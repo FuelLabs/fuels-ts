@@ -1,6 +1,13 @@
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
-import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest } from 'fuels';
-import type { CoinQuantityLike, Contract, WalletUnlocked, Provider } from 'fuels';
+import {
+  BN,
+  ContractFactory,
+  ScriptTransactionRequest,
+  ZeroBytes32,
+  Provider,
+  FUEL_NETWORK_URL,
+} from 'fuels';
+import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -15,6 +22,7 @@ describe(__filename, () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
   let contract: Contract;
+  let baseAssetId: string;
 
   const { binHexlified: scriptBin, abiContents } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
@@ -28,11 +36,12 @@ describe(__filename, () => {
     const seedQuantities: CoinQuantityLike[] = [
       [1000, ASSET_A],
       [500, ASSET_B],
-      [300_000, BaseAssetId],
+      [300_000, ZeroBytes32],
     ];
 
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     wallet = await getTestWallet(seedQuantities);
-    provider = wallet.provider;
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
     const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
     contract = await factory.deployContract({ gasPrice });
@@ -49,7 +58,7 @@ describe(__filename, () => {
     // #import { BN, CoinQuantityLike, ScriptTransactionRequest };
 
     // 1. Create a script transaction using the script binary
-    const { minGasPrice } = contract.provider.getGasConfig();
+    const { minGasPrice } = provider.getGasConfig();
 
     const request = new ScriptTransactionRequest({
       ...defaultTxParams,
@@ -77,7 +86,7 @@ describe(__filename, () => {
     const quantities: CoinQuantityLike[] = [
       [1000, ASSET_A],
       [500, ASSET_B],
-      [maxFee, BaseAssetId],
+      [maxFee, baseAssetId],
     ];
 
     const resources = await wallet.getResourcesToSpend(quantities);

@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
+import { BN, ContractFactory, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -32,13 +32,15 @@ describe('Configurable Contract', () => {
   let wallet: WalletUnlocked;
   let factory: ContractFactory;
   let gasPrice: BN;
+  let baseAssetId: string;
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     ({ minGasPrice: gasPrice } = provider.getGasConfig());
     const quantities: CoinQuantityLike[] = [
       {
         amount: 1_000_000,
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ];
 

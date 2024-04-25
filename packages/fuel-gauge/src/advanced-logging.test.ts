@@ -16,6 +16,7 @@ let otherAdvancedLogContract: Contract;
 let advancedLogId: string;
 let otherLogId: string;
 let minGasPrice: BN;
+let baseAssetId: string;
 
 beforeAll(async () => {
   advancedLogContract = await setupContract();
@@ -24,6 +25,7 @@ beforeAll(async () => {
   advancedLogId = advancedLogContract.id.toB256();
   otherLogId = otherAdvancedLogContract.id.toB256();
   minGasPrice = provider.getGasConfig().minGasPrice;
+  baseAssetId = provider.getBaseAssetId();
 });
 
 /**
@@ -150,7 +152,7 @@ describe('Advanced Logging', () => {
     ];
 
     beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[2_000]]);
+      wallet = await generateTestWallet(provider, [[2_000, baseAssetId]]);
     });
 
     it('when using InvacationScope', async () => {
@@ -237,7 +239,7 @@ describe('Advanced Logging', () => {
     ];
 
     beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[1_000]]);
+      wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
     });
 
     it('when using InvocationScope', async () => {

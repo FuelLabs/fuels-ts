@@ -15,7 +15,7 @@ import type {
   TransactionResultReturnDataReceipt,
   TransactionResultReturnReceipt,
 } from '@fuel-ts/account';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
@@ -242,7 +242,7 @@ export const getScriptDataV0: ContractCallScriptFn = (
   // 1. Amount
   scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
   // 2. Asset ID
-  scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
+  scriptData.push(new B256Coder().encode(call.assetId?.toString() || ZeroBytes32));
   // 3. Contract ID
   scriptData.push(call.contractId.toBytes());
   // 4. Function selector
@@ -294,7 +294,7 @@ export const getScriptDataV1: ContractCallScriptFn = (
   // 1. Amount
   scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
   // 2. Asset ID
-  scriptData.push(new B256Coder().encode(call.assetId?.toString() || BaseAssetId));
+  scriptData.push(new B256Coder().encode(call.assetId?.toString() || ZeroBytes32));
   // 3. Contract ID
   scriptData.push(call.contractId.toBytes());
   // 4. Function selector offset

@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
@@ -236,7 +236,7 @@ describe('Fuel Connector', () => {
       networks: [
         {
           type: 'fuel',
-          assetId: BaseAssetId,
+          assetId: ZeroBytes32,
           decimals: 9,
           chainId: 0,
         },
@@ -258,7 +258,7 @@ describe('Fuel Connector', () => {
         networks: [
           {
             type: 'fuel',
-            assetId: BaseAssetId,
+            assetId: ZeroBytes32,
             decimals: 9,
             chainId: 0,
           },
@@ -323,6 +323,7 @@ describe('Fuel Connector', () => {
 
   it('should ensure getWallet return an wallet', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
 
     const wallets = [
       Wallet.fromPrivateKey(
@@ -350,7 +351,7 @@ describe('Fuel Connector', () => {
     const wallet = await fuel.getWallet(account);
     expect(wallet.provider.url).toEqual(network.url);
     const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
-    const response = await wallet.transfer(receiver.address, bn(1000), BaseAssetId, {
+    const response = await wallet.transfer(receiver.address, bn(1000), baseAssetId, {
       gasPrice: bn(1),
       gasLimit: bn(100_000),
     });
@@ -526,7 +527,7 @@ describe('Fuel Connector', () => {
       }
 
       // eslint-disable-next-line @typescript-eslint/require-await
-      async getBalance(_owner: AbstractAddress, _assetId: BytesLike = BaseAssetId): Promise<BN> {
+      async getBalance(_owner: AbstractAddress, _assetId: BytesLike = ZeroBytes32): Promise<BN> {
         return bn(1234);
       }
     }

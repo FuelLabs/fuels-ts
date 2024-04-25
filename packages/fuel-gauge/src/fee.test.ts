@@ -2,7 +2,6 @@ import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BN, BaseWalletUnlocked, CoinQuantityLike } from 'fuels';
 import {
-  BaseAssetId,
   ContractFactory,
   FUEL_NETWORK_URL,
   Predicate,
@@ -22,12 +21,14 @@ describe('Fee', () => {
   let wallet: BaseWalletUnlocked;
   let provider: Provider;
   let minGasPrice: number;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     minGasPrice = provider.getGasConfig().minGasPrice.toNumber();
     wallet = await generateTestWallet(provider, [
-      [1_000_000_000],
+      [1_000_000_000, baseAssetId],
       [1_000_000_000, ASSET_A],
       [1_000_000_000, ASSET_B],
     ]);
@@ -104,7 +105,7 @@ describe('Fee', () => {
 
     const gasPrice = randomGasPrice(minGasPrice, 7);
 
-    const tx = await wallet.transfer(destination.address, amountToTransfer, BaseAssetId, {
+    const tx = await wallet.transfer(destination.address, amountToTransfer, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });
@@ -134,12 +135,12 @@ describe('Fee', () => {
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(destination1.address, amountToTransfer, BaseAssetId);
+    request.addCoinOutput(destination1.address, amountToTransfer, baseAssetId);
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
     const quantities: CoinQuantityLike[] = [
-      [20_000 + amountToTransfer, BaseAssetId],
+      [20_000 + amountToTransfer, baseAssetId],
       [amountToTransfer, ASSET_A],
       [amountToTransfer, ASSET_B],
     ];
@@ -302,7 +303,7 @@ describe('Fee', () => {
       provider,
     });
 
-    const tx1 = await wallet.transfer(predicate.address, 1_500_000, BaseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 1_500_000, baseAssetId, {
       gasPrice: minGasPrice,
       gasLimit: 10_000,
     });
@@ -311,7 +312,7 @@ describe('Fee', () => {
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
     const gasPrice = randomGasPrice(minGasPrice, 9);
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, BaseAssetId, {
+    const tx2 = await predicate.transfer(wallet.address, transferAmount, baseAssetId, {
       gasPrice,
       gasLimit: 10_000,
     });

@@ -1,7 +1,7 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import type { CoinQuantity, BN } from 'fuels';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 /**
  * @group node
@@ -9,12 +9,15 @@ import { BaseAssetId, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 describe(__filename, () => {
   let provider: Provider;
   let privateKey: string;
-  const assetId = BaseAssetId;
+  let baseAssetId: string;
+  let assetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = await provider.getBaseAssetId();
+    assetId = baseAssetId;
     const wallet = await generateTestWallet(provider, [
-      [1000, BaseAssetId],
+      [1000, baseAssetId],
       [1000, ASSET_A],
     ]);
     privateKey = wallet.privateKey;
