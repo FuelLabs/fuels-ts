@@ -346,7 +346,7 @@ describe('Address class', () => {
     const evmAddress: EvmAddress = address.toEvmAddress();
 
     expect(evmAddress).toBeDefined();
-    expect(evmAddress.value).toBe(ADDRESS_B256_EVM_PADDED);
+    expect(evmAddress.bits).toBe(ADDRESS_B256_EVM_PADDED);
   });
 
   test('create an AssetId from B256', () => {
@@ -354,14 +354,14 @@ describe('Address class', () => {
     const assetId: AssetId = address.toAssetId();
 
     expect(assetId).toBeDefined();
-    expect(assetId.value).toBe(ADDRESS_B256);
+    expect(assetId.bits).toBe(ADDRESS_B256);
   });
 
   test('create an Address from an Evm Address', () => {
     const address = Address.fromEvmAddress(ADDRESS_EVM);
 
     const evmAddressWrapped: EvmAddress = {
-      value: ADDRESS_B256_EVM_PADDED,
+      bits: ADDRESS_B256_EVM_PADDED,
     };
 
     expect(address.toEvmAddress()).toMatchObject(evmAddressWrapped);
