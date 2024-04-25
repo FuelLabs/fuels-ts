@@ -1,5 +1,5 @@
 import type { WalletUnlocked, TransactionResponse, Policy } from 'fuels';
-import { BaseAssetId, ScriptTransactionRequest, bn, PolicyType } from 'fuels';
+import { ScriptTransactionRequest, bn, PolicyType } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -12,6 +12,7 @@ import { getTestWallet } from '../../utils';
  */
 describe('Transaction Policies', () => {
   let wallet: WalletUnlocked;
+  const baseAssetId = '0x';
 
   const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SUM_SCRIPT
@@ -48,7 +49,7 @@ describe('Transaction Policies', () => {
 
   it('gets transaction response from tx id', async () => {
     const scriptMainFunctionArguments = [1];
-    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: BaseAssetId }]);
+    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: baseAssetId }]);
 
     // #region transaction-policies-2
     // #import { ScriptTransactionRequest, TransactionResponse, Policy };

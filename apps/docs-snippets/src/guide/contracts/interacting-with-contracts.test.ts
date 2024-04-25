@@ -1,5 +1,5 @@
 import type { Provider } from 'fuels';
-import { BaseAssetId, Contract } from 'fuels';
+import { Contract } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
@@ -10,9 +10,11 @@ import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
 describe(__filename, () => {
   let counterContract: Contract;
   let provider: Provider;
+  let baseAssetId: string;
   beforeAll(async () => {
     counterContract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
     provider = counterContract.provider;
+    baseAssetId = provider.getBaseAssetId();
   });
 
   it('should successfully use "get" to read from the blockchain', async () => {
@@ -42,7 +44,7 @@ describe(__filename, () => {
   it('should successfully use "simulate" to validate if wallet can pay for transaction', async () => {
     const { id: contractId, interface: abi } = counterContract;
 
-    const fundedWallet = await getTestWallet([[1000, BaseAssetId]]);
+    const fundedWallet = await getTestWallet([[1000, baseAssetId]]);
 
     // #region interacting-with-contracts-3
     const contract = new Contract(contractId, abi, fundedWallet);

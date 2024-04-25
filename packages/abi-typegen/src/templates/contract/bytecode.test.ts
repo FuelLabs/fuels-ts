@@ -25,6 +25,6 @@ describe('templates/contract/bytecode', () => {
     // validating
     restore();
 
-    expect(rendered.trim()).toEqual(bytecodeTemplate);
+    expect(rendered.trim()).toEqual(bytecodeTemplate.trim());
   });
 });

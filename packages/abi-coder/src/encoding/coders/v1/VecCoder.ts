@@ -3,10 +3,11 @@ import { bn } from '@fuel-ts/math';
 import { concatBytes } from '@fuel-ts/utils';
 
 import { MAX_BYTES, WORD_SIZE } from '../../../utils/constants';
-import { chunkByLength } from '../../../utils/utilities';
 import type { TypesOfCoder } from '../AbstractCoder';
 import { Coder } from '../AbstractCoder';
 import { BigNumberCoder } from '../v0/BigNumberCoder';
+
+import { OptionCoder } from './OptionCoder';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
@@ -16,10 +17,12 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   DecodedValueOf<TCoder>
 > {
   coder: TCoder;
+  #isOptionVec: boolean;
 
   constructor(coder: TCoder) {
     super('struct', `struct Vec`, coder.encodedLength + WORD_SIZE);
     this.coder = coder;
+    this.#isOptionVec = this.coder instanceof OptionCoder;
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
@@ -34,7 +37,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    if (data.length < this.encodedLength || data.length > MAX_BYTES) {
+    if (!this.#isOptionVec && (data.length < this.encodedLength || data.length > MAX_BYTES)) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
     }
 
@@ -44,15 +47,18 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     const dataLength = length * this.coder.encodedLength;
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + dataLength);
 
-    if (dataBytes.length !== dataLength) {
+    if (!this.#isOptionVec && dataBytes.length !== dataLength) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec byte data size.`);
     }
 
-    return [
-      chunkByLength(dataBytes, this.coder.encodedLength).map(
-        (chunk) => this.coder.decode(chunk, 0)[0]
-      ),
-      offsetAndLength + dataLength,
-    ];
+    let newOffset = offsetAndLength;
+    const chunks = [];
+    for (let i = 0; i < length; i++) {
+      const [decoded, optionOffset] = this.coder.decode(data, newOffset);
+      chunks.push(decoded);
+      newOffset = optionOffset;
+    }
+
+    return [chunks, newOffset];
   }
 }
