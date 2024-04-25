@@ -217,7 +217,7 @@
 
 #### Defined in
 
-[packages/utils/src/utils/defaultChainConfig.ts:3](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/defaultChainConfig.ts#L3)
+[packages/utils/src/utils/defaultChainConfig.ts:3](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/defaultChainConfig.ts#L3)
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-[packages/utils/src/utils/defaultChainConfig.ts:5](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/defaultChainConfig.ts#L5)
+[packages/utils/src/utils/defaultChainConfig.ts:5](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/defaultChainConfig.ts#L5)
 
 ## Functions
 
@@ -251,7 +251,7 @@ the Uint8Array
 
 #### Defined in
 
-[packages/utils/src/utils/arrayify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/arrayify.ts#L10)
+[packages/utils/src/utils/arrayify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/arrayify.ts#L10)
 
 ___
 
@@ -271,7 +271,7 @@ ___
 
 #### Defined in
 
-[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/capitalizeString.ts#L1)
+[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/capitalizeString.ts#L1)
 
 ___
 
@@ -296,7 +296,7 @@ An array of byte arrays of a specified size
 
 #### Defined in
 
-[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
+[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
 
 ___
 
@@ -320,7 +320,7 @@ Concatenates multiple BytesLike into a single Uint8Array.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/concat.ts#L38)
+[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/concat.ts#L38)
 
 ___
 
@@ -344,7 +344,7 @@ Concatenates multiple Uint8Arrays into a single Uint8Array.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/concat.ts#L11)
+[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/concat.ts#L11)
 
 ___
 
@@ -366,7 +366,7 @@ Returns a hex representation of the inputted bytes.
 
 #### Defined in
 
-[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/hexlify.ts#L10)
+[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/hexlify.ts#L10)
 
 ___
 
@@ -393,4 +393,4 @@ Examples:
 
 #### Defined in
 
-[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/ec261c53/packages/utils/src/utils/normalizeString.ts#L11)
+[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/utils/src/utils/normalizeString.ts#L11)
