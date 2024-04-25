@@ -16,7 +16,7 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
   if (Array.isArray(coinQuantityLike)) {
     amount = coinQuantityLike[0];
     assetId = coinQuantityLike[1];
-    max = coinQuantityLike[2];
+    max = coinQuantityLike[2] ?? undefined;
   } else {
     amount = coinQuantityLike.amount;
     assetId = coinQuantityLike.assetId;
