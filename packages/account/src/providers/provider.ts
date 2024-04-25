@@ -574,9 +574,9 @@ export default class Provider {
   }
 
   /**
-   * Returns the base asset ID
+   * Returns the base asset ID for the current provider network
    *
-   * @returns A promise that resolves to the base asset ID
+   * @returns the base asset ID
    */
   getBaseAssetId() {
     const {
