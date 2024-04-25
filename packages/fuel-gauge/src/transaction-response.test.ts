@@ -2,6 +2,7 @@ import type {} from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { delay } from 'delay';
 import {
   FUEL_NETWORK_URL,
   Provider,
@@ -253,6 +254,8 @@ describe('TransactionResponse', () => {
       loggingEnabled: false,
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+
+    await delay(1000);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),

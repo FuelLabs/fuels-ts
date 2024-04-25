@@ -16,8 +16,9 @@
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/errors": "workspace:*"
+    "delay": "^6.0.0"
   }
 }
