@@ -39,6 +39,12 @@ This method returns all the blocks from the blockchain that match the given quer
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Provider-get-blocks{ts:line-numbers}
 
+# Getting a message by its nonce
+
+You can use the `getMessageByNonce` method to retrieve a message by its nonce.
+
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#getMessageByNonce{ts:line-numbers}
+
 <!-- TODO: fix these examples to not reference hardcoded values after #1356 which introduces message generation tools
 ### Get messages
 

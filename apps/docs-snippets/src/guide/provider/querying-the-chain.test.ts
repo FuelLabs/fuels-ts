@@ -111,4 +111,17 @@ describe('querying the chain', () => {
     // #endregion Provider-get-blocks
     expect(blocks.length).toBe(10);
   });
+
+  it('getMessageByNonce', async () => {
+    // #region getMessageByNonce
+    // #import { FUEL_NETWORK_URL, Provider };
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const nonce = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const message = await provider.getMessageByNonce(nonce);
+
+    expect(message).toBeDefined();
+    expect(message?.nonce).toEqual(nonce);
+    // #endregion getMessageByNonce
+  });
 });
