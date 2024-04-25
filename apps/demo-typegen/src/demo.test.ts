@@ -123,7 +123,7 @@ test('Example script', async () => {
   const script = ScriptAbi__factory.createInstance(wallet);
   const { value } = await script.functions.main().call();
   // #endregion typegen-demo-script
-  expect(value).toStrictEqual(10);
+  expect(value).toBe(10);
 });
 
 test('Example predicate', async () => {
