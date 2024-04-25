@@ -3,5 +3,8 @@ authors = ["Fuel Labs <contact@fuel.sh>"]
 license = "Apache-2.0"
 name = "bytecode-input"
 
-[dependencies]
-bytecode = { git = "https://github.com/FuelLabs/sway-libs", tag = "v0.19.0" }
+# TODO: Uncomment bytecode-related stuff
+# This requires sway-libs to be compatible with latest forc (0.52+)
+
+# [dependencies]
+# bytecode = { git = "https://github.com/FuelLabs/sway-libs", tag = "v0.19.0" }

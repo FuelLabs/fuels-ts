@@ -119,7 +119,7 @@ describe('Coverage Contract', () => {
           .call()
       ).value
     ).toStrictEqual({
-      value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+      bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     });
     expect(
       (
