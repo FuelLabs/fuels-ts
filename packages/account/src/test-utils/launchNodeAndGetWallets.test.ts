@@ -26,11 +26,11 @@ describe('launchNode', () => {
 
   test('launchNodeAndGetWallets - custom config', async () => {
     // #region launchNode-custom-config
-    const chainConfigPath = path.join(cwd(), '.fuel-core/configs');
+    const snapshotDir = path.join(cwd(), '.fuel-core/configs');
 
     const { stop, provider } = await launchNodeAndGetWallets({
       launchNodeOptions: {
-        args: ['--snapshot', chainConfigPath],
+        args: ['--snapshot', snapshotDir],
         loggingEnabled: false,
       },
     });
