@@ -933,7 +933,7 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const contract = await factory.deployContract({ baseAssetId });
 
     const receiver = Wallet.generate({ provider });
     const amountToTransfer = 300;
@@ -961,7 +961,7 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const contract = await factory.deployContract({ baseAssetId });
 
     const receiver1 = Wallet.generate({ provider });
     const receiver2 = Wallet.generate({ provider });
@@ -1000,7 +1000,7 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const contract = await factory.deployContract({ baseAssetId });
 
     await expectToThrowFuelError(
       async () => {
@@ -1128,7 +1128,7 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const storageContract = await factory.deployContract();
+    const storageContract = await factory.deployContract({ baseAssetId });
 
     const initialCounterValue = 20;
 
