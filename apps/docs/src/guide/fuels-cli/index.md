@@ -1,9 +1,14 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuels } = data
+</script>
+
 # Fuels CLI
 
 The quickest way to build full stack Fuel dApps.
 
 - [`fuels init`](./commands.md#fuels-init) — Creates a new `fuels.config.ts` file
-- [`fuels build`](./commands.md#fuels-build) — Build Forc workspace and generate Typescript for everything
+- [`fuels build`](./commands.md#fuels-build) — Build `forc` workspace and generate Typescript types for everything
 - [`fuels deploy`](./commands.md#fuels-deploy) — Deploy workspace contracts and save their IDs to JSON file
 - [`fuels dev`](./commands.md#fuels-dev) — Start local Fuel Core _node_ and `build` + `deploy` on every file change
 
@@ -32,20 +37,20 @@ Add it to your `my-fuel-dapp` project:
 
 ::: code-group
 
-```console [npm]
-npm install fuels --save
+```console-vue [npm]
+npm install fuels@{{fuels}} --save
 ```
 
-```console [pnpm]
-pnpm add fuels
+```console-vue [pnpm]
+pnpm add fuels@{{fuels}}
 ```
 
 :::
 
 ## Double-checking
 
-```console
-npx fuels -v
+```console-vue
+npx fuels@{{fuels}} -v
 ```
 
 ## Next Step

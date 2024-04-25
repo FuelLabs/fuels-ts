@@ -11,7 +11,7 @@ respectively.
 
 The [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) type represents a wallet whose private key is known and
 stored internally in memory. A wallet must be of type [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) in order
-to perform operations that involve [signing messages or transactions](./signing-transactions.md).
+to perform operations that involve [signing messages or transactions](./signing.md).
 
 The [`WalletLocked`](../../api/Account/WalletLocked.md) type represents a wallet whose private key is _not_ known or stored
 in memory. Instead, [`WalletLocked`](../../api/Account/WalletLocked.md) only knows its public address. A [`WalletLocked`](../../api/Account/WalletLocked.md) cannot be
@@ -24,23 +24,23 @@ provides greater access via its private key.
 
 ## Basic Example
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallets{ts:line-numbers}
 
 ## Optional Provider
 
 You can choose not to pass through a provider argument on `Wallet` construction:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-optional-provider{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallet-optional-provider{ts:line-numbers}
 
 ## Transitioning States
 
 A [`WalletLocked`](../../api/Account/WalletLocked.md) instance can be unlocked by providing the private key:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-locked-to-unlocked{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallet-locked-to-unlocked{ts:line-numbers}
 
 A [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) instance can be locked using the `lock` method:
 
-<<< @/../../../packages/fuel-gauge/src/doc-examples.test.ts#wallet-unlocked-to-locked{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallet-unlocked-to-locked{ts:line-numbers}
 
 Most wallet constructors that create or generate a new wallet are provided on
 the [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) type. Consider locking the wallet with the `lock` method after the new private

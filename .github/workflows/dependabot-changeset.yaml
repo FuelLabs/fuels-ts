@@ -1,0 +1,26 @@
+name: Dependabot Changeset
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  create-changeset:
+    name: Create Changeset
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Run dependabot changeset script
+        run: pnpm changeset:dependabot
+
+      - name: Commit Changeset
+        run: |
+          git commit -m "build: update dependency changeset"

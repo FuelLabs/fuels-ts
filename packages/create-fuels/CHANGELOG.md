@@ -1,5 +1,12 @@
 # create-fuels
 
+## 0.82.0
+
+### Minor Changes
+
+- 5daeea4: chore: upgrade Fuel frontend packages
+- 1dbafb5: feat: make `create-fuels` deployment ready
+
 ## 0.81.0
 
 ### Patch Changes

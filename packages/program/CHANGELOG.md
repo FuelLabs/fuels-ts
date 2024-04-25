@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.82.0
+
+### Patch Changes
+
+- Updated dependencies [1c8d8bf]
+  - @fuel-ts/abi-coder@0.82.0
+  - @fuel-ts/account@0.82.0
+  - @fuel-ts/transactions@0.82.0
+  - @fuel-ts/address@0.82.0
+  - @fuel-ts/errors@0.82.0
+  - @fuel-ts/interfaces@0.82.0
+  - @fuel-ts/math@0.82.0
+  - @fuel-ts/utils@0.82.0
+
 ## 0.81.0
 
 ### Patch Changes

@@ -23,11 +23,11 @@ Next, we will install the Fuel Wallet React SDK and the Fuel TypeScript SDK.
 ::: code-group
 
 ```sh [npm]
-npm install @fuel-wallet/react fuels@0.73.0
+npm install fuels @fuels/connectors @fuels/react @tanstack/react-query
 ```
 
 ```sh [pnpm]
-pnpm add @fuel-wallet/react fuels@0.73.0
+pnpm add fuels @fuels/connectors @fuels/react @tanstack/react-query
 ```
 
 :::

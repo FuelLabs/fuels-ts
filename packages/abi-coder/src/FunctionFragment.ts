@@ -20,8 +20,13 @@ import type {
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
-import { ENCODING_V0, ENCODING_V1, OPTION_CODER_TYPE } from './utils/constants';
-import { findFunctionByName, findNonEmptyInputs, findTypeById } from './utils/json-abi';
+import { ENCODING_V1, OPTION_CODER_TYPE } from './utils/constants';
+import {
+  findFunctionByName,
+  findNonEmptyInputs,
+  findTypeById,
+  getEncodingVersion,
+} from './utils/json-abi';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
 import { isHeapType, isPointerType, unpackDynamicData } from './utils/utilities';
 
@@ -52,7 +57,7 @@ export class FunctionFragment<
     this.signature = FunctionFragment.getSignature(this.jsonAbi, this.jsonFn);
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
     this.selectorBytes = new StdStringCoder().encode(name);
-    this.encoding = this.jsonAbi.encoding ?? ENCODING_V0;
+    this.encoding = getEncodingVersion(jsonAbi.encoding);
     this.isInputDataPointer = this.#isInputDataPointer();
     this.outputMetadata = {
       isHeapType: this.#isOutputDataHeap(),

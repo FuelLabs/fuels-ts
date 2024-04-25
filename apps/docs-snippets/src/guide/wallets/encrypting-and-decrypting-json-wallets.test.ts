@@ -10,14 +10,13 @@ describe(__filename, () => {
     // #region encrypting-and-decrypting-json-wallets-1
     // #import { Wallet, fs };
 
-    const wallet = Wallet.generate({
-      provider,
-    });
+    const wallet = Wallet.generate({ provider });
 
+    // Encrypt the wallet
     const password = 'my-password';
-
     const jsonWallet = await wallet.encrypt(password);
 
+    // Save the encrypted wallet to a file
     // #context fs.writeFileSync('secure-path/my-wallet.json', jsonWallet);
     // #endregion encrypting-and-decrypting-json-wallets-1
 
@@ -32,12 +31,14 @@ describe(__filename, () => {
     // #region encrypting-and-decrypting-json-wallets-2
     // #import { Wallet, fs };
 
+    // Load the encrypted wallet from a file
     // #context const jsonWallet = fs.readFileSync('secure-path/my-wallet.json', 'utf-8');
 
+    // Decrypt the wallet
     const password = 'my-password';
-
     const decryptedWallet = await Wallet.fromEncryptedJson(jsonWallet, password, provider);
 
+    // Use the decrypted wallet
     const myBalance = await decryptedWallet.getBalance();
     // #endregion encrypting-and-decrypting-json-wallets-2
 

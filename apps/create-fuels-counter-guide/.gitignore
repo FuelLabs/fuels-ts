@@ -34,6 +34,11 @@ yarn-error.log*
 next-env.d.ts
 
 .fuels
-src/sway-api
+
+src/sway-api/contracts
+src/sway-api/predicates
+src/sway-api/scripts
+src/sway-api/index.ts
+
 sway-programs/**/out
 .turbo

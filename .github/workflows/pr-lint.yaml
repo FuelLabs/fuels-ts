@@ -39,6 +39,7 @@ jobs:
             feat
             fix
             chore
+            build
             docs
             ci
             rc
