@@ -1,6 +1,6 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuelsInstallVersion } = data
+  const { fuels } = data
 </script>
 
 # Generating Types from ABI
@@ -10,7 +10,7 @@
 First we install `fuels` to our project:
 
 ```console-vue
-pnpm add fuels@{{fuelsInstallVersion}}
+pnpm add fuels@{{fuels}}
 ```
 
 ## Help
