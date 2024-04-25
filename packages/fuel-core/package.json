@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/fuel-core",
-  "version": "0.81.0",
+  "version": "0.82.0",
   "description": "NPM bin wrapper around `fuel-core`",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
