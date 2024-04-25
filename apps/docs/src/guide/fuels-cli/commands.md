@@ -55,7 +55,7 @@ In a nutshell:
 
 ## `fuels build`
 
-```console
+```console-vue
 npx fuels@{{fuels}} help build
 ```
 
