@@ -1,4 +1,5 @@
 ---
+"create-fuels": minor
 "@fuel-ts/transactions": minor
 "@fuel-ts/interfaces": minor
 "@fuel-ts/abi-coder": minor
