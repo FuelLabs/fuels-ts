@@ -1,4 +1,0 @@
----
----
-
-docs: improve wallet docs
