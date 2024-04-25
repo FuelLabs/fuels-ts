@@ -89,8 +89,8 @@ describe('std-lib-string Tests', () => {
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
     const INPUT = 'Hello World';
 
-    const { value } = await scriptInstance.functions.main(INPUT).call<BN>();
+    const { value } = await scriptInstance.functions.main(INPUT).call();
 
-    expect(value.toNumber()).toStrictEqual(0);
+    expect(value).toBe(true);
   });
 });
