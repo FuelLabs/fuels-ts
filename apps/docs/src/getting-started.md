@@ -1,6 +1,6 @@
 <script setup>
   import { data } from './versions.data'
-  const { fuels, fuelsInstallVersion } = data
+  const { fuels } = data
 </script>
 
 # Getting Started
@@ -18,16 +18,16 @@ To begin, you need to add the `fuels` dependency to your project. You can do thi
 ::: code-group
 
 ```sh-vue [npm]
-npm install fuels@{{fuelsInstallVersion}} --save
+npm install fuels@{{fuels}} --save
 ```
 
 ```sh-vue [pnpm]
-pnpm add fuels@{{fuelsInstallVersion}}
+pnpm add fuels@{{fuels}}
 ```
 
 :::
 
-**Note**: Use version `{{fuelsInstallVersion}}` to ensure compatibility with `beta-5` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
+**Note**: Use version `{{fuels}}` to ensure compatibility with `beta-5` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
 
 ### Note
 

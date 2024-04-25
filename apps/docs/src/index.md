@@ -1,6 +1,6 @@
 <script setup>
   import { data } from './versions.data'
-  const { forc, fuels, fuelCore, fuelsInstallVersion } = data
+  const { forc, fuels, fuelCore } = data
   const url = `https://docs.fuel.network/docs/forc/`
   const logoSrc = './fuel-logo.png'
 </script>
@@ -33,11 +33,11 @@ Learn more about the Fuel Ecosystem.
 ::: code-group
 
 ```sh-vue [pnpm]
-pnpm add fuels@{{fuelsInstallVersion}}
+pnpm add fuels@{{fuels}}
 ```
 
 ```sh-vue [npm]
-npm install fuels@{{fuelsInstallVersion}} --save
+npm install fuels@{{fuels}} --save
 ```
 
 :::
