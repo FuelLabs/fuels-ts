@@ -11,7 +11,6 @@
 "@fuel-ts/script": minor
 "fuels": minor
 "@fuel-ts/utils": minor
-"@fuel-ts/forc": minor
 ---
 
 chore!: upgrade `fuel-core` to `0.24.3`
