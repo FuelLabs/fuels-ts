@@ -13,7 +13,6 @@ import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
 describe('Transaction Response', () => {
   let contract: Contract;
   let provider: Provider;
-  let baseAssetId: string;
   let wallet: WalletUnlocked;
 
   const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(

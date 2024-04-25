@@ -12,7 +12,6 @@ import { getTestWallet } from '../../utils';
  */
 describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
-  let provider: Provider;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.ECHO_CONFIGURABLES
