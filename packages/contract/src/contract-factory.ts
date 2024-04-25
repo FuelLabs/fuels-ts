@@ -132,7 +132,7 @@ export default class ContractFactory {
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContract(deployContractOptions: DeployContractOptions) {
+  async deployContract(deployContractOptions: DeployContractOptions = {}) {
     if (!this.account) {
       throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
     }
