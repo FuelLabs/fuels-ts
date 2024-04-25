@@ -7,3 +7,4 @@ export * from './utils/normalizeString';
 export * from './utils/date-time';
 export * from './utils/defaultSnapshotConfigs';
 export * from './utils/isDefined';
+export * from './utils/sleep';

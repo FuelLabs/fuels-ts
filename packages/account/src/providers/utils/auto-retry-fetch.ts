@@ -1,6 +1,5 @@
+import { sleep } from '@fuel-ts/utils';
 import type { ProviderOptions } from '../provider';
-
-import { sleep } from './sleep';
 
 type Backoff = 'linear' | 'exponential' | 'fixed';
 

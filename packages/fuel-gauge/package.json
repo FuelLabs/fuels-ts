@@ -18,7 +18,6 @@
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/forc": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "delay": "^6.0.0"
+    "@fuel-ts/utils": "workspace:*"
   }
 }

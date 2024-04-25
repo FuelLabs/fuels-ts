@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import delay from 'delay';
+import { sleep } from '@fuel-ts/utils';
 import type { BN } from 'fuels';
 import { Provider, Wallet, ContractFactory, bn, FUEL_NETWORK_URL } from 'fuels';
 
@@ -76,7 +76,7 @@ describe('MultiTokenContract', () => {
       return value;
     };
 
-    await delay(1000);
+    await sleep(1000);
 
     // validates contract has expected balance after mint
     const validateMintPromises = subIds.map(async (subId) => {
