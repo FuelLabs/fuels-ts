@@ -5,12 +5,14 @@ import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
 import type { BN, InputValue, Predicate } from "fuels";
-import { BaseAssetId, bn } from "fuels";
+import { bn } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
 export default function PredicateExample() {
+  let baseAssetId: string;
+
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
 
   const [predicate, setPredicate] = useState<Predicate<InputValue[]>>();
@@ -21,6 +23,7 @@ export default function PredicateExample() {
 
   useAsync(async () => {
     if (wallet) {
+      baseAssetId = wallet.provider.getBaseAssetId();
       const predicate = TestPredicateAbi__factory.createInstance(
         wallet.provider,
       );
@@ -43,7 +46,7 @@ export default function PredicateExample() {
       return toast.error("Wallet not loaded");
     }
 
-    await wallet.transfer(predicate.address, amount, BaseAssetId, {
+    await wallet.transfer(predicate.address, amount, baseAssetId, {
       gasPrice: 1,
       gasLimit: 10_000,
     });
@@ -71,7 +74,7 @@ export default function PredicateExample() {
       const tx = await reInitializePredicate.transfer(
         wallet.address,
         amount,
-        BaseAssetId,
+        baseAssetId,
       );
       const { isStatusSuccess } = await tx.wait();
 

@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { bn, BaseAssetId } from 'fuels';
+import { bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -15,9 +15,11 @@ const setupContract = createSetupConfig({
 });
 
 let contract: Contract;
+let baseAssetId: string;
 
 beforeAll(async () => {
   contract = await setupContract();
+  baseAssetId = contract.provider.getBaseAssetId();
 });
 
 /**
@@ -31,7 +33,7 @@ test('allow sending coins to payable functions', async () => {
       .callParams({
         forward: {
           amount: bn(100),
-          assetId: BaseAssetId,
+          assetId: baseAssetId,
         },
       })
       .call()
@@ -46,7 +48,7 @@ test("don't allow sending coins to non-payable functions", async () => {
       .callParams({
         forward: {
           amount: bn(100),
-          assetId: BaseAssetId,
+          assetId: baseAssetId,
         },
       })
       .call()
