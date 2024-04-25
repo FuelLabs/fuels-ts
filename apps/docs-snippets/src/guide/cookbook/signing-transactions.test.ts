@@ -57,7 +57,7 @@ describe('Signing transactions', () => {
       .call<BN>();
     // #endregion multiple-signers-2
 
-    expect(value.toNumber()).toEqual(1);
+    expect(value).toBe(true);
     expect((await receiver.getBalance()).toNumber()).toEqual(amountToReceiver);
   });
 

@@ -140,7 +140,7 @@ describe('Vector Types Validation', () => {
       )
       .call();
 
-    expect(value.toString()).toBe('1');
+    expect(value).toBe(true);
   });
 
   it('can use supported vector types [predicate-vector-types]', async () => {

@@ -51,8 +51,8 @@ describe(__filename, () => {
     // #region call-params-3
     const { minGasPrice } = provider.getGasConfig();
     const amountToForward = 10;
-    const contractCallGasLimit = 100;
-    const transactionGasLimit = 3_000_000;
+    const contractCallGasLimit = 1000;
+    const transactionGasLimit = 100_000;
 
     const result = await contract.functions
       .return_context_amount()

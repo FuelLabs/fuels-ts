@@ -603,7 +603,7 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT_B);
   });
 
-  it.skip('should handle multiple calls [with vectors]', async () => {
+  it('should handle multiple calls [with vectors]', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));
@@ -621,7 +621,7 @@ describe('Coverage Contract', () => {
     expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
   });
 
-  it.skip('should handle multiple calls [with vectors + stack data first]', async () => {
+  it('should handle multiple calls [with vectors + stack data first]', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));
