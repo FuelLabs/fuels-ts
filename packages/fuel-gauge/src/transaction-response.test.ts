@@ -2,7 +2,6 @@ import type {} from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { BN } from 'fuels';
 import {
   FUEL_NETWORK_URL,
   Provider,
@@ -88,14 +87,12 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
 describe('TransactionResponse', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
-  let gasPrice: BN;
-  let baseAssetId: string;
 
+  let baseAssetId: string;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
     adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   it('should ensure create method waits till a transaction response is given', async () => {
@@ -107,7 +104,7 @@ describe('TransactionResponse', () => {
       destination.address,
       100,
       baseAssetId,
-      { gasPrice, gasLimit: 10_000 }
+      { gasLimit: 10_000 }
     );
 
     const response = await TransactionResponse.create(transactionId, provider);
@@ -118,22 +115,20 @@ describe('TransactionResponse', () => {
   });
 
   it('should ensure getTransactionSummary fetchs a transaction and assembles transaction summary', async () => {
+    const { ip, port } = await launchNode({
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+
     const destination = Wallet.generate({
-      provider,
+      provider: nodeProvider,
     });
 
-    const { id: transactionId } = await adminWallet.transfer(
-      destination.address,
-      100,
-      baseAssetId,
-      { gasPrice, gasLimit: 10_000 }
-    );
+    const { id: transactionId } = await adminWallet.transfer(destination.address, 100, baseAssetId);
 
-    const response = new TransactionResponse(transactionId, provider);
+    const response = await TransactionResponse.create(transactionId, provider);
 
-    expect(response.gqlTransaction).toBeUndefined();
-
-    const transactionSummary = await response.getTransactionSummary();
+    const transactionSummary = await response.waitForResult();
 
     expect(transactionSummary.id).toBeDefined();
     expect(transactionSummary.fee).toBeDefined();
@@ -173,7 +168,7 @@ describe('TransactionResponse', () => {
        * */
       args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
     });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -186,7 +181,7 @@ describe('TransactionResponse', () => {
       destination.address,
       100,
       baseAssetId,
-      { gasPrice, gasLimit: 10_000 }
+      { gasLimit: 10_000 }
     );
     const response = await TransactionResponse.create(transactionId, nodeProvider);
 
@@ -217,7 +212,7 @@ describe('TransactionResponse', () => {
       args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
       loggingEnabled: false,
     });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -226,9 +221,15 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    const resources = await genesisWallet.getResourcesToSpend([[100_000, baseAssetId]]);
+    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
-    request.addResources(resources);
+    const txCost = await genesisWallet.provider.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await genesisWallet.fund(request, txCost);
+
     request.updateWitnessByOwner(
       genesisWallet.address,
       await genesisWallet.signTransaction(request)
@@ -251,7 +252,7 @@ describe('TransactionResponse', () => {
       args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
       loggingEnabled: false,
     });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/graphql`);
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
     const genesisWallet = new WalletUnlocked(
       process.env.GENESIS_SECRET || randomBytes(32),
@@ -260,9 +261,17 @@ describe('TransactionResponse', () => {
 
     const request = new ScriptTransactionRequest();
 
-    const resources = await genesisWallet.getResourcesToSpend([[100_000, baseAssetId]]);
+    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
-    request.addResources(resources);
+    const txCost = await genesisWallet.provider.getTransactionCost(request, {
+      signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
+    });
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await genesisWallet.fund(request, txCost);
+
     request.updateWitnessByOwner(
       genesisWallet.address,
       await genesisWallet.signTransaction(request)

@@ -30,13 +30,13 @@ export default createConfig({
   // #endregion privateKey
 
   // #region providerUrl
-  // Default: http://127.0.0.1:4000/graphql
-  providerUrl: 'http://network:port/graphql',
+  // Default: http://127.0.0.1:4000/v1/graphql
+  providerUrl: 'http://network:port/v1/graphql',
   // #endregion providerUrl
 
-  // #region chainConfig
-  chainConfig: './my/custom/chainConfig.json',
-  // #endregion chainConfig
+  // #region snapshotDir
+  snapshotDir: './my/snapshot/dir',
+  // #endregion snapshotDir
 
   // #region autoStartFuelCore
   autoStartFuelCore: true,
@@ -70,7 +70,6 @@ export default createConfig({
     }
 
     return {
-      gasPrice: 1,
       storageSlots: [
         {
           key: '0x..',
@@ -112,8 +111,6 @@ export const simpleDeployConfig = createConfig({
   workspace: './sway-programs',
   output: './src/sway-programs-api',
   // #region deployConfig-obj
-  deployConfig: {
-    gasPrice: 1,
-  },
+  deployConfig: {},
   // #endregion deployConfig-obj
 });

@@ -34,7 +34,6 @@ describe(__filename, () => {
 
   it('should throw error due not enough gas', async () => {
     // #region call-params-2
-    const { minGasPrice } = provider.getGasConfig();
 
     await expect(
       contract.functions
@@ -43,7 +42,6 @@ describe(__filename, () => {
           forward: [10, baseAssetId],
           gasLimit: 1,
         })
-        .txParams({ gasPrice: minGasPrice })
         .call()
     ).rejects.toThrow(/Gas limit '1' is lower than the required: /);
     // #endregion call-params-2
@@ -51,9 +49,8 @@ describe(__filename, () => {
 
   it('should successfully execute transaction with `txParams` and `callParams`', async () => {
     // #region call-params-3
-    const { minGasPrice } = provider.getGasConfig();
     const amountToForward = 10;
-    const contractCallGasLimit = 1000;
+    const contractCallGasLimit = 4000;
     const transactionGasLimit = 100_000;
 
     const result = await contract.functions
@@ -64,17 +61,13 @@ describe(__filename, () => {
       })
       .txParams({
         gasLimit: transactionGasLimit,
-        gasPrice: minGasPrice,
       })
       .call();
 
-    const {
-      transactionResult: { transaction },
-      value,
-    } = result;
+    const { value } = result;
+    const expectedValue = 10;
 
-    expect(new BN(value).toNumber()).toBe(10);
-    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(transactionGasLimit);
+    expect(new BN(value).toNumber()).toBe(expectedValue);
     // #endregion call-params-3
   });
 });

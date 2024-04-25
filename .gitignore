@@ -155,3 +155,5 @@ Forc.lock
 
 # This chainConfig is copied over from @fuel-ts/utils at runtime, no need to track it
 .fuel-core/configs/chainConfig.json
+.fuel-core/configs/metadata.json
+.fuel-core/configs/stateConfig.json

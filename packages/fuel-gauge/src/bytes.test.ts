@@ -35,12 +35,10 @@ const setup = async (balance = 500_000) => {
  * @group node
  */
 describe('Bytes Tests', () => {
-  let gasPrice: BN;
   let baseAssetId: string;
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   it('should test bytes output', async () => {
@@ -104,7 +102,6 @@ describe('Bytes Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
@@ -113,7 +110,6 @@ describe('Bytes Tests', () => {
     const initialReceiverBalance = await receiver.getBalance();
 
     const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await tx.waitForResult();

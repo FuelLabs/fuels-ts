@@ -50,17 +50,16 @@ describe(__filename, () => {
     // #region signing-2
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
-      gasPrice: 1,
     });
 
     request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
 
-    const { maxFee, gasUsed, requiredQuantities } = await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request);
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await wallet.fund(request, requiredQuantities, maxFee);
+    await wallet.fund(request, txCost);
 
     const signedTransaction = await wallet.signTransaction(request);
     const transactionId = request.getTransactionId(provider.getChainId());
@@ -82,18 +81,17 @@ describe(__filename, () => {
 
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
-      gasPrice: 1,
     });
 
     request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
 
-    const { maxFee, gasUsed, requiredQuantities } = await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request);
 
-    request.gasLimit = gasUsed;
-    request.maxFee = maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
     // #region signing-3
-    await wallet.fund(request, requiredQuantities, maxFee);
+    await wallet.fund(request, txCost);
 
     const tx = await wallet.sendTransaction(request);
     const result = await tx.waitForResult();

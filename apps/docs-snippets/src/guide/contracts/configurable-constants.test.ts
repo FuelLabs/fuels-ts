@@ -1,4 +1,4 @@
-import type { Provider, WalletUnlocked } from 'fuels';
+import type { WalletUnlocked } from 'fuels';
 import { ContractFactory } from 'fuels';
 
 import {
@@ -12,7 +12,6 @@ import { getTestWallet } from '../../utils';
  */
 describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
-  let provider: Provider;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.ECHO_CONFIGURABLES
@@ -31,7 +30,6 @@ describe('configurable-constants', () => {
 
   beforeAll(async () => {
     wallet = await getTestWallet();
-    provider = wallet.provider;
   });
 
   it('should successfully set new values for all configurable constants', async () => {
@@ -49,11 +47,8 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice } = provider.getGasConfig();
-
     const contract = await factory.deployContract({
       configurableConstants,
-      gasPrice: minGasPrice,
     });
     // #endregion configurable-constants-2
 
@@ -73,11 +68,8 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice } = provider.getGasConfig();
-
     const contract = await factory.deployContract({
       configurableConstants,
-      gasPrice: minGasPrice,
     });
     // #endregion configurable-constants-3
 
@@ -99,12 +91,9 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { minGasPrice } = provider.getGasConfig();
-
     await expect(
       factory.deployContract({
         configurableConstants,
-        gasPrice: minGasPrice,
       })
     ).rejects.toThrowError();
     // #endregion configurable-constants-4

@@ -32,14 +32,12 @@ import { getSetupContract } from './utils';
 describe('TransactionSummary', () => {
   let provider: Provider;
   let adminWallet: WalletUnlocked;
-  let gasPrice: BN;
-  let baseAssetId: string;
 
+  let baseAssetId: string;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
     adminWallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
   });
 
   const verifyTransactionSummary = (params: {
@@ -72,18 +70,21 @@ describe('TransactionSummary', () => {
     const destination = Wallet.generate({
       provider,
     });
+
     const amountToTransfer = 100;
 
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
-      gasPrice: 1,
     });
 
     request.addCoinOutput(destination.address, amountToTransfer, baseAssetId);
 
-    const resources = await adminWallet.getResourcesToSpend([[100_000, baseAssetId]]);
+    const txCost = await adminWallet.provider.getTransactionCost(request);
 
-    request.addResources(resources);
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await adminWallet.fund(request, txCost);
 
     const tx = await adminWallet.sendTransaction(request);
 
@@ -108,7 +109,6 @@ describe('TransactionSummary', () => {
     });
 
     const tx1 = await adminWallet.transfer(sender.address, 500_000, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     const transactionResponse1 = await tx1.waitForResult();
@@ -120,7 +120,6 @@ describe('TransactionSummary', () => {
     });
 
     const tx2 = await sender.transfer(destination.address, amountToTransfer, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     const transactionResponse2 = await tx2.waitForResult();
@@ -148,12 +147,14 @@ describe('TransactionSummary', () => {
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
-      gasPrice: 1,
     });
 
-    const resources = await adminWallet.getResourcesToSpend([[100_000, baseAssetId]]);
+    const txCost = await adminWallet.provider.getTransactionCost(request);
 
-    request.addResources(resources);
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await adminWallet.fund(request, txCost);
 
     const transactionRequest = await adminWallet.populateTransactionWitnessesSignature(request);
 
@@ -281,9 +282,9 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO ACCOUNTS)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, baseAssetId],
-        [10_000, ASSET_A],
-        [10_000, ASSET_B],
+        [50_000, baseAssetId],
+        [50_000, ASSET_A],
+        [50_000, ASSET_B],
       ]);
 
       const senderContract = await setupContract({ cache: false });
@@ -375,9 +376,9 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO CONTRACTS)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, baseAssetId],
-        [10_000, ASSET_A],
-        [10_000, ASSET_B],
+        [60_000, baseAssetId],
+        [60_000, ASSET_A],
+        [60_000, ASSET_B],
       ]);
 
       const senderContract = await setupContract({ cache: false });
@@ -475,13 +476,12 @@ describe('TransactionSummary', () => {
         });
       });
 
-      const { gasUsed, minGasPrice, maxFee, requiredQuantities } =
-        await provider.getTransactionCost(request, []);
+      const txCost = await provider.getTransactionCost(request);
 
-      request.gasLimit = gasUsed;
-      request.gasPrice = minGasPrice;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-      await wallet.fund(request, requiredQuantities, maxFee);
+      await wallet.fund(request, txCost);
 
       const tx = await wallet.sendTransaction(request);
 

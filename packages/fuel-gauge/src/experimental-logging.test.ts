@@ -1,12 +1,11 @@
 import { readFileSync } from 'fs';
-import type { BN, Contract } from 'fuels';
-import { bn } from 'fuels';
+import type { Contract } from 'fuels';
+import { bn, hexlify, randomBytes } from 'fuels';
 import { join } from 'path';
 
 import { setup } from './utils';
 
 let contractInstance: Contract;
-let gasPrice: BN;
 
 const U8_MAX = 2 ** 8 - 1;
 const U16_MAX = 2 ** 16 - 1;
@@ -25,8 +24,6 @@ beforeAll(async () => {
   const abi = JSON.parse(readFileSync(`${path}-abi.json`, 'utf8'));
 
   contractInstance = await setup({ contractBytecode, abi });
-
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 /**
@@ -163,6 +160,14 @@ describe('Experimental Logging', () => {
     expect(logs).toEqual([expected]);
   });
 
+  it('logs b256 vec', async () => {
+    const expected = [hexlify(randomBytes(32)), hexlify(randomBytes(32))];
+
+    const { logs } = await contractInstance.functions.log_vec_b256(expected).call();
+
+    expect(logs).toEqual([expected]);
+  });
+
   it('logs bytes', async () => {
     const expected = [40, 41, 42];
 
@@ -174,10 +179,7 @@ describe('Experimental Logging', () => {
   it('logs StdString', async () => {
     const expected = 'fuel';
 
-    const { logs } = await contractInstance.functions
-      .log_std_string(expected)
-      .txParams({ gasLimit: 1_000_000, gasPrice })
-      .call();
+    const { logs } = await contractInstance.functions.log_std_string(expected).call();
 
     expect(logs).toEqual([expected]);
   });
