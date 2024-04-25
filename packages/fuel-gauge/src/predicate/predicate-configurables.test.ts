@@ -1,4 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { delay } from 'delay';
 import type { CoinQuantityLike } from 'fuels';
 import { getRandomB256, Provider, WalletUnlocked, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
@@ -64,6 +65,8 @@ describe('Predicate', () => {
       });
 
       await tx.waitForResult();
+
+      delay(1000);
 
       await assertBalance(destination, amountToTransfer, baseAssetId);
     });
