@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { bn, toNumber } from '@fuel-ts/math';
 import { TransactionType } from '@fuel-ts/transactions';
@@ -57,23 +57,25 @@ describe('TransactionRequest', () => {
   it('should fund with the expected quantities', () => {
     const transactionRequest = new ScriptTransactionRequest();
 
+    const baseAssetId = ZeroBytes32;
+
     const amountBase = bn(500);
     const amountA = bn(700);
     const amountB = bn(300);
 
     const quantities: CoinQuantity[] = [
-      { assetId: BaseAssetId, amount: amountBase },
+      { assetId: baseAssetId, amount: amountBase },
       { assetId: ASSET_A, amount: amountA },
       { assetId: ASSET_B, amount: amountB },
     ];
 
-    transactionRequest.fundWithFakeUtxos(quantities);
+    transactionRequest.fundWithFakeUtxos(quantities, baseAssetId);
 
     const inputs = transactionRequest.inputs as CoinTransactionRequestInput[];
 
     const inputA = inputs.find((i) => i.assetId === ASSET_A);
     const inputB = inputs.find((i) => i.assetId === ASSET_B);
-    const inputBase = inputs.find((i) => i.assetId === BaseAssetId);
+    const inputBase = inputs.find((i) => i.assetId === baseAssetId);
 
     expect(inputA?.amount).toEqual(bn(700));
     expect(inputB?.amount).toEqual(bn(300));

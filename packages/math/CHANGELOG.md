@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.82.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.82.0
+
 ## 0.81.0
 
 ### Minor Changes

@@ -4,14 +4,14 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 import * as asm from "@fuels/vm-asm";
-import { BaseAssetId, encrypt, decrypt } from "fuels";
+import { ZeroBytes32, encrypt, decrypt } from "fuels";
 
 function App() {
   const [count, setCount] = useState(0);
 
   const { log } = console;
 
-  log("Hello Fuels", BaseAssetId, encrypt, decrypt);
+  log("Hello Fuels", ZeroBytes32, encrypt, decrypt);
   log("Hello ASM", asm);
 
   return (
