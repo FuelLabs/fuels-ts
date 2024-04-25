@@ -1,6 +1,6 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuelsInstallVersion } = data
+  const { fuels } = data
 </script>
 
 # Options
@@ -10,11 +10,11 @@ The `npm create fuels` command has several command-line options that you can use
 ::: code-group
 
 ```sh-vue [pnpm]
-pnpm create fuels@{{fuelsInstallVersion}} [project-name] [options]
+pnpm create fuels@{{fuels}} [project-name] [options]
 ```
 
 ```sh-vue [npm]
-npm create fuels@{{fuelsInstallVersion}} [project-name] [options]
+npm create fuels@{{fuels}} [project-name] [options]
 ```
 
 :::
