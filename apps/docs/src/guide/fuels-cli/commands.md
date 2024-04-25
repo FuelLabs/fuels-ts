@@ -24,7 +24,7 @@ Options:
 
 Creating a sample `fuel.config.ts` file:
 
-```console
+```console-vue
 npx fuels@{{fuels}} init --contracts ./my-contracts/* --output ./src/sway-contracts-api
 ```
 
