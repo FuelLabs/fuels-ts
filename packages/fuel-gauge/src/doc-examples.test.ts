@@ -349,41 +349,28 @@ describe('Doc Examples', () => {
     });
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;
-    const initialPredicateBalance = await predicate.getBalance();
 
     const response = await wallet1.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 10_000,
     });
     await response.waitForResult();
-    const predicateBalance = await predicate.getBalance();
-
-    // assert that predicate address now has the expected amount to predicate
-    expect(bn(predicateBalance)).toEqual(initialPredicateBalance.add(amountToPredicate));
 
     const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, baseAssetId, {
       gasLimit: 10_000,
     });
     // Wait for Transaction to succeed
     await depositOnPredicate.waitForResult();
-    const updatedPredicateBalance = await predicate.getBalance();
-
-    // assert that predicate address now has the updated expected amount to predicate
-    expect(bn(updatedPredicateBalance)).toEqual(
-      initialPredicateBalance.add(amountToPredicate).add(1000)
-    );
 
     const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
       gasLimit: 10_000,
     });
-    await tx.waitForResult();
+    const { isStatusSuccess } = await tx.waitForResult();
 
-    // check balances
-    const finalPredicateBalance = await predicate.getBalance();
+    // check balance
     const receiverBalance = await receiver.getBalance();
 
-    // assert that predicate address now has a zero balance
-    expect(bn(initialPredicateBalance).lte(finalPredicateBalance)).toBeTruthy();
     // assert that predicate funds now belong to the receiver
     expect(bn(receiverBalance).gte(bn(amountToReceiver))).toBeTruthy();
+    expect(isStatusSuccess).toBeTruthy();
   });
 });

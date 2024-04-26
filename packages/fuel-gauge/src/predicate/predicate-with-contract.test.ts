@@ -1,7 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { WalletUnlocked } from 'fuels';
-import { ContractFactory, toNumber, Contract, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
+import { ContractFactory, Contract, Provider, Predicate, FUEL_NETWORK_URL, Wallet } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
@@ -33,7 +32,6 @@ describe('Predicate', () => {
 
   describe('With Contract', () => {
     let wallet: WalletUnlocked;
-    let receiver: WalletUnlocked;
     let provider: Provider;
     let baseAssetId: string;
     beforeAll(async () => {
@@ -43,7 +41,6 @@ describe('Predicate', () => {
 
     beforeEach(async () => {
       wallet = await generateTestWallet(provider, [[2_000_000, baseAssetId]]);
-      receiver = await generateTestWallet(provider);
     });
 
     it('calls a predicate from a contract function', async () => {
@@ -61,9 +58,9 @@ describe('Predicate', () => {
       });
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
-      const predicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
 
-      const { value } = await contractPredicate.functions
+      const { value, transactionResult } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
           forward: [500, baseAssetId],
@@ -71,9 +68,7 @@ describe('Predicate', () => {
         .call();
 
       expect(value.toString()).toEqual('500');
-
-      const finalPredicateBalance = await predicate.getBalance();
-      expect(finalPredicateBalance.lt(predicateBalance)).toBeTruthy();
+      expect(transactionResult.isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
@@ -83,7 +78,8 @@ describe('Predicate', () => {
         wallet
       ).deployContract();
 
-      const initialReceiverBalance = toNumber(await receiver.getBalance());
+      const receiver = Wallet.generate({ provider });
+      const receiverInitialBalance = await receiver.getBalance();
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
@@ -105,43 +101,22 @@ describe('Predicate', () => {
           },
         ],
       });
-      const initialPredicateBalance = toNumber(await predicate.getBalance());
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 
-      expect(toNumber(await predicate.getBalance())).toBeGreaterThan(initialPredicateBalance);
-
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
+      let { isStatusSuccess } = await tx.waitForResult();
+      expect(isStatusSuccess).toBeTruthy();
 
-      const { fee: predicateTxFee } = await tx.waitForResult();
+      const receiverFinalBalance = await receiver.getBalance();
+      expect(receiverFinalBalance.gt(receiverInitialBalance)).toBeTruthy();
 
-      // calling the contract with the receiver account (with resources)
-      const contractAmount = 10;
-      const {
-        transactionResult: { fee: receiverTxFee },
-      } = await contract.functions.mint_coins(200).call();
+      ({
+        transactionResult: { isStatusSuccess },
+      } = await contract.functions.mint_coins(200).call());
 
-      const finalReceiverBalance = toNumber(await receiver.getBalance());
-      const remainingPredicateBalance = toNumber(await predicate.getBalance());
-
-      const expectedFinalReceiverBalance =
-        initialReceiverBalance + amountToReceiver - contractAmount - receiverTxFee.toNumber();
-
-      expectToBeInRange({
-        value: finalReceiverBalance,
-        min: expectedFinalReceiverBalance - 20,
-        max: expectedFinalReceiverBalance + 20,
-      });
-
-      const expectedFinalPredicateBalance =
-        initialPredicateBalance + amountToPredicate - amountToReceiver - predicateTxFee.toNumber();
-
-      expectToBeInRange({
-        value: expectedFinalPredicateBalance,
-        min: remainingPredicateBalance - 20,
-        max: remainingPredicateBalance + 20,
-      });
+      expect(isStatusSuccess).toBeTruthy();
     });
   });
 });

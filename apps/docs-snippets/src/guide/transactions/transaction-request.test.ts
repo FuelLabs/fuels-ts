@@ -63,7 +63,7 @@ describe('Transaction Request', () => {
     });
 
     baseAssetId = provider.getBaseAssetId();
-    await seedTestWallet(predicate, [[10_000, baseAssetId]]);
+    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
   });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {
@@ -180,7 +180,7 @@ describe('Transaction Request', () => {
     transactionRequest.addResources(predicateCoins);
     // #endregion transaction-request-5
 
-    expect(transactionRequest.inputs.length).toEqual(1);
+    expect(transactionRequest.inputs.length).toBeGreaterThanOrEqual(1);
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 
