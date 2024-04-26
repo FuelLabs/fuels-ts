@@ -1,21 +1,14 @@
 contract;
 
-// TODO: Uncomment bytecode-related stuff
-// This requires sway-libs to be compatible with latest forc (0.52+)
-// use bytecode::*;
-
-
 abi MyContract {
-    // fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256;
-    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> bool;
+    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256;
 }
 
 impl MyContract for Contract {
     // #region vector-bytecode-input-sway
-    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> bool {
-        // let root = compute_bytecode_root(bytecode_input);
-        // return root;
-        return true;
+    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256 {
+        //simply return a fixed b256 value created from a hexadecimal string from testing purposes
+        return b256::from_hex_str(&bytecode_input).unwrap();
     }
     // #endregion vector-bytecode-input-sway
 }

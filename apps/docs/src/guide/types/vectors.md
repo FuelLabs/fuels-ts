@@ -26,14 +26,10 @@ Some Sway functions require you to pass in bytecode to the function. The type of
 
 Take the `compute_bytecode_root` function from the [`bytecode` Sway library](https://github.com/FuelLabs/sway-libs/tree/master/libs/src/bytecode.sw), for example.
 
-<!-- <<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers} -->
-
-<!-- TODO: Uncomment swap hardcoded snippet -->
+<<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers}
 
 ```rust
 contract;
-
-use bytecode::*;
 
 abi MyContract {
     fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256;

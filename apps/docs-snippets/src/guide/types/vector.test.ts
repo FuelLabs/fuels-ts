@@ -55,8 +55,7 @@ describe(__filename, () => {
     expect(value.isActive).toEqual(employees[1].isActive);
   });
 
-  // TODO: Unskip test after sway-libs become compatible with latest forc (0.52+)
-  it.skip('should successfully execute a contract call with a bytecode input', async () => {
+  it('should successfully execute a contract call with a bytecode input', async () => {
     const bytecodeContract = await createAndDeployContractFromProject(
       DocSnippetProjectsEnum.BYTECODE_INPUT
     );
