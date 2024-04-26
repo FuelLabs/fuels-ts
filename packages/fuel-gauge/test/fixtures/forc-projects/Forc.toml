@@ -24,8 +24,7 @@ members = [
   "predicate-multi-args",
   "predicate-raw-slice",
   "predicate-std-lib-string",
-  # TODO @anderson uncomment project
-  # "predicate-input-data",
+  "predicate-input-data",
   "predicate-triple-sig",
   "predicate-true",
   "predicate-u32",
