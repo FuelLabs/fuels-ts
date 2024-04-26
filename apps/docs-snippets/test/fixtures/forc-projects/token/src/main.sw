@@ -1,6 +1,6 @@
 contract;
 
-use std::asset::{burn, force_transfer_to_contract, mint, transfer_to_address,};
+use std::asset::{burn, mint, transfer};
 
 abi Token {
     fn transfer_to_address(target: Address, asset_id: AssetId, coins: u64);
@@ -12,11 +12,11 @@ abi Token {
 impl Token for Contract {
     // #region variable-outputs-1
     fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64) {
-        transfer_to_address(recipient, asset_id, amount);
+        transfer(Identity::Address(recipient), asset_id, amount);
     }
 
     fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
-        force_transfer_to_contract(target, asset_id, amount);
+        transfer(Identity::ContractId(target), asset_id, amount);
     }
     // #endregion variable-outputs-1
     fn mint_coins(sub_id: b256, mint_amount: u64) {

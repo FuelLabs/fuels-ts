@@ -1,4 +1,4 @@
-import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
 /**
@@ -9,7 +9,9 @@ export type Coin = {
   assetId: string;
   amount: BN;
   owner: AbstractAddress;
-  maturity: number;
   blockCreated: BN;
   txCreatedIdx: BN;
+  predicate?: BytesLike;
+  predicateData?: BytesLike;
+  padPredicateData?: (policiesLenght: number) => BytesLike;
 };

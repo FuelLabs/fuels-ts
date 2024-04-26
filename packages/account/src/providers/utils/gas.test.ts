@@ -21,7 +21,6 @@ import type { TransactionResultReceipt } from '../transaction-response';
 import {
   calculateMetadataGasForTxCreate,
   calculateMetadataGasForTxScript,
-  calculatePriceWithFactor,
   gasUsedByInputs,
   getGasUsedFromReceipts,
   getMaxGas,
@@ -206,6 +205,7 @@ describe('gas', () => {
       const witnessesLength = 128;
       const minGas = bn(567);
       const gasLimit = bn(10_000);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = witnessLimit
         .sub(bn(witnessesLength))
@@ -219,6 +219,7 @@ describe('gas', () => {
         witnessesLength,
         minGas,
         gasLimit,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -229,6 +230,7 @@ describe('gas', () => {
       const witnessLimit = bn(200);
       const witnessesLength = 500;
       const minGas = bn(210);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = minGas;
 
@@ -237,6 +239,7 @@ describe('gas', () => {
         witnessLimit,
         witnessesLength,
         minGas,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -247,6 +250,7 @@ describe('gas', () => {
       const witnessLimit = undefined;
       const witnessesLength = 64;
       const minGas = bn(350);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = minGas;
 
@@ -255,6 +259,7 @@ describe('gas', () => {
         witnessLimit,
         witnessesLength,
         minGas,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -298,28 +303,6 @@ describe('gas', () => {
       });
 
       expect(expectedMetadataGas.eq(metadataGas)).toBeTruthy();
-    });
-  });
-
-  describe('calculatePriceWithFactor', () => {
-    it('should correctly calculate the price with factor', () => {
-      const gasUsed = new BN(10);
-      const gasPrice = new BN(2);
-      const priceFactor = new BN(5);
-
-      const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
-
-      expect(result.toNumber()).toEqual(4); // ceil(10 / 5) * 2 = 4
-    });
-
-    it('should correctly round up the result', () => {
-      const gasUsed = new BN(11);
-      const gasPrice = new BN(2);
-      const priceFactor = new BN(5);
-
-      const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
-
-      expect(result.toNumber()).toEqual(5); // ceil(11 * 2) / 2 = 5
     });
   });
 

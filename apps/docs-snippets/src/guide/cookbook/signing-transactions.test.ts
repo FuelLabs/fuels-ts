@@ -1,5 +1,5 @@
 import type { Provider, BN, JsonAbi } from 'fuels';
-import { WalletUnlocked, Predicate, BaseAssetId, Script, ScriptTransactionRequest } from 'fuels';
+import { WalletUnlocked, Predicate, Script, ScriptTransactionRequest } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -17,7 +17,7 @@ describe('Signing transactions', () => {
   let receiver: WalletUnlocked;
   let signer: WalletUnlocked;
   let provider: Provider;
-  let gasPrice: BN;
+  let baseAssetId: string;
   const { abiContents: abiPredicate, binHexlified: binPredicate } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.PREDICATE_SIGNING
   );
@@ -32,7 +32,7 @@ describe('Signing transactions', () => {
     });
 
     provider = sender.provider;
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    baseAssetId = provider.getBaseAssetId();
   });
 
   beforeEach(() => {
@@ -47,17 +47,17 @@ describe('Signing transactions', () => {
     abi = abiScript;
 
     // #region multiple-signers-2
-    // #import { Script, BaseAssetId };
+    // #import { Script };
 
     const script = new Script(bytecode, abi, sender);
     const { value } = await script.functions
       .main(signer.address.toB256())
-      .addTransfer(receiver.address, amountToReceiver, BaseAssetId)
+      .addTransfer(receiver.address, amountToReceiver, baseAssetId)
       .addSigners(signer)
       .call<BN>();
     // #endregion multiple-signers-2
 
-    expect(value.toNumber()).toEqual(1);
+    expect(value).toBe(true);
     expect((await receiver.getBalance()).toNumber()).toEqual(amountToReceiver);
   });
 
@@ -67,7 +67,7 @@ describe('Signing transactions', () => {
     abi = abiPredicate;
 
     // #region multiple-signers-4
-    // #import { Predicate, BaseAssetId, ScriptTransactionRequest };
+    // #import { Predicate, ScriptTransactionRequest };
 
     // Create and fund the predicate
     const predicate = new Predicate<[string]>({
@@ -76,32 +76,44 @@ describe('Signing transactions', () => {
       provider,
       inputData: [signer.address.toB256()],
     });
-    await sender.transfer(predicate.address, 10_000, BaseAssetId);
+    const tx1 = await sender.transfer(predicate.address, 100_000, baseAssetId);
+
+    await tx1.waitForResult();
 
     // Create the transaction request
-    const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_000 });
-    request.addCoinOutput(receiver.address, amountToReceiver, BaseAssetId);
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(receiver.address, amountToReceiver, baseAssetId);
 
     // Get the predicate resources and add them and predicate data to the request
     const resources = await predicate.getResourcesToSpend([
       {
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
         amount: amountToReceiver,
       },
     ]);
-    request.addPredicateResources(resources, predicate);
-    const parsedRequest = predicate.populateTransactionPredicateData(request);
+
+    request.addResources(resources);
+
+    request.addWitness('0x');
 
     // Add witnesses including the signer
-    parsedRequest.addWitness('0x');
-    await parsedRequest.addAccountWitnesses(signer);
-
     // Estimate the predicate inputs
-    const { estimatedInputs } = await provider.getTransactionCost(parsedRequest);
-    parsedRequest.updatePredicateInputs(estimatedInputs);
+    const txCost = await provider.getTransactionCost(request, {
+      signatureCallback: (tx) => tx.addAccountWitnesses(signer),
+      resourcesOwner: predicate,
+    });
+
+    request.updatePredicateGasUsed(txCost.estimatedPredicates);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await predicate.fund(request, txCost);
+
+    await request.addAccountWitnesses(signer);
 
     // Send the transaction
-    const res = await provider.sendTransaction(parsedRequest);
+    const res = await provider.sendTransaction(request);
     await res.waitForResult();
 
     // #endregion multiple-signers-4

@@ -26,7 +26,26 @@ Some Sway functions require you to pass in bytecode to the function. The type of
 
 Take the `compute_bytecode_root` function from the [`bytecode` Sway library](https://github.com/FuelLabs/sway-libs/tree/master/libs/src/bytecode.sw), for example.
 
-<<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers}
+<!-- <<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers} -->
+
+<!-- TODO: Uncomment swap hardcoded snippet -->
+
+```rust
+contract;
+
+use bytecode::*;
+
+abi MyContract {
+    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256;
+}
+
+impl MyContract for Contract {
+    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> bool {
+        let root = compute_bytecode_root(bytecode_input);
+        return root;
+    }
+}
+```
 
 To pass bytecode to this function, you can make use of the `arrayify` function to convert the bytecode file contents into a `UInt8Array`, the TS compatible type for Sway's `Vec<u8>` type and pass it the function like so:
 

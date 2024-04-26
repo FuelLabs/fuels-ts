@@ -1,16 +1,6 @@
 contract;
 
-use std::{
-    asset::{
-        transfer_to_address,
-    },
-    bytes::Bytes,
-    constants::BASE_ASSET_ID,
-    logging::log,
-    message::{
-        send_message,
-    },
-};
+use std::{asset::{transfer,}, bytes::Bytes, logging::log, message::{send_message,},};
 use custom_errors::{AccessError, InputError};
 
 abi RevertError {
@@ -23,13 +13,8 @@ abi RevertError {
     fn revert_with_0();
 }
 
-const BASE_TOKEN_A: AssetId = AssetId {
-    value: 0x0000000000000000000000000000000000000000000000000000000000000001,
-};
-
-const BASE_TOKEN_B: AssetId = AssetId {
-    value: 0x0000000000000000000000000000000000000000000000000000000000000001,
-};
+const BASE_TOKEN_A: AssetId = AssetId::from(0x0000000000000000000000000000000000000000000000000000000000000001);
+const BASE_TOKEN_B: AssetId = AssetId::from(0x0000000000000000000000000000000000000000000000000000000000000001);
 
 pub struct ValidInputsEvent {
     token_id: u64,
@@ -66,14 +51,14 @@ impl RevertError for Contract {
         let amount = 1;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
         let user = Address::from(address);
-        transfer_to_address(user, BASE_TOKEN_A, amount);
+        transfer(Identity::Address(user), BASE_TOKEN_A, amount);
     }
 
     fn failed_transfer_revert() {
         let amount = 0;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
         let user = Address::from(address);
-        transfer_to_address(user, BASE_TOKEN_B, amount);
+        transfer(Identity::Address(user), BASE_TOKEN_B, amount);
     }
 
     fn assert_value_eq_10(value: u8) {
