@@ -63,7 +63,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 10,
-      maturity: randomNumber(1, 2),
+      maturity: 1,
       witnessLimit: randomNumber(800, 900),
       maxFee: 1000,
     };

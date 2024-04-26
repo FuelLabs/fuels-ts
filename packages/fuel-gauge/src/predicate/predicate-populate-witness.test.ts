@@ -1,7 +1,6 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, CoinQuantityLike, WalletUnlocked } from 'fuels';
+import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
 import {
-  BaseAssetId,
   Provider,
   Predicate,
   FUEL_NETWORK_URL,
@@ -26,9 +25,9 @@ describe('Predicate', () => {
   describe('Populate Predicate Witness', () => {
     const UTXOS_AMOUNT = 12;
 
-    let gasPrice: BN;
     let provider: Provider;
     let receiver: WalletUnlocked;
+    let baseAssetId: string;
     let predicate1: Predicate<[number]>;
     let predicate2: Predicate<[boolean]>;
 
@@ -36,14 +35,15 @@ describe('Predicate', () => {
     let wallet2: WalletUnlocked;
     let wallet3: WalletUnlocked;
 
-    const quantity: CoinQuantityLike[] = [[500, BaseAssetId]];
+    let quantity: CoinQuantityLike[];
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 1000 });
+      baseAssetId = provider.getBaseAssetId();
+      quantity = [[500, baseAssetId]];
       wallet1 = Wallet.generate({ provider });
       wallet2 = Wallet.generate({ provider });
       wallet3 = Wallet.generate({ provider });
       receiver = Wallet.generate({ provider });
-      gasPrice = provider.getGasConfig().minGasPrice;
       predicate1 = new Predicate<[number]>({
         bytecode: assertNumberArtifacts.binHexlified,
         provider,
@@ -60,14 +60,14 @@ describe('Predicate', () => {
 
       await seedTestWallet(
         [wallet1, wallet2, wallet3, predicate1, predicate2],
-        [[120_000, BaseAssetId]],
+        [[120_000, baseAssetId]],
         UTXOS_AMOUNT
       );
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 1]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasPrice, gasLimit: 2000 });
-      transactionRequest.addCoinOutput(receiver.address, 100, BaseAssetId);
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       const predicate1WrongResources = await provider.getResourcesToSpend(
         predicate1.address,
@@ -93,8 +93,8 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 2]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasPrice, gasLimit: 2000 });
-      transactionRequest.addCoinOutput(receiver.address, 100, BaseAssetId);
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const predicate1WrongResources = await provider.getResourcesToSpend(
@@ -126,8 +126,8 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 3]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasPrice, gasLimit: 2000 });
-      transactionRequest.addCoinOutput(receiver.address, 100, BaseAssetId);
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -170,7 +170,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 4]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasPrice, gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -194,7 +194,7 @@ describe('Predicate', () => {
         quantity
       );
 
-      transactionRequest.addCoinOutput(receiver.address, 100, BaseAssetId);
+      transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       transactionRequest.addResources([
         ...predicate1WrongResources, // witnessIndex 0 but will generate a placeholder witness
@@ -227,7 +227,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 5]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasPrice, gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -241,7 +241,7 @@ describe('Predicate', () => {
         cacheResources(predicate1WrongResources)
       );
 
-      transactionRequest.addCoinOutput(receiver.address, 100, BaseAssetId);
+      transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       transactionRequest.addResources([
         ...resources1, // witnessIndex 0
@@ -270,7 +270,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 6]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasPrice, gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -290,7 +290,7 @@ describe('Predicate', () => {
         quantity
       );
 
-      transactionRequest.addCoinOutput(receiver.address, 100, BaseAssetId);
+      transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       transactionRequest.addResources([
         ...resources1, // witnessIndex 0
