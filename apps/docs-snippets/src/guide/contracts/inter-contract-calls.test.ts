@@ -1,4 +1,4 @@
-import type { Contract, Provider, WalletUnlocked } from 'fuels';
+import type { Contract, WalletUnlocked } from 'fuels';
 import { BN, ContractFactory } from 'fuels';
 
 import {
@@ -14,12 +14,9 @@ describe(__filename, () => {
   let wallet: WalletUnlocked;
   let simpleToken: Contract;
   let tokenDepositor: Contract;
-  let provider: Provider;
 
   beforeAll(async () => {
     wallet = await getTestWallet();
-    provider = wallet.provider;
-    const { minGasPrice } = provider.getGasConfig();
 
     const tokenArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_TOKEN);
     const depositorArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.TOKEN_DEPOSITOR);
@@ -28,13 +25,13 @@ describe(__filename, () => {
       tokenArtifacts.binHexlified,
       tokenArtifacts.abiContents,
       wallet
-    ).deployContract({ gasPrice: minGasPrice });
+    ).deployContract();
 
     tokenDepositor = await new ContractFactory(
       depositorArtifacts.binHexlified,
       depositorArtifacts.abiContents,
       wallet
-    ).deployContract({ gasPrice: minGasPrice });
+    ).deployContract();
   });
 
   it('should successfully make call to another contract', async () => {

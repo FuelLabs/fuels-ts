@@ -1,7 +1,6 @@
 // #region Testing-in-ts-ts
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import type { BN } from 'fuels';
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL, Address } from 'fuels';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
@@ -12,7 +11,6 @@ import type { PredicateAbiInputs } from './predicate-types';
 import { PredicateAbi__factory } from './predicate-types';
 import { ScriptAbi__factory } from './script-types';
 
-let gasPrice: BN;
 let baseAssetId: string;
 
 /**
@@ -21,7 +19,6 @@ let baseAssetId: string;
 describe('ExampleContract', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
     baseAssetId = provider.getBaseAssetId();
   });
   it('with imported storage slots', async () => {
@@ -33,7 +30,6 @@ describe('ExampleContract', () => {
 
     const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
       storageSlots,
-      gasPrice,
     });
     // #endregion typegen-demo-contract-storage-slots
 
@@ -45,7 +41,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
-    const contract = await factory.deployContract({ gasPrice });
+    const contract = await factory.deployContract();
     const contractId = contract.id;
 
     // Call
@@ -73,9 +69,8 @@ describe('ExampleContract', () => {
     // #context import bytecode from './types/DemoContractAbi.hex';
 
     // Deploy
-    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
-      gasPrice,
-    });
+    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet);
+
     // #endregion typegen-demo-contract-factory-deploy
 
     // Call
@@ -93,7 +88,7 @@ it('should throw when simulating via contract factory with wallet with no resour
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
-  const contract = await factory.deployContract({ gasPrice });
+  const contract = await factory.deployContract();
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
   const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
@@ -107,7 +102,7 @@ it('should not throw when dry running via contract factory with wallet with no r
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
-  const contract = await factory.deployContract({ gasPrice });
+  const contract = await factory.deployContract();
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
   await expect(contractInstance.functions.return_input(1337).dryRun()).resolves.not.toThrow();
@@ -123,7 +118,7 @@ test('Example script', async () => {
   const script = ScriptAbi__factory.createInstance(wallet);
   const { value } = await script.functions.main().call();
   // #endregion typegen-demo-script
-  expect(value).toBe(10);
+  expect(value).toStrictEqual(10);
 });
 
 test('Example predicate', async () => {
@@ -145,10 +140,7 @@ test('Example predicate', async () => {
   const initialPredicateBalance = await predicate.getBalance();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)
-  const tx2 = await predicate.transfer(receiver.address, 50_000, baseAssetId, {
-    gasPrice: provider.getGasConfig().minGasPrice,
-    gasLimit: 50,
-  });
+  const tx2 = await predicate.transfer(receiver.address, 50_000, baseAssetId);
   await tx2.wait();
 
   expect((await receiver.getBalance()).toNumber()).toEqual(50_000);

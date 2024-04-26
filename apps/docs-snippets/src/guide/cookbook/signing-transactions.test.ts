@@ -17,7 +17,6 @@ describe('Signing transactions', () => {
   let receiver: WalletUnlocked;
   let signer: WalletUnlocked;
   let provider: Provider;
-  let gasPrice: BN;
   let baseAssetId: string;
   const { abiContents: abiPredicate, binHexlified: binPredicate } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.PREDICATE_SIGNING
@@ -33,7 +32,6 @@ describe('Signing transactions', () => {
     });
 
     provider = sender.provider;
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
     baseAssetId = provider.getBaseAssetId();
   });
 
@@ -78,10 +76,12 @@ describe('Signing transactions', () => {
       provider,
       inputData: [signer.address.toB256()],
     });
-    await sender.transfer(predicate.address, 10_000, baseAssetId);
+    const tx1 = await sender.transfer(predicate.address, 100_000, baseAssetId);
+
+    await tx1.waitForResult();
 
     // Create the transaction request
-    const request = new ScriptTransactionRequest({ gasPrice, gasLimit: 10_00 });
+    const request = new ScriptTransactionRequest();
     request.addCoinOutput(receiver.address, amountToReceiver, baseAssetId);
 
     // Get the predicate resources and add them and predicate data to the request
@@ -91,19 +91,29 @@ describe('Signing transactions', () => {
         amount: amountToReceiver,
       },
     ]);
-    request.addPredicateResources(resources, predicate);
-    const parsedRequest = predicate.populateTransactionPredicateData(request);
+
+    request.addResources(resources);
+
+    request.addWitness('0x');
 
     // Add witnesses including the signer
-    parsedRequest.addWitness('0x');
-    await parsedRequest.addAccountWitnesses(signer);
-
     // Estimate the predicate inputs
-    const { estimatedInputs } = await provider.getTransactionCost(parsedRequest);
-    parsedRequest.updatePredicateInputs(estimatedInputs);
+    const txCost = await provider.getTransactionCost(request, {
+      signatureCallback: (tx) => tx.addAccountWitnesses(signer),
+      resourcesOwner: predicate,
+    });
+
+    request.updatePredicateGasUsed(txCost.estimatedPredicates);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await predicate.fund(request, txCost);
+
+    await request.addAccountWitnesses(signer);
 
     // Send the transaction
-    const res = await provider.sendTransaction(parsedRequest);
+    const res = await provider.sendTransaction(request);
     await res.waitForResult();
 
     // #endregion multiple-signers-4

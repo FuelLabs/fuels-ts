@@ -58,15 +58,19 @@ This property should ideally come from env — `process.env.MY_PRIVATE_KEY`.
 
 > _When [`autostartFuelCore`](#autostartfuelcore) property is set to `true`, the `privateKey` is overridden with the `consensusKey` of the local short-lived `fuel-core` node started by the [`fuels dev`](./commands.md#fuels-dev) command._
 
-## `chainConfig`
+## `snapshotDir`
 
 > - _Used by [`fuels dev`](./commands.md#fuels-dev) only_.
 
-Relative file path to custom `chainConfig.json` file to use with `fuel-core`.
+Relative path to directory containing custom configurations for `fuel-core`, such as:
+
+- `chainConfig.json`
+- `metadata.json`
+- `stateConfig.json`
 
 This will take effect only when [`autoStartFuelCore`](#autostartfuelcore) is `true`.
 
-<<< @../../../demo-fuels/fuels.config.full.ts#chainConfig{ts:line-numbers}
+<<< @../../../demo-fuels/fuels.config.full.ts#snapshotDir{ts:line-numbers}
 
 ## `autoStartFuelCore`
 

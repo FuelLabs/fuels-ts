@@ -28,7 +28,7 @@ describe(__filename, () => {
     expect(cost.maxFee).toBeDefined();
     expect(cost.gasPrice).toBeDefined();
     expect(cost.gasUsed).toBeDefined();
-    expect(cost.minGasPrice).toBeDefined();
+    expect(cost.gasPrice).toBeDefined();
     // #endregion cost-estimation-1
   });
 
@@ -50,7 +50,7 @@ describe(__filename, () => {
     expect(cost.maxFee).toBeDefined();
     expect(cost.gasPrice).toBeDefined();
     expect(cost.gasUsed).toBeDefined();
-    expect(cost.minGasPrice).toBeDefined();
+    expect(cost.gasPrice).toBeDefined();
     // #endregion cost-estimation-2
   });
 });

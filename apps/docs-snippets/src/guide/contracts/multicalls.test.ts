@@ -20,7 +20,6 @@ describe(__filename, () => {
   beforeAll(async () => {
     const wallet = await getTestWallet();
     provider = wallet.provider;
-    const { minGasPrice: gasPrice } = provider.getGasConfig();
     baseAssetId = provider.getBaseAssetId();
 
     const counterArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.COUNTER);
@@ -43,12 +42,11 @@ describe(__filename, () => {
       wallet
     );
 
-    echoContract = await factory1.deployContract({ gasPrice });
+    echoContract = await factory1.deployContract();
     counterContract = await factory2.deployContract({
       storageSlots: counterArtifacts.storageSlots,
-      gasPrice,
     });
-    contextContract = await factory3.deployContract({ gasPrice });
+    contextContract = await factory3.deployContract();
   });
 
   it('should successfully submit multiple calls from the same contract function', async () => {

@@ -28,7 +28,7 @@ describe('Predicate', () => {
 
     beforeAll(async () => {
       [wallet, receiver] = await setupWallets();
-      const amountToPredicate = 10_000;
+      const amountToPredicate = 1000;
       provider = wallet.provider;
       predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesMainArgsStruct,
@@ -43,7 +43,7 @@ describe('Predicate', () => {
     it('throws if sender does not have enough resources for tx and gas', async () => {
       await expect(
         predicate.transfer(receiver.address, predicateBalance, baseAssetId, {
-          gasLimit: 10_000,
+          gasLimit: 100_000_000,
         })
       ).rejects.toThrow(/not enough coins to fit the target/i);
     });

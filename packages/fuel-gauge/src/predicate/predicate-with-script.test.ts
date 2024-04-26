@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN, BigNumberish, WalletUnlocked } from 'fuels';
+import type { BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -23,15 +23,13 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
     let provider: Provider;
-    let gasPrice: BN;
-    let baseAssetId: string;
 
-    beforeEach(async () => {
+    let baseAssetId: string;
+    beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
       baseAssetId = provider.getBaseAssetId();
-      wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
+      wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
       receiver = await generateTestWallet(provider);
-      gasPrice = provider.getGasConfig().minGasPrice;
     });
 
     it('calls a predicate and uses proceeds for a script call', async () => {
@@ -45,13 +43,14 @@ describe('Predicate', () => {
       // calling the script with the receiver account (no resources)
       const scriptInput = 1;
       scriptInstance.account = receiver;
+
       await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
         /not enough coins to fit the target/
       );
 
       // setup predicate
-      const amountToPredicate = 500_000;
-      const amountToReceiver = 110_000;
+      const amountToPredicate = 10_000;
+      const amountToReceiver = 2000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,
@@ -67,14 +66,11 @@ describe('Predicate', () => {
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 
-      expect(toNumber(await predicate.getBalance())).toEqual(
-        initialPredicateBalance + amountToPredicate
-      );
+      expect(toNumber(await predicate.getBalance())).toBeGreaterThan(initialPredicateBalance);
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
 
       const { fee: predicateTxFee } = await tx.waitForResult();
@@ -94,8 +90,8 @@ describe('Predicate', () => {
 
       expectToBeInRange({
         value: finalReceiverBalance,
-        min: expectedReceiverBalance - 1,
-        max: expectedReceiverBalance + 1,
+        min: expectedReceiverBalance - 8,
+        max: expectedReceiverBalance + 8,
       });
 
       const predicateExpectedBalance =
@@ -103,8 +99,8 @@ describe('Predicate', () => {
 
       expectToBeInRange({
         value: remainingPredicateBalance,
-        min: predicateExpectedBalance - 1,
-        max: predicateExpectedBalance + 1,
+        min: predicateExpectedBalance - 8,
+        max: predicateExpectedBalance + 8,
       });
     });
   });

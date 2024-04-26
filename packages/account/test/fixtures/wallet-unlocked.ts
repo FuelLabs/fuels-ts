@@ -4,7 +4,7 @@ export const SCRIPT_TX_REQUEST = new ScriptTransactionRequest({
   gasLimit: 5_000,
   script: '0x',
   scriptData: Uint8Array.from([]),
-  gasPrice: 5,
+  tip: 5,
   maxFee: 20_000,
   maturity: 0,
   witnessLimit: 5000,
@@ -15,7 +15,6 @@ export const SCRIPT_TX_REQUEST = new ScriptTransactionRequest({
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       amount: '0x989680',
       owner: '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e',
-      maturity: 0,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex: 0,
       predicate: '0x',
@@ -40,4 +39,4 @@ export const PUBLIC_KEY =
 export const ADDRESS = '0xf1e92c42b90934aa6372e30bc568a326f6e66a1a0288595e6e3fbd392a4f3e6e';
 export const HASHED_TX = '0x48ee795d94ea9562a3dbb9979cb44bb3dfd341eb755c378b14a3cd6886189980';
 export const SIGNED_TX =
-  '0x4b68db1c036e28b0ae2df25410880abaac46d5d6018b5594efa1b3854f81d937b58a609e43ac3606bfba54ca9ac03f7b076bd745b4b58f885d96a68c3006db15';
+  '0xbcc4d4988bf698ce45406e71112470ace2a6136bddf7dc1df87bfcc13d6a712ca82fa109cb697d02b14c3a6123fa0e06f4741aa0ee76f86cb26afac38ac493cb';
