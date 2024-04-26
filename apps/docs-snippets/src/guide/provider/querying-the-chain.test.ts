@@ -118,7 +118,7 @@ describe('querying the chain', () => {
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const nonce = '0101010101010101010101010101010101010101010101010101010101010101';
+    const nonce = '1010101010101010101010101010101010101010101010101010101010101010';
     const message = await provider.getMessageByNonce(nonce);
 
     expect(message).toBeDefined();
