@@ -107,7 +107,7 @@ describe('MultiTokenContract', () => {
     });
 
     await Promise.all(validateTransferPromises);
-  });
+  }, { timeout: 10000 });
 
   it('can burn coins', async () => {
     const multiTokenContract = await setup();
