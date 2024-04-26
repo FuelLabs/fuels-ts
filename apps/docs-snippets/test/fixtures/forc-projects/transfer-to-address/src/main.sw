@@ -13,7 +13,11 @@ impl TransferToAddress for Contract {
     fn transfer(amount_to_transfer: u64, asset_id: AssetId, recipient: b256) {
         let recipient_address = Address::from(recipient);
 
-        transfer(Identity::Address(recipient_address), asset_id, amount_to_transfer);
+        transfer(
+            Identity::Address(recipient_address),
+            asset_id,
+            amount_to_transfer,
+        );
     }
 }
 // #endregion contract-balance-2

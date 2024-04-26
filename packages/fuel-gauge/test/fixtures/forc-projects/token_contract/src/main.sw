@@ -15,7 +15,11 @@ impl Token for Contract {
     fn mint_to_addresses(addresses: [Address; 3], mint_amount: u64) {
         let mut counter = 0;
         while counter < 3 {
-            mint_to(Identity::Address(addresses[counter]), BASE_TOKEN, mint_amount);
+            mint_to(
+                Identity::Address(addresses[counter]),
+                BASE_TOKEN,
+                mint_amount,
+            );
             counter = counter + 1;
         }
     }

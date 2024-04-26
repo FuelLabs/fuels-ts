@@ -1,15 +1,6 @@
 contract;
 
-use std::{
-    asset::{
-        transfer,
-    },
-    bytes::Bytes,
-    logging::log,
-    message::{
-        send_message,
-    },
-};
+use std::{asset::{transfer,}, bytes::Bytes, logging::log, message::{send_message,},};
 use custom_errors::{AccessError, InputError};
 
 abi RevertError {

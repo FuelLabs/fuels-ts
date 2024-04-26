@@ -1,16 +1,7 @@
 // #region deposit-and-withdraw-cookbook-1
 contract;
 
-use std::{
-    asset::{
-        mint_to,
-        transfer,
-    },
-    call_frames::{
-        msg_asset_id,
-    },
-    context::msg_amount,
-};
+use std::{asset::{mint_to, transfer,}, call_frames::{msg_asset_id,}, context::msg_amount,};
 use std::constants::ZERO_B256;
 
 abi LiquidityPool {

@@ -1,6 +1,6 @@
 contract;
 
-use std::asset::{burn, transfer, mint};
+use std::asset::{burn, mint, transfer};
 
 abi Token {
     fn transfer_to_address(target: Address, asset_id: AssetId, coins: u64);
