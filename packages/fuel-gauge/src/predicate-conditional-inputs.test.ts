@@ -41,7 +41,7 @@ describe('PredicateConditionalInputs', () => {
     });
 
     // transfer asset A to predicate so it can transfer to alice
-    const tx1 = await adminWallet.transfer(predicate.address, 100_000, ASSET_A);
+    const tx1 = await adminWallet.transfer(predicate.address, 10_000, ASSET_A);
 
     await tx1.waitForResult();
 

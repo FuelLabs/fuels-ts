@@ -20,13 +20,13 @@ describe('Reentrant Contract Calls', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [[20_000, baseAssetId]]);
+    wallet = await generateTestWallet(provider, [[200_000, baseAssetId]]);
 
     const factoryBar = new ContractFactory(bar.binHexlified, bar.abiContents, wallet);
-    barContract = await factoryBar.deployContract({ baseAssetId });
+    barContract = await factoryBar.deployContract();
 
     const factoryFoo = new ContractFactory(foo.binHexlified, foo.abiContents, wallet);
-    fooContract = await factoryFoo.deployContract({ baseAssetId });
+    fooContract = await factoryFoo.deployContract();
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
@@ -68,7 +68,7 @@ describe('Reentrant Contract Calls', () => {
       storageTest.binHexlified,
       storageTest.abiContents,
       wallet
-    ).deployContract({ storageSlots: storageTest.storageSlots, baseAssetId });
+    ).deployContract({ storageSlots: storageTest.storageSlots });
 
     const reentrantCall = fooContract.functions.foo(
       { bits: fooContract.id.toB256() },

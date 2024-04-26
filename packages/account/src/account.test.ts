@@ -407,7 +407,7 @@ describe('Account', () => {
   });
 
   it('can transfer with custom TX Params', async () => {
-    const sender = await generateTestWallet(provider, [[9000, baseAssetId]]);
+    const sender = await generateTestWallet(provider, [[50_000, baseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
     const tx = await sender.transfer(receiver.address, 1, baseAssetId, {

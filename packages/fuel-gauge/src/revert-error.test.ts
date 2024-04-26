@@ -181,7 +181,7 @@ describe('Revert Error Testing', () => {
     );
 
     const factory = new ContractFactory(tokenBytecode, tokenAbi, wallet);
-    const tokenContract = await factory.deployContract({ baseAssetId });
+    const tokenContract = await factory.deployContract();
 
     const addresses = [
       { bits: getRandomB256() },
