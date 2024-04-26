@@ -2,10 +2,9 @@ contract;
 
 use std::{
     asset::{
-        transfer_to_address,
+        transfer,
     },
     bytes::Bytes,
-    constants::BASE_ASSET_ID,
     logging::log,
     message::{
         send_message,
@@ -61,14 +60,14 @@ impl RevertError for Contract {
         let amount = 1;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
         let user = Address::from(address);
-        transfer_to_address(user, BASE_TOKEN_A, amount);
+        transfer(Identity::Address(user), BASE_TOKEN_A, amount);
     }
 
     fn failed_transfer_revert() {
         let amount = 0;
         let address = 0x0000000000000000000000000000000000000000000000000000000000000001;
         let user = Address::from(address);
-        transfer_to_address(user, BASE_TOKEN_B, amount);
+        transfer(Identity::Address(user), BASE_TOKEN_B, amount);
     }
 
     fn assert_value_eq_10(value: u8) {

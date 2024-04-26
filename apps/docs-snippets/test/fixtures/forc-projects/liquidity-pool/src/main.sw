@@ -3,8 +3,8 @@ contract;
 
 use std::{
     asset::{
-        mint_to_address,
-        transfer_to_address,
+        mint_to,
+        transfer,
     },
     call_frames::{
         msg_asset_id,
@@ -32,7 +32,7 @@ impl LiquidityPool for Contract {
         let amount_to_mint = msg_amount() * 2;
 
         // Mint some LP token based upon the amount of the base token.
-        mint_to_address(recipient, ZERO_B256, amount_to_mint);
+        mint_to(Identity::Address(recipient), ZERO_B256, amount_to_mint);
     }
 
     #[payable]
@@ -43,7 +43,7 @@ impl LiquidityPool for Contract {
         let amount_to_transfer = msg_amount() / 2;
 
         // Transfer base token to recipient.
-        transfer_to_address(recipient, BASE_TOKEN, amount_to_transfer);
+        transfer(Identity::Address(recipient), BASE_TOKEN, amount_to_transfer);
     }
 }
 // #endregion deposit-and-withdraw-cookbook-1
