@@ -1,11 +1,16 @@
+<script setup>
+  import { data } from '../../versions.data'
+  const { fuels } = data
+</script>
+
 # Commands
 
 The `fuels` CLI consists of a couple of commands.
 
 ## `fuels init`
 
-```console
-npx fuels help init
+```console-vue
+npx fuels@{{fuels}} help init
 ```
 
 ```console
@@ -19,14 +24,14 @@ Options:
 
 Creating a sample `fuel.config.ts` file:
 
-```console
-npx fuels init --contracts ./my-contracts/* --output ./src/sway-contracts-api
+```console-vue
+npx fuels@{{fuels}} init --contracts ./my-contracts/* --output ./src/sway-contracts-api
 ```
 
 Using [Forc workspaces](https://docs.fuel.network/docs/forc/workspaces/)? Try this instead:
 
-```console
-npx fuels init --workspace ./sway-programs --output ./src/sway-programs-api
+```console-vue
+npx fuels@{{fuels}} init --workspace ./sway-programs --output ./src/sway-programs-api
 ```
 
 This will give you a minimal configuration:
@@ -50,8 +55,8 @@ In a nutshell:
 
 ## `fuels build`
 
-```console
-npx fuels help build
+```console-vue
+npx fuels@{{fuels}} help build
 ```
 
 ```console
@@ -63,15 +68,15 @@ Options:
 
 Examples:
 
-```console
-npx fuels build
+```console-vue
+npx fuels@{{fuels}} build
 ```
 
 1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](https://docs.fuel.network/docs/forc/commands/forc_build/)</sup>
 1.  Generate types for them using `fuels-typegen` <sup>[2](#fuels-typegen)</sup>
 
-```console
-npx fuels build --deploy
+```console-vue
+npx fuels@{{fuels}} build --deploy
 ```
 
 Using the `--deploy` flag will additionally:
@@ -83,8 +88,8 @@ Using the `--deploy` flag will additionally:
 
 ## `fuels deploy`
 
-```console
-npx fuels deploy
+```console-vue
+npx fuels@{{fuels}} deploy
 ```
 
 1. Deploy all Sway contracts under `workspace`
@@ -108,8 +113,8 @@ For a complete example, see:
 
 ## `fuels dev`
 
-```console
-npx fuels dev
+```console-vue
+npx fuels@{{fuels}} dev
 ```
 
 The `fuels dev` command do three things:
@@ -118,14 +123,14 @@ The `fuels dev` command do three things:
 1. Runs `build` and `deploy` once at the start
 1. Watches your Forc workspace and repeats the previous step on every change
 
-> _In `dev` mode, everytime you update a contract on your Forc `workspace`, we re-generate type definitions and factory classes for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
+> _In `dev` mode, every time you update a contract on your Forc `workspace`, we re-generate type definitions and factory classes for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
 
 ## `fuels typegen`
 
 Manually generates type definitions and factory classes from ABI JSON files.
 
-```console
-npx fuels help typegen
+```console-vue
+npx fuels@{{fuels}} help typegen
 ```
 
 ```console
@@ -146,8 +151,8 @@ For more info, check:
 
 Check for version incompatibilities between your [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
 
-```console
-npx fuels versions
+```console-vue
+npx fuels@{{fuels}} versions
 ```
 
 ```

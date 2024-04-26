@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { AssetId, BN } from 'fuels';
-import { toHex, Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import { toHex, Provider, Wallet, ContractFactory, bn, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -11,21 +11,22 @@ const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
 );
 
 let provider: Provider;
+let baseAssetId: string;
 
 const setup = async () => {
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-  const { minGasPrice } = wallet.provider.getGasConfig();
+  const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
 
   // Deploy contract
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({ gasPrice: minGasPrice });
+  const contract = await factory.deployContract();
 
   return contract;
 };
 
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
+  baseAssetId = provider.getBaseAssetId();
 });
 
 /**
@@ -36,15 +37,15 @@ describe('TokenTestContract', () => {
     // New wallet to transfer coins and check balance
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
-    const tokenContractId = { value: token.id.toB256() };
-    const addressId = { value: userWallet.address.toB256() };
+    const tokenContractId = { bits: token.id.toB256() };
+    const addressId = { bits: userWallet.address.toB256() };
 
     // Mint some coins
     const { transactionResult } = await token.functions.mint_coins(100).call();
 
     const { mintedAssets } = transactionResult;
 
-    const assetId: AssetId = { value: mintedAssets?.[0].assetId };
+    const assetId: AssetId = { bits: mintedAssets?.[0].assetId };
 
     const getBalance = async () => {
       const { value } = await token.functions.get_balance(tokenContractId, assetId).simulate<BN>();
@@ -60,7 +61,7 @@ describe('TokenTestContract', () => {
 
     // Check new wallet received the coins from the token contract
     const balances = await userWallet.getBalances();
-    const tokenBalance = balances.find((b) => b.assetId === assetId.value);
+    const tokenBalance = balances.find((b) => b.assetId === assetId.bits);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
   });
 
@@ -70,7 +71,7 @@ describe('TokenTestContract', () => {
     );
 
     const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({
-      value: wallet.address.toB256(),
+      bits: wallet.address.toB256(),
     }));
 
     const token = await setup();
@@ -128,15 +129,15 @@ describe('TokenTestContract', () => {
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
     const addressId = {
-      value: userWallet.address.toB256(),
+      bits: userWallet.address.toB256(),
     };
 
     // mint 100 coins
     const { transactionResult } = await token.functions.mint_coins(100).call();
     const { mintedAssets } = transactionResult;
-    const assetId: AssetId = { value: mintedAssets?.[0].assetId || '' };
+    const assetId: AssetId = { bits: mintedAssets?.[0].assetId || '' };
 
-    const getBalance = async () => token.getBalance(assetId.value);
+    const getBalance = async () => token.getBalance(assetId.bits);
 
     // at the start, the contract should have 100 coins
     expect((await getBalance()).toHex()).toEqual(bn(100).toHex());
@@ -152,9 +153,9 @@ describe('TokenTestContract', () => {
     const userWallet = Wallet.generate({ provider });
     const token = await setup();
     const addressParameter = {
-      value: userWallet.address,
+      bits: userWallet.address,
     };
-    const assetId: AssetId = { value: BaseAssetId };
+    const assetId: AssetId = { bits: baseAssetId };
 
     await expectToThrowFuelError(
       () => token.functions.transfer_to_address(addressParameter, assetId, 50).call(),

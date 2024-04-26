@@ -1,5 +1,18 @@
 # create-fuels
 
+## 0.83.0
+
+### Minor Changes
+
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+
+## 0.82.0
+
+### Minor Changes
+
+- 5daeea4: chore: upgrade Fuel frontend packages
+- 1dbafb5: feat: make `create-fuels` deployment ready
+
 ## 0.81.0
 
 ### Patch Changes

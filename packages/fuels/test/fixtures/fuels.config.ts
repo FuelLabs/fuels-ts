@@ -16,11 +16,9 @@ export const fuelsConfig: FuelsConfig = {
   scripts: [join(scriptsDir, 'script')],
   predicates: [join(predicatesDir, 'predicate')],
   output: '/output',
-  deployConfig: {
-    gasPrice: 5,
-  },
   forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
+  deployConfig: {},
   autoStartFuelCore: true,
   fuelCorePort: 4000,
   providerUrl: FUEL_NETWORK_URL,

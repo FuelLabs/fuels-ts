@@ -1,5 +1,5 @@
 import type { Contract, Provider, WalletUnlocked } from 'fuels';
-import { Address, BN, ContractFactory, BaseAssetId, Wallet } from 'fuels';
+import { Address, BN, ContractFactory, Wallet } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -23,27 +23,27 @@ describe(__filename, () => {
     );
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    const { minGasPrice } = sender.provider.getGasConfig();
-    deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
+    deployedContract = await factory.deployContract();
   });
 
   it('should successfully transfer asset to another account', async () => {
     // #region transferring-assets-1
-    // #import { Wallet, BN, BaseAssetId };
+    // #import { Wallet, BN };
 
     // #context const sender = Wallet.fromPrivateKey('...');
     const destination = Wallet.generate({
       provider: sender.provider,
     });
     const amountToTransfer = 500;
-    const assetId = BaseAssetId;
 
-    const response = await sender.transfer(destination.address, amountToTransfer, assetId);
+    const baseAssetId = await sender.provider.getBaseAssetId();
+
+    const response = await sender.transfer(destination.address, amountToTransfer, baseAssetId);
 
     await response.wait();
 
     // Retrieve balances
-    const receiverBalance = await destination.getBalance(assetId);
+    const receiverBalance = await destination.getBalance(baseAssetId);
 
     // Validate new balance
     expect(new BN(receiverBalance).toNumber()).toEqual(amountToTransfer);
@@ -55,8 +55,8 @@ describe(__filename, () => {
       provider: sender.provider,
     });
 
+    const assetId = provider.getBaseAssetId();
     const amountToTransfer = 200;
-    const assetId = BaseAssetId;
 
     // #region transferring-assets-2
     const transactionRequest = await sender.createTransfer(
@@ -84,7 +84,7 @@ describe(__filename, () => {
     });
 
     const amountToTransfer = 200;
-    const assetId = BaseAssetId;
+    const assetId = provider.getBaseAssetId();
 
     // #region transferring-assets-3
     const transactionRequest = await sender.createTransfer(
@@ -99,6 +99,10 @@ describe(__filename, () => {
 
     transactionRequest.maturity = 1;
 
+    const { maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+    transactionRequest.maxFee = maxFee;
+
     const response = await sender.sendTransaction(transactionRequest);
 
     const { id } = await response.wait();
@@ -110,12 +114,12 @@ describe(__filename, () => {
   it('should successfully prepare transfer transaction request', async () => {
     const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-4
-    // #import { Wallet, BN, BaseAssetId };
+    // #import { Wallet, BN };
 
     // #context const senderWallet = Wallet.fromPrivateKey('...');
 
     const amountToTransfer = 400;
-    const assetId = BaseAssetId;
+    const assetId = provider.getBaseAssetId();
     // #context const contractId = Address.fromAddressOrString('0x123...');
 
     const contractBalance = await deployedContract.getBalance(assetId);

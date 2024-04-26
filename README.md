@@ -20,7 +20,7 @@ The [documentation](https://docs.fuel.network/docs/fuels-ts/) site is your main 
   - [Contracts](https://docs.fuel.network/docs/fuels-ts/contracts/)
   - [Scripts](https://docs.fuel.network/docs/fuels-ts/scripts/)
   - [Predicates](https://docs.fuel.network/docs/fuels-ts/predicates/)
-  - [ABI Typegen](https://docs.fuel.network/docs/fuels-ts/typegen/)
+  - [ABI Typegen](https://docs.fuel.network/docs/fuels-ts/fuels-cli/abi-typegen/)
 - [Contributing](https://github.com/FuelLabs/fuels-ts/blob/master/CONTRIBUTING.md)
 - [The Fuel Forum](https://forum.fuel.network/)
 - [The Fuel Ecosystem](#the-fuel-ecosystem)

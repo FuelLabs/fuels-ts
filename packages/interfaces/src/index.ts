@@ -21,17 +21,17 @@ export type RawSlice = Uint8Array | number[];
 export type BytesLike = Uint8Array | string;
 
 /**
- * @prop value - A 256 bit hash string with the first 12 bytes cleared
+ * @prop bits - A 256 bit hash string with the first 12 bytes cleared
  */
 export type EvmAddress = {
-  value: B256AddressEvm;
+  bits: B256AddressEvm;
 };
 
 /**
- * @prop value - A wrapped 256 bit hash string
+ * @prop bits - A wrapped 256 bit hash string
  */
 export type AssetId = {
-  value: B256Address;
+  bits: B256Address;
 };
 
 export type StdString = string;
@@ -62,7 +62,7 @@ export abstract class AbstractAccount {
   abstract getResourcesToSpend(quantities: any[], options?: any): any;
   abstract sendTransaction(transactionRequest: any, options?: any): any;
   abstract simulateTransaction(transactionRequest: any, options?: any): any;
-  abstract fund(transactionRequest: any, quantities: any, fee: any): Promise<void>;
+  abstract fund(transactionRequest: any, txCost: any): Promise<any>;
 }
 /**
  * @hidden

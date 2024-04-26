@@ -1,5 +1,37 @@
 # @fuel-ts/abi-typegen
 
+## 0.83.0
+
+### Minor Changes
+
+- 29f46ef: chore!: upgrade `forc` to `0.56.0`
+
+### Patch Changes
+
+- 0d75266: chore!: upgrading `forc` to `0.55.0`
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+  - @fuel-ts/versions@0.83.0
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/errors@0.83.0
+
+## 0.82.0
+
+### Minor Changes
+
+- dd1b62b: feat: exclusive enum type inference in typegen
+
+### Patch Changes
+
+- 1542cdc: feat: support `()` type in typegen
+  - @fuel-ts/errors@0.82.0
+  - @fuel-ts/interfaces@0.82.0
+  - @fuel-ts/utils@0.82.0
+  - @fuel-ts/versions@0.82.0
+
 ## 0.81.0
 
 ### Minor Changes
