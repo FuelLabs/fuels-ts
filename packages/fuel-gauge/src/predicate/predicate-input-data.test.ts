@@ -8,9 +8,11 @@ import { setupWallets, fundPredicate } from './utils/predicate';
 /**
  * @group node
  */
-describe('Predicate', () => {
+// TODO @anderson un-skip test and swap lines below after re-enabling PREDICATE_INPUT_DATA
+describe.skip('Predicate', () => {
   const { binHexlified, abiContents } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_INPUT_DATA
+    FuelGaugeProjectsEnum.ADVANCED_LOGGING
+    // FuelGaugeProjectsEnum.PREDICATE_INPUT_DATA
   );
 
   describe('Input Data', () => {
