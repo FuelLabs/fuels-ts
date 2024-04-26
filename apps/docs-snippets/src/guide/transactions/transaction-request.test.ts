@@ -63,7 +63,7 @@ describe('Transaction Request', () => {
     });
 
     baseAssetId = provider.getBaseAssetId();
-    await seedTestWallet(predicate, [[10_000, baseAssetId]]);
+    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
   });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {

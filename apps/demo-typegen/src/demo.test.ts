@@ -134,7 +134,7 @@ test('Example predicate', async () => {
   const predicateData: PredicateAbiInputs = [];
   const predicate = PredicateAbi__factory.createInstance(provider, predicateData);
 
-  const tx = await wallet.transfer(predicate.address, 100_000, baseAssetId);
+  const tx = await wallet.transfer(predicate.address, 150_000, baseAssetId);
   await tx.wait();
 
   const initialPredicateBalance = await predicate.getBalance();
