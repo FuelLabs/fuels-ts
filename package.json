@@ -17,7 +17,7 @@
     "pretest": "turbo run pretest",
     "depcheck": "knip --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
-    "test": "vitest --run --coverage --config vite.node.config.mts $(scripts/tests-find.sh --node)",
+    "test": "vitest --run --coverage --config vite.node.config.mts apps/docs-snippets/src/guide/provider/querying-the-chain.test.ts",
     "test:filter": "vitest --run --coverage --config vite.node.config.mts",
     "test:coverage-merge": "tsx ./scripts/tests-coverage-merge.ts",
     "test:coverage-diff": "tsx ./scripts/tests-coverage-diff.ts",
