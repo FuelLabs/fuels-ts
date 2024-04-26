@@ -158,7 +158,7 @@ describe('dry-run-multiple-txs', () => {
     });
   });
 
-  it.only('should properly estimate multiple TXs requests', async () => {
+  it('should properly estimate multiple TXs requests', async () => {
     // preparing test data
     const { revertContract, multiTokenContract, logContract, logOtherContract } =
       await deployContracts();
