@@ -1,12 +1,11 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { hexlify } from '@fuel-ts/utils';
 
 export type CoinQuantityLike =
-  | [amount: BigNumberish, assetId?: BytesLike, max?: BigNumberish]
-  | { amount: BigNumberish; assetId?: BytesLike; max?: BigNumberish };
+  | [amount: BigNumberish, assetId: BytesLike, max?: BigNumberish]
+  | { amount: BigNumberish; assetId: BytesLike; max?: BigNumberish };
 export type CoinQuantity = { amount: BN; assetId: string; max?: BN };
 
 /** @hidden */
@@ -16,11 +15,11 @@ export const coinQuantityfy = (coinQuantityLike: CoinQuantityLike): CoinQuantity
   let max;
   if (Array.isArray(coinQuantityLike)) {
     amount = coinQuantityLike[0];
-    assetId = coinQuantityLike[1] ?? BaseAssetId;
+    assetId = coinQuantityLike[1];
     max = coinQuantityLike[2] ?? undefined;
   } else {
     amount = coinQuantityLike.amount;
-    assetId = coinQuantityLike.assetId ?? BaseAssetId;
+    assetId = coinQuantityLike.assetId;
     max = coinQuantityLike.max ?? undefined;
   }
 
@@ -38,7 +37,7 @@ export interface IAddAmountToAssetParams {
   coinQuantities: CoinQuantity[];
 }
 
-export const addAmountToAsset = (params: IAddAmountToAssetParams): CoinQuantity[] => {
+export const addAmountToCoinQuantities = (params: IAddAmountToAssetParams): CoinQuantity[] => {
   const { amount, assetId } = params;
 
   const coinQuantities = [...params.coinQuantities];

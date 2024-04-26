@@ -1,5 +1,5 @@
 import type { Contract, AssetId } from 'fuels';
-import { Wallet, BN, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { Wallet, BN, Provider, FUEL_NETWORK_URL } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -18,27 +18,28 @@ describe(__filename, () => {
 
   it('should successfully get a contract balance', async () => {
     // #region contract-balance-3
-    // #import { AssetId, Wallet, BN, BaseAssetId };
+    // #import { AssetId, Wallet, BN };
 
     const amountToForward = 40;
     const amountToTransfer = 10;
+    const baseAssetId = provider.getBaseAssetId();
 
     const recipient = Wallet.generate({
       provider,
     });
 
     const asset: AssetId = {
-      value: BaseAssetId,
+      bits: baseAssetId,
     };
 
     await contract.functions
       .transfer(amountToTransfer, asset, recipient.address.toB256())
       .callParams({
-        forward: [amountToForward, BaseAssetId],
+        forward: [amountToForward, baseAssetId],
       })
       .call();
 
-    const contractBalance = await contract.getBalance(BaseAssetId);
+    const contractBalance = await contract.getBalance(baseAssetId);
 
     const expectedBalance = amountToForward - amountToTransfer;
 
