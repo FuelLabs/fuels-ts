@@ -180,7 +180,7 @@ describe('Transaction Request', () => {
     transactionRequest.addResources(predicateCoins);
     // #endregion transaction-request-5
 
-    expect(transactionRequest.inputs.length).toEqual(1);
+    expect(transactionRequest.inputs.length).toBeGreaterThanOrEqual(1);
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 

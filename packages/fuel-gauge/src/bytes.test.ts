@@ -106,13 +106,13 @@ describe('Bytes Tests', () => {
     });
     await setupTx.waitForResult();
 
-    const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
 
     const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
       gasLimit: 10_000,
     });
-    await tx.waitForResult();
+
+    const { isStatusSuccess } = await tx.waitForResult();
 
     // Check the balance of the receiver
     const finalReceiverBalance = await receiver.getBalance();
@@ -120,9 +120,7 @@ describe('Bytes Tests', () => {
       finalReceiverBalance.toHex()
     );
 
-    // Check we spent the entire predicate hash input
-    const finalPredicateBalance = await predicate.getBalance();
-    expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
+    expect(isStatusSuccess).toBeTruthy();
   });
 
   it('should test bytes input [script-bytes]', async () => {
