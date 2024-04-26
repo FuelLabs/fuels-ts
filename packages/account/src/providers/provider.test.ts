@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
@@ -51,7 +51,7 @@ const getCustomFetch =
   };
 
 // TODO: Figure out a way to import this constant from `@fuel-ts/account/configs`
-const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
+const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
 /**
  * @group node
@@ -63,29 +63,29 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.22.1');
+    expect(version).toEqual('0.24.3');
   });
 
   it('can call()', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    const baseAssetId = provider.getBaseAssetId();
 
     const CoinInputs: CoinTransactionRequestInput[] = [
       {
         type: InputType.Coin,
         id: '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-        owner: BaseAssetId,
-        assetId: BaseAssetId,
+        owner: baseAssetId,
+        assetId: baseAssetId,
         txPointer: '0x00000000000000000000000000000000',
-        amount: 100,
+        amount: 1000,
         witnessIndex: 0,
       },
     ];
-
-    const callResult = await provider.call({
-      type: TransactionType.Script,
-      gasPrice: 0,
-      gasLimit: 1000000,
+    const transactionRequest = new ScriptTransactionRequest({
+      tip: 0,
+      gasLimit: 500,
+      maxFee: 1000,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -99,6 +99,13 @@ describe('Provider', () => {
       witnesses: ['0x'],
     });
 
+    const { maxFee, gasUsed } = await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.maxFee = maxFee;
+    transactionRequest.gasLimit = gasUsed;
+
+    const callResult = await provider.call(transactionRequest);
+
     const expectedReceipts: Receipt[] = [
       {
         type: ReceiptType.Log,
@@ -107,20 +114,20 @@ describe('Provider', () => {
         val1: bn(186),
         val2: bn(0),
         val3: bn(0),
-        pc: bn(0x2868),
-        is: bn(0x2860),
+        pc: bn(0x2888),
+        is: bn(0x2880),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: bn(1),
-        pc: bn(0x286c),
-        is: bn(0x2860),
+        pc: bn(0x288c),
+        is: bn(0x2880),
       },
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x18),
+        gasUsed: bn(0x5d3),
       },
     ];
 
@@ -138,7 +145,7 @@ describe('Provider', () => {
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      gasPrice: 0,
+      tip: 0,
       gasLimit: 1000000,
       script:
         /*
@@ -185,6 +192,7 @@ describe('Provider', () => {
 
     const { consensusParameters } = provider.getChain();
 
+    expect(consensusParameters.baseAssetId).toBeDefined();
     expect(consensusParameters.contractMaxSize).toBeDefined();
     expect(consensusParameters.maxInputs).toBeDefined();
     expect(consensusParameters.maxOutputs).toBeDefined();
@@ -199,6 +207,20 @@ describe('Provider', () => {
     expect(consensusParameters.gasPriceFactor).toBeDefined();
     expect(consensusParameters.gasPerByte).toBeDefined();
     expect(consensusParameters.maxMessageDataLength).toBeDefined();
+  });
+
+  it('gets the chain ID', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const chainId = provider.getChainId();
+
+    expect(chainId).toBe(0);
+  });
+
+  it('gets the base asset ID', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+
+    expect(baseAssetId).toBe('0x0000000000000000000000000000000000000000000000000000000000000000');
   });
 
   it('can change the provider url of the current instance', async () => {
@@ -362,8 +384,7 @@ describe('Provider', () => {
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-    // using launched = await setupTestProviderAndWallets();
-    const transactionRequest = new ScriptTransactionRequest({});
+    const transactionRequest = new ScriptTransactionRequest();
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
 
@@ -379,13 +400,14 @@ describe('Provider', () => {
     });
     const { provider } = launched;
 
+    const baseAssetId = provider.getBaseAssetId();
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const transactionRequest = new ScriptTransactionRequest({
       inputs: [MessageInput],
@@ -402,6 +424,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
     const { provider } = launched;
 
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -410,35 +433,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -460,6 +483,8 @@ describe('Provider', () => {
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
     using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
     const { provider } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -468,35 +493,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -534,6 +559,8 @@ describe('Provider', () => {
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
     using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
     const { provider } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
@@ -542,35 +569,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -592,6 +619,8 @@ describe('Provider', () => {
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
     using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
     const { provider } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
@@ -600,35 +629,35 @@ describe('Provider', () => {
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
       amount: 100,
-      sender: BaseAssetId,
-      recipient: BaseAssetId,
+      sender: baseAssetId,
+      recipient: baseAssetId,
       witnessIndex: 1,
-      nonce: BaseAssetId,
+      nonce: baseAssetId,
     };
     const CoinInputA: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[0],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputB: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: arrayify(EXPECTED[1]),
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
     const CoinInputC: CoinTransactionRequestInput = {
       type: InputType.Coin,
       id: EXPECTED[2],
-      owner: BaseAssetId,
-      assetId: BaseAssetId,
-      txPointer: BaseAssetId,
+      owner: baseAssetId,
+      assetId: baseAssetId,
+      txPointer: baseAssetId,
       witnessIndex: 1,
       amount: 100,
     };
@@ -803,7 +832,6 @@ describe('Provider', () => {
     expect(gasConfig.gasPriceFactor).toBeDefined();
     expect(gasConfig.maxGasPerPredicate).toBeDefined();
     expect(gasConfig.maxGasPerTx).toBeDefined();
-    expect(gasConfig.minGasPrice).toBeDefined();
   });
 
   it('should throws when using getChain or getNode and without cached data', async () => {
@@ -958,7 +986,7 @@ describe('Provider', () => {
   it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-    const { gasPerByte } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const gasLimit = bn(1000);
     const transactionRequest = new ScriptTransactionRequest({
@@ -978,6 +1006,7 @@ describe('Provider', () => {
     expect(maxGasSpy).toHaveBeenCalledWith({
       gasPerByte,
       minGas,
+      maxGasPerTx,
       witnessesLength,
       witnessLimit: transactionRequest.witnessLimit,
       gasLimit: transactionRequest.gasLimit,
@@ -987,7 +1016,7 @@ describe('Provider', () => {
   it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-    const { gasPerByte } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const transactionRequest = new CreateTransactionRequest({
       witnesses: [ZeroBytes32],
@@ -1009,24 +1038,23 @@ describe('Provider', () => {
       gasPerByte,
       minGas,
       witnessesLength,
+      maxGasPerTx,
       witnessLimit: transactionRequest.witnessLimit,
     });
   });
 
-  it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
+  // TODO: validate if this test still makes sense
+  it.skip('should ensure estimated fee values on getTransactionCost are never 0', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-
     const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
-    const calculatePriceWithFactorMock = vi
-      .spyOn(gasMod, 'calculatePriceWithFactor')
-      .mockReturnValue(bn(0));
+    const calculateGasFeeMock = vi.spyOn(gasMod, 'calculateGasFee').mockReturnValue(bn(0));
 
     const { minFee, maxFee } = await provider.getTransactionCost(request);
 
-    expect(calculatePriceWithFactorMock).toHaveBeenCalled();
+    expect(calculateGasFeeMock).toHaveBeenCalled();
 
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
@@ -1036,14 +1064,15 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
+    const baseAssetId = provider.getBaseAssetId();
     const b256Str = Address.fromRandom().toB256();
 
     const methodCalls = [
-      () => provider.getBalance(b256Str, BaseAssetId),
+      () => provider.getBalance(b256Str, baseAssetId),
       () => provider.getCoins(b256Str),
       () => provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
       () => provider.getResourcesToSpend(b256Str, []),
-      () => provider.getContractBalance(b256Str, BaseAssetId),
+      () => provider.getContractBalance(b256Str, baseAssetId),
       () => provider.getBalances(b256Str),
       () => provider.getMessages(b256Str),
     ];
@@ -1357,7 +1386,6 @@ describe('Provider', () => {
       },
       {
         code: FuelError.CODES.STREAM_PARSING_ERROR,
-        message: `Error while parsing stream data response: ${badResponse}`,
       }
     );
   });

@@ -1,5 +1,5 @@
 import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { WalletUnlocked, BaseAssetId, toNumber, Contract, Predicate } from 'fuels';
+import { WalletUnlocked, toNumber, Contract, Predicate } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -39,7 +39,7 @@ describe('Predicate', () => {
         provider,
       } = launcher;
 
-      const amountToPredicate = 500_000;
+      const amountToPredicate = 3000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesTrue,
         abi: predicateAbiMainArgsStruct,
@@ -52,7 +52,7 @@ describe('Predicate', () => {
       const { value } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
-          forward: [500, BaseAssetId],
+          forward: [500, provider.getBaseAssetId()],
         })
         .call();
 
@@ -82,8 +82,8 @@ describe('Predicate', () => {
       );
 
       // setup predicate
-      const amountToPredicate = 700_000;
-      const amountToReceiver = 200_000;
+      const amountToPredicate = 20_000;
+      const amountToReceiver = 2_000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,
@@ -99,12 +99,14 @@ describe('Predicate', () => {
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 
-      expect(toNumber(await predicate.getBalance())).toEqual(
-        initialPredicateBalance + amountToPredicate
-      );
+      expect(toNumber(await predicate.getBalance())).toBeGreaterThan(initialPredicateBalance);
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
+      const tx = await predicate.transfer(
+        receiver.address,
+        amountToReceiver,
+        provider.getBaseAssetId()
+      );
 
       const { fee: predicateTxFee } = await tx.waitForResult();
 

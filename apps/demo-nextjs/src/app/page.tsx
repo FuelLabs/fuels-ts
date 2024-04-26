@@ -1,5 +1,5 @@
 import * as asm from "@fuels/vm-asm";
-import { BaseAssetId, decrypt, encrypt } from "fuels";
+import { ZeroBytes32, decrypt, encrypt } from "fuels";
 import Image from "next/image";
 
 import styles from "./page.module.css";
@@ -7,7 +7,7 @@ import styles from "./page.module.css";
 export default function Home() {
   const { log } = console;
 
-  log("Hello Fuels", BaseAssetId, encrypt, decrypt);
+  log("Hello Fuels", ZeroBytes32, encrypt, decrypt);
   log("Hello ASM", asm);
 
   return (

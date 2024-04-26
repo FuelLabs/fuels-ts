@@ -1,12 +1,12 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, Contract, WalletUnlocked } from 'fuels';
-import { ContractFactory, BaseAssetId, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
+import type { Contract, WalletUnlocked } from 'fuels';
+import { ContractFactory, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
-let gasPrice: BN;
+let baseAssetId: string;
 
 /**
  * @group node
@@ -14,15 +14,15 @@ let gasPrice: BN;
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
-    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
     const { binHexlified, abiContents } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    contractInstance = await factory.deployContract({ gasPrice });
+    contractInstance = await factory.deployContract();
   });
 
   it('can get is_caller_external', async () => {
@@ -33,7 +33,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     const { value } = await contractInstance.functions
-      .check_msg_sender({ value: wallet.address.toB256() })
+      .check_msg_sender({ bits: wallet.address.toB256() })
       .call();
 
     expect(value).toBeTruthy();
@@ -41,7 +41,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     await expect(
-      contractInstance.functions.check_msg_sender({ value: getRandomB256() }).call()
+      contractInstance.functions.check_msg_sender({ bits: getRandomB256() }).call()
     ).rejects.toThrow(
       'The transaction reverted because an "assert" statement failed to evaluate to true.'
     );

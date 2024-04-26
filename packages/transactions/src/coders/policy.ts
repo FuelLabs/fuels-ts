@@ -5,16 +5,16 @@ import { concat } from '@fuel-ts/utils';
 
 // Bitfield of used policy types.
 export enum PolicyType {
-  GasPrice = 1,
+  Tip = 1,
   WitnessLimit = 2,
   Maturity = 4,
   MaxFee = 8,
 }
 
-export type Policy = PolicyGasPrice | PolicyWitnessLimit | PolicyMaturity | PolicyMaxFee;
+export type Policy = PolicyTip | PolicyWitnessLimit | PolicyMaturity | PolicyMaxFee;
 
-export type PolicyGasPrice = {
-  type: PolicyType.GasPrice;
+export type PolicyTip = {
+  type: PolicyType.Tip;
   data: BN;
 };
 
@@ -64,7 +64,7 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     sortedPolicies.forEach(({ data, type }) => {
       switch (type) {
         case PolicyType.MaxFee:
-        case PolicyType.GasPrice:
+        case PolicyType.Tip:
         case PolicyType.WitnessLimit:
           parts.push(new BigNumberCoder('u64').encode(data));
           break;
@@ -86,10 +86,10 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     let o = offset;
     const policies: Policy[] = [];
 
-    if (policyTypes & PolicyType.GasPrice) {
-      const [gasPrice, nextOffset] = new BigNumberCoder('u64').decode(data, o);
+    if (policyTypes & PolicyType.Tip) {
+      const [tip, nextOffset] = new BigNumberCoder('u64').decode(data, o);
       o = nextOffset;
-      policies.push({ type: PolicyType.GasPrice, data: gasPrice });
+      policies.push({ type: PolicyType.Tip, data: tip });
     }
 
     if (policyTypes & PolicyType.WitnessLimit) {

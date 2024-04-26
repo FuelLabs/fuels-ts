@@ -2,7 +2,7 @@ import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { readFileSync } from 'fs';
 import type { Interface, Contract, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
-import { Script, Provider, ContractFactory, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import { Script, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
 import { join } from 'path';
 
 let contractInstance: Contract;
@@ -14,8 +14,7 @@ const deployContract = async (
   if (contractInstance && useCache) {
     return contractInstance;
   }
-  const { minGasPrice } = provider.getGasConfig();
-  contractInstance = await factory.deployContract({ gasPrice: minGasPrice });
+  contractInstance = await factory.deployContract();
   return contractInstance;
 };
 
@@ -25,8 +24,9 @@ export const createWallet = async () => {
     return walletInstance;
   }
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
   walletInstance = await generateTestWallet(provider, [
-    [5_000_000, BaseAssetId],
+    [5_000_000, baseAssetId],
     [5_000_000, ASSET_A],
   ]);
   return walletInstance;

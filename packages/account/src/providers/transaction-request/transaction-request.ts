@@ -1,7 +1,6 @@
-import type { InputValue } from '@fuel-ts/abi-coder';
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
@@ -17,7 +16,6 @@ import {
 import { concat, hexlify } from '@fuel-ts/utils';
 
 import type { Account } from '../../account';
-import type { Predicate } from '../../predicate';
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
@@ -60,7 +58,7 @@ export {
  */
 export interface BaseTransactionRequestLike {
   /** Gas price for transaction */
-  gasPrice?: BigNumberish;
+  tip?: BigNumberish;
   /** Block until which tx cannot be included */
   maturity?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
@@ -94,7 +92,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
-  gasPrice: BN;
+  tip: BN;
   /** Block until which tx cannot be included */
   maturity: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
@@ -114,7 +112,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param baseTransactionRequest - Optional object containing properties to initialize the transaction request.
    */
   constructor({
-    gasPrice,
+    tip,
     maturity,
     maxFee,
     witnessLimit,
@@ -122,7 +120,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     outputs,
     witnesses,
   }: BaseTransactionRequestLike = {}) {
-    this.gasPrice = bn(gasPrice);
+    this.tip = bn(tip);
     this.maturity = maturity ?? 0;
     this.witnessLimit = witnessLimit ? bn(witnessLimit) : undefined;
     this.maxFee = maxFee ? bn(maxFee) : undefined;
@@ -135,9 +133,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     let policyTypes = 0;
     const policies: Policy[] = [];
 
-    if (req.gasPrice) {
-      policyTypes += PolicyType.GasPrice;
-      policies.push({ data: req.gasPrice, type: PolicyType.GasPrice });
+    if (req.tip) {
+      policyTypes += PolicyType.Tip;
+      policies.push({ data: req.tip, type: PolicyType.Tip });
     }
     if (req.witnessLimit) {
       policyTypes += PolicyType.WitnessLimit;
@@ -234,7 +232,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @returns The index of the created witness.
    */
-  protected addEmptyWitness(): number {
+  addEmptyWitness(): number {
     // Push a dummy witness with same byte size as a real witness signature
     this.addWitness(concat([ZeroBytes32, ZeroBytes32]));
     return this.witnesses.length - 1;
@@ -347,15 +345,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * assetId, if one it was not added yet.
    *
    * @param coin - Coin resource.
-   * @param predicate - Predicate bytes.
-   * @param predicateData - Predicate data bytes.
    */
-  addCoinInput(coin: Coin, predicate?: Predicate<InputValue[]>) {
+  addCoinInput(coin: Coin) {
     const { assetId, owner, amount } = coin;
 
     let witnessIndex;
 
-    if (predicate) {
+    if (coin.predicate) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(owner);
@@ -374,7 +370,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
-      predicate: predicate?.bytes,
     };
 
     // Insert the Input
@@ -386,20 +381,16 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   /**
    * Adds a single message input to the transaction and a change output for the
-   * baseAssetId, if one it was not added yet.
+   * asset against the message
    *
    * @param message - Message resource.
-   * @param predicate - Predicate bytes.
-   * @param predicateData - Predicate data bytes.
    */
-  addMessageInput(message: MessageCoin, predicate?: Predicate<InputValue[]>) {
-    const { recipient, sender, amount } = message;
-
-    const assetId = BaseAssetId;
+  addMessageInput(message: MessageCoin) {
+    const { recipient, sender, amount, assetId } = message;
 
     let witnessIndex;
 
-    if (predicate) {
+    if (message.predicate) {
       witnessIndex = 0;
     } else {
       witnessIndex = this.getCoinInputWitnessIndexByOwner(recipient);
@@ -417,7 +408,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       recipient: recipient.toB256(),
       amount,
       witnessIndex,
-      predicate: predicate?.bytes,
     };
 
     // Insert the Input
@@ -458,43 +448,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   /**
-   * Adds multiple resources to the transaction by adding coin/message inputs and change
-   * outputs from the related assetIds.
-   *
-   * @param resources - The resources to add.
-   * @returns This transaction.
-   */
-  addPredicateResource(resource: Resource, predicate: Predicate<InputValue[]>) {
-    if (isCoin(resource)) {
-      this.addCoinInput(resource, predicate);
-    } else {
-      this.addMessageInput(resource, predicate);
-    }
-
-    return this;
-  }
-
-  /**
-   * Adds multiple predicate coin/message inputs to the transaction and change outputs
-   * from the related assetIds.
-   *
-   * @param resources - The resources to add.
-   * @returns This transaction.
-   */
-  addPredicateResources(resources: Resource[], predicate: Predicate<InputValue[]>) {
-    resources.forEach((resource) => this.addPredicateResource(resource, predicate));
-
-    return this;
-  }
-
-  /**
    * Adds a coin output to the transaction.
    *
    * @param to - Address of the owner.
    * @param amount - Amount of coin.
    * @param assetId - Asset ID of coin.
    */
-  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId: BytesLike = BaseAssetId) {
+  addCoinOutput(to: AddressLike, amount: BigNumberish, assetId: BytesLike) {
     this.pushOutput({
       type: OutputType.Coin,
       to: addressify(to).toB256(),
@@ -530,7 +490,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param to - Address of the owner.
    * @param assetId - Asset ID of coin.
    */
-  addChangeOutput(to: AddressLike, assetId: BytesLike = BaseAssetId) {
+  addChangeOutput(to: AddressLike, assetId: BytesLike) {
     // Find the ChangeOutput for the AssetId of the Resource
     const changeOutput = this.getChangeOutputs().find(
       (output) => hexlify(output.assetId) === assetId
@@ -577,7 +537,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
-    const { gasPerByte } = consensusParameters;
+    const { gasPerByte, maxGasPerTx } = consensusParameters;
 
     const witnessesLength = this.toTransaction().witnesses.reduce(
       (acc, wit) => acc + wit.dataLength,
@@ -588,6 +548,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       minGas,
       witnessesLength,
       witnessLimit: this.witnessLimit,
+      maxGasPerTx,
     });
   }
 
@@ -596,8 +557,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * quantities array.
    *
    * @param quantities - CoinQuantity Array.
+   * @param baseAssetId - The base asset to fund the transaction.
    */
-  fundWithFakeUtxos(quantities: CoinQuantity[], resourcesOwner?: AbstractAddress) {
+  fundWithFakeUtxos(
+    quantities: CoinQuantity[],
+    baseAssetId: string,
+    resourcesOwner?: AbstractAddress
+  ) {
     const findAssetInput = (assetId: string) =>
       this.inputs.find((input) => {
         if ('assetId' in input) {
@@ -609,17 +575,22 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     const updateAssetInput = (assetId: string, quantity: BN) => {
       const assetInput = findAssetInput(assetId);
 
+      let usedQuantity = quantity;
+
+      if (assetId === baseAssetId) {
+        usedQuantity = bn('1000000000000000000');
+      }
+
       if (assetInput && 'assetId' in assetInput) {
         assetInput.id = hexlify(randomBytes(UTXO_ID_LEN));
-        assetInput.amount = quantity;
+        assetInput.amount = usedQuantity;
       } else {
         this.addResources([
           {
             id: hexlify(randomBytes(UTXO_ID_LEN)),
-            amount: quantity,
+            amount: usedQuantity,
             assetId,
             owner: resourcesOwner || Address.fromRandom(),
-            maturity: 0,
             blockCreated: bn(1),
             txCreatedIdx: bn(1),
           },
@@ -627,7 +598,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       }
     };
 
-    updateAssetInput(BaseAssetId, bn(100_000_000_000));
+    updateAssetInput(baseAssetId, bn(100_000_000_000));
     quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
   }
 
@@ -665,7 +636,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return normalizeJSON(this);
   }
 
-  updatePredicateInputs(inputs: TransactionRequestInput[]) {
+  updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
     this.inputs.forEach((i) => {
       let correspondingInput: TransactionRequestInput | undefined;
       switch (i.type) {
@@ -691,6 +662,22 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         i.predicateData = correspondingInput.predicateData;
         // eslint-disable-next-line no-param-reassign
         i.predicateGasUsed = correspondingInput.predicateGasUsed;
+      }
+    });
+  }
+
+  shiftPredicateData() {
+    this.inputs.forEach((input) => {
+      // TODO: improve logic
+      if (
+        'predicateData' in input &&
+        'padPredicateData' in input &&
+        typeof input.padPredicateData === 'function'
+      ) {
+        // eslint-disable-next-line no-param-reassign
+        input.predicateData = input.padPredicateData(
+          BaseTransactionRequest.getPolicyMeta(this).policies.length
+        );
       }
     });
   }
