@@ -10,7 +10,7 @@ abi MyContract {
 
 impl MyContract for Contract {
     fn compute_bytecode_root(bytecode_input: Vec<u8>) {
-       // simply logs the hexidecimal b256 string of the bytecode input for testing purposes
+        // simply logs the hexidecimal b256 string of the bytecode input for testing purposes
         log(&b256::from_hex_str(&bytecode_input).unwrap().to_hex_str());
     }
 
