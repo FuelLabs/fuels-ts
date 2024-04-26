@@ -1124,7 +1124,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[10_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[50_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 

@@ -101,9 +101,9 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 11,
-      witnessLimit: randomNumber(800, 900),
-      maturity: randomNumber(1, 2),
-      maxFee: 1500,
+      witnessLimit: 2000,
+      maturity: 1,
+      maxFee: 5000,
     };
 
     const { transactionRequest: txRequest } = factory.createTransactionRequest(txParams);
@@ -169,7 +169,7 @@ describe('Policies', () => {
       tip: 2,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: 2000,
+      maxFee: 2500,
     });
 
     const txRequest = await callScope.getTransactionRequest();

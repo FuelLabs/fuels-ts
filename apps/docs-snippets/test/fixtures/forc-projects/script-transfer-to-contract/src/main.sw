@@ -1,7 +1,7 @@
 // #region custom-transactions-1
 script;
 
-use std::asset::force_transfer_to_contract;
+use std::asset::transfer;
 
 fn main(
     contract_address: b256,
@@ -11,9 +11,9 @@ fn main(
     amount_asset_b: u64,
 ) -> bool {
     let wrapped_contract = ContractId::from(contract_address);
-
-    force_transfer_to_contract(wrapped_contract, asset_a, amount_asset_a);
-    force_transfer_to_contract(wrapped_contract, asset_b, amount_asset_b);
+    let contract_id = Identity::ContractId(wrapped_contract);
+    transfer(contract_id, asset_a, amount_asset_a);
+    transfer(contract_id, asset_b, amount_asset_b);
     true
 }
 // #endregion custom-transactions-1
