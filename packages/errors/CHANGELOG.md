@@ -1,5 +1,18 @@
 # @fuel-ts/errors
 
+## 0.83.0
+
+### Minor Changes
+
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+
+### Patch Changes
+
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [0d75266]
+  - @fuel-ts/versions@0.83.0
+
 ## 0.82.0
 
 ### Patch Changes

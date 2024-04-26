@@ -172,11 +172,11 @@ describe('Predicate', () => {
 
       await seedTestWallet(predicateTrue, [[amountToPredicate, baseAssetId]]);
 
-      const initialPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
-
       const receiverWallet = WalletUnlocked.generate({
         provider,
       });
+
+      const initialReceiverBalance = await receiverWallet.getBalance();
 
       const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
       const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
@@ -186,10 +186,13 @@ describe('Predicate', () => {
         1,
         baseAssetId
       );
-      await response.waitForResult();
-      const finalPredicateBalance = bn(await predicateTrue.getBalance()).toNumber();
-      expect(initialPredicateBalance).toBeGreaterThan(finalPredicateBalance);
 
+      const { isStatusSuccess } = await response.waitForResult();
+      expect(isStatusSuccess).toBeTruthy();
+
+      const finalReceiverBalance = await receiverWallet.getBalance();
+
+      expect(finalReceiverBalance.gt(initialReceiverBalance)).toBeTruthy();
       expect(estimatePredicatesSpy).toHaveBeenCalledTimes(1);
       expect(dryRunSpy).toHaveBeenCalledOnce();
     });

@@ -202,7 +202,7 @@ describe('TransactionSummary', () => {
     };
 
     it('should ensure transfer operation is assembled (ACCOUNT TRANSFER)', async () => {
-      const wallet = await generateTestWallet(provider, [[10_000, baseAssetId]]);
+      const wallet = await generateTestWallet(provider, [[50_000, baseAssetId]]);
 
       const recipient = Wallet.generate({ provider });
 
@@ -227,7 +227,7 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operation is assembled (ACCOUNT TRANSFER TO CONTRACT)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, baseAssetId],
+        [50_000, baseAssetId],
         [10_000, ASSET_A],
       ]);
 
@@ -251,7 +251,7 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO ACCOUNT)', async () => {
-      const wallet = await generateTestWallet(provider, [[10_000, baseAssetId]]);
+      const wallet = await generateTestWallet(provider, [[50_000, baseAssetId]]);
 
       const contract = await setupContract();
       contract.account = wallet;
@@ -342,7 +342,7 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO CONTRACT)', async () => {
-      const wallet = await generateTestWallet(provider, [[10_000, baseAssetId]]);
+      const wallet = await generateTestWallet(provider, [[50_000, baseAssetId]]);
 
       const contractSender = await setupContract({ cache: false });
       contractSender.account = wallet;
@@ -440,7 +440,7 @@ describe('TransactionSummary', () => {
 
     it('should ensure transfer operations are assembled (CUSTOM SCRIPT TRANSFER)', async () => {
       const wallet = await generateTestWallet(provider, [
-        [10_000, baseAssetId],
+        [50_000, baseAssetId],
         [10_000, ASSET_A],
         [10_000, ASSET_B],
       ]);

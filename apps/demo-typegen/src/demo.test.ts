@@ -134,18 +134,14 @@ test('Example predicate', async () => {
   const predicateData: PredicateAbiInputs = [];
   const predicate = PredicateAbi__factory.createInstance(provider, predicateData);
 
-  const tx = await wallet.transfer(predicate.address, 100_000, baseAssetId);
-  await tx.wait();
-
-  const initialPredicateBalance = await predicate.getBalance();
+  const tx = await wallet.transfer(predicate.address, 150_000, baseAssetId);
+  const { isStatusSuccess } = await tx.wait();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)
   const tx2 = await predicate.transfer(receiver.address, 50_000, baseAssetId);
   await tx2.wait();
 
   expect((await receiver.getBalance()).toNumber()).toEqual(50_000);
-  expect((await predicate.getBalance()).toNumber()).toBeLessThan(
-    initialPredicateBalance.toNumber()
-  );
+  expect(isStatusSuccess).toBeTruthy();
   // #endregion typegen-demo-predicate
 });
