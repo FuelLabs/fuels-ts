@@ -1,10 +1,10 @@
 ---
-"@fuel-ts/abi-typegen": patch
-"@fuel-ts/abi-coder": patch
-"@fuel-ts/versions": patch
-"@fuel-ts/script": patch
-"@fuel-ts/utils": patch
-"@fuel-ts/forc": patch
+"@fuel-ts/abi-typegen": minor
+"@fuel-ts/abi-coder": minor
+"@fuel-ts/versions": minor
+"@fuel-ts/script": minor
+"@fuel-ts/utils": minor
+"@fuel-ts/forc": minor
 ---
 
 chore!: upgrade `forc` to `0.56.0`
