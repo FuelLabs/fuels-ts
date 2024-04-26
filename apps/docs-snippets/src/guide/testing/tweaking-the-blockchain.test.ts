@@ -7,7 +7,7 @@ import { Provider, DateTime } from 'fuels';
 test('produceBlocks with custom timestamp docs snippet', async () => {
   // TODO: reevaluate/replace after #1356
   const { cleanup, ip, port } = await launchNode({});
-  const url = `http://${ip}:${port}/graphql`;
+  const url = `http://${ip}:${port}/v1/graphql`;
   const provider = await Provider.create(url);
   const latestBlock = await provider.getBlock('latest');
   if (!latestBlock) {

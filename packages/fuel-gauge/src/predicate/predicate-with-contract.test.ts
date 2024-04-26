@@ -1,7 +1,6 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, BN, CoinQuantity, InputCoin, WalletUnlocked } from 'fuels';
 import {
-  BaseAssetId,
   ContractFactory,
   toNumber,
   Contract,
@@ -43,24 +42,24 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletUnlocked;
     let provider: Provider;
-    let gasPrice: BN;
+    let baseAssetId: string;
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      gasPrice = provider.getGasConfig().minGasPrice;
+      baseAssetId = provider.getBaseAssetId();
     });
 
     beforeEach(async () => {
-      wallet = await generateTestWallet(provider, [[2_000_000, BaseAssetId]]);
+      wallet = await generateTestWallet(provider, [[2_000_000, baseAssetId]]);
       receiver = await generateTestWallet(provider);
     });
 
     it('calls a predicate from a contract function', async () => {
       const testWallet = Wallet.generate({ provider });
 
-      await seedTestWallet(testWallet, [[1_000_000, BaseAssetId]]);
+      await seedTestWallet(testWallet, [[1_000_000, baseAssetId]]);
 
       const factory = new ContractFactory(contractBytes, contractAbi, testWallet);
-      const contract = await factory.deployContract({ gasPrice });
+      const contract = await factory.deployContract();
 
       const amountToPredicate = 500_000;
       const predicate = new Predicate<[BN, BN]>({
@@ -71,26 +70,25 @@ describe('Predicate', () => {
       });
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
-      const predicateBalance = await fundPredicate(testWallet, predicate, amountToPredicate);
+      await fundPredicate(testWallet, predicate, amountToPredicate);
 
       const {
         value,
         transactionResult: {
           transaction: { witnesses },
+          isStatusSuccess,
         },
       } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
-          forward: [500, BaseAssetId],
+          forward: [500, baseAssetId],
         })
         .call();
 
       // not witnesses entry were added to Transaction witnesses
       expect(witnesses?.length).toBe(0);
       expect(value.toString()).toEqual('500');
-
-      const finalPredicateBalance = await predicate.getBalance();
-      expect(finalPredicateBalance.lt(predicateBalance)).toBeTruthy();
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
@@ -98,7 +96,7 @@ describe('Predicate', () => {
         tokenPoolBytes,
         tokenPoolAbi,
         wallet
-      ).deployContract({ gasPrice });
+      ).deployContract();
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
@@ -123,7 +121,7 @@ describe('Predicate', () => {
       );
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId);
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
       const { isStatusSuccess } = await tx.waitForResult();
       expect(isStatusSuccess).toBeTruthy();
 
@@ -152,11 +150,10 @@ describe('Predicate', () => {
       await fundPredicate(wallet, predicate, 5000);
 
       const contract = await setupContract();
-      const forward: CoinQuantity = { amount: bn(500), assetId: BaseAssetId };
+      const forward: CoinQuantity = { amount: bn(500), assetId: baseAssetId };
 
       const request = await contract.functions
         .return_context_amount()
-        .txParams({ gasPrice })
         .callParams({
           forward,
         })
@@ -165,21 +162,22 @@ describe('Predicate', () => {
       const sender = contract.account as Account;
 
       // Adding any amount of resources from the sender to ensure its witness index will be 0
-      const senderResources = await sender.getResourcesToSpend([[1, BaseAssetId]]);
+      const senderResources = await sender.getResourcesToSpend([[1, baseAssetId]]);
       request.addResources(senderResources);
 
       // Any amount of the predicate will do as it is not going to pay for the fee
-      const predicateResources = await predicate.getResourcesToSpend([[1, BaseAssetId]]);
+      const predicateResources = await predicate.getResourcesToSpend([[1, baseAssetId]]);
       request.addResources(predicateResources);
 
-      const { maxFee, requiredQuantities, estimatedInputs, gasUsed } =
-        await provider.getTransactionCost(request, [forward]);
+      const txCost = await provider.getTransactionCost(request, {
+        quantitiesToContract: [forward],
+      });
 
-      request.updatePredicateInputs(estimatedInputs);
-      request.gasLimit = gasUsed;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
       // Properly funding the TX to ensure the fee was covered
-      await sender?.fund(request, requiredQuantities, maxFee);
+      await sender?.fund(request, txCost);
 
       const tx = await sender?.sendTransaction(request);
 

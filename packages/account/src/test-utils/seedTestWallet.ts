@@ -14,21 +14,12 @@ export const seedTestWallet = async (
 
   const genesisWallet = new WalletUnlocked(
     process.env.GENESIS_SECRET || randomBytes(32),
+    // Connect to the same Provider as wallet
     toFundAccounts[0].provider
   );
 
-  // Connect to the same Provider as wallet
-  const resources = await genesisWallet.getResourcesToSpend(quantities);
-
-  const { minGasPrice } = genesisWallet.provider.getGasConfig();
-
   // Create transaction
-  const request = new ScriptTransactionRequest({
-    gasLimit: 10000,
-    gasPrice: minGasPrice,
-  });
-
-  request.addResources(resources);
+  const request = new ScriptTransactionRequest();
 
   quantities.map(coinQuantityfy).forEach(({ amount, assetId }) =>
     toFundAccounts.forEach(({ address }) => {
@@ -37,6 +28,13 @@ export const seedTestWallet = async (
       }
     })
   );
+
+  const txCost = await genesisWallet.provider.getTransactionCost(request);
+
+  request.gasLimit = txCost.gasUsed;
+  request.maxFee = txCost.maxFee;
+
+  await genesisWallet.fund(request, txCost);
 
   await genesisWallet.sendTransaction(request, { awaitExecution: true });
 };

@@ -134,9 +134,7 @@ describe('small-bytes', () => {
 
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const { minGasPrice } = wallet.provider.getGasConfig();
     const configurableContract = await factory.deployContract({
-      gasPrice: minGasPrice,
       configurableConstants,
     });
 
@@ -159,9 +157,7 @@ describe('small-bytes', () => {
 
     const wallet = await createWallet();
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const { minGasPrice } = wallet.provider.getGasConfig();
     const configurableContract = await factory.deployContract({
-      gasPrice: minGasPrice,
       configurableConstants,
     });
 

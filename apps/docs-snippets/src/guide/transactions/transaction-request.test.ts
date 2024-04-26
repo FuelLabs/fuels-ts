@@ -6,7 +6,6 @@ import {
   arrayify,
   ZeroBytes32,
   Address,
-  BaseAssetId,
   bn,
   Predicate,
   Provider,
@@ -24,6 +23,7 @@ import {
  */
 describe('Transaction Request', () => {
   let provider: Provider;
+  let baseAssetId: string = ZeroBytes32;
 
   const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SUM_SCRIPT
@@ -36,7 +36,7 @@ describe('Transaction Request', () => {
   const address = Address.fromRandom();
 
   const message = {
-    assetId: BaseAssetId,
+    assetId: baseAssetId,
     sender: address,
     recipient: address,
     nonce: '0x',
@@ -45,10 +45,9 @@ describe('Transaction Request', () => {
   };
   const coin: Coin = {
     id: '0x',
-    assetId: BaseAssetId,
+    assetId: baseAssetId,
     amount: bn(0),
     owner: address,
-    maturity: 1,
     blockCreated: bn(0),
     txCreatedIdx: bn(0),
   };
@@ -63,7 +62,8 @@ describe('Transaction Request', () => {
       provider,
     });
 
-    await seedTestWallet(predicate, [[10_000]]);
+    baseAssetId = provider.getBaseAssetId();
+    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
   });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {
@@ -73,7 +73,9 @@ describe('Transaction Request', () => {
     // #import { ScriptTransactionRequest };
 
     // Instantiate the transaction request using a ScriptTransactionRequest
-    const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+    const transactionRequest = new ScriptTransactionRequest({
+      script: scriptBytecode,
+    });
 
     // Set the script main function arguments (can also be passed in the class constructor)
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
@@ -89,7 +91,9 @@ describe('Transaction Request', () => {
     // #import { CreateTransactionRequest };
 
     // Instantiate the transaction request using a CreateTransactionRequest
-    const transactionRequest = new CreateTransactionRequest({ witnesses: [contractByteCode] });
+    const transactionRequest = new CreateTransactionRequest({
+      witnesses: [contractByteCode],
+    });
     // #endregion transaction-request-2
 
     expect(transactionRequest.witnesses[0]).toEqual(contractByteCode);
@@ -101,10 +105,15 @@ describe('Transaction Request', () => {
     const resources: Resource[] = [resource];
 
     // #region transaction-request-3
-    // #import { ScriptTransactionRequest, BaseAssetId };
+    // #import { ScriptTransactionRequest };
+
+    // Fetch the base asset ID
+    baseAssetId = provider.getBaseAssetId();
 
     // Instantiate the transaction request
-    const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+    const transactionRequest = new ScriptTransactionRequest({
+      script: scriptBytecode,
+    });
 
     // Adding resources (coins or messages)
     transactionRequest.addResources(resources);
@@ -112,7 +121,7 @@ describe('Transaction Request', () => {
 
     // Adding coin inputs and outputs (including transfer to recipient)
     transactionRequest.addCoinInput(coin);
-    transactionRequest.addCoinOutput(recipientAddress, 1000, BaseAssetId);
+    transactionRequest.addCoinOutput(recipientAddress, 1000, baseAssetId);
 
     // Adding message inputs
     transactionRequest.addMessageInput(message);
@@ -131,7 +140,9 @@ describe('Transaction Request', () => {
     // #import { ScriptTransactionRequest };
 
     // Instantiate the transaction request
-    const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+    const transactionRequest = new ScriptTransactionRequest({
+      script: scriptBytecode,
+    });
 
     // Add the contract input and output using the contract ID
     transactionRequest.addContractInputAndOutput(contractId);
@@ -148,7 +159,9 @@ describe('Transaction Request', () => {
     // #import { ScriptTransactionRequest, Predicate };
 
     // Instantiate the transaction request
-    const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+    const transactionRequest = new ScriptTransactionRequest({
+      script: scriptBytecode,
+    });
 
     // Instantiate the predicate and pass valid input data to validate
     // the predicate and unlock the funds
@@ -159,10 +172,12 @@ describe('Transaction Request', () => {
       provider,
     });
 
-    const coins = await predicate.getResourcesToSpend([[2000, BaseAssetId]]);
+    const predicateCoins = await predicate.getResourcesToSpend([
+      { amount: 2000, assetId: baseAssetId },
+    ]);
 
     // Add the predicate input and resources
-    transactionRequest.addResources(coins);
+    transactionRequest.addResources(predicateCoins);
     // #endregion transaction-request-5
 
     expect(transactionRequest.inputs.length).toBeGreaterThanOrEqual(1);
@@ -176,7 +191,9 @@ describe('Transaction Request', () => {
     // #import { ScriptTransactionRequest, Account, WalletUnlocked };
 
     // Instantiate the transaction request
-    const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+    const transactionRequest = new ScriptTransactionRequest({
+      script: scriptBytecode,
+    });
 
     // Add a witness directly
     transactionRequest.addWitness(witness);
@@ -189,23 +206,25 @@ describe('Transaction Request', () => {
     expect(transactionRequest.witnesses.length).toEqual(2);
   });
 
-  it('gets the transaction ID', async () => {
+  it('gets the transaction ID', () => {
     // #region transaction-request-7
     // #import { ScriptTransactionRequest };
 
     // Instantiate the transaction request
-    const transactionRequest = new ScriptTransactionRequest({ script: scriptBytecode });
+    const transactionRequest = new ScriptTransactionRequest({
+      script: scriptBytecode,
+    });
 
     // Get the chain ID
-    const chainId = await provider.getChainId();
+    const chainId = provider.getChainId();
 
     // Get the transaction ID using the Chain ID
     const transactionId = transactionRequest.getTransactionId(chainId);
-    // TX ID: 0x55667d...
+    // TX ID: 0x420f6...
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0x35cd6a10e917d5d0223413c1fb9863d27da40e5d602a7f37cfbcefb570172f6c'
+      '0x09274de739e2a53a815799b4c7fa93359eaf4befee0b26be04a7a6283bbeb127'
     );
   });
 });

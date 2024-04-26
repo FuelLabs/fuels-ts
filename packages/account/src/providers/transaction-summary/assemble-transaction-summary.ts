@@ -1,5 +1,5 @@
-import { type BN } from '@fuel-ts/math';
-import { type Transaction } from '@fuel-ts/transactions';
+import { bn, type BN } from '@fuel-ts/math';
+import { PolicyType, type Transaction } from '@fuel-ts/transactions';
 import { DateTime, hexlify } from '@fuel-ts/utils';
 
 import type { GqlGasCosts } from '../__generated__/operations';
@@ -29,6 +29,8 @@ export interface AssembleTransactionSummaryParams {
   abiMap?: AbiMap;
   maxInputs: BN;
   gasCosts: GqlGasCosts;
+  maxGasPerTx: BN;
+  gasPrice: BN;
 }
 
 /** @hidden */
@@ -46,6 +48,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
     abiMap = {},
     maxInputs,
     gasCosts,
+    maxGasPerTx,
+    gasPrice,
   } = params;
 
   const gasUsed = getGasUsedFromReceipts(receipts);
@@ -64,11 +68,15 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const typeName = getTransactionTypeName(transaction.type);
 
+  const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
+
   const { fee } = calculateTransactionFee({
-    gasUsed,
+    gasPrice,
     rawPayload,
+    tip,
     consensusParameters: {
       gasCosts,
+      maxGasPerTx,
       feeParams: {
         gasPerByte,
         gasPriceFactor,

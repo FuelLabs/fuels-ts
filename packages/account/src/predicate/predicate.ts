@@ -7,15 +7,12 @@ import {
   SCRIPT_FIXED_SIZE,
 } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { ByteArrayCoder } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
-import type { TxParamsType } from '../account';
 import {
   transactionRequestify,
   BaseTransactionRequest,
@@ -27,7 +24,6 @@ import type {
   CoinQuantityLike,
   ExcludeResourcesOption,
   Provider,
-  ProviderSendTxParams,
   Resource,
   TransactionRequest,
   TransactionRequestLike,
@@ -105,9 +101,9 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     request.inputs.filter(isRequestInputResource).forEach((input) => {
       if (isRequestInputResourceFromOwner(input, this.address)) {
         // eslint-disable-next-line no-param-reassign
-        input.predicate = this.bytes;
+        input.predicate = hexlify(this.bytes);
         // eslint-disable-next-line no-param-reassign
-        input.predicateData = this.getPredicateData(policies.length);
+        input.predicateData = hexlify(this.getPredicateData(policies.length));
         // eslint-disable-next-line no-param-reassign
         input.witnessIndex = 0;
       }
@@ -117,40 +113,14 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
   }
 
   /**
-   * A helper that creates a transfer transaction request and returns it.
-   *
-   * @param destination - The address of the destination.
-   * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
-   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
-   * @returns A promise that resolves to the prepared transaction request.
-   */
-  async createTransfer(
-    /** Address of the destination */
-    destination: AbstractAddress,
-    /** Amount of coins */
-    amount: BigNumberish,
-    /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
-    /** Tx Params */
-    txParams: TxParamsType = {}
-  ): Promise<TransactionRequest> {
-    const request = await super.createTransfer(destination, amount, assetId, txParams);
-    return this.populateTransactionPredicateData(request);
-  }
-
-  /**
    * Sends a transaction with the populated predicate data.
    *
    * @param transactionRequestLike - The transaction request-like object.
    * @returns A promise that resolves to the transaction response.
    */
-  sendTransaction(
-    transactionRequestLike: TransactionRequestLike,
-    options?: Pick<ProviderSendTxParams, 'awaitExecution'>
-  ): Promise<TransactionResponse> {
-    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    return super.sendTransaction(transactionRequest, options);
+  sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   /**
@@ -160,27 +130,8 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @returns A promise that resolves to the call result.
    */
   simulateTransaction(transactionRequestLike: TransactionRequestLike): Promise<CallResult> {
-    const transactionRequest = this.populateTransactionPredicateData(transactionRequestLike);
-    return super.simulateTransaction(transactionRequest);
-  }
-
-  /**
-   * Retrieves resources satisfying the spend query for the account.
-   *
-   * @param quantities - Coins to retrieve.
-   * @param excludedIds - IDs of resources to be excluded from the query.
-   * @returns A promise that resolves to an array of Resources.
-   */
-  async getResourcesToSpend(
-    quantities: CoinQuantityLike[],
-    excludedIds?: ExcludeResourcesOption
-  ): Promise<Resource[]> {
-    const resources = await super.getResourcesToSpend(quantities, excludedIds);
-
-    return resources.map((resource) => ({
-      ...resource,
-      predicate: hexlify(this.bytes),
-    }));
+    const transactionRequest = transactionRequestify(transactionRequestLike);
+    return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
   private getPredicateData(policiesLength: number): Uint8Array {
@@ -243,6 +194,29 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
       predicateBytes,
       predicateInterface: abiInterface,
     };
+  }
+
+  /**
+   * Retrieves resources satisfying the spend query for the account.
+   *
+   * @param quantities - IDs of coins to exclude.
+   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @returns A promise that resolves to an array of Resources.
+   */
+  async getResourcesToSpend(
+    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
+    excludedIds?: ExcludeResourcesOption
+  ): Promise<Resource[]> {
+    const resources = await this.provider.getResourcesToSpend(
+      this.address,
+      quantities,
+      excludedIds
+    );
+    return resources.map((resource) => ({
+      ...resource,
+      predicate: hexlify(this.bytes),
+      padPredicateData: (policiesLength: number) => hexlify(this.getPredicateData(policiesLength)),
+    }));
   }
 
   /**

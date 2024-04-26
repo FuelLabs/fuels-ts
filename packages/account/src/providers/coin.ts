@@ -9,8 +9,9 @@ export type Coin = {
   assetId: string;
   amount: BN;
   owner: AbstractAddress;
-  maturity: number;
   blockCreated: BN;
   txCreatedIdx: BN;
   predicate?: BytesLike;
+  predicateData?: BytesLike;
+  padPredicateData?: (policiesLenght: number) => BytesLike;
 };

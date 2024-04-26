@@ -460,10 +460,6 @@ export default defineConfig({
                 text: 'Error Codes',
                 link: '/guide/errors/error-codes',
               },
-              {
-                text: 'Debugging Revert Errors',
-                link: '/guide/errors/debugging-revert-errors',
-              },
             ],
           },
           apiLinks,

@@ -38,7 +38,7 @@ npm run dev
 NEXT_PUBLIC_HAS_CONTRACT=true
 NEXT_PUBLIC_HAS_PREDICATE=true
 NEXT_PUBLIC_HAS_SCRIPT=true
-NEXT_PUBLIC_FUEL_NETWORK_URL=http://127.0.0.1:4000/graphql
+NEXT_PUBLIC_FUEL_NETWORK_URL=http://127.0.0.1:4000/v1/graphql
 ```
 
 This file is populated automatically for end users when they run `pnpm create fuels`.

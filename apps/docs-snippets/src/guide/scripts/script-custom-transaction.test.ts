@@ -1,6 +1,13 @@
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
-import { BN, ContractFactory, BaseAssetId, ScriptTransactionRequest } from 'fuels';
-import type { CoinQuantityLike, Contract, WalletUnlocked, Provider } from 'fuels';
+import {
+  BN,
+  ContractFactory,
+  FUEL_NETWORK_URL,
+  ScriptTransactionRequest,
+  coinQuantityfy,
+  Provider,
+} from 'fuels';
+import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -15,6 +22,7 @@ describe(__filename, () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
   let contract: Contract;
+  let baseAssetId: string;
 
   const { binHexlified: scriptBin, abiContents } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
@@ -25,17 +33,16 @@ describe(__filename, () => {
   );
 
   beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
     const seedQuantities: CoinQuantityLike[] = [
       [1000, ASSET_A],
       [500, ASSET_B],
-      [300_000, BaseAssetId],
+      [300_000, baseAssetId],
     ];
-
     wallet = await getTestWallet(seedQuantities);
-    provider = wallet.provider;
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
-    const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-    contract = await factory.deployContract({ gasPrice });
+    contract = await factory.deployContract();
   });
 
   it('transfer multiple assets to a contract', async () => {
@@ -46,43 +53,37 @@ describe(__filename, () => {
     expect(contractInitialBalanceAssetB).toStrictEqual(new BN(0));
 
     // #region custom-transactions-2
-    // #import { BN, CoinQuantityLike, ScriptTransactionRequest };
+    // #import { BN, ScriptTransactionRequest };
 
     // 1. Create a script transaction using the script binary
-    const { minGasPrice } = contract.provider.getGasConfig();
-
     const request = new ScriptTransactionRequest({
       ...defaultTxParams,
       gasLimit: 3_000_000,
       script: scriptBin,
-      gasPrice: minGasPrice,
     });
 
     // 2. Instantiate the script main arguments
     const scriptArguments = [
       contract.id.toB256(),
-      { value: ASSET_A },
+      { bits: ASSET_A },
       new BN(1000),
-      { value: ASSET_B },
+      { bits: ASSET_B },
       new BN(500),
     ];
 
     // 3. Populate the script data and add the contract input and output
     request.setData(abiContents, scriptArguments).addContractInputAndOutput(contract.id);
 
-    // 4. Calculate the transaction fee
-    const { maxFee } = await provider.getTransactionCost(request);
+    // 4. Get the transaction resources
+    const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
 
-    // 5. Get the transaction resources
-    const quantities: CoinQuantityLike[] = [
-      [1000, ASSET_A],
-      [500, ASSET_B],
-      [maxFee, BaseAssetId],
-    ];
+    // 5. Calculate the transaction fee
+    const txCost = await provider.getTransactionCost(request, { quantitiesToContract: quantities });
 
-    const resources = await wallet.getResourcesToSpend(quantities);
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    request.addResources(resources);
+    await wallet.fund(request, txCost);
 
     // 6. Send the transaction
     const tx = await wallet.sendTransaction(request);

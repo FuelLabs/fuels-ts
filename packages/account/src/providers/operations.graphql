@@ -15,9 +15,15 @@ fragment transactionStatusFragment on TransactionStatus {
       id
     }
     time
+    receipts {
+      ...receiptFragment
+    }
     programState {
       returnType
       data
+    }
+    receipts {
+      ...receiptFragment
     }
   }
   ... on FailureStatus {
@@ -26,7 +32,17 @@ fragment transactionStatusFragment on TransactionStatus {
     }
     time
     reason
+    receipts {
+      ...receiptFragment
+    }
   }
+  ... on SqueezedOutStatus {
+    reason
+  }
+}
+
+fragment transactionStatusSubscriptionFragment on TransactionStatus {
+  type: __typename
   ... on SqueezedOutStatus {
     reason
   }
@@ -35,10 +51,6 @@ fragment transactionStatusFragment on TransactionStatus {
 fragment transactionFragment on Transaction {
   id
   rawPayload
-  gasPrice
-  receipts {
-    ...receiptFragment
-  }
   status {
     ...transactionStatusFragment
   }
@@ -59,31 +71,26 @@ fragment transactionEstimatePredicatesFragment on Transaction {
   }
 }
 
-fragment receiptFragment on Receipt {
-  contract {
-    id
-    #
-    # NOTE:
-    #     Props removed due to excessive bandwidth usage:
-    #     https://github.com/FuelLabs/fuels-ts/issues/1706
-    #
-    # bytecode
-    # salt
-    #
+fragment dryRunFailureStatusFragment on DryRunFailureStatus {
+  reason
+  programState {
+    returnType
+    data
   }
+}
+
+fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
+  programState {
+    returnType
+    data
+  }
+}
+
+fragment receiptFragment on Receipt {
+  id
   pc
   is
-  to {
-    id
-    #
-    # NOTE:
-    #     Props removed due to excessive bandwidth usage:
-    #     https://github.com/FuelLabs/fuels-ts/issues/1706
-    #
-    # bytecode
-    # salt
-    #
-  }
+  to
   toAddress
   amount
   assetId
@@ -110,10 +117,29 @@ fragment receiptFragment on Receipt {
   subId
 }
 
+fragment dryRunTransactionStatusFragment on DryRunTransactionStatus {
+  ... on DryRunFailureStatus {
+    ...dryRunFailureStatusFragment
+  }
+  ... on DryRunSuccessStatus {
+    ...dryRunSuccessStatusFragment
+  }
+}
+
+fragment dryRunTransactionExecutionStatusFragment on DryRunTransactionExecutionStatus {
+  id
+  status {
+    ...dryRunTransactionStatusFragment
+  }
+  receipts {
+    ...receiptFragment
+  }
+}
+
 fragment blockFragment on Block {
   id
+  height
   header {
-    height
     time
   }
   transactions {
@@ -127,7 +153,6 @@ fragment coinFragment on Coin {
   owner
   amount
   assetId
-  maturity
   blockCreated
   txCreatedIdx
 }
@@ -163,26 +188,32 @@ fragment messageProofFragment on MessageProof {
   messageBlockHeader {
     id
     daHeight
+    consensusParametersVersion
+    stateTransitionBytecodeVersion
     transactionsCount
+    messageReceiptCount
     transactionsRoot
+    messageOutboxRoot
+    eventInboxRoot
     height
     prevRoot
     time
     applicationHash
-    messageReceiptRoot
-    messageReceiptCount
   }
   commitBlockHeader {
     id
     daHeight
+    consensusParametersVersion
+    stateTransitionBytecodeVersion
     transactionsCount
+    messageReceiptCount
     transactionsRoot
+    messageOutboxRoot
+    eventInboxRoot
     height
     prevRoot
     time
     applicationHash
-    messageReceiptRoot
-    messageReceiptCount
   }
   sender
   recipient
@@ -198,6 +229,7 @@ fragment balanceFragment on Balance {
 }
 
 fragment TxParametersFragment on TxParameters {
+  version
   maxInputs
   maxOutputs
   maxWitnesses
@@ -206,6 +238,7 @@ fragment TxParametersFragment on TxParameters {
 }
 
 fragment PredicateParametersFragment on PredicateParameters {
+  version
   maxPredicateLength
   maxPredicateDataLength
   maxGasPerPredicate
@@ -213,16 +246,19 @@ fragment PredicateParametersFragment on PredicateParameters {
 }
 
 fragment ScriptParametersFragment on ScriptParameters {
+  version
   maxScriptLength
   maxScriptDataLength
 }
 
 fragment ContractParametersFragment on ContractParameters {
+  version
   contractMaxSize
   maxStorageSlots
 }
 
 fragment FeeParametersFragment on FeeParameters {
+  version
   gasPriceFactor
   gasPerByte
 }
@@ -240,6 +276,7 @@ fragment DependentCostFragment on DependentCost {
 }
 
 fragment GasCostsFragment on GasCosts {
+  version
   add
   addi
   aloc
@@ -252,7 +289,6 @@ fragment GasCostsFragment on GasCosts {
   cb
   cfei
   cfsi
-  croo
   div
   divi
   ecr1
@@ -335,6 +371,9 @@ fragment GasCostsFragment on GasCosts {
   ccp {
     ...DependentCostFragment
   }
+  croo {
+    ...DependentCostFragment
+  }
   csiz {
     ...DependentCostFragment
   }
@@ -393,6 +432,7 @@ fragment GasCostsFragment on GasCosts {
 }
 
 fragment consensusParametersFragment on ConsensusParameters {
+  version
   txParams {
     ...TxParametersFragment
   }
@@ -449,18 +489,9 @@ query getVersion {
 fragment nodeInfoFragment on NodeInfo {
   utxoValidation
   vmBacktrace
-  minGasPrice
   maxTx
   maxDepth
   nodeVersion
-  peers {
-    id
-    addresses
-    clientVersion
-    blockHeight
-    lastHeartbeatMs
-    appScore
-  }
 }
 
 query getNodeInfo {
@@ -484,9 +515,6 @@ query getTransaction($transactionId: TransactionId!) {
 query getTransactionWithReceipts($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
-    receipts {
-      ...receiptFragment
-    }
   }
 }
 
@@ -623,6 +651,18 @@ query getBalance($owner: Address!, $assetId: AssetId!) {
   }
 }
 
+query getLatestGasPrice {
+  latestGasPrice {
+    gasPrice
+  }
+}
+
+query estimateGasPrice($blockHorizon: U32!) {
+  estimateGasPrice(blockHorizon: $blockHorizon) {
+    gasPrice
+  }
+}
+
 query getBalances(
   $filter: BalanceFilterInput!
   $after: String
@@ -689,9 +729,9 @@ query getMessageStatus($nonce: Nonce!) {
   }
 }
 
-mutation dryRun($encodedTransaction: HexString!, $utxoValidation: Boolean) {
-  dryRun(tx: $encodedTransaction, utxoValidation: $utxoValidation) {
-    ...receiptFragment
+mutation dryRun($encodedTransactions: [HexString!]!, $utxoValidation: Boolean) {
+  dryRun(txs: $encodedTransactions, utxoValidation: $utxoValidation) {
+    ...dryRunTransactionExecutionStatusFragment
   }
 }
 
@@ -713,12 +753,12 @@ mutation produceBlocks(
 
 subscription submitAndAwait($encodedTransaction: HexString!) {
   submitAndAwait(tx: $encodedTransaction) {
-    ...transactionStatusFragment
+    ...transactionStatusSubscriptionFragment
   }
 }
 
 subscription statusChange($transactionId: TransactionId!) {
   statusChange(id: $transactionId) {
-    ...transactionStatusFragment
+    ...transactionStatusSubscriptionFragment
   }
 }

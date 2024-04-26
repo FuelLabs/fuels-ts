@@ -6,9 +6,6 @@ import {
   Provider,
   Wallet,
   ScriptTransactionRequest,
-  BaseAssetId,
-  isMessage,
-  isCoin,
   randomBytes,
   hexlify,
   FUEL_NETWORK_URL,
@@ -27,10 +24,10 @@ const B512 =
 const setupContract = getSetupContract('coverage-contract');
 
 let contractInstance: Contract;
-let gasPrice: BN;
+let baseAssetId: string;
 beforeAll(async () => {
   contractInstance = await setupContract();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
+  baseAssetId = contractInstance.provider.getBaseAssetId();
 });
 
 enum SmallEnum {
@@ -119,7 +116,7 @@ describe('Coverage Contract', () => {
           .call()
       ).value
     ).toStrictEqual({
-      value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+      bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
     });
     expect(
       (
@@ -453,11 +450,11 @@ describe('Coverage Contract', () => {
 
     const EXPECTED_MESSAGES_A: Message[] = [
       {
-        messageId: '0x9ca8b2c626327692c7a865d0bbfe6232503e8dc0f7c442abe0b864ffdcca2da9',
+        messageId: '0x5e4b9a05438f912573515dd32093657499310cb650766ce868f21dfb05f09a1a',
         sender: WALLET_B.address,
         recipient: WALLET_A.address,
         nonce: '0x0101010101010101010101010101010101010101010101010101010101010101',
-        amount: bn('ffff', 'hex'),
+        amount: bn('0xffffffffffffffff', 'hex'),
         data: arrayify('0x'),
         daHeight: bn(0),
       },
@@ -484,7 +481,7 @@ describe('Coverage Contract', () => {
 
   it('should test spending input messages', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice });
+    const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
     const recipient = Wallet.generate({
       provider,
@@ -494,14 +491,14 @@ describe('Coverage Contract', () => {
       provider
     );
 
-    const coins = await sender.getResourcesToSpend([[bn(100), BaseAssetId]]);
+    request.addCoinOutput(recipient.address, 10, baseAssetId);
 
-    expect(coins.length).toEqual(1);
-    expect(isMessage(coins[0])).toBeTruthy();
-    expect(isCoin(coins[0])).toBeFalsy();
+    const txCost = await sender.provider.getTransactionCost(request);
 
-    request.addResources(coins);
-    request.addCoinOutput(recipient.address, 10, BaseAssetId);
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await sender.fund(request, txCost);
 
     const response = await sender.sendTransaction(request);
     const result = await response.waitForResult();
@@ -603,7 +600,7 @@ describe('Coverage Contract', () => {
     expect(value).toStrictEqual(INPUT_B);
   });
 
-  it.skip('should handle multiple calls [with vectors]', async () => {
+  it('should handle multiple calls [with vectors]', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));
@@ -621,7 +618,7 @@ describe('Coverage Contract', () => {
     expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
   });
 
-  it.skip('should handle multiple calls [with vectors + stack data first]', async () => {
+  it('should handle multiple calls [with vectors + stack data first]', async () => {
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));

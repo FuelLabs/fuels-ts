@@ -4,7 +4,12 @@ import { join } from 'path';
 
 const projectsDir = join(__dirname, '../test/fixtures/forc-projects');
 
-const files = readdirSync(projectsDir).filter((file) => file.includes('predicate-'));
+const files = readdirSync(projectsDir).filter(
+  (file) =>
+    file.includes('predicate-') &&
+    // TODO @arboleya remove filter
+    !/input-data/.test(file)
+);
 
 const { log } = console;
 
