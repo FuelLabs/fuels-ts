@@ -26,6 +26,7 @@ import type {
   GqlDryRunSuccessStatusFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
+  GqlMessage,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -1634,5 +1635,22 @@ export default class Provider {
   // eslint-disable-next-line @typescript-eslint/require-await
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
     return new TransactionResponse(transactionId, this);
+  }
+
+  /**
+   * Returns Message for given nonce.
+   *
+   * @param nonce - The nonce of the message to retrieve.
+   * @returns A promise that resolves to the Message object.
+   */
+  async getMessageByNonce(nonce: string): Promise<GqlMessage | undefined> {
+    const { message } = await this.operations.getMessageByNonce({ nonce });
+
+    // return undefined if `message` is `null`
+    if (!message) {
+      return undefined;
+    }
+
+    return message;
   }
 }
