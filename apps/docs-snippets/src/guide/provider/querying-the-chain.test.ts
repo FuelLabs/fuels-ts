@@ -115,7 +115,7 @@ describe('querying the chain', () => {
   it('can getMessageByNonce', async () => {
     // #region getMessageByNonce
     // #import { FUEL_NETWORK_URL, Provider };
-    
+
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const nonce = '0101010101010101010101010101010101010101010101010101010101010101';
