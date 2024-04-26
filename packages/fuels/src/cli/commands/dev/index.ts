@@ -23,8 +23,8 @@ export const buildAndDeploy = async (config: FuelsConfig) => {
 
 export const getConfigFilepathsToWatch = (config: FuelsConfig) => {
   const configFilePathsToWatch: string[] = [config.configPath];
-  if (config.chainConfig) {
-    configFilePathsToWatch.push(config.chainConfig);
+  if (config.snapshotDir) {
+    configFilePathsToWatch.push(config.snapshotDir);
   }
   return configFilePathsToWatch;
 };
@@ -78,7 +78,7 @@ export const dev = async (config: FuelsConfig) => {
     const options = { persistent: true, ignoreInitial: true, ignored: '**/out/**' };
     const state = { config, watchHandlers, fuelCore };
 
-    // watch: fuels.config.ts and chainConfig.json
+    // watch: fuels.config.ts and snapshotDir
     watchHandlers.push(watch(configFilePaths, options).on('all', configFileChanged(state)));
 
     // watch: Forc's workspace members

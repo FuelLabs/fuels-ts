@@ -1,21 +1,21 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN } from 'fuels';
-import { Provider, Wallet, ContractFactory, bn, BaseAssetId, FUEL_NETWORK_URL } from 'fuels';
+import { Provider, Wallet, ContractFactory, bn, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
   const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
     FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
   );
 
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-  const contract = await factory.deployContract({ gasPrice });
+  const contract = await factory.deployContract();
   return contract;
 };
 
