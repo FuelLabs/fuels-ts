@@ -169,7 +169,7 @@ describe('Policies', () => {
       tip: 2,
       maturity: randomNumber(1, 2),
       witnessLimit: randomNumber(800, 900),
-      maxFee: 2000,
+      maxFee: 2500,
     });
 
     const txRequest = await callScope.getTransactionRequest();
