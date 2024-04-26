@@ -9,7 +9,7 @@ export const CURRENT_ENVIRONMENT: DappEnvironment =
 
 export const NODE_URL =
   CURRENT_ENVIRONMENT === 'local'
-    ? `http://127.0.0.1:${process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000}/graphql`
+    ? `http://127.0.0.1:${process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000}/v1/graphql`
     : 'https://beta-5.fuel.network/graphql';
 
 /**

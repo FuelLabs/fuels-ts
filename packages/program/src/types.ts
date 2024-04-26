@@ -20,6 +20,7 @@ export type ContractCall = {
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
+  externalContractsAbis?: Record<string, JsonAbi>;
 };
 
 /**
@@ -34,12 +35,13 @@ export type CallParams = Partial<{
  * Represents transaction parameters for a contract call.
  */
 export type TxParams = Partial<{
-  gasPrice: BigNumberish;
+  tip: BigNumberish;
   gasLimit: BigNumberish;
   maturity?: number;
   maxFee?: BigNumberish;
   witnessLimit?: BigNumberish;
   variableOutputs: number;
+  optimizeGas?: boolean;
 }>;
 
 /**
@@ -93,5 +95,4 @@ export type InvocationScopeLike<T = unknown> = {
  */
 export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
-  gasPrice: BigNumberish;
 }>;

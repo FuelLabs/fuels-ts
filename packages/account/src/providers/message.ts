@@ -25,6 +25,9 @@ export type MessageCoin = {
   nonce: BytesLike;
   amount: BN;
   daHeight: BN;
+  predicate?: BytesLike;
+  predicateData?: BytesLike;
+  padPredicateData?: (policiesLenght: number) => BytesLike;
 };
 
 export type MerkleProof = {
@@ -41,7 +44,10 @@ export type BlockHeader = {
   prevRoot: string;
   time: string;
   applicationHash: string;
-  messageReceiptRoot: string;
+  messageOutboxRoot: string;
+  eventInboxRoot: string;
+  consensusParametersVersion: number;
+  stateTransitionBytecodeVersion: number;
   messageReceiptCount: BN;
 };
 

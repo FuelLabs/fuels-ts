@@ -1,5 +1,5 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { bn, toNumber } from '@fuel-ts/math';
 import { TransactionType } from '@fuel-ts/transactions';
@@ -57,27 +57,29 @@ describe('TransactionRequest', () => {
   it('should fund with the expected quantities', () => {
     const transactionRequest = new ScriptTransactionRequest();
 
+    const baseAssetId = ZeroBytes32;
+
     const amountBase = bn(500);
     const amountA = bn(700);
     const amountB = bn(300);
 
     const quantities: CoinQuantity[] = [
-      { assetId: BaseAssetId, amount: amountBase },
+      { assetId: baseAssetId, amount: amountBase },
       { assetId: ASSET_A, amount: amountA },
       { assetId: ASSET_B, amount: amountB },
     ];
 
-    transactionRequest.fundWithFakeUtxos(quantities);
+    transactionRequest.fundWithFakeUtxos(quantities, baseAssetId);
 
     const inputs = transactionRequest.inputs as CoinTransactionRequestInput[];
 
     const inputA = inputs.find((i) => i.assetId === ASSET_A);
     const inputB = inputs.find((i) => i.assetId === ASSET_B);
-    const inputBase = inputs.find((i) => i.assetId === BaseAssetId);
+    const inputBase = inputs.find((i) => i.assetId === baseAssetId);
 
     expect(inputA?.amount).toEqual(bn(700));
     expect(inputB?.amount).toEqual(bn(300));
-    expect(inputBase?.amount).toEqual(bn(500));
+    expect(inputBase?.amount).toEqual(bn('1000000000000000000'));
   });
 
   it('updates witnesses', () => {
@@ -88,7 +90,6 @@ describe('TransactionRequest', () => {
       owner: coinOwner,
       amount: bn(100),
       assetId: ASSET_A,
-      maturity: 0,
       blockCreated: bn(0),
       txCreatedIdx: bn(0),
     };
@@ -159,7 +160,7 @@ describe('transactionRequestify', () => {
       type: TransactionType.Script,
       script,
       scriptData,
-      gasPrice: 1,
+      tip: 1,
       gasLimit: 10000,
       maturity: 1,
       inputs: [],
@@ -174,7 +175,7 @@ describe('transactionRequestify', () => {
     }
 
     expect(txRequest.type).toEqual(txRequestLike.type);
-    expect(toNumber(txRequest.gasPrice)).toEqual(txRequestLike.gasPrice);
+    expect(toNumber(txRequest.tip)).toEqual(txRequestLike.tip);
     expect(toNumber((<ScriptTransactionRequest>txRequest).gasLimit)).toEqual(
       txRequestLike.gasLimit
     );
@@ -187,7 +188,6 @@ describe('transactionRequestify', () => {
   it('should throw error if invalid transaction type', () => {
     const txRequestLike = {
       type: 5,
-      gasPrice: 1,
     };
 
     expect(() => transactionRequestify(txRequestLike)).toThrow('Invalid transaction type: 5');

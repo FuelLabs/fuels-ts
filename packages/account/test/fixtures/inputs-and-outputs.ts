@@ -1,5 +1,5 @@
 import { getRandomB256 } from '@fuel-ts/address';
-import { BaseAssetId, ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { InputCoin, InputMessage } from '@fuel-ts/transactions';
 import { InputType, OutputType } from '@fuel-ts/transactions';
@@ -20,16 +20,15 @@ export const MOCK_COIN_INPUT: InputCoin = {
   outputIndex: 0,
   owner: ZeroBytes32,
   amount: bn(100),
-  assetId: BaseAssetId,
+  assetId: ZeroBytes32,
   txPointer: {
     blockHeight: 0,
     txIndex: 0,
   },
   witnessIndex: 0,
-  maturity: 0,
   predicateGasUsed: bn(0),
-  predicateLength: 0,
-  predicateDataLength: 0,
+  predicateLength: bn(0),
+  predicateDataLength: bn(0),
   predicate: '0x',
   predicateData: '0x',
 };
@@ -44,8 +43,8 @@ export const MOCK_MESSAGE_INPUT: InputMessage = {
   dataLength: ZeroBytes32.length,
   data: ZeroBytes32,
   predicateGasUsed: bn(0),
-  predicateLength: 0,
-  predicateDataLength: 0,
+  predicateLength: bn(0),
+  predicateDataLength: bn(0),
   predicate: '0x',
   predicateData: '0x',
 };
@@ -58,7 +57,6 @@ export const MOCK_REQUEST_COIN_INPUT: CoinTransactionRequestInput = {
   owner: getRandomB256(),
   txPointer: '0x00000000000000000000000000000000',
   witnessIndex: 0,
-  maturity: 0,
 };
 
 export const MOCK_REQUEST_PREDICATE_INPUT: CoinTransactionRequestInput = {
@@ -69,7 +67,6 @@ export const MOCK_REQUEST_PREDICATE_INPUT: CoinTransactionRequestInput = {
   owner: getRandomB256(),
   txPointer: '0x00000000000000000000000000000000',
   witnessIndex: 0,
-  maturity: 0,
   predicate: '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301',
   predicateGasUsed: bn(0),
 };
