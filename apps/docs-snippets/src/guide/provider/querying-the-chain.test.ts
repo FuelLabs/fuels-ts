@@ -120,6 +120,7 @@ describe('querying the chain', () => {
 
     const nonce = '0101010101010101010101010101010101010101010101010101010101010101';
     const message = await provider.getMessageByNonce(nonce);
+    console.log(await provider.getMessageStatus(nonce));
 
     expect(message).toBeDefined();
     expect(message?.nonce).toEqual(`0x${nonce}`);
