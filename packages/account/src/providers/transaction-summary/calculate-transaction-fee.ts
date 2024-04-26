@@ -5,8 +5,8 @@ import { PolicyType, TransactionCoder, TransactionType } from '@fuel-ts/transact
 import { arrayify } from '@fuel-ts/utils';
 
 import type { GqlConsensusParameters, GqlFeeParameters } from '../__generated__/operations';
-import { calculatePriceWithFactor } from '../utils';
 import {
+  calculateGasFee,
   calculateMetadataGasForTxCreate,
   calculateMetadataGasForTxScript,
   getMaxGas,
@@ -21,16 +21,21 @@ type FeeParams =
     };
 
 export type CalculateTransactionFeeParams = {
-  gasUsed: BN;
+  gasPrice: BN;
   rawPayload: string;
-  consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & { feeParams: FeeParams };
+  tip: BN;
+  consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & {
+    feeParams: FeeParams;
+    maxGasPerTx: BN;
+  };
 };
 
 export const calculateTransactionFee = (params: CalculateTransactionFeeParams) => {
   const {
-    gasUsed,
+    gasPrice,
     rawPayload,
-    consensusParameters: { gasCosts, feeParams },
+    tip,
+    consensusParameters: { gasCosts, feeParams, maxGasPerTx },
   } = params;
 
   const gasPerByte = bn(feeParams.gasPerByte);
@@ -45,7 +50,6 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
       fee: bn(0),
       minFee: bn(0),
       maxFee: bn(0),
-      feeFromGasUsed: bn(0),
     };
   }
 
@@ -88,7 +92,6 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     txBytesSize: transactionBytes.length,
   });
 
-  const gasPrice = bn(policies.find((policy) => policy.type === PolicyType.GasPrice)?.data);
   const witnessLimit = policies.find((policy) => policy.type === PolicyType.WitnessLimit)?.data as
     | BN
     | undefined;
@@ -101,17 +104,26 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     witnessesLength,
     gasLimit,
     witnessLimit,
+    maxGasPerTx,
   });
 
-  const feeFromGasUsed = calculatePriceWithFactor(gasUsed, gasPrice, gasPriceFactor);
-  const minFee = calculatePriceWithFactor(minGas, gasPrice, gasPriceFactor);
-  const maxFee = calculatePriceWithFactor(maxGas, gasPrice, gasPriceFactor);
-  const fee = minFee.add(feeFromGasUsed);
+  const minFee = calculateGasFee({
+    gasPrice,
+    gas: minGas,
+    priceFactor: gasPriceFactor,
+    tip,
+  });
+
+  const maxFee = calculateGasFee({
+    gasPrice,
+    gas: maxGas,
+    priceFactor: gasPriceFactor,
+    tip,
+  });
 
   return {
-    fee,
     minFee,
     maxFee,
-    feeFromGasUsed,
+    fee: maxFee,
   };
 };

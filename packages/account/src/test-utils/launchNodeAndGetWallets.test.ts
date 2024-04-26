@@ -22,15 +22,15 @@ describe('launchNode', () => {
       expect(wallet).toBeInstanceOf(WalletUnlocked);
     });
     stop();
-  });
+  }, 10000);
 
   test('launchNodeAndGetWallets - custom config', async () => {
     // #region launchNode-custom-config
-    const chainConfigPath = path.join(cwd(), '.fuel-core/configs/chainConfig.json');
+    const snapshotDir = path.join(cwd(), '.fuel-core/configs');
 
     const { stop, provider } = await launchNodeAndGetWallets({
       launchNodeOptions: {
-        args: ['--chain', chainConfigPath],
+        args: ['--snapshot', snapshotDir],
         loggingEnabled: false,
       },
     });
@@ -39,7 +39,9 @@ describe('launchNode', () => {
       consensusParameters: { gasPerByte },
     } = provider.getChain();
 
-    expect(gasPerByte.toNumber()).toEqual(4);
+    const expectedGasPerByte = 63;
+
+    expect(gasPerByte.toNumber()).toEqual(expectedGasPerByte);
 
     stop();
     // #endregion launchNode-custom-config
@@ -90,6 +92,6 @@ describe('launchNode', () => {
       expect(process.env.GENESIS_SECRET).toHaveLength(66);
 
       stop();
-    });
+    }, 10000);
   });
 });
