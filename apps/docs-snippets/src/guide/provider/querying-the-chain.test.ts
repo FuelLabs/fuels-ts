@@ -117,11 +117,11 @@ describe('querying the chain', () => {
     // #import { FUEL_NETWORK_URL, Provider };
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const nonce = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const nonce = '0101010101010101010101010101010101010101010101010101010101010101';
     const message = await provider.getMessageByNonce(nonce);
 
     expect(message).toBeDefined();
-    expect(message?.nonce).toEqual(nonce);
+    expect(message?.nonce).toEqual(`0x${nonce}`);
     // #endregion getMessageByNonce
   });
 });
