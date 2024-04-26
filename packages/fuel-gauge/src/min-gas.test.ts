@@ -58,8 +58,9 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request);
-    request.gasPrice = txCost.gasPrice;
+    const { maxFee } = await provider.getTransactionCost(request);
+
+    request.maxFee = maxFee;
 
     /**
      * Send transaction
@@ -91,13 +92,12 @@ describe(__filename, () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { maxFee, gasUsed, requiredQuantities, minGasPrice } =
-      await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request);
 
-    request.gasLimit = gasUsed;
-    request.gasPrice = minGasPrice;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await sender.fund(request, requiredQuantities, maxFee);
+    await sender.fund(request, txCost);
 
     /**
      * Send transaction
@@ -106,7 +106,7 @@ describe(__filename, () => {
     const { status, gasUsed: txGasUsed } = await result.wait();
 
     expect(status).toBe(TransactionStatus.success);
-    expect(gasUsed.toString()).toBe(txGasUsed.toString());
+    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
   });
 
   it('sets gas requirements (predicate)', async () => {
@@ -123,6 +123,7 @@ describe(__filename, () => {
       provider,
       inputData: [bn(1000)],
     });
+
     await seedTestWallet(predicate, [[500_000, baseAssetId]]);
 
     /**
@@ -130,30 +131,26 @@ describe(__filename, () => {
      */
     const request = new ScriptTransactionRequest();
     request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
-    const resources = await provider.getResourcesToSpend(predicate.address, [
-      {
-        amount: bn(100_000),
-        assetId: baseAssetId,
-      },
-    ]);
-    request.addResources(resources);
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request, { resourcesOwner: predicate });
+
     request.gasLimit = txCost.gasUsed;
-    request.gasPrice = txCost.gasPrice;
+    request.maxFee = txCost.maxFee;
+
+    await predicate.fund(request, txCost);
 
     /**
      * Send transaction predicate
      */
     const result = await predicate.sendTransaction(request);
     const { status, receipts } = await result.waitForResult();
-    const gasUsed = getGasUsedFromReceipts(receipts);
+    const gasUsedFromReceipts = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
-    expect(gasUsed.toString()).toBe(txCost.gasUsed.toString());
+    expect(txCost.gasUsed.toString()).toBe(gasUsedFromReceipts.toString());
   });
 
   it('sets gas requirements (account and predicate with script)', async () => {
@@ -191,30 +188,30 @@ describe(__filename, () => {
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     // add predicate transfer
-    request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
-    const resourcesPredicate = await provider.getResourcesToSpend(predicate.address, [
+    const resourcesPredicate = await predicate.getResourcesToSpend([
       {
         amount: bn(100_000),
         assetId: baseAssetId,
       },
     ]);
-    request.addPredicateResources(resourcesPredicate, predicate);
+    request.addResources(resourcesPredicate);
+
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
-    const resourcesWallet = await provider.getResourcesToSpend(wallet.address, [
-      {
-        amount: bn(100_000),
-        assetId: baseAssetId,
-      },
-    ]);
-    request.addResources(resourcesWallet);
+
+    const txCost = await provider.getTransactionCost(request, {
+      resourcesOwner: predicate,
+    });
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await wallet.provider.estimatePredicates(request);
+
+    await wallet.fund(request, txCost);
 
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request);
-    request.gasLimit = txCost.gasUsed;
-    request.gasPrice = txCost.gasPrice;
 
     /**
      * Send transaction predicate
@@ -222,10 +219,10 @@ describe(__filename, () => {
     predicate.populateTransactionPredicateData(request);
     await wallet.populateTransactionWitnessesSignature(request);
     const result = await predicate.sendTransaction(request);
-    const { status, receipts } = await result.waitForResult();
-    const gasUsed = getGasUsedFromReceipts(receipts);
+    const { status, receipts } = await result.wait();
+    const txGasUsed = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
-    expect(gasUsed.toString()).toBe(txCost.gasUsed.toString());
+    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
   });
 });

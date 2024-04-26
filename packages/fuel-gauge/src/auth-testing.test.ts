@@ -1,12 +1,11 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, Contract, WalletUnlocked } from 'fuels';
+import type { Contract, WalletUnlocked } from 'fuels';
 import { ContractFactory, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 let contractInstance: Contract;
 let wallet: WalletUnlocked;
-let gasPrice: BN;
 let baseAssetId: string;
 
 /**
@@ -15,7 +14,6 @@ let baseAssetId: string;
 describe('Auth Testing', () => {
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
     baseAssetId = provider.getBaseAssetId();
     wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
@@ -24,7 +22,7 @@ describe('Auth Testing', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    contractInstance = await factory.deployContract({ gasPrice });
+    contractInstance = await factory.deployContract();
   });
 
   it('can get is_caller_external', async () => {

@@ -1,5 +1,30 @@
 # Change Log
 
+## 0.83.0
+
+### Minor Changes
+
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+
+### Patch Changes
+
+- Updated dependencies [3d2e5c4]
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+- Updated dependencies [60be295]
+  - @fuel-ts/abi-coder@0.83.0
+  - @fuel-ts/program@0.83.0
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/transactions@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/account@0.83.0
+  - @fuel-ts/errors@0.83.0
+  - @fuel-ts/crypto@0.83.0
+  - @fuel-ts/hasher@0.83.0
+  - @fuel-ts/merkle@0.83.0
+
 ## 0.82.0
 
 ### Patch Changes

@@ -33,6 +33,7 @@ describe('TransactionSummary', () => {
   const gasPerByte = bn(2);
   const gasPriceFactor = bn(3);
   const maxInputs = bn(255);
+  const maxGasPerTx = bn(10000000);
   const transaction = MOCK_TRANSACTION;
   const transactionBytes = arrayify(MOCK_TRANSACTION_RAWPAYLOAD);
   const receipts: TransactionResultReceipt[] = [
@@ -44,7 +45,7 @@ describe('TransactionSummary', () => {
   ];
 
   beforeAll(async () => {
-    provider = await Provider.create('http://127.0.0.1:4000/graphql');
+    provider = await Provider.create('http://127.0.0.1:4000/v1/graphql');
     gasCosts = provider.getChain().gasCosts;
   });
 
@@ -59,7 +60,6 @@ describe('TransactionSummary', () => {
         fee: bn(0),
         minFee: bn(0),
         maxFee: bn(0),
-        feeFromGasUsed: bn(0),
       });
 
     return {
@@ -81,6 +81,8 @@ describe('TransactionSummary', () => {
       maxInputs,
       gasCosts,
       abiMap: {},
+      maxGasPerTx,
+      gasPrice: bn(1),
     });
 
     expect(transactionSummary).toMatchObject(expected);

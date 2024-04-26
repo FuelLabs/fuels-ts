@@ -23,8 +23,7 @@ describe(__filename, () => {
     );
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    const { minGasPrice } = sender.provider.getGasConfig();
-    deployedContract = await factory.deployContract({ gasPrice: minGasPrice });
+    deployedContract = await factory.deployContract();
   });
 
   it('should successfully transfer asset to another account', async () => {
@@ -99,6 +98,10 @@ describe(__filename, () => {
     const transactionId = transactionRequest.getTransactionId(chainId);
 
     transactionRequest.maturity = 1;
+
+    const { maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+    transactionRequest.maxFee = maxFee;
 
     const response = await sender.sendTransaction(transactionRequest);
 

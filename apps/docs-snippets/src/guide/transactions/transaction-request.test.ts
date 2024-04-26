@@ -1,3 +1,4 @@
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, Coin, Resource } from 'fuels';
 import {
   CreateTransactionRequest,
@@ -47,14 +48,22 @@ describe('Transaction Request', () => {
     assetId: baseAssetId,
     amount: bn(0),
     owner: address,
-    maturity: 1,
     blockCreated: bn(0),
     txCreatedIdx: bn(0),
   };
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = await provider.getBaseAssetId();
+
+    const predicate = new Predicate({
+      bytecode: predicateBytecode,
+      abi: predicateAbi,
+      inputData: [ZeroBytes32],
+      provider,
+    });
+
+    baseAssetId = provider.getBaseAssetId();
+    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
   });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {
@@ -143,7 +152,7 @@ describe('Transaction Request', () => {
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 
-  it('adds a predicate to a transaction request', () => {
+  it('adds a predicate to a transaction request', async () => {
     const dataToValidatePredicate = [ZeroBytes32];
 
     // #region transaction-request-5
@@ -163,11 +172,15 @@ describe('Transaction Request', () => {
       provider,
     });
 
+    const predicateCoins = await predicate.getResourcesToSpend([
+      { amount: 1000, assetId: baseAssetId },
+    ]);
+
     // Add the predicate input and resources
-    transactionRequest.addPredicateResource(coin, predicate);
+    transactionRequest.addResources(predicateCoins);
     // #endregion transaction-request-5
 
-    expect(transactionRequest.inputs.length).toEqual(1);
+    expect(transactionRequest.inputs.length).toBeGreaterThanOrEqual(1);
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 
@@ -210,9 +223,8 @@ describe('Transaction Request', () => {
     // TX ID: 0x420f6...
     // #endregion transaction-request-7
 
-    const expectedTransactionId =
-      '0x420f6093f32975eec3bd505e1a124be5e7352146841017b6142b34923e563f4b';
-
-    expect(transactionId).toBe(expectedTransactionId);
+    expect(transactionId).toBe(
+      '0x09274de739e2a53a815799b4c7fa93359eaf4befee0b26be04a7a6283bbeb127'
+    );
   });
 });

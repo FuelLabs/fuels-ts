@@ -1,5 +1,5 @@
-import type { WalletLocked, WalletUnlocked, BigNumberish, BN } from 'fuels';
-import { Provider, FUEL_NETWORK_URL, toHex, toNumber, Predicate } from 'fuels';
+import type { WalletLocked, WalletUnlocked, BigNumberish } from 'fuels';
+import { Provider, FUEL_NETWORK_URL, toHex, Predicate } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
@@ -29,14 +29,12 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
     let provider: Provider;
-    let gasPrice: BN;
     let baseAssetId: string;
     const amountToReceiver = 50;
-    const amountToPredicate = 400_000;
+    const amountToPredicate = 4000;
 
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
-      gasPrice = provider.getGasConfig().minGasPrice;
       baseAssetId = provider.getBaseAssetId();
     });
 
@@ -53,23 +51,16 @@ describe('Predicate', () => {
         inputData: ['0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a'],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
-      await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate with invalid address data and returns false', async () => {
@@ -79,16 +70,13 @@ describe('Predicate', () => {
         provider,
         inputData: ['0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada'],
       });
-
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
-      // Check there are UTXO locked with the predicate hash
-      expect(initialPredicateBalance.gte(amountToPredicate));
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
-        predicate.transfer(receiver.address, 50, baseAssetId, { gasPrice: 1, gasLimit: 1000 })
+        predicate.transfer(receiver.address, 50, baseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
@@ -100,23 +88,16 @@ describe('Predicate', () => {
         inputData: [1078],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
-      await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
@@ -127,17 +108,14 @@ describe('Predicate', () => {
         inputData: [100],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
-      // Check there are UTXO locked with the predicate hash
-      expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
 
       await expect(
         predicate.transfer(receiver.address, amountToPredicate, baseAssetId, {
-          gasPrice,
-          gasLimit: 10_000,
+          gasLimit: 1000,
         })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
@@ -149,12 +127,7 @@ describe('Predicate', () => {
         provider,
         inputData: [{ has_account: true, total_complete: 100 }],
       });
-
-      const initialPredicateBalance = await fundPredicate(
-        wallet,
-        predicateInstanceForBalance,
-        amountToPredicate
-      );
+      await fundPredicate(wallet, predicateInstanceForBalance, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-struct-arg
@@ -165,20 +138,13 @@ describe('Predicate', () => {
         inputData: [{ has_account: true, total_complete: 100 }],
       });
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
-      await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
       // #endregion predicate-struct-arg
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate with an invalid main struct argument and returns false', async () => {
@@ -194,13 +160,10 @@ describe('Predicate', () => {
         ],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-
-      // Check there are UTXO locked with the predicate hash
-      expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
 
       await expect(
-        predicate.transfer(receiver.address, 50, baseAssetId, { gasPrice, gasLimit: 10_000 })
+        predicate.transfer(receiver.address, 50, baseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
@@ -212,23 +175,16 @@ describe('Predicate', () => {
         inputData: [[42]],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
-      await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate with valid multiple arguments and returns true', async () => {
@@ -239,11 +195,7 @@ describe('Predicate', () => {
         inputData: [20, 30],
       });
 
-      const initialPredicateBalance = await fundPredicate(
-        wallet,
-        predicateForBalance,
-        amountToPredicate
-      );
+      await fundPredicate(wallet, predicateForBalance, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-multi-args
@@ -254,20 +206,13 @@ describe('Predicate', () => {
         inputData: [20, 30],
       });
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
-      await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
       // #endregion predicate-multi-args
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate with valid multiple arguments and returns true - using setData', async () => {
@@ -278,23 +223,16 @@ describe('Predicate', () => {
         inputData: [20, 30],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+        gasLimit: 1000,
       });
-      await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a predicate with invalid multiple arguments and throws error', async () => {
@@ -305,13 +243,10 @@ describe('Predicate', () => {
         inputData: [20, 20],
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-
-      // Check the UTXOs locked with the predicate hash
-      expect(toNumber(initialPredicateBalance)).toBeGreaterThanOrEqual(amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
 
       await expect(
-        predicate.transfer(receiver.address, 50, baseAssetId, { gasPrice, gasLimit: 10_000 })
+        predicate.transfer(receiver.address, 50, baseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
   });

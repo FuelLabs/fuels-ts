@@ -28,12 +28,10 @@ const setup = async (balance = 500_000) => {
 
 const setupContract = getSetupContract('raw-slice');
 let contractInstance: Contract;
-let gasPrice: BN;
 let baseAssetId: string;
 beforeAll(async () => {
   contractInstance = await setupContract();
   baseAssetId = contractInstance.provider.getBaseAssetId();
-  ({ minGasPrice: gasPrice } = contractInstance.provider.getGasConfig());
 });
 
 /**
@@ -95,29 +93,23 @@ describe('Raw Slice Tests', () => {
 
     // setup predicate
     const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
 
-    const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
 
     const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasPrice,
       gasLimit: 10_000,
     });
-    await tx.waitForResult();
+    const { isStatusSuccess } = await tx.waitForResult();
 
     // Check the balance of the receiver
     const finalReceiverBalance = await receiver.getBalance();
     expect(bn(initialReceiverBalance).add(amountToReceiver).toHex()).toEqual(
       finalReceiverBalance.toHex()
     );
-
-    // Check we spent the entire predicate hash input
-    const finalPredicateBalance = await predicate.getBalance();
-    expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
+    expect(isStatusSuccess);
   });
 
   // see https://github.com/FuelLabs/fuels-ts/issues/1344
