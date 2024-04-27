@@ -15,7 +15,11 @@ impl Token for Contract {
     fn mint_to_addresses(addresses: [Address; 3], mint_amount: u64) {
         let mut counter = 0;
         while counter < 3 {
-            mint_to_address(addresses[counter], BASE_TOKEN, mint_amount);
+            mint_to(
+                Identity::Address(addresses[counter]),
+                BASE_TOKEN,
+                mint_amount,
+            );
             counter = counter + 1;
         }
     }
@@ -25,16 +29,15 @@ impl Token for Contract {
     }
 
     fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
-        force_transfer_to_contract(target, asset_id, amount);
+        transfer(Identity::ContractId(target), asset_id, amount);
     }
 
     fn multi_contract_transfer(recipients: [TransferParams<ContractId>; 5]) {
         let mut counter = 0;
 
         while counter < 5 {
-            force_transfer_to_contract(
-                recipients[counter]
-                    .recipient,
+            transfer(
+                Identity::ContractId(recipients[counter].recipient),
                 recipients[counter]
                     .asset_id,
                 recipients[counter]
@@ -46,16 +49,15 @@ impl Token for Contract {
     }
 
     fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64) {
-        transfer_to_address(recipient, asset_id, amount);
+        transfer(Identity::Address(recipient), asset_id, amount);
     }
 
     fn multi_address_transfer(recipients: [TransferParams<Address>; 5]) {
         let mut counter = 0;
 
         while counter < 5 {
-            transfer_to_address(
-                recipients[counter]
-                    .recipient,
+            transfer(
+                Identity::Address(recipients[counter].recipient),
                 recipients[counter]
                     .asset_id,
                 recipients[counter]

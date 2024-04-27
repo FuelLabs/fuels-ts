@@ -1,7 +1,7 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { Provider } from 'fuels';
-import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
+import { WalletUnlocked, Predicate, getRandomB256 } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -51,17 +51,16 @@ describe(__filename, () => {
       gasLimit: 1000,
     });
 
-    await tx.waitForResult();
+    let { isStatusSuccess } = await tx.waitForResult();
+    expect(isStatusSuccess).toBeTruthy();
     // #endregion send-and-spend-funds-from-predicates-3
-
-    const initialPredicateBalance = new BN(await predicate.getBalance()).toNumber();
-
-    expect(initialPredicateBalance).toBeGreaterThanOrEqual(amountToPredicate);
 
     // #region send-and-spend-funds-from-predicates-5
     const receiverWallet = WalletUnlocked.generate({
       provider,
     });
+
+    const receiverInitialBalance = await receiverWallet.getBalance();
 
     const tx2 = await predicate.transfer(
       receiverWallet.address.toB256(),
@@ -69,7 +68,14 @@ describe(__filename, () => {
       baseAssetId
     );
 
-    await tx2.waitForResult();
+    ({ isStatusSuccess } = await tx2.waitForResult());
+    expect(isStatusSuccess).toBeTruthy();
+
+    const receiverFinalBalance = await receiverWallet.getBalance();
+    expect(receiverFinalBalance.gt(receiverInitialBalance)).toBeTruthy();
+
+    ({ isStatusSuccess } = await tx2.waitForResult());
+    expect(isStatusSuccess).toBeTruthy();
     // #endregion send-and-spend-funds-from-predicates-5
   });
 
@@ -89,14 +95,12 @@ describe(__filename, () => {
 
     await tx.waitForResult();
 
-    const predicateBalance = new BN(await predicate.getBalance()).toNumber();
-
     const receiverWallet = WalletUnlocked.generate({
       provider,
     });
 
-    const { error } = await safeExec(() =>
-      predicate.transfer(receiverWallet.address, predicateBalance, baseAssetId)
+    const { error } = await safeExec(async () =>
+      predicate.transfer(receiverWallet.address, await predicate.getBalance(), baseAssetId)
     );
 
     // #region send-and-spend-funds-from-predicates-6

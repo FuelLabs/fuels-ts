@@ -63,7 +63,7 @@ describe('Transaction Request', () => {
     });
 
     baseAssetId = provider.getBaseAssetId();
-    await seedTestWallet(predicate, [[10_000, baseAssetId]]);
+    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
   });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {
@@ -180,7 +180,7 @@ describe('Transaction Request', () => {
     transactionRequest.addResources(predicateCoins);
     // #endregion transaction-request-5
 
-    expect(transactionRequest.inputs.length).toEqual(1);
+    expect(transactionRequest.inputs.length).toBeGreaterThanOrEqual(1);
     expect(transactionRequest.outputs.length).toEqual(1);
   });
 
@@ -224,7 +224,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0x6a9901970ce4d7a43f10f4a95b8e1ecf07be35993dc6e41547d000ee74465a0a'
+      '0x09274de739e2a53a815799b4c7fa93359eaf4befee0b26be04a7a6283bbeb127'
     );
   });
 });

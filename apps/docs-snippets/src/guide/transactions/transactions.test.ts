@@ -15,7 +15,7 @@ describe('Transactions', () => {
   beforeAll(async () => {
     sender = await getTestWallet();
     provider = sender.provider;
-    baseAssetId = await provider.getBaseAssetId();
+    baseAssetId = provider.getBaseAssetId();
     receiver = Wallet.generate({ provider });
   });
 
