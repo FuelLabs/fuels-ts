@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.83.0
+
+### Minor Changes
+
+- b026feb: feat!: fetch base asset ID from chain
+
+### Patch Changes
+
+- 0d75266: chore!: upgrading `forc` to `0.55.0`
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/errors@0.83.0
+  - @fuel-ts/crypto@0.83.0
+
 ## 0.82.0
 
 ### Patch Changes

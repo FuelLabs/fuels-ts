@@ -282,7 +282,7 @@ const generateWallets = async (count: number, provider: Provider) => {
   const baseAssetId = provider.getBaseAssetId();
   const wallets: WalletUnlocked[] = [];
   for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
     wallets.push(wallet);
   }
   return wallets;
