@@ -14,6 +14,6 @@ writeFileSync(packageJsonFilePath, contents);
 
 // fuels.config.ts
 contents = readFileSync(fuelsConfigFilePath, 'utf-8');
-contents = contents.replace(/\n\W+forcPath: 'fuels-forc',/g, '')
-contents = contents.replace(/\n\W+fuelCorePath: 'fuels-core',/g, '')
+contents = contents.replace(/\n\W+forcPath: 'fuels-forc',/g, '');
+contents = contents.replace(/\n\W+fuelCorePath: 'fuels-core',/g, '');
 writeFileSync(fuelsConfigFilePath, contents);
