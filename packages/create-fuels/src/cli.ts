@@ -179,7 +179,7 @@ export const runScaffoldCli = async ({
         text: 'Installing fuelup..',
         color: 'green',
       });
-      installFuelUp();
+      installFuelUp(verboseEnabled);
       installFuelUpSpinner.succeed('Successfully installed fuelup!');
     } else {
       log(
