@@ -1,5 +1,20 @@
 # @fuel-ts/utils
 
+## 0.83.0
+
+### Minor Changes
+
+- 29f46ef: chore!: upgrade `forc` to `0.56.0`
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+- b026feb: feat!: fetch base asset ID from chain
+
+### Patch Changes
+
+- Updated dependencies [9c3c094]
+- Updated dependencies [0d75266]
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/errors@0.83.0
+
 ## 0.82.0
 
 ### Patch Changes
