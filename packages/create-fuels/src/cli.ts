@@ -141,7 +141,9 @@ async function tryInstallFuelup(isVerbose: boolean = false) {
   }
 
   fuelUpSpinner.fail('fuelup not found.');
+
   const shouldInstall = await promptForFuelUpInstall();
+
   if (shouldInstall) {
     installFuelUp(isVerbose);
   } else {
