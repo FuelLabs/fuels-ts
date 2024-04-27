@@ -129,6 +129,30 @@ async function promptForFuelUpInstall() {
   return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
 }
 
+async function tryInstallFuelup(isVerbose: boolean = false) {
+  const fuelUpSpinner = ora({
+    text: 'Checking if fuelup is installed..',
+    color: 'green',
+  }).start();
+
+  if (checkIfFuelUpInstalled()) {
+    fuelUpSpinner.succeed('fuelup is already installed.');
+    return;
+  }
+
+  fuelUpSpinner.fail('fuelup not found.');
+  const shouldInstall = await promptForFuelUpInstall();
+  if (shouldInstall) {
+    installFuelUp(isVerbose);
+  } else {
+    log(
+      chalk.yellow(
+        'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
+      )
+    );
+  }
+}
+
 export const setupProgram = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)
@@ -160,35 +184,7 @@ export const runScaffoldCli = async ({
   let projectPath = program.args[0] ?? (await promptForProjectPath());
   const verboseEnabled = program.opts().verbose ?? false;
 
-  const fuelUpSpinner = ora({
-    text: 'Checking if fuelup is installed..',
-    color: 'green',
-  }).start();
-
-  const isFuelUpInstalled = checkIfFuelUpInstalled();
-
-  if (isFuelUpInstalled) {
-    fuelUpSpinner.succeed('fuelup is already installed.');
-  }
-
-  if (!isFuelUpInstalled) {
-    fuelUpSpinner.fail('fuelup not found.');
-    const shouldInstallFuelUp = await promptForFuelUpInstall();
-    if (shouldInstallFuelUp) {
-      const installFuelUpSpinner = ora({
-        text: 'Installing fuelup..',
-        color: 'green',
-      });
-      installFuelUp(verboseEnabled);
-      installFuelUpSpinner.succeed('Successfully installed fuelup!');
-    } else {
-      log(
-        chalk.yellow(
-          'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
-        )
-      );
-    }
-  }
+  await tryInstallFuelup(verboseEnabled);
 
   while (existsSync(projectPath)) {
     log(
