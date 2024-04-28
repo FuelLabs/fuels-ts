@@ -929,11 +929,11 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[20_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract({ baseAssetId });
+    const contract = await factory.deployContract();
 
     const receiver = Wallet.generate({ provider });
     const amountToTransfer = 300;
@@ -961,7 +961,7 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract({ baseAssetId });
+    const contract = await factory.deployContract();
 
     const receiver1 = Wallet.generate({ provider });
     const receiver2 = Wallet.generate({ provider });
@@ -1000,7 +1000,7 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract({ baseAssetId });
+    const contract = await factory.deployContract();
 
     await expectToThrowFuelError(
       async () => {
@@ -1128,7 +1128,7 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const storageContract = await factory.deployContract({ baseAssetId });
+    const storageContract = await factory.deployContract();
 
     const initialCounterValue = 20;
 
