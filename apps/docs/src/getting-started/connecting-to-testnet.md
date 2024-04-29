@@ -15,7 +15,7 @@ We have some useful resources for the Testnet:
 
 ---
 
-In the example below, we connect a [Provider](./guide/provider/index.md) to the latest testnet and create a new wallet from a private key.
+In the example below, we connect a [Provider](/guide/provider/index.md) to the latest testnet and create a new wallet from a private key.
 
 > **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-beta-5.fuel.network/) to fund your wallet.
 
