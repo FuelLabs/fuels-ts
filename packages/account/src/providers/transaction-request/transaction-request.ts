@@ -13,7 +13,7 @@ import {
   OutputType,
   TransactionType,
 } from '@fuel-ts/transactions';
-import { concat, hexlify } from '@fuel-ts/utils';
+import { concat, hexlify, isDefined } from '@fuel-ts/utils';
 
 import type { Account } from '../../account';
 import type { GqlGasCosts } from '../__generated__/operations';
@@ -133,22 +133,23 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     let policyTypes = 0;
     const policies: Policy[] = [];
 
-    if (req.tip) {
+    const { tip, witnessLimit, maturity } = req;
+
+    if (bn(tip).gt(0)) {
       policyTypes += PolicyType.Tip;
-      policies.push({ data: req.tip, type: PolicyType.Tip });
+      policies.push({ data: bn(tip), type: PolicyType.Tip });
     }
-    if (req.witnessLimit) {
+    if (isDefined(witnessLimit) && bn(witnessLimit).gte(0)) {
       policyTypes += PolicyType.WitnessLimit;
-      policies.push({ data: req.witnessLimit, type: PolicyType.WitnessLimit });
+      policies.push({ data: bn(witnessLimit), type: PolicyType.WitnessLimit });
     }
-    if (req.maturity > 0) {
+    if (maturity && maturity > 0) {
       policyTypes += PolicyType.Maturity;
-      policies.push({ data: req.maturity, type: PolicyType.Maturity });
+      policies.push({ data: maturity, type: PolicyType.Maturity });
     }
-    if (req.maxFee) {
-      policyTypes += PolicyType.MaxFee;
-      policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
-    }
+
+    policyTypes += PolicyType.MaxFee;
+    policies.push({ data: req.maxFee, type: PolicyType.MaxFee });
 
     return {
       policyTypes,
