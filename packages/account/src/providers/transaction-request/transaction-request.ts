@@ -96,7 +96,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /** Block until which tx cannot be included */
   maturity?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
-  maxFee?: BN;
+  maxFee: BN;
   /** The maximum amount of witness data allowed for the transaction */
   witnessLimit?: BN | undefined;
   /** List of inputs */
