@@ -1643,12 +1643,11 @@ export default class Provider {
    * @param nonce - The nonce of the message to retrieve.
    * @returns A promise that resolves to the Message object.
    */
-  async getMessageByNonce(nonce: string): Promise<GqlMessage | undefined> {
+  async getMessageByNonce(nonce: string): Promise<GqlMessage | null> {
     const { message } = await this.operations.getMessageByNonce({ nonce });
 
-    // return undefined if `message` is `null`
     if (!message) {
-      return undefined;
+      return null;
     }
 
     return message;
