@@ -162,7 +162,7 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@v2.1.0
         with:
-          version: 9.0.2
+          version: 9.0.5
           run_install: true
 
       - name: Install jq
