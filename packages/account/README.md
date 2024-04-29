@@ -2,7 +2,7 @@
 
 **@fuel-ts/account** is a sub-module for interacting with **Fuel**.
 
-This module contains the class to manage a private key and signing for a standard Externally Owned Account (EOA)
+This module contains the class to manage a private key and signing for a standard Externally Owned Account (EOA).
 
 ## Table of contents
 
