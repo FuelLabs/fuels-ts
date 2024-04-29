@@ -92,9 +92,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
-  tip: BN;
+  tip?: BN;
   /** Block until which tx cannot be included */
-  maturity: number;
+  maturity?: number;
   /** The maximum fee payable by this transaction using BASE_ASSET. */
   maxFee?: BN;
   /** The maximum amount of witness data allowed for the transaction */
