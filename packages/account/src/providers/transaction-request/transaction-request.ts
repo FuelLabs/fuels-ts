@@ -122,7 +122,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }: BaseTransactionRequestLike = {}) {
     this.tip = tip ? bn(tip) : undefined;
     this.maturity = maturity && maturity > 0 ? maturity : undefined;
-    this.witnessLimit = witnessLimit ? bn(witnessLimit) : undefined;
+    this.witnessLimit = isDefined(witnessLimit) ? bn(witnessLimit) : undefined;
     this.maxFee = bn(maxFee);
     this.inputs = inputs ?? [];
     this.outputs = outputs ?? [];
