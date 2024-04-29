@@ -453,14 +453,7 @@ export default defineConfig({
           },
           {
             text: 'Errors',
-            link: '/guide/errors/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Error Codes',
-                link: '/guide/errors/error-codes',
-              },
-            ],
+            link: '/errors.md',
           },
           apiLinks,
         ],
