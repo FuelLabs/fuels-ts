@@ -17,9 +17,9 @@ When the arguments supplied to the function do not match the minimum required in
 Check that the arguments supplied to the function, match the required type.
 
 ### `ACCOUNT_REQUIRED`
-When an [`Account`](../../api/Account/Account.md) is required for an operation. This will usually be in the form of a [`Wallet`](../wallets/index.md).
+When an [`Account`](./api/Account/Account.md) is required for an operation. This will usually be in the form of a [`Wallet`](./guide/wallets/index.md).
 
-It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
+It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](./guide/contracts/deploying-contracts.md).
 
 ### `CONVERTING_FAILED`
 When converting a big number into an incompatible format.
@@ -69,7 +69,7 @@ Ensure the configurable constants provided are correct and are defined in ABI.
 ### `INVALID_COMPONENT`
 When an expected component is not found in the ABI or is malformed.
 
-Ensure that you have correctly formed Sway types for [Arrays](../types/arrays.md) and [Vectors](../types/vectors.md).
+Ensure that you have correctly formed Sway types for [Arrays](./guide/types/arrays.md) and [Vectors](./guide/types/vectors.md).
 
 ### `INVALID_CREDENTIALS`
 When the password provided is incorrect.
@@ -89,7 +89,7 @@ Ensure that the entropy is between 16 and 32 bytes and a multiple of 4.
 ### `INVALID_EVM_ADDRESS`
 When the provided EVM address is invalid.
 
-Ensure that the [EVM address](../types/evm-address.md) is valid.
+Ensure that the [EVM address](./guide/types/evm-address.md) is valid.
 
 ### `INVALID_INPUT_PARAMETERS`
 When the provided input parameters are _not_ valid.
@@ -154,7 +154,7 @@ Check the status received is within `TransactionStatus`.
 ### `INVALID_TRANSACTION_TYPE`
 When the transaction type from the Fuel Node is _not_ valid.
 
-The type is within [`TransactionType`](../../api/Account/TransactionType.md).
+The type is within [`TransactionType`](./api/Account/TransactionType.md).
 
 ### `INVALID_TTL`
 When the TTL is less than or equal to zero.
@@ -169,7 +169,7 @@ The word list provided to the mnemonic length should be equal to 2048.
 ### `JSON_ABI_ERROR`
 When an ABI type does not conform to the correct format.
 
-It is usually caused by an incorrect type/s within your program, check our type [docs](../types/index.md) here for information on the types we support and their expected format.
+It is usually caused by an incorrect type/s within your program, check our type [docs](./guide/types/index.md) here for information on the types we support and their expected format.
 
 ### `LOG_TYPE_NOT_FOUND`
 When the log type ID supplied can not be found in the ABI.
@@ -184,7 +184,7 @@ Ensure that a connector has been supplied to the `Account` or `Wallet`.
 ### `MISSING_PROVIDER`
 A provider is missing when it's required for a given operation.
 
-It could be caused by the provider not being set for either an [`Account`](../../api/Account/index.md) or a [`Wallet`](../wallets/index.md) - use the `connect` method to attach a provider.
+It could be caused by the provider not being set for either an [`Account`](./api/Account/index.md) or a [`Wallet`](./guide/wallets/index.md) - use the `connect` method to attach a provider.
 
 ### `MISSING_REQUIRED_PARAMETER`
 When a required parameter has not been supplied to a given method.
@@ -204,7 +204,7 @@ Check that the type ID is correct and exists in the ABI.
 ### `TYPE_NOT_SUPPORTED`
 When an unexpected type has been detected - the error message will determine which type is incorrect.
 
-Check the type against your ABI and ensure that it is correct. You can find a list of all our types [here](../types/index.md).
+Check the type against your ABI and ensure that it is correct. You can find a list of all our types [here](./guide/types/index.md).
 
 ### `UNSUPPORTED_FUEL_CLIENT_VERSION`
 When the version of the Fuel Node you are targeting is not supported by the client you are accessing it from.
