@@ -4,7 +4,7 @@
 
 This module contains the class to manage a private key and signing for a standard Externally Owned Account (EOA)
 
-# Table of contents
+## Table of contents
 
 - [Documentation](#documentation)
 - [Usage](#usage)
@@ -38,7 +38,7 @@ pnpm add fuels
 npm add fuels
 ```
 
-# Test Utilities
+## Test Utilities
 
 These test utilities are exported to assist in testing apps using Fuels.
 
