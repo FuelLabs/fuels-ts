@@ -45,7 +45,30 @@ export default defineConfig({
         items: [
           {
             text: 'Getting Started',
-            link: '/getting-started.md',
+            link: '/getting-started/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Installation and Prerequisites',
+                link: '/getting-started/installation-and-prerequisites',
+              },
+              {
+                text: 'Usage',
+                link: '/getting-started/usage',
+              },
+              {
+                text: 'Connecting to Testnet',
+                link: '/getting-started/connecting-to-testnet',
+              },
+              {
+                text: 'Connecting to a Local Node',
+                link: '/getting-started/connecting-to-a-local-node',
+              },
+              {
+                text: 'Further Resources',
+                link: '/getting-started/further-resources',
+              },
+            ],
           },
           {
             text: 'Creating a Fuel dApp',
