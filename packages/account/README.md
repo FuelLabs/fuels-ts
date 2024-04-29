@@ -54,7 +54,7 @@ const baseAssetId = provider.getBaseAssetId();
 seedTestWallet(wallet, [{ assetId: baseAssetId, amount: bn(100_000) }]);
 
 // generating
-const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
 ```
 
 ## Contributing
