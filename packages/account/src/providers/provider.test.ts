@@ -1479,6 +1479,6 @@ describe('Provider', () => {
     const message = await provider.getMessageByNonce(nonce);
 
     expect(message).toBeDefined();
-    expect(message?.nonce).toEqual(`0x${nonce}`);
+    expect(message?.nonce).toEqual(nonce);
   });
 });
