@@ -1,6 +1,6 @@
-# `@fuel-ts/wallet`
+# `@fuel-ts/account`
 
-**@fuel-ts/wallet** is a sub-module for interacting with **Fuel**.
+**@fuel-ts/account** is a sub-module for interacting with **Fuel**.
 
 This module contains the class to manage a private key and signing for a standard Externally Owned Account (EOA)
 
@@ -23,9 +23,9 @@ See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/wallets/)
 ### Installation
 
 ```sh
-pnpm add @fuel-ts/wallet
+pnpm add @fuel-ts/account
 # or
-npm add @fuel-ts/wallet
+npm add @fuel-ts/account
 ```
 
 ### Full SDK Installation
@@ -59,12 +59,12 @@ const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
 
 ## Contributing
 
-In order to contribute to `@fuel-ts/wallet`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
+In order to contribute to `@fuel-ts/account`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
 ## Changelog
 
-The `@fuel-ts/wallet` changelog can be found at [CHANGELOG](./CHANGELOG.md).
+The `@fuel-ts/account` changelog can be found at [CHANGELOG](./CHANGELOG.md).
 
 ## License
 
-The primary license for `@fuel-ts/wallet` is `Apache 2.0`, see [LICENSE](./LICENSE).
+The primary license for `@fuel-ts/account` is `Apache 2.0`, see [LICENSE](./LICENSE).
