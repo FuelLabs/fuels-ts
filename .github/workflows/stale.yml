@@ -16,8 +16,8 @@ jobs:
           repo-token: ${{ github.token }}
           stale-issue-message: "Oops, seems like we needed more information for this issue, please comment with more details or this issue will be closed in 7 days."
           close-issue-message: "This issue was closed because it is missing author input."
-          stale-issue-label: "kind/stale"
-          any-of-labels: "need/author-input"
+          stale-issue-label: "stale"
+          any-of-labels: "need-author-input"
           exempt-issue-labels: "need/triage,need/community-input,need/maintainer-input,need/maintainers-input,need/analysis,status/blocked,status/in-progress,status/ready,status/deferred,status/inactive"
           days-before-issue-stale: 6
           days-before-issue-close: 7
