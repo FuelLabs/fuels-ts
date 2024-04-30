@@ -33,7 +33,6 @@ jobs:
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Versions
         run: |
-          echo "CURRENT_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           pnpm changeset version
           echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
@@ -62,7 +61,6 @@ jobs:
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
-        if: ${{ env.RELEASE_VERSION != env.CURRENT_VERSION }}
         uses: FuelLabs/changesets-action@main
         with:
           publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
@@ -95,6 +93,19 @@ jobs:
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
           git checkout master
+
+          CHANGESET_FILE=$(git diff-tree --no-commit-id --name-only HEAD -r ".changeset/*-*-*.md")
+          if [ -z "$CHANGESET_FILE" ]; then
+            echo "No changesets found, skipping release to @next tag"
+            exit 0
+          fi
+
+          AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
+          if [ -z "$AFFECTED_PACKAGES" ]; then
+            echo "No packages affected by changesets, skipping release to @next tag"
+            exit 0
+          fi
+
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot next

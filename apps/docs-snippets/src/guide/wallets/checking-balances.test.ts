@@ -14,7 +14,7 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = await provider.getBaseAssetId();
+    baseAssetId = provider.getBaseAssetId();
     assetId = baseAssetId;
     const wallet = await generateTestWallet(provider, [
       [1000, baseAssetId],

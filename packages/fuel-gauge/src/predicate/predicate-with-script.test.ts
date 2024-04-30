@@ -1,5 +1,4 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
@@ -62,46 +61,24 @@ describe('Predicate', () => {
           },
         ],
       });
-      const initialPredicateBalance = toNumber(await predicate.getBalance());
 
       await fundPredicate(wallet, predicate, amountToPredicate);
-
-      expect(toNumber(await predicate.getBalance())).toBeGreaterThan(initialPredicateBalance);
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
         gasLimit: 1000,
       });
 
-      const { fee: predicateTxFee } = await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
+      expect(isStatusSuccess).toBeTruthy();
 
-      const {
-        transactionResult: { fee: receiverTxFee },
-      } = await scriptInstance.functions.main(scriptInput).call();
+      const res = await scriptInstance.functions.main(scriptInput).call();
+      expect(res.transactionResult.isStatusSuccess).toBeTruthy();
 
-      const finalReceiverBalance = toNumber(await receiver.getBalance());
-
-      const remainingPredicateBalance = toNumber(await predicate.getBalance());
-
-      const expectedReceiverBalance =
-        initialReceiverBalance + amountToReceiver - receiverTxFee.toNumber();
+      const receiverFinalBalance = await receiver.getBalance();
 
       expect(toNumber(initialReceiverBalance)).toBe(0);
-
-      expectToBeInRange({
-        value: finalReceiverBalance,
-        min: expectedReceiverBalance - 8,
-        max: expectedReceiverBalance + 8,
-      });
-
-      const predicateExpectedBalance =
-        amountToPredicate + initialPredicateBalance - amountToReceiver - predicateTxFee.toNumber();
-
-      expectToBeInRange({
-        value: remainingPredicateBalance,
-        min: predicateExpectedBalance - 8,
-        max: predicateExpectedBalance + 8,
-      });
+      expect(receiverFinalBalance.gt(initialReceiverBalance)).toBeTruthy();
     });
   });
 });

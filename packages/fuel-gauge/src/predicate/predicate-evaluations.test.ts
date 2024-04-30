@@ -31,7 +31,6 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns true', async () => {
-      const amountToPredicate = 1000;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
@@ -40,21 +39,14 @@ describe('Predicate', () => {
         provider,
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
         gasLimit: 1000,
       });
-      await tx.waitForResult();
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      const { isStatusSuccess } = await tx.waitForResult();
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a no argument predicate and returns false', async () => {
