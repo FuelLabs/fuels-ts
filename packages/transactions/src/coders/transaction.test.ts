@@ -6,10 +6,12 @@ import { OutputType } from './output';
 import { PolicyType } from './policy';
 import type { Transaction } from './transaction';
 import { TransactionCoder, TransactionType } from './transaction';
+import { UpgradePurposeTypeEnum } from './upgrade-purpose';
 
 const B256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
 const U64 = bn(32);
 const U32 = 1000;
+const U16 = 900;
 const U8 = 1;
 
 /**
@@ -281,6 +283,113 @@ describe('TransactionCoder', () => {
 
     expect(encoded).toEqual(
       '0x000000000000000200000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000003e8'
+    );
+
+    const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
+
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(JSON.parse(JSON.stringify(decoded))).toMatchObject(
+      JSON.parse(JSON.stringify(transaction))
+    );
+  });
+
+  it('Can encode/decode TransactionUpgrade without inputs, outputs and witnesses', () => {
+    const transaction: Transaction<TransactionType.Upgrade> = {
+      type: TransactionType.Upgrade,
+      upgradePurpose: {
+        type: UpgradePurposeTypeEnum.ConsensusParameters,
+        data: {
+          checksum: B256,
+          witnessIndex: U8,
+        },
+      },
+      policyTypes: 5,
+      inputsCount: 0,
+      outputsCount: 0,
+      witnessesCount: 0,
+      policies: [
+        { type: PolicyType.Tip, data: bn(U32) },
+        { type: PolicyType.Maturity, data: U32 },
+      ],
+      inputs: [],
+      outputs: [],
+      witnesses: [],
+    };
+
+    const encoded = hexlify(new TransactionCoder().encode(transaction));
+
+    expect(encoded).toEqual(
+      '0x000000000000000300000000000000000000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000500000000000000000000000000000000000000000000000000000000000003e800000000000003e8'
+    );
+
+    const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
+
+    expect(offset).toEqual((encoded.length - 2) / 2);
+    expect(JSON.parse(JSON.stringify(decoded))).toMatchObject(
+      JSON.parse(JSON.stringify(transaction))
+    );
+  });
+
+  it('Can encode/decode TransactionUpgrade with inputs, outputs and witnesses', () => {
+    const transaction: Transaction<TransactionType.Upgrade> = {
+      type: TransactionType.Upgrade,
+      upgradePurpose: {
+        type: UpgradePurposeTypeEnum.StateTransition,
+        data: {
+          bytecodeRoot: B256,
+        },
+      },
+      policyTypes: 7,
+      inputsCount: 1,
+      outputsCount: 1,
+      witnessesCount: 3,
+      policies: [
+        { type: PolicyType.Tip, data: bn(U32) },
+        { type: PolicyType.WitnessLimit, data: bn(U32) },
+        { type: PolicyType.Maturity, data: U32 },
+      ],
+      inputs: [
+        {
+          type: InputType.Contract,
+          txID: B256,
+          outputIndex: 0,
+          balanceRoot: B256,
+          stateRoot: B256,
+          contractID: B256,
+          txPointer: {
+            blockHeight: 0,
+            txIndex: 0,
+          },
+        },
+      ],
+      outputs: [
+        {
+          type: OutputType.Coin,
+          to: B256,
+          amount: bn(1),
+          assetId: B256,
+        },
+      ],
+      witnesses: [
+        {
+          dataLength: 1,
+          data: '0x01',
+        },
+        {
+          dataLength: 2,
+          data: '0x0101',
+        },
+        {
+          dataLength: 3,
+          data: '0x010101',
+        },
+      ],
+    };
+
+    const encoded = hexlify(new TransactionCoder().encode(transaction));
+
+    expect(encoded).toEqual(
+      '0x00000000000000030000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000700000000000000010000000000000001000000000000000300000000000003e800000000000003e800000000000003e80000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930bd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b00000000000000000000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000000d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b0000000000000001d5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b000000000000000101000000000000000000000000000002010100000000000000000000000000030101010000000000'
     );
 
     const [decoded, offset] = new TransactionCoder().decode(arrayify(encoded), 0);
