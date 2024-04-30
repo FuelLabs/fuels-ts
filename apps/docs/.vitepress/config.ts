@@ -453,7 +453,7 @@ export default defineConfig({
           },
           {
             text: 'Errors',
-            link: '/errors.md',
+            link: '/guide/errors.md',
           },
           apiLinks,
         ],
