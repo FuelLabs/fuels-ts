@@ -21,11 +21,17 @@ import type { Predicate } from '../predicate';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
+  GqlConsensusParametersVersion,
+  GqlContractParameters,
   GqlDryRunFailureStatusFragmentFragment,
   GqlDryRunSuccessStatusFragmentFragment,
+  GqlFeeParameters,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
   GqlMessage,
+  GqlPredicateParameters,
+  GqlScriptParameters,
+  GqlTxParameters,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -85,24 +91,27 @@ export type ContractResult = {
   bytecode: string;
 };
 
-type ConsensusParameters = {
-  contractMaxSize: BN;
-  maxInputs: BN;
-  maxOutputs: BN;
-  maxWitnesses: BN;
-  maxGasPerTx: BN;
-  maxScriptLength: BN;
-  maxScriptDataLength: BN;
-  maxStorageSlots: BN;
-  maxPredicateLength: BN;
-  maxPredicateDataLength: BN;
-  maxGasPerPredicate: BN;
-  gasPriceFactor: BN;
-  gasPerByte: BN;
-  maxMessageDataLength: BN;
+type ModifyStringToBN<T> = {
+  [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
+};
+
+export type FeeParameters = Omit<GqlFeeParameters, '__typename'>;
+export type ContractParameters = Omit<GqlContractParameters, '__typename'>;
+export type PredicateParameters = Omit<GqlPredicateParameters, '__typename'>;
+export type ScriptParameters = Omit<GqlScriptParameters, '__typename'>;
+export type TxParameters = Omit<GqlTxParameters, '__typename'>;
+export type GasCosts = Omit<GqlGasCosts, '__typename'>;
+
+export type ConsensusParameters = {
+  version: GqlConsensusParametersVersion;
   chainId: BN;
-  gasCosts: GqlGasCosts;
   baseAssetId: string;
+  feeParameters: ModifyStringToBN<FeeParameters>;
+  contractParameters: ModifyStringToBN<ContractParameters>;
+  predicateParameters: ModifyStringToBN<PredicateParameters>;
+  scriptParameters: ModifyStringToBN<ScriptParameters>;
+  txParameters: ModifyStringToBN<TxParameters>;
+  gasCosts: GasCosts;
 };
 
 /**
@@ -112,7 +121,6 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   consensusParameters: ConsensusParameters;
-  gasCosts: GqlGasCosts;
   latestBlock: {
     id: string;
     height: BN;
@@ -160,32 +168,58 @@ export type TransactionCost = {
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   const { name, daHeight, consensusParameters, latestBlock } = chain;
 
-  const { contractParams, feeParams, predicateParams, scriptParams, txParams, gasCosts } =
-    consensusParameters;
+  const {
+    contractParams,
+    feeParams,
+    predicateParams,
+    scriptParams,
+    txParams,
+    gasCosts,
+    baseAssetId,
+    chainId,
+    version,
+  } = consensusParameters;
 
   return {
     name,
     baseChainHeight: bn(daHeight),
     consensusParameters: {
-      contractMaxSize: bn(contractParams.contractMaxSize),
-      maxInputs: bn(txParams.maxInputs),
-      maxOutputs: bn(txParams.maxOutputs),
-      maxWitnesses: bn(txParams.maxWitnesses),
-      maxGasPerTx: bn(txParams.maxGasPerTx),
-      maxScriptLength: bn(scriptParams.maxScriptLength),
-      maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
-      maxStorageSlots: bn(contractParams.maxStorageSlots),
-      maxPredicateLength: bn(predicateParams.maxPredicateLength),
-      maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
-      maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
-      gasPriceFactor: bn(feeParams.gasPriceFactor),
-      gasPerByte: bn(feeParams.gasPerByte),
-      maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
-      chainId: bn(consensusParameters.chainId),
-      baseAssetId: consensusParameters.baseAssetId,
+      version,
+      chainId: bn(chainId),
+      baseAssetId,
+      feeParameters: {
+        version: feeParams.version,
+        gasPerByte: bn(feeParams.gasPerByte),
+        gasPriceFactor: bn(feeParams.gasPriceFactor),
+      },
+      contractParameters: {
+        version: contractParams.version,
+        contractMaxSize: bn(contractParams.contractMaxSize),
+        maxStorageSlots: bn(contractParams.maxStorageSlots),
+      },
+      txParameters: {
+        version: txParams.version,
+        maxInputs: bn(txParams.maxInputs),
+        maxOutputs: bn(txParams.maxOutputs),
+        maxWitnesses: bn(txParams.maxWitnesses),
+        maxGasPerTx: bn(txParams.maxGasPerTx),
+        maxSize: bn(txParams.maxSize),
+        maxBytecodeSubsections: bn(txParams.maxBytecodeSubsections),
+      },
+      predicateParameters: {
+        version: predicateParams.version,
+        maxPredicateLength: bn(predicateParams.maxPredicateLength),
+        maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
+        maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
+        maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
+      },
+      scriptParameters: {
+        version: scriptParams.version,
+        maxScriptLength: bn(scriptParams.maxScriptLength),
+        maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
+      },
       gasCosts,
     },
-    gasCosts,
     latestBlock: {
       id: latestBlock.id,
       height: bn(latestBlock.height),
@@ -398,8 +432,12 @@ export default class Provider {
    * Returns some helpful parameters related to gas fees.
    */
   getGasConfig() {
-    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte, gasCosts } =
-      this.getChain().consensusParameters;
+    const {
+      txParameters: { maxGasPerTx },
+      predicateParameters: { maxGasPerPredicate },
+      feeParameters: { gasPriceFactor, gasPerByte },
+      gasCosts,
+    } = this.getChain().consensusParameters;
     return {
       maxGasPerTx,
       maxGasPerPredicate,
