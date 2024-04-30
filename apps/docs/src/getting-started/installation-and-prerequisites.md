@@ -1,3 +1,8 @@
+<script setup>
+  import { data } from '../versions.data'
+  const { fuels } = data
+</script>
+
 # Installation and Prerequisites
 
 ## Prerequisites
