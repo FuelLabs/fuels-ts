@@ -93,6 +93,19 @@ jobs:
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
           git checkout master
+
+          CHANGESET_FILE=$(git diff-tree --no-commit-id --name-only HEAD -r ".changeset/*-*-*.md")
+          if [ -z "$CHANGESET_FILE" ]; then
+            echo "No changesets found, skipping release to @next tag"
+            exit 0
+          fi
+
+          AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
+          if [ -z "$AFFECTED_PACKAGES" ]; then
+            echo "No packages affected by changesets, skipping release to @next tag"
+            exit 0
+          fi
+
           pnpm changeset:next
           git add .changeset/fuel-labs-ci.md
           pnpm changeset version --snapshot next
