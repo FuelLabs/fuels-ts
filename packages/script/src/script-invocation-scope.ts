@@ -30,7 +30,7 @@ export class ScriptInvocationScope<
       );
     }
 
-    const maxInputs = chainInfoCache.consensusParameters.maxInputs.toNumber();
+    const maxInputs = chainInfoCache.consensusParameters.txParameters.maxInputs.toNumber();
 
     const byteLength = new ByteArrayCoder(programBytes.length).encodedLength;
     this.scriptRequest = new ScriptRequest(

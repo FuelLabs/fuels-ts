@@ -2,7 +2,7 @@ import { bn, type BN } from '@fuel-ts/math';
 import { PolicyType, type Transaction } from '@fuel-ts/transactions';
 import { DateTime, hexlify } from '@fuel-ts/utils';
 
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { getGasUsedFromReceipts } from '../utils';
 
@@ -28,7 +28,7 @@ export interface AssembleTransactionSummaryParams {
   receipts: TransactionResultReceipt[];
   abiMap?: AbiMap;
   maxInputs: BN;
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   maxGasPerTx: BN;
   gasPrice: BN;
 }
@@ -98,6 +98,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
+    tip,
     fee,
     gasUsed,
     operations,

@@ -4,7 +4,8 @@ import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions
 import { PolicyType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlConsensusParameters, GqlFeeParameters } from '../__generated__/operations';
+import type { GqlFeeParameters } from '../__generated__/operations';
+import type { ConsensusParameters } from '../provider';
 import {
   calculateGasFee,
   calculateMetadataGasForTxCreate,
@@ -24,7 +25,7 @@ export type CalculateTransactionFeeParams = {
   gasPrice: BN;
   rawPayload: string;
   tip: BN;
-  consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & {
+  consensusParameters: Pick<ConsensusParameters, 'gasCosts'> & {
     feeParams: FeeParams;
     maxGasPerTx: BN;
   };

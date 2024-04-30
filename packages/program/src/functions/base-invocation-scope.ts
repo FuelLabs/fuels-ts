@@ -88,14 +88,14 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected get calls() {
     const provider = this.getProvider();
-    const consensusParams = provider.getChain().consensusParameters;
+    const consensusParams = provider.getChain();
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
         'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
       );
     }
-    const maxInputs = consensusParams.maxInputs;
+    const maxInputs = consensusParams.consensusParameters.txParameters.maxInputs;
     const script = getContractCallScript(this.functionInvocationScopes, maxInputs);
     return this.functionInvocationScopes.map((funcScope) =>
       createContractCall(funcScope, script.getScriptDataOffset(maxInputs.toNumber()))
@@ -106,7 +106,12 @@ export class BaseInvocationScope<TReturn = any> {
    * Updates the script request with the current contract calls.
    */
   protected updateScriptRequest() {
-    const maxInputs = (this.program.provider as Provider).getChain().consensusParameters.maxInputs;
+    const provider = this.getProvider();
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = provider.getChain();
     const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
