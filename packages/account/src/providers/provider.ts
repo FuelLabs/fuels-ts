@@ -684,7 +684,7 @@ export default class Provider {
    * @param transactionRequest - The transaction request object.
    * @returns A promise that resolves to the estimated transaction request object.
    */
-  async estimatePredicates(transactionRequest: TransactionRequest): Promise<TransactionRequest> {
+  async estimatePredicates<T extends TransactionRequest>(transactionRequest: T): Promise<T> {
     const shouldEstimatePredicates = Boolean(
       transactionRequest.inputs.find(
         (input) =>
