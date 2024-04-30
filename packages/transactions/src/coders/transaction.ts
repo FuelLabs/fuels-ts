@@ -480,6 +480,12 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         parts.push(new TransactionMintCoder().encode(value as Transaction<TransactionType.Mint>));
         break;
       }
+      case TransactionType.Upgrade: {
+        parts.push(
+          new TransactionUpgradeCoder().encode(value as Transaction<TransactionType.Upgrade>)
+        );
+        break;
+      }
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_TYPE,
@@ -509,6 +515,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
       case TransactionType.Mint: {
         [decoded, o] = new TransactionMintCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.Upgrade: {
+        [decoded, o] = new TransactionUpgradeCoder().decode(data, o);
         return [decoded, o];
       }
       default: {
