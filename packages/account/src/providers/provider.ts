@@ -12,7 +12,6 @@ import {
 import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
-import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import { clone } from 'ramda';
@@ -26,6 +25,7 @@ import type {
   GqlDryRunSuccessStatusFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
+  GqlMessage,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -489,22 +489,6 @@ export default class Provider {
       nodeInfo: { nodeVersion },
     } = await this.operations.getVersion();
     return nodeVersion;
-  }
-
-  /**
-   * @hidden
-   *
-   * Returns the network configuration of the connected Fuel node.
-   *
-   * @returns A promise that resolves to the network configuration object
-   */
-  async getNetwork(): Promise<Network> {
-    const {
-      name,
-      consensusParameters: { chainId },
-    } = await this.getChain();
-    const network = new Network(name, chainId.toNumber());
-    return Promise.resolve(network);
   }
 
   /**
@@ -1634,5 +1618,21 @@ export default class Provider {
   // eslint-disable-next-line @typescript-eslint/require-await
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
     return new TransactionResponse(transactionId, this);
+  }
+
+  /**
+   * Returns Message for given nonce.
+   *
+   * @param nonce - The nonce of the message to retrieve.
+   * @returns A promise that resolves to the Message object.
+   */
+  async getMessageByNonce(nonce: string): Promise<GqlMessage | null> {
+    const { message } = await this.operations.getMessageByNonce({ nonce });
+
+    if (!message) {
+      return null;
+    }
+
+    return message;
   }
 }
