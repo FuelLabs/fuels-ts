@@ -32,6 +32,11 @@ import {
   addAmountToCoinQuantities,
   cacheTxInputsFromOwner,
 } from './providers';
+import {
+  getAssetAmountInRequestInputs,
+  isRequestInputCoin,
+  isRequestInputResource,
+} from './providers/transaction-request/helpers';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -43,6 +48,7 @@ export type EstimatedTxParams = Pick<
   TransactionCost,
   'maxFee' | 'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities'
 >;
+const MAX_FUNDING_ATTEMPTS = 2;
 
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
@@ -241,13 +247,16 @@ export class Account extends AbstractAccount {
    * Adds resources to the transaction enough to fund it.
    *
    * @param request - The transaction request.
-   * @param coinQuantities - The coin quantities required to execute the transaction.
+   * @param requiredQuantities - The coin quantities required to execute the transaction.
    * @param fee - The estimated transaction fee.
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const { addedSignatures, estimatedPredicates, maxFee: fee, requiredQuantities } = params;
+
     const baseAssetId = this.provider.getBaseAssetId();
+    const requiredInBaseAsset =
+      requiredQuantities.find((quantity) => quantity.assetId === baseAssetId)?.amount || bn(0);
 
     const txRequest = request as T;
     const requiredQuantitiesWithFee = addAmountToCoinQuantities({
@@ -265,19 +274,15 @@ export class Account extends AbstractAccount {
       };
     });
 
-    txRequest.inputs.forEach((input) => {
-      const isResource = 'amount' in input;
-      if (!isResource) {
-        return;
-      }
-      const isCoin = 'owner' in input;
+    request.inputs.filter(isRequestInputResource).forEach((input) => {
+      const isCoin = isRequestInputCoin(input);
       const assetId = isCoin ? String(input.assetId) : baseAssetId;
       if (quantitiesDict[assetId]) {
         quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(input.amount);
       }
     });
 
-    const missingQuantities: CoinQuantity[] = [];
+    let missingQuantities: CoinQuantity[] = [];
     Object.entries(quantitiesDict).forEach(([assetId, { owned, required }]) => {
       if (owned.lt(required)) {
         missingQuantities.push({
@@ -287,14 +292,50 @@ export class Account extends AbstractAccount {
       }
     });
 
-    const needsToBeFunded = missingQuantities.length;
+    let needsToBeFunded = missingQuantities.length > 0;
+    let fundingAttempts = 0;
+    while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
+      const resources = await this.getResourcesToSpend(
+        missingQuantities,
+        cacheTxInputsFromOwner(request.inputs, this.address)
+      );
 
-    if (needsToBeFunded) {
-      const excludedIds = cacheTxInputsFromOwner(txRequest.inputs, this.address.toB256());
+      request.addResources(resources);
 
-      const resources = await this.getResourcesToSpend(missingQuantities, excludedIds);
+      txRequest.shiftPredicateData();
+      txRequest.updatePredicateGasUsed(estimatedPredicates);
 
-      txRequest.addResources(resources);
+      const requestToReestimate = clone(txRequest);
+      if (addedSignatures) {
+        Array.from({ length: addedSignatures }).forEach(() =>
+          requestToReestimate.addEmptyWitness()
+        );
+      }
+
+      const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
+        transactionRequest: requestToReestimate,
+      });
+
+      const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
+        request.inputs,
+        baseAssetId,
+        baseAssetId
+      );
+
+      const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
+
+      if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
+        needsToBeFunded = false;
+      } else {
+        missingQuantities = [
+          {
+            amount: totalBaseAssetRequiredWithFee.sub(totalBaseAssetOnInputs),
+            assetId: baseAssetId,
+          },
+        ];
+      }
+
+      fundingAttempts += 1;
     }
 
     txRequest.shiftPredicateData();
