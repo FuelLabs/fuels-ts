@@ -59,7 +59,7 @@ export type DryRunStatus =
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
-  dryrunStatus?: DryRunStatus;
+  dryRunStatus?: DryRunStatus;
 };
 
 export type EstimateTxDependenciesReturns = CallResult & {
@@ -655,10 +655,10 @@ export default class Provider {
       encodedTransactions: encodedTransaction,
       utxoValidation: utxoValidation || false,
     });
-    const [{ receipts: rawReceipts, status }] = dryRunStatuses;
+    const [{ receipts: rawReceipts, status: dryRunStatus }] = dryRunStatuses;
     const receipts = rawReceipts.map(processGqlReceipt);
 
-    return { receipts, dryrunStatus: status };
+    return { receipts, dryRunStatus };
   }
 
   /**
@@ -726,7 +726,7 @@ export default class Provider {
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
-    let dryrunStatus: DryRunStatus | undefined;
+    let dryRunStatus: DryRunStatus | undefined;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
@@ -737,7 +737,7 @@ export default class Provider {
       });
 
       receipts = rawReceipts.map(processGqlReceipt);
-      dryrunStatus = status;
+      dryRunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
@@ -768,7 +768,7 @@ export default class Provider {
       receipts,
       outputVariables,
       missingContractIds,
-      dryrunStatus,
+      dryRunStatus,
     };
   }
 
@@ -789,7 +789,7 @@ export default class Provider {
       receipts: [],
       outputVariables: 0,
       missingContractIds: [],
-      dryrunStatus: undefined,
+      dryRunStatus: undefined,
     }));
 
     const allRequests = clone(transactionRequests);
@@ -824,7 +824,7 @@ export default class Provider {
         const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
         const result = results[requestIdx];
         result.receipts = rawReceipts.map(processGqlReceipt);
-        result.dryrunStatus = status;
+        result.dryRunStatus = status;
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
           result.receipts
         );
@@ -870,7 +870,7 @@ export default class Provider {
 
     const results = dryRunStatuses.map(({ receipts: rawReceipts, status }) => {
       const receipts = rawReceipts.map(processGqlReceipt);
-      return { receipts, dryrunStatus: status };
+      return { receipts, dryRunStatus: status };
     });
 
     return results;
