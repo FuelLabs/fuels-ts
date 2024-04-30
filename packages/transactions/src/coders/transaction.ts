@@ -25,6 +25,7 @@ export enum TransactionType /* u8 */ {
   Create = 1,
   Mint = 2,
   Upgrade = 3,
+  Upload = 4,
 }
 
 export type TransactionScript = {
@@ -177,6 +178,7 @@ export type TransactionCreate = {
 
   /** Number of witnesses (u16) */
   witnessesCount: number;
+
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
 
@@ -438,16 +440,67 @@ export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, Transacti
   }
 }
 
+export type TransactionUpload = {
+  type: TransactionType.Upload;
+
+  /** The root of the Merkle tree is created over the bytecode. (b256) */
+  root: string;
+
+  /** Index of witness that authorizes spending the coin (u16) */
+  witnessIndex: number;
+
+  /** The index of the subsection of the bytecode. (u16) */
+  subsectionIndex: number;
+
+  /** The total number of subsections on which bytecode was divided. (u16) */
+  subsectionsNumber: number;
+
+  /** Number of Merkle nodes in the proof. (u16) */
+  proofSetCount: number;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
+
+  /** The proof set of Merkle nodes to verify the connection of the subsection to the root. (b256[]) */
+  proofSet: string[];
+
+  /** List of policies, sorted by PolicyType. */
+  policies: Policy[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** List of witnesses (Witness[]) */
+  witnesses: Witness[];
+};
+
+
 type PossibleTransactions =
   | TransactionScript
   | TransactionCreate
   | TransactionMint
   | TransactionUpgrade
+  | TransactionUpload;
+
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
   : Partial<Omit<TransactionScript, 'type'>> &
       Partial<Omit<TransactionCreate, 'type'>> &
-      Partial<Omit<TransactionMint, 'type'>> & {
+      Partial<Omit<TransactionMint, 'type'>> &
+      Partial<Omit<TransactionUpgrade, 'type'>> &
+      Partial<Omit<TransactionUpload, 'type'>> & {
         type: TransactionType;
       };
 
