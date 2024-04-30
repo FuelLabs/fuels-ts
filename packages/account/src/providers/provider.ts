@@ -442,7 +442,7 @@ export default class Provider {
     if (!isMajorSupported || !isMinorSupported) {
       // eslint-disable-next-line no-console
       console.warn(
-        `Unsupported fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+        `Unsupported Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
       );
     }
   }

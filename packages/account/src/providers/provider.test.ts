@@ -868,7 +868,7 @@ describe('Provider', () => {
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `Unsupported fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
+      `Unsupported Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
     );
   });
 
@@ -897,7 +897,7 @@ describe('Provider', () => {
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `Unsupported fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
+      `Unsupported Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
     );
   });
 
