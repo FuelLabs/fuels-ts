@@ -16,6 +16,7 @@ import { StorageSlotCoder } from './storage-slot';
 import type { StorageSlot } from './storage-slot';
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
+import { UpgradePurposeCoder, type UpgradePurpose } from './upgrade-purpose';
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
 
@@ -374,6 +375,69 @@ export type TransactionUpgrade = {
   /** List of witnesses (Witness[]) */
   witnesses: Witness[];
 };
+
+export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, TransactionUpgrade> {
+  constructor() {
+    super('TransactionUpgrade', 'struct TransactionUpgrade', 0);
+  }
+
+  encode(value: TransactionUpgrade): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new UpgradePurposeCoder().encode(value.upgradePurpose));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
+    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionUpgrade, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new UpgradePurposeCoder().decode(data, o);
+    const upgradePurpose = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const policyTypes = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const inputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const witnessesCount = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    const witnesses = decoded;
+
+    return [
+      {
+        type: TransactionType.Upgrade,
+        upgradePurpose,
+        policyTypes,
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        policies,
+        inputs,
+        outputs,
+        witnesses,
+      },
+      o,
+    ];
+  }
+}
+
 type PossibleTransactions =
   | TransactionScript
   | TransactionCreate
