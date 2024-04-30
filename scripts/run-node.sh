@@ -5,9 +5,9 @@
 
 mkdir -p .fuel-core/db
 
-cp ./packages/utils/src/utils/chainConfig.json .fuel-core/configs/chainConfig.json
-cp ./packages/utils/src/utils/metadata.json .fuel-core/configs/metadata.json
-cp ./packages/utils/src/utils/stateConfig.json .fuel-core/configs/stateConfig.json
+cp ./packages/utils/src/utils/defaultSnapshots/chainConfig.json .fuel-core/configs/chainConfig.json
+cp ./packages/utils/src/utils/defaultSnapshots/metadata.json .fuel-core/configs/metadata.json
+cp ./packages/utils/src/utils/defaultSnapshots/stateConfig.json .fuel-core/configs/stateConfig.json
 
 pnpm fuels-core run \
     --db-path .fuel-core/db \
