@@ -1,4 +1,4 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -26,6 +26,7 @@ import { ScriptTransactionRequest } from './script-transaction-request';
 describe('helpers', () => {
   const ASSET_A: string = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const ASSET_B: string = '0x0202020202020202020202020202020202020202020202020202020202020202';
+  const baseAssetId = ZeroBytes32;
   const coinInput = generateFakeRequestInputCoin();
   const messageInput = generateFakeRequestInputMessage();
   const contractInput = generateFakeRequestInputContract();
@@ -56,7 +57,7 @@ describe('helpers', () => {
   describe('getAssetAmountInRequestInputs', () => {
     it('should handle empty inputs array', () => {
       const tx = new ScriptTransactionRequest();
-      const total = getAssetAmountInRequestInputs(tx.inputs, ASSET_A, BaseAssetId);
+      const total = getAssetAmountInRequestInputs(tx.inputs, ASSET_A, baseAssetId);
       expect(total.eq(0)).toBeTruthy();
     });
 
@@ -69,10 +70,10 @@ describe('helpers', () => {
         generateFakeCoin({ assetId: ASSET_B, amount }),
       ]);
 
-      const assetATotal = getAssetAmountInRequestInputs(tx.inputs, ASSET_A, BaseAssetId);
+      const assetATotal = getAssetAmountInRequestInputs(tx.inputs, ASSET_A, baseAssetId);
       expect(assetATotal.eq(amount.mul(2))).toBeTruthy();
 
-      const assetBTotal = getAssetAmountInRequestInputs(tx.inputs, ASSET_B, BaseAssetId);
+      const assetBTotal = getAssetAmountInRequestInputs(tx.inputs, ASSET_B, baseAssetId);
       expect(assetBTotal.eq(amount)).toBeTruthy();
     });
 
@@ -80,15 +81,15 @@ describe('helpers', () => {
       const amount = bn(100);
       const tx = new ScriptTransactionRequest();
       tx.addResources([
-        generateFakeCoin({ assetId: BaseAssetId, amount }),
+        generateFakeCoin({ assetId: baseAssetId, amount }),
         generateFakeCoin({ assetId: ASSET_A, amount }),
         generateFakeCoin({ assetId: ASSET_B, amount }),
-        generateFakeMessageCoin({ assetId: BaseAssetId, amount }),
+        generateFakeMessageCoin({ assetId: baseAssetId, amount }),
       ]);
 
       const expectedTotal = amount.mul(2);
 
-      const assetATotal = getAssetAmountInRequestInputs(tx.inputs, BaseAssetId, BaseAssetId);
+      const assetATotal = getAssetAmountInRequestInputs(tx.inputs, baseAssetId, baseAssetId);
       expect(assetATotal.eq(expectedTotal)).toBeTruthy();
     });
   });
