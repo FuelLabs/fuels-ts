@@ -212,16 +212,16 @@ describe(__filename, () => {
     const getResourcesToSpend = vi.spyOn(sender, 'getResourcesToSpend');
 
     /**
-     * When estimating with only one UTXO the TX will require in total =~ 1078 of BasetAssetId:
-     * 1000 for the transfer and 78 for fees. However after funding it with 24 UTXOs the fee is
-     * increased to =~ 254. This happens because the bigger the TX becomes, more gas it will use.
+     * When estimating with only one UTXO the TX will require in total =~ 1887 of basetAssetId:
+     * 1000 for the transfer and 887 for fees. However after funding it with 24 UTXOs the fee is
+     * increased to =~ 3081. This happens because the bigger the TX becomes, more gas it will use.
      *
-     * The sender has only 1200 of BaseAssetId, and if we try to fund the transaction only one time,
-     * apparently will be ok since the fee was not updated and 1200 can cover 1078. But the TX
+     * The sender has only 2400 of BaseAssetId, and if we try to fund the transaction only one time,
+     * apparently will be ok since the fee was not updated and 2400 can cover 1887. But the TX
      * will fail after being submitted with Error "InsufficientInputAmount". This error is
      * misleading because in reality the user has not enough coins to cover the fee. The query
      * `getResourcesToSpend` is smart enough to return way more funds than the target amount. But since
-     * the user balance was only slightly above the target ( initially 1078 ), and because the user
+     * the user balance was only slightly above the target ( initially 1887 ), and because the user
      * has its low balance spread in many UTXOs, the fee will be higher than the user balance after
      * funding the TX. By trying to fund the TX again, we can force the proper error to be thrown.
      */
