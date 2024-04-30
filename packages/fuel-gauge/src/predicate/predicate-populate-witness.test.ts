@@ -7,6 +7,7 @@ import {
   ScriptTransactionRequest,
   Wallet,
   cacheResources,
+  bn,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -66,7 +67,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 1]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
       transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       const predicate1WrongResources = await provider.getResourcesToSpend(
@@ -81,9 +82,15 @@ describe('Predicate', () => {
 
       // populating predicates inputs with predicate data and removing placeholder witness added for Predicate
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
+      transactionRequest = await provider.estimatePredicates(transactionRequest);
 
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(0);
+
+      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+      transactionRequest.gasLimit = gasLimit;
+      transactionRequest.maxFee = maxFee;
 
       const tx = await provider.sendTransaction(transactionRequest);
 
@@ -93,7 +100,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 2]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
       transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
@@ -112,6 +119,12 @@ describe('Predicate', () => {
 
       // populating predicates inputs with predicate data and removing placeholder witness added for Predicate
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
+      transactionRequest = await provider.estimatePredicates(transactionRequest);
+
+      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+      transactionRequest.gasLimit = gasLimit;
+      transactionRequest.maxFee = maxFee;
 
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(1);
@@ -126,7 +139,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 3]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
       transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
@@ -154,6 +167,12 @@ describe('Predicate', () => {
 
       // populating predicates inputs with predicate data and removing placeholder witness added for Predicate
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
+      transactionRequest = await provider.estimatePredicates(transactionRequest);
+
+      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+      transactionRequest.gasLimit = gasLimit;
+      transactionRequest.maxFee = maxFee;
 
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(2);
@@ -170,7 +189,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 4]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 3000, maxFee: bn(0) });
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -211,6 +230,12 @@ describe('Predicate', () => {
       // populating predicates inputs with predicate data and removing placeholder witness added for Predicate
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
       transactionRequest = predicate2.populateTransactionPredicateData(transactionRequest);
+      transactionRequest = await provider.estimatePredicates(transactionRequest);
+
+      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+      transactionRequest.gasLimit = gasLimit;
+      transactionRequest.maxFee = maxFee;
 
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(3);
@@ -227,7 +252,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 5]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -255,6 +280,12 @@ describe('Predicate', () => {
 
       // populating predicates inputs with predicate data
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
+      transactionRequest = await provider.estimatePredicates(transactionRequest);
+
+      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+      transactionRequest.gasLimit = gasLimit;
+      transactionRequest.maxFee = maxFee;
 
       // The witnesses amount should remain the same
       expect(transactionRequest.witnesses.length).toBe(2);
@@ -270,7 +301,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 6]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000 });
+      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
 
       const resources1 = await wallet1.getResourcesToSpend(quantity);
       const resources2 = await wallet2.getResourcesToSpend(quantity);
@@ -307,6 +338,13 @@ describe('Predicate', () => {
       // populating predicates inputs with predicate data
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
       transactionRequest = predicate2.populateTransactionPredicateData(transactionRequest);
+
+      transactionRequest = await provider.estimatePredicates(transactionRequest);
+
+      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+
+      transactionRequest.gasLimit = gasLimit;
+      transactionRequest.maxFee = maxFee;
 
       // The witnesses amount should be update to 2
       expect(transactionRequest.witnesses.length).toBe(3);
