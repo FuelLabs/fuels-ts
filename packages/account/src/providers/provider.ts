@@ -153,6 +153,7 @@ export type TransactionCost = {
   estimatedPredicates: TransactionRequestInput[];
   requiredQuantities: CoinQuantity[];
   addedSignatures: number;
+  dryRunStatus?: DryRunStatus;
 };
 // #endregion cost-estimation-1
 
@@ -1052,6 +1053,7 @@ export default class Provider {
     });
 
     let receipts: TransactionResultReceipt[] = [];
+    let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];
     let outputVariables = 0;
     let gasUsed = bn(0);
@@ -1065,10 +1067,9 @@ export default class Provider {
         await signatureCallback(txRequestClone);
       }
 
-      const result = await this.estimateTxDependencies(txRequestClone);
-      receipts = result.receipts;
-      outputVariables = result.outputVariables;
-      missingContractIds = result.missingContractIds;
+      ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
+        await this.estimateTxDependencies(txRequestClone));
+
       gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : gasUsed;
 
       txRequestClone.gasLimit = gasUsed;
@@ -1092,6 +1093,7 @@ export default class Provider {
       missingContractIds,
       addedSignatures,
       estimatedPredicates: txRequestClone.inputs,
+      dryRunStatus,
     };
   }
 
