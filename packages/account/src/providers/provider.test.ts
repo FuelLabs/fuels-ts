@@ -187,21 +187,35 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const { consensusParameters } = provider.getChain();
 
+    expect(consensusParameters.version).toBeDefined();
+    expect(consensusParameters.chainId).toBeDefined();
     expect(consensusParameters.baseAssetId).toBeDefined();
-    expect(consensusParameters.contractMaxSize).toBeDefined();
-    expect(consensusParameters.maxInputs).toBeDefined();
-    expect(consensusParameters.maxOutputs).toBeDefined();
-    expect(consensusParameters.maxWitnesses).toBeDefined();
-    expect(consensusParameters.maxGasPerTx).toBeDefined();
-    expect(consensusParameters.maxScriptLength).toBeDefined();
-    expect(consensusParameters.maxScriptDataLength).toBeDefined();
-    expect(consensusParameters.maxStorageSlots).toBeDefined();
-    expect(consensusParameters.maxPredicateLength).toBeDefined();
-    expect(consensusParameters.maxPredicateDataLength).toBeDefined();
-    expect(consensusParameters.maxGasPerPredicate).toBeDefined();
-    expect(consensusParameters.gasPriceFactor).toBeDefined();
-    expect(consensusParameters.gasPerByte).toBeDefined();
-    expect(consensusParameters.maxMessageDataLength).toBeDefined();
+
+    expect(consensusParameters.feeParameters.version).toBeDefined();
+    expect(consensusParameters.feeParameters.gasPriceFactor).toBeDefined();
+    expect(consensusParameters.feeParameters.gasPerByte).toBeDefined();
+
+    expect(consensusParameters.txParameters.version).toBeDefined();
+    expect(consensusParameters.txParameters.maxSize).toBeDefined();
+    expect(consensusParameters.txParameters.maxInputs).toBeDefined();
+    expect(consensusParameters.txParameters.maxOutputs).toBeDefined();
+    expect(consensusParameters.txParameters.maxWitnesses).toBeDefined();
+    expect(consensusParameters.txParameters.maxGasPerTx).toBeDefined();
+    expect(consensusParameters.txParameters.maxBytecodeSubsections).toBeDefined();
+
+    expect(consensusParameters.scriptParameters.version).toBeDefined();
+    expect(consensusParameters.scriptParameters.maxScriptLength).toBeDefined();
+    expect(consensusParameters.scriptParameters.maxScriptDataLength).toBeDefined();
+
+    expect(consensusParameters.contractParameters.version).toBeDefined();
+    expect(consensusParameters.contractParameters.contractMaxSize).toBeDefined();
+    expect(consensusParameters.contractParameters.maxStorageSlots).toBeDefined();
+
+    expect(consensusParameters.predicateParameters.version).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxPredicateLength).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxPredicateDataLength).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxGasPerPredicate).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxMessageDataLength).toBeDefined();
   });
 
   it('gets the chain ID', async () => {

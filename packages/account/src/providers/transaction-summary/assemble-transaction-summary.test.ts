@@ -14,7 +14,7 @@ import {
   MOCK_SUBMITTED_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
 } from '../../../test/fixtures/transaction-summary';
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
@@ -27,7 +27,7 @@ import type { GraphqlTransactionStatus, Operation } from './types';
  */
 describe('TransactionSummary', () => {
   let provider: Provider;
-  let gasCosts: GqlGasCosts;
+  let gasCosts: GasCosts;
 
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';
   const gasPerByte = bn(2);
@@ -46,7 +46,9 @@ describe('TransactionSummary', () => {
 
   beforeAll(async () => {
     provider = await Provider.create('http://127.0.0.1:4000/v1/graphql');
-    gasCosts = provider.getChain().gasCosts;
+    ({
+      consensusParameters: { gasCosts },
+    } = provider.getChain());
   });
 
   beforeEach(() => {
