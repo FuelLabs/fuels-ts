@@ -13,11 +13,10 @@ jobs:
     steps:
       - uses: actions/stale@v3
         with:
-          repo-token: ${{ github.token }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: "Oops, seems like we needed more information for this issue, please comment with more details or this issue will be closed in 7 days."
           close-issue-message: "This issue was closed because it is missing author input."
           stale-issue-label: "stale"
           any-of-labels: "need-author-input"
           days-before-issue-stale: 6
           days-before-issue-close: 7
-          enable-statistics: true
