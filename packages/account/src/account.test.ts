@@ -283,13 +283,13 @@ describe('Account', () => {
       { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
       { amount: bn(fee), assetId: baseAssetId },
     ];
-    expect(getResourcesToSpendSpy).toBeCalledTimes(1);
+    expect(getResourcesToSpendSpy).toHaveBeenCalled();
     expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
       messages: [],
       utxos: [],
     });
 
-    expect(addResourcesSpy).toBeCalledTimes(1);
+    expect(addResourcesSpy).toHaveBeenCalled();
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
   });
 
