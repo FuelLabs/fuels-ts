@@ -132,6 +132,8 @@ describe('dry-run-multiple-txs', () => {
           data: expect.any(String),
           returnType: 'REVERT',
         },
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
       } as GqlDryRunFailureStatus,
     });
 
@@ -143,6 +145,8 @@ describe('dry-run-multiple-txs', () => {
           data: expect.any(String),
           returnType: 'REVERT',
         },
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
       } as GqlDryRunFailureStatus,
     });
 
@@ -154,6 +158,8 @@ describe('dry-run-multiple-txs', () => {
           data: expect.any(String),
           returnType: 'REVERT',
         },
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
       } as GqlDryRunFailureStatus,
     });
   });
@@ -270,6 +276,10 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [],
       outputVariables: 3,
       dryRunStatus: {
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
 
     // request 3 we dry run it 3 times to add the 2 output variables (1 was already present)
@@ -278,6 +288,10 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [],
       outputVariables: 2,
       dryRunStatus: {
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
 
     // request 4 we dry run it 1 time because it has reveted
@@ -286,6 +300,11 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [],
       outputVariables: 0,
       dryRunStatus: {
+        reason: 'TransferZeroCoins',
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
 
     // request 5 we dry run it 2 times because to add the missing output contract
@@ -294,6 +313,10 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [logOtherContract.id.toB256()],
       outputVariables: 0,
       dryRunStatus: {
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
   });
 });
