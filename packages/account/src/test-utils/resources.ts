@@ -12,7 +12,6 @@ export const generateFakeCoin = (partial: Partial<Coin> = {}): Coin => ({
   amount: bn(100),
   assetId: ZeroBytes32,
   owner: Address.fromRandom(),
-  maturity: 0,
   blockCreated: bn(0),
   txCreatedIdx: bn(0),
   ...partial,
