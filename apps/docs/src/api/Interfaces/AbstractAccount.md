@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[index.ts:60](https://github.com/FuelLabs/fuels-ts/blob/577584db/packag/api/src/index.ts#L60)
+[index.ts:60](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packag/api/src/index.ts#L60)
 
 ___
 
@@ -34,29 +34,28 @@ ___
 
 #### Defined in
 
-[index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/577584db/packag/api/src/index.ts#L61)
+[index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packag/api/src/index.ts#L61)
 
 ## Methods
 
 ### fund
 
-▸ **fund**(`transactionRequest`, `quantities`, `fee`): `Promise`&lt;`void`\>
+▸ **fund**(`transactionRequest`, `txCost`): `Promise`&lt;`any`\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `transactionRequest` | `any` |
-| `quantities` | `any` |
-| `fee` | `any` |
+| `txCost` | `any` |
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`&lt;`any`\>
 
 #### Defined in
 
-[index.ts:65](https://github.com/FuelLabs/fuels-ts/blob/577584db/packag/api/src/index.ts#L65)
+[index.ts:65](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packag/api/src/index.ts#L65)
 
 ___
 
@@ -77,7 +76,7 @@ ___
 
 #### Defined in
 
-[index.ts:62](https://github.com/FuelLabs/fuels-ts/blob/577584db/packag/api/src/index.ts#L62)
+[index.ts:62](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packag/api/src/index.ts#L62)
 
 ___
 
@@ -98,7 +97,7 @@ ___
 
 #### Defined in
 
-[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/577584db/packag/api/src/index.ts#L63)
+[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packag/api/src/index.ts#L63)
 
 ___
 
@@ -119,4 +118,4 @@ ___
 
 #### Defined in
 
-[index.ts:64](https://github.com/FuelLabs/fuels-ts/blob/577584db/packag/api/src/index.ts#L64)
+[index.ts:64](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packag/api/src/index.ts#L64)

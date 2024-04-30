@@ -44,7 +44,7 @@ Represents configuration for calling a contract function.
 
 #### Defined in
 
-[types.ts:50](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/program/src/types.ts#L50)
+[types.ts:52](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/program/src/types.ts#L52)
 
 ___
 
@@ -56,7 +56,7 @@ Represents call parameters for a contract call.
 
 #### Defined in
 
-[types.ts:28](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/program/src/types.ts#L28)
+[types.ts:29](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/program/src/types.ts#L29)
 
 ___
 
@@ -75,6 +75,7 @@ Represents a contract call.
 | `contractId` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
 | `data` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
 | `encoding?` | `EncodingVersion` |
+| `externalContractsAbis?` | `Record`&lt;`string`, `JsonAbi`\> |
 | `fnSelector` | `string` |
 | `fnSelectorBytes` | `Uint8Array` |
 | `gas?` | `BigNumberish` |
@@ -84,7 +85,7 @@ Represents a contract call.
 
 #### Defined in
 
-[types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/program/src/types.ts#L11)
+[types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/program/src/types.ts#L11)
 
 ___
 
@@ -108,28 +109,28 @@ Represents a like object of InvocationScope with a method to get its call config
 
 #### Defined in
 
-[types.ts:83](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/program/src/types.ts#L83)
+[types.ts:85](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/program/src/types.ts#L85)
 
 ___
 
 ### TransactionCostOptions
 
-Ƭ **TransactionCostOptions**: `Partial`&lt;{ `fundTransaction`: `boolean` ; `gasPrice`: `BigNumberish`  }\>
+Ƭ **TransactionCostOptions**: `Partial`&lt;{ `fundTransaction`: `boolean`  }\>
 
 Represents options for calculating the transaction cost.
 
 #### Defined in
 
-[types.ts:94](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/program/src/types.ts#L94)
+[types.ts:96](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/program/src/types.ts#L96)
 
 ___
 
 ### TxParams
 
-Ƭ **TxParams**: `Partial`&lt;{ `gasLimit`: `BigNumberish` ; `gasPrice`: `BigNumberish` ; `maturity?`: `number` ; `maxFee?`: `BigNumberish` ; `variableOutputs`: `number` ; `witnessLimit?`: `BigNumberish`  }\>
+Ƭ **TxParams**: `Partial`&lt;{ `gasLimit`: `BigNumberish` ; `maturity?`: `number` ; `maxFee?`: `BigNumberish` ; `optimizeGas?`: `boolean` ; `tip`: `BigNumberish` ; `variableOutputs`: `number` ; `witnessLimit?`: `BigNumberish`  }\>
 
 Represents transaction parameters for a contract call.
 
 #### Defined in
 
-[types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/program/src/types.ts#L36)
+[types.ts:37](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/program/src/types.ts#L37)

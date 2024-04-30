@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:89](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/account/src/providers/utils/gas.ts#L89)
+[packages/account/src/providers/utils/gas.ts:101](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L101)
 
 ___
 
@@ -20,7 +20,17 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:87](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/account/src/providers/utils/gas.ts#L87)
+[packages/account/src/providers/utils/gas.ts:99](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L99)
+
+___
+
+### maxGasPerTx
+
+• **maxGasPerTx**: `BN`
+
+#### Defined in
+
+[packages/account/src/providers/utils/gas.ts:102](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L102)
 
 ___
 
@@ -30,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:88](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/account/src/providers/utils/gas.ts#L88)
+[packages/account/src/providers/utils/gas.ts:100](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L100)
 
 ___
 
@@ -40,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:86](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/account/src/providers/utils/gas.ts#L86)
+[packages/account/src/providers/utils/gas.ts:98](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L98)
 
 ___
 
@@ -50,4 +60,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:85](https://github.com/FuelLabs/fuels-ts/blob/577584db/packages/account/src/providers/utils/gas.ts#L85)
+[packages/account/src/providers/utils/gas.ts:97](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L97)
