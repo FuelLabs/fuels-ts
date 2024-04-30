@@ -240,6 +240,7 @@ fragment TxParametersFragment on TxParameters {
   maxWitnesses
   maxGasPerTx
   maxSize
+  maxBytecodeSubsections
 }
 
 fragment PredicateParametersFragment on PredicateParameters {
