@@ -1,4 +1,13 @@
-import type { GqlChainInfoFragmentFragment } from '../../src/providers/__generated__/operations';
+import {
+  GqlConsensusParametersVersion,
+  GqlContractParametersVersion,
+  GqlFeeParametersVersion,
+  GqlGasCostsVersion,
+  GqlPredicateParametersVersion,
+  GqlScriptParametersVersion,
+  GqlTxParametersVersion,
+  type GqlChainInfoFragmentFragment,
+} from '../../src/providers/__generated__/operations';
 
 export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
   __typename: 'ChainInfo',
@@ -6,8 +15,10 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
   daHeight: '234',
   consensusParameters: {
     __typename: 'ConsensusParameters',
+    version: GqlConsensusParametersVersion.V1,
     txParams: {
       __typename: 'TxParameters',
+      version: GqlTxParametersVersion.V1,
       maxInputs: '255',
       maxOutputs: '255',
       maxWitnesses: '255',
@@ -16,22 +27,26 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
     },
     scriptParams: {
       __typename: 'ScriptParameters',
+      version: GqlScriptParametersVersion.V1,
       maxScriptLength: '1048576',
       maxScriptDataLength: '1048576',
     },
     contractParams: {
       __typename: 'ContractParameters',
+      version: GqlContractParametersVersion.V1,
       contractMaxSize: '16777216',
       maxStorageSlots: '255',
     },
     predicateParams: {
       __typename: 'PredicateParameters',
+      version: GqlPredicateParametersVersion.V1,
       maxPredicateLength: '1048576',
       maxPredicateDataLength: '1048576',
       maxGasPerPredicate: '100000000',
       maxMessageDataLength: '1048576',
     },
     feeParams: {
+      version: GqlFeeParametersVersion.V1,
       __typename: 'FeeParameters',
       gasPerByte: '4',
       gasPriceFactor: '1000000000',
@@ -39,6 +54,7 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
     baseAssetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
     chainId: '0',
     gasCosts: {
+      version: GqlGasCostsVersion.V1,
       __typename: 'GasCosts',
       add: '1',
       addi: '1',
@@ -52,7 +68,6 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
       cb: '1',
       cfei: '1',
       cfsi: '1',
-      croo: '16',
       div: '1',
       divi: '1',
       ecr1: '3000',
@@ -135,6 +150,11 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
         unitsPerGas: '214',
       },
       ccp: {
+        __typename: 'LightOperation',
+        base: '15',
+        unitsPerGas: '103',
+      },
+      croo: {
         __typename: 'LightOperation',
         base: '15',
         unitsPerGas: '103',
@@ -235,7 +255,8 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
   latestBlock: {
     __typename: 'Block',
     id: '0xb9e55ced368c8d8f1aa487d33e97043e5891406792ea5d61f7807d0441d34722',
-    header: { __typename: 'Header', height: '234', time: '4611686020122537935' },
+    height: '234',
+    header: { __typename: 'Header', time: '4611686020122537935' },
     transactions: [
       {
         __typename: 'Transaction',

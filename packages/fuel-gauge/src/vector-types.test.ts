@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN, BigNumberish } from 'fuels';
-import { bn, Predicate, Wallet, Address, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { BigNumberish } from 'fuels';
+import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -77,9 +77,10 @@ type MainArgs = [
 
 const setup = async (balance = 500_000) => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
 
   return wallet;
 };
@@ -88,14 +89,13 @@ const setup = async (balance = 500_000) => {
  * @group node
  */
 describe('Vector Types Validation', () => {
-  let gasPrice: BN;
-
+  let baseAssetId: string;
   const { binHexlified: predicateVectorTypes, abiContents: predicateVectorTypesAbi } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_VECTOR_TYPES);
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    baseAssetId = provider.getBaseAssetId();
   });
 
   it('can use supported vector types [vector-types-contract]', async () => {
@@ -140,7 +140,7 @@ describe('Vector Types Validation', () => {
       )
       .call();
 
-    expect(value.toString()).toBe('1');
+    expect(value).toBe(true);
   });
 
   it('can use supported vector types [predicate-vector-types]', async () => {
@@ -168,29 +168,23 @@ describe('Vector Types Validation', () => {
     });
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
+    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 10_000,
     });
     await setupTx.waitForResult();
 
-    const initialPredicateBalance = await predicate.getBalance();
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-      gasPrice,
+    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
       gasLimit: 10_000,
     });
-    await tx.waitForResult();
+    const { isStatusSuccess } = await tx.waitForResult();
 
     // Check the balance of the receiver
     const finalReceiverBalance = await receiver.getBalance();
     expect(bn(initialReceiverBalance).add(amountToReceiver).toHex()).toEqual(
       finalReceiverBalance.toHex()
     );
-
-    // Check we spent the entire predicate hash input
-    const finalPredicateBalance = await predicate.getBalance();
-    expect(finalPredicateBalance.lte(initialPredicateBalance)).toBeTruthy();
+    expect(isStatusSuccess).toBeTruthy();
   });
 });

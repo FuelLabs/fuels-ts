@@ -82,8 +82,8 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
       type: TransactionType.Script,
       scriptGasLimit: this.gasLimit,
       ...super.getBaseTransaction(),
-      scriptLength: script.length,
-      scriptDataLength: scriptData.length,
+      scriptLength: bn(script.length),
+      scriptDataLength: bn(scriptData.length),
       receiptsRoot: ZeroBytes32,
       script: hexlify(script),
       scriptData: hexlify(scriptData),
@@ -155,7 +155,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
-    const { gasPerByte } = consensusParameters;
+    const { gasPerByte, maxGasPerTx } = consensusParameters;
 
     const witnessesLength = this.toTransaction().witnesses.reduce(
       (acc, wit) => acc + wit.dataLength,
@@ -168,6 +168,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
       witnessesLength,
       witnessLimit: this.witnessLimit,
       gasLimit: this.gasLimit,
+      maxGasPerTx,
     });
   }
 

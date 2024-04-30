@@ -16,9 +16,7 @@ export const fuelsConfig: FuelsConfig = {
   scripts: [join(scriptsDir, 'script')],
   predicates: [join(predicatesDir, 'predicate')],
   output: '/output',
-  deployConfig: {
-    gasPrice: 5,
-  },
+  deployConfig: {},
   useBuiltinForc: false,
   useBuiltinFuelCore: false,
   autoStartFuelCore: true,

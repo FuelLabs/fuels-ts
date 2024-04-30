@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { BN, Script, BaseAssetId, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { Script, Provider, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -20,10 +20,11 @@ describe('Script With Configurable', () => {
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
     const quantities: CoinQuantityLike[] = [
       {
         amount: 1_000_000,
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ];
 
@@ -37,8 +38,7 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions.main(defaultValues.FEE).call();
 
-    // expected to be true
-    expect(new BN(value as number).toNumber()).toEqual(1);
+    expect(value).toBe(true);
   });
 
   it('should returns false when input value differs from default configurable constant', async () => {
@@ -52,8 +52,7 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions.main(configurableConstants.FEE).call();
 
-    // expected to be false
-    expect(new BN(value as number).toNumber()).toEqual(0);
+    expect(value).toBe(false);
   });
 
   it('should returns true when input value matches manually set configurable constant', async () => {
@@ -65,8 +64,7 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions.main(configurableConstants.FEE).call();
 
-    // expected to be true
-    expect(new BN(value as number).toNumber()).toEqual(1);
+    expect(value).toBe(true);
   });
 
   it('should returns false when input value differs from manually set configurable constant', async () => {
@@ -82,7 +80,6 @@ describe('Script With Configurable', () => {
 
     const { value } = await script.functions.main(input.FEE).call();
 
-    // expected to be false
-    expect(new BN(value as number).toNumber()).toEqual(0);
+    expect(value).toBe(false);
   });
 });

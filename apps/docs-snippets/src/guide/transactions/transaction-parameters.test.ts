@@ -1,5 +1,5 @@
-import type { Contract, Provider, TxParams } from 'fuels';
-import { BN, PolicyType, ScriptTransactionRequest, bn } from 'fuels';
+import type { Contract, TxParams } from 'fuels';
+import { ScriptTransactionRequest, bn } from 'fuels';
 import { expectTypeOf } from 'vitest';
 
 import {
@@ -13,8 +13,6 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe(__filename, () => {
   let contract: Contract;
-  let provider: Provider;
-  let gasPrice: BN;
 
   const { binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SUM_SCRIPT
@@ -22,8 +20,6 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
-    provider = contract.provider;
-    gasPrice = provider.getGasConfig().minGasPrice;
   });
 
   it('matches tx param types', () => {
@@ -31,7 +27,6 @@ describe(__filename, () => {
     // #import { TxParams, bn };
 
     const txParams: TxParams = {
-      gasPrice: bn(1), // BigNumberish or undefined
       gasLimit: bn(1), // BigNumberish or undefined
       maturity: 1, // number or undefined
       maxFee: bn(1), // BigNumberish or undefined
@@ -52,12 +47,10 @@ describe(__filename, () => {
     const transactionRequest = new ScriptTransactionRequest({
       script: scriptBytecode,
       gasLimit: 100,
-      gasPrice,
     });
     // #endregion transaction-parameters-2
 
     expect(transactionRequest.gasLimit.toNumber()).toBe(100);
-    expect(transactionRequest.gasPrice.toNumber()).toBe(gasPrice.toNumber());
   });
 
   it('executes contract call with txParams', async () => {
@@ -65,19 +58,11 @@ describe(__filename, () => {
     const { transactionResult } = await contract.functions
       .increment_count(15)
       .txParams({
-        gasLimit: 10_000,
         variableOutputs: 1,
       })
       .call();
     // #endregion transaction-parameters-3
 
-    const { transaction } = transactionResult;
-
-    const gasLimitPolicy = transaction.policies?.find(
-      (policy) => policy.type === PolicyType.GasPrice
-    );
-
-    expect(new BN(transaction.scriptGasLimit).toNumber()).toBe(10_000);
-    expect(new BN(gasLimitPolicy?.data).toNumber()).toBe(gasPrice.toNumber());
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
   });
 });

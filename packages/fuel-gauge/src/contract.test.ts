@@ -23,7 +23,6 @@ import {
   Wallet,
   ContractFactory,
   ZeroBytes32,
-  BaseAssetId,
   FUEL_NETWORK_URL,
   Predicate,
 } from 'fuels';
@@ -167,16 +166,16 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
  * @group node
  */
 describe('Contract', () => {
-  let gasPrice: BN;
   let provider: Provider;
+  let baseAssetId: string;
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    baseAssetId = provider.getBaseAssetId();
   });
 
   it('generates function methods on a simple contract', async () => {
     const spy = vi.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
     const fragment = contract.interface.getFunction('entry_one');
     const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
@@ -193,7 +192,7 @@ describe('Contract', () => {
 
   it('generates function methods on a complex contract', async () => {
     const spy = vi.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
     const fragment = contract.interface.getFunction('tuple_function');
     const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
@@ -225,7 +224,6 @@ describe('Contract', () => {
       await contract.functions
         .foo(1336)
         .txParams({
-          gasPrice,
           gasLimit: 1,
         })
         .call();
@@ -342,7 +340,6 @@ describe('Contract', () => {
         .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
         .txParams({
           gasLimit: 1,
-          gasPrice,
         })
         .call();
     } catch (e) {
@@ -413,7 +410,6 @@ describe('Contract', () => {
         gasLimit: 1000000,
       })
       .txParams({
-        gasPrice: 1,
         gasLimit: 3000000,
       })
       .call<BN>();
@@ -426,7 +422,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, BaseAssetId],
+          forward: [100, baseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -436,7 +432,6 @@ describe('Contract', () => {
         }),
       ])
       .txParams({
-        gasPrice: 1,
         gasLimit: 5000000,
       })
       .call<[BN, BN, BN]>();
@@ -450,7 +445,7 @@ describe('Contract', () => {
       contract
         .multiCall([
           contract.functions.return_context_amount().callParams({
-            forward: [100, BaseAssetId],
+            forward: [100, baseAssetId],
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
@@ -459,7 +454,6 @@ describe('Contract', () => {
           }),
         ])
         .txParams({
-          gasPrice: 1,
           gasLimit: 100,
         })
         .call<[BN, BN, BN]>()
@@ -483,8 +477,8 @@ describe('Contract', () => {
         }),
       ])
       .txParams({
-        gasPrice: 1,
         gasLimit: 4_000_000,
+        optimizeGas: false,
       })
       .call<[BN, BN]>();
 
@@ -502,7 +496,7 @@ describe('Contract', () => {
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, BaseAssetId],
+        forward: [100, baseAssetId],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -510,49 +504,13 @@ describe('Contract', () => {
     ]);
     const transactionCost = await invocationScope.getTransactionCost();
 
-    expect(toNumber(transactionCost.gasPrice)).toBe(gasPrice.toNumber());
     expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(0);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
     const { value } = await invocationScope
       .txParams({
-        gasPrice: transactionCost.gasPrice,
         gasLimit: transactionCost.gasUsed,
-      })
-      .call<[string, string]>();
-
-    expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
-  });
-
-  it('Get transaction cost with minGasPrice ', async () => {
-    const contract = await setupContract();
-    const { minGasPrice } = contract.provider.getGasConfig();
-    const invocationScope = contract
-      .multiCall([
-        contract.functions.return_context_amount().callParams({
-          forward: [100, BaseAssetId],
-        }),
-        contract.functions.return_context_amount().callParams({
-          forward: [200, AltToken],
-        }),
-      ])
-      .txParams({
-        gasPrice: minGasPrice,
-      });
-    // Get transaction cost using gasPrice from
-    // invocation scope
-    const transactionCost = await invocationScope.getTransactionCost();
-
-    expect(toNumber(transactionCost.gasPrice)).toBe(minGasPrice.toNumber());
-    expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(1);
-    expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
-
-    // Test that gasUsed is correctly calculated
-    // and can be used as gasLimit
-    const { value } = await invocationScope
-      .txParams({
-        gasPrice: transactionCost.gasPrice,
-        gasLimit: transactionCost.gasUsed,
+        optimizeGas: false,
       })
       .call<[string, string]>();
 
@@ -563,7 +521,7 @@ describe('Contract', () => {
     const contract = await setupContract();
 
     const invocationScope = contract.functions.return_context_amount().callParams({
-      forward: [100, BaseAssetId],
+      forward: [100, baseAssetId],
     });
     const { gasUsed } = await invocationScope.getTransactionCost();
 
@@ -571,7 +529,6 @@ describe('Contract', () => {
     await expect(
       invocationScope
         .txParams({
-          gasPrice,
           gasLimit,
         })
         .call<BN>()
@@ -671,7 +628,7 @@ describe('Contract', () => {
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, BaseAssetId],
+          forward: [100, baseAssetId],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -688,10 +645,7 @@ describe('Contract', () => {
     const num = 1337;
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
-    const multiCallScope = contract.multiCall(invocationScopes).txParams({
-      gasPrice,
-      gasLimit: 20_000,
-    });
+    const multiCallScope = contract.multiCall(invocationScopes);
     await multiCallScope.fundWithRequiredCoins();
 
     const transactionRequest = await multiCallScope.getTransactionRequest();
@@ -720,22 +674,26 @@ describe('Contract', () => {
     await seedTestWallet(wallet, [
       {
         amount: bn(1_000_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
     const contract = new ContractFactory(contractBytecode, abi, wallet);
-    const { transactionRequest } = contract.createTransactionRequest({ gasPrice });
+    const { transactionRequest } = contract.createTransactionRequest();
 
     const txRequest = JSON.stringify(transactionRequest);
     const txRequestParsed = JSON.parse(txRequest);
 
-    const transactionRequestParsed = transactionRequestify(txRequestParsed);
+    const transactionRequestParsed = transactionRequestify(
+      txRequestParsed
+    ) as ScriptTransactionRequest;
 
-    const { requiredQuantities, maxFee } =
-      await provider.getTransactionCost(transactionRequestParsed);
+    const txCost = await provider.getTransactionCost(transactionRequestParsed);
+
+    transactionRequestParsed.gasLimit = txCost.gasUsed;
+    transactionRequestParsed.maxFee = txCost.maxFee;
 
     // Fund tx
-    await wallet.fund(transactionRequestParsed, requiredQuantities, maxFee);
+    await wallet.fund(transactionRequestParsed, txCost);
 
     // Send tx
     const response = await wallet.sendTransaction(transactionRequestParsed);
@@ -752,7 +710,7 @@ describe('Contract', () => {
     await seedTestWallet(externalWallet, [
       {
         amount: bn(1_000_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
 
@@ -785,9 +743,7 @@ describe('Contract', () => {
     const num = 1337;
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
-    const multiCallScope = contract
-      .multiCall(invocationScopes)
-      .txParams({ gasPrice, gasLimit: 20_000 });
+    const multiCallScope = contract.multiCall(invocationScopes).txParams({ gasLimit: 20_000 });
 
     const transactionRequest = await multiCallScope.getTransactionRequest();
 
@@ -798,12 +754,12 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const { gasUsed, minFee, requiredQuantities } =
-      await contract.provider.getTransactionCost(transactionRequestParsed);
+    const txCost = await contract.provider.getTransactionCost(transactionRequestParsed);
 
-    transactionRequestParsed.gasLimit = gasUsed;
+    transactionRequestParsed.gasLimit = txCost.gasUsed;
+    transactionRequestParsed.maxFee = txCost.maxFee;
 
-    await contract.account.fund(transactionRequestParsed, requiredQuantities, minFee);
+    await contract.account.fund(transactionRequestParsed, txCost);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const response = await contract.account!.sendTransaction(transactionRequestParsed);
@@ -825,63 +781,31 @@ describe('Contract', () => {
     expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
-  it('should ensure multicall does not allow multiple calls that return heap types', async () => {
+  it('should ensure multicall allows multiple heap types', async () => {
     const wallet = Wallet.generate({
       provider,
     });
     await seedTestWallet(wallet, [
       {
         amount: bn(500_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
     const factory = new ContractFactory(contractBytecode, abi, wallet);
 
-    const contract = await factory.deployContract({ gasPrice });
+    const contract = await factory.deployContract();
 
     const vector = [5, 4, 3, 2, 1];
 
-    const calls = [
-      contract.functions.return_context_amount(),
-      contract.functions.return_vector(vector), // returns heap type Vec
-      contract.functions.return_bytes(), // returns heap type Bytes
-    ];
+    const { value } = await contract
+      .multiCall([
+        contract.functions.return_context_amount(),
+        contract.functions.return_vector(vector), // returns heap type Vec
+        contract.functions.return_bytes(),
+      ])
+      .call();
 
-    await expectToThrowFuelError(
-      () => contract.multiCall(calls).call(),
-      new FuelError(
-        ErrorCode.INVALID_MULTICALL,
-        'A multicall can have only one call that returns a heap type.'
-      )
-    );
-  });
-
-  it('should ensure multicall only allows calls that return a heap type on last position', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(wallet, [
-      {
-        amount: bn(500_000),
-        assetId: BaseAssetId,
-      },
-    ]);
-    const factory = new ContractFactory(contractBytecode, abi, wallet);
-
-    const contract = await factory.deployContract({ gasPrice });
-
-    const calls = [
-      contract.functions.return_bytes(), // returns heap type Bytes
-      contract.functions.return_context_amount(),
-    ];
-
-    await expectToThrowFuelError(
-      () => contract.multiCall(calls).call(),
-      new FuelError(
-        ErrorCode.INVALID_MULTICALL,
-        'In a multicall, the contract call returning a heap type must be the last call.'
-      )
-    );
+    expect(JSON.stringify(value)).toBe(JSON.stringify([bn(0), vector, new Uint8Array()]));
   });
 
   it('Read only call', async () => {
@@ -897,29 +821,26 @@ describe('Contract', () => {
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const wallet = await generateTestWallet(provider, [[10_000_000_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[10_000_000_000, baseAssetId]]);
 
     const contract = await setupContract();
 
-    const initialBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+    const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
     const u64Amount = bn(5_000_000_000);
     const amountToContract = u64Amount;
 
-    const tx = await wallet.transferToContract(contract.id, amountToContract, BaseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
+    const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId);
 
     await tx.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+    const finalBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
   it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
-    const wallet = await generateTestWallet(provider, [[1000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1000, baseAssetId]]);
 
     const contract = await setupContract();
 
@@ -929,32 +850,20 @@ describe('Contract', () => {
       const result = await wallet.transferToContract(
         contract.id.toB256(),
         amountToContract,
-        BaseAssetId,
+        baseAssetId,
         {
           gasLimit: 1,
         }
       );
       await result.wait();
     }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
-
-    await expect(async () => {
-      const result = await wallet.transferToContract(
-        contract.id.toB256(),
-        amountToContract,
-        BaseAssetId,
-        {
-          gasPrice: 0,
-        }
-      );
-      await result.wait();
-    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
   });
 
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     const wallet = await generateTestWallet(provider, [
-      [500_000, BaseAssetId],
+      [500_000, baseAssetId],
       [200, asset],
     ]);
 
@@ -964,10 +873,7 @@ describe('Contract', () => {
 
     const amountToContract = 100;
 
-    const tx = await wallet.transferToContract(contract.id.toB256(), amountToContract, asset, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
+    const tx = await wallet.transferToContract(contract.id.toB256(), amountToContract, asset);
 
     await tx.waitForResult();
 
@@ -977,11 +883,11 @@ describe('Contract', () => {
   });
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
-    const wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
     const contract = await setupContract();
 
-    const initialBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+    const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
     const amountToContract = 200;
     const amountToPredicate = 500_000;
@@ -991,21 +897,15 @@ describe('Contract', () => {
       provider,
     });
 
-    const tx1 = await wallet.transfer(predicate.address, amountToPredicate, BaseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
+    const tx1 = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId);
 
     await tx1.waitForResult();
 
-    const tx2 = await predicate.transferToContract(contract.id, amountToContract, BaseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
-    });
+    const tx2 = await predicate.transferToContract(contract.id, amountToContract, baseAssetId);
 
     await tx2.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(BaseAssetId)).toNumber();
+    const finalBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
@@ -1029,7 +929,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[5_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
@@ -1040,7 +940,7 @@ describe('Contract', () => {
 
     await contract.functions
       .sum(40, 50)
-      .addTransfer(receiver.address, amountToTransfer, BaseAssetId)
+      .addTransfer(receiver.address, amountToTransfer, baseAssetId)
       .call();
 
     const finalBalance = await receiver.getBalance();
@@ -1054,9 +954,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [5_000, BaseAssetId],
-      [5_000, ASSET_A],
-      [5_000, ASSET_B],
+      [50_000, baseAssetId],
+      [50_000, ASSET_A],
+      [50_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1073,12 +973,12 @@ describe('Contract', () => {
 
     await contract.functions
       .sum(40, 50)
-      .addTransfer(receiver1.address, amountToTransfer1, BaseAssetId)
+      .addTransfer(receiver1.address, amountToTransfer1, baseAssetId)
       .addTransfer(receiver2.address, amountToTransfer2, ASSET_A)
       .addTransfer(receiver3.address, amountToTransfer3, ASSET_B)
       .call();
 
-    const finalBalance1 = await receiver1.getBalance(BaseAssetId);
+    const finalBalance1 = await receiver1.getBalance(baseAssetId);
     const finalBalance2 = await receiver2.getBalance(ASSET_A);
     const finalBalance3 = await receiver3.getBalance(ASSET_B);
 
@@ -1093,9 +993,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [5_000, BaseAssetId],
-      [5_000, ASSET_A],
-      [5_000, ASSET_B],
+      [50_000, baseAssetId],
+      [50_000, ASSET_A],
+      [50_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1104,14 +1004,14 @@ describe('Contract', () => {
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, 0, BaseAssetId);
+        await wallet.transferToContract(contract.id, 0, baseAssetId);
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, -1, BaseAssetId);
+        await wallet.transferToContract(contract.id, -1, baseAssetId);
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
@@ -1126,7 +1026,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, BaseAssetId],
+          forward: [100, baseAssetId],
         })
         .simulate()
     ).rejects.toThrowError('not enough coins to fit the target');
@@ -1140,7 +1040,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, BaseAssetId],
+          forward: [100, baseAssetId],
         })
         .simulate()
     ).rejects.toThrowError('Wallet is required!');
@@ -1155,7 +1055,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, BaseAssetId],
+          forward: [100, baseAssetId],
         })
         .simulate()
     ).rejects.toThrowError('An unlocked wallet is required to simulate a contract call.');
@@ -1170,7 +1070,7 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, BaseAssetId],
+          forward: [100, baseAssetId],
         })
         .dryRun()
     ).resolves.not.toThrow();
@@ -1224,7 +1124,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[5000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[50_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 

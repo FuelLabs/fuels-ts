@@ -1,5 +1,5 @@
-import type { BN, InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
-import { BaseAssetId, Predicate } from 'fuels';
+import type { InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import { Predicate } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
@@ -22,16 +22,15 @@ describe('Predicate', () => {
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
     let provider: Provider;
-    let gasPrice: BN;
+    let baseAssetId: string;
 
     beforeEach(async () => {
       [wallet, receiver] = await setupWallets();
       provider = wallet.provider;
-      gasPrice = provider.getGasConfig().minGasPrice;
+      baseAssetId = provider.getBaseAssetId();
     });
 
     it('calls a no argument predicate and returns true', async () => {
-      const amountToPredicate = 200_000;
       const amountToReceiver = 50;
       const initialReceiverBalance = await receiver.getBalance();
 
@@ -40,22 +39,14 @@ describe('Predicate', () => {
         provider,
       });
 
-      const initialPredicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
-
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-        gasPrice,
-        gasLimit: 10_000,
+      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
+        gasLimit: 1000,
       });
-      await tx.waitForResult();
 
-      await assertBalances(
-        predicate,
-        receiver,
-        initialPredicateBalance,
-        initialReceiverBalance,
-        amountToPredicate,
-        amountToReceiver
-      );
+      const { isStatusSuccess } = await tx.waitForResult();
+      await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
+
+      expect(isStatusSuccess).toBeTruthy();
     });
 
     it('calls a no argument predicate and returns false', async () => {
@@ -70,9 +61,8 @@ describe('Predicate', () => {
       await fundPredicate(wallet, predicate, amountToPredicate);
 
       await expect(
-        predicate.transfer(receiver.address, amountToReceiver, BaseAssetId, {
-          gasPrice,
-          gasLimit: 10_000,
+        predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
+          gasLimit: 1000,
         })
       ).rejects.toThrow('PredicateVerificationFailed');
     });

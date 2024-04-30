@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.83.0
+
+### Patch Changes
+
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/crypto@0.83.0
+
 ## 0.82.0
 
 ### Patch Changes

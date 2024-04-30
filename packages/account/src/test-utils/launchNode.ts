@@ -1,6 +1,6 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
-import { toHex } from '@fuel-ts/math';
-import { defaultChainConfig, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
+import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import { randomBytes } from '@fuel-ts/crypto';
+import { defaultSnapshotConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
@@ -50,7 +50,7 @@ export type LaunchNodeResult = Promise<{
   cleanup: () => void;
   ip: string;
   port: string;
-  chainConfigPath: string;
+  snapshotDir: string;
 }>;
 
 export type KillNodeParams = {
@@ -106,13 +106,13 @@ export const launchNode = async ({
   new Promise(async (resolve, reject) => {
     // filter out the flags chain, consensus-key, db-type, and poa-instant. we don't want to pass them twice to fuel-core. see line 214.
     const remainingArgs = extractRemainingArgs(args, [
-      '--chain',
+      '--snapshot',
       '--consensus-key',
       '--db-type',
       '--poa-instant',
     ]);
 
-    const chainConfigPath = getFlagValueFromArgs(args, '--chain');
+    const snapshotDir = getFlagValueFromArgs(args, '--snapshot');
     const consensusKey = getFlagValueFromArgs(args, '--consensus-key') || defaultConsensusKey;
 
     const dbTypeFlagValue = getFlagValueFromArgs(args, '--db-type');
@@ -139,21 +139,36 @@ export const launchNode = async ({
         })
       ).toString();
 
-    let chainConfigPathToUse: string;
+    let snapshotDirToUse: string;
 
     const prefix = basePath || os.tmpdir();
     const suffix = basePath ? '' : randomUUID();
-    const tempDirPath = path.join(prefix, '.fuels', suffix);
+    const tempDirPath = path.join(prefix, '.fuels', suffix, 'snapshotDir');
 
-    if (chainConfigPath) {
-      chainConfigPathToUse = chainConfigPath;
+    if (snapshotDir) {
+      snapshotDirToUse = snapshotDir;
     } else {
       if (!existsSync(tempDirPath)) {
         mkdirSync(tempDirPath, { recursive: true });
       }
-      const tempChainConfigFilePath = path.join(tempDirPath, 'chainConfig.json');
 
-      let chainConfig = defaultChainConfig;
+      let { stateConfigJson } = defaultSnapshotConfigs;
+      const { chainConfigJson, metadataJson } = defaultSnapshotConfigs;
+
+      stateConfigJson = {
+        ...stateConfigJson,
+        coins: [
+          ...stateConfigJson.coins.map((coin) => ({
+            ...coin,
+            amount: '18446744073709551615',
+          })),
+        ],
+        messages: stateConfigJson.messages.map((message) => ({
+          ...message,
+          amount: '18446744073709551615',
+        })),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any;
 
       // If there's no genesis key, generate one and some coins to the genesis block.
       if (!process.env.GENESIS_SECRET) {
@@ -161,26 +176,34 @@ export const launchNode = async ({
         const signer = new Signer(pk);
         process.env.GENESIS_SECRET = hexlify(pk);
 
-        chainConfig = {
-          ...defaultChainConfig,
-          initial_state: {
-            ...defaultChainConfig.initial_state,
-            coins: [
-              ...defaultChainConfig.initial_state.coins,
-              {
-                owner: signer.address.toHexString(),
-                amount: toHex(1_000_000_000),
-                asset_id: BaseAssetId,
-              },
-            ],
-          },
-        };
+        stateConfigJson.coins.push({
+          tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
+          owner: signer.address.toHexString(),
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          amount: '18446744073709551615' as any,
+          asset_id: chainConfigJson.consensus_parameters.V1.base_asset_id,
+          output_index: 0,
+          tx_pointer_block_height: 0,
+          tx_pointer_tx_idx: 0,
+        });
       }
 
-      // Write a temporary chain configuration file.
-      writeFileSync(tempChainConfigFilePath, JSON.stringify(chainConfig), 'utf8');
+      let fixedStateConfigJSON = JSON.stringify(stateConfigJson);
 
-      chainConfigPathToUse = tempChainConfigFilePath;
+      const regexMakeNumber = /("amount":)"(\d+)"/gm;
+
+      fixedStateConfigJSON = fixedStateConfigJSON.replace(regexMakeNumber, '$1$2');
+
+      // Write a temporary chain configuration files.
+      const chainConfigWritePath = path.join(tempDirPath, 'chainConfig.json');
+      const stateConfigWritePath = path.join(tempDirPath, 'stateConfig.json');
+      const metadataWritePath = path.join(tempDirPath, 'metadata.json');
+
+      writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
+      writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
+      writeFileSync(metadataWritePath, JSON.stringify(metadataJson), 'utf8');
+
+      snapshotDirToUse = tempDirPath;
     }
 
     const child = spawn(
@@ -190,10 +213,10 @@ export const launchNode = async ({
         ['--ip', ipToUse],
         ['--port', portToUse],
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
-        ['--min-gas-price', '0'],
+        ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--consensus-key', consensusKey],
-        ['--chain', chainConfigPathToUse as string],
+        ['--snapshot', snapshotDirToUse as string],
         '--vm-backtrace',
         '--utxo-validation',
         '--debug',
@@ -230,7 +253,7 @@ export const launchNode = async ({
           cleanup: () => killNode(cleanupConfig),
           ip: ipToUse,
           port: portToUse,
-          chainConfigPath: chainConfigPathToUse as string,
+          snapshotDir: snapshotDirToUse as string,
         });
       }
       if (/error/i.test(chunk)) {
@@ -256,9 +279,10 @@ export const launchNode = async ({
   });
 
 const generateWallets = async (count: number, provider: Provider) => {
+  const baseAssetId = provider.getBaseAssetId();
   const wallets: WalletUnlocked[] = [];
   for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
     wallets.push(wallet);
   }
   return wallets;
@@ -284,7 +308,7 @@ export const launchNodeAndGetWallets = async ({
 } = {}): LaunchNodeAndGetWalletsResult => {
   const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
 
-  const provider = await Provider.create(`http://${ip}:${port}/graphql`);
+  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
   const wallets = await generateWallets(walletCount, provider);
 
   const cleanup = () => {
