@@ -298,7 +298,7 @@ export class Account extends AbstractAccount {
     while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
       const resources = await this.getResourcesToSpend(
         missingQuantities,
-        cacheRequestInputsResources(request.inputs)
+        cacheTxInputsFromOwner(request.inputs, this.address)
       );
 
       request.addResources(resources);
