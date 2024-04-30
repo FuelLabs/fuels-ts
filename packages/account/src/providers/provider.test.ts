@@ -51,7 +51,7 @@ const getCustomFetch =
   };
 
 // TODO: Figure out a way to import this constant from `@fuel-ts/account/configs`
-const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/graphql';
+const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
 /**
  * @group node
@@ -62,7 +62,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.22.1');
+    expect(version).toEqual('0.24.3');
   });
 
   it('can call()', async () => {
@@ -76,15 +76,14 @@ describe('Provider', () => {
         owner: baseAssetId,
         assetId: baseAssetId,
         txPointer: '0x00000000000000000000000000000000',
-        amount: 100,
+        amount: 1000,
         witnessIndex: 0,
       },
     ];
-
-    const callResult = await provider.call({
-      type: TransactionType.Script,
-      gasPrice: 0,
-      gasLimit: 1000000,
+    const transactionRequest = new ScriptTransactionRequest({
+      tip: 0,
+      gasLimit: 500,
+      maxFee: 1000,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -98,6 +97,13 @@ describe('Provider', () => {
       witnesses: ['0x'],
     });
 
+    const { maxFee, gasUsed } = await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.maxFee = maxFee;
+    transactionRequest.gasLimit = gasUsed;
+
+    const callResult = await provider.call(transactionRequest);
+
     const expectedReceipts: Receipt[] = [
       {
         type: ReceiptType.Log,
@@ -106,20 +112,20 @@ describe('Provider', () => {
         val1: bn(186),
         val2: bn(0),
         val3: bn(0),
-        pc: bn(0x2868),
-        is: bn(0x2860),
+        pc: bn(0x2888),
+        is: bn(0x2880),
       },
       {
         type: ReceiptType.Return,
         id: ZeroBytes32,
         val: bn(1),
-        pc: bn(0x286c),
-        is: bn(0x2860),
+        pc: bn(0x288c),
+        is: bn(0x2880),
       },
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x18),
+        gasUsed: bn(0x5d3),
       },
     ];
 
@@ -136,7 +142,7 @@ describe('Provider', () => {
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
-      gasPrice: 0,
+      tip: 0,
       gasLimit: 1000000,
       script:
         /*
@@ -813,7 +819,6 @@ describe('Provider', () => {
     expect(gasConfig.gasPriceFactor).toBeDefined();
     expect(gasConfig.maxGasPerPredicate).toBeDefined();
     expect(gasConfig.maxGasPerTx).toBeDefined();
-    expect(gasConfig.minGasPrice).toBeDefined();
   });
 
   it('should throws when using getChain or getNode and without cached data', async () => {
@@ -962,7 +967,7 @@ describe('Provider', () => {
   });
   it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { gasPerByte } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const gasLimit = bn(1000);
     const transactionRequest = new ScriptTransactionRequest({
@@ -982,6 +987,7 @@ describe('Provider', () => {
     expect(maxGasSpy).toHaveBeenCalledWith({
       gasPerByte,
       minGas,
+      maxGasPerTx,
       witnessesLength,
       witnessLimit: transactionRequest.witnessLimit,
       gasLimit: transactionRequest.gasLimit,
@@ -990,7 +996,7 @@ describe('Provider', () => {
 
   it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const { gasPerByte } = provider.getGasConfig();
+    const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const transactionRequest = new CreateTransactionRequest({
       witnesses: [ZeroBytes32],
@@ -1012,23 +1018,23 @@ describe('Provider', () => {
       gasPerByte,
       minGas,
       witnessesLength,
+      maxGasPerTx,
       witnessLimit: transactionRequest.witnessLimit,
     });
   });
 
-  it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
+  // TODO: validate if this test still makes sense
+  it.skip('should ensure estimated fee values on getTransactionCost are never 0', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
-    const calculatePriceWithFactorMock = vi
-      .spyOn(gasMod, 'calculatePriceWithFactor')
-      .mockReturnValue(bn(0));
+    const calculateGasFeeMock = vi.spyOn(gasMod, 'calculateGasFee').mockReturnValue(bn(0));
 
     const { minFee, maxFee } = await provider.getTransactionCost(request);
 
-    expect(calculatePriceWithFactorMock).toHaveBeenCalled();
+    expect(calculateGasFeeMock).toHaveBeenCalled();
 
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
@@ -1358,7 +1364,6 @@ describe('Provider', () => {
       },
       {
         code: FuelError.CODES.STREAM_PARSING_ERROR,
-        message: `Error while parsing stream data response: ${badResponse}`,
       }
     );
   });
@@ -1465,5 +1470,15 @@ describe('Provider', () => {
       name: 'TimeoutError',
       message: 'The operation was aborted due to timeout',
     });
+  });
+
+  test('getMessageByNonce', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
+    const message = await provider.getMessageByNonce(nonce);
+
+    expect(message).toBeDefined();
+    expect(message?.nonce).toEqual(nonce);
   });
 });

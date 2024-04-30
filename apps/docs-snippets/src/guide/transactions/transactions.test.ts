@@ -15,7 +15,7 @@ describe('Transactions', () => {
   beforeAll(async () => {
     sender = await getTestWallet();
     provider = sender.provider;
-    baseAssetId = await provider.getBaseAssetId();
+    baseAssetId = provider.getBaseAssetId();
     receiver = Wallet.generate({ provider });
   });
 
@@ -26,7 +26,8 @@ describe('Transactions', () => {
     expect(initialBalance.toNumber()).toBe(0);
 
     // #region transactions-1
-    await sender.transfer(receiver.address, 100, assetIdToTransfer);
+    const tx = await sender.transfer(receiver.address, 100, assetIdToTransfer);
+    await tx.waitForResult();
 
     const newBalance = await receiver.getBalance(baseAssetId);
     // 100

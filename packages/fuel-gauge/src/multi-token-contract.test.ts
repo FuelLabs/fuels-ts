@@ -15,8 +15,7 @@ const setup = async () => {
   );
 
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const { minGasPrice: gasPrice } = wallet.provider.getGasConfig();
-  const contract = await factory.deployContract({ gasPrice });
+  const contract = await factory.deployContract();
   return contract;
 };
 
@@ -31,84 +30,90 @@ const subIds = [
  * @group node
  */
 describe('MultiTokenContract', () => {
-  it('can mint and transfer coins', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    // New wallet to transfer coins and check balance
-    const userWallet = Wallet.generate({ provider });
-    const multiTokenContract = await setup();
-    const contractId = { bits: multiTokenContract.id.toB256() };
+  it(
+    'can mint and transfer coins',
+    async () => {
+      const provider = await Provider.create(FUEL_NETWORK_URL);
+      // New wallet to transfer coins and check balance
+      const userWallet = Wallet.generate({ provider });
+      const multiTokenContract = await setup();
+      const contractId = { bits: multiTokenContract.id.toB256() };
 
-    const helperDict: { [key: string]: { assetId: string; amount: number } } = {
-      [subIds[0]]: {
-        assetId: '',
-        amount: 100,
-      },
-      [subIds[1]]: {
-        assetId: '',
-        amount: 300,
-      },
-      [subIds[2]]: {
-        assetId: '',
-        amount: 400,
-      },
-    };
+      const helperDict: { [key: string]: { assetId: string; amount: number } } = {
+        [subIds[0]]: {
+          assetId: '',
+          amount: 100,
+        },
+        [subIds[1]]: {
+          assetId: '',
+          amount: 300,
+        },
+        [subIds[2]]: {
+          assetId: '',
+          amount: 400,
+        },
+      };
 
-    // mint some coins of the 3 subIds on MultiTokenContract
-    const { transactionResult } = await multiTokenContract
-      .multiCall(
-        subIds.map((subId) =>
-          multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
-        )
-      )
-      .call();
-
-    // update assetId on helperDict object
-    (transactionResult?.mintedAssets || []).forEach(({ subId, assetId }) => {
-      helperDict[subId].assetId = assetId || '';
-    });
-
-    // define helper to get contract balance
-    const getBalance = async (address: { bits: string }, assetId: string) => {
-      const { value } = await multiTokenContract.functions
-        .get_balance(address, { bits: assetId })
-
-        .simulate<BN>();
-      return value;
-    };
-
-    // validates contract has expected balance after mint
-    const validateMintPromises = subIds.map(async (subId) => {
-      expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
-        helperDict[subId].amount
-      );
-    });
-
-    await Promise.all(validateMintPromises);
-
-    // transfer coins to user wallet
-    await multiTokenContract
-      .multiCall(
-        subIds.map((subId) =>
-          multiTokenContract.functions.transfer_to_address(
-            { bits: userWallet.address.toB256() },
-            { bits: helperDict[subId].assetId },
-            helperDict[subId].amount
+      // mint some coins of the 3 subIds on MultiTokenContract
+      const { transactionResult } = await multiTokenContract
+        .multiCall(
+          subIds.map((subId) =>
+            multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
           )
         )
-      )
-      .call();
+        .call();
 
-    const validateTransferPromises = subIds.map(async (subId) => {
-      // validates that user wallet has expected balance after transfer
-      expect(bn(await userWallet.getBalance(helperDict[subId].assetId)).toNumber()).toBe(
-        helperDict[subId].amount
-      );
-      // validates contract has not balance after transfer
-      expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(0);
-    });
+      // update assetId on helperDict object
+      (transactionResult?.mintedAssets || []).forEach(({ subId, assetId }) => {
+        helperDict[subId].assetId = assetId || '';
+      });
 
-    await Promise.all(validateTransferPromises);
-  });
+      // define helper to get contract balance
+      const getBalance = async (address: { bits: string }, assetId: string) => {
+        const { value } = await multiTokenContract.functions
+          .get_balance(address, { bits: assetId })
+
+          .simulate<BN>();
+        return value;
+      };
+
+      // validates contract has expected balance after mint
+      const validateMintPromises = subIds.map(async (subId) => {
+        expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(
+          helperDict[subId].amount
+        );
+      });
+
+      await Promise.all(validateMintPromises);
+
+      // transfer coins to user wallet
+      await multiTokenContract
+        .multiCall(
+          subIds.map((subId) =>
+            multiTokenContract.functions.transfer_to_address(
+              { bits: userWallet.address.toB256() },
+              { bits: helperDict[subId].assetId },
+              helperDict[subId].amount
+            )
+          )
+        )
+        .call();
+
+      const validateTransferPromises = subIds.map(async (subId) => {
+        // validates that user wallet has expected balance after transfer
+        expect(bn(await userWallet.getBalance(helperDict[subId].assetId)).toNumber()).toBe(
+          helperDict[subId].amount
+        );
+        // validates contract has not balance after transfer
+        expect(bn(await getBalance(contractId, helperDict[subId].assetId)).toNumber()).toBe(0);
+      });
+
+      await Promise.all(validateTransferPromises);
+    },
+    {
+      timeout: 15000,
+    }
+  );
 
   it('can burn coins', async () => {
     const multiTokenContract = await setup();

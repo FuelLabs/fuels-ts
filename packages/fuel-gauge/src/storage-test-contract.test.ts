@@ -1,5 +1,4 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BN } from 'fuels';
 import { toHex, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -15,7 +14,6 @@ const setup = async () => {
   const baseAssetId = provider.getBaseAssetId();
   // Create wallet
   const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
-  const { minGasPrice } = wallet.provider.getGasConfig();
   // Deploy contract
   // #region contract-deployment-storage-slots
   // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
@@ -23,7 +21,6 @@ const setup = async () => {
   const factory = new ContractFactory(bytecode, abi, wallet);
   const contract = await factory.deployContract({
     storageSlots,
-    gasPrice: minGasPrice,
   });
   // #endregion contract-deployment-storage-slots
 
@@ -34,11 +31,9 @@ const setup = async () => {
  * @group node
  */
 describe('StorageTestContract', () => {
-  let gasPrice: BN;
   let baseAssetId: string;
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    gasPrice = provider.getGasConfig().minGasPrice;
     baseAssetId = provider.getBaseAssetId();
   });
   it('can increment counter', async () => {
@@ -50,10 +45,7 @@ describe('StorageTestContract', () => {
     const { value: incrementResult } = await contract.functions.increment_counter(37).call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
-    const { value: count } = await contract.functions
-      .counter()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value: count } = await contract.functions.counter().simulate();
     expect(count.toHex()).toEqual(toHex(1337));
   });
 
@@ -63,7 +55,6 @@ describe('StorageTestContract', () => {
     const factory = new ContractFactory(bytecode, abi, wallet);
     // #region contract-deployment-storage-slots-inline
     const contract = await factory.deployContract({
-      gasPrice,
       storageSlots: [
         {
           key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',
@@ -93,10 +84,7 @@ describe('StorageTestContract', () => {
     const { value: incrementResult } = await contract.functions.increment_counter(37).call();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
-    const { value: count } = await contract.functions
-      .counter()
-      .txParams({ gasLimit: 10_000 })
-      .simulate();
+    const { value: count } = await contract.functions.counter().simulate();
     expect(count.toHex()).toEqual(toHex(1337));
   });
 });

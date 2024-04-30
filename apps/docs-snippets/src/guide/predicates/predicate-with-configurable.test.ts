@@ -9,9 +9,9 @@ import { getTestWallet } from '../../utils';
 /**
  * @group node
  */
+
 describe(__filename, () => {
   let wallet: WalletUnlocked;
-  let gasPrice: BN;
   let baseAssetId: string;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
@@ -20,7 +20,6 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     wallet = await getTestWallet();
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
     baseAssetId = wallet.provider.getBaseAssetId();
   });
 
@@ -39,9 +38,8 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 500_000, baseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
+    const tx1 = await wallet.transfer(predicate.address, 1000, baseAssetId, {
+      gasLimit: 1000,
     });
 
     await tx1.waitForResult();
@@ -54,8 +52,7 @@ describe(__filename, () => {
 
     // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
+      gasLimit: 1000,
     });
 
     await tx2.waitForResult();
@@ -76,9 +73,8 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 300_000, baseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
+    const tx1 = await wallet.transfer(predicate.address, 1000, baseAssetId, {
+      gasLimit: 1000,
     });
 
     await tx1.waitForResult();
@@ -91,8 +87,7 @@ describe(__filename, () => {
 
     // transferring funds from the predicate to destination if predicate returns true
     const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
-      gasPrice,
-      gasLimit: 10_000,
+      gasLimit: 1000,
     });
 
     await tx2.waitForResult();

@@ -26,7 +26,7 @@ describe('Edge Cases', () => {
       destination.address,
       100,
       baseAssetId,
-      { gasPrice: provider.getGasConfig().minGasPrice, gasLimit: 10_000 }
+      { gasLimit: 10_000 }
     );
 
     const response = new TransactionResponse(transactionId, provider);
