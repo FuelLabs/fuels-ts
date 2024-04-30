@@ -1,7 +1,7 @@
 // #region contract-balance-2
 contract;
 
-use std::asset::transfer_to_address;
+use std::asset::transfer;
 
 abi TransferToAddress {
     #[payable]
@@ -13,7 +13,11 @@ impl TransferToAddress for Contract {
     fn transfer(amount_to_transfer: u64, asset_id: AssetId, recipient: b256) {
         let recipient_address = Address::from(recipient);
 
-        transfer_to_address(recipient_address, asset_id, amount_to_transfer);
+        transfer(
+            Identity::Address(recipient_address),
+            asset_id,
+            amount_to_transfer,
+        );
     }
 }
 // #endregion contract-balance-2

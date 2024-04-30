@@ -2,7 +2,19 @@
 
 The `launchNodeAndGetWallets` method lets you launch a local Fuel node with various customizations.
 
-In the code snippet below, we provide a custom chain config file to the `launchNodeAndGetWallets` method. You can use a chain config file to customize things like the chain's consensus parameters or specify some initial states for the chain. Click here to see what a chain config file looks like: [`chainConfig.json`](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/chainConfig.json)
+In the code snippet below, we provide a snapshot directory containing a couple of files:
+
+- `chainConfig.json`
+- `stateCondig.json`
+- `metadata.json`
+
+You can use custom snapshots to customize things like the chain's consensus parameters or specify some initial states for the chain.
+
+Here are some examples:
+
+- [`chainConfig.json`](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/chainConfig.json)
+<!-- - [`stateConfig.json`](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/stateConfig.json)
+- [`metadata.json`](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/metadata.json) -->
 
 <<< @/../../../packages/account/src/test-utils/launchNodeAndGetWallets.test.ts#launchNode-custom-config{ts:line-numbers}
 

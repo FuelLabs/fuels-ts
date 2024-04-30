@@ -10,8 +10,8 @@ use std::{
     },
     context::msg_amount,
     asset::{
-        mint_to_address,
-        transfer_to_address,
+        mint_to,
+        transfer_to,
     },
 };
 
@@ -54,7 +54,7 @@ impl LiquidityPool for Contract {
         let amount_to_mint = msg_amount() * 2;
 
         // Mint some LP token based upon the amount of the base token.
-        mint_to_address(recipient, ZERO_B256, amount_to_mint);
+        mint_to(recipient, ZERO_B256, amount_to_mint);
     }
 
     #[storage(read), payable]
@@ -65,7 +65,7 @@ impl LiquidityPool for Contract {
         let amount_to_transfer = msg_amount() / 2;
 
         // Transfer base token to recipient.
-        transfer_to_address(recipient, storage.base_token.read(), amount_to_transfer);
+        transfer_to(recipient, storage.base_token.read(), amount_to_transfer);
     }
 }
 // #endregion liquidity-pool-contract

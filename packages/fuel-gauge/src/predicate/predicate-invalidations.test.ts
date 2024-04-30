@@ -1,5 +1,5 @@
-import type { BN, Provider, WalletLocked, WalletUnlocked } from 'fuels';
-import { BaseAssetId, Predicate } from 'fuels';
+import type { Provider, WalletLocked, WalletUnlocked } from 'fuels';
+import { Predicate } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
@@ -15,10 +15,10 @@ describe('Predicate', () => {
 
   describe('Invalidations', () => {
     let predicate: Predicate<[Validation]>;
-    let predicateBalance: BN;
     let wallet: WalletUnlocked;
     let receiver: WalletLocked;
     let provider: Provider;
+    let baseAssetId: string;
 
     const validation: Validation = {
       has_account: true,
@@ -27,7 +27,7 @@ describe('Predicate', () => {
 
     beforeAll(async () => {
       [wallet, receiver] = await setupWallets();
-      const amountToPredicate = 10_000;
+      const amountToPredicate = 1000;
       provider = wallet.provider;
       predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesMainArgsStruct,
@@ -36,13 +36,13 @@ describe('Predicate', () => {
         inputData: [validation],
       });
 
-      predicateBalance = await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, amountToPredicate);
     });
 
     it('throws if sender does not have enough resources for tx and gas', async () => {
       await expect(
-        predicate.transfer(receiver.address, predicateBalance, BaseAssetId, {
-          gasLimit: 10_000,
+        predicate.transfer(receiver.address, await predicate.getBalance(), baseAssetId, {
+          gasLimit: 100_000_000,
         })
       ).rejects.toThrow(/not enough coins to fit the target/i);
     });
@@ -50,7 +50,7 @@ describe('Predicate', () => {
     it('throws if the passed gas limit is too low', async () => {
       // fuel-client we should change with the proper error message
       await expect(
-        predicate.transfer(receiver.address, 1000, BaseAssetId, {
+        predicate.transfer(receiver.address, 1000, baseAssetId, {
           gasLimit: 0,
         })
       ).rejects.toThrow(/Gas limit '0' is lower than the required:./i);
