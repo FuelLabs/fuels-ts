@@ -156,6 +156,7 @@ export type TransactionSummary<TTransactionType = void> = {
   time?: string;
   operations: Operation[];
   gasUsed: BN;
+  tip: BN;
   fee: BN;
   type: TransactionTypeName;
   blockId?: BlockId;

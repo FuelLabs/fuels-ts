@@ -72,6 +72,7 @@ describe('Contract Factory', () => {
       mintedAssets: expect.any(Array),
       burnedAssets: expect.any(Array),
       time: expect.any(String),
+      tip: expect.any(BN),
       id: expect.any(String),
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
