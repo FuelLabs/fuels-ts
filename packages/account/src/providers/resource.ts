@@ -8,7 +8,6 @@ export type RawCoin = {
   owner: string;
   amount: string;
   assetId: string;
-  maturity: string;
   blockCreated: string;
   txCreatedIdx: string;
 };
