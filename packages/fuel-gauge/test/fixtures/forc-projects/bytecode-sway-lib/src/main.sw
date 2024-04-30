@@ -5,20 +5,21 @@ abi MyContract {
 
     fn verify_contract_bytecode(contract_id: ContractId, bytecode: Vec<u8>) -> bool;
 
-    fn compute_predicate_address(bytecode: Vec<u8>) -> Address;
+    // fn compute_predicate_address(bytecode: Vec<u8>) -> Address;
 }
 
 impl MyContract for Contract {
     fn compute_bytecode_root(bytecode_input: Vec<u8>) {
         // simply logs the hexidecimal b256 string of the bytecode input for testing purposes
-        log(&b256::from_hex_str(&bytecode_input).unwrap().to_hex_str());
+        let ret: b256 = 0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20;
+        log(ret);
     }
 
     fn verify_contract_bytecode(contract_id: ContractId, bytecode: Vec<u8>) -> bool {
         return true;
     }
 
-    fn compute_predicate_address(bytecode: Vec<u8>) -> Address {
-        return Address::from_slice(&b256::from_hex_str(&bytecode).unwrap().to_bytes());
-    }
+    // fn compute_predicate_address(bytecode: Vec<u8>) -> Address {
+    //     return EvmAddress::from();
+    // }
 }

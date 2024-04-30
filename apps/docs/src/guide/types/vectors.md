@@ -36,7 +36,7 @@ abi MyContract {
 }
 
 impl MyContract for Contract {
-    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> bool {
+    fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256 {
         let root = compute_bytecode_root(bytecode_input);
         return root;
     }
