@@ -30,6 +30,8 @@ export enum TransactionTypeName {
   Create = 'Create',
   Mint = 'Mint',
   Script = 'Script',
+  Upgrade = 'Upgrade',
+  Upload = 'Upload',
 }
 
 /**
