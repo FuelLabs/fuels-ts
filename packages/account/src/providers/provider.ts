@@ -440,9 +440,9 @@ export default class Provider {
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
-      throw new FuelError(
-        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Unsupported fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
       );
     }
   }
