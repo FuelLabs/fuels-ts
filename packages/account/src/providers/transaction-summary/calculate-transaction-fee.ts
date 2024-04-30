@@ -21,6 +21,7 @@ type FeeParams =
       gasPriceFactor: BN | number;
     };
 
+// TODO: Remove this helper
 export type CalculateTransactionFeeParams = {
   gasPrice: BN;
   rawPayload: string;

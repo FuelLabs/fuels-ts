@@ -89,6 +89,7 @@ export class BaseInvocationScope<TReturn = any> {
   protected get calls() {
     const provider = this.getProvider();
     const consensusParams = provider.getChain();
+    // TODO: Remove this error since it is already handled on Provider class
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
