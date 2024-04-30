@@ -620,6 +620,12 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         );
         break;
       }
+      case TransactionType.Upload: {
+        parts.push(
+          new TransactionUploadCoder().encode(value as Transaction<TransactionType.Upload>)
+        );
+        break;
+      }
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_TYPE,
@@ -653,6 +659,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
       case TransactionType.Upgrade: {
         [decoded, o] = new TransactionUpgradeCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.Upload: {
+        [decoded, o] = new TransactionUploadCoder().decode(data, o);
         return [decoded, o];
       }
       default: {
