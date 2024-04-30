@@ -15,9 +15,6 @@ fragment transactionStatusFragment on TransactionStatus {
       id
     }
     time
-    receipts {
-      ...receiptFragment
-    }
     programState {
       returnType
       data
