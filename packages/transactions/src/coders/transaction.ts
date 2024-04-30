@@ -486,6 +486,87 @@ export type TransactionUpload = {
   witnesses: Witness[];
 };
 
+export class TransactionUploadCoder extends Coder<TransactionUpload, TransactionUpload> {
+  constructor() {
+    super('TransactionUpload', 'struct TransactionUpload', 0);
+  }
+
+  encode(value: TransactionUpload): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.root));
+    parts.push(new NumberCoder('u16').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u16').encode(value.subsectionIndex));
+    parts.push(new NumberCoder('u16').encode(value.subsectionsNumber));
+    parts.push(new NumberCoder('u16').encode(value.proofSetCount));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
+    parts.push(new ArrayCoder(new B256Coder(), value.proofSetCount).encode(value.proofSet));
+    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionUpload, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const root = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const witnessIndex = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const subsectionIndex = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const subsectionsNumber = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const proofSetCount = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const policyTypes = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const inputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const witnessesCount = decoded;
+    [decoded, o] = new ArrayCoder(new B256Coder(), proofSetCount).decode(data, o);
+    const proofSet = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    const witnesses = decoded;
+
+    return [
+      {
+        type: TransactionType.Upload,
+        root,
+        witnessIndex,
+        subsectionIndex,
+        subsectionsNumber,
+        proofSetCount,
+        policyTypes,
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        proofSet,
+        policies,
+        inputs,
+        outputs,
+        witnesses,
+      },
+      o,
+    ];
+  }
+}
 
 type PossibleTransactions =
   | TransactionScript
