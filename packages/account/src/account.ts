@@ -33,7 +33,6 @@ import {
   cacheTxInputsFromOwner,
 } from './providers';
 import {
-  cacheRequestInputsResources,
   getAssetAmountInRequestInputs,
   isRequestInputCoin,
   isRequestInputResource,
