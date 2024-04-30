@@ -2,4 +2,4 @@
 "@fuel-ts/account": minor
 ---
 
-feat!: warn on fuel client version incompatibility
+chore!: warn on fuel client version incompatibility
