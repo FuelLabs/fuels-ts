@@ -64,10 +64,10 @@ importers:
         version: 6.9.1(eslint@8.52.0)(typescript@5.2.2)
       '@vitest/browser':
         specifier: ^1.1.3
-        version: 1.5.0(vitest@1.5.0)(webdriverio@8.36.1(typescript@5.2.2))
+        version: 1.1.3(vitest@1.1.3)(webdriverio@8.36.1(typescript@5.2.2))
       '@vitest/coverage-istanbul':
         specifier: ^1.1.3
-        version: 1.5.0(vitest@1.5.0(@types/node@18.15.3)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2))
+        version: 1.1.3(vitest@1.1.3(@types/node@18.15.3)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2))
       compare-versions:
         specifier: ^6.1.0
         version: 6.1.0
@@ -169,7 +169,7 @@ importers:
         version: 1.4.2
       vitest:
         specifier: ^1.1.3
-        version: 1.5.0(@types/node@18.15.3)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2)
+        version: 1.1.3(@types/node@18.15.3)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2)
       webdriverio:
         specifier: ^8.36.1
         version: 8.36.1(typescript@5.2.2)
@@ -502,7 +502,7 @@ importers:
         version: link:../../packages/fuels
       vitest:
         specifier: ^1.1.3
-        version: 1.5.0(@types/node@20.11.13)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2)
+        version: 1.1.3(@types/node@20.11.13)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2)
 
   internal/check-imports:
     dependencies:
@@ -4591,12 +4591,12 @@ packages:
       vite: ^5.0.0
       vue: ^3.2.25
 
-  '@vitest/browser@1.5.0':
-    resolution: {integrity: sha512-tJLV8j8sufAT2a3eONnfgIclaqx4RqC8sA3xH8uXwxFw7CNwWCPeJ0czVkUzCE/15bHRoGxwsHC+Ycch6zDb1Q==}
+  '@vitest/browser@1.1.3':
+    resolution: {integrity: sha512-ksI0V8YqonFYfjVYMPTvDR84i7ix7QPL2Sc8G2mHirVGAf4jJS3uC/CsifRLe5/E2r8QUhHbAdZQpvMCqBJV5w==}
     peerDependencies:
       playwright: '*'
       safaridriver: '*'
-      vitest: 1.5.0
+      vitest: ^1.0.0
       webdriverio: '*'
     peerDependenciesMeta:
       playwright:
@@ -4606,25 +4606,25 @@ packages:
       webdriverio:
         optional: true
 
-  '@vitest/coverage-istanbul@1.5.0':
-    resolution: {integrity: sha512-mEbVTIAPKhMkszO0lwOwWiG8Cvkj7rdMgdmCNUDnmcSZYUWGIqM8+4O1bcQ1WMHkejpcwvED5oU6ZFm3syVb6A==}
+  '@vitest/coverage-istanbul@1.1.3':
+    resolution: {integrity: sha512-pqx/RaLjJ7oxsbi0Vc/CjyXBXd86yQ0lKq1PPnk9BMNLqMTEWwfcTelcNrl41yK+IVRhHlFtwcjDva3VslbMMQ==}
     peerDependencies:
-      vitest: 1.5.0
+      vitest: ^1.0.0
 
-  '@vitest/expect@1.5.0':
-    resolution: {integrity: sha512-0pzuCI6KYi2SIC3LQezmxujU9RK/vwC1U9R0rLuGlNGcOuDWxqWKu6nUdFsX9tH1WU0SXtAxToOsEjeUn1s3hA==}
+  '@vitest/expect@1.1.3':
+    resolution: {integrity: sha512-MnJqsKc1Ko04lksF9XoRJza0bGGwTtqfbyrsYv5on4rcEkdo+QgUdITenBQBUltKzdxW7K3rWh+nXRULwsdaVg==}
 
-  '@vitest/runner@1.5.0':
-    resolution: {integrity: sha512-7HWwdxXP5yDoe7DTpbif9l6ZmDwCzcSIK38kTSIt6CFEpMjX4EpCgT6wUmS0xTXqMI6E/ONmfgRKmaujpabjZQ==}
+  '@vitest/runner@1.1.3':
+    resolution: {integrity: sha512-Va2XbWMnhSdDEh/OFxyUltgQuuDRxnarK1hW5QNN4URpQrqq6jtt8cfww/pQQ4i0LjoYxh/3bYWvDFlR9tU73g==}
 
-  '@vitest/snapshot@1.5.0':
-    resolution: {integrity: sha512-qpv3fSEuNrhAO3FpH6YYRdaECnnRjg9VxbhdtPwPRnzSfHVXnNzzrpX4cJxqiwgRMo7uRMWDFBlsBq4Cr+rO3A==}
+  '@vitest/snapshot@1.1.3':
+    resolution: {integrity: sha512-U0r8pRXsLAdxSVAyGNcqOU2H3Z4Y2dAAGGelL50O0QRMdi1WWeYHdrH/QWpN1e8juWfVKsb8B+pyJwTC+4Gy9w==}
 
-  '@vitest/spy@1.5.0':
-    resolution: {integrity: sha512-vu6vi6ew5N5MMHJjD5PoakMRKYdmIrNJmyfkhRpQt5d9Ewhw9nZ5Aqynbi3N61bvk9UvZ5UysMT6ayIrZ8GA9w==}
+  '@vitest/spy@1.1.3':
+    resolution: {integrity: sha512-Ec0qWyGS5LhATFQtldvChPTAHv08yHIOZfiNcjwRQbFPHpkih0md9KAbs7TfeIfL7OFKoe7B/6ukBTqByubXkQ==}
 
-  '@vitest/utils@1.5.0':
-    resolution: {integrity: sha512-BDU0GNL8MWkRkSRdNFvCUCAVOeHaUlVJ9Tx0TYBZyXaaOTmGtUFObzchCivIBrIwKzvZA7A9sCejVhXM2aY98A==}
+  '@vitest/utils@1.1.3':
+    resolution: {integrity: sha512-Dyt3UMcdElTll2H75vhxfpZu03uFpXRCHxWnzcrFjZxT1kTbq8ALUYIeBgGolo1gldVdI0YSlQRacsqxTwNqwg==}
 
   '@vue/compiler-core@3.4.15':
     resolution: {integrity: sha512-XcJQVOaxTKCnth1vCxEChteGuwG6wqnUHxAm1DO3gCz0+uXKaJNx8/digSz4dLALCy8n2lKq24jSUs8segoqIw==}
@@ -7869,10 +7869,6 @@ packages:
     resolution: {integrity: sha512-n3s8EwkdFIJCG3BPKBYvskgXGoy88ARzvegkitk60NxRdwltLOTaH7CUiMRXvwYorl0Q712iEjcWB+fK/MrWVw==}
     engines: {node: '>=10'}
 
-  istanbul-lib-source-maps@5.0.4:
-    resolution: {integrity: sha512-wHOoEsNJTVltaJp8eVkm8w+GVkVNHT2YDYo53YdzQEL2gWm1hBX5cGFR9hQJtuGLebidVX7et3+dmDZrmclduw==}
-    engines: {node: '>=10'}
-
   istanbul-reports@3.1.5:
     resolution: {integrity: sha512-nUsEMa9pBt/NOHqbcbeJEgqIlY/K7rVWUX6Lql2orY5e9roQOthbR3vtY4zzf2orPELg80fnxxk9zUyPlgwD1w==}
     engines: {node: '>=8'}
@@ -8114,9 +8110,6 @@ packages:
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
-
-  js-tokens@9.0.0:
-    resolution: {integrity: sha512-WriZw1luRMlmV3LGJaR6QOJjWwgLUTf89OwT2lUOyjX2dJGBwgmIkbcz+7WFZjrZM635JOIR517++e/67CP9dQ==}
 
   js-yaml@3.14.1:
     resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
@@ -10976,8 +10969,8 @@ packages:
     resolution: {integrity: sha512-0fk9zBqO67Nq5M/m45qHCJxylV/DhBlIOVExqgOMiCCrzrhU6tCibRXNqE3jwJLftzE9SNuZtYbpzcO+i9FiKw==}
     engines: {node: '>=14.16'}
 
-  strip-literal@2.1.0:
-    resolution: {integrity: sha512-Op+UycaUt/8FbN/Z2TWPBLge3jWrP3xj10f3fnYxf052bKuS3EKs1ZQcVGjnEMdsNVAM+plXRdmjrZ/KgG3Skw==}
+  strip-literal@1.3.0:
+    resolution: {integrity: sha512-PugKzOsyXpArk0yWmUwqOZecSO0GH0bPoctLcqNDH9J04pVW3lflYE0ujElBGTloevcxF5MofAOZ7C5l2b+wLg==}
 
   structured-source@4.0.0:
     resolution: {integrity: sha512-qGzRFNJDjFieQkl/sVOI2dUjHKRyL9dAJi2gCPGJLbJHBIkyOHxjuocpIEfbLioX+qSJpvbYdT49/YCdMznKxA==}
@@ -11728,8 +11721,8 @@ packages:
   vfile@4.2.1:
     resolution: {integrity: sha512-O6AE4OskCG5S1emQ/4gl8zK586RqA3srz3nfK/Viy0UPToBc5Trp9BVFb1u0CjsKrAWwnpr4ifM/KBXPWwJbCA==}
 
-  vite-node@1.5.0:
-    resolution: {integrity: sha512-tV8h6gMj6vPzVCa7l+VGq9lwoJjW8Y79vst8QZZGiuRAfijU+EEWuc0kFpmndQrWhMMhet1jdSF+40KSZUqIIw==}
+  vite-node@1.1.3:
+    resolution: {integrity: sha512-BLSO72YAkIUuNrOx+8uznYICJfTEbvBAmWClY3hpath5+h1mbPS5OMn42lrTxXuyCazVyZoDkSRnju78GiVCqA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
@@ -11789,15 +11782,15 @@ packages:
       postcss:
         optional: true
 
-  vitest@1.5.0:
-    resolution: {integrity: sha512-d8UKgR0m2kjdxDWX6911uwxout6GHS0XaGH1cksSIVVG8kRlE7G7aBw7myKQCvDI5dT4j7ZMa+l706BIORMDLw==}
+  vitest@1.1.3:
+    resolution: {integrity: sha512-2l8om1NOkiA90/Y207PsEvJLYygddsOyr81wLQ20Ra8IlLKbyQncWsGZjnbkyG2KwwuTXLQjEPOJuxGMG8qJBQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@types/node': ^18.0.0 || >=20.0.0
-      '@vitest/browser': 1.5.0
-      '@vitest/ui': 1.5.0
+      '@vitest/browser': ^1.0.0
+      '@vitest/ui': ^1.0.0
       happy-dom: '*'
       jsdom: '*'
     peerDependenciesMeta:
@@ -12528,7 +12521,7 @@ snapshots:
 
   '@babel/helper-builder-binary-assignment-operator-visitor@7.22.5':
     dependencies:
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
 
   '@babel/helper-compilation-targets@7.22.15':
     dependencies:
@@ -12596,20 +12589,20 @@ snapshots:
   '@babel/helper-function-name@7.22.5':
     dependencies:
       '@babel/template': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
 
   '@babel/helper-function-name@7.23.0':
     dependencies:
       '@babel/template': 7.22.15
-      '@babel/types': 7.23.9
+      '@babel/types': 7.24.0
 
   '@babel/helper-hoist-variables@7.22.5':
     dependencies:
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
 
   '@babel/helper-member-expression-to-functions@7.22.5':
     dependencies:
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
 
   '@babel/helper-module-imports@7.22.15':
     dependencies:
@@ -12652,7 +12645,7 @@ snapshots:
 
   '@babel/helper-optimise-call-expression@7.22.5':
     dependencies:
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
 
   '@babel/helper-plugin-utils@7.22.5': {}
 
@@ -12664,7 +12657,7 @@ snapshots:
       '@babel/helper-annotate-as-pure': 7.22.5
       '@babel/helper-environment-visitor': 7.22.5
       '@babel/helper-wrap-function': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
     transitivePeerDependencies:
       - supports-color
 
@@ -12714,7 +12707,7 @@ snapshots:
       '@babel/helper-function-name': 7.22.5
       '@babel/template': 7.22.5
       '@babel/traverse': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
     transitivePeerDependencies:
       - supports-color
 
@@ -12730,7 +12723,7 @@ snapshots:
     dependencies:
       '@babel/template': 7.22.15
       '@babel/traverse': 7.23.4
-      '@babel/types': 7.23.9
+      '@babel/types': 7.24.0
     transitivePeerDependencies:
       - supports-color
 
@@ -12767,7 +12760,7 @@ snapshots:
 
   '@babel/parser@7.23.4':
     dependencies:
-      '@babel/types': 7.23.9
+      '@babel/types': 7.24.0
 
   '@babel/parser@7.23.9':
     dependencies:
@@ -12869,9 +12862,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-async-generators@7.8.4(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-async-generators@7.8.4(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-bigint@7.8.3(@babel/core@7.22.5)':
@@ -12879,9 +12872,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-bigint@7.8.3(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-bigint@7.8.3(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-class-properties@7.12.13(@babel/core@7.22.5)':
@@ -12889,9 +12882,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-class-properties@7.12.13(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-class-properties@7.12.13(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-class-static-block@7.14.5(@babel/core@7.22.5)':
@@ -12939,9 +12932,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-import-meta@7.10.4(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-import-meta@7.10.4(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-json-strings@7.8.3(@babel/core@7.22.5)':
@@ -12949,9 +12942,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-json-strings@7.8.3(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-json-strings@7.8.3(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-jsx@7.22.5(@babel/core@7.22.5)':
@@ -12969,9 +12962,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-logical-assignment-operators@7.10.4(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-nullish-coalescing-operator@7.8.3(@babel/core@7.22.5)':
@@ -12979,9 +12972,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-nullish-coalescing-operator@7.8.3(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-nullish-coalescing-operator@7.8.3(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-numeric-separator@7.10.4(@babel/core@7.22.5)':
@@ -12989,9 +12982,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-numeric-separator@7.10.4(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-numeric-separator@7.10.4(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-object-rest-spread@7.8.3(@babel/core@7.22.5)':
@@ -12999,9 +12992,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-object-rest-spread@7.8.3(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-object-rest-spread@7.8.3(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-optional-catch-binding@7.8.3(@babel/core@7.22.5)':
@@ -13009,9 +13002,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-optional-catch-binding@7.8.3(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-optional-catch-binding@7.8.3(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-optional-chaining@7.8.3(@babel/core@7.22.5)':
@@ -13019,9 +13012,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-optional-chaining@7.8.3(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-optional-chaining@7.8.3(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-private-property-in-object@7.14.5(@babel/core@7.22.5)':
@@ -13034,9 +13027,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-top-level-await@7.14.5(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-top-level-await@7.14.5(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-typescript@7.22.5(@babel/core@7.22.5)':
@@ -13044,9 +13037,9 @@ snapshots:
       '@babel/core': 7.22.5
       '@babel/helper-plugin-utils': 7.22.5
 
-  '@babel/plugin-syntax-typescript@7.22.5(@babel/core@7.23.3)':
+  '@babel/plugin-syntax-typescript@7.22.5(@babel/core@7.24.4)':
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
 
   '@babel/plugin-syntax-unicode-sets-regex@7.18.6(@babel/core@7.22.5)':
@@ -13605,8 +13598,8 @@ snapshots:
       '@babel/helper-function-name': 7.22.5
       '@babel/helper-hoist-variables': 7.22.5
       '@babel/helper-split-export-declaration': 7.22.5
-      '@babel/parser': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/parser': 7.24.4
+      '@babel/types': 7.24.0
       debug: 4.3.4(supports-color@5.5.0)
       globals: 11.12.0
     transitivePeerDependencies:
@@ -15751,7 +15744,7 @@ snapshots:
 
   '@svgr/hast-util-to-babel-ast@5.5.0':
     dependencies:
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
 
   '@svgr/plugin-jsx@5.5.0':
     dependencies:
@@ -16560,53 +16553,53 @@ snapshots:
       vite: 5.2.10(@types/node@20.11.13)(terser@5.18.2)
       vue: 3.4.15(typescript@5.2.2)
 
-  '@vitest/browser@1.5.0(vitest@1.5.0)(webdriverio@8.36.1(typescript@5.2.2))':
+  '@vitest/browser@1.1.3(vitest@1.1.3)(webdriverio@8.36.1(typescript@5.2.2))':
     dependencies:
-      '@vitest/utils': 1.5.0
+      '@vitest/utils': 1.1.3
       magic-string: 0.30.5
       sirv: 2.0.4
-      vitest: 1.5.0(@types/node@20.11.13)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2)
+      vitest: 1.1.3(@types/node@20.11.13)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2)
     optionalDependencies:
       webdriverio: 8.36.1(typescript@5.2.2)
 
-  '@vitest/coverage-istanbul@1.5.0(vitest@1.5.0(@types/node@18.15.3)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2))':
+  '@vitest/coverage-istanbul@1.1.3(vitest@1.1.3(@types/node@18.15.3)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2))':
     dependencies:
       debug: 4.3.4(supports-color@5.5.0)
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-instrument: 6.0.1
       istanbul-lib-report: 3.0.1
-      istanbul-lib-source-maps: 5.0.4
+      istanbul-lib-source-maps: 4.0.1
       istanbul-reports: 3.1.6
       magicast: 0.3.3
       picocolors: 1.0.0
       test-exclude: 6.0.0
-      vitest: 1.5.0(@types/node@18.15.3)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2)
+      vitest: 1.1.3(@types/node@18.15.3)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2)
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/expect@1.5.0':
+  '@vitest/expect@1.1.3':
     dependencies:
-      '@vitest/spy': 1.5.0
-      '@vitest/utils': 1.5.0
+      '@vitest/spy': 1.1.3
+      '@vitest/utils': 1.1.3
       chai: 4.4.1
 
-  '@vitest/runner@1.5.0':
+  '@vitest/runner@1.1.3':
     dependencies:
-      '@vitest/utils': 1.5.0
+      '@vitest/utils': 1.1.3
       p-limit: 5.0.0
       pathe: 1.1.2
 
-  '@vitest/snapshot@1.5.0':
+  '@vitest/snapshot@1.1.3':
     dependencies:
       magic-string: 0.30.5
       pathe: 1.1.2
       pretty-format: 29.7.0
 
-  '@vitest/spy@1.5.0':
+  '@vitest/spy@1.1.3':
     dependencies:
       tinyspy: 2.2.0
 
-  '@vitest/utils@1.5.0':
+  '@vitest/utils@1.1.3':
     dependencies:
       diff-sequences: 29.6.3
       estree-walker: 3.0.3
@@ -17258,14 +17251,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  babel-jest@27.5.1(@babel/core@7.23.3):
+  babel-jest@27.5.1(@babel/core@7.24.4):
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
       '@types/babel__core': 7.20.1
       babel-plugin-istanbul: 6.1.1
-      babel-preset-jest: 27.5.1(@babel/core@7.23.3)
+      babel-preset-jest: 27.5.1(@babel/core@7.24.4)
       chalk: 4.1.2
       graceful-fs: 4.2.11
       slash: 3.0.0
@@ -17294,7 +17287,7 @@ snapshots:
   babel-plugin-jest-hoist@27.5.1:
     dependencies:
       '@babel/template': 7.22.5
-      '@babel/types': 7.22.5
+      '@babel/types': 7.24.0
       '@types/babel__core': 7.20.1
       '@types/babel__traverse': 7.20.1
 
@@ -17352,21 +17345,21 @@ snapshots:
       '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.22.5)
       '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.22.5)
 
-  babel-preset-current-node-syntax@1.0.1(@babel/core@7.23.3):
+  babel-preset-current-node-syntax@1.0.1(@babel/core@7.24.4):
     dependencies:
-      '@babel/core': 7.23.3
-      '@babel/plugin-syntax-async-generators': 7.8.4(@babel/core@7.23.3)
-      '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.23.3)
-      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.23.3)
-      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.23.3)
-      '@babel/plugin-syntax-json-strings': 7.8.3(@babel/core@7.23.3)
-      '@babel/plugin-syntax-logical-assignment-operators': 7.10.4(@babel/core@7.23.3)
-      '@babel/plugin-syntax-nullish-coalescing-operator': 7.8.3(@babel/core@7.23.3)
-      '@babel/plugin-syntax-numeric-separator': 7.10.4(@babel/core@7.23.3)
-      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.23.3)
-      '@babel/plugin-syntax-optional-catch-binding': 7.8.3(@babel/core@7.23.3)
-      '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.23.3)
-      '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.23.3)
+      '@babel/core': 7.24.4
+      '@babel/plugin-syntax-async-generators': 7.8.4(@babel/core@7.24.4)
+      '@babel/plugin-syntax-bigint': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.24.4)
+      '@babel/plugin-syntax-import-meta': 7.10.4(@babel/core@7.24.4)
+      '@babel/plugin-syntax-json-strings': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-logical-assignment-operators': 7.10.4(@babel/core@7.24.4)
+      '@babel/plugin-syntax-nullish-coalescing-operator': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-numeric-separator': 7.10.4(@babel/core@7.24.4)
+      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-optional-catch-binding': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.24.4)
 
   babel-preset-fbjs@3.4.0(@babel/core@7.22.5):
     dependencies:
@@ -17407,11 +17400,11 @@ snapshots:
       babel-plugin-jest-hoist: 27.5.1
       babel-preset-current-node-syntax: 1.0.1(@babel/core@7.22.5)
 
-  babel-preset-jest@27.5.1(@babel/core@7.23.3):
+  babel-preset-jest@27.5.1(@babel/core@7.24.4):
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       babel-plugin-jest-hoist: 27.5.1
-      babel-preset-current-node-syntax: 1.0.1(@babel/core@7.23.3)
+      babel-preset-current-node-syntax: 1.0.1(@babel/core@7.24.4)
 
   babel-preset-react-app@10.0.1:
     dependencies:
@@ -19529,7 +19522,7 @@ snapshots:
 
   estree-walker@3.0.3:
     dependencies:
-      '@types/estree': 1.0.1
+      '@types/estree': 1.0.5
 
   esutils@2.0.3: {}
 
@@ -20807,8 +20800,8 @@ snapshots:
 
   istanbul-lib-instrument@5.2.1:
     dependencies:
-      '@babel/core': 7.23.3
-      '@babel/parser': 7.23.9
+      '@babel/core': 7.24.4
+      '@babel/parser': 7.24.4
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
       semver: 6.3.1
@@ -20851,14 +20844,6 @@ snapshots:
       debug: 4.3.4(supports-color@5.5.0)
       istanbul-lib-coverage: 3.2.2
       source-map: 0.6.1
-    transitivePeerDependencies:
-      - supports-color
-
-  istanbul-lib-source-maps@5.0.4:
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
-      debug: 4.3.4(supports-color@5.5.0)
-      istanbul-lib-coverage: 3.2.2
     transitivePeerDependencies:
       - supports-color
 
@@ -20950,10 +20935,10 @@ snapshots:
 
   jest-config@27.5.1(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.2.2)):
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@jest/test-sequencer': 27.5.1
       '@jest/types': 27.5.1
-      babel-jest: 27.5.1(@babel/core@7.23.3)
+      babel-jest: 27.5.1(@babel/core@7.24.4)
       chalk: 4.1.2
       ci-info: 3.8.0
       deepmerge: 4.3.1
@@ -21227,16 +21212,16 @@ snapshots:
 
   jest-snapshot@27.5.1:
     dependencies:
-      '@babel/core': 7.23.3
+      '@babel/core': 7.24.4
       '@babel/generator': 7.23.4
-      '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.23.3)
+      '@babel/plugin-syntax-typescript': 7.22.5(@babel/core@7.24.4)
       '@babel/traverse': 7.22.5
-      '@babel/types': 7.23.9
+      '@babel/types': 7.24.0
       '@jest/transform': 27.5.1
       '@jest/types': 27.5.1
       '@types/babel__traverse': 7.20.1
       '@types/prettier': 2.7.3
-      babel-preset-current-node-syntax: 1.0.1(@babel/core@7.23.3)
+      babel-preset-current-node-syntax: 1.0.1(@babel/core@7.24.4)
       chalk: 4.1.2
       expect: 27.5.1
       graceful-fs: 4.2.11
@@ -21365,8 +21350,6 @@ snapshots:
   js-sdsl@4.4.1: {}
 
   js-tokens@4.0.0: {}
-
-  js-tokens@9.0.0: {}
 
   js-yaml@3.14.1:
     dependencies:
@@ -24631,9 +24614,9 @@ snapshots:
 
   strip-json-comments@5.0.1: {}
 
-  strip-literal@2.1.0:
+  strip-literal@1.3.0:
     dependencies:
-      js-tokens: 9.0.0
+      acorn: 8.11.3
 
   structured-source@4.0.0:
     dependencies:
@@ -25555,7 +25538,7 @@ snapshots:
       unist-util-stringify-position: 2.0.3
       vfile-message: 2.0.4
 
-  vite-node@1.5.0(@types/node@18.15.3)(terser@5.18.2):
+  vite-node@1.1.3(@types/node@18.15.3)(terser@5.18.2):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4(supports-color@5.5.0)
@@ -25572,7 +25555,7 @@ snapshots:
       - supports-color
       - terser
 
-  vite-node@1.5.0(@types/node@20.11.13)(terser@5.18.2):
+  vite-node@1.1.3(@types/node@20.11.13)(terser@5.18.2):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4(supports-color@5.5.0)
@@ -25678,14 +25661,15 @@ snapshots:
       - typescript
       - universal-cookie
 
-  vitest@1.5.0(@types/node@18.15.3)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2):
+  vitest@1.1.3(@types/node@18.15.3)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2):
     dependencies:
-      '@vitest/expect': 1.5.0
-      '@vitest/runner': 1.5.0
-      '@vitest/snapshot': 1.5.0
-      '@vitest/spy': 1.5.0
-      '@vitest/utils': 1.5.0
+      '@vitest/expect': 1.1.3
+      '@vitest/runner': 1.1.3
+      '@vitest/snapshot': 1.1.3
+      '@vitest/spy': 1.1.3
+      '@vitest/utils': 1.1.3
       acorn-walk: 8.3.2
+      cac: 6.7.14
       chai: 4.4.1
       debug: 4.3.4(supports-color@5.5.0)
       execa: 8.0.1
@@ -25694,15 +25678,15 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.0.0
       std-env: 3.7.0
-      strip-literal: 2.1.0
+      strip-literal: 1.3.0
       tinybench: 2.6.0
       tinypool: 0.8.4
       vite: 5.2.10(@types/node@18.15.3)(terser@5.18.2)
-      vite-node: 1.5.0(@types/node@18.15.3)(terser@5.18.2)
+      vite-node: 1.1.3(@types/node@18.15.3)(terser@5.18.2)
       why-is-node-running: 2.2.2
     optionalDependencies:
       '@types/node': 18.15.3
-      '@vitest/browser': 1.5.0(vitest@1.5.0)(webdriverio@8.36.1(typescript@5.2.2))
+      '@vitest/browser': 1.1.3(vitest@1.1.3)(webdriverio@8.36.1(typescript@5.2.2))
       jsdom: 16.7.0
     transitivePeerDependencies:
       - less
@@ -25713,14 +25697,15 @@ snapshots:
       - supports-color
       - terser
 
-  vitest@1.5.0(@types/node@20.11.13)(@vitest/browser@1.5.0)(jsdom@16.7.0)(terser@5.18.2):
+  vitest@1.1.3(@types/node@20.11.13)(@vitest/browser@1.1.3)(jsdom@16.7.0)(terser@5.18.2):
     dependencies:
-      '@vitest/expect': 1.5.0
-      '@vitest/runner': 1.5.0
-      '@vitest/snapshot': 1.5.0
-      '@vitest/spy': 1.5.0
-      '@vitest/utils': 1.5.0
+      '@vitest/expect': 1.1.3
+      '@vitest/runner': 1.1.3
+      '@vitest/snapshot': 1.1.3
+      '@vitest/spy': 1.1.3
+      '@vitest/utils': 1.1.3
       acorn-walk: 8.3.2
+      cac: 6.7.14
       chai: 4.4.1
       debug: 4.3.4(supports-color@5.5.0)
       execa: 8.0.1
@@ -25729,15 +25714,15 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.0.0
       std-env: 3.7.0
-      strip-literal: 2.1.0
+      strip-literal: 1.3.0
       tinybench: 2.6.0
       tinypool: 0.8.4
       vite: 5.2.10(@types/node@20.11.13)(terser@5.18.2)
-      vite-node: 1.5.0(@types/node@20.11.13)(terser@5.18.2)
+      vite-node: 1.1.3(@types/node@20.11.13)(terser@5.18.2)
       why-is-node-running: 2.2.2
     optionalDependencies:
       '@types/node': 20.11.13
-      '@vitest/browser': 1.5.0(vitest@1.5.0)(webdriverio@8.36.1(typescript@5.2.2))
+      '@vitest/browser': 1.1.3(vitest@1.1.3)(webdriverio@8.36.1(typescript@5.2.2))
       jsdom: 16.7.0
     transitivePeerDependencies:
       - less
