@@ -186,7 +186,7 @@ describe(__filename, () => {
     const sender = Wallet.generate({ provider });
     const receiver = Wallet.generate({ provider });
 
-    const splitIn = 24;
+    const splitIn = 20;
 
     /**
      * Splitting funds in 24 UTXOs to result in the transaction become more expensive
@@ -194,23 +194,20 @@ describe(__filename, () => {
      */
     await fundingTxWithMultipleUTXOs({
       account: sender,
-      totalAmount: 1200,
+      totalAmount: 2400,
       splitIn,
     });
 
-    const request = new ScriptTransactionRequest({
-      gasLimit: 1_000,
-      gasPrice: bn(1),
-    });
+    const request = new ScriptTransactionRequest();
 
     const amountToTransfer = 1000;
-    request.addCoinOutput(receiver.address, amountToTransfer, BaseAssetId);
+    request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
-    const { maxFee, requiredQuantities, gasUsed } = await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request);
 
     expect(request.inputs.length).toBe(0);
 
-    request.gasLimit = gasUsed;
+    request.gasLimit = txCost.gasUsed;
 
     const getResourcesToSpend = vi.spyOn(sender, 'getResourcesToSpend');
 
@@ -229,7 +226,7 @@ describe(__filename, () => {
      * funding the TX. By trying to fund the TX again, we can force the proper error to be thrown.
      */
     await expectToThrowFuelError(
-      () => sender.fund(request, requiredQuantities, maxFee),
+      () => sender.fund(request, txCost),
       new FuelError(FuelError.CODES.INVALID_REQUEST, 'not enough coins to fit the target')
     );
 
