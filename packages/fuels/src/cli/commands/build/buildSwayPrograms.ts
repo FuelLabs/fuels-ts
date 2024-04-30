@@ -1,11 +1,11 @@
 import type { FuelsConfig } from '../../types';
-import { getBinarySource } from '../../utils/getBinarySource';
-import { log } from '../../utils/logger';
+import { log, debug } from '../../utils/logger';
 
 import { buildSwayProgram } from './buildSwayProgram';
 
 export async function buildSwayPrograms(config: FuelsConfig) {
-  log(`Building Sway programs using ${getBinarySource(config.fuelCorePath)} 'forc' binary`);
+  log(`Building Sway programs using 'forc' binary`);
+  debug(`Using 'forc' binary from: ${config.forcPath}`);
 
   const paths = config.workspace
     ? [config.workspace]
