@@ -12,6 +12,7 @@ export const seedTestWallet = async (
 ) => {
   const accountsToBeFunded = Array.isArray(wallet) ? wallet : [wallet];
 
+  // There may be multiple wallets, so want to use the same provider for them all
   const [{ provider }] = accountsToBeFunded;
 
   const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || randomBytes(32), provider);
