@@ -23,6 +23,7 @@ export enum TransactionType /* u8 */ {
   Script = 0,
   Create = 1,
   Mint = 2,
+  Upgrade = 3,
 }
 
 export type TransactionScript = {
@@ -342,7 +343,42 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     ];
   }
 }
-type PossibleTransactions = TransactionScript | TransactionCreate | TransactionMint;
+
+export type TransactionUpgrade = {
+  type: TransactionType.Upgrade;
+
+  /** The purpose of the upgrade. */
+  upgradePurpose: UpgradePurpose;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
+
+  /** List of policies, sorted by PolicyType. */
+  policies: Policy[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** List of witnesses (Witness[]) */
+  witnesses: Witness[];
+};
+type PossibleTransactions =
+  | TransactionScript
+  | TransactionCreate
+  | TransactionMint
+  | TransactionUpgrade
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
   : Partial<Omit<TransactionScript, 'type'>> &
