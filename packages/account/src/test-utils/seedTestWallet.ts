@@ -10,19 +10,17 @@ export const seedTestWallet = async (
   quantities: CoinQuantityLike[],
   utxosAmount = 1
 ) => {
-  const toFundAccounts = Array.isArray(wallet) ? wallet : [wallet];
+  const accountsToBeFunded = Array.isArray(wallet) ? wallet : [wallet];
 
-  const genesisWallet = new WalletUnlocked(
-    process.env.GENESIS_SECRET || randomBytes(32),
-    // Connect to the same Provider as wallet
-    toFundAccounts[0].provider
-  );
+  const [{ provider }] = accountsToBeFunded;
+
+  const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || randomBytes(32), provider);
 
   // Create transaction
   const request = new ScriptTransactionRequest();
 
   quantities.map(coinQuantityfy).forEach(({ amount, assetId }) =>
-    toFundAccounts.forEach(({ address }) => {
+    accountsToBeFunded.forEach(({ address }) => {
       for (let i = 0; i < utxosAmount; i++) {
         request.addCoinOutput(address, amount.div(utxosAmount), assetId);
       }
