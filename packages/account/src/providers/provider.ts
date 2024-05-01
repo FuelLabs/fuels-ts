@@ -12,9 +12,9 @@ import {
 import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
-import { Network } from 'ethers';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
+import type { GraphQLResponse } from 'graphql-request/src/types';
 import { clone } from 'ramda';
 
 import type { Predicate } from '../predicate';
@@ -26,6 +26,7 @@ import type {
   GqlDryRunSuccessStatusFragmentFragment,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
+  GqlMessage,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -456,6 +457,17 @@ export default class Provider {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
       fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
+      responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
+        if ('response' in response) {
+          const graphQlResponse = response.response as GraphQLResponse;
+          if (Array.isArray(graphQlResponse?.errors)) {
+            throw new FuelError(
+              FuelError.CODES.INVALID_REQUEST,
+              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
+            );
+          }
+        }
+      },
     });
 
     const executeQuery = (query: DocumentNode, vars: Record<string, unknown>) => {
@@ -489,22 +501,6 @@ export default class Provider {
       nodeInfo: { nodeVersion },
     } = await this.operations.getVersion();
     return nodeVersion;
-  }
-
-  /**
-   * @hidden
-   *
-   * Returns the network configuration of the connected Fuel node.
-   *
-   * @returns A promise that resolves to the network configuration object
-   */
-  async getNetwork(): Promise<Network> {
-    const {
-      name,
-      consensusParameters: { chainId },
-    } = await this.getChain();
-    const network = new Network(name, chainId.toNumber());
-    return Promise.resolve(network);
   }
 
   /**
@@ -1634,5 +1630,21 @@ export default class Provider {
   // eslint-disable-next-line @typescript-eslint/require-await
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
     return new TransactionResponse(transactionId, this);
+  }
+
+  /**
+   * Returns Message for given nonce.
+   *
+   * @param nonce - The nonce of the message to retrieve.
+   * @returns A promise that resolves to the Message object.
+   */
+  async getMessageByNonce(nonce: string): Promise<GqlMessage | null> {
+    const { message } = await this.operations.getMessageByNonce({ nonce });
+
+    if (!message) {
+      return null;
+    }
+
+    return message;
   }
 }
