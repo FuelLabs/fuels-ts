@@ -31,6 +31,7 @@ import type {
   GqlGetBlocksQueryVariables,
   GqlMessage,
   GqlPredicateParameters,
+  GqlRelayedTransactionFailed,
   GqlScriptParameters,
   GqlTxParameters,
 } from './__generated__/operations';
@@ -1686,5 +1687,19 @@ export default class Provider {
     }
 
     return message;
+  }
+
+  async getRelayedTransactionStatus(
+    relayedTransactionId: string
+  ): Promise<GqlRelayedTransactionFailed | null> {
+    const { relayedTransactionStatus } = await this.operations.getRelayedTransactionStatus({
+      relayedTransactionId,
+    });
+
+    if (!relayedTransactionStatus) {
+      return null;
+    }
+
+    return relayedTransactionStatus;
   }
 }
