@@ -158,16 +158,13 @@ describe('loadConfig', () => {
       fuelCorePath: '/non/existent/fuel-core',
     });
 
-
-    const { error, result } = await safeExec(
-      () => loadConfig(paths.root)
-    );
+    const { error, result } = await safeExec(() => loadConfig(paths.root));
 
     const expectedMessage = [
       `Binary for 'forc' not found at path '/non/existent/forc'`,
       `Binary for 'fuel-core' not found at path '/non/existent/fuel-core'`,
     ].join('\n');
     expect(result).toBeFalsy();
-    expect(error?.message).toEqual(expectedMessage)
-  })
+    expect(error?.message).toEqual(expectedMessage);
+  });
 });

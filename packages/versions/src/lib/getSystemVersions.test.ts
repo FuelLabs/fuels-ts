@@ -45,15 +45,22 @@ const scenarioBinaryPaths = [
   { message: 'Using default "forc" and "fuel-core"' },
   { message: 'Using custom "forc" path', forcPath: 'fuels-forc' },
   { message: 'Using custom "fuel-core" path', fuelCorePath: 'fuels-core' },
-  { message: 'Using custom "forc" and "fuel-core" path', forcPath: 'fuels-forc', fuelCorePath: 'fuels-core' },
-]
+  {
+    message: 'Using custom "forc" and "fuel-core" path',
+    forcPath: 'fuels-forc',
+    fuelCorePath: 'fuels-core',
+  },
+];
 
 /**
  * @group node
  */
 describe('getSystemVersions', () => {
   describe.each(scenarioBinaryPaths)('$message', ({ message: _, ...params }) => {
-    const { forcPath: expectedForcCommand, fuelCorePath: expectedFuelCoreCommand } = { ...defaultBinaryPaths, ...params };
+    const { forcPath: expectedForcCommand, fuelCorePath: expectedFuelCoreCommand } = {
+      ...defaultBinaryPaths,
+      ...params,
+    };
 
     test('should get user versions just fine', () => {
       // mocking

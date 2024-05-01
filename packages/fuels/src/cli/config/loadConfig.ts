@@ -52,12 +52,9 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     const errors = [
       forcError ? `Binary for 'forc' not found at path '${forcPath}'` : undefined,
       fuelCoreError ? `Binary for 'fuel-core' not found at path '${fuelCorePath}'` : undefined,
-    ]
+    ];
 
-    throw new FuelError(
-      FuelError.CODES.BIN_FILE_NOT_FOUND,
-      errors.filter(Boolean).join('\n')
-    );
+    throw new FuelError(FuelError.CODES.BIN_FILE_NOT_FOUND, errors.filter(Boolean).join('\n'));
   }
 
   // Start clone-object while initializing optional props
