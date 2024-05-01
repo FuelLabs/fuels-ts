@@ -172,7 +172,7 @@ jobs:
       - name: Run dependabot changeset script
         run: pnpm changeset:dependabot
         env:
-          PR_TITLE: $(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
+          PR_TITLE: ${{ github.event.pull_request.title }}
 
       - name: Commit Changeset
         run: |

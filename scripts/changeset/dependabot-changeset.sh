@@ -15,7 +15,8 @@ done
 changeset_content+="---\n\n"
 
 # Append the pull request title to the changeset content
-changeset_content+="$pr_title"
+echo "PR_TITLE: $PR_TITLE"
+changeset_content+="$PR_TITLE"
 
 # Create a new changeset file using pnpm
 pnpm changeset add --empty
