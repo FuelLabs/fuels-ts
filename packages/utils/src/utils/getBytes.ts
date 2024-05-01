@@ -1,6 +1,14 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 
+/**
+ * Get a typed Uint8Array from a BytesLike object.
+ *
+ * @param value - the BytesLike data.
+ * @param name - a display name for the error result.
+ * @param copy - create a copy of the original data (if applicable).
+ * @returns - a typed Uint8Array.
+ */
 export function getBytes(value: BytesLike, name?: string, copy?: boolean): Uint8Array {
   if (value instanceof Uint8Array) {
     if (copy) {
