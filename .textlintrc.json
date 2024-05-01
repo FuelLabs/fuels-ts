@@ -2,6 +2,7 @@
   "plugins": {},
   "filters": {},
   "rules": {
+    "@elasticpath/no-dead-relative-link": true,
     "no-dead-link": {
       "ignoreRedirects": true,
       "checkRelative": false,

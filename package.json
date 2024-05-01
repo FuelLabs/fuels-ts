@@ -63,6 +63,7 @@
     "@changesets/get-github-info": "^0.5.2",
     "@changesets/read": "^0.6.0",
     "@changesets/types": "^6.0.0",
+    "@elasticpath/textlint-rule-no-dead-relative-link": "^1.1.1",
     "@fuel-ts/forc": "workspace:*",
     "@fuel-ts/fuel-core": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
