@@ -155,7 +155,7 @@ export function calculateMetadataGasForTxScript({
 }
 
 export interface CalculateGasFeeParams {
-  tip: BN;
+  tip?: BN;
   gas: BN;
   gasPrice: BN;
   priceFactor: BN;
@@ -163,5 +163,5 @@ export interface CalculateGasFeeParams {
 
 export const calculateGasFee = (params: CalculateGasFeeParams) => {
   const { gas, gasPrice, priceFactor, tip } = params;
-  return gas.mul(gasPrice).div(priceFactor).add(tip);
+  return gas.mul(gasPrice).div(priceFactor).add(bn(tip));
 };
