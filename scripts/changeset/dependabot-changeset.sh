@@ -6,9 +6,6 @@ latest_commit=$(git rev-parse HEAD)
 # Get the list of changed package directories
 changed_packages=$(git diff-tree --no-commit-id --name-only -r "$latest_commit" | grep "packages/" | sed -E 's|packages/([^/]+)/.*|\1|')
 
-# Get the pull request title
-pr_title=$(git log -1 --pretty=%B "$latest_commit" | head -n 1)
-
 # Create the changeset content
 changeset_content="---\n"
 for package in $changed_packages; do
