@@ -2,8 +2,7 @@ import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
 
-import type { ExcludeResourcesOption, Resource } from '../resource';
-import { isCoin } from '../resource';
+import type { ExcludeResourcesOption } from '../resource';
 
 import type {
   TransactionRequestInput,
@@ -66,15 +65,18 @@ export const cacheRequestInputsResources = (inputs: TransactionRequestInput[]) =
     } as Required<ExcludeResourcesOption>
   );
 
-export const cacheResources = (resources: Array<Resource>) =>
-  resources.reduce(
-    (cache, resource) => {
-      if (isCoin(resource)) {
-        cache.utxos.push(resource.id);
-      } else {
-        cache.messages.push(resource.nonce);
+export const cacheRequestInputsResourcesFromOwner = (
+  inputs: TransactionRequestInput[],
+  owner: AbstractAddress
+): ExcludeResourcesOption =>
+  inputs.reduce(
+    (acc, input) => {
+      if (isRequestInputCoin(input) && input.owner === owner.toB256()) {
+        acc.utxos.push(input.id);
+      } else if (isRequestInputMessage(input) && input.recipient === owner.toB256()) {
+        acc.messages.push(input.nonce);
       }
-      return cache;
+      return acc;
     },
     {
       utxos: [],

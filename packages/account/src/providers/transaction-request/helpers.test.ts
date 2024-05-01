@@ -17,9 +17,9 @@ import {
   isRequestInputResource,
   getRequestInputResourceOwner,
   isRequestInputResourceFromOwner,
-  cacheResources,
   getAssetAmountInRequestInputs,
   cacheRequestInputsResources,
+  cacheRequestInputsResourcesFromOwner,
 } from './helpers';
 import { ScriptTransactionRequest } from './script-transaction-request';
 
@@ -91,46 +91,47 @@ describe('helpers', () => {
     ).toBeTruthy();
   });
 
-  describe('should ensure cacheResources works just fine', () => {
-    const coin1 = generateFakeCoin();
-    const coin2 = generateFakeCoin();
-    const message1 = generateFakeMessageCoin();
-    const message2 = generateFakeMessageCoin();
+  describe('should ensure cacheRequestInputsResourcesFromOwner works just fine', () => {
+    const owner = Address.fromRandom();
+    const coinInput1 = generateFakeRequestInputCoin({ owner: owner.toB256() });
+    const coinInput2 = generateFakeRequestInputCoin();
+    const messageInput1 = generateFakeRequestInputMessage({ recipient: owner.toB256() });
+    const messageInput2 = generateFakeRequestInputMessage();
 
     it('should handle an empty array', () => {
-      const result = cacheResources([]);
+      const result = cacheRequestInputsResourcesFromOwner([], owner);
       expect(result.utxos).toEqual([]);
       expect(result.messages).toEqual([]);
     });
 
     it('should cache Coins just fine', () => {
-      const resources = [coin1, coin2];
+      const inputs = [coinInput1, coinInput2];
 
-      const result = cacheResources(resources);
+      const result = cacheRequestInputsResourcesFromOwner(inputs, owner);
 
-      expect(result.utxos).toContain(coin1.id);
-      expect(result.utxos).toContain(coin2.id);
+      expect(result.utxos).toContain(coinInput1.id);
+      expect(result.utxos).not.toContain(coinInput2.id);
       expect(result.messages).toEqual([]);
     });
 
     it('should cache MessageCoins just fine', () => {
-      const resources = [message1, message2];
+      const inputs = [messageInput1, messageInput2];
 
-      const result = cacheResources(resources);
+      const result = cacheRequestInputsResourcesFromOwner(inputs, owner);
 
-      expect(result.messages).toContain(message1.nonce);
-      expect(result.messages).toContain(message2.nonce);
+      expect(result.messages).toContain(messageInput1.nonce);
+      expect(result.messages).not.toContain(messageInput2.nonce);
       expect(result.utxos).toEqual([]);
     });
 
     it('should cache both resources just fine', () => {
-      const resources = [coin1, message1, message2, coin2];
+      const resources = [coinInput1, coinInput2, messageInput1, messageInput2];
 
-      const result = cacheResources(resources);
-      expect(result.utxos).toContain(coin1.id);
-      expect(result.utxos).toContain(coin2.id);
-      expect(result.messages).toContain(message1.nonce);
-      expect(result.messages).toContain(message2.nonce);
+      const result = cacheRequestInputsResourcesFromOwner(resources, owner);
+      expect(result.utxos).toContain(coinInput1.id);
+      expect(result.utxos).not.toContain(coinInput2.id);
+      expect(result.messages).toContain(messageInput1.nonce);
+      expect(result.messages).not.toContain(messageInput2.nonce);
     });
 
     describe('getAssetAmountInRequestInputs', () => {
