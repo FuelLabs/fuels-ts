@@ -269,16 +269,12 @@ export class BaseInvocationScope<TReturn = any> {
     transactionRequest.addVariableOutputs(outputVariables);
 
     const optimizeGas = this.txParameters?.optimizeGas ?? true;
-
     if (this.txParameters?.gasLimit && !optimizeGas) {
       transactionRequest.gasLimit = bn(this.txParameters.gasLimit);
       const { maxFee: maxFeeForGasLimit } = await this.getProvider().estimateTxGasAndFee({
         transactionRequest,
       });
       transactionRequest.maxFee = maxFeeForGasLimit;
-    } else {
-      transactionRequest.gasLimit = gasUsed;
-      transactionRequest.maxFee = maxFee;
     }
 
     await this.program.account?.fund(transactionRequest, txCost);
@@ -466,24 +462,26 @@ export class BaseInvocationScope<TReturn = any> {
     gasUsed: BN,
     maxFee: BN
   ) {
-    const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
+    const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
 
     const { gasLimit, maxFee: setMaxFee } = transactionRequest;
 
-    if (!gasLimitSpecified) {
-      transactionRequest.gasLimit = gasUsed;
-    } else if (gasLimit.lt(gasUsed)) {
+    if (gasLimitSpecified && gasLimit.lt(gasUsed)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
         `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (isDefined(setMaxFee) && maxFee.gt(setMaxFee)) {
+    if (maxFeeSpecified && maxFee.gt(setMaxFee)) {
       throw new FuelError(
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
+
+    transactionRequest.gasLimit = gasUsed;
+    transactionRequest.maxFee = maxFee;
   }
 }
