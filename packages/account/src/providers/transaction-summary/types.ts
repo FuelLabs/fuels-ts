@@ -164,6 +164,8 @@ export type TransactionSummary<TTransactionType = void> = {
   isTypeMint: boolean;
   isTypeCreate: boolean;
   isTypeScript: boolean;
+  isTypeUpgrade: boolean;
+  isTypeUpload: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;

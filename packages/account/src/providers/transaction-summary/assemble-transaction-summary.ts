@@ -13,6 +13,8 @@ import {
   isTypeMint,
   isTypeCreate,
   isTypeScript,
+  isTypeUpgrade,
+  isTypeUpload,
 } from './operations';
 import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
@@ -112,6 +114,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
     isTypeMint: isTypeMint(transaction.type),
     isTypeCreate: isTypeCreate(transaction.type),
     isTypeScript: isTypeScript(transaction.type),
+    isTypeUpgrade: isTypeUpgrade(transaction.type),
+    isTypeUpload: isTypeUpload(transaction.type),
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
