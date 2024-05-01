@@ -148,4 +148,26 @@ describe('loadConfig', () => {
     expect(config.forcPath).toEqual('fuels-forc');
     expect(config.fuelCorePath).toEqual('fuels-core');
   });
+
+  test('should throw if system binary paths are not found', async () => {
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      forcPath: '/non/existent/forc',
+      fuelCorePath: '/non/existent/fuel-core',
+    });
+
+
+    const { error, result } = await safeExec(
+      () => loadConfig(paths.root)
+    );
+
+    const expectedMessage = [
+      `Binary for 'forc' not found at path '/non/existent/forc'`,
+      `Binary for 'fuel-core' not found at path '/non/existent/fuel-core'`,
+    ].join('\n');
+    expect(result).toBeFalsy();
+    expect(error?.message).toEqual(expectedMessage)
+  })
 });

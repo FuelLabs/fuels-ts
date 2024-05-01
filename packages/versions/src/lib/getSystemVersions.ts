@@ -27,12 +27,12 @@ export const getSystemVersion = (command: string) => {
 
 export function getSystemForc(forcPath: string = defaultForcPath) {
   const { error, version: v } = getSystemVersion(`${forcPath} --version`);
-  return { error, systemForcVersion: v };
+  return { error, systemForcVersion: v, forcPath };
 }
 
 export function getSystemFuelCore(fuelCorePath: string = defaultFuelCorePath) {
   const { error, version: v } = getSystemVersion(`${fuelCorePath} --version`);
-  return { error, systemFuelCoreVersion: v };
+  return { error, systemFuelCoreVersion: v, fuelCorePath };
 }
 
 export function getSystemVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
