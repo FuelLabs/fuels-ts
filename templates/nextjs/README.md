@@ -8,11 +8,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-fuel
 npm run fuels:dev
 ```
 
-1. Start the Next.js development server.
+2. Start the Next.js development server.
 
 ```bash
 npm run dev
 ```
+
+## Deploying to Testnet
+
+To learn how to deploy your Fuel dApp to the testnet, you can follow our [Deploying to Testnet](https://docs.fuel.network/docs/fuels-ts/creating-a-fuel-dapp/deploying-a-dapp-to-testnet/) guide.
 
 ## Learn More
 
