@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { TransactionType, InputType } from '@fuel-ts/transactions';
 
 import type { ExcludeResourcesOption } from '../resource';
@@ -31,15 +32,15 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
 
 export const cacheTxInputsFromOwner = (
   inputs: TransactionRequestInput[],
-  owner: string
+  owner: AbstractAddress
 ): ExcludeResourcesOption =>
   inputs.reduce(
     (acc, input) => {
-      if (input.type === InputType.Coin && input.owner === owner) {
+      if (input.type === InputType.Coin && input.owner === owner.toB256()) {
         acc.utxos.push(input.id);
       }
 
-      if (input.type === InputType.Message && input.recipient === owner) {
+      if (input.type === InputType.Message && input.recipient === owner.toB256()) {
         acc.messages.push(input.nonce);
       }
 
