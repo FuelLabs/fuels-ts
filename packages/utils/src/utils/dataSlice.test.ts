@@ -17,7 +17,7 @@ describe('dataSlice', () => {
   it('should throw an error if end index is greater than data length', () => {
     const data = '0x1234567890abcdef';
     expect(() => dataSlice(data, 0, 20)).toThrowError(
-      new FuelError(ErrorCode.BUFFER_OVERRUN, 'cannot slice beyond data bounds')
+      new FuelError(ErrorCode.INVALID_DATA, 'cannot slice beyond data bounds')
     );
   });
 

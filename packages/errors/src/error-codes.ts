@@ -101,7 +101,4 @@ export enum ErrorCode {
 
   // graphql
   STREAM_PARSING_ERROR = 'stream-parsing-error',
-
-  // coder
-  BUFFER_OVERRUN = 'buffer-overrun',
 }

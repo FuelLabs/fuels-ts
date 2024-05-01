@@ -15,7 +15,7 @@ import { hexlify } from './hexlify';
 export function dataSlice(data: BytesLike, start?: number, end?: number): string {
   const bytes = getBytes(data);
   if (end != null && end > bytes.length) {
-    throw new FuelError(ErrorCode.BUFFER_OVERRUN, 'cannot slice beyond data bounds');
+    throw new FuelError(ErrorCode.INVALID_DATA, 'cannot slice beyond data bounds');
   }
   return hexlify(bytes.slice(start == null ? 0 : start, end == null ? bytes.length : end));
 }
