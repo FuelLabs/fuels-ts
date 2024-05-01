@@ -19,7 +19,7 @@ import Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import * as calculateTransactionFeeMod from './calculate-transaction-fee';
+import * as calculateTransactionFeeMod from './calculate-tx-fee-for-summary';
 import type { GraphqlTransactionStatus, Operation } from './types';
 
 /**
@@ -57,12 +57,8 @@ describe('TransactionSummary', () => {
 
   const mockCalculateTransactionFee = () => {
     const calculateTransactionFee = vi
-      .spyOn(calculateTransactionFeeMod, 'calculateTransactionFee')
-      .mockReturnValue({
-        fee: bn(0),
-        minFee: bn(0),
-        maxFee: bn(0),
-      });
+      .spyOn(calculateTransactionFeeMod, 'calculateTXFeeForSummary')
+      .mockReturnValue(bn(0));
 
     return {
       calculateTransactionFee,

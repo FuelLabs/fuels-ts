@@ -7,7 +7,7 @@ import {
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../../test/fixtures/transaction-summary';
 
-import { calculateTXFeeForSummary } from './calculate-transaction-fee';
+import { calculateTXFeeForSummary } from './calculate-tx-fee-for-summary';
 
 /**
  * @group node

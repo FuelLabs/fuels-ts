@@ -6,7 +6,7 @@ import type { GasCosts } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { getGasUsedFromReceipts } from '../utils';
 
-import { calculateTransactionFee } from './calculate-transaction-fee';
+import { calculateTXFeeForSummary } from './calculate-tx-fee-for-summary';
 import {
   getOperations,
   getTransactionTypeName,
@@ -72,7 +72,11 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
 
-  const { fee } = calculateTransactionFee({
+  const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time, totalFee } =
+    processGraphqlStatus(gqlTransactionStatus);
+
+  const fee = calculateTXFeeForSummary({
+    totalFee,
     gasPrice,
     rawPayload,
     tip,
@@ -85,9 +89,6 @@ export function assembleTransactionSummary<TTransactionType = void>(
       },
     },
   });
-
-  const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
-    processGraphqlStatus(gqlTransactionStatus);
 
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
