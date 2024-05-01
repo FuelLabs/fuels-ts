@@ -73,13 +73,13 @@ export const MESSAGE_PROOF: MessageProof = {
   messageBlockHeader: {
     id: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.id,
     daHeight: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.daHeight),
-    transactionsCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsCount),
+    transactionsCount: Number(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsCount),
     transactionsRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsRoot,
     height: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.height),
     prevRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.prevRoot,
     time: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.applicationHash,
-    messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptCount),
+    messageReceiptCount: Number(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptCount),
     consensusParametersVersion: Number(
       MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.consensusParametersVersion
     ),
@@ -92,13 +92,13 @@ export const MESSAGE_PROOF: MessageProof = {
   commitBlockHeader: {
     id: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.id,
     daHeight: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.daHeight),
-    transactionsCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsCount),
+    transactionsCount: Number(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsCount),
     transactionsRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsRoot,
     height: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.height),
     prevRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.prevRoot,
     time: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.applicationHash,
-    messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptCount),
+    messageReceiptCount: Number(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptCount),
     consensusParametersVersion: Number(
       MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.consensusParametersVersion
     ),
