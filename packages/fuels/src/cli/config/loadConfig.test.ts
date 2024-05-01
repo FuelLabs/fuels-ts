@@ -38,6 +38,8 @@ describe('loadConfig', () => {
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       autoStartFuelCore: true,
     });
 
@@ -52,6 +54,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       contracts: 'workspace/contracts/*',
       scripts: 'workspace/scripts/*',
       predicates: 'workspace/predicates/*',
@@ -68,6 +72,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       contracts: 'workspace/contracts/*',
     });
 
@@ -82,6 +88,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       scripts: 'workspace/scripts/*',
     });
 
@@ -96,6 +104,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       predicates: 'workspace/predicates/*',
     });
 
@@ -110,6 +120,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       // passing contract path in workspace config option
       workspace: 'workspace/contracts/bar',
     });
@@ -119,19 +131,6 @@ describe('loadConfig', () => {
     expect(result).not.toBeTruthy();
     expect(error?.message).toMatch(/forc workspace not detected/i);
     expect(error?.message).toMatch(/try using 'contracts'/i);
-  });
-
-  test('should use system binary paths by default', async () => {
-    await runInit({
-      root: paths.root,
-      workspace: paths.workspaceDir,
-      output: paths.outputDir,
-    });
-
-    const config = await loadConfig(paths.root);
-
-    expect(config.forcPath).toEqual('forc');
-    expect(config.fuelCorePath).toEqual('fuel-core');
   });
 
   test(`should load custom binary paths`, async () => {
