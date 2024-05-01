@@ -92,7 +92,13 @@ Using the `--deploy` flag will additionally:
 npx fuels@{{fuels}} deploy
 ```
 
-1. Deploy all Sway contracts under `workspace`
+> [!NOTE] Note
+> We recommend using the `fuels deploy` command only when you are deploying contracts to a local node.
+> If you are deploying contracts to a live network like the Testnet, we recommend using the [`forc deploy`](https://docs.fuel.network/docs/intro/quickstart-contract/#deploy-to-testnet) command instead.
+
+The `fuels deploy` command does two things:
+
+1. Deploy all Sway contracts under `workspace`.
 1. Saves their deployed IDs to:
    - _`./src/sway-programs-api/contract-ids.json`_
 
@@ -117,7 +123,7 @@ For a complete example, see:
 npx fuels@{{fuels}} dev
 ```
 
-The `fuels dev` command do three things:
+The `fuels dev` command does three things:
 
 1. Auto-start a short-lived `fuel-core` node ([docs](./config-file.md#autostartfuelcore))
 1. Runs `build` and `deploy` once at the start
