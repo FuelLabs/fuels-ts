@@ -1,13 +1,13 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
-import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
+import type { CoinQuantityLike, ExcludeResourcesOption, Resource, WalletUnlocked } from 'fuels';
 import {
   Provider,
   Predicate,
   FUEL_NETWORK_URL,
   ScriptTransactionRequest,
   Wallet,
-  cacheResources,
   bn,
+  isCoin,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -35,6 +35,22 @@ describe('Predicate', () => {
     let wallet1: WalletUnlocked;
     let wallet2: WalletUnlocked;
     let wallet3: WalletUnlocked;
+
+    const cacheResources = (resources: Array<Resource>) =>
+      resources.reduce(
+        (cache, resource) => {
+          if (isCoin(resource)) {
+            cache.utxos.push(resource.id);
+          } else {
+            cache.messages.push(resource.nonce);
+          }
+          return cache;
+        },
+        {
+          utxos: [],
+          messages: [],
+        } as Required<ExcludeResourcesOption>
+      );
 
     let quantity: CoinQuantityLike[];
     beforeAll(async () => {
