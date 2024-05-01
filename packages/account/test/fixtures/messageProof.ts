@@ -80,10 +80,12 @@ export const MESSAGE_PROOF: MessageProof = {
     time: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.applicationHash,
     messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptCount),
-    consensusParametersVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.consensusParametersVersion,
-    stateTransitionBytecodeVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.stateTransitionBytecodeVersion,
+    consensusParametersVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.consensusParametersVersion
+    ),
+    stateTransitionBytecodeVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.stateTransitionBytecodeVersion
+    ),
     eventInboxRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.eventInboxRoot,
     messageOutboxRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageOutboxRoot,
   },
@@ -97,10 +99,12 @@ export const MESSAGE_PROOF: MessageProof = {
     time: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.applicationHash,
     messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptCount),
-    consensusParametersVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.consensusParametersVersion,
-    stateTransitionBytecodeVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.stateTransitionBytecodeVersion,
+    consensusParametersVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.consensusParametersVersion
+    ),
+    stateTransitionBytecodeVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.stateTransitionBytecodeVersion
+    ),
     eventInboxRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.eventInboxRoot,
     messageOutboxRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageOutboxRoot,
   },
