@@ -1,7 +1,7 @@
 ---
-"@fuel-ts/account": minor
-"@fuel-ts/crypto": minor
-"@fuel-ts/utils": minor
+"@fuel-ts/account": patch
+"@fuel-ts/crypto": patch
+"@fuel-ts/utils": patch
 "@fuel-ts/errors": patch
 ---
 
