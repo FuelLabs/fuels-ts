@@ -1,6 +1,8 @@
 import { execSync } from 'child_process';
 
 const versionReg = /[0-9]+\.[0-9]+\.[0-9]/;
+const defaultForcPath = 'forc';
+const defaultFuelCorePath = 'fuel-core';
 
 export const getSystemVersion = (command: string) => {
   let version: string | null = null;
@@ -23,19 +25,20 @@ export const getSystemVersion = (command: string) => {
   };
 };
 
-export function getSystemForc() {
-  const { error, version: v } = getSystemVersion('forc --version');
+export function getSystemForc(forcPath: string = defaultForcPath) {
+  const { error, version: v } = getSystemVersion(`${forcPath} --version`);
   return { error, systemForcVersion: v };
 }
 
-export function getSystemFuelCore() {
-  const { error, version: v } = getSystemVersion('fuel-core --version');
+export function getSystemFuelCore(fuelCorePath: string = defaultFuelCorePath) {
+  const { error, version: v } = getSystemVersion(`${fuelCorePath} --version`);
   return { error, systemFuelCoreVersion: v };
 }
 
-export function getSystemVersions() {
-  const { error: errorForc, systemForcVersion } = getSystemForc();
-  const { error: errorCore, systemFuelCoreVersion } = getSystemFuelCore();
+export function getSystemVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
+  const { forcPath, fuelCorePath } = params;
+  const { error: errorForc, systemForcVersion } = getSystemForc(forcPath);
+  const { error: errorCore, systemFuelCoreVersion } = getSystemFuelCore(fuelCorePath);
 
   const error = errorForc ?? errorCore;
 
