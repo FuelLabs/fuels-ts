@@ -500,6 +500,13 @@ fragment nodeInfoFragment on NodeInfo {
   nodeVersion
 }
 
+fragment relayedTransactionStatusFragment on RelayedTransactionStatus {
+  ... on RelayedTransactionFailed {
+    blockHeight
+    failure
+  }
+}
+
 query getNodeInfo {
   nodeInfo {
     ...nodeInfoFragment
@@ -732,6 +739,14 @@ query getMessageProof(
 query getMessageStatus($nonce: Nonce!) {
   messageStatus(nonce: $nonce) {
     state
+  }
+}
+
+query getRelayedTransactionStatus(
+  $relayedTransactionId: RelayedTransactionId!
+) {
+  relayedTransactionStatus(id: $relayedTransactionId) {
+    ...relayedTransactionStatusFragment
   }
 }
 
