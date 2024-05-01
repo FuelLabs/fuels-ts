@@ -36,7 +36,6 @@ pnpm add fuels @fuels/connectors @fuels/react @tanstack/react-query
 
 In order to make use of the React hooks provided by the Fuel Wallet SDK, we need to wrap our application in a `FuelProvider` component. This component will provide the hooks with the necessary context to interact with the Fuel Wallet SDK. Add the following to your `pages/_app.tsx` file:
 
-<!-- prettier-ignore -->
 <<< @/../../demo-wallet-sdk-react/pages/_app.tsx#wallet-sdk-react-provider{tsx:line-numbers}
 
 ## Building the UI

@@ -200,7 +200,7 @@ the following categories:
    Please note that you might have to run `git fetch origin master` (where
    origin will be your fork on GitHub) before `pnpm changeset` works.
 
-> If you made minor changes like CI config, prettier, etc, you can run
+> If you made minor changes such as config changes, you can run
 > `pnpm changeset add --empty` to generate an empty changeset file to document
 > your changes.
 
