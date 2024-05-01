@@ -3,10 +3,14 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { getBytes } from './getBytes';
 import { hexlify } from './hexlify';
+
 /**
- *  Returns a DataHexString by slicing data from the start
- *  offset to the end offset.
+ *  Returns a hex string by slicing data from the start offset to the end offset.
  *
+ * @param data - the data to be sliced.
+ * @param start - the start offset (default: 0).
+ * @param end - the end offset (default: length of data).
+ * @returns - a sliced hex string from start to end.
  */
 export function dataSlice(data: BytesLike, start?: number, end?: number): string {
   const bytes = getBytes(data);
