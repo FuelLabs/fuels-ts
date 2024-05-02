@@ -1,7 +1,8 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { BigNumberish, Transaction, WalletUnlocked } from 'fuels';
+import type { BaseTransactionRequest, BigNumberish, Transaction, WalletUnlocked } from 'fuels';
 import {
   ContractFactory,
+  CreateTransactionRequest,
   FUEL_NETWORK_URL,
   PolicyType,
   Provider,
@@ -57,6 +58,68 @@ describe('Policies', () => {
     expect(transaction.policies?.[3].type).toBe(PolicyType.MaxFee);
     expect(bn(transaction.policies?.[3]?.data).lte(bn(params.maxFee))).toBeTruthy();
   };
+
+  it('should ensure optional TX policies are not set when not informed', () => {
+    let txRequest: BaseTransactionRequest = new ScriptTransactionRequest();
+
+    txRequest = new ScriptTransactionRequest();
+
+    expect(txRequest.tip).toBeUndefined();
+    expect(txRequest.maturity).toBeUndefined();
+    expect(txRequest?.witnessLimit).toBeUndefined();
+
+    expect(txRequest.maxFee).toBeDefined();
+
+    let tx = txRequest.toTransaction();
+
+    // should only includes MaxFee which is a required policy
+    expect(tx.policies.length).toBe(1);
+    expect(tx.policyTypes).toBe(PolicyType.MaxFee);
+
+    txRequest = new CreateTransactionRequest({ bytecodeWitnessIndex: 0 });
+
+    expect(txRequest.tip).toBeUndefined();
+    expect(txRequest.maturity).toBeUndefined();
+    expect(txRequest?.witnessLimit).toBeUndefined();
+
+    expect(txRequest.maxFee).toBeDefined();
+
+    tx = txRequest.toTransaction();
+
+    // should only includes MaxFee which is a required policy
+    expect(tx.policies.length).toBe(1);
+    expect(tx.policyTypes).toBe(PolicyType.MaxFee);
+  });
+
+  it('should ensure optional TX policies are not set with undesired values', () => {
+    let txRequest: BaseTransactionRequest = new ScriptTransactionRequest({ tip: 0, maturity: 0 });
+
+    txRequest = new ScriptTransactionRequest();
+
+    expect(txRequest.tip).toBeUndefined();
+    expect(txRequest.maturity).toBeUndefined();
+
+    expect(txRequest.maxFee).toBeDefined();
+
+    let tx = txRequest.toTransaction();
+
+    // should only includes maxFee which is a required policy
+    expect(tx.policies.length).toBe(1);
+    expect(tx.policyTypes).toBe(PolicyType.MaxFee);
+
+    txRequest = new CreateTransactionRequest({ tip: 0, maturity: 0, bytecodeWitnessIndex: 0 });
+
+    expect(txRequest.tip).toBeUndefined();
+    expect(txRequest.maturity).toBeUndefined();
+
+    expect(txRequest.maxFee).toBeDefined();
+
+    tx = txRequest.toTransaction();
+
+    // should only includes maxFee which is a required policy
+    expect(tx.policies.length).toBe(1);
+    expect(tx.policyTypes).toBe(PolicyType.MaxFee);
+  });
 
   it('should ensure TX policies are properly set (ScriptTransactionRequest)', async () => {
     const receiver = Wallet.generate({ provider });
@@ -237,7 +300,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       maturity: randomNumber(1, 2),
-      witnessLimit: 5,
+      witnessLimit: 0,
     };
 
     await expect(async () => {
