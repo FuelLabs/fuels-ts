@@ -868,7 +868,10 @@ describe('Provider', () => {
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `Unsupported Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
+which is not supported by the version of the TS SDK that you are using. 
+Thing might or might not work as expected.
+Supported fuel-core version: ${mock.supportedVersion}.`
     );
   });
 
@@ -897,7 +900,10 @@ describe('Provider', () => {
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `Unsupported Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
+which is not supported by the version of the TS SDK that you are using. 
+Thing might or might not work as expected.
+Supported fuel-core version: ${mock.supportedVersion}.`
     );
   });
 
