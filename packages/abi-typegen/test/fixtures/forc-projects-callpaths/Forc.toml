@@ -1,0 +1,5 @@
+[workspace]
+members = [
+  "libs-for-testing",
+  "full"
+]
