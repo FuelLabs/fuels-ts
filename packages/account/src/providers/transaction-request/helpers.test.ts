@@ -3,12 +3,12 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
 
+import { generateFakeCoin, generateFakeMessageCoin } from '../../test-utils/resources';
 import {
   generateFakeRequestInputCoin,
   generateFakeRequestInputMessage,
   generateFakeRequestInputContract,
-} from '../../test-utils';
-import { generateFakeCoin, generateFakeMessageCoin } from '../../test-utils/resources';
+} from '../../test-utils/transactionRequest';
 
 import { CreateTransactionRequest } from './create-transaction-request';
 import {
