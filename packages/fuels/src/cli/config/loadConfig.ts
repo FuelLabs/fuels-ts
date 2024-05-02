@@ -1,7 +1,6 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
-import { FuelError } from '@fuel-ts/errors';
 import { defaultConsensusKey } from '@fuel-ts/utils';
-import { getSystemForc, getSystemFuelCore } from '@fuel-ts/versions/cli';
+import { tryFindBinaries } from '@fuel-ts/utils/cli-utils';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
@@ -45,17 +44,10 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const releaseFlag = forcBuildFlags.find((f) => f === '--release');
   const buildMode = releaseFlag ? 'release' : 'debug';
 
-  const { error: forcError, forcPath } = getSystemForc(userConfig.forcPath);
-  const { error: fuelCoreError, fuelCorePath } = getSystemFuelCore(userConfig.fuelCorePath);
-
-  if (forcError || fuelCoreError) {
-    const errors = [
-      forcError ? `Binary for 'forc' not found at path '${forcPath}'` : undefined,
-      fuelCoreError ? `Binary for 'fuel-core' not found at path '${fuelCorePath}'` : undefined,
-    ];
-
-    throw new FuelError(FuelError.CODES.BIN_FILE_NOT_FOUND, errors.filter(Boolean).join('\n'));
-  }
+  const { forcPath, fuelCorePath } = tryFindBinaries({
+    forcPath: userConfig.forcPath,
+    fuelCorePath: userConfig.fuelCorePath,
+  });
 
   // Start clone-object while initializing optional props
   const config: FuelsConfig = {
