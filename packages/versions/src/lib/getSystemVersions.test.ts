@@ -40,87 +40,91 @@ function mockAllDeps(params: {
   };
 }
 
-const defaultBinaryPaths = { forcPath: 'forc', fuelCorePath: 'fuel-core' };
-const scenarioBinaryPaths = [
-  { message: 'Using default "forc" and "fuel-core"' },
-  { message: 'Using custom "forc" path', forcPath: 'fuels-forc' },
-  { message: 'Using custom "fuel-core" path', fuelCorePath: 'fuels-core' },
-  {
-    message: 'Using custom "forc" and "fuel-core" path',
-    forcPath: 'fuels-forc',
-    fuelCorePath: 'fuels-core',
-  },
-];
-
 /**
  * @group node
  */
 describe('getSystemVersions', () => {
-  describe.each(scenarioBinaryPaths)('$message', ({ message: _, ...params }) => {
-    const { forcPath: expectedForcCommand, fuelCorePath: expectedFuelCoreCommand } = {
-      ...defaultBinaryPaths,
-      ...params,
-    };
-
-    test('should get user versions just fine', () => {
-      // mocking
-      const systemForcVersion = '1.0.0';
-      const systemFuelCoreVersion = '2.0.0';
-      const { execSync } = mockAllDeps({
-        systemForcVersion,
-        systemFuelCoreVersion,
-      });
-
-      // executing
-      const versions = getSystemVersions(params);
-
-      // validating
-      expect(execSync).toHaveBeenCalledTimes(2);
-      expect(execSync).toBeCalledWith(`${expectedForcCommand} --version`);
-      expect(execSync).toBeCalledWith(`${expectedFuelCoreCommand} --version`);
-      expect(versions.systemForcVersion).toEqual(systemForcVersion);
-      expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
+  test('should get user versions just fine', () => {
+    // mocking
+    const systemForcVersion = '1.0.0';
+    const systemFuelCoreVersion = '2.0.0';
+    const { execSync } = mockAllDeps({
+      systemForcVersion,
+      systemFuelCoreVersion,
     });
 
-    test('should return error if Forc or Fuel-Core is not installed', () => {
-      // mocking
-      const systemForcVersion = '1.0.0';
-      const systemFuelCoreVersion = '2.0.0';
-      const { execSync } = mockAllDeps({
-        systemForcVersion,
-        systemFuelCoreVersion,
-        shouldThrow: true,
-      });
+    // executing
+    const versions = getSystemVersions();
 
-      // executing
-      const { error: systemError } = getSystemVersions(params);
+    // validating
+    expect(execSync).toHaveBeenCalledTimes(2);
+    expect(execSync).toBeCalledWith(`forc --version`);
+    expect(execSync).toBeCalledWith(`fuel-core --version`);
+    expect(versions.systemForcVersion).toEqual(systemForcVersion);
+    expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
+  });
 
-      // validating
-      expect(execSync).toHaveBeenCalledTimes(2);
-      expect(execSync).toBeCalledWith(`${expectedForcCommand} --version`);
-      expect(execSync).toBeCalledWith(`${expectedFuelCoreCommand} --version`);
-      expect(systemError).toBeTruthy();
+  test('should return error if Forc or Fuel-Core is not installed', () => {
+    // mocking
+    const systemForcVersion = '1.0.0';
+    const systemFuelCoreVersion = '2.0.0';
+    const { execSync } = mockAllDeps({
+      systemForcVersion,
+      systemFuelCoreVersion,
+      shouldThrow: true,
     });
 
-    test('should throw for fuelup exception', () => {
-      // mocking
-      const systemForcVersion = 'fuelup exception';
-      const systemFuelCoreVersion = 'fuelup exception';
-      const { execSync } = mockAllDeps({
-        systemForcVersion,
-        systemFuelCoreVersion,
-      });
+    // executing
+    const { error: systemError } = getSystemVersions();
 
-      // executing
-      const versions = getSystemVersions(params);
+    // validating
+    expect(execSync).toHaveBeenCalledTimes(2);
+    expect(execSync).toBeCalledWith(`forc --version`);
+    expect(execSync).toBeCalledWith(`fuel-core --version`);
+    expect(systemError).toBeTruthy();
+  });
 
-      // validating
-      expect(execSync).toHaveBeenCalledTimes(2);
-      expect(execSync).toBeCalledWith(`${expectedForcCommand} --version`);
-      expect(execSync).toBeCalledWith(`${expectedFuelCoreCommand} --version`);
-      expect(versions.error?.toString()).toEqual(`Error: ${systemForcVersion}`);
-      expect(versions.systemForcVersion).toEqual(null);
-      expect(versions.systemFuelCoreVersion).toEqual(null);
+  test('should throw for fuelup exception', () => {
+    // mocking
+    const systemForcVersion = 'fuelup exception';
+    const systemFuelCoreVersion = 'fuelup exception';
+    const { execSync } = mockAllDeps({
+      systemForcVersion,
+      systemFuelCoreVersion,
     });
+
+    // executing
+    const versions = getSystemVersions();
+
+    // validating
+    expect(execSync).toHaveBeenCalledTimes(2);
+    expect(execSync).toBeCalledWith(`forc --version`);
+    expect(execSync).toBeCalledWith(`fuel-core --version`);
+    expect(versions.error?.toString()).toEqual(`Error: ${systemForcVersion}`);
+    expect(versions.systemForcVersion).toEqual(null);
+    expect(versions.systemFuelCoreVersion).toEqual(null);
+  });
+
+  it('should be able to use custom binary paths', () => {
+    // mocking
+    const systemForcVersion = '1.0.0';
+    const systemFuelCoreVersion = '2.0.0';
+    const { execSync } = mockAllDeps({
+      systemForcVersion,
+      systemFuelCoreVersion,
+    });
+
+    // executing
+    const versions = getSystemVersions({
+      forcPath: '/path/to/custom/forc',
+      fuelCorePath: '/path/to/custom/fuel-core',
+    });
+
+    // validating
+    expect(execSync).toHaveBeenCalledTimes(2);
+    expect(execSync).toBeCalledWith(`/path/to/custom/forc --version`);
+    expect(execSync).toBeCalledWith(`/path/to/custom/fuel-core --version`);
+    expect(versions.systemForcVersion).toEqual(systemForcVersion);
+    expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
   });
 });
