@@ -89,10 +89,42 @@ afterEach(async () => {
 /**
  * @group node
  */
-test.each(possibleProgramsToInclude)(
-  'create-fuels extracts the template to the specified directory',
-  async (programsToInclude) => {
-    const args = generateArgs(programsToInclude, 'test-project');
+describe('CLI', () => {
+  test.each(possibleProgramsToInclude)(
+    'create-fuels extracts the template to the specified directory',
+    async (programsToInclude) => {
+      const args = generateArgs(programsToInclude, 'test-project');
+      const program = setupProgram();
+      program.parse(args);
+
+      await runScaffoldCli({
+        program,
+        args,
+        shouldInstallDeps: false,
+      });
+
+      let originalTemplateFiles = await getAllFiles(join(__dirname, '../templates/nextjs'));
+      originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
+
+      const testProjectFiles = await getAllFiles('test-project');
+
+      expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
+
+      await fs.rm('test-project', { recursive: true });
+    }
+  );
+
+  test('create-fuels reports an error if the project directory already exists', async () => {
+    await fs.mkdir('test-project-2');
+
+    const args = generateArgs(
+      {
+        contract: true,
+        predicate: true,
+        script: true,
+      },
+      'test-project-2'
+    );
     const program = setupProgram();
     program.parse(args);
 
@@ -100,97 +132,67 @@ test.each(possibleProgramsToInclude)(
       program,
       args,
       shouldInstallDeps: false,
+    }).catch((e) => {
+      expect(e).toBeInstanceOf(Error);
     });
 
-    let originalTemplateFiles = await getAllFiles(join(__dirname, '../templates/nextjs'));
-    originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
+    expect(writeSpy).toHaveBeenCalledWith(
+      expect.stringContaining('A folder already exists at test-project-2')
+    );
 
-    const testProjectFiles = await getAllFiles('test-project');
-
-    expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
-
-    await fs.rm('test-project', { recursive: true });
-  }
-);
-
-test('create-fuels reports an error if the project directory already exists', async () => {
-  await fs.mkdir('test-project-2');
-
-  const args = generateArgs(
-    {
-      contract: true,
-      predicate: true,
-      script: true,
-    },
-    'test-project-2'
-  );
-  const program = setupProgram();
-  program.parse(args);
-
-  await runScaffoldCli({
-    program,
-    args,
-    shouldInstallDeps: false,
-  }).catch((e) => {
-    expect(e).toBeInstanceOf(Error);
+    await fs.rm('test-project-2', { recursive: true });
   });
 
-  expect(writeSpy).toHaveBeenCalledWith(
-    expect.stringContaining('A folder already exists at test-project-2')
-  );
+  test('create-fuels reports an error if no programs are chosen to be included', async () => {
+    const args = generateArgs(
+      {
+        contract: false,
+        predicate: false,
+        script: false,
+      },
+      'test-project-3'
+    );
+    const program = setupProgram();
+    program.parse(args);
 
-  await fs.rm('test-project-2', { recursive: true });
-});
+    await runScaffoldCli({
+      program,
+      args,
+      shouldInstallDeps: false,
+      forceDisablePrompts: true,
+    }).catch((e) => {
+      expect(e).toBeInstanceOf(Error);
+    });
 
-test('create-fuels reports an error if no programs are chosen to be included', async () => {
-  const args = generateArgs(
-    {
-      contract: false,
-      predicate: false,
-      script: false,
-    },
-    'test-project-3'
-  );
-  const program = setupProgram();
-  program.parse(args);
-
-  await runScaffoldCli({
-    program,
-    args,
-    shouldInstallDeps: false,
-    forceDisablePrompts: true,
-  }).catch((e) => {
-    expect(e).toBeInstanceOf(Error);
+    expect(writeSpy).toHaveBeenCalledWith(
+      expect.stringContaining('You must include at least one Sway program.')
+    );
   });
 
-  expect(writeSpy).toHaveBeenCalledWith(
-    expect.stringContaining('You must include at least one Sway program.')
-  );
-});
+  test('setupProgram takes in args properly', () => {
+    const program = setupProgram();
+    program.parse(['', '', 'test-project-name', '-c', '-p', '-s', '--pnpm', '--npm']);
+    expect(program.args[0]).toBe('test-project-name');
+    expect(program.opts().contract).toBe(true);
+    expect(program.opts().predicate).toBe(true);
+    expect(program.opts().script).toBe(true);
+    expect(program.opts().pnpm).toBe(true);
+    expect(program.opts().npm).toBe(true);
+  });
 
-test('setupProgram takes in args properly', () => {
-  const program = setupProgram();
-  program.parse(['', '', 'test-project-name', '-c', '-p', '-s', '--pnpm', '--npm']);
-  expect(program.args[0]).toBe('test-project-name');
-  expect(program.opts().contract).toBe(true);
-  expect(program.opts().predicate).toBe(true);
-  expect(program.opts().script).toBe(true);
-  expect(program.opts().pnpm).toBe(true);
-  expect(program.opts().npm).toBe(true);
-});
+  test('setupProgram takes in combined args properly', () => {
+    const program = setupProgram();
+    program.parse(['', '', '-cps']);
+    expect(program.opts().contract).toBe(true);
+    expect(program.opts().predicate).toBe(true);
+    expect(program.opts().script).toBe(true);
+  });
 
-test('setupProgram takes in combined args properly', () => {
-  const program = setupProgram();
-  program.parse(['', '', '-cps']);
-  expect(program.opts().contract).toBe(true);
-  expect(program.opts().predicate).toBe(true);
-  expect(program.opts().script).toBe(true);
-});
-
-test('setupProgram - no args', () => {
-  const program = setupProgram();
-  program.parse([]);
-  expect(program.opts().contract).toBe(undefined);
-  expect(program.opts().predicate).toBe(undefined);
-  expect(program.opts().script).toBe(undefined);
-});
+  test('setupProgram - no args', () => {
+    const program = setupProgram();
+    program.parse([]);
+    expect(program.opts().contract).toBe(undefined);
+    expect(program.opts().predicate).toBe(undefined);
+    expect(program.opts().script).toBe(undefined);
+  });
+})
