@@ -27,7 +27,7 @@
     "nodemon": "^3.0.3",
     "replace": "^1.2.2",
     "typedoc": "^0.25.1",
-    "typedoc-plugin-merge-modules": "^5.0.1",
+    "typedoc-plugin-merge-modules": "^5.1.0",
     "vitepress": "1.0.0-rc.40",
     "vitepress-plugin-search": "1.0.4-alpha.19",
     "vue": "^3.4.15"
