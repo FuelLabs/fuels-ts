@@ -7,7 +7,7 @@ import type {
 } from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import type { Contract } from '@fuel-ts/program';
-import type { ChainConfig } from '@fuel-ts/utils';
+import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { readFileSync } from 'fs';
 import { mergeDeepRight } from 'ramda';
@@ -46,11 +46,11 @@ interface LaunchTestNodeReturn<TContracts> extends SetupTestProviderAndWalletsRe
   contracts: TContracts;
 }
 function getChainConfig(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
-  let envChainConfig: ChainConfig | undefined;
+  let envChainConfig: SnapshotConfigs | undefined;
   if (process.env.DEFAULT_CHAIN_CONFIG_PATH) {
     envChainConfig = JSON.parse(
       readFileSync(process.env.DEFAULT_CHAIN_CONFIG_PATH, 'utf-8')
-    ) as ChainConfig;
+    ) as SnapshotConfigs;
   }
 
   return mergeDeepRight(envChainConfig ?? {}, nodeOptions?.chainConfig ?? {});
@@ -129,10 +129,7 @@ async function deployContractsToNode(
 
   for (let i = 0; i < factories.length; i++) {
     const f = factories[i];
-    const contract = await f.factory.deployContract({
-      gasPrice: f.factory.account?.provider.getGasConfig().minGasPrice,
-      ...f.deployConfig,
-    });
+    const contract = await f.factory.deployContract(f.deployConfig);
     contracts.push(contract);
   }
 
@@ -157,6 +154,9 @@ export async function launchTestNode<TContracts extends Contract[] = Contract[]>
       args,
     },
   });
+
+  const balances = await wallets[0].getBalances();
+  console.log(balances);
 
   let contracts: TContracts;
   try {

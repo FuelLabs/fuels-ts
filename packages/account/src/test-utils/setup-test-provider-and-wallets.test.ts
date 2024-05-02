@@ -1,8 +1,9 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import { toHex, toNumber } from '@fuel-ts/math';
+import { bn, toNumber } from '@fuel-ts/math';
+import { defaultSnapshotConfigs, hexlify } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 
 import { Provider } from '../providers';
@@ -14,6 +15,7 @@ import * as launchNodeMod from './launchNode';
 import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
 import { TestMessage } from './test-message';
 
+const BaseAssetId = `0x${defaultSnapshotConfigs.chainConfigJson.consensus_parameters.V1.base_asset_id}`;
 /**
  * @group node
  */
@@ -57,14 +59,18 @@ describe('setupTestProviderAndWallets', () => {
 
   it('can partially extend the default node configs', async () => {
     const coin = {
-      owner: '0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d',
-      amount: '0xffffffffffffffff',
-      asset_id: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      owner: hexlify(randomBytes(32)),
+      amount: 1234,
+      asset_id: hexlify(randomBytes(32)),
+      tx_id: hexlify(randomBytes(32)),
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
     };
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         chainConfig: {
-          initial_state: {
+          stateConfigJson: {
             coins: [coin],
           },
         },
@@ -73,11 +79,16 @@ describe('setupTestProviderAndWallets', () => {
 
     const { provider } = launched;
 
-    const coins = await provider.getCoins({ toB256: () => coin.owner } as AbstractAddress);
+    const [sutCoin] = await provider.getCoins(
+      { toB256: () => coin.owner } as AbstractAddress,
+      coin.asset_id
+    );
 
-    expect(coins[0].assetId).toEqual(coin.asset_id);
-    expect(coins[0].amount.toHex()).toEqual(coin.amount);
-    expect(coins[0].owner.toB256()).toEqual(coin.owner);
+    expect(sutCoin.amount.toNumber()).toEqual(coin.amount);
+    expect(sutCoin.owner.toB256()).toEqual(coin.owner);
+    expect(sutCoin.assetId).toEqual(coin.asset_id);
+    expect(sutCoin.txCreatedIdx.toNumber()).toEqual(coin.tx_pointer_tx_idx);
+    expect(sutCoin.blockCreated.toNumber()).toEqual(coin.tx_pointer_block_height);
   });
 
   it('default: two wallets, three assets (BaseAssetId, AssetId.A, AssetId.B), one coin, 10_000_000_000_ amount', async () => {
@@ -91,12 +102,18 @@ describe('setupTestProviderAndWallets', () => {
     const coins2 = await wallet2.getCoins();
 
     expect(coins1.length).toBe(3);
-    expect(coins1.map((x) => [x.amount, x.assetId])).toEqual(
-      coins2.map((x) => [x.amount, x.assetId])
+    expect(
+      coins1
+        .sort((a, b) => (bn(a.assetId).gt(bn(b.assetId)) ? 1 : -1))
+        .map((x) => [x.amount, x.assetId])
+    ).toEqual(
+      coins2
+        .sort((a, b) => (bn(a.assetId).gt(bn(b.assetId)) ? 1 : -1))
+        .map((x) => [x.amount, x.assetId])
     );
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const baseAssetIdCoin = coins1.find((x) => x.assetId === AssetId.BaseAssetId.value)!;
+    const baseAssetIdCoin = coins1.find((x) => x.assetId === BaseAssetId)!;
 
     expect(baseAssetIdCoin.assetId).toBe(BaseAssetId);
     expect(baseAssetIdCoin.amount.toNumber()).toBe(10_000_000_000);
@@ -127,6 +144,7 @@ describe('setupTestProviderAndWallets', () => {
 
     const coins = await wallet.getCoins();
     expect(coins.length).toBe(2);
+    coins.sort((a, b) => (bn(a.assetId).gt(bn(b.assetId)) ? 1 : -1));
 
     const coin1 = coins[0];
 
@@ -144,7 +162,7 @@ describe('setupTestProviderAndWallets', () => {
     const [message] = messages;
     const chainMessage = testMessage.toChainMessage(wallet.address);
 
-    expect(message.amount.toHex(8)).toEqual(chainMessage.amount);
+    expect(message.amount.toNumber()).toEqual(chainMessage.amount);
     expect(message.recipient.toB256()).toEqual(chainMessage.recipient);
     expect(message.sender.toB256()).toEqual(chainMessage.sender);
     expect(toNumber(message.daHeight)).toEqual(toNumber(chainMessage.da_height));
@@ -174,15 +192,17 @@ describe('setupTestProviderAndWallets', () => {
       const coins = await wallet.getCoins();
       expect(coins.length).toBe(numOfAssets * coinsPerAsset);
 
-      coins.forEach((coin, index) => {
-        if (index < coinsPerAsset) {
-          expect(coin.assetId).toBe(BaseAssetId);
-        } else {
-          expect(coin.assetId).not.toBe(BaseAssetId);
-          expect(coin.assetId).not.toBeFalsy();
-        }
-        expect(coin.amount.toNumber()).toBe(amountPerCoin);
-      });
+      coins
+        .sort((coin) => (coin.assetId === BaseAssetId ? -1 : 1))
+        .forEach((coin, index) => {
+          if (index < coinsPerAsset) {
+            expect(coin.assetId).toBe(BaseAssetId);
+          } else {
+            expect(coin.assetId).not.toBe(BaseAssetId);
+            expect(coin.assetId).not.toBeFalsy();
+          }
+          expect(coin.amount.toNumber()).toBe(amountPerCoin);
+        });
     });
 
     await Promise.all(promises);
@@ -193,13 +213,21 @@ describe('setupTestProviderAndWallets', () => {
     const signer = new Signer(pk);
     const address = signer.address;
 
-    const coin = { owner: address.toB256(), amount: toHex(100, 8), asset_id: BaseAssetId };
+    const coin = {
+      owner: address.toB256(),
+      amount: 100,
+      asset_id: BaseAssetId,
+      tx_id: hexlify(randomBytes(32)),
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+    };
     const message = new TestMessage({ recipient: signer.address }).toChainMessage();
 
     using providerAndWallets = await setupTestProviderAndWallets({
       nodeOptions: {
         chainConfig: {
-          initial_state: {
+          stateConfigJson: {
             coins: [coin],
             messages: [message],
           },
@@ -208,30 +236,28 @@ describe('setupTestProviderAndWallets', () => {
     });
     const { wallets, provider } = providerAndWallets;
 
+    expect(wallets.length).toBe(2);
+    const [wallet] = wallets;
+    const coins = await wallet.getCoins();
+    expect(coins.length).toBe(3);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const walletCoin = coins.find((c) => c.assetId === BaseAssetId)!;
+    expect(walletCoin.assetId).toBe(BaseAssetId);
+    expect(walletCoin.amount.toNumber()).toBe(10_000_000_000);
+
     const customWallet = new WalletUnlocked(pk, provider);
     const [customWalletCoin] = await customWallet.getCoins();
     const [customWalletMessage] = await customWallet.getMessages();
 
-    expect(customWalletCoin.amount.toHex(8)).toEqual(coin.amount);
+    expect(customWalletCoin.amount.toNumber()).toEqual(coin.amount);
     expect(customWalletCoin.owner.toB256()).toEqual(coin.owner);
     expect(customWalletCoin.assetId).toEqual(coin.asset_id);
 
-    expect(customWalletMessage.amount.toHex(8)).toEqual(message.amount);
+    expect(customWalletMessage.amount.toNumber()).toEqual(message.amount);
     expect(customWalletMessage.recipient.toB256()).toEqual(message.recipient);
     expect(customWalletMessage.sender.toB256()).toEqual(message.sender);
     expect(toNumber(customWalletMessage.daHeight)).toEqual(toNumber(message.da_height));
     expect(customWalletMessage.data.toString()).toEqual(toNumber(message.data).toString());
     expect(customWalletMessage.nonce).toEqual(message.nonce);
-
-    expect(wallets.length).toBe(2);
-    const [wallet] = wallets;
-
-    const coins = await wallet.getCoins();
-    expect(coins.length).toBe(3);
-
-    const walletCoin = coins[0];
-
-    expect(walletCoin.assetId).toBe(BaseAssetId);
-    expect(walletCoin.amount.toNumber()).toBe(10_000_000_000);
   });
 });

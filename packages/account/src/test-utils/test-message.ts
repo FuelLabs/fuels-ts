@@ -1,8 +1,9 @@
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
-import { BN } from '@fuel-ts/math';
-import { hexlify, type ChainConfig } from '@fuel-ts/utils';
+import { bn, type BN } from '@fuel-ts/math';
+import type { SnapshotConfigs } from '@fuel-ts/utils';
+import { hexlify } from '@fuel-ts/utils';
 
 interface TestMessageSpecs {
   sender: AbstractAddress;
@@ -10,7 +11,7 @@ interface TestMessageSpecs {
   nonce: string;
   amount: number;
   data: string;
-  da_height: string;
+  da_height: number;
 }
 
 export class TestMessage {
@@ -19,7 +20,7 @@ export class TestMessage {
   private nonce: string;
   private amount: number | BN;
   private data: string;
-  private da_height: string;
+  private da_height: number;
 
   /**
    * A helper class to create messages for testing purposes.
@@ -33,7 +34,7 @@ export class TestMessage {
     nonce = hexlify(randomBytes(32)),
     amount = 1_000_000,
     data = '02',
-    da_height = '0x00',
+    da_height = 0,
   }: Partial<TestMessageSpecs> = {}) {
     this.sender = sender;
     this.recipient = recipient;
@@ -43,12 +44,12 @@ export class TestMessage {
     this.da_height = da_height;
   }
 
-  toChainMessage(recipient?: AbstractAddress): ChainConfig['initial_state']['messages'][0] {
+  toChainMessage(recipient?: AbstractAddress): SnapshotConfigs['stateConfigJson']['messages'][0] {
     return {
       sender: this.sender.toB256(),
       recipient: recipient?.toB256() ?? this.recipient.toB256(),
       nonce: this.nonce,
-      amount: new BN(this.amount).toHex(8),
+      amount: bn(this.amount).toNumber(),
       data: this.data,
       da_height: this.da_height,
     };

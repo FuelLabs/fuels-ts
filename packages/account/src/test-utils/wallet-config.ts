@@ -1,7 +1,6 @@
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
-import { toHex } from '@fuel-ts/math';
-import type { ChainConfig } from '@fuel-ts/utils';
+import { defaultSnapshotConfigs, hexlify, type SnapshotConfigs } from '@fuel-ts/utils';
 import type { PartialDeep } from 'type-fest';
 
 import { WalletUnlocked } from '../wallet';
@@ -43,7 +42,7 @@ export interface WalletConfigOptions {
  * Used for configuring the wallets that should exist in the genesis block of a test node.
  */
 export class WalletConfig {
-  private initialState: ChainConfig['initial_state'];
+  private initialState: SnapshotConfigs['stateConfigJson'];
   private options: WalletConfigOptions;
   public wallets: WalletUnlocked[];
   private generateWallets: () => WalletUnlocked[] = () => {
@@ -54,7 +53,8 @@ export class WalletConfig {
     return generatedWallets;
   };
 
-  constructor(config: WalletConfigOptions) {
+  constructor(baseAssetId: string, config: WalletConfigOptions) {
+    const BASE_ASSET_ID = baseAssetId.startsWith('0x') ? baseAssetId : `0x${baseAssetId}`;
     WalletConfig.guard(config);
 
     this.options = config;
@@ -63,19 +63,28 @@ export class WalletConfig {
     this.wallets = this.generateWallets();
     this.initialState = {
       messages: WalletConfig.createMessages(this.wallets, messages),
-      coins: WalletConfig.createCoins(this.wallets, assets, coinsPerAsset, amountPerCoin),
+      coins: WalletConfig.createCoins(
+        this.wallets,
+        BASE_ASSET_ID,
+        assets,
+        coinsPerAsset,
+        amountPerCoin
+      ),
     };
   }
 
-  apply(chainConfig: PartialDeep<ChainConfig> | undefined): PartialDeep<ChainConfig> & {
-    initial_state: { coins: ChainConfig['initial_state']['coins'] };
+  apply(chainConfig: PartialDeep<SnapshotConfigs> | undefined): PartialDeep<SnapshotConfigs> & {
+    stateConfigJson: { coins: SnapshotConfigs['stateConfigJson']['coins'] };
   } {
     return {
       ...chainConfig,
-      initial_state: {
-        ...chainConfig?.initial_state,
-        coins: this.initialState.coins.concat(chainConfig?.initial_state?.coins || []),
-        messages: this.initialState.messages.concat(chainConfig?.initial_state?.messages ?? []),
+      stateConfigJson: {
+        ...(chainConfig?.stateConfigJson ?? defaultSnapshotConfigs.stateConfigJson),
+        // coins: [],
+        // messages: [],
+        // ...(chainConfig?.stateConfigJson ?? {}),
+        coins: this.initialState.coins.concat(chainConfig?.stateConfigJson?.coins || []),
+        messages: this.initialState.messages.concat(chainConfig?.stateConfigJson?.messages ?? []),
       },
     };
   }
@@ -88,13 +97,14 @@ export class WalletConfig {
 
   private static createCoins(
     wallets: WalletUnlocked[],
+    baseAssetId: string,
     assets: number | AssetId[],
     coinsPerAsset: number,
     amountPerCoin: number
   ) {
-    const coins: ChainConfig['initial_state']['coins'] = [];
+    const coins: SnapshotConfigs['stateConfigJson']['coins'] = [];
 
-    let assetIds: string[] = [AssetId.BaseAssetId.value];
+    let assetIds: string[] = [baseAssetId];
     if (Array.isArray(assets)) {
       assetIds = assetIds.concat(assets.map((a) => a.value));
     } else {
@@ -109,9 +119,13 @@ export class WalletConfig {
         assetIds.forEach((assetId) => {
           for (let index = 0; index < coinsPerAsset; index++) {
             coins.push({
-              amount: toHex(amountPerCoin, 8),
+              amount: amountPerCoin,
               asset_id: assetId,
               owner: walletAddress,
+              tx_pointer_block_height: 0,
+              tx_pointer_tx_idx: 0,
+              output_index: 0,
+              tx_id: hexlify(randomBytes(32)),
             });
           }
         });

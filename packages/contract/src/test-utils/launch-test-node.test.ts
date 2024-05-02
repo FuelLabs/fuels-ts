@@ -2,7 +2,7 @@ import { Provider } from '@fuel-ts/account';
 import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
-import type { ChainConfig } from '@fuel-ts/utils';
+import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import { randomInt, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
@@ -20,7 +20,7 @@ async function generateChainConfigFile(chainName: string): Promise<[string, () =
       join(__dirname, '../../../../', '.fuel-core', 'configs', 'chainConfig.json'),
       'utf-8'
     )
-  ) as ChainConfig;
+  ) as SnapshotConfigs['chainConfigJson'];
 
   chainConfig.chain_name = chainName;
 
@@ -92,20 +92,14 @@ describe('launchTestNode', () => {
       contracts: [contract],
     } = launched;
 
-    const gasPrice = contract.provider.getGasConfig().minGasPrice;
-
-    const response = await contract.functions
-      .test_function()
-      .txParams({
-        gasPrice,
-        gasLimit: 10_000,
-      })
-      .call();
+    const response = await contract.functions.test_function().call();
     expect(response.value).toBe(true);
   });
 
   test('a contract can be deployed by providing just the path', async () => {
     using launched = await launchTestNode({
+      walletConfig: {},
+      providerOptions: {},
       deployContracts: [pathToContractRootDir],
     });
 
@@ -196,9 +190,15 @@ describe('launchTestNode', () => {
     using launched = await launchTestNode({
       nodeOptions: {
         chainConfig: {
-          consensus_parameters: {
-            tx_params: {
-              max_inputs,
+          chainConfigJson: {
+            consensus_parameters: {
+              V1: {
+                tx_params: {
+                  V1: {
+                    max_inputs,
+                  },
+                },
+              },
             },
           },
         },

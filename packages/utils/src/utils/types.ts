@@ -1,6 +1,10 @@
 interface Coin {
+  tx_id: string;
+  output_index: number;
+  tx_pointer_block_height: number;
+  tx_pointer_tx_idx: number;
   owner: string;
-  amount: string;
+  amount: number;
   asset_id: string;
 }
 
@@ -8,12 +12,12 @@ interface Message {
   sender: string;
   recipient: string;
   nonce: string;
-  amount: string;
+  amount: number;
   data: string;
-  da_height: string;
+  da_height: number;
 }
 
-interface InitialState {
+interface StateConfig {
   coins: Coin[];
   messages: Message[];
 }
@@ -32,6 +36,11 @@ type Operation =
       };
     };
 interface GasCosts {
+  mod: number;
+  move: number;
+  ret_contract: number;
+  rvrt_contract: number;
+  retd_contract: Operation;
   add: number;
   addi: number;
   aloc: number;
@@ -44,7 +53,7 @@ interface GasCosts {
   cb: number;
   cfei: number;
   cfsi: number;
-  croo: number;
+  croo: Operation;
   div: number;
   divi: number;
   ecr1: number;
@@ -79,9 +88,7 @@ interface GasCosts {
   lw: number;
   mint: number;
   mlog: number;
-  modOp: number;
   modi: number;
-  moveOp: number;
   movi: number;
   mroo: number;
   mul: number;
@@ -91,8 +98,6 @@ interface GasCosts {
   not: number;
   or: number;
   ori: number;
-  ret: number;
-  rvrt: number;
   s256: Operation;
   sb: number;
   scwq: Operation;
@@ -139,7 +144,6 @@ interface GasCosts {
   mcli: Operation;
   mcp: Operation;
   meq: Operation;
-  retd: Operation;
   smo: Operation;
   srwq: Operation;
 }
@@ -151,38 +155,67 @@ interface Consensus {
 }
 
 interface ConsensusParameters {
+  chain_id: number;
+  base_asset_id: string;
+  privileged_address: string;
   tx_params: {
-    max_inputs: number;
-    max_outputs: number;
-    max_witnesses: number;
-    max_gas_per_tx: number;
-    max_size: number;
+    V1: {
+      max_inputs: number;
+      max_outputs: number;
+      max_witnesses: number;
+      max_gas_per_tx: number;
+      max_size: number;
+    };
   };
   predicate_params: {
-    max_predicate_length: number;
-    max_predicate_data_length: number;
-    max_gas_per_predicate: number;
-    max_message_data_length: number;
+    V1: {
+      max_predicate_length: number;
+      max_predicate_data_length: number;
+      max_gas_per_predicate: number;
+      max_message_data_length: number;
+    };
   };
   script_params: {
-    max_script_length: number;
-    max_script_data_length: number;
+    V1: {
+      max_script_length: number;
+      max_script_data_length: number;
+    };
   };
   contract_params: {
-    contract_max_size: number;
-    max_storage_slots: number;
+    V1: {
+      contract_max_size: number;
+      max_storage_slots: number;
+    };
   };
   fee_params: {
-    gas_price_factor: number;
-    gas_per_byte: number;
+    V1: {
+      gas_price_factor: number;
+      gas_per_byte: number;
+    };
+  };
+  block_gas_limit: number;
+  gas_costs: { V1: GasCosts };
+}
+
+interface ChainConfig {
+  chain_name: string;
+  consensus_parameters: {
+    V1: ConsensusParameters;
+  };
+  consensus: Consensus;
+}
+
+interface MetadataConfig {
+  chain_config: string;
+  table_encoding: {
+    Json: {
+      filepath: string;
+    };
   };
 }
 
-export interface ChainConfig {
-  chain_name: string;
-  block_gas_limit: number;
-  initial_state: InitialState;
-  consensus_parameters: ConsensusParameters;
-  gas_costs: GasCosts;
-  consensus: Consensus;
+export interface SnapshotConfigs {
+  stateConfigJson: StateConfig;
+  chainConfigJson: ChainConfig;
+  metadataJson: MetadataConfig;
 }

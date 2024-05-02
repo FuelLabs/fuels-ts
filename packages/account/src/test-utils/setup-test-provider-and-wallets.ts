@@ -1,5 +1,4 @@
-import type { ChainConfig } from '@fuel-ts/utils';
-import { defaultChainConfig } from '@fuel-ts/utils';
+import { defaultSnapshotConfigs, type SnapshotConfigs } from '@fuel-ts/utils';
 import { mergeDeepRight } from 'ramda';
 import type { PartialDeep } from 'type-fest';
 
@@ -21,7 +20,7 @@ export interface LaunchCustomProviderAndGetWalletsOptions {
   /** Options for configuring the test node. */
   nodeOptions?: Partial<
     Omit<LaunchNodeOptions, 'chainConfig'> & {
-      chainConfig: PartialDeep<ChainConfig>;
+      chainConfig: PartialDeep<SnapshotConfigs>;
     }
   >;
 }
@@ -57,14 +56,22 @@ export async function setupTestProviderAndWallets({
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
 
-  const walletConfig = new WalletConfig({
-    ...defaultWalletConfigOptions,
-    ...walletConfigOptions,
-  });
+  const walletConfig = new WalletConfig(
+    nodeOptions.chainConfig?.chainConfigJson?.consensus_parameters?.V1?.base_asset_id ??
+      defaultSnapshotConfigs.chainConfigJson.consensus_parameters.V1.base_asset_id,
+    {
+      ...defaultWalletConfigOptions,
+      ...walletConfigOptions,
+    }
+  );
 
   const { cleanup, url } = await launchNode({
+    loggingEnabled: false,
     ...nodeOptions,
-    chainConfig: mergeDeepRight(defaultChainConfig, walletConfig.apply(nodeOptions?.chainConfig)),
+    chainConfig: mergeDeepRight(
+      defaultSnapshotConfigs,
+      walletConfig.apply(nodeOptions?.chainConfig)
+    ),
     port: '0',
   });
 

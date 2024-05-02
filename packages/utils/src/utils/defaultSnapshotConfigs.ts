@@ -1,8 +1,9 @@
 import chainConfigJson from './defaultSnapshots/chainConfig.json';
 import metadataJson from './defaultSnapshots/metadata.json';
 import stateConfigJson from './defaultSnapshots/stateConfig.json';
+import type { SnapshotConfigs } from './types';
 
-export const defaultSnapshotConfigs = {
+export const defaultSnapshotConfigs: SnapshotConfigs = {
   chainConfigJson,
   metadataJson,
   stateConfigJson,

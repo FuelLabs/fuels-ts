@@ -1,10 +1,7 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { hexlify } from '@fuel-ts/utils';
 
 export class AssetId {
-  public static BaseAssetId = new AssetId(BaseAssetId);
-
   public static A = new AssetId(
     '0x0101010101010101010101010101010101010101010101010101010101010101'
   );

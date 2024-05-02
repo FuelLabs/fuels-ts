@@ -1,14 +1,7 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
-import { toHex } from '@fuel-ts/math';
-import type { ChainConfig } from '@fuel-ts/utils';
-import {
-  defaultChainConfig,
-  defaultConsensusKey,
-  hexlify,
-  defaultSnapshotConfigs,
-} from '@fuel-ts/utils';
+import type { SnapshotConfigs } from '@fuel-ts/utils';
+import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
@@ -56,7 +49,7 @@ export type LaunchNodeOptions = {
    * The chain configuration to use.
    * Passing in a chain configuration path via the `--chain` flag in `args` will override this.
    * */
-  chainConfig?: ChainConfig;
+  chainConfig?: SnapshotConfigs;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -64,7 +57,6 @@ export type LaunchNodeResult = Promise<{
   ip: string;
   port: string;
   url: string;
-  chainConfigPath: string;
   snapshotDir: string;
 }>;
 
@@ -116,7 +108,7 @@ export const launchNode = async ({
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
-  chainConfig = defaultChainConfig,
+  chainConfig = defaultSnapshotConfigs,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -167,54 +159,59 @@ export const launchNode = async ({
       if (!existsSync(tempDirPath)) {
         mkdirSync(tempDirPath, { recursive: true });
       }
-
-      const generatedChainConfig = chainConfig;
-      let { stateConfigJson } = defaultSnapshotConfigs;
-      const { chainConfigJson, metadataJson } = defaultSnapshotConfigs;
-
-      stateConfigJson = {
-        ...stateConfigJson,
-        coins: [
-          ...stateConfigJson.coins.map((coin) => ({
-            ...coin,
-            amount: '18446744073709551615',
-          })),
-        ],
-        messages: stateConfigJson.messages.map((message) => ({
-          ...message,
-          amount: '18446744073709551615',
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any;
-
       // If there's no genesis key, generate one and some coins to the genesis block.
       if (!process.env.GENESIS_SECRET) {
         const pk = Signer.generatePrivateKey();
         const signer = new Signer(pk);
         process.env.GENESIS_SECRET = hexlify(pk);
 
-        stateConfigJson.coins.push({
+        chainConfig.stateConfigJson.coins.push({
           tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
           owner: signer.address.toHexString(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           amount: '18446744073709551615' as any,
-          asset_id: chainConfigJson.consensus_parameters.V1.base_asset_id,
+          asset_id: chainConfig.chainConfigJson.consensus_parameters.V1.base_asset_id,
           output_index: 0,
           tx_pointer_block_height: 0,
           tx_pointer_tx_idx: 0,
         });
       }
 
+      const coins = defaultSnapshotConfigs.stateConfigJson.coins
+        .map((coin) => ({
+          ...coin,
+          amount: '18446744073709551615',
+        }))
+        // @ts-expect-error asd
+        .concat(chainConfig.stateConfigJson.coins)
+        .filter((coin, index, self) => self.findIndex((c) => c.tx_id === coin.tx_id) === index);
+      const messages = defaultSnapshotConfigs.stateConfigJson.messages
+        .map((message) => ({
+          ...message,
+          amount: '18446744073709551615',
+        }))
+        // @ts-expect-error asd
+        .concat(chainConfig.stateConfigJson.messages)
+        .filter(
+          (message, index, self) => self.findIndex((m) => m.nonce === message.nonce) === index
+        );
+      const stateConfigJson = {
+        ...defaultSnapshotConfigs.stateConfigJson,
+        coins,
+        messages,
+      };
+
       let fixedStateConfigJSON = JSON.stringify(stateConfigJson);
 
       const regexMakeNumber = /("amount":)"(\d+)"/gm;
 
       fixedStateConfigJSON = fixedStateConfigJSON.replace(regexMakeNumber, '$1$2');
-
       // Write a temporary chain configuration files.
       const chainConfigWritePath = path.join(tempDirPath, 'chainConfig.json');
       const stateConfigWritePath = path.join(tempDirPath, 'stateConfig.json');
       const metadataWritePath = path.join(tempDirPath, 'metadata.json');
+
+      const { chainConfigJson, metadataJson } = defaultSnapshotConfigs;
 
       writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
       writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
@@ -277,8 +274,7 @@ export const launchNode = async ({
           cleanup: () => killNode(cleanupConfig),
           ip: realIp,
           port: realPort,
-          url: `http://${realIp}:${realPort}/graphql`,
-          chainConfigPath: chainConfigPathToUse as string,
+          url: `http://${realIp}:${realPort}/v1/graphql`,
           snapshotDir: snapshotDirToUse as string,
         });
       }

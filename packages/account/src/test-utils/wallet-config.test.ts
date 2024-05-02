@@ -1,5 +1,7 @@
+import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { hexlify } from '@fuel-ts/utils';
 
 import { AssetId } from './asset-id';
 import type { WalletConfigOptions } from './wallet-config';
@@ -18,7 +20,7 @@ describe('WalletConfig', () => {
   };
   it('throws on invalid number of wallets', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, count: -1 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, count: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
@@ -26,7 +28,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, count: 0 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, count: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of wallets must be greater than zero.'
@@ -36,7 +38,7 @@ describe('WalletConfig', () => {
 
   it('throws on invalid number of assets', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, assets: -1 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, assets: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
@@ -44,14 +46,14 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, assets: 0 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, assets: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
       )
     );
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, assets: [] }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, assets: [] }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of assets per wallet must be greater than zero.'
@@ -61,7 +63,7 @@ describe('WalletConfig', () => {
 
   it('throws on invalid number of coins per asset', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, coinsPerAsset: -1 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, coinsPerAsset: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of coins per asset must be greater than zero.'
@@ -69,7 +71,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, coinsPerAsset: 0 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, coinsPerAsset: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Number of coins per asset must be greater than zero.'
@@ -79,7 +81,7 @@ describe('WalletConfig', () => {
 
   it('throws on invalid amount per coin', async () => {
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, amountPerCoin: -1 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, amountPerCoin: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than zero.'
@@ -87,7 +89,7 @@ describe('WalletConfig', () => {
     );
 
     await expectToThrowFuelError(
-      () => new WalletConfig({ ...configOptions, amountPerCoin: 0 }),
+      () => new WalletConfig(hexlify(randomBytes(32)), { ...configOptions, amountPerCoin: 0 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
         'Amount per coin must be greater than zero.'
@@ -97,13 +99,14 @@ describe('WalletConfig', () => {
 
   it('allows custom assets to be provided', () => {
     const assetId = AssetId.random();
+    const baseAssetId = hexlify(randomBytes(32));
     const {
-      initial_state: { coins: allCoins },
-    } = new WalletConfig({ ...configOptions, assets: [assetId] }).apply({});
+      stateConfigJson: { coins: allCoins },
+    } = new WalletConfig(baseAssetId, { ...configOptions, assets: [assetId] }).apply({});
 
     const coins = allCoins.filter((coin, _index, arr) => coin.owner === arr[0].owner);
 
-    expect(coins[0].asset_id).toEqual(AssetId.BaseAssetId.value);
+    expect(coins[0].asset_id).toEqual(baseAssetId);
     expect(coins[1].asset_id).toEqual(assetId.value);
     expect(coins.length).toBe(2);
   });
