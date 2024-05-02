@@ -26,6 +26,9 @@ const mockAllDeps = (
   };
 };
 
+/**
+ * @group node
+ */
 describe('tryFindBinaries', () => {
   it(`should use default binaries when not paths supplied`, () => {
     const { getSystemForc, getSystemFuelCore } = mockAllDeps();
