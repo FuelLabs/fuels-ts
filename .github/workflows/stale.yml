@@ -18,5 +18,5 @@ jobs:
           close-issue-message: "This issue was closed because it is missing author input."
           stale-issue-label: "stale"
           any-of-labels: "need-author-input"
-          days-before-issue-stale: 6
+          days-before-issue-stale: 14
           days-before-issue-close: 7
