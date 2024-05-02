@@ -89,7 +89,7 @@ pnpm link --global @fuel-ts/wallet
 
 See also:
 
-- [Developing](#Developing)
+- [Developing](#developing)
 
 # Testing
 
