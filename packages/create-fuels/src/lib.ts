@@ -2,14 +2,7 @@ import { execSync } from 'child_process';
 import { log } from 'console';
 import ora from 'ora';
 
-export const checkIfFuelUpInstalled = () => {
-  try {
-    execSync('fuelup --version', { stdio: 'pipe' });
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
+export * from './lib/createIfFuelUpInstalled';
 
 export const installFuelUp = (isVerbose: boolean = false) => {
   const installFuelUpSpinner = ora({
