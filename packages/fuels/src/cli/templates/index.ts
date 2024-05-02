@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/triple-slash-reference */
+/*
 /// <reference path="../../hbs.d.ts" />
 
 // TODO: once abi-typegen implements a way to generate all types of sway

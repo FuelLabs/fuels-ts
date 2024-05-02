@@ -187,7 +187,7 @@ describe('Predicate', () => {
 
     it('throws when setting configurable but predicate has none', () => {
       expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         const predicate = new Predicate({
           bytecode: predicateBytesTrue,
           abi: predicateAbiTrue,
@@ -204,7 +204,7 @@ describe('Predicate', () => {
       const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
 
       expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         const predicate = new Predicate({
           bytecode: predicateBytesConfigurable,
           abi: predicateAbiConfigurable,
@@ -221,7 +221,7 @@ describe('Predicate', () => {
       const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
 
       expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         const predicate = new Predicate({
           bytecode: predicateBytesConfigurable,
           provider: wallet.provider,

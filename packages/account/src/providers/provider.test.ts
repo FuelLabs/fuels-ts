@@ -35,20 +35,20 @@ afterEach(() => {
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
-  async (url: string, options: RequestInit | undefined) => {
-    const graphqlRequest = JSON.parse(options?.body as string);
-    const { operationName } = graphqlRequest;
+    async (url: string, options: RequestInit | undefined) => {
+      const graphqlRequest = JSON.parse(options?.body as string);
+      const { operationName } = graphqlRequest;
 
-    if (operationName === expectedOperationName) {
-      const responseText = JSON.stringify({
-        data: expectedResponse,
-      });
-      const response = Promise.resolve(new Response(responseText, options));
+      if (operationName === expectedOperationName) {
+        const responseText = JSON.stringify({
+          data: expectedResponse,
+        });
+        const response = Promise.resolve(new Response(responseText, options));
 
-      return response;
-    }
-    return fetch(url, options);
-  };
+        return response;
+      }
+      return fetch(url, options);
+    };
 
 // TODO: Figure out a way to import this constant from `@fuel-ts/account/configs`
 const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
@@ -1119,7 +1119,7 @@ describe('Provider', () => {
     fetchSpy.mockImplementationOnce(() => Promise.resolve(new Response(readableStream)));
 
     let numberOfEvents = 0;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     for await (const { submitAndAwait } of provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
@@ -1354,7 +1354,7 @@ describe('Provider', () => {
 
     await expectToThrowFuelError(
       async () => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         for await (const { submitAndAwait } of provider.operations.submitAndAwait({
           encodedTransaction: "it's mocked so doesn't matter",
         })) {

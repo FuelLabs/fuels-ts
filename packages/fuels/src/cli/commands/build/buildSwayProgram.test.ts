@@ -27,7 +27,7 @@ describe('buildSwayPrograms', () => {
     const findBinPath = vi.spyOn(findBinPathMod, 'findBinPath').mockReturnValue('');
 
     const spawnMocks = {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       on: vi.fn((eventName: string, fn: (..._: any) => void) => {
         const shouldExit = eventName === 'exit' && !params.shouldError;
         const shouldError = eventName === 'error' && params.shouldError;

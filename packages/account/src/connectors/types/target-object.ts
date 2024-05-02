@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
 
 /**
  * Target Object that represents the global event bus used by Fuel Connector Manager.

@@ -16,7 +16,7 @@ const configs: Options = {
   env: {
     BASE_URL: process.env.ASSETS_BASE_URL || '',
   },
-  // eslint-disable-next-line @typescript-eslint/require-await
+
   onSuccess: async () => {
     const outputDir = join(__dirname, 'src', 'providers', 'assets', 'images');
     mkdirSync(outputDir, {

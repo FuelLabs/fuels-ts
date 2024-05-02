@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
 export type DeferPromise<R = unknown> = {
   promise: Promise<R>;
   resolve: (value: R) => void;
@@ -16,7 +16,7 @@ export function deferPromise<R = unknown>() {
   return defer;
 }
 
-// eslint-disable-next-line @typescript-eslint/require-await
+
 export async function withTimeout<F extends Promise<unknown>, RT = Awaited<F>>(
   promise: F,
   timeout: number = 1050

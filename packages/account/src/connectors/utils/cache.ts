@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign */
+/*
 
 export type CacheFor = {
   [key: string]: {

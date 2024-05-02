@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
 import {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,
@@ -38,9 +38,9 @@ export type ScriptResult = {
   receipts: TransactionResultReceipt[];
   scriptResultReceipt: TransactionResultScriptResultReceipt;
   returnReceipt:
-    | TransactionResultReturnReceipt
-    | TransactionResultReturnDataReceipt
-    | TransactionResultRevertReceipt;
+  | TransactionResultReturnReceipt
+  | TransactionResultReturnDataReceipt
+  | TransactionResultRevertReceipt;
   callResult: CallResult;
 };
 

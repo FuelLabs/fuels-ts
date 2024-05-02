@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const { compare } = require('compare-versions');
 const { readFileSync, readdirSync } = require('node:fs');
 const { join } = require('node:path');

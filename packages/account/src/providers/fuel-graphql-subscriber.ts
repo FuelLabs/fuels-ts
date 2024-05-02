@@ -13,7 +13,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private stream!: ReadableStreamDefaultReader<Uint8Array>;
   private static textDecoder = new TextDecoder();
 
-  public constructor(private options: FuelGraphQLSubscriberOptions) {}
+  public constructor(private options: FuelGraphQLSubscriberOptions) { }
 
   private async setStream() {
     const { url, query, variables, fetchFn } = this.options;
@@ -30,7 +30,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       },
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     this.stream = response.body!.getReader();
   }
 
@@ -42,10 +42,10 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       await this.setStream();
     }
 
-    // eslint-disable-next-line no-constant-condition
+
     while (true) {
       if (this.events.length > 0) {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
         const { data, errors } = this.events.shift()!;
         if (Array.isArray(errors)) {
           throw new FuelError(
@@ -73,7 +73,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         .replace(':keep-alive-text\n\n', '');
 
       if (decoded === '') {
-        // eslint-disable-next-line no-continue
+
         continue;
       }
 

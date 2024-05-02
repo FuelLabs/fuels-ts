@@ -37,9 +37,9 @@ describe('dev', () => {
     const build = vi.spyOn(buildMod, 'build').mockReturnValue(Promise.resolve());
     const deploy = vi.spyOn(deployMod, 'deploy').mockReturnValue(Promise.resolve([]));
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const on: any = vi.fn(() => ({ on }));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const watch = vi.spyOn(chokidar, 'watch').mockReturnValue({ on } as any);
 
     return { autoStartFuelCore, killChildProcess, build, deploy, on, watch };

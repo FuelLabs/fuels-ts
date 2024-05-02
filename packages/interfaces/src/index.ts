@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-classes-per-file */
+/*
+/*
 
 /**
  * @privateRemarks

@@ -102,7 +102,7 @@ export const launchNode = async ({
   debugEnabled = false,
   basePath,
 }: LaunchNodeOptions): LaunchNodeResult =>
-  // eslint-disable-next-line no-async-promise-executor
+
   new Promise(async (resolve, reject) => {
     // filter out the flags chain, consensus-key, db-type, and poa-instant. we don't want to pass them twice to fuel-core. see line 214.
     const remainingArgs = extractRemainingArgs(args, [
@@ -167,7 +167,7 @@ export const launchNode = async ({
           ...message,
           amount: '18446744073709551615',
         })),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       } as any;
 
       // If there's no genesis key, generate one and some coins to the genesis block.
@@ -179,7 +179,7 @@ export const launchNode = async ({
         stateConfigJson.coins.push({
           tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
           owner: signer.address.toHexString(),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           amount: '18446744073709551615' as any,
           asset_id: chainConfigJson.consensus_parameters.V1.base_asset_id,
           output_index: 0,

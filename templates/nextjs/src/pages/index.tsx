@@ -38,7 +38,6 @@ export default function Home() {
     }
   }, [wallet]);
 
-  // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
     if (!contract) {
       return toast.error("Contract not loaded");
@@ -46,7 +45,7 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet."
       );
     }
 

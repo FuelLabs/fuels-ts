@@ -64,7 +64,7 @@ async function reapplyLatestTagToActualLatestRelease() {
 
   const previousLatest = await octokit.rest.repos.getReleaseByTag({
     ...github.context.repo,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     tag: LATEST_RELEASE!,
   });
 

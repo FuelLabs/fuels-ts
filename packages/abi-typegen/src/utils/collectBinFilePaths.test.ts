@@ -18,7 +18,7 @@ describe('collectBinFilePaths.ts', () => {
   function mockDeps() {
     const validateBinFile = vi
       .spyOn(validateBinFileMod, 'validateBinFile')
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       .mockResolvedValue({} as any);
     // const validateBinFile = vi.spyOn(validateBinFileMod, 'validateBinFile').getMockImplementation();
 

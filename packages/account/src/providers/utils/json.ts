@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-param-reassign */
+/*
+/*
 import { hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 

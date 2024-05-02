@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
 import type { EncodingVersion } from '@fuel-ts/abi-coder';
 import {
   WORD_SIZE,

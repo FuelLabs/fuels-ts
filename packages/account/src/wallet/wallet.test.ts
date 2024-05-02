@@ -186,7 +186,7 @@ describe('Wallet', () => {
 
     // Set custom provider to contract instance
     class ProviderCustom extends Provider {
-      // eslint-disable-next-line @typescript-eslint/require-await
+
       static async connect(url: string) {
         const newProvider = new ProviderCustom(url, {});
         return newProvider;

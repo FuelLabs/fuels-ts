@@ -50,7 +50,7 @@ describe('Predicate', () => {
       };
 
       expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
         const predicate = new Predicate({
           bytecode: predicateBytecode,
           abi: abiWithNoMain,

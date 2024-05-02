@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
 import { Interface } from '@fuel-ts/abi-coder';
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import type { Account, Provider } from '@fuel-ts/account';

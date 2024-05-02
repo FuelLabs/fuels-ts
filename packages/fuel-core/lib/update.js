@@ -2,7 +2,7 @@
 
 import fetch from 'node-fetch';
 
-// eslint-disable-next-line import/extensions
+
 import { getCurrentVersion, setCurrentVersion } from './shared.js';
 
 (async () => {

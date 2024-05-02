@@ -87,9 +87,9 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     request.inputs?.forEach((input: TransactionRequestInput) => {
       if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
-        // eslint-disable-next-line no-param-reassign
+
         input.predicate = hexlify(this.bytes);
-        // eslint-disable-next-line no-param-reassign
+
         input.predicateData = hexlify(this.getPredicateData(policies.length));
       }
     });

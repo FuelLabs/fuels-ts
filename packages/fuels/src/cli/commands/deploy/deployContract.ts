@@ -18,7 +18,7 @@ export async function deployContract(
 
   if (existsSync(storageSlotsPath)) {
     const storageSlots = JSON.parse(readFileSync(storageSlotsPath, 'utf-8'));
-    // eslint-disable-next-line no-param-reassign
+
     deployConfig.storageSlots = storageSlots;
   }
 

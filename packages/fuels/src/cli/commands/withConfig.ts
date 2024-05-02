@@ -37,7 +37,7 @@ export function withConfig<CType extends Commands>(
       config.onSuccess?.(
         {
           type: command,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
           data: eventData as any,
         },
         config

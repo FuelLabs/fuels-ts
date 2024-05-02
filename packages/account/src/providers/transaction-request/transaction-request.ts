@@ -657,11 +657,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         'predicateGasUsed' in correspondingInput &&
         bn(correspondingInput.predicateGasUsed).gt(0)
       ) {
-        // eslint-disable-next-line no-param-reassign
+
         i.predicate = correspondingInput.predicate;
-        // eslint-disable-next-line no-param-reassign
+
         i.predicateData = correspondingInput.predicateData;
-        // eslint-disable-next-line no-param-reassign
+
         i.predicateGasUsed = correspondingInput.predicateGasUsed;
       }
     });
@@ -675,7 +675,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         'padPredicateData' in input &&
         typeof input.padPredicateData === 'function'
       ) {
-        // eslint-disable-next-line no-param-reassign
+
         input.predicateData = input.padPredicateData(
           BaseTransactionRequest.getPolicyMeta(this).policies.length
         );

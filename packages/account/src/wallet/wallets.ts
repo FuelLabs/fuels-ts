@@ -2,7 +2,7 @@
 // Because WalletLocked and WalletUnlocked has a cycle dependency
 // it's not possible to split the two classes in different files
 //
-/* eslint-disable max-classes-per-file */
+/*
 import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { Account } from '../account';
@@ -16,8 +16,8 @@ import { decryptKeystoreWallet } from './keystore-wallet';
 
 export interface GenerateOptions {
   /** Additional entropy for the random bytes */
-  entropy?: BytesLike;
-  provider?: Provider;
+entropy ?: BytesLike;
+provider ?: Provider;
 }
 
 /**
@@ -31,7 +31,7 @@ export class WalletLocked extends Account {
    * @returns An instance of WalletUnlocked.
    */
   unlock(privateKey: BytesLike): WalletUnlocked {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+
     return new WalletUnlocked(privateKey, this._provider);
   }
 }

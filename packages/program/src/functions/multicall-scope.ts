@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
 import { ENCODING_V1 } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract } from '@fuel-ts/interfaces';

@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+
 /// <reference path="./hbs.d.ts" />
 
 export * from './AbiTypeGen';

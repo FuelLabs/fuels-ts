@@ -704,7 +704,7 @@ export default class Provider {
     if (inputs) {
       inputs.forEach((input, index) => {
         if ('predicateGasUsed' in input && bn(input.predicateGasUsed).gt(0)) {
-          // eslint-disable-next-line no-param-reassign
+
           (<CoinTransactionRequestInput>transactionRequest.inputs[index]).predicateGasUsed =
             input.predicateGasUsed;
         }
@@ -769,7 +769,7 @@ export default class Provider {
           transactionRequest,
         });
 
-        // eslint-disable-next-line no-param-reassign
+
         transactionRequest.maxFee = maxFee;
       } else {
         break;
@@ -1058,7 +1058,7 @@ export default class Provider {
     /**
      * Calculate minGas and maxGas based on the real transaction
      */
-    // eslint-disable-next-line prefer-const
+
     let { maxFee, maxGas, minFee, minGas, gasPrice, gasLimit } = await this.estimateTxGasAndFee({
       transactionRequest: signedRequest,
     });
@@ -1627,7 +1627,7 @@ export default class Provider {
     return bn(latestBlockHeight);
   }
 
-  // eslint-disable-next-line @typescript-eslint/require-await
+
   async getTransactionResponse(transactionId: string): Promise<TransactionResponse> {
     return new TransactionResponse(transactionId, this);
   }

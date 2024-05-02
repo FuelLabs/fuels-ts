@@ -65,7 +65,7 @@ export type CallConfig<T = unknown> = {
  * @template TArgs - Type of the function's arguments.
  * @template TReturn - Type of the function's return value.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export interface InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> {
   (...args: TArgs): FunctionInvocationScope<TArgs, TReturn>;
   isReadOnly: () => boolean;

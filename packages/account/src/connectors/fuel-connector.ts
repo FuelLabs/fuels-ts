@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/require-await */
+/*
 import { EventEmitter } from 'events';
 
 import type { TransactionRequestLike } from '../providers';

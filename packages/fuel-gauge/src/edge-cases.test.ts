@@ -35,7 +35,7 @@ describe('Edge Cases', () => {
 
     const subsciption = provider.operations.statusChange({ transactionId });
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     for await (const iterator of subsciption) {
       // we leave this intentionally empty so that we test that the subscription will end the loop when the connection is closed
     }

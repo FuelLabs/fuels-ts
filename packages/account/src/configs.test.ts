@@ -20,12 +20,12 @@ describe('Configs - undefined process', () => {
     vi.resetModules();
 
     // @ts-expect-error - test to assert undefined process
-    // eslint-disable-next-line no-global-assign
+
     process = undefined;
   });
 
   afterEach(() => {
-    // eslint-disable-next-line no-global-assign
+
     process = originalProcess;
   });
 

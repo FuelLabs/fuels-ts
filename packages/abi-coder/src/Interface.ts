@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify } from '@fuel-ts/utils';

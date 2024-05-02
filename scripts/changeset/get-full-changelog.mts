@@ -39,7 +39,7 @@ async function getChangelogInfo(
     data: { title },
   } = await octokit.rest.pulls.get({
     ...github.context.repo,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     pull_number: prNo!,
   });
 

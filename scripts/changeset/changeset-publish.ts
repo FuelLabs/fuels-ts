@@ -9,7 +9,7 @@ const changesetPublishOutput = execSync(
   `pnpm changeset publish --no-git-tag --tag ${npmTag}`
 ).toString();
 
-// eslint-disable-next-line no-console
+
 console.log(changesetPublishOutput); // print out as if execSync was run with stdio: "inherit"
 
 // inspired by https://github.com/FuelLabs/changesets-action/blob/5866ff9f4cd625a76d86c0735aded055aeacf814/src/run.ts#L146

@@ -12,7 +12,7 @@ import {
   getCurrentVersion,
   getPkgPlatform,
   isGitBranch,
-  // eslint-disable-next-line import/extensions
+
 } from './shared.js';
 
 (async () => {

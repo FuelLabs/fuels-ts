@@ -48,7 +48,7 @@ export function constructTree(sums: string[], data: string[]): Node[] {
   let pNodes = [...nodes];
   let size = (nodes.length + 1) >> 1;
   let odd = nodes.length & 1;
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     let i = 0;
     for (; i < size - odd; i += 1) {
@@ -94,7 +94,7 @@ export function calcRoot(sums: string[], data: string[]): Node {
   let pNodes = nodes;
   let size = (nodes.length + 1) >> 1;
   let odd = nodes.length & 1;
-  // eslint-disable-next-line no-constant-condition
+
   while (true) {
     let i = 0;
     for (; i < size - odd; i += 1) {

@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+/*
 
 import { Coder, ArrayCoder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -21,8 +21,8 @@ import { WitnessCoder } from './witness';
 
 export enum TransactionType /* u8 */ {
   Script = 0,
-  Create = 1,
-  Mint = 2,
+    Create = 1,
+    Mint = 2,
 }
 
 export type TransactionScript = {
@@ -346,10 +346,10 @@ type PossibleTransactions = TransactionScript | TransactionCreate | TransactionM
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
   : Partial<Omit<TransactionScript, 'type'>> &
-      Partial<Omit<TransactionCreate, 'type'>> &
-      Partial<Omit<TransactionMint, 'type'>> & {
-        type: TransactionType;
-      };
+  Partial<Omit<TransactionCreate, 'type'>> &
+  Partial<Omit<TransactionMint, 'type'>> & {
+    type: TransactionType;
+  };
 
 export class TransactionCoder extends Coder<Transaction, Transaction> {
   constructor() {

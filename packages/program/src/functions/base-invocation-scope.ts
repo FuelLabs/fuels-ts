@@ -1,5 +1,5 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
+/*
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import type { Provider, CoinQuantity, CallResult, Account } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';

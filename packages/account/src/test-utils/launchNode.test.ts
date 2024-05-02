@@ -21,7 +21,7 @@ vi.mock('child_process', async () => {
  * to know fuel-core state.
  */
 function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const stderrOn = (eventName: string, fn: (data: any) => void) => {
     if (eventName === 'data') {
       if (params.shouldError) {
@@ -141,10 +141,10 @@ describe('launchNode', () => {
     let child = {
       pid: undefined,
       stdout: {
-        removeAllListeners: () => {},
+        removeAllListeners: () => { },
       },
       stderr: {
-        removeAllListeners: () => {},
+        removeAllListeners: () => { },
       },
     } as ChildProcessWithoutNullStreams;
 
@@ -162,10 +162,10 @@ describe('launchNode', () => {
     child = {
       pid: 1,
       stdout: {
-        removeAllListeners: () => {},
+        removeAllListeners: () => { },
       },
       stderr: {
-        removeAllListeners: () => {},
+        removeAllListeners: () => { },
       },
     } as ChildProcessWithoutNullStreams;
 

@@ -47,7 +47,7 @@ export const configFileChanged = (state: DevState) => async (_event: string, pat
   state.fuelCore?.killChildProcess();
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+
     await dev(await loadConfig(state.config.basePath));
   } catch (err: unknown) {
     await withConfigErrorHandler(<Error>err, state.config);

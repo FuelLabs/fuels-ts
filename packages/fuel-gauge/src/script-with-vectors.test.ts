@@ -85,7 +85,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const scriptInstance = getScript<[any], void>('script-with-vector-mixed', wallet);
 
     const { value } = await scriptInstance.functions.main(importantDates).call();
@@ -152,7 +152,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const scriptInstance = getScript<[any[]], void>('script-with-vector-advanced', wallet);
 
     const { value } = await scriptInstance.functions.main(vectorOfStructs).call();

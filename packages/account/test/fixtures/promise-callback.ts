@@ -8,7 +8,7 @@ export type PromiseCallback = Mock & {
 
 export function promiseCallback() {
   const defer = deferPromise();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const mockFn: any = vi.fn();
 
   mockFn.mockImplementation((...args: unknown[]) => {

@@ -44,7 +44,6 @@ export default function Home() {
     }
   }, [wallet]);
 
-  // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
     if (!contract) {
       return toast.error("Contract not loaded");

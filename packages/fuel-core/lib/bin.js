@@ -2,7 +2,7 @@
 
 import { spawn } from 'child_process';
 
-// eslint-disable-next-line import/extensions
+
 import { binPath } from './shared.js';
 
 const args = process.argv.slice(2);

@@ -25,7 +25,7 @@ export class Signer {
     // A lot of common tools do not prefix private keys with a 0x
     if (typeof privateKey === 'string') {
       if (privateKey.match(/^[0-9a-f]*$/i) && privateKey.length === 64) {
-        // eslint-disable-next-line no-param-reassign
+
         privateKey = `0x${privateKey}`;
       }
     }

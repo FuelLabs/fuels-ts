@@ -655,11 +655,11 @@ describe('Contract', () => {
 
     const transactionRequestParsed = transactionRequestify(txRequestParsed);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const response = await contract.account!.sendTransaction(transactionRequestParsed);
     const {
       value: [resultA, resultB],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
 
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
@@ -718,7 +718,7 @@ describe('Contract', () => {
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
     class ProviderCustom extends Provider {
-      // eslint-disable-next-line @typescript-eslint/require-await
+
       static async create(url: string) {
         const newProvider = new ProviderCustom(url);
         return newProvider;
@@ -761,12 +761,12 @@ describe('Contract', () => {
 
     await contract.account.fund(transactionRequestParsed, txCost);
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
     const response = await contract.account!.sendTransaction(transactionRequestParsed);
     const {
       value: [resultA, resultB],
       transactionResult,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     } = await FunctionInvocationResult.build<any, TransactionType.Script>(
       invocationScopes,
       response,

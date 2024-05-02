@@ -1,4 +1,4 @@
-import type {} from '@fuel-ts/account/dist/providers/__generated__/operations';
+import type { } from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
@@ -67,9 +67,9 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
        * and pass the other forward in place of the original stream,
        * thereby not affecting the response at all.
        * */
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
       const [stream1, stream2] = r.body!.tee();
-      // eslint-disable-next-line no-param-reassign
+
       streamHolder.stream = stream1;
       return new Response(stream2);
     };

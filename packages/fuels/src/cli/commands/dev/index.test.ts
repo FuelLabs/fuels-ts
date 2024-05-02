@@ -88,7 +88,7 @@ describe('dev', () => {
   test('should call `close` on all file handlers', () => {
     const close = vi.fn();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const handlers: any = [{ close }, { close }, { close }];
 
     closeAllFileHandlers(handlers);

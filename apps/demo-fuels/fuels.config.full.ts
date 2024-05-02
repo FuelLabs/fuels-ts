@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { createConfig } from 'fuels';
 import type { CommandEvent, ContractDeployOptions, FuelsConfig } from 'fuels/src/cli/types';
 

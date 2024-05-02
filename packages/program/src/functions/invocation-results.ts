@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-classes-per-file */
+/*
+/*
 import { ENCODING_V0 } from '@fuel-ts/abi-coder';
 import type {
   CallResult,

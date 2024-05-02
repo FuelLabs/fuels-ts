@@ -139,8 +139,8 @@ export class Account extends AbstractAccount {
 
     const pageSize = 9999;
     let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
+
+    for (; ;) {
       const pageCoins = await this.provider.getCoins(this.address, assetId, {
         first: pageSize,
         after: cursor,
@@ -173,8 +173,8 @@ export class Account extends AbstractAccount {
 
     const pageSize = 9999;
     let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
+
+    for (; ;) {
       const pageMessages = await this.provider.getMessages(this.address, {
         first: pageSize,
         after: cursor,
@@ -219,8 +219,8 @@ export class Account extends AbstractAccount {
 
     const pageSize = 9999;
     let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
+
+    for (; ;) {
       const pageBalances = await this.provider.getBalances(this.address, {
         first: pageSize,
         after: cursor,

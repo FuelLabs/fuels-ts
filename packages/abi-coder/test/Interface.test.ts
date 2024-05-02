@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+/*
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
@@ -505,7 +505,7 @@ describe('Abi interface', () => {
             ],
           ],
           encodedValue: (input?: any, _offset: number = 0) => {
-            // eslint-disable-next-line no-param-reassign
+
             input = input[0];
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.length]);
             const lengthVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
@@ -541,7 +541,7 @@ describe('Abi interface', () => {
           title: '[vector] vector inside array',
           value: [[[5, 6]]],
           encodedValue: (input?: any, _offset: number = 0) => {
-            // eslint-disable-next-line no-param-reassign
+
             input = input[0];
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);
             const data1 = Uint8Array.from([0, 0, 0, input[0][0]]);
@@ -562,7 +562,7 @@ describe('Abi interface', () => {
             },
           ],
           encodedValue: (input?: any, _offset: number = 0) => {
-            // eslint-disable-next-line no-param-reassign
+
             input = input[0];
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);
             const vectorData = Uint8Array.from(input.vec);
@@ -583,7 +583,7 @@ describe('Abi interface', () => {
             },
           ],
           encodedValue: (input?: any, _offset: number = 0) => {
-            // eslint-disable-next-line no-param-reassign
+
             input = input[0];
             const u8 = Uint8Array.from([7]);
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.vec.length]);

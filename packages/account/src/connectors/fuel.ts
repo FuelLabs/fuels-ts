@@ -66,7 +66,7 @@ export class Fuel extends FuelConnector {
     // Setup all methods
     this.setupMethods();
     // Get the current connector from the storage
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
     this.setDefaultConnector();
     // Setup new connector listener for global events
     this._targetUnsubscribe = this.setupConnectorListener();
@@ -178,11 +178,11 @@ export class Fuel extends FuelConnector {
     // we can ignore the response as is treated as stale.
     const isStale = requestTimestamp < (connector._latestUpdate || 0);
     if (!isStale) {
-      // eslint-disable-next-line no-param-reassign
+
       connector._latestUpdate = Date.now();
-      // eslint-disable-next-line no-param-reassign
+
       connector.installed = ping.status === 'fulfilled' && ping.value;
-      // eslint-disable-next-line no-param-reassign
+
       connector.connected = isConnected.status === 'fulfilled' && isConnected.value;
     }
     return {
@@ -238,7 +238,7 @@ export class Fuel extends FuelConnector {
     }
     if (targetObject?.addEventListener) {
       const handler = (e: CustomEvent<FuelConnector>) => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
         this.addConnector(e.detail);
       };
       targetObject.addEventListener(eventName, handler);
@@ -246,7 +246,7 @@ export class Fuel extends FuelConnector {
         targetObject.removeEventListener?.(eventName, handler);
       };
     }
-    return () => {};
+    return () => { };
   };
 
   /**
@@ -331,7 +331,7 @@ export class Fuel extends FuelConnector {
       // and emit the events to the Fuel instance allowing the application to
       // react to changes in the connector state.
       if (options.emitEvents) {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+
         this.triggerConnectorEvents();
       }
       return true;

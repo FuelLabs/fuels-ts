@@ -74,7 +74,6 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
         newOffset += getWordSizePadding(newOffset);
       }
 
-      // eslint-disable-next-line no-param-reassign
       obj[fieldName as keyof DecodedValueOf<TCoders>] = decoded;
       return obj;
     }, {} as DecodedValueOf<TCoders>);

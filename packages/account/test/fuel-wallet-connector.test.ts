@@ -526,7 +526,7 @@ describe('Fuel Connector', () => {
         return provider;
       }
 
-      // eslint-disable-next-line @typescript-eslint/require-await
+
       async getBalance(_owner: AbstractAddress, _assetId: BytesLike = ZeroBytes32): Promise<BN> {
         return bn(1234);
       }
