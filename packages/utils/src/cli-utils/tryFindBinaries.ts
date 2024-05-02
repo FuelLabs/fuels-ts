@@ -8,16 +8,16 @@ const defaultBinaryPaths = {
 
 /**
  * Tries to find the binaries in the system, otherwise throws an error.
- * 
+ *
  * @param paths - paths to the binaries (optional)
- * @returns - paths and versions of the binaries
+ * @returns - paths to the resolved binaries
  */
 export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: string } = {}) => {
   const { forcPath, fuelCorePath } = { ...defaultBinaryPaths, ...paths };
 
   // Ensure we can get the binary versions
-  const { error: forcError, systemForcVersion } = getSystemForc(forcPath);
-  const { error: fuelCoreError, systemFuelCoreVersion } = getSystemFuelCore(fuelCorePath);
+  const { error: forcError } = getSystemForc(forcPath);
+  const { error: fuelCoreError } = getSystemFuelCore(fuelCorePath);
   if (forcError || fuelCoreError) {
     const errors = [
       forcError ? `Binary for 'forc' not found at path '${forcPath}'` : undefined,
