@@ -32,9 +32,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:packages/utils
-      '@fuel-ts/versions':
-        specifier: workspace:^
-        version: link:packages/versions
       '@internal/forc':
         specifier: workspace:*
         version: link:internal/forc
