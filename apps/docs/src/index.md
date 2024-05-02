@@ -7,7 +7,7 @@
 
 # The Fuel TypeScript SDK
 
-The Fuel TypeScript SDK provides methods and utilities in TypeScript for developing on or interacting with the Fuel network and it's [ecosystem](https://docs.fuel.network/docs/intro/what-is-fuel/).
+The Fuel TypeScript SDK provides methods and utilities in TypeScript, for developing on or interacting with the Fuel network and its [ecosystem](https://docs.fuel.network/docs/intro/what-is-fuel/).
 
 Using the SDK you can:
 
