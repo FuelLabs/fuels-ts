@@ -11,8 +11,8 @@ export const pbkdf2: CryptoApi['pbkdf2'] = (
   salt: BytesLike,
   iterations: number,
   keylen: number,
-  _algo: 'sha256' | 'sha512'
+  algo: 'sha256' | 'sha512'
 ): string => {
-  const algo = { sha256, sha512 }[_algo];
-  return hexlify(pb(algo, password, salt, { c: iterations, dkLen: keylen }));
+  const algorithm = { sha256, sha512 }[algo];
+  return hexlify(pb(algorithm, password, salt, { c: iterations, dkLen: keylen }));
 };

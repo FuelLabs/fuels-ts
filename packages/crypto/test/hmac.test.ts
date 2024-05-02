@@ -2,6 +2,7 @@ import { computeHmac } from '..';
 
 // #TODO: This computes the wrong value on node yet the other tests pass, I'm not sure why
 /**
+ * @group node
  * @group browser
  */
 describe('computeHmac node & browser', () => {
