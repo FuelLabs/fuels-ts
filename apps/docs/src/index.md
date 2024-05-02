@@ -12,10 +12,10 @@ The Fuel TypeScript SDK provides methods and utilities in TypeScript, for develo
 Using the SDK you can:
 
 - Deploy, interact with, and test [Sway](https://docs.fuel.network/docs/sway/) contracts.
+- Bootstrap a dApp and local development environment using the [create fuels CLI](https://docs.fuel.network/docs/fuels-ts/creating-a-fuel-dapp/).
 - Generate and import wallets from private key, mnemonic, or JSON and safely store them on the client.
 - Craft custom transactions and mutate them by adding resources, policies and signers and submit them.
-- Bootstrap a dApp and local development environment using the [Fuels CLI](https://fuellabs.github.io/fuels-ts/guide/fuels-cli/).
-- Generate types for [sway programs](https://docs.fuel.network/docs/sway/sway-program-types/) using [typegen](https://docs.fuel.network/docs/fuels-ts/fuels-cli/abi-typegen/) to give end to end type safety.
+- Generate types for [Sway programs](https://docs.fuel.network/docs/sway/sway-program-types/) using [typegen](https://docs.fuel.network/docs/fuels-ts/fuels-cli/abi-typegen/) to give end-to-end type safety.
 
 ## Version
 
