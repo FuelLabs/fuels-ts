@@ -15,10 +15,7 @@ import {
   promptForPackageManager,
   promptForProjectPath,
 } from './prompts';
-
-const log = (...data: unknown[]) => {
-  process.stdout.write(`${data.join(' ')}\n`);
-};
+import { error, log } from './utils/logger';
 
 export type ProgramsToInclude = {
   contract: boolean;
@@ -91,11 +88,7 @@ export const runScaffoldCli = async ({
   }
 
   while (existsSync(projectPath)) {
-    log(
-      chalk.red(
-        `A folder already exists at ${projectPath}. Please choose a different project name.`
-      )
-    );
+    error(`A folder already exists at ${projectPath}. Please choose a different project name.`);
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
@@ -106,7 +99,7 @@ export const runScaffoldCli = async ({
   }
 
   while (!projectPath) {
-    log(chalk.red('Please specify a project directory.'));
+    error('Please specify a project directory.');
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
@@ -146,7 +139,7 @@ export const runScaffoldCli = async ({
   }
 
   while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
-    log(chalk.red('You must include at least one Sway program.'));
+    error('You must include at least one Sway program.');
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {

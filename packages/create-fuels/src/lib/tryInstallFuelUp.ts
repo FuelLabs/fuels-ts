@@ -1,8 +1,7 @@
-import chalk from 'chalk';
-import { log } from 'console';
 import ora from 'ora';
 
 import { promptFuelUpInstall } from '../prompts';
+import { warn } from '../utils/logger';
 
 import { checkIfFuelUpInstalled } from './createIfFuelUpInstalled';
 import { installFuelUp } from './installFuelUp';
@@ -22,11 +21,7 @@ export const tryInstallFuelUp = async (isVerbose: boolean = false) => {
 
   const shouldInstall = await promptFuelUpInstall();
   if (!shouldInstall) {
-    log(
-      chalk.yellow(
-        'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
-      )
-    );
+    warn('Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init');
     return;
   }
 

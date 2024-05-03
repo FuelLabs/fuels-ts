@@ -1,6 +1,8 @@
 import * as oraMod from 'ora';
 
+import { mockLogger } from '../../test/utils/mockLogger';
 import * as promptFuelUpInstallMod from '../prompts/promptFuelUpInstall';
+import * as loggerMod from '../utils/logger';
 
 import * as checkIfFuelUpInstalledMod from './createIfFuelUpInstalled';
 import * as installFuelUpMod from './installFuelUp';
@@ -93,8 +95,9 @@ describe('tryInstallFuelup', () => {
     expect(promptFuelUpInstall).toBeCalledTimes(1);
   });
 
-  it("should log message if user doesn't want to install", async () => {
+  it("should warn the user to install manually", async () => {
     // Arrange
+    const { warn } = mockLogger();
     const { oraInstance, promptFuelUpInstall, installFuelUp } = mockAllDeps({
       isFuelUpInstalled: false,
       shouldInstallFuelUp: false,
@@ -106,8 +109,7 @@ describe('tryInstallFuelup', () => {
     // Assert
     expect(oraInstance.fail).toBeCalledWith('fuelup not found.');
     expect(promptFuelUpInstall).toBeCalledTimes(1);
-    // TODO: when logger moved over
-    // expect(warn).toBeCalledWith('fuelup is required to run the project.');
+    expect(warn.mock.calls[0][0]).toMatch(/You will need to install fuelup manually./g);
     expect(installFuelUp).not.toBeCalled();
   });
 

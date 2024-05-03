@@ -1,6 +1,7 @@
 import { execSync } from 'child_process';
-import { log } from 'console';
 import ora from 'ora';
+
+import { log, error } from '../utils/logger';
 
 export const installFuelUp = (isVerbose: boolean = false) => {
   const installFuelUpSpinner = ora({
@@ -10,9 +11,9 @@ export const installFuelUp = (isVerbose: boolean = false) => {
   try {
     execSync(`curl https://install.fuel.network | sh`, { stdio: 'inherit' });
     installFuelUpSpinner.succeed('Successfully installed fuelup!');
-  } catch (error) {
+  } catch (e) {
     if (isVerbose) {
-      log(error);
+      error(e);
     }
     log(
       installFuelUpSpinner.fail(
