@@ -34,10 +34,13 @@ export type ExternalStructInput = { value: BigNumberish };
 export type ExternalStructOutput = { value: BN };
 export type AddressInput = { bits: string };
 export type AddressOutput = AddressInput;
+export type ContractIdInput = { bits: string };
+export type ContractIdOutput = ContractIdInput;
 
 interface MyContractAbiInterface extends Interface {
   functions: {
     type_address: FunctionFragment;
+    type_contract_id: FunctionFragment;
     type_evm_address: FunctionFragment;
     type_external_enum: FunctionFragment;
     type_external_struct: FunctionFragment;
@@ -48,6 +51,7 @@ interface MyContractAbiInterface extends Interface {
   };
 
   encodeFunctionData(functionFragment: 'type_address', values: [AddressInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'type_contract_id', values: [ContractIdInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_evm_address', values: [EvmAddress]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_external_enum', values: [ExternalEnumInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_external_struct', values: [ExternalStructInput]): Uint8Array;
@@ -57,6 +61,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'type_vector_u8', values: [Vec<BigNumberish>]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'type_address', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'type_contract_id', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_evm_address', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_external_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_external_struct', data: BytesLike): DecodedValue;
@@ -70,6 +75,7 @@ export class MyContractAbi extends Contract {
   interface: MyContractAbiInterface;
   functions: {
     type_address: InvokeFunction<[x: AddressInput], AddressOutput>;
+    type_contract_id: InvokeFunction<[x: ContractIdInput], ContractIdOutput>;
     type_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     type_external_enum: InvokeFunction<[x: ExternalEnumInput], ExternalEnumOutput>;
     type_external_struct: InvokeFunction<[x: ExternalStructInput], ExternalStructOutput>;
