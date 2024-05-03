@@ -9,12 +9,11 @@ import { join } from 'path';
 
 import packageJson from '../package.json';
 
-import { checkIfFuelUpInstalled, installFuelUp } from './lib';
+import { tryInstallFuelUp } from './lib';
 import {
   promptForProgramsToInclude,
   promptForPackageManager,
   promptForProjectPath,
-  promptFuelUpInstall,
 } from './prompts';
 
 const log = (...data: unknown[]) => {
@@ -56,32 +55,6 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
   writeFileSync(envFilePath, newFileContents);
 }
 
-async function tryInstallFuelup(isVerbose: boolean = false) {
-  const fuelUpSpinner = ora({
-    text: 'Checking if fuelup is installed..',
-    color: 'green',
-  }).start();
-
-  if (checkIfFuelUpInstalled()) {
-    fuelUpSpinner.succeed('fuelup is already installed.');
-    return;
-  }
-
-  fuelUpSpinner.fail('fuelup not found.');
-
-  const shouldInstall = await promptFuelUpInstall();
-
-  if (shouldInstall) {
-    installFuelUp(isVerbose);
-  } else {
-    log(
-      chalk.yellow(
-        'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
-      )
-    );
-  }
-}
-
 export const setupProgram = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)
@@ -114,7 +87,7 @@ export const runScaffoldCli = async ({
   const verboseEnabled = program.opts().verbose ?? false;
 
   if (!process.env.VITEST) {
-    await tryInstallFuelup(verboseEnabled);
+    await tryInstallFuelUp(verboseEnabled);
   }
 
   while (existsSync(projectPath)) {
