@@ -155,7 +155,6 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
     const {
-      // TODO: Validade if it will be simpler to pass only required props
       feeParameters: { gasPerByte },
       txParameters: { maxGasPerTx },
     } = consensusParameters;
