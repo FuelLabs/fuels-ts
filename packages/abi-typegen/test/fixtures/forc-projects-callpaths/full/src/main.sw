@@ -1,6 +1,7 @@
 contract;
 use libs_for_testing::ExternalStruct;
 use libs_for_testing::ExternalEnum;
+use std::vm::evm::evm_address::EvmAddress;
 
 pub struct InternalStruct {
     pub a: u8
@@ -19,6 +20,7 @@ abi MyContract {
     fn type_option_enum(x: Option<u8>) -> Option<u8>;
     fn type_internal_enum(x: InternalEnum) -> InternalEnum;
     fn type_external_enum(x: ExternalEnum) -> ExternalEnum;
+    fn type_evm_address(x: EvmAddress) -> EvmAddress;
 }
 
 impl MyContract for Contract {
@@ -43,8 +45,7 @@ impl MyContract for Contract {
     fn type_external_enum(x: ExternalEnum) -> ExternalEnum {
         x
     }
-
-
-
-
+    fn type_evm_address(x: EvmAddress) -> EvmAddress {
+        x
+    }
 }
