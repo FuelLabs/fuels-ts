@@ -6,12 +6,16 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
 import ora from 'ora';
 import { join } from 'path';
-import prompts from 'prompts';
 
 import packageJson from '../package.json';
 
 import { checkIfFuelUpInstalled, installFuelUp } from './lib';
-import { promptForPackageManager, promptForProjectPath, promptFuelUpInstall } from './prompts';
+import {
+  promptForProgramsToInclude,
+  promptForPackageManager,
+  promptForProjectPath,
+  promptFuelUpInstall,
+} from './prompts';
 
 const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
@@ -34,39 +38,6 @@ const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsT
 
   return toml.stringify(parsed);
 };
-
-async function promptForProgramsToInclude({
-  forceDisablePrompts = false,
-}: {
-  forceDisablePrompts?: boolean;
-}) {
-  if (forceDisablePrompts) {
-    return {
-      contract: false,
-      predicate: false,
-      script: false,
-    };
-  }
-  const programsToIncludeInput = await prompts(
-    {
-      type: 'multiselect',
-      name: 'programsToInclude',
-      message: 'Which Sway programs do you want?',
-      choices: [
-        { title: 'Contract', value: 'contract', selected: true },
-        { title: 'Predicate', value: 'predicate', selected: true },
-        { title: 'Script', value: 'script', selected: true },
-      ],
-      instructions: false,
-    },
-    { onCancel: () => process.exit(0) }
-  );
-  return {
-    contract: programsToIncludeInput.programsToInclude.includes('contract'),
-    predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
-    script: programsToIncludeInput.programsToInclude.includes('script'),
-  };
-}
 
 function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude) {
   /*
