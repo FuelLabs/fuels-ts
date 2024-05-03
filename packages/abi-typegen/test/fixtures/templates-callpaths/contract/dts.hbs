@@ -20,7 +20,12 @@ import type {
   InvokeFunction,
 } from 'fuels';
 
-import type { Vec } from "./common";
+import type { Option, Enum, Vec } from "./common";
+
+export enum InternalEnumInput { A = 'A', B = 'B' };
+export enum InternalEnumOutput { A = 'A', B = 'B' };
+export enum ExternalEnumInput { A = 'A', B = 'B' };
+export enum ExternalEnumOutput { A = 'A', B = 'B' };
 
 export type InternalStructInput = { a: BigNumberish };
 export type InternalStructOutput = { a: number };
@@ -32,19 +37,28 @@ export type AddressOutput = AddressInput;
 interface MyContractAbiInterface extends Interface {
   functions: {
     type_address: FunctionFragment;
+    type_external_enum: FunctionFragment;
     type_external_struct: FunctionFragment;
+    type_internal_enum: FunctionFragment;
     type_internal_struct: FunctionFragment;
+    type_option_enum: FunctionFragment;
     type_vector_u8: FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: 'type_address', values: [AddressInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'type_external_enum', values: [ExternalEnumInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_external_struct', values: [ExternalStructInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'type_internal_enum', values: [InternalEnumInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_internal_struct', values: [InternalStructInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'type_option_enum', values: [Option<BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_vector_u8', values: [Vec<BigNumberish>]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'type_address', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'type_external_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_external_struct', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'type_internal_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_internal_struct', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'type_option_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_vector_u8', data: BytesLike): DecodedValue;
 }
 
@@ -52,8 +66,11 @@ export class MyContractAbi extends Contract {
   interface: MyContractAbiInterface;
   functions: {
     type_address: InvokeFunction<[x: AddressInput], AddressOutput>;
+    type_external_enum: InvokeFunction<[x: ExternalEnumInput], ExternalEnumOutput>;
     type_external_struct: InvokeFunction<[x: ExternalStructInput], ExternalStructOutput>;
+    type_internal_enum: InvokeFunction<[x: InternalEnumInput], InternalEnumOutput>;
     type_internal_struct: InvokeFunction<[x: InternalStructInput], InternalStructOutput>;
+    type_option_enum: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
     type_vector_u8: InvokeFunction<[x: Vec<BigNumberish>], Vec<number>>;
   };
 }

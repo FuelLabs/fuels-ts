@@ -4,3 +4,8 @@ library;
 pub struct ExternalStruct {
     pub value: u64,
 }
+
+pub enum ExternalEnum {
+    A: (),
+    B: ()
+}
