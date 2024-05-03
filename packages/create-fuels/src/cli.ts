@@ -11,7 +11,7 @@ import prompts from 'prompts';
 import packageJson from '../package.json';
 
 import { checkIfFuelUpInstalled, installFuelUp } from './lib';
-import { promptForPackageManager, promptFuelUpInstall } from './prompts';
+import { promptForPackageManager, promptForProjectPath, promptFuelUpInstall } from './prompts';
 
 const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
@@ -34,20 +34,6 @@ const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsT
 
   return toml.stringify(parsed);
 };
-
-async function promptForProjectPath() {
-  const res = await prompts(
-    {
-      type: 'text',
-      name: 'projectName',
-      message: 'What is the name of your project?',
-      initial: 'my-fuel-project',
-    },
-    { onCancel: () => process.exit(0) }
-  );
-
-  return res.projectName as string;
-}
 
 async function promptForProgramsToInclude({
   forceDisablePrompts = false,
