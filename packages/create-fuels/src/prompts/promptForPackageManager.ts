@@ -1,4 +1,4 @@
-import prompts from "prompts";
+import prompts from 'prompts';
 
 export const promptForPackageManager = async () => {
   const packageManagerInput = await prompts(
@@ -15,4 +15,4 @@ export const promptForPackageManager = async () => {
     { onCancel: () => process.exit(0) }
   );
   return packageManagerInput.packageManager as string;
-}
+};

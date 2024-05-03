@@ -1,7 +1,6 @@
-import * as promptsMod from "prompts";
+import * as promptsMod from 'prompts';
 
-import { promptForPackageManager } from "./promptForPackageManager";
-import { promptFuelUpInstall } from "./promptFuelUpInstall";
+import { promptForPackageManager } from './promptForPackageManager';
 
 vi.mock('prompts', async () => {
   const mod = await vi.importActual('prompts');
@@ -19,13 +18,10 @@ const mockPrompts = (params: { results: unknown[] }) => {
   return {
     prompts,
     exit,
-  }
-}
+  };
+};
 
-const responses = [
-  'pnpm',
-  'npm',
-]
+const responses = ['pnpm', 'npm'];
 
 /**
  * @group node
@@ -33,7 +29,7 @@ const responses = [
 describe('promptForPackageManager', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  })
+  });
 
   it('should prompt the user to select a package manger', async () => {
     // Arrange
@@ -67,7 +63,7 @@ describe('promptForPackageManager', () => {
     expect(result).toBe(response);
     expect(prompts).toBeCalledTimes(1);
     expect(exit).not.toBeCalled();
-  })
+  });
 
   it('should exit the process when user cancels the prompt', async () => {
     // Arrange
@@ -81,5 +77,5 @@ describe('promptForPackageManager', () => {
     expect(exit).toBeCalledWith(expectedExitCode);
     expect(result).toBeUndefined();
     expect(prompts).toBeCalledTimes(1);
-  })
-})
+  });
+});

@@ -195,4 +195,4 @@ describe('CLI', () => {
     expect(program.opts().predicate).toBe(undefined);
     expect(program.opts().script).toBe(undefined);
   });
-})
+});

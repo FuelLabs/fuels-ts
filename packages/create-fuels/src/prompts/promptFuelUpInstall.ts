@@ -1,12 +1,11 @@
-import prompts from "prompts";
+import prompts from 'prompts';
 
 export const promptFuelUpInstall = async () => {
   const shouldInstallFuelUp = await prompts(
     {
       type: 'confirm',
       name: 'shouldInstallFuelUp',
-      message:
-        `It seems you don't have 'fuelup' installed. 'fuelup' is required to manage the Fuel toolchain and is a prerequisite for using this template app. Do you want to install it now?`,
+      message: `It seems you don't have 'fuelup' installed. 'fuelup' is required to manage the Fuel toolchain and is a prerequisite for using this template app. Do you want to install it now?`,
       initial: true,
     },
     {
@@ -14,4 +13,4 @@ export const promptFuelUpInstall = async () => {
     }
   );
   return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
-}
+};

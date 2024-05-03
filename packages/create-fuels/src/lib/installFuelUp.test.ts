@@ -1,6 +1,5 @@
-import { fail } from 'assert';
 import * as childProcessMod from 'child_process';
-import * as oraMod from "ora";
+import * as oraMod from 'ora';
 
 import { installFuelUp } from './installFuelUp';
 
@@ -18,7 +17,7 @@ vi.mock('ora', async () => {
     __esModule: true,
     ...mod,
   };
-})
+});
 
 const mockAllDeps = (params: { shouldThrow: boolean }) => {
   const { shouldThrow } = params;
@@ -42,7 +41,7 @@ const mockAllDeps = (params: { shouldThrow: boolean }) => {
     ora,
     oraInstance,
   };
-}
+};
 
 describe('installFuelUp', () => {
   it('should install fuelup successfully', () => {
@@ -57,7 +56,9 @@ describe('installFuelUp', () => {
       text: 'Installing fuelup..',
       color: 'green',
     });
-    expect(execSync).toHaveBeenCalledWith('curl https://install.fuel.network | sh', { stdio: 'inherit' });
+    expect(execSync).toHaveBeenCalledWith('curl https://install.fuel.network | sh', {
+      stdio: 'inherit',
+    });
     expect(oraInstance.succeed).toBeCalledWith('Successfully installed fuelup!');
   });
 
@@ -72,5 +73,5 @@ describe('installFuelUp', () => {
     expect(execSync).toBeCalledTimes(1);
     expect(oraInstance.succeed).not.toBeCalled();
     expect(oraInstance.fail).toBeCalledTimes(1);
-  })
-})
+  });
+});

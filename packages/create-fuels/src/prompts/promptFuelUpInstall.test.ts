@@ -1,6 +1,6 @@
-import * as promptsMod from "prompts";
+import * as promptsMod from 'prompts';
 
-import { promptFuelUpInstall } from "./promptFuelUpInstall";
+import { promptFuelUpInstall } from './promptFuelUpInstall';
 
 vi.mock('prompts', async () => {
   const mod = await vi.importActual('prompts');
@@ -18,8 +18,8 @@ const mockPrompts = (params: { results: unknown[] }) => {
   return {
     prompts,
     exit,
-  }
-}
+  };
+};
 
 /**
  * @group node
@@ -27,7 +27,7 @@ const mockPrompts = (params: { results: unknown[] }) => {
 describe('promptFuelUpInstall', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  })
+  });
 
   it('should prompt the user to install fuelup', async () => {
     // Arrange
@@ -57,7 +57,7 @@ describe('promptFuelUpInstall', () => {
     expect(result).toBe(true);
     expect(prompts).toBeCalledTimes(1);
     expect(exit).not.toBeCalled();
-  })
+  });
 
   it('should return the user response when user chooses not to install fuelup', async () => {
     // Arrange
@@ -70,7 +70,7 @@ describe('promptFuelUpInstall', () => {
     expect(result).toBe(false);
     expect(prompts).toBeCalledTimes(1);
     expect(exit).not.toBeCalled();
-  })
+  });
 
   it('should exit the process when user cancels the prompt', async () => {
     // Arrange
@@ -84,5 +84,5 @@ describe('promptFuelUpInstall', () => {
     expect(exit).toBeCalledWith(expectedExitCode);
     expect(result).toBeUndefined();
     expect(prompts).toBeCalledTimes(1);
-  })
-})
+  });
+});
