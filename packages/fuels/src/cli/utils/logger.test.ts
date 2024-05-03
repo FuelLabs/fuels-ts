@@ -1,5 +1,3 @@
-import { resetDiskAndMocks } from '../../../test/utils/resetDiskAndMocks';
-
 import * as loggerMod from './logger';
 
 /**
@@ -11,7 +9,7 @@ describe('logger', () => {
   const loggingBackup = structuredClone(loggingConfig);
 
   const reset = () => {
-    resetDiskAndMocks();
+    vi.restoreAllMocks();
     configureLogging(loggingBackup);
   };
 
