@@ -11,6 +11,7 @@ import prompts from 'prompts';
 import packageJson from '../package.json';
 
 import { checkIfFuelUpInstalled, installFuelUp } from './lib';
+import { promptFuelUpInstall } from './prompts';
 
 const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
@@ -115,20 +116,6 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
   writeFileSync(envFilePath, newFileContents);
 }
 
-async function promptForFuelUpInstall() {
-  const shouldInstallFuelUp = await prompts(
-    {
-      type: 'confirm',
-      name: 'shouldInstallFuelUp',
-      message:
-        "It seems you don't have `fuelup` installed. `fuelup` is required to manage the Fuel toolchain and is a prerequisite for using this template app. Do you want to install it now?",
-      initial: true,
-    },
-    { onCancel: () => process.exit(0) }
-  );
-  return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
-}
-
 async function tryInstallFuelup(isVerbose: boolean = false) {
   const fuelUpSpinner = ora({
     text: 'Checking if fuelup is installed..',
@@ -142,7 +129,7 @@ async function tryInstallFuelup(isVerbose: boolean = false) {
 
   fuelUpSpinner.fail('fuelup not found.');
 
-  const shouldInstall = await promptForFuelUpInstall();
+  const shouldInstall = await promptFuelUpInstall();
 
   if (shouldInstall) {
     installFuelUp(isVerbose);
