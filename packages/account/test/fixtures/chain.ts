@@ -24,6 +24,7 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
       maxWitnesses: '255',
       maxGasPerTx: '500000000',
       maxSize: '17825792',
+      maxBytecodeSubsections: '255',
     },
     scriptParams: {
       __typename: 'ScriptParameters',
