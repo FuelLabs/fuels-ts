@@ -36,7 +36,9 @@ describe('launchNode', () => {
     });
 
     const {
-      consensusParameters: { gasPerByte },
+      consensusParameters: {
+        feeParameters: { gasPerByte },
+      },
     } = provider.getChain();
 
     const expectedGasPerByte = 63;

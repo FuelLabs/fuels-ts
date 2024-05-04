@@ -1,5 +1,12 @@
 # @fuel-ts/errors
 
+## 0.84.0
+
+### Patch Changes
+
+- Updated dependencies [2990edb]
+  - @fuel-ts/versions@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

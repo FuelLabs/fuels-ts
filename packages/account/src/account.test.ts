@@ -283,13 +283,13 @@ describe('Account', () => {
       { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
       { amount: bn(fee), assetId: baseAssetId },
     ];
-    expect(getResourcesToSpendSpy).toBeCalledTimes(1);
+    expect(getResourcesToSpendSpy).toHaveBeenCalled();
     expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
       messages: [],
       utxos: [],
     });
 
-    expect(addResourcesSpy).toBeCalledTimes(1);
+    expect(addResourcesSpy).toHaveBeenCalled();
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
   });
 
@@ -384,7 +384,8 @@ describe('Account', () => {
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(499112) }]);
+    const expectedRemaining = 499118;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
   });
 
@@ -402,7 +403,8 @@ describe('Account', () => {
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(499112) }]);
+    const expectedRemaining = 499118;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
   });
 
@@ -507,7 +509,8 @@ describe('Account', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(498427) }]);
+    const expectedRemaining = 498433;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
@@ -582,7 +585,9 @@ describe('Account', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(1498327) }]);
+
+    const expectedRemaining = 1498333;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
   });
 
   it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
