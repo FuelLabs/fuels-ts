@@ -143,7 +143,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
 
     const VM_TX_MEMORY = calculateVmTxMemory({
-      maxInputs: this.provider.getChain().consensusParameters.maxInputs.toNumber(),
+      maxInputs: this.provider.getChain().consensusParameters.txParameters.maxInputs.toNumber(),
     });
     const OFFSET =
       VM_TX_MEMORY +

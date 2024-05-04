@@ -8,6 +8,7 @@ mkdir -p .fuel-core/db
 cp ./packages/utils/src/utils/defaultSnapshots/chainConfig.json .fuel-core/configs/chainConfig.json
 cp ./packages/utils/src/utils/defaultSnapshots/metadata.json .fuel-core/configs/metadata.json
 cp ./packages/utils/src/utils/defaultSnapshots/stateConfig.json .fuel-core/configs/stateConfig.json
+cp ./packages/utils/src/utils/defaultSnapshots/state_transition_bytecode.wasm .fuel-core/configs/state_transition_bytecode.wasm
 
 pnpm fuels-core run \
     --db-path .fuel-core/db \
