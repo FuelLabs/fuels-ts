@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
-    "@vue/devtools-api": "^6.5.0",
+    "@vue/devtools-api": "^6.6.1",
     "flexsearch": "^0.7.31",
     "markdown-it": "^13.0.1",
     "nodemon": "^3.0.3",
