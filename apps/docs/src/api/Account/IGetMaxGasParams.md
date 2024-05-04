@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:101](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L101)
+[packages/account/src/providers/utils/gas.ts:102](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L102)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:99](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L99)
+[packages/account/src/providers/utils/gas.ts:100](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L100)
 
 ___
 
@@ -30,7 +30,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:102](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L102)
+[packages/account/src/providers/utils/gas.ts:103](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L103)
 
 ___
 
@@ -40,7 +40,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:100](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L100)
+[packages/account/src/providers/utils/gas.ts:101](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L101)
 
 ___
 
@@ -50,7 +50,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:98](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L98)
+[packages/account/src/providers/utils/gas.ts:99](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L99)
 
 ___
 
@@ -60,4 +60,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:97](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L97)
+[packages/account/src/providers/utils/gas.ts:98](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L98)

@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:159](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L159)
+[packages/account/src/providers/utils/gas.ts:160](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L160)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:160](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L160)
+[packages/account/src/providers/utils/gas.ts:161](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L161)
 
 ___
 
@@ -30,14 +30,14 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:161](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L161)
+[packages/account/src/providers/utils/gas.ts:162](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L162)
 
 ___
 
 ### tip
 
-• **tip**: `BN`
+• `Optional` **tip**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:158](https://github.com/FuelLabs/fuels-ts/blob/aa70d26b/packages/account/src/providers/utils/gas.ts#L158)
+[packages/account/src/providers/utils/gas.ts:159](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/utils/gas.ts#L159)

@@ -10,7 +10,7 @@
 
 #### Defined in
 
-packages/transactions/dist/coders/transaction.d.ts:11
+packages/transactions/dist/coders/transaction.d.ts:12
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-packages/transactions/dist/coders/transaction.d.ts:12
+packages/transactions/dist/coders/transaction.d.ts:13
 
 ___
 
@@ -30,4 +30,24 @@ ___
 
 #### Defined in
 
-packages/transactions/dist/coders/transaction.d.ts:10
+packages/transactions/dist/coders/transaction.d.ts:11
+
+___
+
+### Upgrade
+
+• **Upgrade** = ``3``
+
+#### Defined in
+
+packages/transactions/dist/coders/transaction.d.ts:14
+
+___
+
+### Upload
+
+• **Upload** = ``4``
+
+#### Defined in
+
+packages/transactions/dist/coders/transaction.d.ts:15
