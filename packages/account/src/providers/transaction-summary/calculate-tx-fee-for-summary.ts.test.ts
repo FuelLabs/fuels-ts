@@ -7,7 +7,7 @@ import {
   MOCK_TX_SCRIPT_RAW_PAYLOAD,
 } from '../../../test/fixtures/transaction-summary';
 
-import { calculateTransactionFee } from './calculate-transaction-fee';
+import { calculateTXFeeForSummary } from './calculate-tx-fee-for-summary';
 
 /**
  * @group node
@@ -23,7 +23,7 @@ describe('calculateTransactionFee', () => {
     const gasPriceFactor = 92;
     const gasPerByte = 4;
 
-    const { fee, maxFee, minFee } = calculateTransactionFee({
+    const fee = calculateTXFeeForSummary({
       tip: bn(0),
       gasPrice: bn(1),
       consensusParameters: {
@@ -38,12 +38,8 @@ describe('calculateTransactionFee', () => {
     });
 
     const expectedfee = bn(84);
-    const expectedmaxFee = bn(84);
-    const expectedminFee = bn(77);
 
     expect(fee.toNumber()).toEqual(expectedfee.toNumber());
-    expect(maxFee.toNumber()).toEqual(expectedmaxFee.toNumber());
-    expect(minFee.toNumber()).toEqual(expectedminFee.toNumber());
   });
 
   it('should properly calculate the transaction fee (CREATE TX)', () => {
@@ -56,7 +52,7 @@ describe('calculateTransactionFee', () => {
     const gasPriceFactor = 92;
     const gasPerByte = 4;
 
-    const { fee, maxFee, minFee } = calculateTransactionFee({
+    const fee = calculateTXFeeForSummary({
       tip: bn(0),
       gasPrice: bn(1),
       consensusParameters: {
@@ -71,12 +67,8 @@ describe('calculateTransactionFee', () => {
     });
 
     const expectedfee = bn(159);
-    const expectedmaxFee = bn(159);
-    const expectedminFee = bn(159);
 
     expect(fee.toNumber()).toEqual(expectedfee.toNumber());
-    expect(maxFee.toNumber()).toEqual(expectedmaxFee.toNumber());
-    expect(minFee.toNumber()).toEqual(expectedminFee.toNumber());
   });
 
   it('should properly calculate the transaction fee (MINT TX)', () => {
@@ -89,7 +81,7 @@ describe('calculateTransactionFee', () => {
     const gasPriceFactor = 92;
     const gasPerByte = 4;
 
-    const { fee, maxFee, minFee } = calculateTransactionFee({
+    const fee = calculateTXFeeForSummary({
       tip: bn(0),
       gasPrice: bn(1),
       consensusParameters: {
@@ -104,7 +96,5 @@ describe('calculateTransactionFee', () => {
     });
 
     expect(fee.toNumber()).toEqual(0);
-    expect(maxFee.toNumber()).toEqual(0);
-    expect(minFee.toNumber()).toEqual(0);
   });
 });
