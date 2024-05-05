@@ -445,7 +445,7 @@ export default class Provider {
       console.warn(
         `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}, 
 which is not supported by the version of the TS SDK that you are using. 
-Things might or might not work as expected.
+Things may not work as expected.
 Supported fuel-core version: ${supportedVersion}.`
       );
     }
