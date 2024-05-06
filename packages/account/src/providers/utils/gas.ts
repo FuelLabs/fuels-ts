@@ -3,7 +3,8 @@ import type { BN, BNInput } from '@fuel-ts/math';
 import { ReceiptType, type Input } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlDependentCost, GqlGasCosts } from '../__generated__/operations';
+import type { GqlDependentCost } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import type { TransactionRequestInput } from '../transaction-request';
 import type {
   TransactionResultReceipt,
@@ -36,7 +37,7 @@ export function resolveGasDependentCosts(byteSize: BNInput, gasDependentCost: Gq
 export function gasUsedByInputs(
   inputs: Array<TransactionRequestInput | Input>,
   txBytesSize: number,
-  gasCosts: GqlGasCosts
+  gasCosts: GasCosts
 ) {
   const witnessCache: Array<number> = [];
 
@@ -75,7 +76,7 @@ export function gasUsedByInputs(
 
 export interface IGetMinGasParams {
   inputs: Array<TransactionRequestInput | Input>;
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   txBytesSize: number;
   metadataGas: BN;
   gasPerByte: BN;
@@ -129,7 +130,7 @@ export function calculateMetadataGasForTxCreate({
   txBytesSize,
   contractBytesSize,
 }: {
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   contractBytesSize: BN;
   stateRootSize: number;
   txBytesSize: number;
@@ -148,14 +149,14 @@ export function calculateMetadataGasForTxScript({
   gasCosts,
   txBytesSize,
 }: {
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   txBytesSize: number;
 }) {
   return resolveGasDependentCosts(txBytesSize, gasCosts.s256);
 }
 
 export interface CalculateGasFeeParams {
-  tip: BN;
+  tip?: BN;
   gas: BN;
   gasPrice: BN;
   priceFactor: BN;
@@ -163,5 +164,5 @@ export interface CalculateGasFeeParams {
 
 export const calculateGasFee = (params: CalculateGasFeeParams) => {
   const { gas, gasPrice, priceFactor, tip } = params;
-  return gas.mul(gasPrice).div(priceFactor).add(tip);
+  return gas.mul(gasPrice).div(priceFactor).add(bn(tip));
 };

@@ -22,11 +22,18 @@ import type { Predicate } from '../predicate';
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragmentFragment,
+  GqlConsensusParametersVersion,
+  GqlContractParameters,
   GqlDryRunFailureStatusFragmentFragment,
   GqlDryRunSuccessStatusFragmentFragment,
+  GqlFeeParameters,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
   GqlMessage,
+  GqlPredicateParameters,
+  GqlRelayedTransactionFailed,
+  GqlScriptParameters,
+  GqlTxParameters,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -60,7 +67,7 @@ export type DryRunStatus =
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
-  dryrunStatus?: DryRunStatus;
+  dryRunStatus?: DryRunStatus;
 };
 
 export type EstimateTxDependenciesReturns = CallResult & {
@@ -86,24 +93,27 @@ export type ContractResult = {
   bytecode: string;
 };
 
-type ConsensusParameters = {
-  contractMaxSize: BN;
-  maxInputs: BN;
-  maxOutputs: BN;
-  maxWitnesses: BN;
-  maxGasPerTx: BN;
-  maxScriptLength: BN;
-  maxScriptDataLength: BN;
-  maxStorageSlots: BN;
-  maxPredicateLength: BN;
-  maxPredicateDataLength: BN;
-  maxGasPerPredicate: BN;
-  gasPriceFactor: BN;
-  gasPerByte: BN;
-  maxMessageDataLength: BN;
+type ModifyStringToBN<T> = {
+  [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
+};
+
+export type FeeParameters = Omit<GqlFeeParameters, '__typename'>;
+export type ContractParameters = Omit<GqlContractParameters, '__typename'>;
+export type PredicateParameters = Omit<GqlPredicateParameters, '__typename'>;
+export type ScriptParameters = Omit<GqlScriptParameters, '__typename'>;
+export type TxParameters = Omit<GqlTxParameters, '__typename'>;
+export type GasCosts = Omit<GqlGasCosts, '__typename'>;
+
+export type ConsensusParameters = {
+  version: GqlConsensusParametersVersion;
   chainId: BN;
-  gasCosts: GqlGasCosts;
   baseAssetId: string;
+  feeParameters: ModifyStringToBN<FeeParameters>;
+  contractParameters: ModifyStringToBN<ContractParameters>;
+  predicateParameters: ModifyStringToBN<PredicateParameters>;
+  scriptParameters: ModifyStringToBN<ScriptParameters>;
+  txParameters: ModifyStringToBN<TxParameters>;
+  gasCosts: GasCosts;
 };
 
 /**
@@ -113,7 +123,6 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   consensusParameters: ConsensusParameters;
-  gasCosts: GqlGasCosts;
   latestBlock: {
     id: string;
     height: BN;
@@ -154,38 +163,65 @@ export type TransactionCost = {
   estimatedPredicates: TransactionRequestInput[];
   requiredQuantities: CoinQuantity[];
   addedSignatures: number;
+  dryRunStatus?: DryRunStatus;
 };
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
   const { name, daHeight, consensusParameters, latestBlock } = chain;
 
-  const { contractParams, feeParams, predicateParams, scriptParams, txParams, gasCosts } =
-    consensusParameters;
+  const {
+    contractParams,
+    feeParams,
+    predicateParams,
+    scriptParams,
+    txParams,
+    gasCosts,
+    baseAssetId,
+    chainId,
+    version,
+  } = consensusParameters;
 
   return {
     name,
     baseChainHeight: bn(daHeight),
     consensusParameters: {
-      contractMaxSize: bn(contractParams.contractMaxSize),
-      maxInputs: bn(txParams.maxInputs),
-      maxOutputs: bn(txParams.maxOutputs),
-      maxWitnesses: bn(txParams.maxWitnesses),
-      maxGasPerTx: bn(txParams.maxGasPerTx),
-      maxScriptLength: bn(scriptParams.maxScriptLength),
-      maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
-      maxStorageSlots: bn(contractParams.maxStorageSlots),
-      maxPredicateLength: bn(predicateParams.maxPredicateLength),
-      maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
-      maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
-      gasPriceFactor: bn(feeParams.gasPriceFactor),
-      gasPerByte: bn(feeParams.gasPerByte),
-      maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
-      chainId: bn(consensusParameters.chainId),
-      baseAssetId: consensusParameters.baseAssetId,
+      version,
+      chainId: bn(chainId),
+      baseAssetId,
+      feeParameters: {
+        version: feeParams.version,
+        gasPerByte: bn(feeParams.gasPerByte),
+        gasPriceFactor: bn(feeParams.gasPriceFactor),
+      },
+      contractParameters: {
+        version: contractParams.version,
+        contractMaxSize: bn(contractParams.contractMaxSize),
+        maxStorageSlots: bn(contractParams.maxStorageSlots),
+      },
+      txParameters: {
+        version: txParams.version,
+        maxInputs: bn(txParams.maxInputs),
+        maxOutputs: bn(txParams.maxOutputs),
+        maxWitnesses: bn(txParams.maxWitnesses),
+        maxGasPerTx: bn(txParams.maxGasPerTx),
+        maxSize: bn(txParams.maxSize),
+        maxBytecodeSubsections: bn(txParams.maxBytecodeSubsections),
+      },
+      predicateParameters: {
+        version: predicateParams.version,
+        maxPredicateLength: bn(predicateParams.maxPredicateLength),
+        maxPredicateDataLength: bn(predicateParams.maxPredicateDataLength),
+        maxGasPerPredicate: bn(predicateParams.maxGasPerPredicate),
+        maxMessageDataLength: bn(predicateParams.maxMessageDataLength),
+      },
+      scriptParameters: {
+        version: scriptParams.version,
+        maxScriptLength: bn(scriptParams.maxScriptLength),
+        maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
+      },
       gasCosts,
     },
-    gasCosts,
     latestBlock: {
       id: latestBlock.id,
       height: bn(latestBlock.height),
@@ -398,8 +434,12 @@ export default class Provider {
    * Returns some helpful parameters related to gas fees.
    */
   getGasConfig() {
-    const { maxGasPerTx, maxGasPerPredicate, gasPriceFactor, gasPerByte, gasCosts } =
-      this.getChain().consensusParameters;
+    const {
+      txParameters: { maxGasPerTx },
+      predicateParameters: { maxGasPerPredicate },
+      feeParameters: { gasPriceFactor, gasPerByte },
+      gasCosts,
+    } = this.getChain().consensusParameters;
     return {
       maxGasPerTx,
       maxGasPerPredicate,
@@ -441,9 +481,12 @@ export default class Provider {
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
-      throw new FuelError(
-        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+      // eslint-disable-next-line no-console
+      console.warn(
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}, 
+which is not supported by the version of the TS SDK that you are using. 
+Things may not work as expected.
+Supported fuel-core version: ${supportedVersion}.`
       );
     }
   }
@@ -667,10 +710,10 @@ export default class Provider {
       encodedTransactions: encodedTransaction,
       utxoValidation: utxoValidation || false,
     });
-    const [{ receipts: rawReceipts, status }] = dryRunStatuses;
+    const [{ receipts: rawReceipts, status: dryRunStatus }] = dryRunStatuses;
     const receipts = rawReceipts.map(processGqlReceipt);
 
-    return { receipts, dryrunStatus: status };
+    return { receipts, dryRunStatus };
   }
 
   /**
@@ -738,7 +781,7 @@ export default class Provider {
     let receipts: TransactionResultReceipt[] = [];
     const missingContractIds: string[] = [];
     let outputVariables = 0;
-    let dryrunStatus: DryRunStatus | undefined;
+    let dryRunStatus: DryRunStatus | undefined;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
@@ -749,7 +792,7 @@ export default class Provider {
       });
 
       receipts = rawReceipts.map(processGqlReceipt);
-      dryrunStatus = status;
+      dryRunStatus = status;
 
       const { missingOutputVariables, missingOutputContractIds } =
         getReceiptsWithMissingData(receipts);
@@ -780,7 +823,7 @@ export default class Provider {
       receipts,
       outputVariables,
       missingContractIds,
-      dryrunStatus,
+      dryRunStatus,
     };
   }
 
@@ -801,7 +844,7 @@ export default class Provider {
       receipts: [],
       outputVariables: 0,
       missingContractIds: [],
-      dryrunStatus: undefined,
+      dryRunStatus: undefined,
     }));
 
     const allRequests = clone(transactionRequests);
@@ -836,7 +879,7 @@ export default class Provider {
         const { receipts: rawReceipts, status } = dryRunResults.dryRun[i];
         const result = results[requestIdx];
         result.receipts = rawReceipts.map(processGqlReceipt);
-        result.dryrunStatus = status;
+        result.dryRunStatus = status;
         const { missingOutputVariables, missingOutputContractIds } = getReceiptsWithMissingData(
           result.receipts
         );
@@ -882,7 +925,7 @@ export default class Provider {
 
     const results = dryRunStatuses.map(({ receipts: rawReceipts, status }) => {
       const receipts = rawReceipts.map(processGqlReceipt);
-      return { receipts, dryrunStatus: status };
+      return { receipts, dryRunStatus: status };
     });
 
     return results;
@@ -1064,6 +1107,7 @@ export default class Provider {
     });
 
     let receipts: TransactionResultReceipt[] = [];
+    let dryRunStatus: DryRunStatus | undefined;
     let missingContractIds: string[] = [];
     let outputVariables = 0;
     let gasUsed = bn(0);
@@ -1077,10 +1121,9 @@ export default class Provider {
         await signatureCallback(txRequestClone);
       }
 
-      const result = await this.estimateTxDependencies(txRequestClone);
-      receipts = result.receipts;
-      outputVariables = result.outputVariables;
-      missingContractIds = result.missingContractIds;
+      ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
+        await this.estimateTxDependencies(txRequestClone));
+
       gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : gasUsed;
 
       txRequestClone.gasLimit = gasUsed;
@@ -1104,6 +1147,7 @@ export default class Provider {
       missingContractIds,
       addedSignatures,
       estimatedPredicates: txRequestClone.inputs,
+      dryRunStatus,
     };
   }
 
@@ -1551,32 +1595,32 @@ export default class Provider {
       messageBlockHeader: {
         id: messageBlockHeader.id,
         daHeight: bn(messageBlockHeader.daHeight),
-        transactionsCount: bn(messageBlockHeader.transactionsCount),
+        transactionsCount: Number(messageBlockHeader.transactionsCount),
         transactionsRoot: messageBlockHeader.transactionsRoot,
         height: bn(messageBlockHeader.height),
         prevRoot: messageBlockHeader.prevRoot,
         time: messageBlockHeader.time,
         applicationHash: messageBlockHeader.applicationHash,
-        messageReceiptCount: bn(messageBlockHeader.messageReceiptCount),
+        messageReceiptCount: Number(messageBlockHeader.messageReceiptCount),
         messageOutboxRoot: messageBlockHeader.messageOutboxRoot,
-        consensusParametersVersion: messageBlockHeader.consensusParametersVersion,
+        consensusParametersVersion: Number(messageBlockHeader.consensusParametersVersion),
         eventInboxRoot: messageBlockHeader.eventInboxRoot,
-        stateTransitionBytecodeVersion: messageBlockHeader.stateTransitionBytecodeVersion,
+        stateTransitionBytecodeVersion: Number(messageBlockHeader.stateTransitionBytecodeVersion),
       },
       commitBlockHeader: {
         id: commitBlockHeader.id,
         daHeight: bn(commitBlockHeader.daHeight),
-        transactionsCount: bn(commitBlockHeader.transactionsCount),
+        transactionsCount: Number(commitBlockHeader.transactionsCount),
         transactionsRoot: commitBlockHeader.transactionsRoot,
         height: bn(commitBlockHeader.height),
         prevRoot: commitBlockHeader.prevRoot,
         time: commitBlockHeader.time,
         applicationHash: commitBlockHeader.applicationHash,
-        messageReceiptCount: bn(commitBlockHeader.messageReceiptCount),
+        messageReceiptCount: Number(commitBlockHeader.messageReceiptCount),
         messageOutboxRoot: commitBlockHeader.messageOutboxRoot,
-        consensusParametersVersion: commitBlockHeader.consensusParametersVersion,
+        consensusParametersVersion: Number(commitBlockHeader.consensusParametersVersion),
         eventInboxRoot: commitBlockHeader.eventInboxRoot,
-        stateTransitionBytecodeVersion: commitBlockHeader.stateTransitionBytecodeVersion,
+        stateTransitionBytecodeVersion: Number(commitBlockHeader.stateTransitionBytecodeVersion),
       },
       sender: Address.fromAddressOrString(sender),
       recipient: Address.fromAddressOrString(recipient),
@@ -1646,5 +1690,19 @@ export default class Provider {
     }
 
     return message;
+  }
+
+  async getRelayedTransactionStatus(
+    relayedTransactionId: string
+  ): Promise<GqlRelayedTransactionFailed | null> {
+    const { relayedTransactionStatus } = await this.operations.getRelayedTransactionStatus({
+      relayedTransactionId,
+    });
+
+    if (!relayedTransactionStatus) {
+      return null;
+    }
+
+    return relayedTransactionStatus;
   }
 }
