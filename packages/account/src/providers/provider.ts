@@ -23,17 +23,17 @@ import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragment,
   GqlConsensusParametersVersion,
-  GqlContractParameters,
+  GqlContractParameters as ContractParameters,
   GqlDryRunFailureStatusFragment,
   GqlDryRunSuccessStatusFragment,
-  GqlFeeParameters,
-  GqlGasCosts,
+  GqlFeeParameters as FeeParameters,
+  GqlGasCosts as GasCosts,
   GqlGetBlocksQueryVariables,
   GqlMessage,
-  GqlPredicateParameters,
+  GqlPredicateParameters as PredicateParameters,
   GqlRelayedTransactionFailed,
-  GqlScriptParameters,
-  GqlTxParameters,
+  GqlScriptParameters as ScriptParameters,
+  GqlTxParameters as TxParameters,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -95,12 +95,14 @@ type ModifyStringToBN<T> = {
   [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
 };
 
-export type FeeParameters = GqlFeeParameters;
-export type ContractParameters = GqlContractParameters;
-export type PredicateParameters = GqlPredicateParameters;
-export type ScriptParameters = GqlScriptParameters;
-export type TxParameters = GqlTxParameters;
-export type GasCosts = GqlGasCosts;
+export {
+  GasCosts,
+  FeeParameters,
+  ContractParameters,
+  PredicateParameters,
+  ScriptParameters,
+  TxParameters,
+};
 
 export type ConsensusParameters = {
   version: GqlConsensusParametersVersion;
