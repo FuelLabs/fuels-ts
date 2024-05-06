@@ -23,6 +23,7 @@ export class ScriptInvocationScope<
     const programBytes = (this.program as AbstractScript).bytes;
     const chainInfoCache = (this.program.provider as Provider).getChain();
 
+    // TODO: Remove this error since it is already handled on Provider class
     if (!chainInfoCache) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
@@ -30,7 +31,7 @@ export class ScriptInvocationScope<
       );
     }
 
-    const maxInputs = chainInfoCache.consensusParameters.maxInputs.toNumber();
+    const maxInputs = chainInfoCache.consensusParameters.txParameters.maxInputs.toNumber();
 
     const byteLength = new ByteArrayCoder(programBytes.length).encodedLength;
     this.scriptRequest = new ScriptRequest(

@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { bn, type BN } from '@fuel-ts/math';
 
 import type {
   BlockId,
@@ -31,13 +32,15 @@ export const getTransactionStatusName = (gqlStatus: GqlTransactionStatusesNames)
 type IProcessGraphqlStatusResponse = Pick<
   TransactionSummary,
   'time' | 'blockId' | 'isStatusPending' | 'isStatusSuccess' | 'isStatusFailure' | 'status'
->;
+> & { totalFee?: BN; totalGas?: BN };
 
 /** @hidden */
 export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionStatus) => {
   let time: Time | undefined;
   let blockId: BlockId | undefined;
   let status: TransactionStatus | undefined;
+  let totalFee: BN | undefined;
+  let totalGas: BN | undefined;
 
   let isStatusFailure = false;
   let isStatusSuccess = false;
@@ -51,12 +54,16 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
         time = gqlTransactionStatus.time;
         blockId = gqlTransactionStatus.block.id;
         isStatusSuccess = true;
+        totalFee = bn(gqlTransactionStatus.totalFee);
+        totalGas = bn(gqlTransactionStatus.totalGas);
         break;
 
       case 'FailureStatus':
         time = gqlTransactionStatus.time;
         blockId = gqlTransactionStatus.block.id;
         isStatusFailure = true;
+        totalFee = bn(gqlTransactionStatus.totalFee);
+        totalGas = bn(gqlTransactionStatus.totalGas);
         break;
 
       case 'SubmittedStatus':
@@ -71,6 +78,8 @@ export const processGraphqlStatus = (gqlTransactionStatus?: GraphqlTransactionSt
     time,
     blockId,
     status,
+    totalFee,
+    totalGas,
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,
