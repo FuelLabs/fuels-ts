@@ -153,7 +153,7 @@ fragment blockFragment on Block {
 }
 
 fragment coinFragment on Coin {
-  __typename
+  type: __typename
   utxoId
   owner
   amount
@@ -163,7 +163,7 @@ fragment coinFragment on Coin {
 }
 
 fragment messageCoinFragment on MessageCoin {
-  __typename
+  type: __typename
   sender
   recipient
   nonce
@@ -270,7 +270,6 @@ fragment FeeParametersFragment on FeeParameters {
 }
 
 fragment DependentCostFragment on DependentCost {
-  __typename
   ... on LightOperation {
     base
     unitsPerGas
