@@ -73,34 +73,38 @@ export const MESSAGE_PROOF: MessageProof = {
   messageBlockHeader: {
     id: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.id,
     daHeight: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.daHeight),
-    transactionsCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsCount),
+    transactionsCount: Number(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsCount),
     transactionsRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.transactionsRoot,
     height: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.height),
     prevRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.prevRoot,
     time: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.applicationHash,
-    messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptCount),
-    consensusParametersVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.consensusParametersVersion,
-    stateTransitionBytecodeVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.stateTransitionBytecodeVersion,
+    messageReceiptCount: Number(MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageReceiptCount),
+    consensusParametersVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.consensusParametersVersion
+    ),
+    stateTransitionBytecodeVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.stateTransitionBytecodeVersion
+    ),
     eventInboxRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.eventInboxRoot,
     messageOutboxRoot: MESSAGE_PROOF_RAW_RESPONSE.messageBlockHeader.messageOutboxRoot,
   },
   commitBlockHeader: {
     id: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.id,
     daHeight: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.daHeight),
-    transactionsCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsCount),
+    transactionsCount: Number(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsCount),
     transactionsRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.transactionsRoot,
     height: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.height),
     prevRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.prevRoot,
     time: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.time,
     applicationHash: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.applicationHash,
-    messageReceiptCount: bn(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptCount),
-    consensusParametersVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.consensusParametersVersion,
-    stateTransitionBytecodeVersion:
-      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.stateTransitionBytecodeVersion,
+    messageReceiptCount: Number(MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageReceiptCount),
+    consensusParametersVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.consensusParametersVersion
+    ),
+    stateTransitionBytecodeVersion: Number(
+      MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.stateTransitionBytecodeVersion
+    ),
     eventInboxRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.eventInboxRoot,
     messageOutboxRoot: MESSAGE_PROOF_RAW_RESPONSE.commitBlockHeader.messageOutboxRoot,
   },

@@ -2,17 +2,19 @@ import { bn, type BN } from '@fuel-ts/math';
 import { PolicyType, type Transaction } from '@fuel-ts/transactions';
 import { DateTime, hexlify } from '@fuel-ts/utils';
 
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 import { getGasUsedFromReceipts } from '../utils';
 
-import { calculateTransactionFee } from './calculate-transaction-fee';
+import { calculateTXFeeForSummary } from './calculate-tx-fee-for-summary';
 import {
   getOperations,
   getTransactionTypeName,
   isTypeMint,
   isTypeCreate,
   isTypeScript,
+  isTypeUpgrade,
+  isTypeUpload,
 } from './operations';
 import { extractBurnedAssetsFromReceipts, extractMintedAssetsFromReceipts } from './receipt';
 import { processGraphqlStatus } from './status';
@@ -28,7 +30,7 @@ export interface AssembleTransactionSummaryParams {
   receipts: TransactionResultReceipt[];
   abiMap?: AbiMap;
   maxInputs: BN;
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   maxGasPerTx: BN;
   gasPrice: BN;
 }
@@ -70,7 +72,11 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const tip = bn(transaction.policies?.find((policy) => policy.type === PolicyType.Tip)?.data);
 
-  const { fee } = calculateTransactionFee({
+  const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time, totalFee } =
+    processGraphqlStatus(gqlTransactionStatus);
+
+  const fee = calculateTXFeeForSummary({
+    totalFee,
     gasPrice,
     rawPayload,
     tip,
@@ -84,9 +90,6 @@ export function assembleTransactionSummary<TTransactionType = void>(
     },
   });
 
-  const { isStatusFailure, isStatusPending, isStatusSuccess, blockId, status, time } =
-    processGraphqlStatus(gqlTransactionStatus);
-
   const mintedAssets = extractMintedAssetsFromReceipts(receipts);
   const burnedAssets = extractBurnedAssetsFromReceipts(receipts);
 
@@ -98,6 +101,7 @@ export function assembleTransactionSummary<TTransactionType = void>(
 
   const transactionSummary: TransactionSummary<TTransactionType> = {
     id,
+    tip,
     fee,
     gasUsed,
     operations,
@@ -111,6 +115,8 @@ export function assembleTransactionSummary<TTransactionType = void>(
     isTypeMint: isTypeMint(transaction.type),
     isTypeCreate: isTypeCreate(transaction.type),
     isTypeScript: isTypeScript(transaction.type),
+    isTypeUpgrade: isTypeUpgrade(transaction.type),
+    isTypeUpload: isTypeUpload(transaction.type),
     isStatusFailure,
     isStatusSuccess,
     isStatusPending,

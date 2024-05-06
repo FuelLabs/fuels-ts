@@ -1,3 +1,4 @@
+import type { TransactionResult } from '@fuel-ts/account';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
@@ -54,7 +55,7 @@ describe('Contract Factory', () => {
     await contact.functions.initialize_counter(100).call();
 
     const { transactionResult } = await contact.functions.increment_counter(1).call();
-    expect(transactionResult).toEqual({
+    expect(transactionResult).toEqual<TransactionResult>({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
       status: expect.any(String),
@@ -66,12 +67,15 @@ describe('Contract Factory', () => {
       isStatusSuccess: expect.any(Boolean),
       isTypeCreate: expect.any(Boolean),
       isTypeMint: expect.any(Boolean),
+      isTypeUpgrade: expect.any(Boolean),
+      isTypeUpload: expect.any(Boolean),
       isTypeScript: expect.any(Boolean),
       logs: expect.any(Array),
       date: expect.any(Date),
       mintedAssets: expect.any(Array),
       burnedAssets: expect.any(Array),
       time: expect.any(String),
+      tip: expect.any(BN),
       id: expect.any(String),
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
