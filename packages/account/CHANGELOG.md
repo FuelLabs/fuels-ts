@@ -1,5 +1,32 @@
 # Change Log
 
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+- 214f9fc: fix!: deprecate getNetwork from `account`
+
+### Patch Changes
+
+- 86543ed: build: update deps
+- 4aca0b8: feat: add `getMessageByNonce` to `Provider`
+- 6231f7a: docs: updated inconsistent `@fuel-ts/account` README
+- 2dd75b9: fix: handling optional policies
+- 506f788: fix: throw proper error for not enough resources to cover fee
+- Updated dependencies [2990edb]
+  - @fuel-ts/transactions@0.84.0
+  - @fuel-ts/versions@0.84.0
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/abi-coder@0.84.0
+  - @fuel-ts/address@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/merkle@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes
