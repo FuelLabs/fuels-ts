@@ -291,7 +291,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
          * If at least one resource was added as a predicate resource, we need to check if it was the
          * first one. If that is the case, we don't need to remove the witness placeholder
          * as this was added with the "witnessIndex" as 0 and without a placeholder witness. Later if
-         * any resource without predicate is added, it will have the same witnessIndex because it has the
+         * any resource without a predicate is added, it will have the same witnessIndex because it has the
          * same owner.
          */
         const wasFilledInputAddedFirst = !!predicateInputs[0]?.predicate;
