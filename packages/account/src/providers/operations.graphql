@@ -290,10 +290,12 @@ fragment FeeParametersFragment on FeeParameters {
 
 fragment DependentCostFragment on DependentCost {
   ... on LightOperation {
+    type: __typename
     base
     unitsPerGas
   }
   ... on HeavyOperation {
+    type: __typename
     base
     gasPerUnit
   }
