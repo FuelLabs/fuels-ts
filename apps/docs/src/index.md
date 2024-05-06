@@ -5,97 +5,18 @@
   const logoSrc = './fuel-logo.png'
 </script>
 
+# The Fuel TypeScript SDK
+
+The Fuel TypeScript SDK provides methods and utilities in TypeScript, for developing on or interacting with the Fuel network and its [ecosystem](https://docs.fuel.network/docs/intro/what-is-fuel/).
+
+Using the SDK you can:
+
+- Deploy, interact with, and test [Sway](https://docs.fuel.network/docs/sway/) contracts.
+- Bootstrap a dApp and local development environment using the [create fuels CLI](https://docs.fuel.network/docs/fuels-ts/creating-a-fuel-dapp/).
+- Generate and import wallets from private key, mnemonic, or JSON and safely store them on the client.
+- Craft custom transactions and mutate them by adding resources, policies and signers and submit them.
+- Generate types for [Sway programs](https://docs.fuel.network/docs/sway/sway-program-types/) using [typegen](https://docs.fuel.network/docs/fuels-ts/fuels-cli/abi-typegen/) to give end-to-end type safety.
+
 ## Version
 
-This doc was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{forc}}`, and Forc `v{{forc}}`.
-
-## Installation Guide
-
-Please visit the Fuel's [installation guide](https://docs.fuel.network/guides/installation) to install The Fuel toolchain binaries and pre requisites.
-
-## Developer Quickstart Guide
-
-We recommend starting with the [Developer Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/) for a walk through on building your first DApp on Fuel.
-
-## The Fuel Ecosystem
-
-Learn more about the Fuel Ecosystem.
-
-- [🌴 Sway](https://docs.fuel.network/docs/sway/) the new language. Empowering everyone to build reliable and efficient smart contracts.
-- <a :href="url" target="_blank" rel="noreferrer">🧰 Forc</a> the Fuel toolbox. Build, deploy and manage your sway projects.
-- [⚙️ Fuel Core](https://github.com/FuelLabs/fuel-core) the new FuelVM, a blazingly fast blockchain VM.
-- [🔗 Fuel Specs](https://github.com/FuelLabs/fuel-specs) the Fuel protocol specifications.
-- [🦀 RUST SDK](https://github.com/FuelLabs/fuels-rs) a robust SDK in rust.
-- [⚡ Fuel Network](https://fuel.network/) the project.
-
-## Install
-
-::: code-group
-
-```sh-vue [pnpm]
-pnpm add fuels@{{fuels}}
-```
-
-```sh-vue [npm]
-npm install fuels@{{fuels}} --save
-```
-
-:::
-
-> If you are a Windows user, you will need to be running Windows Subsystem for Linux (WSL) to install and use the Fuel toolchain, including the TypeScript SDK. We don't support Windows natively at this time.
-
-## Import
-
-<!-- TODO: stop using hard-coded snippets -->
-
-```ts:line-numbers
-import { Wallet } from "fuels";
-
-// Random Wallet
-console.log(Wallet.generate());
-
-// Using privateKey Wallet
-console.log(Wallet.fromPrivateKey(PRIVATE_KEY));
-```
-
-## Calling Contracts
-
-<!-- TODO: stop using hard-coded snippets -->
-
-```ts:line-numbers
-import { Provider, Wallet, Contract, BigNumberish, BN } from "fuels";
-import abi from "./abi.json";
-
-const provider = await Provider.create('https://beta-5.fuel.network/graphql');
-const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider); // private key with coins
-const contractId = "0x...";
-const contract = new Contract(contractId, abi, wallet);
-
-// All contract methods are available under functions
-const { transactionId, value } = await contract.functions
-  .foo<[BigNumberish], BN>("bar")
-  .call();
-
-console.log(transactionId, value);
-```
-
-[READ MORE](./guide/contracts/)
-
-## Deploying Contracts
-
-<!-- TODO: stop using hard-coded snippets -->
-
-```ts:line-numbers
-import { Provider, ContractFactory } from "fuels";
-// Byte code generated using: forc build
-import bytecode from "./bytecode.bin";
-
-const factory = new ContractFactory(bytecode, [], wallet);
-const contract = await factory.deployContract();
-
-console.log(contract.id);
-```
-
-## License
-
-The primary license for this repo is `Apache 2.0`, see [`LICENSE`](https://github.com/FuelLabs/fuels-ts/blob/master/LICENSE).
+This documentation was generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{forc}}`, and Forc `v{{forc}}`.
