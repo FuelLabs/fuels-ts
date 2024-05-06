@@ -126,34 +126,40 @@ describe('dry-run-multiple-txs', () => {
 
     expect(estimatedRequests[0]).toStrictEqual<CallResult>({
       receipts: expect.any(Array<TransactionResultReceipt>),
-      dryrunStatus: {
+      dryRunStatus: {
         reason: expect.any(String),
         programState: {
           data: expect.any(String),
           returnType: 'REVERT',
         },
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
       } as GqlDryRunFailureStatus,
     });
 
     expect(estimatedRequests[1]).toStrictEqual<CallResult>({
       receipts: expect.any(Array<TransactionResultReceipt>),
-      dryrunStatus: {
+      dryRunStatus: {
         reason: expect.any(String),
         programState: {
           data: expect.any(String),
           returnType: 'REVERT',
         },
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
       } as GqlDryRunFailureStatus,
     });
 
     expect(estimatedRequests[2]).toStrictEqual<CallResult>({
       receipts: expect.any(Array<TransactionResultReceipt>),
-      dryrunStatus: {
+      dryRunStatus: {
         reason: expect.any(String),
         programState: {
           data: expect.any(String),
           returnType: 'REVERT',
         },
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
       } as GqlDryRunFailureStatus,
     });
   });
@@ -261,7 +267,7 @@ describe('dry-run-multiple-txs', () => {
       receipts: [],
       missingContractIds: [],
       outputVariables: 0,
-      dryrunStatus: undefined,
+      dryRunStatus: undefined,
     });
 
     // request 2 we dry run it 4 times to add the 3 output variables
@@ -269,7 +275,11 @@ describe('dry-run-multiple-txs', () => {
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 3,
-      dryrunStatus: { programState: expect.any(Object) },
+      dryRunStatus: {
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
 
     // request 3 we dry run it 3 times to add the 2 output variables (1 was already present)
@@ -277,7 +287,11 @@ describe('dry-run-multiple-txs', () => {
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 2,
-      dryrunStatus: { programState: expect.any(Object) },
+      dryRunStatus: {
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
 
     // request 4 we dry run it 1 time because it has reveted
@@ -285,7 +299,12 @@ describe('dry-run-multiple-txs', () => {
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [],
       outputVariables: 0,
-      dryrunStatus: { reason: 'TransferZeroCoins', programState: expect.any(Object) },
+      dryRunStatus: {
+        reason: 'TransferZeroCoins',
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
 
     // request 5 we dry run it 2 times because to add the missing output contract
@@ -293,7 +312,11 @@ describe('dry-run-multiple-txs', () => {
       receipts: expect.any(Array<TransactionResultReceipt>),
       missingContractIds: [logOtherContract.id.toB256()],
       outputVariables: 0,
-      dryrunStatus: { programState: expect.any(Object) },
+      dryRunStatus: {
+        programState: expect.any(Object),
+        totalFee: expect.any(String),
+        totalGas: expect.any(String),
+      },
     });
   });
 });

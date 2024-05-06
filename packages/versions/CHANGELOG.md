@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+
 ## 0.83.0
 
 ### Minor Changes

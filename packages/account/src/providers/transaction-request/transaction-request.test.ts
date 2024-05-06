@@ -175,7 +175,7 @@ describe('transactionRequestify', () => {
     }
 
     expect(txRequest.type).toEqual(txRequestLike.type);
-    expect(toNumber(txRequest.tip)).toEqual(txRequestLike.tip);
+    expect(txRequest.tip?.toNumber()).toEqual(txRequestLike.tip);
     expect(toNumber((<ScriptTransactionRequest>txRequest).gasLimit)).toEqual(
       txRequestLike.gasLimit
     );
