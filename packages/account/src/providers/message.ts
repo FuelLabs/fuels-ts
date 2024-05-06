@@ -37,7 +37,7 @@ export type MerkleProof = {
 export type BlockHeader = {
   id: string;
   daHeight: BN;
-  transactionsCount: BN;
+  transactionsCount: number;
   transactionsRoot: string;
   height: BN;
   prevRoot: string;
@@ -47,7 +47,7 @@ export type BlockHeader = {
   eventInboxRoot: string;
   consensusParametersVersion: number;
   stateTransitionBytecodeVersion: number;
-  messageReceiptCount: BN;
+  messageReceiptCount: number;
 };
 
 /**

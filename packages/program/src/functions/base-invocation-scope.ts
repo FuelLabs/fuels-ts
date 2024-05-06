@@ -81,7 +81,8 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected get calls() {
     const provider = this.getProvider();
-    const consensusParams = provider.getChain().consensusParameters;
+    const consensusParams = provider.getChain();
+    // TODO: Remove this error since it is already handled on Provider class
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
@@ -95,7 +96,12 @@ export class BaseInvocationScope<TReturn = any> {
    * Updates the script request with the current contract calls.
    */
   protected updateScriptRequest() {
-    const maxInputs = (this.program.provider as Provider).getChain().consensusParameters.maxInputs;
+    const provider = this.getProvider();
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = provider.getChain();
     const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
