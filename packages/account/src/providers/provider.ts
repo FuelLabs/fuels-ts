@@ -62,8 +62,8 @@ import { mergeQuantities } from './utils/merge-quantities';
 const MAX_RETRIES = 10;
 
 export type DryRunStatus =
-  | Omit<GqlDryRunFailureStatusFragmentFragment, '__typename'>
-  | Omit<GqlDryRunSuccessStatusFragmentFragment, '__typename'>;
+  | GqlDryRunFailureStatusFragmentFragment
+  | GqlDryRunSuccessStatusFragmentFragment;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -97,12 +97,12 @@ type ModifyStringToBN<T> = {
   [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
 };
 
-export type FeeParameters = Omit<GqlFeeParameters, '__typename'>;
-export type ContractParameters = Omit<GqlContractParameters, '__typename'>;
-export type PredicateParameters = Omit<GqlPredicateParameters, '__typename'>;
-export type ScriptParameters = Omit<GqlScriptParameters, '__typename'>;
-export type TxParameters = Omit<GqlTxParameters, '__typename'>;
-export type GasCosts = Omit<GqlGasCosts, '__typename'>;
+export type FeeParameters = GqlFeeParameters;
+export type ContractParameters = GqlContractParameters;
+export type PredicateParameters = GqlPredicateParameters;
+export type ScriptParameters = GqlScriptParameters;
+export type TxParameters = GqlTxParameters;
+export type GasCosts = GqlGasCosts;
 
 export type ConsensusParameters = {
   version: GqlConsensusParametersVersion;
@@ -1256,7 +1256,7 @@ export default class Provider {
     const coins = result.coinsToSpend
       .flat()
       .map((coin) => {
-        switch (coin.__typename) {
+        switch (coin.type) {
           case 'MessageCoin':
             return {
               amount: bn(coin.amount),

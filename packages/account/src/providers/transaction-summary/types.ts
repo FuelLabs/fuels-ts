@@ -3,20 +3,23 @@ import type { B256Address } from '@fuel-ts/interfaces';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
-import type { GqlGetTransactionQuery } from '../__generated__/operations';
+import type {
+  GqlFailureStatusFragmentFragment,
+  GqlGetTransactionQuery,
+  GqlSqueezedOutStatusFragmentFragment,
+  GqlSubmittedStatusFragmentFragment,
+  GqlSuccessStatusFragmentFragment,
+} from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 export type GqlTransaction = NonNullable<GqlGetTransactionQuery['transaction']>;
 
 export type GraphqlTransactionStatus = GqlTransaction['status'];
 
-export type SuccessStatus = Extract<GraphqlTransactionStatus, { __typename: 'SuccessStatus' }>;
-export type FailureStatus = Extract<GraphqlTransactionStatus, { __typename: 'FailureStatus' }>;
-export type SubmittedStatus = Extract<GraphqlTransactionStatus, { __typename: 'SubmittedStatus' }>;
-export type SqueezedOutStatus = Extract<
-  GraphqlTransactionStatus,
-  { __typename: 'SqueezedOutStatus' }
->;
+export type SuccessStatus = GqlSuccessStatusFragmentFragment;
+export type FailureStatus = GqlFailureStatusFragmentFragment;
+export type SubmittedStatus = GqlSubmittedStatusFragmentFragment;
+export type SqueezedOutStatus = GqlSqueezedOutStatusFragmentFragment;
 
 export type Reason = FailureStatus['reason'];
 export type ProgramState = SuccessStatus['programState'];

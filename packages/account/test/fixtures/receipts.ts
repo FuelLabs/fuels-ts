@@ -5,7 +5,6 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragmentFragment = {
   receiptType: GqlReceiptType.Call,
   pc: '15488',
   is: '15488',
-  __typename: 'Receipt',
   to: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',
   amount: '100',
   assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
