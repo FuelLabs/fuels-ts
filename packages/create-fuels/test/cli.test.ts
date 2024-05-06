@@ -1,12 +1,11 @@
 import fs, { cp } from 'fs/promises';
 import { glob } from 'glob';
 import { join } from 'path';
-import type { MockInstance } from 'vitest';
 
 import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
-let writeSpy: MockInstance;
+import { mockLogger } from './utils/mockLogger';
 
 const getAllFiles = async (pathToDir: string) => {
   const files = await glob(`${pathToDir}/**/*`, {
@@ -78,12 +77,10 @@ beforeEach(async () => {
   await cp(join(__dirname, '../../../templates'), join(__dirname, '../templates'), {
     recursive: true,
   });
-  writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
 });
 
 afterEach(async () => {
   await fs.rm(join(__dirname, '../templates'), { recursive: true });
-  writeSpy.mockRestore();
 });
 
 /**
@@ -116,7 +113,7 @@ describe('CLI', () => {
 
   test('create-fuels reports an error if the project directory already exists', async () => {
     await fs.mkdir('test-project-2');
-
+    const { error } = mockLogger();
     const args = generateArgs(
       {
         contract: true,
@@ -136,7 +133,7 @@ describe('CLI', () => {
       expect(e).toBeInstanceOf(Error);
     });
 
-    expect(writeSpy).toHaveBeenCalledWith(
+    expect(error).toHaveBeenCalledWith(
       expect.stringContaining('A folder already exists at test-project-2')
     );
 
@@ -144,6 +141,7 @@ describe('CLI', () => {
   });
 
   test('create-fuels reports an error if no programs are chosen to be included', async () => {
+    const { error } = mockLogger();
     const args = generateArgs(
       {
         contract: false,
@@ -164,7 +162,7 @@ describe('CLI', () => {
       expect(e).toBeInstanceOf(Error);
     });
 
-    expect(writeSpy).toHaveBeenCalledWith(
+    expect(error).toHaveBeenCalledWith(
       expect.stringContaining('You must include at least one Sway program.')
     );
   });
