@@ -15,9 +15,6 @@ fragment transactionStatusFragment on TransactionStatus {
       id
     }
     time
-    receipts {
-      ...receiptFragment
-    }
     programState {
       returnType
       data
@@ -25,11 +22,15 @@ fragment transactionStatusFragment on TransactionStatus {
     receipts {
       ...receiptFragment
     }
+    totalGas
+    totalFee
   }
   ... on FailureStatus {
     block {
       id
     }
+    totalGas
+    totalFee
     time
     reason
     receipts {
@@ -72,6 +73,8 @@ fragment transactionEstimatePredicatesFragment on Transaction {
 }
 
 fragment dryRunFailureStatusFragment on DryRunFailureStatus {
+  totalGas
+  totalFee
   reason
   programState {
     returnType
@@ -80,6 +83,8 @@ fragment dryRunFailureStatusFragment on DryRunFailureStatus {
 }
 
 fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
+  totalGas
+  totalFee
   programState {
     returnType
     data
@@ -235,6 +240,7 @@ fragment TxParametersFragment on TxParameters {
   maxWitnesses
   maxGasPerTx
   maxSize
+  maxBytecodeSubsections
 }
 
 fragment PredicateParametersFragment on PredicateParameters {
@@ -494,6 +500,13 @@ fragment nodeInfoFragment on NodeInfo {
   nodeVersion
 }
 
+fragment relayedTransactionStatusFragment on RelayedTransactionStatus {
+  ... on RelayedTransactionFailed {
+    blockHeight
+    failure
+  }
+}
+
 query getNodeInfo {
   nodeInfo {
     ...nodeInfoFragment
@@ -729,6 +742,14 @@ query getMessageStatus($nonce: Nonce!) {
   }
 }
 
+query getRelayedTransactionStatus(
+  $relayedTransactionId: RelayedTransactionId!
+) {
+  relayedTransactionStatus(id: $relayedTransactionId) {
+    ...relayedTransactionStatusFragment
+  }
+}
+
 mutation dryRun($encodedTransactions: [HexString!]!, $utxoValidation: Boolean) {
   dryRun(txs: $encodedTransactions, utxoValidation: $utxoValidation) {
     ...dryRunTransactionExecutionStatusFragment
@@ -749,6 +770,12 @@ mutation produceBlocks(
     blocksToProduce: $blocksToProduce
     startTimestamp: $startTimestamp
   )
+}
+
+query getMessageByNonce($nonce: Nonce!) {
+  message(nonce: $nonce) {
+    ...messageFragment
+  }
 }
 
 subscription submitAndAwait($encodedTransaction: HexString!) {

@@ -2,9 +2,9 @@ import { Provider } from '@fuel-ts/account';
 import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
-import type { SnapshotConfigs } from '@fuel-ts/utils';
+import { hexlify, type SnapshotConfigs } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
-import { randomInt, randomUUID } from 'crypto';
+import { randomBytes, randomInt, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import os from 'os';
@@ -185,6 +185,7 @@ describe('launchTestNode', () => {
 
     process.env.DEFAULT_CHAIN_CONFIG_PATH = chainConfigPath;
 
+    const baseAssetId = hexlify(randomBytes(32));
     // eslint-disable-next-line @typescript-eslint/naming-convention
     const max_inputs = randomInt(200);
     using launched = await launchTestNode({
@@ -193,11 +194,7 @@ describe('launchTestNode', () => {
           chainConfigJson: {
             consensus_parameters: {
               V1: {
-                tx_params: {
-                  V1: {
-                    max_inputs,
-                  },
-                },
+                base_asset_id: baseAssetId,
               },
             },
           },
@@ -212,9 +209,9 @@ describe('launchTestNode', () => {
 
     const {
       name,
-      consensusParameters: { maxInputs },
+      consensusParameters: { baseAssetId: baseAssetIdFromChainConfig },
     } = await provider.fetchChain();
     expect(name).toEqual(chainName);
-    expect(maxInputs.toNumber()).toEqual(max_inputs);
+    expect(baseAssetIdFromChainConfig).toEqual(baseAssetId);
   });
 });

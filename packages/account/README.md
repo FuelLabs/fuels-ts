@@ -1,10 +1,10 @@
-# `@fuel-ts/wallet`
+# `@fuel-ts/account`
 
-**@fuel-ts/wallet** is a sub-module for interacting with **Fuel**.
+**@fuel-ts/account** is a sub-module for interacting with **Fuel**.
 
-This module contains the class to manage a private key and signing for a standard Externally Owned Account (EOA)
+This module contains the class to manage a private key and signing for a standard Externally Owned Account (EOA).
 
-# Table of contents
+## Table of contents
 
 - [Documentation](#documentation)
 - [Usage](#usage)
@@ -23,9 +23,9 @@ See [Fuels-ts Documentation](https://docs.fuel.network/docs/fuels-ts/wallets/)
 ### Installation
 
 ```sh
-pnpm add @fuel-ts/wallet
+pnpm add @fuel-ts/account
 # or
-npm add @fuel-ts/wallet
+npm add @fuel-ts/account
 ```
 
 ### Full SDK Installation
@@ -38,33 +38,36 @@ pnpm add fuels
 npm add fuels
 ```
 
-# Test Utilities
+## Test Utilities
 
 These test utilities are exported to assist in testing apps using Fuels.
 
 ```ts
 import { bn } from "@fuel-ts/math";
-import { seedTestWallet, generateTestWallet } from "@account/test-utils";
+import {
+  seedTestWallet,
+  generateTestWallet,
+} from "@fuel-ts/account/test-utils";
 
 const provider = await Provider.create("http://127.0.0.1:4000/v1/graphql");
 
 // seeding
 const wallet = Wallet.fromPrivateKey("0x...", provider);
-const baseAssetId = await provider.getBaseAssetId();
+const baseAssetId = provider.getBaseAssetId();
 seedTestWallet(wallet, [{ assetId: baseAssetId, amount: bn(100_000) }]);
 
 // generating
-const wallet = await generateTestWallet(provider, [[1_000, BaseAssetId]]);
+const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
 ```
 
 ## Contributing
 
-In order to contribute to `@fuel-ts/wallet`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
+In order to contribute to `@fuel-ts/account`, please see the main [fuels-ts](https://github.com/FuelLabs/fuels-ts) monorepo.
 
 ## Changelog
 
-The `@fuel-ts/wallet` changelog can be found at [CHANGELOG](./CHANGELOG.md).
+The `@fuel-ts/account` changelog can be found at [CHANGELOG](./CHANGELOG.md).
 
 ## License
 
-The primary license for `@fuel-ts/wallet` is `Apache 2.0`, see [LICENSE](./LICENSE).
+The primary license for `@fuel-ts/account` is `Apache 2.0`, see [LICENSE](./LICENSE).

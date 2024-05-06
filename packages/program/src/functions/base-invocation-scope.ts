@@ -88,14 +88,15 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected get calls() {
     const provider = this.getProvider();
-    const consensusParams = provider.getChain().consensusParameters;
+    const consensusParams = provider.getChain();
+    // TODO: Remove this error since it is already handled on Provider class
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
         'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
       );
     }
-    const maxInputs = consensusParams.maxInputs;
+    const maxInputs = consensusParams.consensusParameters.txParameters.maxInputs;
     const script = getContractCallScript(this.functionInvocationScopes, maxInputs);
     return this.functionInvocationScopes.map((funcScope) =>
       createContractCall(funcScope, script.getScriptDataOffset(maxInputs.toNumber()))
@@ -106,7 +107,12 @@ export class BaseInvocationScope<TReturn = any> {
    * Updates the script request with the current contract calls.
    */
   protected updateScriptRequest() {
-    const maxInputs = (this.program.provider as Provider).getChain().consensusParameters.maxInputs;
+    const provider = this.getProvider();
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = provider.getChain();
     const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
@@ -269,16 +275,12 @@ export class BaseInvocationScope<TReturn = any> {
     transactionRequest.addVariableOutputs(outputVariables);
 
     const optimizeGas = this.txParameters?.optimizeGas ?? true;
-
     if (this.txParameters?.gasLimit && !optimizeGas) {
       transactionRequest.gasLimit = bn(this.txParameters.gasLimit);
       const { maxFee: maxFeeForGasLimit } = await this.getProvider().estimateTxGasAndFee({
         transactionRequest,
       });
       transactionRequest.maxFee = maxFeeForGasLimit;
-    } else {
-      transactionRequest.gasLimit = gasUsed;
-      transactionRequest.maxFee = maxFee;
     }
 
     await this.program.account?.fund(transactionRequest, txCost);
@@ -466,24 +468,26 @@ export class BaseInvocationScope<TReturn = any> {
     gasUsed: BN,
     maxFee: BN
   ) {
-    const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
+    const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
+    const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
 
     const { gasLimit, maxFee: setMaxFee } = transactionRequest;
 
-    if (!gasLimitSpecified) {
-      transactionRequest.gasLimit = gasUsed;
-    } else if (gasLimit.lt(gasUsed)) {
+    if (gasLimitSpecified && gasLimit.lt(gasUsed)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
         `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (isDefined(setMaxFee) && maxFee.gt(setMaxFee)) {
+    if (maxFeeSpecified && maxFee.gt(setMaxFee)) {
       throw new FuelError(
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
+
+    transactionRequest.gasLimit = gasUsed;
+    transactionRequest.maxFee = maxFee;
   }
 }

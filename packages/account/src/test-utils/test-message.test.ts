@@ -24,7 +24,7 @@ describe('test-message', () => {
     const recipient = Address.fromRandom();
     const sender = Address.fromRandom();
     const amount = 1;
-    const daHeight = '0x01';
+    const daHeight = 1;
     const data = '1234';
     const nonce = hexlify(randomBytes(32));
 

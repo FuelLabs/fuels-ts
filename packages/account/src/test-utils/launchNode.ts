@@ -210,12 +210,14 @@ export const launchNode = async ({
       const chainConfigWritePath = path.join(tempDirPath, 'chainConfig.json');
       const stateConfigWritePath = path.join(tempDirPath, 'stateConfig.json');
       const metadataWritePath = path.join(tempDirPath, 'metadata.json');
+      const stateTransitionWritePath = path.join(tempDirPath, 'state_transition_bytecode.wasm');
 
       const { chainConfigJson, metadataJson } = defaultSnapshotConfigs;
 
       writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
       writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
       writeFileSync(metadataWritePath, JSON.stringify(metadataJson), 'utf8');
+      writeFileSync(stateTransitionWritePath, JSON.stringify(''));
 
       snapshotDirToUse = tempDirPath;
     }
@@ -304,7 +306,7 @@ const generateWallets = async (count: number, provider: Provider) => {
   const baseAssetId = provider.getBaseAssetId();
   const wallets: WalletUnlocked[] = [];
   for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
     wallets.push(wallet);
   }
   return wallets;

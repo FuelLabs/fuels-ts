@@ -4,7 +4,8 @@ import type { TransactionCreate, TransactionScript } from '@fuel-ts/transactions
 import { PolicyType, TransactionCoder, TransactionType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlConsensusParameters, GqlFeeParameters } from '../__generated__/operations';
+import type { GqlFeeParameters } from '../__generated__/operations';
+import type { ConsensusParameters } from '../provider';
 import {
   calculateGasFee,
   calculateMetadataGasForTxCreate,
@@ -20,23 +21,33 @@ type FeeParams =
       gasPriceFactor: BN | number;
     };
 
-export type CalculateTransactionFeeParams = {
+export type CalculateTXFeeForSummaryParams = {
   gasPrice: BN;
   rawPayload: string;
   tip: BN;
-  consensusParameters: Pick<GqlConsensusParameters, 'gasCosts'> & {
+  totalFee?: BN;
+  consensusParameters: Pick<ConsensusParameters, 'gasCosts'> & {
     feeParams: FeeParams;
     maxGasPerTx: BN;
   };
 };
 
-export const calculateTransactionFee = (params: CalculateTransactionFeeParams) => {
+export const calculateTXFeeForSummary = (params: CalculateTXFeeForSummaryParams): BN => {
   const {
     gasPrice,
     rawPayload,
     tip,
+    totalFee,
     consensusParameters: { gasCosts, feeParams, maxGasPerTx },
   } = params;
+
+  /**
+   * If totalFee is provided it means that the TX was already processed and we could extract the fee
+   * from its status
+   */
+  if (totalFee) {
+    return totalFee;
+  }
 
   const gasPerByte = bn(feeParams.gasPerByte);
   const gasPriceFactor = bn(feeParams.gasPriceFactor);
@@ -45,20 +56,16 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
 
   const [transaction] = new TransactionCoder().decode(transactionBytes, 0);
 
-  if (transaction.type === TransactionType.Mint) {
-    return {
-      fee: bn(0),
-      minFee: bn(0),
-      maxFee: bn(0),
-    };
-  }
-
   const { type, witnesses, inputs, policies } = transaction as
     | TransactionCreate
     | TransactionScript;
 
   let metadataGas = bn(0);
   let gasLimit = bn(0);
+
+  if (type !== TransactionType.Create && type !== TransactionType.Script) {
+    return bn(0);
+  }
 
   if (type === TransactionType.Create) {
     const { bytecodeWitnessIndex, storageSlots } = transaction as TransactionCreate;
@@ -107,13 +114,6 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     maxGasPerTx,
   });
 
-  const minFee = calculateGasFee({
-    gasPrice,
-    gas: minGas,
-    priceFactor: gasPriceFactor,
-    tip,
-  });
-
   const maxFee = calculateGasFee({
     gasPrice,
     gas: maxGas,
@@ -121,9 +121,5 @@ export const calculateTransactionFee = (params: CalculateTransactionFeeParams) =
     tip,
   });
 
-  return {
-    minFee,
-    maxFee,
-    fee: maxFee,
-  };
+  return maxFee;
 };

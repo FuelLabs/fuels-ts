@@ -1,5 +1,13 @@
 # create-fuels
 
+## 0.84.0
+
+## 0.83.0
+
+### Minor Changes
+
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+
 ## 0.82.0
 
 ### Minor Changes
