@@ -2,7 +2,6 @@ import * as oraMod from 'ora';
 
 import { mockLogger } from '../../test/utils/mockLogger';
 import * as promptFuelUpInstallMod from '../prompts/promptFuelUpInstall';
-import * as loggerMod from '../utils/logger';
 
 import * as checkIfFuelUpInstalledMod from './createIfFuelUpInstalled';
 import * as installFuelUpMod from './installFuelUp';
