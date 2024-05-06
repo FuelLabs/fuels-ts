@@ -68,12 +68,14 @@ describe(__filename, () => {
     // #import { arrayify, readFile };
 
     const bytecode = await readFile(bytecodePath);
+    const bytecodeAsVecU8 = arrayify(bytecode);
 
     const { value: bytecodeRoot } = await bytecodeContract.functions
-      .compute_bytecode_root(arrayify(bytecode))
+      .compute_bytecode_root(Array.from(bytecodeAsVecU8))
       .call();
     // #endregion vector-bytecode-input-ts
 
+    console.log('bytecodeRoot:', bytecodeRoot);
     expect(bytecodeRoot).toBeDefined();
     expect(bytecodeRoot.length).toBe(66);
   });
