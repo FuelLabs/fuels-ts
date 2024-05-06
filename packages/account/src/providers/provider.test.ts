@@ -62,7 +62,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.24.3');
+    expect(version).toEqual('0.26.0');
   });
 
   it('can call()', async () => {
@@ -187,21 +187,35 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const { consensusParameters } = provider.getChain();
 
+    expect(consensusParameters.version).toBeDefined();
+    expect(consensusParameters.chainId).toBeDefined();
     expect(consensusParameters.baseAssetId).toBeDefined();
-    expect(consensusParameters.contractMaxSize).toBeDefined();
-    expect(consensusParameters.maxInputs).toBeDefined();
-    expect(consensusParameters.maxOutputs).toBeDefined();
-    expect(consensusParameters.maxWitnesses).toBeDefined();
-    expect(consensusParameters.maxGasPerTx).toBeDefined();
-    expect(consensusParameters.maxScriptLength).toBeDefined();
-    expect(consensusParameters.maxScriptDataLength).toBeDefined();
-    expect(consensusParameters.maxStorageSlots).toBeDefined();
-    expect(consensusParameters.maxPredicateLength).toBeDefined();
-    expect(consensusParameters.maxPredicateDataLength).toBeDefined();
-    expect(consensusParameters.maxGasPerPredicate).toBeDefined();
-    expect(consensusParameters.gasPriceFactor).toBeDefined();
-    expect(consensusParameters.gasPerByte).toBeDefined();
-    expect(consensusParameters.maxMessageDataLength).toBeDefined();
+
+    expect(consensusParameters.feeParameters.version).toBeDefined();
+    expect(consensusParameters.feeParameters.gasPriceFactor).toBeDefined();
+    expect(consensusParameters.feeParameters.gasPerByte).toBeDefined();
+
+    expect(consensusParameters.txParameters.version).toBeDefined();
+    expect(consensusParameters.txParameters.maxSize).toBeDefined();
+    expect(consensusParameters.txParameters.maxInputs).toBeDefined();
+    expect(consensusParameters.txParameters.maxOutputs).toBeDefined();
+    expect(consensusParameters.txParameters.maxWitnesses).toBeDefined();
+    expect(consensusParameters.txParameters.maxGasPerTx).toBeDefined();
+    expect(consensusParameters.txParameters.maxBytecodeSubsections).toBeDefined();
+
+    expect(consensusParameters.scriptParameters.version).toBeDefined();
+    expect(consensusParameters.scriptParameters.maxScriptLength).toBeDefined();
+    expect(consensusParameters.scriptParameters.maxScriptDataLength).toBeDefined();
+
+    expect(consensusParameters.contractParameters.version).toBeDefined();
+    expect(consensusParameters.contractParameters.contractMaxSize).toBeDefined();
+    expect(consensusParameters.contractParameters.maxStorageSlots).toBeDefined();
+
+    expect(consensusParameters.predicateParameters.version).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxPredicateLength).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxPredicateDataLength).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxGasPerPredicate).toBeDefined();
+    expect(consensusParameters.predicateParameters.maxMessageDataLength).toBeDefined();
   });
 
   it('gets the chain ID', async () => {
@@ -843,7 +857,7 @@ describe('Provider', () => {
     );
   });
 
-  it('throws on difference between major client version and supported major version', async () => {
+  it('warns on difference between major client version and supported major version', async () => {
     const { FUEL_CORE } = versions;
     const [major, minor, patch] = FUEL_CORE.split('.');
     const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
@@ -862,13 +876,20 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
-      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
-    });
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    await Provider.create(FUEL_NETWORK_URL);
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnce();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
+which is not supported by the version of the TS SDK that you are using. 
+Things may not work as expected.
+Supported fuel-core version: ${mock.supportedVersion}.`
+    );
   });
 
-  it('throws on difference between minor client version and supported minor version', async () => {
+  it('warns on difference between minor client version and supported minor version', async () => {
     const { FUEL_CORE } = versions;
     const [major, minor, patch] = FUEL_CORE.split('.');
     const minorMismatch = minor === '0' ? 1 : parseInt(patch, 10) - 1;
@@ -887,10 +908,17 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
-      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
-    });
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    await Provider.create(FUEL_NETWORK_URL);
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnce();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
+which is not supported by the version of the TS SDK that you are using. 
+Things may not work as expected.
+Supported fuel-core version: ${mock.supportedVersion}.`
+    );
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
