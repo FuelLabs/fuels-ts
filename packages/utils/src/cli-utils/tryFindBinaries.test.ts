@@ -70,7 +70,7 @@ describe('tryFindBinaries', () => {
     expect(getSystemFuelCore).toBeCalledWith('fuel-core');
     expect(binaries.forcPath).toEqual('forc');
     expect(binaries.fuelCorePath).toEqual('fuel-core');
-  })
+  });
 
   it(`should throw when binaries are not found`, () => {
     const forcPath = '/non/existent/path/to/forc';
