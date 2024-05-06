@@ -201,10 +201,12 @@ export const launchNode = async ({
       const chainConfigWritePath = path.join(tempDirPath, 'chainConfig.json');
       const stateConfigWritePath = path.join(tempDirPath, 'stateConfig.json');
       const metadataWritePath = path.join(tempDirPath, 'metadata.json');
+      const stateTransitionWritePath = path.join(tempDirPath, 'state_transition_bytecode.wasm');
 
       writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
       writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
       writeFileSync(metadataWritePath, JSON.stringify(metadataJson), 'utf8');
+      writeFileSync(stateTransitionWritePath, JSON.stringify(''));
 
       snapshotDirToUse = tempDirPath;
     }

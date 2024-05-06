@@ -194,7 +194,7 @@ export class TransactionResponse {
 
     const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = this.provider.getGasConfig();
     const gasPrice = await this.provider.getLatestGasPrice();
-    const maxInputs = this.provider.getChain().consensusParameters.maxInputs;
+    const maxInputs = this.provider.getChain().consensusParameters.txParameters.maxInputs;
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,

@@ -16,12 +16,11 @@ import {
 import { concat, hexlify, isDefined } from '@fuel-ts/utils';
 
 import type { Account } from '../../account';
-import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { MessageCoin } from '../message';
-import type { ChainInfo } from '../provider';
+import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
 import { normalizeJSON } from '../utils';
@@ -517,7 +516,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * @hidden
    */
-  metadataGas(_gasCosts: GqlGasCosts): BN {
+  metadataGas(_gasCosts: GasCosts): BN {
     throw new Error('Not implemented');
   }
 
@@ -525,8 +524,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @hidden
    */
   calculateMinGas(chainInfo: ChainInfo): BN {
-    const { gasCosts, consensusParameters } = chainInfo;
-    const { gasPerByte } = consensusParameters;
+    const { consensusParameters } = chainInfo;
+    const {
+      gasCosts,
+      feeParameters: { gasPerByte },
+    } = consensusParameters;
     return getMinGas({
       gasPerByte,
       gasCosts,
@@ -538,7 +540,10 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
-    const { gasPerByte, maxGasPerTx } = consensusParameters;
+    const {
+      feeParameters: { gasPerByte },
+      txParameters: { maxGasPerTx },
+    } = consensusParameters;
 
     const witnessesLength = this.toTransaction().witnesses.reduce(
       (acc, wit) => acc + wit.dataLength,
