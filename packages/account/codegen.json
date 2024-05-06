@@ -30,7 +30,7 @@
           "UtxoId": "string"
         },
         "useTypeImports": true,
-        "nonOptionalTypename": true,
+        "skipTypename": true,
         "typesPrefix": "Gql"
       }
     }
