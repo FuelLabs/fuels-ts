@@ -481,9 +481,12 @@ export default class Provider {
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
-      throw new FuelError(
-        FuelError.CODES.UNSUPPORTED_FUEL_CLIENT_VERSION,
-        `Fuel client version: ${nodeInfo.nodeVersion}, Supported version: ${supportedVersion}`
+      // eslint-disable-next-line no-console
+      console.warn(
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}, 
+which is not supported by the version of the TS SDK that you are using. 
+Things may not work as expected.
+Supported fuel-core version: ${supportedVersion}.`
       );
     }
   }
