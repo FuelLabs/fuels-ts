@@ -21,11 +21,11 @@ import type { Predicate } from '../predicate';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragmentFragment,
+  GqlChainInfoFragment,
   GqlConsensusParametersVersion,
   GqlContractParameters,
-  GqlDryRunFailureStatusFragmentFragment,
-  GqlDryRunSuccessStatusFragmentFragment,
+  GqlDryRunFailureStatusFragment,
+  GqlDryRunSuccessStatusFragment,
   GqlFeeParameters,
   GqlGasCosts,
   GqlGetBlocksQueryVariables,
@@ -61,9 +61,7 @@ import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
-export type DryRunStatus =
-  | GqlDryRunFailureStatusFragmentFragment
-  | GqlDryRunSuccessStatusFragmentFragment;
+export type DryRunStatus = GqlDryRunFailureStatusFragment | GqlDryRunSuccessStatusFragment;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -167,7 +165,7 @@ export type TransactionCost = {
 };
 // #endregion cost-estimation-1
 
-const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
+const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
   const { name, daHeight, consensusParameters, latestBlock } = chain;
 
   const {

@@ -4,11 +4,11 @@ import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
 import type {
-  GqlFailureStatusFragmentFragment,
+  GqlFailureStatusFragment,
   GqlGetTransactionQuery,
-  GqlSqueezedOutStatusFragmentFragment,
-  GqlSubmittedStatusFragmentFragment,
-  GqlSuccessStatusFragmentFragment,
+  GqlSqueezedOutStatusFragment,
+  GqlSubmittedStatusFragment,
+  GqlSuccessStatusFragment,
 } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 
@@ -16,10 +16,10 @@ export type GqlTransaction = NonNullable<GqlGetTransactionQuery['transaction']>;
 
 export type GraphqlTransactionStatus = GqlTransaction['status'];
 
-export type SuccessStatus = GqlSuccessStatusFragmentFragment;
-export type FailureStatus = GqlFailureStatusFragmentFragment;
-export type SubmittedStatus = GqlSubmittedStatusFragmentFragment;
-export type SqueezedOutStatus = GqlSqueezedOutStatusFragmentFragment;
+export type SuccessStatus = GqlSuccessStatusFragment;
+export type FailureStatus = GqlFailureStatusFragment;
+export type SubmittedStatus = GqlSubmittedStatusFragment;
+export type SqueezedOutStatus = GqlSqueezedOutStatusFragment;
 
 export type Reason = FailureStatus['reason'];
 export type ProgramState = SuccessStatus['programState'];

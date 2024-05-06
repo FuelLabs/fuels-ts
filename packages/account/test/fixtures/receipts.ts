@@ -1,7 +1,7 @@
-import type { GqlReceiptFragmentFragment } from '../../src/providers/__generated__/operations';
+import type { GqlReceiptFragment } from '../../src/providers/__generated__/operations';
 import { GqlReceiptType } from '../../src/providers/__generated__/operations';
 
-export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragmentFragment = {
+export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragment = {
   receiptType: GqlReceiptType.Call,
   pc: '15488',
   is: '15488',
@@ -31,7 +31,7 @@ export const MOCK_GQL_RECEIPT_FRAGMENT: GqlReceiptFragmentFragment = {
   subId: '0x0000000000000000000000000000000000000000000000000000000000000000',
 };
 
-export const MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS: GqlReceiptFragmentFragment = {
+export const MOCK_GQL_RECEIPT_FRAGMENT_TO_ADDRESS: GqlReceiptFragment = {
   ...MOCK_GQL_RECEIPT_FRAGMENT,
   to: null,
   toAddress: '0xfc69a2f25c26312fbecc7fce531eca80a2d315482c03fbc00d36b5cf065a0ac3',

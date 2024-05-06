@@ -6,10 +6,10 @@ import {
   GqlPredicateParametersVersion,
   GqlScriptParametersVersion,
   GqlTxParametersVersion,
-  type GqlChainInfoFragmentFragment,
+  type GqlChainInfoFragment,
 } from '../../src/providers/__generated__/operations';
 
-export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
+export const MOCK_CHAIN: GqlChainInfoFragment = {
   name: 'local_testnet',
   daHeight: '234',
   consensusParameters: {
