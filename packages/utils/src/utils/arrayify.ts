@@ -9,7 +9,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
  * @param copy - create a copy of the original data (if applicable).
  * @returns - a typed Uint8Array.
  */
-export const arrayify = (value: BytesLike, name?: string, copy?: boolean): Uint8Array => {
+export const arrayify = (value: BytesLike, name?: string, copy: boolean = true): Uint8Array => {
   if (value instanceof Uint8Array) {
     if (copy) {
       return new Uint8Array(value);
