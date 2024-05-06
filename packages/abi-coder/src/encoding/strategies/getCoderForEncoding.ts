@@ -14,7 +14,7 @@ import { getCoder as getCoderV1 } from './getCoderV1';
  * @throws for an unsupported encoding version.
  * @returns the appropriate encoding strategy.
  */
-export function getCoderForEncoding(encoding: EncodingVersion = ENCODING_V0): GetCoderFn {
+export function getCoderForEncoding(encoding: EncodingVersion = ENCODING_V1): GetCoderFn {
   switch (encoding) {
     case ENCODING_V1:
       return getCoderV1;

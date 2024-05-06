@@ -143,9 +143,6 @@ export const isPointerType = (type: string) => {
   }
 };
 
-export const isHeapType = (type: string) =>
-  type === VEC_CODER_TYPE || type === BYTES_CODER_TYPE || type === STD_STRING_CODER_TYPE;
-
 /**
  * Because some properties can be single-bytes, we need to pad them
  * with zeros until they are aligned to a word-sized increment.

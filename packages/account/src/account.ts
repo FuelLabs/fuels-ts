@@ -301,8 +301,6 @@ export class Account extends AbstractAccount {
       );
 
       request.addResources(resources);
-
-      txRequest.shiftPredicateData();
       txRequest.updatePredicateGasUsed(estimatedPredicates);
 
       const requestToReestimate = clone(txRequest);
@@ -338,7 +336,6 @@ export class Account extends AbstractAccount {
       fundingAttempts += 1;
     }
 
-    txRequest.shiftPredicateData();
     txRequest.updatePredicateGasUsed(estimatedPredicates);
 
     const requestToReestimate = clone(txRequest);

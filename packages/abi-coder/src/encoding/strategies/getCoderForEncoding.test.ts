@@ -9,8 +9,8 @@ import { getCoder as getCoderV1 } from './getCoderV1';
  * @group browser
  */
 describe('getEncodingStrategy', () => {
-  it('defaults to encoding version 0', () => {
-    expect(getCoderForEncoding()).toBe(getCoderV0);
+  it('defaults to encoding version 1', () => {
+    expect(getCoderForEncoding()).toBe(getCoderV1);
   });
 
   it('returns getCoderV1 for encoding version 1', () => {

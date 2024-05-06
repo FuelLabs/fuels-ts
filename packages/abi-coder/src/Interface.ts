@@ -58,13 +58,12 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
   encodeFunctionData(
     functionFragment: FunctionFragment | string,
-    values: Array<InputValue>,
-    offset = 0
+    values: Array<InputValue>
   ): Uint8Array {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
-    return fragment.encodeArguments(values, offset);
+    return fragment.encodeArguments(values);
   }
 
   // Decode the result of a function call

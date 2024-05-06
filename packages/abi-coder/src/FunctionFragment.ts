@@ -28,7 +28,6 @@ import {
   getEncodingVersion,
 } from './utils/json-abi';
 import type { Uint8ArrayWithDynamicData } from './utils/utilities';
-import { isHeapType, isPointerType, unpackDynamicData } from './utils/utilities';
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
@@ -41,11 +40,6 @@ export class FunctionFragment<
   readonly name: string;
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];
-  readonly isInputDataPointer: boolean;
-  readonly outputMetadata: {
-    isHeapType: boolean;
-    encodedLength: number;
-  };
 
   private readonly jsonAbi: JsonAbi;
 
@@ -58,11 +52,6 @@ export class FunctionFragment<
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
     this.selectorBytes = new StdStringCoder().encode(name);
     this.encoding = getEncodingVersion(jsonAbi.encoding);
-    this.isInputDataPointer = this.#isInputDataPointer();
-    this.outputMetadata = {
-      isHeapType: this.#isOutputDataHeap(),
-      encodedLength: this.#getOutputEncodedLength(),
-    };
 
     this.attributes = this.jsonFn.attributes ?? [];
   }
@@ -80,35 +69,7 @@ export class FunctionFragment<
     return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
   }
 
-  #isInputDataPointer(): boolean {
-    const inputTypes = this.jsonFn.inputs.map((i) => findTypeById(this.jsonAbi, i.type));
-
-    return this.jsonFn.inputs.length > 1 || isPointerType(inputTypes[0]?.type || '');
-  }
-
-  #isOutputDataHeap(): boolean {
-    const outputType = findTypeById(this.jsonAbi, this.jsonFn.output.type);
-
-    return isHeapType(outputType?.type || '');
-  }
-
-  #getOutputEncodedLength(): number {
-    try {
-      const heapCoder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output);
-      if (heapCoder instanceof VecCoder) {
-        return heapCoder.coder.encodedLength;
-      }
-      if (heapCoder instanceof ByteCoder) {
-        return ByteCoder.memorySize;
-      }
-
-      return heapCoder.encodedLength;
-    } catch (e) {
-      return 0;
-    }
-  }
-
-  encodeArguments(values: InputValue[], offset = 0): Uint8Array {
+  encodeArguments(values: InputValue[]): Uint8Array {
     FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 
     const shallowCopyValues = values.slice();
@@ -126,11 +87,7 @@ export class FunctionFragment<
       })
     );
 
-    if (this.encoding === ENCODING_V1) {
-      return new TupleCoderV1(coders).encode(shallowCopyValues);
-    }
-    const results: Uint8ArrayWithDynamicData = new TupleCoder(coders).encode(shallowCopyValues);
-    return unpackDynamicData(results, offset, results.byteLength);
+    return new TupleCoderV1(coders).encode(shallowCopyValues);
   }
 
   private static verifyArgsAndInputsAlign(
