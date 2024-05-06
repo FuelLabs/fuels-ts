@@ -1,11 +1,22 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn, toBytes } from '@fuel-ts/math';
 
+import type { EncodingOptions } from '../../../types/EncodingOptions';
+import { WORD_SIZE } from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
 
 export class BooleanCoder extends Coder<boolean, boolean> {
-  constructor() {
-    super('boolean', 'boolean', 1);
+  options: EncodingOptions;
+
+  constructor(
+    options: EncodingOptions = {
+      padToWordSize: false,
+    }
+  ) {
+    const encodedLength = options.padToWordSize ? WORD_SIZE : 1;
+    super('boolean', 'boolean', encodedLength);
+
+    this.options = options;
   }
 
   encode(value: boolean): Uint8Array {

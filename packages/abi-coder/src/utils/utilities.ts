@@ -125,25 +125,6 @@ export const chunkByLength = (data: Uint8Array, length = WORD_SIZE): Uint8Array[
 };
 
 /**
- * Checks if a given type is a pointer type
- * See: https://github.com/FuelLabs/sway/issues/1368
- */
-export const isPointerType = (type: string) => {
-  switch (type) {
-    case 'u8':
-    case 'u16':
-    case 'u32':
-    case 'u64':
-    case 'bool': {
-      return false;
-    }
-    default: {
-      return true;
-    }
-  }
-};
-
-/**
  * Because some properties can be single-bytes, we need to pad them
  * with zeros until they are aligned to a word-sized increment.
  * This is the case for `tuple` and `struct` properties.

@@ -1,5 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { concat } from '@fuel-ts/utils';
+
+import { WORD_SIZE } from '../../../utils/constants';
 
 import { BooleanCoder } from './BooleanCoder';
 
@@ -13,6 +16,7 @@ describe('BooleanCoder', () => {
   const FALSE_ENCODED = new Uint8Array([0]);
 
   const coder = new BooleanCoder();
+  const paddedCoder = new BooleanCoder({ padToWordSize: true });
 
   it('encodes a true boolean', () => {
     const expected = TRUE_ENCODED;
@@ -41,6 +45,46 @@ describe('BooleanCoder', () => {
     const expectedValue = FALSE_DECODED;
     const expectedLength = FALSE_ENCODED.length;
     const [actualValue, actualLength] = coder.decode(FALSE_ENCODED, 0);
+
+    expect(actualValue).toStrictEqual(expectedValue);
+    expect(actualLength).toBe(expectedLength);
+  });
+
+  it('encodes a true boolean [padded]', () => {
+    const expected = concat([new Uint8Array(7), TRUE_ENCODED]);
+    const actual = paddedCoder.encode(TRUE_DECODED);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('encodes a false boolean [padded]', () => {
+    const expected = concat([new Uint8Array(7), FALSE_ENCODED]);
+    const actual = paddedCoder.encode(FALSE_DECODED);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('decodes a true boolean [padded]', () => {
+    const expectedValue = TRUE_DECODED;
+    const expectedLength = WORD_SIZE;
+
+    const [actualValue, actualLength] = paddedCoder.decode(
+      concat([new Uint8Array(7), TRUE_ENCODED]),
+      0
+    );
+
+    expect(actualValue).toStrictEqual(expectedValue);
+    expect(actualLength).toBe(expectedLength);
+  });
+
+  it('decodes a false boolean [padded]', () => {
+    const expectedValue = FALSE_DECODED;
+    const expectedLength = WORD_SIZE;
+
+    const [actualValue, actualLength] = paddedCoder.decode(
+      concat([new Uint8Array(7), FALSE_ENCODED]),
+      0
+    );
 
     expect(actualValue).toStrictEqual(expectedValue);
     expect(actualLength).toBe(expectedLength);

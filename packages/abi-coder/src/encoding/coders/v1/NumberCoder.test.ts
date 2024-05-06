@@ -166,4 +166,70 @@ describe('NumberCoder', () => {
       new FuelError(ErrorCode.TYPE_NOT_SUPPORTED, `Invalid number type: ${invalidNumber}`)
     );
   });
+
+  it('encodes a u8 number [padded]', () => {
+    const coder = new NumberCoder('u8', { padToWordSize: true });
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]);
+    const actual = coder.encode(U8_MAX);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('decodes a u8 number [padded]', () => {
+    const coder = new NumberCoder('u8', { padToWordSize: true });
+    const expectedValue = U8_MAX;
+    const expectedLength = 8;
+
+    const [actualValue, actualLength] = coder.decode(
+      new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]),
+      0
+    );
+
+    expect(actualValue).toStrictEqual(expectedValue);
+    expect(actualLength).toBe(expectedLength);
+  });
+
+  it('encodes a u16 number [padded]', () => {
+    const coder = new NumberCoder('u16', { padToWordSize: true });
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, U8_MAX, U8_MAX]);
+    const actual = coder.encode(U16_MAX);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('decodes a u16 number [padded]', () => {
+    const coder = new NumberCoder('u16', { padToWordSize: true });
+    const expectedValue = U16_MAX;
+    const expectedLength = 8;
+
+    const [actualValue, actualLength] = coder.decode(
+      new Uint8Array([0, 0, 0, 0, 0, 0, U8_MAX, U8_MAX]),
+      0
+    );
+
+    expect(actualValue).toStrictEqual(expectedValue);
+    expect(actualLength).toBe(expectedLength);
+  });
+
+  it('encodes a u32 number [padded]', () => {
+    const coder = new NumberCoder('u32', { padToWordSize: true });
+    const expected = new Uint8Array([0, 0, 0, 0, U8_MAX, U8_MAX, U8_MAX, U8_MAX]);
+    const actual = coder.encode(U32_MAX);
+
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('decodes a u32 number [padded]', () => {
+    const coder = new NumberCoder('u32', { padToWordSize: true });
+    const expectedValue = U32_MAX;
+    const expectedLength = 8;
+
+    const [actualValue, actualLength] = coder.decode(
+      new Uint8Array([0, 0, 0, 0, U8_MAX, U8_MAX, U8_MAX, U8_MAX]),
+      0
+    );
+
+    expect(actualValue).toStrictEqual(expectedValue);
+    expect(actualLength).toBe(expectedLength);
+  });
 });

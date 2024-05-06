@@ -78,7 +78,7 @@ export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
   encode(value: OutputContract): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u8').encode(value.inputIndex));
+    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(value.inputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
 
@@ -89,7 +89,7 @@ export class OutputContractCoder extends Coder<OutputContract, OutputContract> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
     const inputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const balanceRoot = decoded;
@@ -264,7 +264,7 @@ export class OutputCoder extends Coder<Output, Output> {
   encode(value: Output): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u8').encode(value.type));
+    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(value.type));
 
     const { type } = value;
 
@@ -304,7 +304,7 @@ export class OutputCoder extends Coder<Output, Output> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
     const type = decoded as OutputType;
     switch (type) {
       case OutputType.Coin: {

@@ -1,6 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { toNumber, toBytes } from '@fuel-ts/math';
 
+import type { EncodingOptions } from '../../../types/EncodingOptions';
+import { WORD_SIZE } from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
 
 type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';
@@ -19,14 +21,19 @@ const getLength = (baseType: NumberCoderType): number => {
 };
 
 export class NumberCoder extends Coder<number, number> {
-  length: number;
   baseType: NumberCoderType;
+  options: EncodingOptions;
 
-  constructor(baseType: NumberCoderType) {
-    const length = getLength(baseType);
+  constructor(
+    baseType: NumberCoderType,
+    options: EncodingOptions = {
+      padToWordSize: false,
+    }
+  ) {
+    const length = options.padToWordSize ? WORD_SIZE : getLength(baseType);
     super('number', baseType, length);
     this.baseType = baseType;
-    this.length = length;
+    this.options = options;
   }
 
   encode(value: number | string): Uint8Array {
@@ -38,11 +45,11 @@ export class NumberCoder extends Coder<number, number> {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}.`);
     }
 
-    if (bytes.length > this.length) {
+    if (bytes.length > this.encodedLength) {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Invalid ${this.baseType}, too many bytes.`);
     }
 
-    return toBytes(bytes, this.length);
+    return toBytes(bytes, this.encodedLength);
   }
 
   decode(data: Uint8Array, offset: number): [number, number] {
@@ -50,12 +57,12 @@ export class NumberCoder extends Coder<number, number> {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid number data size.`);
     }
 
-    const bytes = data.slice(offset, offset + this.length);
+    const bytes = data.slice(offset, offset + this.encodedLength);
 
     if (bytes.length !== this.encodedLength) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid number byte data size.`);
     }
 
-    return [toNumber(bytes), offset + this.length];
+    return [toNumber(bytes), offset + this.encodedLength];
   }
 }

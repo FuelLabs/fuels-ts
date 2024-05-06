@@ -53,12 +53,21 @@ import type { EncodingVersion } from '../utils/constants';
  *
  * Encoding Version 1:
  *
- * It currently is supported only by logs, but has no specific configurable options.
- * More information on the improvements made in this version can be found in the
- * fuel specs (https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/argument-encoding.md#version-1
+ * As version 1 aims to make call data as compact as possible, types are only using their required
+ * property space. In the VM, they are still padded. Therefore the following option is available:
+ * 
+ * 1) padToWordSize (default=false)
+ * 
+ * Describes if the encoding should be padded to the word size.
+ * 
+ * false —— no padding (default).
+ * true —— padding to the word size, and should be used when underneath:
+ *   • number(u8, u16, u32)
+ *   • boolean
  */
 export type EncodingOptions = {
   encoding?: EncodingVersion;
   isSmallBytes?: boolean;
   isRightPadded?: boolean;
+  padToWordSize?: boolean;
 };
