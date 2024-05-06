@@ -59,6 +59,19 @@ describe('tryFindBinaries', () => {
     expect(binaries.fuelCorePath).toEqual(fuelCorePath);
   });
 
+  it('should handle undefined paths', () => {
+    const { getSystemForc, getSystemFuelCore } = mockAllDeps();
+
+    const binaries = tryFindBinaries({ forcPath: undefined, fuelCorePath: undefined });
+
+    expect(getSystemForc).toHaveBeenCalledTimes(1);
+    expect(getSystemForc).toBeCalledWith('forc');
+    expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
+    expect(getSystemFuelCore).toBeCalledWith('fuel-core');
+    expect(binaries.forcPath).toEqual('forc');
+    expect(binaries.fuelCorePath).toEqual('fuel-core');
+  })
+
   it(`should throw when binaries are not found`, () => {
     const forcPath = '/non/existent/path/to/forc';
     const fuelCorePath = '/non/existent/path/to/fuel-core';
