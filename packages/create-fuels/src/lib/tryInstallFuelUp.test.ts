@@ -46,6 +46,9 @@ const mockAllDeps = (params: { isFuelUpInstalled?: boolean; shouldInstallFuelUp?
   };
 };
 
+/**
+ * @group node
+ */
 describe('tryInstallFuelup', () => {
   it('should display a message of installation to the user', async () => {
     // Arrange

@@ -43,6 +43,9 @@ const mockAllDeps = (params: { shouldThrow: boolean }) => {
   };
 };
 
+/**
+ * @group node
+ */
 describe('installFuelUp', () => {
   it('should install fuelup successfully', () => {
     // Arrange

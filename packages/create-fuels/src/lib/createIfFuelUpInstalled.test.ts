@@ -26,6 +26,9 @@ const mockAllDeps = (params: { version: string; shouldThrow: boolean }) => {
   };
 };
 
+/**
+ * @group node
+ */
 describe('createIfFuelUpInstalled', () => {
   it('should check the version of fuelup', () => {
     const { execSync } = mockAllDeps({ version: '1.0.0', shouldThrow: false });
