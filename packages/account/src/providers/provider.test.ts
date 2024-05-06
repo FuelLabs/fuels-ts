@@ -857,7 +857,7 @@ describe('Provider', () => {
     );
   });
 
-  it('throws on difference between major client version and supported major version', async () => {
+  it('warns on difference between major client version and supported major version', async () => {
     const { FUEL_CORE } = versions;
     const [major, minor, patch] = FUEL_CORE.split('.');
     const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
@@ -876,13 +876,20 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
-      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
-    });
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    await Provider.create(FUEL_NETWORK_URL);
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnce();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
+which is not supported by the version of the TS SDK that you are using. 
+Things may not work as expected.
+Supported fuel-core version: ${mock.supportedVersion}.`
+    );
   });
 
-  it('throws on difference between minor client version and supported minor version', async () => {
+  it('warns on difference between minor client version and supported minor version', async () => {
     const { FUEL_CORE } = versions;
     const [major, minor, patch] = FUEL_CORE.split('.');
     const minorMismatch = minor === '0' ? 1 : parseInt(patch, 10) - 1;
@@ -901,10 +908,17 @@ describe('Provider', () => {
     const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
     spy.mockImplementationOnce(() => mock);
 
-    await expectToThrowFuelError(() => Provider.create(FUEL_NETWORK_URL), {
-      code: ErrorCode.UNSUPPORTED_FUEL_CLIENT_VERSION,
-      message: `Fuel client version: ${FUEL_CORE}, Supported version: ${mock.supportedVersion}`,
-    });
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    await Provider.create(FUEL_NETWORK_URL);
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnce();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
+which is not supported by the version of the TS SDK that you are using. 
+Things may not work as expected.
+Supported fuel-core version: ${mock.supportedVersion}.`
+    );
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
