@@ -9,4 +9,3 @@ export * from './utils/defaultSnapshotConfigs';
 export * from './utils/isDefined';
 export * from './utils/base58';
 export * from './utils/dataSlice';
-export * from './utils/getBytes';

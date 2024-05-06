@@ -3,7 +3,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 
-import { getBytes } from './getBytes';
+import { arrayify } from './arrayify';
 
 const BN_0 = bn(0);
 const BN_58 = bn(58);
@@ -28,7 +28,7 @@ function getAlpha(letter: string): BN {
  *  Encode value as a Base58-encoded string.
  */
 export function encodeBase58(_value: BytesLike): string {
-  const bytes = getBytes(_value);
+  const bytes = arrayify(_value);
 
   let value = bn(bytes);
   let result = '';

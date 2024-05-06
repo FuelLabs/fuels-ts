@@ -1,5 +1,5 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { getBytes, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 import { pbkdf2Sync } from 'crypto';
 
 let locked = false;
@@ -21,8 +21,8 @@ export function pbkdf2(
   keylen: number,
   algo: 'sha256' | 'sha512'
 ): string {
-  const password = getBytes(_password, 'password');
-  const salt = getBytes(_salt, 'salt');
+  const password = arrayify(_password, 'password');
+  const salt = arrayify(_salt, 'salt');
   return hexlify(pBkdf2(password, salt, iterations, keylen, algo));
 }
 pbkdf2._ = PBKDF2;

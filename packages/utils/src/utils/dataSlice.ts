@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 
-import { getBytes } from './getBytes';
+import { arrayify } from './arrayify';
 import { hexlify } from './hexlify';
 
 /**
@@ -13,7 +13,7 @@ import { hexlify } from './hexlify';
  * @returns - a sliced hex string from start to end.
  */
 export function dataSlice(data: BytesLike, start?: number, end?: number): string {
-  const bytes = getBytes(data);
+  const bytes = arrayify(data);
   if (end != null && end > bytes.length) {
     throw new FuelError(ErrorCode.INVALID_DATA, 'cannot slice beyond data bounds');
   }

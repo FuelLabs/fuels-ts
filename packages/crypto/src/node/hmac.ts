@@ -1,5 +1,5 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { getBytes, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 import { createHmac } from 'crypto';
 
 let locked = false;
@@ -17,8 +17,8 @@ export function computeHmac(
   _key: Uint8Array,
   _data: Uint8Array
 ): string {
-  const key = getBytes(_key, 'key');
-  const data = getBytes(_data, 'data');
+  const key = arrayify(_key, 'key');
+  const data = arrayify(_data, 'data');
   return hexlify(computeHMAC(algorithm, key, data));
 }
 computeHmac._ = COMPUTEHMAC;
