@@ -1,4 +1,6 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet, bn } from 'fuels';
 
@@ -178,5 +180,56 @@ describe(__filename, () => {
     const receiverBalance = await receiver.getBalance(baseAssetId);
 
     expect(receiverBalance.toNumber()).toBe(amountToTransfer);
+  });
+
+  it('should ensure proper error is thrown when user has not enough resources', async () => {
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
+
+    const splitIn = 20;
+
+    /**
+     * Splitting funds in 24 UTXOs to result in the transaction become more expensive
+     * after the funds are added to it.
+     */
+    await fundingTxWithMultipleUTXOs({
+      account: sender,
+      totalAmount: 2400,
+      splitIn,
+    });
+
+    const request = new ScriptTransactionRequest();
+
+    const amountToTransfer = 1000;
+    request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
+
+    const txCost = await provider.getTransactionCost(request);
+
+    expect(request.inputs.length).toBe(0);
+
+    request.gasLimit = txCost.gasUsed;
+
+    const getResourcesToSpend = vi.spyOn(sender, 'getResourcesToSpend');
+
+    /**
+     * When estimating with only one UTXO the TX will require in total =~ 1887 of basetAssetId:
+     * 1000 for the transfer and 887 for fees. However after funding it with 24 UTXOs the fee is
+     * increased to =~ 3081. This happens because the bigger the TX becomes, more gas it will use.
+     *
+     * The sender has only 2400 of BaseAssetId, and if we try to fund the transaction only one time,
+     * apparently will be ok since the fee was not updated and 2400 can cover 1887. But the TX
+     * will fail after being submitted with Error "InsufficientInputAmount". This error is
+     * misleading because in reality the user has not enough coins to cover the fee. The query
+     * `getResourcesToSpend` is smart enough to return way more funds than the target amount. But since
+     * the user balance was only slightly above the target ( initially 1887 ), and because the user
+     * has its low balance spread in many UTXOs, the fee will be higher than the user balance after
+     * funding the TX. By trying to fund the TX again, we can force the proper error to be thrown.
+     */
+    await expectToThrowFuelError(
+      () => sender.fund(request, txCost),
+      new FuelError(FuelError.CODES.INVALID_REQUEST, 'not enough coins to fit the target')
+    );
+
+    expect(getResourcesToSpend).toHaveBeenCalledTimes(2);
   });
 });
