@@ -30,6 +30,8 @@ export enum TransactionTypeName {
   Create = 'Create',
   Mint = 'Mint',
   Script = 'Script',
+  Upgrade = 'Upgrade',
+  Upload = 'Upload',
 }
 
 /**
@@ -154,6 +156,7 @@ export type TransactionSummary<TTransactionType = void> = {
   time?: string;
   operations: Operation[];
   gasUsed: BN;
+  tip: BN;
   fee: BN;
   type: TransactionTypeName;
   blockId?: BlockId;
@@ -161,6 +164,8 @@ export type TransactionSummary<TTransactionType = void> = {
   isTypeMint: boolean;
   isTypeCreate: boolean;
   isTypeScript: boolean;
+  isTypeUpgrade: boolean;
+  isTypeUpload: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;

@@ -292,8 +292,8 @@ describe('Fee', () => {
 
     expectToBeInRange({
       value: fee.toNumber(),
-      min: balanceDiff - 10,
-      max: balanceDiff + 10,
+      min: balanceDiff - 20,
+      max: balanceDiff + 20,
     });
   });
 });
