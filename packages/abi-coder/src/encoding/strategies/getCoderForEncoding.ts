@@ -2,9 +2,8 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { GetCoderFn } from '../../types/GetCoder';
 import type { EncodingVersion } from '../../utils/constants';
-import { ENCODING_V0, ENCODING_V1 } from '../../utils/constants';
+import { ENCODING_V1 } from '../../utils/constants';
 
-import { getCoder as getCoderV0 } from './getCoderV0';
 import { getCoder as getCoderV1 } from './getCoderV1';
 
 /**
@@ -18,8 +17,6 @@ export function getCoderForEncoding(encoding: EncodingVersion = ENCODING_V1): Ge
   switch (encoding) {
     case ENCODING_V1:
       return getCoderV1;
-    case ENCODING_V0:
-      return getCoderV0;
     default:
       throw new FuelError(
         ErrorCode.UNSUPPORTED_ENCODING_VERSION,

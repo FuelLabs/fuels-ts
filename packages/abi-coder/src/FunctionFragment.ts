@@ -8,11 +8,8 @@ import { arrayify } from '@fuel-ts/utils';
 import { AbiCoder } from './AbiCoder';
 import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
-import { ByteCoder } from './encoding/coders/v0/ByteCoder';
-import { TupleCoder } from './encoding/coders/v0/TupleCoder';
-import { VecCoder } from './encoding/coders/v0/VecCoder';
-import { StdStringCoder } from './encoding/coders/v1/StdStringCoder';
-import { TupleCoder as TupleCoderV1 } from './encoding/coders/v1/TupleCoder';
+import { StdStringCoder } from './encoding/coders/StdStringCoder';
+import { TupleCoder } from './encoding/coders/TupleCoder';
 import type {
   JsonAbi,
   JsonAbiArgument,
@@ -20,14 +17,13 @@ import type {
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
-import { ENCODING_V1, OPTION_CODER_TYPE } from './utils/constants';
+import { OPTION_CODER_TYPE } from './utils/constants';
 import {
   findFunctionByName,
   findNonEmptyInputs,
   findTypeById,
   getEncodingVersion,
 } from './utils/json-abi';
-import type { Uint8ArrayWithDynamicData } from './utils/utilities';
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
@@ -82,12 +78,11 @@ export class FunctionFragment<
 
     const coders = nonEmptyInputs.map((t) =>
       AbiCoder.getCoder(this.jsonAbi, t, {
-        isRightPadded: nonEmptyInputs.length > 1,
         encoding: this.encoding,
       })
     );
 
-    return new TupleCoderV1(coders).encode(shallowCopyValues);
+    return new TupleCoder(coders).encode(shallowCopyValues);
   }
 
   private static verifyArgsAndInputsAlign(

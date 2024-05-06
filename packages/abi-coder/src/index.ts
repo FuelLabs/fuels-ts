@@ -13,6 +13,5 @@ export {
   BYTES_32,
   calculateVmTxMemory,
   type EncodingVersion,
-  ENCODING_V0,
   ENCODING_V1,
 } from './utils/constants';
