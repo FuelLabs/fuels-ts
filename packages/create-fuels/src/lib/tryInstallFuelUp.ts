@@ -21,7 +21,9 @@ export const tryInstallFuelUp = async (isVerbose: boolean = false) => {
 
   const shouldInstall = await promptFuelUpInstall();
   if (!shouldInstall) {
-    warn('Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init');
+    warn(
+      'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
+    );
     return;
   }
 

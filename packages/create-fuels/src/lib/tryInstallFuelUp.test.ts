@@ -94,7 +94,7 @@ describe('tryInstallFuelup', () => {
     expect(promptFuelUpInstall).toBeCalledTimes(1);
   });
 
-  it("should warn the user to install manually", async () => {
+  it('should warn the user to install manually', async () => {
     // Arrange
     const { warn } = mockLogger();
     const { oraInstance, promptFuelUpInstall, installFuelUp } = mockAllDeps({
