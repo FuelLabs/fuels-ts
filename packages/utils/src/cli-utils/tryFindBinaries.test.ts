@@ -1,7 +1,7 @@
+import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as versionsCliMod from '@fuel-ts/versions/cli';
 
 import { tryFindBinaries } from './tryFindBinaries';
-import { safeExec } from '@fuel-ts/errors/test-utils';
 
 const mockAllDeps = (
   params: {
@@ -73,7 +73,7 @@ describe('tryFindBinaries', () => {
     expect(binaries.fuelCorePath).toEqual('fuel-core');
   });
 
-  it(`should throw when binaries are not found`, async() => {
+  it(`should throw when binaries are not found`, async () => {
     const forcPath = '/non/existent/path/to/forc';
     const fuelCorePath = '/non/existent/path/to/fuel-core';
     const { getSystemForc, getSystemFuelCore } = mockAllDeps({
@@ -81,7 +81,7 @@ describe('tryFindBinaries', () => {
       fuelCoreError: new Error('fuel-core not found'),
     });
 
-    const { error, result } = await safeExec(() => tryFindBinaries({ forcPath, fuelCorePath }));
+    const { error } = await safeExec(() => tryFindBinaries({ forcPath, fuelCorePath }));
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);

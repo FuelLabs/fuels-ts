@@ -44,7 +44,7 @@ function mockAllDeps(params: {
  * @group node
  */
 describe('getSystemVersions', () => {
-  const expectedExecSyncOptions = expect.objectContaining({ stdio: 'pipe' })
+  const expectedExecSyncOptions = expect.objectContaining({ stdio: 'pipe' });
 
   test('should get user versions just fine', () => {
     // mocking
