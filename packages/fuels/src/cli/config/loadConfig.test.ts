@@ -159,11 +159,10 @@ describe('loadConfig', () => {
 
     const { error, result } = await safeExec(() => loadConfig(paths.root));
 
-    const expectedMessage = [
-      `Binary for 'forc' not found at path '/non/existent/forc'`,
-      `Binary for 'fuel-core' not found at path '/non/existent/fuel-core'`,
-    ].join('\n');
     expect(result).toBeFalsy();
-    expect(error?.message).toEqual(expectedMessage);
+    expect(error?.message).toMatch(/Unable to find the following binaries on the filesystem/g);
+    expect(error?.message).toMatch(/\/non\/existent\/forc/g);
+    expect(error?.message).toMatch(/\/non\/existent\/fuel-core/g);
+    expect(error?.message).toMatch(/Visit https:\/\/docs.fuel.network\/guides\/installation\//g);
   });
 });
