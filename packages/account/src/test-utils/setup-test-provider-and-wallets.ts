@@ -55,7 +55,6 @@ export async function setupTestProviderAndWallets({
 }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {}): Promise<SetupTestProviderAndWalletsReturn> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
-
   const walletConfig = new WalletConfig(
     nodeOptions.chainConfig?.chainConfigJson?.consensus_parameters?.V1?.base_asset_id ??
       defaultSnapshotConfigs.chainConfigJson.consensus_parameters.V1.base_asset_id,

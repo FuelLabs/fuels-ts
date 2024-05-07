@@ -10,6 +10,7 @@ import type { Contract } from '@fuel-ts/program';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { readFileSync } from 'fs';
+import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
@@ -45,15 +46,47 @@ interface LaunchTestNodeOptions extends LaunchCustomProviderAndGetWalletsOptions
 interface LaunchTestNodeReturn<TContracts> extends SetupTestProviderAndWalletsReturn {
   contracts: TContracts;
 }
-function getChainConfig(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
-  let envChainConfig: SnapshotConfigs | undefined;
-  if (process.env.DEFAULT_CHAIN_CONFIG_PATH) {
-    envChainConfig = JSON.parse(
-      readFileSync(process.env.DEFAULT_CHAIN_CONFIG_PATH, 'utf-8')
-    ) as SnapshotConfigs;
+function getChainMetadata(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
+  let envChainMetadata: SnapshotConfigs['metadataJson'] | undefined;
+  let chainConfig: SnapshotConfigs['chainConfigJson'] | undefined;
+  let stateConfig: SnapshotConfigs['stateConfigJson'] | undefined;
+
+  if (process.env.DEFAULT_CHAIN_METADATA_PATH) {
+    envChainMetadata = JSON.parse(
+      readFileSync(process.env.DEFAULT_CHAIN_METADATA_PATH, 'utf-8')
+    ) as SnapshotConfigs['metadataJson'];
+    const dirname = path.dirname(process.env.DEFAULT_CHAIN_METADATA_PATH);
+    const chainConfigPath = path.join(dirname, envChainMetadata.chain_config);
+    chainConfig = JSON.parse(
+      readFileSync(chainConfigPath, 'utf-8')
+    ) as SnapshotConfigs['chainConfigJson'];
+    const stateConfigPath = path.join(dirname, envChainMetadata.table_encoding.Json.filepath);
+    stateConfig = JSON.parse(
+      readFileSync(stateConfigPath, 'utf-8')
+    ) as SnapshotConfigs['stateConfigJson'];
   }
 
-  return mergeDeepRight(envChainConfig ?? {}, nodeOptions?.chainConfig ?? {});
+  const obj = [envChainMetadata, chainConfig, stateConfig].reduce((acc, val, idx) => {
+    if (val === undefined) {
+      return acc;
+    }
+    switch (idx) {
+      case 0:
+        acc.metadataJson = val as SnapshotConfigs['metadataJson'];
+        break;
+      case 1:
+        acc.chainConfigJson = val as SnapshotConfigs['chainConfigJson'];
+        break;
+      case 2:
+        acc.stateConfigJson = val as SnapshotConfigs['stateConfigJson'];
+        break;
+      default:
+        return acc;
+    }
+    return acc;
+  }, {} as SnapshotConfigs);
+
+  return mergeDeepRight(obj, nodeOptions?.chainConfig ?? {});
 }
 
 function getFuelCoreArgs(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
@@ -142,9 +175,8 @@ export async function launchTestNode<TContracts extends Contract[] = Contract[]>
   nodeOptions = {},
   deployContracts = [],
 }: Partial<LaunchTestNodeOptions> = {}): Promise<LaunchTestNodeReturn<TContracts>> {
-  const chainConfig = getChainConfig(nodeOptions);
+  const chainConfig = getChainMetadata(nodeOptions);
   const args = getFuelCoreArgs(nodeOptions);
-
   const { provider, wallets, cleanup } = await setupTestProviderAndWallets({
     walletConfig,
     providerOptions,
@@ -154,9 +186,6 @@ export async function launchTestNode<TContracts extends Contract[] = Contract[]>
       args,
     },
   });
-
-  const balances = await wallets[0].getBalances();
-  console.log(balances);
 
   let contracts: TContracts;
   try {

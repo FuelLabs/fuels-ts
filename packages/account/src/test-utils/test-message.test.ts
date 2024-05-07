@@ -38,7 +38,7 @@ describe('test-message', () => {
     });
 
     const message = testMessage.toChainMessage();
-    expect(message.amount).toEqual(new BN(amount).toHex(8));
+    expect(message.amount).toEqual(amount);
     expect(message.da_height).toEqual(daHeight);
     expect(message.data).toEqual(data);
     expect(message.nonce).toEqual(nonce);

@@ -37,7 +37,7 @@ describe('launching a test node', () => {
         count: 2,
         assets: [AssetId.A, AssetId.B],
         coinsPerAsset: 2,
-        amountPerCoin: 1_000,
+        amountPerCoin: 1_000_000,
       },
       deployContracts: [
         pathToCounterContractRootDir,
@@ -75,16 +75,16 @@ describe('launching a test node', () => {
   });
 
   test('configuring a base chain config', async () => {
-    const chainConfigPath = join(
+    const metadataPath = join(
       __dirname,
       '../../../../../',
       '.fuel-core',
       'configs',
-      'chainConfig.json'
+      'metadata.json'
     );
 
     // #region custom-chain-config
-    process.env.DEFAULT_CHAIN_CONFIG_PATH = chainConfigPath;
+    process.env.DEFAULT_CHAIN_METADATA_PATH = metadataPath;
 
     using launched = await launchTestNode();
     // #endregion custom-chain-config

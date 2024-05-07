@@ -4,9 +4,9 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { hexlify, type SnapshotConfigs } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
-import { randomBytes, randomInt, randomUUID } from 'crypto';
+import { randomBytes, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
-import { writeFile } from 'fs/promises';
+import { writeFile, copyFile } from 'fs/promises';
 import os from 'os';
 import { join } from 'path';
 
@@ -15,13 +15,13 @@ import { launchTestNode } from './launch-test-node';
 const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contract');
 
 async function generateChainConfigFile(chainName: string): Promise<[string, () => void]> {
+  const configsFolder = join(__dirname, '../../../../', '.fuel-core', 'configs');
+  const chainMetadata = JSON.parse(
+    readFileSync(join(configsFolder, 'metadata.json'), 'utf-8')
+  ) as SnapshotConfigs['metadataJson'];
   const chainConfig = JSON.parse(
-    readFileSync(
-      join(__dirname, '../../../../', '.fuel-core', 'configs', 'chainConfig.json'),
-      'utf-8'
-    )
+    readFileSync(join(configsFolder, chainMetadata.chain_config), 'utf-8')
   ) as SnapshotConfigs['chainConfigJson'];
-
   chainConfig.chain_name = chainName;
 
   const tempDirPath = join(os.tmpdir(), '.fuels-ts', randomUUID());
@@ -29,12 +29,23 @@ async function generateChainConfigFile(chainName: string): Promise<[string, () =
   if (!existsSync(tempDirPath)) {
     mkdirSync(tempDirPath, { recursive: true });
   }
-  const chainConfigPath = join(tempDirPath, '.chainConfig.json');
+
+  const metadataPath = join(tempDirPath, 'metadata.json');
+
+  await copyFile(join(configsFolder, 'metadata.json'), metadataPath);
+  await copyFile(
+    join(configsFolder, chainMetadata.table_encoding.Json.filepath),
+    join(tempDirPath, chainMetadata.table_encoding.Json.filepath)
+  );
 
   // Write a temporary chain configuration file.
-  await writeFile(chainConfigPath, JSON.stringify(chainConfig), 'utf-8');
+  await writeFile(
+    join(tempDirPath, chainMetadata.chain_config),
+    JSON.stringify(chainConfig),
+    'utf-8'
+  );
 
-  return [chainConfigPath, () => rmSync(tempDirPath, { recursive: true, force: true })];
+  return [metadataPath, () => rmSync(tempDirPath, { recursive: true, force: true })];
 }
 
 /**
@@ -166,11 +177,11 @@ describe('launchTestNode', () => {
     const chainName = 'gimme_fuel';
     const [chainConfigPath, cleanup] = await generateChainConfigFile(chainName);
 
-    process.env.DEFAULT_CHAIN_CONFIG_PATH = chainConfigPath;
+    process.env.DEFAULT_CHAIN_METADATA_PATH = chainConfigPath;
 
     using launched = await launchTestNode();
     cleanup();
-    process.env.DEFAULT_CHAIN_CONFIG_PATH = '';
+    process.env.DEFAULT_CHAIN_METADATA_PATH = '';
 
     const { provider } = launched;
 
@@ -181,13 +192,11 @@ describe('launchTestNode', () => {
 
   test('chain config from environment variable can be extended manually', async () => {
     const chainName = 'gimme_fuel_gimme_fire_gimme_that_which_i_desire';
-    const [chainConfigPath, cleanup] = await generateChainConfigFile(chainName);
-
-    process.env.DEFAULT_CHAIN_CONFIG_PATH = chainConfigPath;
+    const [chainMetadataPath, cleanup] = await generateChainConfigFile(chainName);
+    process.env.DEFAULT_CHAIN_METADATA_PATH = chainMetadataPath;
 
     const baseAssetId = hexlify(randomBytes(32));
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    const max_inputs = randomInt(200);
+
     using launched = await launchTestNode({
       nodeOptions: {
         chainConfig: {
@@ -203,7 +212,7 @@ describe('launchTestNode', () => {
     });
 
     cleanup();
-    process.env.DEFAULT_CHAIN_CONFIG_PATH = '';
+    process.env.DEFAULT_CHAIN_METADATA_PATH = '';
 
     const { provider } = launched;
 

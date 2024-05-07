@@ -44,7 +44,7 @@ That's a lot of options! These docs showcase some functionality; for a detailed 
 
 The default chain config it uses is that of the current testnet network iteration. [Click here](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/chainConfig.json) to see what it looks like.
 
-If you need a different base chain config, you can specify a `DEFAULT_CHAIN_CONFIG_PATH` environment variable which points to your chain config. `launchTestNode` will read that config and work with it instead, integrating all the functionality with it the same way it'd do with the default config.
+If you need a different base chain config, you can specify a `DEFAULT_CHAIN_METADATA_PATH` environment variable which points to your chain config. `launchTestNode` will read that config and work with it instead, integrating all the functionality with it the same way it'd do with the default config.
 How and where you specify the environment variable depends on your testing tool.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#custom-chain-config{ts:line-numbers}

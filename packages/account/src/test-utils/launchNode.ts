@@ -207,12 +207,15 @@ export const launchNode = async ({
 
       fixedStateConfigJSON = fixedStateConfigJSON.replace(regexMakeNumber, '$1$2');
       // Write a temporary chain configuration files.
-      const chainConfigWritePath = path.join(tempDirPath, 'chainConfig.json');
-      const stateConfigWritePath = path.join(tempDirPath, 'stateConfig.json');
-      const metadataWritePath = path.join(tempDirPath, 'metadata.json');
-      const stateTransitionWritePath = path.join(tempDirPath, 'state_transition_bytecode.wasm');
 
-      const { chainConfigJson, metadataJson } = defaultSnapshotConfigs;
+      const { chainConfigJson, metadataJson } = chainConfig;
+      const metadataWritePath = path.join(tempDirPath, 'metadata.json');
+      const chainConfigWritePath = path.join(tempDirPath, metadataJson.chain_config);
+      const stateConfigWritePath = path.join(
+        tempDirPath,
+        metadataJson.table_encoding.Json.filepath
+      );
+      const stateTransitionWritePath = path.join(tempDirPath, 'state_transition_bytecode.wasm');
 
       writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
       writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
