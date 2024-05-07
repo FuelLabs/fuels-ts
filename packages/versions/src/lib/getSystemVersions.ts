@@ -9,7 +9,7 @@ export const getSystemVersion = (command: string) => {
   let error: Error | null = null;
 
   try {
-    const contents = execSync(command).toString();
+    const contents = execSync(command, { stdio: 'pipe' }).toString();
     if (versionReg.test(contents)) {
       version = contents.match(versionReg)?.[0] as string;
     } else {

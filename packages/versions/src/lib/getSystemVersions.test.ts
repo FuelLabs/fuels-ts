@@ -44,6 +44,8 @@ function mockAllDeps(params: {
  * @group node
  */
 describe('getSystemVersions', () => {
+  const expectedExecSyncOptions = expect.objectContaining({ stdio: 'pipe' })
+
   test('should get user versions just fine', () => {
     // mocking
     const systemForcVersion = '1.0.0';
@@ -58,8 +60,8 @@ describe('getSystemVersions', () => {
 
     // validating
     expect(execSync).toHaveBeenCalledTimes(2);
-    expect(execSync).toBeCalledWith(`forc --version`);
-    expect(execSync).toBeCalledWith(`fuel-core --version`);
+    expect(execSync).toBeCalledWith(`forc --version`, expectedExecSyncOptions);
+    expect(execSync).toBeCalledWith(`fuel-core --version`, expectedExecSyncOptions);
     expect(versions.systemForcVersion).toEqual(systemForcVersion);
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
   });
@@ -79,8 +81,8 @@ describe('getSystemVersions', () => {
 
     // validating
     expect(execSync).toHaveBeenCalledTimes(2);
-    expect(execSync).toBeCalledWith(`forc --version`);
-    expect(execSync).toBeCalledWith(`fuel-core --version`);
+    expect(execSync).toBeCalledWith(`forc --version`, expectedExecSyncOptions);
+    expect(execSync).toBeCalledWith(`fuel-core --version`, expectedExecSyncOptions);
     expect(systemError).toBeTruthy();
   });
 
@@ -98,8 +100,8 @@ describe('getSystemVersions', () => {
 
     // validating
     expect(execSync).toHaveBeenCalledTimes(2);
-    expect(execSync).toBeCalledWith(`forc --version`);
-    expect(execSync).toBeCalledWith(`fuel-core --version`);
+    expect(execSync).toBeCalledWith(`forc --version`, expectedExecSyncOptions);
+    expect(execSync).toBeCalledWith(`fuel-core --version`, expectedExecSyncOptions);
     expect(versions.error?.toString()).toEqual(`Error: ${systemForcVersion}`);
     expect(versions.systemForcVersion).toEqual(null);
     expect(versions.systemFuelCoreVersion).toEqual(null);
@@ -122,8 +124,8 @@ describe('getSystemVersions', () => {
 
     // validating
     expect(execSync).toHaveBeenCalledTimes(2);
-    expect(execSync).toBeCalledWith(`/path/to/custom/forc --version`);
-    expect(execSync).toBeCalledWith(`/path/to/custom/fuel-core --version`);
+    expect(execSync).toBeCalledWith(`/path/to/custom/forc --version`, expectedExecSyncOptions);
+    expect(execSync).toBeCalledWith(`/path/to/custom/fuel-core --version`, expectedExecSyncOptions);
     expect(versions.systemForcVersion).toEqual(systemForcVersion);
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
   });
