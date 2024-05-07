@@ -1,6 +1,5 @@
 import { Address } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
-import { BN } from '@fuel-ts/math';
 import { hexlify } from '@fuel-ts/utils';
 
 import { TestMessage } from './test-message';

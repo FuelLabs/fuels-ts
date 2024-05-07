@@ -1,5 +1,4 @@
-import { expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import { WalletUnlocked, toNumber, Contract, Predicate } from 'fuels';
+import { WalletUnlocked, Contract, Predicate } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -71,7 +70,6 @@ describe('Predicate', () => {
       } = launcher;
       const receiver = WalletUnlocked.generate({ provider });
 
-      const receiver = Wallet.generate({ provider });
       const receiverInitialBalance = await receiver.getBalance();
 
       // calling the contract with the receiver account (no resources)
