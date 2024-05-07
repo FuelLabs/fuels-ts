@@ -63,11 +63,19 @@ importers:
         specifier: ^6.9.0
         version: 6.9.1(eslint@8.52.0)(typescript@5.2.2)
       '@vitest/browser':
+<<<<<<< HEAD
         specifier: ^1.1.3
         version: 1.2.1(vitest@1.2.1)(webdriverio@8.36.1(typescript@5.2.2))
       '@vitest/coverage-istanbul':
         specifier: ^1.1.3
         version: 1.2.1(vitest@1.2.1(@types/node@18.15.3)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2))
+=======
+        specifier: ^1.6.0
+        version: 1.6.0(vitest@1.6.0)(webdriverio@8.36.1(typescript@5.2.2))
+      '@vitest/coverage-istanbul':
+        specifier: ^1.6.0
+        version: 1.6.0(vitest@1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2))
+>>>>>>> master
       compare-versions:
         specifier: ^6.1.0
         version: 6.1.0
@@ -168,8 +176,13 @@ importers:
         specifier: ^1.4.2
         version: 1.4.2
       vitest:
+<<<<<<< HEAD
         specifier: ^1.1.3
         version: 1.2.1(@types/node@18.15.3)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2)
+=======
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2)
+>>>>>>> master
       webdriverio:
         specifier: ^8.36.1
         version: 8.36.1(typescript@5.2.2)
@@ -501,8 +514,13 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
       vitest:
+<<<<<<< HEAD
         specifier: ^1.1.3
         version: 1.2.1(@types/node@20.11.13)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2)
+=======
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.11.13)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2)
+>>>>>>> master
 
   internal/check-imports:
     dependencies:
@@ -4594,12 +4612,17 @@ packages:
       vite: ^5.0.0
       vue: ^3.2.25
 
+<<<<<<< HEAD
   '@vitest/browser@1.2.1':
     resolution: {integrity: sha512-jhaQ15zWYAwz8anXgmLW0yAVLCXdT8RFv7LeW9bg7sMlvGJaTCTIHaHWFvCdADF/i62+22tnrzgiiqSnApjXtA==}
+=======
+  '@vitest/browser@1.6.0':
+    resolution: {integrity: sha512-3Wpp9h1hf++rRVPvoXevkdHybLhJVn7MwIMKMIh08tVaoDMmT6fnNhbP222Z48V9PptpYeA5zvH9Ct/ZcaAzmQ==}
+>>>>>>> master
     peerDependencies:
       playwright: '*'
       safaridriver: '*'
-      vitest: ^1.0.0
+      vitest: 1.6.0
       webdriverio: '*'
     peerDependenciesMeta:
       playwright:
@@ -4609,11 +4632,17 @@ packages:
       webdriverio:
         optional: true
 
+<<<<<<< HEAD
   '@vitest/coverage-istanbul@1.2.1':
     resolution: {integrity: sha512-j8M4R3XbQ7cmLqJd7mfxCpEc0bQ7S6o5VIEt7c0Auri2lT1hkd89Sa/mOYDnuGasTNawamW+0d9vDRK/5uhVXw==}
+=======
+  '@vitest/coverage-istanbul@1.6.0':
+    resolution: {integrity: sha512-h/BwpXehkkS0qsNCS00QxiupAqVkNi0WT19BR0dQvlge5oHghoSVLx63fABYFoKxVb7Ue7+k6V2KokmQ1zdMpg==}
+>>>>>>> master
     peerDependencies:
-      vitest: ^1.0.0
+      vitest: 1.6.0
 
+<<<<<<< HEAD
   '@vitest/expect@1.2.1':
     resolution: {integrity: sha512-/bqGXcHfyKgFWYwIgFr1QYDaR9e64pRKxgBNWNXPefPFRhgm+K3+a/dS0cUGEreWngets3dlr8w8SBRw2fCfFQ==}
 
@@ -4628,6 +4657,22 @@ packages:
 
   '@vitest/utils@1.2.1':
     resolution: {integrity: sha512-bsH6WVZYe/J2v3+81M5LDU8kW76xWObKIURpPrOXm2pjBniBu2MERI/XP60GpS4PHU3jyK50LUutOwrx4CyHUg==}
+=======
+  '@vitest/expect@1.6.0':
+    resolution: {integrity: sha512-ixEvFVQjycy/oNgHjqsL6AZCDduC+tflRluaHIzKIsdbzkLn2U/iBnVeJwB6HsIjQBdfMR8Z0tRxKUsvFJEeWQ==}
+
+  '@vitest/runner@1.6.0':
+    resolution: {integrity: sha512-P4xgwPjwesuBiHisAVz/LSSZtDjOTPYZVmNAnpHHSR6ONrf8eCJOFRvUwdHn30F5M1fxhqtl7QZQUk2dprIXAg==}
+
+  '@vitest/snapshot@1.6.0':
+    resolution: {integrity: sha512-+Hx43f8Chus+DCmygqqfetcAZrDJwvTj0ymqjQq4CvmpKFSTVteEOBzCusu1x2tt4OJcvBflyHUE0DZSLgEMtQ==}
+
+  '@vitest/spy@1.6.0':
+    resolution: {integrity: sha512-leUTap6B/cqi/bQkXUu6bQV5TZPx7pmMBKBQiI0rJA8c3pB56ZsaTbREnF7CJfmvAS4V2cXIBAh/3rVwrrCYgw==}
+
+  '@vitest/utils@1.6.0':
+    resolution: {integrity: sha512-21cPiuGMoMZwiOHa2i4LXkMkMkCGzA+MVFV70jRwHo95dL4x/ts5GZhML1QWuy7yfp3WzK3lRvZi3JnXTYqrBw==}
+>>>>>>> master
 
   '@vue/compiler-core@3.4.15':
     resolution: {integrity: sha512-XcJQVOaxTKCnth1vCxEChteGuwG6wqnUHxAm1DO3gCz0+uXKaJNx8/digSz4dLALCy8n2lKq24jSUs8segoqIw==}
@@ -7872,6 +7917,10 @@ packages:
     resolution: {integrity: sha512-n3s8EwkdFIJCG3BPKBYvskgXGoy88ARzvegkitk60NxRdwltLOTaH7CUiMRXvwYorl0Q712iEjcWB+fK/MrWVw==}
     engines: {node: '>=10'}
 
+  istanbul-lib-source-maps@5.0.4:
+    resolution: {integrity: sha512-wHOoEsNJTVltaJp8eVkm8w+GVkVNHT2YDYo53YdzQEL2gWm1hBX5cGFR9hQJtuGLebidVX7et3+dmDZrmclduw==}
+    engines: {node: '>=10'}
+
   istanbul-reports@3.1.5:
     resolution: {integrity: sha512-nUsEMa9pBt/NOHqbcbeJEgqIlY/K7rVWUX6Lql2orY5e9roQOthbR3vtY4zzf2orPELg80fnxxk9zUyPlgwD1w==}
     engines: {node: '>=8'}
@@ -8113,6 +8162,9 @@ packages:
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
+
+  js-tokens@9.0.0:
+    resolution: {integrity: sha512-WriZw1luRMlmV3LGJaR6QOJjWwgLUTf89OwT2lUOyjX2dJGBwgmIkbcz+7WFZjrZM635JOIR517++e/67CP9dQ==}
 
   js-yaml@3.14.1:
     resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
@@ -10972,8 +11024,8 @@ packages:
     resolution: {integrity: sha512-0fk9zBqO67Nq5M/m45qHCJxylV/DhBlIOVExqgOMiCCrzrhU6tCibRXNqE3jwJLftzE9SNuZtYbpzcO+i9FiKw==}
     engines: {node: '>=14.16'}
 
-  strip-literal@1.3.0:
-    resolution: {integrity: sha512-PugKzOsyXpArk0yWmUwqOZecSO0GH0bPoctLcqNDH9J04pVW3lflYE0ujElBGTloevcxF5MofAOZ7C5l2b+wLg==}
+  strip-literal@2.1.0:
+    resolution: {integrity: sha512-Op+UycaUt/8FbN/Z2TWPBLge3jWrP3xj10f3fnYxf052bKuS3EKs1ZQcVGjnEMdsNVAM+plXRdmjrZ/KgG3Skw==}
 
   structured-source@4.0.0:
     resolution: {integrity: sha512-qGzRFNJDjFieQkl/sVOI2dUjHKRyL9dAJi2gCPGJLbJHBIkyOHxjuocpIEfbLioX+qSJpvbYdT49/YCdMznKxA==}
@@ -11724,8 +11776,13 @@ packages:
   vfile@4.2.1:
     resolution: {integrity: sha512-O6AE4OskCG5S1emQ/4gl8zK586RqA3srz3nfK/Viy0UPToBc5Trp9BVFb1u0CjsKrAWwnpr4ifM/KBXPWwJbCA==}
 
+<<<<<<< HEAD
   vite-node@1.2.1:
     resolution: {integrity: sha512-fNzHmQUSOY+y30naohBvSW7pPn/xn3Ib/uqm+5wAJQJiqQsU0NBR78XdRJb04l4bOFKjpTWld0XAfkKlrDbySg==}
+=======
+  vite-node@1.6.0:
+    resolution: {integrity: sha512-de6HJgzC+TFzOu0NTC4RAIsyf/DY/ibWDYQUcuEA84EMHhcefTUGkjFHKKEJhQN4A+6I0u++kr3l36ZF2d7XRw==}
+>>>>>>> master
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
@@ -11813,15 +11870,20 @@ packages:
       postcss:
         optional: true
 
+<<<<<<< HEAD
   vitest@1.2.1:
     resolution: {integrity: sha512-TRph8N8rnSDa5M2wKWJCMnztCZS9cDcgVTQ6tsTFTG/odHJ4l5yNVqvbeDJYJRZ6is3uxaEpFs8LL6QM+YFSdA==}
+=======
+  vitest@1.6.0:
+    resolution: {integrity: sha512-H5r/dN06swuFnzNFhq/dnz37bPXnq8xB2xB5JOVk8K09rUtoeNN+LHWkoQ0A/i3hvbUKKcCei9KpbxqHMLhLLA==}
+>>>>>>> master
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
       '@edge-runtime/vm': '*'
       '@types/node': ^18.0.0 || >=20.0.0
-      '@vitest/browser': ^1.0.0
-      '@vitest/ui': ^1.0.0
+      '@vitest/browser': 1.6.0
+      '@vitest/ui': 1.6.0
       happy-dom: '*'
       jsdom: '*'
     peerDependenciesMeta:
@@ -16584,6 +16646,7 @@ snapshots:
       vite: 5.2.10(@types/node@20.11.13)(terser@5.18.2)
       vue: 3.4.15(typescript@5.2.2)
 
+<<<<<<< HEAD
   '@vitest/browser@1.2.1(vitest@1.2.1)(webdriverio@8.36.1(typescript@5.2.2))':
     dependencies:
       '@vitest/utils': 1.2.1
@@ -16594,16 +16657,29 @@ snapshots:
       webdriverio: 8.36.1(typescript@5.2.2)
 
   '@vitest/coverage-istanbul@1.2.1(vitest@1.2.1(@types/node@18.15.3)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2))':
+=======
+  '@vitest/browser@1.6.0(vitest@1.6.0)(webdriverio@8.36.1(typescript@5.2.2))':
+    dependencies:
+      '@vitest/utils': 1.6.0
+      magic-string: 0.30.5
+      sirv: 2.0.4
+      vitest: 1.6.0(@types/node@20.11.13)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2)
+    optionalDependencies:
+      webdriverio: 8.36.1(typescript@5.2.2)
+
+  '@vitest/coverage-istanbul@1.6.0(vitest@1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2))':
+>>>>>>> master
     dependencies:
       debug: 4.3.4(supports-color@5.5.0)
       istanbul-lib-coverage: 3.2.2
       istanbul-lib-instrument: 6.0.1
       istanbul-lib-report: 3.0.1
-      istanbul-lib-source-maps: 4.0.1
+      istanbul-lib-source-maps: 5.0.4
       istanbul-reports: 3.1.6
       magicast: 0.3.3
       picocolors: 1.0.0
       test-exclude: 6.0.0
+<<<<<<< HEAD
       vitest: 1.2.1(@types/node@18.15.3)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2)
     transitivePeerDependencies:
       - supports-color
@@ -16621,16 +16697,43 @@ snapshots:
       pathe: 1.1.2
 
   '@vitest/snapshot@1.2.1':
+=======
+      vitest: 1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2)
+    transitivePeerDependencies:
+      - supports-color
+
+  '@vitest/expect@1.6.0':
+    dependencies:
+      '@vitest/spy': 1.6.0
+      '@vitest/utils': 1.6.0
+      chai: 4.4.1
+
+  '@vitest/runner@1.6.0':
+    dependencies:
+      '@vitest/utils': 1.6.0
+      p-limit: 5.0.0
+      pathe: 1.1.2
+
+  '@vitest/snapshot@1.6.0':
+>>>>>>> master
     dependencies:
       magic-string: 0.30.5
       pathe: 1.1.2
       pretty-format: 29.7.0
 
+<<<<<<< HEAD
   '@vitest/spy@1.2.1':
     dependencies:
       tinyspy: 2.2.0
 
   '@vitest/utils@1.2.1':
+=======
+  '@vitest/spy@1.6.0':
+    dependencies:
+      tinyspy: 2.2.0
+
+  '@vitest/utils@1.6.0':
+>>>>>>> master
     dependencies:
       diff-sequences: 29.6.3
       estree-walker: 3.0.3
@@ -20878,6 +20981,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  istanbul-lib-source-maps@5.0.4:
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.25
+      debug: 4.3.4(supports-color@5.5.0)
+      istanbul-lib-coverage: 3.2.2
+    transitivePeerDependencies:
+      - supports-color
+
   istanbul-reports@3.1.5:
     dependencies:
       html-escaper: 2.0.2
@@ -21381,6 +21492,8 @@ snapshots:
   js-sdsl@4.4.1: {}
 
   js-tokens@4.0.0: {}
+
+  js-tokens@9.0.0: {}
 
   js-yaml@3.14.1:
     dependencies:
@@ -24645,9 +24758,9 @@ snapshots:
 
   strip-json-comments@5.0.1: {}
 
-  strip-literal@1.3.0:
+  strip-literal@2.1.0:
     dependencies:
-      acorn: 8.11.3
+      js-tokens: 9.0.0
 
   structured-source@4.0.0:
     dependencies:
@@ -25569,7 +25682,11 @@ snapshots:
       unist-util-stringify-position: 2.0.3
       vfile-message: 2.0.4
 
+<<<<<<< HEAD
   vite-node@1.2.1(@types/node@18.15.3)(terser@5.18.2):
+=======
+  vite-node@1.6.0(@types/node@18.15.3)(terser@5.18.2):
+>>>>>>> master
     dependencies:
       cac: 6.7.14
       debug: 4.3.4(supports-color@5.5.0)
@@ -25586,7 +25703,11 @@ snapshots:
       - supports-color
       - terser
 
+<<<<<<< HEAD
   vite-node@1.2.1(@types/node@20.11.13)(terser@5.18.2):
+=======
+  vite-node@1.6.0(@types/node@20.11.13)(terser@5.18.2):
+>>>>>>> master
     dependencies:
       cac: 6.7.14
       debug: 4.3.4(supports-color@5.5.0)
@@ -25712,6 +25833,7 @@ snapshots:
       - typescript
       - universal-cookie
 
+<<<<<<< HEAD
   vitest@1.2.1(@types/node@18.15.3)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2):
     dependencies:
       '@vitest/expect': 1.2.1
@@ -25719,8 +25841,16 @@ snapshots:
       '@vitest/snapshot': 1.2.1
       '@vitest/spy': 1.2.1
       '@vitest/utils': 1.2.1
+=======
+  vitest@1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2):
+    dependencies:
+      '@vitest/expect': 1.6.0
+      '@vitest/runner': 1.6.0
+      '@vitest/snapshot': 1.6.0
+      '@vitest/spy': 1.6.0
+      '@vitest/utils': 1.6.0
+>>>>>>> master
       acorn-walk: 8.3.2
-      cac: 6.7.14
       chai: 4.4.1
       debug: 4.3.4(supports-color@5.5.0)
       execa: 8.0.1
@@ -25729,15 +25859,24 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.0.0
       std-env: 3.7.0
-      strip-literal: 1.3.0
+      strip-literal: 2.1.0
       tinybench: 2.6.0
       tinypool: 0.8.4
+<<<<<<< HEAD
       vite: 5.0.12(@types/node@18.15.3)(terser@5.18.2)
       vite-node: 1.2.1(@types/node@18.15.3)(terser@5.18.2)
       why-is-node-running: 2.2.2
     optionalDependencies:
       '@types/node': 18.15.3
       '@vitest/browser': 1.2.1(vitest@1.2.1)(webdriverio@8.36.1(typescript@5.2.2))
+=======
+      vite: 5.2.10(@types/node@18.15.3)(terser@5.18.2)
+      vite-node: 1.6.0(@types/node@18.15.3)(terser@5.18.2)
+      why-is-node-running: 2.2.2
+    optionalDependencies:
+      '@types/node': 18.15.3
+      '@vitest/browser': 1.6.0(vitest@1.6.0)(webdriverio@8.36.1(typescript@5.2.2))
+>>>>>>> master
       jsdom: 16.7.0
     transitivePeerDependencies:
       - less
@@ -25748,6 +25887,7 @@ snapshots:
       - supports-color
       - terser
 
+<<<<<<< HEAD
   vitest@1.2.1(@types/node@20.11.13)(@vitest/browser@1.2.1)(jsdom@16.7.0)(terser@5.18.2):
     dependencies:
       '@vitest/expect': 1.2.1
@@ -25755,8 +25895,16 @@ snapshots:
       '@vitest/snapshot': 1.2.1
       '@vitest/spy': 1.2.1
       '@vitest/utils': 1.2.1
+=======
+  vitest@1.6.0(@types/node@20.11.13)(@vitest/browser@1.6.0)(jsdom@16.7.0)(terser@5.18.2):
+    dependencies:
+      '@vitest/expect': 1.6.0
+      '@vitest/runner': 1.6.0
+      '@vitest/snapshot': 1.6.0
+      '@vitest/spy': 1.6.0
+      '@vitest/utils': 1.6.0
+>>>>>>> master
       acorn-walk: 8.3.2
-      cac: 6.7.14
       chai: 4.4.1
       debug: 4.3.4(supports-color@5.5.0)
       execa: 8.0.1
@@ -25765,15 +25913,24 @@ snapshots:
       pathe: 1.1.2
       picocolors: 1.0.0
       std-env: 3.7.0
-      strip-literal: 1.3.0
+      strip-literal: 2.1.0
       tinybench: 2.6.0
       tinypool: 0.8.4
+<<<<<<< HEAD
       vite: 5.0.12(@types/node@20.11.13)(terser@5.18.2)
       vite-node: 1.2.1(@types/node@20.11.13)(terser@5.18.2)
       why-is-node-running: 2.2.2
     optionalDependencies:
       '@types/node': 20.11.13
       '@vitest/browser': 1.2.1(vitest@1.2.1)(webdriverio@8.36.1(typescript@5.2.2))
+=======
+      vite: 5.2.10(@types/node@20.11.13)(terser@5.18.2)
+      vite-node: 1.6.0(@types/node@20.11.13)(terser@5.18.2)
+      why-is-node-running: 2.2.2
+    optionalDependencies:
+      '@types/node': 20.11.13
+      '@vitest/browser': 1.6.0(vitest@1.6.0)(webdriverio@8.36.1(typescript@5.2.2))
+>>>>>>> master
       jsdom: 16.7.0
     transitivePeerDependencies:
       - less
