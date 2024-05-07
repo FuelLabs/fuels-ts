@@ -75,7 +75,6 @@ describe(__filename, () => {
       .call();
     // #endregion vector-bytecode-input-ts
 
-    console.log('bytecodeRoot:', bytecodeRoot);
     expect(bytecodeRoot).toBeDefined();
     expect(bytecodeRoot.length).toBe(66);
   });

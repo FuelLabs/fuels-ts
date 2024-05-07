@@ -20,9 +20,9 @@ The code snippet below demonstrates how to call this Sway contract method, which
 
 <<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-4{ts:line-numbers}
 
-## Converting Bytecode to Vec<u8>
+## Converting Bytecode to Vectors
 
-Some Sway functions require you to pass in bytecode to the function. The type of the bytecode parameter is usually Vec<u8>. For example, take the compute_bytecode_root function from the [bytecode Sway library](https://fuellabs.github.io/sway-libs/book/bytecode/index.html?highlight=bytecode#using-the-bytecode-library-in-sway).
+Some Sway functions require you to pass in bytecode to the function. The type of the bytecode parameter is usually `Vec<u8>`. For example, take the `compute_bytecode_root` function from the [`bytecode` Sway library](https://fuellabs.github.io/sway-libs/book/bytecode/index.html?highlight=bytecode#using-the-bytecode-library-in-sway).
 
 To pass bytecode to this function, you can make use of the `arrayify` function to convert the bytecode file contents into a `UInt8Array`, the TS compatible type for Sway's `Vec<u8>` type and pass it the function like so:
 
