@@ -149,20 +149,24 @@ describe('loadConfig', () => {
   });
 
   test('should throw if system binary paths are not found', async () => {
+    const forcPath = '/non/existent/forc';
+    const fuelCorePath = '/non/existent/fuel-core';
     await runInit({
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
-      forcPath: '/non/existent/forc',
-      fuelCorePath: '/non/existent/fuel-core',
+      forcPath,
+      fuelCorePath,
     });
 
     const { error, result } = await safeExec(() => loadConfig(paths.root));
 
     expect(result).toBeFalsy();
-    expect(error?.message).toMatch(/Unable to find the following binaries on the filesystem/g);
-    expect(error?.message).toMatch(/\/non\/existent\/forc/g);
-    expect(error?.message).toMatch(/\/non\/existent\/fuel-core/g);
-    expect(error?.message).toMatch(/Visit https:\/\/docs.fuel.network\/guides\/installation\//g);
+    expect(error?.message).toContain(`Unable to find the following binaries on the filesystem`);
+    expect(error?.message).toContain(`'forc' at path '${forcPath}'`);
+    expect(error?.message).toContain(`'fuel-core' at path '${fuelCorePath}'`);
+    expect(error?.message).toContain(
+      'Visit https://docs.fuel.network/guides/installation/ for an installation guide.'
+    );
   });
 });

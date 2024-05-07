@@ -85,9 +85,11 @@ describe('tryFindBinaries', () => {
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
-    expect(error?.message).toMatch(/Unable to find the following binaries on the filesystem/g);
-    expect(error?.message).toMatch(/\/non\/existent\/forc/g);
-    expect(error?.message).toMatch(/\/non\/existent\/fuel-core/g);
-    expect(error?.message).toMatch(/Visit https:\/\/docs.fuel.network\/guides\/installation\//g);
+    expect(error?.message).toContain(`Unable to find the following binaries on the filesystem`);
+    expect(error?.message).toContain(`'forc' at path '${forcPath}'`);
+    expect(error?.message).toContain(`'fuel-core' at path '${fuelCorePath}'`);
+    expect(error?.message).toContain(
+      'Visit https://docs.fuel.network/guides/installation/ for an installation guide.'
+    );
   });
 });
