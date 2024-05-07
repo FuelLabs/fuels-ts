@@ -86,6 +86,16 @@ export function isTypeScript(transactionType: TransactionType) {
 }
 
 /** @hidden */
+export function isTypeUpgrade(transactionType: TransactionType) {
+  return isType(transactionType, TransactionTypeName.Upgrade);
+}
+
+/** @hidden */
+export function isTypeUpload(transactionType: TransactionType) {
+  return isType(transactionType, TransactionTypeName.Upload);
+}
+
+/** @hidden */
 export function hasSameAssetId(a: OperationCoin) {
   return (b: OperationCoin) => a.assetId === b.assetId;
 }

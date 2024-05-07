@@ -10,6 +10,8 @@ import prompts from 'prompts';
 
 import packageJson from '../package.json';
 
+import { checkIfFuelUpInstalled, installFuelUp } from './lib';
+
 const log = (...data: unknown[]) => {
   process.stdout.write(`${data.join(' ')}\n`);
 };
@@ -113,6 +115,46 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
   writeFileSync(envFilePath, newFileContents);
 }
 
+async function promptForFuelUpInstall() {
+  const shouldInstallFuelUp = await prompts(
+    {
+      type: 'confirm',
+      name: 'shouldInstallFuelUp',
+      message:
+        "It seems you don't have `fuelup` installed. `fuelup` is required to manage the Fuel toolchain and is a prerequisite for using this template app. Do you want to install it now?",
+      initial: true,
+    },
+    { onCancel: () => process.exit(0) }
+  );
+  return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
+}
+
+async function tryInstallFuelup(isVerbose: boolean = false) {
+  const fuelUpSpinner = ora({
+    text: 'Checking if fuelup is installed..',
+    color: 'green',
+  }).start();
+
+  if (checkIfFuelUpInstalled()) {
+    fuelUpSpinner.succeed('fuelup is already installed.');
+    return;
+  }
+
+  fuelUpSpinner.fail('fuelup not found.');
+
+  const shouldInstall = await promptForFuelUpInstall();
+
+  if (shouldInstall) {
+    installFuelUp(isVerbose);
+  } else {
+    log(
+      chalk.yellow(
+        'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
+      )
+    );
+  }
+}
+
 export const setupProgram = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)
@@ -143,6 +185,10 @@ export const runScaffoldCli = async ({
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
   const verboseEnabled = program.opts().verbose ?? false;
+
+  if (!process.env.VITEST) {
+    await tryInstallFuelup(verboseEnabled);
+  }
 
   while (existsSync(projectPath)) {
     log(
