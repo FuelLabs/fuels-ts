@@ -45,9 +45,6 @@ jobs:
       - name: Lint markdown files
         run: pnpm lint:md-links
 
-      - name: Validate Tests
-        run: pnpm test:validate
-
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
@@ -70,6 +67,9 @@ jobs:
         uses: ./.github/actions/test-setup
         with:
           node-version: ${{ matrix.env.version || 20 }}
+
+      - name: Validate Tests
+        run: pnpm test:validate
 
       - name: Run Tests - ${{ matrix.env.name }}
         run: pnpm ci:test --${{ matrix.env.name }}
