@@ -5,7 +5,7 @@ import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
-  description: 'Fuel Labs Typescript SDK',
+  description: 'Fuel Typescript SDK',
   base: '/fuels-ts/',
   srcDir: 'src',
   outDir: 'dist',
