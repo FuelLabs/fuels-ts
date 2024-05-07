@@ -20,7 +20,7 @@ async function getChangelogInfo(
   changeset: NewChangeset,
 ): Promise<ChangelogInfo> {
   const changesetCommit = execSync(
-    `git log -n 1 --oneline --pretty=format:%H -- ${join(
+    `git log -n 1 --diff-filter=A --oneline --pretty=format:%H -- ${join(
       process.cwd(),
       ".changeset",
       `${changeset.id}.md`,
