@@ -79,6 +79,7 @@ jobs:
             # e.g. when a script is added in the scripts folder
             exit 0
           fi
+          echo "CHANGESET_FILE=$(echo "$CHANGESET_FILE")" >> $GITHUB_ENV
 
           AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
 
@@ -103,6 +104,22 @@ jobs:
           fi
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Validate added changeset will be deleted
+        if: ${{ env.CHANGESET_FILE != '' }}
+        run: |
+          pnpm changeset version
+
+          if git status --porcelain .changeset | grep -q "D $CHANGESET_FILE"; then
+              git reset --hard
+              exit 0
+          fi
+
+          # Throw if changeset not in deleted changesets
+          echo "Changeset file $CHANGESET_FILE will not get deleted in the changesets PR. Check its affected packages."
+          exit 1
+        env:
+          CHANGESET_FILE: ${{ env.CHANGESET_FILE }}
 
       - name: Validate that there are only patch changes
         if: startsWith(github.base_ref, 'release/')
