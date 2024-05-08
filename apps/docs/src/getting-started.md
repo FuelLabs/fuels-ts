@@ -27,7 +27,7 @@ pnpm add fuels@{{fuels}}
 
 :::
 
-**Note**: Use version `{{fuels}}` to ensure compatibility with `beta-5` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
+**Note**: Use version `{{fuels}}` to ensure compatibility with `testnet` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
 
 ### Note
 
@@ -59,7 +59,7 @@ function App() {
 
   useEffect(() => {
     async () => {
-      const provider = await Provider.create("https://beta-5.fuel.network/graphql");
+      const provider = await Provider.create("https://devnet.fuel.network/v1/graphql");
       const myWallet = Wallet.fromAddress("0x...", provider);
       myWallet.getBalances().then((data) => {
         setBalance(new BN(data[0].amount).toNumber());
@@ -86,7 +86,7 @@ For a quick test or just playing around, you can load it in your Web Apps straig
 
   const exec = async () => {
     const provider = await Provider.create(
-      "https://beta-5.fuel.network/graphql",
+      "https://devnet.fuel.network/v1/graphql",
     );
     const { name } = provider.getChain();
     console.log(name);
@@ -109,21 +109,21 @@ For this interaction to work, the SDK must be able to communicate with a [`fuel-
 The **Testnet** is a public network that allows you to interact with a Fuel Virtual Machine and is used for testing and development purposes.
 
 > [!NOTE] Latest Testnet
-> Beta 5
+> Dev Testnet
 >
-> `https://beta-5.fuel.network/graphql`
+> `https://devnet.fuel.network/v1/graphql`
 
 We have some useful resources for the Testnet:
 
-- [**Faucet**](https://faucet-beta-5.fuel.network/) - for funding wallets that have been created.
+- [**Faucet**](https://faucet-devnet.fuel.network/) - for funding wallets that have been created.
 - [**Explorer**](https://app.fuel.network/) - for viewing transactions and blocks.
-- [**GraphQL Playground**](https://beta-5.fuel.network/playground) - for testing GraphQL queries and mutations.
+- [**GraphQL Playground**](https://devnet.fuel.network/v1/playground) - for testing GraphQL queries and mutations.
 
 ---
 
 In the example below, we connect a [Provider](./guide/provider/index.md) to the latest testnet and create a new wallet from a private key.
 
-> **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-beta-5.fuel.network/) to fund your wallet.
+> **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-devnet.fuel.network/) to fund your wallet.
 
 <<< @/../../docs-snippets/src/guide/introduction/getting-started.test.ts#connecting-to-the-testnet{ts:line-numbers}
 

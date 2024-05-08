@@ -7,7 +7,7 @@
       "checkRelative": false,
       "ignore": [
         "https://learnmeabitcoin.com/**",
-        "https://faucet-beta-5.fuel.network/"
+        "https://devnet.fuel.network/"
       ]
     }
   }
