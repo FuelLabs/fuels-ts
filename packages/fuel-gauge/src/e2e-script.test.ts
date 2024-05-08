@@ -86,7 +86,6 @@ describe('Live Script Test', () => {
 
     const provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
     const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
-    console.log(wallet.address);
     const scriptInstance = getScript<MainArgs, BN>('vector-types-script', wallet);
 
     let output: BN = bn(0);
