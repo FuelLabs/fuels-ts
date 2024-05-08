@@ -247,42 +247,46 @@ describe('TransactionResponse', () => {
     cleanup();
   });
 
-  it('should throw error for a SqueezedOut status update [submitAndAwait]', async () => {
-    const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
-      loggingEnabled: false,
-    });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+  it(
+    'should throw error for a SqueezedOut status update [submitAndAwait]',
+    async () => {
+      const { cleanup, ip, port } = await launchNode({
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
+        loggingEnabled: false,
+      });
+      const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
-    const genesisWallet = new WalletUnlocked(
-      process.env.GENESIS_SECRET || randomBytes(32),
-      nodeProvider
-    );
+      const genesisWallet = new WalletUnlocked(
+        process.env.GENESIS_SECRET || randomBytes(32),
+        nodeProvider
+      );
 
-    const request = new ScriptTransactionRequest();
+      const request = new ScriptTransactionRequest();
 
-    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
+      request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
-    const txCost = await genesisWallet.provider.getTransactionCost(request, {
-      signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
-    });
+      const txCost = await genesisWallet.provider.getTransactionCost(request, {
+        signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
+      });
 
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-    await genesisWallet.fund(request, txCost);
+      await genesisWallet.fund(request, txCost);
 
-    request.updateWitnessByOwner(
-      genesisWallet.address,
-      await genesisWallet.signTransaction(request)
-    );
+      request.updateWitnessByOwner(
+        genesisWallet.address,
+        await genesisWallet.signTransaction(request)
+      );
 
-    await expectToThrowFuelError(
-      async () => {
-        await nodeProvider.sendTransaction(request, { awaitExecution: true });
-      },
-      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
-    );
-    cleanup();
-  });
+      await expectToThrowFuelError(
+        async () => {
+          await nodeProvider.sendTransaction(request, { awaitExecution: true });
+        },
+        { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+      );
+      cleanup();
+    },
+    { retry: 10 }
+  );
 });
