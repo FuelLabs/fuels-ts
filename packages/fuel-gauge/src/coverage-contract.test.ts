@@ -506,6 +506,23 @@ describe('Coverage Contract', () => {
     expect(result.status).toEqual('success');
   });
 
+  it('supports result type', async () => {
+    const {
+      value: { Ok },
+    } = await contractInstance.functions.types_result({ Ok: 1 }).call();
+    expect(Ok.toNumber()).toBe(20);
+
+    const {
+      value: { Err: DivisError },
+    } = await contractInstance.functions.types_result({ Ok: 0 }).call();
+    expect(DivisError).toBe('DivisError');
+
+    const {
+      value: { Err: InputError },
+    } = await contractInstance.functions.types_result({ Err: 1 }).call();
+    expect(InputError).toBe('InputError');
+  });
+
   it('can read from produce_logs_variables', async () => {
     const { logs } = await contractInstance.functions.produce_logs_variables().call();
 
