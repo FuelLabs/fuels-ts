@@ -472,23 +472,24 @@ export class BaseInvocationScope<TReturn = any> {
     const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
     const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
 
-    const { gasLimit, maxFee: setMaxFee } = transactionRequest;
+    const { gasLimit: setGasLimit, maxFee: setMaxFee } = transactionRequest;
 
-    if (gasLimitSpecified && gasLimit.lt(gasUsed)) {
+    if (!gasLimitSpecified) {
+      transactionRequest.gasLimit = gasUsed;
+    } else if (setGasLimit.lt(gasUsed)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (maxFeeSpecified && maxFee.gt(setMaxFee)) {
+    if (!maxFeeSpecified) {
+      transactionRequest.maxFee = maxFee;
+    } else if (maxFee.gt(setMaxFee)) {
       throw new FuelError(
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
-
-    transactionRequest.gasLimit = gasUsed;
-    transactionRequest.maxFee = maxFee;
   }
 }
