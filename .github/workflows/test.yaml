@@ -144,11 +144,13 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         if: ${{ steps.findPr.outputs.number }}
         with:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
           filePath: coverage/report/coverage-diff.txt
           pr_number: ${{ (steps.findPr.outputs.number) }}
           comment_tag: diff
           mode: recreate
           create_if_not_exists: true
+
   create-changeset:
     needs: [test]
     name: Create Changeset
