@@ -6,15 +6,16 @@ import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
 import ora from 'ora';
 import { join } from 'path';
-import prompts from 'prompts';
 
 import packageJson from '../package.json';
 
-import { checkIfFuelUpInstalled, installFuelUp } from './lib';
-
-const log = (...data: unknown[]) => {
-  process.stdout.write(`${data.join(' ')}\n`);
-};
+import { tryInstallFuelUp } from './lib';
+import {
+  promptForProgramsToInclude,
+  promptForPackageManager,
+  promptForProjectPath,
+} from './prompts';
+import { error, log } from './utils/logger';
 
 export type ProgramsToInclude = {
   contract: boolean;
@@ -34,70 +35,6 @@ const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsT
   return toml.stringify(parsed);
 };
 
-async function promptForProjectPath() {
-  const res = await prompts(
-    {
-      type: 'text',
-      name: 'projectName',
-      message: 'What is the name of your project?',
-      initial: 'my-fuel-project',
-    },
-    { onCancel: () => process.exit(0) }
-  );
-
-  return res.projectName as string;
-}
-
-async function promptForPackageManager() {
-  const packageManagerInput = await prompts(
-    {
-      type: 'select',
-      name: 'packageManager',
-      message: 'Select a package manager',
-      choices: [
-        { title: 'pnpm', value: 'pnpm' },
-        { title: 'npm', value: 'npm' },
-      ],
-      initial: 0,
-    },
-    { onCancel: () => process.exit(0) }
-  );
-  return packageManagerInput.packageManager as string;
-}
-
-async function promptForProgramsToInclude({
-  forceDisablePrompts = false,
-}: {
-  forceDisablePrompts?: boolean;
-}) {
-  if (forceDisablePrompts) {
-    return {
-      contract: false,
-      predicate: false,
-      script: false,
-    };
-  }
-  const programsToIncludeInput = await prompts(
-    {
-      type: 'multiselect',
-      name: 'programsToInclude',
-      message: 'Which Sway programs do you want?',
-      choices: [
-        { title: 'Contract', value: 'contract', selected: true },
-        { title: 'Predicate', value: 'predicate', selected: true },
-        { title: 'Script', value: 'script', selected: true },
-      ],
-      instructions: false,
-    },
-    { onCancel: () => process.exit(0) }
-  );
-  return {
-    contract: programsToIncludeInput.programsToInclude.includes('contract'),
-    predicate: programsToIncludeInput.programsToInclude.includes('predicate'),
-    script: programsToIncludeInput.programsToInclude.includes('script'),
-  };
-}
-
 function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude) {
   /*
    * Should be like:
@@ -113,46 +50,6 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
   newFileContents += `\nNEXT_PUBLIC_DAPP_ENVIRONMENT=local`;
 
   writeFileSync(envFilePath, newFileContents);
-}
-
-async function promptForFuelUpInstall() {
-  const shouldInstallFuelUp = await prompts(
-    {
-      type: 'confirm',
-      name: 'shouldInstallFuelUp',
-      message:
-        "It seems you don't have `fuelup` installed. `fuelup` is required to manage the Fuel toolchain and is a prerequisite for using this template app. Do you want to install it now?",
-      initial: true,
-    },
-    { onCancel: () => process.exit(0) }
-  );
-  return shouldInstallFuelUp.shouldInstallFuelUp as boolean;
-}
-
-async function tryInstallFuelup(isVerbose: boolean = false) {
-  const fuelUpSpinner = ora({
-    text: 'Checking if fuelup is installed..',
-    color: 'green',
-  }).start();
-
-  if (checkIfFuelUpInstalled()) {
-    fuelUpSpinner.succeed('fuelup is already installed.');
-    return;
-  }
-
-  fuelUpSpinner.fail('fuelup not found.');
-
-  const shouldInstall = await promptForFuelUpInstall();
-
-  if (shouldInstall) {
-    installFuelUp(isVerbose);
-  } else {
-    log(
-      chalk.yellow(
-        'Warning: You will need to install fuelup manually. See https://docs.fuel.network/guides/installation/#running-fuelup-init'
-      )
-    );
-  }
 }
 
 export const setupProgram = () => {
@@ -187,15 +84,11 @@ export const runScaffoldCli = async ({
   const verboseEnabled = program.opts().verbose ?? false;
 
   if (!process.env.VITEST) {
-    await tryInstallFuelup(verboseEnabled);
+    await tryInstallFuelUp(verboseEnabled);
   }
 
   while (existsSync(projectPath)) {
-    log(
-      chalk.red(
-        `A folder already exists at ${projectPath}. Please choose a different project name.`
-      )
-    );
+    error(`A folder already exists at ${projectPath}. Please choose a different project name.`);
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
@@ -206,7 +99,7 @@ export const runScaffoldCli = async ({
   }
 
   while (!projectPath) {
-    log(chalk.red('Please specify a project directory.'));
+    error('Please specify a project directory.');
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
@@ -246,7 +139,7 @@ export const runScaffoldCli = async ({
   }
 
   while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
-    log(chalk.red('You must include at least one Sway program.'));
+    error('You must include at least one Sway program.');
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
