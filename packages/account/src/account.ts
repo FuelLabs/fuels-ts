@@ -381,7 +381,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
-    const request = new ScriptTransactionRequest(txParams);
+    let request = new ScriptTransactionRequest(txParams);
     const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetIdToTransfer);
     const txCost = await this.provider.getTransactionCost(request, {
@@ -389,14 +389,12 @@ export class Account extends AbstractAccount {
       resourcesOwner: this,
     });
 
-    this.validateGasLimitAndMaxFee({
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
       gasUsed: txCost.gasUsed,
       maxFee: txCost.maxFee,
       txParams,
     });
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
 
     await this.fund(request, txCost);
 
@@ -467,7 +465,7 @@ export class Account extends AbstractAccount {
       assetId: assetIdToTransfer,
     });
 
-    const request = new ScriptTransactionRequest({
+    let request = new ScriptTransactionRequest({
       ...txParams,
       script,
       scriptData,
@@ -480,14 +478,12 @@ export class Account extends AbstractAccount {
       quantitiesToContract: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
     });
 
-    this.validateGasLimitAndMaxFee({
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
       gasUsed: txCost.gasUsed,
       maxFee: txCost.maxFee,
       txParams,
     });
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
 
     await this.fund(request, txCost);
 
@@ -527,19 +523,17 @@ export class Account extends AbstractAccount {
     const params: ScriptTransactionRequestLike = { script, ...txParams };
 
     const baseAssetId = this.provider.getBaseAssetId();
-    const request = new ScriptTransactionRequest(params);
+    let request = new ScriptTransactionRequest(params);
     const quantitiesToContract = [{ amount: bn(amount), assetId: baseAssetId }];
 
     const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
 
-    this.validateGasLimitAndMaxFee({
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
       gasUsed: txCost.gasUsed,
       maxFee: txCost.maxFee,
       txParams,
     });
-
-    request.maxFee = txCost.maxFee;
-    request.gasLimit = txCost.gasUsed;
 
     await this.fund(request, txCost);
 
@@ -612,26 +606,36 @@ export class Account extends AbstractAccount {
   }
 
   private validateGasLimitAndMaxFee({
-    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
     gasUsed,
     maxFee,
+    transactionRequest,
+    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
   }: {
     gasUsed: BN;
     maxFee: BN;
+    transactionRequest: ScriptTransactionRequest;
     txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
   }) {
-    if (isDefined(setGasLimit) && gasUsed.gt(setGasLimit)) {
+    const request = transactionRequestify(transactionRequest) as ScriptTransactionRequest;
+
+    if (!isDefined(setGasLimit)) {
+      request.gasLimit = gasUsed;
+    } else if (gasUsed.gt(setGasLimit)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
         `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (isDefined(setMaxFee) && maxFee.gt(setMaxFee)) {
+    if (!isDefined(setMaxFee)) {
+      request.maxFee = maxFee;
+    } else if (maxFee.gt(setMaxFee)) {
       throw new FuelError(
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
+
+    return request;
   }
 }
