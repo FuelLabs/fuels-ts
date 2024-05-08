@@ -1,7 +1,8 @@
 ---
-"@fuel-ts/contract": minor
+"@fuel-ts/utils": patch
 "@fuel-ts/account": minor
-"fuels": minor
+"@fuel-ts/contract": patch
+"fuels": patch
 ---
 
 feat: add `launchTestNode` utility
