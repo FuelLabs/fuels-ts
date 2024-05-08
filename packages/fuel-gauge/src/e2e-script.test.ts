@@ -114,7 +114,7 @@ describe('Live Script Test', () => {
       console.warn(`
         not enough coins to fit the target?
         - add assets: https://faucet-devnet.fuel.network/
-        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/${address}
+        - check balance: https://app.fuel.network/account/${address}/assets/
         - bech32 address: ${address}
       `);
     }
