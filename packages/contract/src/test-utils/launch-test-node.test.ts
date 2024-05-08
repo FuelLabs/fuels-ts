@@ -24,28 +24,28 @@ async function generateChainConfigFile(chainName: string): Promise<[string, () =
   ) as SnapshotConfigs['chainConfigJson'];
   chainConfig.chain_name = chainName;
 
-  const tempDirPath = join(os.tmpdir(), '.fuels-ts', randomUUID());
+  const tempSnapshotDirPath = join(os.tmpdir(), '.fuels-ts', randomUUID());
 
-  if (!existsSync(tempDirPath)) {
-    mkdirSync(tempDirPath, { recursive: true });
+  if (!existsSync(tempSnapshotDirPath)) {
+    mkdirSync(tempSnapshotDirPath, { recursive: true });
   }
 
-  const metadataPath = join(tempDirPath, 'metadata.json');
+  const metadataPath = join(tempSnapshotDirPath, 'metadata.json');
 
   await copyFile(join(configsFolder, 'metadata.json'), metadataPath);
   await copyFile(
     join(configsFolder, chainMetadata.table_encoding.Json.filepath),
-    join(tempDirPath, chainMetadata.table_encoding.Json.filepath)
+    join(tempSnapshotDirPath, chainMetadata.table_encoding.Json.filepath)
   );
 
   // Write a temporary chain configuration file.
   await writeFile(
-    join(tempDirPath, chainMetadata.chain_config),
+    join(tempSnapshotDirPath, chainMetadata.chain_config),
     JSON.stringify(chainConfig),
     'utf-8'
   );
 
-  return [metadataPath, () => rmSync(tempDirPath, { recursive: true, force: true })];
+  return [tempSnapshotDirPath, () => rmSync(tempSnapshotDirPath, { recursive: true, force: true })];
 }
 
 /**
@@ -177,11 +177,11 @@ describe('launchTestNode', () => {
     const chainName = 'gimme_fuel';
     const [chainConfigPath, cleanup] = await generateChainConfigFile(chainName);
 
-    process.env.DEFAULT_CHAIN_METADATA_PATH = chainConfigPath;
+    process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = chainConfigPath;
 
     using launched = await launchTestNode();
     cleanup();
-    process.env.DEFAULT_CHAIN_METADATA_PATH = '';
+    process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = '';
 
     const { provider } = launched;
 
@@ -193,7 +193,7 @@ describe('launchTestNode', () => {
   test('chain config from environment variable can be extended manually', async () => {
     const chainName = 'gimme_fuel_gimme_fire_gimme_that_which_i_desire';
     const [chainMetadataPath, cleanup] = await generateChainConfigFile(chainName);
-    process.env.DEFAULT_CHAIN_METADATA_PATH = chainMetadataPath;
+    process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = chainMetadataPath;
 
     const baseAssetId = hexlify(randomBytes(32));
 
@@ -212,7 +212,7 @@ describe('launchTestNode', () => {
     });
 
     cleanup();
-    process.env.DEFAULT_CHAIN_METADATA_PATH = '';
+    process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = '';
 
     const { provider } = launched;
 

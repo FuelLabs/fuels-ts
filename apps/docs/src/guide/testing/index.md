@@ -40,18 +40,18 @@ That's a lot of options! These docs showcase some functionality; for a detailed 
 
 ### Configuring the Test Node
 
-`launchTestNode` creates a temporary chain config every time it runs.
+`launchTestNode` creates a temporary snapshot directory and configurations every time it runs. The path to this directory is passed given to `fuel-core` via the `--snapshot` flag.
 
-The default chain config it uses is that of the current testnet network iteration. [Click here](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs/chainConfig.json) to see what it looks like.
+The default snapshot used is that of the current testnet network iteration. [Click here](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs) to see what it looks like.
 
-If you need a different base chain config, you can specify a `DEFAULT_CHAIN_METADATA_PATH` environment variable which points to your chain config. `launchTestNode` will read that config and work with it instead, integrating all the functionality with it the same way it'd do with the default config.
+If you need a different snapshot, you can specify a `DEFAULT_CHAIN_SNAPSHOT_DIR` environment variable which points to your snapshot directory. `launchTestNode` will read that config and work with it instead, integrating all the functionality with it the same way it'd do with the default config.
 How and where you specify the environment variable depends on your testing tool.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#custom-chain-config{ts:line-numbers}
 
-Besides the chain config, you can provide arguments to the `fuel-core` node via the `nodeOptions.args` property. For a detailed list of all possible arguments run `fuel-core run --help`.
+Besides the snapshot, you can provide arguments to the `fuel-core` node via the `nodeOptions.args` property. For a detailed list of all possible arguments run `fuel-core run --help`.
 
-If you want _all_ your tests to run with the same config, consider specifying the `DEFAULT_FUEL_CORE_ARGS` environment variable.
+If you want _all_ your tests to run with the same arguments, consider specifying the `DEFAULT_FUEL_CORE_ARGS` environment variable.
 
 _Note: these args will be overridden in a test if `nodeOptions.args` is provided._
 

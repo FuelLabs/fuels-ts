@@ -51,11 +51,11 @@ function getChainSnapshot(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
   let chainConfig: SnapshotConfigs['chainConfigJson'] | undefined;
   let stateConfig: SnapshotConfigs['stateConfigJson'] | undefined;
 
-  if (process.env.DEFAULT_CHAIN_METADATA_PATH) {
+  if (process.env.DEFAULT_CHAIN_SNAPSHOT_DIR) {
+    const dirname = process.env.DEFAULT_CHAIN_SNAPSHOT_DIR;
     envChainMetadata = JSON.parse(
-      readFileSync(process.env.DEFAULT_CHAIN_METADATA_PATH, 'utf-8')
+      readFileSync(path.join(dirname, 'metadata.json'), 'utf-8')
     ) as SnapshotConfigs['metadataJson'];
-    const dirname = path.dirname(process.env.DEFAULT_CHAIN_METADATA_PATH);
     const chainConfigPath = path.join(dirname, envChainMetadata.chain_config);
     chainConfig = JSON.parse(
       readFileSync(chainConfigPath, 'utf-8')

@@ -75,16 +75,10 @@ describe('launching a test node', () => {
   });
 
   test('configuring a base chain config', async () => {
-    const metadataPath = join(
-      __dirname,
-      '../../../../../',
-      '.fuel-core',
-      'configs',
-      'metadata.json'
-    );
+    const snapshotDirPath = join(__dirname, '../../../../../', '.fuel-core', 'configs');
 
     // #region custom-chain-config
-    process.env.DEFAULT_CHAIN_METADATA_PATH = metadataPath;
+    process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = snapshotDirPath;
 
     using launched = await launchTestNode();
     // #endregion custom-chain-config
