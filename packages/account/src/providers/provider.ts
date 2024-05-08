@@ -21,19 +21,19 @@ import type { Predicate } from '../predicate';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragmentFragment,
+  GqlChainInfoFragment,
   GqlConsensusParametersVersion,
-  GqlContractParameters,
-  GqlDryRunFailureStatusFragmentFragment,
-  GqlDryRunSuccessStatusFragmentFragment,
-  GqlFeeParameters,
-  GqlGasCosts,
+  GqlContractParameters as ContractParameters,
+  GqlDryRunFailureStatusFragment,
+  GqlDryRunSuccessStatusFragment,
+  GqlFeeParameters as FeeParameters,
+  GqlGasCosts as GasCosts,
   GqlGetBlocksQueryVariables,
   GqlMessage,
-  GqlPredicateParameters,
+  GqlPredicateParameters as PredicateParameters,
   GqlRelayedTransactionFailed,
-  GqlScriptParameters,
-  GqlTxParameters,
+  GqlScriptParameters as ScriptParameters,
+  GqlTxParameters as TxParameters,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -61,9 +61,7 @@ import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
-export type DryRunStatus =
-  | Omit<GqlDryRunFailureStatusFragmentFragment, '__typename'>
-  | Omit<GqlDryRunSuccessStatusFragmentFragment, '__typename'>;
+export type DryRunStatus = GqlDryRunFailureStatusFragment | GqlDryRunSuccessStatusFragment;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -97,12 +95,14 @@ type ModifyStringToBN<T> = {
   [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
 };
 
-export type FeeParameters = Omit<GqlFeeParameters, '__typename'>;
-export type ContractParameters = Omit<GqlContractParameters, '__typename'>;
-export type PredicateParameters = Omit<GqlPredicateParameters, '__typename'>;
-export type ScriptParameters = Omit<GqlScriptParameters, '__typename'>;
-export type TxParameters = Omit<GqlTxParameters, '__typename'>;
-export type GasCosts = Omit<GqlGasCosts, '__typename'>;
+export {
+  GasCosts,
+  FeeParameters,
+  ContractParameters,
+  PredicateParameters,
+  ScriptParameters,
+  TxParameters,
+};
 
 export type ConsensusParameters = {
   version: GqlConsensusParametersVersion;
@@ -168,7 +168,7 @@ export type TransactionCost = {
 };
 // #endregion cost-estimation-1
 
-const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
+const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
   const { name, daHeight, consensusParameters, latestBlock } = chain;
 
   const {
@@ -1259,7 +1259,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const coins = result.coinsToSpend
       .flat()
       .map((coin) => {
-        switch (coin.__typename) {
+        switch (coin.type) {
           case 'MessageCoin':
             return {
               amount: bn(coin.amount),
