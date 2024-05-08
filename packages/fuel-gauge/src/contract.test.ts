@@ -478,7 +478,6 @@ describe('Contract', () => {
       ])
       .txParams({
         gasLimit: 4_000_000,
-        optimizeGas: false,
       })
       .call<[BN, BN]>();
 
@@ -510,7 +509,6 @@ describe('Contract', () => {
     const { value } = await invocationScope
       .txParams({
         gasLimit: transactionCost.gasUsed,
-        optimizeGas: false,
       })
       .call<[string, string]>();
 
@@ -646,9 +644,7 @@ describe('Contract', () => {
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
     const multiCallScope = contract.multiCall(invocationScopes);
-    await multiCallScope.fundWithRequiredCoins();
-
-    const transactionRequest = await multiCallScope.getTransactionRequest();
+    const transactionRequest = await multiCallScope.fundWithRequiredCoins();
 
     const txRequest = JSON.stringify(transactionRequest);
     const txRequestParsed = JSON.parse(txRequest);

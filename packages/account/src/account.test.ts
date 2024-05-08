@@ -251,6 +251,8 @@ describe('Account', () => {
 
     const request = new ScriptTransactionRequest();
 
+    request.maxFee = fee;
+
     const resourcesToSpend: Resource[] = [];
     const getResourcesToSpendSpy = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
@@ -267,7 +269,6 @@ describe('Account', () => {
 
     await account.fund(request, {
       requiredQuantities: quantities,
-      maxFee: fee,
       estimatedPredicates: [],
       addedSignatures: 0,
     });
