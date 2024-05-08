@@ -44,7 +44,7 @@ export class TestMessage {
     this.da_height = da_height;
   }
 
-  toChainMessage(recipient?: AbstractAddress): SnapshotConfigs['stateConfigJson']['messages'][0] {
+  toChainMessage(recipient?: AbstractAddress): SnapshotConfigs['stateConfig']['messages'][0] {
     return {
       sender: this.sender.toB256(),
       recipient: recipient?.toB256() ?? this.recipient.toB256(),

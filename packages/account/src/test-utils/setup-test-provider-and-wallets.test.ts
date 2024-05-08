@@ -15,7 +15,7 @@ import * as launchNodeMod from './launchNode';
 import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
 import { TestMessage } from './test-message';
 
-const BaseAssetId = `0x${defaultSnapshotConfigs.chainConfigJson.consensus_parameters.V1.base_asset_id}`;
+const BaseAssetId = `0x${defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.base_asset_id}`;
 /**
  * @group node
  */
@@ -70,7 +70,7 @@ describe('setupTestProviderAndWallets', () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         snapshotConfig: {
-          stateConfigJson: {
+          stateConfig: {
             coins: [coin],
           },
         },
@@ -227,7 +227,7 @@ describe('setupTestProviderAndWallets', () => {
     using providerAndWallets = await setupTestProviderAndWallets({
       nodeOptions: {
         snapshotConfig: {
-          stateConfigJson: {
+          stateConfig: {
             coins: [coin],
             messages: [message],
           },

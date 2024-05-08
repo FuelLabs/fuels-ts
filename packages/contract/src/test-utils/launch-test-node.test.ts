@@ -18,10 +18,10 @@ async function generateChainConfigFile(chainName: string): Promise<[string, () =
   const configsFolder = join(__dirname, '../../../../', '.fuel-core', 'configs');
   const chainMetadata = JSON.parse(
     readFileSync(join(configsFolder, 'metadata.json'), 'utf-8')
-  ) as SnapshotConfigs['metadataJson'];
+  ) as SnapshotConfigs['metadata'];
   const chainConfig = JSON.parse(
     readFileSync(join(configsFolder, chainMetadata.chain_config), 'utf-8')
-  ) as SnapshotConfigs['chainConfigJson'];
+  ) as SnapshotConfigs['chainConfig'];
   chainConfig.chain_name = chainName;
 
   const tempSnapshotDirPath = join(os.tmpdir(), '.fuels-ts', randomUUID());
@@ -200,7 +200,7 @@ describe('launchTestNode', () => {
     using launched = await launchTestNode({
       nodeOptions: {
         snapshotConfig: {
-          chainConfigJson: {
+          chainConfig: {
             consensus_parameters: {
               V1: {
                 base_asset_id: baseAssetId,

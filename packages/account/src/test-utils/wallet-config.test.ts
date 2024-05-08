@@ -101,7 +101,7 @@ describe('WalletConfig', () => {
     const assetId = AssetId.random();
     const baseAssetId = hexlify(randomBytes(32));
     const {
-      stateConfigJson: { coins: allCoins },
+      stateConfig: { coins: allCoins },
     } = new WalletConfig(baseAssetId, { ...configOptions, assets: [assetId] }).apply({});
 
     const coins = allCoins.filter((coin, _index, arr) => coin.owner === arr[0].owner);

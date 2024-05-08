@@ -4,9 +4,9 @@ import stateConfigJson from './defaultSnapshots/stateConfig.json';
 import type { SnapshotConfigs } from './types';
 
 export const defaultSnapshotConfigs: SnapshotConfigs = {
-  chainConfigJson,
-  metadataJson,
-  stateConfigJson,
+  chainConfig: chainConfigJson,
+  metadata: metadataJson,
+  stateConfig: stateConfigJson,
 };
 
 export const defaultConsensusKey =

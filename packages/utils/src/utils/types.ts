@@ -215,7 +215,7 @@ interface MetadataConfig {
 }
 
 export interface SnapshotConfigs {
-  stateConfigJson: StateConfig;
-  chainConfigJson: ChainConfig;
-  metadataJson: MetadataConfig;
+  stateConfig: StateConfig;
+  chainConfig: ChainConfig;
+  metadata: MetadataConfig;
 }

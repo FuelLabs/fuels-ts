@@ -42,7 +42,7 @@ export interface WalletConfigOptions {
  * Used for configuring the wallets that should exist in the genesis block of a test node.
  */
 export class WalletConfig {
-  private initialState: SnapshotConfigs['stateConfigJson'];
+  private initialState: SnapshotConfigs['stateConfig'];
   private options: WalletConfigOptions;
   public wallets: WalletUnlocked[];
   private generateWallets: () => WalletUnlocked[] = () => {
@@ -74,16 +74,14 @@ export class WalletConfig {
   }
 
   apply(snapshotConfig: PartialDeep<SnapshotConfigs> | undefined): PartialDeep<SnapshotConfigs> & {
-    stateConfigJson: { coins: SnapshotConfigs['stateConfigJson']['coins'] };
+    stateConfig: { coins: SnapshotConfigs['stateConfig']['coins'] };
   } {
     return {
       ...snapshotConfig,
-      stateConfigJson: {
-        ...(snapshotConfig?.stateConfigJson ?? defaultSnapshotConfigs.stateConfigJson),
-        coins: this.initialState.coins.concat(snapshotConfig?.stateConfigJson?.coins || []),
-        messages: this.initialState.messages.concat(
-          snapshotConfig?.stateConfigJson?.messages ?? []
-        ),
+      stateConfig: {
+        ...(snapshotConfig?.stateConfig ?? defaultSnapshotConfigs.stateConfig),
+        coins: this.initialState.coins.concat(snapshotConfig?.stateConfig?.coins || []),
+        messages: this.initialState.messages.concat(snapshotConfig?.stateConfig?.messages ?? []),
       },
     };
   }
@@ -101,7 +99,7 @@ export class WalletConfig {
     coinsPerAsset: number,
     amountPerCoin: number
   ) {
-    const coins: SnapshotConfigs['stateConfigJson']['coins'] = [];
+    const coins: SnapshotConfigs['stateConfig']['coins'] = [];
 
     let assetIds: string[] = [baseAssetId];
     if (Array.isArray(assets)) {

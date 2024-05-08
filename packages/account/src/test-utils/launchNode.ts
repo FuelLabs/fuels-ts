@@ -88,6 +88,50 @@ export const killNode = (params: KillNodeParams) => {
   }
 };
 
+function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) {
+  const defaultCoins = defaultSnapshotConfigs.stateConfig.coins.map((coin) => ({
+    ...coin,
+    amount: '18446744073709551615',
+  }));
+  const defaultMessages = defaultSnapshotConfigs.stateConfig.messages.map((message) => ({
+    ...message,
+    amount: '18446744073709551615',
+  }));
+
+  const coins = defaultCoins
+    .concat(stateConfig.coins.map((coin) => ({ ...coin, amount: coin.amount.toString() })))
+    .filter((coin, index, self) => self.findIndex((c) => c.tx_id === coin.tx_id) === index);
+  const messages = defaultMessages
+    .concat(stateConfig.messages.map((msg) => ({ ...msg, amount: msg.amount.toString() })))
+    .filter((msg, index, self) => self.findIndex((m) => m.nonce === msg.nonce) === index);
+
+  // If there's no genesis key, generate one and some coins to the genesis block.
+  if (!process.env.GENESIS_SECRET) {
+    const pk = Signer.generatePrivateKey();
+    const signer = new Signer(pk);
+    process.env.GENESIS_SECRET = hexlify(pk);
+
+    coins.push({
+      tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
+      owner: signer.address.toHexString(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      amount: '18446744073709551615' as any,
+      asset_id: chainConfig.consensus_parameters.V1.base_asset_id,
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+    });
+  }
+  const json = JSON.stringify({
+    ...stateConfig,
+    coins,
+    messages,
+  });
+
+  const regexMakeNumber = /("amount":)"(\d+)"/gm;
+  return json.replace(regexMakeNumber, '$1$2');
+}
+
 // #region launchNode-launchNodeOptions
 /**
  * Launches a fuel-core node.
@@ -151,78 +195,27 @@ export const launchNode = async ({
 
     const prefix = basePath || os.tmpdir();
     const suffix = basePath ? '' : randomUUID();
-    const tempDirPath = path.join(prefix, '.fuels', suffix, 'snapshotDir');
+    const tempDir = path.join(prefix, '.fuels', suffix, 'snapshotDir');
 
     if (snapshotDir) {
       snapshotDirToUse = snapshotDir;
     } else {
-      if (!existsSync(tempDirPath)) {
-        mkdirSync(tempDirPath, { recursive: true });
+      if (!existsSync(tempDir)) {
+        mkdirSync(tempDir, { recursive: true });
       }
-      // If there's no genesis key, generate one and some coins to the genesis block.
-      if (!process.env.GENESIS_SECRET) {
-        const pk = Signer.generatePrivateKey();
-        const signer = new Signer(pk);
-        process.env.GENESIS_SECRET = hexlify(pk);
+      const { metadata } = snapshotConfig;
 
-        snapshotConfig.stateConfigJson.coins.push({
-          tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
-          owner: signer.address.toHexString(),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          amount: '18446744073709551615' as any,
-          asset_id: snapshotConfig.chainConfigJson.consensus_parameters.V1.base_asset_id,
-          output_index: 0,
-          tx_pointer_block_height: 0,
-          tx_pointer_tx_idx: 0,
-        });
-      }
+      const metadataPath = path.join(tempDir, 'metadata.json');
+      const chainConfigPath = path.join(tempDir, metadata.chain_config);
+      const stateConfigPath = path.join(tempDir, metadata.table_encoding.Json.filepath);
+      const stateTransitionPath = path.join(tempDir, 'state_transition_bytecode.wasm');
 
-      const coins = defaultSnapshotConfigs.stateConfigJson.coins
-        .map((coin) => ({
-          ...coin,
-          amount: '18446744073709551615',
-        }))
-        // @ts-expect-error asd
-        .concat(snapshotConfig.stateConfigJson.coins)
-        .filter((coin, index, self) => self.findIndex((c) => c.tx_id === coin.tx_id) === index);
-      const messages = defaultSnapshotConfigs.stateConfigJson.messages
-        .map((message) => ({
-          ...message,
-          amount: '18446744073709551615',
-        }))
-        // @ts-expect-error asd
-        .concat(snapshotConfig.stateConfigJson.messages)
-        .filter(
-          (message, index, self) => self.findIndex((m) => m.nonce === message.nonce) === index
-        );
-      const stateConfigJson = {
-        ...defaultSnapshotConfigs.stateConfigJson,
-        coins,
-        messages,
-      };
+      writeFileSync(chainConfigPath, JSON.stringify(snapshotConfig.chainConfig), 'utf8');
+      writeFileSync(stateConfigPath, getFinalStateConfigJSON(snapshotConfig), 'utf8');
+      writeFileSync(metadataPath, JSON.stringify(metadata), 'utf8');
+      writeFileSync(stateTransitionPath, JSON.stringify(''));
 
-      let fixedStateConfigJSON = JSON.stringify(stateConfigJson);
-
-      const regexMakeNumber = /("amount":)"(\d+)"/gm;
-
-      fixedStateConfigJSON = fixedStateConfigJSON.replace(regexMakeNumber, '$1$2');
-      // Write a temporary chain configuration files.
-
-      const { chainConfigJson, metadataJson } = snapshotConfig;
-      const metadataWritePath = path.join(tempDirPath, 'metadata.json');
-      const chainConfigWritePath = path.join(tempDirPath, metadataJson.chain_config);
-      const stateConfigWritePath = path.join(
-        tempDirPath,
-        metadataJson.table_encoding.Json.filepath
-      );
-      const stateTransitionWritePath = path.join(tempDirPath, 'state_transition_bytecode.wasm');
-
-      writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
-      writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
-      writeFileSync(metadataWritePath, JSON.stringify(metadataJson), 'utf8');
-      writeFileSync(stateTransitionWritePath, JSON.stringify(''));
-
-      snapshotDirToUse = tempDirPath;
+      snapshotDirToUse = tempDir;
     }
 
     const child = spawn(
@@ -231,7 +224,7 @@ export const launchNode = async ({
         'run',
         ['--ip', ipToUse],
         ['--port', portToUse],
-        useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
+        useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDir],
         ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--consensus-key', consensusKey],
@@ -256,7 +249,7 @@ export const launchNode = async ({
 
     const cleanupConfig: KillNodeParams = {
       child,
-      configPath: tempDirPath,
+      configPath: tempDir,
       killFn: treeKill,
       state: {
         isDead: false,

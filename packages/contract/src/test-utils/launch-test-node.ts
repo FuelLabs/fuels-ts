@@ -47,23 +47,23 @@ interface LaunchTestNodeReturn<TContracts> extends SetupTestProviderAndWalletsRe
   contracts: TContracts;
 }
 function getChainSnapshot(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
-  let envChainMetadata: SnapshotConfigs['metadataJson'] | undefined;
-  let chainConfig: SnapshotConfigs['chainConfigJson'] | undefined;
-  let stateConfig: SnapshotConfigs['stateConfigJson'] | undefined;
+  let envChainMetadata: SnapshotConfigs['metadata'] | undefined;
+  let chainConfig: SnapshotConfigs['chainConfig'] | undefined;
+  let stateConfig: SnapshotConfigs['stateConfig'] | undefined;
 
   if (process.env.DEFAULT_CHAIN_SNAPSHOT_DIR) {
     const dirname = process.env.DEFAULT_CHAIN_SNAPSHOT_DIR;
     envChainMetadata = JSON.parse(
       readFileSync(path.join(dirname, 'metadata.json'), 'utf-8')
-    ) as SnapshotConfigs['metadataJson'];
+    ) as SnapshotConfigs['metadata'];
     const chainConfigPath = path.join(dirname, envChainMetadata.chain_config);
     chainConfig = JSON.parse(
       readFileSync(chainConfigPath, 'utf-8')
-    ) as SnapshotConfigs['chainConfigJson'];
+    ) as SnapshotConfigs['chainConfig'];
     const stateConfigPath = path.join(dirname, envChainMetadata.table_encoding.Json.filepath);
     stateConfig = JSON.parse(
       readFileSync(stateConfigPath, 'utf-8')
-    ) as SnapshotConfigs['stateConfigJson'];
+    ) as SnapshotConfigs['stateConfig'];
   }
 
   const obj = [envChainMetadata, chainConfig, stateConfig].reduce((acc, val, idx) => {
@@ -72,13 +72,13 @@ function getChainSnapshot(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
     }
     switch (idx) {
       case 0:
-        acc.metadataJson = val as SnapshotConfigs['metadataJson'];
+        acc.metadata = val as SnapshotConfigs['metadata'];
         break;
       case 1:
-        acc.chainConfigJson = val as SnapshotConfigs['chainConfigJson'];
+        acc.chainConfig = val as SnapshotConfigs['chainConfig'];
         break;
       case 2:
-        acc.stateConfigJson = val as SnapshotConfigs['stateConfigJson'];
+        acc.stateConfig = val as SnapshotConfigs['stateConfig'];
         break;
       default:
         return acc;
