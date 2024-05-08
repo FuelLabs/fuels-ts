@@ -35,8 +35,7 @@ describe('Getting started', () => {
     expect(wallet).toBeInstanceOf(WalletUnlocked);
   });
 
-  // TODO: remove skip from testnet test
-  it.skip('can connect to testnet', async () => {
+  it('can connect to testnet', async () => {
     // #region connecting-to-the-testnet
     // #import { Provider, Wallet, FUEL_TESTNET_NETWORK_URL };
 
