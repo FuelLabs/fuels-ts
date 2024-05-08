@@ -1073,7 +1073,6 @@ Supported fuel-core version: ${supportedVersion}.`
      * Estimate predicates gasUsed
      */
     // Remove gasLimit to avoid gasLimit when estimating predicates
-    txRequestClone.maxFee = bn(0);
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
@@ -1098,6 +1097,7 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     await this.estimatePredicates(signedRequest);
+    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     /**
      * Calculate minGas and maxGas based on the real transaction
@@ -1112,8 +1112,6 @@ Supported fuel-core version: ${supportedVersion}.`
     let missingContractIds: string[] = [];
     let outputVariables = 0;
     let gasUsed = bn(0);
-
-    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     txRequestClone.maxFee = maxFee;
     if (isScriptTransaction) {
