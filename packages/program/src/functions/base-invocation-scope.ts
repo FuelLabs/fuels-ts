@@ -258,12 +258,12 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The current instance of the class.
    */
   async fundWithRequiredCoins() {
-    const transactionRequest = await this.getTransactionRequest();
+    let transactionRequest = await this.getTransactionRequest();
+    transactionRequest = clone(transactionRequest);
 
     const txCost = await this.getTransactionCost();
     const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
     this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-
     // Clean coin inputs before add new coins to the request
     transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
 
