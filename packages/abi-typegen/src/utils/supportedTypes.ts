@@ -10,6 +10,7 @@ import { GenericType } from '../abi/types/GenericType';
 import { OptionType } from '../abi/types/OptionType';
 import { RawUntypedPtr } from '../abi/types/RawUntypedPtr';
 import { RawUntypedSlice } from '../abi/types/RawUntypedSlice';
+import { ResultType } from '../abi/types/ResultType';
 import { StdStringType } from '../abi/types/StdStringType';
 import { StrSliceType } from '../abi/types/StrSliceType';
 import { StrType } from '../abi/types/StrType';
@@ -46,4 +47,5 @@ export const supportedTypes = [
   U8Type,
   VectorType,
   EvmAddressType,
+  ResultType,
 ];
