@@ -19,8 +19,8 @@ export interface LaunchCustomProviderAndGetWalletsOptions {
   providerOptions?: Partial<ProviderOptions>;
   /** Options for configuring the test node. */
   nodeOptions?: Partial<
-    Omit<LaunchNodeOptions, 'chainConfig'> & {
-      chainConfig: PartialDeep<SnapshotConfigs>;
+    Omit<LaunchNodeOptions, 'snapshotConfig'> & {
+      snapshotConfig: PartialDeep<SnapshotConfigs>;
     }
   >;
 }
@@ -56,7 +56,7 @@ export async function setupTestProviderAndWallets({
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
   const walletConfig = new WalletConfig(
-    nodeOptions.chainConfig?.chainConfigJson?.consensus_parameters?.V1?.base_asset_id ??
+    nodeOptions.snapshotConfig?.chainConfigJson?.consensus_parameters?.V1?.base_asset_id ??
       defaultSnapshotConfigs.chainConfigJson.consensus_parameters.V1.base_asset_id,
     {
       ...defaultWalletConfigOptions,
@@ -67,9 +67,9 @@ export async function setupTestProviderAndWallets({
   const { cleanup, url } = await launchNode({
     loggingEnabled: false,
     ...nodeOptions,
-    chainConfig: mergeDeepRight(
+    snapshotConfig: mergeDeepRight(
       defaultSnapshotConfigs,
-      walletConfig.apply(nodeOptions?.chainConfig)
+      walletConfig.apply(nodeOptions?.snapshotConfig)
     ),
     port: '0',
   });

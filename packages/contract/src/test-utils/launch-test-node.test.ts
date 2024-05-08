@@ -199,7 +199,7 @@ describe('launchTestNode', () => {
 
     using launched = await launchTestNode({
       nodeOptions: {
-        chainConfig: {
+        snapshotConfig: {
           chainConfigJson: {
             consensus_parameters: {
               V1: {

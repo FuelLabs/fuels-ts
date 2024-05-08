@@ -69,7 +69,7 @@ describe('setupTestProviderAndWallets', () => {
     };
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
-        chainConfig: {
+        snapshotConfig: {
           stateConfigJson: {
             coins: [coin],
           },
@@ -226,7 +226,7 @@ describe('setupTestProviderAndWallets', () => {
 
     using providerAndWallets = await setupTestProviderAndWallets({
       nodeOptions: {
-        chainConfig: {
+        snapshotConfig: {
           stateConfigJson: {
             coins: [coin],
             messages: [message],

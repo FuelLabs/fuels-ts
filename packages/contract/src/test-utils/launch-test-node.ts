@@ -46,7 +46,7 @@ interface LaunchTestNodeOptions extends LaunchCustomProviderAndGetWalletsOptions
 interface LaunchTestNodeReturn<TContracts> extends SetupTestProviderAndWalletsReturn {
   contracts: TContracts;
 }
-function getChainMetadata(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
+function getChainSnapshot(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
   let envChainMetadata: SnapshotConfigs['metadataJson'] | undefined;
   let chainConfig: SnapshotConfigs['chainConfigJson'] | undefined;
   let stateConfig: SnapshotConfigs['stateConfigJson'] | undefined;
@@ -86,7 +86,7 @@ function getChainMetadata(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
     return acc;
   }, {} as SnapshotConfigs);
 
-  return mergeDeepRight(obj, nodeOptions?.chainConfig ?? {});
+  return mergeDeepRight(obj, nodeOptions?.snapshotConfig ?? {});
 }
 
 function getFuelCoreArgs(nodeOptions: LaunchTestNodeOptions['nodeOptions']) {
@@ -175,14 +175,14 @@ export async function launchTestNode<TContracts extends Contract[] = Contract[]>
   nodeOptions = {},
   deployContracts = [],
 }: Partial<LaunchTestNodeOptions> = {}): Promise<LaunchTestNodeReturn<TContracts>> {
-  const chainConfig = getChainMetadata(nodeOptions);
+  const snapshotConfig = getChainSnapshot(nodeOptions);
   const args = getFuelCoreArgs(nodeOptions);
   const { provider, wallets, cleanup } = await setupTestProviderAndWallets({
     walletConfig,
     providerOptions,
     nodeOptions: {
       ...nodeOptions,
-      chainConfig,
+      snapshotConfig,
       args,
     },
   });

@@ -46,10 +46,10 @@ export type LaunchNodeOptions = {
   debugEnabled?: boolean;
   basePath?: string;
   /**
-   * The chain configuration to use.
-   * Passing in a chain configuration path via the `--chain` flag in `args` will override this.
+   * The snapshot configuration to use.
+   * Passing in a snapshot configuration path via the `--snapshot` flag in `args` will override this.
    * */
-  chainConfig?: SnapshotConfigs;
+  snapshotConfig?: SnapshotConfigs;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -108,7 +108,7 @@ export const launchNode = async ({
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
-  chainConfig = defaultSnapshotConfigs,
+  snapshotConfig = defaultSnapshotConfigs,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -165,12 +165,12 @@ export const launchNode = async ({
         const signer = new Signer(pk);
         process.env.GENESIS_SECRET = hexlify(pk);
 
-        chainConfig.stateConfigJson.coins.push({
+        snapshotConfig.stateConfigJson.coins.push({
           tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
           owner: signer.address.toHexString(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           amount: '18446744073709551615' as any,
-          asset_id: chainConfig.chainConfigJson.consensus_parameters.V1.base_asset_id,
+          asset_id: snapshotConfig.chainConfigJson.consensus_parameters.V1.base_asset_id,
           output_index: 0,
           tx_pointer_block_height: 0,
           tx_pointer_tx_idx: 0,
@@ -183,7 +183,7 @@ export const launchNode = async ({
           amount: '18446744073709551615',
         }))
         // @ts-expect-error asd
-        .concat(chainConfig.stateConfigJson.coins)
+        .concat(snapshotConfig.stateConfigJson.coins)
         .filter((coin, index, self) => self.findIndex((c) => c.tx_id === coin.tx_id) === index);
       const messages = defaultSnapshotConfigs.stateConfigJson.messages
         .map((message) => ({
@@ -191,7 +191,7 @@ export const launchNode = async ({
           amount: '18446744073709551615',
         }))
         // @ts-expect-error asd
-        .concat(chainConfig.stateConfigJson.messages)
+        .concat(snapshotConfig.stateConfigJson.messages)
         .filter(
           (message, index, self) => self.findIndex((m) => m.nonce === message.nonce) === index
         );
@@ -208,7 +208,7 @@ export const launchNode = async ({
       fixedStateConfigJSON = fixedStateConfigJSON.replace(regexMakeNumber, '$1$2');
       // Write a temporary chain configuration files.
 
-      const { chainConfigJson, metadataJson } = chainConfig;
+      const { chainConfigJson, metadataJson } = snapshotConfig;
       const metadataWritePath = path.join(tempDirPath, 'metadata.json');
       const chainConfigWritePath = path.join(tempDirPath, metadataJson.chain_config);
       const stateConfigWritePath = path.join(

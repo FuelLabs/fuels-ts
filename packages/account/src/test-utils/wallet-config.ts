@@ -73,18 +73,17 @@ export class WalletConfig {
     };
   }
 
-  apply(chainConfig: PartialDeep<SnapshotConfigs> | undefined): PartialDeep<SnapshotConfigs> & {
+  apply(snapshotConfig: PartialDeep<SnapshotConfigs> | undefined): PartialDeep<SnapshotConfigs> & {
     stateConfigJson: { coins: SnapshotConfigs['stateConfigJson']['coins'] };
   } {
     return {
-      ...chainConfig,
+      ...snapshotConfig,
       stateConfigJson: {
-        ...(chainConfig?.stateConfigJson ?? defaultSnapshotConfigs.stateConfigJson),
-        // coins: [],
-        // messages: [],
-        // ...(chainConfig?.stateConfigJson ?? {}),
-        coins: this.initialState.coins.concat(chainConfig?.stateConfigJson?.coins || []),
-        messages: this.initialState.messages.concat(chainConfig?.stateConfigJson?.messages ?? []),
+        ...(snapshotConfig?.stateConfigJson ?? defaultSnapshotConfigs.stateConfigJson),
+        coins: this.initialState.coins.concat(snapshotConfig?.stateConfigJson?.coins || []),
+        messages: this.initialState.messages.concat(
+          snapshotConfig?.stateConfigJson?.messages ?? []
+        ),
       },
     };
   }
