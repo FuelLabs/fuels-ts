@@ -3,8 +3,6 @@ import {
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import type { IRawAbiTypeRoot } from '../../index';
-import type { IType } from '../../types/interfaces/IType';
-import { makeType } from '../../utils/makeType';
 import { parseTypes } from '../../utils/parseTypes';
 
 import { EnumType } from './EnumType';
