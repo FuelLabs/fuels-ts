@@ -246,9 +246,9 @@ export class Account extends AbstractAccount {
   /**
    * Funds a transaction request by adding the necessary resources.
    *
-   * @template T - The type of the TransactionRequest.
-   * @param T - request - The transaction request to fund.
-   * @param EstimatedTxParams - The estimated transaction parameters.
+   * @typeParam T - The type of the TransactionRequest.
+   * @param request - The transaction request to fund.
+   * @param params - The estimated transaction parameters.
    * @returns The funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
