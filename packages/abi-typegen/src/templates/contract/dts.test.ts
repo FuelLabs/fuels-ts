@@ -14,7 +14,7 @@ import { renderDtsTemplate } from './dts';
  * @group node
  */
 describe('templates/dts', () => {
-  test('should render dts template', () => {
+  test('ssshould render dts template', () => {
     // mocking
     const { restore } = mockVersions();
 

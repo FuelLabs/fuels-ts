@@ -15,3 +15,5 @@ export type Enum<T> = {
 export type Option<T> = T | undefined;
 
 export type Vec<T> = T[];
+
+export type Result<T, E> = Enum<{Ok: T, Err: E}>;
