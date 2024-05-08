@@ -46,7 +46,7 @@ export type TxParamsType = Pick<
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'setMaxFee'
+  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
 >;
 const MAX_FUNDING_ATTEMPTS = 2;
 
@@ -244,15 +244,15 @@ export class Account extends AbstractAccount {
   }
 
   /**
-   * Adds resources to the transaction enough to fund it.
+   * Funds a transaction request by adding the necessary resources.
    *
-   * @param request - The transaction request.
-   * @param requiredQuantities - The coin quantities required to execute the transaction.
-   * @param fee - The estimated transaction fee.
-   * @returns A promise that resolves when the resources are added to the transaction.
+   * @template T - The type of the TransactionRequest.
+   * @param T - request - The transaction request to fund.
+   * @param EstimatedTxParams - The estimated transaction parameters.
+   * @returns The funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, setMaxFee } = params;
+    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
 
     const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
@@ -311,31 +311,30 @@ export class Account extends AbstractAccount {
         );
       }
 
-      if (setMaxFee) {
+      if (!updateMaxFee) {
+        break;
+      }
+      const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
+        transactionRequest: requestToReestimate,
+      });
+
+      const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
+        request.inputs,
+        baseAssetId,
+        baseAssetId
+      );
+
+      const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
+
+      if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
         needsToBeFunded = false;
       } else {
-        const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
-          transactionRequest: requestToReestimate,
-        });
-
-        const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
-          request.inputs,
-          baseAssetId,
-          baseAssetId
-        );
-
-        const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
-
-        if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
-          needsToBeFunded = false;
-        } else {
-          missingQuantities = [
-            {
-              amount: totalBaseAssetRequiredWithFee.sub(totalBaseAssetOnInputs),
-              assetId: baseAssetId,
-            },
-          ];
-        }
+        missingQuantities = [
+          {
+            amount: totalBaseAssetRequiredWithFee.sub(totalBaseAssetOnInputs),
+            assetId: baseAssetId,
+          },
+        ];
       }
 
       fundingAttempts += 1;
@@ -349,7 +348,7 @@ export class Account extends AbstractAccount {
       Array.from({ length: addedSignatures }).forEach(() => requestToReestimate.addEmptyWitness());
     }
 
-    if (setMaxFee) {
+    if (!updateMaxFee) {
       return request;
     }
 

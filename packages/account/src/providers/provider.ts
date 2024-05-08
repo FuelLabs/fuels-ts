@@ -164,7 +164,7 @@ export type TransactionCost = {
   requiredQuantities: CoinQuantity[];
   addedSignatures: number;
   dryRunStatus?: DryRunStatus;
-  setMaxFee?: boolean;
+  updateMaxFee?: boolean;
 };
 // #endregion cost-estimation-1
 
@@ -484,8 +484,8 @@ export default class Provider {
     if (!isMajorSupported || !isMinorSupported) {
       // eslint-disable-next-line no-console
       console.warn(
-        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}, 
-which is not supported by the version of the TS SDK that you are using. 
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion},
+which is not supported by the version of the TS SDK that you are using.
 Things may not work as expected.
 Supported fuel-core version: ${supportedVersion}.`
       );
@@ -1060,7 +1060,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const baseAssetId = this.getBaseAssetId();
-    const setMaxFee = !txRequestClone.maxFee.eq(0);
+    const updateMaxFee = txRequestClone.maxFee.eq(0);
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
@@ -1147,7 +1147,7 @@ Supported fuel-core version: ${supportedVersion}.`
       addedSignatures,
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
-      setMaxFee,
+      updateMaxFee,
     };
   }
 
