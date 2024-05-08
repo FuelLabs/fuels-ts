@@ -275,21 +275,11 @@ export class BaseInvocationScope<TReturn = any> {
     // Adding required number of OutputVariables
     transactionRequest.addVariableOutputs(outputVariables);
 
-    const optimizeGas = this.txParameters?.optimizeGas ?? true;
-    if (this.txParameters?.gasLimit && !optimizeGas) {
-      transactionRequest.gasLimit = bn(this.txParameters.gasLimit);
-      const { maxFee: maxFeeForGasLimit } = await this.getProvider().estimateTxGasAndFee({
-        transactionRequest,
-      });
-      transactionRequest.maxFee = maxFeeForGasLimit;
-    }
-
     await this.program.account?.fund(transactionRequest, txCost);
 
     if (this.addSignersCallback) {
       await this.addSignersCallback(transactionRequest);
     }
-
     return transactionRequest;
   }
 
