@@ -13,8 +13,8 @@ import { ResultType } from './ResultType';
  */
 describe('ResultType.ts', () => {
   /*
-      Test helpers
-    */
+    Test helpers
+  */
   function getResultType() {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const rawTypes = project.abiContents.types as IRawAbiTypeRoot[];
