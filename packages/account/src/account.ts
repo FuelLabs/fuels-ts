@@ -46,7 +46,7 @@ export type TxParamsType = Pick<
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'maxFee' | 'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities'
+  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'setMaxFee'
 >;
 const MAX_FUNDING_ATTEMPTS = 2;
 
@@ -252,13 +252,13 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves when the resources are added to the transaction.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, maxFee: fee, requiredQuantities } = params;
+    const { addedSignatures, estimatedPredicates, requiredQuantities, setMaxFee } = params;
 
+    const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
     const requiredInBaseAsset =
       requiredQuantities.find((quantity) => quantity.assetId === baseAssetId)?.amount || bn(0);
 
-    const txRequest = request as T;
     const requiredQuantitiesWithFee = addAmountToCoinQuantities({
       amount: bn(fee),
       assetId: baseAssetId,
@@ -301,57 +301,65 @@ export class Account extends AbstractAccount {
       );
 
       request.addResources(resources);
+      request.shiftPredicateData();
+      request.updatePredicateGasUsed(estimatedPredicates);
 
-      txRequest.shiftPredicateData();
-      txRequest.updatePredicateGasUsed(estimatedPredicates);
-
-      const requestToReestimate = clone(txRequest);
+      const requestToReestimate = clone(request);
       if (addedSignatures) {
         Array.from({ length: addedSignatures }).forEach(() =>
           requestToReestimate.addEmptyWitness()
         );
       }
 
-      const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
-        transactionRequest: requestToReestimate,
-      });
-
-      const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
-        request.inputs,
-        baseAssetId,
-        baseAssetId
-      );
-
-      const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
-
-      if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
+      if (setMaxFee) {
         needsToBeFunded = false;
       } else {
-        missingQuantities = [
-          {
-            amount: totalBaseAssetRequiredWithFee.sub(totalBaseAssetOnInputs),
-            assetId: baseAssetId,
-          },
-        ];
+        const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
+          transactionRequest: requestToReestimate,
+        });
+
+        const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
+          request.inputs,
+          baseAssetId,
+          baseAssetId
+        );
+
+        const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
+
+        if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
+          needsToBeFunded = false;
+        } else {
+          missingQuantities = [
+            {
+              amount: totalBaseAssetRequiredWithFee.sub(totalBaseAssetOnInputs),
+              assetId: baseAssetId,
+            },
+          ];
+        }
       }
 
       fundingAttempts += 1;
     }
 
-    txRequest.shiftPredicateData();
-    txRequest.updatePredicateGasUsed(estimatedPredicates);
+    request.shiftPredicateData();
+    request.updatePredicateGasUsed(estimatedPredicates);
 
-    const requestToReestimate = clone(txRequest);
+    const requestToReestimate = clone(request);
     if (addedSignatures) {
       Array.from({ length: addedSignatures }).forEach(() => requestToReestimate.addEmptyWitness());
     }
+
+    if (setMaxFee) {
+      return request;
+    }
+
     const { maxFee } = await this.provider.estimateTxGasAndFee({
       transactionRequest: requestToReestimate,
     });
 
-    txRequest.maxFee = maxFee;
+    request.maxFee = maxFee;
 
-    return txRequest;
+    return request;
   }
 
   /**
