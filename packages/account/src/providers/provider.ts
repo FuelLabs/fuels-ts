@@ -164,6 +164,7 @@ export type TransactionCost = {
   requiredQuantities: CoinQuantity[];
   addedSignatures: number;
   dryRunStatus?: DryRunStatus;
+  setMaxFee?: boolean;
 };
 // #endregion cost-estimation-1
 
@@ -1059,7 +1060,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const baseAssetId = this.getBaseAssetId();
-
+    const setMaxFee = !txRequestClone.maxFee.eq(0);
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
@@ -1148,6 +1149,7 @@ Supported fuel-core version: ${supportedVersion}.`
       addedSignatures,
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
+      setMaxFee,
     };
   }
 
