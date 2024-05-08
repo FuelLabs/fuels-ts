@@ -11,6 +11,10 @@ describe(__filename, () => {
   let mainWallet: Account;
   let provider: Provider;
   let baseAssetId: string;
+
+  const assetA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+  const assetB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
@@ -231,5 +235,110 @@ describe(__filename, () => {
     );
 
     expect(getResourcesToSpend).toHaveBeenCalledTimes(2);
+  });
+
+  it('should ensure a partially funded Transaction will require only missing funds', async () => {
+    const receiver = Wallet.generate({ provider });
+    const wallet1 = Wallet.generate({ provider });
+    const wallet2 = Wallet.generate({ provider });
+
+    const totalInBaseAsset = 15_000;
+    const totalInAssetA = 20_000;
+    const partiallyInAssetA = totalInAssetA / 2;
+
+    // wallet1 does not have enough funds to cover total required in assetA and
+    await seedTestWallet(wallet1, [
+      [totalInBaseAsset, baseAssetId],
+      [partiallyInAssetA, assetA],
+    ]);
+
+    /**
+     * The wallet2 will have the missing amount to cover the total required in assetA and
+     * will not have enough funds to cover the fee.
+     */
+    await seedTestWallet(wallet2, [[partiallyInAssetA, assetA]]);
+
+    let transactionRequest = new ScriptTransactionRequest();
+
+    transactionRequest.addCoinOutput(receiver.address, totalInAssetA, assetA);
+
+    const txCost = await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.gasLimit = txCost.gasUsed;
+    transactionRequest.maxFee = txCost.maxFee;
+
+    const partiallyResources = await wallet1.getResourcesToSpend([
+      [partiallyInAssetA, assetA],
+      [totalInBaseAsset, baseAssetId],
+    ]);
+
+    const baseAssetResource = partiallyResources.find((r) => r.assetId === baseAssetId);
+    const assetAResource = partiallyResources.find((r) => r.assetId === assetA);
+
+    // expect to have the correct amount of resources, not enough to cover the TX needs
+    expect(baseAssetResource?.amount.toString()).toBe(totalInBaseAsset.toString());
+    expect(assetAResource?.amount.toString()).toBe(partiallyInAssetA.toString());
+
+    transactionRequest.addResources(partiallyResources);
+
+    // funding the missing resources
+    await wallet2.fund(transactionRequest, txCost);
+
+    transactionRequest = (await wallet2.populateTransactionWitnessesSignature(
+      transactionRequest
+    )) as ScriptTransactionRequest;
+
+    const tx = await wallet1.sendTransaction(transactionRequest);
+
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
+  });
+
+  it('should ensure a funded Transaction will not require more funds from another user', async () => {
+    const receiver = Wallet.generate({ provider });
+    const fundedWallet = Wallet.generate({ provider });
+    const unfundedWallet = Wallet.generate({ provider });
+
+    await seedTestWallet(fundedWallet, [
+      [15_000, baseAssetId],
+      [15_000, assetA],
+      [15_000, assetB],
+    ]);
+
+    let transactionRequest = new ScriptTransactionRequest();
+
+    transactionRequest.addCoinOutput(receiver.address, 1500, baseAssetId);
+    transactionRequest.addCoinOutput(receiver.address, 3000, assetA);
+    transactionRequest.addCoinOutput(receiver.address, 4500, assetB);
+
+    const txCost = await provider.getTransactionCost(transactionRequest);
+
+    transactionRequest.gasLimit = txCost.gasUsed;
+    transactionRequest.maxFee = txCost.maxFee;
+
+    // funding the TX request with the fundedWallet
+    await fundedWallet.fund(transactionRequest, txCost);
+
+    const balances = await unfundedWallet.getBalances();
+
+    // expect balance to be empty since the wallet was not funded
+    expect(balances.length).toBe(0);
+
+    /**
+     * Calling fund again with the unfunded wallet. Any attempt to fetch resources from any asset will
+     * result in an error since this wallet carry not funds.
+     */
+    await unfundedWallet.fund(transactionRequest, txCost);
+
+    transactionRequest = (await fundedWallet.populateTransactionWitnessesSignature(
+      transactionRequest
+    )) as ScriptTransactionRequest;
+
+    const tx = await unfundedWallet.sendTransaction(transactionRequest);
+
+    const { isStatusSuccess } = await tx.waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
   });
 });
