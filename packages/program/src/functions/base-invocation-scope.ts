@@ -16,6 +16,7 @@ import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
+import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
 import { POINTER_DATA_OFFSET } from '../script-request';
