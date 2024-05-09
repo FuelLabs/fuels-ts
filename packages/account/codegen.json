@@ -11,22 +11,27 @@
       ],
       "config": {
         "scalars": {
-          "DateTime": "string",
-          "HexString": "string",
-          "Bytes32": "string",
-          "UtxoId": "string",
-          "U64": "string",
           "Address": "string",
-          "BlockId": "string",
-          "TransactionId": "string",
           "AssetId": "string",
+          "BlockId": "string",
+          "Bytes32": "string",
           "ContractId": "string",
-          "Salt": "string",
+          "HexString": "string",
           "Nonce": "string",
-          "Tai64Timestamp": "string"
+          "RelayedTransactionId": "string",
+          "Salt": "string",
+          "Signature": "string",
+          "Tai64Timestamp": "string",
+          "TransactionId": "string",
+          "TxPointer": "string",
+          "U16": "string",
+          "U32": "string",
+          "U64": "string",
+          "UtxoId": "string"
         },
         "useTypeImports": true,
-        "nonOptionalTypename": true,
+        "dedupeOperationSuffix": true,
+        "skipTypename": true,
         "typesPrefix": "Gql"
       }
     }
