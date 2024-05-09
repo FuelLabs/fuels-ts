@@ -8,7 +8,9 @@
       "checkRelative": false,
       "ignore": [
         "https://learnmeabitcoin.com/**",
-        "https://faucet-beta-5.fuel.network/"
+        "https://faucet-beta-5.fuel.network/",
+        "https://thebitcoinmanual.com/",
+        "https://forum.fuel.network/"
       ]
     }
   }
