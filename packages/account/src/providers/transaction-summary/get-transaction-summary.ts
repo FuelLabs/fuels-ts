@@ -6,7 +6,7 @@ import { arrayify } from '@fuel-ts/utils';
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
   GqlPageInfo,
-  GqlReceiptFragmentFragment,
+  GqlReceiptFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
@@ -44,7 +44,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     0
   );
 
-  let txReceipts: GqlReceiptFragmentFragment[] = [];
+  let txReceipts: GqlReceiptFragment[] = [];
 
   if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
     txReceipts = gqlTransaction.status.receipts;
@@ -159,7 +159,7 @@ export async function getTransactionsSummaries(
 
     const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
-    let txReceipts: GqlReceiptFragmentFragment[] = [];
+    let txReceipts: GqlReceiptFragment[] = [];
 
     if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
       txReceipts = gqlTransaction.status.receipts;
