@@ -1,3 +1,7 @@
+/**
+ * @group node
+ * @group browser
+ */
 describe('assets', () => {
   beforeEach(() => {
     vi.resetModules()
