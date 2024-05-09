@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test';
 test('has title', async ({ page }) => {
   await page.goto('http://localhost:3000/');
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Fuel/);
+  const title = page.getByRole('heading', { name: 'Welcome to Fuel' });
+  expect(title).toBeVisible();
 });
 
 // test('get started link', async ({ page }) => {
