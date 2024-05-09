@@ -1,4 +1,3 @@
-/*
 import type { FunctionFragment } from '@fuel-ts/abi-coder';
 import type { CoinQuantity } from '@fuel-ts/account';
 import { coinQuantityfy } from '@fuel-ts/account';

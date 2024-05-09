@@ -1,4 +1,3 @@
-/*
 import { Coder, BigNumberCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
@@ -9,18 +8,18 @@ import { ByteArrayCoder } from './byte-array';
 
 export enum ReceiptType /* u8 */ {
   Call = 0,
-    Return = 1,
-    ReturnData = 2,
-    Panic = 3,
-    Revert = 4,
-    Log = 5,
-    LogData = 6,
-    Transfer = 7,
-    TransferOut = 8,
-    ScriptResult = 9,
-    MessageOut = 10,
-    Mint = 11,
-    Burn = 12,
+  Return = 1,
+  ReturnData = 2,
+  Panic = 3,
+  Revert = 4,
+  Log = 5,
+  LogData = 6,
+  Transfer = 7,
+  TransferOut = 8,
+  ScriptResult = 9,
+  MessageOut = 10,
+  Mint = 11,
+  Burn = 12,
 }
 
 export type ReceiptCall = {

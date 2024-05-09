@@ -1,5 +1,3 @@
-/*
-
 import { setTimeout } from 'timers/promises';
 
 import type {

@@ -1,5 +1,3 @@
-/*
-
 import { Coder, ArrayCoder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { type BN } from '@fuel-ts/math';
@@ -21,8 +19,8 @@ import { WitnessCoder } from './witness';
 
 export enum TransactionType /* u8 */ {
   Script = 0,
-    Create = 1,
-    Mint = 2,
+  Create = 1,
+  Mint = 2,
 }
 
 export type TransactionScript = {

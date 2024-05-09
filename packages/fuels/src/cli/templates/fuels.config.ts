@@ -1,4 +1,3 @@
-/*
 /// <reference path="../../hbs.d.ts" />
 
 import Handlebars from 'handlebars';

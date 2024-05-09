@@ -1,4 +1,3 @@
-/*
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 
 /**

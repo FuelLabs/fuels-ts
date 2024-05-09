@@ -1,4 +1,3 @@
-/*
 /// <reference path="../../hbs.d.ts" />
 
 // TODO: once abi-typegen implements a way to generate all types of sway

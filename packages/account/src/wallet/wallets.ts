@@ -2,7 +2,7 @@
 // Because WalletLocked and WalletUnlocked has a cycle dependency
 // it's not possible to split the two classes in different files
 //
-/*
+
 import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { Account } from '../account';
@@ -16,8 +16,8 @@ import { decryptKeystoreWallet } from './keystore-wallet';
 
 export interface GenerateOptions {
   /** Additional entropy for the random bytes */
-entropy ?: BytesLike;
-provider ?: Provider;
+  entropy?: BytesLike;
+  provider?: Provider;
 }
 
 /**

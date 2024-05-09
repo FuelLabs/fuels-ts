@@ -1,4 +1,3 @@
-/*
 import type { EncodingVersion } from '@fuel-ts/abi-coder';
 import {
   WORD_SIZE,

@@ -1,4 +1,3 @@
-/*
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/account';

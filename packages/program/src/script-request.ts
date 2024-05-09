@@ -1,4 +1,3 @@
-/*
 import {
   ASSET_ID_LEN,
   CONTRACT_ID_LEN,

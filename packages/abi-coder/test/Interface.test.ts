@@ -1,4 +1,3 @@
-/*
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
@@ -505,7 +504,6 @@ describe('Abi interface', () => {
             ],
           ],
           encodedValue: (input?: any, _offset: number = 0) => {
-
             input = input[0];
             const length = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input.length]);
             const lengthVec1 = Uint8Array.from([0, 0, 0, 0, 0, 0, 0, input[0].length]);

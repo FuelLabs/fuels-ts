@@ -1,4 +1,3 @@
-/*
 import { Coder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
@@ -6,10 +5,10 @@ import { concat } from '@fuel-ts/utils';
 
 export enum OutputType /* u8 */ {
   Coin = 0,
-    Contract = 1,
-    Change = 2,
-    Variable = 3,
-    ContractCreated = 4,
+  Contract = 1,
+  Change = 2,
+  Variable = 3,
+  ContractCreated = 4,
 }
 
 export type OutputCoin = {

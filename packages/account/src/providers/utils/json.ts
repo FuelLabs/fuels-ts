@@ -1,5 +1,3 @@
-/*
-/*
 import { hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 

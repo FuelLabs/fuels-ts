@@ -1,5 +1,3 @@
-/*
-
 export type CacheFor = {
   [key: string]: {
     timeout: number;

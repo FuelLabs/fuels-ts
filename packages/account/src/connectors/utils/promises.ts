@@ -1,4 +1,3 @@
-/*
 export type DeferPromise<R = unknown> = {
   promise: Promise<R>;
   resolve: (value: R) => void;

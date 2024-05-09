@@ -1,4 +1,3 @@
-/*
 import type { Provider } from '@fuel-ts/account';
 import { FuelError } from '@fuel-ts/errors';
 import type { AbstractScript } from '@fuel-ts/interfaces';

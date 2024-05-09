@@ -1,4 +1,4 @@
-/*
+
 import { Coder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
@@ -20,40 +20,40 @@ export type InputCoin = {
   type: InputType.Coin;
 
   /** Hash of transaction (b256) */
-txID: string;
+  txID: string;
 
-/** Index of transaction output (u16) */
-outputIndex: number;
+  /** Index of transaction output (u16) */
+  outputIndex: number;
 
-/** Owning address or script hash (b256) */
-owner: string;
+  /** Owning address or script hash (b256) */
+  owner: string;
 
-/** Amount of coins (u64) */
-amount: BN;
+  /** Amount of coins (u64) */
+  amount: BN;
 
-/** Asset ID of the coins (b256) */
-assetId: string;
+  /** Asset ID of the coins (b256) */
+  assetId: string;
 
-/** Points to the TX whose output is being spent. (TxPointer) */
-txPointer: TxPointer;
+  /** Points to the TX whose output is being spent. (TxPointer) */
+  txPointer: TxPointer;
 
-/** Index of witness that authorizes spending the coin (u16) */
-witnessIndex: number;
+  /** Index of witness that authorizes spending the coin (u16) */
+  witnessIndex: number;
 
-/** Gas used by predicate (u64) */
-predicateGasUsed: BN;
+  /** Gas used by predicate (u64) */
+  predicateGasUsed: BN;
 
-/** Length of predicate, in instructions (u64) */
-predicateLength: BN;
+  /** Length of predicate, in instructions (u64) */
+  predicateLength: BN;
 
-/** Length of predicate input data, in bytes (u64) */
-predicateDataLength: BN;
+  /** Length of predicate input data, in bytes (u64) */
+  predicateDataLength: BN;
 
-/** Predicate bytecode (byte[]) */
-predicate: string;
+  /** Predicate bytecode (byte[]) */
+  predicate: string;
 
-/** Predicate input data (parameters) (byte[]) */
-predicateData: string;
+  /** Predicate input data (parameters) (byte[]) */
+  predicateData: string;
 };
 
 export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
