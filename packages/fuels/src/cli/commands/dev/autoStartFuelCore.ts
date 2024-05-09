@@ -40,7 +40,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
     const { cleanup, snapshotDir } = await launchNode({
       args: [
         ['--snapshot', config.snapshotDir],
-        ['--db-type', 'rocks-db'],
+        ['--db-type', 'in-memory'],
       ].flat() as string[],
       ip: bindIp,
       port: port.toString(),
