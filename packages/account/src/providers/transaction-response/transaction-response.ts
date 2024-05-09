@@ -20,7 +20,7 @@ import type {
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlReceiptFragmentFragment } from '../__generated__/operations';
+import type { GqlReceiptFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
@@ -184,7 +184,7 @@ export class TransactionResponse {
       transaction
     ) as Transaction<TTransactionType>;
 
-    let txReceipts: GqlReceiptFragmentFragment[] = [];
+    let txReceipts: GqlReceiptFragment[] = [];
 
     if (transaction?.status && 'receipts' in transaction.status) {
       txReceipts = transaction.status.receipts;

@@ -102,6 +102,7 @@ export class Abi {
       option: 'Option',
       enum: 'Enum',
       vector: 'Vec',
+      result: 'Result',
     };
 
     this.commonTypesInUse = [];
