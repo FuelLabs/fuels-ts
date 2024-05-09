@@ -1,12 +1,19 @@
 import { Asset } from '../types'
 import { getAssetEth, getAssetFuel, getAssetWithNetwork, getDefaultChainId } from '../utils/network';
-import { assets } from '../index'
 import { CHAIN_IDS } from '../../chains'
 
 /**
  * @group node
  */
 describe('Network Utils', () => {
+  let assets: Asset[];
+
+  beforeAll(async () => {
+    vi.stubEnv('ASSETS_BASE_URL', '');
+    const assetMod = await import('../assets');
+    assets = assetMod.assets;
+  })
+
   test('getDefaultChainId', async () => {
     expect(getDefaultChainId('ethereum')).toBe(11155111);
     expect(getDefaultChainId('fuel')).toBe(0);
