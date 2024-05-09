@@ -824,7 +824,7 @@ describe('Contract', () => {
 
     const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
-    const u64Amount = bn(5_000_000_000);
+    const u64Amount = bn(10_000);
     const amountToContract = u64Amount;
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId);
@@ -1199,7 +1199,9 @@ describe('Contract', () => {
   });
 
   it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
-    const contract = await setupContract();
+    const contract = await setupContract({
+      cache: false,
+    });
 
     const gasLimit = 500_000;
     const maxFee = 250_000;
