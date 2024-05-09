@@ -375,12 +375,10 @@ export default class Provider {
    * Constructor to initialize a Provider.
    *
    * @param url - GraphQL endpoint of the Fuel node
-   * @param chainInfo - Chain info of the Fuel node
    * @param options - Additional options for the provider
    * @hidden
    */
   protected constructor(
-    /** GraphQL endpoint of the Fuel node */
     public url: string,
     options: ProviderOptions = {}
   ) {
@@ -393,10 +391,13 @@ export default class Provider {
 
   /**
    * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
+   *
    * @param url - GraphQL endpoint of the Fuel node
    * @param options - Additional options for the provider
+   *
+   * @returns A promise that resolves to a Provider instance.
    */
-  static async create(url: string, options: ProviderOptions = {}) {
+  static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
     const provider = new Provider(url, options);
     await provider.fetchChainAndNodeInfo();
     return provider;
@@ -404,8 +405,10 @@ export default class Provider {
 
   /**
    * Returns the cached chainInfo for the current URL.
+   *
+   * @returns the chain information configuration.
    */
-  getChain() {
+  getChain(): ChainInfo {
     const chain = Provider.chainInfoCache[this.url];
     if (!chain) {
       throw new FuelError(
@@ -418,8 +421,10 @@ export default class Provider {
 
   /**
    * Returns the cached nodeInfo for the current URL.
+   *
+   * @returns the node information configuration.
    */
-  getNode() {
+  getNode(): NodeInfo {
     const node = Provider.nodeInfoCache[this.url];
     if (!node) {
       throw new FuelError(
@@ -451,6 +456,9 @@ export default class Provider {
 
   /**
    * Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
+   *
+   * @param url - The URL to connect to.
+   * @param options - Additional options for the provider.
    */
   async connect(url: string, options?: ProviderOptions) {
     this.url = url;
@@ -558,7 +566,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
   /**
    * Returns the chain information.
-   * @param url - The URL of the Fuel node
+   * 
    * @returns NodeInfo object
    */
   async fetchNode(): Promise<NodeInfo> {
@@ -579,7 +587,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
   /**
    * Fetches the `chainInfo` for the given node URL.
-   * @param url - The URL of the Fuel node
+   * 
    * @returns ChainInfo object
    */
   async fetchChain(): Promise<ChainInfo> {
@@ -593,7 +601,8 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Returns the chain ID
+   * Returns the chain 
+   * 
    * @returns A promise that resolves to the chain ID number
    */
   getChainId() {
@@ -637,6 +646,8 @@ Supported fuel-core version: ${supportedVersion}.`
    * the transaction will be mutated and those dependencies will be added.
    *
    * @param transactionRequestLike - The transaction request object.
+   * @param estimateTxDependencies - Additional provider call parameters.
+   * @param awaitExecution - Additional provider call parameters.
    * @returns A promise that resolves to the transaction response object.
    */
   // #region Provider-sendTransaction
@@ -910,6 +921,11 @@ Supported fuel-core version: ${supportedVersion}.`
     return results;
   }
 
+  /**
+   * Dry runs multiple transactions. 
+   *
+   * @param transactionRequests - Array of transaction request objects.
+   */
   async dryRunMultipleTransactions(
     transactionRequests: TransactionRequest[],
     { utxoValidation, estimateTxDependencies = true }: ProviderCallParams = {}
@@ -1049,7 +1065,10 @@ Supported fuel-core version: ${supportedVersion}.`
    * transaction. The default value is 0.2 or 20%
    *
    * @param transactionRequestLike - The transaction request object.
-   * @param tolerance - The tolerance to add on top of the gasUsed.
+   * @param resourcesOwner - The account that will provide the resources for the transaction.
+   * @param signatureCallback - A callback to sign the transaction.
+   * @param quantitiesToContract - The quantities to forward to the contract.
+   * 
    * @returns A promise that resolves to the transaction cost object.
    */
   async getTransactionCost(
@@ -1151,6 +1170,15 @@ Supported fuel-core version: ${supportedVersion}.`
     };
   }
 
+  /**
+   * 
+   * 
+   * @param owner - address to add resources from.
+   * @param transactionRequestLike - transaction request to populate resources for.
+   * @param quantitiesToContract - quantities for the contract.
+   * 
+   * @returns required quantities for the transaction.
+   */
   async getResourcesForTransaction(
     owner: string | AbstractAddress,
     transactionRequestLike: TransactionRequestLike,
@@ -1186,13 +1214,16 @@ Supported fuel-core version: ${supportedVersion}.`
 
   /**
    * Returns coins for the given owner.
+   * 
+   * @param owner - The address to get coins for.
+   * @param assetId - The asset ID of coins to get.
+   * @param paginationArgs - Pagination arguments.
+   * 
+   * @returns A promise that resolves to the coins.
    */
   async getCoins(
-    /** The address to get coins for */
     owner: string | AbstractAddress,
-    /** The asset ID of coins to get */
     assetId?: BytesLike,
-    /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Coin[]> {
     const ownerAddress = Address.fromAddressOrString(owner);
@@ -1223,11 +1254,8 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the resources.
    */
   async getResourcesToSpend(
-    /** The address to get coins for */
     owner: string | AbstractAddress,
-    /** The quantities to get */
     quantities: CoinQuantityLike[],
-    /** IDs of excluded resources from the selection. */
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     const ownerAddress = Address.fromAddressOrString(owner);
@@ -1294,7 +1322,6 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the block.
    */
   async getBlock(
-    /** ID or height of the block */
     idOrHeight: string | number | 'latest'
   ): Promise<Block | null> {
     let variables;
@@ -1458,9 +1485,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the balances.
    */
   async getBalances(
-    /** The address to get coins for */
     owner: string | AbstractAddress,
-    /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<CoinQuantity[]> {
     const result = await this.operations.getBalances({
@@ -1485,9 +1510,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the messages.
    */
   async getMessages(
-    /** The address to get message from */
     address: string | AbstractAddress,
-    /** Pagination arguments */
     paginationArgs?: CursorPaginationArgs
   ): Promise<Message[]> {
     const result = await this.operations.getMessages({
@@ -1525,7 +1548,6 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the message proof.
    */
   async getMessageProof(
-    /** The transaction to get message from */
     transactionId: string,
     nonce: string,
     commitBlockId?: string,

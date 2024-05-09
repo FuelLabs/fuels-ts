@@ -64,6 +64,9 @@ export class Account extends AbstractAccount {
    */
   protected _provider?: Provider;
 
+  /**
+   * The connector for use with external wallets
+   */
   protected _connector?: FuelConnector;
 
   /**
@@ -71,6 +74,7 @@ export class Account extends AbstractAccount {
    *
    * @param address - The address of the account.
    * @param provider - A Provider instance  (optional).
+   * @param connector - A FuelConnector instance (optional).
    */
   constructor(address: string | AbstractAddress, provider?: Provider, connector?: FuelConnector) {
     super();
@@ -117,12 +121,12 @@ export class Account extends AbstractAccount {
   /**
    * Retrieves resources satisfying the spend query for the account.
    *
-   * @param quantities - IDs of coins to exclude.
+   * @param quantities - IDs of coins to obtains.
    * @param excludedIds - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
-    quantities: CoinQuantityLike[] /** IDs of coins to exclude */,
+    quantities: CoinQuantityLike[],
     excludedIds?: ExcludeResourcesOption
   ): Promise<Resource[]> {
     return this.provider.getResourcesToSpend(this.address, quantities, excludedIds);
@@ -248,8 +252,7 @@ export class Account extends AbstractAccount {
    *
    * @param request - The transaction request.
    * @param requiredQuantities - The coin quantities required to execute the transaction.
-   * @param fee - The estimated transaction fee.
-   * @returns A promise that resolves when the resources are added to the transaction.
+   * @returns A promise that resolves to the funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const { addedSignatures, estimatedPredicates, maxFee: fee, requiredQuantities } = params;
@@ -364,13 +367,9 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
-    /** Address of the destination */
     destination: string | AbstractAddress,
-    /** Amount of coins */
     amount: BigNumberish,
-    /** Asset ID of coins */
     assetId?: BytesLike,
-    /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
     const request = new ScriptTransactionRequest(txParams);
@@ -405,13 +404,9 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
-    /** Address of the destination */
     destination: string | AbstractAddress,
-    /** Amount of coins */
     amount: BigNumberish,
-    /** Asset ID of coins */
     assetId?: BytesLike,
-    /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     if (bn(amount).lte(0)) {
@@ -435,13 +430,9 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
-    /** Contract address */
     contractId: string | AbstractAddress,
-    /** Amount of coins */
     amount: BigNumberish,
-    /** Asset ID of coins */
     assetId?: BytesLike,
-    /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     if (bn(amount).lte(0)) {
@@ -495,11 +486,8 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
-    /** Address of the recipient on the base chain */
     recipient: string | AbstractAddress,
-    /** Amount of base asset */
     amount: BigNumberish,
-    /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     const recipientAddress = Address.fromAddressOrString(recipient);
@@ -538,6 +526,12 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request);
   }
 
+  /**
+   * Sign a message from the account via the connector.
+   *
+   * @param message - the message to sign.
+   * @returns a promise that resolves to the signature.
+   */
   async signMessage(message: string): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
@@ -565,6 +559,8 @@ export class Account extends AbstractAccount {
    * Sends a transaction to the network.
    *
    * @param transactionRequestLike - The transaction request to be sent.
+   * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
+   * @param awaitExecution - Whether to wait for the transaction to be executed.
    * @returns A promise that resolves to the transaction response.
    */
   async sendTransaction(
@@ -590,6 +586,7 @@ export class Account extends AbstractAccount {
    * Simulates a transaction.
    *
    * @param transactionRequestLike - The transaction request to be simulated.
+   * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
    * @returns A promise that resolves to the call result.
    */
   async simulateTransaction(
