@@ -12,9 +12,6 @@ const configs: Options = {
     configs: 'src/configs.ts',
     'test-utils': 'src/test-utils/index.ts',
   },
-  env: {
-    ASSETS_BASE_URL: process.env.ASSETS_BASE_URL || '',
-  },
   // eslint-disable-next-line @typescript-eslint/require-await
   onSuccess: async () => {
     const outputDir = join(__dirname, 'src', 'providers', 'assets', 'images');
