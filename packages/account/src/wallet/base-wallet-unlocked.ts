@@ -147,7 +147,7 @@ export class BaseWalletUnlocked extends Account {
 
   /**
    * Encrypts an unlocked wallet with a password.
-   * 
+   *
    * @param password - the password to encrypt the wallet with.
    * @returns - the encrypted wallet.
    */

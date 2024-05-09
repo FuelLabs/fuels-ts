@@ -154,7 +154,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
 
   /**
    * Calculates the maximum gas for the transaction.
-   * 
+   *
    * @param chainInfo - The chain information.
    * @param minGas - The minimum gas.
    * @returns the maximum gas.

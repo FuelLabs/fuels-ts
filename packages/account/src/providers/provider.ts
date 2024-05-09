@@ -566,7 +566,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
   /**
    * Returns the chain information.
-   * 
+   *
    * @returns NodeInfo object
    */
   async fetchNode(): Promise<NodeInfo> {
@@ -587,7 +587,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
   /**
    * Fetches the `chainInfo` for the given node URL.
-   * 
+   *
    * @returns ChainInfo object
    */
   async fetchChain(): Promise<ChainInfo> {
@@ -601,8 +601,8 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Returns the chain 
-   * 
+   * Returns the chain
+   *
    * @returns A promise that resolves to the chain ID number
    */
   getChainId() {
@@ -922,7 +922,7 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Dry runs multiple transactions. 
+   * Dry runs multiple transactions.
    *
    * @param transactionRequests - Array of transaction request objects.
    */
@@ -1068,7 +1068,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param resourcesOwner - The account that will provide the resources for the transaction.
    * @param signatureCallback - A callback to sign the transaction.
    * @param quantitiesToContract - The quantities to forward to the contract.
-   * 
+   *
    * @returns A promise that resolves to the transaction cost object.
    */
   async getTransactionCost(
@@ -1171,12 +1171,12 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * 
-   * 
+   *
+   *
    * @param owner - address to add resources from.
    * @param transactionRequestLike - transaction request to populate resources for.
    * @param quantitiesToContract - quantities for the contract.
-   * 
+   *
    * @returns required quantities for the transaction.
    */
   async getResourcesForTransaction(
@@ -1214,11 +1214,11 @@ Supported fuel-core version: ${supportedVersion}.`
 
   /**
    * Returns coins for the given owner.
-   * 
+   *
    * @param owner - The address to get coins for.
    * @param assetId - The asset ID of coins to get.
    * @param paginationArgs - Pagination arguments.
-   * 
+   *
    * @returns A promise that resolves to the coins.
    */
   async getCoins(
@@ -1321,9 +1321,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param idOrHeight - ID or height of the block.
    * @returns A promise that resolves to the block.
    */
-  async getBlock(
-    idOrHeight: string | number | 'latest'
-  ): Promise<Block | null> {
+  async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
     let variables;
     if (typeof idOrHeight === 'number') {
       variables = { height: bn(idOrHeight).toString(10) };
