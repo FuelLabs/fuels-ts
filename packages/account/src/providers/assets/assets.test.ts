@@ -1,20 +1,21 @@
-
 describe('assets', () => {
   beforeEach(() => {
     vi.resetModules()
   })
 
-  it('should have assets with the icon resolved', async () => {
-    const { assets } = await import('./assets');
-
-    expect(assets).toEqual([
-      expect.objectContaining({
-        'icon': './eth.svg',
-      })
-    ])
+  describe('with default `ASSETS_BASE_URL`', () => {
+    it('should have assets with the icon resolved', async () => {
+      const { assets } = await import('./assets');
+  
+      expect(assets).toEqual([
+        expect.objectContaining({
+          'icon': 'https://cdn.fuel.network/assets/eth.svg',
+        })
+      ])
+    });
   })
 
-  describe('with `ASSETS_BASE_URL`', () => {
+  describe('with custom `ASSETS_BASE_URL`', () => {
     beforeAll(() => {
       vi.stubEnv('ASSETS_BASE_URL', 'https://some-url.com/');
     })
