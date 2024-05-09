@@ -12,7 +12,7 @@ import {
   PANIC_DOC_URL,
 } from '@fuel-ts/transactions/configs';
 
-import type { GqlTransactionStatusFragmentFragment } from '../__generated__/operations';
+import type { GqlTransactionStatusFragment } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 import type { FailureStatus } from '../transaction-summary';
 
@@ -101,7 +101,7 @@ export const assembleRevertError = (
 
 interface IExtractTxError {
   receipts: Array<TransactionResultReceipt>;
-  status?: GqlTransactionStatusFragmentFragment | null;
+  status?: GqlTransactionStatusFragment | null;
   logs: Array<unknown>;
 }
 

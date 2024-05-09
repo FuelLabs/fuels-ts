@@ -5,14 +5,11 @@ import type { GqlGetMessageProofQuery } from '../../src/providers/__generated__/
 import type { MessageProof } from '../../src/providers/message';
 
 export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof'] = {
-  __typename: 'MessageProof',
   messageProof: {
-    __typename: 'MerkleProof',
     proofSet: ['0x34fdfbc73458998a106b02f13bba51bc0fd36513602e312ca1d1893f2075eca5'],
     proofIndex: '0',
   },
   blockProof: {
-    __typename: 'MerkleProof',
     proofSet: [
       '0x3480098c927d3a8a86745ba6c91419f04901baf5d25bbd0e6ba56fcb3b3e35bd',
       '0xa8795e5d15b88c2383f5673a4658edae93dcdb7986ccfacbe916e656ec11ce70',
@@ -23,7 +20,6 @@ export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof']
     proofIndex: '432',
   },
   messageBlockHeader: {
-    __typename: 'Header',
     id: '0x864b55089878bf7009d2ff64cbeeeeb75fcd73768785dcb75d54180e7fbaab7b',
     daHeight: '0',
     transactionsCount: '2',
@@ -39,7 +35,6 @@ export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof']
     messageOutboxRoot: '0x8817eb3173bc39ae465def50f978153fd84ea4badbe3a4e26486ba7f1bcd0579',
   },
   commitBlockHeader: {
-    __typename: 'Header',
     id: '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b',
     daHeight: '0',
     transactionsCount: '2',
