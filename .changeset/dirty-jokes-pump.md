@@ -1,2 +1,4 @@
 ---
 ---
+
+docs: update `CONTRIBUTING.md`
