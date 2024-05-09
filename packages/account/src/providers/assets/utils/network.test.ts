@@ -1,19 +1,12 @@
 import { Asset } from '../types'
 import { getAssetEth, getAssetFuel, getAssetWithNetwork, getDefaultChainId } from '../utils/network';
 import { CHAIN_IDS } from '../../chains'
+import { assets } from '../assets';
 
 /**
  * @group node
  */
 describe('Network Utils', () => {
-  let assets: Asset[];
-
-  beforeAll(async () => {
-    vi.stubEnv('ASSETS_BASE_URL', '');
-    const assetMod = await import('../assets');
-    assets = assetMod.assets;
-  })
-
   test('getDefaultChainId', async () => {
     expect(getDefaultChainId('ethereum')).toBe(11155111);
     expect(getDefaultChainId('fuel')).toBe(0);
@@ -26,7 +19,7 @@ describe('Network Utils', () => {
       type: 'ethereum',
       chainId: CHAIN_IDS.eth.sepolia,
       decimals: 18,
-      icon: 'eth.svg',
+      icon: 'https://cdn.fuel.network/assets/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH'
     })
@@ -40,7 +33,7 @@ describe('Network Utils', () => {
       chainId: CHAIN_IDS.fuel.beta5,
       decimals: 9,
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-      icon: 'eth.svg',
+      icon: 'https://cdn.fuel.network/assets/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH'
     })
@@ -59,7 +52,7 @@ describe('Network Utils', () => {
       type: 'ethereum',
       chainId: CHAIN_IDS.eth.sepolia,
       decimals: 18,
-      icon: 'eth.svg',
+      icon: 'https://cdn.fuel.network/assets/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH',
     })
@@ -74,7 +67,7 @@ describe('Network Utils', () => {
       chainId: CHAIN_IDS.fuel.beta5,
       decimals: 9,
       assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
-      icon: 'eth.svg',
+      icon: 'https://cdn.fuel.network/assets/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH',
     })

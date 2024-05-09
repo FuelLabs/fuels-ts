@@ -1,7 +1,7 @@
 import { CHAIN_IDS } from '../chains';
 
 import type { Assets } from './types';
-import { resolveIconPaths } from './utils';
+import { resolveIconPaths, fuelAssetsBaseUrl } from './utils';
 
 export const rawAssets: Assets = [
   {
@@ -35,4 +35,4 @@ export const rawAssets: Assets = [
   },
 ];
 
-export const assets = resolveIconPaths(rawAssets, process.env.ASSETS_BASE_URL);
+export const assets = resolveIconPaths(rawAssets, fuelAssetsBaseUrl);
