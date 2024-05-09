@@ -3,15 +3,11 @@
   const { fuels } = data
 </script>
 
-# Installation and Prerequisites
-
-## Prerequisites
+# Installation
 
 We expect you to install the [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
 
-## Installation
-
-To begin, you need to add the `fuels` dependency to your project. You can do this using the following command:
+The next step is to add the `fuels` dependency to your project. You can do this using the following command:
 
 ::: code-group
 
@@ -27,7 +23,7 @@ pnpm add fuels@{{fuels}}
 
 **Note**: Use version `{{fuels}}` to ensure compatibility with `beta-5` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
 
-### Note
+---
 
 If you are using bun, you'll need to add a `trustedDependencies` field to your `package.json`:
 

@@ -49,8 +49,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Installation and Prerequisites',
-                link: '/getting-started/installation-and-prerequisites',
+                text: 'Installation',
+                link: '/getting-started/installation',
               },
               {
                 text: 'Usage',
