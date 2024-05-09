@@ -93,6 +93,14 @@ jobs:
             exit 0
           fi
 
+          # Minor changes are treated as breaking until v1.0.0 is released.
+          if echo "$AFFECTED_PACKAGES" | grep -q 'minor'; then
+            if ! echo "$PR_TITLE" | grep -q '!'; then
+              echo "Changeset has minor changes. Please mark the PR as breaking by adding an exclamation mark to its title (e.g. fix!: xxx)."
+              exit 1
+            fi
+          fi
+
           CHANGESET_DESCRIPTION=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
 
           if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then
