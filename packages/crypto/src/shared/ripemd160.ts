@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify } from '@fuel-ts/utils';
 import { ripemd160 as noble_ripemd160 } from '@noble/hashes/ripemd160';
@@ -18,7 +19,7 @@ ripemd160.lock = (): void => {
 };
 ripemd160.register = (func: (data: Uint8Array) => Uint8Array) => {
   if (locked) {
-    throw new TypeError('ripemd160 is locked');
+    throw new FuelError(ErrorCode.HASHER_LOCKED, 'ripemd160 is locked');
   }
   ripemd = func;
 };

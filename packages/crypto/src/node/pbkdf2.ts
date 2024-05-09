@@ -1,3 +1,4 @@
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { pbkdf2Sync } from 'crypto';
@@ -39,7 +40,7 @@ pbkdf2.register = (
   ) => BytesLike
 ) => {
   if (locked) {
-    throw new Error('pbkdf2 is locked');
+    throw new FuelError(ErrorCode.HASHER_LOCKED, 'pbkdf2 is locked');
   }
   pBkdf2 = func;
 };

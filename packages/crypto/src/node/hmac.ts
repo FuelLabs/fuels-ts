@@ -1,3 +1,4 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { createHmac } from 'crypto';
@@ -29,7 +30,7 @@ computeHmac.register = (
   func: (algorithm: 'sha256' | 'sha512', key: Uint8Array, data: Uint8Array) => BytesLike
 ) => {
   if (locked) {
-    throw new Error('computeHmac is locked');
+    throw new FuelError(ErrorCode.HASHER_LOCKED, 'computeHmac is locked');
   }
   computeHMAC = func;
 };
