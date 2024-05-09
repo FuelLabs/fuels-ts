@@ -1,7 +1,6 @@
-import type { GqlNodeInfoFragmentFragment } from '../../src/providers/__generated__/operations';
+import type { GqlNodeInfoFragment } from '../../src/providers/__generated__/operations';
 
-export const MOCK_NODE_INFO: GqlNodeInfoFragmentFragment = {
-  __typename: 'NodeInfo',
+export const MOCK_NODE_INFO: GqlNodeInfoFragment = {
   utxoValidation: true,
   vmBacktrace: true,
   maxTx: '4064',
