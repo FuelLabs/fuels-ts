@@ -1,5 +1,16 @@
 # @fuel-ts/abi-typegen
 
+## 0.85.0
+
+### Patch Changes
+
+- d0e9b1a: feat: support `Result<T, E>` type in typegen
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
 ## 0.84.0
 
 ### Patch Changes

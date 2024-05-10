@@ -8,7 +8,7 @@ import { urlJoin } from './url';
  * @param basePath - Base path for the icon URLs (default: './')
  * @returns The assets with the icon paths resolved
  */
-export function resolveIconPaths(assets: Assets, basePath = './') {
+export function resolveIconPaths(assets: Assets, basePath: string = './') {
   return assets.map((asset) => ({
     ...asset,
     icon: urlJoin(basePath, asset.icon),

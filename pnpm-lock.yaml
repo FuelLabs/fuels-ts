@@ -1032,6 +1032,13 @@ importers:
       "@fuels/vm-asm":
         specifier: 0.49.0
         version: 0.49.0
+      ramda:
+        specifier: ^0.29.0
+        version: 0.29.0
+    devDependencies:
+      '@types/ramda':
+        specifier: ^0.29.3
+        version: 0.29.3
 
   packages/script:
     dependencies:
