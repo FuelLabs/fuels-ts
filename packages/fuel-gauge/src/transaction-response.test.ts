@@ -45,9 +45,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
       Promise<Response>
     >
   ) {
-    console.log('getFetchMock called');
     return async (...args: Parameters<typeof fetch>) => {
-      console.log(args);
       /**
        * We need to restore the original fetch implementation so that fetching is possible
        * We then get the response and mock the fetch implementation again
@@ -58,7 +56,6 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
       fetchSpy.mockImplementation(getFetchMock(fetchSpy));
 
       const isSubscriptionCall = args[0].toString().endsWith('graphql-sub');
-      console.log('isSubscriptionCall', isSubscriptionCall);
       if (!isSubscriptionCall) {
         return r;
       }
