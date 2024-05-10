@@ -300,8 +300,8 @@ describe('TransactionResponse', () => {
         if (done) {
           break;
         }
-        const text = decoder.decode(value);
-        console.log(text);
+        const streamedEvent = decoder.decode(value);
+        console.log(streamedEvent);
       }
 
       throw e;
