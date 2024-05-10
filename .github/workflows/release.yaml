@@ -167,7 +167,7 @@ jobs:
         if: env.SHOULD_DEPLOY_DOCS == 'true'
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: update-nightly.yaml
+          workflow: update-nightly.yml
           ref: master
           repo: FuelLabs/docs-hub
           token: ${{ secrets.REPO_TOKEN }}
