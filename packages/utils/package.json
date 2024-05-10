@@ -42,6 +42,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*"
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*"
   }
 }

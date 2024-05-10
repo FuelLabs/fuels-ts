@@ -1,9 +1,14 @@
-import { randomBytes } from '@fuel-ts/crypto';
+import { randomBytes, pbkdf2, computeHmac } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { arrayify, concat, hexlify } from '@fuel-ts/utils';
-import { computeHmac, dataSlice, encodeBase58, pbkdf2 } from 'ethers';
+import {
+  arrayify,
+  hexlify,
+  concat,
+  dataSlice,
+  encodeBase58,
+} from '@fuel-ts/utils';
 
 import { english } from '../wordlists';
 

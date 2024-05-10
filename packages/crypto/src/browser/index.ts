@@ -1,4 +1,4 @@
-import { keccak256, scrypt } from '../shared';
+import { scrypt, keccak256, ripemd160 } from '../shared';
 import type { CryptoApi } from '../types';
 
 import { decrypt, encrypt, keyFromPassword } from './aes-ctr';
@@ -7,6 +7,8 @@ import {
   decryptJsonWalletData,
   encryptJsonWalletData,
 } from './encryptJsonWalletData';
+import { computeHmac } from './hmac';
+import { pbkdf2 } from './pbkdf2';
 import { randomBytes } from './randomBytes';
 import { stringFromBuffer } from './stringFromBuffer';
 
@@ -21,6 +23,9 @@ const api: CryptoApi = {
   keccak256,
   decryptJsonWalletData,
   encryptJsonWalletData,
+  computeHmac,
+  pbkdf2,
+  ripemd160,
 };
 
 export default api;

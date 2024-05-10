@@ -1,16 +1,16 @@
+import { computeHmac, ripemd160 } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn, toBytes, toHex } from '@fuel-ts/math';
-import { arrayify, concat, hexlify } from '@fuel-ts/utils';
 import {
-  computeHmac,
+  arrayify,
+  hexlify,
+  concat,
   dataSlice,
-  decodeBase58,
   encodeBase58,
-  ripemd160,
-  toBeHex,
-} from 'ethers';
+  decodeBase58,
+} from '@fuel-ts/utils';
 
 import { Mnemonic } from '../mnemonic';
 import { Signer } from '../signer';
@@ -241,7 +241,7 @@ class HDWallet {
   }
 
   static fromExtendedKey(extendedKey: string) {
-    const decoded = toBeHex(decodeBase58(extendedKey));
+    const decoded = hexlify(toBytes(decodeBase58(extendedKey)));
     const bytes = arrayify(decoded);
     const validChecksum = base58check(bytes.slice(0, 78)) === extendedKey;
 
