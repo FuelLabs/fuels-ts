@@ -1097,7 +1097,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       const responseObject = {
         data: {
           submitAndAwait: {
-            type: 'SuccessStatus',
+            type: 'SuccessStatusGlobal',
             time: 'data: 4611686020137152060',
           },
         },
@@ -1120,7 +1120,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     for await (const { submitAndAwait } of provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
-      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect(submitAndAwait.type).toEqual('SuccessStatusGlobal');
       expect((<SubmittedStatus>submitAndAwait).time).toEqual('data: 4611686020137152060');
     }
   });
@@ -1171,7 +1171,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       const event2 = {
         data: {
           submitAndAwait: {
-            type: 'SuccessStatus',
+            type: 'SuccessStatusGlobal',
           },
         },
       };
@@ -1203,7 +1203,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         expect(submitAndAwait.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwait.type).toEqual('SuccessStatusGlobal');
       }
     }
 
@@ -1216,7 +1216,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       const responseObject = JSON.stringify({
         data: {
           submitAndAwait: {
-            type: 'SuccessStatus',
+            type: 'SuccessStatusGlobal',
           },
         },
       });
@@ -1244,7 +1244,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     for await (const { submitAndAwait } of provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
-      expect(submitAndAwait.type).toEqual('SuccessStatus');
+      expect(submitAndAwait.type).toEqual('SuccessStatusGlobal');
     }
   });
 
@@ -1262,7 +1262,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       const event2 = JSON.stringify({
         data: {
           submitAndAwait: {
-            type: 'SuccessStatus',
+            type: 'SuccessStatusGlobal',
           },
         },
       });
@@ -1297,7 +1297,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         expect(submitAndAwait.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwait.type).toEqual('SuccessStatusGlobal');
       }
     }
 
@@ -1318,7 +1318,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       const event2 = JSON.stringify({
         data: {
           submitAndAwait: {
-            type: 'SuccessStatus',
+            type: 'SuccessStatusGlobal',
           },
         },
       });
@@ -1355,7 +1355,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         expect(submitAndAwait.type).toEqual('SubmittedStatus');
       }
       if (numberOfEvents === 2) {
-        expect(submitAndAwait.type).toEqual('SuccessStatus');
+        expect(submitAndAwait.type).toEqual('SuccessStatusGlobal');
       }
     }
 
