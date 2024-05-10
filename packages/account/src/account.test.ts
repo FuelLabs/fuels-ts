@@ -3,6 +3,7 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
+import { PolicyType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import { Account } from './account';
@@ -253,6 +254,8 @@ describe('Account', () => {
 
     const request = new ScriptTransactionRequest();
 
+    request.maxFee = fee;
+
     const resourcesToSpend: Resource[] = [];
     const getResourcesToSpendSpy = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
@@ -272,7 +275,6 @@ describe('Account', () => {
 
     await account.fund(request, {
       requiredQuantities: quantities,
-      maxFee: fee,
       estimatedPredicates: [],
       addedSignatures: 0,
     });
@@ -435,6 +437,28 @@ describe('Account', () => {
       { assetId: baseAssetId, amount: bn(expectedRemaining) },
     ]);
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
+  });
+
+  it('can set "gasLimit" and "maxFee" when transferring amounts', async () => {
+    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    const receiver = Address.fromRandom();
+
+    const gasLimit = 30_000;
+    const maxFee = 15_000;
+
+    const request = await sender.createTransfer(receiver, 1, baseAssetId, {
+      gasLimit,
+      maxFee,
+    });
+
+    const response = await sender.sendTransaction(request);
+    const { transaction } = await response.wait();
+
+    const { scriptGasLimit, policies } = transaction;
+    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
   it('can transfer with custom TX Params', async () => {
@@ -632,6 +656,29 @@ describe('Account', () => {
     expect(senderBalances).toEqual([
       { assetId: baseAssetId, amount: bn(expectedRemaining) },
     ]);
+  });
+
+  it('can set "gasLimit" and "maxFee" when withdrawing to base layer', async () => {
+    const sender = Wallet.generate({
+      provider,
+    });
+
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+
+    const recipient = Address.fromRandom();
+    const amount = 110;
+
+    const gasLimit = 100_000;
+    const maxFee = 50_000;
+
+    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasLimit, maxFee });
+    const { transaction } = await tx.wait();
+
+    const { scriptGasLimit, policies } = transaction;
+    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
   it('should ensure gas price and gas limit are validated when transfering amounts', async () => {

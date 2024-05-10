@@ -1,12 +1,7 @@
-import { CHAIN_IDS } from "../../chains";
-import { assets } from "../index";
-import type { Asset } from "../types";
-import {
-	getAssetEth,
-	getAssetFuel,
-	getAssetWithNetwork,
-	getDefaultChainId,
-} from "../utils/network";
+import { Asset } from '../types'
+import { getAssetEth, getAssetFuel, getAssetWithNetwork, getDefaultChainId } from '../utils/network';
+import { CHAIN_IDS } from '../../chains'
+import { assets } from '../assets';
 
 /**
  * @group node
@@ -17,41 +12,32 @@ describe("Network Utils", () => {
 		expect(getDefaultChainId("fuel")).toBe(0);
 	});
 
-	test("getAssetWithNetwork - Ethereum", async () => {
-		const asset = assets[0] as Asset;
-		const assetEth = getAssetWithNetwork({
-			asset,
-			networkType: "ethereum",
-			chainId: CHAIN_IDS.eth.sepolia,
-		});
+	test('getAssetWithNetwork - Ethereum', async () => {
+		const asset = assets[0] as Asset
+		const assetEth = getAssetWithNetwork({ asset, networkType: 'ethereum', chainId: CHAIN_IDS.eth.sepolia })
 		expect(assetEth).toEqual({
-			type: "ethereum",
+			type: 'ethereum',
 			chainId: CHAIN_IDS.eth.sepolia,
 			decimals: 18,
-			icon: "eth.svg",
-			name: "Ethereum",
-			symbol: "ETH",
-		});
-	});
+			icon: 'https://cdn.fuel.network/assets/eth.svg',
+			name: 'Ethereum',
+			symbol: 'ETH'
+		})
+	})
 
-	test("getAssetWithNetwork - Fuel", async () => {
-		const asset = assets[0] as Asset;
-		const assetFuel = getAssetWithNetwork({
-			asset,
-			networkType: "fuel",
-			chainId: CHAIN_IDS.fuel.beta5,
-		});
+	test('getAssetWithNetwork - Fuel', async () => {
+		const asset = assets[0] as Asset
+		const assetFuel = getAssetWithNetwork({ asset, networkType: 'fuel', chainId: CHAIN_IDS.fuel.beta5 })
 		expect(assetFuel).toEqual({
-			type: "fuel",
+			type: 'fuel',
 			chainId: CHAIN_IDS.fuel.beta5,
 			decimals: 9,
-			assetId:
-				"0x0000000000000000000000000000000000000000000000000000000000000000",
-			icon: "eth.svg",
-			name: "Ethereum",
-			symbol: "ETH",
-		});
-	});
+			assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+			icon: 'https://cdn.fuel.network/assets/eth.svg',
+			name: 'Ethereum',
+			symbol: 'ETH'
+		})
+	})
 
 	test("getAssetWithNetwork - invalid network", async () => {
 		const asset = assets[0] as Asset;
@@ -63,32 +49,31 @@ describe("Network Utils", () => {
 		expect(assetUndefined).toBeUndefined();
 	});
 
-	test("getAssetEth", async () => {
-		const asset = assets[0] as Asset;
-		const assetEth = getAssetEth(asset);
+	test('getAssetEth', async () => {
+		const asset = assets[0] as Asset
+		const assetEth = getAssetEth(asset)
 		expect(assetEth).toEqual({
-			type: "ethereum",
+			type: 'ethereum',
 			chainId: CHAIN_IDS.eth.sepolia,
 			decimals: 18,
-			icon: "eth.svg",
-			name: "Ethereum",
-			symbol: "ETH",
-		});
-	});
+			icon: 'https://cdn.fuel.network/assets/eth.svg',
+			name: 'Ethereum',
+			symbol: 'ETH',
+		})
+	})
 
-	test("getAssetFuel", async () => {
-		const asset = assets[0] as Asset;
-		const assetFuel = getAssetFuel(asset);
+	test('getAssetFuel', async () => {
+		const asset = assets[0] as Asset
+		const assetFuel = getAssetFuel(asset)
 
 		expect(assetFuel).toEqual({
-			type: "fuel",
+			type: 'fuel',
 			chainId: CHAIN_IDS.fuel.beta5,
 			decimals: 9,
-			assetId:
-				"0x0000000000000000000000000000000000000000000000000000000000000000",
-			icon: "eth.svg",
-			name: "Ethereum",
-			symbol: "ETH",
-		});
-	});
-});
+			assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+			icon: 'https://cdn.fuel.network/assets/eth.svg',
+			name: 'Ethereum',
+			symbol: 'ETH',
+		})
+	})
+})

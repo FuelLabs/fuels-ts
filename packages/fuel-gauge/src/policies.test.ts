@@ -52,6 +52,11 @@ describe('Policies', () => {
     return randomValue;
   };
 
+  const randomMaturity = async () => {
+    const { latestBlock } = await provider.fetchChain();
+    return randomNumber(1, latestBlock.height.toNumber());
+  };
+
   const validatePolicies = ({
     transaction,
     params,
@@ -147,7 +152,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 10,
-      maturity: randomNumber(1, 2),
+      maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
       maxFee: 1000,
     };
@@ -186,7 +191,7 @@ describe('Policies', () => {
     const txParams: CustomTxParams = {
       tip: 11,
       witnessLimit: 2000,
-      maturity: 1,
+      maturity: await randomMaturity(),
       maxFee: 5000,
     };
 
@@ -222,7 +227,7 @@ describe('Policies', () => {
 
     const callScope = contract.functions.payable().txParams({
       tip: 5,
-      maturity: randomNumber(1, 2),
+      maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
       maxFee: 3000,
     });
@@ -252,7 +257,7 @@ describe('Policies', () => {
 
     const callScope = scriptInstance.functions.main(33).txParams({
       tip: 2,
-      maturity: randomNumber(1, 2),
+      maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
       maxFee: 3000,
     });
@@ -274,7 +279,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 4,
-      maturity: randomNumber(1, 2),
+      maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
       maxFee: 3000,
     };
@@ -307,7 +312,7 @@ describe('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 1,
-      maturity: randomNumber(1, 2),
+      maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
       maxFee: 3000,
     };
@@ -331,7 +336,7 @@ describe('Policies', () => {
     const receiver = Wallet.generate({ provider });
 
     const txParams: CustomTxParams = {
-      maturity: randomNumber(1, 2),
+      maturity: await randomMaturity(),
       witnessLimit: 0,
     };
 
@@ -354,7 +359,7 @@ describe('Policies', () => {
       const maxFee = 1;
 
       const txParams: CustomTxParams = {
-        maturity: randomNumber(1, 2),
+        maturity: await randomMaturity(),
         witnessLimit: 800,
         maxFee,
       };
@@ -386,7 +391,7 @@ describe('Policies', () => {
       })();
 
       const txParams: CustomTxParams = {
-        maturity: randomNumber(1, 2),
+        maturity: await randomMaturity(),
         witnessLimit: 800,
         maxFee,
       };
@@ -409,7 +414,7 @@ describe('Policies', () => {
       const receiver = Wallet.generate({ provider });
 
       const txParams: CustomTxParams = {
-        maturity: randomNumber(1, 2),
+        maturity: await randomMaturity(),
         witnessLimit: 800,
         maxFee,
       };
@@ -436,7 +441,7 @@ describe('Policies', () => {
       const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
       const txParams: CustomTxParams = {
-        maturity: randomNumber(1, 2),
+        maturity: await randomMaturity(),
         witnessLimit: 800,
         maxFee,
       };
@@ -462,7 +467,7 @@ describe('Policies', () => {
       })();
 
       const txParams: CustomTxParams = {
-        maturity: randomNumber(1, 2),
+        maturity: await randomMaturity(),
         witnessLimit: 800,
         maxFee,
       };

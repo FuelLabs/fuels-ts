@@ -963,8 +963,8 @@ describe('Provider', () => {
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
-which is not supported by the version of the TS SDK that you are using. 
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
+which is not supported by the version of the TS SDK that you are using.
 Things may not work as expected.
 Supported fuel-core version: ${mock.supportedVersion}.`,
     );
@@ -998,8 +998,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`,
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE}, 
-which is not supported by the version of the TS SDK that you are using. 
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
+which is not supported by the version of the TS SDK that you are using.
 Things may not work as expected.
 Supported fuel-core version: ${mock.supportedVersion}.`,
     );

@@ -18,7 +18,6 @@ describe('ResultType.ts', () => {
   function getResultType() {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const rawTypes = project.abiContents.types as IRawAbiTypeRoot[];
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return parseTypes({
       rawAbiTypes: [rawTypes.find((t) => t.type === 'enum Result')!],
     })[0];

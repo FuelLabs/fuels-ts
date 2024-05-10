@@ -35,6 +35,7 @@ import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
 import { NoWitnessAtIndexError } from './errors';
+import { isRequestInputResource } from './helpers';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -96,8 +97,7 @@ type ToBaseTransactionResponse = Pick<
  * Abstract class to define the functionalities of a transaction request transaction request.
  */
 export abstract class BaseTransactionRequest
-  implements BaseTransactionRequestLike
-{
+  implements BaseTransactionRequestLike {
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
@@ -370,7 +370,7 @@ export abstract class BaseTransactionRequest
    * @param coin - Coin resource.
    */
   addCoinInput(coin: Coin) {
-    const { assetId, owner, amount } = coin;
+    const { assetId, owner, amount, id, predicate } = coin;
 
     let witnessIndex;
 
@@ -386,13 +386,14 @@ export abstract class BaseTransactionRequest
     }
 
     const input: CoinTransactionRequestInput = {
-      ...coin,
+      id,
       type: InputType.Coin,
       owner: owner.toB256(),
       amount,
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
+      predicate,
     };
 
     // Insert the Input
@@ -409,7 +410,7 @@ export abstract class BaseTransactionRequest
    * @param message - Message resource.
    */
   addMessageInput(message: MessageCoin) {
-    const { recipient, sender, amount, assetId } = message;
+    const { recipient, sender, amount, predicate, nonce, assetId } = message;
 
     let witnessIndex;
 
@@ -425,12 +426,13 @@ export abstract class BaseTransactionRequest
     }
 
     const input: MessageTransactionRequestInput = {
-      ...message,
+      nonce,
       type: InputType.Message,
       sender: sender.toB256(),
       recipient: recipient.toB256(),
       amount,
       witnessIndex,
+      predicate,
     };
 
     // Insert the Input
@@ -665,6 +667,20 @@ export abstract class BaseTransactionRequest
    */
   toJSON() {
     return normalizeJSON(this);
+  }
+
+  removeWitness(index: number) {
+    this.witnesses.splice(index, 1);
+    this.adjustWitnessIndexes(index);
+  }
+
+  private adjustWitnessIndexes(removedIndex: number) {
+    this.inputs.filter(isRequestInputResource).forEach((input) => {
+      if (input.witnessIndex > removedIndex) {
+
+        input.witnessIndex -= 1;
+      }
+    });
   }
 
   updatePredicateGasUsed(inputs: TransactionRequestInput[]) {

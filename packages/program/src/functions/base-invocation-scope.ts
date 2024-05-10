@@ -19,6 +19,7 @@ import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
+import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
 import { POINTER_DATA_OFFSET } from '../script-request';
@@ -287,12 +288,12 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The current instance of the class.
    */
   async fundWithRequiredCoins() {
-    const transactionRequest = await this.getTransactionRequest();
+    let transactionRequest = await this.getTransactionRequest();
+    transactionRequest = clone(transactionRequest);
 
     const txCost = await this.getTransactionCost();
     const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
     this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
-
     // Clean coin inputs before add new coins to the request
     transactionRequest.inputs = transactionRequest.inputs.filter(
       (i) => i.type !== InputType.Coin,
@@ -308,22 +309,11 @@ export class BaseInvocationScope<TReturn = any> {
     // Adding required number of OutputVariables
     transactionRequest.addVariableOutputs(outputVariables);
 
-    const optimizeGas = this.txParameters?.optimizeGas ?? true;
-    if (this.txParameters?.gasLimit && !optimizeGas) {
-      transactionRequest.gasLimit = bn(this.txParameters.gasLimit);
-      const { maxFee: maxFeeForGasLimit } =
-        await this.getProvider().estimateTxGasAndFee({
-          transactionRequest,
-        });
-      transactionRequest.maxFee = maxFeeForGasLimit;
-    }
-
     await this.program.account?.fund(transactionRequest, txCost);
 
     if (this.addSignersCallback) {
       await this.addSignersCallback(transactionRequest);
     }
-
     return transactionRequest;
   }
 
@@ -523,23 +513,24 @@ export class BaseInvocationScope<TReturn = any> {
       isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
     const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
 
-    const { gasLimit, maxFee: setMaxFee } = transactionRequest;
+    const { gasLimit: setGasLimit, maxFee: setMaxFee } = transactionRequest;
 
-    if (gasLimitSpecified && gasLimit.lt(gasUsed)) {
+    if (!gasLimitSpecified) {
+      transactionRequest.gasLimit = gasUsed;
+    } else if (setGasLimit.lt(gasUsed)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`,
+        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (maxFeeSpecified && maxFee.gt(setMaxFee)) {
+    if (!maxFeeSpecified) {
+      transactionRequest.maxFee = maxFee;
+    } else if (maxFee.gt(setMaxFee)) {
       throw new FuelError(
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`,
       );
     }
-
-    transactionRequest.gasLimit = gasUsed;
-    transactionRequest.maxFee = maxFee;
   }
 }
