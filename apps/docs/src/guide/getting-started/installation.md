@@ -1,5 +1,5 @@
 <script setup>
-  import { data } from '../versions.data'
+  import { data } from '../../versions.data'
   const { fuels } = data
 </script>
 

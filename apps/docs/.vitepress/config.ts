@@ -45,28 +45,28 @@ export default defineConfig({
         items: [
           {
             text: 'Getting Started',
-            link: '/getting-started/',
+            link: '/guide/getting-started/',
             collapsed: true,
             items: [
               {
                 text: 'Installation',
-                link: '/getting-started/installation',
+                link: '/guide/getting-started/installation',
               },
               {
                 text: 'Usage',
-                link: '/getting-started/usage',
+                link: '/guide/getting-started/usage',
               },
               {
                 text: 'Connecting to Testnet',
-                link: '/getting-started/connecting-to-testnet',
+                link: '/guide/getting-started/connecting-to-testnet',
               },
               {
                 text: 'Connecting to a Local Node',
-                link: '/getting-started/connecting-to-a-local-node',
+                link: '/guide/getting-started/connecting-to-a-local-node',
               },
               {
                 text: 'Further Resources',
-                link: '/getting-started/further-resources',
+                link: '/guide/getting-started/further-resources',
               },
             ],
           },
