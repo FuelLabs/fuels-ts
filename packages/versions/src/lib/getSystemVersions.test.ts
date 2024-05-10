@@ -64,6 +64,8 @@ describe('getSystemVersions', () => {
     expect(execSync).toBeCalledWith(`fuel-core --version`, expectedExecSyncOptions);
     expect(versions.systemForcVersion).toEqual(systemForcVersion);
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
+    expect(versions.systemForcPath).toEqual('forc');
+    expect(versions.systemFuelCorePath).toEqual('fuel-core');
   });
 
   test('should return error if Forc or Fuel-Core is not installed', () => {
@@ -128,5 +130,7 @@ describe('getSystemVersions', () => {
     expect(execSync).toBeCalledWith(`/path/to/custom/fuel-core --version`, expectedExecSyncOptions);
     expect(versions.systemForcVersion).toEqual(systemForcVersion);
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
+    expect(versions.systemForcPath).toEqual('/path/to/custom/forc');
+    expect(versions.systemFuelCorePath).toEqual('/path/to/custom/fuel-core');
   });
 });

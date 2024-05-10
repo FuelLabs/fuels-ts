@@ -11,7 +11,9 @@ import type { FuelsConfig, UserFuelsConfig } from '../types';
 import { readForcToml, readSwayType } from './forcUtils';
 import { validateConfig } from './validateConfig';
 
-export async function loadConfig(cwd: string): Promise<FuelsConfig> {
+export async function loadUserConfig(
+  cwd: string
+): Promise<{ userConfig: UserFuelsConfig; configPath: string }> {
   const configJoycon = new JoyCon();
 
   const configPath = await configJoycon.resolve({
@@ -37,7 +39,11 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   });
 
   const userConfig: UserFuelsConfig = result.mod.default;
+  return { configPath, userConfig };
+}
 
+export async function loadConfig(cwd: string): Promise<FuelsConfig> {
+  const { configPath, userConfig } = await loadUserConfig(cwd);
   await validateConfig(userConfig);
 
   const { forcBuildFlags = [] } = userConfig;

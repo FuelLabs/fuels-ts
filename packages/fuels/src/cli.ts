@@ -7,6 +7,7 @@ import { build } from './cli/commands/build';
 import { deploy } from './cli/commands/deploy';
 import { dev } from './cli/commands/dev';
 import { init } from './cli/commands/init';
+import { withBinaryPaths } from './cli/commands/withBinaryPaths';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
 import { Commands } from './cli/types';
@@ -89,10 +90,10 @@ export const configureCli = () => {
   );
 
   // Versions
-  program
-    .command('versions')
+  (command = program.command('versions'))
     .description('Check for version incompatibilities')
-    .action(runVersions);
+    .addOption(pathOption)
+    .action(withBinaryPaths(command, Commands.versions, runVersions));
 
   return program;
 };

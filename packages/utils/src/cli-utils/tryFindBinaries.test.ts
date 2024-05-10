@@ -1,25 +1,41 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import * as versionsCliMod from '@fuel-ts/versions/cli';
+import * as childProcessMod from 'child_process';
 
 import { tryFindBinaries } from './tryFindBinaries';
 
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
 const mockAllDeps = (
   params: {
-    forcError?: Error;
-    fuelCoreError?: Error;
+    forcError?: boolean;
+    fuelCoreError?: boolean;
   } = {}
 ) => {
   const { forcError, fuelCoreError } = params;
 
   const version = '1.0.0';
 
-  const getSystemForc = vi
-    .spyOn(versionsCliMod, 'getSystemForc')
-    .mockImplementation(() => ({ error: forcError ?? null, systemForcVersion: version }));
+  const execSyncError = vi.fn(() => {
+    throw new Error();
+  });
+  const execSyncVersion = vi.fn().mockReturnValue(version);
 
-  const getSystemFuelCore = vi
-    .spyOn(versionsCliMod, 'getSystemFuelCore')
-    .mockImplementation(() => ({ error: fuelCoreError ?? null, systemFuelCoreVersion: version }));
+  const getSystemForc = vi.spyOn(versionsCliMod, 'getSystemForc');
+  vi.spyOn(childProcessMod, 'execSync').mockImplementationOnce(
+    forcError ? execSyncError : execSyncVersion
+  );
+
+  const getSystemFuelCore = vi.spyOn(versionsCliMod, 'getSystemFuelCore');
+  vi.spyOn(childProcessMod, 'execSync').mockImplementationOnce(
+    fuelCoreError ? execSyncError : execSyncVersion
+  );
 
   return {
     getSystemForc,
@@ -37,9 +53,9 @@ describe('tryFindBinaries', () => {
     const binaries = tryFindBinaries();
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
-    expect(getSystemForc).toBeCalledWith('forc');
+    expect(getSystemForc).toBeCalledWith(undefined);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
-    expect(getSystemFuelCore).toBeCalledWith('fuel-core');
+    expect(getSystemFuelCore).toBeCalledWith(undefined);
     expect(binaries.forcPath).toEqual('forc');
     expect(binaries.fuelCorePath).toEqual('fuel-core');
   });
@@ -66,9 +82,9 @@ describe('tryFindBinaries', () => {
     const binaries = tryFindBinaries({ forcPath: undefined, fuelCorePath: undefined });
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
-    expect(getSystemForc).toBeCalledWith('forc');
+    expect(getSystemForc).toBeCalledWith(undefined);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
-    expect(getSystemFuelCore).toBeCalledWith('fuel-core');
+    expect(getSystemFuelCore).toBeCalledWith(undefined);
     expect(binaries.forcPath).toEqual('forc');
     expect(binaries.fuelCorePath).toEqual('fuel-core');
   });
@@ -77,8 +93,8 @@ describe('tryFindBinaries', () => {
     const forcPath = '/non/existent/path/to/forc';
     const fuelCorePath = '/non/existent/path/to/fuel-core';
     const { getSystemForc, getSystemFuelCore } = mockAllDeps({
-      forcError: new Error('forc not found'),
-      fuelCoreError: new Error('fuel-core not found'),
+      forcError: true,
+      fuelCoreError: true,
     });
 
     const { error } = await safeExec(() => tryFindBinaries({ forcPath, fuelCorePath }));
