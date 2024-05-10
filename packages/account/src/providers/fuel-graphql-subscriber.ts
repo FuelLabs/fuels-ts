@@ -13,7 +13,7 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   private stream!: ReadableStreamDefaultReader<Uint8Array>;
   private static textDecoder = new TextDecoder();
 
-  public constructor(private options: FuelGraphQLSubscriberOptions) { }
+  public constructor(private options: FuelGraphQLSubscriberOptions) {}
 
   private async setStream() {
     const { url, query, variables, fetchFn } = this.options;
@@ -30,7 +30,6 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       },
     });
 
-
     this.stream = response.body!.getReader();
   }
 
@@ -42,10 +41,8 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
       await this.setStream();
     }
 
-
     while (true) {
       if (this.events.length > 0) {
-
         const { data, errors } = this.events.shift()!;
         if (Array.isArray(errors)) {
           throw new FuelError(
@@ -73,7 +70,6 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         .replace(':keep-alive-text\n\n', '');
 
       if (decoded === '') {
-
         continue;
       }
 

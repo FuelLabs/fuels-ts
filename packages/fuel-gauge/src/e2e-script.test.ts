@@ -15,9 +15,17 @@ describe('Live Script Test', () => {
       return;
     }
 
-    const provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
-    const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
-    const scriptInstance = getScript<[boolean], boolean>('script-main-arg-bool', wallet);
+    const provider = await Provider.create(
+      process.env.FUEL_TESTNET_NETWORK_URL,
+    );
+    const wallet = new WalletUnlocked(
+      process.env.TEST_WALLET_PVT_KEY,
+      provider,
+    );
+    const scriptInstance = getScript<[boolean], boolean>(
+      'script-main-arg-bool',
+      wallet,
+    );
 
     let output: boolean = false;
     try {

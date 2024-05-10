@@ -455,7 +455,9 @@ describe('Account', () => {
     const { transaction } = await response.wait();
 
     const { scriptGasLimit, policies } = transaction;
-    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+    const maxFeePolicy = policies?.find(
+      (policy) => policy.type === PolicyType.MaxFee,
+    );
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
@@ -671,11 +673,16 @@ describe('Account', () => {
     const gasLimit = 100_000;
     const maxFee = 50_000;
 
-    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasLimit, maxFee });
+    const tx = await sender.withdrawToBaseLayer(recipient, amount, {
+      gasLimit,
+      maxFee,
+    });
     const { transaction } = await tx.wait();
 
     const { scriptGasLimit, policies } = transaction;
-    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+    const maxFeePolicy = policies?.find(
+      (policy) => policy.type === PolicyType.MaxFee,
+    );
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);

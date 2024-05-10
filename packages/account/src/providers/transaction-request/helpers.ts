@@ -24,12 +24,12 @@ export const isRequestInputResource = (
   isRequestInputCoin(input) || isRequestInputMessage(input);
 
 export const getRequestInputResourceOwner = (
-  input: CoinTransactionRequestInput | MessageTransactionRequestInput
+  input: CoinTransactionRequestInput | MessageTransactionRequestInput,
 ) => (isRequestInputCoin(input) ? input.owner : input.recipient);
 
 export const isRequestInputResourceFromOwner = (
   input: CoinTransactionRequestInput | MessageTransactionRequestInput,
-  owner: AbstractAddress
+  owner: AbstractAddress,
 ) => getRequestInputResourceOwner(input) === owner.toB256();
 
 export const getAssetAmountInRequestInputs = (
@@ -69,13 +69,16 @@ export const cacheRequestInputsResources = (
 
 export const cacheRequestInputsResourcesFromOwner = (
   inputs: TransactionRequestInput[],
-  owner: AbstractAddress
+  owner: AbstractAddress,
 ): ExcludeResourcesOption =>
   inputs.reduce(
     (acc, input) => {
       if (isRequestInputCoin(input) && input.owner === owner.toB256()) {
         acc.utxos.push(input.id);
-      } else if (isRequestInputMessage(input) && input.recipient === owner.toB256()) {
+      } else if (
+        isRequestInputMessage(input) &&
+        input.recipient === owner.toB256()
+      ) {
         acc.messages.push(input.nonce);
       }
       return acc;
@@ -83,5 +86,5 @@ export const cacheRequestInputsResourcesFromOwner = (
     {
       utxos: [],
       messages: [],
-    } as Required<ExcludeResourcesOption>
+    } as Required<ExcludeResourcesOption>,
   );

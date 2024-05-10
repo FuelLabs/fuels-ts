@@ -28,6 +28,8 @@ import type {
 import {
   ScriptTransactionRequest,
   addAmountToCoinQuantities,
+  transactionRequestify,
+  withdrawScript,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -44,7 +46,10 @@ export type TxParamsType = Pick<
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
+  | 'estimatedPredicates'
+  | 'addedSignatures'
+  | 'requiredQuantities'
+  | 'updateMaxFee'
 >;
 const MAX_FUNDING_ATTEMPTS = 2;
 
@@ -146,7 +151,7 @@ export class Account extends AbstractAccount {
     const pageSize = 9999;
     let cursor;
 
-    for (; ;) {
+    for (;;) {
       const pageCoins = await this.provider.getCoins(this.address, assetId, {
         first: pageSize,
         after: cursor,
@@ -180,7 +185,7 @@ export class Account extends AbstractAccount {
     const pageSize = 9999;
     let cursor;
 
-    for (; ;) {
+    for (;;) {
       const pageMessages = await this.provider.getMessages(this.address, {
         first: pageSize,
         after: cursor,
@@ -226,7 +231,7 @@ export class Account extends AbstractAccount {
     const pageSize = 9999;
     let cursor;
 
-    for (; ;) {
+    for (;;) {
       const pageBalances = await this.provider.getBalances(this.address, {
         first: pageSize,
         after: cursor,
@@ -257,8 +262,16 @@ export class Account extends AbstractAccount {
    * @param params - The estimated transaction parameters.
    * @returns The funded transaction request.
    */
-  async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
+  async fund<T extends TransactionRequest>(
+    request: T,
+    params: EstimatedTxParams,
+  ): Promise<T> {
+    const {
+      addedSignatures,
+      estimatedPredicates,
+      requiredQuantities,
+      updateMaxFee,
+    } = params;
 
     const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
@@ -306,7 +319,7 @@ export class Account extends AbstractAccount {
     while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
       const resources = await this.getResourcesToSpend(
         missingQuantities,
-        cacheRequestInputsResourcesFromOwner(request.inputs, this.address)
+        cacheRequestInputsResourcesFromOwner(request.inputs, this.address),
       );
 
       request.addResources(resources);
@@ -657,7 +670,9 @@ export class Account extends AbstractAccount {
     transactionRequest: ScriptTransactionRequest;
     txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
   }) {
-    const request = transactionRequestify(transactionRequest) as ScriptTransactionRequest;
+    const request = transactionRequestify(
+      transactionRequest,
+    ) as ScriptTransactionRequest;
 
     if (!isDefined(setGasLimit)) {
       request.gasLimit = gasUsed;

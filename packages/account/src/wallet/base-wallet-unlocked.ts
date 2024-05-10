@@ -9,8 +9,9 @@ import type {
   EstimateTransactionParams,
   Provider,
   ProviderSendTxParams,
-  EstimateTransactionParams,
   TransactionRequest,
+  TransactionRequestLike,
+  TransactionResponse,
 } from '../providers';
 import { Signer } from '../signer';
 
@@ -94,9 +95,11 @@ export class BaseWalletUnlocked extends Account {
    * @returns The populated transaction request.
    */
   async populateTransactionWitnessesSignature<T extends TransactionRequest>(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
   ) {
-    const transactionRequest = transactionRequestify(transactionRequestLike) as T;
+    const transactionRequest = transactionRequestify(
+      transactionRequestLike,
+    ) as T;
     const signedTransaction = await this.signTransaction(transactionRequest);
 
     transactionRequest.updateWitnessByOwner(this.address, signedTransaction);

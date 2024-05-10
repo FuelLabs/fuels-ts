@@ -31,9 +31,9 @@ import { ScriptTransactionRequest } from './script-transaction-request';
  * @group browser
  */
 describe('helpers', () => {
-  const assetA: string =
+  const ASSET_A: string =
     '0x0101010101010101010101010101010101010101010101010101010101010101';
-  const assetB: string =
+  const ASSET_B: string =
     '0x0202020202020202020202020202020202020202020202020202020202020202';
   const baseAssetId = ZeroBytes32;
   const coinInput = generateFakeRequestInputCoin();
@@ -68,7 +68,9 @@ describe('helpers', () => {
     expect(getRequestInputResourceOwner(coinInput)).toBe(coinInput.owner);
 
     // MessageCoin
-    expect(getRequestInputResourceOwner(messageInput)).toBe(messageInput.recipient);
+    expect(getRequestInputResourceOwner(messageInput)).toBe(
+      messageInput.recipient,
+    );
   });
 
   it('should ensure isRequestInputResourceFromOwner works just fine', () => {
@@ -79,20 +81,32 @@ describe('helpers', () => {
     const resourceInput1 = generateFakeRequestInputCoin({ owner: address1 });
 
     expect(
-      isRequestInputResourceFromOwner(resourceInput1, Address.fromString(address1))
+      isRequestInputResourceFromOwner(
+        resourceInput1,
+        Address.fromString(address1),
+      ),
     ).toBeTruthy();
     expect(
-      isRequestInputResourceFromOwner(resourceInput1, Address.fromString(address2))
+      isRequestInputResourceFromOwner(
+        resourceInput1,
+        Address.fromString(address2),
+      ),
     ).toBeFalsy();
 
     // Message
     const resourceInput2 = generateFakeRequestInputCoin({ owner: address2 });
 
     expect(
-      isRequestInputResourceFromOwner(resourceInput2, Address.fromString(address1))
+      isRequestInputResourceFromOwner(
+        resourceInput2,
+        Address.fromString(address1),
+      ),
     ).toBeFalsy();
     expect(
-      isRequestInputResourceFromOwner(resourceInput2, Address.fromString(address2))
+      isRequestInputResourceFromOwner(
+        resourceInput2,
+        Address.fromString(address2),
+      ),
     ).toBeTruthy();
   });
 
@@ -100,7 +114,9 @@ describe('helpers', () => {
     const owner = Address.fromRandom();
     const coinInput1 = generateFakeRequestInputCoin({ owner: owner.toB256() });
     const coinInput2 = generateFakeRequestInputCoin();
-    const messageInput1 = generateFakeRequestInputMessage({ recipient: owner.toB256() });
+    const messageInput1 = generateFakeRequestInputMessage({
+      recipient: owner.toB256(),
+    });
     const messageInput2 = generateFakeRequestInputMessage();
 
     it('should handle an empty array', () => {
@@ -142,7 +158,11 @@ describe('helpers', () => {
     describe('getAssetAmountInRequestInputs', () => {
       it('should handle empty inputs array', () => {
         const tx = new ScriptTransactionRequest();
-        const total = getAssetAmountInRequestInputs(tx.inputs, ASSET_A, baseAssetId);
+        const total = getAssetAmountInRequestInputs(
+          tx.inputs,
+          ASSET_A,
+          baseAssetId,
+        );
         expect(total.eq(0)).toBeTruthy();
       });
 
@@ -155,10 +175,18 @@ describe('helpers', () => {
           generateFakeCoin({ assetId: ASSET_B, amount }),
         ]);
 
-        const assetATotal = getAssetAmountInRequestInputs(tx.inputs, ASSET_A, baseAssetId);
+        const assetATotal = getAssetAmountInRequestInputs(
+          tx.inputs,
+          ASSET_A,
+          baseAssetId,
+        );
         expect(assetATotal.eq(amount.mul(2))).toBeTruthy();
 
-        const assetBTotal = getAssetAmountInRequestInputs(tx.inputs, ASSET_B, baseAssetId);
+        const assetBTotal = getAssetAmountInRequestInputs(
+          tx.inputs,
+          ASSET_B,
+          baseAssetId,
+        );
         expect(assetBTotal.eq(amount)).toBeTruthy();
       });
 
@@ -174,7 +202,11 @@ describe('helpers', () => {
 
         const expectedTotal = amount.mul(2);
 
-        const assetATotal = getAssetAmountInRequestInputs(tx.inputs, baseAssetId, baseAssetId);
+        const assetATotal = getAssetAmountInRequestInputs(
+          tx.inputs,
+          baseAssetId,
+          baseAssetId,
+        );
         expect(assetATotal.eq(expectedTotal)).toBeTruthy();
       });
     });
@@ -189,8 +221,14 @@ describe('helpers', () => {
 
       it('should sum assets on TransactionRequestsInputs just fine', () => {
         const amount = bn(100);
-        const input1 = generateFakeRequestInputCoin({ assetId: ASSET_A, amount });
-        const input2 = generateFakeRequestInputCoin({ assetId: ASSET_B, amount });
+        const input1 = generateFakeRequestInputCoin({
+          assetId: ASSET_A,
+          amount,
+        });
+        const input2 = generateFakeRequestInputCoin({
+          assetId: ASSET_B,
+          amount,
+        });
         const input3 = generateFakeRequestInputMessage({ amount });
         const tx = new CreateTransactionRequest({
           inputs: [input2, input1, input3],

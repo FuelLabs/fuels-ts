@@ -508,7 +508,6 @@ export default class Provider {
       checkFuelCoreVersionCompatibility(nodeInfo.nodeVersion);
 
     if (!isMajorSupported || !isMinorSupported) {
-
       console.warn(
         `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion},
 which is not supported by the version of the TS SDK that you are using.
@@ -765,7 +764,9 @@ Supported fuel-core version: ${supportedVersion}.`,
    * @param transactionRequest - The transaction request object.
    * @returns A promise that resolves to the estimated transaction request object.
    */
-  async estimatePredicates<T extends TransactionRequest>(transactionRequest: T): Promise<T> {
+  async estimatePredicates<T extends TransactionRequest>(
+    transactionRequest: T,
+  ): Promise<T> {
     const shouldEstimatePredicates = Boolean(
       transactionRequest.inputs.find(
         (input) =>

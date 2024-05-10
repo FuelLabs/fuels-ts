@@ -8,14 +8,17 @@ import { WalletUnlocked } from '../wallet';
 export const seedTestWallet = async (
   wallet: Account | Account[],
   quantities: CoinQuantityLike[],
-  utxosAmount = 1
+  utxosAmount = 1,
 ) => {
   const accountsToBeFunded = Array.isArray(wallet) ? wallet : [wallet];
 
   // There may be multiple wallets, so want to use the same provider for them all
   const [{ provider }] = accountsToBeFunded;
 
-  const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || randomBytes(32), provider);
+  const genesisWallet = new WalletUnlocked(
+    process.env.GENESIS_SECRET || randomBytes(32),
+    provider,
+  );
 
   // Create transaction
   const request = new ScriptTransactionRequest();
@@ -25,7 +28,7 @@ export const seedTestWallet = async (
       for (let i = 0; i < utxosAmount; i++) {
         request.addCoinOutput(address, amount.div(utxosAmount), assetId);
       }
-    })
+    }),
   );
 
   const txCost = await genesisWallet.provider.getTransactionCost(request);

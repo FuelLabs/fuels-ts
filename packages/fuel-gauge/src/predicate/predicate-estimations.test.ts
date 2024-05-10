@@ -201,7 +201,7 @@ describe('Predicate', () => {
 
     test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
       const { binHexlified, abiContents } = getFuelGaugeForcProject(
-        FuelGaugeProjectsEnum.PREDICATE_VALIDATE_TRANSFER
+        FuelGaugeProjectsEnum.PREDICATE_VALIDATE_TRANSFER,
       );
 
       const amountToPredicate = 10_000;
@@ -227,7 +227,11 @@ describe('Predicate', () => {
         'estimatePredicates',
       );
 
-      const response = await predicate.transfer(receiverWallet.address.toB256(), 1, baseAssetId);
+      const response = await predicate.transfer(
+        receiverWallet.address.toB256(),
+        1,
+        baseAssetId,
+      );
 
       const { isStatusSuccess } = await response.waitForResult();
       expect(isStatusSuccess).toBeTruthy();

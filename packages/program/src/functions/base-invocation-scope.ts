@@ -520,7 +520,7 @@ export class BaseInvocationScope<TReturn = any> {
     } else if (setGasLimit.lt(gasUsed)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
+        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`,
       );
     }
 

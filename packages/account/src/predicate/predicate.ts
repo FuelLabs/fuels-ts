@@ -1,4 +1,3 @@
-
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import {
   INPUT_COIN_FIXED_SIZE,
@@ -84,7 +83,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @returns The transaction request with predicate data.
    */
   populateTransactionPredicateData<T extends TransactionRequest>(
-    transactionRequestLike: TransactionRequestLike
+    transactionRequestLike: TransactionRequestLike,
   ) {
     const request = transactionRequestify(transactionRequestLike) as T;
 
@@ -98,7 +97,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     request.inputs.filter(isRequestInputResource).forEach((input) => {
       if (isRequestInputResourceFromOwner(input, this.address)) {
-
         input.predicate = hexlify(this.bytes);
 
         input.predicateData = hexlify(this.getPredicateData(policies.length));
@@ -295,12 +293,16 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     let index = -1;
 
-    const hasEmptyPredicateInputs = predicateInputs.find((input) => !input.predicate);
+    const hasEmptyPredicateInputs = predicateInputs.find(
+      (input) => !input.predicate,
+    );
 
     if (hasEmptyPredicateInputs) {
       index = hasEmptyPredicateInputs.witnessIndex;
 
-      const allInputsAreEmpty = predicateInputs.every((input) => !input.predicate);
+      const allInputsAreEmpty = predicateInputs.every(
+        (input) => !input.predicate,
+      );
 
       if (!allInputsAreEmpty) {
         /**

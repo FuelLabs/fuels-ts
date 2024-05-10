@@ -97,7 +97,8 @@ type ToBaseTransactionResponse = Pick<
  * Abstract class to define the functionalities of a transaction request transaction request.
  */
 export abstract class BaseTransactionRequest
-  implements BaseTransactionRequestLike {
+  implements BaseTransactionRequestLike
+{
   /** Type of the transaction */
   abstract type: TransactionType;
   /** Gas price for transaction */
@@ -677,7 +678,6 @@ export abstract class BaseTransactionRequest
   private adjustWitnessIndexes(removedIndex: number) {
     this.inputs.filter(isRequestInputResource).forEach((input) => {
       if (input.witnessIndex > removedIndex) {
-
         input.witnessIndex -= 1;
       }
     });

@@ -1,4 +1,3 @@
-
 import {
   generateTestWallet,
   seedTestWallet,
@@ -29,12 +28,6 @@ import {
   toHex,
   toNumber,
   transactionRequestify,
-  FunctionInvocationResult,
-  Wallet,
-  ContractFactory,
-  ZeroBytes32,
-  FUEL_NETWORK_URL,
-  Predicate,
   PolicyType,
 } from 'fuels';
 
@@ -892,7 +885,9 @@ describe('Contract', () => {
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [
+      [10_000_000, baseAssetId],
+    ]);
 
     const contract = await setupContract();
 
@@ -919,22 +914,31 @@ describe('Contract', () => {
   });
 
   it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
-    const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [
+      [10_000_000, baseAssetId],
+    ]);
     const contract = await setupContract();
     const amountToContract = 5_000;
 
     const gasLimit = 80_000;
     const maxFee = 40_000;
 
-    const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId, {
-      gasLimit,
-      maxFee,
-    });
+    const tx = await wallet.transferToContract(
+      contract.id,
+      amountToContract,
+      baseAssetId,
+      {
+        gasLimit,
+        maxFee,
+      },
+    );
 
     const { transaction } = await tx.waitForResult();
 
     const { scriptGasLimit, policies } = transaction;
-    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+    const maxFeePolicy = policies?.find(
+      (policy) => policy.type === PolicyType.MaxFee,
+    );
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
@@ -1281,7 +1285,7 @@ describe('Contract', () => {
 
   it('should ensure "maxFee" and "gasLimit" can be set for a contract call', async () => {
     const { abiContents, binHexlified } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
+      FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT,
     );
 
     const wallet = await generateTestWallet(provider, [[150_000, baseAssetId]]);
@@ -1302,7 +1306,9 @@ describe('Contract', () => {
       })
       .call();
 
-    const maxFeePolicy = transaction.policies?.find((policy) => policy.type === PolicyType.MaxFee);
+    const maxFeePolicy = transaction.policies?.find(
+      (policy) => policy.type === PolicyType.MaxFee,
+    );
     const scriptGasLimit = transaction.scriptGasLimit;
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
@@ -1335,7 +1341,9 @@ describe('Contract', () => {
 
     const { scriptGasLimit, policies } = transaction;
 
-    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+    const maxFeePolicy = policies?.find(
+      (policy) => policy.type === PolicyType.MaxFee,
+    );
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);

@@ -1,5 +1,14 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
-import type { Account, BN, CoinQuantity, InputCoin, WalletUnlocked } from 'fuels';
+import {
+  generateTestWallet,
+  seedTestWallet,
+} from '@fuel-ts/account/test-utils';
+import type {
+  Account,
+  BN,
+  CoinQuantity,
+  InputCoin,
+  WalletUnlocked,
+} from 'fuels';
 import {
   ContractFactory,
   toNumber,
@@ -29,15 +38,16 @@ describe('Predicate', () => {
   const { binHexlified: tokenPoolBytes, abiContents: tokenPoolAbi } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
 
-  const { binHexlified: predicateSum, abiContents: predicateAbiSum } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_SUM
-  );
+  const { binHexlified: predicateSum, abiContents: predicateAbiSum } =
+    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_SUM);
 
   const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_TRUE);
 
-  const { binHexlified: complexPredicateBytes, abiContents: complexPredicateAbi } =
-    getFuelGaugeForcProject(FuelGaugeProjectsEnum.COMPLEX_PREDICATE);
+  const {
+    binHexlified: complexPredicateBytes,
+    abiContents: complexPredicateAbi,
+  } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.COMPLEX_PREDICATE);
 
   describe('With Contract', () => {
     let wallet: WalletUnlocked;
@@ -59,7 +69,11 @@ describe('Predicate', () => {
 
       await seedTestWallet(testWallet, [[1_000_000, baseAssetId]]);
 
-      const factory = new ContractFactory(contractBytes, contractAbi, testWallet);
+      const factory = new ContractFactory(
+        contractBytes,
+        contractAbi,
+        testWallet,
+      );
       const contract = await factory.deployContract();
 
       const amountToPredicate = 500_000;
@@ -70,7 +84,11 @@ describe('Predicate', () => {
         inputData: [bn(1337), bn(0)],
       });
       // Create a instance of the contract with the predicate as the caller Account
-      const contractPredicate = new Contract(contract.id, contract.interface, predicate);
+      const contractPredicate = new Contract(
+        contract.id,
+        contract.interface,
+        predicate,
+      );
       await fundPredicate(testWallet, predicate, amountToPredicate);
 
       const {
@@ -118,11 +136,15 @@ describe('Predicate', () => {
       await fundPredicate(wallet, predicate, amountToPredicate);
 
       expect(toNumber(await predicate.getBalance())).toEqual(
-        initialPredicateBalance + amountToPredicate
+        initialPredicateBalance + amountToPredicate,
       );
 
       // executing predicate to transfer resources to receiver
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
+      const tx = await predicate.transfer(
+        receiver.address,
+        amountToReceiver,
+        baseAssetId,
+      );
       const { isStatusSuccess } = await tx.waitForResult();
       expect(isStatusSuccess).toBeTruthy();
 
@@ -163,11 +185,15 @@ describe('Predicate', () => {
       const sender = contract.account as Account;
 
       // Adding any amount of resources from the sender to ensure its witness index will be 0
-      const senderResources = await sender.getResourcesToSpend([[1, baseAssetId]]);
+      const senderResources = await sender.getResourcesToSpend([
+        [1, baseAssetId],
+      ]);
       request.addResources(senderResources);
 
       // Any amount of the predicate will do as it is not going to pay for the fee
-      const predicateResources = await predicate.getResourcesToSpend([[1, baseAssetId]]);
+      const predicateResources = await predicate.getResourcesToSpend([
+        [1, baseAssetId],
+      ]);
       request.addResources(predicateResources);
 
       const txCost = await provider.getTransactionCost(request, {
@@ -188,7 +214,8 @@ describe('Predicate', () => {
 
       const predicateAddress = predicate.address.toB256();
       const predicateInputs = inputs?.filter(
-        (input) => input.type === InputType.Coin && input.owner === predicateAddress
+        (input) =>
+          input.type === InputType.Coin && input.owner === predicateAddress,
       );
 
       // It ensures a predicate witness index is set to 0
