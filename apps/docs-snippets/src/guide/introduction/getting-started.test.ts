@@ -1,4 +1,10 @@
-import { FUEL_NETWORK_URL, FUEL_BETA_5_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
+import {
+  FUEL_BETA_5_NETWORK_URL,
+  FUEL_NETWORK_URL,
+  Provider,
+  Wallet,
+  WalletUnlocked,
+} from 'fuels';
 
 /**
  * @group node
@@ -7,7 +13,9 @@ import { FUEL_NETWORK_URL, FUEL_BETA_5_NETWORK_URL, Provider, Wallet, WalletUnlo
 describe('Getting started', () => {
   beforeAll(() => {
     // Avoids using the actual network.
-    vi.spyOn(Provider, 'create').mockImplementationOnce(() => Provider.create(FUEL_NETWORK_URL));
+    vi.spyOn(Provider, 'create').mockImplementationOnce(() =>
+      Provider.create(FUEL_NETWORK_URL),
+    );
   });
 
   it('can connect to a local network', async () => {
@@ -15,12 +23,13 @@ describe('Getting started', () => {
     // #import { Provider, Wallet };
 
     // Create a provider.
-    const LOCAL_FUEL_NETWORK = 'http://127.0.0.1:4000/v1/graphql';
-    const provider = await Provider.create(LOCAL_FUEL_NETWORK);
+    const localFuelNetwork = 'http://127.0.0.1:4000/v1/graphql';
+    const provider = await Provider.create(localFuelNetwork);
 
     // Create our wallet (with a private key).
-    const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
-    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+    const privateKey =
+      'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+    const wallet = Wallet.fromPrivateKey(privateKey, provider);
     // #endregion connecting-to-the-local-node
 
     expect(provider).toBeTruthy();
@@ -38,8 +47,9 @@ describe('Getting started', () => {
     const provider = await Provider.create(FUEL_BETA_5_NETWORK_URL);
 
     // Create our wallet (with a private key).
-    const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
-    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+    const privateKey =
+      'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
+    const wallet = Wallet.fromPrivateKey(privateKey, provider);
 
     // Perform a balance check.
     const balances = await wallet.getBalances();

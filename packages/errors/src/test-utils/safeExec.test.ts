@@ -1,32 +1,32 @@
-import { safeExec } from "./safeExec";
+import { safeExec } from './safeExec';
 
 /**
  * @group node
  * @group browser
  */
-describe("safeExec.js", () => {
-	it("should catch error", async () => {
-		const ERROR_MSG = "I am an error.";
+describe('safeExec.js', () => {
+  it('should catch error', async () => {
+    const errorMsg = 'I am an error.';
 
-		const fn = () => {
-			throw new Error(ERROR_MSG);
-		};
+    const fn = () => {
+      throw new Error(errorMsg);
+    };
 
-		const { error, result } = await safeExec(fn);
+    const { error, result } = await safeExec(fn);
 
-		expect(result).toBeFalsy();
-		expect(error).toBeTruthy();
-		expect(error?.message).toEqual(ERROR_MSG);
-	});
+    expect(result).toBeFalsy();
+    expect(error).toBeTruthy();
+    expect(error?.message).toEqual(errorMsg);
+  });
 
-	it("should execute function safely", async () => {
-		const RETURNED_VALUE = "I am the returned value.";
+  it('should execute function safely', async () => {
+    const returnedValue = 'I am the returned value.';
 
-		const fn = () => RETURNED_VALUE;
+    const fn = () => returnedValue;
 
-		const { error, result } = await safeExec(fn);
+    const { error, result } = await safeExec(fn);
 
-		expect(error).toBeFalsy();
-		expect(result).toEqual(RETURNED_VALUE);
-	});
+    expect(error).toBeFalsy();
+    expect(result).toEqual(returnedValue);
+  });
 });

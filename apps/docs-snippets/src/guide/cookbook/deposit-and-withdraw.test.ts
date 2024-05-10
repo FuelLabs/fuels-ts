@@ -1,4 +1,4 @@
-import type { Contract, WalletUnlocked, Provider } from 'fuels';
+import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { ContractFactory, Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
 
 import {
@@ -20,7 +20,7 @@ describe(__filename, () => {
     sender = await getTestWallet();
 
     const { abiContents, binHexlified } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.LIQUIDITY_POOL
+      DocSnippetProjectsEnum.LIQUIDITY_POOL,
     );
     provider = sender.provider;
     baseAssetId = provider.getBaseAssetId();

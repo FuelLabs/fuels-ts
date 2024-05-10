@@ -1,5 +1,5 @@
 export enum ProgramTypeEnum {
-	CONTRACT = "contract",
-	SCRIPT = "script",
-	PREDICATE = "predicate",
+  CONTRACT = 'contract',
+  SCRIPT = 'script',
+  PREDICATE = 'predicate',
 }

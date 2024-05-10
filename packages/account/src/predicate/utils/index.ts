@@ -1,1 +1,1 @@
-export * from "./getPredicateRoot";
+export * from './getPredicateRoot';

@@ -1,1 +1,1 @@
-export * from "./sumMerkleTree";
+export * from './sumMerkleTree';

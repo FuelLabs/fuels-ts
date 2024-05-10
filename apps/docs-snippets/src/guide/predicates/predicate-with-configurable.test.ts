@@ -1,4 +1,4 @@
-import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
+import { BN, Predicate, WalletUnlocked, getRandomB256 } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -15,7 +15,7 @@ describe(__filename, () => {
   let baseAssetId: string;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.WHITELISTED_ADDRESS_PREDICATE
+    DocSnippetProjectsEnum.WHITELISTED_ADDRESS_PREDICATE,
   );
 
   beforeAll(async () => {
@@ -51,9 +51,14 @@ describe(__filename, () => {
     const amountToTransfer = 100;
 
     // transferring funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
-      gasLimit: 1000,
-    });
+    const tx2 = await predicate.transfer(
+      destinationWallet.address,
+      amountToTransfer,
+      baseAssetId,
+      {
+        gasLimit: 1000,
+      },
+    );
 
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-2
@@ -69,7 +74,9 @@ describe(__filename, () => {
       bytecode: bin,
       provider: wallet.provider,
       abi,
-      inputData: ['0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132'],
+      inputData: [
+        '0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132',
+      ],
     });
 
     // transferring funds to the predicate
@@ -86,9 +93,14 @@ describe(__filename, () => {
     const amountToTransfer = 100;
 
     // transferring funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
-      gasLimit: 1000,
-    });
+    const tx2 = await predicate.transfer(
+      destinationWallet.address,
+      amountToTransfer,
+      baseAssetId,
+      {
+        gasLimit: 1000,
+      },
+    );
 
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-3

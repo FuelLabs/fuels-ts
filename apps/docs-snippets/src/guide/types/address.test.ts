@@ -6,12 +6,13 @@ import { Address, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {
     // #region address-2
-    const ADDRESS_BECH32 = 'fuel1elnmzsav56dqnp95sx4e2pckq36cvae9ser44m5zlvgtwxw49fmqd7e42e';
+    const addressBech32 =
+      'fuel1elnmzsav56dqnp95sx4e2pckq36cvae9ser44m5zlvgtwxw49fmqd7e42e';
 
-    const address = new Address(ADDRESS_BECH32);
+    const address = new Address(addressBech32);
 
-    expect(address.toString()).toEqual(ADDRESS_BECH32);
-    expect(address.bech32Address).toEqual(ADDRESS_BECH32);
+    expect(address.toString()).toEqual(addressBech32);
+    expect(address.bech32Address).toEqual(addressBech32);
     // #endregion address-2
   });
 
@@ -30,7 +31,8 @@ describe(__filename, () => {
 
   it('should successfully generate new address instance from 256 bit string', () => {
     // #region address-4
-    const b256 = '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6';
+    const b256 =
+      '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6';
 
     const address = Address.fromB256(b256);
 

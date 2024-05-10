@@ -1,105 +1,105 @@
-import { ErrorCode, FuelError } from "@fuel-ts/errors";
-import { readFileSync, writeFileSync } from "fs";
-import { globSync } from "glob";
-import mkdirp from "mkdirp";
-import { basename } from "path";
-import rimraf from "rimraf";
+import { readFileSync, writeFileSync } from 'fs';
+import { basename } from 'path';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { globSync } from 'glob';
+import mkdirp from 'mkdirp';
+import rimraf from 'rimraf';
 
-import { AbiTypeGen } from "./AbiTypeGen";
-import type { ProgramTypeEnum } from "./types/enums/ProgramTypeEnum";
-import type { IFile } from "./types/interfaces/IFile";
-import { collectBinFilepaths } from "./utils/collectBinFilePaths";
-import { collectStorageSlotsFilepaths } from "./utils/collectStorageSlotsFilePaths";
+import { AbiTypeGen } from './AbiTypeGen';
+import type { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
+import type { IFile } from './types/interfaces/IFile';
+import { collectBinFilepaths } from './utils/collectBinFilePaths';
+import { collectStorageSlotsFilepaths } from './utils/collectStorageSlotsFilePaths';
 
 export interface IGenerateFilesParams {
-	cwd: string;
-	filepaths?: string[];
-	inputs?: string[];
-	output: string;
-	silent?: boolean;
-	programType: ProgramTypeEnum;
+  cwd: string;
+  filepaths?: string[];
+  inputs?: string[];
+  output: string;
+  silent?: boolean;
+  programType: ProgramTypeEnum;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
-	const {
-		cwd,
-		inputs,
-		output,
-		silent,
-		programType,
-		filepaths: inputFilepaths,
-	} = params;
+  const {
+    cwd,
+    inputs,
+    output,
+    silent,
+    programType,
+    filepaths: inputFilepaths,
+  } = params;
 
-	const cwdBasename = basename(cwd);
+  const cwdBasename = basename(cwd);
 
-	function log(...args: unknown[]) {
-		if (!silent) {
-			process.stdout.write(`${args.join(" ")}\n`);
-		}
-	}
+  function log(...args: unknown[]) {
+    if (!silent) {
+      process.stdout.write(`${args.join(' ')}\n`);
+    }
+  }
 
-	/*
+  /*
     Assembling files array and expanding globals if needed
   */
-	let filepaths: string[] = [];
+  let filepaths: string[] = [];
 
-	if (!inputFilepaths?.length && inputs?.length) {
-		filepaths = inputs.flatMap((i) => globSync(i, { cwd }));
-	} else if (inputFilepaths?.length) {
-		filepaths = inputFilepaths;
-	} else {
-		throw new FuelError(
-			ErrorCode.MISSING_REQUIRED_PARAMETER,
-			`At least one parameter should be supplied: 'input' or 'filepaths'.`,
-		);
-	}
+  if (!inputFilepaths?.length && inputs?.length) {
+    filepaths = inputs.flatMap((i) => globSync(i, { cwd }));
+  } else if (inputFilepaths?.length) {
+    filepaths = inputFilepaths;
+  } else {
+    throw new FuelError(
+      ErrorCode.MISSING_REQUIRED_PARAMETER,
+      `At least one parameter should be supplied: 'input' or 'filepaths'.`,
+    );
+  }
 
-	/*
+  /*
     Assembling file paths x contents
   */
-	const abiFiles = filepaths.map((filepath) => {
-		const abi: IFile = {
-			path: filepath,
-			contents: readFileSync(filepath, "utf-8"),
-		};
-		return abi;
-	});
+  const abiFiles = filepaths.map((filepath) => {
+    const abi: IFile = {
+      path: filepath,
+      contents: readFileSync(filepath, 'utf-8'),
+    };
+    return abi;
+  });
 
-	if (!abiFiles.length) {
-		throw new FuelError(ErrorCode.NO_ABIS_FOUND, `no ABI found at '${inputs}'`);
-	}
+  if (!abiFiles.length) {
+    throw new FuelError(ErrorCode.NO_ABIS_FOUND, `no ABI found at '${inputs}'`);
+  }
 
-	const binFiles = collectBinFilepaths({ filepaths, programType });
+  const binFiles = collectBinFilepaths({ filepaths, programType });
 
-	const storageSlotsFiles = collectStorageSlotsFilepaths({
-		filepaths,
-		programType,
-	});
+  const storageSlotsFiles = collectStorageSlotsFilepaths({
+    filepaths,
+    programType,
+  });
 
-	/*
+  /*
     Starting the engine
   */
-	const abiTypeGen = new AbiTypeGen({
-		outputDir: output,
-		abiFiles,
-		binFiles,
-		storageSlotsFiles,
-		programType,
-	});
+  const abiTypeGen = new AbiTypeGen({
+    outputDir: output,
+    abiFiles,
+    binFiles,
+    storageSlotsFiles,
+    programType,
+  });
 
-	/*
+  /*
     Generating files
   */
-	log("Generating files..\n");
+  log('Generating files..\n');
 
-	mkdirp.sync(`${output}/factories`);
+  mkdirp.sync(`${output}/factories`);
 
-	abiTypeGen.files.forEach((file) => {
-		rimraf.sync(file.path);
-		writeFileSync(file.path, file.contents);
-		const trimPathRegex = new RegExp(`^.+${cwdBasename}/`, "m");
-		log(` - ${file.path.replace(trimPathRegex, "")}`);
-	});
+  abiTypeGen.files.forEach((file) => {
+    rimraf.sync(file.path);
+    writeFileSync(file.path, file.contents);
+    const trimPathRegex = new RegExp(`^.+${cwdBasename}/`, 'm');
+    log(` - ${file.path.replace(trimPathRegex, '')}`);
+  });
 
-	log("\nDone.⚡");
+  log('\nDone.⚡');
 }

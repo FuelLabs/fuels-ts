@@ -1,38 +1,38 @@
-import { ErrorCode, FuelError } from "@fuel-ts/errors";
-import type { BN } from "@fuel-ts/math";
-import { bn } from "@fuel-ts/math";
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import type {
-	ReceiptCall,
-	ReceiptLog,
-	ReceiptLogData,
-	ReceiptPanic,
-	ReceiptReturn,
-	ReceiptReturnData,
-	ReceiptRevert,
-	ReceiptTransfer,
-	ReceiptTransferOut,
-	ReceiptScriptResult,
-	ReceiptMessageOut,
-	Transaction,
-	ReceiptMint,
-	ReceiptBurn,
-} from "@fuel-ts/transactions";
-import { TransactionCoder } from "@fuel-ts/transactions";
-import { arrayify } from "@fuel-ts/utils";
+  ReceiptBurn,
+  ReceiptCall,
+  ReceiptLog,
+  ReceiptLogData,
+  ReceiptMessageOut,
+  ReceiptMint,
+  ReceiptPanic,
+  ReceiptReturn,
+  ReceiptReturnData,
+  ReceiptRevert,
+  ReceiptScriptResult,
+  ReceiptTransfer,
+  ReceiptTransferOut,
+  Transaction,
+} from '@fuel-ts/transactions';
+import { TransactionCoder } from '@fuel-ts/transactions';
+import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlReceiptFragment } from "../__generated__/operations";
-import type Provider from "../provider";
-import type { JsonAbisFromAllCalls } from "../transaction-request";
-import { assembleTransactionSummary } from "../transaction-summary/assemble-transaction-summary";
-import { processGqlReceipt } from "../transaction-summary/receipt";
+import type { GqlReceiptFragment } from '../__generated__/operations';
+import type Provider from '../provider';
+import type { JsonAbisFromAllCalls } from '../transaction-request';
+import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
+import { processGqlReceipt } from '../transaction-summary/receipt';
 import type {
-	TransactionSummary,
-	GqlTransaction,
-	AbiMap,
-} from "../transaction-summary/types";
-import { extractTxError } from "../utils";
+  AbiMap,
+  GqlTransaction,
+  TransactionSummary,
+} from '../transaction-summary/types';
+import { extractTxError } from '../utils';
 
-import { getDecodedLogs } from "./getDecodedLogs";
+import { getDecodedLogs } from './getDecodedLogs';
 
 /** @hidden */
 export type TransactionResultCallReceipt = ReceiptCall;
@@ -40,7 +40,7 @@ export type TransactionResultCallReceipt = ReceiptCall;
 export type TransactionResultReturnReceipt = ReceiptReturn;
 /** @hidden */
 export type TransactionResultReturnDataReceipt = ReceiptReturnData & {
-	data: string;
+  data: string;
 };
 /** @hidden */
 export type TransactionResultPanicReceipt = ReceiptPanic;
@@ -63,247 +63,247 @@ export type TransactionResultBurnReceipt = ReceiptBurn;
 
 /** @hidden */
 export type TransactionResultReceipt =
-	| ReceiptCall
-	| ReceiptReturn
-	| (ReceiptReturnData & { data: string })
-	| ReceiptPanic
-	| ReceiptRevert
-	| ReceiptLog
-	| (ReceiptLogData & { data: string })
-	| ReceiptTransfer
-	| ReceiptTransferOut
-	| ReceiptScriptResult
-	| ReceiptMessageOut
-	| TransactionResultMintReceipt
-	| TransactionResultBurnReceipt;
+  | ReceiptCall
+  | ReceiptReturn
+  | (ReceiptReturnData & { data: string })
+  | ReceiptPanic
+  | ReceiptRevert
+  | ReceiptLog
+  | (ReceiptLogData & { data: string })
+  | ReceiptTransfer
+  | ReceiptTransferOut
+  | ReceiptScriptResult
+  | ReceiptMessageOut
+  | TransactionResultMintReceipt
+  | TransactionResultBurnReceipt;
 
 /** @hidden */
 export type TransactionResult<TTransactionType = void> =
-	TransactionSummary<TTransactionType> & {
-		gqlTransaction: GqlTransaction;
-		logs?: Array<unknown>;
-	};
+  TransactionSummary<TTransactionType> & {
+    gqlTransaction: GqlTransaction;
+    logs?: Array<unknown>;
+  };
 
 /**
  * Represents a response for a transaction.
  */
 export class TransactionResponse {
-	/** Transaction ID */
-	id: string;
-	/** Current provider */
-	provider: Provider;
-	/** Gas used on the transaction */
-	gasUsed: BN = bn(0);
-	/** The graphql Transaction with receipts object. */
-	gqlTransaction?: GqlTransaction;
+  /** Transaction ID */
+  id: string;
+  /** Current provider */
+  provider: Provider;
+  /** Gas used on the transaction */
+  gasUsed: BN = bn(0);
+  /** The graphql Transaction with receipts object. */
+  gqlTransaction?: GqlTransaction;
 
-	abis?: JsonAbisFromAllCalls;
+  abis?: JsonAbisFromAllCalls;
 
-	/**
-	 * Constructor for `TransactionResponse`.
-	 *
-	 * @param id - The transaction ID.
-	 * @param provider - The provider.
-	 */
-	constructor(id: string, provider: Provider, abis?: JsonAbisFromAllCalls) {
-		this.id = id;
-		this.provider = provider;
-		this.abis = abis;
-	}
+  /**
+   * Constructor for `TransactionResponse`.
+   *
+   * @param id - The transaction ID.
+   * @param provider - The provider.
+   */
+  constructor(id: string, provider: Provider, abis?: JsonAbisFromAllCalls) {
+    this.id = id;
+    this.provider = provider;
+    this.abis = abis;
+  }
 
-	/**
-	 * Async constructor for `TransactionResponse`. This method can be used to create
-	 * an instance of `TransactionResponse` and wait for the transaction to be fetched
-	 * from the chain, ensuring that the `gqlTransaction` property is set.
-	 *
-	 * @param id - The transaction ID.
-	 * @param provider - The provider.
-	 */
-	static async create(
-		id: string,
-		provider: Provider,
-		abis?: JsonAbisFromAllCalls,
-	): Promise<TransactionResponse> {
-		const response = new TransactionResponse(id, provider, abis);
-		await response.fetch();
-		return response;
-	}
+  /**
+   * Async constructor for `TransactionResponse`. This method can be used to create
+   * an instance of `TransactionResponse` and wait for the transaction to be fetched
+   * from the chain, ensuring that the `gqlTransaction` property is set.
+   *
+   * @param id - The transaction ID.
+   * @param provider - The provider.
+   */
+  static async create(
+    id: string,
+    provider: Provider,
+    abis?: JsonAbisFromAllCalls,
+  ): Promise<TransactionResponse> {
+    const response = new TransactionResponse(id, provider, abis);
+    await response.fetch();
+    return response;
+  }
 
-	/**
-	 * Fetch the transaction with receipts from the provider.
-	 *
-	 * @returns Transaction with receipts query result.
-	 */
-	async fetch(): Promise<GqlTransaction> {
-		const response = await this.provider.operations.getTransactionWithReceipts({
-			transactionId: this.id,
-		});
+  /**
+   * Fetch the transaction with receipts from the provider.
+   *
+   * @returns Transaction with receipts query result.
+   */
+  async fetch(): Promise<GqlTransaction> {
+    const response = await this.provider.operations.getTransactionWithReceipts({
+      transactionId: this.id,
+    });
 
-		if (!response.transaction) {
-			const subscription = this.provider.operations.statusChange({
-				transactionId: this.id,
-			});
+    if (!response.transaction) {
+      const subscription = this.provider.operations.statusChange({
+        transactionId: this.id,
+      });
 
-			for await (const { statusChange } of subscription) {
-				if (statusChange) {
-					break;
-				}
-			}
+      for await (const { statusChange } of subscription) {
+        if (statusChange) {
+          break;
+        }
+      }
 
-			return this.fetch();
-		}
+      return this.fetch();
+    }
 
-		this.gqlTransaction = response.transaction;
+    this.gqlTransaction = response.transaction;
 
-		return response.transaction;
-	}
+    return response.transaction;
+  }
 
-	/**
-	 * Decode the raw payload of the transaction.
-	 *
-	 * @param transactionWithReceipts - The transaction with receipts object.
-	 * @returns The decoded transaction.
-	 */
-	decodeTransaction<TTransactionType = void>(
-		transactionWithReceipts: GqlTransaction,
-	) {
-		return new TransactionCoder().decode(
-			arrayify(transactionWithReceipts.rawPayload),
-			0,
-		)?.[0] as Transaction<TTransactionType>;
-	}
+  /**
+   * Decode the raw payload of the transaction.
+   *
+   * @param transactionWithReceipts - The transaction with receipts object.
+   * @returns The decoded transaction.
+   */
+  decodeTransaction<TTransactionType = void>(
+    transactionWithReceipts: GqlTransaction,
+  ) {
+    return new TransactionCoder().decode(
+      arrayify(transactionWithReceipts.rawPayload),
+      0,
+    )?.[0] as Transaction<TTransactionType>;
+  }
 
-	/**
-	 * Retrieves the TransactionSummary. If the `gqlTransaction` is not set, it will
-	 * fetch it from the provider
-	 *
-	 * @param contractsAbiMap - The contracts ABI map.
-	 * @returns
-	 */
-	async getTransactionSummary<TTransactionType = void>(
-		contractsAbiMap?: AbiMap,
-	): Promise<TransactionSummary<TTransactionType>> {
-		let transaction = this.gqlTransaction;
+  /**
+   * Retrieves the TransactionSummary. If the `gqlTransaction` is not set, it will
+   * fetch it from the provider
+   *
+   * @param contractsAbiMap - The contracts ABI map.
+   * @returns
+   */
+  async getTransactionSummary<TTransactionType = void>(
+    contractsAbiMap?: AbiMap,
+  ): Promise<TransactionSummary<TTransactionType>> {
+    let transaction = this.gqlTransaction;
 
-		if (!transaction) {
-			transaction = await this.fetch();
-		}
+    if (!transaction) {
+      transaction = await this.fetch();
+    }
 
-		const decodedTransaction = this.decodeTransaction<TTransactionType>(
-			transaction,
-		) as Transaction<TTransactionType>;
+    const decodedTransaction = this.decodeTransaction<TTransactionType>(
+      transaction,
+    ) as Transaction<TTransactionType>;
 
-		let txReceipts: GqlReceiptFragment[] = [];
+    let txReceipts: GqlReceiptFragment[] = [];
 
-		if (transaction?.status && "receipts" in transaction.status) {
-			txReceipts = transaction.status.receipts;
-		}
+    if (transaction?.status && 'receipts' in transaction.status) {
+      txReceipts = transaction.status.receipts;
+    }
 
-		const receipts = txReceipts.map(processGqlReceipt) || [];
+    const receipts = txReceipts.map(processGqlReceipt) || [];
 
-		const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } =
-			this.provider.getGasConfig();
-		const gasPrice = await this.provider.getLatestGasPrice();
-		const maxInputs =
-			this.provider.getChain().consensusParameters.txParameters.maxInputs;
+    const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } =
+      this.provider.getGasConfig();
+    const gasPrice = await this.provider.getLatestGasPrice();
+    const maxInputs =
+      this.provider.getChain().consensusParameters.txParameters.maxInputs;
 
-		const transactionSummary = assembleTransactionSummary<TTransactionType>({
-			id: this.id,
-			receipts,
-			transaction: decodedTransaction,
-			transactionBytes: arrayify(transaction.rawPayload),
-			gqlTransactionStatus: transaction.status,
-			gasPerByte,
-			gasPriceFactor,
-			abiMap: contractsAbiMap,
-			maxInputs,
-			gasCosts,
-			maxGasPerTx,
-			gasPrice,
-		});
+    const transactionSummary = assembleTransactionSummary<TTransactionType>({
+      id: this.id,
+      receipts,
+      transaction: decodedTransaction,
+      transactionBytes: arrayify(transaction.rawPayload),
+      gqlTransactionStatus: transaction.status,
+      gasPerByte,
+      gasPriceFactor,
+      abiMap: contractsAbiMap,
+      maxInputs,
+      gasCosts,
+      maxGasPerTx,
+      gasPrice,
+    });
 
-		return transactionSummary;
-	}
+    return transactionSummary;
+  }
 
-	private async waitForStatusChange() {
-		const status = this.gqlTransaction?.status?.type;
-		if (status && status !== "SubmittedStatus") {
-			return;
-		}
+  private async waitForStatusChange() {
+    const status = this.gqlTransaction?.status?.type;
+    if (status && status !== 'SubmittedStatus') {
+      return;
+    }
 
-		const subscription = this.provider.operations.statusChange({
-			transactionId: this.id,
-		});
+    const subscription = this.provider.operations.statusChange({
+      transactionId: this.id,
+    });
 
-		for await (const { statusChange } of subscription) {
-			if (statusChange.type === "SqueezedOutStatus") {
-				throw new FuelError(
-					ErrorCode.TRANSACTION_SQUEEZED_OUT,
-					`Transaction Squeezed Out with reason: ${statusChange.reason}`,
-				);
-			}
-			if (statusChange.type !== "SubmittedStatus") {
-				break;
-			}
-		}
+    for await (const { statusChange } of subscription) {
+      if (statusChange.type === 'SqueezedOutStatus') {
+        throw new FuelError(
+          ErrorCode.TRANSACTION_SQUEEZED_OUT,
+          `Transaction Squeezed Out with reason: ${statusChange.reason}`,
+        );
+      }
+      if (statusChange.type !== 'SubmittedStatus') {
+        break;
+      }
+    }
 
-		await this.fetch();
-	}
+    await this.fetch();
+  }
 
-	/**
-	 * Waits for transaction to complete and returns the result.
-	 *
-	 * @returns The completed transaction result
-	 */
-	async waitForResult<TTransactionType = void>(
-		contractsAbiMap?: AbiMap,
-	): Promise<TransactionResult<TTransactionType>> {
-		await this.waitForStatusChange();
+  /**
+   * Waits for transaction to complete and returns the result.
+   *
+   * @returns The completed transaction result
+   */
+  async waitForResult<TTransactionType = void>(
+    contractsAbiMap?: AbiMap,
+  ): Promise<TransactionResult<TTransactionType>> {
+    await this.waitForStatusChange();
 
-		const transactionSummary =
-			await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
+    const transactionSummary =
+      await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
-		const transactionResult: TransactionResult<TTransactionType> = {
-			gqlTransaction: this.gqlTransaction as GqlTransaction,
-			...transactionSummary,
-		};
+    const transactionResult: TransactionResult<TTransactionType> = {
+      gqlTransaction: this.gqlTransaction as GqlTransaction,
+      ...transactionSummary,
+    };
 
-		let logs: Array<unknown> = [];
+    let logs: Array<unknown> = [];
 
-		if (this.abis) {
-			logs = getDecodedLogs(
-				transactionSummary.receipts,
-				this.abis.main,
-				this.abis.otherContractsAbis,
-			);
+    if (this.abis) {
+      logs = getDecodedLogs(
+        transactionSummary.receipts,
+        this.abis.main,
+        this.abis.otherContractsAbis,
+      );
 
-			transactionResult.logs = logs;
-		}
+      transactionResult.logs = logs;
+    }
 
-		if (transactionResult.isStatusFailure) {
-			const {
-				receipts,
-				gqlTransaction: { status },
-			} = transactionResult;
+    if (transactionResult.isStatusFailure) {
+      const {
+        receipts,
+        gqlTransaction: { status },
+      } = transactionResult;
 
-			throw extractTxError({
-				receipts,
-				status,
-				logs,
-			});
-		}
+      throw extractTxError({
+        receipts,
+        status,
+        logs,
+      });
+    }
 
-		return transactionResult;
-	}
+    return transactionResult;
+  }
 
-	/**
-	 * Waits for transaction to complete and returns the result.
-	 *
-	 * @param contractsAbiMap - The contracts ABI map.
-	 */
-	async wait<TTransactionType = void>(
-		contractsAbiMap?: AbiMap,
-	): Promise<TransactionResult<TTransactionType>> {
-		return this.waitForResult<TTransactionType>(contractsAbiMap);
-	}
+  /**
+   * Waits for transaction to complete and returns the result.
+   *
+   * @param contractsAbiMap - The contracts ABI map.
+   */
+  async wait<TTransactionType = void>(
+    contractsAbiMap?: AbiMap,
+  ): Promise<TransactionResult<TTransactionType>> {
+    return this.waitForResult<TTransactionType>(contractsAbiMap);
+  }
 }

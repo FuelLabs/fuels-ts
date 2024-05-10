@@ -19,7 +19,10 @@ describe(__filename, () => {
     const myWallet: WalletUnlocked = Wallet.generate({ provider });
 
     // or use an Address to create a wallet
-    const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address, provider);
+    const someWallet: WalletLocked = Wallet.fromAddress(
+      myWallet.address,
+      provider,
+    );
     // #endregion wallets
 
     expect(myWallet.address).toBeTruthy();
@@ -28,16 +31,19 @@ describe(__filename, () => {
 
   it('wallet-locked-to-unlocked', () => {
     const myWallet: WalletUnlocked = Wallet.generate({ provider });
-    const PRIVATE_KEY = myWallet.privateKey;
+    const privateKey = myWallet.privateKey;
 
     // #region wallet-locked-to-unlocked
     // #import { Wallet, WalletLocked, WalletUnlocked };
 
     // Lock an existing wallet
-    const lockedWallet: WalletLocked = Wallet.fromAddress(myWallet.address, provider);
+    const lockedWallet: WalletLocked = Wallet.fromAddress(
+      myWallet.address,
+      provider,
+    );
 
     // Unlock an existing wallet
-    const unlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
+    const unlockedWallet: WalletUnlocked = lockedWallet.unlock(privateKey);
     // #endregion wallet-locked-to-unlocked
 
     expect(myWallet.address).toBeTruthy();
@@ -67,7 +73,9 @@ describe(__filename, () => {
     unlockedWallet.lock();
 
     // All provider dependent methods will throw
-    await expect(() => unlockedWallet.getCoins()).rejects.toThrow(/Provider not set/);
+    await expect(() => unlockedWallet.getCoins()).rejects.toThrow(
+      /Provider not set/,
+    );
     // #endregion wallet-optional-provider
   });
 });

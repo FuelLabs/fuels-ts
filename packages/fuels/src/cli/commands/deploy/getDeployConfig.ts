@@ -1,18 +1,18 @@
-import type { DeployContractOptions } from "@fuel-ts/contract";
+import type { DeployContractOptions } from '@fuel-ts/contract';
 
-import type { ContractDeployOptions, OptionsFunction } from "../../types";
+import type { ContractDeployOptions, OptionsFunction } from '../../types';
 
 export async function getDeployConfig(
-	deployConfig: DeployContractOptions | OptionsFunction,
-	options: ContractDeployOptions,
+  deployConfig: DeployContractOptions | OptionsFunction,
+  options: ContractDeployOptions,
 ) {
-	let config: DeployContractOptions;
+  let config: DeployContractOptions;
 
-	if (typeof deployConfig === "function") {
-		config = await deployConfig(options);
-	} else {
-		config = deployConfig;
-	}
+  if (typeof deployConfig === 'function') {
+    config = await deployConfig(options);
+  } else {
+    config = deployConfig;
+  }
 
-	return config;
+  return config;
 }

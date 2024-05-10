@@ -1,41 +1,41 @@
 {
-	"name": "@fuel-ts/script",
-	"version": "0.84.0",
-	"description": "",
-	"author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"types": "dist/index.d.ts",
-	"engines": {
-		"node": "^18.18.2 || ^20.0.0"
-	},
-	"exports": {
-		".": {
-			"require": "./dist/index.js",
-			"import": "./dist/index.mjs",
-			"types": "./dist/index.d.ts"
-		}
-	},
-	"files": ["dist"],
-	"scripts": {
-		"pretest": "pnpm build:forc",
-		"build": "tsup",
-		"build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
-		"postbuild": "tsx ../../scripts/postbuild.ts"
-	},
-	"license": "Apache-2.0",
-	"dependencies": {
-		"@fuel-ts/abi-coder": "workspace:*",
-		"@fuel-ts/account": "workspace:*",
-		"@fuel-ts/address": "workspace:*",
-		"@fuel-ts/errors": "workspace:*",
-		"@fuel-ts/interfaces": "workspace:*",
-		"@fuel-ts/math": "workspace:*",
-		"@fuel-ts/program": "workspace:*",
-		"@fuel-ts/transactions": "workspace:*",
-		"@fuel-ts/utils": "workspace:*"
-	},
-	"devDependencies": {
-		"@fuel-ts/forc": "workspace:*"
-	}
+  "name": "@fuel-ts/script",
+  "version": "0.84.0",
+  "description": "",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.18.2 || ^20.0.0"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "pretest": "pnpm build:forc",
+    "build": "tsup",
+    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/program": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@fuel-ts/forc": "workspace:*"
+  }
 }

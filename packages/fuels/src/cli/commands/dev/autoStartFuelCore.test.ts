@@ -1,116 +1,116 @@
-import * as testUtilsMod from "@fuel-ts/account/test-utils";
-import { existsSync, rmSync } from "fs";
-import { join } from "path";
+import { existsSync, rmSync } from 'fs';
+import { join } from 'path';
+import * as testUtilsMod from '@fuel-ts/account/test-utils';
 
-import { fuelsConfig } from "../../../../test/fixtures/fuels.config";
-import type { FuelsConfig } from "../../types";
+import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
+import type { FuelsConfig } from '../../types';
 
-import type { FuelCoreNode } from "./autoStartFuelCore";
-import { autoStartFuelCore } from "./autoStartFuelCore";
+import type { FuelCoreNode } from './autoStartFuelCore';
+import { autoStartFuelCore } from './autoStartFuelCore';
 
 /**
  * @group node
  */
-describe("autoStartFuelCore", () => {
-	afterEach(() => {
-		vi.restoreAllMocks();
+describe('autoStartFuelCore', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
 
-		const chainConfig = join(
-			fuelsConfig.basePath,
-			".fuels",
-			"chainConfig.json",
-		);
-		const metadata = join(fuelsConfig.basePath, ".fuels", "metadata.json");
-		const stateConfig = join(
-			fuelsConfig.basePath,
-			".fuels",
-			"stateConfig.json",
-		);
-		const filepaths = [chainConfig, metadata, stateConfig];
-		filepaths.forEach((filepath) => {
-			if (existsSync(filepath)) {
-				rmSync(filepath);
-			}
-		});
-	});
+    const chainConfig = join(
+      fuelsConfig.basePath,
+      '.fuels',
+      'chainConfig.json',
+    );
+    const metadata = join(fuelsConfig.basePath, '.fuels', 'metadata.json');
+    const stateConfig = join(
+      fuelsConfig.basePath,
+      '.fuels',
+      'stateConfig.json',
+    );
+    const filepaths = [chainConfig, metadata, stateConfig];
+    filepaths.forEach((filepath) => {
+      if (existsSync(filepath)) {
+        rmSync(filepath);
+      }
+    });
+  });
 
-	function mockLaunchNode() {
-		const launchNode = vi.spyOn(testUtilsMod, "launchNode").mockReturnValue(
-			Promise.resolve({
-				cleanup: () => {},
-				ip: "0.0.0.0",
-				port: "4000",
-				snapshotDir: "/some/path",
-			}),
-		);
-		return { launchNode };
-	}
+  function mockLaunchNode() {
+    const launchNode = vi.spyOn(testUtilsMod, 'launchNode').mockReturnValue(
+      Promise.resolve({
+        cleanup: () => {},
+        ip: '0.0.0.0',
+        port: '4000',
+        snapshotDir: '/some/path',
+      }),
+    );
+    return { launchNode };
+  }
 
-	test("should auto start `fuel-core`", async () => {
-		const { launchNode } = mockLaunchNode();
+  test('should auto start `fuel-core`', async () => {
+    const { launchNode } = mockLaunchNode();
 
-		const config = structuredClone(fuelsConfig);
-		config.autoStartFuelCore = true;
+    const config = structuredClone(fuelsConfig);
+    config.autoStartFuelCore = true;
 
-		await autoStartFuelCore(config);
+    await autoStartFuelCore(config);
 
-		expect(launchNode).toHaveBeenCalledTimes(1);
-	});
+    expect(launchNode).toHaveBeenCalledTimes(1);
+  });
 
-	test("should not start `fuel-core`", async () => {
-		const { launchNode } = mockLaunchNode();
+  test('should not start `fuel-core`', async () => {
+    const { launchNode } = mockLaunchNode();
 
-		const config = structuredClone(fuelsConfig);
-		config.autoStartFuelCore = false;
+    const config = structuredClone(fuelsConfig);
+    config.autoStartFuelCore = false;
 
-		await autoStartFuelCore(config);
+    await autoStartFuelCore(config);
 
-		expect(launchNode).toHaveBeenCalledTimes(0);
-	});
+    expect(launchNode).toHaveBeenCalledTimes(0);
+  });
 
-	test("should start `fuel-core` node using built-in binary", async () => {
-		const { launchNode } = mockLaunchNode();
+  test('should start `fuel-core` node using built-in binary', async () => {
+    const { launchNode } = mockLaunchNode();
 
-		const copyConfig: FuelsConfig = structuredClone(fuelsConfig);
-		copyConfig.useBuiltinFuelCore = true;
+    const copyConfig: FuelsConfig = structuredClone(fuelsConfig);
+    copyConfig.useBuiltinFuelCore = true;
 
-		// this will cause it to autofind a free port
-		copyConfig.fuelCorePort = undefined;
-		delete copyConfig.fuelCorePort;
+    // this will cause it to autofind a free port
+    copyConfig.fuelCorePort = undefined;
+    delete copyConfig.fuelCorePort;
 
-		const core = (await autoStartFuelCore(copyConfig)) as FuelCoreNode;
+    const core = (await autoStartFuelCore(copyConfig)) as FuelCoreNode;
 
-		expect(launchNode).toHaveBeenCalledTimes(1);
+    expect(launchNode).toHaveBeenCalledTimes(1);
 
-		expect(core.bindIp).toEqual("0.0.0.0");
-		expect(core.accessIp).toEqual("127.0.0.1");
-		expect(core.port).toBeGreaterThanOrEqual(4000);
-		expect(core.providerUrl).toMatch(
-			/http:\/\/127\.0\.0\.1:([0-9]+)\/v1\/graphql/,
-		);
-		expect(core.killChildProcess).toBeTruthy();
+    expect(core.bindIp).toEqual('0.0.0.0');
+    expect(core.accessIp).toEqual('127.0.0.1');
+    expect(core.port).toBeGreaterThanOrEqual(4000);
+    expect(core.providerUrl).toMatch(
+      /http:\/\/127\.0\.0\.1:([0-9]+)\/v1\/graphql/,
+    );
+    expect(core.killChildProcess).toBeTruthy();
 
-		core.killChildProcess();
-	});
+    core.killChildProcess();
+  });
 
-	test("should start `fuel-core` node using system binary", async () => {
-		const { launchNode } = mockLaunchNode();
+  test('should start `fuel-core` node using system binary', async () => {
+    const { launchNode } = mockLaunchNode();
 
-		const core = (await autoStartFuelCore({
-			...structuredClone(fuelsConfig),
-			useBuiltinFuelCore: false,
-		})) as FuelCoreNode;
+    const core = (await autoStartFuelCore({
+      ...structuredClone(fuelsConfig),
+      useBuiltinFuelCore: false,
+    })) as FuelCoreNode;
 
-		expect(launchNode).toHaveBeenCalledTimes(1);
+    expect(launchNode).toHaveBeenCalledTimes(1);
 
-		expect(core.bindIp).toEqual("0.0.0.0");
-		expect(core.accessIp).toEqual("127.0.0.1");
-		expect(core.port).toBeGreaterThanOrEqual(4000);
-		expect(core.providerUrl).toMatch(
-			/http:\/\/127\.0\.0\.1:([0-9]+)\/v1\/graphql/,
-		);
-		expect(core.killChildProcess).toBeTruthy();
+    expect(core.bindIp).toEqual('0.0.0.0');
+    expect(core.accessIp).toEqual('127.0.0.1');
+    expect(core.port).toBeGreaterThanOrEqual(4000);
+    expect(core.providerUrl).toMatch(
+      /http:\/\/127\.0\.0\.1:([0-9]+)\/v1\/graphql/,
+    );
+    expect(core.killChildProcess).toBeTruthy();
 
-		core.killChildProcess();
-	});
+    core.killChildProcess();
+  });
 });

@@ -1,7 +1,7 @@
+import { join } from 'path';
 import { readFile } from 'fs/promises';
 import type { Contract } from 'fuels';
 import { BN, arrayify, getRandomB256 } from 'fuels';
-import { join } from 'path';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -14,7 +14,7 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(
-      DocSnippetProjectsEnum.ECHO_EMPLOYEE_DATA_VECTOR
+      DocSnippetProjectsEnum.ECHO_EMPLOYEE_DATA_VECTOR,
     );
   });
 
@@ -45,7 +45,9 @@ describe(__filename, () => {
         isActive: true,
       },
     ];
-    const { value } = await contract.functions.echo_last_employee_data(employees).simulate();
+    const { value } = await contract.functions
+      .echo_last_employee_data(employees)
+      .simulate();
     // #endregion vector-4
     expect(value.name).toEqual(employees[1].name);
     expect(value.age).toEqual(employees[1].age);
@@ -58,11 +60,11 @@ describe(__filename, () => {
   // TODO: Unskip test after sway-libs become compatible with latest forc (0.52+)
   it.skip('should successfully execute a contract call with a bytecode input', async () => {
     const bytecodeContract = await createAndDeployContractFromProject(
-      DocSnippetProjectsEnum.BYTECODE_INPUT
+      DocSnippetProjectsEnum.BYTECODE_INPUT,
     );
     const bytecodePath = join(
       __dirname,
-      '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin'
+      '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin',
     );
 
     // #region vector-bytecode-input-ts

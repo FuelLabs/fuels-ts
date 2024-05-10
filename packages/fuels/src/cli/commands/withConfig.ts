@@ -1,53 +1,53 @@
-import { capitalizeString } from "@fuel-ts/utils";
-import type { Command } from "commander";
+import { capitalizeString } from '@fuel-ts/utils';
+import type { Command } from 'commander';
 
-import { loadConfig } from "../config/loadConfig";
-import type { Commands, FuelsConfig, CommandEvent } from "../types";
-import { error, log } from "../utils/logger";
+import { loadConfig } from '../config/loadConfig';
+import type { CommandEvent, Commands, FuelsConfig } from '../types';
+import { error, log } from '../utils/logger';
 
 export const withConfigErrorHandler = async (
-	err: Error,
-	config?: FuelsConfig,
+  err: Error,
+  config?: FuelsConfig,
 ) => {
-	error(err);
-	if (config) {
-		await config.onFailure?.(<Error>err, config);
-	}
+  error(err);
+  if (config) {
+    await config.onFailure?.(<Error>err, config);
+  }
 };
 
 export function withConfig<CType extends Commands>(
-	program: Command,
-	command: CType,
-	fn: (
-		config: FuelsConfig,
-		options?: Command,
-	) => Promise<Extract<CommandEvent, { type: CType }>["data"]>,
+  program: Command,
+  command: CType,
+  fn: (
+    config: FuelsConfig,
+    options?: Command,
+  ) => Promise<Extract<CommandEvent, { type: CType }>['data']>,
 ) {
-	return async () => {
-		const options = program.opts();
+  return async () => {
+    const options = program.opts();
 
-		let config: FuelsConfig;
+    let config: FuelsConfig;
 
-		try {
-			config = await loadConfig(options.path);
-		} catch (err) {
-			await withConfigErrorHandler(<Error>err);
-			return;
-		}
+    try {
+      config = await loadConfig(options.path);
+    } catch (err) {
+      await withConfigErrorHandler(<Error>err);
+      return;
+    }
 
-		try {
-			const eventData = await fn(config, program);
-			config.onSuccess?.(
-				{
-					type: command,
+    try {
+      const eventData = await fn(config, program);
+      config.onSuccess?.(
+        {
+          type: command,
 
-					data: eventData as any,
-				},
-				config,
-			);
-			log(`🎉  ${capitalizeString(command)} completed successfully!`);
-		} catch (err: unknown) {
-			await withConfigErrorHandler(<Error>err, config);
-		}
-	};
+          data: eventData as any,
+        },
+        config,
+      );
+      log(`🎉  ${capitalizeString(command)} completed successfully!`);
+    } catch (err: unknown) {
+      await withConfigErrorHandler(<Error>err, config);
+    }
+  };
 }

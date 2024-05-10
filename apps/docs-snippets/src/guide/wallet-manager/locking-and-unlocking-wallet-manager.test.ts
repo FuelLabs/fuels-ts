@@ -14,7 +14,8 @@ describe(__filename, () => {
     await walletManager.unlock(password);
     // #endregion locking-and-unlocking-wallet-manager-1
 
-    const privateKey = '0xc7079e195cca2495e47b056115f850a8be1f2c4ffe2a806922accb36d2ff0dde';
+    const privateKey =
+      '0xc7079e195cca2495e47b056115f850a8be1f2c4ffe2a806922accb36d2ff0dde';
 
     await walletManager.addVault({
       type: 'privateKey',

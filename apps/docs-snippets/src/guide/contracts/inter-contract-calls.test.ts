@@ -18,19 +18,23 @@ describe(__filename, () => {
   beforeAll(async () => {
     wallet = await getTestWallet();
 
-    const tokenArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_TOKEN);
-    const depositorArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.TOKEN_DEPOSITOR);
+    const tokenArtifacts = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.SIMPLE_TOKEN,
+    );
+    const depositorArtifacts = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.TOKEN_DEPOSITOR,
+    );
 
     simpleToken = await new ContractFactory(
       tokenArtifacts.binHexlified,
       tokenArtifacts.abiContents,
-      wallet
+      wallet,
     ).deployContract();
 
     tokenDepositor = await new ContractFactory(
       depositorArtifacts.binHexlified,
       depositorArtifacts.abiContents,
-      wallet
+      wallet,
     ).deployContract();
   });
 

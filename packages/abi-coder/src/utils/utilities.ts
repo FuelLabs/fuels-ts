@@ -1,21 +1,21 @@
-import type { BytesLike } from "@fuel-ts/interfaces";
-import { concat, concatBytes, arrayify } from "@fuel-ts/utils";
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { arrayify, concat, concatBytes } from '@fuel-ts/utils';
 
-import { BigNumberCoder } from "../encoding/coders/v0/BigNumberCoder";
+import { BigNumberCoder } from '../encoding/coders/v0/BigNumberCoder';
 
 import {
-	BYTES_CODER_TYPE,
-	VEC_CODER_TYPE,
-	STD_STRING_CODER_TYPE,
-	WORD_SIZE,
-} from "./constants";
+  BYTES_CODER_TYPE,
+  STD_STRING_CODER_TYPE,
+  VEC_CODER_TYPE,
+  WORD_SIZE,
+} from './constants';
 
 export type DynamicData = {
-	[pointerIndex: number]: Uint8ArrayWithDynamicData;
+  [pointerIndex: number]: Uint8ArrayWithDynamicData;
 };
 
 export type Uint8ArrayWithDynamicData = Uint8Array & {
-	dynamicData?: DynamicData;
+  dynamicData?: DynamicData;
 };
 
 const VEC_PROPERTY_SPACE = 3; // ptr + cap + length
@@ -27,75 +27,75 @@ export const BASE_RAW_SLICE_OFFSET = RAW_SLICE_PROPERTY_SPACE * WORD_SIZE;
 // this is a fork of @ethersproject/bytes:concat
 // this collects individual dynamicData data and relocates it to top level
 export function concatWithDynamicData(
-	items: ReadonlyArray<BytesLike>,
+  items: ReadonlyArray<BytesLike>,
 ): Uint8ArrayWithDynamicData {
-	const topLevelData: DynamicData = {};
+  const topLevelData: DynamicData = {};
 
-	let totalIndex = 0;
-	const objects = items.map((item) => {
-		const dynamicData = (item as Uint8ArrayWithDynamicData).dynamicData;
-		if (dynamicData) {
-			Object.entries(dynamicData).forEach(([pointerIndex, vData]) => {
-				topLevelData[Number.parseInt(pointerIndex, 10) + totalIndex] = vData;
-			});
-		}
+  let totalIndex = 0;
+  const objects = items.map((item) => {
+    const dynamicData = (item as Uint8ArrayWithDynamicData).dynamicData;
+    if (dynamicData) {
+      Object.entries(dynamicData).forEach(([pointerIndex, vData]) => {
+        topLevelData[Number.parseInt(pointerIndex, 10) + totalIndex] = vData;
+      });
+    }
 
-		const byteArray = arrayify(item);
-		totalIndex += byteArray.byteLength / WORD_SIZE;
+    const byteArray = arrayify(item);
+    totalIndex += byteArray.byteLength / WORD_SIZE;
 
-		return byteArray;
-	});
+    return byteArray;
+  });
 
-	const length = objects.reduce((accum, item) => accum + item.length, 0);
-	const result: Uint8ArrayWithDynamicData = new Uint8Array(length);
+  const length = objects.reduce((accum, item) => accum + item.length, 0);
+  const result: Uint8ArrayWithDynamicData = new Uint8Array(length);
 
-	objects.reduce((offset, object) => {
-		result.set(object, offset);
-		return offset + object.length;
-	}, 0);
+  objects.reduce((offset, object) => {
+    result.set(object, offset);
+    return offset + object.length;
+  }, 0);
 
-	// store vector data and pointer indices, but only if data exist
-	if (Object.keys(topLevelData).length) {
-		result.dynamicData = topLevelData;
-	}
+  // store vector data and pointer indices, but only if data exist
+  if (Object.keys(topLevelData).length) {
+    result.dynamicData = topLevelData;
+  }
 
-	return result;
+  return result;
 }
 
 export function unpackDynamicData(
-	results: Uint8ArrayWithDynamicData,
-	baseOffset: number,
-	dataOffset: number,
+  results: Uint8ArrayWithDynamicData,
+  baseOffset: number,
+  dataOffset: number,
 ): Uint8Array {
-	if (!results.dynamicData) {
-		return concat([results]);
-	}
+  if (!results.dynamicData) {
+    return concat([results]);
+  }
 
-	let cumulativeDynamicByteLength = 0;
-	let updatedResults = results;
-	Object.entries(results.dynamicData).forEach(([pointerIndex, vData]) => {
-		// update value of pointer
-		const pointerOffset = Number.parseInt(pointerIndex, 10) * WORD_SIZE;
-		const adjustedValue = new BigNumberCoder("u64").encode(
-			dataOffset + baseOffset + cumulativeDynamicByteLength,
-		);
-		updatedResults.set(adjustedValue, pointerOffset);
+  let cumulativeDynamicByteLength = 0;
+  let updatedResults = results;
+  Object.entries(results.dynamicData).forEach(([pointerIndex, vData]) => {
+    // update value of pointer
+    const pointerOffset = Number.parseInt(pointerIndex, 10) * WORD_SIZE;
+    const adjustedValue = new BigNumberCoder('u64').encode(
+      dataOffset + baseOffset + cumulativeDynamicByteLength,
+    );
+    updatedResults.set(adjustedValue, pointerOffset);
 
-		// append dynamic data at the end
-		const dataToAppend = vData.dynamicData
-			? // unpack child dynamic data
-				unpackDynamicData(
-					vData,
-					baseOffset,
-					dataOffset + vData.byteLength + cumulativeDynamicByteLength,
-				)
-			: vData;
-		updatedResults = concat([updatedResults, dataToAppend]);
+    // append dynamic data at the end
+    const dataToAppend = vData.dynamicData
+      ? // unpack child dynamic data
+        unpackDynamicData(
+          vData,
+          baseOffset,
+          dataOffset + vData.byteLength + cumulativeDynamicByteLength,
+        )
+      : vData;
+    updatedResults = concat([updatedResults, dataToAppend]);
 
-		cumulativeDynamicByteLength += dataToAppend.byteLength;
-	});
+    cumulativeDynamicByteLength += dataToAppend.byteLength;
+  });
 
-	return updatedResults;
+  return updatedResults;
 }
 
 /**
@@ -119,19 +119,19 @@ export function unpackDynamicData(
  *
  */
 export const chunkByLength = (
-	data: Uint8Array,
-	length = WORD_SIZE,
+  data: Uint8Array,
+  length = WORD_SIZE,
 ): Uint8Array[] => {
-	const chunks = [];
-	let offset = 0;
-	let chunk = data.slice(offset, offset + length);
-	while (chunk.length) {
-		chunks.push(chunk);
-		offset += length;
-		chunk = data.slice(offset, offset + length);
-	}
+  const chunks = [];
+  let offset = 0;
+  let chunk = data.slice(offset, offset + length);
+  while (chunk.length) {
+    chunks.push(chunk);
+    offset += length;
+    chunk = data.slice(offset, offset + length);
+  }
 
-	return chunks;
+  return chunks;
 };
 
 /**
@@ -139,24 +139,24 @@ export const chunkByLength = (
  * See: https://github.com/FuelLabs/sway/issues/1368
  */
 export const isPointerType = (type: string) => {
-	switch (type) {
-		case "u8":
-		case "u16":
-		case "u32":
-		case "u64":
-		case "bool": {
-			return false;
-		}
-		default: {
-			return true;
-		}
-	}
+  switch (type) {
+    case 'u8':
+    case 'u16':
+    case 'u32':
+    case 'u64':
+    case 'bool': {
+      return false;
+    }
+    default: {
+      return true;
+    }
+  }
 };
 
 export const isHeapType = (type: string) =>
-	type === VEC_CODER_TYPE ||
-	type === BYTES_CODER_TYPE ||
-	type === STD_STRING_CODER_TYPE;
+  type === VEC_CODER_TYPE ||
+  type === BYTES_CODER_TYPE ||
+  type === STD_STRING_CODER_TYPE;
 
 /**
  * Because some properties can be single-bytes, we need to pad them
@@ -165,18 +165,18 @@ export const isHeapType = (type: string) =>
  * Please refer to packages/abi-coder/src/coders/abstract-coder.ts for more details
  */
 export const isMultipleOfWordSize = (length: number) =>
-	length % WORD_SIZE === 0;
+  length % WORD_SIZE === 0;
 
 export const getWordSizePadding = (length: number) =>
-	WORD_SIZE - (length % WORD_SIZE);
+  WORD_SIZE - (length % WORD_SIZE);
 
 export const rightPadToWordSize = (encoded: Uint8Array) => {
-	if (isMultipleOfWordSize(encoded.length)) {
-		return encoded;
-	}
-	const padding = new Uint8Array(WORD_SIZE - (encoded.length % WORD_SIZE));
-	return concatBytes([encoded, padding]);
+  if (isMultipleOfWordSize(encoded.length)) {
+    return encoded;
+  }
+  const padding = new Uint8Array(WORD_SIZE - (encoded.length % WORD_SIZE));
+  return concatBytes([encoded, padding]);
 };
 
 export const isUint8Array = (value: unknown): value is Uint8Array =>
-	value instanceof Uint8Array;
+  value instanceof Uint8Array;

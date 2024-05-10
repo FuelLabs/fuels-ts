@@ -17,7 +17,8 @@ describe(__filename, () => {
       name: 'John Doe',
       age: 30,
       salary: 100_000,
-      idHash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+      idHash:
+        '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
       ratings: [4, 5, 5],
       isActive: true,
     };

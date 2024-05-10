@@ -1,5 +1,5 @@
 import type { AbstractAddress, WalletUnlocked } from 'fuels';
-import { ContractFactory, Contract } from 'fuels';
+import { Contract, ContractFactory } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -15,7 +15,7 @@ describe(__filename, () => {
   let contractId: AbstractAddress;
   let wallet: WalletUnlocked;
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.ECHO_VALUES
+    DocSnippetProjectsEnum.ECHO_VALUES,
   );
 
   beforeAll(async () => {

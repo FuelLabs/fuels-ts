@@ -1,5 +1,10 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, bn } from 'fuels';
+import {
+  FUEL_NETWORK_URL,
+  Provider,
+  ScriptTransactionRequest,
+  bn,
+} from 'fuels';
 
 /**
  * @group node
@@ -9,7 +14,8 @@ describe('querying the chain', () => {
     // #region wallet-query
     // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdA =
+      '0x0101010101010101010101010101010101010101010101010101010101010101';
     const baseAssetId = provider.getBaseAssetId();
 
     const wallet = await generateTestWallet(provider, [
@@ -53,7 +59,8 @@ describe('querying the chain', () => {
     // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdA =
+      '0x0101010101010101010101010101010101010101010101010101010101010101';
     const baseAssetId = provider.getBaseAssetId();
 
     const wallet = await generateTestWallet(provider, [
@@ -78,7 +85,8 @@ describe('querying the chain', () => {
     // #import { Provider, FUEL_NETWORK_URL, generateTestWallet, ScriptTransactionRequest };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdA =
+      '0x0101010101010101010101010101010101010101010101010101010101010101';
     const baseAssetId = provider.getBaseAssetId();
 
     const wallet = await generateTestWallet(provider, [
@@ -118,7 +126,8 @@ describe('querying the chain', () => {
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
+    const nonce =
+      '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
     const message = await provider.getMessageByNonce(nonce);
 
     expect(message).toBeDefined();

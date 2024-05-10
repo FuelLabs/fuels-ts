@@ -1,6 +1,6 @@
+import { join } from 'path';
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { JsonAbi } from 'fuels';
-import { join } from 'path';
 
 export enum DocSnippetProjectsEnum {
   COUNTER = 'counter',

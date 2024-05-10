@@ -1,30 +1,30 @@
-import type { WalletUnlocked } from "@fuel-ts/account";
-import { ContractFactory } from "@fuel-ts/contract";
-import type { DeployContractOptions } from "@fuel-ts/contract";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync } from 'fs';
+import type { WalletUnlocked } from '@fuel-ts/account';
+import { ContractFactory } from '@fuel-ts/contract';
+import type { DeployContractOptions } from '@fuel-ts/contract';
 
-import { debug } from "../../utils/logger";
+import { debug } from '../../utils/logger';
 
 export async function deployContract(
-	wallet: WalletUnlocked,
-	binaryPath: string,
-	abiPath: string,
-	storageSlotsPath: string,
-	deployConfig: DeployContractOptions,
+  wallet: WalletUnlocked,
+  binaryPath: string,
+  abiPath: string,
+  storageSlotsPath: string,
+  deployConfig: DeployContractOptions,
 ) {
-	debug(`Deploying contract for ABI: ${abiPath}`);
+  debug(`Deploying contract for ABI: ${abiPath}`);
 
-	const bytecode = readFileSync(binaryPath);
+  const bytecode = readFileSync(binaryPath);
 
-	if (existsSync(storageSlotsPath)) {
-		const storageSlots = JSON.parse(readFileSync(storageSlotsPath, "utf-8"));
+  if (existsSync(storageSlotsPath)) {
+    const storageSlots = JSON.parse(readFileSync(storageSlotsPath, 'utf-8'));
 
-		deployConfig.storageSlots = storageSlots;
-	}
+    deployConfig.storageSlots = storageSlots;
+  }
 
-	const abi = JSON.parse(readFileSync(abiPath, "utf-8"));
-	const contractFactory = new ContractFactory(bytecode, abi, wallet);
+  const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
+  const contractFactory = new ContractFactory(bytecode, abi, wallet);
 
-	const contract = await contractFactory.deployContract(deployConfig);
-	return contract.id.toB256();
+  const contract = await contractFactory.deployContract(deployConfig);
+  return contract.id.toB256();
 }

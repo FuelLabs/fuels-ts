@@ -1,4 +1,4 @@
-import { type Contract } from 'fuels';
+import type { Contract } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -11,7 +11,9 @@ describe(__filename, () => {
   let baseAssetId: string;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.RETURN_CONTEXT,
+    );
     baseAssetId = contract.provider.getBaseAssetId();
   });
 

@@ -10,7 +10,8 @@ describe(__filename, () => {
 
     const tai64: DateTime = DateTime.fromTai64('4611686020108779339');
     const unixSeconds: DateTime = DateTime.fromUnixSeconds(1681391398);
-    const unixMilliseconds: DateTime = DateTime.fromUnixMilliseconds(1681391398000);
+    const unixMilliseconds: DateTime =
+      DateTime.fromUnixMilliseconds(1681391398000);
     // #endregion create-from-multiple-sources
 
     expect(tai64).toBeDefined();

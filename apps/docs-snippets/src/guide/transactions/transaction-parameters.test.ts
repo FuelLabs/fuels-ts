@@ -15,11 +15,13 @@ describe(__filename, () => {
   let contract: Contract;
 
   const { binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
+    DocSnippetProjectsEnum.SUM_SCRIPT,
   );
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.COUNTER,
+    );
   });
 
   it('matches tx param types', () => {

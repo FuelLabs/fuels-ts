@@ -1,29 +1,29 @@
-import type { IRawAbiTypeRoot } from "../../index";
-import type { IType } from "../../types/interfaces/IType";
+import type { IRawAbiTypeRoot } from '../../index';
+import type { IType } from '../../types/interfaces/IType';
 
-import { AType } from "./AType";
+import { AType } from './AType';
 
 export class U8Type extends AType implements IType {
-	public static swayType = "u8";
+  public static swayType = 'u8';
 
-	public name = "u8";
+  public name = 'u8';
 
-	public static MATCH_REGEX: RegExp = /^u8$/m;
+  public static MATCH_REGEX: RegExp = /^u8$/m;
 
-	constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
-		super(params);
-		this.attributes = {
-			inputLabel: `BigNumberish`,
-			outputLabel: `number`,
-		};
-		this.requiredFuelsMembersImports = [this.attributes.inputLabel];
-	}
+  constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
+    super(params);
+    this.attributes = {
+      inputLabel: `BigNumberish`,
+      outputLabel: `number`,
+    };
+    this.requiredFuelsMembersImports = [this.attributes.inputLabel];
+  }
 
-	static isSuitableFor(params: { type: string }) {
-		return U8Type.MATCH_REGEX.test(params.type);
-	}
+  static isSuitableFor(params: { type: string }) {
+    return U8Type.MATCH_REGEX.test(params.type);
+  }
 
-	public parseComponentsAttributes(_params: { types: IType[] }) {
-		return this.attributes;
-	}
+  public parseComponentsAttributes(_params: { types: IType[] }) {
+    return this.attributes;
+  }
 }

@@ -1,4 +1,4 @@
-import type { Provider, Contract, WalletUnlocked } from 'fuels';
+import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, TransactionResponse } from 'fuels';
 
 import {
@@ -15,13 +15,14 @@ describe('Transaction Response', () => {
   let provider: Provider;
   let wallet: WalletUnlocked;
 
-  const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
+  const { abiContents: scriptAbi, binHexlified: scriptBytecode } =
+    getDocsSnippetsForcProject(DocSnippetProjectsEnum.SUM_SCRIPT);
 
   beforeAll(async () => {
     wallet = await getTestWallet();
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.COUNTER,
+    );
     provider = contract.provider;
   });
 
@@ -36,7 +37,8 @@ describe('Transaction Response', () => {
     const transactionResponse: TransactionResponse = call.transactionResponse;
 
     // Retrieve the full transaction summary
-    const transactionSummary = await transactionResponse.getTransactionSummary();
+    const transactionSummary =
+      await transactionResponse.getTransactionSummary();
     // #endregion transaction-response-1
 
     expect(call.transactionId).toEqual(transactionSummary.id);
@@ -64,7 +66,8 @@ describe('Transaction Response', () => {
     await wallet.fund(transactionRequest, txCost);
 
     // Submit the transaction
-    const response: TransactionResponse = await wallet.sendTransaction(transactionRequest);
+    const response: TransactionResponse =
+      await wallet.sendTransaction(transactionRequest);
 
     // Generate the transaction summary
     const transactionSummary = await response.getTransactionSummary();
@@ -87,11 +90,11 @@ describe('Transaction Response', () => {
     transactionRequest.gasLimit = txCost.gasUsed;
 
     await wallet.fund(transactionRequest, txCost);
-    const response: TransactionResponse = await wallet.sendTransaction(transactionRequest);
+    const response: TransactionResponse =
+      await wallet.sendTransaction(transactionRequest);
 
-    const previouslySubmittedTransactionId = transactionRequest.getTransactionId(
-      provider.getChainId()
-    );
+    const previouslySubmittedTransactionId =
+      transactionRequest.getTransactionId(provider.getChainId());
 
     // #region transaction-response-3
     // #import { TransactionResponse };
@@ -101,10 +104,14 @@ describe('Transaction Response', () => {
     // 0x...
 
     // Retrieve the transaction response from the transaction ID
-    const transactionResponse = await TransactionResponse.create(transactionId, provider);
+    const transactionResponse = await TransactionResponse.create(
+      transactionId,
+      provider,
+    );
 
     // Generate the transaction summary
-    const transactionSummary = await transactionResponse.getTransactionSummary();
+    const transactionSummary =
+      await transactionResponse.getTransactionSummary();
     // #endregion transaction-response-3
 
     expect(response.id).toEqual(transactionSummary.id);

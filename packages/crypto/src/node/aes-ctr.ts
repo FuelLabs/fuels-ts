@@ -1,30 +1,30 @@
-import { FuelError, ErrorCode } from "@fuel-ts/errors";
-import { arrayify } from "@fuel-ts/utils";
-import crypto from "crypto";
-import { pbkdf2 } from "ethers";
+import crypto from 'crypto';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { arrayify } from '@fuel-ts/utils';
+import { pbkdf2 } from 'ethers';
 
-import type { CryptoApi, Keystore } from "../types";
+import type { CryptoApi, Keystore } from '../types';
 
-import { bufferFromString } from "./bufferFromString";
-import { randomBytes } from "./randomBytes";
-import { stringFromBuffer } from "./stringFromBuffer";
+import { bufferFromString } from './bufferFromString';
+import { randomBytes } from './randomBytes';
+import { stringFromBuffer } from './stringFromBuffer';
 
-const ALGORITHM = "aes-256-ctr";
+const ALGORITHM = 'aes-256-ctr';
 
 /**
  * Generate a pbkdf2 key from a password and random salt
  */
-export const keyFromPassword: CryptoApi["keyFromPassword"] = (
-	password: string,
-	saltBuffer: Uint8Array,
+export const keyFromPassword: CryptoApi['keyFromPassword'] = (
+  password: string,
+  saltBuffer: Uint8Array,
 ): Uint8Array => {
-	const passBuffer = bufferFromString(
-		String(password).normalize("NFKC"),
-		"utf-8",
-	);
-	const key = pbkdf2(passBuffer, saltBuffer, 100000, 32, "sha256");
+  const passBuffer = bufferFromString(
+    String(password).normalize('NFKC'),
+    'utf-8',
+  );
+  const key = pbkdf2(passBuffer, saltBuffer, 100000, 32, 'sha256');
 
-	return arrayify(key);
+  return arrayify(key);
 };
 
 /**
@@ -33,49 +33,49 @@ export const keyFromPassword: CryptoApi["keyFromPassword"] = (
  *
  * @returns Promise<Keystore> object
  */
-export const encrypt: CryptoApi["encrypt"] = async <T>(
-	password: string,
-	data: T,
+export const encrypt: CryptoApi['encrypt'] = async <T>(
+  password: string,
+  data: T,
 ): Promise<Keystore> => {
-	const iv = randomBytes(16);
-	const salt = randomBytes(32);
-	const secret = keyFromPassword(password, salt);
-	const dataBuffer = Uint8Array.from(
-		Buffer.from(JSON.stringify(data), "utf-8"),
-	);
+  const iv = randomBytes(16);
+  const salt = randomBytes(32);
+  const secret = keyFromPassword(password, salt);
+  const dataBuffer = Uint8Array.from(
+    Buffer.from(JSON.stringify(data), 'utf-8'),
+  );
 
-	const cipher = await crypto.createCipheriv(ALGORITHM, secret, iv);
-	let cipherData = cipher.update(dataBuffer);
-	cipherData = Buffer.concat([cipherData, cipher.final()]);
+  const cipher = await crypto.createCipheriv(ALGORITHM, secret, iv);
+  let cipherData = cipher.update(dataBuffer);
+  cipherData = Buffer.concat([cipherData, cipher.final()]);
 
-	return {
-		data: stringFromBuffer(cipherData),
-		iv: stringFromBuffer(iv),
-		salt: stringFromBuffer(salt),
-	};
+  return {
+    data: stringFromBuffer(cipherData),
+    iv: stringFromBuffer(iv),
+    salt: stringFromBuffer(salt),
+  };
 };
 
 /**
  * Given a password and a keystore object, decrypts the text and returns
  * the resulting value
  */
-export const decrypt: CryptoApi["decrypt"] = async <T>(
-	password: string,
-	keystore: Keystore,
+export const decrypt: CryptoApi['decrypt'] = async <T>(
+  password: string,
+  keystore: Keystore,
 ): Promise<T> => {
-	const iv = bufferFromString(keystore.iv);
-	const salt = bufferFromString(keystore.salt);
-	const secret = keyFromPassword(password, salt);
-	const encryptedText = bufferFromString(keystore.data);
+  const iv = bufferFromString(keystore.iv);
+  const salt = bufferFromString(keystore.salt);
+  const secret = keyFromPassword(password, salt);
+  const encryptedText = bufferFromString(keystore.data);
 
-	const decipher = await crypto.createDecipheriv(ALGORITHM, secret, iv);
-	const decrypted = decipher.update(encryptedText);
-	const deBuff = Buffer.concat([decrypted, decipher.final()]);
-	const decryptedData = Buffer.from(deBuff).toString("utf-8");
+  const decipher = await crypto.createDecipheriv(ALGORITHM, secret, iv);
+  const decrypted = decipher.update(encryptedText);
+  const deBuff = Buffer.concat([decrypted, decipher.final()]);
+  const decryptedData = Buffer.from(deBuff).toString('utf-8');
 
-	try {
-		return JSON.parse(decryptedData);
-	} catch {
-		throw new FuelError(ErrorCode.INVALID_CREDENTIALS, "Invalid credentials.");
-	}
+  try {
+    return JSON.parse(decryptedData);
+  } catch {
+    throw new FuelError(ErrorCode.INVALID_CREDENTIALS, 'Invalid credentials.');
+  }
 };

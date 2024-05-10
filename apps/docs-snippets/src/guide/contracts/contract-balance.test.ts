@@ -1,5 +1,5 @@
-import type { Contract, AssetId } from 'fuels';
-import { Wallet, BN, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { AssetId, Contract } from 'fuels';
+import { BN, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -13,7 +13,9 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TRANSFER_TO_ADDRESS);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.TRANSFER_TO_ADDRESS,
+    );
   });
 
   it('should successfully get a contract balance', async () => {

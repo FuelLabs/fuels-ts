@@ -1,5 +1,5 @@
 import type { BigNumberish, CoinQuantity, WalletUnlocked } from 'fuels';
-import { Provider, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 /**
  * @group node

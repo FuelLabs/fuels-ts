@@ -6,10 +6,10 @@
  * the event bus should be provided.
  */
 export interface TargetObject {
-	on?: (event: string, callback: any) => void;
-	off?: (event: string, callback: any) => void;
-	emit?: (event: string, data: any) => void;
-	addEventListener?: (event: string, callback: any) => void;
-	removeEventListener?: (event: string, callback: any) => void;
-	postMessage?: (message: string) => void;
+  on?: (event: string, callback: any) => void;
+  off?: (event: string, callback: any) => void;
+  emit?: (event: string, data: any) => void;
+  addEventListener?: (event: string, callback: any) => void;
+  removeEventListener?: (event: string, callback: any) => void;
+  postMessage?: (message: string) => void;
 }

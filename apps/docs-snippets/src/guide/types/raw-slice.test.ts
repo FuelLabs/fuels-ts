@@ -10,7 +10,9 @@ describe('RawSlice', () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_RAW_SLICE);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.ECHO_RAW_SLICE,
+    );
   });
 
   it('should pass a raw slice to a contract', async () => {
@@ -19,7 +21,9 @@ describe('RawSlice', () => {
 
     const rawSlice: RawSlice = [40, 41, 42];
 
-    const { value } = await contract.functions.raw_slice_comparison(rawSlice).simulate();
+    const { value } = await contract.functions
+      .raw_slice_comparison(rawSlice)
+      .simulate();
 
     expect(value).toBeTruthy();
     // #endregion raw-slice-1
@@ -31,7 +35,9 @@ describe('RawSlice', () => {
 
     const rawSlice: RawSlice = [8, 42, 77];
 
-    const { value } = await contract.functions.echo_raw_slice(rawSlice).simulate();
+    const { value } = await contract.functions
+      .echo_raw_slice(rawSlice)
+      .simulate();
 
     expect(value).toStrictEqual(rawSlice);
     // #endregion raw-slice-2

@@ -1,86 +1,86 @@
 {
-	"name": "fuels",
-	"version": "0.84.0",
-	"description": "Fuel TS SDK",
-	"author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-	"bin": {
-		"fuels": "fuels.js"
-	},
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"types": "dist/index.d.ts",
-	"engines": {
-		"node": "^18.18.2 || ^20.0.0"
-	},
-	"exports": {
-		".": {
-			"require": "./dist/index.js",
-			"import": "./dist/index.mjs",
-			"types": "./dist/index.d.ts"
-		},
-		"./cli": {
-			"require": "./dist/cli.js",
-			"import": "./dist/cli.mjs",
-			"types": "./dist/cli.d.ts"
-		}
-	},
-	"typesVersions": {
-		"*": {
-			"cli": ["./dist/cli.d.ts"]
-		}
-	},
-	"files": ["dist"],
-	"scripts": {
-		"build": "tsup && pnpm vite build",
-		"postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
-		"prepublishOnly": "cp ../../README.md ./README.md"
-	},
-	"license": "Apache-2.0",
-	"dependencies": {
-		"@fuel-ts/abi-coder": "workspace:*",
-		"@fuel-ts/abi-typegen": "workspace:*",
-		"@fuel-ts/account": "workspace:*",
-		"@fuel-ts/address": "workspace:*",
-		"@fuel-ts/contract": "workspace:*",
-		"@fuel-ts/crypto": "workspace:*",
-		"@fuel-ts/errors": "workspace:*",
-		"@fuel-ts/forc": "workspace:*",
-		"@fuel-ts/fuel-core": "workspace:*",
-		"@fuel-ts/hasher": "workspace:*",
-		"@fuel-ts/interfaces": "workspace:*",
-		"@fuel-ts/math": "workspace:*",
-		"@fuel-ts/merkle": "workspace:*",
-		"@fuel-ts/program": "workspace:*",
-		"@fuel-ts/script": "workspace:*",
-		"@fuel-ts/transactions": "workspace:*",
-		"@fuel-ts/utils": "workspace:*",
-		"@fuel-ts/versions": "workspace:*",
-		"bundle-require": "^4.0.1",
-		"chalk": "4",
-		"chokidar": "^3.5.3",
-		"commander": "^9.4.1",
-		"esbuild": "^0.19.3",
-		"glob": "^10.2.6",
-		"handlebars": "^4.7.7",
-		"joycon": "^3.1.1",
-		"lodash.camelcase": "^4.3.0",
-		"portfinder": "^1.0.32",
-		"toml": "^3.0.0",
-		"tree-kill": "^1.2.2",
-		"yup": "^0.32.11"
-	},
-	"devDependencies": {
-		"@types/lodash.camelcase": "^4.3.7",
-		"@types/rimraf": "^3.0.2",
-		"vite": "^5.2.9"
-	},
-	"keywords": [
-		"ethereum",
-		"forc",
-		"fuel",
-		"fuels",
-		"fuel-vm",
-		"sway",
-		"typescript"
-	]
+  "name": "fuels",
+  "version": "0.84.0",
+  "description": "Fuel TS SDK",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "bin": {
+    "fuels": "fuels.js"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "engines": {
+    "node": "^18.18.2 || ^20.0.0"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./cli": {
+      "require": "./dist/cli.js",
+      "import": "./dist/cli.mjs",
+      "types": "./dist/cli.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "cli": ["./dist/cli.d.ts"]
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsup && pnpm vite build",
+    "postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
+    "prepublishOnly": "cp ../../README.md ./README.md"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fuel-ts/abi-coder": "workspace:*",
+    "@fuel-ts/abi-typegen": "workspace:*",
+    "@fuel-ts/account": "workspace:*",
+    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/contract": "workspace:*",
+    "@fuel-ts/crypto": "workspace:*",
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/forc": "workspace:*",
+    "@fuel-ts/fuel-core": "workspace:*",
+    "@fuel-ts/hasher": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*",
+    "@fuel-ts/program": "workspace:*",
+    "@fuel-ts/script": "workspace:*",
+    "@fuel-ts/transactions": "workspace:*",
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
+    "bundle-require": "^4.0.1",
+    "chalk": "4",
+    "chokidar": "^3.5.3",
+    "commander": "^9.4.1",
+    "esbuild": "^0.19.3",
+    "glob": "^10.2.6",
+    "handlebars": "^4.7.7",
+    "joycon": "^3.1.1",
+    "lodash.camelcase": "^4.3.0",
+    "portfinder": "^1.0.32",
+    "toml": "^3.0.0",
+    "tree-kill": "^1.2.2",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/lodash.camelcase": "^4.3.7",
+    "@types/rimraf": "^3.0.2",
+    "vite": "^5.2.9"
+  },
+  "keywords": [
+    "ethereum",
+    "forc",
+    "fuel",
+    "fuels",
+    "fuel-vm",
+    "sway",
+    "typescript"
+  ]
 }

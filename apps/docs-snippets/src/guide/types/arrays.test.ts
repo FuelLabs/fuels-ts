@@ -11,7 +11,9 @@ describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_U64_ARRAY);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.ECHO_U64_ARRAY,
+    );
   });
 
   it('should successfully demonstrate typed arrays examples', () => {
@@ -29,7 +31,9 @@ describe(__filename, () => {
     // #region arrays-2
     const u64Array = [10000000, 20000000];
 
-    const { value } = await contract.functions.echo_u64_array(u64Array).simulate();
+    const { value } = await contract.functions
+      .echo_u64_array(u64Array)
+      .simulate();
 
     expect(new BN(value[0]).toNumber()).toEqual(u64Array[0]);
 

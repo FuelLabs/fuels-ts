@@ -5,7 +5,9 @@ import { createAndDeployContractFromProject } from '../../utils';
  * @group node
  */
 test('isReadOnly returns true for read-only functions', async () => {
-  const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
+  const contract = await createAndDeployContractFromProject(
+    DocSnippetProjectsEnum.COUNTER,
+  );
 
   // #region is-function-readonly-1
   const isReadOnly = contract.functions.get_count.isReadOnly();

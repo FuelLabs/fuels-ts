@@ -37,18 +37,20 @@ describe('unit-conversion', () => {
 
   describe('Contract', () => {
     it('should use BN in a contract', async () => {
-      const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+      const contract = await createAndDeployContractFromProject(
+        DocSnippetProjectsEnum.ECHO_VALUES,
+      );
 
       // #region contract-calls-1
-      const MAX_U64 = bn('18446744073709551615');
+      const maxU64 = bn('18446744073709551615');
 
-      const { value } = await contract.functions.echo_u64(MAX_U64).call();
+      const { value } = await contract.functions.echo_u64(maxU64).call();
 
       value.toString();
       // "18446744073709551615"
       // #endregion contract-calls-1
 
-      expect(value.toString()).toEqual(MAX_U64.toString());
+      expect(value.toString()).toEqual(maxU64.toString());
     });
   });
 

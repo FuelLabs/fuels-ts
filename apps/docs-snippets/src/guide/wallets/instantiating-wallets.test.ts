@@ -15,7 +15,8 @@ describe(__filename, () => {
 
   it('should instantiate an unlocked wallet from private key', () => {
     // #region instantiating-wallets-2
-    const privateKey = '0x36ca81ba70f3e04b7cc8780bff42d907ebca508097d4ae3df5147c93fd217f7c';
+    const privateKey =
+      '0x36ca81ba70f3e04b7cc8780bff42d907ebca508097d4ae3df5147c93fd217f7c';
 
     const myWallet: WalletUnlocked = Wallet.fromPrivateKey(privateKey);
     // #endregion instantiating-wallets-2
@@ -25,7 +26,8 @@ describe(__filename, () => {
 
   it('should instantiate an unlocked wallet from mnemonic phrase', () => {
     // #region instantiating-wallets-3
-    const mnemonic = 'section gospel lady april mouse huge prosper boy urge fox tackle orient';
+    const mnemonic =
+      'section gospel lady april mouse huge prosper boy urge fox tackle orient';
 
     const myWallet: WalletUnlocked = Wallet.fromMnemonic(mnemonic);
     // #endregion instantiating-wallets-3
@@ -35,7 +37,8 @@ describe(__filename, () => {
 
   it('should instantiate an unlocked wallet from seed', () => {
     // #region instantiating-wallets-4
-    const mySeed = '0xa5d42fd0cf8825fc846b2f257887a515573ee5b779e99f060dc945b3d5504bca';
+    const mySeed =
+      '0xa5d42fd0cf8825fc846b2f257887a515573ee5b779e99f060dc945b3d5504bca';
 
     const myWallet: WalletUnlocked = Wallet.fromSeed(mySeed);
     // #endregion instantiating-wallets-4
@@ -45,7 +48,8 @@ describe(__filename, () => {
 
   it('should instantiate an unlocked wallet from derived key', () => {
     // #region instantiating-wallets-5
-    const mySeed = '0xa5d42fd0cf8825fc846b2f257887a515573ee5b779e99f060dc945b3d5504bca';
+    const mySeed =
+      '0xa5d42fd0cf8825fc846b2f257887a515573ee5b779e99f060dc945b3d5504bca';
 
     const extendedKey = HDWallet.fromSeed(mySeed).toExtendedKey();
 
@@ -61,7 +65,10 @@ describe(__filename, () => {
 
     const password = 'password';
 
-    const myWallet: WalletUnlocked = await Wallet.fromEncryptedJson(jsonWallet, password);
+    const myWallet: WalletUnlocked = await Wallet.fromEncryptedJson(
+      jsonWallet,
+      password,
+    );
     // #endregion instantiating-wallets-6
 
     expect(myWallet).toBeDefined();
@@ -69,8 +76,10 @@ describe(__filename, () => {
 
   it('should instantiate an unlocked wallet from a locked wallet', () => {
     // #region instantiating-wallets-7
-    const address = 'fuel1fjett54ahnydhklerngqhclzmmkmp6s0xnykns8dwsdpjfg3r2rsfazpw5';
-    const privateKey = '0x9deba03f08676716e3a4247797672d8008a5198d183048be65415ef89447b890';
+    const address =
+      'fuel1fjett54ahnydhklerngqhclzmmkmp6s0xnykns8dwsdpjfg3r2rsfazpw5';
+    const privateKey =
+      '0x9deba03f08676716e3a4247797672d8008a5198d183048be65415ef89447b890';
 
     const lockedWallet: WalletLocked = Wallet.fromAddress(address);
 
@@ -101,7 +110,9 @@ describe(__filename, () => {
     const myWallet = Wallet.fromAddress(address);
 
     // #region instantiating-wallets-9
-    const provider = await Provider.create('https://beta-5.fuel.network/graphql');
+    const provider = await Provider.create(
+      'https://beta-5.fuel.network/graphql',
+    );
 
     myWallet.connect(provider);
     // #endregion instantiating-wallets-9

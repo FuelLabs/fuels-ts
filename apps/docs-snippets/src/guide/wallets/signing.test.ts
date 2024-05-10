@@ -34,7 +34,10 @@ describe(__filename, () => {
     const hashedMessage = hashMessage(message);
     // Example output: 0x40436501b686546b7c660bb18791ac2ae35e77fbe2ac977fc061922b9ec83766
 
-    const recoveredAddress = Signer.recoverAddress(hashedMessage, signedMessage);
+    const recoveredAddress = Signer.recoverAddress(
+      hashedMessage,
+      signedMessage,
+    );
     // Example output: Address {
     //   bech32Address: 'fuel1za0wl90u09c6v88faqkvczu9r927kewvvr0asejv5xmdwtm98w0st7m2s3'
     // }
@@ -64,7 +67,10 @@ describe(__filename, () => {
     const signedTransaction = await wallet.signTransaction(request);
     const transactionId = request.getTransactionId(provider.getChainId());
 
-    const recoveredAddress = Signer.recoverAddress(transactionId, signedTransaction);
+    const recoveredAddress = Signer.recoverAddress(
+      transactionId,
+      signedTransaction,
+    );
 
     request.updateWitnessByOwner(recoveredAddress, signedTransaction);
 

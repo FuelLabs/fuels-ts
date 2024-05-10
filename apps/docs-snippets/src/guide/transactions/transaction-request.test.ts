@@ -1,16 +1,16 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, Coin, Resource } from 'fuels';
 import {
-  CreateTransactionRequest,
-  ScriptTransactionRequest,
-  arrayify,
-  ZeroBytes32,
   Address,
-  bn,
+  CreateTransactionRequest,
+  FUEL_NETWORK_URL,
   Predicate,
   Provider,
-  FUEL_NETWORK_URL,
+  ScriptTransactionRequest,
   WalletUnlocked,
+  ZeroBytes32,
+  arrayify,
+  bn,
 } from 'fuels';
 
 import {
@@ -25,13 +25,11 @@ describe('Transaction Request', () => {
   let provider: Provider;
   let baseAssetId: string = ZeroBytes32;
 
-  const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
+  const { abiContents: scriptAbi, binHexlified: scriptBytecode } =
+    getDocsSnippetsForcProject(DocSnippetProjectsEnum.SUM_SCRIPT);
 
-  const { abiContents: predicateAbi, binHexlified: predicateBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SIMPLE_PREDICATE
-  );
+  const { abiContents: predicateAbi, binHexlified: predicateBytecode } =
+    getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_PREDICATE);
 
   const address = Address.fromRandom();
 
@@ -224,7 +222,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0xac53fe9d09624f6295e0d9205eecc373ff568db2dbb89656190b1cb1a9b5bb00'
+      '0xac53fe9d09624f6295e0d9205eecc373ff568db2dbb89656190b1cb1a9b5bb00',
     );
   });
 });

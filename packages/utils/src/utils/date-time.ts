@@ -47,7 +47,7 @@ const secondsToMs = (seconds: number): number => seconds * 1000;
  * @returns Unix seconds timestamp
  */
 const tai64ToUnixSeconds = (tai64: Tai64Timestamp): number =>
-	Number(BigInt(tai64) - TAI64_UNIX_OFFSET);
+  Number(BigInt(tai64) - TAI64_UNIX_OFFSET);
 
 /**
  * Converts Unix (seconds) to Tai64 (seconds).
@@ -56,7 +56,7 @@ const tai64ToUnixSeconds = (tai64: Tai64Timestamp): number =>
  * @returns Tai64 timestamp
  */
 const unixSecondsToTai64 = (unixSeconds: number): string =>
-	String(BigInt(unixSeconds) + TAI64_UNIX_OFFSET);
+  String(BigInt(unixSeconds) + TAI64_UNIX_OFFSET);
 
 /**
  * Helper to convert Tai64 (seconds) time units to UNIX (milliseconds) time units and vice.
@@ -65,7 +65,7 @@ const unixSecondsToTai64 = (unixSeconds: number): string =>
  * @returns Unix milliseconds timestamp
  */
 const tai64ToUnixMilliseconds = (tai64: Tai64Timestamp): number =>
-	secondsToMs(tai64ToUnixSeconds(tai64));
+  secondsToMs(tai64ToUnixSeconds(tai64));
 
 /**
  * This class is used to represent a date and time in the Tai64 format.
@@ -96,61 +96,61 @@ const tai64ToUnixMilliseconds = (tai64: Tai64Timestamp): number =>
  * ```
  */
 export class DateTime extends Date implements Date {
-	static TAI64_NULL: Tai64Timestamp = "";
+  static TAI64_NULL: Tai64Timestamp = '';
 
-	/**
-	 * Generates a new DateTime instance from a Tai64 timestamp.
-	 *
-	 * @param tai64 - Tai64 timestamp
-	 * @returns a new DateTime instance
-	 */
-	static fromTai64(tai64: Tai64Timestamp): DateTime {
-		return new DateTime(tai64ToUnixMilliseconds(tai64));
-	}
+  /**
+   * Generates a new DateTime instance from a Tai64 timestamp.
+   *
+   * @param tai64 - Tai64 timestamp
+   * @returns a new DateTime instance
+   */
+  static fromTai64(tai64: Tai64Timestamp): DateTime {
+    return new DateTime(tai64ToUnixMilliseconds(tai64));
+  }
 
-	/**
-	 * @param unixMilliseconds - unix milliseconds timestamp
-	 * @returns a new DateTime instance
-	 */
-	static fromUnixMilliseconds(unixMilliseconds: number): DateTime {
-		return new DateTime(unixMilliseconds);
-	}
+  /**
+   * @param unixMilliseconds - unix milliseconds timestamp
+   * @returns a new DateTime instance
+   */
+  static fromUnixMilliseconds(unixMilliseconds: number): DateTime {
+    return new DateTime(unixMilliseconds);
+  }
 
-	/**
-	 * @param unixSeconds - unix seconds timestamp
-	 * @returns a new DateTime instance
-	 */
-	static fromUnixSeconds(unixSeconds: number): DateTime {
-		return new DateTime(secondsToMs(unixSeconds));
-	}
+  /**
+   * @param unixSeconds - unix seconds timestamp
+   * @returns a new DateTime instance
+   */
+  static fromUnixSeconds(unixSeconds: number): DateTime {
+    return new DateTime(secondsToMs(unixSeconds));
+  }
 
-	/**
-	 * Hide the constructor to prevent direct instantiation.
-	 */
-	private constructor(date: Date | number | string) {
-		super(date);
-	}
+  /**
+   * Hide the constructor to prevent direct instantiation.
+   */
+  private constructor(date: Date | number | string) {
+    super(date);
+  }
 
-	/**
-	 * Returns the Tai64 timestamp.
-	 *
-	 * @returns the Tai64 timestamp
-	 */
-	toTai64(): Tai64Timestamp {
-		return unixSecondsToTai64(this.toUnixSeconds());
-	}
+  /**
+   * Returns the Tai64 timestamp.
+   *
+   * @returns the Tai64 timestamp
+   */
+  toTai64(): Tai64Timestamp {
+    return unixSecondsToTai64(this.toUnixSeconds());
+  }
 
-	/**
-	 * @returns the unix milliseconds timestamp
-	 */
-	toUnixMilliseconds(): number {
-		return this.getTime();
-	}
+  /**
+   * @returns the unix milliseconds timestamp
+   */
+  toUnixMilliseconds(): number {
+    return this.getTime();
+  }
 
-	/**
-	 * @returns the unix seconds timestamp
-	 */
-	toUnixSeconds(): number {
-		return msToSeconds(this.getTime());
-	}
+  /**
+   * @returns the unix seconds timestamp
+   */
+  toUnixSeconds(): number {
+    return msToSeconds(this.getTime());
+  }
 }

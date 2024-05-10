@@ -1,12 +1,12 @@
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
+  ContractFactory,
   FUEL_NETWORK_URL,
   Provider,
   ScriptTransactionRequest,
   Wallet,
   WalletUnlocked,
   coinQuantityfy,
-  ContractFactory,
 } from 'fuels';
 
 import type { DocSnippetProjectsEnum } from '../test/fixtures/forc-projects';
@@ -20,7 +20,10 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   const baseAssetId = provider.getBaseAssetId();
 
   // instantiate the genesis wallet with its secret key
-  const genesisWallet = new WalletUnlocked(process.env.GENESIS_SECRET || '0x01', provider);
+  const genesisWallet = new WalletUnlocked(
+    process.env.GENESIS_SECRET || '0x01',
+    provider,
+  );
 
   // create a new test wallet
   const testWallet = Wallet.generate({ provider });
@@ -31,7 +34,9 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // add the transaction outputs (coins to be sent to the test wallet)
   (seedQuantities || [[1_000_000, baseAssetId]])
     .map(coinQuantityfy)
-    .forEach(({ amount, assetId }) => request.addCoinOutput(testWallet.address, amount, assetId));
+    .forEach(({ amount, assetId }) =>
+      request.addCoinOutput(testWallet.address, amount, assetId),
+    );
 
   // get the cost of the transaction
   const txCost = await genesisWallet.provider.getTransactionCost(request);
@@ -49,12 +54,17 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
 };
 
 export const createAndDeployContractFromProject = async (
-  project: DocSnippetProjectsEnum
+  project: DocSnippetProjectsEnum,
 ): Promise<Contract> => {
   const wallet = await getTestWallet();
-  const { abiContents, binHexlified, storageSlots } = getDocsSnippetsForcProject(project);
+  const { abiContents, binHexlified, storageSlots } =
+    getDocsSnippetsForcProject(project);
 
-  const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
+  const contractFactory = new ContractFactory(
+    binHexlified,
+    abiContents,
+    wallet,
+  );
 
   return contractFactory.deployContract({
     storageSlots,

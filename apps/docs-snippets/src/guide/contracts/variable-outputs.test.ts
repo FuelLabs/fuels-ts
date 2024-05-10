@@ -1,5 +1,5 @@
 import type { Contract } from 'fuels';
-import { getMintedAssetId, getRandomB256, Wallet } from 'fuels';
+import { Wallet, getMintedAssetId, getRandomB256 } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -10,7 +10,9 @@ import { createAndDeployContractFromProject } from '../../utils';
 describe(__filename, () => {
   let contract: Contract;
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TOKEN);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.TOKEN,
+    );
   });
 
   it('should successfully execute contract call with variable outputs', async () => {

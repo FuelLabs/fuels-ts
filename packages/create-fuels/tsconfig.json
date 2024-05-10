@@ -1,8 +1,8 @@
 {
-	"extends": "../../tsconfig.base.json",
-	"compilerOptions": {
-		"outDir": "./dist"
-	},
-	"include": ["src", "scripts", "test"],
-	"exclude": ["templates"]
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["src", "scripts", "test"],
+  "exclude": ["templates"]
 }

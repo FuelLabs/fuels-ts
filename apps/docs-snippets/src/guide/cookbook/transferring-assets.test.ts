@@ -19,7 +19,7 @@ describe(__filename, () => {
     sender = await getTestWallet();
 
     const { abiContents, binHexlified } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.COUNTER
+      DocSnippetProjectsEnum.COUNTER,
     );
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
@@ -38,7 +38,11 @@ describe(__filename, () => {
 
     const baseAssetId = await sender.provider.getBaseAssetId();
 
-    const response = await sender.transfer(destination.address, amountToTransfer, baseAssetId);
+    const response = await sender.transfer(
+      destination.address,
+      amountToTransfer,
+      baseAssetId,
+    );
 
     await response.wait();
 
@@ -62,7 +66,7 @@ describe(__filename, () => {
     const transactionRequest = await sender.createTransfer(
       destination.address,
       amountToTransfer,
-      assetId
+      assetId,
     );
 
     const chainId = provider.getChainId();
@@ -90,7 +94,7 @@ describe(__filename, () => {
     const transactionRequest = await sender.createTransfer(
       destination.address,
       amountToTransfer,
-      assetId
+      assetId,
     );
 
     const chainId = provider.getChainId();
@@ -99,7 +103,9 @@ describe(__filename, () => {
 
     transactionRequest.maturity = 1;
 
-    const { maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
+    const { maxFee } = await provider.estimateTxGasAndFee({
+      transactionRequest,
+    });
 
     transactionRequest.maxFee = maxFee;
 
@@ -124,12 +130,18 @@ describe(__filename, () => {
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
-    const tx = await sender.transferToContract(contractId, amountToTransfer, assetId);
+    const tx = await sender.transferToContract(
+      contractId,
+      amountToTransfer,
+      assetId,
+    );
     expect(new BN(contractBalance).toNumber()).toBe(0);
 
     await tx.waitForResult();
 
-    expect(new BN(await deployedContract.getBalance(assetId)).toNumber()).toBe(amountToTransfer);
+    expect(new BN(await deployedContract.getBalance(assetId)).toNumber()).toBe(
+      amountToTransfer,
+    );
     // #endregion transferring-assets-4
   });
 });

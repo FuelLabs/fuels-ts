@@ -15,7 +15,9 @@ describe(__filename, () => {
   let baseAssetId: string;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.ECHO_VALUES,
+    );
     provider = contract.provider;
     baseAssetId = provider.getBaseAssetId();
     wallet = await getTestWallet([
@@ -31,7 +33,10 @@ describe(__filename, () => {
     // #region add-transfer-1
     const recipient = Wallet.generate({ provider });
 
-    await contract.functions.echo_u64(100).addTransfer(recipient.address, 100, baseAssetId).call();
+    await contract.functions
+      .echo_u64(100)
+      .addTransfer(recipient.address, 100, baseAssetId)
+      .call();
     // #endregion add-transfer-1
 
     const recipientBalance = await recipient.getBalance(baseAssetId);

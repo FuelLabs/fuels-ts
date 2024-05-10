@@ -1,46 +1,46 @@
 import {
-	ASSET_ID_LEN,
-	CONTRACT_ID_LEN,
-	SCRIPT_FIXED_SIZE,
-	WORD_SIZE,
-	calculateVmTxMemory,
-} from "@fuel-ts/abi-coder";
+  ASSET_ID_LEN,
+  CONTRACT_ID_LEN,
+  SCRIPT_FIXED_SIZE,
+  WORD_SIZE,
+  calculateVmTxMemory,
+} from '@fuel-ts/abi-coder';
 import type {
-	TransactionResultReturnDataReceipt,
-	TransactionResultRevertReceipt,
-	CallResult,
-	TransactionResultReceipt,
-	TransactionResultReturnReceipt,
-	TransactionResultScriptResultReceipt,
-	TransactionResult,
-} from "@fuel-ts/account";
-import { extractTxError } from "@fuel-ts/account";
-import { ErrorCode, FuelError } from "@fuel-ts/errors";
-import type { BytesLike } from "@fuel-ts/interfaces";
-import type { BN } from "@fuel-ts/math";
-import type { ReceiptScriptResult } from "@fuel-ts/transactions";
-import { ReceiptType } from "@fuel-ts/transactions";
-import { arrayify } from "@fuel-ts/utils";
+  CallResult,
+  TransactionResult,
+  TransactionResultReceipt,
+  TransactionResultReturnDataReceipt,
+  TransactionResultReturnReceipt,
+  TransactionResultRevertReceipt,
+  TransactionResultScriptResultReceipt,
+} from '@fuel-ts/account';
+import { extractTxError } from '@fuel-ts/account';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
+import type { ReceiptScriptResult } from '@fuel-ts/transactions';
+import { ReceiptType } from '@fuel-ts/transactions';
+import { arrayify } from '@fuel-ts/utils';
 
-import type { CallConfig } from "./types";
+import type { CallConfig } from './types';
 
 export const calculateScriptDataBaseOffset = (maxInputs: number) =>
-	SCRIPT_FIXED_SIZE + calculateVmTxMemory({ maxInputs });
+  SCRIPT_FIXED_SIZE + calculateVmTxMemory({ maxInputs });
 export const POINTER_DATA_OFFSET =
-	WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
+  WORD_SIZE + ASSET_ID_LEN + CONTRACT_ID_LEN + WORD_SIZE + WORD_SIZE;
 /**
  * Represents a script result, containing information about the script execution.
  */
 export type ScriptResult = {
-	code: BN;
-	gasUsed: BN;
-	receipts: TransactionResultReceipt[];
-	scriptResultReceipt: TransactionResultScriptResultReceipt;
-	returnReceipt:
-		| TransactionResultReturnReceipt
-		| TransactionResultReturnDataReceipt
-		| TransactionResultRevertReceipt;
-	callResult: CallResult;
+  code: BN;
+  gasUsed: BN;
+  receipts: TransactionResultReceipt[];
+  scriptResultReceipt: TransactionResultScriptResultReceipt;
+  returnReceipt:
+    | TransactionResultReturnReceipt
+    | TransactionResultReturnDataReceipt
+    | TransactionResultRevertReceipt;
+  callResult: CallResult;
 };
 
 /**
@@ -50,41 +50,41 @@ export type ScriptResult = {
  * @returns The converted ScriptResult.
  */
 function callResultToScriptResult(callResult: CallResult): ScriptResult {
-	const receipts = [...callResult.receipts];
+  const receipts = [...callResult.receipts];
 
-	let scriptResultReceipt: ReceiptScriptResult | undefined;
-	let returnReceipt:
-		| TransactionResultReturnReceipt
-		| TransactionResultReturnDataReceipt
-		| TransactionResultRevertReceipt
-		| undefined;
+  let scriptResultReceipt: ReceiptScriptResult | undefined;
+  let returnReceipt:
+    | TransactionResultReturnReceipt
+    | TransactionResultReturnDataReceipt
+    | TransactionResultRevertReceipt
+    | undefined;
 
-	receipts.forEach((receipt) => {
-		if (receipt.type === ReceiptType.ScriptResult) {
-			scriptResultReceipt = receipt;
-		} else if (
-			receipt.type === ReceiptType.Return ||
-			receipt.type === ReceiptType.ReturnData ||
-			receipt.type === ReceiptType.Revert
-		) {
-			returnReceipt = receipt;
-		}
-	});
+  receipts.forEach((receipt) => {
+    if (receipt.type === ReceiptType.ScriptResult) {
+      scriptResultReceipt = receipt;
+    } else if (
+      receipt.type === ReceiptType.Return ||
+      receipt.type === ReceiptType.ReturnData ||
+      receipt.type === ReceiptType.Revert
+    ) {
+      returnReceipt = receipt;
+    }
+  });
 
-	if (!scriptResultReceipt || !returnReceipt) {
-		throw new FuelError(ErrorCode.SCRIPT_REVERTED, `Transaction reverted.`);
-	}
+  if (!scriptResultReceipt || !returnReceipt) {
+    throw new FuelError(ErrorCode.SCRIPT_REVERTED, `Transaction reverted.`);
+  }
 
-	const scriptResult: ScriptResult = {
-		code: scriptResultReceipt.result,
-		gasUsed: scriptResultReceipt.gasUsed,
-		receipts,
-		scriptResultReceipt,
-		returnReceipt,
-		callResult,
-	};
+  const scriptResult: ScriptResult = {
+    code: scriptResultReceipt.result,
+    gasUsed: scriptResultReceipt.gasUsed,
+    receipts,
+    scriptResultReceipt,
+    returnReceipt,
+    callResult,
+  };
 
-	return scriptResult;
+  return scriptResult;
 }
 
 /**
@@ -97,24 +97,24 @@ function callResultToScriptResult(callResult: CallResult): ScriptResult {
  * @throws Throws an error if decoding fails.
  */
 export function decodeCallResult<TResult>(
-	callResult: CallResult,
-	decoder: (scriptResult: ScriptResult) => TResult,
-	logs: Array<any> = [],
+  callResult: CallResult,
+  decoder: (scriptResult: ScriptResult) => TResult,
+  logs: Array<any> = [],
 ): TResult {
-	try {
-		const scriptResult = callResultToScriptResult(callResult);
-		return decoder(scriptResult);
-	} catch (error) {
-		if ((<FuelError>error).code === ErrorCode.SCRIPT_REVERTED) {
-			throw extractTxError({
-				logs,
-				receipts: callResult.receipts,
-				status: (<TransactionResult>callResult).gqlTransaction?.status,
-			});
-		}
+  try {
+    const scriptResult = callResultToScriptResult(callResult);
+    return decoder(scriptResult);
+  } catch (error) {
+    if ((<FuelError>error).code === ErrorCode.SCRIPT_REVERTED) {
+      throw extractTxError({
+        logs,
+        receipts: callResult.receipts,
+        status: (<TransactionResult>callResult).gqlTransaction?.status,
+      });
+    }
 
-		throw error;
-	}
+    throw error;
+  }
 }
 
 /**
@@ -126,52 +126,52 @@ export function decodeCallResult<TResult>(
  * @returns The decoded invocation result.
  */
 export function callResultToInvocationResult<TReturn>(
-	callResult: CallResult,
-	call: CallConfig,
-	logs?: unknown[],
+  callResult: CallResult,
+  call: CallConfig,
+  logs?: unknown[],
 ): TReturn {
-	return decodeCallResult(
-		callResult,
-		(scriptResult: ScriptResult) => {
-			if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
-				throw new FuelError(
-					ErrorCode.SCRIPT_REVERTED,
-					`Script Reverted. Logs: ${JSON.stringify(logs)}`,
-				);
-			}
+  return decodeCallResult(
+    callResult,
+    (scriptResult: ScriptResult) => {
+      if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
+        throw new FuelError(
+          ErrorCode.SCRIPT_REVERTED,
+          `Script Reverted. Logs: ${JSON.stringify(logs)}`,
+        );
+      }
 
-			if (
-				scriptResult.returnReceipt.type !== ReceiptType.Return &&
-				scriptResult.returnReceipt.type !== ReceiptType.ReturnData
-			) {
-				const { type } = scriptResult.returnReceipt;
-				throw new FuelError(
-					ErrorCode.SCRIPT_REVERTED,
-					`Script Return Type [${type}] Invalid. Logs: ${JSON.stringify({
-						logs,
-						receipt: scriptResult.returnReceipt,
-					})}`,
-				);
-			}
+      if (
+        scriptResult.returnReceipt.type !== ReceiptType.Return &&
+        scriptResult.returnReceipt.type !== ReceiptType.ReturnData
+      ) {
+        const { type } = scriptResult.returnReceipt;
+        throw new FuelError(
+          ErrorCode.SCRIPT_REVERTED,
+          `Script Return Type [${type}] Invalid. Logs: ${JSON.stringify({
+            logs,
+            receipt: scriptResult.returnReceipt,
+          })}`,
+        );
+      }
 
-			let value;
-			if (scriptResult.returnReceipt.type === ReceiptType.Return) {
-				value = scriptResult.returnReceipt.val;
-			}
-			if (scriptResult.returnReceipt.type === ReceiptType.ReturnData) {
-				const decoded = call.func.decodeOutput(scriptResult.returnReceipt.data);
-				value = decoded[0];
-			}
+      let value;
+      if (scriptResult.returnReceipt.type === ReceiptType.Return) {
+        value = scriptResult.returnReceipt.val;
+      }
+      if (scriptResult.returnReceipt.type === ReceiptType.ReturnData) {
+        const decoded = call.func.decodeOutput(scriptResult.returnReceipt.data);
+        value = decoded[0];
+      }
 
-			return value as TReturn;
-		},
-		logs,
-	);
+      return value as TReturn;
+    },
+    logs,
+  );
 }
 
 export type EncodedScriptCall =
-	| Uint8Array
-	| { data: Uint8Array; script: Uint8Array };
+  | Uint8Array
+  | { data: Uint8Array; script: Uint8Array };
 
 /**
  * `ScriptRequest` provides functionality to encode and decode script data and results.
@@ -180,93 +180,93 @@ export type EncodedScriptCall =
  * @template TResult - Type of the script result.
  */
 export class ScriptRequest<TData = void, TResult = void> {
-	/**
-	 * The bytes of the script.
-	 */
-	bytes: Uint8Array;
+  /**
+   * The bytes of the script.
+   */
+  bytes: Uint8Array;
 
-	/**
-	 * A function to encode the script data.
-	 */
-	scriptDataEncoder: (data: TData) => EncodedScriptCall;
+  /**
+   * A function to encode the script data.
+   */
+  scriptDataEncoder: (data: TData) => EncodedScriptCall;
 
-	/**
-	 * A function to decode the script result.
-	 */
-	scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
+  /**
+   * A function to decode the script result.
+   */
+  scriptResultDecoder: (scriptResult: ScriptResult) => TResult;
 
-	/**
-	 * Creates an instance of the ScriptRequest class.
-	 *
-	 * @param bytes - The bytes of the script.
-	 * @param scriptDataEncoder - The script data encoder function.
-	 * @param scriptResultDecoder - The script result decoder function.
-	 */
-	constructor(
-		bytes: BytesLike,
-		scriptDataEncoder: (data: TData) => EncodedScriptCall,
-		scriptResultDecoder: (scriptResult: ScriptResult) => TResult,
-	) {
-		this.bytes = arrayify(bytes);
-		this.scriptDataEncoder = scriptDataEncoder;
-		this.scriptResultDecoder = scriptResultDecoder;
-	}
+  /**
+   * Creates an instance of the ScriptRequest class.
+   *
+   * @param bytes - The bytes of the script.
+   * @param scriptDataEncoder - The script data encoder function.
+   * @param scriptResultDecoder - The script result decoder function.
+   */
+  constructor(
+    bytes: BytesLike,
+    scriptDataEncoder: (data: TData) => EncodedScriptCall,
+    scriptResultDecoder: (scriptResult: ScriptResult) => TResult,
+  ) {
+    this.bytes = arrayify(bytes);
+    this.scriptDataEncoder = scriptDataEncoder;
+    this.scriptResultDecoder = scriptResultDecoder;
+  }
 
-	/**
-	 * Gets the script data offset for the given bytes.
-	 *
-	 * @param byteLength - The byte length of the script.
-	 * @param maxInputs - The maxInputs value from the chain's consensus params.
-	 * @returns The script data offset.
-	 */
-	static getScriptDataOffsetWithScriptBytes(
-		byteLength: number,
-		maxInputs: number,
-	): number {
-		const scriptDataBaseOffset =
-			calculateVmTxMemory({ maxInputs }) + SCRIPT_FIXED_SIZE;
-		return scriptDataBaseOffset + byteLength;
-	}
+  /**
+   * Gets the script data offset for the given bytes.
+   *
+   * @param byteLength - The byte length of the script.
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
+   * @returns The script data offset.
+   */
+  static getScriptDataOffsetWithScriptBytes(
+    byteLength: number,
+    maxInputs: number,
+  ): number {
+    const scriptDataBaseOffset =
+      calculateVmTxMemory({ maxInputs }) + SCRIPT_FIXED_SIZE;
+    return scriptDataBaseOffset + byteLength;
+  }
 
-	/**
-	 * Gets the script data offset.
-	 *
-	 * @param maxInputs - The maxInputs value from the chain's consensus params.
-	 * @returns The script data offset.
-	 */
-	getScriptDataOffset(maxInputs: number) {
-		return ScriptRequest.getScriptDataOffsetWithScriptBytes(
-			this.bytes.length,
-			maxInputs,
-		);
-	}
+  /**
+   * Gets the script data offset.
+   *
+   * @param maxInputs - The maxInputs value from the chain's consensus params.
+   * @returns The script data offset.
+   */
+  getScriptDataOffset(maxInputs: number) {
+    return ScriptRequest.getScriptDataOffsetWithScriptBytes(
+      this.bytes.length,
+      maxInputs,
+    );
+  }
 
-	/**
-	 * Encodes the data for a script call.
-	 *
-	 * @param data - The script data.
-	 * @returns The encoded data.
-	 */
-	encodeScriptData(data: TData): Uint8Array {
-		const callScript = this.scriptDataEncoder(data);
-		// if Uint8Array
-		if (ArrayBuffer.isView(callScript)) {
-			return callScript;
-		}
+  /**
+   * Encodes the data for a script call.
+   *
+   * @param data - The script data.
+   * @returns The encoded data.
+   */
+  encodeScriptData(data: TData): Uint8Array {
+    const callScript = this.scriptDataEncoder(data);
+    // if Uint8Array
+    if (ArrayBuffer.isView(callScript)) {
+      return callScript;
+    }
 
-		// object
-		this.bytes = arrayify(callScript.script);
-		return callScript.data;
-	}
+    // object
+    this.bytes = arrayify(callScript.script);
+    return callScript.data;
+  }
 
-	/**
-	 * Decodes the result of a script call.
-	 *
-	 * @param callResult - The CallResult from the script call.
-	 * @param logs - Optional logs associated with the decoding.
-	 * @returns The decoded result.
-	 */
-	decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
-		return decodeCallResult(callResult, this.scriptResultDecoder, logs);
-	}
+  /**
+   * Decodes the result of a script call.
+   *
+   * @param callResult - The CallResult from the script call.
+   * @param logs - Optional logs associated with the decoding.
+   * @returns The decoded result.
+   */
+  decodeCallResult(callResult: CallResult, logs: Array<any> = []): TResult {
+    return decodeCallResult(callResult, this.scriptResultDecoder, logs);
+  }
 }

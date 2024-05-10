@@ -1,5 +1,5 @@
 import { Address } from 'fuels';
-import type { AssetId, Contract, B256Address } from 'fuels';
+import type { AssetId, B256Address, Contract } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -9,10 +9,13 @@ import { createAndDeployContractFromProject } from '../../utils';
  */
 describe('AssetId', () => {
   let contract: Contract;
-  const Bits256: B256Address = '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c';
+  const Bits256: B256Address =
+    '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c';
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_ASSET_ID);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.ECHO_ASSET_ID,
+    );
   });
 
   it('should demonstrate typed asset id example', () => {
@@ -31,14 +34,17 @@ describe('AssetId', () => {
     // #region asset-id-2
     // #import { AssetId };
 
-    const b256Address = '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c';
+    const b256Address =
+      '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c';
 
     const address = Address.fromB256(b256Address);
 
     const assetId: AssetId = address.toAssetId();
     // #endregion asset-id-2
 
-    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
+    const { value } = await contract.functions
+      .echo_asset_id_comparison(assetId)
+      .simulate();
 
     expect(value).toBeTruthy();
   });
@@ -51,7 +57,9 @@ describe('AssetId', () => {
       bits: Bits256,
     };
 
-    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
+    const { value } = await contract.functions
+      .echo_asset_id_comparison(assetId)
+      .simulate();
 
     expect(value).toBeTruthy();
     // #endregion asset-id-3

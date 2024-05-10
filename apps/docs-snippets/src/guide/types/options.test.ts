@@ -10,7 +10,9 @@ describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.SUM_OPTION_U8);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.SUM_OPTION_U8,
+    );
   });
 
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
@@ -22,7 +24,9 @@ describe(__filename, () => {
 
     const input2: number | undefined = 5;
 
-    const { value } = await contract.functions.sum_optional_u8(input1, input2).simulate();
+    const { value } = await contract.functions
+      .sum_optional_u8(input1, input2)
+      .simulate();
 
     expect(value).toEqual(input1 + input2);
     // #endregion options-3
@@ -32,7 +36,9 @@ describe(__filename, () => {
     // #region options-4
     const input: number | undefined = 5;
 
-    const { value } = await contract.functions.sum_optional_u8(input).simulate();
+    const { value } = await contract.functions
+      .sum_optional_u8(input)
+      .simulate();
 
     expect(value).toEqual(input);
     // #endregion options-4

@@ -13,11 +13,15 @@ describe(__filename, () => {
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+    const assetIdA =
+      '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdB =
+      '0x0202020202020202020202020202020202020202020202020202020202020202';
 
     // single asset
-    const walletA: WalletUnlocked = await generateTestWallet(provider, [[42, baseAssetId]]);
+    const walletA: WalletUnlocked = await generateTestWallet(provider, [
+      [42, baseAssetId],
+    ]);
 
     // multiple assets
     const walletB = await generateTestWallet(provider, [

@@ -22,7 +22,9 @@ describe(__filename, () => {
       [200_000, baseAssetId],
       [200_000, ASSET_A],
     ]);
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.COUNTER,
+    );
     privateKey = wallet.privateKey;
   });
 
@@ -32,7 +34,11 @@ describe(__filename, () => {
 
     const recipient = Wallet.generate({ provider });
 
-    const txResponse = await myWallet.transfer(recipient.address, 100, baseAssetId);
+    const txResponse = await myWallet.transfer(
+      recipient.address,
+      100,
+      baseAssetId,
+    );
 
     await txResponse.waitForResult();
     // #endregion wallet-transferring-1
@@ -46,14 +52,17 @@ describe(__filename, () => {
     // #region wallet-transferring-2
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
-    const address = 'fuel1zc7r2rwuzl3uskfc0w737780uqd8sn6lfm3wgqf9wa767gs3sems5d6kxj';
+    const address =
+      'fuel1zc7r2rwuzl3uskfc0w737780uqd8sn6lfm3wgqf9wa767gs3sems5d6kxj';
 
     const txResponse = await myWallet.transfer(address, 100, baseAssetId);
     // #endregion wallet-transferring-2
 
     await txResponse.waitForResult();
 
-    const newBalance = await Wallet.fromAddress(address, provider).getBalance(baseAssetId);
+    const newBalance = await Wallet.fromAddress(address, provider).getBalance(
+      baseAssetId,
+    );
 
     expect(newBalance.toNumber()).toBeGreaterThan(0);
   });
@@ -78,7 +87,11 @@ describe(__filename, () => {
     // #region wallet-transferring-4
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
-    const txResponse = await myWallet.transferToContract(contract.id, 100, baseAssetId);
+    const txResponse = await myWallet.transferToContract(
+      contract.id,
+      100,
+      baseAssetId,
+    );
 
     await txResponse.waitForResult();
     // #endregion wallet-transferring-4
@@ -94,7 +107,11 @@ describe(__filename, () => {
 
     const contractAddress = contract.id.toString();
 
-    const txResponse = await myWallet.transferToContract(contractAddress, 100, baseAssetId);
+    const txResponse = await myWallet.transferToContract(
+      contractAddress,
+      100,
+      baseAssetId,
+    );
 
     await txResponse.waitForResult();
     // #endregion wallet-transferring-5

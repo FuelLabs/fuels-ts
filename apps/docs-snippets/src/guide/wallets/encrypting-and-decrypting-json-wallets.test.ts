@@ -36,7 +36,11 @@ describe(__filename, () => {
 
     // Decrypt the wallet
     const password = 'my-password';
-    const decryptedWallet = await Wallet.fromEncryptedJson(jsonWallet, password, provider);
+    const decryptedWallet = await Wallet.fromEncryptedJson(
+      jsonWallet,
+      password,
+      provider,
+    );
 
     // Use the decrypted wallet
     const myBalance = await decryptedWallet.getBalance();

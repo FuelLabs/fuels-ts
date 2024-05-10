@@ -1,5 +1,5 @@
 import type { WalletUnlocked } from 'fuels';
-import { Script, BN } from 'fuels';
+import { BN, Script } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -13,7 +13,7 @@ import { getTestWallet } from '../../utils';
 describe(__filename, () => {
   let wallet: WalletUnlocked;
   const { abiContents, binHexlified } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
+    DocSnippetProjectsEnum.SUM_SCRIPT,
   );
 
   beforeAll(async () => {

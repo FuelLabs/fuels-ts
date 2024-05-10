@@ -1,11 +1,11 @@
 import {
+  Address,
   FUEL_NETWORK_URL,
   Provider,
   ScriptTransactionRequest,
+  WalletUnlocked,
   ZeroBytes32,
   sleep,
-  WalletUnlocked,
-  Address,
 } from 'fuels';
 
 async function fetchSomeExternalCredentials() {

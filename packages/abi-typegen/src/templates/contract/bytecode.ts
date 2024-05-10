@@ -1,18 +1,18 @@
-import type { BytesLike } from "@fuel-ts/interfaces";
+import type { BytesLike } from '@fuel-ts/interfaces';
 
-import { renderHbsTemplate } from "../renderHbsTemplate";
+import { renderHbsTemplate } from '../renderHbsTemplate';
 
-import bytecodeTemplate from "./bytecode.hbs";
+import bytecodeTemplate from './bytecode.hbs';
 
 export function renderBytecodeTemplate(params: {
-	hexlifiedBytecode: BytesLike;
+  hexlifiedBytecode: BytesLike;
 }) {
-	const text = renderHbsTemplate({
-		template: bytecodeTemplate,
-		data: {
-			hexlifiedBytecode: params.hexlifiedBytecode,
-		},
-	});
+  const text = renderHbsTemplate({
+    template: bytecodeTemplate,
+    data: {
+      hexlifiedBytecode: params.hexlifiedBytecode,
+    },
+  });
 
-	return text;
+  return text;
 }

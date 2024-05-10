@@ -35,8 +35,8 @@
     place already and ready to be built and released.
 */
 
-import { getBuiltinVersions } from "./lib/getBuiltinVersions";
+import { getBuiltinVersions } from './lib/getBuiltinVersions';
 
 export const versions = getBuiltinVersions();
 
-export * from "./lib/checkFuelCoreVersionCompatibility";
+export * from './lib/checkFuelCoreVersionCompatibility';

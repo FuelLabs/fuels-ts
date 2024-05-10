@@ -17,5 +17,6 @@
   },
   "[shellscript]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
-  }
+  },
+  "vitest.disableWorkspaceWarning": true
 }

@@ -11,7 +11,9 @@ describe(__filename, () => {
   let contract: Contract;
 
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.ECHO_VALUES,
+    );
   });
 
   it('should successfully echo tuple in a contract call', async () => {

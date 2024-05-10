@@ -1,10 +1,10 @@
-import { join } from "path";
+import { join } from 'path';
 
-import type { Abi } from "../abi/Abi";
-import type { IFile } from "../index";
-import { renderCommonTemplate } from "../templates/common/common";
-import { renderIndexTemplate } from "../templates/common/index";
-import { renderFactoryTemplate } from "../templates/predicate/factory";
+import type { Abi } from '../abi/Abi';
+import type { IFile } from '../index';
+import { renderCommonTemplate } from '../templates/common/common';
+import { renderIndexTemplate } from '../templates/common/index';
+import { renderFactoryTemplate } from '../templates/predicate/factory';
 
 /**
  * Render all Predicate-related templates and returns
@@ -12,41 +12,41 @@ import { renderFactoryTemplate } from "../templates/predicate/factory";
  * the only thing missing is to write them to disk.
  */
 export function assemblePredicates(params: { abis: Abi[]; outputDir: string }) {
-	const { abis, outputDir } = params;
+  const { abis, outputDir } = params;
 
-	const files: IFile[] = [];
-	const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
+  const files: IFile[] = [];
+  const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
 
-	abis.forEach((abi) => {
-		const { name } = abi;
+  abis.forEach((abi) => {
+    const { name } = abi;
 
-		const factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
+    const factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
 
-		const factory: IFile = {
-			path: factoryFilepath,
-			contents: renderFactoryTemplate({ abi }),
-		};
+    const factory: IFile = {
+      path: factoryFilepath,
+      contents: renderFactoryTemplate({ abi }),
+    };
 
-		files.push(factory);
-	});
+    files.push(factory);
+  });
 
-	// Includes index file
-	const indexFile: IFile = {
-		path: `${outputDir}/index.ts`,
-		contents: renderIndexTemplate({ abis }),
-	};
+  // Includes index file
+  const indexFile: IFile = {
+    path: `${outputDir}/index.ts`,
+    contents: renderIndexTemplate({ abis }),
+  };
 
-	files.push(indexFile);
+  files.push(indexFile);
 
-	// Conditionally includes `common.d.ts` file if needed
-	if (usesCommonTypes) {
-		const commonsFilepath = join(outputDir, "common.d.ts");
-		const file: IFile = {
-			path: commonsFilepath,
-			contents: renderCommonTemplate(),
-		};
-		files.push(file);
-	}
+  // Conditionally includes `common.d.ts` file if needed
+  if (usesCommonTypes) {
+    const commonsFilepath = join(outputDir, 'common.d.ts');
+    const file: IFile = {
+      path: commonsFilepath,
+      contents: renderCommonTemplate(),
+    };
+    files.push(file);
+  }
 
-	return files;
+  return files;
 }

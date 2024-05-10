@@ -1,20 +1,20 @@
-import type { Mock } from "vitest";
+import type { Mock } from 'vitest';
 
-import { deferPromise, type DeferPromise } from "../../src/connectors/utils";
+import { type DeferPromise, deferPromise } from '../../src/connectors/utils';
 
 export type PromiseCallback = Mock & {
-	promise: DeferPromise;
+  promise: DeferPromise;
 };
 
 export function promiseCallback() {
-	const defer = deferPromise();
+  const defer = deferPromise();
 
-	const mockFn: any = vi.fn();
+  const mockFn: any = vi.fn();
 
-	mockFn.mockImplementation((...args: unknown[]) => {
-		defer.resolve(args);
-	});
-	mockFn.promise = defer.promise;
+  mockFn.mockImplementation((...args: unknown[]) => {
+    defer.resolve(args);
+  });
+  mockFn.promise = defer.promise;
 
-	return mockFn as PromiseCallback;
+  return mockFn as PromiseCallback;
 }

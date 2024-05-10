@@ -22,24 +22,30 @@ describe(__filename, () => {
     provider = wallet.provider;
     baseAssetId = provider.getBaseAssetId();
 
-    const counterArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.COUNTER);
-    const echoArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
-    const contextArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
+    const counterArtifacts = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.COUNTER,
+    );
+    const echoArtifacts = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.ECHO_VALUES,
+    );
+    const contextArtifacts = getDocsSnippetsForcProject(
+      DocSnippetProjectsEnum.RETURN_CONTEXT,
+    );
 
     const factory1 = new ContractFactory(
       echoArtifacts.binHexlified,
       echoArtifacts.abiContents,
-      wallet
+      wallet,
     );
     const factory2 = new ContractFactory(
       counterArtifacts.binHexlified,
       counterArtifacts.abiContents,
-      wallet
+      wallet,
     );
     const factory3 = new ContractFactory(
       contextArtifacts.binHexlified,
       contextArtifacts.abiContents,
-      wallet
+      wallet,
     );
 
     echoContract = await factory1.deployContract();

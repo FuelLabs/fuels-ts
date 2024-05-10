@@ -1,31 +1,31 @@
-import { hexlify } from "@fuel-ts/utils";
-import { existsSync, readFileSync } from "fs";
+import { existsSync, readFileSync } from 'fs';
+import { hexlify } from '@fuel-ts/utils';
 
-import type { ProgramTypeEnum } from "../types/enums/ProgramTypeEnum";
-import type { IFile } from "../types/interfaces/IFile";
+import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
+import type { IFile } from '../types/interfaces/IFile';
 
-import { validateBinFile } from "./validateBinFile";
+import { validateBinFile } from './validateBinFile';
 
 export const collectBinFilepaths = (params: {
-	filepaths: string[];
-	programType: ProgramTypeEnum;
+  filepaths: string[];
+  programType: ProgramTypeEnum;
 }) => {
-	const { filepaths, programType } = params;
+  const { filepaths, programType } = params;
 
-	// validate and collect bin filepaths for Scripts and/or Predicates
-	const binFiles = filepaths.map((abiFilepath) => {
-		const binFilepath = abiFilepath.replace("-abi.json", ".bin");
-		const binExists = existsSync(binFilepath);
+  // validate and collect bin filepaths for Scripts and/or Predicates
+  const binFiles = filepaths.map((abiFilepath) => {
+    const binFilepath = abiFilepath.replace('-abi.json', '.bin');
+    const binExists = existsSync(binFilepath);
 
-		validateBinFile({ abiFilepath, binFilepath, binExists, programType });
+    validateBinFile({ abiFilepath, binFilepath, binExists, programType });
 
-		const bin: IFile = {
-			path: binFilepath,
-			contents: hexlify(readFileSync(binFilepath)),
-		};
+    const bin: IFile = {
+      path: binFilepath,
+      contents: hexlify(readFileSync(binFilepath)),
+    };
 
-		return bin;
-	});
+    return bin;
+  });
 
-	return binFiles;
+  return binFiles;
 };

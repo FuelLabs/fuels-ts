@@ -1,4 +1,4 @@
 export enum TargetEnum {
-	INPUT = "input",
-	OUTPUT = "output",
+  INPUT = 'input',
+  OUTPUT = 'output',
 }

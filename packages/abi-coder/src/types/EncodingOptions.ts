@@ -1,4 +1,4 @@
-import type { EncodingVersion } from "../utils/constants";
+import type { EncodingVersion } from '../utils/constants';
 
 /**
  * These are configurable options to be used when encoding.
@@ -58,7 +58,7 @@ import type { EncodingVersion } from "../utils/constants";
  * fuel specs (https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/argument-encoding.md#version-1
  */
 export type EncodingOptions = {
-	encoding?: EncodingVersion;
-	isSmallBytes?: boolean;
-	isRightPadded?: boolean;
+  encoding?: EncodingVersion;
+  isSmallBytes?: boolean;
+  isRightPadded?: boolean;
 };

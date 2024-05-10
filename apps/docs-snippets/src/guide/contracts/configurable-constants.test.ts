@@ -14,7 +14,7 @@ describe('configurable-constants', () => {
   let wallet: WalletUnlocked;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.ECHO_CONFIGURABLES
+    DocSnippetProjectsEnum.ECHO_CONFIGURABLES,
   );
 
   const defaultValues = {
@@ -52,7 +52,9 @@ describe('configurable-constants', () => {
     });
     // #endregion configurable-constants-2
 
-    const { value } = await contract.functions.echo_configurables(true).simulate();
+    const { value } = await contract.functions
+      .echo_configurables(true)
+      .simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(configurableConstants.tag);
@@ -73,7 +75,9 @@ describe('configurable-constants', () => {
     });
     // #endregion configurable-constants-3
 
-    const { value } = await contract.functions.echo_configurables(false).simulate();
+    const { value } = await contract.functions
+      .echo_configurables(false)
+      .simulate();
 
     expect(value[0]).toEqual(configurableConstants.age);
     expect(value[1]).toEqual(defaultValues.tag);
@@ -94,7 +98,7 @@ describe('configurable-constants', () => {
     await expect(
       factory.deployContract({
         configurableConstants,
-      })
+      }),
     ).rejects.toThrowError();
     // #endregion configurable-constants-4
   });

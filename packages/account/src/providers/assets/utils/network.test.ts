@@ -1,3 +1,5 @@
+import { CHAIN_IDS } from "../../chains";
+import { assets } from "../index";
 import type { Asset } from "../types";
 import {
 	getAssetEth,
@@ -5,8 +7,6 @@ import {
 	getAssetWithNetwork,
 	getDefaultChainId,
 } from "../utils/network";
-import { assets } from "../index";
-import { CHAIN_IDS } from "../../chains";
 
 /**
  * @group node

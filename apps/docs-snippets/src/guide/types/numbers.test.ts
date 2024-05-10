@@ -33,19 +33,25 @@ describe(__filename, () => {
   });
 
   test('should succcesfully pass in and read a number to/from a contract', async () => {
-    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+    const contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.ECHO_VALUES,
+    );
 
     // #region numbers-docs-3
     const originalNumber = 20;
 
-    const { value } = await contract.functions.echo_u64(bn(originalNumber)).call();
+    const { value } = await contract.functions
+      .echo_u64(bn(originalNumber))
+      .call();
 
     expect(value.toNumber()).toEqual(originalNumber);
     // #endregion numbers-docs-3
   });
 
   test('should succcesfully pass in and read a number to/from a contract - small numbers', async () => {
-    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+    const contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.ECHO_VALUES,
+    );
 
     // #region numbers-docs-4
     const originalNumber = 20;

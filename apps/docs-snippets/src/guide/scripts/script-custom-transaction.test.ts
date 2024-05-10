@@ -3,9 +3,9 @@ import {
   BN,
   ContractFactory,
   FUEL_NETWORK_URL,
+  Provider,
   ScriptTransactionRequest,
   coinQuantityfy,
-  Provider,
 } from 'fuels';
 import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
 
@@ -25,12 +25,11 @@ describe(__filename, () => {
   let baseAssetId: string;
 
   const { binHexlified: scriptBin, abiContents } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
+    DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT,
   );
 
-  const { abiContents: contractAbi, binHexlified: contractBin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.ECHO_VALUES
-  );
+  const { abiContents: contractAbi, binHexlified: contractBin } =
+    getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
@@ -72,13 +71,20 @@ describe(__filename, () => {
     ];
 
     // 3. Populate the script data and add the contract input and output
-    request.setData(abiContents, scriptArguments).addContractInputAndOutput(contract.id);
+    request
+      .setData(abiContents, scriptArguments)
+      .addContractInputAndOutput(contract.id);
 
     // 4. Get the transaction resources
-    const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
+    const quantities = [
+      coinQuantityfy([1000, ASSET_A]),
+      coinQuantityfy([500, ASSET_B]),
+    ];
 
     // 5. Calculate the transaction fee
-    const txCost = await provider.getTransactionCost(request, { quantitiesToContract: quantities });
+    const txCost = await provider.getTransactionCost(request, {
+      quantitiesToContract: quantities,
+    });
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

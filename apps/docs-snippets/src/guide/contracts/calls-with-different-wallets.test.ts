@@ -12,7 +12,7 @@ describe(__filename, () => {
 
   beforeAll(async () => {
     deployedContract = await createAndDeployContractFromProject(
-      DocSnippetProjectsEnum.RETURN_CONTEXT
+      DocSnippetProjectsEnum.RETURN_CONTEXT,
     );
   });
 

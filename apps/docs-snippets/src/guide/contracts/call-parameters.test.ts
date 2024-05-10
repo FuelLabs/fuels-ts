@@ -12,7 +12,9 @@ describe(__filename, () => {
   let provider: Provider;
   let baseAssetId: string;
   beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
+    contract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.RETURN_CONTEXT,
+    );
     provider = contract.provider;
     baseAssetId = provider.getBaseAssetId();
   });
@@ -42,7 +44,7 @@ describe(__filename, () => {
           forward: [10, baseAssetId],
           gasLimit: 1,
         })
-        .call()
+        .call(),
     ).rejects.toThrow(/Gas limit '1' is lower than the required: /);
     // #endregion call-params-2
   });

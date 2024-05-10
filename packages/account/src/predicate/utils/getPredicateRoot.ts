@@ -1,7 +1,7 @@
-import { hash } from "@fuel-ts/hasher";
-import type { BytesLike } from "@fuel-ts/interfaces";
-import { calcRoot } from "@fuel-ts/merkle";
-import { chunkAndPadBytes, hexlify, concat, arrayify } from "@fuel-ts/utils";
+import { hash } from '@fuel-ts/hasher';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { calcRoot } from '@fuel-ts/merkle';
+import { arrayify, chunkAndPadBytes, concat, hexlify } from '@fuel-ts/utils';
 
 /**
  * @hidden
@@ -13,11 +13,11 @@ import { chunkAndPadBytes, hexlify, concat, arrayify } from "@fuel-ts/utils";
  * @returns The predicate root as a string.
  */
 export const getPredicateRoot = (bytecode: BytesLike): string => {
-	const chunkSize = 16 * 1024;
-	const bytes = arrayify(bytecode);
-	const chunks = chunkAndPadBytes(bytes, chunkSize);
-	const codeRoot = calcRoot(chunks.map((c) => hexlify(c)));
+  const chunkSize = 16 * 1024;
+  const bytes = arrayify(bytecode);
+  const chunks = chunkAndPadBytes(bytes, chunkSize);
+  const codeRoot = calcRoot(chunks.map((c) => hexlify(c)));
 
-	const predicateRoot = hash(concat(["0x4655454C", codeRoot]));
-	return predicateRoot;
+  const predicateRoot = hash(concat(['0x4655454C', codeRoot]));
+  return predicateRoot;
 };

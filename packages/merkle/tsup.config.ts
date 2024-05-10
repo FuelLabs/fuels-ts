@@ -1,3 +1,3 @@
-import { index } from "@internal/tsup";
+import { index } from '@internal/tsup';
 
 export default index;

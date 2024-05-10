@@ -1,5 +1,10 @@
-import type { Provider, BN, JsonAbi } from 'fuels';
-import { WalletUnlocked, Predicate, Script, ScriptTransactionRequest } from 'fuels';
+import type { BN, JsonAbi, Provider } from 'fuels';
+import {
+  Predicate,
+  Script,
+  ScriptTransactionRequest,
+  WalletUnlocked,
+} from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -18,12 +23,10 @@ describe('Signing transactions', () => {
   let signer: WalletUnlocked;
   let provider: Provider;
   let baseAssetId: string;
-  const { abiContents: abiPredicate, binHexlified: binPredicate } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.PREDICATE_SIGNING
-  );
-  const { abiContents: abiScript, binHexlified: binScript } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SCRIPT_SIGNING
-  );
+  const { abiContents: abiPredicate, binHexlified: binPredicate } =
+    getDocsSnippetsForcProject(DocSnippetProjectsEnum.PREDICATE_SIGNING);
+  const { abiContents: abiScript, binHexlified: binScript } =
+    getDocsSnippetsForcProject(DocSnippetProjectsEnum.SCRIPT_SIGNING);
 
   beforeAll(async () => {
     sender = await getTestWallet();

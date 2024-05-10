@@ -12,7 +12,9 @@ describe(__filename, () => {
   let provider: Provider;
   let baseAssetId: string;
   beforeAll(async () => {
-    counterContract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
+    counterContract = await createAndDeployContractFromProject(
+      DocSnippetProjectsEnum.COUNTER,
+    );
     provider = counterContract.provider;
     baseAssetId = provider.getBaseAssetId();
   });

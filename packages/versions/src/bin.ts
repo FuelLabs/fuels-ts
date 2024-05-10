@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import { runVersions } from "./cli";
+import { runVersions } from './cli';
 
 runVersions();
