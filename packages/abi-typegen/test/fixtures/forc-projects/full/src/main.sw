@@ -24,6 +24,18 @@ struct StructWithSingleOption {
     single: Option<StructWithMultiOption>,
 }
 
+enum MyContractError {
+    DivisionByZero: (),
+}
+
+fn divide(numerator: u64, denominator: u64) -> Result<u64, MyContractError> {
+    if (denominator == 0) {
+        return Err(MyContractError::DivisionByZero);
+    } else {
+        Ok(numerator / denominator)
+    }
+}
+
 abi MyContract {
     fn types_empty(x: ()) -> ();
     fn types_empty_then_value(x: (), y: u8) -> ();
@@ -52,6 +64,7 @@ abi MyContract {
     fn types_bytes(x: Bytes) -> Bytes;
     fn types_raw_slice(x: raw_slice) -> raw_slice;
     fn types_std_string(x: String) -> String;
+    fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
 }
 
 impl MyContract for Contract {
@@ -136,5 +149,16 @@ impl MyContract for Contract {
     }
     fn types_std_string(x: String) -> String {
         x
+    }
+    fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]> {
+        if (x.is_err()) {
+            return Err(__to_str_array("InputError"));
+        }
+
+        let result = divide(20, x.unwrap());
+        match result {
+            Ok(value) => Ok(value),
+            Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
+        }
     }
 }
