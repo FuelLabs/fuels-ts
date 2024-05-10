@@ -3,6 +3,7 @@ import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
   ContractTransactionRequestInput,
+  BN,
 } from 'fuels';
 import {
   Provider,
@@ -168,9 +169,20 @@ describe('Predicate', () => {
     });
 
     test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
-      const amountToPredicate = 3000;
+      const { binHexlified, abiContents } = getFuelGaugeForcProject(
+        FuelGaugeProjectsEnum.PREDICATE_VALIDATE_TRANSFER
+      );
 
-      await seedTestWallet(predicateTrue, [[amountToPredicate, baseAssetId]]);
+      const amountToPredicate = 10_000;
+
+      const predicate = new Predicate<[BN]>({
+        bytecode: binHexlified,
+        abi: abiContents,
+        provider,
+        inputData: [bn(amountToPredicate)],
+      });
+
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]]);
 
       const receiverWallet = WalletUnlocked.generate({
         provider,
@@ -181,11 +193,7 @@ describe('Predicate', () => {
       const dryRunSpy = vi.spyOn(provider.operations, 'dryRun');
       const estimatePredicatesSpy = vi.spyOn(provider.operations, 'estimatePredicates');
 
-      const response = await predicateTrue.transfer(
-        receiverWallet.address.toB256(),
-        1,
-        baseAssetId
-      );
+      const response = await predicate.transfer(receiverWallet.address.toB256(), 1, baseAssetId);
 
       const { isStatusSuccess } = await response.waitForResult();
       expect(isStatusSuccess).toBeTruthy();

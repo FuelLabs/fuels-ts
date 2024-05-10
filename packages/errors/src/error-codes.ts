@@ -42,7 +42,6 @@ export enum ErrorCode {
   PARSE_FAILED = 'parse-failed',
   ENCODE_ERROR = 'encode-error',
   DECODE_ERROR = 'decode-error',
-  INVALID_CREDENTIALS = 'invalid-credentials',
   ENV_DEPENDENCY_MISSING = 'env-dependency-missing',
   INVALID_TTL = 'invalid-ttl',
   INVALID_INPUT_PARAMETERS = 'invalid-input-parameters',
@@ -53,6 +52,10 @@ export enum ErrorCode {
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
+
+  // crypto
+  INVALID_CREDENTIALS = 'invalid-credentials',
+  HASHER_LOCKED = 'hasher-locked',
 
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
@@ -100,7 +103,4 @@ export enum ErrorCode {
 
   // graphql
   STREAM_PARSING_ERROR = 'stream-parsing-error',
-
-  // coder
-  // ...
 }

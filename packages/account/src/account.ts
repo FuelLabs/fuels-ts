@@ -30,9 +30,9 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
-  cacheTxInputsFromOwner,
 } from './providers';
 import {
+  cacheRequestInputsResourcesFromOwner,
   getAssetAmountInRequestInputs,
   isRequestInputCoin,
   isRequestInputResource,
@@ -46,7 +46,7 @@ export type TxParamsType = Pick<
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'maxFee' | 'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities'
+  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
 >;
 const MAX_FUNDING_ATTEMPTS = 2;
 
@@ -244,21 +244,21 @@ export class Account extends AbstractAccount {
   }
 
   /**
-   * Adds resources to the transaction enough to fund it.
+   * Funds a transaction request by adding the necessary resources.
    *
-   * @param request - The transaction request.
-   * @param requiredQuantities - The coin quantities required to execute the transaction.
-   * @param fee - The estimated transaction fee.
-   * @returns A promise that resolves when the resources are added to the transaction.
+   * @typeParam T - The type of the TransactionRequest.
+   * @param request - The transaction request to fund.
+   * @param params - The estimated transaction parameters.
+   * @returns The funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, maxFee: fee, requiredQuantities } = params;
+    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
 
+    const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
     const requiredInBaseAsset =
       requiredQuantities.find((quantity) => quantity.assetId === baseAssetId)?.amount || bn(0);
 
-    const txRequest = request as T;
     const requiredQuantitiesWithFee = addAmountToCoinQuantities({
       amount: bn(fee),
       assetId: baseAssetId,
@@ -297,21 +297,23 @@ export class Account extends AbstractAccount {
     while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
       const resources = await this.getResourcesToSpend(
         missingQuantities,
-        cacheTxInputsFromOwner(request.inputs, this.address)
+        cacheRequestInputsResourcesFromOwner(request.inputs, this.address)
       );
 
       request.addResources(resources);
+      request.shiftPredicateData();
+      request.updatePredicateGasUsed(estimatedPredicates);
 
-      txRequest.shiftPredicateData();
-      txRequest.updatePredicateGasUsed(estimatedPredicates);
-
-      const requestToReestimate = clone(txRequest);
+      const requestToReestimate = clone(request);
       if (addedSignatures) {
         Array.from({ length: addedSignatures }).forEach(() =>
           requestToReestimate.addEmptyWitness()
         );
       }
 
+      if (!updateMaxFee) {
+        break;
+      }
       const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
         transactionRequest: requestToReestimate,
       });
@@ -338,20 +340,25 @@ export class Account extends AbstractAccount {
       fundingAttempts += 1;
     }
 
-    txRequest.shiftPredicateData();
-    txRequest.updatePredicateGasUsed(estimatedPredicates);
+    request.shiftPredicateData();
+    request.updatePredicateGasUsed(estimatedPredicates);
 
-    const requestToReestimate = clone(txRequest);
+    const requestToReestimate = clone(request);
     if (addedSignatures) {
       Array.from({ length: addedSignatures }).forEach(() => requestToReestimate.addEmptyWitness());
     }
+
+    if (!updateMaxFee) {
+      return request;
+    }
+
     const { maxFee } = await this.provider.estimateTxGasAndFee({
       transactionRequest: requestToReestimate,
     });
 
-    txRequest.maxFee = maxFee;
+    request.maxFee = maxFee;
 
-    return txRequest;
+    return request;
   }
 
   /**
@@ -373,7 +380,7 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
-    const request = new ScriptTransactionRequest(txParams);
+    let request = new ScriptTransactionRequest(txParams);
     const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
     request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetIdToTransfer);
     const txCost = await this.provider.getTransactionCost(request, {
@@ -381,14 +388,12 @@ export class Account extends AbstractAccount {
       resourcesOwner: this,
     });
 
-    this.validateGasLimitAndMaxFee({
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
       gasUsed: txCost.gasUsed,
       maxFee: txCost.maxFee,
       txParams,
     });
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
 
     await this.fund(request, txCost);
 
@@ -459,7 +464,7 @@ export class Account extends AbstractAccount {
       assetId: assetIdToTransfer,
     });
 
-    const request = new ScriptTransactionRequest({
+    let request = new ScriptTransactionRequest({
       ...txParams,
       script,
       scriptData,
@@ -472,14 +477,12 @@ export class Account extends AbstractAccount {
       quantitiesToContract: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
     });
 
-    this.validateGasLimitAndMaxFee({
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
       gasUsed: txCost.gasUsed,
       maxFee: txCost.maxFee,
       txParams,
     });
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
 
     await this.fund(request, txCost);
 
@@ -519,19 +522,17 @@ export class Account extends AbstractAccount {
     const params: ScriptTransactionRequestLike = { script, ...txParams };
 
     const baseAssetId = this.provider.getBaseAssetId();
-    const request = new ScriptTransactionRequest(params);
+    let request = new ScriptTransactionRequest(params);
     const quantitiesToContract = [{ amount: bn(amount), assetId: baseAssetId }];
 
     const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
 
-    this.validateGasLimitAndMaxFee({
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
       gasUsed: txCost.gasUsed,
       maxFee: txCost.maxFee,
       txParams,
     });
-
-    request.maxFee = txCost.maxFee;
-    request.gasLimit = txCost.gasUsed;
 
     await this.fund(request, txCost);
 
@@ -604,26 +605,36 @@ export class Account extends AbstractAccount {
   }
 
   private validateGasLimitAndMaxFee({
-    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
     gasUsed,
     maxFee,
+    transactionRequest,
+    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
   }: {
     gasUsed: BN;
     maxFee: BN;
+    transactionRequest: ScriptTransactionRequest;
     txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
   }) {
-    if (isDefined(setGasLimit) && gasUsed.gt(setGasLimit)) {
+    const request = transactionRequestify(transactionRequest) as ScriptTransactionRequest;
+
+    if (!isDefined(setGasLimit)) {
+      request.gasLimit = gasUsed;
+    } else if (gasUsed.gt(setGasLimit)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
         `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (isDefined(setMaxFee) && maxFee.gt(setMaxFee)) {
+    if (!isDefined(setMaxFee)) {
+      request.maxFee = maxFee;
+    } else if (maxFee.gt(setMaxFee)) {
       throw new FuelError(
         ErrorCode.MAX_FEE_TOO_LOW,
         `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
+
+    return request;
   }
 }
