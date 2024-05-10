@@ -21,19 +21,19 @@ import type { Predicate } from '../predicate';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
-  GqlChainInfoFragmentFragment,
+  GqlChainInfoFragment,
   GqlConsensusParametersVersion,
-  GqlContractParameters,
-  GqlDryRunFailureStatusFragmentFragment,
-  GqlDryRunSuccessStatusFragmentFragment,
-  GqlFeeParameters,
-  GqlGasCosts,
+  GqlContractParameters as ContractParameters,
+  GqlDryRunFailureStatusFragment,
+  GqlDryRunSuccessStatusFragment,
+  GqlFeeParameters as FeeParameters,
+  GqlGasCosts as GasCosts,
   GqlGetBlocksQueryVariables,
   GqlMessage,
-  GqlPredicateParameters,
+  GqlPredicateParameters as PredicateParameters,
   GqlRelayedTransactionFailed,
-  GqlScriptParameters,
-  GqlTxParameters,
+  GqlScriptParameters as ScriptParameters,
+  GqlTxParameters as TxParameters,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -61,9 +61,7 @@ import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
-export type DryRunStatus =
-  | Omit<GqlDryRunFailureStatusFragmentFragment, '__typename'>
-  | Omit<GqlDryRunSuccessStatusFragmentFragment, '__typename'>;
+export type DryRunStatus = GqlDryRunFailureStatusFragment | GqlDryRunSuccessStatusFragment;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -97,12 +95,14 @@ type ModifyStringToBN<T> = {
   [P in keyof T]: P extends 'version' ? T[P] : T[P] extends string ? BN : T[P];
 };
 
-export type FeeParameters = Omit<GqlFeeParameters, '__typename'>;
-export type ContractParameters = Omit<GqlContractParameters, '__typename'>;
-export type PredicateParameters = Omit<GqlPredicateParameters, '__typename'>;
-export type ScriptParameters = Omit<GqlScriptParameters, '__typename'>;
-export type TxParameters = Omit<GqlTxParameters, '__typename'>;
-export type GasCosts = Omit<GqlGasCosts, '__typename'>;
+export {
+  GasCosts,
+  FeeParameters,
+  ContractParameters,
+  PredicateParameters,
+  ScriptParameters,
+  TxParameters,
+};
 
 export type ConsensusParameters = {
   version: GqlConsensusParametersVersion;
@@ -164,10 +164,11 @@ export type TransactionCost = {
   requiredQuantities: CoinQuantity[];
   addedSignatures: number;
   dryRunStatus?: DryRunStatus;
+  updateMaxFee?: boolean;
 };
 // #endregion cost-estimation-1
 
-const processGqlChain = (chain: GqlChainInfoFragmentFragment): ChainInfo => {
+const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
   const { name, daHeight, consensusParameters, latestBlock } = chain;
 
   const {
@@ -483,8 +484,8 @@ export default class Provider {
     if (!isMajorSupported || !isMinorSupported) {
       // eslint-disable-next-line no-console
       console.warn(
-        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion}, 
-which is not supported by the version of the TS SDK that you are using. 
+        `The Fuel Node that you are trying to connect to is using fuel-core version ${nodeInfo.nodeVersion},
+which is not supported by the version of the TS SDK that you are using.
 Things may not work as expected.
 Supported fuel-core version: ${supportedVersion}.`
       );
@@ -1059,7 +1060,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const baseAssetId = this.getBaseAssetId();
-
+    const updateMaxFee = txRequestClone.maxFee.eq(0);
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
@@ -1072,7 +1073,6 @@ Supported fuel-core version: ${supportedVersion}.`
      * Estimate predicates gasUsed
      */
     // Remove gasLimit to avoid gasLimit when estimating predicates
-    txRequestClone.maxFee = bn(0);
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
@@ -1097,6 +1097,7 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     await this.estimatePredicates(signedRequest);
+    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     /**
      * Calculate minGas and maxGas based on the real transaction
@@ -1111,8 +1112,6 @@ Supported fuel-core version: ${supportedVersion}.`
     let missingContractIds: string[] = [];
     let outputVariables = 0;
     let gasUsed = bn(0);
-
-    txRequestClone.updatePredicateGasUsed(signedRequest.inputs);
 
     txRequestClone.maxFee = maxFee;
     if (isScriptTransaction) {
@@ -1148,6 +1147,7 @@ Supported fuel-core version: ${supportedVersion}.`
       addedSignatures,
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
+      updateMaxFee,
     };
   }
 
@@ -1259,7 +1259,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const coins = result.coinsToSpend
       .flat()
       .map((coin) => {
-        switch (coin.__typename) {
+        switch (coin.type) {
           case 'MessageCoin':
             return {
               amount: bn(coin.amount),
