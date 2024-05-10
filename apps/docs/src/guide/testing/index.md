@@ -34,10 +34,6 @@ You can also configure wallets and deploy multiple contracts with them:
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#multiple-contracts-and-wallets{ts:line-numbers}
 
-That's a lot of options! These docs showcase some functionality; for a detailed look it's best to fiddle with the utility yourself. Every property is documented with typedoc. If something is still unclear, you found a bug or you've got a feature idea, please contact us via official channels of communication and we'll help you.
-
----
-
 ### Configuring the Test Node
 
 `launchTestNode` creates a temporary snapshot directory and configurations every time it runs. The path to this directory is passed given to `fuel-core` via the `--snapshot` flag.
