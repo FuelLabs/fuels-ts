@@ -10,6 +10,7 @@ import { getSystemVersions } from './lib/getSystemVersions';
 export * from './lib/compareSystemVersions';
 export * from './lib/fuelUpLink';
 export * from './lib/getSystemVersions';
+export * from './lib/getBuiltinVersions';
 
 export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
 

@@ -14,32 +14,44 @@ vi.mock('child_process', async () => {
 
 const mockAllDeps = (
   params: {
+    compatibleVersion?: string;
     forcError?: boolean;
+    forcVersion?: string;
     fuelCoreError?: boolean;
+    fuelCoreVersion?: string;
   } = {}
 ) => {
-  const { forcError, fuelCoreError } = params;
+  const { forcError, forcVersion, fuelCoreError, fuelCoreVersion } = params;
 
-  const version = '1.0.0';
+  const compatibleVersion = params.compatibleVersion ?? '1.0.0';
 
   const execSyncError = vi.fn(() => {
     throw new Error();
   });
-  const execSyncVersion = vi.fn().mockReturnValue(version);
 
   const getSystemForc = vi.spyOn(versionsCliMod, 'getSystemForc');
   vi.spyOn(childProcessMod, 'execSync').mockImplementationOnce(
-    forcError ? execSyncError : execSyncVersion
+    forcError ? execSyncError : vi.fn().mockReturnValue(forcVersion ?? compatibleVersion)
   );
 
   const getSystemFuelCore = vi.spyOn(versionsCliMod, 'getSystemFuelCore');
   vi.spyOn(childProcessMod, 'execSync').mockImplementationOnce(
-    fuelCoreError ? execSyncError : execSyncVersion
+    fuelCoreError ? execSyncError : vi.fn().mockReturnValue(fuelCoreVersion ?? compatibleVersion)
   );
+
+  const getBuiltinVersions = vi
+    .spyOn(versionsCliMod, 'getBuiltinVersions')
+    .mockReturnValue({
+      FORC: compatibleVersion,
+      FUEL_CORE: compatibleVersion,
+      FUELS: compatibleVersion,
+    });
+
 
   return {
     getSystemForc,
     getSystemFuelCore,
+    getBuiltinVersions,
   };
 };
 
@@ -107,5 +119,23 @@ describe('tryFindBinaries', () => {
     expect(error?.message).toContain(
       'Visit https://docs.fuel.network/guides/installation/ for an installation guide.'
     );
+  });
+
+  it(`should throw when binaries are outdated`, async () => {
+    const compatibleVersion = '1.0.0';
+    const currentVersion = '0.0.1';
+    const { getSystemForc, getSystemFuelCore } = mockAllDeps({
+      compatibleVersion,
+      forcVersion: currentVersion,
+      fuelCoreVersion: currentVersion,
+    });
+
+    const { error } = await safeExec(() => tryFindBinaries());
+
+    expect(getSystemForc).toHaveBeenCalledTimes(1);
+    expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
+    expect(error?.message).toContain(`The following binaries on the filesystem are outdated`);
+    expect(error?.message).toContain(`'forc' is currently '${currentVersion}', but requires '${compatibleVersion}'`);
+    expect(error?.message).toContain(`'fuel-core' is currently '${currentVersion}', but requires '${compatibleVersion}'`);
   });
 });
