@@ -303,6 +303,7 @@ describe('TransactionResponse', () => {
             break;
           }
           const streamedEvent = decoder.decode(value);
+          // eslint-disable-next-line no-console
           console.log(streamedEvent);
         }
 
