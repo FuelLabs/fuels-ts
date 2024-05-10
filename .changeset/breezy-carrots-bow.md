@@ -5,4 +5,4 @@
 "fuels": patch
 ---
 
-feat: add `launchTestNode` utility
+feat!: add `launchTestNode` utility
