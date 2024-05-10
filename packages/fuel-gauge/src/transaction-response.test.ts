@@ -45,7 +45,9 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
       Promise<Response>
     >
   ) {
+    console.log('getFetchMock called');
     return async (...args: Parameters<typeof fetch>) => {
+      console.log(args);
       /**
        * We need to restore the original fetch implementation so that fetching is possible
        * We then get the response and mock the fetch implementation again
@@ -56,6 +58,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
       fetchSpy.mockImplementation(getFetchMock(fetchSpy));
 
       const isSubscriptionCall = args[0].toString().endsWith('graphql-sub');
+      console.log('isSubscriptionCall', isSubscriptionCall);
       if (!isSubscriptionCall) {
         return r;
       }
@@ -246,46 +249,67 @@ describe('TransactionResponse', () => {
     cleanup();
   });
 
-  it(
-    'should throw error for a SqueezedOut status update [submitAndAwait]',
-    async () => {
-      const { cleanup, ip, port } = await launchNode({
-        args: ['--poa-instant', 'false', '--poa-interval-period', '4s', '--tx-pool-ttl', '1s'],
-        loggingEnabled: false,
-      });
-      const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+  it('should throw error for a SqueezedOut status update [submitAndAwait]', async () => {
+    const { cleanup, ip, port } = await launchNode({
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
+      loggingEnabled: false,
+    });
+    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
-      const genesisWallet = new WalletUnlocked(
-        process.env.GENESIS_SECRET || randomBytes(32),
-        nodeProvider
-      );
+    const genesisWallet = new WalletUnlocked(
+      process.env.GENESIS_SECRET || randomBytes(32),
+      nodeProvider
+    );
 
-      const request = new ScriptTransactionRequest();
+    const request = new ScriptTransactionRequest();
 
-      request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
+    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
-      const txCost = await genesisWallet.provider.getTransactionCost(request, {
-        signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
-      });
+    const txCost = await genesisWallet.provider.getTransactionCost(request, {
+      signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
+    });
 
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-      await genesisWallet.fund(request, txCost);
+    await genesisWallet.fund(request, txCost);
 
-      request.updateWitnessByOwner(
-        genesisWallet.address,
-        await genesisWallet.signTransaction(request)
-      );
+    request.updateWitnessByOwner(
+      genesisWallet.address,
+      await genesisWallet.signTransaction(request)
+    );
 
+    const subscriptionStreamHolder = {
+      stream: new ReadableStream<Uint8Array>(),
+    };
+
+    getSubscriptionStreamFromFetch(subscriptionStreamHolder);
+    try {
       await expectToThrowFuelError(
         async () => {
-          await nodeProvider.sendTransaction(request, { awaitExecution: true });
+          await nodeProvider.sendTransaction(request, {
+            awaitExecution: true,
+            estimateTxDependencies: false,
+          });
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );
-      cleanup();
-    },
-    { retry: 10 }
-  );
+    } catch (e) {
+      const decoder = new TextDecoder();
+      const reader = subscriptionStreamHolder.stream.getReader();
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) {
+          break;
+        }
+        const text = decoder.decode(value);
+        console.log(text);
+      }
+
+      throw e;
+    }
+
+    cleanup();
+  });
 });
