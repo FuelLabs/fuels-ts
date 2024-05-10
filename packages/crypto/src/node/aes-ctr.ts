@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+import { arrayify } from '@fuel-ts/utils';
 
 import type { CryptoApi, Keystore } from '../types';
 
