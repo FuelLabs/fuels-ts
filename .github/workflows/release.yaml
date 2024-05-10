@@ -16,6 +16,10 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # Ensure that the workflow runs only after a commit is pushed into the branch
+    # and not when the branch is created.
+    # This is to avoid running the workflow when a release/* branch is created.
+    if: github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
       - name: Checkout
