@@ -246,67 +246,71 @@ describe('TransactionResponse', () => {
     cleanup();
   });
 
-  it('should throw error for a SqueezedOut status update [submitAndAwait]', async () => {
-    const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
-      loggingEnabled: false,
-    });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+  it(
+    'should throw error for a SqueezedOut status update [submitAndAwait]',
+    async () => {
+      const { cleanup, ip, port } = await launchNode({
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
+        loggingEnabled: false,
+      });
+      const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
-    const genesisWallet = new WalletUnlocked(
-      process.env.GENESIS_SECRET || randomBytes(32),
-      nodeProvider
-    );
-
-    const request = new ScriptTransactionRequest();
-
-    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
-
-    const txCost = await genesisWallet.provider.getTransactionCost(request, {
-      signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
-    });
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
-    await genesisWallet.fund(request, txCost);
-
-    request.updateWitnessByOwner(
-      genesisWallet.address,
-      await genesisWallet.signTransaction(request)
-    );
-
-    const subscriptionStreamHolder = {
-      stream: new ReadableStream<Uint8Array>(),
-    };
-
-    getSubscriptionStreamFromFetch(subscriptionStreamHolder);
-    try {
-      await expectToThrowFuelError(
-        async () => {
-          await nodeProvider.sendTransaction(request, {
-            awaitExecution: true,
-            estimateTxDependencies: false,
-          });
-        },
-        { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+      const genesisWallet = new WalletUnlocked(
+        process.env.GENESIS_SECRET || randomBytes(32),
+        nodeProvider
       );
-    } catch (e) {
-      const decoder = new TextDecoder();
-      const reader = subscriptionStreamHolder.stream.getReader();
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) {
-          break;
+
+      const request = new ScriptTransactionRequest();
+
+      request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
+
+      const txCost = await genesisWallet.provider.getTransactionCost(request, {
+        signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
+      });
+
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
+
+      await genesisWallet.fund(request, txCost);
+
+      request.updateWitnessByOwner(
+        genesisWallet.address,
+        await genesisWallet.signTransaction(request)
+      );
+
+      const subscriptionStreamHolder = {
+        stream: new ReadableStream<Uint8Array>(),
+      };
+
+      getSubscriptionStreamFromFetch(subscriptionStreamHolder);
+      try {
+        await expectToThrowFuelError(
+          async () => {
+            await nodeProvider.sendTransaction(request, {
+              awaitExecution: true,
+              estimateTxDependencies: false,
+            });
+          },
+          { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+        );
+      } catch (e) {
+        const decoder = new TextDecoder();
+        const reader = subscriptionStreamHolder.stream.getReader();
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) {
+            break;
+          }
+          const streamedEvent = decoder.decode(value);
+          console.log(streamedEvent);
         }
-        const streamedEvent = decoder.decode(value);
-        console.log(streamedEvent);
+
+        throw e;
       }
 
-      throw e;
-    }
-
-    cleanup();
-  });
+      cleanup();
+    },
+    { repeats: 50 }
+  );
 });
