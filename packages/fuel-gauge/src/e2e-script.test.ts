@@ -24,8 +24,6 @@ describe('Live Script Test', () => {
 
       const response = await callScope.call();
 
-      console.log('response', response.transactionResult.receipts);
-
       const { value } = response;
 
       output = value;
