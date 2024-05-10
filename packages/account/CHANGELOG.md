@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.85.0
+
+### Minor Changes
+
+- fb0e12f: chore!: remove `__typename` from GraphQL types
+
+### Patch Changes
+
+- 9bc893b: fix: avoid overriding user `gasLimit` and `maxFee` inputs
+- 1115ade: fix: added CDN path for icon assets
+- f7eacb4: chore: warn on fuel client version incompatibility
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/address@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/transactions@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/merkle@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
 ## 0.84.0
 
 ### Minor Changes
