@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Provider, WalletUnlocked, FUEL_NETWORK_URL } from 'fuels';
+import { Provider, WalletUnlocked } from 'fuels';
 
 import { getScript } from './utils';
 
@@ -14,20 +14,16 @@ describe('Live Script Test', () => {
       return;
     }
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = new WalletUnlocked('0x1', provider);
+    const provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
+    const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
     const scriptInstance = getScript<[boolean], boolean>('script-main-arg-bool', wallet);
 
     let output: boolean = false;
     try {
       const callScope = scriptInstance.functions.main(true);
 
-      const response = await callScope.call();
-
-      console.log('response', response.transactionResult.receipts);
-
-      const { value } = response;
-
+      const { value } = await callScope.call();
+      
       output = value;
     } catch (e) {
       const address = wallet.address.toAddress();
