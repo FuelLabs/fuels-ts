@@ -23,7 +23,7 @@ describe('Live Script Test', () => {
       const callScope = scriptInstance.functions.main(true);
 
       const { value } = await callScope.call();
-      
+
       output = value;
     } catch (e) {
       const address = wallet.address.toAddress();
