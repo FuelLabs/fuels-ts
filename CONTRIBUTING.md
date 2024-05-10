@@ -187,7 +187,7 @@ the following categories:
 
 1. Fork the fuels-ts repository and clone your fork
 
-2. Create a new branch out of the `master` branch.
+2. Create a new branch out of the `master` branch with the naming convention `<username>/<fix|feat|chore|build|docs>/<branch-name>`.
 
 3. Make and commit your changes following the
    [commit convention](https://github.com/FuelLabs/fuels-ts/blob/master/README.md#commit-convention).
@@ -199,6 +199,8 @@ the following categories:
    [Learn more about Changeset](https://github.com/changesets/changesets/tree/main/packages/cli).
    Please note that you might have to run `git fetch origin master` (where
    origin will be your fork on GitHub) before `pnpm changeset` works.
+
+5. We adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for semantic versioning, and given that we currently do not have a major release yet, only breaking changes would require a `minor` version bump. All other API compatible changes would be a `patch` version bump.
 
 > If you made minor changes like CI config, prettier, etc, you can run
 > `pnpm changeset add --empty` to generate an empty changeset file to document
