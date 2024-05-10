@@ -1,25 +1,25 @@
-import { randomBytes } from '@fuel-ts/crypto';
-import { FuelError } from '@fuel-ts/errors';
-import { AbstractContract, AbstractAccount } from '@fuel-ts/interfaces';
+import { randomBytes } from "@fuel-ts/crypto";
+import { FuelError } from "@fuel-ts/errors";
+import { AbstractContract, AbstractAccount } from "@fuel-ts/interfaces";
 import type {
-  Bech32Address,
-  B256Address,
-  AddressLike,
-  ContractIdLike,
-  AbstractAddress,
-  B256AddressEvm,
-  BytesLike,
-} from '@fuel-ts/interfaces';
-import { arrayify, hexlify } from '@fuel-ts/utils';
-import type { Decoded } from 'bech32';
-import { bech32m } from 'bech32';
+	Bech32Address,
+	B256Address,
+	AddressLike,
+	ContractIdLike,
+	AbstractAddress,
+	B256AddressEvm,
+	BytesLike,
+} from "@fuel-ts/interfaces";
+import { arrayify, hexlify } from "@fuel-ts/utils";
+import type { Decoded } from "bech32";
+import { bech32m } from "bech32";
 
 /**
  * Fuel Network HRP (human-readable part) for bech32 encoding
  *
  * @hidden
  */
-export const FUEL_BECH32_HRP_PREFIX = 'fuel';
+export const FUEL_BECH32_HRP_PREFIX = "fuel";
 
 /**
  * Decodes a Bech32 address string into Decoded
@@ -27,7 +27,7 @@ export const FUEL_BECH32_HRP_PREFIX = 'fuel';
  * @hidden
  */
 export function fromBech32(address: Bech32Address): Decoded {
-  return bech32m.decode(address);
+	return bech32m.decode(address);
 }
 
 /**
@@ -36,10 +36,10 @@ export function fromBech32(address: Bech32Address): Decoded {
  * @hidden
  */
 export function toBech32(address: B256Address): Bech32Address {
-  return bech32m.encode(
-    FUEL_BECH32_HRP_PREFIX,
-    bech32m.toWords(arrayify(hexlify(address)))
-  ) as Bech32Address;
+	return bech32m.encode(
+		FUEL_BECH32_HRP_PREFIX,
+		bech32m.toWords(arrayify(hexlify(address))),
+	) as Bech32Address;
 }
 
 /**
@@ -48,11 +48,11 @@ export function toBech32(address: B256Address): Bech32Address {
  * @hidden
  */
 export function isBech32(address: BytesLike): boolean {
-  return (
-    typeof address === 'string' &&
-    address.indexOf(FUEL_BECH32_HRP_PREFIX + 1) === 0 &&
-    fromBech32(address as Bech32Address).prefix === FUEL_BECH32_HRP_PREFIX
-  );
+	return (
+		typeof address === "string" &&
+		address.indexOf(FUEL_BECH32_HRP_PREFIX + 1) === 0 &&
+		fromBech32(address as Bech32Address).prefix === FUEL_BECH32_HRP_PREFIX
+	);
 }
 
 /**
@@ -61,7 +61,7 @@ export function isBech32(address: BytesLike): boolean {
  * @hidden
  */
 export function isB256(address: string): boolean {
-  return address.length === 66 && /(0x)[0-9a-f]{64}$/i.test(address);
+	return address.length === 66 && /(0x)[0-9a-f]{64}$/i.test(address);
 }
 
 /**
@@ -70,7 +70,7 @@ export function isB256(address: string): boolean {
  * @hidden
  */
 export function isPublicKey(address: string): boolean {
-  return address.length === 130 && /(0x)[0-9a-f]{128}$/i.test(address);
+	return address.length === 130 && /(0x)[0-9a-f]{128}$/i.test(address);
 }
 
 /**
@@ -79,7 +79,7 @@ export function isPublicKey(address: string): boolean {
  * @hidden
  */
 export function isEvmAddress(address: string): boolean {
-  return address.length === 42 && /(0x)[0-9a-f]{40}$/i.test(address);
+	return address.length === 42 && /(0x)[0-9a-f]{40}$/i.test(address);
 }
 
 /**
@@ -88,7 +88,7 @@ export function isEvmAddress(address: string): boolean {
  * @hidden
  */
 export function getBytesFromBech32(address: Bech32Address): Uint8Array {
-  return new Uint8Array(bech32m.fromWords(fromBech32(address).words));
+	return new Uint8Array(bech32m.fromWords(fromBech32(address).words));
 }
 
 /**
@@ -97,14 +97,14 @@ export function getBytesFromBech32(address: Bech32Address): Uint8Array {
  * @hidden
  */
 export function toB256(address: Bech32Address): B256Address {
-  if (!isBech32(address)) {
-    throw new FuelError(
-      FuelError.CODES.INVALID_BECH32_ADDRESS,
-      `Invalid Bech32 Address: ${address}.`
-    );
-  }
+	if (!isBech32(address)) {
+		throw new FuelError(
+			FuelError.CODES.INVALID_BECH32_ADDRESS,
+			`Invalid Bech32 Address: ${address}.`,
+		);
+	}
 
-  return hexlify(getBytesFromBech32(address));
+	return hexlify(getBytesFromBech32(address));
 }
 
 /**
@@ -116,8 +116,8 @@ export function toB256(address: Bech32Address): B256Address {
  * @hidden
  */
 export function normalizeBech32(address: Bech32Address): Bech32Address {
-  const { words } = fromBech32(address);
-  return bech32m.encode(FUEL_BECH32_HRP_PREFIX, words) as Bech32Address;
+	const { words } = fromBech32(address);
+	return bech32m.encode(FUEL_BECH32_HRP_PREFIX, words) as Bech32Address;
 }
 
 /**
@@ -125,16 +125,18 @@ export function normalizeBech32(address: Bech32Address): Bech32Address {
  *
  * @hidden
  */
-export const addressify = (addressLike: AddressLike | ContractIdLike): AbstractAddress => {
-  if (addressLike instanceof AbstractAccount) {
-    return addressLike.address;
-  }
+export const addressify = (
+	addressLike: AddressLike | ContractIdLike,
+): AbstractAddress => {
+	if (addressLike instanceof AbstractAccount) {
+		return addressLike.address;
+	}
 
-  if (addressLike instanceof AbstractContract) {
-    return addressLike.id;
-  }
+	if (addressLike instanceof AbstractContract) {
+		return addressLike.id;
+	}
 
-  return addressLike;
+	return addressLike;
 };
 
 /**
@@ -150,27 +152,29 @@ export const getRandomB256 = () => hexlify(randomBytes(32));
  *
  * @hidden
  */
-export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => {
-  let bytes;
+export const clearFirst12BytesFromB256 = (
+	b256: B256Address,
+): B256AddressEvm => {
+	let bytes;
 
-  try {
-    if (!isB256(b256)) {
-      throw new FuelError(
-        FuelError.CODES.INVALID_BECH32_ADDRESS,
-        `Invalid Bech32 Address: ${b256}.`
-      );
-    }
+	try {
+		if (!isB256(b256)) {
+			throw new FuelError(
+				FuelError.CODES.INVALID_BECH32_ADDRESS,
+				`Invalid Bech32 Address: ${b256}.`,
+			);
+		}
 
-    bytes = getBytesFromBech32(toBech32(b256));
-    bytes = hexlify(bytes.fill(0, 0, 12)) as B256AddressEvm;
-  } catch (error) {
-    throw new FuelError(
-      FuelError.CODES.PARSE_FAILED,
-      `Cannot generate EVM Address B256 from: ${b256}.`
-    );
-  }
+		bytes = getBytesFromBech32(toBech32(b256));
+		bytes = hexlify(bytes.fill(0, 0, 12)) as B256AddressEvm;
+	} catch (error) {
+		throw new FuelError(
+			FuelError.CODES.PARSE_FAILED,
+			`Cannot generate EVM Address B256 from: ${b256}.`,
+		);
+	}
 
-  return bytes;
+	return bytes;
 };
 
 /**
@@ -182,10 +186,15 @@ export const clearFirst12BytesFromB256 = (b256: B256Address): B256AddressEvm => 
  *
  * @hidden
  */
-export const padFirst12BytesOfEvmAddress = (address: string): B256AddressEvm => {
-  if (!isEvmAddress(address)) {
-    throw new FuelError(FuelError.CODES.INVALID_EVM_ADDRESS, 'Invalid EVM address format.');
-  }
+export const padFirst12BytesOfEvmAddress = (
+	address: string,
+): B256AddressEvm => {
+	if (!isEvmAddress(address)) {
+		throw new FuelError(
+			FuelError.CODES.INVALID_EVM_ADDRESS,
+			"Invalid EVM address format.",
+		);
+	}
 
-  return address.replace('0x', '0x000000000000000000000000') as B256AddressEvm;
+	return address.replace("0x", "0x000000000000000000000000") as B256AddressEvm;
 };

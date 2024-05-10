@@ -1,39 +1,39 @@
 {
-  "$schema": "https://www.graphql-code-generator.com/config.schema.json",
-  "schema": "./src/providers/fuel-core-schema.graphql",
-  "documents": "./src/providers/operations.graphql",
-  "generates": {
-    "./src/providers/__generated__/operations.ts": {
-      "plugins": [
-        { "typescript": {} },
-        { "typescript-operations": {} },
-        { "typescript-generic-sdk": {} }
-      ],
-      "config": {
-        "scalars": {
-          "Address": "string",
-          "AssetId": "string",
-          "BlockId": "string",
-          "Bytes32": "string",
-          "ContractId": "string",
-          "HexString": "string",
-          "Nonce": "string",
-          "RelayedTransactionId": "string",
-          "Salt": "string",
-          "Signature": "string",
-          "Tai64Timestamp": "string",
-          "TransactionId": "string",
-          "TxPointer": "string",
-          "U16": "string",
-          "U32": "string",
-          "U64": "string",
-          "UtxoId": "string"
-        },
-        "useTypeImports": true,
-        "dedupeOperationSuffix": true,
-        "skipTypename": true,
-        "typesPrefix": "Gql"
-      }
-    }
-  }
+	"$schema": "https://www.graphql-code-generator.com/config.schema.json",
+	"schema": "./src/providers/fuel-core-schema.graphql",
+	"documents": "./src/providers/operations.graphql",
+	"generates": {
+		"./src/providers/__generated__/operations.ts": {
+			"plugins": [
+				{ "typescript": {} },
+				{ "typescript-operations": {} },
+				{ "typescript-generic-sdk": {} }
+			],
+			"config": {
+				"scalars": {
+					"Address": "string",
+					"AssetId": "string",
+					"BlockId": "string",
+					"Bytes32": "string",
+					"ContractId": "string",
+					"HexString": "string",
+					"Nonce": "string",
+					"RelayedTransactionId": "string",
+					"Salt": "string",
+					"Signature": "string",
+					"Tai64Timestamp": "string",
+					"TransactionId": "string",
+					"TxPointer": "string",
+					"U16": "string",
+					"U32": "string",
+					"U64": "string",
+					"UtxoId": "string"
+				},
+				"useTypeImports": true,
+				"dedupeOperationSuffix": true,
+				"skipTypename": true,
+				"typesPrefix": "Gql"
+			}
+		}
+	}
 }

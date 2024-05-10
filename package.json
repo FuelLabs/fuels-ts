@@ -58,7 +58,7 @@
   "devDependencies": {
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
-    "@biomejs/biome": "^1.7.2",
+    "@biomejs/biome": "1.7.3",
     "@changesets/cli": "^2.27.1",
     "@changesets/get-github-info": "^0.5.2",
     "@changesets/read": "^0.6.0",

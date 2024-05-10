@@ -1,16 +1,16 @@
-import cryptoApi from './node';
+import cryptoApi from "./node";
 
-export * from './types';
+export * from "./types";
 
 export const {
-  bufferFromString,
-  decrypt,
-  encrypt,
-  keyFromPassword,
-  randomBytes,
-  stringFromBuffer,
-  scrypt,
-  keccak256,
-  decryptJsonWalletData,
-  encryptJsonWalletData,
+	bufferFromString,
+	decrypt,
+	encrypt,
+	keyFromPassword,
+	randomBytes,
+	stringFromBuffer,
+	scrypt,
+	keccak256,
+	decryptJsonWalletData,
+	encryptJsonWalletData,
 } = cryptoApi;

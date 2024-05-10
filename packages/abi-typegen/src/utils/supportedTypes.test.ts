@@ -1,10 +1,10 @@
-import { supportedTypes } from './supportedTypes';
+import { supportedTypes } from "./supportedTypes";
 
 /**
  * @group node
  */
-describe('supportedTypes.ts', () => {
-  test('should export all supported types', () => {
-    expect(supportedTypes.length).toEqual(24);
-  });
+describe("supportedTypes.ts", () => {
+	test("should export all supported types", () => {
+		expect(supportedTypes.length).toEqual(24);
+	});
 });

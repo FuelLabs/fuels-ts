@@ -1,67 +1,76 @@
-import * as chokidar from 'chokidar';
+import * as chokidar from "chokidar";
 
-import * as buildMod from '../../src/cli/commands/build/index';
-import * as deployMod from '../../src/cli/commands/deploy/index';
-import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
-import { mockLogger } from '../utils/mockLogger';
-import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
-import { runInit, runDev, bootstrapProject, resetConfigAndMocks } from '../utils/runCommands';
+import * as buildMod from "../../src/cli/commands/build/index";
+import * as deployMod from "../../src/cli/commands/deploy/index";
+import { mockStartFuelCore } from "../utils/mockAutoStartFuelCore";
+import { mockLogger } from "../utils/mockLogger";
+import { resetDiskAndMocks } from "../utils/resetDiskAndMocks";
+import {
+	runInit,
+	runDev,
+	bootstrapProject,
+	resetConfigAndMocks,
+} from "../utils/runCommands";
 
-vi.mock('chokidar', async () => {
-  const mod = await vi.importActual('chokidar');
-  return {
-    __esModule: true,
-    ...mod,
-  };
+vi.mock("chokidar", async () => {
+	const mod = await vi.importActual("chokidar");
+	return {
+		__esModule: true,
+		...mod,
+	};
 });
 
 /**
  * @group node
  */
-describe('dev', () => {
-  const paths = bootstrapProject(__filename);
+describe("dev", () => {
+	const paths = bootstrapProject(__filename);
 
-  afterEach(() => {
-    resetConfigAndMocks(paths.fuelsConfigPath);
-  });
+	afterEach(() => {
+		resetConfigAndMocks(paths.fuelsConfigPath);
+	});
 
-  afterAll(() => {
-    resetDiskAndMocks(paths.root);
-  });
+	afterAll(() => {
+		resetDiskAndMocks(paths.root);
+	});
 
-  function mockAll() {
-    mockLogger();
+	function mockAll() {
+		mockLogger();
 
-    const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
+		const { autoStartFuelCore, killChildProcess } = mockStartFuelCore();
 
-    const build = vi.spyOn(buildMod, 'build').mockReturnValue(Promise.resolve());
-    const deploy = vi.spyOn(deployMod, 'deploy').mockReturnValue(Promise.resolve([]));
+		const build = vi
+			.spyOn(buildMod, "build")
+			.mockReturnValue(Promise.resolve());
+		const deploy = vi
+			.spyOn(deployMod, "deploy")
+			.mockReturnValue(Promise.resolve([]));
 
+		const on: any = vi.fn(() => ({ on }));
 
-    const on: any = vi.fn(() => ({ on }));
+		const watch = vi.spyOn(chokidar, "watch").mockReturnValue({ on } as any);
 
-    const watch = vi.spyOn(chokidar, 'watch').mockReturnValue({ on } as any);
+		return { autoStartFuelCore, killChildProcess, build, deploy, on, watch };
+	}
 
-    return { autoStartFuelCore, killChildProcess, build, deploy, on, watch };
-  }
+	it("should run `dev` command", async () => {
+		const { autoStartFuelCore, killChildProcess, build, deploy, on, watch } =
+			mockAll();
 
-  it('should run `dev` command', async () => {
-    const { autoStartFuelCore, killChildProcess, build, deploy, on, watch } = mockAll();
+		await runInit({
+			root: paths.root,
+			workspace: paths.workspaceDir,
+			output: paths.outputDir,
+		});
 
-    await runInit({
-      root: paths.root,
-      workspace: paths.workspaceDir,
-      output: paths.outputDir,
-    });
+		await runDev({ root: paths.root });
 
-    await runDev({ root: paths.root });
+		expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
+		expect(killChildProcess).toHaveBeenCalledTimes(0);
+		expect(build).toHaveBeenCalledTimes(1);
+		expect(deploy).toHaveBeenCalledTimes(1);
 
-    expect(autoStartFuelCore).toHaveBeenCalledTimes(1);
-    expect(killChildProcess).toHaveBeenCalledTimes(0);
-    expect(build).toHaveBeenCalledTimes(1);
-    expect(deploy).toHaveBeenCalledTimes(1);
-
-    expect(watch).toHaveBeenCalledTimes(2);
-    expect(on).toHaveBeenCalledTimes(2);
-  });
+		expect(watch).toHaveBeenCalledTimes(2);
+		expect(on).toHaveBeenCalledTimes(2);
+	});
 });

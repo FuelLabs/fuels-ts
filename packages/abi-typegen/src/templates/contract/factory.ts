@@ -1,17 +1,21 @@
-import type { Abi } from '../../abi/Abi';
-import { renderHbsTemplate } from '../renderHbsTemplate';
+import type { Abi } from "../../abi/Abi";
+import { renderHbsTemplate } from "../renderHbsTemplate";
 
-import factoryTemplate from './factory.hbs';
+import factoryTemplate from "./factory.hbs";
 
 export function renderFactoryTemplate(params: { abi: Abi }) {
-  const { name: capitalizedName, rawContents, storageSlotsContents } = params.abi;
-  const abiJsonString = JSON.stringify(rawContents, null, 2);
-  const storageSlotsJsonString = storageSlotsContents ?? '[]';
+	const {
+		name: capitalizedName,
+		rawContents,
+		storageSlotsContents,
+	} = params.abi;
+	const abiJsonString = JSON.stringify(rawContents, null, 2);
+	const storageSlotsJsonString = storageSlotsContents ?? "[]";
 
-  const text = renderHbsTemplate({
-    template: factoryTemplate,
-    data: { capitalizedName, abiJsonString, storageSlotsJsonString },
-  });
+	const text = renderHbsTemplate({
+		template: factoryTemplate,
+		data: { capitalizedName, abiJsonString, storageSlotsJsonString },
+	});
 
-  return text;
+	return text;
 }

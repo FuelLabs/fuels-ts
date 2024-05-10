@@ -1,68 +1,68 @@
-import { EnumType } from '../abi/types/EnumType';
-import { GenericType } from '../abi/types/GenericType';
-import { StructType } from '../abi/types/StructType';
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import { EnumType } from "../abi/types/EnumType";
+import { GenericType } from "../abi/types/GenericType";
+import { StructType } from "../abi/types/StructType";
+import type { IRawAbiTypeRoot } from "../types/interfaces/IRawAbiType";
 
-import { extractStructName } from './extractStructName';
+import { extractStructName } from "./extractStructName";
 
 /**
  * @group node
  */
-describe('extractStructName.ts', () => {
-  /*
+describe("extractStructName.ts", () => {
+	/*
     Test helpers
   */
-  function makeType(typeId: number, type: string): IRawAbiTypeRoot {
-    return {
-      typeId,
-      type,
-      components: null,
-      typeParameters: null,
-    };
-  }
+	function makeType(typeId: number, type: string): IRawAbiTypeRoot {
+		return {
+			typeId,
+			type,
+			components: null,
+			typeParameters: null,
+		};
+	}
 
-  /*
+	/*
     Tests
   */
-  test('should extract names from Enum', () => {
-    const enumRawAbiType = makeType(1, 'enum MyEnumName');
+	test("should extract names from Enum", () => {
+		const enumRawAbiType = makeType(1, "enum MyEnumName");
 
-    expect(
-      extractStructName({
-        rawAbiType: enumRawAbiType,
-        regex: EnumType.MATCH_REGEX,
-      })
-    ).toEqual('MyEnumName');
-  });
+		expect(
+			extractStructName({
+				rawAbiType: enumRawAbiType,
+				regex: EnumType.MATCH_REGEX,
+			}),
+		).toEqual("MyEnumName");
+	});
 
-  test('should extract names from Structs', () => {
-    const structRawAbiType = makeType(2, 'struct MyStructName');
+	test("should extract names from Structs", () => {
+		const structRawAbiType = makeType(2, "struct MyStructName");
 
-    expect(
-      extractStructName({
-        rawAbiType: structRawAbiType,
-        regex: StructType.MATCH_REGEX,
-      })
-    ).toEqual('MyStructName');
-  });
+		expect(
+			extractStructName({
+				rawAbiType: structRawAbiType,
+				regex: StructType.MATCH_REGEX,
+			}),
+		).toEqual("MyStructName");
+	});
 
-  test('should extract names from Generics', () => {
-    const genericRawAbiType = makeType(3, 'generic MyGenericName');
+	test("should extract names from Generics", () => {
+		const genericRawAbiType = makeType(3, "generic MyGenericName");
 
-    expect(
-      extractStructName({
-        rawAbiType: genericRawAbiType,
-        regex: GenericType.MATCH_REGEX,
-      })
-    ).toEqual('MyGenericName');
-  });
+		expect(
+			extractStructName({
+				rawAbiType: genericRawAbiType,
+				regex: GenericType.MATCH_REGEX,
+			}),
+		).toEqual("MyGenericName");
+	});
 
-  test('should throw when trying to extract type', () => {
-    const rawAbiType = makeType(3, 'struct');
+	test("should throw when trying to extract type", () => {
+		const rawAbiType = makeType(3, "struct");
 
-    const regex = /^struct (.+)$/m;
-    expect(() => {
-      extractStructName({ rawAbiType, regex });
-    }).toThrow(/Couldn't extract struct name with:/);
-  });
+		const regex = /^struct (.+)$/m;
+		expect(() => {
+			extractStructName({ rawAbiType, regex });
+		}).toThrow(/Couldn't extract struct name with:/);
+	});
 });

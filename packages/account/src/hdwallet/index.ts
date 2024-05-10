@@ -1,1 +1,1 @@
-export { default as HDWallet } from './hdwallet';
+export { default as HDWallet } from "./hdwallet";

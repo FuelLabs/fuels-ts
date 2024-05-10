@@ -1,1 +1,1 @@
-export * from './binaryMerkleTree';
+export * from "./binaryMerkleTree";

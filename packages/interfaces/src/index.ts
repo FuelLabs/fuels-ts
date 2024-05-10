@@ -24,14 +24,14 @@ export type BytesLike = Uint8Array | string;
  * @prop bits - A 256 bit hash string with the first 12 bytes cleared
  */
 export type EvmAddress = {
-  bits: B256AddressEvm;
+	bits: B256AddressEvm;
 };
 
 /**
  * @prop bits - A wrapped 256 bit hash string
  */
 export type AssetId = {
-  bits: B256Address;
+	bits: B256Address;
 };
 
 export type StdString = string;
@@ -40,53 +40,53 @@ export type StdString = string;
  * @hidden
  */
 export abstract class AbstractScriptRequest<T> {
-  abstract bytes: Uint8Array;
-  abstract encodeScriptData: (data: T) => Uint8Array;
+	abstract bytes: Uint8Array;
+	abstract encodeScriptData: (data: T) => Uint8Array;
 }
 
 // #region address-1
 export abstract class AbstractAddress {
-  abstract toJSON(): string;
-  abstract toString(): string;
-  abstract toAddress(): Bech32Address;
-  abstract toB256(): B256Address;
-  abstract toHexString(): string;
-  abstract toBytes(): Uint8Array;
-  abstract equals(other: AbstractAddress): boolean;
+	abstract toJSON(): string;
+	abstract toString(): string;
+	abstract toAddress(): Bech32Address;
+	abstract toB256(): B256Address;
+	abstract toHexString(): string;
+	abstract toBytes(): Uint8Array;
+	abstract equals(other: AbstractAddress): boolean;
 }
 // #endregion address-1
 
 export abstract class AbstractAccount {
-  abstract address: AbstractAddress;
-  abstract provider: unknown;
-  abstract getResourcesToSpend(quantities: any[], options?: any): any;
-  abstract sendTransaction(transactionRequest: any, options?: any): any;
-  abstract simulateTransaction(transactionRequest: any, options?: any): any;
-  abstract fund(transactionRequest: any, txCost: any): Promise<any>;
+	abstract address: AbstractAddress;
+	abstract provider: unknown;
+	abstract getResourcesToSpend(quantities: any[], options?: any): any;
+	abstract sendTransaction(transactionRequest: any, options?: any): any;
+	abstract simulateTransaction(transactionRequest: any, options?: any): any;
+	abstract fund(transactionRequest: any, txCost: any): Promise<any>;
 }
 /**
  * @hidden
  */
 export abstract class AbstractProgram {
-  abstract account: AbstractAccount | null;
-  abstract interface: {
-    readonly jsonAbi: any;
-  };
+	abstract account: AbstractAccount | null;
+	abstract interface: {
+		readonly jsonAbi: any;
+	};
 
-  abstract provider: {
-    sendTransaction(transactionRequest: any, options?: any): any;
-  } | null;
+	abstract provider: {
+		sendTransaction(transactionRequest: any, options?: any): any;
+	} | null;
 }
 
 export abstract class AbstractContract extends AbstractProgram {
-  abstract id: AbstractAddress;
+	abstract id: AbstractAddress;
 }
 
 /**
  * @hidden
  */
 export abstract class AbstractScript extends AbstractProgram {
-  abstract bytes: Uint8Array;
+	abstract bytes: Uint8Array;
 }
 
 /** A simple type alias defined using the `type` keyword. */

@@ -1,3 +1,3 @@
-import { binAndCli } from '@internal/tsup';
+import { binAndCli } from "@internal/tsup";
 
 export default binAndCli;

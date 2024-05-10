@@ -1,32 +1,30 @@
-import { getDeployConfig } from './getDeployConfig';
+import { getDeployConfig } from "./getDeployConfig";
 
 /**
  * @group node
  */
-describe('getDeployConfig', () => {
-  test('deploy options as object', async () => {
+describe("getDeployConfig", () => {
+	test("deploy options as object", async () => {
+		const deployConfig: any = { itWorked: true };
 
-    const deployConfig: any = { itWorked: true };
+		const resolved = await getDeployConfig(deployConfig, {
+			contracts: [],
+			contractName: "something",
+			contractPath: "something",
+		});
 
-    const resolved = await getDeployConfig(deployConfig, {
-      contracts: [],
-      contractName: 'something',
-      contractPath: 'something',
-    });
+		expect(resolved).toEqual(deployConfig);
+	});
 
-    expect(resolved).toEqual(deployConfig);
-  });
+	test("deploy options as a function", async () => {
+		const deployConfig: any = { itWorked: true };
 
-  test('deploy options as a function', async () => {
+		const resolved = await getDeployConfig((..._) => deployConfig, {
+			contracts: [],
+			contractName: "something",
+			contractPath: "something",
+		});
 
-    const deployConfig: any = { itWorked: true };
-
-    const resolved = await getDeployConfig((..._) => deployConfig, {
-      contracts: [],
-      contractName: 'something',
-      contractPath: 'something',
-    });
-
-    expect(resolved).toEqual(deployConfig);
-  });
+		expect(resolved).toEqual(deployConfig);
+	});
 });

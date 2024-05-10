@@ -1,8 +1,8 @@
-import type { Asset } from '../../providers/assets/types';
-import type { FuelConnector } from '../fuel-connector';
+import type { Asset } from "../../providers/assets/types";
+import type { FuelConnector } from "../fuel-connector";
 
-import type { FuelConnectorEventTypes } from './connector-types';
-import type { Network } from './data-type';
+import type { FuelConnectorEventTypes } from "./connector-types";
+import type { Network } from "./data-type";
 
 /** **
  * ========================================================================================
@@ -13,10 +13,10 @@ import type { Network } from './data-type';
 /**
  * Extract the event argument type from the event type.
  */
-export type FuelEventArg<T extends FuelConnectorEvents['type']> = Extract<
-  FuelConnectorEventTypes,
-  { type: T }
->['data'];
+export type FuelEventArg<T extends FuelConnectorEvents["type"]> = Extract<
+	FuelConnectorEventTypes,
+	{ type: T }
+>["data"];
 
 /**
  * Event trigger when the accounts available to the
@@ -26,8 +26,8 @@ export type FuelEventArg<T extends FuelConnectorEvents['type']> = Extract<
  * @property accounts - The accounts addresses
  */
 export type AccountsEvent = {
-  type: FuelConnectorEventTypes.accounts;
-  data: Array<string>;
+	type: FuelConnectorEventTypes.accounts;
+	data: Array<string>;
 };
 
 /**
@@ -38,8 +38,8 @@ export type AccountsEvent = {
  * @property data - The current account selected or null.
  */
 export type AccountEvent = {
-  type: FuelConnectorEventTypes.currentAccount;
-  data: string | null;
+	type: FuelConnectorEventTypes.currentAccount;
+	data: string | null;
 };
 
 /**
@@ -50,8 +50,8 @@ export type AccountEvent = {
  * @property data - The new connection status.
  */
 export type ConnectionEvent = {
-  type: FuelConnectorEventTypes.connection;
-  data: boolean;
+	type: FuelConnectorEventTypes.connection;
+	data: boolean;
 };
 
 /**
@@ -63,8 +63,8 @@ export type ConnectionEvent = {
  * @property data - The network information
  */
 export type NetworkEvent = {
-  type: FuelConnectorEventTypes.currentNetwork;
-  data: Network;
+	type: FuelConnectorEventTypes.currentNetwork;
+	data: Network;
 };
 
 /**
@@ -76,8 +76,8 @@ export type NetworkEvent = {
  * @property data - The network information
  */
 export type NetworksEvent = {
-  type: FuelConnectorEventTypes.networks;
-  data: Network;
+	type: FuelConnectorEventTypes.networks;
+	data: Network;
 };
 
 /**
@@ -88,8 +88,8 @@ export type NetworksEvent = {
  * @property data - The list of connectors
  */
 export type ConnectorsEvent = {
-  type: FuelConnectorEventTypes.connectors;
-  data: Array<FuelConnector>;
+	type: FuelConnectorEventTypes.connectors;
+	data: Array<FuelConnector>;
 };
 
 /**
@@ -100,8 +100,8 @@ export type ConnectorsEvent = {
  * @property data - The list of connectors
  */
 export type ConnectorEvent = {
-  type: FuelConnectorEventTypes.currentConnector;
-  data: FuelConnector;
+	type: FuelConnectorEventTypes.currentConnector;
+	data: FuelConnector;
 };
 
 /**
@@ -112,21 +112,21 @@ export type ConnectorEvent = {
  * @property data - The list of assets
  */
 export type AssetsEvent = {
-  type: FuelConnectorEventTypes.assets;
-  data: Array<Asset>;
+	type: FuelConnectorEventTypes.assets;
+	data: Array<Asset>;
 };
 
 /**
  * All the events available to the connector.
  */
 export type FuelConnectorEvents =
-  | ConnectionEvent
-  | NetworkEvent
-  | NetworksEvent
-  | AccountEvent
-  | AccountsEvent
-  | ConnectorsEvent
-  | ConnectorEvent
-  | AssetsEvent;
+	| ConnectionEvent
+	| NetworkEvent
+	| NetworksEvent
+	| AccountEvent
+	| AccountsEvent
+	| ConnectorsEvent
+	| ConnectorEvent
+	| AssetsEvent;
 
-export type FuelConnectorEventsType = FuelConnectorEvents['type'];
+export type FuelConnectorEventsType = FuelConnectorEvents["type"];

@@ -1,39 +1,39 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { safeExec } from "@fuel-ts/errors/test-utils";
 
-import type { ArrayType } from '../abi/types/ArrayType';
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { ArrayType } from "../abi/types/ArrayType";
+import type { IRawAbiTypeRoot } from "../types/interfaces/IRawAbiType";
 
-import { makeType } from './makeType';
+import { makeType } from "./makeType";
 
 /**
  * @group node
  */
-describe('makeType.ts', () => {
-  test('should create a new Type instance just fine', () => {
-    const rawAbiType: IRawAbiTypeRoot = {
-      typeId: 1,
-      type: 'u64',
-      components: null,
-      typeParameters: null,
-    };
+describe("makeType.ts", () => {
+	test("should create a new Type instance just fine", () => {
+		const rawAbiType: IRawAbiTypeRoot = {
+			typeId: 1,
+			type: "u64",
+			components: null,
+			typeParameters: null,
+		};
 
-    expect(makeType({ rawAbiType })).toBeTruthy();
-  });
+		expect(makeType({ rawAbiType })).toBeTruthy();
+	});
 
-  test('should throw for unsupported types', async () => {
-    const rawAbiType: IRawAbiTypeRoot = {
-      typeId: 1,
-      type: 'non existent',
-      components: null,
-      typeParameters: null,
-    };
+	test("should throw for unsupported types", async () => {
+		const rawAbiType: IRawAbiTypeRoot = {
+			typeId: 1,
+			type: "non existent",
+			components: null,
+			typeParameters: null,
+		};
 
-    const expectedErrorMsg = `Type not supported: ${rawAbiType.type}`;
+		const expectedErrorMsg = `Type not supported: ${rawAbiType.type}`;
 
-    const fn = () => makeType({ rawAbiType });
-    const { error, result } = await safeExec<ArrayType, Error>(fn);
+		const fn = () => makeType({ rawAbiType });
+		const { error, result } = await safeExec<ArrayType, Error>(fn);
 
-    expect(result).toBeFalsy();
-    expect(error?.message).toEqual(expectedErrorMsg);
-  });
+		expect(result).toBeFalsy();
+		expect(error?.message).toEqual(expectedErrorMsg);
+	});
 });

@@ -1,18 +1,18 @@
-import type { Command } from 'commander';
+import type { Command } from "commander";
 
-import type { Commands } from '../types';
-import { error } from '../utils/logger';
+import type { Commands } from "../types";
+import { error } from "../utils/logger";
 
 export function withProgram<CType extends Commands>(
-  program: Command,
-  _command: CType,
-  fn: (program: Command) => void
+	program: Command,
+	_command: CType,
+	fn: (program: Command) => void,
 ) {
-  return async () => {
-    try {
-      await fn(program);
-    } catch (err) {
-      error(err);
-    }
-  };
+	return async () => {
+		try {
+			await fn(program);
+		} catch (err) {
+			error(err);
+		}
+	};
 }

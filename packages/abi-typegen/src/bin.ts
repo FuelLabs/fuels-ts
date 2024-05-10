@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import { run } from './cli';
+import { run } from "./cli";
 
 run({
-  argv: process.argv,
-  programName: 'fuels-typegen',
+	argv: process.argv,
+	programName: "fuels-typegen",
 });

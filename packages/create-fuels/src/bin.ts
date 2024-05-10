@@ -1,16 +1,16 @@
 #!/usr/bin/env node
-import chalk from 'chalk';
-import { log } from 'console';
+import chalk from "chalk";
+import { log } from "console";
 
-import { runScaffoldCli, setupProgram } from './cli';
+import { runScaffoldCli, setupProgram } from "./cli";
 
 runScaffoldCli({
-  program: setupProgram(),
-  args: process.argv,
-  shouldInstallDeps: true,
+	program: setupProgram(),
+	args: process.argv,
+	shouldInstallDeps: true,
 })
-  .then(() => process.exit(0))
-  .catch((e) => {
-    log(chalk.red(e));
-    process.exit(1);
-  });
+	.then(() => process.exit(0))
+	.catch((e) => {
+		log(chalk.red(e));
+		process.exit(1);
+	});

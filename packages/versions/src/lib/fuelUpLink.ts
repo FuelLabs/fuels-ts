@@ -1,1 +1,1 @@
-export const fuelUpLink = 'https://github.com/fuellabs/fuelup';
+export const fuelUpLink = "https://github.com/fuellabs/fuelup";

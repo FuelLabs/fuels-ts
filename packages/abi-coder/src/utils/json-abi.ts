@@ -1,9 +1,14 @@
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { ErrorCode, FuelError } from "@fuel-ts/errors";
 
-import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
+import type { ResolvedAbiType } from "../ResolvedAbiType";
+import type {
+	JsonAbi,
+	JsonAbiArgument,
+	JsonAbiFunction,
+	JsonAbiType,
+} from "../types/JsonAbi";
 
-import { ENCODING_V0, ENCODING_V1, type EncodingVersion } from './constants';
+import { ENCODING_V0, ENCODING_V1, type EncodingVersion } from "./constants";
 
 /**
  * Asserts that the encoding version is supported by the ABI coder.
@@ -13,20 +18,20 @@ import { ENCODING_V0, ENCODING_V1, type EncodingVersion } from './constants';
  * @throws FuelError if the encoding version is not supported
  */
 export const getEncodingVersion = (encoding?: string): EncodingVersion => {
-  switch (encoding) {
-    case undefined:
-    case ENCODING_V0:
-      return ENCODING_V0;
+	switch (encoding) {
+		case undefined:
+		case ENCODING_V0:
+			return ENCODING_V0;
 
-    case ENCODING_V1:
-      return ENCODING_V1;
+		case ENCODING_V1:
+			return ENCODING_V1;
 
-    default:
-      throw new FuelError(
-        ErrorCode.UNSUPPORTED_ENCODING_VERSION,
-        `Encoding version '${encoding}' is unsupported.`
-      );
-  }
+		default:
+			throw new FuelError(
+				ErrorCode.UNSUPPORTED_ENCODING_VERSION,
+				`Encoding version '${encoding}' is unsupported.`,
+			);
+	}
 };
 
 /**
@@ -36,15 +41,18 @@ export const getEncodingVersion = (encoding?: string): EncodingVersion => {
  * @param name - the name of the function to find
  * @returns the JsonAbi function object
  */
-export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction => {
-  const fn = abi.functions.find((f) => f.name === name);
-  if (!fn) {
-    throw new FuelError(
-      ErrorCode.FUNCTION_NOT_FOUND,
-      `Function with name '${name}' doesn't exist in the ABI`
-    );
-  }
-  return fn;
+export const findFunctionByName = (
+	abi: JsonAbi,
+	name: string,
+): JsonAbiFunction => {
+	const fn = abi.functions.find((f) => f.name === name);
+	if (!fn) {
+		throw new FuelError(
+			ErrorCode.FUNCTION_NOT_FOUND,
+			`Function with name '${name}' doesn't exist in the ABI`,
+		);
+	}
+	return fn;
 };
 
 /**
@@ -55,14 +63,14 @@ export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction 
  * @returns the JsonAbi type object
  */
 export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
-  const type = abi.types.find((t) => t.typeId === typeId);
-  if (!type) {
-    throw new FuelError(
-      ErrorCode.TYPE_NOT_FOUND,
-      `Type with typeId '${typeId}' doesn't exist in the ABI.`
-    );
-  }
-  return type;
+	const type = abi.types.find((t) => t.typeId === typeId);
+	if (!type) {
+		throw new FuelError(
+			ErrorCode.TYPE_NOT_FOUND,
+			`Type with typeId '${typeId}' doesn't exist in the ABI.`,
+		);
+	}
+	return type;
 };
 
 /**
@@ -74,9 +82,10 @@ export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
  * @returns the list of non-empty inputs
  */
 export const findNonEmptyInputs = (
-  abi: JsonAbi,
-  inputs: readonly JsonAbiArgument[]
-): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== '()');
+	abi: JsonAbi,
+	inputs: readonly JsonAbiArgument[],
+): JsonAbiArgument[] =>
+	inputs.filter((input) => findTypeById(abi, input.type).type !== "()");
 
 /**
  * Find the vector buffer argument in a list of components.
@@ -85,15 +94,15 @@ export const findNonEmptyInputs = (
  * @returns the vector buffer argument
  */
 export const findVectorBufferArgument = (
-  components: readonly ResolvedAbiType[]
+	components: readonly ResolvedAbiType[],
 ): JsonAbiArgument => {
-  const bufferComponent = components.find((c) => c.name === 'buf');
-  const bufferTypeArgument = bufferComponent?.originalTypeArguments?.[0];
-  if (!bufferComponent || !bufferTypeArgument) {
-    throw new FuelError(
-      ErrorCode.INVALID_COMPONENT,
-      `The Vec type provided is missing or has a malformed 'buf' component.`
-    );
-  }
-  return bufferTypeArgument;
+	const bufferComponent = components.find((c) => c.name === "buf");
+	const bufferTypeArgument = bufferComponent?.originalTypeArguments?.[0];
+	if (!bufferComponent || !bufferTypeArgument) {
+		throw new FuelError(
+			ErrorCode.INVALID_COMPONENT,
+			`The Vec type provided is missing or has a malformed 'buf' component.`,
+		);
+	}
+	return bufferTypeArgument;
 };

@@ -1,59 +1,62 @@
-import * as getSystemFuelCoreMod from '@fuel-ts/versions/cli';
+import * as getSystemFuelCoreMod from "@fuel-ts/versions/cli";
 
-import { mockLogger } from '../../../../test/utils/mockLogger';
+import { mockLogger } from "../../../../test/utils/mockLogger";
 
-import { shouldUseBuiltinFuelCore } from './shouldUseBuiltinFuelCore';
+import { shouldUseBuiltinFuelCore } from "./shouldUseBuiltinFuelCore";
 
-vi.mock('prompts', async () => {
-  const mod = await vi.importActual('prompts');
-  return {
-    __esModule: true,
-    ...mod,
-  };
+vi.mock("prompts", async () => {
+	const mod = await vi.importActual("prompts");
+	return {
+		__esModule: true,
+		...mod,
+	};
 });
 
 /**
  * @group node
  */
-describe('shouldUseBuiltinFuelCore', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+describe("shouldUseBuiltinFuelCore", () => {
+	afterEach(() => {
+		vi.restoreAllMocks();
+	});
 
-  function mockAll(returns: { getSystemFuelCore: string | null }) {
-    const getSystemFuelCore = vi
-      .spyOn(getSystemFuelCoreMod, 'getSystemFuelCore')
-      .mockReturnValue({ error: null, systemFuelCoreVersion: returns.getSystemFuelCore });
+	function mockAll(returns: { getSystemFuelCore: string | null }) {
+		const getSystemFuelCore = vi
+			.spyOn(getSystemFuelCoreMod, "getSystemFuelCore")
+			.mockReturnValue({
+				error: null,
+				systemFuelCoreVersion: returns.getSystemFuelCore,
+			});
 
-    const { error } = mockLogger();
+		const { error } = mockLogger();
 
-    return {
-      getSystemFuelCore,
-      error,
-    };
-  }
+		return {
+			getSystemFuelCore,
+			error,
+		};
+	}
 
-  it('should select [built-in] fuel-core', () => {
-    const { getSystemFuelCore, error } = mockAll({ getSystemFuelCore: null });
+	it("should select [built-in] fuel-core", () => {
+		const { getSystemFuelCore, error } = mockAll({ getSystemFuelCore: null });
 
-    const useBuiltinFuelCore = shouldUseBuiltinFuelCore();
+		const useBuiltinFuelCore = shouldUseBuiltinFuelCore();
 
-    expect(useBuiltinFuelCore).toEqual(true);
-    expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
+		expect(useBuiltinFuelCore).toEqual(true);
+		expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
 
-    expect(error).toHaveBeenCalledTimes(0);
-  });
+		expect(error).toHaveBeenCalledTimes(0);
+	});
 
-  it('should select [system] fuel-core', () => {
-    const { getSystemFuelCore, error } = mockAll({
-      getSystemFuelCore: '1.0.0',
-    });
+	it("should select [system] fuel-core", () => {
+		const { getSystemFuelCore, error } = mockAll({
+			getSystemFuelCore: "1.0.0",
+		});
 
-    const useBuiltinFuelCore = shouldUseBuiltinFuelCore();
+		const useBuiltinFuelCore = shouldUseBuiltinFuelCore();
 
-    expect(useBuiltinFuelCore).toEqual(false);
-    expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
+		expect(useBuiltinFuelCore).toEqual(false);
+		expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
 
-    expect(error).toHaveBeenCalledTimes(0);
-  });
+		expect(error).toHaveBeenCalledTimes(0);
+	});
 });

@@ -1,47 +1,55 @@
-import type { FunctionFragment, JsonAbi, EncodingVersion } from '@fuel-ts/abi-coder';
-import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/account';
-import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type {
+	FunctionFragment,
+	JsonAbi,
+	EncodingVersion,
+} from "@fuel-ts/abi-coder";
+import type { CoinQuantity, CoinQuantityLike } from "@fuel-ts/account";
+import type {
+	AbstractProgram,
+	AbstractAddress,
+	BytesLike,
+} from "@fuel-ts/interfaces";
+import type { BigNumberish } from "@fuel-ts/math";
 
-import type { FunctionInvocationScope } from './functions/invocation-scope';
+import type { FunctionInvocationScope } from "./functions/invocation-scope";
 
 /**
  * Represents a contract call.
  */
 export type ContractCall = {
-  contractId: AbstractAddress;
-  data: BytesLike;
-  fnSelector: string;
-  fnSelectorBytes: Uint8Array;
-  encoding?: EncodingVersion;
-  isInputDataPointer: boolean;
-  isOutputDataHeap: boolean;
-  outputEncodedLength: number;
-  amount?: BigNumberish;
-  assetId?: BytesLike;
-  gas?: BigNumberish;
-  externalContractsAbis?: Record<string, JsonAbi>;
+	contractId: AbstractAddress;
+	data: BytesLike;
+	fnSelector: string;
+	fnSelectorBytes: Uint8Array;
+	encoding?: EncodingVersion;
+	isInputDataPointer: boolean;
+	isOutputDataHeap: boolean;
+	outputEncodedLength: number;
+	amount?: BigNumberish;
+	assetId?: BytesLike;
+	gas?: BigNumberish;
+	externalContractsAbis?: Record<string, JsonAbi>;
 };
 
 /**
  * Represents call parameters for a contract call.
  */
 export type CallParams = Partial<{
-  forward: CoinQuantityLike;
-  gasLimit: BigNumberish;
+	forward: CoinQuantityLike;
+	gasLimit: BigNumberish;
 }>;
 
 /**
  * Represents transaction parameters for a contract call.
  */
 export type TxParams = Partial<{
-  tip: BigNumberish;
-  gasLimit: BigNumberish;
-  maturity?: number;
-  maxFee?: BigNumberish;
-  witnessLimit?: BigNumberish;
-  variableOutputs: number;
-  optimizeGas?: boolean;
+	tip: BigNumberish;
+	gasLimit: BigNumberish;
+	maturity?: number;
+	maxFee?: BigNumberish;
+	witnessLimit?: BigNumberish;
+	variableOutputs: number;
+	optimizeGas?: boolean;
 }>;
 
 /**
@@ -50,13 +58,13 @@ export type TxParams = Partial<{
  * @template T - Type of the function's arguments.
  */
 export type CallConfig<T = unknown> = {
-  func: FunctionFragment;
-  program: AbstractProgram;
-  callParameters?: CallParams;
-  txParameters?: TxParams;
-  forward?: CoinQuantity;
-  externalAbis: Record<string, JsonAbi>;
-  args: T;
+	func: FunctionFragment;
+	program: AbstractProgram;
+	callParameters?: CallParams;
+	txParameters?: TxParams;
+	forward?: CoinQuantity;
+	externalAbis: Record<string, JsonAbi>;
+	args: T;
 };
 
 /**
@@ -66,16 +74,19 @@ export type CallConfig<T = unknown> = {
  * @template TReturn - Type of the function's return value.
  */
 
-export interface InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> {
-  (...args: TArgs): FunctionInvocationScope<TArgs, TReturn>;
-  isReadOnly: () => boolean;
+export interface InvokeFunction<
+	TArgs extends Array<any> = Array<any>,
+	TReturn = any,
+> {
+	(...args: TArgs): FunctionInvocationScope<TArgs, TReturn>;
+	isReadOnly: () => boolean;
 }
 
 /**
  * Represents a collection of functions that can be invoked.
  */
 export interface InvokeFunctions {
-  [key: string]: InvokeFunction;
+	[key: string]: InvokeFunction;
 }
 
 /**
@@ -83,16 +94,16 @@ export interface InvokeFunctions {
  * @template T - Type of the function's arguments.
  */
 export type InvocationScopeLike<T = unknown> = {
-  /**
-   * Get the call configuration for this invocation scope.
-   * @returns \{CallConfig<T>\} The call configuration.
-   */
-  getCallConfig(): CallConfig<T>;
+	/**
+	 * Get the call configuration for this invocation scope.
+	 * @returns \{CallConfig<T>\} The call configuration.
+	 */
+	getCallConfig(): CallConfig<T>;
 };
 
 /**
  * Represents options for calculating the transaction cost.
  */
 export type TransactionCostOptions = Partial<{
-  fundTransaction: boolean;
+	fundTransaction: boolean;
 }>;

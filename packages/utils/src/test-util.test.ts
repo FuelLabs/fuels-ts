@@ -1,10 +1,10 @@
-import * as indexMod from './test-utils';
+import * as indexMod from "./test-utils";
 
 /**
  * @group node
  */
-describe('index.js', () => {
-  test('should export all test utilities', () => {
-    expect(indexMod.getForcProject).toBeTruthy();
-  });
+describe("index.js", () => {
+	test("should export all test utilities", () => {
+		expect(indexMod.getForcProject).toBeTruthy();
+	});
 });

@@ -1,8 +1,8 @@
-import { sha256 } from '@fuel-ts/hasher';
-import type { BytesLike } from '@fuel-ts/interfaces';
-import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
-import type { StorageSlot } from '@fuel-ts/transactions';
-import { chunkAndPadBytes, hexlify, concat, arrayify } from '@fuel-ts/utils';
+import { sha256 } from "@fuel-ts/hasher";
+import type { BytesLike } from "@fuel-ts/interfaces";
+import { calcRoot, SparseMerkleTree } from "@fuel-ts/merkle";
+import type { StorageSlot } from "@fuel-ts/transactions";
+import { chunkAndPadBytes, hexlify, concat, arrayify } from "@fuel-ts/utils";
 
 /**
  * @hidden
@@ -13,11 +13,11 @@ import { chunkAndPadBytes, hexlify, concat, arrayify } from '@fuel-ts/utils';
  * @returns The Merkle root of the contract's bytecode.
  */
 export const getContractRoot = (bytecode: BytesLike): string => {
-  const chunkSize = 16 * 1024;
-  const bytes = arrayify(bytecode);
-  const chunks = chunkAndPadBytes(bytes, chunkSize);
+	const chunkSize = 16 * 1024;
+	const bytes = arrayify(bytecode);
+	const chunks = chunkAndPadBytes(bytes, chunkSize);
 
-  return calcRoot(chunks.map((c) => hexlify(c)));
+	return calcRoot(chunks.map((c) => hexlify(c)));
 };
 
 /**
@@ -29,11 +29,11 @@ export const getContractRoot = (bytecode: BytesLike): string => {
  * @returns The Merkle root of the contract's storage slots.
  */
 export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
-  const tree = new SparseMerkleTree();
+	const tree = new SparseMerkleTree();
 
-  storageSlots.forEach(({ key, value }) => tree.update(sha256(key), value));
+	storageSlots.forEach(({ key, value }) => tree.update(sha256(key), value));
 
-  return tree.root;
+	return tree.root;
 };
 
 /**
@@ -48,13 +48,13 @@ export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
  * @returns The contract ID of the contract.
  */
 export const getContractId = (
-  bytecode: BytesLike,
-  salt: BytesLike,
-  stateRoot: BytesLike
+	bytecode: BytesLike,
+	salt: BytesLike,
+	stateRoot: BytesLike,
 ): string => {
-  const root = getContractRoot(arrayify(bytecode));
-  const contractId = sha256(concat(['0x4655454C', salt, root, stateRoot]));
-  return contractId;
+	const root = getContractRoot(arrayify(bytecode));
+	const contractId = sha256(concat(["0x4655454C", salt, root, stateRoot]));
+	return contractId;
 };
 
 /**
@@ -67,4 +67,4 @@ export const getContractId = (
  * @returns The input value hexlified with prefix.
  */
 export const hexlifyWithPrefix = (value: string) =>
-  hexlify(value.startsWith('0x') ? value : `0x${value}`);
+	hexlify(value.startsWith("0x") ? value : `0x${value}`);

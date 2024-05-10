@@ -1,8 +1,8 @@
-import { renderHbsTemplate } from '../renderHbsTemplate';
+import { renderHbsTemplate } from "../renderHbsTemplate";
 
-import commonTemplate from './common.hbs';
+import commonTemplate from "./common.hbs";
 
 export function renderCommonTemplate() {
-  const text = renderHbsTemplate({ template: commonTemplate });
-  return text;
+	const text = renderHbsTemplate({ template: commonTemplate });
+	return text;
 }

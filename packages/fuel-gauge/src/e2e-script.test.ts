@@ -77,48 +77,59 @@ type MainArgs = [
  * @group node
  * @group e2e
  */
-describe('Live Script Test', () => {
-  it('can use script against live Fuel Node', async () => {
-    if (!process.env.TEST_WALLET_PVT_KEY || !process.env.FUEL_TESTNET_NETWORK_URL) {
-      console.log('Skipping live Fuel Node test');
-      return;
-    }
+describe("Live Script Test", () => {
+	it("can use script against live Fuel Node", async () => {
+		if (
+			!process.env.TEST_WALLET_PVT_KEY ||
+			!process.env.FUEL_TESTNET_NETWORK_URL
+		) {
+			console.log("Skipping live Fuel Node test");
+			return;
+		}
 
-    const provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
-    const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
-    const scriptInstance = getScript<MainArgs, BN>('vector-types-script', wallet);
+		const provider = await Provider.create(
+			process.env.FUEL_TESTNET_NETWORK_URL,
+		);
+		const wallet = new WalletUnlocked(
+			process.env.TEST_WALLET_PVT_KEY,
+			provider,
+		);
+		const scriptInstance = getScript<MainArgs, BN>(
+			"vector-types-script",
+			wallet,
+		);
 
-    let output: BN = bn(0);
-    try {
-      const callScope = scriptInstance.functions.main(
-        U32_VEC,
-        VEC_IN_VEC,
-        STRUCT_IN_VEC,
-        VEC_IN_STRUCT,
-        ARRAY_IN_VEC,
-        VEC_IN_ARRAY,
-        VEC_IN_ENUM,
-        ENUM_IN_VEC,
-        TUPLE_IN_VEC,
-        VEC_IN_TUPLE,
-        VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
-      );
+		let output: BN = bn(0);
+		try {
+			const callScope = scriptInstance.functions.main(
+				U32_VEC,
+				VEC_IN_VEC,
+				STRUCT_IN_VEC,
+				VEC_IN_STRUCT,
+				ARRAY_IN_VEC,
+				VEC_IN_ARRAY,
+				VEC_IN_ENUM,
+				ENUM_IN_VEC,
+				TUPLE_IN_VEC,
+				VEC_IN_TUPLE,
+				VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC,
+			);
 
-      const { value } = await callScope.call();
+			const { value } = await callScope.call();
 
-      output = value;
-    } catch (e) {
-      const address = wallet.address.toAddress();
+			output = value;
+		} catch (e) {
+			const address = wallet.address.toAddress();
 
-      console.error((e as Error).message);
-      console.warn(`
+			console.error((e as Error).message);
+			console.warn(`
         not enough coins to fit the target?
         - add assets: https://faucet-beta-5.fuel.network/
         - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/${address}
         - bech32 address: ${address}
       `);
-    }
+		}
 
-    expect(output).toBe(true);
-  });
+		expect(output).toBe(true);
+	});
 });

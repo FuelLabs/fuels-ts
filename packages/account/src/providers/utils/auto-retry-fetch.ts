@@ -1,25 +1,25 @@
-import type { ProviderOptions } from '../provider';
+import type { ProviderOptions } from "../provider";
 
-import { sleep } from './sleep';
+import { sleep } from "./sleep";
 
-type Backoff = 'linear' | 'exponential' | 'fixed';
+type Backoff = "linear" | "exponential" | "fixed";
 
 /**
  * Retry options scheme
  */
 export type RetryOptions = {
-  /**
-   * Amount of attempts to retry before failing the call.
-   */
-  maxRetries: number;
-  /**
-   * Backoff strategy to use when retrying. Default is exponential.
-   */
-  backoff?: Backoff;
-  /**
-   * Starting delay for backoff strategy. Default is 150ms.
-   */
-  baseDelay?: number;
+	/**
+	 * Amount of attempts to retry before failing the call.
+	 */
+	maxRetries: number;
+	/**
+	 * Backoff strategy to use when retrying. Default is exponential.
+	 */
+	backoff?: Backoff;
+	/**
+	 * Starting delay for backoff strategy. Default is 150ms.
+	 */
+	baseDelay?: number;
 };
 
 /**
@@ -29,17 +29,17 @@ export type RetryOptions = {
  * @returns Next wait delay
  */
 export function getWaitDelay(options: RetryOptions, retryAttemptNum: number) {
-  const duration = options.baseDelay ?? 150;
+	const duration = options.baseDelay ?? 150;
 
-  switch (options.backoff) {
-    case 'linear':
-      return duration * retryAttemptNum;
-    case 'fixed':
-      return duration;
-    case 'exponential':
-    default:
-      return 2 ** (retryAttemptNum - 1) * duration;
-  }
+	switch (options.backoff) {
+		case "linear":
+			return duration * retryAttemptNum;
+		case "fixed":
+			return duration;
+		case "exponential":
+		default:
+			return 2 ** (retryAttemptNum - 1) * duration;
+	}
 }
 
 /**
@@ -50,38 +50,38 @@ export function getWaitDelay(options: RetryOptions, retryAttemptNum: number) {
  * @returns Whatever is the output of the `fetchFn` function
  */
 export function autoRetryFetch(
-  fetchFn: NonNullable<ProviderOptions['fetch']>,
-  options?: RetryOptions,
-  retryAttemptNum: number = 0
-): NonNullable<ProviderOptions['fetch']> {
-  if (options === undefined) {
-    return fetchFn;
-  }
+	fetchFn: NonNullable<ProviderOptions["fetch"]>,
+	options?: RetryOptions,
+	retryAttemptNum = 0,
+): NonNullable<ProviderOptions["fetch"]> {
+	if (options === undefined) {
+		return fetchFn;
+	}
 
-  return async (...args) => {
-    try {
-      return await fetchFn(...args);
-    } catch (_error: unknown) {
-      const error = _error as Error & { cause?: { code: string } };
+	return async (...args) => {
+		try {
+			return await fetchFn(...args);
+		} catch (_error: unknown) {
+			const error = _error as Error & { cause?: { code: string } };
 
-      /**
-       * So far, we are auto-retrying only for `ECONNREFUSED` error.
-       * TODO: Investigate if we should consider more errors.
-       */
-      if (error.cause?.code !== 'ECONNREFUSED') {
-        throw error;
-      }
-      const retryNum = retryAttemptNum + 1;
+			/**
+			 * So far, we are auto-retrying only for `ECONNREFUSED` error.
+			 * TODO: Investigate if we should consider more errors.
+			 */
+			if (error.cause?.code !== "ECONNREFUSED") {
+				throw error;
+			}
+			const retryNum = retryAttemptNum + 1;
 
-      if (retryNum > options.maxRetries) {
-        throw error;
-      }
+			if (retryNum > options.maxRetries) {
+				throw error;
+			}
 
-      const delay = getWaitDelay(options, retryNum);
+			const delay = getWaitDelay(options, retryNum);
 
-      await sleep(delay);
+			await sleep(delay);
 
-      return autoRetryFetch(fetchFn, options, retryNum)(...args);
-    }
-  };
+			return autoRetryFetch(fetchFn, options, retryNum)(...args);
+		}
+	};
 }

@@ -1,23 +1,23 @@
 {
-  "private": true,
-  "name": "fuel-gauge",
-  "version": "0.0.1",
-  "description": "",
-  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "scripts": {
-    "pretest": "run-s build:forc build:forc-experimental build:process-predicates",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
-    "build:forc-experimental": "pnpm fuels-forc build -p test/fixtures/forc-projects-experimental --release",
-    "build:process-predicates": "tsx ./scripts/process-predicates.ts"
-  },
-  "license": "Apache-2.0",
-  "dependencies": {
-    "fuels": "workspace:*"
-  },
-  "devDependencies": {
-    "@fuel-ts/account": "workspace:*",
-    "@fuel-ts/forc": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/errors": "workspace:*"
-  }
+	"private": true,
+	"name": "fuel-gauge",
+	"version": "0.0.1",
+	"description": "",
+	"author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+	"scripts": {
+		"pretest": "run-s build:forc build:forc-experimental build:process-predicates",
+		"build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
+		"build:forc-experimental": "pnpm fuels-forc build -p test/fixtures/forc-projects-experimental --release",
+		"build:process-predicates": "tsx ./scripts/process-predicates.ts"
+	},
+	"license": "Apache-2.0",
+	"dependencies": {
+		"fuels": "workspace:*"
+	},
+	"devDependencies": {
+		"@fuel-ts/account": "workspace:*",
+		"@fuel-ts/forc": "workspace:*",
+		"@fuel-ts/utils": "workspace:*",
+		"@fuel-ts/errors": "workspace:*"
+	}
 }

@@ -1,30 +1,30 @@
 import {
-  AbiTypegenProjectsEnum,
-  getTypegenForcProject,
-} from '../../../test/fixtures/forc-projects';
-import bytecodeTemplate from '../../../test/fixtures/templates/contract/bytecode.hbs';
-import { mockVersions } from '../../../test/utils/mockVersions';
+	AbiTypegenProjectsEnum,
+	getTypegenForcProject,
+} from "../../../test/fixtures/forc-projects";
+import bytecodeTemplate from "../../../test/fixtures/templates/contract/bytecode.hbs";
+import { mockVersions } from "../../../test/utils/mockVersions";
 
-import { renderBytecodeTemplate } from './bytecode';
+import { renderBytecodeTemplate } from "./bytecode";
 
 /**
  * @group node
  */
-describe('templates/contract/bytecode', () => {
-  test('should render bytecode template', () => {
-    // mocking
-    const { restore } = mockVersions();
+describe("templates/contract/bytecode", () => {
+	test("should render bytecode template", () => {
+		// mocking
+		const { restore } = mockVersions();
 
-    // executing
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
+		// executing
+		const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
-    const rendered = renderBytecodeTemplate({
-      hexlifiedBytecode: project.binHexlified,
-    });
+		const rendered = renderBytecodeTemplate({
+			hexlifiedBytecode: project.binHexlified,
+		});
 
-    // validating
-    restore();
+		// validating
+		restore();
 
-    expect(rendered.trim()).toEqual(bytecodeTemplate.trim());
-  });
+		expect(rendered.trim()).toEqual(bytecodeTemplate.trim());
+	});
 });

@@ -1,50 +1,46 @@
 {
-  "name": "@fuel-ts/versions",
-  "version": "0.84.0",
-  "description": "Validates supported versions of the Fuel toolchain",
-  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "bin": {
-    "fuels-versions": "versions.js"
-  },
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "engines": {
-    "node": "^18.18.2 || ^20.0.0"
-  },
-  "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
-    },
-    "./cli": {
-      "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
-    }
-  },
-  "typesVersions": {
-    "*": {
-      "cli": [
-        "./dist/cli.d.ts"
-      ]
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "prebuild": "tsx ./scripts/rewriteVersions.ts",
-    "build": "tsup",
-    "postbuild": "tsx ../../scripts/postbuild.ts"
-  },
-  "license": "Apache-2.0",
-  "dependencies": {
-    "chalk": "4",
-    "cli-table": "^0.3.11"
-  },
-  "devDependencies": {
-    "@types/cli-table": "^0.3.1"
-  }
+	"name": "@fuel-ts/versions",
+	"version": "0.84.0",
+	"description": "Validates supported versions of the Fuel toolchain",
+	"author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+	"bin": {
+		"fuels-versions": "versions.js"
+	},
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"types": "dist/index.d.ts",
+	"engines": {
+		"node": "^18.18.2 || ^20.0.0"
+	},
+	"exports": {
+		".": {
+			"require": "./dist/index.js",
+			"import": "./dist/index.mjs",
+			"types": "./dist/index.d.ts"
+		},
+		"./cli": {
+			"require": "./dist/cli.js",
+			"import": "./dist/cli.mjs",
+			"types": "./dist/cli.d.ts"
+		}
+	},
+	"typesVersions": {
+		"*": {
+			"cli": ["./dist/cli.d.ts"]
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"prebuild": "tsx ./scripts/rewriteVersions.ts",
+		"build": "tsup",
+		"postbuild": "tsx ../../scripts/postbuild.ts"
+	},
+	"license": "Apache-2.0",
+	"dependencies": {
+		"chalk": "4",
+		"cli-table": "^0.3.11"
+	},
+	"devDependencies": {
+		"@types/cli-table": "^0.3.1"
+	}
 }

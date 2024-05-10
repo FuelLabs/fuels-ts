@@ -1,33 +1,30 @@
 {
-  "name": "create-fuels",
-  "version": "0.84.0",
-  "description": "",
-  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
-  "bin": {
-    "create-fuels": "create-fuels.js"
-  },
-  "files": [
-    "dist",
-    "templates"
-  ],
-  "engines": {
-    "node": "^18.18.2 || ^20.0.0"
-  },
-  "license": "Apache-2.0",
-  "scripts": {
-    "build": "tsup",
-    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
-  },
-  "dependencies": {
-    "@iarna/toml": "^2.2.5",
-    "chalk": "4",
-    "commander": "^9.4.1",
-    "ora": "5.4.1",
-    "prompts": "^2.4.2"
-  },
-  "devDependencies": {
-    "@fuel-ts/versions": "workspace:*",
-    "@types/prompts": "^2.4.8",
-    "glob": "^10.2.6"
-  }
+	"name": "create-fuels",
+	"version": "0.84.0",
+	"description": "",
+	"author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+	"bin": {
+		"create-fuels": "create-fuels.js"
+	},
+	"files": ["dist", "templates"],
+	"engines": {
+		"node": "^18.18.2 || ^20.0.0"
+	},
+	"license": "Apache-2.0",
+	"scripts": {
+		"build": "tsup",
+		"prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
+	},
+	"dependencies": {
+		"@iarna/toml": "^2.2.5",
+		"chalk": "4",
+		"commander": "^9.4.1",
+		"ora": "5.4.1",
+		"prompts": "^2.4.2"
+	},
+	"devDependencies": {
+		"@fuel-ts/versions": "workspace:*",
+		"@types/prompts": "^2.4.8",
+		"glob": "^10.2.6"
+	}
 }

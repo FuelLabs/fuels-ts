@@ -1,5 +1,5 @@
-export { english } from './words/english';
+export { english } from "./words/english";
 
 export enum Language {
-  'english' = 'english',
+	english = "english",
 }

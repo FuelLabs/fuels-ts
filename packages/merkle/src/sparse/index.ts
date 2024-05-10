@@ -1,1 +1,1 @@
-export { SparseMerkleTree } from './sparseMerkleTree';
+export { SparseMerkleTree } from "./sparseMerkleTree";
