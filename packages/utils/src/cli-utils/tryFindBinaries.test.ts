@@ -39,14 +39,11 @@ const mockAllDeps = (
     fuelCoreError ? execSyncError : vi.fn().mockReturnValue(fuelCoreVersion ?? compatibleVersion)
   );
 
-  const getBuiltinVersions = vi
-    .spyOn(versionsCliMod, 'getBuiltinVersions')
-    .mockReturnValue({
-      FORC: compatibleVersion,
-      FUEL_CORE: compatibleVersion,
-      FUELS: compatibleVersion,
-    });
-
+  const getBuiltinVersions = vi.spyOn(versionsCliMod, 'getBuiltinVersions').mockReturnValue({
+    FORC: compatibleVersion,
+    FUEL_CORE: compatibleVersion,
+    FUELS: compatibleVersion,
+  });
 
   return {
     getSystemForc,
@@ -135,7 +132,11 @@ describe('tryFindBinaries', () => {
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
     expect(error?.message).toContain(`The following binaries on the filesystem are outdated`);
-    expect(error?.message).toContain(`'forc' is currently '${currentVersion}', but requires '${compatibleVersion}'`);
-    expect(error?.message).toContain(`'fuel-core' is currently '${currentVersion}', but requires '${compatibleVersion}'`);
+    expect(error?.message).toContain(
+      `'forc' is currently '${currentVersion}', but requires '${compatibleVersion}'`
+    );
+    expect(error?.message).toContain(
+      `'fuel-core' is currently '${currentVersion}', but requires '${compatibleVersion}'`
+    );
   });
 });

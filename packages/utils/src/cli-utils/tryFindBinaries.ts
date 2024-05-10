@@ -41,11 +41,16 @@ export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: strin
   });
 
   if (systemForcIsLt || systemFuelCoreIsLt) {
-    const { FORC: compatibleForcVersion, FUEL_CORE: compatibleFuelCoreVersion } = getBuiltinVersions();
+    const { FORC: compatibleForcVersion, FUEL_CORE: compatibleFuelCoreVersion } =
+      getBuiltinVersions();
     const errors = [
       'The following binaries on the filesystem are outdated:',
-      systemForcIsLt ? ` -> '${systemForcPath}' is currently '${systemForcVersion}', but requires '${compatibleForcVersion}'.` : undefined,
-      systemFuelCoreIsLt ? ` -> '${systemFuelCorePath}' is currently '${systemFuelCoreVersion}', but requires '${compatibleFuelCoreVersion}'.` : undefined,
+      systemForcIsLt
+        ? ` -> '${systemForcPath}' is currently '${systemForcVersion}', but requires '${compatibleForcVersion}'.`
+        : undefined,
+      systemFuelCoreIsLt
+        ? ` -> '${systemFuelCorePath}' is currently '${systemFuelCoreVersion}', but requires '${compatibleFuelCoreVersion}'.`
+        : undefined,
     ];
     throw new FuelError(FuelError.CODES.NOT_SUPPORTED, `${errors.filter(Boolean).join('\n')}`, {
       ...paths,
