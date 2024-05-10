@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
+## 0.84.0
+
+### Patch Changes
+
+- Updated dependencies [2990edb]
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

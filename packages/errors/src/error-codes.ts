@@ -87,7 +87,6 @@ export enum ErrorCode {
 
   // chain
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
-  UNSUPPORTED_FUEL_CLIENT_VERSION = 'unsupported-fuel-client-version',
 
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',
