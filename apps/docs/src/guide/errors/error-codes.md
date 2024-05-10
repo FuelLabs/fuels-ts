@@ -247,3 +247,8 @@ Check the type against your ABI and ensure that it is correct. You can find a li
 A wallet manager will throw for a multitude of reasons. The error message will determine which element of the configuration is incorrect.
 
 It could be that the passphrase is incorrect and/or the wallet does _not_ exist in the manager.
+
+## `HASHER_LOCKED`
+
+The hashing algorithm is currently locked, any subsequent attempts to register a new implementation will throw this error.
+The purpose of the lock function is to provide a way to ensure that the implementation of the specific hashing algorithm cannot be changed once it is locked. This can be useful in scenarios where you want to guarantee the integrity and consistency of the hashing function throughout your application.
