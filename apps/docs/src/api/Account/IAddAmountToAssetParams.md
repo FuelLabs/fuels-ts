@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:36](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/coin-quantity.ts#L36)
+[packages/account/src/providers/coin-quantity.ts:36](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/account/src/providers/coin-quantity.ts#L36)
 
 ___
 
@@ -20,7 +20,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:35](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/coin-quantity.ts#L35)
+[packages/account/src/providers/coin-quantity.ts:35](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/account/src/providers/coin-quantity.ts#L35)
 
 ___
 
@@ -30,4 +30,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:37](https://github.com/FuelLabs/fuels-ts/blob/6c4998c2/packages/account/src/providers/coin-quantity.ts#L37)
+[packages/account/src/providers/coin-quantity.ts:37](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/account/src/providers/coin-quantity.ts#L37)
