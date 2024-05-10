@@ -92,7 +92,7 @@ jobs:
 
             exit 0
           fi
-          #TODO: Remove once v1.0.0 is released.
+          # TODO: Remove once v1.0.0 is released.
           # Minor changes are treated as breaking until v1.0.0 is released.
           if echo "$AFFECTED_PACKAGES" | grep -q 'minor'; then
             if ! echo "$PR_TITLE" | grep -q '!'; then
