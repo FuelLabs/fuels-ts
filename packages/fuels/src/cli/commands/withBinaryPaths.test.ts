@@ -34,6 +34,9 @@ const mockAllDeps = (
   };
 };
 
+/**
+ * @group node
+ */
 describe('withBinaryPaths', () => {
   beforeEach(() => {
     mockLogger();
