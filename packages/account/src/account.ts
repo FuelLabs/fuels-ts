@@ -121,7 +121,7 @@ export class Account extends AbstractAccount {
   /**
    * Retrieves resources satisfying the spend query for the account.
    *
-   * @param quantities - IDs of coins to obtains.
+   * @param quantities - IDs of coins to be obtained.
    * @param excludedIds - IDs of resources to be excluded from the query.
    * @returns A promise that resolves to an array of Resources.
    */
