@@ -49,6 +49,18 @@ pub enum ColorEnum {
     Blue: (),
 }
 
+enum MyContractError {
+    DivisionByZero: (),
+}
+
+fn divide(numerator: u64, denominator: u64) -> Result<u64, MyContractError> {
+    if (denominator == 0) {
+        return Err(MyContractError::DivisionByZero);
+    } else {
+        Ok(numerator / denominator)
+    }
+}
+
 abi CoverageContract {
     fn produce_logs_variables();
     fn get_id() -> b256;
@@ -107,6 +119,7 @@ abi CoverageContract {
         inputC: b256,
         inputD: b256,
     ) -> Vec<b256>;
+    fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
 }
 
 pub fn vec_from(vals: [u32; 3]) -> Vec<u32> {
@@ -424,5 +437,17 @@ impl CoverageContract for Contract {
         inputD: b256,
     ) -> Vec<b256> {
         inputB
+    }
+
+    fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]> {
+        if (x.is_err()) {
+            return Err(__to_str_array("InputError"));
+        }
+
+        let result = divide(20, x.unwrap());
+        match result {
+            Ok(value) => Ok(value),
+            Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
+        }
     }
 }
