@@ -43,11 +43,11 @@ export const readVersions = () => {
   const fromFiles = readVersionsFromFiles();
   const fromEnv = readVersionsFromEnv();
 
-  const fuels = fromEnv.FUELS || fromFiles.FUELS;
-  const forc = fromEnv.FORC || fromFiles.FORC;
-  const fuelCore = fromEnv.FUEL_CORE || fromFiles.FUEL_CORE;
+  const FUELS = fromEnv.FUELS || fromFiles.FUELS;
+  const FORC = fromEnv.FORC || fromFiles.FORC;
+  const FUEL_CORE = fromEnv.FUEL_CORE || fromFiles.FUEL_CORE;
 
-  return { fuels, forc, fuelCore };
+  return { FUELS, FORC, FUEL_CORE };
 };
 
 export const rewriteVersions = () => {

@@ -22,18 +22,18 @@ describe('rewriteVersions.js', () => {
   function modifyEnv() {
     const envBackup = { ...process.env };
 
-    const buildVersion = '9.9.9';
-    const forcVersion = '8.8.8';
-    const fuelCoreVersion = '7.7.7';
+    const BUILD_VERSION = '9.9.9';
+    const FORC_VERSION = '8.8.8';
+    const FUEL_CORE_VERSION = '7.7.7';
 
-    process.env.BUILD_VERSION = buildVersion;
-    process.env.FORC_VERSION = forcVersion;
-    process.env.FUEL_CORE_VERSION = fuelCoreVersion;
+    process.env.BUILD_VERSION = BUILD_VERSION;
+    process.env.FORC_VERSION = FORC_VERSION;
+    process.env.FUEL_CORE_VERSION = FUEL_CORE_VERSION;
 
     return {
-      buildVersion,
-      forcVersion,
-      fuelCoreVersion,
+      BUILD_VERSION,
+      FORC_VERSION,
+      FUEL_CORE_VERSION,
       restoreEnv() {
         process.env = envBackup;
       },
