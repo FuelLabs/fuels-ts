@@ -135,7 +135,7 @@ export class Account extends AbstractAccount {
   /**
    * Retrieves coins owned by the account.
    *
-   * @param assetId - The asset ID of the coins to retrieve.
+   * @param assetId - The asset ID of the coins to retrieve (optional).
    * @returns A promise that resolves to an array of Coins.
    */
   async getCoins(assetId?: BytesLike): Promise<Coin[]> {
@@ -204,7 +204,7 @@ export class Account extends AbstractAccount {
   /**
    * Retrieves the balance of the account for the given asset.
    *
-   * @param assetId - The asset ID to check the balance for.
+   * @param assetId - The asset ID to check the balance for (optional).
    * @returns A promise that resolves to the balance amount.
    */
   async getBalance(assetId?: BytesLike): Promise<BN> {
@@ -370,7 +370,7 @@ export class Account extends AbstractAccount {
    *
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (gasLimit, tip, maturity, maxFee, witnessLimit).
    * @returns A promise that resolves to the prepared transaction request.
    */
@@ -405,7 +405,7 @@ export class Account extends AbstractAccount {
    *
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
+   * @param assetId - The asset ID of the coins to transfer (optional).
    * @param txParams - The transaction parameters (gasLimit, maturity).
    * @returns A promise that resolves to the transaction response.
    */
@@ -431,8 +431,8 @@ export class Account extends AbstractAccount {
    *
    * @param contractId - The address of the contract.
    * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
-   * @param txParams - The optional transaction parameters.
+   * @param assetId - The asset ID of the coins to transfer (optional).
+   * @param txParams - The optional transaction parameters (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
