@@ -1,5 +1,12 @@
 # @fuel-ts/errors
 
+## 0.85.0
+
+### Patch Changes
+
+- f7eacb4: chore: warn on fuel client version incompatibility
+  - @fuel-ts/versions@0.85.0
+
 ## 0.84.0
 
 ### Patch Changes

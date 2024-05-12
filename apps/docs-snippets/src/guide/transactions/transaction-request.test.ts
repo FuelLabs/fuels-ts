@@ -173,7 +173,7 @@ describe('Transaction Request', () => {
     });
 
     const predicateCoins = await predicate.getResourcesToSpend([
-      { amount: 1000, assetId: baseAssetId },
+      { amount: 2000, assetId: baseAssetId },
     ]);
 
     // Add the predicate input and resources
