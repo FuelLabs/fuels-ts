@@ -52,7 +52,7 @@ describe('ArrayCoder', () => {
     const coder = new ArrayCoder(
       new EnumCoder('TestEnum', {
         a: new NumberCoder('u8'),
-        b: new BooleanCoder(options),
+        b: new BooleanCoder(),
       }),
       4
     );
@@ -69,7 +69,7 @@ describe('ArrayCoder', () => {
     const coder = new ArrayCoder(
       new EnumCoder('TestEnum', {
         a: new NumberCoder('u8'),
-        b: new BooleanCoder(options),
+        b: new BooleanCoder(),
       }),
       4
     );
