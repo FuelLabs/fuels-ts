@@ -3,7 +3,7 @@ import { createConfig } from 'fuels';
 export default createConfig({
   workspace: './sway-programs', // forc workspace
   output: './src/sway-programs-api',
-  forcPath: 'fues-forc',
+  forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
 });
 
