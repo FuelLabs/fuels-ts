@@ -22,7 +22,7 @@ The code snippet below demonstrates how to call this Sway contract method, which
 
 ## Converting Bytecode to Vectors
 
-Some Sway functions require you to pass in bytecode to the function. The type of the bytecode parameter is usually `Vec<u8>`. For example, take the `compute_bytecode_root` function from the [`bytecode` Sway library](https://fuellabs.github.io/sway-libs/book/bytecode/index.html?highlight=bytecode#using-the-bytecode-library-in-sway).
+Some functions require you to pass in bytecode to the function. The type of the bytecode parameter is usually `Vec<u8>`, here's an example of how to pass bytecode to a function:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers}
 
