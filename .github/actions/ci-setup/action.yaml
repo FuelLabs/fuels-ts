@@ -10,7 +10,7 @@ runs:
   using: "composite"
   steps:
     - name: Cache PNPM modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.local/share/pnpm/store/v4
         key: ${{ runner.os }}-node-${{ inputs.node-version }}-pnpm-${{ inputs.pnpm-version }}-lock-${{ hashFiles('**/pnpm-lock.yaml') }}
