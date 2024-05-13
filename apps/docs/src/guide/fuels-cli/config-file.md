@@ -147,7 +147,7 @@ Parameters:
 
 Path to the `forc` binary.
 
-When not supplied, will default to using the `system` binaries.
+When not supplied, will default to using the `system` binaries (`forc`).
 
 <<< @../../../demo-fuels/fuels.config.full.ts#forcPath{ts:line-numbers}
 
@@ -155,7 +155,7 @@ When not supplied, will default to using the `system` binaries.
 
 Path to the `fuel-core` binary.
 
-When not supplied, will default to using the `system` binaries.
+When not supplied, will default to using the `system` binaries (`fuel-core`).
 
 <<< @../../../demo-fuels/fuels.config.full.ts#fuelCorePath{ts:line-numbers}
 

@@ -97,13 +97,13 @@ export default createConfig({
   // #endregion onFailure
 
   // #region forcPath
-  // Default: undefined
-  forcPath: 'fuels-forc',
+  // Default: 'forc',
+  forcPath: '/custom/path/to/forc',
   // #endregion forcPath
 
   // #region fuelCorePath
-  // Default: undefined
-  fuelCorePath: 'fuels-core',
+  // Default: 'fuel-core'
+  fuelCorePath: '/custom/path/to/fuel-core',
   // #endregion fuelCorePath
 });
 

@@ -36,7 +36,7 @@ npx fuels@{{fuels}} init --workspace ./sway-programs --output ./src/sway-program
 
 This will give you a minimal configuration:
 
-<<< @../../../demo-fuels/fuels.config.ts#config{ts:line-numbers}
+<<< @../../../demo-fuels/fuels.config.minimal.ts#config{ts:line-numbers}
 
 In a nutshell:
 
@@ -162,12 +162,13 @@ npx fuels@{{fuels}} versions
 ```
 
 ```
+┌───────────┬───────────┬────────────────┬─────────────┐
+│           │ Supported │ Yours / System │ System Path │
+├───────────┼───────────┼────────────────┼─────────────┤
+│ Forc      │ 0.56.1    │ 0.56.1         │ forc        │
+├───────────┼───────────┼────────────────┼─────────────┤
+│ Fuel-Core │ 0.26.0    │ 0.26.0         │ fuel-core   │
+└───────────┴───────────┴────────────────┴─────────────┘
+
 You have all the right versions! ⚡
-┌───────────┬───────────┬─────────────────┐
-│           │ Supported │ Yours / System  │
-├───────────┼───────────┼─────────────────┤
-│ Forc      │ 0.49.3    │ 0.49.3          │
-├───────────┼───────────┼─────────────────┤
-│ Fuel-Core │ 0.22.1    │ 0.22.1          │
-└───────────┴───────────┴─────────────────┘
 ```
