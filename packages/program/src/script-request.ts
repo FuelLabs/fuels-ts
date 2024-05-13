@@ -13,7 +13,7 @@ import type {
   TransactionResultReceipt,
   TransactionResultReturnReceipt,
   TransactionResultScriptResultReceipt,
-  TransactionResult,
+  DryRunFailureStatusFragment,
 } from '@fuel-ts/account';
 import { extractTxError } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -107,10 +107,11 @@ export function decodeCallResult<TResult>(
     return decoder(scriptResult);
   } catch (error) {
     if ((<FuelError>error).code === ErrorCode.SCRIPT_REVERTED) {
+      const statusReason = (<DryRunFailureStatusFragment>callResult?.dryRunStatus)?.reason;
       throw extractTxError({
         logs,
         receipts: callResult.receipts,
-        status: (<TransactionResult>callResult).gqlTransaction?.status,
+        statusReason,
       });
     }
 
