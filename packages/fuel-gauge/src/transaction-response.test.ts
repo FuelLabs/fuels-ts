@@ -315,6 +315,6 @@ describe('TransactionResponse', () => {
 
       cleanup();
     },
-    { repeats: 50 }
+    { repeats: 100 }
   );
 });

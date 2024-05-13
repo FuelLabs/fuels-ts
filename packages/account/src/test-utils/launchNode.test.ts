@@ -101,7 +101,7 @@ describe('launchNode', () => {
     expect(result).not.toBeTruthy();
 
     expect(innerMocks.on).toHaveBeenCalledTimes(1);
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
   });
 
@@ -112,7 +112,7 @@ describe('launchNode', () => {
 
     const { cleanup } = await launchNode(defaultLaunchNodeConfig);
 
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
 
     cleanup();
@@ -129,7 +129,7 @@ describe('launchNode', () => {
       debugEnabled: true,
     });
 
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
+    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(0);
     expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(1);
   });
 
