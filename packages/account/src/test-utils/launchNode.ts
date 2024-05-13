@@ -98,7 +98,7 @@ export const launchNode = async ({
   port,
   args = [],
   useSystemFuelCore = false,
-  loggingEnabled = true,
+  loggingEnabled = false,
   debugEnabled = false,
   basePath,
 }: LaunchNodeOptions): LaunchNodeResult =>
