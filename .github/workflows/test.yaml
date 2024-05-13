@@ -162,7 +162,7 @@ jobs:
           ref: ${{ github.event.client_payload.ref }}
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v4
         with:
           version: 9.0.5
           run_install: true

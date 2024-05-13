@@ -22,7 +22,7 @@ runs:
         registry-url: "https://registry.npmjs.org"
 
     - name: Setup PNPM
-      uses: pnpm/action-setup@v2.1.0
+      uses: pnpm/action-setup@v4
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
