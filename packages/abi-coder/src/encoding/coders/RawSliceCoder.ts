@@ -2,10 +2,10 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 
 import { WORD_SIZE } from '../../utils/constants';
+
 import { Coder } from './AbstractCoder';
 import { ArrayCoder } from './ArrayCoder';
 import { BigNumberCoder } from './BigNumberCoder';
-
 import { NumberCoder } from './NumberCoder';
 
 export class RawSliceCoder extends Coder<number[], number[]> {

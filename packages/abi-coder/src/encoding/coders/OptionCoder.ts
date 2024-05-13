@@ -1,5 +1,4 @@
 import type { Coder } from './AbstractCoder';
-
 import type { InputValueOf, DecodedValueOf } from './EnumCoder';
 import { EnumCoder } from './EnumCoder';
 

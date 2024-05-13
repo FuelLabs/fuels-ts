@@ -4,6 +4,7 @@ import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import { WORD_SIZE } from '../../utils/constants';
+
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
 import { BigNumberCoder } from './BigNumberCoder';

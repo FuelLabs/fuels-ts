@@ -2,6 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { MAX_BYTES } from '../../utils/constants';
 import { concatWithDynamicData } from '../../utils/utilities';
+
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
 

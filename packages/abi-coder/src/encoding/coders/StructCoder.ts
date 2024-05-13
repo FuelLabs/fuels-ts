@@ -3,7 +3,6 @@ import { concatBytes } from '@fuel-ts/utils';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
-
 import { OptionCoder } from './OptionCoder';
 
 type InputValueOf<TCoders extends Record<string, Coder>> = {

@@ -3,6 +3,7 @@ import { toNumber, toBytes } from '@fuel-ts/math';
 
 import type { EncodingOptions } from '../../types/EncodingOptions';
 import { WORD_SIZE } from '../../utils/constants';
+
 import { Coder } from './AbstractCoder';
 
 type NumberCoderType = 'u8' | 'u16' | 'u32' | 'u64';

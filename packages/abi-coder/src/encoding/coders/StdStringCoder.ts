@@ -3,6 +3,7 @@ import { bn } from '@fuel-ts/math';
 import { toUtf8Bytes, toUtf8String } from 'ethers';
 
 import { WORD_SIZE } from '../../utils/constants';
+
 import { Coder } from './AbstractCoder';
 import { BigNumberCoder } from './BigNumberCoder';
 

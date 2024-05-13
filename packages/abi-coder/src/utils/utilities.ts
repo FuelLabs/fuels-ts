@@ -3,7 +3,7 @@ import { concat, concatBytes, arrayify } from '@fuel-ts/utils';
 
 import { BigNumberCoder } from '../encoding/coders/BigNumberCoder';
 
-import { BYTES_CODER_TYPE, VEC_CODER_TYPE, STD_STRING_CODER_TYPE, WORD_SIZE } from './constants';
+import { WORD_SIZE } from './constants';
 
 export type DynamicData = {
   [pointerIndex: number]: Uint8ArrayWithDynamicData;

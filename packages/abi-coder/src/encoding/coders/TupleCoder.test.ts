@@ -3,8 +3,8 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
 
 import { U64_MAX } from '../../../test/utils/constants';
-import { BigNumberCoder } from './BigNumberCoder';
 
+import { BigNumberCoder } from './BigNumberCoder';
 import { BooleanCoder } from './BooleanCoder';
 import { TupleCoder } from './TupleCoder';
 

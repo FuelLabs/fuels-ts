@@ -3,6 +3,7 @@ import { bn, toHex } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
 import { WORD_SIZE } from '../../utils/constants';
+
 import { Coder } from './AbstractCoder';
 
 export class B256Coder extends Coder<string, string> {

@@ -3,6 +3,7 @@ import { bn, toBytes } from '@fuel-ts/math';
 
 import type { EncodingOptions } from '../../types/EncodingOptions';
 import { WORD_SIZE } from '../../utils/constants';
+
 import { Coder } from './AbstractCoder';
 
 export class BooleanCoder extends Coder<boolean, boolean> {
