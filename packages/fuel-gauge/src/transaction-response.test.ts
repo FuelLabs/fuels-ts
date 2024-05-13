@@ -9,6 +9,7 @@ import {
   randomBytes,
   WalletUnlocked,
   ScriptTransactionRequest,
+  hexlify,
 } from 'fuels';
 import type { MockInstance } from 'vitest';
 
@@ -295,6 +296,7 @@ describe('TransactionResponse', () => {
           { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
         );
       } catch (e) {
+        console.log('Failed transaction: ', hexlify(request.toTransactionBytes()));
         const decoder = new TextDecoder();
         const reader = subscriptionStreamHolder.stream.getReader();
         // eslint-disable-next-line no-constant-condition
