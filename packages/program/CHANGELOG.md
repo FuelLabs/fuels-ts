@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.85.0
+
+### Patch Changes
+
+- 9bc893b: fix: avoid overriding user `gasLimit` and `maxFee` inputs
+- Updated dependencies [9bc893b]
+- Updated dependencies [1115ade]
+- Updated dependencies [fb0e12f]
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/account@0.85.0
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/address@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/transactions@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
 ## 0.84.0
 
 ### Minor Changes
