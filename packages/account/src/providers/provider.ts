@@ -602,7 +602,7 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Returns the chain
+   * Returns the chain ID
    *
    * @returns A promise that resolves to the chain ID number
    */
