@@ -19,7 +19,7 @@ describe('bytecode computations', () => {
     const contract = await setupContract();
 
     const { logs } = await contract.functions
-      .compute_bytecode_root(Array.from(arrayify(bytecodeFromFile)))
+      .compute_bytecode_root(arrayify(bytecodeFromFile))
       .call();
 
     const bytecodeRoot: string = logs[0];

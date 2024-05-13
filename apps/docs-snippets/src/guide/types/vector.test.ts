@@ -73,7 +73,7 @@ describe(__filename, () => {
       const bytecodeAsVecU8 = arrayify(bytecode);
 
       const { value: bytecodeRoot } = await bytecodeContract.functions
-        .compute_bytecode_root(Array.from(bytecodeAsVecU8))
+        .compute_bytecode_root(bytecodeAsVecU8)
         .call();
       // #endregion vector-bytecode-input-ts
 
