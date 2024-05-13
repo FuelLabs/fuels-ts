@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { concat } from '@fuel-ts/utils';
 
 import { MAX_BYTES } from '../../utils/constants';
-import { concatWithDynamicData } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -31,7 +31,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Types/values length mismatch.`);
     }
 
-    return concatWithDynamicData(Array.from(value).map((v) => this.coder.encode(v)));
+    return concat(Array.from(value).map((v) => this.coder.encode(v)));
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
