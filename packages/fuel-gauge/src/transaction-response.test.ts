@@ -251,7 +251,8 @@ describe('TransactionResponse', () => {
     async () => {
       const { cleanup, ip, port } = await launchNode({
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
-        loggingEnabled: false,
+        loggingEnabled: true,
+        debugEnabled: true,
       });
       const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
