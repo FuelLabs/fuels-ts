@@ -1,5 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { arrayify } from '@fuel-ts/utils';
 
 import { U32_MAX } from '../../../test/utils/constants';
 
@@ -23,7 +24,10 @@ describe('VecCoder', () => {
     const coder = new VecCoder(new BooleanCoder());
     await expectToThrowFuelError(
       () => coder.encode('Nope' as never),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Expected array value.')
+      new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        'Expected array value, or a Uint8Array. You can use arrayify to convert a value to a Uint8Array.'
+      )
     );
   });
 
@@ -35,6 +39,14 @@ describe('VecCoder', () => {
 
     expect(actual).toEqual(expected);
     expect(newOffset).toEqual(11);
+  });
+
+  it('should encode a u8 Vec (UInt8Array)', () => {
+    const coder = new VecCoder(new NumberCoder('u8'));
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 8, 6, 7]);
+    const actual = coder.encode(arrayify(Uint8Array.from([8, 6, 7])));
+
+    expect(actual).toEqual(expected);
   });
 
   it('throws when decoding empty vec bytes', async () => {

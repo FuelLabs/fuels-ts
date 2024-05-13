@@ -1,26 +1,23 @@
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import {
-  Interface,
-  INPUT_COIN_FIXED_SIZE,
-  WORD_SIZE,
-  calculateVmTxMemory,
-  SCRIPT_FIXED_SIZE,
-} from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { ByteArrayCoder, InputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
-import { transactionRequestify, BaseTransactionRequest } from '../providers';
+import {
+  transactionRequestify,
+  isRequestInputResource,
+  isRequestInputResourceFromOwner,
+} from '../providers';
 import type {
   CallResult,
   CoinQuantityLike,
   ExcludeResourcesOption,
   Provider,
   Resource,
-  TransactionRequestInput,
+  TransactionRequest,
   TransactionRequestLike,
   TransactionResponse,
 } from '../providers';
@@ -80,15 +77,25 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param transactionRequestLike - The transaction request-like object.
    * @returns The transaction request with predicate data.
    */
-  populateTransactionPredicateData(transactionRequestLike: TransactionRequestLike) {
-    const request = transactionRequestify(transactionRequestLike);
+  populateTransactionPredicateData<T extends TransactionRequest>(
+    transactionRequestLike: TransactionRequestLike
+  ) {
+    const request = transactionRequestify(transactionRequestLike) as T;
 
-    request.inputs?.forEach((input: TransactionRequestInput) => {
-      if (input.type === InputType.Coin && hexlify(input.owner) === this.address.toB256()) {
+    const placeholderIndex = this.getIndexFromPlaceholderWitness(request);
+
+    if (placeholderIndex !== -1) {
+      request.removeWitness(placeholderIndex);
+    }
+
+    request.inputs.filter(isRequestInputResource).forEach((input) => {
+      if (isRequestInputResourceFromOwner(input, this.address)) {
         // eslint-disable-next-line no-param-reassign
         input.predicate = hexlify(this.bytes);
         // eslint-disable-next-line no-param-reassign
         input.predicateData = hexlify(this.getPredicateData());
+        // eslint-disable-next-line no-param-reassign
+        input.witnessIndex = 0;
       }
     });
 
@@ -233,5 +240,44 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     }
 
     return mutatedBytes;
+  }
+
+  /**
+   * Returns the index of the witness placeholder that was added to this predicate.
+   * If no witness placeholder was added, it returns -1.
+   * @param request - The transaction request.
+   * @returns The index of the witness placeholder, or -1 if there is no witness placeholder.
+   */
+  private getIndexFromPlaceholderWitness(request: TransactionRequest): number {
+    const predicateInputs = request.inputs
+      .filter(isRequestInputResource)
+      .filter((input) => isRequestInputResourceFromOwner(input, this.address));
+
+    let index = -1;
+
+    const hasEmptyPredicateInputs = predicateInputs.find((input) => !input.predicate);
+
+    if (hasEmptyPredicateInputs) {
+      index = hasEmptyPredicateInputs.witnessIndex;
+
+      const allInputsAreEmpty = predicateInputs.every((input) => !input.predicate);
+
+      if (!allInputsAreEmpty) {
+        /**
+         * If at least one resource was added as a predicate resource, we need to check if it was the
+         * first one. If that is the case, we don't need to remove the witness placeholder
+         * as this was added with the "witnessIndex" as 0 and without a placeholder witness. Later if
+         * any resource without a predicate is added, it will have the same witnessIndex because it has the
+         * same owner.
+         */
+        const wasFilledInputAddedFirst = !!predicateInputs[0]?.predicate;
+
+        if (wasFilledInputAddedFirst) {
+          index = -1;
+        }
+      }
+    }
+
+    return index;
   }
 }

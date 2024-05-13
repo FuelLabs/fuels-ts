@@ -38,7 +38,6 @@ export type TxParams = Partial<{
   maxFee?: BigNumberish;
   witnessLimit?: BigNumberish;
   variableOutputs: number;
-  optimizeGas?: boolean;
 }>;
 
 /**

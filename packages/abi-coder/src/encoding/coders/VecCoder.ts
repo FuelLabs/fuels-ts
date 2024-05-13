@@ -3,13 +3,14 @@ import { bn } from '@fuel-ts/math';
 import { concatBytes } from '@fuel-ts/utils';
 
 import { MAX_BYTES, WORD_SIZE } from '../../utils/constants';
-import type { TypesOfCoder } from './AbstractCoder';
-import { Coder } from './AbstractCoder';
-import { BigNumberCoder } from './BigNumberCoder';
+import { isUint8Array } from '../../utils/utilities';
 
+import { Coder } from './AbstractCoder';
+import type { TypesOfCoder } from './AbstractCoder';
+import { BigNumberCoder } from './BigNumberCoder';
 import { OptionCoder } from './OptionCoder';
 
-type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']>;
+type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']> | Uint8Array;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
 
 export class VecCoder<TCoder extends Coder> extends Coder<
@@ -26,12 +27,21 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
-    if (!Array.isArray(value)) {
-      throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
+    if (!Array.isArray(value) && !isUint8Array(value)) {
+      throw new FuelError(
+        ErrorCode.ENCODE_ERROR,
+        `Expected array value, or a Uint8Array. You can use arrayify to convert a value to a Uint8Array.`
+      );
+    }
+
+    const lengthCoder = new BigNumberCoder('u64');
+
+    if (isUint8Array(value)) {
+      return new Uint8Array([...lengthCoder.encode(value.length), ...value]);
     }
 
     const bytes = value.map((v) => this.coder.encode(v));
-    const lengthBytes = new BigNumberCoder('u64').encode(value.length);
+    const lengthBytes = lengthCoder.encode(value.length);
 
     return new Uint8Array([...lengthBytes, ...concatBytes(bytes)]);
   }
