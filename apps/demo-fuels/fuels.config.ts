@@ -1,13 +1,11 @@
-// #region config
 import { createConfig } from 'fuels';
 
 export default createConfig({
   workspace: './sway-programs', // forc workspace
   output: './src/sway-programs-api',
-  forcPath: 'fuels-forc',
+  forcPath: 'fues-forc',
   fuelCorePath: 'fuels-core',
 });
-// #endregion config
 
 /**
  * Check the docs:
