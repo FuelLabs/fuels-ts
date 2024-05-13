@@ -63,7 +63,7 @@ jobs:
         run: pnpm ci:test --${{ matrix.env.name }}
 
       - name: Upload Coverage - ${{ matrix.env.name }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.env.name }}
           path: coverage/environments/${{ matrix.env.name }}
@@ -108,7 +108,7 @@ jobs:
         run: mkdir -p coverage/environments
 
       - name: Download Coverage Artifact for Node Tests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: node
           path: coverage/environments
@@ -121,7 +121,7 @@ jobs:
         id: findPr
 
       - name: Upload Master Coverage Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-master
