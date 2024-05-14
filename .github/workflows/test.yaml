@@ -67,6 +67,7 @@ jobs:
         with:
           name: ${{ matrix.env.name }}
           path: coverage/environments/${{ matrix.env.name }}
+          overwrite: true
 
   e2e:
     runs-on: ubuntu-latest
