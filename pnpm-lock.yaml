@@ -591,9 +591,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      ethers:
-        specifier: ^6.7.1
-        version: 6.7.1
       type-fest:
         specifier: ^3.1.0
         version: 3.1.0
