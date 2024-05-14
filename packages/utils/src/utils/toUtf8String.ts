@@ -4,8 +4,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify } from './arrayify';
 
 /**
- *  When using the UTF-8 error API the following errors can be intercepted
- *  and processed as the %%reason%% passed to the [[Utf8ErrorFunc]].
+ *  These errors are logged when decoding a UTF-8 string fails.
  *
  *  `"UNEXPECTED_CONTINUE"` - a continuation byte was present where there
  *  was nothing to continue.
@@ -17,19 +16,19 @@ import { arrayify } from './arrayify';
  *  codepoint length.
  *
  *  `"MISSING_CONTINUE"` - a missing continuation byte was expected but
- *  not found. The %%offset%% indicates the index the continuation byte
+ *  not found. The offset indicates the index the continuation byte
  *  was expected at.
  *
  *  `"OUT_OF_RANGE"` - the computed code point is outside the range
- *  for UTF-8. The %%badCodepoint%% indicates the computed codepoint, which was
+ *  for UTF-8. The badCodepoint indicates the computed codepoint, which was
  *  outside the valid UTF-8 range.
  *
  *  `"UTF16_SURROGATE"` - the UTF-8 strings contained a UTF-16 surrogate
- *  pair. The %%badCodepoint%% is the computed codepoint, which was inside the
+ *  pair. The badCodepoint is the computed codepoint, which was inside the
  *  UTF-16 surrogate range.
  *
  *  `"OVERLONG"` - the string is an overlong representation. The
- *  %%badCodepoint%% indicates the computed codepoint, which has already
+ *   badCodepoint indicates the computed codepoint, which has already
  *  been bounds checked.
  *
  *
@@ -48,11 +47,14 @@ function onError(
   reason: Utf8ErrorReason,
   offset: number,
   bytes: Uint8Array,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   output: Array<number>,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   badCodepoint?: number
 ): number {
-  // #TODO: Log these errors
-  // console.log(`invalid codepoint at offset ${offset}; ${reason}, bytes: ${bytes}`);
+  // #TODO: Log these as warnings after https://github.com/FuelLabs/fuels-ts/issues/2298 is implemented.
+  // eslint-disable-next-line no-console
+  console.log(`invalid codepoint at offset ${offset}; ${reason}, bytes: ${bytes}`);
   return offset;
 }
 
@@ -128,7 +130,7 @@ function getUtf8CodePoints(_bytes: BytesLike): Array<number> {
       const nextChar = bytes[i];
 
       // Invalid continuation byte
-      if ((nextChar & 0xc0) != 0x80) {
+      if ((nextChar & 0xc0) !== 0x80) {
         i += onError('MISSING_CONTINUE', i, bytes, result);
         res = null;
         break;
@@ -168,11 +170,10 @@ function getUtf8CodePoints(_bytes: BytesLike): Array<number> {
 }
 
 /**
- *  Returns the string represented by the UTF-8 data %%bytes%%.
+ *  Returns the string represented by the UTF-8 data bytes.
  *
- *  When onErrorfunction is specified, it is called on UTF-8
- *  errors allowing recovery using the Utf8ErrorFunc API.
- *  (default: [error](Utf8ErrorFuncs))
+ * @param bytes - the UTF-8 data bytes
+ * @returns the string represented by the UTF-8 data bytes
  */
 
 export function toUtf8String(bytes: BytesLike): string {
