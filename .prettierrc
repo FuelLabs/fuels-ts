@@ -28,7 +28,9 @@
     {
       "files": ["pnpm-lock.yaml"],
       "options": {
-        "singleQuote": true
+        "singleQuote": true,
+        "printWidth": 300,
+        "bracketSpacing": false
       }
     }
   ]
