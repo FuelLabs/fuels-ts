@@ -45,7 +45,8 @@
     "forc:format": "./scripts/forc-format.sh",
     "forc:verify": "tsx ./scripts/verify-forc-version",
     "node:run": "./scripts/run-node.sh",
-    "node:clean": "rimraf .fuel-core/db"
+    "node:clean": "rimraf .fuel-core/db",
+    "check-deps": "./scripts/check-deps.sh"
   },
   "repository": {
     "type": "git",
