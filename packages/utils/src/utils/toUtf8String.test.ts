@@ -1,5 +1,9 @@
 import { toUtf8String } from './toUtf8String';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('toUtf8String', () => {
   it('should convert valid UTF-8 bytes to a string', () => {
     const bytes = new Uint8Array([72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100]);

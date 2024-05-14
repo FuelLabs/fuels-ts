@@ -2,6 +2,10 @@ import { FuelError, ErrorCode } from '@fuel-ts/errors';
 
 import { toUtf8Bytes } from './toUtf8Bytes';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('toUtf8Bytes', () => {
   it('should convert a simple ASCII string to UTF-8 bytes', () => {
     const input = 'Hello, world!';
