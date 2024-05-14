@@ -1,5 +1,5 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { BaseAssetId, FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -15,7 +15,8 @@ describe('Edge Cases', () => {
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const adminWallet = await generateTestWallet(provider, [[500_000]]);
+    const baseAssetId = provider.getBaseAssetId();
+    const adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     const destination = Wallet.generate({
       provider,
@@ -24,8 +25,8 @@ describe('Edge Cases', () => {
     const { id: transactionId } = await adminWallet.transfer(
       destination.address,
       100,
-      BaseAssetId,
-      { gasPrice: provider.getGasConfig().minGasPrice, gasLimit: 10_000 }
+      baseAssetId,
+      { gasLimit: 10_000 }
     );
 
     const response = new TransactionResponse(transactionId, provider);

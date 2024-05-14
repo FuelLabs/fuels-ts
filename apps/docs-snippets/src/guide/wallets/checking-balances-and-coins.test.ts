@@ -1,11 +1,12 @@
 import type { BigNumberish, CoinQuantity, WalletUnlocked } from 'fuels';
-import { Provider, BaseAssetId, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { Provider, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
 /**
  * @group node
  */
 describe(__filename, () => {
   let provider: Provider | undefined;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
@@ -15,9 +16,9 @@ describe(__filename, () => {
     const myWallet: WalletUnlocked = Wallet.generate({ provider });
 
     // #region wallet-check-balance
-    // #import { BigNumberish, BaseAssetId };
+    // #import { BigNumberish };
 
-    const balance: BigNumberish = await myWallet.getBalance(BaseAssetId);
+    const balance: BigNumberish = await myWallet.getBalance(baseAssetId);
     // #endregion wallet-check-balance
 
     expect(balance.toNumber()).toEqual(0);

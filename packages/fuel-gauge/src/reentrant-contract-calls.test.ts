@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { Contract, WalletUnlocked } from 'fuels';
-import { BaseAssetId, ContractFactory, FUEL_NETWORK_URL, Provider, ReceiptType, bn } from 'fuels';
+import { ContractFactory, FUEL_NETWORK_URL, Provider, ReceiptType, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -15,10 +15,12 @@ describe('Reentrant Contract Calls', () => {
   let barContract: Contract;
   let fooContract: Contract;
   let wallet: WalletUnlocked;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    wallet = await generateTestWallet(provider, [[200_000, baseAssetId]]);
 
     const factoryBar = new ContractFactory(bar.binHexlified, bar.abiContents, wallet);
     barContract = await factoryBar.deployContract();
@@ -32,7 +34,7 @@ describe('Reentrant Contract Calls', () => {
       value,
       transactionResult: { receipts },
     } = await fooContract.functions
-      .foo({ value: fooContract.id.toB256() }, { value: barContract.id.toB256() })
+      .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
       .addContracts([barContract])
       .call();
 
@@ -54,7 +56,7 @@ describe('Reentrant Contract Calls', () => {
      * number 42 (from `Foo.foo`) instead of 1337 (from `Foo.baz`).
      */
     const returnReceipts = receipts.filter(
-      (r) => r.type === ReceiptType.Return && r.id === fooContract.id.toB256()
+      (r) => r.type === ReceiptType.ReturnData && r.id === fooContract.id.toB256()
     );
 
     expect(value.toNumber()).toBe(42);
@@ -69,8 +71,8 @@ describe('Reentrant Contract Calls', () => {
     ).deployContract({ storageSlots: storageTest.storageSlots });
 
     const reentrantCall = fooContract.functions.foo(
-      { value: fooContract.id.toB256() },
-      { value: barContract.id.toB256() }
+      { bits: fooContract.id.toB256() },
+      { bits: barContract.id.toB256() }
     );
 
     const result = await fooContract

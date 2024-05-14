@@ -1,16 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
-import type {
-  Account,
-  CoinQuantityLike,
-  TransactionResponse,
-  TransactionResult,
-} from '@fuel-ts/account';
+import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/account';
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -29,9 +23,10 @@ const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcPro
 
 const setup = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
+  const baseAssetId = provider.getBaseAssetId();
 
   // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
+  const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
 
   return wallet;
 };
@@ -45,24 +40,17 @@ const callScript = async <TData, TResult>(
   result: TResult;
   response: TransactionResponse;
 }> => {
-  const { minGasPrice } = account.provider.getGasConfig();
-
-  const request = new ScriptTransactionRequest({
-    gasLimit: 1000000,
-    gasPrice: minGasPrice,
-  });
+  const request = new ScriptTransactionRequest();
   request.setScript(script, data);
 
   // Keep a list of coins we need to input to this transaction
-  const requiredCoinQuantities: CoinQuantityLike[] = [];
 
-  requiredCoinQuantities.push({ amount: 1000, assetId: BaseAssetId });
+  const txCost = await account.provider.getTransactionCost(request);
 
-  // Get and add required coins to the transaction
-  if (requiredCoinQuantities.length) {
-    const resources = await account.getResourcesToSpend(requiredCoinQuantities);
-    request.addResources(resources);
-  }
+  request.gasLimit = txCost.gasUsed;
+  request.maxFee = txCost.maxFee;
+
+  await account.fund(request, txCost);
 
   const response = await account.sendTransaction(request);
   const transactionResult = await response.waitForResult();

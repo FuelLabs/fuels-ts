@@ -1,5 +1,62 @@
 # Change Log
 
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
+## 0.84.0
+
+### Patch Changes
+
+- Updated dependencies [2990edb]
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
+## 0.83.0
+
+### Minor Changes
+
+- 3d2e5c4: feat!: enabling v1 encoding for everything
+- 29f46ef: chore!: upgrade `forc` to `0.56.0`
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+
+### Patch Changes
+
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/errors@0.83.0
+  - @fuel-ts/crypto@0.83.0
+  - @fuel-ts/hasher@0.83.0
+  - @fuel-ts/math@0.83.0
+
+## 0.82.0
+
+### Patch Changes
+
+- 1c8d8bf: fix: encoding version type
+  - @fuel-ts/crypto@0.82.0
+  - @fuel-ts/errors@0.82.0
+  - @fuel-ts/hasher@0.82.0
+  - @fuel-ts/interfaces@0.82.0
+  - @fuel-ts/math@0.82.0
+  - @fuel-ts/utils@0.82.0
+
 ## 0.81.0
 
 ### Patch Changes

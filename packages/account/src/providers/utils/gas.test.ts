@@ -10,7 +10,7 @@ import {
   MOCK_REQUEST_MESSAGE_INPUT,
   MOCK_REQUEST_PREDICATE_INPUT,
 } from '../../../test/fixtures/inputs-and-outputs';
-import type { GqlDependentCost } from '../__generated__/operations';
+import type { GqlHeavyOperation, GqlLightOperation } from '../__generated__/operations';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -21,7 +21,6 @@ import type { TransactionResultReceipt } from '../transaction-response';
 import {
   calculateMetadataGasForTxCreate,
   calculateMetadataGasForTxScript,
-  calculatePriceWithFactor,
   gasUsedByInputs,
   getGasUsedFromReceipts,
   getMaxGas,
@@ -36,8 +35,7 @@ describe('gas', () => {
   describe('resolveGasDependentCosts', () => {
     it('calculates cost correctly for LightOperation', () => {
       const byteSize = new BN('100');
-      const gasDependentCost: GqlDependentCost = {
-        __typename: 'LightOperation',
+      const gasDependentCost: GqlLightOperation = {
         base: '10',
         unitsPerGas: '10',
       };
@@ -49,8 +47,7 @@ describe('gas', () => {
 
     it('calculates cost correctly for HeavyOperation', () => {
       const byteSize = new BN('500');
-      const gasDependentCost: GqlDependentCost = {
-        __typename: 'HeavyOperation',
+      const gasDependentCost: GqlHeavyOperation = {
         base: '10',
         gasPerUnit: '2',
       };
@@ -206,6 +203,7 @@ describe('gas', () => {
       const witnessesLength = 128;
       const minGas = bn(567);
       const gasLimit = bn(10_000);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = witnessLimit
         .sub(bn(witnessesLength))
@@ -219,6 +217,7 @@ describe('gas', () => {
         witnessesLength,
         minGas,
         gasLimit,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -229,6 +228,7 @@ describe('gas', () => {
       const witnessLimit = bn(200);
       const witnessesLength = 500;
       const minGas = bn(210);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = minGas;
 
@@ -237,6 +237,7 @@ describe('gas', () => {
         witnessLimit,
         witnessesLength,
         minGas,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -247,6 +248,7 @@ describe('gas', () => {
       const witnessLimit = undefined;
       const witnessesLength = 64;
       const minGas = bn(350);
+      const maxGasPerTx = bn(MOCK_CHAIN.consensusParameters.txParams.maxGasPerTx);
 
       const expectedMaxGas = minGas;
 
@@ -255,6 +257,7 @@ describe('gas', () => {
         witnessLimit,
         witnessesLength,
         minGas,
+        maxGasPerTx,
       });
 
       expect(expectedMaxGas.eq(maxGas)).toBeTruthy();
@@ -298,28 +301,6 @@ describe('gas', () => {
       });
 
       expect(expectedMetadataGas.eq(metadataGas)).toBeTruthy();
-    });
-  });
-
-  describe('calculatePriceWithFactor', () => {
-    it('should correctly calculate the price with factor', () => {
-      const gasUsed = new BN(10);
-      const gasPrice = new BN(2);
-      const priceFactor = new BN(5);
-
-      const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
-
-      expect(result.toNumber()).toEqual(4); // ceil(10 / 5) * 2 = 4
-    });
-
-    it('should correctly round up the result', () => {
-      const gasUsed = new BN(11);
-      const gasPrice = new BN(2);
-      const priceFactor = new BN(5);
-
-      const result = calculatePriceWithFactor(gasUsed, gasPrice, priceFactor);
-
-      expect(result.toNumber()).toEqual(5); // ceil(11 * 2) / 2 = 5
     });
   });
 

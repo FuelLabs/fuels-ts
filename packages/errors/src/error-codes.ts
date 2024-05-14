@@ -42,7 +42,6 @@ export enum ErrorCode {
   PARSE_FAILED = 'parse-failed',
   ENCODE_ERROR = 'encode-error',
   DECODE_ERROR = 'decode-error',
-  INVALID_CREDENTIALS = 'invalid-credentials',
   ENV_DEPENDENCY_MISSING = 'env-dependency-missing',
   INVALID_TTL = 'invalid-ttl',
   INVALID_INPUT_PARAMETERS = 'invalid-input-parameters',
@@ -54,9 +53,14 @@ export enum ErrorCode {
   INVALID_REQUEST = 'invalid-request',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
 
+  // crypto
+  INVALID_CREDENTIALS = 'invalid-credentials',
+  HASHER_LOCKED = 'hasher-locked',
+
   // transaction
   GAS_PRICE_TOO_LOW = 'gas-price-too-low',
   GAS_LIMIT_TOO_LOW = 'gas-limit-too-low',
+  MAX_FEE_TOO_LOW = 'max-fee-too-low',
   TRANSACTION_NOT_FOUND = 'transaction-not-found',
   TRANSACTION_FAILED = 'transaction-failed',
   INVALID_CONFIGURABLE_CONSTANTS = 'invalid-configurable-constants',
@@ -86,7 +90,6 @@ export enum ErrorCode {
 
   // chain
   ERROR_BUILDING_BLOCK_EXPLORER_URL = 'error-building-block-explorer-url',
-  UNSUPPORTED_FUEL_CLIENT_VERSION = 'unsupported-fuel-client-version',
 
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',
@@ -100,7 +103,4 @@ export enum ErrorCode {
 
   // graphql
   STREAM_PARSING_ERROR = 'stream-parsing-error',
-
-  // coder
-  // ...
 }

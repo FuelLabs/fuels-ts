@@ -12,14 +12,22 @@ const config: UserConfig = {
         Buffer: true,
         global: true,
       },
-      include: ["fs", "crypto", "buffer", "fs", "events", "timers/promises"],
+      include: [
+        "crypto",
+        "buffer",
+        "fs",
+        "events",
+        "timers/promises",
+        "util",
+        "stream",
+      ],
       overrides: {
         fs: "memfs",
       },
     }),
   ],
   optimizeDeps: {
-    exclude: ["fsevents"],
+    exclude: ["fsevents", "path-scurry"],
     include: ["events", "timers/promises"],
   },
   test: {

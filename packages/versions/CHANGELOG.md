@@ -1,5 +1,26 @@
 # @fuel-ts/versions
 
+## 0.85.0
+
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+
+## 0.83.0
+
+### Minor Changes
+
+- 29f46ef: chore!: upgrade `forc` to `0.56.0`
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+
+### Patch Changes
+
+- 0d75266: chore!: upgrading `forc` to `0.55.0`
+
+## 0.82.0
+
 ## 0.81.0
 
 ### Minor Changes

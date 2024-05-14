@@ -20,6 +20,7 @@ import type {
 import { TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
+import type { GqlReceiptFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
@@ -183,10 +184,17 @@ export class TransactionResponse {
       transaction
     ) as Transaction<TTransactionType>;
 
-    const receipts = transaction.receipts?.map(processGqlReceipt) || [];
+    let txReceipts: GqlReceiptFragment[] = [];
 
-    const { gasPerByte, gasPriceFactor, gasCosts } = this.provider.getGasConfig();
-    const maxInputs = this.provider.getChain().consensusParameters.maxInputs;
+    if (transaction?.status && 'receipts' in transaction.status) {
+      txReceipts = transaction.status.receipts;
+    }
+
+    const receipts = txReceipts.map(processGqlReceipt) || [];
+
+    const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = this.provider.getGasConfig();
+    const gasPrice = await this.provider.getLatestGasPrice();
+    const maxInputs = this.provider.getChain().consensusParameters.txParameters.maxInputs;
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
@@ -199,6 +207,8 @@ export class TransactionResponse {
       abiMap: contractsAbiMap,
       maxInputs,
       gasCosts,
+      maxGasPerTx,
+      gasPrice,
     });
 
     return transactionSummary;

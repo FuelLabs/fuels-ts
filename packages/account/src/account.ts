@@ -1,11 +1,11 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, isDefined } from '@fuel-ts/utils';
+import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
 import type {
@@ -23,19 +23,32 @@ import type {
   ProviderSendTxParams,
   TransactionResponse,
   EstimateTransactionParams,
+  TransactionCost,
 } from './providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
-  addAmountToAsset,
+  addAmountToCoinQuantities,
 } from './providers';
+import {
+  cacheRequestInputsResourcesFromOwner,
+  getAssetAmountInRequestInputs,
+  isRequestInputCoin,
+  isRequestInputResource,
+} from './providers/transaction-request/helpers';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
-  'gasLimit' | 'gasPrice' | 'maturity' | 'maxFee' | 'witnessLimit'
+  'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit'
 >;
+
+export type EstimatedTxParams = Pick<
+  TransactionCost,
+  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
+>;
+const MAX_FUNDING_ATTEMPTS = 2;
 
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
@@ -190,8 +203,9 @@ export class Account extends AbstractAccount {
    * @param assetId - The asset ID to check the balance for.
    * @returns A promise that resolves to the balance amount.
    */
-  async getBalance(assetId: BytesLike = BaseAssetId): Promise<BN> {
-    const amount = await this.provider.getBalance(this.address, assetId);
+  async getBalance(assetId?: BytesLike): Promise<BN> {
+    const assetIdToFetch = assetId ?? this.provider.getBaseAssetId();
+    const amount = await this.provider.getBalance(this.address, assetIdToFetch);
     return amount;
   }
 
@@ -230,63 +244,45 @@ export class Account extends AbstractAccount {
   }
 
   /**
-   * Adds resources to the transaction enough to fund it.
+   * Funds a transaction request by adding the necessary resources.
    *
-   * @param request - The transaction request.
-   * @param coinQuantities - The coin quantities required to execute the transaction.
-   * @param fee - The estimated transaction fee.
-   * @returns A promise that resolves when the resources are added to the transaction.
+   * @typeParam T - The type of the TransactionRequest.
+   * @param request - The transaction request to fund.
+   * @param params - The estimated transaction parameters.
+   * @returns The funded transaction request.
    */
-  async fund<T extends TransactionRequest>(
-    request: T,
-    coinQuantities: CoinQuantity[],
-    fee: BN
-  ): Promise<void> {
-    const updatedQuantities = addAmountToAsset({
+  async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
+    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
+
+    const fee = request.maxFee;
+    const baseAssetId = this.provider.getBaseAssetId();
+    const requiredInBaseAsset =
+      requiredQuantities.find((quantity) => quantity.assetId === baseAssetId)?.amount || bn(0);
+
+    const requiredQuantitiesWithFee = addAmountToCoinQuantities({
       amount: bn(fee),
-      assetId: BaseAssetId,
-      coinQuantities,
+      assetId: baseAssetId,
+      coinQuantities: requiredQuantities,
     });
 
     const quantitiesDict: Record<string, { required: BN; owned: BN }> = {};
 
-    updatedQuantities.forEach(({ amount, assetId }) => {
+    requiredQuantitiesWithFee.forEach(({ amount, assetId }) => {
       quantitiesDict[assetId] = {
         required: amount,
         owned: bn(0),
       };
     });
 
-    const cachedUtxos: BytesLike[] = [];
-    const cachedMessages: BytesLike[] = [];
-
-    const owner = this.address.toB256();
-
-    request.inputs.forEach((input) => {
-      const isResource = 'amount' in input;
-
-      if (isResource) {
-        const isCoin = 'owner' in input;
-
-        if (isCoin) {
-          const assetId = String(input.assetId);
-          if (input.owner === owner && quantitiesDict[assetId]) {
-            const amount = bn(input.amount);
-            quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(amount);
-
-            // caching this utxo to avoid fetching it again if requests needs to be funded
-            cachedUtxos.push(input.id);
-          }
-        } else if (input.recipient === owner && input.amount && quantitiesDict[BaseAssetId]) {
-          quantitiesDict[BaseAssetId].owned = quantitiesDict[BaseAssetId].owned.add(input.amount);
-
-          // caching this message to avoid fetching it again if requests needs to be funded
-          cachedMessages.push(input.nonce);
-        }
+    request.inputs.filter(isRequestInputResource).forEach((input) => {
+      const isCoin = isRequestInputCoin(input);
+      const assetId = isCoin ? String(input.assetId) : baseAssetId;
+      if (quantitiesDict[assetId]) {
+        quantitiesDict[assetId].owned = quantitiesDict[assetId].owned.add(input.amount);
       }
     });
 
-    const missingQuantities: CoinQuantity[] = [];
+    let missingQuantities: CoinQuantity[] = [];
     Object.entries(quantitiesDict).forEach(([assetId, { owned, required }]) => {
       if (owned.lt(required)) {
         missingQuantities.push({
@@ -296,15 +292,73 @@ export class Account extends AbstractAccount {
       }
     });
 
-    const needsToBeFunded = missingQuantities.length;
+    let needsToBeFunded = missingQuantities.length > 0;
+    let fundingAttempts = 0;
+    while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
+      const resources = await this.getResourcesToSpend(
+        missingQuantities,
+        cacheRequestInputsResourcesFromOwner(request.inputs, this.address)
+      );
 
-    if (needsToBeFunded) {
-      const resources = await this.getResourcesToSpend(missingQuantities, {
-        messages: cachedMessages,
-        utxos: cachedUtxos,
-      });
       request.addResources(resources);
+      request.shiftPredicateData();
+      request.updatePredicateGasUsed(estimatedPredicates);
+
+      const requestToReestimate = clone(request);
+      if (addedSignatures) {
+        Array.from({ length: addedSignatures }).forEach(() =>
+          requestToReestimate.addEmptyWitness()
+        );
+      }
+
+      if (!updateMaxFee) {
+        break;
+      }
+      const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
+        transactionRequest: requestToReestimate,
+      });
+
+      const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
+        request.inputs,
+        baseAssetId,
+        baseAssetId
+      );
+
+      const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
+
+      if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
+        needsToBeFunded = false;
+      } else {
+        missingQuantities = [
+          {
+            amount: totalBaseAssetRequiredWithFee.sub(totalBaseAssetOnInputs),
+            assetId: baseAssetId,
+          },
+        ];
+      }
+
+      fundingAttempts += 1;
     }
+
+    request.shiftPredicateData();
+    request.updatePredicateGasUsed(estimatedPredicates);
+
+    const requestToReestimate = clone(request);
+    if (addedSignatures) {
+      Array.from({ length: addedSignatures }).forEach(() => requestToReestimate.addEmptyWitness());
+    }
+
+    if (!updateMaxFee) {
+      return request;
+    }
+
+    const { maxFee } = await this.provider.estimateTxGasAndFee({
+      transactionRequest: requestToReestimate,
+    });
+
+    request.maxFee = maxFee;
+
+    return request;
   }
 
   /**
@@ -313,7 +367,7 @@ export class Account extends AbstractAccount {
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer.
-   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @param txParams - The transaction parameters (gasLimit, tip, maturity, maxFee, witnessLimit).
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
@@ -322,33 +376,26 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
+    assetId?: BytesLike,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
-    const { minGasPrice } = this.provider.getGasConfig();
-    const params = { gasPrice: minGasPrice, ...txParams };
-    const request = new ScriptTransactionRequest(params);
-    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetId);
-    const { maxFee, requiredQuantities, gasUsed, estimatedInputs } =
-      await this.provider.getTransactionCost(request, [], {
-        estimateTxDependencies: true,
-        resourcesOwner: this,
-      });
-
-    request.gasPrice = bn(txParams.gasPrice ?? minGasPrice);
-    request.gasLimit = bn(txParams.gasLimit ?? gasUsed);
-
-    this.validateGas({
-      gasUsed,
-      gasPrice: request.gasPrice,
-      gasLimit: request.gasLimit,
-      minGasPrice,
+    let request = new ScriptTransactionRequest(txParams);
+    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
+    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetIdToTransfer);
+    const txCost = await this.provider.getTransactionCost(request, {
+      estimateTxDependencies: true,
+      resourcesOwner: this,
     });
 
-    await this.fund(request, requiredQuantities, maxFee);
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
+    });
 
-    request.updatePredicateInputs(estimatedInputs);
+    await this.fund(request, txCost);
 
     return request;
   }
@@ -359,7 +406,7 @@ export class Account extends AbstractAccount {
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer.
-   * @param txParams - The transaction parameters (gasLimit, gasPrice, maturity).
+   * @param txParams - The transaction parameters (gasLimit, maturity).
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
@@ -368,7 +415,7 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
+    assetId?: BytesLike,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
@@ -378,7 +425,8 @@ export class Account extends AbstractAccount {
         'Transfer amount must be a positive number.'
       );
     }
-    const request = await this.createTransfer(destination, amount, assetId, txParams);
+    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
+    const request = await this.createTransfer(destination, amount, assetIdToTransfer, txParams);
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
@@ -397,7 +445,7 @@ export class Account extends AbstractAccount {
     /** Amount of coins */
     amount: BigNumberish,
     /** Asset ID of coins */
-    assetId: BytesLike = BaseAssetId,
+    assetId?: BytesLike,
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
@@ -409,38 +457,34 @@ export class Account extends AbstractAccount {
     }
 
     const contractAddress = Address.fromAddressOrString(contractId);
-    const { minGasPrice } = this.provider.getGasConfig();
-    const params = { gasPrice: minGasPrice, ...txParams };
-
+    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
     const { script, scriptData } = await assembleTransferToContractScript({
       hexlifiedContractId: contractAddress.toB256(),
       amountToTransfer: bn(amount),
-      assetId,
+      assetId: assetIdToTransfer,
     });
 
-    const request = new ScriptTransactionRequest({
-      ...params,
+    let request = new ScriptTransactionRequest({
+      ...txParams,
       script,
       scriptData,
     });
 
     request.addContractInputAndOutput(contractAddress);
 
-    const { maxFee, requiredQuantities, gasUsed } = await this.provider.getTransactionCost(
-      request,
-      [{ amount: bn(amount), assetId: String(assetId) }]
-    );
-
-    request.gasLimit = bn(params.gasLimit ?? gasUsed);
-
-    this.validateGas({
-      gasUsed,
-      gasPrice: request.gasPrice,
-      gasLimit: request.gasLimit,
-      minGasPrice,
+    const txCost = await this.provider.getTransactionCost(request, {
+      resourcesOwner: this,
+      quantitiesToContract: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
     });
 
-    await this.fund(request, requiredQuantities, maxFee);
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
+    });
+
+    await this.fund(request, txCost);
 
     return this.sendTransaction(request);
   }
@@ -461,8 +505,6 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    const { minGasPrice } = this.provider.getGasConfig();
-
     const recipientAddress = Address.fromAddressOrString(recipient);
     // add recipient and amount to the transaction script code
     const recipientDataArray = arrayify(
@@ -477,26 +519,22 @@ export class Account extends AbstractAccount {
       ...amountDataArray,
     ]);
 
-    const params: ScriptTransactionRequestLike = { script, gasPrice: minGasPrice, ...txParams };
+    const params: ScriptTransactionRequestLike = { script, ...txParams };
 
-    const request = new ScriptTransactionRequest(params);
-    const forwardingQuantities = [{ amount: bn(amount), assetId: BaseAssetId }];
+    const baseAssetId = this.provider.getBaseAssetId();
+    let request = new ScriptTransactionRequest(params);
+    const quantitiesToContract = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const { requiredQuantities, maxFee, gasUsed } = await this.provider.getTransactionCost(
-      request,
-      forwardingQuantities
-    );
+    const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
 
-    request.gasLimit = bn(params.gasLimit ?? gasUsed);
-
-    this.validateGas({
-      gasUsed,
-      gasPrice: request.gasPrice,
-      gasLimit: request.gasLimit,
-      minGasPrice,
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
     });
 
-    await this.fund(request, requiredQuantities, maxFee);
+    await this.fund(request, txCost);
 
     return this.sendTransaction(request);
   }
@@ -566,29 +604,37 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
-  private validateGas({
+  private validateGasLimitAndMaxFee({
     gasUsed,
-    gasPrice,
-    gasLimit,
-    minGasPrice,
+    maxFee,
+    transactionRequest,
+    txParams: { gasLimit: setGasLimit, maxFee: setMaxFee },
   }: {
     gasUsed: BN;
-    gasPrice: BN;
-    gasLimit: BN;
-    minGasPrice: BN;
+    maxFee: BN;
+    transactionRequest: ScriptTransactionRequest;
+    txParams: Pick<TxParamsType, 'gasLimit' | 'maxFee'>;
   }) {
-    if (minGasPrice.gt(gasPrice)) {
+    const request = transactionRequestify(transactionRequest) as ScriptTransactionRequest;
+
+    if (!isDefined(setGasLimit)) {
+      request.gasLimit = gasUsed;
+    } else if (gasUsed.gt(setGasLimit)) {
       throw new FuelError(
-        ErrorCode.GAS_PRICE_TOO_LOW,
-        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+        ErrorCode.GAS_LIMIT_TOO_LOW,
+        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (gasUsed.gt(gasLimit)) {
+    if (!isDefined(setMaxFee)) {
+      request.maxFee = maxFee;
+    } else if (maxFee.gt(setMaxFee)) {
       throw new FuelError(
-        ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+        ErrorCode.MAX_FEE_TOO_LOW,
+        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
+
+    return request;
   }
 }

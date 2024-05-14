@@ -16,6 +16,7 @@ import { StorageSlotCoder } from './storage-slot';
 import type { StorageSlot } from './storage-slot';
 import type { TxPointer } from './tx-pointer';
 import { TxPointerCoder } from './tx-pointer';
+import { UpgradePurposeCoder, type UpgradePurpose } from './upgrade-purpose';
 import type { Witness } from './witness';
 import { WitnessCoder } from './witness';
 
@@ -23,6 +24,8 @@ export enum TransactionType /* u8 */ {
   Script = 0,
   Create = 1,
   Mint = 2,
+  Upgrade = 3,
+  Upload = 4,
 }
 
 export type TransactionScript = {
@@ -31,26 +34,26 @@ export type TransactionScript = {
   /** Gas limit for transaction (u64) */
   scriptGasLimit: BN;
 
-  /** Script length, in instructions (u16) */
-  scriptLength: number;
+  /** Merkle root of receipts (b256) */
+  receiptsRoot: string;
 
-  /** Length of script input data, in bytes (u16) */
-  scriptDataLength: number;
+  /** Script length, in instructions (u64) */
+  scriptLength: BN;
+
+  /** Length of script input data, in bytes (u64) */
+  scriptDataLength: BN;
 
   /** Bitfield of used policy types (u32) */
   policyTypes: number;
 
-  /** Number of inputs (u8) */
+  /** Number of inputs (u16) */
   inputsCount: number;
 
-  /** Number of outputs (u8) */
+  /** Number of outputs (u16) */
   outputsCount: number;
 
-  /** Number of witnesses (u8) */
+  /** Number of witnesses (u16) */
   witnessesCount: number;
-
-  /** Merkle root of receipts (b256) */
-  receiptsRoot: string;
 
   /** Script to execute (byte[]) */
   script: string;
@@ -58,11 +61,11 @@ export type TransactionScript = {
   /** Script input data (parameters) (byte[]) */
   scriptData: string;
 
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
   /** List of policies, sorted by PolicyType. */
   policies: Policy[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
 
   /** List of outputs (Output[]) */
   outputs: Output[];
@@ -80,15 +83,15 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     const parts: Uint8Array[] = [];
 
     parts.push(new BigNumberCoder('u64').encode(value.scriptGasLimit));
-    parts.push(new NumberCoder('u32').encode(value.scriptLength));
-    parts.push(new NumberCoder('u32').encode(value.scriptDataLength));
-    parts.push(new NumberCoder('u32').encode(value.policyTypes));
-    parts.push(new NumberCoder('u8').encode(value.inputsCount));
-    parts.push(new NumberCoder('u8').encode(value.outputsCount));
-    parts.push(new NumberCoder('u8').encode(value.witnessesCount));
     parts.push(new B256Coder().encode(value.receiptsRoot));
-    parts.push(new ByteArrayCoder(value.scriptLength).encode(value.script));
-    parts.push(new ByteArrayCoder(value.scriptDataLength).encode(value.scriptData));
+    parts.push(new BigNumberCoder('u64').encode(value.scriptLength));
+    parts.push(new BigNumberCoder('u64').encode(value.scriptDataLength));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
+    parts.push(new ByteArrayCoder(value.scriptLength.toNumber()).encode(value.script));
+    parts.push(new ByteArrayCoder(value.scriptDataLength.toNumber()).encode(value.scriptData));
     parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
@@ -102,23 +105,23 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
     let o = offset;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const scriptGasLimit = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new B256Coder().decode(data, o);
+    const receiptsRoot = decoded;
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const scriptLength = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const scriptDataLength = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const policyTypes = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const inputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const outputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const witnessesCount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const receiptsRoot = decoded;
-    [decoded, o] = new ByteArrayCoder(scriptLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(scriptLength.toNumber()).decode(data, o);
     const script = decoded;
-    [decoded, o] = new ByteArrayCoder(scriptDataLength).decode(data, o);
+    [decoded, o] = new ByteArrayCoder(scriptDataLength.toNumber()).decode(data, o);
     const scriptData = decoded;
     [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
     const policies = decoded;
@@ -155,35 +158,32 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
 export type TransactionCreate = {
   type: TransactionType.Create;
 
-  /** Contract bytecode length, in instructions (u16) */
-  bytecodeLength: number;
-
   /** Witness index of contract bytecode to create (u8) */
   bytecodeWitnessIndex: number;
-
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of storage slots to initialize (u16) */
-  storageSlotsCount: number;
-
-  /** Number of inputs (u8) */
-  inputsCount: number;
-
-  /** Number of outputs (u8) */
-  outputsCount: number;
-
-  /** Number of witnesses (u8) */
-  witnessesCount: number;
 
   /** Salt (b256) */
   salt: string;
 
-  /** List of policies. */
-  policies: Policy[];
+  /** Number of storage slots to initialize (u16) */
+  storageSlotsCount: BN;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
 
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
+
+  /** List of policies. */
+  policies: Policy[];
 
   /** List of inputs (Input[]) */
   inputs: Input[];
@@ -203,18 +203,19 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u32').encode(value.bytecodeLength));
-    parts.push(new NumberCoder('u8').encode(value.bytecodeWitnessIndex));
-    parts.push(new NumberCoder('u32').encode(value.policyTypes));
-    parts.push(new NumberCoder('u16').encode(value.storageSlotsCount));
-    parts.push(new NumberCoder('u8').encode(value.inputsCount));
-    parts.push(new NumberCoder('u8').encode(value.outputsCount));
-    parts.push(new NumberCoder('u8').encode(value.witnessesCount));
+    parts.push(new NumberCoder('u16').encode(value.bytecodeWitnessIndex));
     parts.push(new B256Coder().encode(value.salt));
-    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new BigNumberCoder('u64').encode(value.storageSlotsCount));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
     parts.push(
-      new ArrayCoder(new StorageSlotCoder(), value.storageSlotsCount).encode(value.storageSlots)
+      new ArrayCoder(new StorageSlotCoder(), value.storageSlotsCount.toNumber()).encode(
+        value.storageSlots
+      )
     );
+    parts.push(new PoliciesCoder().encode(value.policies));
     parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
     parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
     parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
@@ -226,26 +227,27 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
-    const bytecodeLength = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const bytecodeWitnessIndex = decoded;
+    [decoded, o] = new B256Coder().decode(data, o);
+    const salt = decoded;
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    const storageSlotsCount = decoded;
     [decoded, o] = new NumberCoder('u32').decode(data, o);
     const policyTypes = decoded;
     [decoded, o] = new NumberCoder('u16').decode(data, o);
-    const storageSlotsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
     const inputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const outputsCount = decoded;
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
     const witnessesCount = decoded;
-    [decoded, o] = new B256Coder().decode(data, o);
-    const salt = decoded;
+    [decoded, o] = new ArrayCoder(new StorageSlotCoder(), storageSlotsCount.toNumber()).decode(
+      data,
+      o
+    );
+    const storageSlots = decoded;
     [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
     const policies = decoded;
-    [decoded, o] = new ArrayCoder(new StorageSlotCoder(), storageSlotsCount).decode(data, o);
-    const storageSlots = decoded;
     [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
     const inputs = decoded;
     [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
@@ -256,7 +258,6 @@ export class TransactionCreateCoder extends Coder<TransactionCreate, Transaction
     return [
       {
         type: TransactionType.Create,
-        bytecodeLength,
         bytecodeWitnessIndex,
         policyTypes,
         storageSlotsCount,
@@ -292,6 +293,8 @@ export type TransactionMint = {
 
   /** The asset ID corresponding to the minted amount. */
   mintAssetId: string;
+
+  gasPrice: BN;
 };
 
 export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint> {
@@ -307,6 +310,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     parts.push(new OutputContractCoder().encode(value.outputContract));
     parts.push(new BigNumberCoder('u64').encode(value.mintAmount));
     parts.push(new B256Coder().encode(value.mintAssetId));
+    parts.push(new BigNumberCoder('u64').encode(value.gasPrice));
 
     return concat(parts);
   }
@@ -325,6 +329,8 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
     const mintAmount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const mintAssetId = decoded;
+    [decoded, o] = new BigNumberCoder('u64').decode(data, o);
+    const gasPrice = decoded;
 
     return [
       {
@@ -334,17 +340,248 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
         outputContract,
         mintAmount,
         mintAssetId,
+        gasPrice,
       },
       o,
     ];
   }
 }
-type PossibleTransactions = TransactionScript | TransactionCreate | TransactionMint;
+
+export type TransactionUpgrade = {
+  type: TransactionType.Upgrade;
+
+  /** The purpose of the upgrade. */
+  upgradePurpose: UpgradePurpose;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
+
+  /** List of policies, sorted by PolicyType. */
+  policies: Policy[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** List of witnesses (Witness[]) */
+  witnesses: Witness[];
+};
+
+export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, TransactionUpgrade> {
+  constructor() {
+    super('TransactionUpgrade', 'struct TransactionUpgrade', 0);
+  }
+
+  encode(value: TransactionUpgrade): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new UpgradePurposeCoder().encode(value.upgradePurpose));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
+    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionUpgrade, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new UpgradePurposeCoder().decode(data, o);
+    const upgradePurpose = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const policyTypes = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const inputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const witnessesCount = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    const witnesses = decoded;
+
+    return [
+      {
+        type: TransactionType.Upgrade,
+        upgradePurpose,
+        policyTypes,
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        policies,
+        inputs,
+        outputs,
+        witnesses,
+      },
+      o,
+    ];
+  }
+}
+
+export type TransactionUpload = {
+  type: TransactionType.Upload;
+
+  /** The root of the Merkle tree is created over the bytecode. (b256) */
+  root: string;
+
+  /** Index of witness that authorizes spending the coin (u16) */
+  witnessIndex: number;
+
+  /** The index of the subsection of the bytecode. (u16) */
+  subsectionIndex: number;
+
+  /** The total number of subsections on which bytecode was divided. (u16) */
+  subsectionsNumber: number;
+
+  /** Number of Merkle nodes in the proof. (u16) */
+  proofSetCount: number;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
+
+  /** The proof set of Merkle nodes to verify the connection of the subsection to the root. (b256[]) */
+  proofSet: string[];
+
+  /** List of policies, sorted by PolicyType. */
+  policies: Policy[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** List of witnesses (Witness[]) */
+  witnesses: Witness[];
+};
+
+export class TransactionUploadCoder extends Coder<TransactionUpload, TransactionUpload> {
+  constructor() {
+    super('TransactionUpload', 'struct TransactionUpload', 0);
+  }
+
+  encode(value: TransactionUpload): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.root));
+    parts.push(new NumberCoder('u16').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u16').encode(value.subsectionIndex));
+    parts.push(new NumberCoder('u16').encode(value.subsectionsNumber));
+    parts.push(new NumberCoder('u16').encode(value.proofSetCount));
+    parts.push(new NumberCoder('u32').encode(value.policyTypes));
+    parts.push(new NumberCoder('u16').encode(value.inputsCount));
+    parts.push(new NumberCoder('u16').encode(value.outputsCount));
+    parts.push(new NumberCoder('u16').encode(value.witnessesCount));
+    parts.push(new ArrayCoder(new B256Coder(), value.proofSetCount).encode(value.proofSet));
+    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionUpload, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const root = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const witnessIndex = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const subsectionIndex = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const subsectionsNumber = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const proofSetCount = decoded;
+    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    const policyTypes = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const inputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    const witnessesCount = decoded;
+    [decoded, o] = new ArrayCoder(new B256Coder(), proofSetCount).decode(data, o);
+    const proofSet = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    const witnesses = decoded;
+
+    return [
+      {
+        type: TransactionType.Upload,
+        root,
+        witnessIndex,
+        subsectionIndex,
+        subsectionsNumber,
+        proofSetCount,
+        policyTypes,
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        proofSet,
+        policies,
+        inputs,
+        outputs,
+        witnesses,
+      },
+      o,
+    ];
+  }
+}
+
+type PossibleTransactions =
+  | TransactionScript
+  | TransactionCreate
+  | TransactionMint
+  | TransactionUpgrade
+  | TransactionUpload;
+
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
   : Partial<Omit<TransactionScript, 'type'>> &
       Partial<Omit<TransactionCreate, 'type'>> &
-      Partial<Omit<TransactionMint, 'type'>> & {
+      Partial<Omit<TransactionMint, 'type'>> &
+      Partial<Omit<TransactionUpgrade, 'type'>> &
+      Partial<Omit<TransactionUpload, 'type'>> & {
         type: TransactionType;
       };
 
@@ -377,6 +614,18 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         parts.push(new TransactionMintCoder().encode(value as Transaction<TransactionType.Mint>));
         break;
       }
+      case TransactionType.Upgrade: {
+        parts.push(
+          new TransactionUpgradeCoder().encode(value as Transaction<TransactionType.Upgrade>)
+        );
+        break;
+      }
+      case TransactionType.Upload: {
+        parts.push(
+          new TransactionUploadCoder().encode(value as Transaction<TransactionType.Upload>)
+        );
+        break;
+      }
       default: {
         throw new FuelError(
           ErrorCode.INVALID_TRANSACTION_TYPE,
@@ -406,6 +655,14 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
       case TransactionType.Mint: {
         [decoded, o] = new TransactionMintCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.Upgrade: {
+        [decoded, o] = new TransactionUpgradeCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.Upload: {
+        [decoded, o] = new TransactionUploadCoder().decode(data, o);
         return [decoded, o];
       }
       default: {

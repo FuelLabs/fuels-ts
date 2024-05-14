@@ -1,8 +1,8 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { BN, Contract, WalletUnlocked, TransactionResultReceipt } from 'fuels';
-import { bn, ContractFactory, Provider, BaseAssetId, FUEL_NETWORK_URL, getRandomB256 } from 'fuels';
+import type { Contract, WalletUnlocked, TransactionResultReceipt } from 'fuels';
+import { bn, ContractFactory, Provider, FUEL_NETWORK_URL, getRandomB256 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -13,20 +13,20 @@ let wallet: WalletUnlocked;
  * @group node
  */
 describe('Revert Error Testing', () => {
-  let gasPrice: BN;
   let provider: Provider;
+  let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = await generateTestWallet(provider, [[1_000_000, BaseAssetId]]);
+    baseAssetId = provider.getBaseAssetId();
+    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
     const { binHexlified: bytecode, abiContents: FactoryAbi } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.REVERT_ERROR
     );
 
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    ({ minGasPrice: gasPrice } = wallet.provider.getGasConfig());
-    contractInstance = await factory.deployContract({ gasPrice });
+    contractInstance = await factory.deployContract();
   });
 
   it('can pass require checks [valid]', async () => {
@@ -175,7 +175,7 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw for "assert_ne" revert TX', async () => {
+  it('should throw for a missing OutputChange', async () => {
     const { binHexlified: tokenBytecode, abiContents: tokenAbi } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.TOKEN_CONTRACT
     );
@@ -184,9 +184,9 @@ describe('Revert Error Testing', () => {
     const tokenContract = await factory.deployContract();
 
     const addresses = [
-      { value: getRandomB256() },
-      { value: getRandomB256() },
-      { value: getRandomB256() },
+      { bits: getRandomB256() },
+      { bits: getRandomB256() },
+      { bits: getRandomB256() },
     ];
 
     const request = await tokenContract
@@ -194,14 +194,14 @@ describe('Revert Error Testing', () => {
         tokenContract.functions.mint_coins(500),
         tokenContract.functions.mint_to_addresses(addresses, 300),
       ])
-      .txParams({ gasPrice })
       .getTransactionRequest();
 
-    const { gasUsed, maxFee, requiredQuantities } = await provider.getTransactionCost(request);
+    const txCost = await provider.getTransactionCost(request);
 
-    request.gasLimit = gasUsed;
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-    await wallet.fund(request, requiredQuantities, maxFee);
+    await wallet.fund(request, txCost);
 
     const tx = await wallet.sendTransaction(request, {
       estimateTxDependencies: false,

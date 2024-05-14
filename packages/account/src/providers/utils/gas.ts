@@ -1,18 +1,19 @@
-import type { BN, BNInput } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import type { BN, BNInput } from '@fuel-ts/math';
 import { ReceiptType, type Input } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlDependentCost, GqlGasCosts } from '../__generated__/operations';
+import type {
+  GqlDependentCost,
+  GqlHeavyOperation,
+  GqlLightOperation,
+} from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import type { TransactionRequestInput } from '../transaction-request';
 import type {
   TransactionResultReceipt,
   TransactionResultScriptResultReceipt,
 } from '../transaction-response';
-
-/** @hidden */
-export const calculatePriceWithFactor = (gas: BN, gasPrice: BN, priceFactor: BN): BN =>
-  bn(Math.ceil(gas.mul(gasPrice).toNumber() / priceFactor.toNumber()));
 
 /** @hidden */
 export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>): BN => {
@@ -28,11 +29,10 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
 export function resolveGasDependentCosts(byteSize: BNInput, gasDependentCost: GqlDependentCost) {
   const base = bn(gasDependentCost.base);
   let dependentValue = bn(0);
-  if (gasDependentCost.__typename === 'LightOperation') {
-    dependentValue = bn(byteSize).div(bn(gasDependentCost.unitsPerGas));
-  }
-  if (gasDependentCost.__typename === 'HeavyOperation') {
-    dependentValue = bn(byteSize).mul(bn(gasDependentCost.gasPerUnit));
+  if ('unitsPerGas' in gasDependentCost) {
+    dependentValue = bn(byteSize).div(bn((<GqlLightOperation>gasDependentCost).unitsPerGas));
+  } else {
+    dependentValue = bn(byteSize).mul(bn((<GqlHeavyOperation>gasDependentCost).gasPerUnit));
   }
   return base.add(dependentValue);
 }
@@ -40,30 +40,46 @@ export function resolveGasDependentCosts(byteSize: BNInput, gasDependentCost: Gq
 export function gasUsedByInputs(
   inputs: Array<TransactionRequestInput | Input>,
   txBytesSize: number,
-  gasCosts: GqlGasCosts
+  gasCosts: GasCosts
 ) {
   const witnessCache: Array<number> = [];
-  const totalGas = inputs.reduce((total, input) => {
+
+  const chargeableInputs = inputs.filter((input) => {
+    const isCoinOrMessage = 'owner' in input || 'sender' in input;
+    if (isCoinOrMessage) {
+      if ('predicate' in input && input.predicate && input.predicate !== '0x') {
+        return true;
+      }
+
+      if (!witnessCache.includes(input.witnessIndex)) {
+        // should charge only once for each witness
+        witnessCache.push(input.witnessIndex);
+        return true;
+      }
+    }
+    return false;
+  });
+
+  const vmInitializationCost = resolveGasDependentCosts(txBytesSize, gasCosts.vmInitialization);
+
+  const totalGas = chargeableInputs.reduce((total, input) => {
     if ('predicate' in input && input.predicate && input.predicate !== '0x') {
       return total.add(
-        resolveGasDependentCosts(txBytesSize, gasCosts.vmInitialization)
+        vmInitializationCost
           .add(resolveGasDependentCosts(arrayify(input.predicate).length, gasCosts.contractRoot))
           .add(bn(input.predicateGasUsed))
       );
     }
-    if ('witnessIndex' in input && !witnessCache.includes(input.witnessIndex)) {
-      witnessCache.push(input.witnessIndex);
-      return total.add(gasCosts.ecr1);
-    }
-    return total;
-  }, bn());
+
+    return total.add(gasCosts.ecr1);
+  }, bn(0));
   // Never allow gas to exceed MAX_U64
   return totalGas;
 }
 
 export interface IGetMinGasParams {
   inputs: Array<TransactionRequestInput | Input>;
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   txBytesSize: number;
   metadataGas: BN;
   gasPerByte: BN;
@@ -87,10 +103,18 @@ export interface IGetMaxGasParams {
   gasPerByte: BN;
   minGas: BN;
   gasLimit?: BN;
+  maxGasPerTx: BN;
 }
 
 export function getMaxGas(params: IGetMaxGasParams) {
-  const { gasPerByte, witnessesLength, witnessLimit, minGas, gasLimit = bn(0) } = params;
+  const {
+    gasPerByte,
+    witnessesLength,
+    witnessLimit,
+    minGas,
+    gasLimit = bn(0),
+    maxGasPerTx,
+  } = params;
 
   let remainingAllowedWitnessGas = bn(0);
 
@@ -98,7 +122,9 @@ export function getMaxGas(params: IGetMaxGasParams) {
     remainingAllowedWitnessGas = bn(witnessLimit).sub(witnessesLength).mul(gasPerByte);
   }
 
-  return remainingAllowedWitnessGas.add(minGas).add(gasLimit);
+  const maxGas = remainingAllowedWitnessGas.add(minGas).add(gasLimit);
+
+  return maxGas.gte(maxGasPerTx) ? maxGasPerTx : maxGas;
 }
 
 export function calculateMetadataGasForTxCreate({
@@ -107,7 +133,7 @@ export function calculateMetadataGasForTxCreate({
   txBytesSize,
   contractBytesSize,
 }: {
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   contractBytesSize: BN;
   stateRootSize: number;
   txBytesSize: number;
@@ -126,8 +152,20 @@ export function calculateMetadataGasForTxScript({
   gasCosts,
   txBytesSize,
 }: {
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   txBytesSize: number;
 }) {
   return resolveGasDependentCosts(txBytesSize, gasCosts.s256);
 }
+
+export interface CalculateGasFeeParams {
+  tip?: BN;
+  gas: BN;
+  gasPrice: BN;
+  priceFactor: BN;
+}
+
+export const calculateGasFee = (params: CalculateGasFeeParams) => {
+  const { gas, gasPrice, priceFactor, tip } = params;
+  return gas.mul(gasPrice).div(priceFactor).add(bn(tip));
+};

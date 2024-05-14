@@ -1,16 +1,8 @@
+import type { TransactionResult } from '@fuel-ts/account';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import {
-  BN,
-  bn,
-  toHex,
-  Interface,
-  Provider,
-  ContractFactory,
-  BaseAssetId,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { BN, bn, toHex, Interface, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -18,7 +10,7 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
  * @group node
  */
 describe('Contract Factory', () => {
-  let gasPrice: BN;
+  let baseAssetId: string;
 
   const {
     binHexlified: byteCode,
@@ -28,8 +20,8 @@ describe('Contract Factory', () => {
 
   const createContractFactory = async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[5_000_000, BaseAssetId]]);
-    ({ minGasPrice: gasPrice } = provider.getGasConfig());
+    baseAssetId = provider.getBaseAssetId();
+    const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
 
     // send byteCode and ABI to ContractFactory to load
     const factory = new ContractFactory(byteCode, abi, wallet);
@@ -39,7 +31,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract({ gasPrice });
+    const contact = await factory.deployContract();
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
@@ -56,14 +48,14 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return transaction results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract({ gasPrice });
+    const contact = await factory.deployContract();
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
     await contact.functions.initialize_counter(100).call();
 
     const { transactionResult } = await contact.functions.increment_counter(1).call();
-    expect(transactionResult).toEqual({
+    expect(transactionResult).toEqual<TransactionResult>({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
       status: expect.any(String),
@@ -75,12 +67,15 @@ describe('Contract Factory', () => {
       isStatusSuccess: expect.any(Boolean),
       isTypeCreate: expect.any(Boolean),
       isTypeMint: expect.any(Boolean),
+      isTypeUpgrade: expect.any(Boolean),
+      isTypeUpload: expect.any(Boolean),
       isTypeScript: expect.any(Boolean),
       logs: expect.any(Array),
       date: expect.any(Date),
       mintedAssets: expect.any(Array),
       burnedAssets: expect.any(Array),
       time: expect.any(String),
+      tip: expect.any(BN),
       id: expect.any(String),
       gasUsed: expect.objectContaining({
         words: expect.arrayContaining([expect.any(Number)]),
@@ -99,7 +94,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const contract = await factory.deployContract({ gasPrice });
+    const contract = await factory.deployContract();
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
@@ -117,7 +112,6 @@ describe('Contract Factory', () => {
     const factory = await createContractFactory();
     const contract = await factory.deployContract({
       storageSlots,
-      gasPrice,
     });
 
     const { value: var1 } = await contract.functions.return_var1().call();
@@ -146,7 +140,6 @@ describe('Contract Factory', () => {
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contact = await factory.deployContract({
-      gasPrice,
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
@@ -161,7 +154,6 @@ describe('Contract Factory', () => {
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contract = await factory.deployContract({
-      gasPrice,
       storageSlots: [
         ...storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value

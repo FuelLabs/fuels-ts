@@ -1,5 +1,100 @@
 # Change Log
 
+## 0.85.0
+
+### Minor Changes
+
+- fb0e12f: chore!: remove `__typename` from GraphQL types
+
+### Patch Changes
+
+- 9bc893b: fix: avoid overriding user `gasLimit` and `maxFee` inputs
+- 1115ade: fix: added CDN path for icon assets
+- f7eacb4: chore: warn on fuel client version incompatibility
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/address@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/transactions@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/merkle@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+- 214f9fc: fix!: deprecate getNetwork from `account`
+
+### Patch Changes
+
+- 86543ed: build: update deps
+- 4aca0b8: feat: add `getMessageByNonce` to `Provider`
+- 6231f7a: docs: updated inconsistent `@fuel-ts/account` README
+- 2dd75b9: fix: handling optional policies
+- 506f788: fix: throw proper error for not enough resources to cover fee
+- Updated dependencies [2990edb]
+  - @fuel-ts/transactions@0.84.0
+  - @fuel-ts/versions@0.84.0
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/abi-coder@0.84.0
+  - @fuel-ts/address@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/merkle@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
+## 0.83.0
+
+### Minor Changes
+
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+- b026feb: feat!: fetch base asset ID from chain
+
+### Patch Changes
+
+- 60be295: chore: ajusting some tests
+- Updated dependencies [3d2e5c4]
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+  - @fuel-ts/abi-coder@0.83.0
+  - @fuel-ts/versions@0.83.0
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/transactions@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/errors@0.83.0
+  - @fuel-ts/address@0.83.0
+  - @fuel-ts/crypto@0.83.0
+  - @fuel-ts/hasher@0.83.0
+  - @fuel-ts/math@0.83.0
+  - @fuel-ts/merkle@0.83.0
+
+## 0.82.0
+
+### Patch Changes
+
+- Updated dependencies [1c8d8bf]
+  - @fuel-ts/abi-coder@0.82.0
+  - @fuel-ts/transactions@0.82.0
+  - @fuel-ts/address@0.82.0
+  - @fuel-ts/crypto@0.82.0
+  - @fuel-ts/errors@0.82.0
+  - @fuel-ts/hasher@0.82.0
+  - @fuel-ts/interfaces@0.82.0
+  - @fuel-ts/math@0.82.0
+  - @fuel-ts/merkle@0.82.0
+  - @fuel-ts/utils@0.82.0
+  - @fuel-ts/versions@0.82.0
+
 ## 0.81.0
 
 ### Patch Changes

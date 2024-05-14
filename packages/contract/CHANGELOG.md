@@ -1,5 +1,87 @@
 # Change Log
 
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [9bc893b]
+- Updated dependencies [1115ade]
+- Updated dependencies [fb0e12f]
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/account@0.85.0
+  - @fuel-ts/program@0.85.0
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/transactions@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/merkle@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
+## 0.84.0
+
+### Patch Changes
+
+- Updated dependencies [86543ed]
+- Updated dependencies [4aca0b8]
+- Updated dependencies [6231f7a]
+- Updated dependencies [2990edb]
+- Updated dependencies [214f9fc]
+- Updated dependencies [2dd75b9]
+- Updated dependencies [506f788]
+  - @fuel-ts/account@0.84.0
+  - @fuel-ts/transactions@0.84.0
+  - @fuel-ts/program@0.84.0
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/abi-coder@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/merkle@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
+## 0.83.0
+
+### Minor Changes
+
+- 9c3c094: chore!: upgrade `fuel-core` to `0.24.3`
+
+### Patch Changes
+
+- Updated dependencies [3d2e5c4]
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+- Updated dependencies [60be295]
+  - @fuel-ts/abi-coder@0.83.0
+  - @fuel-ts/program@0.83.0
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/transactions@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/account@0.83.0
+  - @fuel-ts/errors@0.83.0
+  - @fuel-ts/crypto@0.83.0
+  - @fuel-ts/hasher@0.83.0
+  - @fuel-ts/merkle@0.83.0
+
+## 0.82.0
+
+### Patch Changes
+
+- Updated dependencies [1c8d8bf]
+  - @fuel-ts/abi-coder@0.82.0
+  - @fuel-ts/account@0.82.0
+  - @fuel-ts/program@0.82.0
+  - @fuel-ts/transactions@0.82.0
+  - @fuel-ts/crypto@0.82.0
+  - @fuel-ts/errors@0.82.0
+  - @fuel-ts/hasher@0.82.0
+  - @fuel-ts/interfaces@0.82.0
+  - @fuel-ts/merkle@0.82.0
+  - @fuel-ts/utils@0.82.0
+
 ## 0.81.0
 
 ### Patch Changes

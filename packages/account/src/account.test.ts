@@ -1,9 +1,9 @@
 import { Address } from '@fuel-ts/address';
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { PolicyType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import { Account } from './account';
@@ -15,22 +15,21 @@ import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 
 let provider: Provider;
-let gasPrice: BN;
-
+let baseAssetId: string;
 afterEach(() => {
   vi.restoreAllMocks();
 });
 
 beforeAll(async () => {
   provider = await Provider.create(FUEL_NETWORK_URL);
-  ({ minGasPrice: gasPrice } = provider.getGasConfig());
+  baseAssetId = provider.getBaseAssetId();
 });
 
 /**
  * @group node
  */
 describe('Account', () => {
-  const assets = [ASSET_A, ASSET_B, BaseAssetId];
+  const assets = [ASSET_A, ASSET_B, ZeroBytes32];
 
   it('should create account using an address, with a provider', () => {
     const account = new Account(
@@ -253,6 +252,8 @@ describe('Account', () => {
 
     const request = new ScriptTransactionRequest();
 
+    request.maxFee = fee;
+
     const resourcesToSpend: Resource[] = [];
     const getResourcesToSpendSpy = vi
       .spyOn(Account.prototype, 'getResourcesToSpend')
@@ -260,33 +261,37 @@ describe('Account', () => {
 
     const addResourcesSpy = vi.spyOn(request, 'addResources');
 
-    const addAmountToAssetSpy = vi.spyOn(providersMod, 'addAmountToAsset');
+    const addAmountToCoinQuantitiesSpy = vi.spyOn(providersMod, 'addAmountToCoinQuantities');
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
 
-    await account.fund(request, quantities, fee);
+    await account.fund(request, {
+      requiredQuantities: quantities,
+      estimatedPredicates: [],
+      addedSignatures: 0,
+    });
 
-    expect(addAmountToAssetSpy).toBeCalledTimes(1);
-    expect(addAmountToAssetSpy).toHaveBeenCalledWith({
+    expect(addAmountToCoinQuantitiesSpy).toBeCalledTimes(1);
+    expect(addAmountToCoinQuantitiesSpy).toHaveBeenCalledWith({
       amount: bn(fee),
-      assetId: BaseAssetId,
+      assetId: baseAssetId,
       coinQuantities: quantities,
     });
 
     const expectedTotalResources = [
       { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
-      { amount: bn(fee), assetId: BaseAssetId },
+      { amount: bn(fee), assetId: baseAssetId },
     ];
-    expect(getResourcesToSpendSpy).toBeCalledTimes(1);
+    expect(getResourcesToSpendSpy).toHaveBeenCalled();
     expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
       messages: [],
       utxos: [],
     });
 
-    expect(addResourcesSpy).toBeCalledTimes(1);
+    expect(addResourcesSpy).toHaveBeenCalled();
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
   });
 
@@ -370,11 +375,10 @@ describe('Account', () => {
   });
 
   it('can transfer a single type of coin to a single destination', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasPrice,
+    const response = await sender.transfer(receiver.address, 1, baseAssetId, {
       gasLimit: 10_000,
     });
     await response.wait();
@@ -382,16 +386,16 @@ describe('Account', () => {
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
-    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+    const expectedRemaining = 499118;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
+    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
   });
 
   it('can create transfer request just fine', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const receiver = await generateTestWallet(provider);
 
-    const request = await sender.createTransfer(receiver.address.toB256(), 1, BaseAssetId, {
-      gasPrice,
+    const request = await sender.createTransfer(receiver.address.toB256(), 1, baseAssetId, {
       gasLimit: 10_000,
     });
 
@@ -401,31 +405,54 @@ describe('Account', () => {
     const senderBalances = await sender.getBalances();
     const receiverBalances = await receiver.getBalances();
 
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499921) }]);
-    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+    const expectedRemaining = 499118;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
+    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
+  });
+
+  it('can set "gasLimit" and "maxFee" when transferring amounts', async () => {
+    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    const receiver = Address.fromRandom();
+
+    const gasLimit = 30_000;
+    const maxFee = 15_000;
+
+    const request = await sender.createTransfer(receiver, 1, baseAssetId, {
+      gasLimit,
+      maxFee,
+    });
+
+    const response = await sender.sendTransaction(request);
+    const { transaction } = await response.wait();
+
+    const { scriptGasLimit, policies } = transaction;
+    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
   it('can transfer with custom TX Params', async () => {
-    const sender = await generateTestWallet(provider, [[1000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[50_000, baseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
-    const response = await sender.transfer(receiver.address, 1, BaseAssetId, {
-      gasLimit: 600,
-      gasPrice,
+    const tx = await sender.transfer(receiver.address, 1, baseAssetId, {
+      gasLimit: 1000,
+      tip: 10,
+      witnessLimit: 10000,
     });
 
-    await response.wait();
-    const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(921) }]);
+    const response = await tx.wait();
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
+    expect(response.isStatusSuccess).toBeTruthy();
   });
 
   it('can exclude IDs when getResourcesToSpend is called', async () => {
     const user = await generateTestWallet(provider, [
       [500_000, ASSET_A],
       [500_000, ASSET_B],
-      [500_000, BaseAssetId],
+      [500_000, baseAssetId],
     ]);
 
     const coins = await user.getCoins();
@@ -441,22 +468,15 @@ describe('Account', () => {
     const assetIdB = ASSET_B;
     const amount = 1;
 
-    const request = new ScriptTransactionRequest({ gasLimit: 1000000, gasPrice });
+    const request = new ScriptTransactionRequest();
     const sender = await generateTestWallet(provider, [
       [500_000, assetIdA],
       [500_000, assetIdB],
-      [500_000, BaseAssetId],
+      [500_000, baseAssetId],
     ]);
     const receiverA = await generateTestWallet(provider);
     const receiverB = await generateTestWallet(provider);
 
-    const resources = await sender.getResourcesToSpend([
-      [500_000, BaseAssetId],
-      [500_000, assetIdA],
-      [500_000, assetIdB],
-    ]);
-
-    request.addResources(resources);
     request.addCoinOutputs(receiverA.address, [
       [amount, assetIdA],
       [amount, assetIdB],
@@ -465,6 +485,13 @@ describe('Account', () => {
       [amount, assetIdA],
       [amount, assetIdB],
     ]);
+
+    const txCost = await sender.provider.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await sender.fund(request, txCost);
 
     const response = await sender.sendTransaction(request);
 
@@ -488,13 +515,13 @@ describe('Account', () => {
   });
 
   it('can withdraw an amount of base asset', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
     const amount = 10;
 
-    const tx = await sender.withdrawToBaseLayer(recipient, 10, { gasPrice, gasLimit: 10_000 });
+    const tx = await sender.withdrawToBaseLayer(recipient, 10);
     const result = await tx.waitForResult();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
@@ -506,11 +533,12 @@ describe('Account', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(499911) }]);
+    const expectedRemaining = 498433;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const RECIPIENT_ID = '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263';
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
@@ -521,8 +549,7 @@ describe('Account', () => {
 
     // Wait for the next block to be minter on out case we are using a local provider
     // so we can create a new tx to generate next block
-    const resp = await sender.transfer(recipient, AMOUNT, BaseAssetId, {
-      gasPrice,
+    const resp = await sender.transfer(recipient, AMOUNT, baseAssetId, {
       gasLimit: 10_000,
     });
     const nextBlock = await resp.waitForResult();
@@ -548,18 +575,17 @@ describe('Account', () => {
     });
 
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[500_000, BaseAssetId]]);
-    await seedTestWallet(sender, [[500_000, BaseAssetId]]);
-    await seedTestWallet(sender, [[500_000, BaseAssetId]]);
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
 
-    const transfer = await sender.transfer(receiver.address, 110, BaseAssetId, {
-      gasPrice,
+    const transfer = await sender.transfer(receiver.address, 110, baseAssetId, {
       gasLimit: 10_000,
     });
     await transfer.wait();
 
     const receiverBalances = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: BaseAssetId, amount: bn(110) }]);
+    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(110) }]);
   });
 
   it('can withdraw an amount of base asset using mutiple uxtos', async () => {
@@ -567,14 +593,14 @@ describe('Account', () => {
       provider,
     });
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[500_000, BaseAssetId]]);
-    await seedTestWallet(sender, [[500_000, BaseAssetId]]);
-    await seedTestWallet(sender, [[500_000, BaseAssetId]]);
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
     const amount = 110;
-    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasPrice, gasLimit: 10_000 });
+    const tx = await sender.withdrawToBaseLayer(recipient, amount);
     const result = await tx.wait();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
@@ -583,63 +609,74 @@ describe('Account', () => {
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
     const senderBalances = await sender.getBalances();
-    expect(senderBalances).toEqual([{ assetId: BaseAssetId, amount: bn(1499811) }]);
+
+    const expectedRemaining = 1498333;
+    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
+  });
+
+  it('can set "gasLimit" and "maxFee" when withdrawing to base layer', async () => {
+    const sender = Wallet.generate({
+      provider,
+    });
+
+    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+
+    const recipient = Address.fromRandom();
+    const amount = 110;
+
+    const gasLimit = 100_000;
+    const maxFee = 50_000;
+
+    const tx = await sender.withdrawToBaseLayer(recipient, amount, { gasLimit, maxFee });
+    const { transaction } = await tx.wait();
+
+    const { scriptGasLimit, policies } = transaction;
+    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
   it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
-    const sender = await generateTestWallet(provider);
+    const sender = await generateTestWallet(provider, [[1000, baseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
     await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
-        gasLimit: 0,
+      const result = await sender.transfer(receiver.address, 1, baseAssetId, {
+        gasLimit: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
-
-    await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, BaseAssetId, {
-        gasPrice: 0,
-      });
-      await result.wait();
-    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
+    }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
   });
 
   it('should ensure gas limit and price are validated when withdraw an amount of base asset', async () => {
-    const sender = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[10_000, baseAssetId]]);
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
 
     await expect(async () => {
       const result = await sender.withdrawToBaseLayer(recipient, 10, {
-        gasPrice: 0,
+        gasLimit: 1,
       });
       await result.wait();
-    }).rejects.toThrowError(/Gas price '0' is lower than the required: ./);
-
-    await expect(async () => {
-      const result = await sender.withdrawToBaseLayer(recipient, 10, {
-        gasLimit: 0,
-      });
-      await result.wait();
-    }).rejects.toThrowError(/Gas limit '0' is lower than the required: ./);
+    }).rejects.toThrowError(/Gas limit '1' is lower than the required: ./);
   });
 
   it('should throw when trying to transfer a zero or negative amount', async () => {
-    const sender = await generateTestWallet(provider, [[10_000, BaseAssetId]]);
+    const sender = await generateTestWallet(provider, [[10_000, baseAssetId]]);
     const receiver = Wallet.generate({ provider });
 
     await expectToThrowFuelError(
       async () => {
-        await sender.transfer(receiver.address, 0, BaseAssetId);
+        await sender.transfer(receiver.address, 0, baseAssetId);
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
 
     await expectToThrowFuelError(
       async () => {
-        await sender.transfer(receiver.address, -1, BaseAssetId);
+        await sender.transfer(receiver.address, -1, baseAssetId);
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );

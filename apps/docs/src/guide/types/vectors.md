@@ -20,11 +20,9 @@ The code snippet below demonstrates how to call this Sway contract method, which
 
 <<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-4{ts:line-numbers}
 
-## Working with Bytecode in the SDK
+## Converting Bytecode to Vectors
 
-Some Sway functions require you to pass in bytecode to the function. The type of the bytecode parameter is usually `Vec<u8>`.
-
-Take the `compute_bytecode_root` function from the [`bytecode` Sway library](https://github.com/FuelLabs/sway-libs/tree/master/libs/src/bytecode.sw), for example.
+Some functions require you to pass in bytecode to the function. The type of the bytecode parameter is usually `Vec<u8>`, here's an example of how to pass bytecode to a function:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/bytecode-input/src/main.sw#vector-bytecode-input-sway{ts:line-numbers}
 

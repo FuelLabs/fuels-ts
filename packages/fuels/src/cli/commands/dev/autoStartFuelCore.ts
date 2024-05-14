@@ -12,7 +12,7 @@ export type FuelCoreNode = {
   accessIp: string;
   port: number;
   providerUrl: string;
-  chainConfigPath: string;
+  snapshotDir: string;
   killChildProcess: () => void;
 };
 
@@ -35,12 +35,12 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
 
     const port = config.fuelCorePort ?? (await getPortPromise({ port: 4000 }));
 
-    const providerUrl = `http://${accessIp}:${port}/graphql`;
+    const providerUrl = `http://${accessIp}:${port}/v1/graphql`;
 
-    const { cleanup, chainConfigPath } = await launchNode({
+    const { cleanup, snapshotDir } = await launchNode({
       args: [
-        ['--chain', config.chainConfig],
-        ['--db-type', 'rocks-db'],
+        ['--snapshot', config.snapshotDir],
+        ['--db-type', 'in-memory'],
       ].flat() as string[],
       ip: bindIp,
       port: port.toString(),
@@ -55,7 +55,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       accessIp,
       port,
       providerUrl,
-      chainConfigPath,
+      snapshotDir,
       killChildProcess: cleanup,
     };
 
