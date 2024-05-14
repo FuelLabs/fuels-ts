@@ -1,6 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { concat } from '@fuel-ts/utils';
-import { toUtf8Bytes, toUtf8String } from 'ethers';
+import { concat, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
 
 import { Coder } from '../AbstractCoder';
 
