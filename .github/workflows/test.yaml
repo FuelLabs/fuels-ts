@@ -93,8 +93,8 @@ jobs:
           TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
           FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
 
-  test:
-    if: github.base_ref == 'master' || github.ref_name == 'master'
+  report-coverage:
+    if: (github.base_ref == 'master' || github.ref_name == 'master') && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     needs: [environments, e2e]
     steps:
@@ -142,44 +142,10 @@ jobs:
 
       - name: Report Coverage
         uses: thollander/actions-comment-pull-request@v2
-        if: ${{ steps.findPr.outputs.number }} && github.actor != 'dependabot[bot]'
+        if: ${{ steps.findPr.outputs.number }}
         with:
           filePath: coverage/report/coverage-diff.txt
           pr_number: ${{ (steps.findPr.outputs.number) }}
           comment_tag: diff
           mode: recreate
           create_if_not_exists: true
-  create-changeset:
-    name: Create Changeset
-    runs-on: ubuntu-latest
-    if: github.actor  == 'dependabot[bot]'
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.client_payload.ref }}
-
-      - name: Setup PNPM
-        uses: pnpm/action-setup@v2.1.0
-        with:
-          version: 9.0.5
-          run_install: true
-
-      - name: Install jq
-        run: sudo apt-get install -y jq
-
-      - name: Run dependabot changeset script
-        run: pnpm changeset:dependabot
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-
-      - name: Commit Changeset
-        run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git add .
-          git commit -m "build: update dependency changeset [skip ci]"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
