@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { toUtf8Bytes, toUtf8String } from 'ethers';
+import { toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
 
 import { WORD_SIZE } from '../../../utils/constants';
 import { Coder } from '../AbstractCoder';
