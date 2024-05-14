@@ -55,27 +55,31 @@ describe(__filename, () => {
     expect(value.isActive).toEqual(employees[1].isActive);
   });
 
-  // TODO: Unskip test after sway-libs become compatible with latest forc (0.52+)
-  it.skip('should successfully execute a contract call with a bytecode input', async () => {
-    const bytecodeContract = await createAndDeployContractFromProject(
-      DocSnippetProjectsEnum.BYTECODE_INPUT
-    );
-    const bytecodePath = join(
-      __dirname,
-      '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin'
-    );
+  it(
+    'should successfully execute a contract call with a bytecode input',
+    async () => {
+      const bytecodeContract = await createAndDeployContractFromProject(
+        DocSnippetProjectsEnum.BYTECODE_INPUT
+      );
+      const bytecodePath = join(
+        __dirname,
+        '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin'
+      );
 
-    // #region vector-bytecode-input-ts
-    // #import { arrayify, readFile };
+      // #region vector-bytecode-input-ts
+      // #import { arrayify, readFile };
 
-    const bytecode = await readFile(bytecodePath);
+      const bytecode = await readFile(bytecodePath);
+      const bytecodeAsVecU8 = arrayify(bytecode);
 
-    const { value: bytecodeRoot } = await bytecodeContract.functions
-      .compute_bytecode_root(arrayify(bytecode))
-      .call();
-    // #endregion vector-bytecode-input-ts
+      const { value: bytecodeRoot } = await bytecodeContract.functions
+        .compute_bytecode_root(bytecodeAsVecU8)
+        .call();
+      // #endregion vector-bytecode-input-ts
 
-    expect(bytecodeRoot).toBeDefined();
-    expect(bytecodeRoot.length).toBe(66);
-  });
+      expect(bytecodeRoot).toBeDefined();
+      expect(bytecodeRoot.length).toBe(66);
+    },
+    { timeout: 10000 }
+  );
 });
