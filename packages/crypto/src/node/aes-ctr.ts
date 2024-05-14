@@ -1,11 +1,11 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { arrayify } from '@fuel-ts/utils';
 import crypto from 'crypto';
-import { pbkdf2 } from 'ethers';
 
 import type { CryptoApi, Keystore } from '../types';
 
 import { bufferFromString } from './bufferFromString';
+import { pbkdf2 } from './pbkdf2';
 import { randomBytes } from './randomBytes';
 import { stringFromBuffer } from './stringFromBuffer';
 
