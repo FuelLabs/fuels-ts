@@ -1,7 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
-import { concat } from '@fuel-ts/utils';
-import { toUtf8Bytes, toUtf8String } from 'ethers';
+import { concat, toUtf8String, toUtf8Bytes } from '@fuel-ts/utils';
 
 import { WORD_SIZE } from '../../../utils/constants';
 import type { Uint8ArrayWithDynamicData } from '../../../utils/utilities';
