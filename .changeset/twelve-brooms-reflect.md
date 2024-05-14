@@ -8,4 +8,4 @@
 "@fuel-ts/forc": minor
 ---
 
-feat!: upgrade `forc@0.57.0` and remove `V0` encoding
+feat!: upgrade `forc@0.58.0` and remove `V0` encoding
