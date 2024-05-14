@@ -20,7 +20,7 @@ jobs:
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
-    name: ${{ matrix.env.name }}${{ matrix.env.name == 'node' && '@' || ''}}${{ matrix.env.name == 'node' && matrix.env.version || ''}}
+    name: ${{ matrix.env.name }}${{ matrix.env.version && '@' || ''}}${{ matrix.env.version || ''}}
     strategy:
       fail-fast: false
       matrix:
