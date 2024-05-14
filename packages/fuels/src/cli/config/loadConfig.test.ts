@@ -1,5 +1,6 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 import {
   runInit,
@@ -9,6 +10,7 @@ import {
 } from '../../../test/utils/runCommands';
 import type { FuelsConfig } from '../types';
 
+import { readForcToml, readSwayType } from './forcUtils';
 import { loadConfig } from './loadConfig';
 
 /**
@@ -48,6 +50,28 @@ describe('loadConfig', () => {
 
     expect(fuelsContents).toMatch(`  autoStartFuelCore: true,`); // not a comment
     expect(config.autoStartFuelCore).toEqual(true);
+  });
+
+  test('should resolve a workspace path that includes a library', async () => {
+    const libraries = readForcToml(paths.workspaceDir)
+      .workspace.members.map((member) => resolve(paths.workspaceDir, member))
+      .map((member) => readSwayType(member))
+      // @ts-expect-error should be SwayType enum which doesn't include library
+      .filter((type) => type === 'library');
+
+    expect(libraries.length).toEqual(1);
+
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+    });
+
+    const config = await loadConfig(paths.root);
+
+    expect(config.contracts.length).toEqual(2);
+    expect(config.scripts.length).toEqual(1);
+    expect(config.predicates.length).toEqual(1);
   });
 
   test(`should resolve individual paths when not using workspaces`, async () => {
