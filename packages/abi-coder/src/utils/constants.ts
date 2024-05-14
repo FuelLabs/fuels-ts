@@ -25,9 +25,8 @@ export const genericRegEx = /^generic (?<name>\w+)$/;
 /**
  * Encoding versions
  */
-export const ENCODING_V0 = '0';
 export const ENCODING_V1 = '1';
-export type EncodingVersion = typeof ENCODING_V0 | typeof ENCODING_V1;
+export type EncodingVersion = typeof ENCODING_V1;
 
 /**
  * Property space and config constants

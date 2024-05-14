@@ -9,7 +9,7 @@ import { shouldUseBuiltinForc } from '../commands/init/shouldUseBuiltinForc';
 import { shouldUseBuiltinFuelCore } from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
 
-import { readForcToml, readSwayType } from './forcUtils';
+import { SwayType, readForcToml, readSwayType } from './forcUtils';
 import { validateConfig } from './validateConfig';
 
 export async function loadConfig(cwd: string): Promise<FuelsConfig> {
@@ -95,10 +95,10 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
 
     const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
 
-    swayMembers.forEach((path) => {
-      const type = readSwayType(path);
-      config[`${type}s`].push(path);
-    });
+    swayMembers
+      .map((path) => ({ path, type: readSwayType(path) }))
+      .filter(({ type }) => Object.values(SwayType).includes(type))
+      .forEach(({ path, type }) => config[`${type}s`].push(path));
 
     config.workspace = workspace;
   }

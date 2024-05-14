@@ -30,9 +30,9 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
-  cacheTxInputsFromOwner,
 } from './providers';
 import {
+  cacheRequestInputsResourcesFromOwner,
   getAssetAmountInRequestInputs,
   isRequestInputCoin,
   isRequestInputResource,
@@ -297,11 +297,10 @@ export class Account extends AbstractAccount {
     while (needsToBeFunded && fundingAttempts < MAX_FUNDING_ATTEMPTS) {
       const resources = await this.getResourcesToSpend(
         missingQuantities,
-        cacheTxInputsFromOwner(request.inputs, this.address)
+        cacheRequestInputsResourcesFromOwner(request.inputs, this.address)
       );
 
       request.addResources(resources);
-      request.shiftPredicateData();
       request.updatePredicateGasUsed(estimatedPredicates);
 
       const requestToReestimate = clone(request);
@@ -340,7 +339,6 @@ export class Account extends AbstractAccount {
       fundingAttempts += 1;
     }
 
-    request.shiftPredicateData();
     request.updatePredicateGasUsed(estimatedPredicates);
 
     const requestToReestimate = clone(request);

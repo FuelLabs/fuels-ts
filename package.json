@@ -105,7 +105,7 @@
     "ts-generator": "^0.1.1",
     "tsup": "^6.7.0",
     "tsx": "^4.7.0",
-    "turbo": "^1.8.8",
+    "turbo": "^1.13.3",
     "typescript": "~5.2.2",
     "vite": "^5.2.10",
     "vite-plugin-node-polyfills": "^0.21.0",
