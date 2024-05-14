@@ -29,7 +29,3 @@ Some functions require you to pass in bytecode to the function. The type of the 
 To pass bytecode to this function, you can make use of the `arrayify` function to convert the bytecode file contents into a `UInt8Array`, the TS compatible type for Sway's `Vec<u8>` type and pass it the function like so:
 
 <<< @/../../docs-snippets/src/guide/types/vector.test.ts#vector-bytecode-input-ts{ts:line-numbers}
-
-## Returning vectors
-
-Currently, returning vectors is not supported by Sway. If you try returning a type that is or contains a Vector, you will get a compile-time error.
