@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/utils/src/utils/defaultSnapshotConfigs.ts:11](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/defaultSnapshotConfigs.ts#L11)
+[packages/utils/src/utils/defaultSnapshotConfigs.ts:11](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/defaultSnapshotConfigs.ts#L11)
 
 ___
 
@@ -250,31 +250,33 @@ ___
 
 #### Defined in
 
-[packages/utils/src/utils/defaultSnapshotConfigs.ts:5](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/defaultSnapshotConfigs.ts#L5)
+[packages/utils/src/utils/defaultSnapshotConfigs.ts:5](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/defaultSnapshotConfigs.ts#L5)
 
 ## Functions
 
 ### arrayify
 
-▸ **arrayify**(`value`): `Uint8Array`
+▸ **arrayify**(`value`, `name?`, `copy?`): `Uint8Array`
 
-Converts a bytes-like value to a `Uint8Array`.
+Get a typed Uint8Array from a BytesLike object.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `value` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | the value to convert to a Uint8Array |
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `value` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | `undefined` | the BytesLike data. |
+| `name?` | `string` | `undefined` | a display name for the error result. |
+| `copy` | `boolean` | `true` | create a copy of the original data (if applicable). |
 
 #### Returns
 
 `Uint8Array`
 
-the Uint8Array
+- a typed Uint8Array.
 
 #### Defined in
 
-[packages/utils/src/utils/arrayify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/arrayify.ts#L10)
+[packages/utils/src/utils/arrayify.ts:12](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/arrayify.ts#L12)
 
 ___
 
@@ -294,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/capitalizeString.ts#L1)
+[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/capitalizeString.ts#L1)
 
 ___
 
@@ -319,7 +321,7 @@ An array of byte arrays of a specified size
 
 #### Defined in
 
-[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
+[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
 
 ___
 
@@ -343,7 +345,7 @@ Concatenates multiple BytesLike into a single Uint8Array.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/concat.ts#L38)
+[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/concat.ts#L38)
 
 ___
 
@@ -367,7 +369,75 @@ Concatenates multiple Uint8Arrays into a single Uint8Array.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/concat.ts#L11)
+[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/concat.ts#L11)
+
+___
+
+### dataSlice
+
+▸ **dataSlice**(`data`, `start?`, `end?`): `string`
+
+Returns a hex string by slicing data from the start offset to the end offset.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `data` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | the data to be sliced. |
+| `start?` | `number` | the start offset (default: 0). |
+| `end?` | `number` | the end offset (default: length of data). |
+
+#### Returns
+
+`string`
+
+- a sliced hex string from start to end.
+
+#### Defined in
+
+[packages/utils/src/utils/dataSlice.ts:15](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/dataSlice.ts#L15)
+
+___
+
+### decodeBase58
+
+▸ **decodeBase58**(`value`): `BN`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `value` | `string` |
+
+#### Returns
+
+`BN`
+
+#### Defined in
+
+[packages/utils/src/utils/base58.ts:51](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/base58.ts#L51)
+
+___
+
+### encodeBase58
+
+▸ **encodeBase58**(`_value`): `string`
+
+Encode value as a Base58-encoded string.
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `_value` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[packages/utils/src/utils/base58.ts:30](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/base58.ts#L30)
 
 ___
 
@@ -389,7 +459,7 @@ Returns a hex representation of the inputted bytes.
 
 #### Defined in
 
-[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/hexlify.ts#L10)
+[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/hexlify.ts#L10)
 
 ___
 
@@ -415,7 +485,7 @@ value is T
 
 #### Defined in
 
-[packages/utils/src/utils/isDefined.ts:1](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/isDefined.ts#L1)
+[packages/utils/src/utils/isDefined.ts:1](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/isDefined.ts#L1)
 
 ___
 
@@ -442,4 +512,55 @@ Examples:
 
 #### Defined in
 
-[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/7c77a797/packages/utils/src/utils/normalizeString.ts#L11)
+[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/normalizeString.ts#L11)
+
+___
+
+### toUtf8Bytes
+
+▸ **toUtf8Bytes**(`stri`, `form?`): `Uint8Array`
+
+Returns the UTF-8 byte representation of str.
+
+ If form is disabled, the string is not normalized.
+
+#### Parameters
+
+| Name | Type | Default value | Description |
+| :------ | :------ | :------ | :------ |
+| `stri` | `string` | `undefined` | the string to convert to UTF-8 bytes. |
+| `form` | `boolean` | `true` | whether to normalize the string. |
+
+#### Returns
+
+`Uint8Array`
+
+- the UTF-8 byte representation of str.
+
+#### Defined in
+
+[packages/utils/src/utils/toUtf8Bytes.ts:11](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/toUtf8Bytes.ts#L11)
+
+___
+
+### toUtf8String
+
+▸ **toUtf8String**(`bytes`): `string`
+
+Returns the string represented by the UTF-8 data bytes.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `bytes` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | the UTF-8 data bytes |
+
+#### Returns
+
+`string`
+
+the string represented by the UTF-8 data bytes
+
+#### Defined in
+
+[packages/utils/src/utils/toUtf8String.ts:179](https://github.com/FuelLabs/fuels-ts/blob/d0550af1/packages/utils/src/utils/toUtf8String.ts#L179)
