@@ -24,6 +24,12 @@
       "options": {
         "useTabs": false
       }
+    },
+    {
+      "files": ["pnpm-lock.yaml"],
+      "options": {
+        "singleQuote": true
+      }
     }
   ]
 }
