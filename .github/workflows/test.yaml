@@ -142,7 +142,7 @@ jobs:
 
       - name: Report Coverage
         uses: thollander/actions-comment-pull-request@v2
-        if: ${{ steps.findPr.outputs.number }}
+        if: ${{ steps.findPr.outputs.number }} && github.actor != 'dependabot[bot]'
         with:
           filePath: coverage/report/coverage-diff.txt
           pr_number: ${{ (steps.findPr.outputs.number) }}
@@ -150,7 +150,6 @@ jobs:
           mode: recreate
           create_if_not_exists: true
   create-changeset:
-    needs: [test]
     name: Create Changeset
     runs-on: ubuntu-latest
     if: github.actor  == 'dependabot[bot]'
