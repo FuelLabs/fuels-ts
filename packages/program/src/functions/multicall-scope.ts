@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ENCODING_V1 } from '@fuel-ts/abi-coder';
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract } from '@fuel-ts/interfaces';
 
 import { BaseInvocationScope } from './base-invocation-scope';
@@ -21,9 +19,6 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
   constructor(contract: AbstractContract, funcScopes: Array<FunctionInvocationScope>) {
     super(contract, true);
     this.addCalls(funcScopes);
-    if (this.program.interface.jsonAbi.encoding !== ENCODING_V1) {
-      this.validateHeapTypeReturnCalls();
-    }
   }
 
   /**
@@ -44,35 +39,5 @@ export class MultiCallInvocationScope<TReturn = any> extends BaseInvocationScope
    */
   addCalls(funcScopes: Array<FunctionInvocationScope>) {
     return super.addCalls(funcScopes);
-  }
-
-  private validateHeapTypeReturnCalls() {
-    let heapOutputIndex = -1;
-    let numberOfHeaps = 0;
-
-    this.calls.forEach((call, callIndex) => {
-      const { isOutputDataHeap } = call;
-
-      if (isOutputDataHeap) {
-        heapOutputIndex = callIndex;
-
-        if (++numberOfHeaps > 1) {
-          throw new FuelError(
-            ErrorCode.INVALID_MULTICALL,
-            'A multicall can have only one call that returns a heap type.'
-          );
-        }
-      }
-    });
-
-    const hasHeapTypeReturn = heapOutputIndex !== -1;
-    const isOnLastCall = heapOutputIndex === this.calls.length - 1;
-
-    if (hasHeapTypeReturn && !isOnLastCall) {
-      throw new FuelError(
-        ErrorCode.INVALID_MULTICALL,
-        'In a multicall, the contract call returning a heap type must be the last call.'
-      );
-    }
   }
 }

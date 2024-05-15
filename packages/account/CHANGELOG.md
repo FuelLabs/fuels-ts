@@ -1,5 +1,32 @@
 # Change Log
 
+## 0.86.0
+
+### Minor Changes
+
+- ee969d3: fix!: avoid add witnesses for predicates
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+### Patch Changes
+
+- 316c757: fix: internalize `ethers` functionality and remove dependency
+- 0651a5f: chore: remove `ethers` from `abi-coder`
+- Updated dependencies [316c757]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/crypto@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/transactions@0.86.0
+  - @fuel-ts/versions@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/hasher@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/merkle@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
 ## 0.85.0
 
 ### Minor Changes

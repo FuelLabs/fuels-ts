@@ -46,7 +46,7 @@ describe('PredicateConditionalInputs', () => {
     await tx1.waitForResult();
 
     // transfer base asset to Alice so she can pay the fees
-    const tx2 = await adminWallet.transfer(aliceWallet.address, 2_000, baseAssetId);
+    const tx2 = await adminWallet.transfer(aliceWallet.address, 2105, baseAssetId);
 
     await tx2.waitForResult();
 
