@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.86.0
+
+### Patch Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+- Updated dependencies [316c757]
+- Updated dependencies [ee969d3]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/account@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/transactions@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
 ## 0.85.0
 
 ### Patch Changes
