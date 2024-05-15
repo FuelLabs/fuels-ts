@@ -71,7 +71,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     const fragment =
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
-    return fragment.decodeOutput(data);
+    return fragment.decodeOutput(data)[0];
   }
 
   decodeLog(data: BytesLike, logId: string): any {
@@ -85,7 +85,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     return AbiCoder.decode(this.jsonAbi, loggedType.loggedType, arrayify(data), 0, {
       encoding: this.encoding,
-    });
+    })[0];
   }
 
   encodeConfigurable(name: string, value: InputValue) {
