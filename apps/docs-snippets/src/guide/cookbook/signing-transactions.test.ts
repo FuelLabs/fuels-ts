@@ -77,7 +77,6 @@ describe('Signing transactions', () => {
       inputData: [signer.address.toB256()],
     });
     const tx1 = await sender.transfer(predicate.address, 100_000, baseAssetId);
-
     await tx1.waitForResult();
 
     // Create the transaction request
@@ -93,7 +92,6 @@ describe('Signing transactions', () => {
     ]);
 
     request.addResources(resources);
-
     request.addWitness('0x');
 
     // Add witnesses including the signer

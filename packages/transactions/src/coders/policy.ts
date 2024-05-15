@@ -70,7 +70,7 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
           break;
 
         case PolicyType.Maturity:
-          parts.push(new NumberCoder('u32').encode(data));
+          parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(data));
           break;
 
         default: {
@@ -99,7 +99,10 @@ export class PoliciesCoder extends Coder<Policy[], Policy[]> {
     }
 
     if (policyTypes & PolicyType.Maturity) {
-      const [maturity, nextOffset] = new NumberCoder('u32').decode(data, o);
+      const [maturity, nextOffset] = new NumberCoder('u32', { padToWordSize: true }).decode(
+        data,
+        o
+      );
       o = nextOffset;
       policies.push({ type: PolicyType.Maturity, data: maturity });
     }

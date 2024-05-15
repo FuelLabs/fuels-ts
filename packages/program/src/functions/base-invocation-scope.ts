@@ -19,7 +19,6 @@ import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import { POINTER_DATA_OFFSET } from '../script-request';
 import type { ContractCall, InvocationScopeLike, TxParams } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
@@ -31,12 +30,9 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
  * @param funcScope - The invocation scope containing the necessary information for the contract call.
  * @returns The contract call object.
  */
-function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
+function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, externalAbis } = funcScope.getCallConfig();
-  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer
-    ? POINTER_DATA_OFFSET
-    : 0;
-  const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
+  const data = func.encodeArguments(args as Array<InputValue>);
 
   return {
     contractId: (program as AbstractContract).id,
@@ -44,9 +40,6 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
     fnSelectorBytes: func.selectorBytes,
     encoding: func.encoding,
     data,
-    isInputDataPointer: func.isInputDataPointer,
-    isOutputDataHeap: func.outputMetadata.isHeapType,
-    outputEncodedLength: func.outputMetadata.encodedLength,
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,
@@ -97,11 +90,7 @@ export class BaseInvocationScope<TReturn = any> {
         'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
       );
     }
-    const maxInputs = consensusParams.consensusParameters.txParameters.maxInputs;
-    const script = getContractCallScript(this.functionInvocationScopes, maxInputs);
-    return this.functionInvocationScopes.map((funcScope) =>
-      createContractCall(funcScope, script.getScriptDataOffset(maxInputs.toNumber()))
-    );
+    return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
   }
 
   /**

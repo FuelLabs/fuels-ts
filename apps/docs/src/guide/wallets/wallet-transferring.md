@@ -26,7 +26,7 @@ You can transfer assets to a deployed contract instance by using its `id`:
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-4{ts:line-numbers}
 
-Alternatively, you can simply use the contract's string address in the [`Bech32`](../types/bech32) format:
+Alternatively, you can simply use the contract's string address in the [`Bech32`](../types/bech32.md) format:
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-5{ts:line-numbers}
 
@@ -34,4 +34,4 @@ Alternatively, you can simply use the contract's string address in the [`Bech32`
 
 Before transferring assets, ensure your wallet has sufficient funds. Attempting a transfer without enough funds will result in an error: `not enough coins to fit the target`.
 
-You can see how to check your balance at the [`checking-balances`](./checking-balances) page.
+You can see how to check your balance at the [`checking-balances`](./checking-balances.md) page.

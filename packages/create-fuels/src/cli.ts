@@ -1,13 +1,11 @@
 import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
-import { Command } from 'commander';
+import type { Command } from 'commander';
 import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
 import ora from 'ora';
 import { join } from 'path';
-
-import packageJson from '../package.json';
 
 import { tryInstallFuelUp } from './lib';
 import {
@@ -16,6 +14,8 @@ import {
   promptForProjectPath,
 } from './prompts';
 import { error, log } from './utils/logger';
+
+export { setupProgram } from './lib/setupProgram';
 
 export type ProgramsToInclude = {
   contract: boolean;
@@ -51,21 +51,6 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
 
   writeFileSync(envFilePath, newFileContents);
 }
-
-export const setupProgram = () => {
-  const program = new Command(packageJson.name)
-    .version(packageJson.version)
-    .arguments('[projectDirectory]')
-    .option('-c, --contract', 'Include contract program')
-    .option('-p, --predicate', 'Include predicate program')
-    .option('-s, --script', 'Include script program')
-    .option('--pnpm', 'Use pnpm as the package manager')
-    .option('--npm', 'Use npm as the package manager')
-    .option('--verbose', 'Enable verbose logging')
-    .addHelpCommand()
-    .showHelpAfterError(true);
-  return program;
-};
 
 export const runScaffoldCli = async ({
   program,

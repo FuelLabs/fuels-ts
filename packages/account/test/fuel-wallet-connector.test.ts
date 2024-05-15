@@ -182,7 +182,7 @@ describe('Fuel Connector', () => {
       storage: null,
       connectors: [new MockConnector()],
     });
-    const networkUrl = 'https://beta-5.fuel.network';
+    const networkUrl = 'https://devnet.fuel.network';
     const newNetwork = {
       url: networkUrl,
       chainId: 0,

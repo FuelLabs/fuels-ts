@@ -14,8 +14,8 @@ export class TxPointerCoder extends StructCoder<{
 }> {
   constructor() {
     super('TxPointer', {
-      blockHeight: new NumberCoder('u32'),
-      txIndex: new NumberCoder('u16'),
+      blockHeight: new NumberCoder('u32', { padToWordSize: true }),
+      txIndex: new NumberCoder('u16', { padToWordSize: true }),
     });
   }
 }

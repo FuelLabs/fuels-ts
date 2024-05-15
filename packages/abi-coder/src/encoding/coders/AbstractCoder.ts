@@ -1,7 +1,7 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
-import type { Option } from './v0/OptionCoder';
+import type { Option } from './OptionCoder';
 
 type Primitive = string | number | boolean;
 
