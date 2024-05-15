@@ -15,9 +15,10 @@ Aditionally, the library can be used as a CLI tool to help checking/validating u
 # Table of contents
 
 - [Documentation](#documentation)
-- [Usage](#usage)
-  - [Installation](#installation)
-  - [Full SDK Installation](#full-sdk-installation)
+- [Installation](#installation)
+  - [Programmatic Usage](#programmatic-usage)
+  - [CLI Usage](#cli-usage)
+- [Full SDK Installation](#full-sdk-installation)
 - [Contributing](#contributing)
 - [Changelog](#changelog)
 - [License](#license)

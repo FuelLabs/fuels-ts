@@ -65,6 +65,7 @@
     "@changesets/types": "^6.0.0",
     "@internal/forc": "workspace:*",
     "@internal/fuel-core": "workspace:*",
+    "@elasticpath/textlint-rule-no-dead-relative-link": "^1.1.1",
     "@fuel-ts/utils": "workspace:*",
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
