@@ -16,12 +16,15 @@ const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contra
 
 async function generateChainConfigFile(chainName: string): Promise<[string, () => void]> {
   const configsFolder = join(__dirname, '../../../../', '.fuel-core', 'configs');
+  
   const chainMetadata = JSON.parse(
     readFileSync(join(configsFolder, 'metadata.json'), 'utf-8')
   ) as SnapshotConfigs['metadata'];
+  
   const chainConfig = JSON.parse(
     readFileSync(join(configsFolder, chainMetadata.chain_config), 'utf-8')
   ) as SnapshotConfigs['chainConfig'];
+  
   chainConfig.chain_name = chainName;
 
   const tempSnapshotDirPath = join(os.tmpdir(), '.fuels-ts', randomUUID());
