@@ -23,7 +23,7 @@ describe('UpgradePurposeCoder', () => {
     };
 
     const typeBytes = [0, 0, 0, 0, 0, 0, 0, UpgradePurposeTypeEnum.ConsensusParameters];
-    const witnessIndexBytes = new NumberCoder('u8').encode(witnessIndex);
+    const witnessIndexBytes = new NumberCoder('u8', { padToWordSize: true }).encode(witnessIndex);
     const checksumBytes = new B256Coder().encode(checksum);
 
     const expectedEncoded = Uint8Array.from([...typeBytes, ...witnessIndexBytes, ...checksumBytes]);

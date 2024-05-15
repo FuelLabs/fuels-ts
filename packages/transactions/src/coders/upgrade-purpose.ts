@@ -39,13 +39,13 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
     const parts: Uint8Array[] = [];
     const { type } = upgradePurposeType;
 
-    parts.push(new NumberCoder('u8').encode(type));
+    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(type));
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
         const data = upgradePurposeType.data as ConsensusParameters;
 
-        parts.push(new NumberCoder('u16').encode(data.witnessIndex));
+        parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(data.witnessIndex));
         parts.push(new B256Coder().encode(data.checksum));
         break;
       }
@@ -72,12 +72,12 @@ export class UpgradePurposeCoder extends Coder<UpgradePurpose, UpgradePurpose> {
     let o = offset;
     let decoded;
 
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
     const type = decoded as UpgradePurposeTypeEnum;
 
     switch (type) {
       case UpgradePurposeTypeEnum.ConsensusParameters: {
-        [decoded, o] = new NumberCoder('u16').decode(data, o);
+        [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
         const witnessIndex = decoded;
         [decoded, o] = new B256Coder().decode(data, o);
         const checksum = decoded;
