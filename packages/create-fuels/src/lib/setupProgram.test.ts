@@ -3,7 +3,7 @@ import { setupProgram } from './setupProgram';
 /**
  * @group node
  */
-describe(() => {
+describe('setupProgram', () => {
   test('setupProgram takes in args properly', () => {
     const program = setupProgram();
     program.parse(['', '', 'test-project-name', '-c', '-p', '-s', '--pnpm', '--npm']);
