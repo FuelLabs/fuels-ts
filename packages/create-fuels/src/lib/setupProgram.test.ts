@@ -1,5 +1,8 @@
 import { setupProgram } from './setupProgram';
 
+/**
+ * @group node
+ */
 describe(() => {
   test('setupProgram takes in args properly', () => {
     const program = setupProgram();
