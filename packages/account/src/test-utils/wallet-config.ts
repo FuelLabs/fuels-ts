@@ -61,6 +61,7 @@ export class WalletConfig {
     this.options = config;
 
     const { assets, coinsPerAsset, amountPerCoin, messages } = this.options;
+    
     this.wallets = this.generateWallets();
     this.initialState = {
       messages: WalletConfig.createMessages(this.wallets, messages),
