@@ -45,6 +45,7 @@ export class WalletConfig {
   private initialState: SnapshotConfigs['stateConfig'];
   private options: WalletConfigOptions;
   public wallets: WalletUnlocked[];
+
   private generateWallets: () => WalletUnlocked[] = () => {
     const generatedWallets: WalletUnlocked[] = [];
     for (let index = 1; index <= this.options.count; index++) {
