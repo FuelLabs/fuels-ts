@@ -33,7 +33,12 @@ my-fuel-dapp # NextJS app or similar
 
 ## Prerequisites
 
-We expect you to install the [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) before using this library. Follow [this guide](https://docs.fuel.network/guides/installation/) to get this installed.
+The [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) and its components (namely `forc` and `fuel-core`) are pre-requisite for several operations with the Fuels CLI. For example:
+
+- Building out contracts using [`fuels build`](./commands.md#fuels-build) requires `forc`.
+- Deploying contracts locally using [`fuels deploy`](./commands.md#fuels-deploy) requires `fuel-core`.
+
+Follow the [installation guide](https://docs.fuel.network/guides/installation/) if you don't have them installed already.
 
 ## Installation
 
