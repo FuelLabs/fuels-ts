@@ -65,6 +65,8 @@ describe('loadConfig', () => {
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
     const config = await loadConfig(paths.root);
