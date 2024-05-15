@@ -89,12 +89,18 @@ export class WalletConfig {
     };
   }
 
+  /**
+   * Create messages for the wallets in the format that the chain expects.
+   */
   private static createMessages(wallets: WalletUnlocked[], messages: TestMessage[]) {
     return messages
       .map((msg) => wallets.map((wallet) => msg.toChainMessage(wallet.address)))
       .flatMap((x) => x);
   }
 
+  /**
+   * Create coins for the wallets in the format that the chain expects.
+   */
   private static createCoins(
     wallets: WalletUnlocked[],
     baseAssetId: string,
