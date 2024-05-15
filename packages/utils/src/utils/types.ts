@@ -35,6 +35,7 @@ type Operation =
         gas_per_unit: number;
       };
     };
+
 interface GasCosts {
   mod: number;
   move: number;
