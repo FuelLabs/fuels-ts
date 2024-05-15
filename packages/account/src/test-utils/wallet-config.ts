@@ -45,6 +45,7 @@ export class WalletConfig {
   private initialState: SnapshotConfigs['stateConfig'];
   private options: WalletConfigOptions;
   public wallets: WalletUnlocked[];
+
   private generateWallets: () => WalletUnlocked[] = () => {
     const generatedWallets: WalletUnlocked[] = [];
     for (let index = 1; index <= this.options.count; index++) {
@@ -60,6 +61,7 @@ export class WalletConfig {
     this.options = config;
 
     const { assets, coinsPerAsset, amountPerCoin, messages } = this.options;
+    
     this.wallets = this.generateWallets();
     this.initialState = {
       messages: WalletConfig.createMessages(this.wallets, messages),
