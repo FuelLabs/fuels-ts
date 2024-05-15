@@ -145,7 +145,7 @@ Forc.lock
 **/test-predicate-*/index.ts
 
 # Ignore typegen test files
-**/test/typegen
+**/test/fixtures/typegen
 
 # Ignore [local] history directory (VsCode extension)
 .history

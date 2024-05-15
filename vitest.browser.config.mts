@@ -20,6 +20,9 @@ const config: UserConfig = {
         "timers/promises",
         "util",
         "stream",
+        "path",
+        "os",
+        "child_process",
       ],
       overrides: {
         fs: "memfs",
