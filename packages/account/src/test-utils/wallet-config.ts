@@ -56,13 +56,14 @@ export class WalletConfig {
 
   constructor(baseAssetId: string, config: WalletConfigOptions) {
     const BASE_ASSET_ID = baseAssetId.startsWith('0x') ? baseAssetId : `0x${baseAssetId}`;
-    WalletConfig.guard(config);
+    WalletConfig.validate(config);
 
     this.options = config;
 
     const { assets, coinsPerAsset, amountPerCoin, messages } = this.options;
-    
+
     this.wallets = this.generateWallets();
+
     this.initialState = {
       messages: WalletConfig.createMessages(this.wallets, messages),
       coins: WalletConfig.createCoins(
@@ -133,7 +134,7 @@ export class WalletConfig {
     return coins;
   }
 
-  private static guard({
+  private static validate({
     count: wallets,
     assets,
     coinsPerAsset,
