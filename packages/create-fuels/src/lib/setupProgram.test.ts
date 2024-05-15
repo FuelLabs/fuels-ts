@@ -1,4 +1,4 @@
-import { setupProgram } from "./setupProgram";
+import { setupProgram } from './setupProgram';
 
 describe(() => {
   test('setupProgram takes in args properly', () => {
@@ -27,4 +27,4 @@ describe(() => {
     expect(program.opts().predicate).toBe(undefined);
     expect(program.opts().script).toBe(undefined);
   });
-})
+});
