@@ -1,5 +1,70 @@
 # @fuel-ts/abi-typegen
 
+## 0.86.0
+
+### Patch Changes
+
+- Updated dependencies [316c757]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/versions@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- d0e9b1a: feat: support `Result<T, E>` type in typegen
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
+## 0.84.0
+
+### Patch Changes
+
+- Updated dependencies [2990edb]
+  - @fuel-ts/versions@0.84.0
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
+## 0.83.0
+
+### Minor Changes
+
+- 29f46ef: chore!: upgrade `forc` to `0.56.0`
+
+### Patch Changes
+
+- 0d75266: chore!: upgrading `forc` to `0.55.0`
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+- Updated dependencies [0d75266]
+  - @fuel-ts/versions@0.83.0
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/interfaces@0.83.0
+  - @fuel-ts/errors@0.83.0
+
+## 0.82.0
+
+### Minor Changes
+
+- dd1b62b: feat: exclusive enum type inference in typegen
+
+### Patch Changes
+
+- 1542cdc: feat: support `()` type in typegen
+  - @fuel-ts/errors@0.82.0
+  - @fuel-ts/interfaces@0.82.0
+  - @fuel-ts/utils@0.82.0
+  - @fuel-ts/versions@0.82.0
+
 ## 0.81.0
 
 ### Minor Changes

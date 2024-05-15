@@ -24,12 +24,12 @@ import type {
   StdString,
 } from 'fuels';
 
-import type { Option, Enum, Vec } from "./common";
+import type { Option, Enum, Vec, Result } from "./common";
 
 export enum MyEnumInput { Checked = 'Checked', Pending = 'Pending' };
 export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };
 
-export type AssetIdInput = { value: string };
+export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
 export type MyStructInput = { x: BigNumberish, y: BigNumberish, state: MyEnumInput };
 export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
@@ -53,6 +53,7 @@ interface MyContractAbiInterface extends Interface {
     types_option: FunctionFragment;
     types_option_geo: FunctionFragment;
     types_raw_slice: FunctionFragment;
+    types_result: FunctionFragment;
     types_std_string: FunctionFragment;
     types_str: FunctionFragment;
     types_struct: FunctionFragment;
@@ -82,6 +83,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_option', values: [Option<BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option_geo', values: [Option<MyStructInput>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_raw_slice', values: [RawSlice]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_result', values: [Result<BigNumberish, BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_std_string', values: [StdString]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_str', values: [string]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_struct', values: [MyStructInput]): Uint8Array;
@@ -110,6 +112,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_option', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_option_geo', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_raw_slice', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_result', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_std_string', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_str', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_struct', data: BytesLike): DecodedValue;
@@ -142,6 +145,7 @@ export class MyContractAbi extends Contract {
     types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
     types_option_geo: InvokeFunction<[x: Option<MyStructInput>], Option<MyStructOutput>>;
     types_raw_slice: InvokeFunction<[x: RawSlice], RawSlice>;
+    types_result: InvokeFunction<[x: Result<BigNumberish, BigNumberish>], Result<BN, string>>;
     types_std_string: InvokeFunction<[x: StdString], StdString>;
     types_str: InvokeFunction<[x: string], string>;
     types_struct: InvokeFunction<[x: MyStructInput], MyStructOutput>;

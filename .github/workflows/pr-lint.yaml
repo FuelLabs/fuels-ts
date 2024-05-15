@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -60,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -79,6 +79,7 @@ jobs:
             # e.g. when a script is added in the scripts folder
             exit 0
           fi
+          echo "CHANGESET_FILE=$(echo "$CHANGESET_FILE")" >> $GITHUB_ENV
 
           AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
 
@@ -91,17 +92,42 @@ jobs:
 
             exit 0
           fi
+          # TODO: Remove once v1.0.0 is released.
+          # Minor changes are treated as breaking until v1.0.0 is released.
+          if echo "$AFFECTED_PACKAGES" | grep -q 'minor'; then
+            if ! echo "$PR_TITLE" | grep -q '!'; then
+              echo "Changeset has `minor` changes. Please mark the PR as breaking by adding an exclamation mark to its title (e.g. fix!: xxx) or use a `patch` instead."
+              exit 1
+            fi
+          fi
 
           CHANGESET_DESCRIPTION=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
 
           if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then
             echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
             echo "Changeset file: $CHANGESET_FILE"
-            echo "Changeset content: $CHANGESET_CONTENT"
+            echo "Changeset content:"
+            cat "$CHANGESET_FILE"
             exit 1
           fi
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Validate added changeset will be deleted
+        if: ${{ env.CHANGESET_FILE != '' }}
+        run: |
+          pnpm changeset version
+
+          if git status --porcelain .changeset | grep -q "D $CHANGESET_FILE"; then
+              git reset --hard
+              exit 0
+          fi
+
+          # Throw if changeset not in deleted changesets
+          echo "Changeset file $CHANGESET_FILE will not get deleted in the changesets PR. Check its affected packages."
+          exit 1
+        env:
+          CHANGESET_FILE: ${{ env.CHANGESET_FILE }}
 
       - name: Validate that there are only patch changes
         if: startsWith(github.base_ref, 'release/')

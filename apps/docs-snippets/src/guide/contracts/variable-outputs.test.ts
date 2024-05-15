@@ -18,8 +18,8 @@ describe(__filename, () => {
 
     await contract.functions.mint_coins(subId, 100).call();
 
-    const address = { value: Wallet.generate().address.toB256() };
-    const assetId = { value: getMintedAssetId(contract.id.toB256(), subId) };
+    const address = { bits: Wallet.generate().address.toB256() };
+    const assetId = { bits: getMintedAssetId(contract.id.toB256(), subId) };
 
     // #region variable-outputs-2
     const { transactionResult } = await contract.functions

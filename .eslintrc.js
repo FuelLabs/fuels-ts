@@ -27,6 +27,7 @@ module.exports = {
         selector: 'ForOfStatement',
       },
     ],
+    'no-trailing-spaces': 'error',
     '@typescript-eslint/no-non-null-assertion': 1,
     // Disable error on devDependencies importing since this isn't a TS library
     'require-await': 'off',

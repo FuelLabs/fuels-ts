@@ -1,5 +1,5 @@
 import { BigNumberCoder } from '@fuel-ts/abi-coder';
-import { BaseAssetId } from '@fuel-ts/address/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
 import * as arrayifyMod from '@fuel-ts/utils';
@@ -20,7 +20,7 @@ describe('util', () => {
   it('should ensure "composeScriptForTransferringToContract" returns script just fine', async () => {
     const hexlifiedContractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;
-    const assetId: BytesLike = BaseAssetId;
+    const assetId: BytesLike = ZeroBytes32;
 
     const { script, scriptData } = await assembleTransferToContractScript({
       hexlifiedContractId,
@@ -53,7 +53,7 @@ describe('util', () => {
 
     const hexlifiedContractId = '0x1234567890123456789012345678901234567890';
     const amountToTransfer: BigNumberish = 0;
-    const assetId: BytesLike = BaseAssetId;
+    const assetId: BytesLike = ZeroBytes32;
 
     const scriptData = formatTransferToContractScriptData({
       hexlifiedContractId,

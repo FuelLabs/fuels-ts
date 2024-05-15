@@ -1,5 +1,50 @@
 # Change Log
 
+## 0.86.0
+
+### Patch Changes
+
+- 316c757: fix: internalize `ethers` functionality and remove dependency
+- Updated dependencies [316c757]
+- Updated dependencies [0651a5f]
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/utils@0.85.0
+
+## 0.84.0
+
+### Patch Changes
+
+- Updated dependencies [2990edb]
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+
+## 0.83.0
+
+### Patch Changes
+
+- Updated dependencies [29f46ef]
+- Updated dependencies [9c3c094]
+- Updated dependencies [b026feb]
+  - @fuel-ts/utils@0.83.0
+  - @fuel-ts/errors@0.83.0
+
+## 0.82.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.82.0
+- @fuel-ts/utils@0.82.0
+
 ## 0.81.0
 
 ### Patch Changes

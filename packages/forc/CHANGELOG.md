@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.86.0
+
+### Patch Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+## 0.85.0
+
+## 0.84.0
+
+## 0.83.0
+
+### Minor Changes
+
+- 29f46ef: chore!: upgrade `forc` to `0.56.0`
+
+### Patch Changes
+
+- 0d75266: chore!: upgrading `forc` to `0.55.0`
+
+## 0.82.0
+
 ## 0.81.0
 
 ## 0.80.0

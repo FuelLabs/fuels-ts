@@ -164,12 +164,12 @@ describe('dev', () => {
   });
 
   test('should collect only non-null config paths', () => {
-    const config = structuredClone(fuelsConfig);
+    const config: FuelsConfig = structuredClone(fuelsConfig);
 
-    config.chainConfig = undefined;
+    config.snapshotDir = undefined;
     expect(getConfigFilepathsToWatch(config)).toHaveLength(1);
 
-    config.chainConfig = '/some/path/to/chainConfig.json';
+    config.snapshotDir = '/some/path/to/chainConfig.json';
     expect(getConfigFilepathsToWatch(config)).toHaveLength(2);
   });
 });

@@ -64,8 +64,13 @@ export type UserFuelsConfig = {
    */
   providerUrl?: string;
 
-  /** Relative filepath to custom `chainConfig.json` to be used when initializing a Fuel Core node */
-  chainConfig?: string;
+  /**
+   * Relative path to directory containing custom configurations for `fuel-core`, such as:
+   * - chainConfig.json
+   * - metadata.json
+   * - stateConfig.json
+   */
+  snapshotDir?: string;
 
   /** Static of dyanmic deploy configs to be used when deploying contracts */
   deployConfig?: DeployContractOptions | OptionsFunction;

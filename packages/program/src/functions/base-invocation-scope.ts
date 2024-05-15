@@ -12,13 +12,14 @@ import type {
   AbstractProgram,
 } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
-import { bn, toNumber } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
+import { isDefined } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
+import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import { POINTER_DATA_OFFSET } from '../script-request';
-import type { ContractCall, InvocationScopeLike, TransactionCostOptions, TxParams } from '../types';
+import type { ContractCall, InvocationScopeLike, TxParams } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
 import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
@@ -29,12 +30,9 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
  * @param funcScope - The invocation scope containing the necessary information for the contract call.
  * @returns The contract call object.
  */
-function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
-  const { program, args, forward, func, callParameters } = funcScope.getCallConfig();
-  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer
-    ? POINTER_DATA_OFFSET
-    : 0;
-  const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
+function createContractCall(funcScope: InvocationScopeLike): ContractCall {
+  const { program, args, forward, func, callParameters, externalAbis } = funcScope.getCallConfig();
+  const data = func.encodeArguments(args as Array<InputValue>);
 
   return {
     contractId: (program as AbstractContract).id,
@@ -42,12 +40,10 @@ function createContractCall(funcScope: InvocationScopeLike, offset: number): Con
     fnSelectorBytes: func.selectorBytes,
     encoding: func.encoding,
     data,
-    isInputDataPointer: func.isInputDataPointer,
-    isOutputDataHeap: func.outputMetadata.isHeapType,
-    outputEncodedLength: func.outputMetadata.encodedLength,
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,
+    externalContractsAbis: externalAbis,
   };
 }
 
@@ -76,7 +72,6 @@ export class BaseInvocationScope<TReturn = any> {
   constructor(program: AbstractProgram, isMultiCall: boolean) {
     this.program = program;
     this.isMultiCall = isMultiCall;
-
     this.transactionRequest = new ScriptTransactionRequest();
   }
 
@@ -87,25 +82,27 @@ export class BaseInvocationScope<TReturn = any> {
    */
   protected get calls() {
     const provider = this.getProvider();
-    const consensusParams = provider.getChain().consensusParameters;
+    const consensusParams = provider.getChain();
+    // TODO: Remove this error since it is already handled on Provider class
     if (!consensusParams) {
       throw new FuelError(
         FuelError.CODES.CHAIN_INFO_CACHE_EMPTY,
         'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
       );
     }
-    const maxInputs = consensusParams.maxInputs;
-    const script = getContractCallScript(this.functionInvocationScopes, maxInputs);
-    return this.functionInvocationScopes.map((funcScope) =>
-      createContractCall(funcScope, script.getScriptDataOffset(maxInputs.toNumber()))
-    );
+    return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
   }
 
   /**
    * Updates the script request with the current contract calls.
    */
   protected updateScriptRequest() {
-    const maxInputs = (this.program.provider as Provider).getChain().consensusParameters.maxInputs;
+    const provider = this.getProvider();
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = provider.getChain();
     const contractCallScript = getContractCallScript(this.functionInvocationScopes, maxInputs);
     this.transactionRequest.setScript(contractCallScript, this.calls);
   }
@@ -118,6 +115,11 @@ export class BaseInvocationScope<TReturn = any> {
     calls.forEach((c) => {
       if (c.contractId) {
         this.transactionRequest.addContractInputAndOutput(c.contractId);
+      }
+      if (c.externalContractsAbis) {
+        Object.keys(c.externalContractsAbis).forEach((contractId) =>
+          this.transactionRequest.addContractInputAndOutput(Address.fromB256(contractId))
+        );
       }
     });
   }
@@ -226,13 +228,13 @@ export class BaseInvocationScope<TReturn = any> {
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
-  async getTransactionCost(options?: TransactionCostOptions) {
+  async getTransactionCost() {
     const provider = this.getProvider();
 
     const request = await this.getTransactionRequest();
-    request.gasPrice = bn(toNumber(request.gasPrice) || toNumber(options?.gasPrice || 0));
-    const txCost = await provider.getTransactionCost(request, this.getRequiredCoins(), {
+    const txCost = await provider.getTransactionCost(request, {
       resourcesOwner: this.program.account as AbstractAccount,
+      quantitiesToContract: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
 
@@ -245,41 +247,29 @@ export class BaseInvocationScope<TReturn = any> {
    * @returns The current instance of the class.
    */
   async fundWithRequiredCoins() {
-    const transactionRequest = await this.getTransactionRequest();
+    let transactionRequest = await this.getTransactionRequest();
+    transactionRequest = clone(transactionRequest);
 
-    const {
-      maxFee,
-      gasUsed,
-      minGasPrice,
-      estimatedInputs,
-      outputVariables,
-      missingContractIds,
-      requiredQuantities,
-    } = await this.getTransactionCost();
-    this.setDefaultTxParams(transactionRequest, minGasPrice, gasUsed);
-
+    const txCost = await this.getTransactionCost();
+    const { gasUsed, missingContractIds, outputVariables, maxFee } = txCost;
+    this.setDefaultTxParams(transactionRequest, gasUsed, maxFee);
     // Clean coin inputs before add new coins to the request
-    this.transactionRequest.inputs = this.transactionRequest.inputs.filter(
-      (i) => i.type !== InputType.Coin
-    );
-
-    await this.program.account?.fund(this.transactionRequest, requiredQuantities, maxFee);
-
-    this.transactionRequest.updatePredicateInputs(estimatedInputs);
+    transactionRequest.inputs = transactionRequest.inputs.filter((i) => i.type !== InputType.Coin);
 
     // Adding missing contract ids
     missingContractIds.forEach((contractId) => {
-      this.transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
+      transactionRequest.addContractInputAndOutput(Address.fromString(contractId));
     });
 
     // Adding required number of OutputVariables
-    this.transactionRequest.addVariableOutputs(outputVariables);
+    transactionRequest.addVariableOutputs(outputVariables);
+
+    await this.program.account?.fund(transactionRequest, txCost);
 
     if (this.addSignersCallback) {
-      await this.addSignersCallback(this.transactionRequest);
+      await this.addSignersCallback(transactionRequest);
     }
-
-    return this;
+    return transactionRequest;
   }
 
   /**
@@ -292,11 +282,8 @@ export class BaseInvocationScope<TReturn = any> {
     this.txParameters = txParams;
     const request = this.transactionRequest;
 
-    const { minGasPrice } = this.getProvider().getGasConfig();
-
-    request.gasPrice = bn(txParams.gasPrice || request.gasPrice || minGasPrice);
+    request.tip = bn(txParams.tip || request.tip);
     request.gasLimit = bn(txParams.gasLimit || request.gasLimit);
-
     request.maxFee = txParams.maxFee ? bn(txParams.maxFee) : request.maxFee;
     request.witnessLimit = txParams.witnessLimit ? bn(txParams.witnessLimit) : request.witnessLimit;
     request.maturity = txParams.maturity || request.maturity;
@@ -363,15 +350,12 @@ export class BaseInvocationScope<TReturn = any> {
   async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
-    await this.fundWithRequiredCoins();
+    const transactionRequest = await this.fundWithRequiredCoins();
 
-    const response = await this.program.account.sendTransaction(
-      await this.getTransactionRequest(),
-      {
-        awaitExecution: true,
-        estimateTxDependencies: false,
-      }
-    );
+    const response = await this.program.account.sendTransaction(transactionRequest, {
+      awaitExecution: true,
+      estimateTxDependencies: false,
+    });
 
     return FunctionInvocationResult.build<T>(
       this.functionInvocationScopes,
@@ -395,15 +379,11 @@ export class BaseInvocationScope<TReturn = any> {
         'An unlocked wallet is required to simulate a contract call.'
       );
     }
+    const transactionRequest = await this.fundWithRequiredCoins();
 
-    await this.fundWithRequiredCoins();
-
-    const result = await this.program.account.simulateTransaction(
-      await this.getTransactionRequest(),
-      {
-        estimateTxDependencies: false,
-      }
-    );
+    const result = await this.program.account.simulateTransaction(transactionRequest, {
+      estimateTxDependencies: false,
+    });
 
     return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
@@ -461,33 +441,33 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * In case the gasLimit and gasPrice are *not* set by the user, this method sets some default values.
+   * In case the gasLimit is *not* set by the user, this method sets a default value.
    */
   private setDefaultTxParams(
     transactionRequest: ScriptTransactionRequest,
-    minGasPrice: BN,
-    gasUsed: BN
+    gasUsed: BN,
+    maxFee: BN
   ) {
-    const gasLimitSpecified = !!this.txParameters?.gasLimit || this.hasCallParamsGasLimit;
-    const gasPriceSpecified = !!this.txParameters?.gasPrice;
+    const gasLimitSpecified = isDefined(this.txParameters?.gasLimit) || this.hasCallParamsGasLimit;
+    const maxFeeSpecified = isDefined(this.txParameters?.maxFee);
 
-    const { gasLimit, gasPrice } = transactionRequest;
+    const { gasLimit: setGasLimit, maxFee: setMaxFee } = transactionRequest;
 
     if (!gasLimitSpecified) {
       transactionRequest.gasLimit = gasUsed;
-    } else if (gasLimit.lt(gasUsed)) {
+    } else if (setGasLimit.lt(gasUsed)) {
       throw new FuelError(
         ErrorCode.GAS_LIMIT_TOO_LOW,
-        `Gas limit '${gasLimit}' is lower than the required: '${gasUsed}'.`
+        `Gas limit '${setGasLimit}' is lower than the required: '${gasUsed}'.`
       );
     }
 
-    if (!gasPriceSpecified) {
-      transactionRequest.gasPrice = minGasPrice;
-    } else if (gasPrice.lt(minGasPrice)) {
+    if (!maxFeeSpecified) {
+      transactionRequest.maxFee = maxFee;
+    } else if (maxFee.gt(setMaxFee)) {
       throw new FuelError(
-        ErrorCode.GAS_PRICE_TOO_LOW,
-        `Gas price '${gasPrice}' is lower than the required: '${minGasPrice}'.`
+        ErrorCode.MAX_FEE_TOO_LOW,
+        `Max fee '${setMaxFee}' is lower than the required: '${maxFee}'.`
       );
     }
   }

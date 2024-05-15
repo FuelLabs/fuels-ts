@@ -23,7 +23,7 @@ fn expected_bytes() -> Bytes {
     bytes
 }
 
-fn main(_arg: u64, wrapper: Wrapper<Vec<Bytes>>) {
+fn main(_arg: u64, wrapper: Wrapper<Vec<Bytes>>) -> bool {
     if let SomeEnum::Second(enum_bytes) = wrapper.inner_enum {
         require(
             enum_bytes == expected_bytes(),
@@ -51,4 +51,6 @@ fn main(_arg: u64, wrapper: Wrapper<Vec<Bytes>>) {
             .unwrap() == expected_bytes(),
         "wrapper.inner[1] didn't match expectation",
     );
+
+    true
 }

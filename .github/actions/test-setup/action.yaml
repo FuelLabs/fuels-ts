@@ -10,19 +10,19 @@ runs:
   using: "composite"
   steps:
     - name: Cache PNPM modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.local/share/pnpm/store/v4
         key: ${{ runner.os }}-node-${{ inputs.node-version }}-pnpm-${{ inputs.pnpm-version }}-lock-${{ hashFiles('**/pnpm-lock.yaml') }}
 
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
         registry-url: "https://registry.npmjs.org"
 
     - name: Setup PNPM
-      uses: pnpm/action-setup@v2.1.0
+      uses: pnpm/action-setup@v4
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
@@ -30,21 +30,3 @@ runs:
     - name: Build
       run: pnpm build
       shell: bash
-
-    - name: Install rust toolchain
-      uses: dtolnay/rust-toolchain@stable
-      # selecting a toolchain either by action or manual `rustup` calls should happen
-      # before the cache plugin, as it uses the current rustc version as its cache key
-    - uses: Swatinem/rust-cache@v2
-      with:
-        prefix-key: "v1-rust"
-
-    - name: Install forc for experimental builds
-      shell: bash
-      run: |
-        curl https://install.fuel.network > install-fuelup.sh
-        chmod +x install-fuelup.sh
-        ./install-fuelup.sh --no-modify-path --skip-toolchain-installation
-        export PATH="${HOME}/.fuelup/bin:${PATH}"
-        fuelup toolchain new forc-experimental
-        fuelup component add forc@$(cat ./packages/forc/VERSION_EXPERIMENTAL)

@@ -4,10 +4,16 @@ Once you have set up a provider, you're ready to interact with the Fuel blockcha
 
 We can connect to either a _*local*_ or an _*external*_ node:
 
-> 1. _Running a [local node](../../getting-started.md#connecting-to-a-local-node)_
-> 1. _Connecting to an [external node](../../getting-started.md#connecting-to-the-testnet)_
+> 1. _Running a [local node](../getting-started/connecting-to-a-local-node.md)_
+> 1. _Connecting to an [external node](../getting-started/connecting-to-testnet.md)_
 
 Let's look at a few examples below.
+
+## Get the Base Asset ID
+
+The base asset is the underlying asset used to perform any transaction on a chain. This should be fetched from a provider to then be used in transactions.
+
+<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#provider-getBaseAssetId{ts:line-numbers}
 
 ## Get all coins from an address
 
@@ -33,6 +39,12 @@ This method returns all the blocks from the blockchain that match the given quer
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Provider-get-blocks{ts:line-numbers}
 
+## Get a message by its nonce
+
+You can use the `getMessageByNonce` method to retrieve a message by its nonce.
+
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#getMessageByNonce{ts:line-numbers}
+
 <!-- TODO: fix these examples to not reference hardcoded values after #1356 which introduces message generation tools
 ### Get messages
 
@@ -40,13 +52,13 @@ You can use the `getMessages` method to retrieve a list of messages from the blo
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessages{ts:line-numbers}
 
-### Get resources
+## Get resources
 
 You can use the `getResourcesToSpend` method to retrieve a list of all the resources (coins + assets) that can be spent by a given address.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getResourcesToSpend{ts:line-numbers}
 
-### Get message proof
+## Get message proof
 
 A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
 

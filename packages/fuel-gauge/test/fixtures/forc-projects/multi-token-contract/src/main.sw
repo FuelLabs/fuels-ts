@@ -36,7 +36,7 @@ impl MultiToken for Contract {
         let mut counter = 0;
 
         while counter < 3 {
-            mint_to_address(addresses[counter], sub_id, mint_amount);
+            mint_to(Identity::Address(addresses[counter]), sub_id, mint_amount);
             counter = counter + 1;
         }
     }
@@ -48,11 +48,11 @@ impl MultiToken for Contract {
     }
 
     fn transfer_to_contract(target: ContractId, asset_id: AssetId, amount: u64) {
-        force_transfer_to_contract(target, asset_id, amount);
+        transfer(Identity::ContractId(target), asset_id, amount);
     }
 
     fn transfer_to_address(recipient: Address, asset_id: AssetId, amount: u64) {
-        transfer_to_address(recipient, asset_id, amount);
+        transfer(Identity::Address(recipient), asset_id, amount);
     }
 
     fn get_balance(target: ContractId, asset_id: AssetId) -> u64 {

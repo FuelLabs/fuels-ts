@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { FuelError } from '@fuel-ts/errors';
-import type { BN, Contract, Provider, WalletUnlocked } from 'fuels';
+import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { Script, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -15,7 +15,7 @@ let advancedLogContract: Contract;
 let otherAdvancedLogContract: Contract;
 let advancedLogId: string;
 let otherLogId: string;
-let minGasPrice: BN;
+let baseAssetId: string;
 
 beforeAll(async () => {
   advancedLogContract = await setupContract();
@@ -23,7 +23,7 @@ beforeAll(async () => {
   provider = advancedLogContract.provider;
   advancedLogId = advancedLogContract.id.toB256();
   otherLogId = otherAdvancedLogContract.id.toB256();
-  minGasPrice = provider.getGasConfig().minGasPrice;
+  baseAssetId = provider.getBaseAssetId();
 });
 
 /**
@@ -42,7 +42,7 @@ describe('Advanced Logging', () => {
       { Playing: 1 },
       'Contract Id',
       {
-        value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+        bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
       },
       'Game Ref',
       {
@@ -52,7 +52,7 @@ describe('Advanced Logging', () => {
         game_id: '0x18af8',
         state: { Playing: 1 },
         contract_Id: {
-          value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+          bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
         },
         difficulty: { Medium: true },
       },
@@ -66,7 +66,7 @@ describe('Advanced Logging', () => {
         game_id: '0x20157',
         state: { Playing: 1 },
         contract_Id: {
-          value: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+          bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
         },
         difficulty: { Hard: true },
       },
@@ -100,7 +100,7 @@ describe('Advanced Logging', () => {
               game_id: bn(0x18af8),
               state: { Playing: 1 },
               contract_Id: {
-                value: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+                bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
               },
               difficulty: { Medium: true },
             },
@@ -150,7 +150,7 @@ describe('Advanced Logging', () => {
     ];
 
     beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[2_000]]);
+      wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
     });
 
     it('when using InvacationScope', async () => {
@@ -190,20 +190,16 @@ describe('Advanced Logging', () => {
         ])
         .getTransactionRequest();
 
-      const { maxFee, gasUsed, requiredQuantities } = await provider.getTransactionCost(
-        request,
-        [],
-        {
-          resourcesOwner: wallet,
-        }
-      );
+      const txCost = await provider.getTransactionCost(request, {
+        resourcesOwner: wallet,
+      });
 
-      request.gasLimit = gasUsed;
-      request.gasPrice = minGasPrice;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-      await wallet.fund(request, requiredQuantities, maxFee);
+      await wallet.fund(request, txCost);
 
-      const tx = await wallet.sendTransaction(request);
+      const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
 
       const { logs } = await tx.waitForResult();
 
@@ -237,7 +233,7 @@ describe('Advanced Logging', () => {
     ];
 
     beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[1_000]]);
+      wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
     });
 
     it('when using InvocationScope', async () => {
@@ -258,18 +254,14 @@ describe('Advanced Logging', () => {
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .getTransactionRequest();
 
-      const { maxFee, gasUsed, requiredQuantities } = await provider.getTransactionCost(
-        request,
-        [],
-        {
-          resourcesOwner: wallet,
-        }
-      );
+      const txCost = await provider.getTransactionCost(request, {
+        resourcesOwner: wallet,
+      });
 
-      request.gasLimit = gasUsed;
-      request.gasPrice = minGasPrice;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-      await wallet.fund(request, requiredQuantities, maxFee);
+      await wallet.fund(request, txCost);
 
       const tx = await wallet.sendTransaction(request);
 

@@ -1,6 +1,4 @@
-import { BaseAssetId } from '@fuel-ts/address/configs';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 
 import { FUEL_NETWORK_URL } from '../configs';
@@ -17,11 +15,12 @@ import { WalletLocked, WalletUnlocked } from './wallets';
 describe('Wallet', () => {
   let wallet: WalletUnlocked;
   let provider: Provider;
-  let gasPrice: BN;
+  let baseAssetId: string;
+
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     wallet = Wallet.generate({ provider });
-    gasPrice = provider.getGasConfig().minGasPrice;
+    baseAssetId = provider.getBaseAssetId();
   });
 
   describe('WalletLocked.constructor', () => {
@@ -177,7 +176,7 @@ describe('Wallet', () => {
     const externalWallet = await generateTestWallet(provider, [
       {
         amount: bn(1_000_000_000),
-        assetId: BaseAssetId,
+        assetId: baseAssetId,
       },
     ]);
     const externalWalletReceiver = await generateTestWallet(provider);
@@ -210,12 +209,12 @@ describe('Wallet', () => {
     const response = await lockedWallet.transfer(
       externalWalletReceiver.address,
       bn(1_000_000),
-      BaseAssetId,
-      { gasPrice, gasLimit: 10_000 }
+      baseAssetId,
+      { gasLimit: 10_000 }
     );
     await response.wait();
 
-    const balance = await externalWalletReceiver.getBalance(BaseAssetId);
+    const balance = await externalWalletReceiver.getBalance(baseAssetId);
     expect(balance.eq(1_000_000)).toBeTruthy();
   });
 

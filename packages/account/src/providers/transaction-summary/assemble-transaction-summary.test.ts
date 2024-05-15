@@ -14,12 +14,12 @@ import {
   MOCK_SUBMITTED_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
 } from '../../../test/fixtures/transaction-summary';
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
-import * as calculateTransactionFeeMod from './calculate-transaction-fee';
+import * as calculateTransactionFeeMod from './calculate-tx-fee-for-summary';
 import type { GraphqlTransactionStatus, Operation } from './types';
 
 /**
@@ -27,12 +27,13 @@ import type { GraphqlTransactionStatus, Operation } from './types';
  */
 describe('TransactionSummary', () => {
   let provider: Provider;
-  let gasCosts: GqlGasCosts;
+  let gasCosts: GasCosts;
 
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';
   const gasPerByte = bn(2);
   const gasPriceFactor = bn(3);
   const maxInputs = bn(255);
+  const maxGasPerTx = bn(10000000);
   const transaction = MOCK_TRANSACTION;
   const transactionBytes = arrayify(MOCK_TRANSACTION_RAWPAYLOAD);
   const receipts: TransactionResultReceipt[] = [
@@ -44,8 +45,10 @@ describe('TransactionSummary', () => {
   ];
 
   beforeAll(async () => {
-    provider = await Provider.create('http://127.0.0.1:4000/graphql');
-    gasCosts = provider.getChain().gasCosts;
+    provider = await Provider.create('http://127.0.0.1:4000/v1/graphql');
+    ({
+      consensusParameters: { gasCosts },
+    } = provider.getChain());
   });
 
   beforeEach(() => {
@@ -54,13 +57,8 @@ describe('TransactionSummary', () => {
 
   const mockCalculateTransactionFee = () => {
     const calculateTransactionFee = vi
-      .spyOn(calculateTransactionFeeMod, 'calculateTransactionFee')
-      .mockReturnValue({
-        fee: bn(0),
-        minFee: bn(0),
-        maxFee: bn(0),
-        feeFromGasUsed: bn(0),
-      });
+      .spyOn(calculateTransactionFeeMod, 'calculateTXFeeForSummary')
+      .mockReturnValue(bn(0));
 
     return {
       calculateTransactionFee,
@@ -81,6 +79,8 @@ describe('TransactionSummary', () => {
       maxInputs,
       gasCosts,
       abiMap: {},
+      maxGasPerTx,
+      gasPrice: bn(1),
     });
 
     expect(transactionSummary).toMatchObject(expected);

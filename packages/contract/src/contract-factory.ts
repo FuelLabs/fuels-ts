@@ -7,7 +7,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, isDefined } from '@fuel-ts/utils';
 
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
@@ -113,7 +113,6 @@ export default class ContractFactory {
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(this.bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
-      gasPrice: 0,
       bytecodeWitnessIndex: 0,
       witnesses: [this.bytecode],
       ...options,
@@ -145,13 +144,20 @@ export default class ContractFactory {
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
 
-    const { requiredQuantities, maxFee } =
-      await this.account.provider.getTransactionCost(transactionRequest);
+    const txCost = await this.account.provider.getTransactionCost(transactionRequest);
 
-    transactionRequest.gasPrice = this.account.provider.getGasConfig().minGasPrice;
-    transactionRequest.maxFee = this.account.provider.getGasConfig().maxGasPerTx;
+    const { maxFee: setMaxFee } = deployContractOptions;
 
-    await this.account.fund(transactionRequest, requiredQuantities, maxFee);
+    if (isDefined(setMaxFee) && txCost.maxFee.gt(setMaxFee)) {
+      throw new FuelError(
+        ErrorCode.MAX_FEE_TOO_LOW,
+        `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
+      );
+    }
+
+    transactionRequest.maxFee = txCost.maxFee;
+
+    await this.account.fund(transactionRequest, txCost);
     await this.account.sendTransaction(transactionRequest, {
       awaitExecution: true,
     });
