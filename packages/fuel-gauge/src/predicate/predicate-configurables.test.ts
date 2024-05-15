@@ -180,6 +180,8 @@ describe('Predicate', () => {
         provider: wallet.provider,
       });
 
+      await fundPredicate(wallet, predicate, amountToPredicate);
+
       await expect(
         predicate.transfer(destination.address, 300, baseAssetId, { gasLimit: 1000 })
       ).rejects.toThrow(/PredicateVerificationFailed/);
