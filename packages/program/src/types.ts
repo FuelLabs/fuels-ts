@@ -14,9 +14,6 @@ export type ContractCall = {
   fnSelector: string;
   fnSelectorBytes: Uint8Array;
   encoding?: EncodingVersion;
-  isInputDataPointer: boolean;
-  isOutputDataHeap: boolean;
-  outputEncodedLength: number;
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
