@@ -1,5 +1,34 @@
 # Change Log
 
+## 0.86.0
+
+### Patch Changes
+
+- 8866c09: fix: ignore libraries in `fuels` CLI
+- Updated dependencies [316c757]
+- Updated dependencies [ee969d3]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/account@0.86.0
+  - @fuel-ts/crypto@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/transactions@0.86.0
+  - @fuel-ts/versions@0.86.0
+  - @fuel-ts/program@0.86.0
+  - @fuel-ts/script@0.86.0
+  - @fuel-ts/forc@0.86.0
+  - @fuel-ts/contract@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/hasher@0.86.0
+  - @fuel-ts/abi-typegen@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/merkle@0.86.0
+  - @fuel-ts/fuel-core@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
 ## 0.85.0
 
 ### Patch Changes
