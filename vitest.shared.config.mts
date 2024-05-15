@@ -11,16 +11,6 @@ export default defineConfig({
     }),
   ],
   test: {
-    exclude: [
-      "**/node_modules/**",
-      "**/dist/**",
-      "/apps/demo-nextjs",
-      "/apps/demo-react-cra",
-      "/apps/demo-react-vite",
-    ],
-    globals: true,
-    setupFiles: ["./vite.env.ts"],
-    env: loadEnv(mode, process.cwd(), ""),
     coverage: {
       enabled: true,
       provider: "istanbul",
@@ -39,6 +29,16 @@ export default defineConfig({
         "apps/docs",
       ],
     },
+    exclude: [
+      "**/node_modules/**",
+      "**/dist/**",
+      "/apps/demo-nextjs",
+      "/apps/demo-react-cra",
+      "/apps/demo-react-vite",
+    ],
+    globals: true,
+    setupFiles: ["./vitest.env.ts"],
+    env: loadEnv(mode, process.cwd(), ""),
     poolOptions: {
       threads: {
         minThreads: 1,
