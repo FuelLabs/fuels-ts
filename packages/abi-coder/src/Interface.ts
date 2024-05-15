@@ -6,7 +6,7 @@ import { arrayify } from '@fuel-ts/utils';
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
-import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
+import type { JsonAbi, JsonAbiArgument, JsonAbiConfigurable } from './types/JsonAbi';
 import { type EncodingVersion } from './utils/constants';
 import { findTypeById, getEncodingVersion } from './utils/json-abi';
 
@@ -72,6 +72,12 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
 
     return fragment.decodeOutput(data);
+  }
+
+  decodeTypeApplication(data: BytesLike, typeApplication: JsonAbiArgument): any {
+    return AbiCoder.decode(this.jsonAbi, typeApplication, arrayify(data), 0, {
+      encoding: this.encoding,
+    })[0];
   }
 
   decodeLog(data: BytesLike, logId: number): any {
