@@ -6,7 +6,7 @@ import type {
   TransactionResultReceipt,
   WalletUnlocked,
 } from 'fuels';
-import { ContractFactory, FUEL_NETWORK_URL, Provider, Wallet, bn } from 'fuels';
+import { ContractFactory, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
