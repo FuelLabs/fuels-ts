@@ -1,6 +1,6 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuels } = data
+  const { fuels, forc, fuelCore } = data
 </script>
 
 # Commands
@@ -161,13 +161,13 @@ Check for version incompatibilities between your [Fuel Toolchain](https://docs.f
 npx fuels@{{fuels}} versions
 ```
 
-```
+```console-vue
 ┌───────────┬───────────┬────────────────┬─────────────┐
 │           │ Supported │ Yours / System │ System Path │
 ├───────────┼───────────┼────────────────┼─────────────┤
-│ Forc      │ 0.56.1    │ 0.56.1         │ forc        │
+│ Forc      │ {{forc}}    │ {{forc}}         │ forc        │
 ├───────────┼───────────┼────────────────┼─────────────┤
-│ Fuel-Core │ 0.26.0    │ 0.26.0         │ fuel-core   │
+│ Fuel-Core │ {{fuelCore}}    │ {{fuelCore}}         │ fuel-core   │
 └───────────┴───────────┴────────────────┴─────────────┘
 
 You have all the right versions! ⚡
