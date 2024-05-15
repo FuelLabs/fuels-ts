@@ -1,14 +1,18 @@
 import { sleep } from '../utils/sleep';
 
-import { urlIsLive } from './url-is-live';
-
 /**
  * @hidden
  *
- * Mainly used to verify that a fuel-core node has been killed after cleanup is called.
+ * Waits until the given URL is unreachable. Used in tests to verify that fuel-core is no longer running.
  */
 export async function waitUntilUnreachable(url: string) {
-  const isLive = await urlIsLive(url);
+  let isLive;
+  try {
+    await fetch(url);
+    isLive = true;
+  } catch (e) {
+    isLive = false;
+  }
   if (!isLive) {
     return;
   }

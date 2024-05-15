@@ -1,4 +1,3 @@
-import * as urlIsLiveMod from './url-is-live';
 import { waitUntilUnreachable } from './wait-until-unreachable';
 
 /**
@@ -9,26 +8,30 @@ describe('waitUntilUnreachable', () => {
     vi.restoreAllMocks();
   });
   test('waits until the url is unreachable', async () => {
+    const fetchSpy = vi
+      .spyOn(global, 'fetch')
+      .mockImplementationOnce(() => Promise.resolve(new Response()))
+      .mockImplementationOnce(() => Promise.resolve(new Response()))
+
+      .mockImplementationOnce(() => {
+        throw new Error('mocked');
+      });
     const url = 'mocked';
-    const urlIsLiveSpy = vi
-      .spyOn(urlIsLiveMod, 'urlIsLive')
-      .mockResolvedValueOnce(true)
-      .mockResolvedValueOnce(true)
-      .mockResolvedValueOnce(false);
 
     await waitUntilUnreachable(url);
 
-    expect(urlIsLiveSpy).toHaveBeenCalledTimes(3);
-    expect(urlIsLiveSpy).toHaveBeenNthCalledWith(1, url);
-    expect(urlIsLiveSpy).toHaveBeenNthCalledWith(2, url);
-    expect(urlIsLiveSpy).toHaveBeenNthCalledWith(3, url);
+    expect(fetchSpy).toHaveBeenCalledTimes(3);
+    expect(fetchSpy).toHaveBeenNthCalledWith(1, url);
+    expect(fetchSpy).toHaveBeenNthCalledWith(2, url);
+    expect(fetchSpy).toHaveBeenNthCalledWith(3, url);
   });
 
   test.fails(
     'times out test if url is live',
     async () => {
+      vi.spyOn(global, 'fetch').mockImplementation(() => Promise.resolve(new Response()));
+
       const url = 'mocked';
-      vi.spyOn(urlIsLiveMod, 'urlIsLive').mockResolvedValue(true);
 
       await waitUntilUnreachable(url);
     },

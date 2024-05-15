@@ -1,5 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { urlIsLive, waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
+import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
 
 import type { LaunchNodeOptions } from './launchNode';
@@ -66,7 +66,7 @@ const defaultLaunchNodeConfig: Partial<LaunchNodeOptions> = {
 describe('launchNode', () => {
   test('using ephemeral port 0 is possible', async () => {
     const { cleanup, port, url } = await launchNode({ port: '0' });
-    expect(await urlIsLive(url)).toBe(true);
+    expect(await fetch(url)).toBeTruthy();
     expect(port).not.toEqual('0');
 
     cleanup();
@@ -74,7 +74,7 @@ describe('launchNode', () => {
 
   it('cleanup kills the started node', async () => {
     const { cleanup, url } = await launchNode({});
-    expect(await urlIsLive(url)).toBe(true);
+    expect(await fetch(url)).toBeTruthy();
 
     cleanup();
 
