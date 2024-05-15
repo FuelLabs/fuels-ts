@@ -7,8 +7,10 @@ See the full ABI-spec [here](https://github.com/FuelLabs/fuel-specs/blob/master/
 # Table of contents
 
 - [Documentation](#documentation)
-- [Usage](#usage)
-  - [Installation](#installation)
+- [Installation](#installation)
+- [Help](#help)
+- [Generating Types](#generating-types)
+- [Programmatic API](#programmatic-api)
   - [Full SDK Installation](#full-sdk-installation)
 - [Type's Conversion Table](#types-conversion-table)
 - [Contributing](#contributing)
@@ -92,7 +94,7 @@ We just need to call it with the `typegen` command, and the rest feels the same.
 npx fuels typegen -i ./out/debug/*-abi.json -o ./src/contracts
 ```
 
-# Type's Conversion Table
+## Type's Conversion Table
 
 The table below describes how Sway types are converted from/to Typescript.
 
