@@ -2,10 +2,7 @@ import type { BN } from 'fuels';
 import { AssetId, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-const pathToCounterContractRootDir = join(
-  __dirname,
-  '../../../test/fixtures/forc-projects/counter'
-);
+const contractRootDirPath = join(__dirname, '../../../test/fixtures/forc-projects/counter');
 
 /**
  * @group node
@@ -13,8 +10,12 @@ const pathToCounterContractRootDir = join(
 describe('launching a test node', () => {
   test('simple contract deployment', async () => {
     // #region deploy-contract
+    // #import { launchTestNode };
+
+    // #context const contractRootDirPath = 'full-path-to-contract-root-dir';
+
     using launched = await launchTestNode({
-      deployContracts: [pathToCounterContractRootDir],
+      deployContracts: [contractRootDirPath],
     });
 
     const {
@@ -23,7 +24,7 @@ describe('launching a test node', () => {
       wallets,
     } = launched;
 
-    const response = await contract.functions.get_count().call();
+    const response = await contract.functions.count().call();
     // #endregion deploy-contract
     expect((response.value as BN).toNumber()).toBe(0);
     expect(provider).toBeDefined();
@@ -32,17 +33,21 @@ describe('launching a test node', () => {
 
   test('multiple contracts and wallets', async () => {
     // #region multiple-contracts-and-wallets
+    // #import { launchTestNode, AssetId };
+
+    // #context const contractRootDirPath = 'full-path-to-contract-root-dir';
+
     using launched = await launchTestNode({
       walletConfig: {
         count: 2,
-        assets: [AssetId.A, AssetId.B],
+        assets: AssetId.random(2),
         coinsPerAsset: 2,
         amountPerCoin: 1_000_000,
       },
       deployContracts: [
-        pathToCounterContractRootDir,
+        contractRootDirPath,
         {
-          contractDir: pathToCounterContractRootDir,
+          contractDir: contractRootDirPath,
           walletIndex: 1,
           options: { storageSlots: [] },
         },

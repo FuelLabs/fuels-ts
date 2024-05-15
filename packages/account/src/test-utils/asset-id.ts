@@ -12,7 +12,11 @@ export class AssetId {
 
   private constructor(public value: string) {}
 
-  public static random() {
-    return new AssetId(hexlify(randomBytes(32)));
+  public static random(count: number = 1) {
+    const assetIds = [];
+    for (let i = 0; i < count; i++) {
+      assetIds.push(new AssetId(hexlify(randomBytes(32))));
+    }
+    return assetIds;
   }
 }

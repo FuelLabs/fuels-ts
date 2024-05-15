@@ -2,7 +2,7 @@ contract;
 
 abi Counter {
     #[storage(read)]
-    fn get_count() -> u64;
+    fn count() -> u64;
 
     #[storage(write, read)]
     fn increment_count(amount: u64) -> u64;
@@ -14,7 +14,7 @@ storage {
 
 impl Counter for Contract {
     #[storage(read)]
-    fn get_count() -> u64 {
+    fn count() -> u64 {
         storage.counter.read()
     }
 

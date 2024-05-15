@@ -128,7 +128,7 @@ describe('setupTestProviderAndWallets', () => {
   });
 
   it('can be given custom asset id and message', async () => {
-    const assetId = AssetId.random();
+    const [assetId] = AssetId.random();
     const testMessage = new TestMessage();
     using providerAndWallets = await setupTestProviderAndWallets({
       walletConfig: {

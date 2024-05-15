@@ -374,6 +374,10 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
+                text: 'Wallet Config',
+                link: '/guide/testing/wallet-config',
+              },
+              {
                 text: 'Testing in TS',
                 link: '/guide/testing/testing-in-ts',
               },

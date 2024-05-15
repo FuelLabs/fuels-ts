@@ -113,9 +113,7 @@ export class WalletConfig {
     if (Array.isArray(assets)) {
       assetIds = assetIds.concat(assets.map((a) => a.value));
     } else {
-      for (let index = 0; index < assets - 1; index++) {
-        assetIds.push(AssetId.random().value);
-      }
+      assetIds.concat(AssetId.random(assets).map((a) => a.value));
     }
 
     wallets

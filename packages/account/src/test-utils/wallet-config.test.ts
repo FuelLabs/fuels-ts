@@ -98,7 +98,7 @@ describe('WalletConfig', () => {
   });
 
   it('allows custom assets to be provided', () => {
-    const assetId = AssetId.random();
+    const [assetId] = AssetId.random();
     const baseAssetId = hexlify(randomBytes(32));
     const {
       stateConfig: { coins: allCoins },
