@@ -18,7 +18,7 @@ To test your Sway applications using the TS-SDK, you can pick whatever testing l
 
 ### Launching a Test Node
 
-To simplify testing in isolation, the SDK provides `launchTestNode`, a utility via which you can spin up a short-lived `fuel-core` node, setup a custom provider and wallets, and deploy contracts in one go.
+To simplify testing in isolation, the SDK provides `launchTestNode`, a utility that allows you to spin up a short-lived `fuel-core` node, set up a custom provider and wallets, and deploy contracts in one go.
 Here is a simple contract deployment in a test:
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#deploy-contract{ts:line-numbers}
