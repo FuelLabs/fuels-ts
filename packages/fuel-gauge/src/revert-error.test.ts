@@ -1,8 +1,8 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Contract, WalletUnlocked, TransactionResultReceipt } from 'fuels';
-import { bn, ContractFactory, Provider, FUEL_NETWORK_URL, getRandomB256 } from 'fuels';
+import { bn, ContractFactory, Provider, FUEL_NETWORK_URL, getRandomB256, Predicate } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -235,6 +235,23 @@ describe('Revert Error Testing', () => {
           panic: false,
           revert: true,
           reason: 'unknown',
+        }
+      )
+    );
+  });
+
+  it('should ensure errors from getTransactionCost dry-run are properly thrown', async () => {
+    await expectToThrowFuelError(
+      () => contractInstance.functions.assert_value_ne_5(5).getTransactionCost(),
+      new FuelError(
+        ErrorCode.SCRIPT_REVERTED,
+        `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
+        {
+          logs: [5, 5],
+          receipts: expect.any(Array<TransactionResultReceipt>),
+          panic: false,
+          revert: true,
+          reason: 'assert_ne',
         }
       )
     );
