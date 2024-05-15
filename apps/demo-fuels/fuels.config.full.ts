@@ -98,12 +98,12 @@ export default createConfig({
 
   // #region forcPath
   // Default: 'forc',
-  forcPath: '/custom/path/to/forc',
+  forcPath: '~/.fuelup/bin/forc',
   // #endregion forcPath
 
   // #region fuelCorePath
   // Default: 'fuel-core'
-  fuelCorePath: '/custom/path/to/fuel-core',
+  fuelCorePath: '~/.fuelup/bin/fuel-core',
   // #endregion fuelCorePath
 });
 
