@@ -135,7 +135,7 @@ describe('Abi interface', () => {
 
     it('encodes configurables', () => {
       const encoded = exhaustiveExamplesInterface.encodeConfigurable('U8', 55);
-      expect(encoded).toEqual(new Uint8Array([55, 0, 0, 0, 0, 0, 0, 0]));
+      expect(encoded).toEqual(new Uint8Array([55]));
     });
 
     it('throws when encoding non-existent configurable', () => {
@@ -599,8 +599,8 @@ describe('Abi interface', () => {
         '$title: $value',
         ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
           const encoded = Array.isArray(value)
-            ? fn.encodeArguments(value, offset)
-            : fn.encodeArguments([value], offset);
+            ? fn.encodeArguments(value)
+            : fn.encodeArguments([value]);
 
           const encodedVal =
             encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;

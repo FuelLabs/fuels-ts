@@ -1,21 +1,13 @@
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import {
-  Interface,
-  INPUT_COIN_FIXED_SIZE,
-  WORD_SIZE,
-  calculateVmTxMemory,
-  SCRIPT_FIXED_SIZE,
-} from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { ByteArrayCoder } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
 import {
   transactionRequestify,
-  BaseTransactionRequest,
   isRequestInputResource,
   isRequestInputResourceFromOwner,
 } from '../providers';
@@ -90,8 +82,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
   ) {
     const request = transactionRequestify(transactionRequestLike) as T;
 
-    const { policies } = BaseTransactionRequest.getPolicyMeta(request);
-
     const placeholderIndex = this.getIndexFromPlaceholderWitness(request);
 
     if (placeholderIndex !== -1) {
@@ -103,7 +93,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
         // eslint-disable-next-line no-param-reassign
         input.predicate = hexlify(this.bytes);
         // eslint-disable-next-line no-param-reassign
-        input.predicateData = hexlify(this.getPredicateData(policies.length));
+        input.predicateData = hexlify(this.getPredicateData());
         // eslint-disable-next-line no-param-reassign
         input.witnessIndex = 0;
       }
@@ -134,26 +124,13 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     return super.simulateTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
-  private getPredicateData(policiesLength: number): Uint8Array {
+  private getPredicateData(): Uint8Array {
     if (!this.predicateData.length) {
       return new Uint8Array();
     }
 
     const mainFn = this.interface?.functions.main;
-    const paddedCode = new ByteArrayCoder(this.bytes.length).encode(this.bytes);
-
-    const VM_TX_MEMORY = calculateVmTxMemory({
-      maxInputs: this.provider.getChain().consensusParameters.txParameters.maxInputs.toNumber(),
-    });
-    const OFFSET =
-      VM_TX_MEMORY +
-      SCRIPT_FIXED_SIZE +
-      INPUT_COIN_FIXED_SIZE +
-      WORD_SIZE +
-      paddedCode.byteLength +
-      policiesLength * WORD_SIZE;
-
-    return mainFn?.encodeArguments(this.predicateData, OFFSET) || new Uint8Array();
+    return mainFn?.encodeArguments(this.predicateData) || new Uint8Array();
   }
 
   /**
@@ -215,7 +192,6 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     return resources.map((resource) => ({
       ...resource,
       predicate: hexlify(this.bytes),
-      padPredicateData: (policiesLength: number) => hexlify(this.getPredicateData(policiesLength)),
     }));
   }
 
