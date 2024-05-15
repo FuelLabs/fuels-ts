@@ -36,7 +36,7 @@ You can also configure wallets and deploy multiple contracts with them:
 
 ### Configuring the Test Node
 
-`launchTestNode` creates a temporary snapshot directory and configurations every time it runs. The path to this directory is passed given to `fuel-core` via the `--snapshot` flag.
+`launchTestNode` creates a temporary snapshot directory and configurations every time it runs. The path to this directory is passed to `fuel-core` via the `--snapshot` flag.
 
 The default snapshot used is that of the current testnet network iteration. [Click here](https://github.com/FuelLabs/fuels-ts/blob/master/.fuel-core/configs) to see what it looks like.
 
