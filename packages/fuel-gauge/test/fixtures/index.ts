@@ -67,5 +67,5 @@ export const getFuelGaugeForcProject = (project: FuelGaugeProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, 'forc-projects', project),
     projectName: project,
-    build: 'release',
+    TContractConfig: 'release',
   });

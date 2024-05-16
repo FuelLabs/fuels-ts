@@ -7,13 +7,13 @@ import { normalizeString } from '../utils/normalizeString';
 interface IGetForcProjectParams {
   projectDir: string;
   projectName: string;
-  build: 'debug' | 'release';
+  TContractConfigs: 'debug' | 'release';
 }
 
 export const getProjectBuildDir = (params: IGetForcProjectParams) =>
-  join(params.projectDir, 'out', params.build);
+  join(params.projectDir, 'out', params.TContractConfigs);
 export const getProjectReleaseDir = (params: IGetForcProjectParams) =>
-  join(params.projectDir, 'out', params.build);
+  join(params.projectDir, 'out', params.TContractConfigs);
 export const getProjectTempDir = (params: IGetForcProjectParams) =>
   join(getProjectBuildDir(params), '__temp__');
 

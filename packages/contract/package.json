@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "pretest": "pnpm build:forc",
-    "build:forc": "pnpm fuels-forc build -p ./test/fixtures/simple-contract --release",
+    "build:forc": "pnpm exec ../fuels/fuels.js build",
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },

@@ -2,9 +2,8 @@ import type { BN } from 'fuels';
 import { Wallet, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum } from '../test/fixtures';
-
-import { getProgramDir } from './utils';
+import { MultiTokenContractAbi__factory } from '../test/typegen/contracts';
+import binHexlified from '../test/typegen/contracts/MultiTokenContractAbi.hex';
 
 // hardcoded subIds on MultiTokenContract
 const subIds = [
@@ -12,8 +11,6 @@ const subIds = [
   '0x0d000e76a67758bbc6861d48ca571876cd480d9df8cf4dfa635c168e1e97f324',
   '0xdf78cb1e1a1b31fff104eb0baf734a4767a1b1373687c29a26bf1a2b22d1a3c5',
 ];
-
-const multiTokenContractDir = getProgramDir(FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT);
 
 /**
  * @group node
@@ -23,7 +20,12 @@ describe('MultiTokenContract', () => {
     'can mint and transfer coins',
     async () => {
       using launched = await launchTestNode({
-        deployContracts: [multiTokenContractDir],
+        deployContracts: [
+          {
+            typegenFactory: MultiTokenContractAbi__factory,
+            bytecode: binHexlified,
+          },
+        ],
       });
       const {
         provider,
@@ -112,7 +114,12 @@ describe('MultiTokenContract', () => {
 
   it('can burn coins', async () => {
     using launched = await launchTestNode({
-      deployContracts: [multiTokenContractDir],
+      deployContracts: [
+        {
+          typegenFactory: MultiTokenContractAbi__factory,
+          bytecode: binHexlified,
+        },
+      ],
     });
     const {
       contracts: [multiTokenContract],

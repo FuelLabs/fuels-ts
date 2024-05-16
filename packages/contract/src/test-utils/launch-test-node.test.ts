@@ -10,21 +10,22 @@ import { writeFile, copyFile } from 'fs/promises';
 import os from 'os';
 import { join } from 'path';
 
-import { launchTestNode } from './launch-test-node';
+import { SimpleContractAbi__factory } from '../../test/typegen';
+import contractBytecode from '../../test/typegen/contracts/SimpleContractAbi.hex';
 
-const pathToContractRootDir = join(__dirname, '../../test/fixtures/simple-contract');
+import { launchTestNode } from './launch-test-node';
 
 async function generateChainConfigFile(chainName: string): Promise<[string, () => void]> {
   const configsFolder = join(__dirname, '../../../../', '.fuel-core', 'configs');
-  
+
   const chainMetadata = JSON.parse(
     readFileSync(join(configsFolder, 'metadata.json'), 'utf-8')
   ) as SnapshotConfigs['metadata'];
-  
+
   const chainConfig = JSON.parse(
     readFileSync(join(configsFolder, chainMetadata.chain_config), 'utf-8')
   ) as SnapshotConfigs['chainConfig'];
-  
+
   chainConfig.chain_name = chainName;
 
   const tempSnapshotDirPath = join(os.tmpdir(), '.fuels-ts', randomUUID());
@@ -83,7 +84,18 @@ describe('launchTestNode', () => {
     const spy = vi.spyOn(setupTestProviderAndWalletsMod, 'setupTestProviderAndWallets');
 
     const { error } = await safeExec(() =>
-      launchTestNode({ deployContracts: ['invalid location'] })
+      launchTestNode({
+        deployContracts: [
+          {
+            deployer: {
+              deployContract: () => {
+                throw new Error('Test error');
+              },
+            },
+            bytecode: contractBytecode,
+          },
+        ],
+      })
     );
     expect(error).toBeDefined();
     // Verify that error isn't due to
@@ -99,22 +111,12 @@ describe('launchTestNode', () => {
 
   test('a contract can be deployed', async () => {
     using launched = await launchTestNode({
-      deployContracts: [{ contractDir: pathToContractRootDir }],
-    });
-
-    const {
-      contracts: [contract],
-    } = launched;
-
-    const response = await contract.functions.test_function().call();
-    expect(response.value).toBe(true);
-  });
-
-  test('a contract can be deployed by providing just the path', async () => {
-    using launched = await launchTestNode({
-      walletConfig: {},
-      providerOptions: {},
-      deployContracts: [pathToContractRootDir],
+      deployContracts: [
+        {
+          deployer: SimpleContractAbi__factory,
+          bytecode: contractBytecode,
+        },
+      ],
     });
 
     const {
@@ -131,8 +133,15 @@ describe('launchTestNode', () => {
         count: 2,
       },
       deployContracts: [
-        pathToContractRootDir,
-        { contractDir: pathToContractRootDir, walletIndex: 1 },
+        {
+          deployer: SimpleContractAbi__factory,
+          bytecode: contractBytecode,
+        },
+        {
+          deployer: SimpleContractAbi__factory,
+          bytecode: contractBytecode,
+          walletIndex: 1,
+        },
       ],
     });
 
@@ -155,7 +164,13 @@ describe('launchTestNode', () => {
     await expectToThrowFuelError(
       async () => {
         await launchTestNode({
-          deployContracts: [{ contractDir: pathToContractRootDir, walletIndex: 2 }],
+          deployContracts: [
+            {
+              deployer: SimpleContractAbi__factory,
+              bytecode: contractBytecode,
+              walletIndex: 2,
+            },
+          ],
         });
       },
       {
