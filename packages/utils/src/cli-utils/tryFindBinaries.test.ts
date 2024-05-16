@@ -45,7 +45,10 @@ const mockAllDeps = (
     FUELS: compatibleVersion,
   });
 
+  const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
   return {
+    warn,
     getSystemForc,
     getSystemFuelCore,
     getBuiltinVersions,
@@ -118,25 +121,24 @@ describe('tryFindBinaries', () => {
     );
   });
 
-  it(`should throw when binaries are outdated`, async () => {
+  it(`should warn the user when binaries are outdated`, async () => {
     const compatibleVersion = '1.0.0';
     const currentVersion = '0.0.1';
-    const { getSystemForc, getSystemFuelCore } = mockAllDeps({
+    const expectedMessage = [
+      `The following binaries on the filesystem are outdated:`,
+      ` -> 'forc' is currently '${currentVersion}', but requires '${compatibleVersion}'.`,
+      ` -> 'fuel-core' is currently '${currentVersion}', but requires '${compatibleVersion}'.`,
+    ].join('\n');
+    const { warn, getSystemForc, getSystemFuelCore } = mockAllDeps({
       compatibleVersion,
       forcVersion: currentVersion,
       fuelCoreVersion: currentVersion,
     });
 
-    const { error } = await safeExec(() => tryFindBinaries());
+    tryFindBinaries();
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
-    expect(error?.message).toContain(`The following binaries on the filesystem are outdated`);
-    expect(error?.message).toContain(
-      `'forc' is currently '${currentVersion}', but requires '${compatibleVersion}'`
-    );
-    expect(error?.message).toContain(
-      `'fuel-core' is currently '${currentVersion}', but requires '${compatibleVersion}'`
-    );
+    expect(warn).toBeCalledWith(expectedMessage)
   });
 });

@@ -16,13 +16,13 @@ import {
 export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: string } = {}) => {
   // Ensure we can get the binary versions
   const { error: forcError, systemForcPath, systemForcVersion } = getSystemForc(paths.forcPath);
-  
+
   const {
     error: fuelCoreError,
     systemFuelCorePath,
     systemFuelCoreVersion,
   } = getSystemFuelCore(paths.fuelCorePath);
-  
+
   if (forcError || fuelCoreError) {
     const errors = [
       'Unable to find the following binaries on the filesystem:',
@@ -46,6 +46,7 @@ export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: strin
   if (systemForcIsLt || systemFuelCoreIsLt) {
     const { FORC: compatibleForcVersion, FUEL_CORE: compatibleFuelCoreVersion } =
       getBuiltinVersions();
+
     const errors = [
       'The following binaries on the filesystem are outdated:',
       systemForcIsLt
@@ -55,9 +56,9 @@ export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: strin
         ? ` -> '${systemFuelCorePath}' is currently '${systemFuelCoreVersion}', but requires '${compatibleFuelCoreVersion}'.`
         : undefined,
     ];
-    throw new FuelError(FuelError.CODES.NOT_SUPPORTED, `${errors.filter(Boolean).join('\n')}`, {
-      ...paths,
-    });
+
+    // eslint-disable-next-line no-console
+    console.warn(`${errors.filter(Boolean).join('\n')}`);
   }
 
   return {
