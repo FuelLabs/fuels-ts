@@ -7,9 +7,9 @@ It's a collection of utilities and test utilities that may be useful in other pl
 # Table of contents
 
 - [Documentation](#documentation)
-- [Usage](#usage)
-  - [Installation](#installation)
-  - [Full SDK Installation](#full-sdk-installation)
+- [Installation](#installation)
+  - [Utilities](#utilities)
+  - [Test Utilities](#test-utilities)
 - [Contributing](#contributing)
 - [Changelog](#changelog)
 - [License](#license)
