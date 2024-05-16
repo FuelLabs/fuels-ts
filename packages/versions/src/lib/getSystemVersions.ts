@@ -4,7 +4,7 @@ export const getSystemVersion = async (command: string) => {
   let version: string | null = null;
   let error: Error | null = null;
 
-  if (process.env.VITEST && process.env.VITEST_ENV !== 'browser') {
+  if (!process.env.VITEST || process.env.VITEST_ENV === 'node') {
     const { execSync } = await import('child_process');
     try {
       const contents = execSync(command).toString();

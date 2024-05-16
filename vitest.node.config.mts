@@ -8,6 +8,7 @@ const config: UserConfig = {
     coverage: {
       reportsDirectory: "coverage/environments/node",
     },
+    env: { VITEST_ENV: "node" },
   },
 };
 

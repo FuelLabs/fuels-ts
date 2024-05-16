@@ -11,7 +11,7 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
 
   let spawnFn: typeof spawn;
 
-  if (process.env.VITEST && process.env.VITEST_ENV !== 'browser') {
+  if (!process.env.VITEST || process.env.VITEST_ENV === 'node') {
     const { spawn: spawnChildProcess } = await import('child_process');
     spawnFn = spawnChildProcess;
   }
