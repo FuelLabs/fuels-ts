@@ -9,6 +9,7 @@ pnpm node:run > /dev/null 2>&1 &
 echo "Started Fuel-Core node in background."
 
 if [[ "$*" == *"--browser"* ]]; then
+    pnpm pretest
     pnpm test:browser
     TEST_RESULT=$?
 elif [[ "$*" == *"--node"* ]]; then

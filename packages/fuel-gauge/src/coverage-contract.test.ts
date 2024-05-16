@@ -56,6 +56,7 @@ enum ColorEnumOutput {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Coverage Contract', () => {
   it('can return outputs', async () => {
