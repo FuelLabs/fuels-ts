@@ -1,0 +1,92 @@
+name: Create Changeset
+
+on:
+  repository_dispatch:
+    types: [create-changeset]
+
+jobs:
+  create-changeset:
+    name: Create Changeset
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.client_payload.ref }}
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2.1.0
+        with:
+          version: 9.0.5
+          run_install: true
+
+      - name: Install jq
+        run: sudo apt-get install -y jq
+
+      - name: Run dependabot changeset script
+        run: pnpm changeset:dependabot
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Commit Changeset
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add .
+          git commit -m "build: update dependency changeset [skip ci]"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+
+  validate-changeset:
+    name: Validate PR Changeset
+    needs: create-changeset
+    if: startsWith(github.head_ref, 'changeset-release') != true && github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Validate Changeset
+        run: pnpm changeset status --since=origin/${{ github.base_ref }}
+
+      - name: Validate Changeset Content
+        run: |
+          CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/${{ github.base_ref }} .changeset/*.md)
+
+          if [ -z "$CHANGESET_FILE" ]; then
+            # A PR doesn't have to have a changeset when packages aren't affected
+            # e.g. when a script is added in the scripts folder
+            exit 0
+          fi
+          echo "CHANGESET_FILE=$(echo "$CHANGESET_FILE")" >> $GITHUB_ENV
+
+          AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
+
+          if [ -z "$AFFECTED_PACKAGES" ]; then
+            # The changelog logic ignores changesets that don't affect any packages so we can ignore them here as well,
+            # because this changeset linting logic is only for changesets who's PRs will be referenced in the changelog.
+
+            # The relevant changelog logic is here:
+            # https://github.com/FuelLabs/fuels-ts/blob/155b6f2fe28e988b277dac231af6d6a0cff1df0c/scripts/changeset/get-full-changelog.mts#L77
+
+            exit 0
+          fi
+
+          CHANGESET_DESCRIPTION=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
+
+          if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then
+            echo "Changeset content does not match PR title. Please update the changeset to match the PR title."
+            echo "Changeset file: $CHANGESET_FILE"
+            echo "Changeset content:"
+            cat "$CHANGESET_FILE"
+            exit 1
+          fi
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
