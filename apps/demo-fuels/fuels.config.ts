@@ -9,5 +9,5 @@ export default createConfig({
 
 /**
  * Check the docs:
- * https://fuellabs.github.io/fuels-ts/guide/fuels/config-file
+ * https://docs.fuel.network/docs/fuels-ts/fuels-cli/config-file/
  */
