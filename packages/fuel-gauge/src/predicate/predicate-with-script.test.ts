@@ -9,6 +9,7 @@ import { fundPredicate } from './utils/predicate';
 
 /**
  * @group node
+ * @group bun
  */
 describe('Predicate', () => {
   const { binHexlified: scriptBytes, abiContents: scriptAbi } = getFuelGaugeForcProject(

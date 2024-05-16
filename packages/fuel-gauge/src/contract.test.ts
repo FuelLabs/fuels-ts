@@ -165,6 +165,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 
 /**
  * @group node
+ * @group bun
  */
 describe('Contract', () => {
   let provider: Provider;

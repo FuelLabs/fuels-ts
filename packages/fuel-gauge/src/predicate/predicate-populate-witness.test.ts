@@ -14,6 +14,7 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtu
 
 /**
  * @group node
+ * @group bun
  */
 describe('Predicate', () => {
   const assertNumberArtifacts = getFuelGaugeForcProject(

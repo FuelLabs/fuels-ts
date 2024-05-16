@@ -82,6 +82,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
 
 /**
  * @group node
+ * @group bun
  */
 describe('TransactionResponse', () => {
   let provider: Provider;

@@ -25,6 +25,8 @@
     "test:validate": "./scripts/tests-validate.sh",
     "test:browser": "vitest --run --coverage --config vitest.browser.config.mts $(scripts/tests-find.sh --browser)",
     "test:browser:filter": "vitest --run --coverage --config vitest.browser.config.mts",
+    "test:bun": "bun test $(scripts/tests-find.sh --bun)",
+    "test:bun:filter": "bun test",
     "test:e2e": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --e2e)",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --max-warnings 0",

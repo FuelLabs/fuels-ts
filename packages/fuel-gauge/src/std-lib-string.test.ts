@@ -26,6 +26,7 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group bun
  */
 describe('std-lib-string Tests', () => {
   const { binHexlified: predicateStdString, abiContents: predicateStdStringAbi } =

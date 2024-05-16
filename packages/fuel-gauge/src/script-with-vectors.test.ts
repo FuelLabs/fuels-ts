@@ -16,6 +16,7 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group bun
  */
 describe('Script With Vectors', () => {
   it('can call script and use main argument [array]', async () => {

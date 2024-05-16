@@ -15,6 +15,7 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 
 /**
  * @group node
+ * @group bun
  */
 describe('Fee', () => {
   let wallet: BaseWalletUnlocked;

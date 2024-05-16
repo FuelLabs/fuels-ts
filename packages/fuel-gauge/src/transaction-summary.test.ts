@@ -28,6 +28,7 @@ import { getSetupContract } from './utils';
 
 /**
  * @group node
+ * @group bun
  */
 describe('TransactionSummary', () => {
   let provider: Provider;

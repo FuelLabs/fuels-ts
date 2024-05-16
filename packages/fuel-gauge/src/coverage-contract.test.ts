@@ -48,6 +48,7 @@ enum ColorEnumOutput {
 
 /**
  * @group node
+ * @group bun
  */
 describe('Coverage Contract', () => {
   it('can return outputs', async () => {

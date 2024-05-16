@@ -27,6 +27,7 @@ const defaultValues = {
 
 /**
  * @group node
+ * @group bun
  */
 describe('Configurable Contract', () => {
   let wallet: WalletUnlocked;

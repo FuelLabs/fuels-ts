@@ -12,6 +12,7 @@ let wallet: WalletUnlocked;
 
 /**
  * @group node
+ * @group bun
  */
 describe('Script With Configurable', () => {
   const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(

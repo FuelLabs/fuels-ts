@@ -21,6 +21,7 @@ import type { Validation } from '../types/predicate';
 
 /**
  * @group node
+ * @group bun
  */
 describe('Predicate', () => {
   const { binHexlified: predicateTrueBytecode } = getFuelGaugeForcProject(

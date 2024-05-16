@@ -18,6 +18,7 @@ import { createSetupConfig } from './utils';
 
 /**
  * @group node
+ * @group bun
  */
 describe('Policies', () => {
   let provider: Provider;

@@ -33,6 +33,7 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group bun
  */
 describe('Bytes Tests', () => {
   let baseAssetId: string;

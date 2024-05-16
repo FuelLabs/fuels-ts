@@ -8,6 +8,7 @@ import { fundPredicate, setupWallets } from './utils/predicate';
 
 /**
  * @group node
+ * @group bun
  */
 describe('Predicate', () => {
   const { binHexlified: predicateBytesMainArgsStruct, abiContents: predicateAbiMainArgsStruct } =

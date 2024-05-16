@@ -8,6 +8,7 @@ import { getSetupContract } from './utils';
 
 /**
  * @group node
+ * @group bun
  */
 describe('bytecode computations', () => {
   test('compute_bytecode_root', async () => {

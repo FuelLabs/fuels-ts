@@ -8,6 +8,7 @@ import { fundPredicate, assertBalance } from './utils/predicate';
 
 /**
  * @group node
+ * @group bun
  */
 describe('Predicate', () => {
   const { binHexlified: predicateBytesTrue, abiContents: predicateAbiTrue } =

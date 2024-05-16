@@ -12,6 +12,7 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 
 /**
  * @group node
+ * @group bun
  */
 describe('dry-run-multiple-txs', () => {
   const { abiContents, binHexlified } = getFuelGaugeForcProject(

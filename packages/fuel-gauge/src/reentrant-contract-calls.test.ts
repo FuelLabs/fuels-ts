@@ -10,6 +10,7 @@ const storageTest = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_C
 
 /**
  * @group node
+ * @group bun
  */
 describe('Reentrant Contract Calls', () => {
   let barContract: Contract;

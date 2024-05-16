@@ -19,6 +19,7 @@ import { fundPredicate, setupContractWithConfig } from './utils/predicate';
 
 /**
  * @group node
+ * @group bun
  */
 describe('Predicate', () => {
   const { binHexlified: contractBytes, abiContents: contractAbi } = getFuelGaugeForcProject(

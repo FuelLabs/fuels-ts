@@ -28,6 +28,7 @@ beforeAll(async () => {
 
 /**
  * @group node
+ * @group bun
  */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {

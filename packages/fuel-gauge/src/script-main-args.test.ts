@@ -22,6 +22,7 @@ type Baz = {
 
 /**
  * @group node
+ * @group bun
  */
 describe('Script Coverage', () => {
   const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(

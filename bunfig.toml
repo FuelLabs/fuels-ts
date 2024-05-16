@@ -1,0 +1,4 @@
+[test]
+preload = ["./vitest.env.ts"]
+coverage = true
+coverageSkipTestFiles = true

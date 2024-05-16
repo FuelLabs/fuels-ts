@@ -6,6 +6,7 @@ import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet, bn } from
 
 /**
  * @group node
+ * @group bun
  */
 describe(__filename, () => {
   let mainWallet: Account;

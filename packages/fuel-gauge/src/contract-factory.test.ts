@@ -8,6 +8,7 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 
 /**
  * @group node
+ * @group bun
  */
 describe('Contract Factory', () => {
   let baseAssetId: string;

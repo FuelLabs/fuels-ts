@@ -24,6 +24,7 @@ beforeAll(async () => {
 
 /**
  * @group node
+ * @group bun
  */
 test('allow sending coins to payable functions', async () => {
   // This should not fail because the function is payable

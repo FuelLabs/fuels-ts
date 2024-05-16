@@ -6,6 +6,7 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 
 /**
  * @group node
+ * @group bun
  */
 describe('PredicateConditionalInputs', () => {
   let baseAssetId: string;

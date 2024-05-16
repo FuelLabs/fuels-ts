@@ -5,6 +5,7 @@ import { getSetupContract } from './utils';
 
 /**
  * @group node
+ * @group bun
  */
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {

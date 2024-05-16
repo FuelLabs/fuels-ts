@@ -29,6 +29,7 @@ const setup = async () => {
 
 /**
  * @group node
+ * @group bun
  */
 describe('StorageTestContract', () => {
   let baseAssetId: string;

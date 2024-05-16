@@ -10,6 +10,7 @@ let baseAssetId: string;
 
 /**
  * @group node
+ * @group bun
  */
 describe('Auth Testing', () => {
   beforeAll(async () => {

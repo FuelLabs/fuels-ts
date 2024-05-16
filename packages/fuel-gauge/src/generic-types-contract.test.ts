@@ -10,6 +10,7 @@ const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeFor
 
 /**
  * @group node
+ * @group bun
  */
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {

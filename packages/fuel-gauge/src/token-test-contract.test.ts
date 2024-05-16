@@ -31,6 +31,7 @@ beforeAll(async () => {
 
 /**
  * @group node
+ * @group bun
  */
 describe('TokenTestContract', () => {
   it('Can mint and transfer coins', async () => {

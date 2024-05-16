@@ -4,6 +4,7 @@ import { getSetupContract } from './utils';
 
 /**
  * @group node
+ * @group bun
  */
 describe('isReadOnly', () => {
   test('isReadOnly returns true for a read-only function', async () => {

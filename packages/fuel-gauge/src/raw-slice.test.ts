@@ -36,6 +36,7 @@ beforeAll(async () => {
 
 /**
  * @group node
+ * @group bun
  */
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {

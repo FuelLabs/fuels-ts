@@ -11,6 +11,7 @@ let wallet: WalletUnlocked;
 
 /**
  * @group node
+ * @group bun
  */
 describe('Revert Error Testing', () => {
   let provider: Provider;
