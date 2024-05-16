@@ -16,11 +16,13 @@ import {
 export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: string } = {}) => {
   // Ensure we can get the binary versions
   const { error: forcError, systemForcPath, systemForcVersion } = getSystemForc(paths.forcPath);
+  
   const {
     error: fuelCoreError,
     systemFuelCorePath,
     systemFuelCoreVersion,
   } = getSystemFuelCore(paths.fuelCorePath);
+  
   if (forcError || fuelCoreError) {
     const errors = [
       'Unable to find the following binaries on the filesystem:',
@@ -28,6 +30,7 @@ export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: strin
       fuelCoreError ? ` -> 'fuel-core' at path '${systemFuelCorePath}'` : undefined,
       `\nVisit https://docs.fuel.network/guides/installation/ for an installation guide.`,
     ];
+
     throw new FuelError(
       FuelError.CODES.BIN_FILE_NOT_FOUND,
       `${errors.filter(Boolean).join('\n')}`,
