@@ -10,8 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: CI Setup
-        uses: ./.github/actions/ci-setup
+      - name: Build
+        uses: ./.github/actions/test-setup
         with:
           node-version: ${{ matrix.env.version || 20 }}
       - name: Run Fuel Node
