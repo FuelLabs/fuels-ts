@@ -5,7 +5,7 @@ import apiLinks from '../.typedoc/api-links.json';
 
 export default defineConfig({
   title: 'Fuels-ts',
-  description: 'Fuel Labs Typescript SDK',
+  description: 'Fuel Typescript SDK',
   base: '/fuels-ts/',
   srcDir: 'src',
   outDir: 'dist',
@@ -45,7 +45,30 @@ export default defineConfig({
         items: [
           {
             text: 'Getting Started',
-            link: '/getting-started.md',
+            link: '/guide/getting-started/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Installation',
+                link: '/guide/getting-started/installation',
+              },
+              {
+                text: 'Usage',
+                link: '/guide/getting-started/usage',
+              },
+              {
+                text: 'Connecting to Testnet',
+                link: '/guide/getting-started/connecting-to-testnet',
+              },
+              {
+                text: 'Connecting to a Local Node',
+                link: '/guide/getting-started/connecting-to-a-local-node',
+              },
+              {
+                text: 'Further Resources',
+                link: '/guide/getting-started/further-resources',
+              },
+            ],
           },
           {
             text: 'Creating a Fuel dApp',

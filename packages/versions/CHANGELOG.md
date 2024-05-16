@@ -1,5 +1,19 @@
 # @fuel-ts/versions
 
+## 0.86.0
+
+### Patch Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+## 0.85.0
+
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+
 ## 0.83.0
 
 ### Minor Changes

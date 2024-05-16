@@ -6,7 +6,6 @@ import { findType } from '../../utils/findType';
 
 import { AType } from './AType';
 import { EmptyType } from './EmptyType';
-import { OptionType } from './OptionType';
 
 export class EnumType extends AType implements IType {
   public static swayType = 'enum MyEnumName';
@@ -14,7 +13,7 @@ export class EnumType extends AType implements IType {
   public name = 'enum';
 
   static MATCH_REGEX: RegExp = /^enum (.+::)?(.+)$/m;
-  static IGNORE_REGEX: RegExp = OptionType.MATCH_REGEX;
+  static IGNORE_REGEX: RegExp = /^enum (Option|Result)$/m;
 
   static isSuitableFor(params: { type: string }) {
     const isAMatch = EnumType.MATCH_REGEX.test(params.type);

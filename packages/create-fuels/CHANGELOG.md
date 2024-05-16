@@ -1,5 +1,15 @@
 # create-fuels
 
+## 0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- 7c3ef04: feat: optionally auto-install `fuelup` during `create fuels` routine
+
+## 0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

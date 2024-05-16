@@ -173,7 +173,7 @@ describe('Transaction Request', () => {
     });
 
     const predicateCoins = await predicate.getResourcesToSpend([
-      { amount: 1000, assetId: baseAssetId },
+      { amount: 2000, assetId: baseAssetId },
     ]);
 
     // Add the predicate input and resources
@@ -224,7 +224,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0xac53fe9d09624f6295e0d9205eecc373ff568db2dbb89656190b1cb1a9b5bb00'
+      '0xb82d9e3da13a1b56b623238c0d7a7ab4d602f2c7f886bf7a9c05ecfb99267ce3'
     );
   });
 });

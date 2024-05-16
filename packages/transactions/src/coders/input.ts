@@ -65,12 +65,12 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.txID));
-    parts.push(new NumberCoder('u16').encode(value.outputIndex));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.owner));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.assetId));
     parts.push(new TxPointerCoder().encode(value.txPointer));
-    parts.push(new NumberCoder('u16').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
     parts.push(new BigNumberCoder('u64').encode(value.predicateDataLength));
@@ -88,7 +88,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const txID = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const owner = decoded;
@@ -98,7 +98,7 @@ export class InputCoinCoder extends Coder<InputCoin, InputCoin> {
     const assetId = decoded;
     [decoded, o] = new TxPointerCoder().decode(data, o);
     const txPointer = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessIndex = Number(decoded);
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
@@ -163,7 +163,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
     const parts: Uint8Array[] = [];
 
     parts.push(new B256Coder().encode(value.txID));
-    parts.push(new NumberCoder('u16').encode(value.outputIndex));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputIndex));
     parts.push(new B256Coder().encode(value.balanceRoot));
     parts.push(new B256Coder().encode(value.stateRoot));
     parts.push(new TxPointerCoder().encode(value.txPointer));
@@ -178,7 +178,7 @@ export class InputContractCoder extends Coder<InputContract, InputContract> {
 
     [decoded, o] = new B256Coder().decode(data, o);
     const txID = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const outputIndex = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const balanceRoot = decoded;
@@ -277,7 +277,7 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     parts.push(new ByteArrayCoder(32).encode(value.recipient));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new ByteArrayCoder(32).encode(value.nonce));
-    parts.push(new NumberCoder('u16').encode(value.witnessIndex));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
     parts.push(new BigNumberCoder('u64').encode(value.predicateGasUsed));
     parts.push(new BigNumberCoder('u64').encode(data.length));
     parts.push(new BigNumberCoder('u64').encode(value.predicateLength));
@@ -311,11 +311,11 @@ export class InputMessageCoder extends Coder<InputMessage, InputMessage> {
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessIndex = Number(decoded);
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateGasUsed = decoded;
-    [decoded, o] = new NumberCoder('u32').decode(data, o);
+    [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
     const dataLength = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const predicateLength = decoded;
@@ -359,7 +359,7 @@ export class InputCoder extends Coder<Input, Input> {
   encode(value: Input): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u8').encode(value.type));
+    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(value.type));
 
     const { type } = value;
 
@@ -391,7 +391,7 @@ export class InputCoder extends Coder<Input, Input> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
     const type = decoded as InputType;
     switch (type) {
       case InputType.Coin: {

@@ -25,6 +25,7 @@ import {
   ZeroBytes32,
   FUEL_NETWORK_URL,
   Predicate,
+  PolicyType,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -478,7 +479,6 @@ describe('Contract', () => {
       ])
       .txParams({
         gasLimit: 4_000_000,
-        optimizeGas: false,
       })
       .call<[BN, BN]>();
 
@@ -510,7 +510,6 @@ describe('Contract', () => {
     const { value } = await invocationScope
       .txParams({
         gasLimit: transactionCost.gasUsed,
-        optimizeGas: false,
       })
       .call<[string, string]>();
 
@@ -646,9 +645,7 @@ describe('Contract', () => {
     const struct = { a: true, b: 1337 };
     const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
     const multiCallScope = contract.multiCall(invocationScopes);
-    await multiCallScope.fundWithRequiredCoins();
-
-    const transactionRequest = await multiCallScope.getTransactionRequest();
+    const transactionRequest = await multiCallScope.fundWithRequiredCoins();
 
     const txRequest = JSON.stringify(transactionRequest);
     const txRequestParsed = JSON.parse(txRequest);
@@ -821,13 +818,13 @@ describe('Contract', () => {
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const wallet = await generateTestWallet(provider, [[10_000_000_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
 
     const contract = await setupContract();
 
     const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
-    const u64Amount = bn(5_000_000_000);
+    const u64Amount = bn(10_000);
     const amountToContract = u64Amount;
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId);
@@ -837,6 +834,28 @@ describe('Contract', () => {
     const finalBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
+  });
+
+  it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
+    const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
+    const contract = await setupContract();
+    const amountToContract = 5_000;
+
+    const gasLimit = 80_000;
+    const maxFee = 40_000;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId, {
+      gasLimit,
+      maxFee,
+    });
+
+    const { transaction } = await tx.waitForResult();
+
+    const { scriptGasLimit, policies } = transaction;
+    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
   it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
@@ -1147,5 +1166,67 @@ describe('Contract', () => {
     ({ value } = await storageContract.functions.counter().get());
 
     expect(value.toNumber()).toBe(initialCounterValue);
+  });
+
+  it('should ensure "maxFee" and "gasLimit" can be set for a contract call', async () => {
+    const { abiContents, binHexlified } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
+    );
+
+    const wallet = await generateTestWallet(provider, [[150_000, baseAssetId]]);
+    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+
+    const storageContract = await factory.deployContract();
+
+    const gasLimit = 200_000;
+    const maxFee = 100_000;
+
+    const {
+      transactionResult: { transaction },
+    } = await storageContract.functions
+      .counter()
+      .txParams({
+        gasLimit,
+        maxFee,
+      })
+      .call();
+
+    const maxFeePolicy = transaction.policies?.find((policy) => policy.type === PolicyType.MaxFee);
+    const scriptGasLimit = transaction.scriptGasLimit;
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+  });
+
+  it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
+    const contract = await setupContract({
+      cache: false,
+    });
+
+    const gasLimit = 500_000;
+    const maxFee = 250_000;
+
+    const {
+      transactionResult: { transaction },
+    } = await contract
+      .multiCall([
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+      ])
+      .txParams({ gasLimit, maxFee })
+      .call();
+
+    const { scriptGasLimit, policies } = transaction;
+
+    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 });

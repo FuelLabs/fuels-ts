@@ -16,18 +16,18 @@ import {
 import { concat, hexlify, isDefined } from '@fuel-ts/utils';
 
 import type { Account } from '../../account';
-import type { GqlGasCosts } from '../__generated__/operations';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
 import type { MessageCoin } from '../message';
-import type { ChainInfo } from '../provider';
+import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
 import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
 import { NoWitnessAtIndexError } from './errors';
+import { isRequestInputResource } from './helpers';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -348,7 +348,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param coin - Coin resource.
    */
   addCoinInput(coin: Coin) {
-    const { assetId, owner, amount } = coin;
+    const { assetId, owner, amount, id, predicate } = coin;
 
     let witnessIndex;
 
@@ -364,13 +364,14 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     }
 
     const input: CoinTransactionRequestInput = {
-      ...coin,
+      id,
       type: InputType.Coin,
       owner: owner.toB256(),
       amount,
       assetId,
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
+      predicate,
     };
 
     // Insert the Input
@@ -387,7 +388,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param message - Message resource.
    */
   addMessageInput(message: MessageCoin) {
-    const { recipient, sender, amount, assetId } = message;
+    const { recipient, sender, amount, predicate, nonce, assetId } = message;
 
     let witnessIndex;
 
@@ -403,12 +404,13 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     }
 
     const input: MessageTransactionRequestInput = {
-      ...message,
+      nonce,
       type: InputType.Message,
       sender: sender.toB256(),
       recipient: recipient.toB256(),
       amount,
       witnessIndex,
+      predicate,
     };
 
     // Insert the Input
@@ -517,7 +519,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   /**
    * @hidden
    */
-  metadataGas(_gasCosts: GqlGasCosts): BN {
+  metadataGas(_gasCosts: GasCosts): BN {
     throw new Error('Not implemented');
   }
 
@@ -525,8 +527,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @hidden
    */
   calculateMinGas(chainInfo: ChainInfo): BN {
-    const { gasCosts, consensusParameters } = chainInfo;
-    const { gasPerByte } = consensusParameters;
+    const { consensusParameters } = chainInfo;
+    const {
+      gasCosts,
+      feeParameters: { gasPerByte },
+    } = consensusParameters;
     return getMinGas({
       gasPerByte,
       gasCosts,
@@ -538,7 +543,10 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
-    const { gasPerByte, maxGasPerTx } = consensusParameters;
+    const {
+      feeParameters: { gasPerByte },
+      txParameters: { maxGasPerTx },
+    } = consensusParameters;
 
     const witnessesLength = this.toTransaction().witnesses.reduce(
       (acc, wit) => acc + wit.dataLength,
@@ -637,6 +645,20 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     return normalizeJSON(this);
   }
 
+  removeWitness(index: number) {
+    this.witnesses.splice(index, 1);
+    this.adjustWitnessIndexes(index);
+  }
+
+  private adjustWitnessIndexes(removedIndex: number) {
+    this.inputs.filter(isRequestInputResource).forEach((input) => {
+      if (input.witnessIndex > removedIndex) {
+        // eslint-disable-next-line no-param-reassign
+        input.witnessIndex -= 1;
+      }
+    });
+  }
+
   updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
     this.inputs.forEach((i) => {
       let correspondingInput: TransactionRequestInput | undefined;
@@ -663,22 +685,6 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         i.predicateData = correspondingInput.predicateData;
         // eslint-disable-next-line no-param-reassign
         i.predicateGasUsed = correspondingInput.predicateGasUsed;
-      }
-    });
-  }
-
-  shiftPredicateData() {
-    this.inputs.forEach((input) => {
-      // TODO: improve logic
-      if (
-        'predicateData' in input &&
-        'padPredicateData' in input &&
-        typeof input.padPredicateData === 'function'
-      ) {
-        // eslint-disable-next-line no-param-reassign
-        input.predicateData = input.padPredicateData(
-          BaseTransactionRequest.getPolicyMeta(this).policies.length
-        );
       }
     });
   }

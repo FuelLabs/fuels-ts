@@ -3,7 +3,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
-import { ENCODING_V0, ENCODING_V1, type EncodingVersion } from './constants';
+import { ENCODING_V1, type EncodingVersion } from './constants';
 
 /**
  * Asserts that the encoding version is supported by the ABI coder.
@@ -15,9 +15,6 @@ import { ENCODING_V0, ENCODING_V1, type EncodingVersion } from './constants';
 export const getEncodingVersion = (encoding?: string): EncodingVersion => {
   switch (encoding) {
     case undefined:
-    case ENCODING_V0:
-      return ENCODING_V0;
-
     case ENCODING_V1:
       return ENCODING_V1;
 

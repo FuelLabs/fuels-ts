@@ -3,7 +3,12 @@ import type { BN, BNInput } from '@fuel-ts/math';
 import { ReceiptType, type Input } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
-import type { GqlDependentCost, GqlGasCosts } from '../__generated__/operations';
+import type {
+  GqlDependentCost,
+  GqlHeavyOperation,
+  GqlLightOperation,
+} from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import type { TransactionRequestInput } from '../transaction-request';
 import type {
   TransactionResultReceipt,
@@ -24,11 +29,10 @@ export const getGasUsedFromReceipts = (receipts: Array<TransactionResultReceipt>
 export function resolveGasDependentCosts(byteSize: BNInput, gasDependentCost: GqlDependentCost) {
   const base = bn(gasDependentCost.base);
   let dependentValue = bn(0);
-  if (gasDependentCost.__typename === 'LightOperation') {
-    dependentValue = bn(byteSize).div(bn(gasDependentCost.unitsPerGas));
-  }
-  if (gasDependentCost.__typename === 'HeavyOperation') {
-    dependentValue = bn(byteSize).mul(bn(gasDependentCost.gasPerUnit));
+  if ('unitsPerGas' in gasDependentCost) {
+    dependentValue = bn(byteSize).div(bn((<GqlLightOperation>gasDependentCost).unitsPerGas));
+  } else {
+    dependentValue = bn(byteSize).mul(bn((<GqlHeavyOperation>gasDependentCost).gasPerUnit));
   }
   return base.add(dependentValue);
 }
@@ -36,7 +40,7 @@ export function resolveGasDependentCosts(byteSize: BNInput, gasDependentCost: Gq
 export function gasUsedByInputs(
   inputs: Array<TransactionRequestInput | Input>,
   txBytesSize: number,
-  gasCosts: GqlGasCosts
+  gasCosts: GasCosts
 ) {
   const witnessCache: Array<number> = [];
 
@@ -75,7 +79,7 @@ export function gasUsedByInputs(
 
 export interface IGetMinGasParams {
   inputs: Array<TransactionRequestInput | Input>;
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   txBytesSize: number;
   metadataGas: BN;
   gasPerByte: BN;
@@ -129,7 +133,7 @@ export function calculateMetadataGasForTxCreate({
   txBytesSize,
   contractBytesSize,
 }: {
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   contractBytesSize: BN;
   stateRootSize: number;
   txBytesSize: number;
@@ -148,7 +152,7 @@ export function calculateMetadataGasForTxScript({
   gasCosts,
   txBytesSize,
 }: {
-  gasCosts: GqlGasCosts;
+  gasCosts: GasCosts;
   txBytesSize: number;
 }) {
   return resolveGasDependentCosts(txBytesSize, gasCosts.s256);
