@@ -41,8 +41,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
 
   await validateConfig(userConfig);
 
-  const useBuiltinForc = userConfig.useBuiltinForc ?? shouldUseBuiltinForc();
-  const useBuiltinFuelCore = userConfig.useBuiltinFuelCore ?? shouldUseBuiltinFuelCore();
+  const useBuiltinForc = userConfig.useBuiltinForc ?? (await shouldUseBuiltinForc());
+  const useBuiltinFuelCore = userConfig.useBuiltinFuelCore ?? (await shouldUseBuiltinFuelCore());
 
   const { forcBuildFlags = [] } = userConfig;
   const releaseFlag = forcBuildFlags.find((f) => f === '--release');

@@ -47,7 +47,7 @@ describe('getSystemVersions.js', () => {
   /*
     Tests
   */
-  test('should get user versions just fine', () => {
+  test('should get user versions just fine', async () => {
     // mocking
     const systemForcVersion = '1.0.0';
     const systemFuelCoreVersion = '2.0.0';
@@ -57,7 +57,7 @@ describe('getSystemVersions.js', () => {
     });
 
     // executing
-    const versions = getSystemVersions();
+    const versions = await getSystemVersions();
 
     // validating
     expect(execSync).toHaveBeenCalledTimes(2);
@@ -65,7 +65,7 @@ describe('getSystemVersions.js', () => {
     expect(versions.systemFuelCoreVersion).toEqual(systemFuelCoreVersion);
   });
 
-  test('should return error if Forc or Fuel-Core is not installed', () => {
+  test('should return error if Forc or Fuel-Core is not installed', async () => {
     // mocking
     const systemForcVersion = '1.0.0';
     const systemFuelCoreVersion = '2.0.0';
@@ -77,13 +77,13 @@ describe('getSystemVersions.js', () => {
     });
 
     // executing
-    const { error: systemError } = getSystemVersions();
+    const { error: systemError } = await getSystemVersions();
 
     // validating
     expect(systemError).toBeTruthy();
   });
 
-  test('should throw for fuelup exception', () => {
+  test('should throw for fuelup exception', async () => {
     // mocking
     const systemForcVersion = 'fuelup exception';
     const systemFuelCoreVersion = 'fuelup exception';
@@ -93,7 +93,7 @@ describe('getSystemVersions.js', () => {
     });
 
     // executing
-    const versions = getSystemVersions();
+    const versions = await getSystemVersions();
 
     // validating
     expect(execSync).toHaveBeenCalledTimes(2);

@@ -20,6 +20,8 @@ const config: UserConfig = {
         "timers/promises",
         "util",
         "stream",
+        "path",
+        "os",
       ],
       overrides: {
         fs: "memfs",
@@ -27,7 +29,7 @@ const config: UserConfig = {
     }),
   ],
   optimizeDeps: {
-    exclude: ["fsevents", "path-scurry"],
+    exclude: ["fsevents", "path-scurry", "child_process"],
     include: ["events", "timers/promises"],
   },
   test: {
@@ -39,6 +41,7 @@ const config: UserConfig = {
       enabled: true,
       name: "chrome",
     },
+    env: { VITEST_ENV: "browser" },
   },
 };
 

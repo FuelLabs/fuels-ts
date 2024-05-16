@@ -3,7 +3,6 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { defaultSnapshotConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
-import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
@@ -208,76 +207,79 @@ export const launchNode = async ({
       snapshotDirToUse = tempDirPath;
     }
 
-    const child = spawn(
-      command,
-      [
-        'run',
-        ['--ip', ipToUse],
-        ['--port', portToUse],
-        useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
-        ['--min-gas-price', '1'],
-        poaInstant ? ['--poa-instant', 'true'] : [],
-        ['--consensus-key', consensusKey],
-        ['--snapshot', snapshotDirToUse as string],
-        '--vm-backtrace',
-        '--utxo-validation',
-        '--debug',
-        ...remainingArgs,
-      ].flat(),
-      {
-        stdio: 'pipe',
-      }
-    );
+    if (process.env.VITEST && process.env.VITEST_ENV !== 'browser') {
+      const { spawn } = await import('child_process');
+      const child = spawn(
+        command,
+        [
+          'run',
+          ['--ip', ipToUse],
+          ['--port', portToUse],
+          useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
+          ['--min-gas-price', '1'],
+          poaInstant ? ['--poa-instant', 'true'] : [],
+          ['--consensus-key', consensusKey],
+          ['--snapshot', snapshotDirToUse as string],
+          '--vm-backtrace',
+          '--utxo-validation',
+          '--debug',
+          ...remainingArgs,
+        ].flat(),
+        {
+          stdio: 'pipe',
+        }
+      );
 
-    if (loggingEnabled) {
-      child.stderr.pipe(process.stderr);
+      if (loggingEnabled) {
+        child.stderr.pipe(process.stderr);
+      }
+
+      if (debugEnabled) {
+        child.stdout.pipe(process.stdout);
+      }
+
+      const cleanupConfig: KillNodeParams = {
+        child,
+        configPath: tempDirPath,
+        killFn: treeKill,
+        state: {
+          isDead: false,
+        },
+      };
+
+      // Look for a specific graphql start point in the output.
+      child.stderr.on('data', (chunk: string) => {
+        // Look for the graphql service start.
+        if (chunk.indexOf(graphQLStartSubstring) !== -1) {
+          // Resolve with the cleanup method.
+          resolve({
+            cleanup: () => killNode(cleanupConfig),
+            ip: ipToUse,
+            port: portToUse,
+            snapshotDir: snapshotDirToUse as string,
+          });
+        }
+        if (/error/i.test(chunk)) {
+          reject(chunk.toString());
+        }
+      });
+
+      // Process exit.
+      process.on('exit', () => killNode(cleanupConfig));
+
+      // Catches ctrl+c event.
+      process.on('SIGINT', () => killNode(cleanupConfig));
+
+      // Catches "kill pid" (for example: nodemon restart).
+      process.on('SIGUSR1', () => killNode(cleanupConfig));
+      process.on('SIGUSR2', () => killNode(cleanupConfig));
+
+      // Catches uncaught exceptions.
+      process.on('beforeExit', () => killNode(cleanupConfig));
+      process.on('uncaughtException', () => killNode(cleanupConfig));
+
+      child.on('error', reject);
     }
-
-    if (debugEnabled) {
-      child.stdout.pipe(process.stdout);
-    }
-
-    const cleanupConfig: KillNodeParams = {
-      child,
-      configPath: tempDirPath,
-      killFn: treeKill,
-      state: {
-        isDead: false,
-      },
-    };
-
-    // Look for a specific graphql start point in the output.
-    child.stderr.on('data', (chunk: string) => {
-      // Look for the graphql service start.
-      if (chunk.indexOf(graphQLStartSubstring) !== -1) {
-        // Resolve with the cleanup method.
-        resolve({
-          cleanup: () => killNode(cleanupConfig),
-          ip: ipToUse,
-          port: portToUse,
-          snapshotDir: snapshotDirToUse as string,
-        });
-      }
-      if (/error/i.test(chunk)) {
-        reject(chunk.toString());
-      }
-    });
-
-    // Process exit.
-    process.on('exit', () => killNode(cleanupConfig));
-
-    // Catches ctrl+c event.
-    process.on('SIGINT', () => killNode(cleanupConfig));
-
-    // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', () => killNode(cleanupConfig));
-    process.on('SIGUSR2', () => killNode(cleanupConfig));
-
-    // Catches uncaught exceptions.
-    process.on('beforeExit', () => killNode(cleanupConfig));
-    process.on('uncaughtException', () => killNode(cleanupConfig));
-
-    child.on('error', reject);
   });
 
 const generateWallets = async (count: number, provider: Provider) => {

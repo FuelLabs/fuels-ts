@@ -1,8 +1,8 @@
 import { getSystemForc } from '@fuel-ts/versions/cli';
 
-export const shouldUseBuiltinForc = () => {
+export const shouldUseBuiltinForc = async () => {
   // first, tries to use system binary
-  const { systemForcVersion } = getSystemForc();
+  const { systemForcVersion } = await getSystemForc();
   if (systemForcVersion !== null) {
     return false;
   }

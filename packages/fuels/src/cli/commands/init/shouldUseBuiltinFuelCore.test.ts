@@ -15,7 +15,7 @@ describe('shouldUseBuiltinForc', () => {
   function mockAll(returns: { getSystemForc: string | null }) {
     const getSystemForc = vi
       .spyOn(getSystemForcMod, 'getSystemForc')
-      .mockReturnValue({ error: null, systemForcVersion: returns.getSystemForc });
+      .mockResolvedValue({ error: null, systemForcVersion: returns.getSystemForc });
 
     const { error } = mockLogger();
 
@@ -25,10 +25,10 @@ describe('shouldUseBuiltinForc', () => {
     };
   }
 
-  it('should select [built-in] forc', () => {
+  it('should select [built-in] forc', async () => {
     const { getSystemForc, error } = mockAll({ getSystemForc: null });
 
-    const useBuiltinForc = shouldUseBuiltinForc();
+    const useBuiltinForc = await shouldUseBuiltinForc();
 
     expect(useBuiltinForc).toEqual(true);
     expect(getSystemForc).toHaveBeenCalledTimes(1);
@@ -36,10 +36,10 @@ describe('shouldUseBuiltinForc', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  it('should select [system] forc', () => {
+  it('should select [system] forc', async () => {
     const { getSystemForc, error } = mockAll({ getSystemForc: '1.0.0' });
 
-    const useBuiltinForc = shouldUseBuiltinForc();
+    const useBuiltinForc = await shouldUseBuiltinForc();
 
     expect(useBuiltinForc).toEqual(false);
     expect(getSystemForc).toHaveBeenCalledTimes(1);

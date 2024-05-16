@@ -13,7 +13,7 @@ export * from './lib/getSystemVersions';
 
 export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
 
-export function runVersions() {
+export async function runVersions() {
   const { error, info } = console;
 
   const supportedVersions = getBuiltinVersions();
@@ -22,7 +22,11 @@ export function runVersions() {
     head: ['', chalk.bold('Supported'), chalk.bold(`Yours / System`)],
   });
 
-  const { error: systemError, systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
+  const {
+    error: systemError,
+    systemForcVersion,
+    systemFuelCoreVersion,
+  } = await getSystemVersions();
 
   const comparisons = compareSystemVersions({
     systemForcVersion: eitherOr(systemForcVersion, '0'),

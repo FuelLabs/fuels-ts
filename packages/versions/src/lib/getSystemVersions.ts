@@ -1,20 +1,21 @@
-import { execSync } from 'child_process';
-
 const versionReg = /[0-9]+\.[0-9]+\.[0-9]/;
 
-export const getSystemVersion = (command: string) => {
+export const getSystemVersion = async (command: string) => {
   let version: string | null = null;
   let error: Error | null = null;
 
-  try {
-    const contents = execSync(command).toString();
-    if (versionReg.test(contents)) {
-      version = contents.match(versionReg)?.[0] as string;
-    } else {
-      throw new Error(contents);
+  if (process.env.VITEST && process.env.VITEST_ENV !== 'browser') {
+    const { execSync } = await import('child_process');
+    try {
+      const contents = execSync(command).toString();
+      if (versionReg.test(contents)) {
+        version = contents.match(versionReg)?.[0] as string;
+      } else {
+        throw new Error(contents);
+      }
+    } catch (err: unknown) {
+      error = err as Error;
     }
-  } catch (err: unknown) {
-    error = err as Error;
   }
 
   return {
@@ -23,19 +24,19 @@ export const getSystemVersion = (command: string) => {
   };
 };
 
-export function getSystemForc() {
-  const { error, version: v } = getSystemVersion('forc --version');
+export async function getSystemForc() {
+  const { error, version: v } = await getSystemVersion('forc --version');
   return { error, systemForcVersion: v };
 }
 
-export function getSystemFuelCore() {
-  const { error, version: v } = getSystemVersion('fuel-core --version');
+export async function getSystemFuelCore() {
+  const { error, version: v } = await getSystemVersion('fuel-core --version');
   return { error, systemFuelCoreVersion: v };
 }
 
-export function getSystemVersions() {
-  const { error: errorForc, systemForcVersion } = getSystemForc();
-  const { error: errorCore, systemFuelCoreVersion } = getSystemFuelCore();
+export async function getSystemVersions() {
+  const { error: errorForc, systemForcVersion } = await getSystemForc();
+  const { error: errorCore, systemFuelCoreVersion } = await getSystemFuelCore();
 
   const error = errorForc ?? errorCore;
 

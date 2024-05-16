@@ -54,11 +54,11 @@ describe('cli.js', () => {
       systemFuelCoreIsEq,
     }));
 
-    vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
+    vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockResolvedValue({
       error: systemVersionsError,
       systemForcVersion,
       systemFuelCoreVersion,
-    }));
+    });
 
     vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({
       FORC: '1.0.0',
@@ -76,7 +76,7 @@ describe('cli.js', () => {
   /*
     Tests
   */
-  test('should inform about newer versions', () => {
+  test('should inform about newer versions', async () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '1.1.1',
@@ -89,7 +89,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    runVersions();
+    await runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(2);
@@ -97,7 +97,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should inform about exact versions', () => {
+  test('should inform about exact versions', async () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '1.0.0',
@@ -110,7 +110,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    runVersions();
+    await runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(2);
@@ -118,7 +118,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should warn about older versions', () => {
+  test('should warn about older versions', async () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '0.0.1',
@@ -131,7 +131,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    runVersions();
+    await runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(0);
@@ -139,7 +139,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(3);
   });
 
-  test('should warn about fuelup exception', () => {
+  test('should warn about fuelup exception', async () => {
     // mocks
     const systemVersionsError = new Error('fuelup exception');
 
@@ -154,7 +154,7 @@ describe('cli.js', () => {
     });
 
     // executing
-    runVersions();
+    await runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(0);

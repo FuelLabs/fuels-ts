@@ -1,8 +1,8 @@
 import { getSystemFuelCore } from '@fuel-ts/versions/cli';
 
-export const shouldUseBuiltinFuelCore = () => {
+export const shouldUseBuiltinFuelCore = async () => {
   // first, tries use system binary
-  const { systemFuelCoreVersion } = getSystemFuelCore();
+  const { systemFuelCoreVersion } = await getSystemFuelCore();
   if (systemFuelCoreVersion !== null) {
     return false;
   }
