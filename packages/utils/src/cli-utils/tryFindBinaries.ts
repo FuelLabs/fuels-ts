@@ -16,6 +16,7 @@ import {
 export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: string } = {}) => {
   // Ensure we can get the binary versions
   const { error: forcError, systemForcPath, systemForcVersion } = getSystemForc(paths.forcPath);
+  
   const {
     error: fuelCoreError,
     systemFuelCorePath,
