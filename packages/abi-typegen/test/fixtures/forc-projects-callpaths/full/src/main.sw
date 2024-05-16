@@ -23,6 +23,7 @@ abi MyContract {
     fn type_internal_enum(x: InternalEnum) -> InternalEnum;
     fn type_external_enum(x: ExternalEnum) -> ExternalEnum;
     fn type_evm_address(x: EvmAddress) -> EvmAddress;
+    fn type_result(x: Result<u8, u8>) -> Result<u8, u8>;
 }
 
 impl MyContract for Contract {
@@ -57,4 +58,8 @@ impl MyContract for Contract {
     fn type_evm_address(x: EvmAddress) -> EvmAddress {
         x
     }
+    fn type_result(x: Result<u8, u8>) -> Result<u8, u8> {
+        x
+    }
+
 }

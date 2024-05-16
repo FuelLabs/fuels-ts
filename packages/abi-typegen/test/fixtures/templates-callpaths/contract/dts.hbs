@@ -21,7 +21,7 @@ import type {
   InvokeFunction,
 } from 'fuels';
 
-import type { Option, Enum, Vec } from "./common";
+import type { Option, Enum, Vec, Result } from "./common";
 
 export enum InternalEnumInput { A = 'A', B = 'B' };
 export enum InternalEnumOutput { A = 'A', B = 'B' };
@@ -50,6 +50,7 @@ interface MyContractAbiInterface extends Interface {
     type_internal_enum: FunctionFragment;
     type_internal_struct: FunctionFragment;
     type_option_enum: FunctionFragment;
+    type_result: FunctionFragment;
     type_vector_u8: FunctionFragment;
   };
 
@@ -62,6 +63,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'type_internal_enum', values: [InternalEnumInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_internal_struct', values: [InternalStructInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_option_enum', values: [Option<BigNumberish>]): Uint8Array;
+  encodeFunctionData(functionFragment: 'type_result', values: [Result<BigNumberish, BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'type_vector_u8', values: [Vec<BigNumberish>]): Uint8Array;
 
   decodeFunctionData(functionFragment: 'type_address', data: BytesLike): DecodedValue;
@@ -73,6 +75,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'type_internal_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_internal_struct', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_option_enum', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'type_result', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'type_vector_u8', data: BytesLike): DecodedValue;
 }
 
@@ -88,6 +91,7 @@ export class MyContractAbi extends Contract {
     type_internal_enum: InvokeFunction<[x: InternalEnumInput], InternalEnumOutput>;
     type_internal_struct: InvokeFunction<[x: InternalStructInput], InternalStructOutput>;
     type_option_enum: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
+    type_result: InvokeFunction<[x: Result<BigNumberish, BigNumberish>], Result<number, number>>;
     type_vector_u8: InvokeFunction<[x: Vec<BigNumberish>], Vec<number>>;
   };
 }
