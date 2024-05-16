@@ -91,10 +91,8 @@ describe('autoStartFuelCore', () => {
   test('should start `fuel-core` node using system binary', async () => {
     const { launchNode } = mockLaunchNode();
 
-    const core = (await autoStartFuelCore({
-      ...structuredClone(fuelsConfig),
-      useBuiltinFuelCore: false,
-    })) as FuelCoreNode;
+    const config = structuredClone(fuelsConfig);
+    const core = (await autoStartFuelCore(config)) as FuelCoreNode;
 
     expect(launchNode).toHaveBeenCalledTimes(1);
 
