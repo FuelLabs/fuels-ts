@@ -4,7 +4,7 @@ import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { getPortPromise } from 'portfinder';
 
 import type { FuelsConfig } from '../../types';
-import { debug, log, loggingConfig } from '../../utils/logger';
+import { log, loggingConfig } from '../../utils/logger';
 
 export type FuelCoreNode = {
   bindIp: string;

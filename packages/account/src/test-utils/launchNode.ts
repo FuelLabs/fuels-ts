@@ -1,7 +1,6 @@
 import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
 import { defaultSnapshotConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
-import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';

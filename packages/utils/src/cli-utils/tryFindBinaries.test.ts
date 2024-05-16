@@ -121,7 +121,7 @@ describe('tryFindBinaries', () => {
     );
   });
 
-  it(`should warn the user when binaries are outdated`, async () => {
+  it(`should warn the user when binaries are outdated`, () => {
     const compatibleVersion = '1.0.0';
     const currentVersion = '0.0.1';
     const expectedMessage = [
