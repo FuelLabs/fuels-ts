@@ -2,4 +2,4 @@
 "@fuel-ts/account": minor
 ---
 
-chore: update testnet URLs
+chore!: update testnet URLs
