@@ -46,7 +46,7 @@ async function getChangelogInfo(
   const prType = title.replace(/(\w+).*/, "$1"); // chore!: add something -> chore
   const isBreaking = title.includes(`${prType}!`);
 
-  const titleDescription = title.replace(/\w+\W+(.*)/, "$1"); // chore!: add something -> add something
+  const titleDescription = title.replace(/\w+!?:(.*)/, "$1").trim(); // chore!: add something -> add something
   const summary =
     titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 
