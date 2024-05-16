@@ -21,6 +21,7 @@ export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: strin
     systemFuelCorePath,
     systemFuelCoreVersion,
   } = getSystemFuelCore(paths.fuelCorePath);
+  
   if (forcError || fuelCoreError) {
     const errors = [
       'Unable to find the following binaries on the filesystem:',
