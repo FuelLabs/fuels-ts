@@ -41,7 +41,6 @@ export type LaunchNodeOptions = {
   port?: string;
   args?: string[];
   fuelCorePath?: string;
-  useSystemFuelCore?: boolean;
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
   basePath?: string;
@@ -88,8 +87,7 @@ export const killNode = (params: KillNodeParams) => {
  * @param ip - the ip to bind to. (optional, defaults to 0.0.0.0)
  * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
  * @param args - additional arguments to pass to fuel-core.
- * @param fuelCorePath - the path to the fuel-core binary. (optional, defaults to the fuel-core binary in the node_modules folder)
- * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@internal/fuel-core package.
+ * @param fuelCorePath - the path to the fuel-core binary. (optional, defaults to 'fuel-core')
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
  * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
@@ -99,8 +97,7 @@ export const launchNode = async ({
   ip,
   port,
   args = [],
-  fuelCorePath = undefined,
-  useSystemFuelCore = false,
+  fuelCorePath = process.env.FUEL_CORE_PATH ?? undefined,
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
@@ -127,9 +124,7 @@ export const launchNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const binPath = fuelCorePath ?? findBinPath('fuels-core', __dirname);
-
-    const command = useSystemFuelCore ? 'fuel-core' : binPath;
+    const command = fuelCorePath ?? 'fuel-core';
 
     const ipToUse = ip || '0.0.0.0';
 
