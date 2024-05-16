@@ -200,7 +200,7 @@ describe('TransactionResponse', () => {
     await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
 
     cleanup();
-  }, 22500);
+  }, 18500);
 
   it('should throw error for a SqueezedOut status update [waitForResult]', async () => {
     const { cleanup, ip, port } = await launchNode({
