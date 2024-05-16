@@ -27,8 +27,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
   let fuelCore: FuelCoreNode | undefined;
 
   if (config.autoStartFuelCore) {
-    log(`Starting 'fuel-core' node..`);
-    debug(`Using 'fuel-core' binary from: ${config.fuelCorePath}`);
+    log(`Starting node using: '${config.fuelCorePath}'`);
 
     const bindIp = '0.0.0.0';
     const accessIp = '127.0.0.1';
