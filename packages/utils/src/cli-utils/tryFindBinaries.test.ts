@@ -126,8 +126,8 @@ describe('tryFindBinaries', () => {
     const currentVersion = '0.0.1';
     const expectedMessage = [
       `The following binaries on the filesystem are outdated:`,
-      ` -> 'forc' is currently '${currentVersion}', but requires '${compatibleVersion}'.`,
-      ` -> 'fuel-core' is currently '${currentVersion}', but requires '${compatibleVersion}'.`,
+      ` -> 'forc' is currently 'v${currentVersion}', but the current 'fuels' version requires 'v${compatibleVersion}'.`,
+      ` -> 'fuel-core' is currently 'v${currentVersion}', but the current 'fuels' version requires 'v${compatibleVersion}'.`,
     ].join('\n');
     const { warn, getSystemForc, getSystemFuelCore } = mockAllDeps({
       compatibleVersion,
