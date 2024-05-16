@@ -23,6 +23,7 @@ jobs:
             { name: node, version: 18.18.2 },
             { name: node, version: 20 },
             { name: browser },
+            { name: bun, version: 1.1.8 }
           ]
     timeout-minutes: 25
     steps:
@@ -33,6 +34,13 @@ jobs:
         uses: ./.github/actions/test-setup
         with:
           node-version: ${{ matrix.env.version || 20 }}
+
+      - name: Setup Bun
+        if: matrix.env.name == 'bun'
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: ${{ matrix.env.version }}
+          registry-url: "https://registry.npmjs.org"
 
       - name: Validate Tests
         run: pnpm test:validate
