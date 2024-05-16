@@ -66,8 +66,8 @@ import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
-export type DryRunFailureStatusFragment = Omit<GqlDryRunFailureStatusFragment, '__typename'>;
-export type DryRunSuccessStatusFragment = Omit<GqlDryRunSuccessStatusFragment, '__typename'>;
+export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
+export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
 
 export type DryRunStatus = DryRunFailureStatusFragment | DryRunSuccessStatusFragment;
 
