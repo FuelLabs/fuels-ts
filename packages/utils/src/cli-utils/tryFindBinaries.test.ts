@@ -139,6 +139,6 @@ describe('tryFindBinaries', () => {
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);
-    expect(warn).toBeCalledWith(expectedMessage)
+    expect(warn).toBeCalledWith(expectedMessage);
   });
 });
