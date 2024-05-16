@@ -28,6 +28,7 @@ export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: strin
       fuelCoreError ? ` -> 'fuel-core' at path '${systemFuelCorePath}'` : undefined,
       `\nVisit https://docs.fuel.network/guides/installation/ for an installation guide.`,
     ];
+
     throw new FuelError(
       FuelError.CODES.BIN_FILE_NOT_FOUND,
       `${errors.filter(Boolean).join('\n')}`,
