@@ -44,6 +44,12 @@ export type TxParamsType = Pick<
   'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit'
 >;
 
+export type TransferParams = {
+  destination: string | AbstractAddress;
+  amount: BigNumberish;
+  assetId?: BytesLike;
+};
+
 export type EstimatedTxParams = Pick<
   TransactionCost,
   'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
@@ -407,17 +413,10 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
-  async transferToMany({
-    transfers,
-    txParams = {},
-  }: {
-    transfers: {
-      destination: string | AbstractAddress;
-      amount: BigNumberish;
-      assetId?: BytesLike;
-    }[];
-    txParams: TxParamsType;
-  }): Promise<TransactionResponse> {
+  async transferToMany(
+    transfers: TransferParams[],
+    txParams: TxParamsType = {}
+  ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addTransfers(request, transfers);
     request = await this.estimateAndFundTransaction(request, txParams);
