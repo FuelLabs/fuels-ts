@@ -575,9 +575,7 @@ describe('Account', () => {
     });
 
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[500_000, baseAssetId]]);
-    await seedTestWallet(sender, [[500_000, baseAssetId]]);
-    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+    await seedTestWallet(sender, [[1_500_000, baseAssetId]], 3);
 
     const transfer = await sender.transfer(receiver.address, 110, baseAssetId, {
       gasLimit: 10_000,
@@ -593,9 +591,7 @@ describe('Account', () => {
       provider,
     });
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[500_000, baseAssetId]]);
-    await seedTestWallet(sender, [[500_000, baseAssetId]]);
-    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+    await seedTestWallet(sender, [[1_500_000, baseAssetId]], 3);
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
