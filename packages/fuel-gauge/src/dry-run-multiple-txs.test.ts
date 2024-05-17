@@ -121,6 +121,7 @@ describe('dry-run-multiple-txs', () => {
       receipts: expect.any(Array<TransactionResultReceipt>),
       dryRunStatus: {
         reason: expect.any(String),
+        type: 'DryRunFailureStatus',
         programState: {
           data: expect.any(String),
           returnType: 'REVERT',
@@ -134,6 +135,7 @@ describe('dry-run-multiple-txs', () => {
       receipts: expect.any(Array<TransactionResultReceipt>),
       dryRunStatus: {
         reason: expect.any(String),
+        type: 'DryRunFailureStatus',
         programState: {
           data: expect.any(String),
           returnType: 'REVERT',
@@ -147,6 +149,7 @@ describe('dry-run-multiple-txs', () => {
       receipts: expect.any(Array<TransactionResultReceipt>),
       dryRunStatus: {
         reason: expect.any(String),
+        type: 'DryRunFailureStatus',
         programState: {
           data: expect.any(String),
           returnType: 'REVERT',
@@ -252,6 +255,7 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [],
       outputVariables: 3,
       dryRunStatus: {
+        type: 'DryRunSuccessStatus',
         totalFee: expect.any(String),
         totalGas: expect.any(String),
         programState: expect.any(Object),
@@ -264,6 +268,7 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [],
       outputVariables: 2,
       dryRunStatus: {
+        type: 'DryRunSuccessStatus',
         programState: expect.any(Object),
         totalFee: expect.any(String),
         totalGas: expect.any(String),
@@ -276,6 +281,7 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [],
       outputVariables: 0,
       dryRunStatus: {
+        type: 'DryRunFailureStatus',
         reason: 'TransferZeroCoins',
         programState: expect.any(Object),
         totalFee: expect.any(String),
@@ -289,6 +295,7 @@ describe('dry-run-multiple-txs', () => {
       missingContractIds: [logOtherContract.id.toB256()],
       outputVariables: 0,
       dryRunStatus: {
+        type: 'DryRunSuccessStatus',
         programState: expect.any(Object),
         totalFee: expect.any(String),
         totalGas: expect.any(String),

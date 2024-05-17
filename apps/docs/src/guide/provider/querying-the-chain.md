@@ -4,8 +4,8 @@ Once you have set up a provider, you're ready to interact with the Fuel blockcha
 
 We can connect to either a _*local*_ or an _*external*_ node:
 
-> 1. _Running a [local node](/guide/getting-started/connecting-to-a-local-node.md)_
-> 1. _Connecting to an [external node](/guide/getting-started/connecting-to-testnet.md)_
+> 1. _Running a [local node](../getting-started/connecting-to-a-local-node.md)_
+> 1. _Connecting to an [external node](../getting-started/connecting-to-testnet.md)_
 
 Let's look at a few examples below.
 

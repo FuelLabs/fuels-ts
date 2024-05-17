@@ -239,4 +239,21 @@ describe('Revert Error Testing', () => {
       )
     );
   });
+
+  it('should ensure errors from getTransactionCost dry-run are properly thrown', async () => {
+    await expectToThrowFuelError(
+      () => contractInstance.functions.assert_value_ne_5(5).getTransactionCost(),
+      new FuelError(
+        ErrorCode.SCRIPT_REVERTED,
+        `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
+        {
+          logs: [5, 5],
+          receipts: expect.any(Array<TransactionResultReceipt>),
+          panic: false,
+          revert: true,
+          reason: 'assert_ne',
+        }
+      )
+    );
+  });
 });

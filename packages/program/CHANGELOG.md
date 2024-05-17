@@ -1,5 +1,56 @@
 # Change Log
 
+## 0.88.0
+
+### Patch Changes
+
+- d5116ce: fix: validate status from estimation dry-run
+- Updated dependencies [d5116ce]
+- Updated dependencies [3f86778]
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/account@0.88.0
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/transactions@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/utils@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- Updated dependencies [0da455a]
+  - @fuel-ts/abi-coder@0.87.0
+  - @fuel-ts/account@0.87.0
+  - @fuel-ts/transactions@0.87.0
+  - @fuel-ts/address@0.87.0
+  - @fuel-ts/errors@0.87.0
+  - @fuel-ts/interfaces@0.87.0
+  - @fuel-ts/math@0.87.0
+  - @fuel-ts/utils@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+- Updated dependencies [316c757]
+- Updated dependencies [ee969d3]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/account@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/transactions@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
 ## 0.85.0
 
 ### Patch Changes

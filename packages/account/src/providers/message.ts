@@ -27,7 +27,6 @@ export type MessageCoin = {
   daHeight: BN;
   predicate?: BytesLike;
   predicateData?: BytesLike;
-  padPredicateData?: (policiesLenght: number) => BytesLike;
 };
 
 export type MerkleProof = {
