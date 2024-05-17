@@ -2,6 +2,15 @@ import { Command } from 'commander';
 
 import packageJson from '../../package.json';
 
+export interface ProgramOptions {
+  contract?: boolean;
+  predicate?: boolean;
+  script?: boolean;
+  pnpm?: boolean;
+  npm?: boolean;
+  verbose?: boolean;
+}
+
 export const setupProgram = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)

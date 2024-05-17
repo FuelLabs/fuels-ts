@@ -8,6 +8,7 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
+import type { ProgramOptions } from './lib/setupProgram';
 import {
   promptForProgramsToInclude,
   promptForPackageManager,
@@ -17,11 +18,7 @@ import { error, log } from './utils/logger';
 
 export { setupProgram } from './lib/setupProgram';
 
-export type ProgramsToInclude = {
-  contract: boolean;
-  predicate: boolean;
-  script: boolean;
-};
+export type ProgramsToInclude = Pick<ProgramOptions, 'contract' | 'predicate' | 'script'>;
 
 const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsToInclude) => {
   const parsed = toml.parse(fileContents) as {
@@ -66,7 +63,9 @@ export const runScaffoldCli = async ({
   program.parse(args);
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
-  const verboseEnabled = program.opts().verbose ?? false;
+
+  const opts = program.opts<ProgramOptions>();
+  const verboseEnabled = opts.verbose ?? false;
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
@@ -95,8 +94,8 @@ export const runScaffoldCli = async ({
   }
 
   const cliPackageManagerChoices = {
-    pnpm: program.opts().pnpm,
-    npm: program.opts().npm,
+    pnpm: opts.pnpm,
+    npm: opts.npm,
   };
 
   const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
@@ -108,9 +107,9 @@ export const runScaffoldCli = async ({
   }
 
   const cliProgramsToInclude = {
-    contract: program.opts().contract,
-    predicate: program.opts().predicate,
-    script: program.opts().script,
+    contract: opts.contract,
+    predicate: opts.predicate,
+    script: opts.script,
   };
   const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
 
