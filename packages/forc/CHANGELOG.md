@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.88.0
+
+### Minor Changes
+
+- 60337b5: chore!: update `forc` to `0.59.0`
+
+## 0.87.0
+
 ## 0.86.0
 
 ### Patch Changes
