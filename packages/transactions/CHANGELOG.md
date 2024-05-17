@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.88.0
+
+### Patch Changes
+
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/utils@0.88.0
+
 ## 0.87.0
 
 ### Patch Changes
