@@ -35,7 +35,7 @@ export function getDecodedLogs<T = unknown>(
           ? new BigNumberCoder('u64').encode(receipt.val0)
           : receipt.data;
 
-      const [decodedLog] = interfaceToUse.decodeLog(data, receipt.val1.toNumber());
+      const [decodedLog] = interfaceToUse.decodeLog(data, receipt.val1.toString());
       logs.push(decodedLog);
     }
 
