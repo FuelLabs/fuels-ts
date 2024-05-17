@@ -443,6 +443,20 @@ export class Account extends AbstractAccount {
     return request;
   }
 
+  addTransfers(
+    request: ScriptTransactionRequest,
+    transfers: {
+      destination: string | AbstractAddress;
+      amount: BigNumberish;
+      assetId?: BytesLike;
+    }[]
+  ) {
+    const baseAssetId = this.provider.getBaseAssetId();
+    transfers.forEach(({ destination, amount, assetId }) => {
+      this.addTransfer(request, destination, amount, assetId ?? baseAssetId);
+    });
+    return request;
+  }
 
   /**
    * Transfers coins to a contract address.
