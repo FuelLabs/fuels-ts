@@ -268,15 +268,14 @@ export class TransactionResponse {
       transactionResult.logs = logs;
     }
 
-    if (transactionResult.isStatusFailure) {
-      const {
-        receipts,
-        gqlTransaction: { status },
-      } = transactionResult;
+    const { gqlTransaction, receipts } = transactionResult;
+
+    if (gqlTransaction.status?.type === 'FailureStatus') {
+      const { reason } = gqlTransaction.status;
 
       throw extractTxError({
         receipts,
-        status,
+        statusReason: reason,
         logs,
       });
     }

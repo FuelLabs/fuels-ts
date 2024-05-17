@@ -16,6 +16,25 @@ beforeAll(async () => {
  * @group node
  */
 describe('Options Tests', () => {
+  it('calls', async () => {
+    const { value } = await contractInstance.functions.print_enum_option_array().call();
+
+    expect(value).toStrictEqual({
+      inner: [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+    });
+  });
+
   it('echos u8 option', async () => {
     const someInput = U8_MAX;
     const noneInput = undefined;
@@ -147,5 +166,17 @@ describe('Options Tests', () => {
       .call();
 
     expect(mixedValue).toStrictEqual(mixedInput);
+  });
+
+  it('echoes deeply nested option', async () => {
+    const input = {
+      DeepEnum: {
+        a: [true, [U8_MAX, undefined, 123]],
+      },
+    };
+
+    const { value } = await contractInstance.functions.echo_deeply_nested_option(input).call();
+
+    expect(value).toStrictEqual(input);
   });
 });

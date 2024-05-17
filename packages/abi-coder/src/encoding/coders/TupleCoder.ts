@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concatBytes } from '@fuel-ts/utils';
 
-import { OPTION_CODER_TYPE } from '../../utils/constants';
+import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -21,11 +21,10 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
   #hasNestedOption: boolean;
 
   constructor(coders: TCoders) {
-    const hasNestedOption = coders.some((coder) => coder.type === OPTION_CODER_TYPE);
     const encodedLength = coders.reduce((acc, coder) => acc + coder.encodedLength, 0);
     super('tuple', `(${coders.map((coder) => coder.type).join(', ')})`, encodedLength);
     this.coders = coders;
-    this.#hasNestedOption = hasNestedOption;
+    this.#hasNestedOption = hasNestedOption(coders);
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {

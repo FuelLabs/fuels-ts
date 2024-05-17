@@ -23,7 +23,7 @@ export interface JsonAbiArgument {
 }
 
 export interface JsonAbiLoggedType {
-  readonly logId: number;
+  readonly logId: string;
   readonly loggedType: JsonAbiArgument;
 }
 

@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.88.0
+
+### Minor Changes
+
+- 3f86778: chore!: update testnet URLs
+- 60337b5: chore!: update `forc` to `0.59.0`
+
+### Patch Changes
+
+- d5116ce: fix: validate status from estimation dry-run
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/transactions@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/crypto@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/merkle@0.88.0
+  - @fuel-ts/utils@0.88.0
+  - @fuel-ts/versions@0.88.0
+
 ## 0.87.0
 
 ### Patch Changes
