@@ -1,6 +1,6 @@
 import type { Coder } from '../encoding/coders/AbstractCoder';
 
-import { WORD_SIZE } from './constants';
+import { OPTION_CODER_TYPE, WORD_SIZE } from './constants';
 
 /**
  * Turns:
@@ -40,26 +40,25 @@ export const isUint8Array = (value: unknown): value is Uint8Array => value insta
 type TCoders = Record<string, Coder>;
 
 /**
- * Finds a deeply nested type in a coders object.
+ * Finds a deeply nested option in a coders object.
  *
- * @param type - the type to find.
  * @param coders - the coders object to search.
  * @returns - whether the coder has been found.
  */
-export const findNestedType = (type: string, coders: Record<string, Coder>): boolean => {
-  const array = Object.values(coders);
+export const findNestedOption = (coders: Record<string, Coder> | Coder[]): boolean => {
+  const array = Array.isArray(coders) ? coders : Object.values(coders);
 
   for (const node of array) {
-    if (node.type === type) {
+    if (node.type === OPTION_CODER_TYPE) {
       return true;
     }
 
-    if ('coder' in node && (node.coder as Coder).type === type) {
+    if ('coder' in node && (node.coder as Coder).type === OPTION_CODER_TYPE) {
       return true;
     }
 
     if ('coders' in node) {
-      const child = findNestedType(type, node.coders as TCoders);
+      const child = findNestedOption(node.coders as TCoders);
       if (child) {
         return true;
       }

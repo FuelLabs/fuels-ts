@@ -1,8 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concatBytes } from '@fuel-ts/utils';
 
-import { OPTION_CODER_TYPE } from '../../utils/constants';
-import { findNestedType } from '../../utils/utilities';
+import { findNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -24,7 +23,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
   #hasNestedOption: boolean;
 
   constructor(name: string, coders: TCoders) {
-    const hasNestedOption = findNestedType(OPTION_CODER_TYPE, coders);
+    const hasNestedOption = findNestedOption(coders);
     const encodedLength = Object.values(coders).reduce(
       (acc, coder) => acc + coder.encodedLength,
       0
