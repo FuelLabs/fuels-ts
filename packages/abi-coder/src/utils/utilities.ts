@@ -45,7 +45,7 @@ export type TCoders = Record<string, Coder>;
  * @param coders - the coders object to search.
  * @returns - whether the coder has been found.
  */
-export const findNestedOption = (coders: Record<string, Coder> | Coder[]): boolean => {
+export const hasNestedOption = (coders: Record<string, Coder> | Coder[]): boolean => {
   const array = Array.isArray(coders) ? coders : Object.values(coders);
 
   for (const node of array) {
@@ -58,7 +58,7 @@ export const findNestedOption = (coders: Record<string, Coder> | Coder[]): boole
     }
 
     if ('coders' in node) {
-      const child = findNestedOption(node.coders as TCoders);
+      const child = hasNestedOption(node.coders as TCoders);
       if (child) {
         return true;
       }

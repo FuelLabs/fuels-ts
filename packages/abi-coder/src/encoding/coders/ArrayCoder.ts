@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
 
 import { MAX_BYTES } from '../../utils/constants';
-import { findNestedOption } from '../../utils/utilities';
+import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -22,7 +22,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
     super('array', `[${coder.type}; ${length}]`, length * coder.encodedLength);
     this.coder = coder;
     this.length = length;
-    this.#hasNestedOption = findNestedOption([coder]);
+    this.#hasNestedOption = hasNestedOption([coder]);
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {

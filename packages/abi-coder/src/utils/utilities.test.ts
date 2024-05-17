@@ -1,4 +1,4 @@
-import { findNestedOption, type TCoders } from './utilities';
+import { hasNestedOption, type TCoders } from './utilities';
 
 describe('findNestedOption', () => {
   it('finds a deeply nested option', () => {
@@ -48,6 +48,6 @@ describe('findNestedOption', () => {
       },
     };
 
-    expect(findNestedOption(coders)).toBe(true);
+    expect(hasNestedOption(coders)).toBe(true);
   });
 });

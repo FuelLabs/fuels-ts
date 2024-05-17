@@ -4,7 +4,7 @@ import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
 import { WORD_SIZE } from '../../utils/constants';
-import { findNestedOption } from '../../utils/utilities';
+import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -44,7 +44,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
     this.#encodedValueSize = encodedValueSize;
-    this.#hasNestedOption = findNestedOption(coders);
+    this.#hasNestedOption = hasNestedOption(coders);
   }
 
   #encodeNativeEnum(value: string): Uint8Array {

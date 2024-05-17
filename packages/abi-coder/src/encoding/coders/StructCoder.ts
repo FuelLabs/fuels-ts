@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concatBytes } from '@fuel-ts/utils';
 
-import { findNestedOption } from '../../utils/utilities';
+import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -30,7 +30,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     super('struct', `struct ${name}`, encodedLength);
     this.name = name;
     this.coders = coders;
-    this.#hasNestedOption = findNestedOption(coders);
+    this.#hasNestedOption = hasNestedOption(coders);
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
