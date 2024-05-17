@@ -602,6 +602,15 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
+  private validateTransferAmount(amount: BigNumberish) {
+    if (bn(amount).lte(0)) {
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSFER_AMOUNT,
+        'Transfer amount must be a positive number.'
+      );
+    }
+  }
+
   private async estimateAndFundTransaction(
     transactionRequest: ScriptTransactionRequest,
     txParams: TxParamsType
