@@ -37,7 +37,7 @@ export const chunkByLength = (data: Uint8Array, length = WORD_SIZE): Uint8Array[
 
 export const isUint8Array = (value: unknown): value is Uint8Array => value instanceof Uint8Array;
 
-type TCoders = Record<string, Coder>;
+export type TCoders = Record<string, Coder>;
 
 /**
  * Finds a deeply nested option in a coders object.

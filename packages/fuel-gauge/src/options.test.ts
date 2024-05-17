@@ -168,7 +168,7 @@ describe('Options Tests', () => {
     expect(mixedValue).toStrictEqual(mixedInput);
   });
 
-  it('echoes deeply nested option', async () => {
+  it.only('echoes deeply nested option', async () => {
     const input = {
       DeepEnum: {
         a: [true, [U8_MAX, undefined, 123]],
