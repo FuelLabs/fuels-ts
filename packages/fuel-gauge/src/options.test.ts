@@ -16,6 +16,25 @@ beforeAll(async () => {
  * @group node
  */
 describe('Options Tests', () => {
+  it('calls', async () => {
+    const { value } = await contractInstance.functions.print_enum_option_array().call();
+
+    expect(value).toStrictEqual({
+      inner: [
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+      ],
+    });
+  });
+
   it('echos u8 option', async () => {
     const someInput = U8_MAX;
     const noneInput = undefined;
