@@ -602,6 +602,24 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
+  private async estimateAndFundTransaction(
+    transactionRequest: ScriptTransactionRequest,
+    txParams: TxParamsType
+  ) {
+    let request = transactionRequest;
+    const txCost = await this.provider.getTransactionCost(request, {
+      resourcesOwner: this,
+    });
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
+    });
+    request = await this.fund(request, txCost);
+    return request;
+  }
+
   private validateGasLimitAndMaxFee({
     gasUsed,
     maxFee,
