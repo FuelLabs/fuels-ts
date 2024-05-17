@@ -1,5 +1,9 @@
 import { hasNestedOption, type TCoders } from './utilities';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('findNestedOption', () => {
   it('finds a deeply nested option', () => {
     const coders: TCoders = {
