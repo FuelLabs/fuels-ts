@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
 
-import { MAX_BYTES, OPTION_CODER_TYPE } from '../../utils/constants';
+import { MAX_BYTES } from '../../utils/constants';
 import { findNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';

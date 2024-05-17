@@ -1,7 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concatBytes } from '@fuel-ts/utils';
 
-import { OPTION_CODER_TYPE } from '../../utils/constants';
 import { findNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';

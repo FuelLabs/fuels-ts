@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { concatBytes } from '@fuel-ts/utils';
 
-import { MAX_BYTES, OPTION_CODER_TYPE, WORD_SIZE } from '../../utils/constants';
+import { MAX_BYTES, WORD_SIZE } from '../../utils/constants';
 import { findNestedOption, isUint8Array } from '../../utils/utilities';
 
 import { Coder } from './AbstractCoder';
