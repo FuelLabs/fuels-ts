@@ -1,5 +1,13 @@
 # create-fuels
 
+## 0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- 30fa103: chore: `create fuels` tests clean up the filesystem
+
 ## 0.86.0
 
 ## 0.85.0

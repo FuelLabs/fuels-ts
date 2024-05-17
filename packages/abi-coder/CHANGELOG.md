@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.88.0
+
+### Minor Changes
+
+- 60337b5: chore!: update `forc` to `0.59.0`
+
+### Patch Changes
+
+- 0b8e1a8: feat: find deeply nested `option` coders
+  - @fuel-ts/crypto@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/utils@0.88.0
+
+## 0.87.0
+
+### Minor Changes
+
+- 0da455a: feat!: remove nested option size validation
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.87.0
+- @fuel-ts/errors@0.87.0
+- @fuel-ts/hasher@0.87.0
+- @fuel-ts/interfaces@0.87.0
+- @fuel-ts/math@0.87.0
+- @fuel-ts/utils@0.87.0
+
 ## 0.86.0
 
 ### Minor Changes
