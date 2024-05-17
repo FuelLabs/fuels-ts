@@ -8,12 +8,9 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
+import { getPackageManager } from './lib/getPackageManager';
 import type { ProgramOptions } from './lib/setupProgram';
-import {
-  promptForProgramsToInclude,
-  promptForPackageManager,
-  promptForProjectPath,
-} from './prompts';
+import { promptForProgramsToInclude, promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
 
 export { setupProgram } from './lib/setupProgram';
@@ -66,6 +63,7 @@ export const runScaffoldCli = async ({
 
   const opts = program.opts<ProgramOptions>();
   const verboseEnabled = opts.verbose ?? false;
+  const packageManager = await getPackageManager(opts);
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
@@ -91,19 +89,6 @@ export const runScaffoldCli = async ({
     }
 
     projectPath = await promptForProjectPath();
-  }
-
-  const cliPackageManagerChoices = {
-    pnpm: opts.pnpm,
-    npm: opts.npm,
-  };
-
-  const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
-
-  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
-
-  if (!packageManager) {
-    packageManager = 'pnpm';
   }
 
   const cliProgramsToInclude = {

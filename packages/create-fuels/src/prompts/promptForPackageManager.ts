@@ -1,6 +1,8 @@
 import prompts from 'prompts';
 
-export const promptForPackageManager = async () => {
+import type { PackageManager } from '../lib/getPackageManager';
+
+export const promptForPackageManager = async (): Promise<PackageManager | undefined> => {
   const packageManagerInput = await prompts(
     {
       type: 'select',
@@ -14,5 +16,5 @@ export const promptForPackageManager = async () => {
     },
     { onCancel: () => process.exit(0) }
   );
-  return packageManagerInput.packageManager as string;
+  return packageManagerInput.packageManager as PackageManager;
 };
