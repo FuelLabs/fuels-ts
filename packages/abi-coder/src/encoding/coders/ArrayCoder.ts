@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concat } from '@fuel-ts/utils';
 
-import { MAX_BYTES } from '../../utils/constants';
+import { MAX_BYTES, OPTION_CODER_TYPE } from '../../utils/constants';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -15,11 +15,14 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
 > {
   coder: TCoder;
   length: number;
+  #hasNestedOption: boolean;
 
   constructor(coder: TCoder, length: number) {
+    const hasNestedOption = coder.type === OPTION_CODER_TYPE;
     super('array', `[${coder.type}; ${length}]`, length * coder.encodedLength);
     this.coder = coder;
     this.length = length;
+    this.#hasNestedOption = hasNestedOption;
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
@@ -35,7 +38,7 @@ export class ArrayCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    if (data.length < this.encodedLength || data.length > MAX_BYTES) {
+    if ((!this.#hasNestedOption && data.length < this.encodedLength) || data.length > MAX_BYTES) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid array data size.`);
     }
 
