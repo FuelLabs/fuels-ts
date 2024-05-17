@@ -82,8 +82,9 @@
           "lw": 2,
           "mint": 29024,
           "mlog": 2,
-          "modi": 2,
           "mod_op": 2,
+          "modi": 2,
+          "move_op": 2,
           "movi": 2,
           "mroo": 4,
           "mul": 2,
@@ -97,7 +98,6 @@
           "popl": 3,
           "pshh": 4,
           "pshl": 4,
-          "move_op": 2,
           "ret": 134,
           "rvrt": 153,
           "sb": 2,
@@ -199,6 +199,12 @@
             "LightOperation": {
               "base": 3,
               "units_per_gas": 766
+            }
+          },
+          "retd": {
+            "LightOperation": {
+              "base": 485,
+              "units_per_gas": 3
             }
           },
           "s256": {
