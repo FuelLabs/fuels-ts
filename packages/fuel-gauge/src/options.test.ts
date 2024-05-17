@@ -167,4 +167,16 @@ describe('Options Tests', () => {
 
     expect(mixedValue).toStrictEqual(mixedInput);
   });
+
+  it('echoes deeply nested option', async () => {
+    const input = {
+      DeepEnum: {
+        a: [true, [U8_MAX, undefined, 123]],
+      },
+    };
+
+    const { value } = await contractInstance.functions.echo_deeply_nested_option(input).call();
+
+    expect(value).toStrictEqual(input);
+  });
 });

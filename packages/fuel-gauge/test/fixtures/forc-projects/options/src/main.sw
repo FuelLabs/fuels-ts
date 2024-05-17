@@ -41,6 +41,14 @@ impl GardenVector {
     }
 }
 
+enum DeepEnum {
+    a: (bool, [Option<u8>; 3]),
+}
+
+struct DeepStruct {
+    DeepEnum: DeepEnum,
+}
+
 abi OptionContract {
     fn echo_option(arg: Option<u8>) -> Option<u8>;
     fn echo_struct_enum_option(arg: OptionStruct) -> OptionStruct;
@@ -49,6 +57,7 @@ abi OptionContract {
     fn echo_enum_option(arg: OptionEnum) -> OptionEnum;
     fn echo_array_option(arg: [Option<u16>; 3]) -> [Option<u16>; 3];
     fn print_enum_option_array() -> GardenVector;
+    fn echo_deeply_nested_option(arg: DeepStruct) -> DeepStruct;
 }
 
 impl OptionContract for Contract {
@@ -78,5 +87,9 @@ impl OptionContract for Contract {
 
     fn print_enum_option_array() -> GardenVector {
         GardenVector::new()
+    }
+
+    fn echo_deeply_nested_option(arg: DeepStruct) -> DeepStruct {
+        arg
     }
 }
