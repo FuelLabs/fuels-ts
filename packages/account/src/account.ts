@@ -428,6 +428,22 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
+  addTransfer(
+    request: ScriptTransactionRequest,
+    destination: string | AbstractAddress,
+    amount: BigNumberish,
+    assetId?: BytesLike
+  ) {
+    this.validateTransferAmount(amount);
+    request.addCoinOutput(
+      Address.fromAddressOrString(destination),
+      amount,
+      assetId ?? this.provider.getBaseAssetId()
+    );
+    return request;
+  }
+
+
   /**
    * Transfers coins to a contract address.
    *
