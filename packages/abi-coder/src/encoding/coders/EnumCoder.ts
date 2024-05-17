@@ -3,7 +3,8 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { OPTION_CODER_TYPE, WORD_SIZE } from '../../utils/constants';
+import { WORD_SIZE } from '../../utils/constants';
+import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
@@ -33,7 +34,6 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   #hasNestedOption: boolean;
 
   constructor(name: string, coders: TCoders) {
-    const hasNestedOption = Object.values(coders).some((coder) => coder.type === OPTION_CODER_TYPE);
     const caseIndexCoder = new BigNumberCoder('u64');
     const encodedValueSize = Object.values(coders).reduce(
       (max, coder) => Math.max(max, coder.encodedLength),
@@ -44,7 +44,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
     this.#encodedValueSize = encodedValueSize;
-    this.#hasNestedOption = hasNestedOption;
+    this.#hasNestedOption = hasNestedOption(coders);
   }
 
   #encodeNativeEnum(value: string): Uint8Array {

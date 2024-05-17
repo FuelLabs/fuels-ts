@@ -2,8 +2,8 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { bn } from '@fuel-ts/math';
 import { concatBytes } from '@fuel-ts/utils';
 
-import { MAX_BYTES, OPTION_CODER_TYPE, WORD_SIZE } from '../../utils/constants';
-import { isUint8Array } from '../../utils/utilities';
+import { MAX_BYTES, WORD_SIZE } from '../../utils/constants';
+import { hasNestedOption, isUint8Array } from '../../utils/utilities';
 
 import { Coder } from './AbstractCoder';
 import type { TypesOfCoder } from './AbstractCoder';
@@ -22,7 +22,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   constructor(coder: TCoder) {
     super('struct', `struct Vec`, coder.encodedLength + WORD_SIZE);
     this.coder = coder;
-    this.#hasNestedOption = coder.type === OPTION_CODER_TYPE;
+    this.#hasNestedOption = hasNestedOption([coder]);
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
