@@ -11,7 +11,7 @@ describe('findNestedOption', () => {
         name: 'DeepEnum',
         type: 'enum DeepEnum',
         encodedLength: 36,
-        // @ts-expect-error tuple coder contains coders
+        // @ts-expect-error enum coder contains coders
         coders: {
           a: {
             name: 'tuple',
