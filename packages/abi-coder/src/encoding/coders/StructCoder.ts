@@ -1,6 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concatBytes } from '@fuel-ts/utils';
 
+import { OPTION_CODER_TYPE } from '../../utils/constants';
+
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
 import { OptionCoder } from './OptionCoder';
@@ -18,8 +20,10 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
 > {
   name: string;
   coders: TCoders;
+  #hasNestedOption: boolean;
 
   constructor(name: string, coders: TCoders) {
+    const hasNestedOption = Object.values(coders).some((coder) => coder.type === OPTION_CODER_TYPE);
     const encodedLength = Object.values(coders).reduce(
       (acc, coder) => acc + coder.encodedLength,
       0
@@ -27,6 +31,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     super('struct', `struct ${name}`, encodedLength);
     this.name = name;
     this.coders = coders;
+    this.#hasNestedOption = hasNestedOption;
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
@@ -48,7 +53,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
-    if (data.length < this.encodedLength) {
+    if (!this.#hasNestedOption && data.length < this.encodedLength) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid struct data size.`);
     }
 
