@@ -413,6 +413,13 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
+  /**
+   * Transfers multiple amounts of a token to multiple recipients.
+   *
+   * @param transfers - An array of `TransferParams` objects representing the transfers to be made.
+   * @param txParams - Optional transaction parameters.
+   * @returns A promise that resolves to a `TransactionResponse` object representing the transaction result.
+   */
   async multiTransfer(
     transfers: TransferParams[],
     txParams: TxParamsType = {}
@@ -423,6 +430,15 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
+  /**
+   * Adds a transfer to the given transaction request.
+   *
+   * @param request - The script transaction request to add transfers to.
+   * @param destination - The destination address for the transfer.
+   * @param amount - The amount to transfer.
+   * @param assetId - (Optional) The asset ID for the transfer. If not provided, the base asset ID from the provider will be used.
+   * @returns The updated transaction request with the added transfer.
+   */
   addTransfer(
     request: ScriptTransactionRequest,
     destination: string | AbstractAddress,
@@ -438,6 +454,13 @@ export class Account extends AbstractAccount {
     return request;
   }
 
+  /**
+   * Adds multiple transfers to a script transaction request.
+   *
+   * @param request - The script transaction request to add transfers to.
+   * @param transfers - An array of `TransferParams` objects representing the transfers to be made.
+   * @returns The updated script transaction request.
+   */
   addTransfers(request: ScriptTransactionRequest, transfers: TransferParams[]) {
     const baseAssetId = this.provider.getBaseAssetId();
     transfers.forEach(({ destination, amount, assetId }) => {
