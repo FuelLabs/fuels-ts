@@ -78,7 +78,6 @@ describe('findNestedOption', () => {
                 name: 'array',
                 type: '[enum Option; 3]',
                 encodedLength: 27,
-                // Deeply nested option
                 coder: {
                   name: 'AnotherEnum',
                   type: 'enum NotAnOption',
