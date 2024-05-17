@@ -413,7 +413,7 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
-  async transferToMany(
+  async multiTransfer(
     transfers: TransferParams[],
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
