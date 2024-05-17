@@ -14,22 +14,23 @@ import type { Coin, CoinQuantity, Message, Resource } from './providers';
 import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 
-let provider: Provider;
-let baseAssetId: string;
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
-beforeAll(async () => {
-  provider = await Provider.create(FUEL_NETWORK_URL);
-  baseAssetId = provider.getBaseAssetId();
-});
-
 /**
  * @group node
  */
+
 describe('Account', () => {
   const assets = [ASSET_A, ASSET_B, ZeroBytes32];
+  let provider: Provider;
+  let baseAssetId: string;
+
+  beforeAll(async () => {
+    provider = await Provider.create(FUEL_NETWORK_URL);
+    baseAssetId = provider.getBaseAssetId();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   it('should create account using an address, with a provider', () => {
     const account = new Account(
