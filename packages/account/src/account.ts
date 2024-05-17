@@ -379,22 +379,8 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
-    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetIdToTransfer);
-    const txCost = await this.provider.getTransactionCost(request, {
-      estimateTxDependencies: true,
-      resourcesOwner: this,
-    });
-
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
-    });
-
-    await this.fund(request, txCost);
-
+    request = this.addTransfer(request, destination, amount, assetId);
+    request = await this.estimateAndFundTransaction(request, txParams);
     return request;
   }
 
