@@ -6,6 +6,7 @@ import { bn } from '@fuel-ts/math';
 import { PolicyType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
+import type { TransferParams } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 import { ScriptTransactionRequest, Provider } from './providers';
@@ -390,6 +391,77 @@ describe('Account', () => {
     const expectedRemaining = 499118;
     expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
+  });
+
+  it('can transfer to multiple destinations', async () => {
+    const sender = await generateTestWallet(provider, [
+      [900_000, baseAssetId],
+      [900_000, ASSET_A],
+      [900_000, ASSET_B],
+    ]);
+
+    const amounts = [100, 200, 300, 400];
+
+    const receivers = [
+      Wallet.generate({ provider }),
+      Wallet.generate({ provider }),
+      Wallet.generate({ provider }),
+    ];
+
+    const transferConfig: TransferParams[] = [
+      { amount: amounts[0], destination: receivers[0].address, assetId: baseAssetId },
+      { amount: amounts[1], destination: receivers[1].address, assetId: ASSET_A },
+      { amount: amounts[2], destination: receivers[2].address, assetId: ASSET_B },
+      { amount: amounts[3], destination: receivers[2].address, assetId: ASSET_A },
+    ];
+
+    const response1 = await sender.multiTransfer(transferConfig);
+    const { isStatusSuccess } = await response1.waitForResult();
+    expect(isStatusSuccess).toBeTruthy();
+
+    const expectedBalances = [
+      { receiver: receivers[0], assetId: baseAssetId, expectedBalance: amounts[0] },
+      { receiver: receivers[1], assetId: ASSET_A, expectedBalance: amounts[1] },
+      { receiver: receivers[2], assetId: ASSET_B, expectedBalance: amounts[2] },
+      { receiver: receivers[2], assetId: ASSET_A, expectedBalance: amounts[3] },
+    ];
+
+    for (const { receiver, assetId, expectedBalance } of expectedBalances) {
+      const balance = await receiver.getBalance(assetId);
+      expect(balance.toNumber()).toBe(expectedBalance);
+    }
+
+    // Test with custom TX Params
+    const gasLimit = 100_000;
+    const maxFee = 120_000;
+    const tip = 1_000;
+    const witnessLimit = 10_000;
+    const maturity = 1;
+
+    const response = await sender.multiTransfer(transferConfig, {
+      gasLimit,
+      maxFee,
+      tip,
+      witnessLimit,
+      maturity,
+    });
+
+    const {
+      transaction: { policies, scriptGasLimit },
+      isStatusSuccess: isStatusSuccess2,
+    } = await response.waitForResult();
+
+    expect(isStatusSuccess2).toBeTruthy();
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(policies?.[0].data).toNumber()).toBe(tip);
+    expect(bn(policies?.[1].data).toNumber()).toBe(witnessLimit);
+    expect(policies?.[2].data).toBe(maturity);
+    expect(bn(policies?.[3].data).toNumber()).toBe(maxFee);
+
+    for (const { receiver, assetId, expectedBalance } of expectedBalances) {
+      const balance = await receiver.getBalance(assetId);
+      expect(balance.toNumber()).toBe(expectedBalance * 2);
+    }
   });
 
   it('can create transfer request just fine', async () => {
