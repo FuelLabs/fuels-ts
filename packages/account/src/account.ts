@@ -403,14 +403,10 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    if (bn(amount).lte(0)) {
-      throw new FuelError(
-        ErrorCode.INVALID_TRANSFER_AMOUNT,
-        'Transfer amount must be a positive number.'
-      );
-    }
-    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    const request = await this.createTransfer(destination, amount, assetIdToTransfer, txParams);
+    const request = await this.createTransfer(destination, amount, assetId, txParams);
+    return this.sendTransaction(request, { estimateTxDependencies: false });
+  }
+
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
