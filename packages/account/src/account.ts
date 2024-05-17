@@ -388,6 +388,9 @@ export class Account extends AbstractAccount {
       resourcesOwner: this,
     });
 
+    console.log('gasUsed', txCost.gasUsed.toString());
+    console.log('maxFee', txCost.maxFee.toString());
+
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
       gasUsed: txCost.gasUsed,

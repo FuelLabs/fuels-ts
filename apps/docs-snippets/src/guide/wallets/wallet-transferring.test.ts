@@ -19,8 +19,8 @@ describe(__filename, () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
     const wallet = await generateTestWallet(provider, [
-      [200_000, baseAssetId],
-      [200_000, ASSET_A],
+      [1_000_000, baseAssetId],
+      [1_000_000, ASSET_A],
     ]);
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
     privateKey = wallet.privateKey;

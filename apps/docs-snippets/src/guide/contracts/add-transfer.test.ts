@@ -19,9 +19,9 @@ describe(__filename, () => {
     provider = contract.provider;
     baseAssetId = provider.getBaseAssetId();
     wallet = await getTestWallet([
-      [5000, baseAssetId],
-      [5000, ASSET_A],
-      [5000, ASSET_B],
+      [500_000, baseAssetId],
+      [500_000, ASSET_A],
+      [500_000, ASSET_B],
     ]);
 
     contract.account = wallet;

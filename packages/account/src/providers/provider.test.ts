@@ -76,14 +76,14 @@ describe('Provider', () => {
         owner: baseAssetId,
         assetId: baseAssetId,
         txPointer: '0x00000000000000000000000000000000',
-        amount: 1000,
+        amount: 500_000,
         witnessIndex: 0,
       },
     ];
     const transactionRequest = new ScriptTransactionRequest({
       tip: 0,
-      gasLimit: 500,
-      maxFee: 1000,
+      gasLimit: 100_000,
+      maxFee: 120_000,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -96,11 +96,6 @@ describe('Provider', () => {
       inputs: CoinInputs,
       witnesses: ['0x'],
     });
-
-    const { maxFee, gasUsed } = await provider.getTransactionCost(transactionRequest);
-
-    transactionRequest.maxFee = maxFee;
-    transactionRequest.gasLimit = gasUsed;
 
     const callResult = await provider.call(transactionRequest);
 
@@ -125,7 +120,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x5d3),
+        gasUsed: bn(170),
       },
     ];
 

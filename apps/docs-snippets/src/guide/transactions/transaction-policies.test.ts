@@ -62,7 +62,7 @@ describe('Transaction Policies', () => {
       maturity: 2,
       tip: bn(3),
       witnessLimit: 900,
-      maxFee: bn(10_000),
+      maxFee: bn(60_000),
     });
 
     // Set the script main function arguments

@@ -89,7 +89,7 @@ describe('Experimental Predicate', () => {
 
     const amountToReceiver = 100;
 
-    await fundPredicate(wallet, predicate, 100_000);
+    await fundPredicate(wallet, predicate, 300_000);
     const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId);
     await tx.waitForResult();
 
