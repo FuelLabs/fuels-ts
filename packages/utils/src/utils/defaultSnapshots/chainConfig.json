@@ -8,7 +8,7 @@
           "max_outputs": 255,
           "max_witnesses": 255,
           "max_gas_per_tx": 5000000000,
-          "max_size": 112640,
+          "max_size": 262144,
           "max_bytecode_subsections": 256
         }
       },
@@ -17,7 +17,7 @@
           "max_predicate_length": 102400,
           "max_predicate_data_length": 102400,
           "max_message_data_length": 102400,
-          "max_gas_per_predicate": 30000000
+          "max_gas_per_predicate": 100000000
         }
       },
       "script_params": {
@@ -28,7 +28,7 @@
       },
       "contract_params": {
         "V1": {
-          "contract_max_size": 102400,
+          "contract_max_size": 262144,
           "max_storage_slots": 1760
         }
       },
@@ -259,7 +259,7 @@
         }
       },
       "base_asset_id": "0000000000000000000000000000000000000000000000000000000000000000",
-      "block_gas_limit": 30000000,
+      "block_gas_limit": 100000000,
       "privileged_address": "0000000000000000000000000000000000000000000000000000000000000000"
     }
   },
