@@ -22,11 +22,10 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
   #hasNestedOption: boolean;
 
   constructor(coders: TCoders) {
-    const hasNestedOption = findNestedOption(coders);
     const encodedLength = coders.reduce((acc, coder) => acc + coder.encodedLength, 0);
     super('tuple', `(${coders.map((coder) => coder.type).join(', ')})`, encodedLength);
     this.coders = coders;
-    this.#hasNestedOption = hasNestedOption;
+    this.#hasNestedOption = findNestedOption(coders);
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {

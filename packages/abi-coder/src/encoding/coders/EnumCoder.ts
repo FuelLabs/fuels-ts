@@ -34,7 +34,6 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   #hasNestedOption: boolean;
 
   constructor(name: string, coders: TCoders) {
-    const hasNestedOption =findNestedOption(coders);
     const caseIndexCoder = new BigNumberCoder('u64');
     const encodedValueSize = Object.values(coders).reduce(
       (max, coder) => Math.max(max, coder.encodedLength),
@@ -45,7 +44,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
     this.#encodedValueSize = encodedValueSize;
-    this.#hasNestedOption = hasNestedOption;
+    this.#hasNestedOption = findNestedOption(coders);
   }
 
   #encodeNativeEnum(value: string): Uint8Array {

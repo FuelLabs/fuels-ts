@@ -23,7 +23,6 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
   #hasNestedOption: boolean;
 
   constructor(name: string, coders: TCoders) {
-    const hasNestedOption = findNestedOption(coders);
     const encodedLength = Object.values(coders).reduce(
       (acc, coder) => acc + coder.encodedLength,
       0
@@ -31,7 +30,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
     super('struct', `struct ${name}`, encodedLength);
     this.name = name;
     this.coders = coders;
-    this.#hasNestedOption = hasNestedOption;
+    this.#hasNestedOption = findNestedOption(coders);
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
