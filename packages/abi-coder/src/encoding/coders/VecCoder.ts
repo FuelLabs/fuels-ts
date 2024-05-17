@@ -46,7 +46,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    if (!this.#hasNestedOption && (data.length < this.encodedLength || data.length > MAX_BYTES)) {
+    if ((!this.#hasNestedOption && data.length < this.encodedLength) || data.length > MAX_BYTES) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
     }
 
