@@ -407,6 +407,20 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
+  async transferToMany({
+    transfers,
+    txParams = {},
+  }: {
+    transfers: {
+      destination: string | AbstractAddress;
+      amount: BigNumberish;
+      assetId?: BytesLike;
+    }[];
+    txParams: TxParamsType;
+  }): Promise<TransactionResponse> {
+    let request = new ScriptTransactionRequest(txParams);
+    request = this.addTransfers(request, transfers);
+    request = await this.estimateAndFundTransaction(request, txParams);
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
 
