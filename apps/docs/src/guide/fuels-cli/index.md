@@ -55,4 +55,4 @@ npx fuels@{{fuels}} -v
 
 ## Next Step
 
-Use [`pnpm fuels init`](./commands#init) to create a [`fuel.config.ts`](./config-file) file.
+Use [`pnpm fuels init`](./commands.md#fuels-init) to create a [`fuel.config.ts`](./config-file.md) file.
