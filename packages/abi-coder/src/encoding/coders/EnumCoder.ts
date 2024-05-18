@@ -3,7 +3,7 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { WORD_SIZE } from '../../utils/constants';
+import { OPTION_CODER_TYPE, WORD_SIZE } from '../../utils/constants';
 import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
@@ -31,7 +31,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   coders: TCoders;
   #caseIndexCoder: BigNumberCoder;
   #encodedValueSize: number;
-  #hasNestedOption: boolean;
+  #shouldValidateLength: boolean;
 
   constructor(name: string, coders: TCoders) {
     const caseIndexCoder = new BigNumberCoder('u64');
@@ -44,7 +44,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
     this.#encodedValueSize = encodedValueSize;
-    this.#hasNestedOption = hasNestedOption(coders);
+    this.#shouldValidateLength = !(this.type === OPTION_CODER_TYPE || hasNestedOption(coders));
   }
 
   #encodeNativeEnum(value: string): Uint8Array {
@@ -80,7 +80,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
-    if (!this.#hasNestedOption && data.length < this.#encodedValueSize) {
+    if (this.#shouldValidateLength && data.length < this.#encodedValueSize) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid enum data size.`);
     }
 
