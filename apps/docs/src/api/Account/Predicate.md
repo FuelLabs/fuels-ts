@@ -46,7 +46,7 @@ Creates an instance of the Predicate class.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:52](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L52)
+[packages/account/src/predicate/predicate.ts:52](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L52)
 
 ## Properties
 
@@ -60,7 +60,7 @@ Creates an instance of the Predicate class.
 
 #### Defined in
 
-[packages/account/src/account.ts:67](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L67)
+[packages/account/src/account.ts:67](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L67)
 
 ___
 
@@ -76,7 +76,7 @@ The provider used to interact with the network.
 
 #### Defined in
 
-[packages/account/src/account.ts:65](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L65)
+[packages/account/src/account.ts:65](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L65)
 
 ___
 
@@ -92,7 +92,7 @@ The address associated with the account.
 
 #### Defined in
 
-[packages/account/src/account.ts:60](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L60)
+[packages/account/src/account.ts:60](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L60)
 
 ___
 
@@ -102,7 +102,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:39](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L39)
+[packages/account/src/predicate/predicate.ts:39](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L39)
 
 ___
 
@@ -112,7 +112,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:41](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L41)
+[packages/account/src/predicate/predicate.ts:41](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L41)
 
 ___
 
@@ -122,7 +122,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:40](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L40)
+[packages/account/src/predicate/predicate.ts:40](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L40)
 
 ## Accessors
 
@@ -148,7 +148,7 @@ Account.provider
 
 #### Defined in
 
-[packages/account/src/account.ts:89](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L89)
+[packages/account/src/account.ts:89](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L89)
 
 • `set` **provider**(`provider`): `void`
 
@@ -170,7 +170,7 @@ Account.provider
 
 #### Defined in
 
-[packages/account/src/account.ts:102](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L102)
+[packages/account/src/account.ts:102](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L102)
 
 ## Methods
 
@@ -198,7 +198,7 @@ The updated Provider instance.
 
 #### Defined in
 
-[packages/account/src/account.ts:112](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L112)
+[packages/account/src/account.ts:112](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L112)
 
 ___
 
@@ -229,7 +229,7 @@ A promise that resolves to the prepared transaction request.
 
 #### Defined in
 
-[packages/account/src/account.ts:371](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L371)
+[packages/account/src/account.ts:371](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L371)
 
 ___
 
@@ -264,7 +264,7 @@ The funded transaction request.
 
 #### Defined in
 
-[packages/account/src/account.ts:254](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L254)
+[packages/account/src/account.ts:254](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L254)
 
 ___
 
@@ -292,7 +292,7 @@ A promise that resolves to the balance amount.
 
 #### Defined in
 
-[packages/account/src/account.ts:206](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L206)
+[packages/account/src/account.ts:206](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L206)
 
 ___
 
@@ -314,7 +314,7 @@ A promise that resolves to an array of Coins and their quantities.
 
 #### Defined in
 
-[packages/account/src/account.ts:217](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L217)
+[packages/account/src/account.ts:217](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L217)
 
 ___
 
@@ -342,7 +342,7 @@ A promise that resolves to an array of Coins.
 
 #### Defined in
 
-[packages/account/src/account.ts:137](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L137)
+[packages/account/src/account.ts:137](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L137)
 
 ___
 
@@ -367,7 +367,7 @@ The index of the witness placeholder, or -1 if there is no witness placeholder.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:251](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L251)
+[packages/account/src/predicate/predicate.ts:251](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L251)
 
 ___
 
@@ -389,7 +389,7 @@ A promise that resolves to an array of Messages.
 
 #### Defined in
 
-[packages/account/src/account.ts:171](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L171)
+[packages/account/src/account.ts:171](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L171)
 
 ___
 
@@ -403,7 +403,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:127](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L127)
+[packages/account/src/predicate/predicate.ts:127](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L127)
 
 ___
 
@@ -432,7 +432,7 @@ A promise that resolves to an array of Resources.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:183](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L183)
+[packages/account/src/predicate/predicate.ts:183](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L183)
 
 ___
 
@@ -462,7 +462,7 @@ The transaction request with predicate data.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:80](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L80)
+[packages/account/src/predicate/predicate.ts:80](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L80)
 
 ___
 
@@ -490,7 +490,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:111](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L111)
+[packages/account/src/predicate/predicate.ts:111](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L111)
 
 ___
 
@@ -514,7 +514,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/account.ts:540](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L540)
+[packages/account/src/account.ts:540](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L540)
 
 ___
 
@@ -542,7 +542,7 @@ A promise that resolves to the signature of the transaction.
 
 #### Defined in
 
-[packages/account/src/account.ts:553](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L553)
+[packages/account/src/account.ts:553](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L553)
 
 ___
 
@@ -570,7 +570,7 @@ A promise that resolves to the call result.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:122](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L122)
+[packages/account/src/predicate/predicate.ts:122](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L122)
 
 ___
 
@@ -601,7 +601,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/account.ts:410](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L410)
+[packages/account/src/account.ts:410](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L410)
 
 ___
 
@@ -632,7 +632,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/account.ts:440](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L440)
+[packages/account/src/account.ts:440](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L440)
 
 ___
 
@@ -662,7 +662,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/account.ts:498](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/account.ts#L498)
+[packages/account/src/account.ts:498](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L498)
 
 ___
 
@@ -693,7 +693,7 @@ An object containing the new predicate bytes and interface.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:144](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L144)
+[packages/account/src/predicate/predicate.ts:144](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L144)
 
 ___
 
@@ -719,4 +719,4 @@ The mutated bytes with the configurable constants set.
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:206](https://github.com/FuelLabs/fuels-ts/blob/8105a4ca/packages/account/src/predicate/predicate.ts#L206)
+[packages/account/src/predicate/predicate.ts:206](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/predicate/predicate.ts#L206)
