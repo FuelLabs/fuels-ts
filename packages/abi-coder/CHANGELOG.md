@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.88.1
+
+### Patch Changes
+
+- 64b90a9: feat: disable `option` length validation at `enum Option` level
+  - @fuel-ts/crypto@0.88.1
+  - @fuel-ts/errors@0.88.1
+  - @fuel-ts/hasher@0.88.1
+  - @fuel-ts/interfaces@0.88.1
+  - @fuel-ts/math@0.88.1
+  - @fuel-ts/utils@0.88.1
+
 ## 0.88.0
 
 ### Minor Changes

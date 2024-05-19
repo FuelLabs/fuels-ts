@@ -1,4 +1,5 @@
-import type { Contract } from 'fuels';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import type { Contract, WalletUnlocked } from 'fuels';
 
 import { getSetupContract } from './utils';
 
@@ -8,8 +9,12 @@ const U32_MAX = 4294967295;
 
 const setupContract = getSetupContract('options');
 let contractInstance: Contract;
+let wallet: WalletUnlocked;
 beforeAll(async () => {
   contractInstance = await setupContract();
+  wallet = await generateTestWallet(contractInstance.provider, [
+    [200_000, contractInstance.provider.getBaseAssetId()],
+  ]);
 });
 
 /**
@@ -178,5 +183,13 @@ describe('Options Tests', () => {
     const { value } = await contractInstance.functions.echo_deeply_nested_option(input).call();
 
     expect(value).toStrictEqual(input);
+  });
+
+  it('prints struct option', async () => {
+    const { value } = await contractInstance.functions
+      .get_some_struct({ Address: { bits: wallet.address.toB256() } })
+      .call();
+
+    expect(value).toStrictEqual(undefined);
   });
 });
