@@ -92,6 +92,7 @@ fragment transactionEstimatePredicatesFragment on Transaction {
 }
 
 fragment dryRunFailureStatusFragment on DryRunFailureStatus {
+  type: __typename
   totalGas
   totalFee
   reason
@@ -102,6 +103,7 @@ fragment dryRunFailureStatusFragment on DryRunFailureStatus {
 }
 
 fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
+  type: __typename
   totalGas
   totalFee
   programState {

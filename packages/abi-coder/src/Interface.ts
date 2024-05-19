@@ -74,7 +74,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     return fragment.decodeOutput(data);
   }
 
-  decodeLog(data: BytesLike, logId: number): any {
+  decodeLog(data: BytesLike, logId: string): any {
     const loggedType = this.jsonAbi.loggedTypes.find((type) => type.logId === logId);
     if (!loggedType) {
       throw new FuelError(
