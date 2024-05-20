@@ -374,12 +374,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Wallet Config',
-                link: '/guide/testing/wallet-config',
-              },
-              {
-                text: 'Testing in TS',
-                link: '/guide/testing/testing-in-ts',
+                text: 'launchTestNode Options',
+                link: '/guide/testing/launchTestNode-options',
               },
               {
                 text: 'Tweaking the Blockchain',

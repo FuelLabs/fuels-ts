@@ -17,7 +17,7 @@ export interface WalletConfigOptions {
   /**
    * If `number`, the number of unique asset ids each wallet will own.
    *
-   * If `AssetId[]`, the asset ids the each wallet will own besides `AssetId.BaseAssetId`.
+   * If `AssetId[]`, the asset ids the each wallet will own besides the base asset.
    */
   assets: number | AssetId[];
 

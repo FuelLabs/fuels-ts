@@ -306,7 +306,6 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    // #region Provider-produce-blocks
     const block = await provider.getBlock('latest');
     if (!block) {
       throw new Error('No latest block');
@@ -324,7 +323,6 @@ describe('Provider', () => {
     const newest: Date = DateTime.fromTai64(producedBlock?.time || DateTime.TAI64_NULL);
 
     expect(newest >= oldest).toBeTruthy();
-    // #endregion Provider-produce-blocks
   });
 
   // TODO: Add back support for producing blocks with intervals by supporting the new

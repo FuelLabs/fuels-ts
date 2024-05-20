@@ -24,7 +24,7 @@ interface ContractDeployer {
 
 interface DeployContractConfig {
   /**
-   * Contract deployer object compatible with factories outputted of `pnpm fuels typegen`.
+   * Contract deployer object compatible with factories outputted by `pnpm fuels typegen`.
    */
   deployer: ContractDeployer;
   /**
