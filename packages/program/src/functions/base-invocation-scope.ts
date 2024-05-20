@@ -5,13 +5,8 @@ import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type {
-  AbstractAccount,
-  AbstractAddress,
-  AbstractContract,
-  AbstractProgram,
-} from '@fuel-ts/interfaces';
-import type { BN, BigNumberish } from '@fuel-ts/math';
+import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
