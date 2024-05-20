@@ -11,6 +11,7 @@ export const promptForPackageManager = async (): Promise<PackageManager | undefi
       choices: [
         { title: 'pnpm', value: 'pnpm' },
         { title: 'npm', value: 'npm' },
+        { title: 'bun', value: 'bun' },
       ],
       initial: 0,
     },

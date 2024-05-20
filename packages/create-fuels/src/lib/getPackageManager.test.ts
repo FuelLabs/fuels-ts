@@ -71,6 +71,7 @@ describe('getPackageManager', () => {
     const installScenarios: [PackageManager, string][] = [
       ['pnpm', 'pnpm install'],
       ['npm', 'npm install'],
+      ['bun', 'bun install'],
     ]
 
     it.each(installScenarios)('should have the correct install commands', (packageManager, expectedInstallCommand) => {
@@ -85,6 +86,7 @@ describe('getPackageManager', () => {
     const runScenarios: [PackageManager, string][] = [
       ['pnpm', 'pnpm fuels:dev'],
       ['npm', 'npm run fuels:dev'],
+      ['bun', 'bun run fuels:dev'],
     ]
 
     it.each(runScenarios)('should have the correct run commands', (packageManager, expectedRunCommand) => {

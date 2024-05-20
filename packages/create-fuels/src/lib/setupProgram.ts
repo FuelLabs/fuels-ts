@@ -8,6 +8,7 @@ export interface ProgramOptions {
   script?: boolean;
   pnpm?: boolean;
   npm?: boolean;
+  bun?: boolean;
   verbose?: boolean;
 }
 
@@ -20,6 +21,7 @@ export const setupProgram = () => {
     .option('-s, --script', 'Include script program')
     .option('--pnpm', 'Use pnpm as the package manager')
     .option('--npm', 'Use npm as the package manager')
+    .option('--bun', 'Use bun as the package manager')
     .option('--verbose', 'Enable verbose logging')
     .addHelpCommand()
     .showHelpAfterError(true);

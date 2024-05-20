@@ -3,7 +3,7 @@ import { warn } from '../utils/logger';
 
 import type { ProgramOptions } from './setupProgram';
 
-export const availablePackageManagers = ['pnpm', 'npm'] as const;
+export const availablePackageManagers = ['pnpm', 'npm', 'bun'] as const;
 export type PackageManager = (typeof availablePackageManagers)[number];
 
 const runnableApplicator =
@@ -20,12 +20,17 @@ export const packageMangerCommands = {
     install: 'npm install',
     run: runnableApplicator('npm run'),
   },
+  bun: {
+    install: 'bun install',
+    run: runnableApplicator('bun run'),
+  }
 } as const;
 
 export const getPackageManager = async (opts: ProgramOptions) => {
   const packageMangerOpts = {
     pnpm: opts.pnpm,
     npm: opts.npm,
+    bun: opts.bun,
   };
 
   const cliChosenPackageManagerSelected = Object.entries(packageMangerOpts)
