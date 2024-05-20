@@ -12,24 +12,21 @@ import {
   PANIC_DOC_URL,
 } from '@fuel-ts/transactions/configs';
 
-import type { GqlTransactionStatusFragment } from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
-import type { FailureStatus } from '../transaction-summary';
 
 /**
  * Assembles an error message for a panic status.
  * @param status - The transaction failure status.
  * @returns The error message.
  */
-export const assemblePanicError = (status: FailureStatus) => {
-  let errorMessage = `The transaction reverted with reason: "${status.reason}".`;
-  const reason = status.reason;
+export const assemblePanicError = (statusReason: string) => {
+  let errorMessage = `The transaction reverted with reason: "${statusReason}".`;
 
-  if (PANIC_REASONS.includes(status.reason)) {
-    errorMessage = `${errorMessage}\n\nYou can read more about this error at:\n\n${PANIC_DOC_URL}#variant.${status.reason}`;
+  if (PANIC_REASONS.includes(statusReason)) {
+    errorMessage = `${errorMessage}\n\nYou can read more about this error at:\n\n${PANIC_DOC_URL}#variant.${statusReason}`;
   }
 
-  return { errorMessage, reason };
+  return { errorMessage, reason: statusReason };
 };
 
 /** @hidden */
@@ -101,8 +98,8 @@ export const assembleRevertError = (
 
 interface IExtractTxError {
   receipts: Array<TransactionResultReceipt>;
-  status?: GqlTransactionStatusFragment | null;
   logs: Array<unknown>;
+  statusReason: string;
 }
 
 /**
@@ -111,15 +108,14 @@ interface IExtractTxError {
  * @returns The FuelError object.
  */
 export const extractTxError = (params: IExtractTxError): FuelError => {
-  const { receipts, status, logs } = params;
+  const { receipts, statusReason, logs } = params;
 
   const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
   const isRevert = receipts.some(({ type }) => type === ReceiptType.Revert);
 
-  const { errorMessage, reason } =
-    status?.type === 'FailureStatus' && isPanic
-      ? assemblePanicError(status)
-      : assembleRevertError(receipts, logs);
+  const { errorMessage, reason } = isPanic
+    ? assemblePanicError(statusReason)
+    : assembleRevertError(receipts, logs);
 
   const metadata = {
     logs,

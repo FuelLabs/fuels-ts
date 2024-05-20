@@ -1,6 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { concatBytes } from '@fuel-ts/utils';
 
+import { hasNestedOption } from '../../utils/utilities';
+
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
 
@@ -16,11 +18,13 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
   DecodedValueOf<TCoders>
 > {
   coders: TCoders;
+  #hasNestedOption: boolean;
 
   constructor(coders: TCoders) {
     const encodedLength = coders.reduce((acc, coder) => acc + coder.encodedLength, 0);
     super('tuple', `(${coders.map((coder) => coder.type).join(', ')})`, encodedLength);
     this.coders = coders;
+    this.#hasNestedOption = hasNestedOption(coders);
   }
 
   encode(value: InputValueOf<TCoders>): Uint8Array {
@@ -32,7 +36,7 @@ export class TupleCoder<TCoders extends Coder[]> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
-    if (data.length < this.encodedLength) {
+    if (!this.#hasNestedOption && data.length < this.encodedLength) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid tuple data size.`);
     }
 

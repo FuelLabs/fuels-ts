@@ -67,7 +67,7 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
+          FUEL_NETWORK_URL: https://devnet.fuel.network/v1/graphql
           TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
           TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
           FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
@@ -121,7 +121,7 @@ jobs:
 
       - name: Report Coverage
         uses: thollander/actions-comment-pull-request@v2
-        if: ${{ steps.findPr.outputs.number }} && github.actor != 'dependabot[bot]'
+        if: ${{ steps.findPr.outputs.number }}
         with:
           filePath: coverage/report/coverage-diff.txt
           pr_number: ${{ (steps.findPr.outputs.number) }}
@@ -130,6 +130,7 @@ jobs:
           create_if_not_exists: true
 
   create-changeset:
+    needs: [test]
     name: Create Changeset
     runs-on: ubuntu-latest
     if: github.actor  == 'dependabot[bot]'
