@@ -316,3 +316,7 @@ Gwei
 onchain
 Vercel
 hardcoded
+tsconfig
+deployer
+overriden
+typesafe
