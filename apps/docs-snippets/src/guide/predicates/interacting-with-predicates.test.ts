@@ -1,4 +1,4 @@
-import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
+import type { WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, Provider, FUEL_NETWORK_URL, bn, Predicate } from 'fuels';
 
 import {
