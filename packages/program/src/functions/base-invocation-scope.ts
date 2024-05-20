@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult, Account } from '@fuel-ts/account';
+import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -321,6 +321,25 @@ export class BaseInvocationScope<TReturn = any> {
       amount,
       assetId
     );
+
+    return this;
+  }
+
+  /**
+   * Adds multiple transfers to the contract call transaction request.
+   *
+   * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
+   * @returns The current instance of the class.
+   */
+  addBatchTransfer(transferParams: TransferParams[]) {
+    const baseAssetId = this.getProvider().getBaseAssetId();
+    transferParams.forEach(({ destination, amount, assetId }) => {
+      this.transactionRequest = this.transactionRequest.addCoinOutput(
+        Address.fromAddressOrString(destination),
+        amount,
+        assetId || baseAssetId
+      );
+    });
 
     return this;
   }
