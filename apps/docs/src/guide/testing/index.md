@@ -8,7 +8,7 @@
 
 In order to test your Sway and TS-SDK applications, you can test your code in a number of ways:
 
-1. Testing with the TS-SDK: Compiling you Sway code and connecting to the methods using TS-SDK and JS testing frameworks
+1. Testing with the TS-SDK: Compiling your Sway code and connecting to the methods using TS-SDK and JS testing frameworks
 1. Using [`forc test`](https://docs.fuel.network/docs/forc/commands/forc%5ftest/#forc-test)
 1. Using [the Rust SDK](https://docs.fuel.network/docs/fuels-rs/testing/)
 
