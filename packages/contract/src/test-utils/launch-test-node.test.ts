@@ -1,19 +1,25 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Provider } from '@fuel-ts/account';
 import * as setupTestProviderAndWalletsMod from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { hexlify, type SnapshotConfigs } from '@fuel-ts/utils';
-import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
+import { getForcProject, waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import { randomBytes, randomUUID } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync } from 'fs';
 import { writeFile, copyFile } from 'fs/promises';
 import os from 'os';
 import { join } from 'path';
 
-import { SimpleContractAbi__factory } from '../../test/typegen';
-import contractBytecode from '../../test/typegen/contracts/SimpleContractAbi.hex';
+import ContractFactory from '../contract-factory';
 
 import { launchTestNode } from './launch-test-node';
+
+const { binHexlified, abiContents } = getForcProject<JsonAbi>({
+  projectDir: '../../test/fixtures/forc-projects/simple-contract',
+  projectName: 'simple-contract',
+  build: 'release',
+});
 
 async function generateChainConfigFile(chainName: string): Promise<[string, () => void]> {
   const configsFolder = join(__dirname, '../../../../', '.fuel-core', 'configs');
@@ -92,7 +98,7 @@ describe('launchTestNode', () => {
                 throw new Error('Test error');
               },
             },
-            bytecode: contractBytecode,
+            bytecode: binHexlified,
           },
         ],
       })
@@ -113,8 +119,13 @@ describe('launchTestNode', () => {
     using launched = await launchTestNode({
       deployContracts: [
         {
-          deployer: SimpleContractAbi__factory,
-          bytecode: contractBytecode,
+          deployer: {
+            deployContract: async (bytecode, wallet, options) => {
+              const factory = new ContractFactory(bytecode, abiContents, wallet);
+              return factory.deployContract(options);
+            },
+          },
+          bytecode: binHexlified,
         },
       ],
     });
@@ -134,12 +145,22 @@ describe('launchTestNode', () => {
       },
       deployContracts: [
         {
-          deployer: SimpleContractAbi__factory,
-          bytecode: contractBytecode,
+          deployer: {
+            deployContract: async (bytecode, wallet, options) => {
+              const factory = new ContractFactory(bytecode, abiContents, wallet);
+              return factory.deployContract(options);
+            },
+          },
+          bytecode: binHexlified,
         },
         {
-          deployer: SimpleContractAbi__factory,
-          bytecode: contractBytecode,
+          deployer: {
+            deployContract: async (bytecode, wallet, options) => {
+              const factory = new ContractFactory(bytecode, abiContents, wallet);
+              return factory.deployContract(options);
+            },
+          },
+          bytecode: binHexlified,
           walletIndex: 1,
         },
       ],
@@ -166,8 +187,13 @@ describe('launchTestNode', () => {
         await launchTestNode({
           deployContracts: [
             {
-              deployer: SimpleContractAbi__factory,
-              bytecode: contractBytecode,
+              deployer: {
+                deployContract: async (bytecode, wallet, options) => {
+                  const factory = new ContractFactory(bytecode, abiContents, wallet);
+                  return factory.deployContract(options);
+                },
+              },
+              bytecode: binHexlified,
               walletIndex: 2,
             },
           ],
