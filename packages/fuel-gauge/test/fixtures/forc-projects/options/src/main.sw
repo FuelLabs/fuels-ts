@@ -1,5 +1,7 @@
 contract;
 
+use {std::{auth::msg_sender, hash::Hash,},};
+
 enum OptionEnum {
     a: Option<u8>,
     b: Option<u16>,
@@ -49,7 +51,18 @@ struct DeepStruct {
     DeepEnum: DeepEnum,
 }
 
+struct SomeStruct {
+    a: u64,
+    b: u64,
+}
+
+storage {
+    stuff: StorageMap<Identity, SomeStruct> = StorageMap {},
+}
+
 abi OptionContract {
+    #[storage(read)]
+    fn get_some_struct(id: Identity) -> Option<SomeStruct>;
     fn echo_option(arg: Option<u8>) -> Option<u8>;
     fn echo_struct_enum_option(arg: OptionStruct) -> OptionStruct;
     fn echo_vec_option(arg: Vec<Option<u32>>) -> Vec<Option<u32>>;
@@ -61,6 +74,11 @@ abi OptionContract {
 }
 
 impl OptionContract for Contract {
+    #[storage(read)]
+    fn get_some_struct(id: Identity) -> Option<SomeStruct> {
+        storage.stuff.get(id).try_read()
+    }
+
     fn echo_option(arg: Option<u8>) -> Option<u8> {
         arg
     }
