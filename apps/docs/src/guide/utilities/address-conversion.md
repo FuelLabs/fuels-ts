@@ -44,13 +44,13 @@ And by using the `isB256` and `toBech32` utilities:
 
 ## Converting a Contract ID
 
-The Contract `id` property has the [`AbstractAddress`](../types/address#abstractaddress-class) type. Therefore, it can be converted using the [`Address`](../../api/Address/Address.md) class functions such as `toAddress` and `toB256`:
+The Contract `id` property has the [`AbstractAddress`](../types/address.md#abstractaddress-class) type. Therefore, it can be converted using the [`Address`](../../api/Address/Address.md) class functions such as `toAddress` and `toB256`:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-2{ts:line-numbers}
 
 ## Converting a Wallet Address
 
-Similarly, the Wallet `address` property is also of type [`AbstractAddress`](../types/address#abstractaddress-class) and can therefore use the same [`Address`](../../api/Address/Address.md) class functions for conversion:
+Similarly, the Wallet `address` property is also of type [`AbstractAddress`](../types/address.md#abstractaddress-class) and can therefore use the same [`Address`](../../api/Address/Address.md) class functions for conversion:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-3{ts:line-numbers}
 

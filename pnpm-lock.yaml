@@ -8,7 +8,6 @@ overrides:
   cross-fetch: 4.0.0
 
 importers:
-
   .:
     devDependencies:
       '@actions/core':
@@ -29,6 +28,9 @@ importers:
       '@changesets/types':
         specifier: ^6.0.0
         version: 6.0.0
+      '@elasticpath/textlint-rule-no-dead-relative-link':
+        specifier: ^1.1.1
+        version: 1.1.1
       '@fuel-ts/forc':
         specifier: workspace:*
         version: link:packages/forc
@@ -1186,7 +1188,6 @@ importers:
         version: 5.2.2
 
 packages:
-
   '@aashutoshrathi/word-wrap@1.2.6':
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
@@ -2108,6 +2109,10 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0
 
+  '@babel/polyfill@7.12.1':
+    resolution: {integrity: sha512-X0pi0V6gxLi6lFZpGmeNa4zxtwEmCs42isWLNjZZDE0Y8yVfgu0T2OAHlzBbdYlqbW/YXVvoBHpATEM+goCj8g==}
+    deprecated: 🚨 This package has been deprecated in favor of separate inclusion of a polyfill and regenerator-runtime (when needed). See the @babel/polyfill docs (https://babeljs.io/docs/en/babel-polyfill) for more information.
+
   '@babel/preset-env@7.22.5':
     resolution: {integrity: sha512-fj06hw89dpiZzGZtxn+QybifF07nNiZjZ7sazs2aVDcysAZVGjW7+7iFYxg6GLNM47R/thYfLdrXc+2f11Vi9A==}
     engines: {node: '>=6.9.0'}
@@ -2363,6 +2368,10 @@ packages:
         optional: true
       search-insights:
         optional: true
+
+  '@elasticpath/textlint-rule-no-dead-relative-link@1.1.1':
+    resolution: {integrity: sha512-j7XAh1vJmY1rnLOBGDcuno/HPHU6PUOHsJyY+rACIKkjsLChPlw4ACEwxeooE81tzJFOma0IdMviK/noqc5gIg==}
+    engines: {node: '>=6.0.0'}
 
   '@ericcornelissen/bash-parser@0.5.2':
     resolution: {integrity: sha512-4pIMTa1nEFfMXitv7oaNEWOdM+zpOZavesa5GaiWTgda6Zk32CFGxjUp/iIaN0PwgUW1yTq/fztSjbpE8SLGZQ==}
@@ -5749,6 +5758,10 @@ packages:
   core-js-pure@3.31.0:
     resolution: {integrity: sha512-/AnE9Y4OsJZicCzIe97JP5XoPKQJfTuEG43aEVLFJGOJpyqELod+pE6LEl63DfG1Mp8wX97LDaDpy1GmLEUxlg==}
 
+  core-js@2.6.12:
+    resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
+    deprecated: core-js@<3.23.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Some versions have web compatibility issues. Please, upgrade your dependencies to the actual version of core-js.
+
   core-js@3.31.0:
     resolution: {integrity: sha512-NIp2TQSGfR6ba5aalZD+ZQ1fSxGhDo/s1w0nx3RYzf2pnJxt7YynxFlFScP6eV7+GZsKO95NSjGxyJsU3DZgeQ==}
 
@@ -7148,6 +7161,9 @@ packages:
 
   get-url-origin@1.0.1:
     resolution: {integrity: sha512-MMSKo16gB2+6CjWy55jNdIAqUEaKgw3LzZCb8wVVtFrhoQ78EXyuYXxDdn3COI3A4Xr4ZfM3fZa9RTjO6DOTxw==}
+
+  github-slugger@1.5.0:
+    resolution: {integrity: sha512-wIh+gKBI9Nshz2o46B0B3f5k/W+WI9ZAv6y5Dn5WJ5SK1t0TnDimB4WE5rmTD05ZAIn8HALCZVmCsvj0w0v0lw==}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -12258,7 +12274,6 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
 
 snapshots:
-
   '@aashutoshrathi/word-wrap@1.2.6': {}
 
   '@actions/core@1.10.1':
@@ -13455,6 +13470,11 @@ snapshots:
       '@babel/helper-create-regexp-features-plugin': 7.22.5(@babel/core@7.22.5)
       '@babel/helper-plugin-utils': 7.22.5
 
+  '@babel/polyfill@7.12.1':
+    dependencies:
+      core-js: 2.6.12
+      regenerator-runtime: 0.13.11
+
   '@babel/preset-env@7.22.5(@babel/core@7.22.5)':
     dependencies:
       '@babel/compat-data': 7.22.5
@@ -13940,6 +13960,12 @@ snapshots:
       search-insights: 2.11.0
     transitivePeerDependencies:
       - '@algolia/client-search'
+
+  '@elasticpath/textlint-rule-no-dead-relative-link@1.1.1':
+    dependencies:
+      '@babel/polyfill': 7.12.1
+      github-slugger: 1.5.0
+      textlint-rule-helper: 2.3.0
 
   '@ericcornelissen/bash-parser@0.5.2':
     dependencies:
@@ -18037,6 +18063,8 @@ snapshots:
 
   core-js-pure@3.31.0: {}
 
+  core-js@2.6.12: {}
+
   core-js@3.31.0: {}
 
   core-util-is@1.0.3: {}
@@ -20066,6 +20094,8 @@ snapshots:
       - supports-color
 
   get-url-origin@1.0.1: {}
+
+  github-slugger@1.5.0: {}
 
   glob-parent@5.1.2:
     dependencies:

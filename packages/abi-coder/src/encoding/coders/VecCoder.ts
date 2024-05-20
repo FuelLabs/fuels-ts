@@ -3,12 +3,11 @@ import { bn } from '@fuel-ts/math';
 import { concatBytes } from '@fuel-ts/utils';
 
 import { MAX_BYTES, WORD_SIZE } from '../../utils/constants';
-import { isUint8Array } from '../../utils/utilities';
+import { hasNestedOption, isUint8Array } from '../../utils/utilities';
 
 import { Coder } from './AbstractCoder';
 import type { TypesOfCoder } from './AbstractCoder';
 import { BigNumberCoder } from './BigNumberCoder';
-import { OptionCoder } from './OptionCoder';
 
 type InputValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Input']> | Uint8Array;
 type DecodedValueOf<TCoder extends Coder> = Array<TypesOfCoder<TCoder>['Decoded']>;
@@ -18,12 +17,12 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   DecodedValueOf<TCoder>
 > {
   coder: TCoder;
-  #isOptionVec: boolean;
+  #hasNestedOption: boolean;
 
   constructor(coder: TCoder) {
     super('struct', `struct Vec`, coder.encodedLength + WORD_SIZE);
     this.coder = coder;
-    this.#isOptionVec = this.coder instanceof OptionCoder;
+    this.#hasNestedOption = hasNestedOption([coder]);
   }
 
   encode(value: InputValueOf<TCoder>): Uint8Array {
@@ -47,7 +46,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoder>, number] {
-    if (!this.#isOptionVec && (data.length < this.encodedLength || data.length > MAX_BYTES)) {
+    if ((!this.#hasNestedOption && data.length < this.encodedLength) || data.length > MAX_BYTES) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec data size.`);
     }
 
@@ -57,7 +56,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
     const dataLength = length * this.coder.encodedLength;
     const dataBytes = data.slice(offsetAndLength, offsetAndLength + dataLength);
 
-    if (!this.#isOptionVec && dataBytes.length !== dataLength) {
+    if (!this.#hasNestedOption && dataBytes.length !== dataLength) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid vec byte data size.`);
     }
 
