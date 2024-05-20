@@ -145,4 +145,47 @@ describe('launching a test node', () => {
     });
     // #endregion custom-node-options
   });
+
+  test('using assetId', async () => {
+    // #region asset-ids
+    // #import { launchTestNode, AssetId };
+    const assets = AssetId.random();
+
+    using launched = await launchTestNode({
+      walletConfig: {
+        assets,
+      },
+    });
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const coins = await wallet.getCoins(assets[0].value);
+    // #endregion asset-ids
+    expect(coins[0].assetId).toEqual(assets[0].value);
+  });
+
+  test('generating test messages', async () => {
+    // #region test-messages
+    // #import { launchTestNode, TestMessage };
+
+    const testMessage = new TestMessage({ amount: 1000 });
+
+    using launched = await launchTestNode({
+      walletConfig: {
+        messages: [testMessage],
+      },
+    });
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const [message] = await wallet.getMessages();
+    // message.nonce === testMessage.nonce
+    // #endregion test-messages
+
+    expect(message.nonce).toEqual(testMessage.nonce);
+  });
 });

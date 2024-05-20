@@ -9,16 +9,20 @@ Used to set the node's genesis block state (coins and messages).
   - The `AssetId` utility simplifies testing when different assets are necessary.
 - `coinsPerAsset`: number of coins (UTXOs) per asset id.
 - `amountPerCoin`: for each coin, the amount it'll contain.
-- `messages`: messages that are supposed to be on the wallet. The [`TestMessage`](./launchTestNode-options.md#testmessage) utility is used to generate them. The `recipient` field of the message is overriden to be the wallet's address.
+- `messages`: messages to assign to the wallets. The [`TestMessage`](./launchTestNode-options.md#testmessage) utility is used to generate them. The `recipient` field of the message is overriden to be the wallet's address.
 
 #### `AssetId`
 
 The `AssetId` utility integrates with [`walletConfig`](./launchTestNode-options.md#walletconfig) and gives you an easy way to generate multiple random asset ids via the `AssetId.random` static method.
 
+<<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#asset-ids{ts:line-numbers}
+
 #### `TestMessage`
 
 A helper class to create messages for testing purposes. Used in tandem with [`walletConfig`](./launchTestNode-options.md#walletconfig).
 It can also be used standalone and passed into the initial state of a chain via the `TestMessage.toChainMessage` instance method.
+
+<<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#test-messages{ts:line-numbers}
 
 ### `deployContracts`
 
@@ -33,7 +37,10 @@ Used to deploy contracts on the node `launchTestNode` utility launches. It's an 
 
 <!-- TODO: will cross-reference work done in [#1915](https://github.com/FuelLabs/fuels-ts/issues/1915) -->
 
+_Note: The API for these options is still not fully complete and better documentation will come in the future._
+
 Options to modify the behavior of the node.
+
 For example, you can specify your own base asset id of the chain like below:
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#custom-node-options{ts:line-numbers}

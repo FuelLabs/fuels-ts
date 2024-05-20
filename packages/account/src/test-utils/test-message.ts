@@ -15,12 +15,12 @@ interface TestMessageSpecs {
 }
 
 export class TestMessage {
-  private sender: AbstractAddress;
-  private recipient: AbstractAddress;
-  private nonce: string;
-  private amount: number | BN;
-  private data: string;
-  private da_height: number;
+  public readonly sender: AbstractAddress;
+  public readonly recipient: AbstractAddress;
+  public readonly nonce: string;
+  public readonly amount: number | BN;
+  public readonly data: string;
+  public readonly da_height: number;
 
   /**
    * A helper class to create messages for testing purposes.

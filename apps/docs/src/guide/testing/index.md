@@ -26,6 +26,7 @@ Before showcasing example usage, it's important to note that the utility support
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#automatic-cleanup{ts:line-numbers}
 
+This is a big quality-of-life improvement because it's not necessary to manually dispose of the node anymore.
 In order to benefit from this feature, you need to do the following:
 
 1. Set your TypeScript version to 5.2 or above,
@@ -62,7 +63,7 @@ _Note: you will have to change the import paths of the contract factory and byte
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#deploy-contract{ts:line-numbers}
 
 A more complex example showcasing genesis block state configuration with [`walletConfig`](./launchTestNode-options.md#walletconfig) and deployment of multiple contracts is shown below.
-For brevity's sake, the example omits usage of [`nodeOptions`](./launchTestNode-options.md#nodeoptions) and [`providerOptions`](./launchTestNode-options.md#provideroptions).
+The documentation for all of the options and utilities used in the example can be found [here](./launchTestNode-options.md). For brevity's sake, the example omits usage of [`nodeOptions`](./launchTestNode-options.md#nodeoptions) and [`providerOptions`](./launchTestNode-options.md#provideroptions).
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#multiple-contracts-and-wallets{ts:line-numbers}
 
