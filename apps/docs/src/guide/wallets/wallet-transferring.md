@@ -20,7 +20,7 @@ When transferring the base chain coin like ETH, you can omit the `assetId`:
 
 ## Transferring To Multiple Wallets
 
-To transfer assets to multiple wallets, use the `Account.multiTransfer` method:
+To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-6{ts:line-numbers}
 
