@@ -320,3 +320,4 @@ tsconfig
 deployer
 overriden
 typesafe
+launchTestNode
