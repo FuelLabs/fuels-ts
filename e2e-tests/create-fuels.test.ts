@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('increment functionality works properly', async ({ page }) => {
+test('counter contract - increment function call works properly', async ({ page }) => {
   await page.goto('http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
 
   await page.waitForTimeout(2000);
