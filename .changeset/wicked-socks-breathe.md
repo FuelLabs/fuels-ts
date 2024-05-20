@@ -1,4 +1,5 @@
 ---
+"@fuel-ts/abi-coder": patch
 "@fuel-ts/abi-typegen": patch
 ---
 
