@@ -5,9 +5,10 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "pretest": "run-s build:forc build:process-predicates",
+    "pretest": "run-s build:forc build:process-predicates transform:abi",
     "build:forc": "pnpm fuels build",
-    "build:process-predicates": "tsx ./scripts/process-predicates.ts"
+    "build:process-predicates": "tsx ./scripts/process-predicates.ts",
+    "transform:abi": "tsx ../abi-typegen/src/transformAbi.ts test/fixtures"
   },
   "license": "Apache-2.0",
   "dependencies": {

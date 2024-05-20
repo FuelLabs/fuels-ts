@@ -5,6 +5,10 @@ export interface IRawAbiTypeRoot {
   typeParameters: null | number[];
 }
 
+export interface IRawAbiTypeRootNew extends Omit<IRawAbiTypeRoot, 'typeId'> {
+  typeId: string;
+}
+
 export interface IRawAbiTypeComponent {
   name: string; // type name
   type: number; // foreing key for `typeId` (on `root` nodes)
