@@ -578,6 +578,7 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request);
   }
 
+  /** @hidden * */
   async signMessage(message: string): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
@@ -643,6 +644,7 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
+  /** @hidden * */
   private validateTransferAmount(amount: BigNumberish) {
     if (bn(amount).lte(0)) {
       throw new FuelError(
@@ -652,6 +654,7 @@ export class Account extends AbstractAccount {
     }
   }
 
+  /** @hidden * */
   private async estimateAndFundTransaction(
     transactionRequest: ScriptTransactionRequest,
     txParams: TxParamsType
@@ -670,6 +673,7 @@ export class Account extends AbstractAccount {
     return request;
   }
 
+  /** @hidden * */
   private validateGasLimitAndMaxFee({
     gasUsed,
     maxFee,
