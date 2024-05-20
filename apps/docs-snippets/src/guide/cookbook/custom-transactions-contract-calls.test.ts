@@ -43,7 +43,11 @@ describe('Custom Transactions from Contract Calls', () => {
     // Create an invocation scope for the contract function you'd like to call in the transaction
     const scope = contractInstance.functions
       .increment_count(amountToRecipient)
-      .addTransfer(receiverWallet.address, amountToRecipient, baseAssetId);
+      .addTransfer({
+        amount: amountToRecipient,
+        destination: receiverWallet.address,
+        assetId: baseAssetId,
+      });
 
     // Build a transaction request from the invocation scope
     const transactionRequest = await scope.getTransactionRequest();

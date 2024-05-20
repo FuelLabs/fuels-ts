@@ -310,16 +310,16 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * Adds an asset transfer to an Account on the contract call transaction request.
    *
-   * @param destination - The address of the destination.
-   * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
+   * @param transferParams - The object representing the transfer to be made.
    * @returns The current instance of the class.
    */
-  addTransfer(destination: string | AbstractAddress, amount: BigNumberish, assetId: string) {
+  addTransfer(transferParams: TransferParams) {
+    const { amount, destination, assetId } = transferParams;
+    const baseAssetId = this.getProvider().getBaseAssetId();
     this.transactionRequest = this.transactionRequest.addCoinOutput(
       Address.fromAddressOrString(destination),
       amount,
-      assetId
+      assetId || baseAssetId
     );
 
     return this;
