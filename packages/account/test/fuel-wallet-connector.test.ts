@@ -286,6 +286,7 @@ describe('Fuel Connector', () => {
       types: [],
       loggedTypes: [],
       functions: [],
+      messagesTypes: [],
       configurables: [],
     });
     expect(isAdded).toEqual(true);
