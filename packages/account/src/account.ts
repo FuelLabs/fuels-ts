@@ -122,7 +122,7 @@ export class Account extends AbstractAccount {
    * Retrieves resources satisfying the spend query for the account.
    *
    * @param quantities - IDs of coins to be obtained.
-   * @param excludedIds - IDs of resources to be excluded from the query.
+   * @param excludedIds - IDs of resources to be excluded from the query (optional).
    * @returns A promise that resolves to an array of Resources.
    */
   async getResourcesToSpend(
@@ -253,7 +253,7 @@ export class Account extends AbstractAccount {
    * @typeParam T - The type of the TransactionRequest.
    * @param request - The transaction request to fund.
    * @param params - The estimated transaction parameters.
-   * @returns The funded transaction request.
+   * @returns A promise that resolves to the funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
@@ -369,7 +369,7 @@ export class Account extends AbstractAccount {
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
-   * @param txParams - The transaction parameters (gasLimit, tip, maturity, maxFee, witnessLimit).
+   * @param txParams - The transaction parameters (optional).
    * @returns A promise that resolves to the prepared transaction request.
    */
   async createTransfer(
@@ -404,7 +404,7 @@ export class Account extends AbstractAccount {
    * @param destination - The address of the destination.
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
-   * @param txParams - The transaction parameters (gasLimit, maturity).
+   * @param txParams - The transaction parameters (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transfer(
@@ -430,7 +430,7 @@ export class Account extends AbstractAccount {
    * @param contractId - The address of the contract.
    * @param amount - The amount of coins to transfer.
    * @param assetId - The asset ID of the coins to transfer (optional).
-   * @param txParams - The optional transaction parameters (optional).
+   * @param txParams - The transaction parameters (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async transferToContract(
@@ -484,7 +484,7 @@ export class Account extends AbstractAccount {
    *
    * @param recipient - Address of the recipient on the base chain.
    * @param amount - Amount of base asset.
-   * @param txParams - The optional transaction parameters.
+   * @param txParams - The transaction parameters (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async withdrawToBaseLayer(
@@ -540,7 +540,7 @@ export class Account extends AbstractAccount {
   }
 
   /**
-   * Signs a transaction with the wallet's private key.
+   * Signs a transaction from the account via the connector..
    *
    * @param transactionRequestLike - The transaction request to sign.
    * @returns A promise that resolves to the signature of the transaction.
@@ -559,8 +559,7 @@ export class Account extends AbstractAccount {
    * Sends a transaction to the network.
    *
    * @param transactionRequestLike - The transaction request to be sent.
-   * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
-   * @param awaitExecution - Whether to wait for the transaction to be executed.
+   * @param sendTransactionParams - The provider send transaction parameters (optional).
    * @returns A promise that resolves to the transaction response.
    */
   async sendTransaction(
@@ -586,7 +585,7 @@ export class Account extends AbstractAccount {
    * Simulates a transaction.
    *
    * @param transactionRequestLike - The transaction request to be simulated.
-   * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
+   * @param estimateTxParams - The estimate transaction params (optional).
    * @returns A promise that resolves to the call result.
    */
   async simulateTransaction(
@@ -600,6 +599,9 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
+  /**
+   * @hidden
+   */
   private validateGasLimitAndMaxFee({
     gasUsed,
     maxFee,
