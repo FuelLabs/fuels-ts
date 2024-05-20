@@ -3,6 +3,7 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 export const jsonAbiFragmentMock: JsonAbi = {
   configurables: [],
   loggedTypes: [],
+  messagesTypes: [],
   types: [
     {
       typeId: 0,
@@ -88,5 +89,6 @@ export const jsonAbiMock: JsonAbi = {
     },
   ],
   loggedTypes: [],
+  messagesTypes: [],
   configurables: [],
 };
