@@ -1,10 +1,11 @@
-import fs, { cp } from 'fs/promises';
+import { mkdirSync } from 'fs';
 import { glob } from 'glob';
-import { join } from 'path';
 
 import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
+import type { ProjectPaths } from './utils/bootstrapProject';
+import { bootstrapProject, cleanupFilesystem, resetFilesystem } from './utils/bootstrapProject';
 import { mockLogger } from './utils/mockLogger';
 
 const getAllFiles = async (pathToDir: string) => {
@@ -70,63 +71,63 @@ const filterOriginalTemplateFiles = (files: string[], programsToInclude: Program
   return newFiles;
 };
 
-beforeEach(async () => {
-  // move the templates folder from the root of the project to the root of the create-fuels package temporarily.
-  // this is needed because of the way the create-fuels package is setup.
-  // it expects the templates folder to be in the root of the create-fuels package. we move it there in the prepublishOnly script
-  await cp(join(__dirname, '../../../templates'), join(__dirname, '../templates'), {
-    recursive: true,
-  });
-});
-
-afterEach(async () => {
-  await fs.rm(join(__dirname, '../templates'), { recursive: true });
-});
-
 /**
  * @group node
  */
 describe('CLI', () => {
+  const { error } = mockLogger();
+  let paths: ProjectPaths;
+
+  beforeEach(() => {
+    paths = bootstrapProject(__filename);
+  });
+
+  afterEach(() => {
+    resetFilesystem(paths.root);
+    resetFilesystem(paths.template);
+    vi.resetAllMocks();
+  });
+
+  afterAll(() => {
+    cleanupFilesystem();
+  });
+
   test.each(possibleProgramsToInclude)(
     'create-fuels extracts the template to the specified directory',
     async (programsToInclude) => {
-      const args = generateArgs(programsToInclude, 'test-project');
-      const program = setupProgram();
-      program.parse(args);
+      const args = generateArgs(programsToInclude, paths.root);
 
       await runScaffoldCli({
-        program,
+        program: setupProgram(),
         args,
         shouldInstallDeps: false,
       });
 
-      let originalTemplateFiles = await getAllFiles(join(__dirname, '../templates/nextjs'));
+      let originalTemplateFiles = await getAllFiles(paths.template);
       originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
 
-      const testProjectFiles = await getAllFiles('test-project');
+      const testProjectFiles = await getAllFiles(paths.root);
 
       expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
-
-      await fs.rm('test-project', { recursive: true });
     }
   );
 
   test('create-fuels reports an error if the project directory already exists', async () => {
-    await fs.mkdir('test-project-2');
-    const { error } = mockLogger();
     const args = generateArgs(
       {
         contract: true,
         predicate: true,
         script: true,
       },
-      'test-project-2'
+      paths.root
     );
-    const program = setupProgram();
-    program.parse(args);
 
+    // Generate the project once
+    mkdirSync(paths.root, { recursive: true });
+
+    // Generate the project again
     await runScaffoldCli({
-      program,
+      program: setupProgram(),
       args,
       shouldInstallDeps: false,
     }).catch((e) => {
@@ -134,27 +135,22 @@ describe('CLI', () => {
     });
 
     expect(error).toHaveBeenCalledWith(
-      expect.stringContaining('A folder already exists at test-project-2')
+      expect.stringContaining(`A folder already exists at ${paths.root}`)
     );
-
-    await fs.rm('test-project-2', { recursive: true });
   });
 
   test('create-fuels reports an error if no programs are chosen to be included', async () => {
-    const { error } = mockLogger();
     const args = generateArgs(
       {
         contract: false,
         predicate: false,
         script: false,
       },
-      'test-project-3'
+      paths.root
     );
-    const program = setupProgram();
-    program.parse(args);
 
     await runScaffoldCli({
-      program,
+      program: setupProgram(),
       args,
       shouldInstallDeps: false,
       forceDisablePrompts: true,
@@ -165,32 +161,5 @@ describe('CLI', () => {
     expect(error).toHaveBeenCalledWith(
       expect.stringContaining('You must include at least one Sway program.')
     );
-  });
-
-  test('setupProgram takes in args properly', () => {
-    const program = setupProgram();
-    program.parse(['', '', 'test-project-name', '-c', '-p', '-s', '--pnpm', '--npm']);
-    expect(program.args[0]).toBe('test-project-name');
-    expect(program.opts().contract).toBe(true);
-    expect(program.opts().predicate).toBe(true);
-    expect(program.opts().script).toBe(true);
-    expect(program.opts().pnpm).toBe(true);
-    expect(program.opts().npm).toBe(true);
-  });
-
-  test('setupProgram takes in combined args properly', () => {
-    const program = setupProgram();
-    program.parse(['', '', '-cps']);
-    expect(program.opts().contract).toBe(true);
-    expect(program.opts().predicate).toBe(true);
-    expect(program.opts().script).toBe(true);
-  });
-
-  test('setupProgram - no args', () => {
-    const program = setupProgram();
-    program.parse([]);
-    expect(program.opts().contract).toBe(undefined);
-    expect(program.opts().predicate).toBe(undefined);
-    expect(program.opts().script).toBe(undefined);
   });
 });

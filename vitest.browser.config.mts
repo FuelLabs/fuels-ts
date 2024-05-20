@@ -1,8 +1,8 @@
 import { nodePolyfills } from "vite-plugin-node-polyfills";
-import { mergeConfig } from "vitest/config";
 import type { UserConfig } from "vitest/config";
+import { mergeConfig, defineProject } from "vitest/config";
 
-import baseConfig from "./vite.base.config.mts";
+import sharedConfig from "./vitest.shared.config.mts";
 
 const config: UserConfig = {
   plugins: [
@@ -42,4 +42,4 @@ const config: UserConfig = {
   },
 };
 
-export default mergeConfig(baseConfig, config);
+export default mergeConfig(sharedConfig, defineProject(config));

@@ -11,16 +11,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  docs:
-    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
-    with:
-      doc-folder-path: "apps/docs/src"
-      spellcheck-config-path: "apps/docs/.spellcheck.yml"
-
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
-    name: ${{ matrix.env.name }}${{ matrix.env.name == 'node' && '@' || ''}}${{ matrix.env.name == 'node' && matrix.env.version || ''}}
+    name: ${{ matrix.env.name }}${{ matrix.env.version && '@' || ''}}${{ matrix.env.version || ''}}
     strategy:
       fail-fast: false
       matrix:
@@ -33,28 +27,12 @@ jobs:
     timeout-minutes: 25
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
         with:
           node-version: ${{ matrix.env.version || 20 }}
-
-      - name: Verify package.json integrity
-        run: pnpm lint:package-jsons
-
-      - name: Verify package exports integrity
-        run: pnpm verify:package-exports
-
-      - name: Forc Format Check
-        run: pnpm forc:check
-
-      # linting of some tests depends on pretest being run so that it generates the necessary files
-      - name: Pretest
-        run: pnpm pretest
-
-      - name: Lint
-        run: pnpm lint
 
       - name: Validate Tests
         run: pnpm test:validate
@@ -63,10 +41,11 @@ jobs:
         run: pnpm ci:test --${{ matrix.env.name }}
 
       - name: Upload Coverage - ${{ matrix.env.name }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.env.name }}
           path: coverage/environments/${{ matrix.env.name }}
+          overwrite: true
 
   e2e:
     runs-on: ubuntu-latest
@@ -75,7 +54,7 @@ jobs:
     if: ${{ !github.event.pull_request.draft }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -88,7 +67,7 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
+          FUEL_NETWORK_URL: https://devnet.fuel.network/v1/graphql
           TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
           TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
           FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
@@ -99,7 +78,7 @@ jobs:
     needs: [environments, e2e]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
@@ -108,7 +87,7 @@ jobs:
         run: mkdir -p coverage/environments
 
       - name: Download Coverage Artifact for Node Tests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: node
           path: coverage/environments
@@ -121,7 +100,7 @@ jobs:
         id: findPr
 
       - name: Upload Master Coverage Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ !steps.findPr.outputs.number }}
         with:
           name: coverage-master
@@ -142,26 +121,28 @@ jobs:
 
       - name: Report Coverage
         uses: thollander/actions-comment-pull-request@v2
-        if: ${{ steps.findPr.outputs.number }} && github.actor != 'dependabot[bot]'
+        if: ${{ steps.findPr.outputs.number }}
         with:
           filePath: coverage/report/coverage-diff.txt
           pr_number: ${{ (steps.findPr.outputs.number) }}
           comment_tag: diff
           mode: recreate
           create_if_not_exists: true
+
   create-changeset:
+    needs: [test]
     name: Create Changeset
     runs-on: ubuntu-latest
     if: github.actor  == 'dependabot[bot]'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.client_payload.ref }}
 
       - name: Setup PNPM
-        uses: pnpm/action-setup@v2.1.0
+        uses: pnpm/action-setup@v4
         with:
           version: 9.0.5
           run_install: true

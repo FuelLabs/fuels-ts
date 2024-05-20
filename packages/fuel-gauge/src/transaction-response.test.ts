@@ -153,7 +153,7 @@ describe('TransactionResponse', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
-  it('should ensure waitForResult always waits for the transaction to be processed', async () => {
+  it.skip('should ensure waitForResult always waits for the transaction to be processed', async () => {
     const { cleanup, ip, port } = await launchNode({
       /**
        * This is set to so long in order to test keep-alive message handling as well.

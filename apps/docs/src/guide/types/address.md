@@ -2,7 +2,7 @@
 
 In Sway, the [`Address`](../../api/Address/Address.md) type serves as a type-safe wrapper around the primitive `b256` type. The SDK takes a different approach and has its own abstraction for the [Address](../../api/Address/Address.md) type.
 
-## [`AbstractAddress`](../../api/Interfaces/AbstractAddress.md) Class
+## `AbstractAddress` Class
 
 The SDK defines the [AbstractAddress](../../api/Interfaces/AbstractAddress.md) class, which provides a set of utility functions for easy manipulation and conversion between address formats.
 

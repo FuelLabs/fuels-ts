@@ -72,8 +72,8 @@ Examples:
 npx fuels@{{fuels}} build
 ```
 
-1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
-1.  Generate types for them using `fuels-typegen` <sup>[2](#typegen)</sup>
+1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](https://docs.fuel.network/docs/forc/commands/forc_build/)</sup>
+1.  Generate types for them using `fuels-typegen` <sup>[2](#fuels-typegen)</sup>
 
 ```console-vue
 npx fuels@{{fuels}} build --deploy
@@ -155,7 +155,7 @@ For more info, check:
 
 ## `fuels versions`
 
-Check for version incompatibilities between your [Fuel Toolchain](#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
+Check for version incompatibilities between your [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
 
 ```console-vue
 npx fuels@{{fuels}} versions

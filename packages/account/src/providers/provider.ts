@@ -52,16 +52,24 @@ import type {
 } from './transaction-request';
 import { transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
-import { TransactionResponse } from './transaction-response';
+import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
-import { calculateGasFee, getGasUsedFromReceipts, getReceiptsWithMissingData } from './utils';
+import {
+  calculateGasFee,
+  extractTxError,
+  getGasUsedFromReceipts,
+  getReceiptsWithMissingData,
+} from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
 import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
-export type DryRunStatus = GqlDryRunFailureStatusFragment | GqlDryRunSuccessStatusFragment;
+export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
+export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
+
+export type DryRunStatus = DryRunFailureStatusFragment | DryRunSuccessStatusFragment;
 
 export type CallResult = {
   receipts: TransactionResultReceipt[];
@@ -1123,8 +1131,11 @@ Supported fuel-core version: ${supportedVersion}.`
       ({ receipts, missingContractIds, outputVariables, dryRunStatus } =
         await this.estimateTxDependencies(txRequestClone));
 
-      gasUsed = isScriptTransaction ? getGasUsedFromReceipts(receipts) : gasUsed;
+      if (dryRunStatus && 'reason' in dryRunStatus) {
+        throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
+      }
 
+      gasUsed = getGasUsedFromReceipts(receipts);
       txRequestClone.gasLimit = gasUsed;
 
       ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
@@ -1704,5 +1715,27 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return relayedTransactionStatus;
+  }
+
+  private extractDryRunError(
+    transactionRequest: ScriptTransactionRequest,
+    receipts: TransactionResultReceipt[],
+    dryRunStatus: DryRunStatus
+  ): FuelError {
+    const status = dryRunStatus as DryRunFailureStatusFragment;
+    let logs: unknown[] = [];
+    if (transactionRequest.abis) {
+      logs = getDecodedLogs(
+        receipts,
+        transactionRequest.abis.main,
+        transactionRequest.abis.otherContractsAbis
+      );
+    }
+
+    return extractTxError({
+      logs,
+      receipts,
+      statusReason: status.reason,
+    });
   }
 }

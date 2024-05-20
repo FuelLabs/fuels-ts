@@ -50,10 +50,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions: write-all
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: FuelLabs/github-actions/setups/node@master
+      - uses: ./.github/actions/ci-setup
         with:
           node-version: 20.10.0
           pnpm-version: 9.0.5

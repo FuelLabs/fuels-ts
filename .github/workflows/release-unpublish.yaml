@@ -17,8 +17,8 @@ jobs:
     name: Unpublish versions next and pr
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v3
-      - uses: FuelLabs/github-actions/setups/node@master
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/ci-setup
       - uses: FuelLabs/github-actions/setups/npm@master
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
