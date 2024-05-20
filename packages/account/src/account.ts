@@ -385,7 +385,7 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
-    request = this.addTransfer(request, destination, amount, assetId);
+    request = this.addTransfer(request, { destination, amount, assetId });
     request = await this.estimateAndFundTransaction(request, txParams);
     return request;
   }
@@ -416,16 +416,16 @@ export class Account extends AbstractAccount {
   /**
    * Transfers multiple amounts of a token to multiple recipients.
    *
-   * @param transfers - An array of `TransferParams` objects representing the transfers to be made.
+   * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
    * @param txParams - Optional transaction parameters.
    * @returns A promise that resolves to a `TransactionResponse` object representing the transaction result.
    */
   async batchTransfer(
-    transfers: TransferParams[],
+    transferParams: TransferParams[],
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
-    request = this.addTransfers(request, transfers);
+    request = this.addTransfers(request, transferParams);
     request = await this.estimateAndFundTransaction(request, txParams);
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
@@ -434,17 +434,11 @@ export class Account extends AbstractAccount {
    * Adds a transfer to the given transaction request.
    *
    * @param request - The script transaction request to add transfers to.
-   * @param destination - The destination address for the transfer.
-   * @param amount - The amount to transfer.
-   * @param assetId - (Optional) The asset ID for the transfer. If not provided, the base asset ID from the provider will be used.
+   * @param transferParams - The object representing the transfers to be made.
    * @returns The updated transaction request with the added transfer.
    */
-  addTransfer(
-    request: ScriptTransactionRequest,
-    destination: string | AbstractAddress,
-    amount: BigNumberish,
-    assetId?: BytesLike
-  ) {
+  addTransfer(request: ScriptTransactionRequest, transferParams: TransferParams) {
+    const { destination, amount, assetId } = transferParams;
     this.validateTransferAmount(amount);
     request.addCoinOutput(
       Address.fromAddressOrString(destination),
@@ -458,13 +452,17 @@ export class Account extends AbstractAccount {
    * Adds multiple transfers to a script transaction request.
    *
    * @param request - The script transaction request to add transfers to.
-   * @param transfers - An array of `TransferParams` objects representing the transfers to be made.
+   * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
    * @returns The updated script transaction request.
    */
-  addTransfers(request: ScriptTransactionRequest, transfers: TransferParams[]) {
+  addTransfers(request: ScriptTransactionRequest, transferParams: TransferParams[]) {
     const baseAssetId = this.provider.getBaseAssetId();
-    transfers.forEach(({ destination, amount, assetId }) => {
-      this.addTransfer(request, destination, amount, assetId ?? baseAssetId);
+    transferParams.forEach(({ destination, amount, assetId }) => {
+      this.addTransfer(request, {
+        destination,
+        amount,
+        assetId: assetId ?? baseAssetId,
+      });
     });
     return request;
   }
