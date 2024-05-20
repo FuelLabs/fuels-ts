@@ -2,7 +2,8 @@ import type { BN } from 'fuels';
 import { AssetId, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-const contractRootDirPath = join(__dirname, '../../../test/fixtures/forc-projects/counter');
+import { CounterAbi__factory } from '../../../test/typegen/contracts';
+import counterContractBytecode from '../../../test/typegen/contracts/CounterAbi.hex';
 
 /**
  * @group node
@@ -12,10 +13,13 @@ describe('launching a test node', () => {
     // #region deploy-contract
     // #import { launchTestNode };
 
-    // #context const contractRootDirPath = 'full-path-to-contract-root-dir';
-
     using launched = await launchTestNode({
-      deployContracts: [contractRootDirPath],
+      deployContracts: [
+        {
+          deployer: CounterAbi__factory,
+          bytecode: counterContractBytecode,
+        },
+      ],
     });
 
     const {
@@ -45,9 +49,13 @@ describe('launching a test node', () => {
         amountPerCoin: 1_000_000,
       },
       deployContracts: [
-        contractRootDirPath,
         {
-          contractDir: contractRootDirPath,
+          deployer: CounterAbi__factory,
+          bytecode: counterContractBytecode,
+        },
+        {
+          deployer: CounterAbi__factory,
+          bytecode: counterContractBytecode,
           walletIndex: 1,
           options: { storageSlots: [] },
         },
