@@ -11,7 +11,7 @@ const runnableApplicator =
   (command: string = '') =>
     `${commandPrefix} ${command}`;
 
-export const packageManagerConfiguration = {
+export const packageMangerCommands = {
   pnpm: {
     install: 'pnpm install',
     run: runnableApplicator('pnpm'),
