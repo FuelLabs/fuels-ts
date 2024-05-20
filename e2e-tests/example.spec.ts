@@ -8,6 +8,9 @@ test('increment functionality works properly', async ({ page }) => {
   const topUpWalletButton = page.getByText('Top-up Wallet');
   await topUpWalletButton.click();
 
+  const welcomeToFuelText = page.getByText('Welcome to Fuel');
+  await expect(welcomeToFuelText).toBeVisible();
+
   await page.waitForTimeout(2000);
 
   await page.reload();
