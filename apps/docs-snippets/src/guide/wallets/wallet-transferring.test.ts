@@ -89,7 +89,7 @@ describe(__filename, () => {
       { amount: 300, destination: recipient2.address, assetId: someOtherAssetId },
     ];
 
-    const tx = await myWallet.multiTransfer(transfersToMake);
+    const tx = await myWallet.batchTransfer(transfersToMake);
     const { isStatusSuccess } = await tx.waitForResult();
     // #endregion wallet-transferring-6
 

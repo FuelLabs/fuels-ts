@@ -415,7 +415,7 @@ describe('Account', () => {
       { amount: amounts[3], destination: receivers[2].address, assetId: ASSET_A },
     ];
 
-    const response1 = await sender.multiTransfer(transferConfig);
+    const response1 = await sender.batchTransfer(transferConfig);
     const { isStatusSuccess } = await response1.waitForResult();
     expect(isStatusSuccess).toBeTruthy();
 
@@ -438,7 +438,7 @@ describe('Account', () => {
     const witnessLimit = 10_000;
     const maturity = 1;
 
-    const response = await sender.multiTransfer(transferConfig, {
+    const response = await sender.batchTransfer(transferConfig, {
       gasLimit,
       maxFee,
       tip,

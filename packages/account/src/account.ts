@@ -420,7 +420,7 @@ export class Account extends AbstractAccount {
    * @param txParams - Optional transaction parameters.
    * @returns A promise that resolves to a `TransactionResponse` object representing the transaction result.
    */
-  async multiTransfer(
+  async batchTransfer(
     transfers: TransferParams[],
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
