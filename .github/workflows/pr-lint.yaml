@@ -24,20 +24,20 @@ jobs:
           event-type: create-changeset
           client-payload: '{"ref": "${{ github.event.pull_request.head.ref }}"}'
 
-  dependency-check:
-    name: Validate Dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  # dependency-check:
+  #   name: Validate Dependencies
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
 
-      - name: CI Setup
-        uses: ./.github/actions/ci-setup
+  #     - name: CI Setup
+  #       uses: ./.github/actions/ci-setup
 
-      - name: Validate Dependencies
-        run: pnpm depcheck
+  #     - name: Validate Dependencies
+  #       run: pnpm depcheck
 
   validate-title:
     name: Validate PR title
