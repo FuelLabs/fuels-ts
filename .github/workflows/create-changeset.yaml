@@ -1,11 +1,13 @@
 name: Create Changeset
 
 on:
-  repository_dispatch:
-    types: [generate-changeset]
+  pull_request_target:
+    branches:
+      - master
 
 jobs:
   generate-changeset:
+    ## TODO: include condition for dependabot before merging
     name: Create Changeset
     runs-on: ubuntu-latest
 
@@ -30,14 +32,9 @@ jobs:
           PR_TITLE: ${{ github.event.pull_request.title }}
 
       - name: Commit Changeset
-        run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git add .
-          git commit -m "build: update dependency changeset [skip ci]"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: ${{ github.event.pull_request.head.ref }}
 
   validate-changeset:
     name: Validate PR Changeset
