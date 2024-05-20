@@ -434,7 +434,7 @@ export class Account extends AbstractAccount {
    * Adds a transfer to the given transaction request.
    *
    * @param request - The script transaction request to add transfers to.
-   * @param transferParams - The object representing the transfers to be made.
+   * @param transferParams - The object representing the transfer to be made.
    * @returns The updated transaction request with the added transfer.
    */
   addTransfer(request: ScriptTransactionRequest, transferParams: TransferParams) {
