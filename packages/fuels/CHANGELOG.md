@@ -1,5 +1,80 @@
 # Change Log
 
+## 0.88.1
+
+### Patch Changes
+
+- Updated dependencies [64b90a9]
+  - @fuel-ts/abi-coder@0.88.1
+  - @fuel-ts/account@0.88.1
+  - @fuel-ts/contract@0.88.1
+  - @fuel-ts/program@0.88.1
+  - @fuel-ts/script@0.88.1
+  - @fuel-ts/transactions@0.88.1
+  - @fuel-ts/abi-typegen@0.88.1
+  - @fuel-ts/address@0.88.1
+  - @fuel-ts/crypto@0.88.1
+  - @fuel-ts/errors@0.88.1
+  - @fuel-ts/forc@0.88.1
+  - @fuel-ts/fuel-core@0.88.1
+  - @fuel-ts/hasher@0.88.1
+  - @fuel-ts/interfaces@0.88.1
+  - @fuel-ts/math@0.88.1
+  - @fuel-ts/merkle@0.88.1
+  - @fuel-ts/utils@0.88.1
+  - @fuel-ts/versions@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- Updated dependencies [d5116ce]
+- Updated dependencies [3f86778]
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/account@0.88.0
+  - @fuel-ts/program@0.88.0
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/forc@0.88.0
+  - @fuel-ts/contract@0.88.0
+  - @fuel-ts/script@0.88.0
+  - @fuel-ts/transactions@0.88.0
+  - @fuel-ts/abi-typegen@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/crypto@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/fuel-core@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/merkle@0.88.0
+  - @fuel-ts/utils@0.88.0
+  - @fuel-ts/versions@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- Updated dependencies [0da455a]
+  - @fuel-ts/abi-coder@0.87.0
+  - @fuel-ts/account@0.87.0
+  - @fuel-ts/contract@0.87.0
+  - @fuel-ts/program@0.87.0
+  - @fuel-ts/script@0.87.0
+  - @fuel-ts/transactions@0.87.0
+  - @fuel-ts/abi-typegen@0.87.0
+  - @fuel-ts/address@0.87.0
+  - @fuel-ts/crypto@0.87.0
+  - @fuel-ts/errors@0.87.0
+  - @fuel-ts/forc@0.87.0
+  - @fuel-ts/fuel-core@0.87.0
+  - @fuel-ts/hasher@0.87.0
+  - @fuel-ts/interfaces@0.87.0
+  - @fuel-ts/math@0.87.0
+  - @fuel-ts/merkle@0.87.0
+  - @fuel-ts/utils@0.87.0
+  - @fuel-ts/versions@0.87.0
+
 ## 0.86.0
 
 ### Patch Changes
