@@ -15,7 +15,7 @@ jobs:
   create-changeset:
     name: Create Changeset
     runs-on: ubuntu-latest
-    if: github.actor  == 'dependabot[bot]'
+    ## TODO: include condition for dependabot before merging
     steps:
       - name: Trigger Changeset Creation
         uses: peter-evans/repository-dispatch@v2

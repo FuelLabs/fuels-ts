@@ -42,6 +42,7 @@ jobs:
   validate-changeset:
     name: Validate PR Changeset
     needs: create-changeset
+    ## TODO: change to dependabot before merging
     if: startsWith(github.head_ref, 'changeset-release') != true && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     steps:

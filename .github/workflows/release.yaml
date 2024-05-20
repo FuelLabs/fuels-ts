@@ -1,195 +1,195 @@
-name: "Release"
+# name: "Release"
 
-on:
-  push:
-    branches:
-      - master
-      - release/*
+# on:
+#   push:
+#     branches:
+#       - master
+#       - release/*
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+# concurrency: ${{ github.workflow }}-${{ github.ref }}
 
-jobs:
-  release:
-    name: "Release"
-    runs-on: ubuntu-latest
-    permissions: write-all
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    # Ensure that the workflow runs only after a commit is pushed into the branch
-    # and not when the branch is created.
-    # This is to avoid running the workflow when a release/* branch is created.
-    if: github.event.before != '0000000000000000000000000000000000000000'
+# jobs:
+#   release:
+#     name: "Release"
+#     runs-on: ubuntu-latest
+#     permissions: write-all
+#     environment:
+#       name: github-pages
+#       url: ${{ steps.deployment.outputs.page_url }}
+#     # Ensure that the workflow runs only after a commit is pushed into the branch
+#     # and not when the branch is created.
+#     # This is to avoid running the workflow when a release/* branch is created.
+#     if: github.event.before != '0000000000000000000000000000000000000000'
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.ref }}
-          # workaround to ensure force pushes to changeset branch use REPO_TOKEN owner's account
-          # see https://github.com/changesets/action/issues/70
-          persist-credentials: false
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
+#         with:
+#           fetch-depth: 0
+#           ref: ${{ github.event.pull_request.head.ref }}
+#           # workaround to ensure force pushes to changeset branch use REPO_TOKEN owner's account
+#           # see https://github.com/changesets/action/issues/70
+#           persist-credentials: false
 
-      - name: CI Setup
-        uses: ./.github/actions/ci-setup
+#       - name: CI Setup
+#         uses: ./.github/actions/ci-setup
 
-      # if there are changesets present, package.json will be bumped
-      - name: Bump and Collect Versions
-        run: |
-          pnpm changeset version
-          echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
-          echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
-          echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
-          git reset --hard
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       # if there are changesets present, package.json will be bumped
+#       - name: Bump and Collect Versions
+#         run: |
+#           pnpm changeset version
+#           echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+#           echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
+#           echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
+#           git reset --hard
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Ensure NPM access
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#       - name: Ensure NPM access
+#         run: npm whoami
+#         env:
+#           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Build
-        run: pnpm build
+#       - name: Build
+#         run: pnpm build
 
-      - name: Set branch name and changeset PR title
-        run: |
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+#       - name: Set branch name and changeset PR title
+#         run: |
+#           echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
-      - name: Get latest release
-        run: |
-          echo "LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)" >> $GITHUB_ENV
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Get latest release
+#         run: |
+#           echo "LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)" >> $GITHUB_ENV
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
-        uses: FuelLabs/changesets-action@main
-        with:
-          publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
-          version: pnpm changeset:version-with-docs
-          commit: "ci(changesets): versioning packages"
-          title: ${{ env.CHANGESET_PR_TITLE }}
-          createGithubReleases: aggregate
-          githubReleaseName: ${{ env.RELEASE_VERSION }}
-          githubTagName: ${{ env.RELEASE_VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#       - name: Create Release Pull Request or Publish to npm
+#         id: changesets
+#         uses: FuelLabs/changesets-action@main
+#         with:
+#           publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
+#           version: pnpm changeset:version-with-docs
+#           commit: "ci(changesets): versioning packages"
+#           title: ${{ env.CHANGESET_PR_TITLE }}
+#           createGithubReleases: aggregate
+#           githubReleaseName: ${{ env.RELEASE_VERSION }}
+#           githubTagName: ${{ env.RELEASE_VERSION }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+#           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Prettify changelog
-        run: pnpm changeset:update-changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
-          RELEASE_TAG: ${{ env.RELEASE_VERSION }}
-          PUBLISHED: ${{ steps.changesets.outputs.published }}
-          REF_NAME: ${{ github.ref_name }}
-          LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
+#       - name: Prettify changelog
+#         run: pnpm changeset:update-changelog
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+#           RELEASE_TAG: ${{ env.RELEASE_VERSION }}
+#           PUBLISHED: ${{ steps.changesets.outputs.published }}
+#           REF_NAME: ${{ github.ref_name }}
+#           LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
 
-      - name: Delete the release branch
-        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
-        run: git push origin --delete ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+#       - name: Delete the release branch
+#         if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
+#         run: git push origin --delete ${{ github.ref_name }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
-      - name: Release to @next tag on npm
-        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
-        run: |
-          git checkout master
+#       - name: Release to @next tag on npm
+#         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+#         run: |
+#           git checkout master
 
-          CHANGESET_FILE=$(git diff-tree --no-commit-id --name-only HEAD -r ".changeset/*-*-*.md")
-          if [ -z "$CHANGESET_FILE" ]; then
-            echo "No changesets found, skipping release to @next tag"
-            exit 0
-          fi
+#           CHANGESET_FILE=$(git diff-tree --no-commit-id --name-only HEAD -r ".changeset/*-*-*.md")
+#           if [ -z "$CHANGESET_FILE" ]; then
+#             echo "No changesets found, skipping release to @next tag"
+#             exit 0
+#           fi
 
-          AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
-          if [ -z "$AFFECTED_PACKAGES" ]; then
-            echo "No packages affected by changesets, skipping release to @next tag"
-            exit 0
-          fi
+#           AFFECTED_PACKAGES=$(sed -n '/---/,/---/p' "$CHANGESET_FILE" | sed '/---/d')
+#           if [ -z "$AFFECTED_PACKAGES" ]; then
+#             echo "No packages affected by changesets, skipping release to @next tag"
+#             exit 0
+#           fi
 
-          pnpm changeset:next
-          git add .changeset/fuel-labs-ci.md
-          pnpm changeset version --snapshot next
-          pnpm changeset publish --tag next
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           pnpm changeset:next
+#           git add .changeset/fuel-labs-ci.md
+#           pnpm changeset version --snapshot next
+#           pnpm changeset publish --tag next
+#         env:
+#           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ensure docs are always deployed after merge of changeset PR
-      - name: Get the last commit message and set env vars
-        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
+#       # ensure docs are always deployed after merge of changeset PR
+#       - name: Get the last commit message and set env vars
+#         run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
 
-      - name: Decides if Docs should be deployed
-        if: github.ref_name == 'master' && startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
-        run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
+#       - name: Decides if Docs should be deployed
+#         if: github.ref_name == 'master' && startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
+#         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
-      - name: Configure GitHub Pages
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/configure-pages@v2
+#       - name: Configure GitHub Pages
+#         if: env.SHOULD_DEPLOY_DOCS == 'true'
+#         uses: actions/configure-pages@v2
 
-      - name: Upload Docs Artifact
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: apps/docs/dist
+#       - name: Upload Docs Artifact
+#         if: env.SHOULD_DEPLOY_DOCS == 'true'
+#         uses: actions/upload-pages-artifact@v1
+#         with:
+#           path: apps/docs/dist
 
-      - name: Deploy Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        id: deployment
-        uses: actions/deploy-pages@v1
+#       - name: Deploy Docs
+#         if: env.SHOULD_DEPLOY_DOCS == 'true'
+#         id: deployment
+#         uses: actions/deploy-pages@v1
 
-      - name: Checkout API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/checkout@v4
-        with:
-          ref: docs
-          fetch-depth: 0
+#       - name: Checkout API Docs
+#         if: env.SHOULD_DEPLOY_DOCS == 'true'
+#         uses: actions/checkout@v4
+#         with:
+#           ref: docs
+#           fetch-depth: 0
 
-      - name: Generate and Push API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git merge origin/master --no-edit
-          pnpm install
-          pnpm build
-          rm -f apps/docs/.gitignore
-          git add apps/docs/src/api/
-          git add apps/docs/.typedoc/api-links.json
-          git commit -m "docs: API docs - ${{ env.RELEASE_VERSION }}"
-          git push
-          git restore apps/docs/.gitignore
+#       - name: Generate and Push API Docs
+#         if: env.SHOULD_DEPLOY_DOCS == 'true'
+#         run: |
+#           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#           git config user.name "github-actions[bot]"
+#           git merge origin/master --no-edit
+#           pnpm install
+#           pnpm build
+#           rm -f apps/docs/.gitignore
+#           git add apps/docs/src/api/
+#           git add apps/docs/.typedoc/api-links.json
+#           git commit -m "docs: API docs - ${{ env.RELEASE_VERSION }}"
+#           git push
+#           git restore apps/docs/.gitignore
 
-      - name: Update docs (nightly)
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          workflow: update-nightly.yml
-          ref: master
-          repo: FuelLabs/docs-hub
-          token: ${{ secrets.REPO_TOKEN }}
+#       - name: Update docs (nightly)
+#         if: env.SHOULD_DEPLOY_DOCS == 'true'
+#         uses: benc-uk/workflow-dispatch@v1
+#         with:
+#           workflow: update-nightly.yml
+#           ref: master
+#           repo: FuelLabs/docs-hub
+#           token: ${{ secrets.REPO_TOKEN }}
 
-      # Upload assets to S3
-      - uses: unfor19/install-aws-cli-action@v1.0.3
-        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
-        with:
-          version: 2
-          verbose: false
-          arch: amd64
-          rootdir: ""
-          workdir: ""
-      - uses: aws-actions/configure-aws-credentials@v1
-        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
-        with:
-          aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
-          aws-region: us-east-1
-      - name: Upload assets to s3
-        if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
-        run: |
-          aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
-        env:
-          S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
+#       # Upload assets to S3
+#       - uses: unfor19/install-aws-cli-action@v1.0.3
+#         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+#         with:
+#           version: 2
+#           verbose: false
+#           arch: amd64
+#           rootdir: ""
+#           workdir: ""
+#       - uses: aws-actions/configure-aws-credentials@v1
+#         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+#         with:
+#           aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
+#           aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
+#           aws-region: us-east-1
+#       - name: Upload assets to s3
+#         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
+#         run: |
+#           aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
+#         env:
+#           S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
