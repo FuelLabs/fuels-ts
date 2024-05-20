@@ -1,5 +1,6 @@
-import type { WalletUnlocked } from 'fuels';
-import { ScriptTransactionRequest, Provider, FUEL_NETWORK_URL, bn, Predicate } from 'fuels';
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
+import type { CoinQuantityLike, Provider, WalletUnlocked } from 'fuels';
+import { ScriptTransactionRequest, bn, Predicate, BN } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -16,31 +17,40 @@ describe(__filename, () => {
   let receiver: WalletUnlocked;
   let baseAssetId: string;
   let provider: Provider;
-  let predicate: Predicate<[number]>;
+  let predicate: Predicate<[string]>;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.WHITELISTED_ADDRESS_PREDICATE
+    DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
 
+  const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
+
   beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL, { cacheUtxo: 1000 });
     wallet = await getTestWallet();
     receiver = await getTestWallet();
-
-    predicate = new Predicate<[number]>({
-      bytecode: bin,
-      provider,
-      abi,
-      inputData: [11],
-    });
+    provider = wallet.provider;
 
     baseAssetId = wallet.provider.getBaseAssetId();
+
+    predicate = new Predicate<[string]>({
+      bytecode: bin,
+      provider: wallet.provider,
+      abi,
+      inputData: [inputAddress],
+    });
+    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
   });
 
   it('should successfully populate the transaction with predicate data', async () => {
+    const quantity: CoinQuantityLike[] = [[500, baseAssetId]];
+
     // #region interacting-with-predicates-1
     let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
     transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
+
+    const predicateResources = await provider.getResourcesToSpend(predicate.address, quantity);
+
+    transactionRequest.addResources(predicateResources);
 
     transactionRequest = predicate.populateTransactionPredicateData(transactionRequest);
     transactionRequest = await provider.estimatePredicates(transactionRequest);
@@ -99,14 +109,23 @@ describe(__filename, () => {
     await predicate.fund(transactionRequest, txCost);
 
     const result = await predicate.simulateTransaction(transactionRequest);
+
     // #endregion interacting-with-predicates-3
 
-    expect(result.dryRunStatus).toEqual({
-      type: 'DryRunSuccessStatus',
-      programState: expect.any(Object),
-      totalFee: expect.any(String),
-      totalGas: expect.any(String),
-    });
+    expect(result.receipts).toEqual([
+      {
+        type: 1,
+        id: expect.any(String),
+        val: expect.any(BN),
+        pc: expect.any(BN),
+        is: expect.any(BN),
+      },
+      {
+        type: 9,
+        gasUsed: expect.any(BN),
+        result: expect.any(BN),
+      },
+    ]);
   });
 
   it('should get predicate resources and add them to the predicate data', async () => {
