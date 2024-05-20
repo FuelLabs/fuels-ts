@@ -2,10 +2,10 @@ name: Create Changeset
 
 on:
   repository_dispatch:
-    types: [create-changeset]
+    types: [generate-changeset]
 
 jobs:
-  create-changeset:
+  generate-changeset:
     name: Create Changeset
     runs-on: ubuntu-latest
 
@@ -41,7 +41,7 @@ jobs:
 
   validate-changeset:
     name: Validate PR Changeset
-    needs: create-changeset
+    needs: generate-changeset
     ## TODO: change to dependabot before merging
     if: startsWith(github.head_ref, 'changeset-release') != true && github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest

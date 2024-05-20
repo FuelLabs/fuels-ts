@@ -18,10 +18,9 @@ jobs:
     ## TODO: include condition for dependabot before merging
     steps:
       - name: Trigger Changeset Creation
-        uses: peter-evans/repository-dispatch@v2
+        uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          event-type: create-changeset
+          event-type: generate-changeset
           client-payload: '{"ref": "${{ github.event.pull_request.head.ref }}"}'
 
   # dependency-check:
