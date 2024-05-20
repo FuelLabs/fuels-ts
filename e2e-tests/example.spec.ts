@@ -14,6 +14,9 @@ test('increment functionality works properly', async ({ page }) => {
 
   await page.waitForTimeout(2000);
 
+  const html = await page.content();
+  console.log(html);
+
   const incrementButton = page.getByText('Increment Counter');
   await incrementButton.click();
 
