@@ -16,6 +16,8 @@ jobs:
           node-version: ${{ matrix.env.version || 20 }}
       - name: Run Fuel Node
         run: (cd templates/nextjs && pnpm run fuels:dev) &
+      - name: Copy .env.example and create .env.local off it
+        run: cp templates/nextjs/.env.example templates/nextjs/.env.local
       - name: Run Next.js server
         run: (cd templates/nextjs && pnpm run dev) &
       - name: Install Playwright Browsers
