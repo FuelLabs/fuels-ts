@@ -1,6 +1,8 @@
 ---
 "@fuel-ts/account": patch
-"fuels": patch
+"create-fuels": patch
+"fuels": minor
+"@fuel-ts/utils": minor
 "@fuel-ts/versions": patch
 ---
 
