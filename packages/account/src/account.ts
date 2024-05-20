@@ -425,7 +425,7 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
     let request = new ScriptTransactionRequest(txParams);
-    request = this.addTransfers(request, transferParams);
+    request = this.addBatchTransfer(request, transferParams);
     request = await this.estimateAndFundTransaction(request, txParams);
     return this.sendTransaction(request, { estimateTxDependencies: false });
   }
@@ -455,7 +455,7 @@ export class Account extends AbstractAccount {
    * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
    * @returns The updated script transaction request.
    */
-  addTransfers(request: ScriptTransactionRequest, transferParams: TransferParams[]) {
+  addBatchTransfer(request: ScriptTransactionRequest, transferParams: TransferParams[]) {
     const baseAssetId = this.provider.getBaseAssetId();
     transferParams.forEach(({ destination, amount, assetId }) => {
       this.addTransfer(request, {
