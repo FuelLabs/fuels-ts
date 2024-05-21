@@ -14,7 +14,6 @@ import {
 } from '../providers';
 import type {
   CallResult,
-  Coin,
   CoinQuantityLike,
   ExcludeResourcesOption,
   Provider,
