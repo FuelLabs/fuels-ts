@@ -94,18 +94,16 @@ const _abi = {
 
 const _bin = '0x000'
 
-export class MyPredicateAbi__factory {
+export const MyPredicateAbi__factory = {
 
-  static readonly abi = _abi
-  static readonly bin = _bin;
+  abi: _abi,
+  bin: _bin,
 
-  static createInstance(provider: Provider, predicateData?: MyPredicateAbiInputs, configurables?: MyPredicateAbiConfigurables) {
-
-    const { abi, bin } = MyPredicateAbi__factory
+  createInstance(provider: Provider, predicateData?: MyPredicateAbiInputs, configurables?: MyPredicateAbiConfigurables) {
 
     const predicate = new Predicate<MyPredicateAbiInputs>({
-      bytecode: bin,
-      abi,
+      bytecode: _bin,
+      abi: _abi,
       provider,
       inputData: predicateData,
       configurableConstants: configurables,
