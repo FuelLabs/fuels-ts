@@ -213,11 +213,13 @@ describe(__filename, () => {
       provider,
     });
 
+    const transferAmount = 1000;
+
     // #region predicates-prestage-transaction
     // Prepare the transaction
     const preparedTx = await predicate.createTransfer(
       receiverWallet.address,
-      amountToPredicate,
+      transferAmount,
       baseAssetId
     );
 
