@@ -1,5 +1,6 @@
 {
-  "name": "@fuel-ts/forc",
+  "private": true,
+  "name": "@internal/forc",
   "version": "0.88.1",
   "description": "NPM bin wrapper around Fuel `forc`",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",

@@ -2,7 +2,6 @@ import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
-import { findBinPath } from '@fuel-ts/utils/cli-utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
@@ -41,7 +40,7 @@ export type LaunchNodeOptions = {
   ip?: string;
   port?: string;
   args?: string[];
-  useSystemFuelCore?: boolean;
+  fuelCorePath?: string;
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
   basePath?: string;
@@ -138,7 +137,7 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
  * @param ip - the ip to bind to. (optional, defaults to 0.0.0.0)
  * @param port - the port to bind to. (optional, defaults to 4000 or the next available port)
  * @param args - additional arguments to pass to fuel-core.
- * @param useSystemFuelCore - whether to use the system fuel-core binary or the one provided by the \@fuel-ts/fuel-core package.
+ * @param fuelCorePath - the path to the fuel-core binary. (optional, defaults to 'fuel-core')
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
  * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
@@ -148,7 +147,7 @@ export const launchNode = async ({
   ip,
   port,
   args = [],
-  useSystemFuelCore = false,
+  fuelCorePath = process.env.FUEL_CORE_PATH ?? undefined,
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
@@ -176,9 +175,7 @@ export const launchNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const binPath = findBinPath('fuels-core', __dirname);
-
-    const command = useSystemFuelCore ? 'fuel-core' : binPath;
+    const command = fuelCorePath ?? 'fuel-core';
 
     const ipToUse = ip || '0.0.0.0';
 
