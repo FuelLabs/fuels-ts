@@ -192,7 +192,7 @@ describe(__filename, () => {
     expect(txId).toEqual(txIdFromExecutedTx);
   });
 
-  it.only('should be able to pre-stage a transaction, get TX ID, and then send the transaction', async () => {
+  it('should be able to pre-stage a transaction, get TX ID, and then send the transaction', async () => {
     const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
     const predicate = new Predicate({
       bytecode: bin,
