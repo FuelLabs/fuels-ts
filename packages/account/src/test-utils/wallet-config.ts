@@ -113,8 +113,9 @@ export class WalletConfig {
     if (Array.isArray(assets)) {
       assetIds = assetIds.concat(assets.map((a) => a.value));
     } else {
-      assetIds.concat(AssetId.random(assets).map((a) => a.value));
+      assetIds = assetIds.concat(AssetId.random(assets).map((a) => a.value));
     }
+    console.log('assetIds', assets, assetIds);
 
     wallets
       .map((wallet) => wallet.address.toHexString())
