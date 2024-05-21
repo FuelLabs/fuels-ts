@@ -11,6 +11,9 @@ import {
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
+/**
+ * @group node
+ */
 describe('Predicate', () => {
   it('can generate and use fake predicate coins', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
