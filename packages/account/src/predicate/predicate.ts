@@ -203,8 +203,8 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param coins - An array of `FakeResources` objects representing the coins.
    * @returns An array of `Resource` objects with generated properties.
    */
-  generateFakeResources(coins: FakeResources[]): Array<Coin> {
-    return this.generateFakeResources(coins).map((coin) => ({
+  generateFakeResources(coins: FakeResources[]): Array<Resource> {
+    return super.generateFakeResources(coins).map((coin) => ({
       ...coin,
       predicate: hexlify(this.bytes),
       predicateData: hexlify(this.getPredicateData()),
