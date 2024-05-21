@@ -8,8 +8,6 @@ import {
   resetConfigAndMocks,
   resetDiskAndMocks,
 } from '../../../test/utils/runCommands';
-import * as shouldUseBuiltinForcMod from '../commands/init/shouldUseBuiltinForc';
-import * as shouldUseBuiltinFuelCoreMod from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig } from '../types';
 
 import { readForcToml, readSwayType } from './forcUtils';
@@ -42,7 +40,8 @@ describe('loadConfig', () => {
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
-      useBuiltinBinaries: true,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       autoStartFuelCore: true,
     });
 
@@ -66,6 +65,8 @@ describe('loadConfig', () => {
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
     const config = await loadConfig(paths.root);
@@ -79,6 +80,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       contracts: 'workspace/contracts/*',
       scripts: 'workspace/scripts/*',
       predicates: 'workspace/predicates/*',
@@ -95,6 +98,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       contracts: 'workspace/contracts/*',
     });
 
@@ -109,6 +114,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       scripts: 'workspace/scripts/*',
     });
 
@@ -123,6 +130,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       predicates: 'workspace/predicates/*',
     });
 
@@ -137,6 +146,8 @@ describe('loadConfig', () => {
     await runInit({
       root: paths.root,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
       // passing contract path in workspace config option
       workspace: 'workspace/contracts/bar',
     });
@@ -148,27 +159,40 @@ describe('loadConfig', () => {
     expect(error?.message).toMatch(/try using 'contracts'/i);
   });
 
-  test(`should smart-set built-in flags`, async () => {
+  test(`should load custom binary paths`, async () => {
     await runInit({
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
+      forcPath: 'fuels-forc',
+      fuelCorePath: 'fuels-core',
     });
-
-    const shouldUseBuiltinForc = vi
-      .spyOn(shouldUseBuiltinForcMod, 'shouldUseBuiltinForc')
-      .mockReturnValue(false);
-
-    const shouldUseBuiltinFuelCore = vi
-      .spyOn(shouldUseBuiltinFuelCoreMod, 'shouldUseBuiltinFuelCore')
-      .mockReturnValue(true);
 
     const config = await loadConfig(paths.root);
 
-    expect(config.useBuiltinForc).toEqual(false);
-    expect(config.useBuiltinFuelCore).toEqual(true);
+    expect(config.forcPath).toEqual('fuels-forc');
+    expect(config.fuelCorePath).toEqual('fuels-core');
+  });
 
-    expect(shouldUseBuiltinForc).toHaveBeenCalledTimes(1);
-    expect(shouldUseBuiltinFuelCore).toHaveBeenCalledTimes(1);
+  test('should throw if system binary paths are not found', async () => {
+    const forcPath = '/non/existent/forc';
+    const fuelCorePath = '/non/existent/fuel-core';
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      forcPath,
+      fuelCorePath,
+    });
+
+    const { error, result } = await safeExec(() => loadConfig(paths.root));
+
+    expect(result).toBeFalsy();
+    expect(error?.message).toContain(`Unable to find the following binaries on the filesystem`);
+    expect(error?.message).toContain(`'forc' at path '${forcPath}'`);
+    expect(error?.message).toContain(`'fuel-core' at path '${fuelCorePath}'`);
+    expect(error?.message).toContain(
+      'Visit https://docs.fuel.network/guides/installation/ for an installation guide.'
+    );
   });
 });

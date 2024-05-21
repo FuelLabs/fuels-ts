@@ -13,4 +13,6 @@ export default createConfig({
   output: './src/sway-api',
   fuelCorePort,
   providerUrl: NODE_URL,
+  forcPath: 'fuels-forc',
+  fuelCorePath: 'fuels-core',
 });
