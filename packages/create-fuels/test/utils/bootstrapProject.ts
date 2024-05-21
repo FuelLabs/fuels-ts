@@ -41,7 +41,7 @@ export const copyTemplate = (srcDir: string, destDir: string) => {
   if (!existsSync(destDir)) {
     cpSync(srcDir, destDir, { recursive: true });
   }
-}
+};
 
 export const resetFilesystem = (dirPath: string) => {
   if (existsSync(dirPath)) {

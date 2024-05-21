@@ -1,6 +1,6 @@
-import { glob } from "glob";
+import { glob } from 'glob';
 
-import type { ProgramsToInclude } from "../../src/cli";
+import type { ProgramsToInclude } from '../../src/cli';
 
 export const getAllFiles = async (pathToDir: string) => {
   const files = await glob(`${pathToDir}/**/*`, {
@@ -10,7 +10,10 @@ export const getAllFiles = async (pathToDir: string) => {
   return filesWithoutPrefix;
 };
 
-export const filterOriginalTemplateFiles = (files: string[], programsToInclude: ProgramsToInclude) => {
+export const filterOriginalTemplateFiles = (
+  files: string[],
+  programsToInclude: ProgramsToInclude
+) => {
   let newFiles = [...files];
 
   newFiles = newFiles.filter((file) => {

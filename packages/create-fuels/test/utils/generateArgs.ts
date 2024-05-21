@@ -1,4 +1,4 @@
-import type { ProgramsToInclude } from "../../src/cli";
+import type { ProgramsToInclude } from '../../src/cli';
 
 const defaultFlags = ['--pnpm'];
 
@@ -20,4 +20,8 @@ export const generateArgs = (programsToInclude: ProgramsToInclude, projectName?:
   return args;
 };
 
-export const generateArgv = (programsToInclude: ProgramsToInclude, projectName?: string) => ['', '', ...generateArgs(programsToInclude, projectName)];
+export const generateArgv = (programsToInclude: ProgramsToInclude, projectName?: string) => [
+  '',
+  '',
+  ...generateArgs(programsToInclude, projectName),
+];

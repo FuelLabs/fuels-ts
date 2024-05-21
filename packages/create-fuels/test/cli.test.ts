@@ -4,7 +4,12 @@ import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
-import { bootstrapProject, cleanupFilesystem, copyTemplate, resetFilesystem } from './utils/bootstrapProject';
+import {
+  bootstrapProject,
+  cleanupFilesystem,
+  copyTemplate,
+  resetFilesystem,
+} from './utils/bootstrapProject';
 import { generateArgv } from './utils/generateArgs';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
