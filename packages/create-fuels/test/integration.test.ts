@@ -24,24 +24,19 @@ describe('CLI - Integration', () => {
     resetFilesystem(paths.root);
   });
 
-  it(
-    'should perform `pnpm create fuels`',
-    async () => {
-      let expectedTemplateFiles = await getAllFiles(paths.sourceTemplate);
-      expectedTemplateFiles = filterOriginalTemplateFiles(
-        expectedTemplateFiles,
-        programsToInclude
-      ).filter(filterForcBuildFiles);
+  it('should perform `pnpm create fuels`', async () => {
+    let expectedTemplateFiles = await getAllFiles(paths.sourceTemplate);
+    expectedTemplateFiles = filterOriginalTemplateFiles(
+      expectedTemplateFiles,
+      programsToInclude
+    ).filter(filterForcBuildFiles);
 
-      // Perform create fuels
-      const { error: createFuelsError } = await safeExec(() =>
-        execSync(`pnpm create fuels@${fuelsVersion} ${args}`, { stdio: 'inherit' })
-      );
-      expect(createFuelsError).toBeUndefined();
+    const { error: createFuelsError } = await safeExec(() =>
+      execSync(`pnpm create fuels@${fuelsVersion} ${args}`, { stdio: 'inherit' })
+    );
+    expect(createFuelsError).toBeUndefined();
 
-      const actualTemplateFiles = await getAllFiles(paths.root);
-      expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
-    },
-    { timeout: 60000 }
-  );
+    const actualTemplateFiles = await getAllFiles(paths.root);
+    expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
+  });
 });
