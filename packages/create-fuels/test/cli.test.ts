@@ -5,7 +5,7 @@ import { runScaffoldCli, setupProgram } from '../src/cli';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
 import { bootstrapProject, cleanupFilesystem, copyTemplate, resetFilesystem } from './utils/bootstrapProject';
-import { generateArgs } from './utils/generateArgs';
+import { generateArgv } from './utils/generateArgs';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
@@ -44,7 +44,7 @@ describe('CLI', () => {
   test.each(possibleProgramsToInclude)(
     'create-fuels extracts the template to the specified directory',
     async (programsToInclude) => {
-      const args = generateArgs(programsToInclude, paths.root);
+      const args = generateArgv(programsToInclude, paths.root);
 
       await runScaffoldCli({
         program: setupProgram(),
@@ -62,7 +62,7 @@ describe('CLI', () => {
   );
 
   test('create-fuels reports an error if the project directory already exists', async () => {
-    const args = generateArgs(
+    const args = generateArgv(
       {
         contract: true,
         predicate: true,
@@ -89,7 +89,7 @@ describe('CLI', () => {
   });
 
   test('create-fuels reports an error if no programs are chosen to be included', async () => {
-    const args = generateArgs(
+    const args = generateArgv(
       {
         contract: false,
         predicate: false,
