@@ -5,7 +5,7 @@
 Used to set the node's genesis block state (coins and messages).
 
 - `count`: number of wallets/addresses to generate on the genesis block.
-- `assets`: configure how many unique assets each wallet will own alongside the base asset. Can be `number` or `AssetId[]`.
+- `assets`: configure how many unique assets each wallet will own with the base asset included. Can be `number` or `AssetId[]`.
   - The `AssetId` utility simplifies testing when different assets are necessary.
 - `coinsPerAsset`: number of coins (UTXOs) per asset id.
 - `amountPerCoin`: for each coin, the amount it'll contain.
