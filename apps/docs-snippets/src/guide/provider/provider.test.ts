@@ -2,7 +2,6 @@ import {
   FUEL_NETWORK_URL,
   Provider,
   ScriptTransactionRequest,
-  ZeroBytes32,
   sleep,
   WalletUnlocked,
   Address,
