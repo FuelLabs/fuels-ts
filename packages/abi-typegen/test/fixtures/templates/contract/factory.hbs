@@ -59,33 +59,31 @@ const _abi = {
 
 const _storageSlots: StorageSlot[] = [];
 
-export class MyContractAbi__factory {
-  static readonly abi = _abi;
+export const MyContractAbi__factory = {
+  abi: _abi,
 
-  static readonly storageSlots = _storageSlots;
+  storageSlots: _storageSlots,
 
-  static createInterface(): MyContractAbiInterface {
+  createInterface(): MyContractAbiInterface {
     return new Interface(_abi) as unknown as MyContractAbiInterface
-  }
+  },
 
-  static connect(
+  connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): MyContractAbi {
     return new Contract(id, _abi, accountOrProvider) as unknown as MyContractAbi
-  }
+  },
 
-  static async deployContract(
+  async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<MyContractAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const { storageSlots } = MyContractAbi__factory;
-
     const contract = await factory.deployContract({
-      storageSlots,
+      storageSlots: _storageSlots,
       ...options,
     });
 
