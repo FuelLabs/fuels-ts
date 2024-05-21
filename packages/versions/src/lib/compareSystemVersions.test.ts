@@ -29,9 +29,11 @@ describe('compareSystemVersions.js', () => {
 
     expect(comparisons.systemForcIsGt).toEqual(true);
     expect(comparisons.systemForcIsEq).toEqual(false);
+    expect(comparisons.systemForcIsLt).toEqual(false);
 
     expect(comparisons.systemFuelCoreIsGt).toEqual(true);
     expect(comparisons.systemFuelCoreIsEq).toEqual(false);
+    expect(comparisons.systemFuelCoreIsLt).toEqual(false);
   });
 
   test('should compare against: exact versions', () => {
@@ -42,9 +44,11 @@ describe('compareSystemVersions.js', () => {
 
     expect(comparisons.systemForcIsGt).toEqual(false);
     expect(comparisons.systemForcIsEq).toEqual(true);
+    expect(comparisons.systemForcIsLt).toEqual(false);
 
     expect(comparisons.systemFuelCoreIsGt).toEqual(false);
     expect(comparisons.systemFuelCoreIsEq).toEqual(true);
+    expect(comparisons.systemFuelCoreIsLt).toEqual(false);
   });
 
   test('should compare against: older versions', () => {
@@ -55,8 +59,10 @@ describe('compareSystemVersions.js', () => {
 
     expect(comparisons.systemForcIsGt).toEqual(false);
     expect(comparisons.systemForcIsEq).toEqual(false);
+    expect(comparisons.systemForcIsLt).toEqual(true);
 
     expect(comparisons.systemFuelCoreIsGt).toEqual(false);
     expect(comparisons.systemFuelCoreIsEq).toEqual(false);
+    expect(comparisons.systemFuelCoreIsLt).toEqual(true);
   });
 });
