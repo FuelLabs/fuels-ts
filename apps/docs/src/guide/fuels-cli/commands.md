@@ -1,11 +1,11 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuels } = data
+  const { fuels, forc, fuelCore } = data
 </script>
 
 # Commands
 
-The `fuels` CLI consists of a couple commands.
+The `fuels` CLI consists of a couple of commands.
 
 ## `fuels init`
 
@@ -36,7 +36,7 @@ npx fuels@{{fuels}} init --workspace ./sway-programs --output ./src/sway-program
 
 This will give you a minimal configuration:
 
-<<< @../../../demo-fuels/fuels.config.ts#config{ts:line-numbers}
+<<< @../../../demo-fuels/fuels.config.minimal.ts#config{ts:line-numbers}
 
 In a nutshell:
 
@@ -127,7 +127,7 @@ The `fuels dev` command does three things:
 
 1. Auto-start a short-lived `fuel-core` node ([docs](./config-file.md#autostartfuelcore))
 1. Runs `build` and `deploy` once at the start
-1. Watches your Forc workspace and repeats previous step on every change
+1. Watches your Forc workspace and repeats the previous step on every change
 
 > _In `dev` mode, every time you update a contract on your Forc `workspace`, we re-generate type definitions and factory classes for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
 
@@ -161,31 +161,14 @@ Check for version incompatibilities between your [Fuel Toolchain](https://docs.f
 npx fuels@{{fuels}} versions
 ```
 
-```
+```console-vue
+┌───────────┬───────────┬────────────────┬─────────────┐
+│           │ Supported │ Yours / System │ System Path │
+├───────────┼───────────┼────────────────┼─────────────┤
+│ Forc      │ {{forc}}    │ {{forc}}         │ forc        │
+├───────────┼───────────┼────────────────┼─────────────┤
+│ Fuel-Core │ {{fuelCore}}    │ {{fuelCore}}         │ fuel-core   │
+└───────────┴───────────┴────────────────┴─────────────┘
+
 You have all the right versions! ⚡
-┌───────────┬───────────┬─────────────────┐
-│           │ Supported │ Yours / System  │
-├───────────┼───────────┼─────────────────┤
-│ Forc      │ 0.30.0    │ 0.30.0          │
-├───────────┼───────────┼─────────────────┤
-│ Fuel-Core │ 0.14.0    │ 0.14.0          │
-└───────────┴───────────┴─────────────────┘
 ```
-
-## `fuels forc`
-
-Simple [wrapper](./binaries.md) around the `forc` binary.
-
-Check also:
-
-- [Built-in Binaries](./binaries.md)
-- [`forc` documentation](https://docs.fuel.network/docs/forc/commands/)
-
-## `fuels core`
-
-Simple [wrapper](./binaries.md) around the `fuel-core` binary.
-
-Check also:
-
-- [Built-in Binaries](./binaries.md)
-- [`fuel-core` documentation](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)

@@ -10,19 +10,26 @@ import { getSystemVersions } from './lib/getSystemVersions';
 export * from './lib/compareSystemVersions';
 export * from './lib/fuelUpLink';
 export * from './lib/getSystemVersions';
+export * from './lib/getBuiltinVersions';
 
 export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
 
-export function runVersions() {
+export function runVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
   const { error, info } = console;
 
   const supportedVersions = getBuiltinVersions();
 
   const cliTable = new CliTable({
-    head: ['', chalk.bold('Supported'), chalk.bold(`Yours / System`)],
+    head: ['', chalk.bold('Supported'), chalk.bold(`Yours / System`), chalk.bold('System Path')],
   });
 
-  const { error: systemError, systemForcVersion, systemFuelCoreVersion } = getSystemVersions();
+  const {
+    error: systemError,
+    systemForcVersion,
+    systemFuelCoreVersion,
+    systemForcPath,
+    systemFuelCorePath,
+  } = getSystemVersions(params);
 
   const comparisons = compareSystemVersions({
     systemForcVersion: eitherOr(systemForcVersion, '0'),
@@ -41,8 +48,13 @@ export function runVersions() {
     isOk: comparisons.systemFuelCoreIsEq,
   });
 
-  cliTable.push(['Forc', supportedVersions.FORC, userForcColorized]);
-  cliTable.push(['Fuel-Core', supportedVersions.FUEL_CORE, userFuelCoreColorized]);
+  cliTable.push(['Forc', supportedVersions.FORC, userForcColorized, systemForcPath]);
+  cliTable.push([
+    'Fuel-Core',
+    supportedVersions.FUEL_CORE,
+    userFuelCoreColorized,
+    systemFuelCorePath,
+  ]);
 
   const someIsGt = comparisons.systemForcIsGt || comparisons.systemFuelCoreIsGt;
   const bothAreExact = comparisons.systemForcIsEq && comparisons.systemFuelCoreIsEq;
