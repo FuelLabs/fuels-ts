@@ -71,8 +71,6 @@ Commands:
   deploy [options]   Deploy contracts to the Fuel network
   typegen [options]  Generate Typescript from Sway ABI JSON files
   versions           Check for version incompatibilities
-  core               Wrapper around Fuel Core binary
-  forc               Wrapper around Forc binary
   help [command]     Display help for command
 ```
 
