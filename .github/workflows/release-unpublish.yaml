@@ -15,7 +15,7 @@ concurrency:
 jobs:
   clean-npm-versions:
     name: Unpublish versions next and pr
-    runs-on: buildjet-4vcpu-ubuntu-2204
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/ci-setup
