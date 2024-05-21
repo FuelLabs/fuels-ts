@@ -52,6 +52,8 @@ describe('dev', () => {
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
     await runDev({ root: paths.root });
