@@ -4,7 +4,7 @@ import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
-import { bootstrapProject, cleanupFilesystem, resetFilesystem } from './utils/bootstrapProject';
+import { bootstrapProject, cleanupFilesystem, copyTemplate, resetFilesystem } from './utils/bootstrapProject';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
@@ -47,6 +47,7 @@ describe('CLI', () => {
 
   beforeEach(() => {
     paths = bootstrapProject(__filename);
+    copyTemplate(paths.sourceTemplate, paths.template);
   });
 
   afterEach(() => {
