@@ -16,9 +16,8 @@ describe('CLI - Integration', () => {
   const paths: ProjectPaths = bootstrapProject(__filename);;
   const args = generateArgs(programsToInclude, paths.root).join(' ');
 
-  afterAll(() => {
+  afterEach(() => {
     resetFilesystem(paths.root);
-    vi.resetAllMocks();
   });
 
   it('should perform `pnpm create fuels`', async () => {
