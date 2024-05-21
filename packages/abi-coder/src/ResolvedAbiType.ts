@@ -1,3 +1,5 @@
+import { FuelError, ErrorCode } from '@fuel-ts/errors';
+
 import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
 import { arrayRegEx, enumRegEx, genericRegEx, stringRegEx, structRegEx } from './utils/constants';
 import { findTypeById } from './utils/json-abi';
@@ -132,6 +134,13 @@ export class ResolvedAbiType {
   }
 
   private getArgSignaturePrefix(): string {
+    if (this.type.length > 1000) {
+      throw new FuelError(
+        ErrorCode.INVALID_COMPONENT,
+        `The provided ABI type is too long: ${this.type}.`
+      );
+    }
+
     const structMatch = structRegEx.test(this.type);
     if (structMatch) {
       return 's';
@@ -166,6 +175,13 @@ export class ResolvedAbiType {
 
     if (this.components === null) {
       return this.type;
+    }
+
+    if (this.type.length > 1000) {
+      throw new FuelError(
+        ErrorCode.INVALID_COMPONENT,
+        `The provided ABI type is too long: ${this.type}.`
+      );
     }
 
     const arrayMatch = arrayRegEx.exec(this.type)?.groups;
