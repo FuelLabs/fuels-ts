@@ -5,6 +5,7 @@ import { runScaffoldCli, setupProgram } from '../src/cli';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
 import { bootstrapProject, cleanupFilesystem, copyTemplate, resetFilesystem } from './utils/bootstrapProject';
+import { generateArgs } from './utils/generateArgs';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
@@ -17,26 +18,6 @@ const possibleProgramsToInclude: ProgramsToInclude[] = [
   { contract: false, predicate: true, script: true },
   { contract: true, predicate: true, script: true },
 ];
-
-const defaultFlags = ['--pnpm'];
-
-const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string) => {
-  const args = ['', ''];
-  if (projectName) {
-    args.push(projectName);
-  }
-  if (programsToInclude.contract) {
-    args.push('-c');
-  }
-  if (programsToInclude.predicate) {
-    args.push('-p');
-  }
-  if (programsToInclude.script) {
-    args.push('-s');
-  }
-  args.push(...defaultFlags);
-  return args;
-};
 
 /**
  * @group node
