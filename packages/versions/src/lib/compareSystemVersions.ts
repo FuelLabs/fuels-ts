@@ -19,10 +19,16 @@ export function compareSystemVersions(params: ICompareVersionsParams) {
   const systemForcIsEq = eq(systemForcVersion, versions.FORC);
   const systemFuelCoreIsEq = eq(systemFuelCoreVersion, versions.FUEL_CORE);
 
+  // are user's versions LESS than the ones supported by the SDK?
+  const systemForcIsLt = !systemForcIsGt && !systemForcIsEq;
+  const systemFuelCoreIsLt = !systemFuelCoreIsGt && !systemFuelCoreIsEq;
+
   return {
     systemForcIsGt,
     systemFuelCoreIsGt,
     systemForcIsEq,
     systemFuelCoreIsEq,
+    systemForcIsLt,
+    systemFuelCoreIsLt,
   };
 }

@@ -143,33 +143,21 @@ Parameters:
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onFailure{ts:line-numbers}
 
-## `useBuiltinForc`
+## `forcPath`
 
-Opt-in or out from using [built-in](./binaries.md) `forc` binaries.
+Path to the `forc` binary.
 
-When not supplied, will default to using the `system` binaries.
+When not supplied, will default to using the `system` binaries (`forc`).
 
-If `system` binaries are absent, print a warning and use `built-in` ones instead.
+<<< @../../../demo-fuels/fuels.config.full.ts#forcPath{ts:line-numbers}
 
-<<< @../../../demo-fuels/fuels.config.full.ts#useBuiltInForc{ts:line-numbers}
+## `fuelCorePath`
 
-Check also:
+Path to the `fuel-core` binary.
 
-- [Built-in Binaries](./binaries.md)
+When not supplied, will default to using the `system` binaries (`fuel-core`).
 
-## `useBuiltinFuelCore`
-
-Opt-in or out from using [built-in](./binaries.md) `fuel-core` binaries.
-
-When not supplied, will default to using the `system` binaries.
-
-If `system` binaries are absent, print a warning and use `built-in` ones instead.
-
-<<< @../../../demo-fuels/fuels.config.full.ts#useBuiltInFuelCore{ts:line-numbers}
-
-Check also:
-
-- [Built-in Binaries](./binaries.md)
+<<< @../../../demo-fuels/fuels.config.full.ts#fuelCorePath{ts:line-numbers}
 
 ## Loading environment variables
 
