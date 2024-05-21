@@ -8,7 +8,7 @@ jobs:
     name: "Release PR to npm"
     runs-on: ubuntu-latest
     # comment out if:false to enable release PR to npm
-    if: false
+    # if: false
     permissions: write-all
     steps:
       - name: Checkout
@@ -48,3 +48,22 @@ jobs:
             This PR is published in NPM with version **${{ steps.release.outputs.published_version }}**
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  integration-test:
+    name: "Integration test PR"
+    runs-on: ubuntu-latest
+    needs: [release-pr]
+    env:
+      PUBLISHED_NPM_VERSION: ${{ needs.release-pr.outputs.published_version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Integration test
+        run: pnpm test:integration
