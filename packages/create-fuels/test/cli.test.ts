@@ -1,5 +1,4 @@
 import { mkdirSync } from 'fs';
-import { glob } from 'glob';
 
 import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
@@ -7,14 +6,7 @@ import { runScaffoldCli, setupProgram } from '../src/cli';
 import type { ProjectPaths } from './utils/bootstrapProject';
 import { bootstrapProject, cleanupFilesystem, resetFilesystem } from './utils/bootstrapProject';
 import { mockLogger } from './utils/mockLogger';
-
-const getAllFiles = async (pathToDir: string) => {
-  const files = await glob(`${pathToDir}/**/*`, {
-    ignore: ['**/node_modules/**', '**/.next/**', '**/sway-api/**'],
-  });
-  const filesWithoutPrefix = files.map((file) => file.replace(pathToDir, ''));
-  return filesWithoutPrefix;
-};
+import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
 const possibleProgramsToInclude: ProgramsToInclude[] = [
   { contract: true, predicate: false, script: false },
@@ -44,31 +36,6 @@ const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string
   }
   args.push(...defaultFlags);
   return args;
-};
-
-const filterOriginalTemplateFiles = (files: string[], programsToInclude: ProgramsToInclude) => {
-  let newFiles = [...files];
-
-  newFiles = newFiles.filter((file) => {
-    if (file.includes('CHANGELOG')) {
-      return false;
-    }
-    if (!programsToInclude.contract && file.includes('contract')) {
-      return false;
-    }
-    if (!programsToInclude.predicate && file.includes('predicate')) {
-      return false;
-    }
-    if (!programsToInclude.script && file.includes('script')) {
-      return false;
-    }
-    if (['/gitignore', '/env'].includes(file)) {
-      return false;
-    }
-    return true;
-  });
-
-  return newFiles;
 };
 
 /**
