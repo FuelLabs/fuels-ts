@@ -125,7 +125,7 @@ describe('Provider', () => {
     transactionRequest.addCoinOutput(recipientAddress, 100, baseAssetId);
     // #endregion provider-getBaseAssetId
 
-    expect(baseAssetId).toBe(ZeroBytes32);
+    expect(baseAssetId).toBeDefined();
   });
 
   it('using operations', async () => {

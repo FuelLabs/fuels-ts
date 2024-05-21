@@ -12,7 +12,7 @@ import { getTestWallet } from '../../utils';
  */
 describe('Transaction Policies', () => {
   let wallet: WalletUnlocked;
-  const baseAssetId = '0x';
+  let baseAssetId: string;
 
   const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SUM_SCRIPT
@@ -20,6 +20,7 @@ describe('Transaction Policies', () => {
 
   beforeAll(async () => {
     wallet = await getTestWallet();
+    baseAssetId = wallet.provider.getBaseAssetId();
   });
 
   it('sets policies', () => {

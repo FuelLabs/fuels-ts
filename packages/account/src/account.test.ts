@@ -1,5 +1,4 @@
 import { Address } from '@fuel-ts/address';
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { bn } from '@fuel-ts/math';
@@ -20,13 +19,14 @@ import { Wallet } from './wallet';
  */
 
 describe('Account', () => {
-  const assets = [ASSET_A, ASSET_B, ZeroBytes32];
+  const assets = [ASSET_A, ASSET_B];
   let provider: Provider;
   let baseAssetId: string;
 
   beforeAll(async () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
+    assets.push(baseAssetId);
   });
 
   afterEach(() => {

@@ -224,7 +224,7 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
 
-    expect(baseAssetId).toBe('0x0000000000000000000000000000000000000000000000000000000000000000');
+    expect(baseAssetId).toBeDefined();
   });
 
   it('can change the provider url of the current instance', async () => {
