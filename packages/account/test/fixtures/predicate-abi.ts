@@ -34,5 +34,6 @@ export const predicateAbi: JsonAbi = {
     },
   ],
   loggedTypes: [],
+  messagesTypes: [],
   configurables: [],
 };
