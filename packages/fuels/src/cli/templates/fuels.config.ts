@@ -13,8 +13,8 @@ export function renderFuelsConfigTemplate(props: {
   scripts?: string[];
   predicates?: string[];
   output: string;
-  useBuiltinForc?: boolean;
-  useBuiltinFuelCore?: boolean;
+  forcPath?: string;
+  fuelCorePath?: string;
   autoStartFuelCore?: boolean;
 }) {
   const renderTemplate = Handlebars.compile(fuelsConfigTemplate, {

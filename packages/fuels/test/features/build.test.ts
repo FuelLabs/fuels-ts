@@ -41,6 +41,8 @@ describe(
         root: paths.root,
         workspace: paths.workspaceDir,
         output: paths.outputDir,
+        forcPath: paths.forcPath,
+        fuelCorePath: paths.fuelCorePath,
       });
 
       await runBuild({ root: paths.root });
@@ -76,6 +78,8 @@ describe(
         root: paths.root,
         contracts: paths.contractsDir,
         output: paths.outputDir,
+        forcPath: paths.forcPath,
+        fuelCorePath: paths.fuelCorePath,
       });
 
       await runBuild({ root: paths.root });
@@ -102,6 +106,8 @@ describe(
         root: paths.root,
         workspace: paths.workspaceDir,
         output: paths.outputDir,
+        forcPath: paths.forcPath,
+        fuelCorePath: paths.fuelCorePath,
       });
 
       await runBuild({ root: paths.root, deploy: true });
@@ -118,6 +124,8 @@ describe(
         root: paths.root,
         workspace: paths.workspaceDir,
         output: paths.outputDir,
+        forcPath: paths.forcPath,
+        fuelCorePath: paths.fuelCorePath,
       });
 
       // inject `forcBuildFlags: ['--release']` in config file
