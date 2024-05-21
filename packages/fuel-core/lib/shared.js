@@ -3,7 +3,6 @@ import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } fr
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -55,14 +54,18 @@ export const buildFromGitBranch = (branchName) => {
   const fuelCoreRepoDebugDir = join(fuelCoreRepoDir, 'target', 'debug');
   const stdioOpts = { stdio: 'inherit' };
 
- if (existsSync(fuelCoreRepoDir)) {
-  spawnSync('git', ['pull'], { cwd: fuelCoreRepoDir, ...stdioOpts });
-  spawnSync('git', ['checkout', branchName], { cwd: fuelCoreRepoDir, ...stdioOpts });
-  spawnSync('cargo', ['build'], { cwd: fuelCoreRepoDir, ...stdioOpts });
-} else {
-  spawnSync('git', ['clone', '--branch', branchName, fuelCoreRepoUrl, fuelCoreRepoDir], stdioOpts);
-  spawnSync('cargo', ['build'], { cwd: fuelCoreRepoDir, ...stdioOpts });
-}
+  if (existsSync(fuelCoreRepoDir)) {
+    spawnSync('git', ['pull'], { cwd: fuelCoreRepoDir, ...stdioOpts });
+    spawnSync('git', ['checkout', branchName], { cwd: fuelCoreRepoDir, ...stdioOpts });
+    spawnSync('cargo', ['build'], { cwd: fuelCoreRepoDir, ...stdioOpts });
+  } else {
+    spawnSync(
+      'git',
+      ['clone', '--branch', branchName, fuelCoreRepoUrl, fuelCoreRepoDir],
+      stdioOpts
+    );
+    spawnSync('cargo', ['build'], { cwd: fuelCoreRepoDir, ...stdioOpts });
+  }
 
   const [from, to] = [fuelCoreRepoDebugDir, fuelCoreBinDirPath];
 
