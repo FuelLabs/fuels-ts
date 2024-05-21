@@ -8,8 +8,8 @@ The `addTransfer` method allows you to append an asset transfer to your contract
 
 In the previous example, we first use a contract call to the `echo_u64` function. Following this, `addTransfer` is added to chain call to include a transfer of `100` units of the `BaseAssetId` in the transaction.
 
-## Multiple Transfers
+## Batch Transfer
 
-You can chain multiple `addTransfer` calls to include various transfers in a single transaction. Here's how you can concatenate these calls:
+You can add a batch of transfers into a single transaction by using `addBatchTransfer`:
 
 <<< @/../../docs-snippets/src/guide/contracts/add-transfer.test.ts#add-transfer-2{ts:line-numbers}
