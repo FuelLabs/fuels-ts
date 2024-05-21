@@ -1,4 +1,4 @@
 ---
 ---
 
-feat: add e2e test for the `create fuels` template
+chore: add e2e test for the `create fuels` template
