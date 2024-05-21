@@ -31,18 +31,15 @@ importers:
       '@elasticpath/textlint-rule-no-dead-relative-link':
         specifier: ^1.1.1
         version: 1.1.1
-      '@fuel-ts/forc':
-        specifier: workspace:*
-        version: link:packages/forc
-      '@fuel-ts/fuel-core':
-        specifier: workspace:*
-        version: link:packages/fuel-core
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:packages/utils
-      '@fuel-ts/versions':
-        specifier: workspace:^
-        version: link:packages/versions
+      '@internal/forc':
+        specifier: workspace:*
+        version: link:internal/forc
+      '@internal/fuel-core':
+        specifier: workspace:*
+        version: link:internal/fuel-core
       '@internal/tsup':
         specifier: workspace:*
         version: link:internal/tsup
@@ -389,9 +386,9 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../../packages/errors
-      '@fuel-ts/forc':
+      '@internal/forc':
         specifier: workspace:*
-        version: link:../../packages/forc
+        version: link:../../internal/forc
 
   apps/demo-wallet-sdk-react:
     dependencies:
@@ -565,6 +562,18 @@ importers:
 
   internal/check-tests: {}
 
+  internal/forc:
+    dependencies:
+      node-fetch:
+        specifier: ^2.6.7
+        version: 2.7.0
+
+  internal/fuel-core:
+    dependencies:
+      node-fetch:
+        specifier: ^2.7.0
+        version: 2.7.0
+
   internal/tsup: {}
 
   packages/abi-coder:
@@ -624,9 +633,9 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
     devDependencies:
-      '@fuel-ts/forc':
+      '@internal/forc':
         specifier: workspace:*
-        version: link:../forc
+        version: link:../../internal/forc
       '@types/mkdirp':
         specifier: ^1.0.2
         version: 1.0.2
@@ -831,18 +840,6 @@ importers:
         specifier: workspace:*
         version: link:../versions
 
-  packages/forc:
-    dependencies:
-      node-fetch:
-        specifier: ^2.6.7
-        version: 2.6.7
-
-  packages/fuel-core:
-    dependencies:
-      node-fetch:
-        specifier: ^2.7.0
-        version: 2.7.0
-
   packages/fuel-gauge:
     dependencies:
       fuels:
@@ -855,12 +852,12 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/forc':
-        specifier: workspace:*
-        version: link:../forc
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      '@internal/forc':
+        specifier: workspace:*
+        version: link:../../internal/forc
 
   packages/fuels:
     dependencies:
@@ -885,12 +882,6 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
-      '@fuel-ts/forc':
-        specifier: workspace:*
-        version: link:../forc
-      '@fuel-ts/fuel-core':
-        specifier: workspace:*
-        version: link:../fuel-core
       '@fuel-ts/hasher':
         specifier: workspace:*
         version: link:../hasher
@@ -1073,9 +1064,9 @@ importers:
         specifier: workspace:*
         version: link:../utils
     devDependencies:
-      '@fuel-ts/forc':
+      '@internal/forc':
         specifier: workspace:*
-        version: link:../forc
+        version: link:../../internal/forc
 
   packages/transactions:
     dependencies:
@@ -1112,6 +1103,9 @@ importers:
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
 
   packages/versions:
     dependencies:
@@ -8888,15 +8882,6 @@ packages:
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
-
-  node-fetch@2.6.7:
-    resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -22203,10 +22188,6 @@ snapshots:
       tslib: 2.6.0
 
   node-domexception@1.0.0: {}
-
-  node-fetch@2.6.7:
-    dependencies:
-      whatwg-url: 5.0.0
 
   node-fetch@2.7.0:
     dependencies:

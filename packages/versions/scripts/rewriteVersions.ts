@@ -3,16 +3,17 @@ import { join } from 'path';
 
 export const readVersionsFromFiles = () => {
   const rootDir = join(__dirname, '../../..');
+  const internalDir = join(rootDir, 'internal');
   const packagesDir = join(rootDir, 'packages');
 
   const firstLineReg = /^.+$/m;
 
   // forc
-  const forcPath = join(packagesDir, 'forc', 'VERSION');
+  const forcPath = join(internalDir, 'forc', 'VERSION');
   const forcVersion = readFileSync(forcPath, 'utf8').match(firstLineReg)?.[0];
 
   // fuel-core
-  const fuelCorePath = join(packagesDir, 'fuel-core', 'VERSION');
+  const fuelCorePath = join(internalDir, 'fuel-core', 'VERSION');
   const fuelCoreVersion = readFileSync(fuelCorePath, 'utf8').match(firstLineReg)?.[0];
 
   // fuels

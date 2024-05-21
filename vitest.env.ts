@@ -32,5 +32,7 @@ const getPrivateKeyForCurrentWorker = () => {
   return privateKey;
 };
 
+process.env.FUEL_CORE_PATH = 'fuels-core';
+
 process.env.GENESIS_SECRET =
   process.env.FUEL_NETWORK_GENESIS_KEY || getPrivateKeyForCurrentWorker();

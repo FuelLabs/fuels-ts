@@ -8,33 +8,31 @@ const _abi = {{abiJsonString}};
 
 const _storageSlots: StorageSlot[] = {{storageSlotsJsonString}};
 
-export class {{capitalizedName}}__factory {
-  static readonly abi = _abi;
+export const {{capitalizedName}}__factory = {
+  abi: _abi,
 
-  static readonly storageSlots = _storageSlots;
+  storageSlots: _storageSlots,
 
-  static createInterface(): {{capitalizedName}}Interface {
+  createInterface(): {{capitalizedName}}Interface {
     return new Interface(_abi) as unknown as {{capitalizedName}}Interface
-  }
+  },
 
-  static connect(
+  connect(
     id: string | AbstractAddress,
     accountOrProvider: Account | Provider
   ): {{capitalizedName}} {
     return new Contract(id, _abi, accountOrProvider) as unknown as {{capitalizedName}}
-  }
+  },
 
-  static async deployContract(
+  async deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<{{capitalizedName}}> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const { storageSlots } = {{capitalizedName}}__factory;
-
     const contract = await factory.deployContract({
-      storageSlots,
+      storageSlots: _storageSlots,
       ...options,
     });
 

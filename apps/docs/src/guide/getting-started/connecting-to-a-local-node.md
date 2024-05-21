@@ -3,7 +3,7 @@
 Firstly, you will need a local node running on your machine. We recommend one of the following methods:
 
 - [Testing utilities](../testing/index.md#wallet-test-utilities) can assist in programmatically launching a short-lived node.
-- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) directly, or via the CLI [fuels](../fuels-cli/commands.md#fuels-core).
+- Running [fuel-core](https://docs.fuel.network/guides/running-a-node/running-a-local-node/) locally.
 
 In the following example, we create a provider to connect to the local node and sign a message.
 
