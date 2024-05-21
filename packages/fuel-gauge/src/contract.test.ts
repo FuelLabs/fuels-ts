@@ -8,6 +8,7 @@ import type {
   TransactionType,
   JsonAbi,
   ScriptTransactionRequest,
+  TransferParams,
 } from 'fuels';
 import {
   BN,
@@ -97,6 +98,7 @@ const jsonFragment: JsonAbi = {
       attributes: [],
     },
   ],
+  messagesTypes: [],
 };
 
 const complexFragment: JsonAbi = {
@@ -157,6 +159,7 @@ const complexFragment: JsonAbi = {
       attributes: [],
     },
   ],
+  messagesTypes: [],
 };
 
 const txPointer = '0x00000000000000000000000000000000';
@@ -959,7 +962,11 @@ describe('Contract', () => {
 
     await contract.functions
       .sum(40, 50)
-      .addTransfer(receiver.address, amountToTransfer, baseAssetId)
+      .addTransfer({
+        destination: receiver.address,
+        amount: amountToTransfer,
+        assetId: baseAssetId,
+      })
       .call();
 
     const finalBalance = await receiver.getBalance();
@@ -990,12 +997,13 @@ describe('Contract', () => {
     const amountToTransfer2 = 699;
     const amountToTransfer3 = 122;
 
-    await contract.functions
-      .sum(40, 50)
-      .addTransfer(receiver1.address, amountToTransfer1, baseAssetId)
-      .addTransfer(receiver2.address, amountToTransfer2, ASSET_A)
-      .addTransfer(receiver3.address, amountToTransfer3, ASSET_B)
-      .call();
+    const transferParams: TransferParams[] = [
+      { destination: receiver1.address, amount: amountToTransfer1, assetId: baseAssetId },
+      { destination: receiver2.address, amount: amountToTransfer2, assetId: ASSET_A },
+      { destination: receiver3.address, amount: amountToTransfer3, assetId: ASSET_B },
+    ];
+
+    await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
 
     const finalBalance1 = await receiver1.getBalance(baseAssetId);
     const finalBalance2 = await receiver2.getBalance(ASSET_A);

@@ -52,7 +52,11 @@ describe('Signing transactions', () => {
     const script = new Script(bytecode, abi, sender);
     const { value } = await script.functions
       .main(signer.address.toB256())
-      .addTransfer(receiver.address, amountToReceiver, baseAssetId)
+      .addTransfer({
+        destination: receiver.address,
+        amount: amountToReceiver,
+        assetId: baseAssetId,
+      })
       .addSigners(signer)
       .call<BN>();
     // #endregion multiple-signers-2
