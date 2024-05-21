@@ -289,6 +289,10 @@ export default defineConfig({
                 text: 'Send And Spend Funds From Predicates',
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
               },
+              {
+                text: 'Methods',
+                link: '/guide/predicates/methods',
+              },
             ],
           },
           {
