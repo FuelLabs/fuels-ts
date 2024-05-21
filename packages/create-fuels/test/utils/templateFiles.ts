@@ -34,3 +34,6 @@ export const filterOriginalTemplateFiles = (files: string[], programsToInclude: 
 
   return newFiles;
 };
+
+export const filterForcBuildFiles = (file: string) =>
+  !file.includes('contract/out') && !file.includes('script/out') && !file.includes('predicate/out');
