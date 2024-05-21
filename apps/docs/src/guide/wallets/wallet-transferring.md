@@ -18,6 +18,12 @@ When transferring the base chain coin like ETH, you can omit the `assetId`:
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-3{ts:line-numbers}
 
+## Transferring To Multiple Wallets
+
+To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
+
+<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-6{ts:line-numbers}
+
 ## Transferring To Contracts
 
 Transferring assets from your wallet to a deployed contract is straightforward. All you need is the contract's address.
