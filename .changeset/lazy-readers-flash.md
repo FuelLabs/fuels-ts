@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/account": minor
+"@fuel-ts/account": patch
 ---
 
 feat: implement `generateFakeResources` on `Account` class
