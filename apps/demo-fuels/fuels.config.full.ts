@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { createConfig } from 'fuels';
-import type { CommandEvent, ContractDeployOptions, FuelsConfig } from 'fuels/src/cli/types';
+import type { CommandEvent, ContractDeployOptions, FuelsConfig } from 'fuels';
 
 const MY_FIRST_DEPLOYED_CONTRACT_NAME = '';
 
@@ -96,15 +96,15 @@ export default createConfig({
   },
   // #endregion onFailure
 
-  // #region useBuiltInForc
-  // Default: undefined
-  useBuiltinForc: false,
-  // #endregion useBuiltInForc
+  // #region forcPath
+  // Default: 'forc',
+  forcPath: '~/.fuelup/bin/forc',
+  // #endregion forcPath
 
-  // #region useBuiltInFuelCore
-  // Default: undefined
-  useBuiltinFuelCore: false,
-  // #endregion useBuiltInFuelCore
+  // #region fuelCorePath
+  // Default: 'fuel-core'
+  fuelCorePath: '~/.fuelup/bin/fuel-core',
+  // #endregion fuelCorePath
 });
 
 export const simpleDeployConfig = createConfig({
