@@ -370,8 +370,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'launchTestNode Options',
-                link: '/guide/testing/launchTestNode-options',
+                text: 'Reference',
+                link: '/guide/testing/reference',
               },
               {
                 text: 'Tweaking the Blockchain',

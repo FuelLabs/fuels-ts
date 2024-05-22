@@ -62,8 +62,8 @@ _Note: you will have to change the import paths of the contract factory and byte
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#deploy-contract{ts:line-numbers}
 
-A more complex example showcasing genesis block state configuration with [`walletConfig`](./launchTestNode-options.md#walletconfig) and deployment of multiple contracts is shown below.
-The documentation for all of the options and utilities used in the example can be found [here](./launchTestNode-options.md). For brevity's sake, the example omits usage of [`nodeOptions`](./launchTestNode-options.md#nodeoptions) and [`providerOptions`](./launchTestNode-options.md#provideroptions).
+A more complex example showcasing genesis block state configuration with [`walletConfig`](./reference.md#walletconfig) and deployment of multiple contracts is shown below.
+The documentation for all of the options and utilities used in the example can be found [here](./reference.md). For brevity's sake, the example omits usage of [`nodeOptions`](./reference.md#nodeoptions) and [`providerOptions`](./reference.md#provideroptions).
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#multiple-contracts-and-wallets{ts:line-numbers}
 

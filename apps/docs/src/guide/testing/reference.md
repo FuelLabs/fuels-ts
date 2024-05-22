@@ -1,4 +1,6 @@
-# LaunchTestNode Options
+# Reference
+
+This reference describes all the options of the [`launchTestNode`](./index.md#launching-a-test-node) utility.
 
 ### `walletConfig`
 
