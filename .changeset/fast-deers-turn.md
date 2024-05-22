@@ -2,4 +2,4 @@
 "@fuel-ts/abi-typegen": patch
 ---
 
-fix: `typegen` predicates and scripts not importing from `./common`
+fix: `typegen` generic enums and `./common` import for predicates and scripts
