@@ -44,6 +44,12 @@ export type TxParamsType = Pick<
   'gasLimit' | 'tip' | 'maturity' | 'maxFee' | 'witnessLimit'
 >;
 
+export type TransferParams = {
+  destination: string | AbstractAddress;
+  amount: BigNumberish;
+  assetId?: BytesLike;
+};
+
 export type EstimatedTxParams = Pick<
   TransactionCost,
   'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
@@ -379,22 +385,8 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType = {}
   ): Promise<TransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
-    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    request.addCoinOutput(Address.fromAddressOrString(destination), amount, assetIdToTransfer);
-    const txCost = await this.provider.getTransactionCost(request, {
-      estimateTxDependencies: true,
-      resourcesOwner: this,
-    });
-
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
-    });
-
-    await this.fund(request, txCost);
-
+    request = this.addTransfer(request, { destination, amount, assetId });
+    request = await this.estimateAndFundTransaction(request, txParams);
     return request;
   }
 
@@ -417,15 +409,62 @@ export class Account extends AbstractAccount {
     /** Tx Params */
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    if (bn(amount).lte(0)) {
-      throw new FuelError(
-        ErrorCode.INVALID_TRANSFER_AMOUNT,
-        'Transfer amount must be a positive number.'
-      );
-    }
-    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    const request = await this.createTransfer(destination, amount, assetIdToTransfer, txParams);
+    const request = await this.createTransfer(destination, amount, assetId, txParams);
     return this.sendTransaction(request, { estimateTxDependencies: false });
+  }
+
+  /**
+   * Transfers multiple amounts of a token to multiple recipients.
+   *
+   * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
+   * @param txParams - Optional transaction parameters.
+   * @returns A promise that resolves to a `TransactionResponse` object representing the transaction result.
+   */
+  async batchTransfer(
+    transferParams: TransferParams[],
+    txParams: TxParamsType = {}
+  ): Promise<TransactionResponse> {
+    let request = new ScriptTransactionRequest(txParams);
+    request = this.addBatchTransfer(request, transferParams);
+    request = await this.estimateAndFundTransaction(request, txParams);
+    return this.sendTransaction(request, { estimateTxDependencies: false });
+  }
+
+  /**
+   * Adds a transfer to the given transaction request.
+   *
+   * @param request - The script transaction request to add transfers to.
+   * @param transferParams - The object representing the transfer to be made.
+   * @returns The updated transaction request with the added transfer.
+   */
+  addTransfer(request: ScriptTransactionRequest, transferParams: TransferParams) {
+    const { destination, amount, assetId } = transferParams;
+    this.validateTransferAmount(amount);
+    request.addCoinOutput(
+      Address.fromAddressOrString(destination),
+      amount,
+      assetId ?? this.provider.getBaseAssetId()
+    );
+    return request;
+  }
+
+  /**
+   * Adds multiple transfers to a script transaction request.
+   *
+   * @param request - The script transaction request to add transfers to.
+   * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
+   * @returns The updated script transaction request.
+   */
+  addBatchTransfer(request: ScriptTransactionRequest, transferParams: TransferParams[]) {
+    const baseAssetId = this.provider.getBaseAssetId();
+    transferParams.forEach(({ destination, amount, assetId }) => {
+      this.addTransfer(request, {
+        destination,
+        amount,
+        assetId: assetId ?? baseAssetId,
+      });
+    });
+    return request;
   }
 
   /**
@@ -537,6 +576,7 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request);
   }
 
+  /** @hidden * */
   async signMessage(message: string): Promise<string> {
     if (!this._connector) {
       throw new FuelError(ErrorCode.MISSING_CONNECTOR, 'A connector is required to sign messages.');
@@ -602,6 +642,36 @@ export class Account extends AbstractAccount {
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
   }
 
+  /** @hidden * */
+  private validateTransferAmount(amount: BigNumberish) {
+    if (bn(amount).lte(0)) {
+      throw new FuelError(
+        ErrorCode.INVALID_TRANSFER_AMOUNT,
+        'Transfer amount must be a positive number.'
+      );
+    }
+  }
+
+  /** @hidden * */
+  private async estimateAndFundTransaction(
+    transactionRequest: ScriptTransactionRequest,
+    txParams: TxParamsType
+  ) {
+    let request = transactionRequest;
+    const txCost = await this.provider.getTransactionCost(request, {
+      resourcesOwner: this,
+    });
+    request = this.validateGasLimitAndMaxFee({
+      transactionRequest: request,
+      gasUsed: txCost.gasUsed,
+      maxFee: txCost.maxFee,
+      txParams,
+    });
+    request = await this.fund(request, txCost);
+    return request;
+  }
+
+  /** @hidden * */
   private validateGasLimitAndMaxFee({
     gasUsed,
     maxFee,

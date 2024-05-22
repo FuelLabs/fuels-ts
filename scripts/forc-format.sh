@@ -2,7 +2,7 @@
 
 main_dir=$(pwd)
 forc_tomls=$(find . -type f -name "Forc.toml")
-forc_fmt=$(realpath ./packages/forc/forc-binaries/forc-fmt)
+forc_fmt=$(realpath ./internal/forc/forc-binaries/forc-fmt)
 expected_authors="authors = [\"Fuel Labs <contact@fuel.sh>\"]"
 
 for forc_toml in $forc_tomls; do

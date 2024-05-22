@@ -52,12 +52,16 @@ describe('cli.js', () => {
       systemFuelCoreIsGt,
       systemForcIsEq,
       systemFuelCoreIsEq,
+      systemForcIsLt,
+      systemFuelCoreIsLt,
     }));
 
     vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockResolvedValue({
       error: systemVersionsError,
       systemForcVersion,
       systemFuelCoreVersion,
+      systemForcPath: 'forc',
+      systemFuelCorePath: 'fuel-core',
     });
 
     vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({

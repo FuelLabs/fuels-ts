@@ -26,11 +26,15 @@ import type {
 
 import type { Option, Enum, Vec, Result } from "./common";
 
+export type GenericEnumInput<T1, T2> = Enum<{ a: T1, b: T2 }>;
+export type GenericEnumOutput<T1, T2> = GenericEnumInput<T1, T2>;
 export enum MyEnumInput { Checked = 'Checked', Pending = 'Pending' };
 export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };
 
 export type AssetIdInput = { bits: string };
 export type AssetIdOutput = AssetIdInput;
+export type GenericStructWithEnumInput<T1, T2> = { a: T1, b: GenericEnumInput<T1, T2> };
+export type GenericStructWithEnumOutput<T1, T2> = { a: T1, b: GenericEnumOutput<T1, T2> };
 export type MyStructInput = { x: BigNumberish, y: BigNumberish, state: MyEnumInput };
 export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
 export type RawBytesInput = { ptr: BigNumberish, cap: BigNumberish };
@@ -50,6 +54,8 @@ interface MyContractAbiInterface extends Interface {
     types_empty_then_value: FunctionFragment;
     types_enum: FunctionFragment;
     types_evm_address: FunctionFragment;
+    types_generic_enum: FunctionFragment;
+    types_generic_struct: FunctionFragment;
     types_option: FunctionFragment;
     types_option_geo: FunctionFragment;
     types_raw_slice: FunctionFragment;
@@ -80,6 +86,8 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_empty_then_value', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_enum', values: [MyEnumInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_evm_address', values: [EvmAddress]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_generic_enum', values: [GenericEnumInput<BigNumberish, BigNumberish>]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_generic_struct', values: [GenericStructWithEnumInput<BigNumberish, BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option', values: [Option<BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_option_geo', values: [Option<MyStructInput>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_raw_slice', values: [RawSlice]): Uint8Array;
@@ -109,6 +117,8 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_empty_then_value', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_evm_address', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_generic_enum', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_generic_struct', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_option', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_option_geo', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_raw_slice', data: BytesLike): DecodedValue;
@@ -142,6 +152,8 @@ export class MyContractAbi extends Contract {
     types_empty_then_value: InvokeFunction<[y: BigNumberish], void>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
     types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
+    types_generic_enum: InvokeFunction<[x: GenericEnumInput<BigNumberish, BigNumberish>], GenericEnumOutput<number, number>>;
+    types_generic_struct: InvokeFunction<[x: GenericStructWithEnumInput<BigNumberish, BigNumberish>], GenericStructWithEnumOutput<number, number>>;
     types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
     types_option_geo: InvokeFunction<[x: Option<MyStructInput>], Option<MyStructOutput>>;
     types_raw_slice: InvokeFunction<[x: RawSlice], RawSlice>;

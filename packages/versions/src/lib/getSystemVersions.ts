@@ -1,4 +1,6 @@
 const versionReg = /[0-9]+\.[0-9]+\.[0-9]/;
+const defaultForcCommand = 'forc';
+const defaultFuelCoreCommand = 'fuel-core';
 
 export const getSystemVersion = async (command: string) => {
   let version: string | null = null;
@@ -7,7 +9,10 @@ export const getSystemVersion = async (command: string) => {
   if (!process.env.VITEST || process.env.VITEST_ENV === 'node') {
     const { execSync } = await import('child_process');
     try {
-      const contents = execSync(command).toString();
+      const contents = execSync(command, {
+        stdio: ['pipe', 'pipe', 'ignore'],
+        encoding: 'utf8',
+      }).toString();
       if (versionReg.test(contents)) {
         version = contents.match(versionReg)?.[0] as string;
       } else {
@@ -24,25 +29,32 @@ export const getSystemVersion = async (command: string) => {
   };
 };
 
-export async function getSystemForc() {
-  const { error, version: v } = await getSystemVersion('forc --version');
-  return { error, systemForcVersion: v };
+export async function getSystemForc(forcPath: string = defaultForcCommand) {
+  const { error, version: v } = await getSystemVersion(`${forcPath} --version`);
+  return { error, systemForcVersion: v, systemForcPath: forcPath };
 }
 
-export async function getSystemFuelCore() {
-  const { error, version: v } = await getSystemVersion('fuel-core --version');
-  return { error, systemFuelCoreVersion: v };
+export async function getSystemFuelCore(fuelCorePath: string = defaultFuelCoreCommand) {
+  const { error, version: v } = await getSystemVersion(`${fuelCorePath} --version`);
+  return { error, systemFuelCoreVersion: v, systemFuelCorePath: fuelCorePath };
 }
 
-export async function getSystemVersions() {
-  const { error: errorForc, systemForcVersion } = await getSystemForc();
-  const { error: errorCore, systemFuelCoreVersion } = await getSystemFuelCore();
+export async function getSystemVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
+  const { forcPath, fuelCorePath } = params;
+  const { error: errorForc, systemForcVersion, systemForcPath } = await getSystemForc(forcPath);
+  const {
+    error: errorCore,
+    systemFuelCoreVersion,
+    systemFuelCorePath,
+  } = await getSystemFuelCore(fuelCorePath);
 
   const error = errorForc ?? errorCore;
 
   return {
     error,
     systemForcVersion,
+    systemForcPath,
     systemFuelCoreVersion,
+    systemFuelCorePath,
   };
 }
