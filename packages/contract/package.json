@@ -53,6 +53,7 @@
     "ramda": "^0.29.0"
   },
   "devDependencies": {
+    "@internal/forc": "workspace:*",
     "@types/ramda": "^0.29.3",
     "@fuel-ts/utils": "workspace:*"
   }
