@@ -204,7 +204,7 @@ export const launchNode = async ({
       snapshotDirToUse = tempDirPath;
     }
 
-    if (!process.env.VITEST || process.env.VITEST_ENV === 'node') {
+    if (!process.env.TEST || process.env.VITEST_ENV === 'node') {
       const { spawn } = await import('child_process');
       const child = spawn(
         command,

@@ -64,7 +64,7 @@ export const rewriteVersions = () => {
 };
 
 /* istanbul ignore next -- @preserve */
-if (!process.env.VITEST) {
+if (!process.env.TEST) {
   // do not auto-run script when inside vitest
   rewriteVersions();
 }

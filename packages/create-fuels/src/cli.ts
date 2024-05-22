@@ -68,7 +68,7 @@ export const runScaffoldCli = async ({
   let projectPath = program.args[0] ?? (await promptForProjectPath());
   const verboseEnabled = program.opts().verbose ?? false;
 
-  if (!process.env.VITEST) {
+  if (!process.env.TEST) {
     await tryInstallFuelUp(verboseEnabled);
   }
 
@@ -76,7 +76,7 @@ export const runScaffoldCli = async ({
     error(`A folder already exists at ${projectPath}. Please choose a different project name.`);
 
     // Exit the program if we are testing to prevent hanging
-    if (process.env.VITEST) {
+    if (process.env.TEST) {
       throw new Error();
     }
 
@@ -87,7 +87,7 @@ export const runScaffoldCli = async ({
     error('Please specify a project directory.');
 
     // Exit the program if we are testing to prevent hanging
-    if (process.env.VITEST) {
+    if (process.env.TEST) {
       throw new Error();
     }
 
@@ -127,7 +127,7 @@ export const runScaffoldCli = async ({
     error('You must include at least one Sway program.');
 
     // Exit the program if we are testing to prevent hanging
-    if (process.env.VITEST) {
+    if (process.env.TEST) {
       throw new Error();
     }
 

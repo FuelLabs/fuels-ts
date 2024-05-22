@@ -59,6 +59,8 @@ enum ColorEnumOutput {
  * @group browser
  */
 describe('Coverage Contract', () => {
+  console.log(process.env);
+
   it('can return outputs', async () => {
     // Call contract methods
     expect((await contractInstance.functions.get_id().call()).value).toEqual(
