@@ -23,7 +23,7 @@ export const packageMangerCommands = {
   bun: {
     install: 'bun install',
     run: runnableApplicator('bun run'),
-  }
+  },
 } as const;
 
 export const getPackageManager = async (opts: ProgramOptions) => {

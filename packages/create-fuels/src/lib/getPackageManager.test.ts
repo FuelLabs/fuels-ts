@@ -2,7 +2,11 @@ import { mockLogger } from '../../test/utils/mockLogger';
 import * as promptsMod from '../prompts';
 
 import type { PackageManager } from './getPackageManager';
-import { availablePackageManagers, getPackageManager, packageMangerCommands } from './getPackageManager';
+import {
+  availablePackageManagers,
+  getPackageManager,
+  packageMangerCommands,
+} from './getPackageManager';
 
 const mockAllDeps = (opts: { packageManager?: PackageManager } = {}) => {
   const { warn } = mockLogger();
@@ -72,29 +76,35 @@ describe('getPackageManager', () => {
       ['pnpm', 'pnpm install'],
       ['npm', 'npm install'],
       ['bun', 'bun install'],
-    ]
+    ];
 
-    it.each(installScenarios)('should have the correct install commands', (packageManager, expectedInstallCommand) => {
-      const command = packageMangerCommands[packageManager];
+    it.each(installScenarios)(
+      'should have the correct install commands',
+      (packageManager, expectedInstallCommand) => {
+        const command = packageMangerCommands[packageManager];
 
-      const install = command.install;
+        const install = command.install;
 
-      expect(install).toEqual(expectedInstallCommand);
-    });
+        expect(install).toEqual(expectedInstallCommand);
+      }
+    );
 
     const runCommand = 'fuels:dev';
     const runScenarios: [PackageManager, string][] = [
       ['pnpm', 'pnpm fuels:dev'],
       ['npm', 'npm run fuels:dev'],
       ['bun', 'bun run fuels:dev'],
-    ]
+    ];
 
-    it.each(runScenarios)('should have the correct run commands', (packageManager, expectedRunCommand) => {
-      const command = packageMangerCommands[packageManager as PackageManager];
+    it.each(runScenarios)(
+      'should have the correct run commands',
+      (packageManager, expectedRunCommand) => {
+        const command = packageMangerCommands[packageManager as PackageManager];
 
-      const run = command.run(runCommand);
+        const run = command.run(runCommand);
 
-      expect(run).toEqual(expectedRunCommand);
-    });
+        expect(run).toEqual(expectedRunCommand);
+      }
+    );
   });
 });
