@@ -98,7 +98,7 @@ jobs:
       - name: Integration test
         run: pnpm test:integration
         env:
-          PUBLISHED_NPM_VERSION: ${{ release.outputs.published_version }}
+          PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
 
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
