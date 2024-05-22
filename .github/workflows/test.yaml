@@ -95,6 +95,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pr-number: ${{ github.event.pull_request.number }}
 
+      - name: Echo Published Version
+        run: echo ${{ steps.release.outputs.published_version }}
+
       - name: Integration test
         run: pnpm test:integration
         env:
