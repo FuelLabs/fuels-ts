@@ -17,43 +17,152 @@ import {
   Provider,
 } from 'fuels';
 
+import type { Option, Enum, Vec } from "./common";
+
+export enum MyEnumInput { A = 'A', B = 'B' };
+export enum MyEnumOutput { A = 'A', B = 'B' };
+
 export type ValidationInput = { has_account: boolean, total_complete: BigNumberish };
 export type ValidationOutput = { has_account: boolean, total_complete: BN };
 
 export type MyPredicateAbiConfigurables = {
 };
 
-export type MyPredicateAbiInputs = [received: ValidationInput];
+export type MyPredicateAbiInputs = [vec: Vec<ValidationInput>, enm: MyEnumInput, opt: Option<BigNumberish>];
 
 const _abi = {
   "encoding": "1",
   "types": [
     {
       "typeId": 0,
+      "type": "()",
+      "components": [],
+      "typeParameters": null
+    },
+    {
+      "typeId": 1,
       "type": "bool",
       "components": null,
       "typeParameters": null
     },
     {
-      "typeId": 1,
-      "type": "struct Validation",
+      "typeId": 2,
+      "type": "enum MyEnum",
       "components": [
         {
-          "name": "has_account",
+          "name": "A",
           "type": 0,
           "typeArguments": null
         },
         {
-          "name": "total_complete",
-          "type": 2,
+          "name": "B",
+          "type": 0,
           "typeArguments": null
         }
       ],
       "typeParameters": null
     },
     {
-      "typeId": 2,
+      "typeId": 3,
+      "type": "enum Option",
+      "components": [
+        {
+          "name": "None",
+          "type": 0,
+          "typeArguments": null
+        },
+        {
+          "name": "Some",
+          "type": 4,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": [
+        4
+      ]
+    },
+    {
+      "typeId": 4,
+      "type": "generic T",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 5,
+      "type": "raw untyped ptr",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 6,
+      "type": "struct RawVec",
+      "components": [
+        {
+          "name": "ptr",
+          "type": 5,
+          "typeArguments": null
+        },
+        {
+          "name": "cap",
+          "type": 9,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": [
+        4
+      ]
+    },
+    {
+      "typeId": 7,
+      "type": "struct Validation",
+      "components": [
+        {
+          "name": "has_account",
+          "type": 1,
+          "typeArguments": null
+        },
+        {
+          "name": "total_complete",
+          "type": 9,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": null
+    },
+    {
+      "typeId": 8,
+      "type": "struct Vec",
+      "components": [
+        {
+          "name": "buf",
+          "type": 6,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 4,
+              "typeArguments": null
+            }
+          ]
+        },
+        {
+          "name": "len",
+          "type": 9,
+          "typeArguments": null
+        }
+      ],
+      "typeParameters": [
+        4
+      ]
+    },
+    {
+      "typeId": 9,
       "type": "u64",
+      "components": null,
+      "typeParameters": null
+    },
+    {
+      "typeId": 10,
+      "type": "u8",
       "components": null,
       "typeParameters": null
     }
@@ -62,15 +171,37 @@ const _abi = {
     {
       "inputs": [
         {
-          "name": "received",
-          "type": 1,
+          "name": "vec",
+          "type": 8,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 7,
+              "typeArguments": null
+            }
+          ]
+        },
+        {
+          "name": "enm",
+          "type": 2,
           "typeArguments": null
+        },
+        {
+          "name": "opt",
+          "type": 3,
+          "typeArguments": [
+            {
+              "name": "",
+              "type": 10,
+              "typeArguments": null
+            }
+          ]
         }
       ],
       "name": "main",
       "output": {
         "name": "",
-        "type": 0,
+        "type": 1,
         "typeArguments": null
       },
       "attributes": null

@@ -5,9 +5,11 @@ struct Validation {
     total_complete: u64,
 }
 
-fn main(received: Validation) -> bool {
-    let expected_has_account: bool = true;
-    let expected_total_complete: u64 = 100;
+enum MyEnum {
+    A: (),
+    B: (),
+}
 
-    received.has_account == expected_has_account && received.total_complete == expected_total_complete
+fn main(vec: Vec<Validation>, enm: MyEnum, opt: Option<u8>) -> bool {
+    return true;
 }
