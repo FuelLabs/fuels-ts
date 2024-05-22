@@ -1,4 +1,4 @@
-# launchTestNode Options
+# LaunchTestNode Options
 
 ### `walletConfig`
 
