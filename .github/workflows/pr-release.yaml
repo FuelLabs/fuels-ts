@@ -38,4 +38,4 @@ jobs:
           message: |
             This PR is published in NPM with version **${{ steps.release.outputs.published_version }}**
         env:
-          GITHUB_TOKEN: ${{ inputs.github-token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
