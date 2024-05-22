@@ -22,8 +22,7 @@ export const generateArgs = (
   return args;
 };
 
-export const generateArgv = (programsToInclude: ProgramsToInclude, projectName?: string): string[] => [
-  '',
-  '',
-  ...generateArgs(programsToInclude, projectName),
-];
+export const generateArgv = (
+  programsToInclude: ProgramsToInclude,
+  projectName?: string
+): string[] => ['', '', ...generateArgs(programsToInclude, projectName)];
