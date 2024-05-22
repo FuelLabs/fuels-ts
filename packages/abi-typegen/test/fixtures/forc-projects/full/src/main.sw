@@ -10,6 +10,16 @@ enum MyEnum {
     Pending: (),
 }
 
+enum GenericEnum<T1, T2> {
+    a: T1,
+    b: T2,
+}
+
+struct GenericStructWithEnum<T1, T2> {
+    a: T1,
+    b: GenericEnum<T1, T2>,
+}
+
 struct MyStruct {
     x: u8,
     y: u8,
@@ -65,6 +75,8 @@ abi MyContract {
     fn types_raw_slice(x: raw_slice) -> raw_slice;
     fn types_std_string(x: String) -> String;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
+    fn types_generic_enum(x: GenericEnum<u8, u16>) -> GenericEnum<u8, u16>;
+    fn types_generic_struct(x: GenericStructWithEnum<u8, u16>) -> GenericStructWithEnum<u8, u16>;
 }
 
 impl MyContract for Contract {
@@ -160,5 +172,11 @@ impl MyContract for Contract {
             Ok(value) => Ok(value),
             Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
         }
+    }
+    fn types_generic_enum(x: GenericEnum<u8, u16>) -> GenericEnum<u8, u16> {
+        x
+    }
+    fn types_generic_struct(x: GenericStructWithEnum<u8, u16>) -> GenericStructWithEnum<u8, u16> {
+        x
     }
 }
