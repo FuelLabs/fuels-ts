@@ -2,6 +2,9 @@ contract;
 use libs_for_testing::ExternalStruct;
 use libs_for_testing::ExternalEnum;
 use std::vm::evm::evm_address::EvmAddress;
+use std::string::String;
+use std::bytes::Bytes;
+use std::b512::B512;
 
 pub struct InternalStruct {
     pub a: u8
@@ -24,6 +27,9 @@ abi MyContract {
     fn type_external_enum(x: ExternalEnum) -> ExternalEnum;
     fn type_evm_address(x: EvmAddress) -> EvmAddress;
     fn type_result(x: Result<u8, u8>) -> Result<u8, u8>;
+    fn type_bytes(x: Bytes) -> Bytes;
+    fn type_string(x: String) -> String;
+    fn types_b512(x: B512) -> B512;
 }
 
 impl MyContract for Contract {
@@ -59,6 +65,15 @@ impl MyContract for Contract {
         x
     }
     fn type_result(x: Result<u8, u8>) -> Result<u8, u8> {
+        x
+    }
+    fn type_bytes(x: Bytes) -> Bytes {
+        x
+    }
+    fn type_string(x: String) -> String {
+        x
+    }
+    fn types_b512(x: B512) -> B512 {
         x
     }
 
