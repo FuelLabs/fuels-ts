@@ -58,6 +58,8 @@ describe('cli.js', () => {
       error: systemVersionsError,
       systemForcVersion,
       systemFuelCoreVersion,
+      systemForcPath: 'forc',
+      systemFuelCorePath: 'fuel-core',
     }));
 
     vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockImplementation(() => ({

@@ -43,7 +43,7 @@ describe(__filename, () => {
           gasLimit: 1,
         })
         .call()
-    ).rejects.toThrow(/Gas limit '1' is lower than the required: /);
+    ).rejects.toThrow('The transaction reverted with reason: "OutOfGas"');
     // #endregion call-params-2
   });
 

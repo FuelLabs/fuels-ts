@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.86.0",
+  "version": "0.88.1",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplatePackageJson.ts"
+    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplateFiles.ts"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
