@@ -3,6 +3,7 @@ import type { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 import { extractStructName } from '../../utils/extractStructName';
 import { findType } from '../../utils/findType';
+import { parseTypeArguments } from '../../utils/parseTypeArguments';
 
 import { AType } from './AType';
 import { EmptyType } from './EmptyType';
@@ -75,14 +76,29 @@ export class EnumType extends AType implements IType {
     const attributeKey: 'inputLabel' | 'outputLabel' = `${target}Label`;
 
     const contents = enumComponents.map((component) => {
-      const { name, type: typeId } = component;
+      const { name, type: typeId, typeArguments } = component;
 
       if (typeId === 0) {
         return `${name}: []`;
       }
 
-      const { attributes } = findType({ types, typeId });
-      return `${name}: ${attributes[attributeKey]}`;
+      const type = findType({ types, typeId });
+      let typeDecl: string;
+
+      if (typeArguments) {
+        // recursively process child `typeArguments`
+        typeDecl = parseTypeArguments({
+          types,
+          target,
+          parentTypeId: typeId,
+          typeArguments,
+        });
+      } else {
+        // or just collect type declaration
+        typeDecl = type.attributes[attributeKey];
+      }
+
+      return `${name}: ${typeDecl}`;
     });
 
     return contents.join(', ');
