@@ -26,6 +26,8 @@ import type {
 
 import type { Option, Enum, Vec, Result } from "./common";
 
+export type EnumWithVectorInput = Enum<{ num: BigNumberish, vec: Vec<BigNumberish> }>;
+export type EnumWithVectorOutput = Enum<{ num: number, vec: Vec<number> }>;
 export type GenericEnumInput<T1, T2> = Enum<{ a: T1, b: T2 }>;
 export type GenericEnumOutput<T1, T2> = GenericEnumInput<T1, T2>;
 export enum MyEnumInput { Checked = 'Checked', Pending = 'Pending' };
@@ -53,6 +55,7 @@ interface MyContractAbiInterface extends Interface {
     types_empty: FunctionFragment;
     types_empty_then_value: FunctionFragment;
     types_enum: FunctionFragment;
+    types_enum_with_vector: FunctionFragment;
     types_evm_address: FunctionFragment;
     types_generic_enum: FunctionFragment;
     types_generic_struct: FunctionFragment;
@@ -85,6 +88,7 @@ interface MyContractAbiInterface extends Interface {
   encodeFunctionData(functionFragment: 'types_empty', values: []): Uint8Array;
   encodeFunctionData(functionFragment: 'types_empty_then_value', values: [BigNumberish]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_enum', values: [MyEnumInput]): Uint8Array;
+  encodeFunctionData(functionFragment: 'types_enum_with_vector', values: [EnumWithVectorInput]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_evm_address', values: [EvmAddress]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_generic_enum', values: [GenericEnumInput<BigNumberish, BigNumberish>]): Uint8Array;
   encodeFunctionData(functionFragment: 'types_generic_struct', values: [GenericStructWithEnumInput<BigNumberish, BigNumberish>]): Uint8Array;
@@ -116,6 +120,7 @@ interface MyContractAbiInterface extends Interface {
   decodeFunctionData(functionFragment: 'types_empty', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_empty_then_value', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_enum', data: BytesLike): DecodedValue;
+  decodeFunctionData(functionFragment: 'types_enum_with_vector', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_evm_address', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_generic_enum', data: BytesLike): DecodedValue;
   decodeFunctionData(functionFragment: 'types_generic_struct', data: BytesLike): DecodedValue;
@@ -151,6 +156,7 @@ export class MyContractAbi extends Contract {
     types_empty: InvokeFunction<[], void>;
     types_empty_then_value: InvokeFunction<[y: BigNumberish], void>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
+    types_enum_with_vector: InvokeFunction<[x: EnumWithVectorInput], EnumWithVectorOutput>;
     types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     types_generic_enum: InvokeFunction<[x: GenericEnumInput<BigNumberish, BigNumberish>], GenericEnumOutput<number, number>>;
     types_generic_struct: InvokeFunction<[x: GenericStructWithEnumInput<BigNumberish, BigNumberish>], GenericStructWithEnumOutput<number, number>>;
