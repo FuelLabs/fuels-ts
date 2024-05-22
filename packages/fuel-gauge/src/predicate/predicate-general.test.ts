@@ -25,6 +25,7 @@ describe('Predicate', () => {
     const amount1 = bn(100_000);
     const amount2 = bn(200_000);
     const amount3 = bn(300_000);
+    const amountToTransferBaseAsset = bn(1000);
 
     const fakeCoinsConfig: FakeResources[] = [
       { amount: amount1, assetId: baseAssetId },
@@ -55,7 +56,7 @@ describe('Predicate', () => {
     });
 
     request.addResources(fakeCoins);
-    request.addCoinOutput(Address.fromRandom(), amount1.div(3), baseAssetId);
+    request.addCoinOutput(Address.fromRandom(), amountToTransferBaseAsset, baseAssetId);
     request.addCoinOutput(Address.fromRandom(), amount2, ASSET_A);
     request.addCoinOutput(Address.fromRandom(), amount3, ASSET_B);
 
