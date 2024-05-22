@@ -10,8 +10,6 @@ jobs:
     # comment out if:false to enable release PR to npm
     if: false
     permissions: write-all
-    outputs:
-      published_version: ${{ steps.release.outputs.published_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
