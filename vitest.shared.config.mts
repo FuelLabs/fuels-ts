@@ -38,7 +38,7 @@ export default defineConfig({
     ],
     globals: true,
     setupFiles: ["./vitest.env.ts"],
-    env: loadEnv(mode, process.cwd(), ""),
+    env: Object.assign(process.env, loadEnv(mode, process.cwd(), "")),
     poolOptions: {
       threads: {
         minThreads: 1,
