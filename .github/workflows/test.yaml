@@ -93,7 +93,7 @@ jobs:
           path: coverage/environments
 
       - name: Download Coverage Artifact for Browser Tests
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: browser
           path: coverage/environments
