@@ -5,11 +5,19 @@ struct Validation {
     total_complete: u64,
 }
 
-enum MyEnum {
-    A: (),
-    B: (),
+enum MyGenericEnum<T> {
+    a: T,
 }
 
-fn main(vec: Vec<Validation>, enm: MyEnum, opt: Option<u8>) -> bool {
+struct MyGenericStruct<T> {
+    a: T,
+}
+
+fn main(
+    vec: Vec<Validation>,
+    enm: MyGenericEnum<u16>,
+    opt: Option<u8>,
+    res: Result<MyGenericStruct<str[4]>, u64>,
+) -> bool {
     return true;
 }
