@@ -27,21 +27,18 @@ describe('CLI - Integration', () => {
   it(
     'should perform `pnpm create fuels`',
     async () => {
-      const command = `pnpm create fuels@${fuelsVersion} ${args}`;
-      console.log(command);
       let expectedTemplateFiles = await getAllFiles(paths.sourceTemplate);
       expectedTemplateFiles = filterOriginalTemplateFiles(
         expectedTemplateFiles,
         programsToInclude
       ).filter(filterForcBuildFiles);
-      console.log('ExpectedSourceTemplate', JSON.stringify(expectedTemplateFiles))
 
-
-      const { error: createFuelsError } = await safeExec(() => execSync(command, { stdio: 'inherit' }));
+      const { error: createFuelsError } = await safeExec(() =>
+        execSync(`pnpm create fuels@${fuelsVersion} ${args}`, { stdio: 'inherit' })
+      );
       expect(createFuelsError).toBeUndefined();
 
       const actualTemplateFiles = await getAllFiles(paths.root);
-      console.log('Actual', JSON.stringify(actualTemplateFiles))
       expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
     },
     { timeout: 30000 }
