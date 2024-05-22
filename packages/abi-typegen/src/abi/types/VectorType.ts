@@ -13,7 +13,6 @@ export class VectorType extends ArrayType {
   static isSuitableFor(params: { type: string }) {
     const isAMatch = VectorType.MATCH_REGEX.test(params.type);
     const shouldBeIgnored = VectorType.IGNORE_REGEX.test(params.type);
-    console.log(params.type, isAMatch, shouldBeIgnored);
     return isAMatch && !shouldBeIgnored;
   }
 
