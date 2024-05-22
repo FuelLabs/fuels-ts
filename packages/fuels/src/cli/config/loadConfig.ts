@@ -50,7 +50,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   const releaseFlag = forcBuildFlags.find((f) => f === '--release');
   const buildMode = releaseFlag ? 'release' : 'debug';
 
-  const { forcPath, fuelCorePath } = tryFindBinaries({
+  const { forcPath, fuelCorePath } = await tryFindBinaries({
     forcPath: userConfig.forcPath,
     fuelCorePath: userConfig.fuelCorePath,
   });

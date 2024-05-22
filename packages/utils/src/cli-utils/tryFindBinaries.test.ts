@@ -59,10 +59,10 @@ const mockAllDeps = (
  * @group node
  */
 describe('tryFindBinaries', () => {
-  it(`should use default binaries when not paths supplied`, () => {
+  it(`should use default binaries when not paths supplied`, async () => {
     const { getSystemForc, getSystemFuelCore } = mockAllDeps();
 
-    const binaries = tryFindBinaries();
+    const binaries = await tryFindBinaries();
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemForc).toBeCalledWith(undefined);
@@ -72,13 +72,13 @@ describe('tryFindBinaries', () => {
     expect(binaries.fuelCorePath).toEqual('fuel-core');
   });
 
-  it(`should use custom binaries when paths supplied`, () => {
+  it(`should use custom binaries when paths supplied`, async () => {
     const { getSystemForc, getSystemFuelCore } = mockAllDeps();
 
     const forcPath = '/some/path/to/forc';
     const fuelCorePath = '/some/path/to/fuel-core';
 
-    const binaries = tryFindBinaries({ forcPath, fuelCorePath });
+    const binaries = await tryFindBinaries({ forcPath, fuelCorePath });
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemForc).toBeCalledWith(forcPath);
@@ -88,10 +88,10 @@ describe('tryFindBinaries', () => {
     expect(binaries.fuelCorePath).toEqual(fuelCorePath);
   });
 
-  it('should handle undefined paths', () => {
+  it('should handle undefined paths', async () => {
     const { getSystemForc, getSystemFuelCore } = mockAllDeps();
 
-    const binaries = tryFindBinaries({ forcPath: undefined, fuelCorePath: undefined });
+    const binaries = await tryFindBinaries({ forcPath: undefined, fuelCorePath: undefined });
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemForc).toBeCalledWith(undefined);
@@ -121,7 +121,7 @@ describe('tryFindBinaries', () => {
     );
   });
 
-  it(`should warn the user when binaries are outdated`, () => {
+  it(`should warn the user when binaries are outdated`, async () => {
     const compatibleVersion = '1.0.0';
     const currentVersion = '0.0.1';
     const expectedMessage = [
@@ -135,7 +135,7 @@ describe('tryFindBinaries', () => {
       fuelCoreVersion: currentVersion,
     });
 
-    tryFindBinaries();
+    await tryFindBinaries();
 
     expect(getSystemForc).toHaveBeenCalledTimes(1);
     expect(getSystemFuelCore).toHaveBeenCalledTimes(1);

@@ -13,15 +13,19 @@ import {
  * @param paths - paths to the binaries (optional)
  * @returns - paths to the resolved binaries
  */
-export const tryFindBinaries = (paths: { forcPath?: string; fuelCorePath?: string } = {}) => {
+export const tryFindBinaries = async (paths: { forcPath?: string; fuelCorePath?: string } = {}) => {
   // Ensure we can get the binary versions
-  const { error: forcError, systemForcPath, systemForcVersion } = getSystemForc(paths.forcPath);
+  const {
+    error: forcError,
+    systemForcPath,
+    systemForcVersion,
+  } = await getSystemForc(paths.forcPath);
 
   const {
     error: fuelCoreError,
     systemFuelCorePath,
     systemFuelCoreVersion,
-  } = getSystemFuelCore(paths.fuelCorePath);
+  } = await getSystemFuelCore(paths.fuelCorePath);
 
   if (forcError || fuelCoreError) {
     const errors = [
