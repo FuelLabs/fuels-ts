@@ -12,6 +12,10 @@ inputs:
     description: "PR number"
     default: ${{ github.event.pull_request.number }}
 
+outputs:
+  published_version:
+    description: "Published version of the PR"
+
 runs:
   using: "composite"
   steps:
