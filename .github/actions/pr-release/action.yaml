@@ -16,15 +16,14 @@ runs:
   using: "composite"
   steps:
     - name: Ensure NPM access
+      shell: bash
       run: npm whoami
       env:
         NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
 
-    - name: Build
-      run: pnpm build
-
     - name: Release to @pr-${{ inputs.pr-number }} tag on npm
       id: release
+      shell: bash
       run: |
         pnpm changeset:next
         git add .changeset/fuel-labs-ci.md
