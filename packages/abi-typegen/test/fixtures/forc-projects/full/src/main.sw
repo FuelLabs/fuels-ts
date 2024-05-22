@@ -1,5 +1,6 @@
 contract;
-
+use libs_for_testing::ExternalStruct;
+use libs_for_testing::ExternalEnum;
 use std::vm::evm::evm_address::EvmAddress;
 use std::b512::B512;
 use std::string::String;
@@ -165,5 +166,20 @@ impl MyContract for Contract {
             Ok(value) => Ok(value),
             Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
         }
+    }
+    fn type_address(x: Address) -> Address {
+        x
+    }
+    fn type_contract_id(x: ContractId) -> ContractId {
+        x
+    }
+    fn type_identity(x: Identity) -> Identity {
+        x
+    }
+    fn type_external_enum(x: ExternalEnum) -> ExternalEnum {
+        x
+    }
+    fn type_external_struct(x: ExternalStruct) -> ExternalStruct {
+        x
     }
 }
