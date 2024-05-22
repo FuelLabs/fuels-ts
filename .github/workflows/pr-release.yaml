@@ -63,6 +63,11 @@ jobs:
       - name: Test Setup
         uses: ./.github/actions/test-setup
 
+      - name: Test Env
+        run: echo $PUBLISHED_NPM_VERSION
+        env:
+          PUBLISHED_NPM_VERSION: ${{ needs.release-pr.outputs.published_version }}
+
       - name: Integration test
         run: pnpm test:integration
         env:
