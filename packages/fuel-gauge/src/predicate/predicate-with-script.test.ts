@@ -5,8 +5,6 @@ import { toNumber, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
-import { fundPredicate } from './utils/predicate';
-
 /**
  * @group node
  */
