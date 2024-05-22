@@ -5,11 +5,19 @@ struct Score {
     points: u8,
 }
 
-enum MyEnum {
-    A: (),
-    B: (),
+enum MyGenericEnum<T> {
+    a: T,
 }
 
-fn main(vec: Vec<Score>, enm: MyEnum, opt: Option<u8>) -> bool {
+struct MyGenericStruct<T> {
+    a: T,
+}
+
+fn main(
+    vec: Vec<Score>,
+    enm: MyGenericEnum<u16>,
+    opt: Option<u8>,
+    res: Result<MyGenericStruct<str[4]>, u64>,
+) -> bool {
     return true;
 }
