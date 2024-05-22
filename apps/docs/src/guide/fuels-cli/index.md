@@ -54,6 +54,10 @@ npm install fuels@{{fuels}} --save
 pnpm add fuels@{{fuels}}
 ```
 
+```console-vue [bun]
+bun add fuels@{{fuels}}
+```
+
 :::
 
 ## Double-checking

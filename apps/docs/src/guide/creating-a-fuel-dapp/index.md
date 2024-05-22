@@ -23,6 +23,10 @@ npm create fuels@{{fuels}}
 pnpm create fuels@{{fuels}}
 ```
 
+```sh-vue [bun]
+bun create fuels@{{fuels}}
+```
+
 :::
 
 Once you run the command, you will be greeted with a few simple questions. We will answer them as follows:
@@ -115,6 +119,10 @@ npm fuels:dev
 pnpm fuels:dev
 ```
 
+```sh [bun]
+bun run fuels:dev
+```
+
 :::
 
 Once the server is up and running, we can start our Next.js development server in another terminal.
@@ -127,6 +135,10 @@ pnpm dev
 
 ```sh [pnpm]
 pnpm dev
+```
+
+```sh [bun]
+bun dev
 ```
 
 :::

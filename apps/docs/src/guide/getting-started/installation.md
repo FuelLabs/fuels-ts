@@ -19,6 +19,10 @@ npm install fuels@{{fuels}} --save
 pnpm add fuels@{{fuels}}
 ```
 
+```sh-vue [bun]
+bun add fuels@{{fuels}}
+```
+
 :::
 
 **Note**: Use version `{{fuels}}` to ensure compatibility with `testnet` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).

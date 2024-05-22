@@ -16,6 +16,10 @@ npm create next-app my-fuel-app
 pnpm create next-app my-fuel-app
 ```
 
+```sh [bun]
+bun create next-app my-fuel-app
+```
+
 :::
 
 Next, we will install the Fuel Wallet React SDK and the Fuel TypeScript SDK.
@@ -28,6 +32,10 @@ npm install fuels @fuels/connectors @fuels/react @tanstack/react-query
 
 ```sh [pnpm]
 pnpm add fuels @fuels/connectors @fuels/react @tanstack/react-query
+```
+
+```sh [bun]
+bun add fuels @fuels/connectors @fuels/react @tanstack/react-query
 ```
 
 :::
