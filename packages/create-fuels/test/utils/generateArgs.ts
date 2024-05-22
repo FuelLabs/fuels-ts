@@ -1,8 +1,6 @@
 import type { ProgramsToInclude } from '../../src/cli';
 
-const defaultFlags = ['--pnpm'];
-
-export const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string) => {
+export const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string, packageManager: string = 'pnpm') => {
   const args = [];
   if (projectName) {
     args.push(projectName);
@@ -16,7 +14,7 @@ export const generateArgs = (programsToInclude: ProgramsToInclude, projectName?:
   if (programsToInclude.script) {
     args.push('-s');
   }
-  args.push(...defaultFlags);
+  args.push([`--${packageManager}`]);
   return args;
 };
 
