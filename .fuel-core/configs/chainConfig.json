@@ -7,7 +7,7 @@
           "max_inputs": 255,
           "max_outputs": 255,
           "max_witnesses": 255,
-          "max_gas_per_tx": 5000000000,
+          "max_gas_per_tx": 100000000,
           "max_size": 262144,
           "max_bytecode_subsections": 256
         }
