@@ -27,7 +27,7 @@ describe('CLI - Integration', () => {
   it(
     'should perform `pnpm create fuels`',
     async () => {
-      const command = `pnpm create fuels${fuelsVersion} ${args}`;
+      const command = `pnpm create fuels@${fuelsVersion} ${args}`;
       console.log(command);
       let expectedTemplateFiles = await getAllFiles(paths.sourceTemplate);
       expectedTemplateFiles = filterOriginalTemplateFiles(
