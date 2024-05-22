@@ -22,7 +22,7 @@ To simplify testing in isolation, the SDK provides `launchTestNode`, a utility t
 
 #### Explicit Resource Management
 
-Before showcasing example usage, it's important to note that the utility supports [`explicit resource management`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management) introduced in TypeScript 5.2 which automatically calls a cleanup function after a variable instantiated with the `using` keyword goes out of block scope. In the case of `launchTestNode`, the cleanup function kills the launched `fuel-core` node once your test finishes.
+Before showcasing example usage, it's important to note that the utility supports [`explicit resource management`](https://www.typescriptlang.org/docs/handbook/variable-declarations.html#using-declarations) introduced in TypeScript 5.2 which automatically calls a cleanup function after a variable instantiated with the `using` keyword goes out of block scope. In the case of `launchTestNode`, the cleanup function kills the launched `fuel-core` node once your test finishes.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#automatic-cleanup{ts:line-numbers}
 
@@ -53,7 +53,7 @@ If you instantiate it with `const`/`let`, the automatic disposal won't happen an
 Basic usage of `launchTestNode` with the counter contract from the [Fuel dApp tutorial](../creating-a-fuel-dapp/index.md) is shown below.
 The example showcases the following:
 
-- The `launched` variable was instantiated with the [`using`](https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management) keyword.
+- The `launched` variable was instantiated with the [`using`](https://www.typescriptlang.org/docs/handbook/variable-declarations.html#using-declarations) keyword.
 - `launchTestNode` spun up a short-lived `fuel-core` node, deployed a contract to it and returned it for testing.
 - The deployed contract is fully typesafe because of `launchTestNode`'s type-level integration with `typegen` outputs.
 - Besides the contract, you've got the [provider](../provider/index.md) and [wallets](../wallets/index.md) at your disposal.
