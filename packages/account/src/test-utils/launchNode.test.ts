@@ -63,29 +63,43 @@ const defaultLaunchNodeConfig: Partial<LaunchNodeOptions> = {
  * @group node
  */
 describe('launchNode', () => {
-  test('should start `fuel-core` node using built-in binary', async () => {
-    mockSpawn();
-
-    const { cleanup, ip, port } = await launchNode({
-      ...defaultLaunchNodeConfig,
-      useSystemFuelCore: false,
-    });
-
-    expect(ip).toBe('0.0.0.0');
-    expect(port).toBe('4000');
-    cleanup();
-  });
-
   test('should start `fuel-core` node using system binary', async () => {
     mockSpawn();
 
+    const { cleanup, ip, port } = await launchNode(defaultLaunchNodeConfig);
+
+    expect(ip).toBe('0.0.0.0');
+    expect(port).toBe('4000');
+
+    cleanup();
+  });
+
+  test('should start `fuel-core` node with custom binary', async () => {
+    const { spawn } = mockSpawn();
+
     const { cleanup, ip, port } = await launchNode({
       ...defaultLaunchNodeConfig,
-      useSystemFuelCore: true,
+      fuelCorePath: 'fuels-core',
     });
 
     expect(ip).toBe('0.0.0.0');
     expect(port).toBe('4000');
+    expect(spawn).toBeCalledWith('fuels-core', expect.any(Array), expect.any(Object));
+
+    cleanup();
+  });
+
+  test('should start `fuel-core` node with custom binaries', async () => {
+    const { spawn } = mockSpawn();
+
+    const { cleanup, ip, port } = await launchNode({
+      ...defaultLaunchNodeConfig,
+      fuelCorePath: 'custom-fuels-core',
+    });
+
+    expect(ip).toBe('0.0.0.0');
+    expect(port).toBe('4000');
+    expect(spawn).toBeCalledWith('custom-fuels-core', expect.any(Array), expect.any(Object));
 
     cleanup();
   });
