@@ -4,7 +4,7 @@ export const generateArgs = (
   programsToInclude: ProgramsToInclude,
   projectName?: string,
   packageManager: string = 'pnpm'
-) => {
+): string[] => {
   const args = [];
   if (projectName) {
     args.push(projectName);
@@ -18,11 +18,11 @@ export const generateArgs = (
   if (programsToInclude.script) {
     args.push('-s');
   }
-  args.push([`--${packageManager}`]);
+  args.push(`--${packageManager}`);
   return args;
 };
 
-export const generateArgv = (programsToInclude: ProgramsToInclude, projectName?: string) => [
+export const generateArgv = (programsToInclude: ProgramsToInclude, projectName?: string): string[] => [
   '',
   '',
   ...generateArgs(programsToInclude, projectName),
