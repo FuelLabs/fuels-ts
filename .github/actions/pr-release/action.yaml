@@ -15,6 +15,7 @@ inputs:
 outputs:
   published_version:
     description: "Published version of the PR"
+    value: ${{ steps.release.outputs.published_version }}
 
 runs:
   using: "composite"
