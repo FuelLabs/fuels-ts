@@ -53,8 +53,6 @@ jobs:
     name: "Integration test PR"
     runs-on: ubuntu-latest
     needs: [release-pr]
-    env:
-      PUBLISHED_NPM_VERSION: ${{ needs.release-pr.outputs.published_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -67,3 +65,5 @@ jobs:
 
       - name: Integration test
         run: pnpm test:integration
+        env:
+          PUBLISHED_NPM_VERSION: ${{ needs.release-pr.outputs.published_version }}
