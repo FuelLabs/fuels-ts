@@ -32,6 +32,7 @@ describe('formatEnums.ts', () => {
         outputNativeValues: "a = 'a', b = 'b', c = 'c'",
         outputValues: 'a: [], b: [], c: []',
         recycleRef: true,
+        typeAnnotations: '',
       },
       {
         structName: 'MyEnum',
@@ -40,6 +41,7 @@ describe('formatEnums.ts', () => {
         outputNativeValues: undefined,
         outputValues: 'letter: LetterEnumOutput',
         recycleRef: false,
+        typeAnnotations: '',
       },
     ]);
   });

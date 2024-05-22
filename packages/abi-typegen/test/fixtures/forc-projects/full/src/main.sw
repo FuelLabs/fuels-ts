@@ -10,6 +10,21 @@ enum MyEnum {
     Pending: (),
 }
 
+enum GenericEnum<T1, T2> {
+    a: T1,
+    b: T2,
+}
+
+enum EnumWithVector {
+    num: u8,
+    vec: Vec<u8>,
+}
+
+struct GenericStructWithEnum<T1, T2> {
+    a: T1,
+    b: GenericEnum<T1, T2>,
+}
+
 struct MyStruct {
     x: u8,
     y: u8,
@@ -55,6 +70,7 @@ abi MyContract {
     fn types_array(x: [u8; 3]) -> [u8; 3];
     fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8);
     fn types_enum(x: MyEnum) -> MyEnum;
+    fn types_enum_with_vector(x: EnumWithVector) -> EnumWithVector;
     fn types_vector_u8(x: Vec<u8>) -> Vec<u8>;
     fn types_vector_geo(x: Vec<MyStruct>) -> Vec<MyStruct>;
     fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption>;
@@ -65,6 +81,8 @@ abi MyContract {
     fn types_raw_slice(x: raw_slice) -> raw_slice;
     fn types_std_string(x: String) -> String;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
+    fn types_generic_enum(x: GenericEnum<u8, u16>) -> GenericEnum<u8, u16>;
+    fn types_generic_struct(x: GenericStructWithEnum<u8, u16>) -> GenericStructWithEnum<u8, u16>;
 }
 
 impl MyContract for Contract {
@@ -123,6 +141,10 @@ impl MyContract for Contract {
     fn types_enum(x: MyEnum) -> MyEnum {
         x
     }
+    fn types_enum_with_vector(x: EnumWithVector) -> EnumWithVector {
+        x
+    }
+
     fn types_vector_u8(x: Vec<u8>) -> Vec<u8> {
         x
     }
@@ -160,5 +182,11 @@ impl MyContract for Contract {
             Ok(value) => Ok(value),
             Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
         }
+    }
+    fn types_generic_enum(x: GenericEnum<u8, u16>) -> GenericEnum<u8, u16> {
+        x
+    }
+    fn types_generic_struct(x: GenericStructWithEnum<u8, u16>) -> GenericStructWithEnum<u8, u16> {
+        x
     }
 }
