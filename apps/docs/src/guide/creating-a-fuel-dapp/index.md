@@ -108,7 +108,7 @@ Let's first start our Fuel Dev server. This will start a local Fuel node and con
 ::: code-group
 
 ```sh [npm]
-pnpm fuels:dev
+npm fuels:dev
 ```
 
 ```sh [pnpm]
