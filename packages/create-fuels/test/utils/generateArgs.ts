@@ -1,6 +1,10 @@
 import type { ProgramsToInclude } from '../../src/cli';
 
-export const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string, packageManager: string = 'pnpm') => {
+export const generateArgs = (
+  programsToInclude: ProgramsToInclude,
+  projectName?: string,
+  packageManager: string = 'pnpm'
+) => {
   const args = [];
   if (projectName) {
     args.push(projectName);

@@ -18,7 +18,7 @@ const availablePackages = ['pnpm'];
  * @group integration
  */
 describe('CLI - Integration', () => {
-  let paths: ProjectPaths
+  let paths: ProjectPaths;
 
   beforeEach(() => {
     paths = bootstrapProject(__filename);
@@ -32,12 +32,14 @@ describe('CLI - Integration', () => {
     'should perform `%s create fuels`',
     async (packageManager) => {
       const args = generateArgs(programsToInclude, paths.root, packageManager).join(' ');
-      const expectedTemplateFiles = await getAllFiles(paths.sourceTemplate).then(
-        (files) => filterOriginalTemplateFiles(files, programsToInclude).filter(filterForcBuildFiles)
+      const expectedTemplateFiles = await getAllFiles(paths.sourceTemplate).then((files) =>
+        filterOriginalTemplateFiles(files, programsToInclude).filter(filterForcBuildFiles)
       );
 
       const { error: createFuelsError } = await safeExec(() =>
-        execSync(`${packageManager} create fuels@${PUBLISHED_NPM_VERSION} ${args}`, { stdio: 'inherit' })
+        execSync(`${packageManager} create fuels@${PUBLISHED_NPM_VERSION} ${args}`, {
+          stdio: 'inherit',
+        })
       );
 
       const actualTemplateFiles = await getAllFiles(paths.root);
