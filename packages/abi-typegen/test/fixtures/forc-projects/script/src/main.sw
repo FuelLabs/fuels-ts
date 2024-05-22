@@ -5,6 +5,11 @@ struct Score {
     points: u8,
 }
 
-fn main(score: Score) -> bool {
-    return true
+enum MyEnum {
+    A: (),
+    B: (),
+}
+
+fn main(vec: Vec<Score>, enm: MyEnum, opt: Option<u8>) -> bool {
+    return true;
 }
