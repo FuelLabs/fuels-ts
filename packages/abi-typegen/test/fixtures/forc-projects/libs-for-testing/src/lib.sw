@@ -7,5 +7,5 @@ pub struct ExternalStruct {
 
 pub enum ExternalEnum {
     A: (),
-    B: ()
+    B: (),
 }
