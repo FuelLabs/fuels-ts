@@ -72,6 +72,34 @@ jobs:
           TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
           FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
 
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [environments]
+    if: ${{ !github.event.pull_request.draft }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Publish to NPM
+        id: release
+        uses: ./.github/actions/pr-release
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-number: ${{ github.event.pull_request.number }}
+
+      - name: Integration test
+        run: pnpm test:integration
+        env:
+          PUBLISHED_NPM_VERSION: ${{ release.outputs.published_version }}
+
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
