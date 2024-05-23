@@ -45,7 +45,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     throw new FuelError(
       ErrorCode.FUNCTION_NOT_FOUND,
-      `function ${nameOrSignatureOrSelector} not found: ${JSON.stringify(fn)}.`
+      `Function ${nameOrSignatureOrSelector} not found.`
     );
   }
 

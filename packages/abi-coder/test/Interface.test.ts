@@ -782,4 +782,26 @@ describe('Abi interface', () => {
       ).toThrowError(`Log type with logId '1' doesn't exist in the ABI.`);
     });
   });
+
+  describe('decodeFunctionResult', () => {
+    it('should return decoded function result', () => {
+      const data = exhaustiveExamplesInterface.decodeFunctionResult(
+        'struct_simple',
+        '0x01000000000000000000000000000020'
+      );
+      expect(data).toEqual({
+        a: true,
+        b: 32,
+      });
+    });
+
+    it('should throw an error when function does not exist', () => {
+      expect(() => {
+        exhaustiveExamplesInterface.decodeFunctionResult(
+          'doesnt_exist',
+          '0x01000000000000000000000000000020'
+        );
+      }).toThrowError(/^Function doesnt_exist not found\.$/);
+    });
+  });
 });
