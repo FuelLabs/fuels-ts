@@ -90,10 +90,6 @@ jobs:
       - name: Publish to NPM
         id: release
         uses: ./.github/actions/pr-release
-        with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          pr-number: ${{ github.event.pull_request.number }}
 
       - name: Echo Published Version
         run: echo ${{ steps.release.outputs.published_version }}
