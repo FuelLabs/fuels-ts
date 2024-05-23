@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-chore: add `e2e` test for `create fuels` CLI
+chore: add test to verify `create fuels` template integrity
