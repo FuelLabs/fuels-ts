@@ -32,7 +32,7 @@ Once you've populated the transaction with the populated data, you can send it t
 
 <<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-2{ts:line-numbers}
 
-## `simulateTransaction`
+### `simulateTransaction`
 
 The `simulateTransaction` method should be used to dry-run a predicate call, ensuring that the wallet used has sufficient funds to cover the transaction fees, without consuming any resources.
 
