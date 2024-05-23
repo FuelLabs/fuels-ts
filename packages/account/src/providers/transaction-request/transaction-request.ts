@@ -348,7 +348,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param coin - Coin resource.
    */
   addCoinInput(coin: Coin) {
-    const { assetId, owner, amount, id, predicate } = coin;
+    const { assetId, owner, amount, id, predicate, predicateData } = coin;
 
     let witnessIndex;
 
@@ -372,6 +372,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       txPointer: '0x00000000000000000000000000000000',
       witnessIndex,
       predicate,
+      predicateData,
     };
 
     // Insert the Input
@@ -388,7 +389,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @param message - Message resource.
    */
   addMessageInput(message: MessageCoin) {
-    const { recipient, sender, amount, predicate, nonce, assetId } = message;
+    const { recipient, sender, amount, predicate, nonce, assetId, predicateData } = message;
 
     let witnessIndex;
 
@@ -411,6 +412,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       amount,
       witnessIndex,
       predicate,
+      predicateData,
     };
 
     // Insert the Input
