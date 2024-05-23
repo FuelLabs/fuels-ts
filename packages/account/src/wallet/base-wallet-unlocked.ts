@@ -107,6 +107,8 @@ export class BaseWalletUnlocked extends Account {
    * Populates the witness signature for a transaction and sends it to the network using `provider.sendTransaction`.
    *
    * @param transactionRequestLike - The transaction request to send.
+   * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
+   * @param awaitExecution - Whether to wait for the transaction to be executed.
    * @returns A promise that resolves to the TransactionResponse object.
    */
   async sendTransaction(
@@ -146,6 +148,12 @@ export class BaseWalletUnlocked extends Account {
     );
   }
 
+  /**
+   * Encrypts an unlocked wallet with a password.
+   *
+   * @param password - the password to encrypt the wallet with.
+   * @returns - the encrypted wallet.
+   */
   async encrypt(password: string): Promise<string> {
     return encryptKeystoreWallet(this.privateKey, this.address, password);
   }
