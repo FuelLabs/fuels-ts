@@ -24,7 +24,7 @@ This will return the resources that are spent when calling the predicate. This i
 
 ## `sendTransaction`
 
-Once you've populated the transaction with the populated data you can send the transaction to the node using the `sendTransaction` method.
+Once you've populated the transaction with the populated data, you can send it to the node using the `sendTransaction` method.
 
 <<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-2{ts:line-numbers}
 
