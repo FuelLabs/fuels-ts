@@ -18,6 +18,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
     rawContents,
     name: capitalizedName,
     hexlifiedBinContents: hexlifiedBinString,
+    commonTypesInUse,
   } = params.abi;
 
   const abiJsonString = JSON.stringify(rawContents, null, 2);
@@ -47,6 +48,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
       capitalizedName,
       imports,
       formattedConfigurables,
+      commonTypesInUse: commonTypesInUse.join(', '),
     },
   });
 
