@@ -10,6 +10,8 @@ import {
   getAllFiles,
 } from './utils/templateFiles';
 
+const { log } = console;
+
 const PUBLISHED_NPM_VERSION = process.env.PUBLISHED_NPM_VERSION;
 const programsToInclude = { contract: true, predicate: true, script: true };
 const availablePackages = ['pnpm'];
@@ -17,8 +19,16 @@ const availablePackages = ['pnpm'];
 /**
  * @group e2e
  */
-describe('E2E - CLI', () => {
+describe('`create fuels` package integrity', () => {
   let paths: ProjectPaths;
+  let shouldSkip = false;
+
+  beforeAll(() => {
+    if (!PUBLISHED_NPM_VERSION) {
+      log('Skipping live `create fuels` test');
+      shouldSkip = true;
+    }
+  });
 
   beforeEach(() => {
     paths = bootstrapProject(__filename);
@@ -31,6 +41,10 @@ describe('E2E - CLI', () => {
   it.each(availablePackages)(
     'should perform `%s create fuels`',
     async (packageManager) => {
+      if (shouldSkip) {
+        return;
+      }
+
       const args = generateArgs(programsToInclude, paths.root, packageManager).join(' ');
       const expectedTemplateFiles = await getAllFiles(paths.sourceTemplate).then((files) =>
         filterOriginalTemplateFiles(files, programsToInclude).filter(filterForcBuildFiles)
