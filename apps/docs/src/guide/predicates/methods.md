@@ -44,7 +44,7 @@ Once you've instantiated a `new Predicate` you will want to create a transaction
 
 ### `createTransfer`
 
-The `createTransfer` method is used to create a transfer object that can be used to send funds to another wallet. This can be useful should you need to modify the transfer object or use it's properties before sending it to the node.
+The `createTransfer` method creates a transfer object that can be used to send funds to another wallet. This can be useful should you need to modify the transfer object or use its properties before sending it to the node.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
 
