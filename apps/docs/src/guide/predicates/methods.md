@@ -16,7 +16,11 @@ This will return the balances of the wallet that is being used to interact with 
 
 ### `getResourcesToSpend`
 
-This will return the resources that are spent when calling the predicate. This is useful when creating the predicate transaction to ensure that the wallet has sufficient funds to cover the transaction fees.
+This will return the resources owned by a predicate so that they can be added to a transaction request.
+
+This method is called under the hood when using `transfer` or `createTransfer`.
+
+You may want to use this method when using a predicate in an existing transaction request.
 
 <<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-1{ts:line-numbers}
 
@@ -44,12 +48,14 @@ Once you've instantiated a `new Predicate` you will want to create a transaction
 
 ### `createTransfer`
 
-The `createTransfer` method creates a transfer object that can be used to send funds to another wallet. This can be useful should you need to modify the transfer object or use its properties before sending it to the node.
+The `createTransfer` method creates a transfer request and add the transfer details to that request. This method estimates the transaction cost via a dry-run, and then funds it with predicate resources, which is useful since the returned transaction request can now be submitted with greater certainty that it will succeed.
+
+ This can be useful should you need to modify the transfer request or use its properties before sending it to the node.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
 
 ### `transfer`
 
-Once you've created a `transfer` object using the `createTransfer` method can send the funds to another wallet using the `transfer` method.
+You can send funds to another wallet using the `transfer` method.
 
 <<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
