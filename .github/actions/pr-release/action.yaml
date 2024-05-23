@@ -2,11 +2,11 @@ name: "Publish PR to NPM"
 inputs:
   npm-token:
     description: "NPM token for authenticating to NPM registry"
-    default: ${{ secrets.NPM_TOKEN }}
+    required: true
 
   github-token:
     description: "GitHub token for authenticating to GitHub"
-    default: ${{ secrets.GITHUB_TOKEN }}
+    required: true
 
   pr-number:
     description: "PR number"
