@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-feat: support for bun
+feat: support for `bun`
