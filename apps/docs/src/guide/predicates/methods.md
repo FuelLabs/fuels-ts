@@ -16,7 +16,7 @@ This will return the balances of the wallet that is being used to interact with 
 
 ### `getResourcesToSpend`
 
-This will return the resources that will be spent when calling the predicate. This is useful when creating the predicate transaction so that you can ensure that the wallet has sufficient funds to cover the transaction fees.
+This will return the resources that are spent when calling the predicate. This is useful when creating the predicate transaction to ensure that the wallet has sufficient funds to cover the transaction fees.
 
 <<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-1{ts:line-numbers}
 
