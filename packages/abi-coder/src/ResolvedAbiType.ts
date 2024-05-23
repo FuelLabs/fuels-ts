@@ -16,14 +16,23 @@ export class ResolvedAbiType {
 
     this.name = argument.name;
 
-    const type = findTypeById(abi, argument.type);
-    this.type = type.type;
+    const jsonABIType = findTypeById(abi, argument.type);
+
+    if (jsonABIType.type.length > 256) {
+      throw new FuelError(
+        ErrorCode.INVALID_COMPONENT,
+        `The provided ABI type is too long: ${jsonABIType.type}.`
+      );
+    }
+
+    this.type = jsonABIType.type;
     this.originalTypeArguments = argument.typeArguments;
     this.components = ResolvedAbiType.getResolvedGenericComponents(
       abi,
       argument,
-      type.components,
-      type.typeParameters ?? ResolvedAbiType.getImplicitGenericTypeParameters(abi, type.components)
+      jsonABIType.components,
+      jsonABIType.typeParameters ??
+        ResolvedAbiType.getImplicitGenericTypeParameters(abi, jsonABIType.components)
     );
   }
 
@@ -127,13 +136,6 @@ export class ResolvedAbiType {
   }
 
   getSignature(): string {
-    if (this.type.length > 256) {
-      throw new FuelError(
-        ErrorCode.INVALID_COMPONENT,
-        `The provided ABI type is too long: ${this.type}.`
-      );
-    }
-
     const prefix = this.getArgSignaturePrefix();
     const content = this.getArgSignatureContent();
 
