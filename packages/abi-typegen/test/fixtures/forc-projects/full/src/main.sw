@@ -15,6 +15,11 @@ enum GenericEnum<T1, T2> {
     b: T2,
 }
 
+enum EnumWithVector {
+    num: u8,
+    vec: Vec<u8>,
+}
+
 struct GenericStructWithEnum<T1, T2> {
     a: T1,
     b: GenericEnum<T1, T2>,
@@ -65,6 +70,7 @@ abi MyContract {
     fn types_array(x: [u8; 3]) -> [u8; 3];
     fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8);
     fn types_enum(x: MyEnum) -> MyEnum;
+    fn types_enum_with_vector(x: EnumWithVector) -> EnumWithVector;
     fn types_vector_u8(x: Vec<u8>) -> Vec<u8>;
     fn types_vector_geo(x: Vec<MyStruct>) -> Vec<MyStruct>;
     fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption>;
@@ -135,6 +141,10 @@ impl MyContract for Contract {
     fn types_enum(x: MyEnum) -> MyEnum {
         x
     }
+    fn types_enum_with_vector(x: EnumWithVector) -> EnumWithVector {
+        x
+    }
+
     fn types_vector_u8(x: Vec<u8>) -> Vec<u8> {
         x
     }

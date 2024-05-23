@@ -189,7 +189,7 @@ describe('runTypegen.js', () => {
     // validates execution was ok
     expect(error).toBeFalsy();
 
-    expect(stdoutWrite).toHaveBeenCalledTimes(4);
+    expect(stdoutWrite).toHaveBeenCalledTimes(5);
   });
 
   test('should raise error for non-existent Script BIN file', async () => {
