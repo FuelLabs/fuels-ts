@@ -98,7 +98,7 @@ export const getCoder: GetCoderFn = (
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const components = resolvedAbiType.components!;
 
-  if (resolvedAbiType.type.length > 1000) {
+  if (resolvedAbiType.type.length > 256) {
     throw new FuelError(
       ErrorCode.INVALID_COMPONENT,
       `The provided ABI type is too long: ${resolvedAbiType.type}.`
