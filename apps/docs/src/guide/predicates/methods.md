@@ -26,7 +26,7 @@ You may want to use this method when using a predicate in an existing transactio
 
 ## Transactions
 
-## `sendTransaction`
+### `sendTransaction`
 
 Once you've populated the transaction with the populated data, you can send it to the node using the `sendTransaction` method.
 
