@@ -1097,12 +1097,6 @@ Supported fuel-core version: ${supportedVersion}.`
    * to set gasLimit and also reserve balance amounts
    * on the the transaction.
    *
-   * @privateRemarks
-   * The tolerance is add on top of the gasUsed calculated
-   * from the node, this create a safe margin costs like
-   * change states on transfer that don't occur on the dryRun
-   * transaction. The default value is 0.2 or 20%
-   *
    * @param transactionRequestLike - The transaction request object.
    * @param transactionCostParams - The transaction cost parameters (optional).
    *
