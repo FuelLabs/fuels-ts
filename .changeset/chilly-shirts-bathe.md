@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-chore: add integration test for `create fuels` CLI
+chore: add `e2e` test for `create fuels` CLI

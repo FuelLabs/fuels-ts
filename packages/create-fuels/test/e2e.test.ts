@@ -15,9 +15,9 @@ const programsToInclude = { contract: true, predicate: true, script: true };
 const availablePackages = ['pnpm'];
 
 /**
- * @group integration
+ * @group e2e
  */
-describe('CLI - Integration', () => {
+describe('E2E - CLI', () => {
   let paths: ProjectPaths;
 
   beforeEach(() => {
