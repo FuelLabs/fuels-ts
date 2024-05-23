@@ -181,6 +181,8 @@ abi MyContract {
         arg3: (str[5], bool),
         arg4: MyOtherStruct,
     );
+
+    fn log();
 }
 
 impl MyContract for Contract {
@@ -338,5 +340,12 @@ impl MyContract for Contract {
     ) {}
     fn simple_vector(arg: Vec<u8>) -> Vec<u8> {
         arg
+    }
+
+    fn log() {
+        log(SimpleStruct {
+            a: true,
+            b: 32u32,
+        });
     }
 }

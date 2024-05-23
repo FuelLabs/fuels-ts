@@ -766,4 +766,20 @@ describe('Abi interface', () => {
       );
     });
   });
+
+  describe('decodeLog', () => {
+    it('should return decoded log by id', () => {
+      const data = exhaustiveExamplesInterface.decodeLog('0x01000000000000000000000000000020', '0');
+      expect(data).toEqual({
+        a: true,
+        b: 32,
+      });
+    });
+
+    it('should throw an error when log does not exist', () => {
+      expect(() =>
+        exhaustiveExamplesInterface.decodeLog('0x01000000000000000000000000000020', '1')
+      ).toThrowError(`Log type with logId '1' doesn't exist in the ABI.`);
+    });
+  });
 });
