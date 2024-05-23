@@ -41,7 +41,7 @@ const config: UserConfig = {
       enabled: true,
       name: "chrome",
     },
-    env: { VITEST_ENV: "browser" },
+    env: { TEST_ENV: "browser" },
   },
 };
 

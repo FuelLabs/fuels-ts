@@ -6,7 +6,7 @@ export const getSystemVersion = async (command: string) => {
   let version: string | null = null;
   let error: Error | null = null;
 
-  if (!process.env.TEST || process.env.VITEST_ENV === 'node') {
+  if (!process.env.TEST || process.env.TEST_ENV === 'node') {
     const { execSync } = await import('child_process');
     try {
       const contents = execSync(command, {

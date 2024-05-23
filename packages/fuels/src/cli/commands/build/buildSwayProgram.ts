@@ -10,7 +10,7 @@ export const buildSwayProgram = async (config: FuelsConfig, path: string) => {
 
   let spawnFn: typeof spawn;
 
-  if (!process.env.TEST || process.env.VITEST_ENV === 'node') {
+  if (!process.env.TEST || process.env.TEST_ENV === 'node') {
     const { spawn: spawnChildProcess } = await import('child_process');
     spawnFn = spawnChildProcess;
   }

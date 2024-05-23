@@ -37,7 +37,7 @@ export default defineConfig({
       "/apps/demo-react-vite",
     ],
     globals: true,
-    setupFiles: ["./vitest.env.ts"],
+    setupFiles: ["./vitest.setup.ts"],
     env: loadEnv(mode, process.cwd(), ""),
     poolOptions: {
       threads: {
