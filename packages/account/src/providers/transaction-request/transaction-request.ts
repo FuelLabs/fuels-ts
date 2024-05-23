@@ -27,7 +27,11 @@ import { normalizeJSON } from '../utils';
 import { getMaxGas, getMinGas } from '../utils/gas';
 
 import { NoWitnessAtIndexError } from './errors';
-import { isRequestInputResource } from './helpers';
+import {
+  getRequestInputResourceOwner,
+  isRequestInputResource,
+  isRequestInputResourceFromOwner,
+} from './helpers';
 import type {
   TransactionRequestInput,
   CoinTransactionRequestInput,
@@ -662,29 +666,19 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
-    this.inputs.forEach((i) => {
-      let correspondingInput: TransactionRequestInput | undefined;
-      switch (i.type) {
-        case InputType.Coin:
-          correspondingInput = inputs.find((x) => x.type === InputType.Coin && x.owner === i.owner);
-          break;
-        case InputType.Message:
-          correspondingInput = inputs.find(
-            (x) => x.type === InputType.Message && x.sender === i.sender
-          );
-          break;
-        default:
-          return;
-      }
+    const inputsToExtractGasUsed = inputs.filter(isRequestInputResource);
+
+    this.inputs.filter(isRequestInputResource).forEach((i) => {
+      const owner = getRequestInputResourceOwner(i);
+      const correspondingInput = inputsToExtractGasUsed.find((x) =>
+        isRequestInputResourceFromOwner(x, Address.fromString(String(owner)))
+      );
+
       if (
         correspondingInput &&
         'predicateGasUsed' in correspondingInput &&
         bn(correspondingInput.predicateGasUsed).gt(0)
       ) {
-        // eslint-disable-next-line no-param-reassign
-        i.predicate = correspondingInput.predicate;
-        // eslint-disable-next-line no-param-reassign
-        i.predicateData = correspondingInput.predicateData;
         // eslint-disable-next-line no-param-reassign
         i.predicateGasUsed = correspondingInput.predicateGasUsed;
       }
