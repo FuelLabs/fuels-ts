@@ -25,7 +25,8 @@ export function formatEnums(params: { types: IType[] }) {
         outputNativeValues,
         typeAnnotations,
       };
-    });
+    })
+    .sort((a, b) => (a.structName < b.structName ? -1 : 1));
 
   return { enums };
 }

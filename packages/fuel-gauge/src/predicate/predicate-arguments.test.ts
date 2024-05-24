@@ -31,7 +31,7 @@ describe('Predicate', () => {
     let provider: Provider;
     let baseAssetId: string;
     const amountToReceiver = 50;
-    const amountToPredicate = 4000;
+    const amountToPredicate = 300_000;
 
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);

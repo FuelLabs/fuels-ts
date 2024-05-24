@@ -14,12 +14,15 @@ import { renderDtsTemplate } from './dts';
  * @group node
  */
 describe('templates/dts', () => {
-  test('should render dts template', () => {
+  test.each(['debug', 'release'])('should render dts template', (build) => {
     // mocking
     const { restore } = mockVersions();
 
     // executing
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
+    const project = getTypegenForcProject(
+      AbiTypegenProjectsEnum.FULL,
+      build as 'release' | 'debug'
+    );
     const { abiContents: rawContents } = project;
 
     const abi = new Abi({

@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import { cpSync, mkdirSync, rmSync, readFileSync, writeFileSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
@@ -55,11 +55,16 @@ export const buildFromGitBranch = (branchName) => {
   const stdioOpts = { stdio: 'inherit' };
 
   if (existsSync(fuelCoreRepoDir)) {
-    execSync(`cd ${fuelCoreRepoDir} && git pull && git checkout ${branchName}`, stdioOpts);
-    execSync(`cd ${fuelCoreRepoDir} && cargo build`, stdioOpts);
+    spawnSync('git', ['pull'], { cwd: fuelCoreRepoDir, ...stdioOpts });
+    spawnSync('git', ['checkout', branchName], { cwd: fuelCoreRepoDir, ...stdioOpts });
+    spawnSync('cargo', ['build'], { cwd: fuelCoreRepoDir, ...stdioOpts });
   } else {
-    execSync(`git clone --branch ${branchName} ${fuelCoreRepoUrl} ${fuelCoreRepoDir}`, stdioOpts);
-    execSync(`cd ${fuelCoreRepoDir} && cargo build`, stdioOpts);
+    spawnSync(
+      'git',
+      ['clone', '--branch', branchName, fuelCoreRepoUrl, fuelCoreRepoDir],
+      stdioOpts
+    );
+    spawnSync('cargo', ['build'], { cwd: fuelCoreRepoDir, ...stdioOpts });
   }
 
   const [from, to] = [fuelCoreRepoDebugDir, fuelCoreBinDirPath];

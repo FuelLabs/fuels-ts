@@ -38,7 +38,7 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 1000, baseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 200_000, baseAssetId, {
       gasLimit: 1000,
     });
 
@@ -73,7 +73,7 @@ describe(__filename, () => {
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 1000, baseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 200_000, baseAssetId, {
       gasLimit: 1000,
     });
 

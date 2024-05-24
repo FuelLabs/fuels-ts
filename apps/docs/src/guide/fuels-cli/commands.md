@@ -131,6 +131,14 @@ The `fuels dev` command does three things:
 
 > _In `dev` mode, every time you update a contract on your Forc `workspace`, we re-generate type definitions and factory classes for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
 
+## `fuels node`
+
+```console-vue
+npx fuels@{{fuels}} node
+```
+
+The `fuels node` command starts a short-lived `fuel-core` node ([docs](./config-file.md#autostartfuelcore)).
+
 ## `fuels typegen`
 
 Manually generates type definitions and factory classes from ABI JSON files.

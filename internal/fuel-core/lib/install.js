@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import { error } from 'console';
 import { existsSync, rmSync, writeFileSync, renameSync } from 'fs';
 import fetch from 'node-fetch';
@@ -33,7 +33,7 @@ import {
   let versionMatches = false;
 
   if (existsSync(binPath)) {
-    const binRawVersion = execSync(`${binPath} --version`).toString().trim();
+    const binRawVersion = spawnSync(binPath, ['--version'], { encoding: 'utf8' }).stdout.trim();
     const binVersion = binRawVersion.match(/([.0-9]+)/)?.[0];
 
     versionMatches = binVersion === fuelCoreVersion;
@@ -67,7 +67,7 @@ import {
     writeFileSync(pkgPath, buf);
 
     // Extract
-    execSync(`tar xzf "${pkgPath}" -C "${rootDir}"`);
+    spawnSync('tar', ['xzf', pkgPath, '-C', rootDir]);
 
     // Take the contents of the directory containing the extracted
     // binaries and move them to the `fuel-core-binaries` directory
