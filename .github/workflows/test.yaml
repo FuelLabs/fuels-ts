@@ -72,7 +72,7 @@ jobs:
           TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
           FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
 
-  create-fuels-e2e:
+  create-fuels-template-integration:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
@@ -84,8 +84,8 @@ jobs:
       - name: Test Setup
         uses: ./.github/actions/test-setup
 
-      - name: Run e2e tests
-        run: sh ./scripts/create-fuels-e2e.sh
+      - name: Run UI tests
+        run: sh ./scripts/create-fuels-template-integration.sh
 
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'

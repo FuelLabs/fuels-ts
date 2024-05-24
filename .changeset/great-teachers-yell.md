@@ -1,4 +1,4 @@
 ---
 ---
 
-chore: add e2e test for the `create fuels` template
+chore: add integration test for the `create fuels` template
