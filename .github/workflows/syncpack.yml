@@ -1,0 +1,35 @@
+name: Sync Dependencies with Syncpack
+
+on:
+  pull_request:
+    branches:
+      - main # Run this action on pull requests targeting the main branch
+
+jobs:
+  syncpack:
+    runs-on: ubuntu-latest
+    name: Sync Dependency Versions
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16" # Ensure compatibility with Syncpack
+
+      - name: Run Syncpack to Manage Dependencies
+        uses: JamieMason/syncpack-github-action@0.2.3
+        with:
+          bot-email: "github-actions@github.com"
+          bot-username: "github-actions[bot]"
+          commit-message: "chore(syncpack): format and sync package.json files"
+          format-mismatches: "fix"
+          lockfile-mismatches: "fix"
+          package-manager-version: "latest"
+          package-manager: "pnpm"
+          semver-range-mismatches: "fix"
+          syncpack-version: "12.3.2"
+          version-mismatches: "fix"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
