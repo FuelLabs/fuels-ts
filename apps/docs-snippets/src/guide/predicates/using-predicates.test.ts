@@ -1,5 +1,5 @@
 import type { WalletUnlocked } from 'fuels';
-import { BN, Predicate } from 'fuels';
+import { Predicate } from 'fuels';
 
 import {
   getDocsSnippetsForcProject,

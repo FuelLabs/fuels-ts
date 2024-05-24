@@ -1,7 +1,7 @@
 
 # Creating a Fuel dApp with Predicates
 
-This guide builds on the [Creating a Fuel dApp](./creating-a-fuel-dapp.md) guide. Once you've gotten the dApp there up and running, then you can continue here via clicking the Predicate Example link. We will modify the predicate we created in the previous guide. The final result will look like this:
+This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've gotten the dApp there up and running, then you can continue here via clicking the Predicate Example link. We will modify the predicate we created in the previous guide. The final result will look like this:
 
 ![End result of this guide](../../public/creating-a-fuel-dapp-predicates-end-result.png)
 
@@ -47,7 +47,7 @@ Thirdly, we will add a button that calls the `changePin` function when clicked.
   <Button onClick={changePin}>Change Pin</Button>
 ```
 
-Congratulations! That's all. You should now be able to see the modified predicate dApp running at http://localhost:3000 with our newly added change pin functionality.
+Congratulations! That's all. You should now be able to see the modified predicate dApp running at `http://localhost:3000` with our newly added change pin functionality.
 
 You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide/src/predicate.tsx)..
 
