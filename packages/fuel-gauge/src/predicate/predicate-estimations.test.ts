@@ -210,8 +210,8 @@ describe('Predicate', () => {
       expect(dryRunSpy).toHaveBeenCalledOnce();
     });
 
-    describe('should ensure resources inputs from a predicate includes predicateData', () => {
-      test('fetching with predicate', async () => {
+    describe('predicate resource fetching and predicateData population', () => {
+      test('getting predicate resources via the predicate automatically populates predicateData', async () => {
         const transactionRequest = new ScriptTransactionRequest();
 
         const resources = await predicateStruct.getResourcesToSpend([[fundingAmount, baseAssetId]]);
@@ -228,7 +228,7 @@ describe('Predicate', () => {
         });
       });
 
-      test('fetching with provider', async () => {
+      test('getting predicate resources via the provider requires manual predicateData population', async () => {
         const transactionRequest = new ScriptTransactionRequest();
 
         const resources = await provider.getResourcesToSpend(predicateStruct.address, [
