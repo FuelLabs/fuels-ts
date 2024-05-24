@@ -4,6 +4,7 @@ import { basename, join } from 'path';
 export type ProjectPaths = {
   root: string;
   template: string;
+  sourceTemplate: string;
 };
 
 /**
@@ -21,9 +22,6 @@ export const bootstrapProject = (
   // Template paths
   const templateDir = join(templatesDir, templateName);
   const localTemplateDir = join(testTemplateDir, templateName);
-  if (!existsSync(localTemplateDir)) {
-    cpSync(templateDir, localTemplateDir, { recursive: true });
-  }
 
   // Unique name
   const testFilename = basename(testFilepath.replace(/\./g, '-'));
@@ -35,7 +33,14 @@ export const bootstrapProject = (
   return {
     root,
     template: localTemplateDir,
+    sourceTemplate: templateDir,
   };
+};
+
+export const copyTemplate = (srcDir: string, destDir: string) => {
+  if (!existsSync(destDir)) {
+    cpSync(srcDir, destDir, { recursive: true });
+  }
 };
 
 export const resetFilesystem = (dirPath: string) => {
