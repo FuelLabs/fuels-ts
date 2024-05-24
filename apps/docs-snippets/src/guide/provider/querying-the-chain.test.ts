@@ -69,8 +69,8 @@ describe('querying the chain', () => {
     // #endregion wallet-get-balances
 
     expect(walletBalances).toEqual([
-      { assetId: baseAssetId, amount: bn(42) },
       { assetId: assetIdA, amount: bn(100) },
+      { assetId: baseAssetId, amount: bn(42) },
     ]);
   });
   it('get spendable resources', async () => {
