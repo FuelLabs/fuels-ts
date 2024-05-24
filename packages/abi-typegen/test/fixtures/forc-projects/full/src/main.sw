@@ -1,5 +1,6 @@
 contract;
-
+use libs_for_testing::ExternalStruct;
+use libs_for_testing::ExternalEnum;
 use std::vm::evm::evm_address::EvmAddress;
 use std::b512::B512;
 use std::string::String;
@@ -81,6 +82,11 @@ abi MyContract {
     fn types_raw_slice(x: raw_slice) -> raw_slice;
     fn types_std_string(x: String) -> String;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
+    fn type_address(x: Address) -> Address;
+    fn type_contract_id(x: ContractId) -> ContractId;
+    fn type_identity(x: Identity) -> Identity;
+    fn type_external_struct(x: ExternalStruct) -> ExternalStruct;
+    fn type_external_enum(x: ExternalEnum) -> ExternalEnum;
     fn types_generic_enum(x: GenericEnum<u8, u16>) -> GenericEnum<u8, u16>;
     fn types_generic_struct(x: GenericStructWithEnum<u8, u16>) -> GenericStructWithEnum<u8, u16>;
 }
@@ -182,6 +188,21 @@ impl MyContract for Contract {
             Ok(value) => Ok(value),
             Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
         }
+    }
+    fn type_address(x: Address) -> Address {
+        x
+    }
+    fn type_contract_id(x: ContractId) -> ContractId {
+        x
+    }
+    fn type_identity(x: Identity) -> Identity {
+        x
+    }
+    fn type_external_enum(x: ExternalEnum) -> ExternalEnum {
+        x
+    }
+    fn type_external_struct(x: ExternalStruct) -> ExternalStruct {
+        x
     }
     fn types_generic_enum(x: GenericEnum<u8, u16>) -> GenericEnum<u8, u16> {
         x
