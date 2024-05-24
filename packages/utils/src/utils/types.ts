@@ -37,11 +37,6 @@ type Operation =
     };
 
 interface GasCosts {
-  mod: number;
-  move: number;
-  ret_contract: number;
-  rvrt_contract: number;
-  retd_contract: Operation;
   add: number;
   addi: number;
   aloc: number;
