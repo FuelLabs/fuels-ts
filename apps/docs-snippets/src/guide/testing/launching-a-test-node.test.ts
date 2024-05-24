@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import exp from 'constants';
 import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
@@ -26,6 +25,7 @@ describe('launching a test node', () => {
     launched.cleanup();
     // #endregion manual-cleanup
   });
+
   test('simple contract deployment', async () => {
     // #region deploy-contract
     // #import { launchTestNode };
@@ -128,6 +128,7 @@ describe('launching a test node', () => {
   test('customizing node options', async () => {
     // #region custom-node-options
     // #import { launchTestNode, AssetId };
+
     const [baseAssetId] = AssetId.random();
 
     using launched = await launchTestNode({
@@ -149,6 +150,7 @@ describe('launching a test node', () => {
   test('using assetId', async () => {
     // #region asset-ids
     // #import { launchTestNode, AssetId };
+
     const assets = AssetId.random();
 
     using launched = await launchTestNode({

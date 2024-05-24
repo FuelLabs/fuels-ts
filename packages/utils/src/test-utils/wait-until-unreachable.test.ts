@@ -7,6 +7,7 @@ describe('waitUntilUnreachable', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
+
   test('waits until the url is unreachable', async () => {
     const fetchSpy = vi
       .spyOn(global, 'fetch')
