@@ -80,7 +80,7 @@ describe('Signing transactions', () => {
       provider,
       inputData: [signer.address.toB256()],
     });
-    const tx1 = await sender.transfer(predicate.address, 100_000, baseAssetId);
+    const tx1 = await sender.transfer(predicate.address, 200_000, baseAssetId);
     await tx1.waitForResult();
 
     // Create the transaction request
