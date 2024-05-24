@@ -66,6 +66,7 @@ Options:
 
 Commands:
   init [options]     Create a sample `fuel.config.ts` file
+  node [options]     Start a Fuel node
   dev [options]      Start a Fuel node and run build + deploy on every file change
   build [options]    Build Sway programs and generate Typescript for them
   deploy [options]   Deploy contracts to the Fuel network
