@@ -7,7 +7,7 @@ export class StdStringType extends AType implements IType {
 
   public name = 'stdString';
 
-  static MATCH_REGEX: RegExp = /^struct String/m;
+  static MATCH_REGEX: RegExp = /^struct (std::string::)?String/m;
 
   static isSuitableFor(params: { type: string }) {
     return StdStringType.MATCH_REGEX.test(params.type);
