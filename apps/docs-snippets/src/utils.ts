@@ -29,7 +29,7 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   const request = new ScriptTransactionRequest();
 
   // add the transaction outputs (coins to be sent to the test wallet)
-  (seedQuantities || [[1_000_000, baseAssetId]])
+  (seedQuantities || [[100_000_000_000, baseAssetId]])
     .map(coinQuantityfy)
     .forEach(({ amount, assetId }) => request.addCoinOutput(testWallet.address, amount, assetId));
 

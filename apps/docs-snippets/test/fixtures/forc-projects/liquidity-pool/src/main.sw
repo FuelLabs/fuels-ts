@@ -11,12 +11,14 @@ abi LiquidityPool {
     fn withdraw(recipient: Address);
 }
 
-const BASE_TOKEN: AssetId = AssetId::from(0x0000000000000000000000000000000000000000000000000000000000000000);
+configurable {
+    TOKEN: AssetId = AssetId::from(0x0000000000000000000000000000000000000000000000000000000000000000),
+}
 
 impl LiquidityPool for Contract {
     #[payable]
     fn deposit(recipient: Address) {
-        assert(BASE_TOKEN == msg_asset_id());
+        assert(TOKEN == msg_asset_id());
         assert(0 < msg_amount());
 
         // Mint two times the amount.
@@ -34,7 +36,7 @@ impl LiquidityPool for Contract {
         let amount_to_transfer = msg_amount() / 2;
 
         // Transfer base token to recipient.
-        transfer(Identity::Address(recipient), BASE_TOKEN, amount_to_transfer);
+        transfer(Identity::Address(recipient), TOKEN, amount_to_transfer);
     }
 }
 // #endregion deposit-and-withdraw-cookbook-1
