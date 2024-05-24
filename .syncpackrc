@@ -1,5 +1,14 @@
 {
   "dependencyTypes": [
     "prod"
+  ],
+  "versionGroups": [
+    {
+      "label": "Ignore local dependencies",
+      "dependencies": [
+        "$LOCAL"
+      ],
+      "isIgnored": true
+    }
   ]
 }
