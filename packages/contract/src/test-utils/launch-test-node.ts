@@ -133,8 +133,7 @@ export async function launchTestNode<TFactories extends DeployContractConfig[]>(
   providerOptions = {},
   walletConfig = {},
   nodeOptions = {},
-  // @ts-expect-error asd
-  deployContracts = [],
+  deployContracts,
 }: Partial<LaunchTestNodeOptions<TFactories>> = {}): Promise<LaunchTestNodeReturn<TFactories>> {
   const snapshotConfig = getChainSnapshot(nodeOptions);
   const args = getFuelCoreArgs(nodeOptions);
@@ -151,7 +150,7 @@ export async function launchTestNode<TFactories extends DeployContractConfig[]>(
   let contracts: TContracts<TFactories>;
   try {
     contracts = (await Promise.all(
-      deployContracts.map(async (config) =>
+      (deployContracts ?? []).map(async (config) =>
         config.deployer.deployContract(
           config.bytecode,
           getWalletForDeployment(config, wallets),
