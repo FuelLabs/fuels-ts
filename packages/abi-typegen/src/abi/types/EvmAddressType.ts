@@ -7,7 +7,7 @@ export class EvmAddressType extends AType implements IType {
 
   public name = 'evmAddress';
 
-  static MATCH_REGEX: RegExp = /^struct EvmAddress$/m;
+  static MATCH_REGEX: RegExp = /^struct (std::vm::evm::evm_address::)?EvmAddress$/m;
 
   static isSuitableFor(params: { type: string }) {
     return EvmAddressType.MATCH_REGEX.test(params.type);

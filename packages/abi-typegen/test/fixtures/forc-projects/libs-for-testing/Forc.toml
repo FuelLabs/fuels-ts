@@ -1,8 +1,7 @@
 [project]
 authors = ["Fuel Labs <contact@fuel.sh>"]
-entry = "main.sw"
+entry = "lib.sw"
 license = "Apache-2.0"
-name = "full"
+name = "libs-for-testing"
 
 [dependencies]
-libs-for-testing = { path = "../libs-for-testing" }
