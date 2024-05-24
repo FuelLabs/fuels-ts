@@ -103,6 +103,12 @@ jobs:
           name: node
           path: coverage/environments
 
+      - name: Download Coverage Artifact for Browser Tests
+        uses: actions/download-artifact@v4
+        with:
+          name: browser
+          path: coverage/environments
+
       - name: Generate Coverage
         run: pnpm test:coverage-merge
 

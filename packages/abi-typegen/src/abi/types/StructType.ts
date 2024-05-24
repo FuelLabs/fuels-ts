@@ -12,8 +12,8 @@ export class StructType extends AType implements IType {
 
   public name = 'struct';
 
-  static MATCH_REGEX: RegExp = /^struct (.+)$/m;
-  static IGNORE_REGEX: RegExp = /^struct (Vec|RawVec|EvmAddress|Bytes|String)$/m;
+  static MATCH_REGEX: RegExp = /^struct (.+::)?(.+)$/m;
+  static IGNORE_REGEX: RegExp = /^struct (std::.*)?(Vec|RawVec|EvmAddress|Bytes|String|RawBytes)$/m;
 
   static isSuitableFor(params: { type: string }) {
     const isAMatch = StructType.MATCH_REGEX.test(params.type);
