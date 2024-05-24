@@ -5,7 +5,7 @@ export class B512Type extends B256Type {
 
   public name = 'b512';
 
-  static MATCH_REGEX = /^struct B512$/m;
+  static MATCH_REGEX = /^struct (std::b512::)?B512$/m;
 
   static isSuitableFor(params: { type: string }) {
     return B512Type.MATCH_REGEX.test(params.type);
