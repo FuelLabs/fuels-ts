@@ -7,7 +7,7 @@ export class ResultType extends AType implements IType {
 
   public name = 'result';
 
-  static MATCH_REGEX: RegExp = /^enum Result$/m;
+  static MATCH_REGEX: RegExp = /^enum (std::result::)?Result$/m;
 
   static isSuitableFor(params: { type: string }) {
     return ResultType.MATCH_REGEX.test(params.type);
