@@ -19,7 +19,7 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
       maxInputs: '255',
       maxOutputs: '255',
       maxWitnesses: '255',
-      maxGasPerTx: '500000000',
+      maxGasPerTx: '5000000000',
       maxSize: '17825792',
       maxBytecodeSubsections: '255',
     },

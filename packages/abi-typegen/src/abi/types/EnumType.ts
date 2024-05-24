@@ -7,18 +7,20 @@ import { parseTypeArguments } from '../../utils/parseTypeArguments';
 
 import { AType } from './AType';
 import { EmptyType } from './EmptyType';
+import { OptionType } from './OptionType';
+import { ResultType } from './ResultType';
 
 export class EnumType extends AType implements IType {
   public static swayType = 'enum MyEnumName';
 
   public name = 'enum';
 
-  static MATCH_REGEX: RegExp = /^enum (.+)$/m;
-  static IGNORE_REGEX: RegExp = /^enum (Option|Result)$/m;
+  static MATCH_REGEX: RegExp = /^enum (.+::)?(.+)$/m;
+  static IGNORE_REGEXES: RegExp[] = [OptionType.MATCH_REGEX, ResultType.MATCH_REGEX];
 
   static isSuitableFor(params: { type: string }) {
     const isAMatch = EnumType.MATCH_REGEX.test(params.type);
-    const shouldBeIgnored = EnumType.IGNORE_REGEX.test(params.type);
+    const shouldBeIgnored = EnumType.IGNORE_REGEXES.some((r) => r.test(params.type));
     return isAMatch && !shouldBeIgnored;
   }
 

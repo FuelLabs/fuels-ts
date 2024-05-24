@@ -14,6 +14,7 @@ import {
   FUEL_NETWORK_URL,
   getRandomB256,
   WalletUnlocked,
+  isRequestInputResource,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
@@ -35,8 +36,9 @@ describe('Predicate', () => {
     let predicateTrue: Predicate<[]>;
     let predicateStruct: Predicate<[Validation]>;
     let baseAssetId: string;
+    const fundingAmount = 10_000;
 
-    beforeEach(async () => {
+    beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
       baseAssetId = provider.getBaseAssetId();
       predicateTrue = new Predicate({
@@ -48,10 +50,13 @@ describe('Predicate', () => {
         abi: predicateAbiMainArgsStruct,
         provider,
       });
+    });
+
+    beforeEach(async () => {
       await seedTestWallet(predicateStruct, [
         {
           assetId: baseAssetId,
-          amount: bn(10_000),
+          amount: bn(fundingAmount),
         },
       ]);
     });
@@ -173,7 +178,7 @@ describe('Predicate', () => {
         FuelGaugeProjectsEnum.PREDICATE_VALIDATE_TRANSFER
       );
 
-      const amountToPredicate = 10_000;
+      const amountToPredicate = 200_000;
 
       const predicate = new Predicate<[BN]>({
         bytecode: binHexlified,
@@ -203,6 +208,51 @@ describe('Predicate', () => {
       expect(finalReceiverBalance.gt(initialReceiverBalance)).toBeTruthy();
       expect(estimatePredicatesSpy).toHaveBeenCalledTimes(1);
       expect(dryRunSpy).toHaveBeenCalledOnce();
+    });
+
+    describe('predicate resource fetching and predicateData population', () => {
+      test('getting predicate resources via the predicate automatically populates predicateData', async () => {
+        const transactionRequest = new ScriptTransactionRequest();
+
+        const resources = await predicateStruct.getResourcesToSpend([[fundingAmount, baseAssetId]]);
+        resources.forEach((resource) => {
+          expect(resource.predicateData).toBeDefined();
+        });
+
+        transactionRequest.addResources(resources);
+        const inputs = transactionRequest.inputs.filter(isRequestInputResource);
+
+        expect(inputs.length).toBeGreaterThan(0);
+        inputs.forEach((resource) => {
+          expect(resource.predicateData).toBeDefined();
+        });
+      });
+
+      test('getting predicate resources via the provider requires manual predicateData population', async () => {
+        const transactionRequest = new ScriptTransactionRequest();
+
+        const resources = await provider.getResourcesToSpend(predicateStruct.address, [
+          [fundingAmount, baseAssetId],
+        ]);
+
+        resources.forEach((resource) => {
+          expect(resource.predicateData).toBeUndefined();
+        });
+
+        transactionRequest.addResources(resources);
+        const inputs = transactionRequest.inputs.filter(isRequestInputResource);
+
+        expect(inputs.length).toBeGreaterThan(0);
+        inputs.forEach((resource) => {
+          expect(resource.predicateData).toBeUndefined();
+        });
+
+        predicateStruct.populateTransactionPredicateData(transactionRequest);
+
+        inputs.forEach((resource) => {
+          expect(resource.predicateData).toBeDefined();
+        });
+      });
     });
   });
 });
