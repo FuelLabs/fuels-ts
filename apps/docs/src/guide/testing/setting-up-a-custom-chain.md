@@ -28,4 +28,4 @@ The `launchNodeOptions` option lets you specify some additional options for the 
 
 <<< @/../../../packages/account/src/test-utils/launchNode.ts#launchNode-launchNodeOptions{ts:line-numbers}
 
-> Note: You can see all the available fuel-core args by running `fuel-core -h`.
+> Note: You can see all the available fuel-core args by running `fuel-core run -h`.
