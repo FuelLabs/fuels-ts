@@ -178,7 +178,7 @@ describe('Predicate', () => {
         FuelGaugeProjectsEnum.PREDICATE_VALIDATE_TRANSFER
       );
 
-      const amountToPredicate = 10_000;
+      const amountToPredicate = 200_000;
 
       const predicate = new Predicate<[BN]>({
         bytecode: binHexlified,

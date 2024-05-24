@@ -44,7 +44,7 @@ describe(__filename, () => {
   it('should successfully use "simulate" to validate if wallet can pay for transaction', async () => {
     const { id: contractId, interface: abi } = counterContract;
 
-    const fundedWallet = await getTestWallet([[10_000, baseAssetId]]);
+    const fundedWallet = await getTestWallet([[200_000, baseAssetId]]);
 
     // #region interacting-with-contracts-3
     const contract = new Contract(contractId, abi, fundedWallet);

@@ -1,11 +1,9 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish, WalletUnlocked } from 'fuels';
 import { toNumber, Script, Provider, Predicate, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
-
-import { fundPredicate } from './utils/predicate';
 
 /**
  * @group node
@@ -48,8 +46,8 @@ describe('Predicate', () => {
       );
 
       // setup predicate
-      const amountToPredicate = 10_000;
-      const amountToReceiver = 2000;
+      const amountToPredicate = 900_000;
+      const amountToReceiver = 100_000;
       const predicate = new Predicate<[Validation]>({
         bytecode: predicateBytesStruct,
         provider,
@@ -62,7 +60,7 @@ describe('Predicate', () => {
         ],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
 
       // executing predicate to transfer resources to receiver
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {

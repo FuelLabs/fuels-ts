@@ -77,13 +77,13 @@ describe('Predicate', () => {
 
       await seedTestWallet(
         [wallet1, wallet2, wallet3, predicate1, predicate2],
-        [[120_000, baseAssetId]],
+        [[500_000_000, baseAssetId]],
         UTXOS_AMOUNT
       );
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 1]', async () => {
-      let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
+      let transactionRequest = new ScriptTransactionRequest();
       transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
       const predicate1WrongResources = await provider.getResourcesToSpend(
@@ -103,10 +103,8 @@ describe('Predicate', () => {
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(0);
 
-      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
-
-      transactionRequest.gasLimit = gasLimit;
-      transactionRequest.maxFee = maxFee;
+      transactionRequest.gasLimit = bn(100_000);
+      transactionRequest.maxFee = bn(120_000);
 
       const tx = await provider.sendTransaction(transactionRequest);
 
@@ -137,11 +135,8 @@ describe('Predicate', () => {
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
       transactionRequest = await provider.estimatePredicates(transactionRequest);
 
-      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
-
-      transactionRequest.gasLimit = gasLimit;
-      transactionRequest.maxFee = maxFee;
-
+      transactionRequest.gasLimit = bn(100_000);
+      transactionRequest.maxFee = bn(120_000);
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(1);
 
@@ -185,10 +180,8 @@ describe('Predicate', () => {
       transactionRequest = predicate1.populateTransactionPredicateData(transactionRequest);
       transactionRequest = await provider.estimatePredicates(transactionRequest);
 
-      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
-
-      transactionRequest.gasLimit = gasLimit;
-      transactionRequest.maxFee = maxFee;
+      transactionRequest.gasLimit = bn(160_000);
+      transactionRequest.maxFee = bn(180_000);
 
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(2);
@@ -248,10 +241,8 @@ describe('Predicate', () => {
       transactionRequest = predicate2.populateTransactionPredicateData(transactionRequest);
       transactionRequest = await provider.estimatePredicates(transactionRequest);
 
-      const { gasLimit, maxFee } = await provider.estimateTxGasAndFee({ transactionRequest });
-
-      transactionRequest.gasLimit = gasLimit;
-      transactionRequest.maxFee = maxFee;
+      transactionRequest.gasLimit = bn(250_000);
+      transactionRequest.maxFee = bn(270_000);
 
       // The predicate resource witness placeholder was removed
       expect(transactionRequest.witnesses.length).toBe(3);
