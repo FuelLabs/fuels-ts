@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
-import { concat } from '@fuel-ts/utils';
+import { concat, hexlify } from '@fuel-ts/utils';
 
 import { Interface } from '../src';
 /** @knipignore */
@@ -769,25 +771,9 @@ describe('Abi interface', () => {
 
   describe('decodeLog', () => {
     it('should return decoded log by id', () => {
-      const data = exhaustiveExamplesInterface.decodeLog('0x01000000000000000000000000000020', '0');
-      expect(data).toEqual({
-        a: true,
-        b: 32,
-      });
-    });
-
-    it('should throw an error when log does not exist', () => {
-      expect(() =>
-        exhaustiveExamplesInterface.decodeLog('0x01000000000000000000000000000020', '1')
-      ).toThrowError(`Log type with logId '1' doesn't exist in the ABI.`);
-    });
-  });
-
-  describe('decodeFunctionResult', () => {
-    it('should return decoded function result', () => {
-      const data = exhaustiveExamplesInterface.decodeFunctionResult(
-        'struct_simple',
-        '0x01000000000000000000000000000020'
+      const data = exhaustiveExamplesInterface.decodeLog(
+        hexlify(Uint8Array.from([1, 0, 0, 0, 32])),
+        '8500535089865083573'
       );
       expect(data).toEqual({
         a: true,
@@ -795,13 +781,44 @@ describe('Abi interface', () => {
       });
     });
 
-    it('should throw an error when function does not exist', () => {
-      expect(() => {
-        exhaustiveExamplesInterface.decodeFunctionResult(
-          'doesnt_exist',
-          '0x01000000000000000000000000000020'
-        );
-      }).toThrowError(/^Function doesnt_exist not found\.$/);
+    it('should throw an error when log does not exist', async () => {
+      await expectToThrowFuelError(
+        () => {
+          exhaustiveExamplesInterface.decodeLog(
+            hexlify(Uint8Array.from([1, 0, 0, 0, 32])),
+            '8500535089865083573'
+          );
+        },
+        new FuelError(
+          ErrorCode.LOG_TYPE_NOT_FOUND,
+          `Log type with logId '8500535089865083573' doesn't exist in the ABI.`
+        )
+      );
+    });
+  });
+
+  describe('decodeFunctionResult', () => {
+    it('should return decoded function result', () => {
+      const data = exhaustiveExamplesInterface.decodeFunctionResult(
+        'struct_simple',
+        hexlify(Uint8Array.from([1, 0, 0, 0, 32]))
+      );
+      expect(data).toEqual({
+        a: true,
+        b: 32,
+      });
+    });
+
+    it('should throw an error when function does not exist', async () => {
+      await expectToThrowFuelError(
+        () => {
+          exhaustiveExamplesInterface.decodeFunctionResult(
+            'doesnt_exist',
+            hexlify(Uint8Array.from([1, 0, 0, 0, 32]))
+          );
+        },
+        new FuelError(ErrorCode.FUNCTION_NOT_FOUND, `Function doesnt_exist not found.`)
+      );
     });
   });
 });
