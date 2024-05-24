@@ -83,6 +83,10 @@ export default defineConfig({
                 text: 'Deploying a dApp to Testnet',
                 link: '/guide/creating-a-fuel-dapp/deploying-a-dapp-to-testnet',
               },
+              {
+                text: 'Creating a Fuel dApp with Predicates',
+                link: '/guide/creating-a-fuel-dapp/using-predicates',
+              },
             ],
           },
           {

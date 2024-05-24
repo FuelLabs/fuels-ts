@@ -316,3 +316,4 @@ onchain
 Vercel
 hardcoded
 differentiators
+updatable
