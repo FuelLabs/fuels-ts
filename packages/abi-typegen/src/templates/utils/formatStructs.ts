@@ -20,7 +20,8 @@ export function formatStructs(params: { types: IType[] }) {
         outputValues,
         recycleRef: inputValues === outputValues, // reduces duplication
       };
-    });
+    })
+    .sort((a, b) => (a.structName < b.structName ? -1 : 1));
 
   return { structs };
 }

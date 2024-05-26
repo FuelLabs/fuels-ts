@@ -26,8 +26,8 @@ export const createWallet = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
   const baseAssetId = provider.getBaseAssetId();
   walletInstance = await generateTestWallet(provider, [
-    [5_000_000, baseAssetId],
-    [5_000_000, ASSET_A],
+    [500_000_000, baseAssetId],
+    [500_000_000, ASSET_A],
   ]);
   return walletInstance;
 };

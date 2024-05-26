@@ -152,6 +152,13 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this.outputs.length - 1;
   }
 
+  /**
+   * Calculates the maximum gas for the transaction.
+   *
+   * @param chainInfo - The chain information.
+   * @param minGas - The minimum gas.
+   * @returns the maximum gas.
+   */
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
     const {

@@ -37,9 +37,9 @@ describe(__filename, () => {
 
     expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(42) }]);
     expect(walletBBalances).toEqual([
-      { assetId: baseAssetId, amount: bn(30) },
       { assetId: assetIdA, amount: bn(100) },
       { assetId: assetIdB, amount: bn(200) },
+      { assetId: baseAssetId, amount: bn(30) },
     ]);
     expect(walletCBalances).toEqual([]);
     // #endregion wallet-setup

@@ -14,6 +14,7 @@ export function formatEnums(params: { types: IType[] }) {
       const outputValues = et.getStructContents({ types, target: TargetEnum.OUTPUT });
       const inputNativeValues = et.getNativeEnum({ types });
       const outputNativeValues = et.getNativeEnum({ types });
+      const typeAnnotations = et.getStructDeclaration({ types });
 
       return {
         structName,
@@ -22,8 +23,10 @@ export function formatEnums(params: { types: IType[] }) {
         recycleRef: inputValues === outputValues, // reduces duplication
         inputNativeValues,
         outputNativeValues,
+        typeAnnotations,
       };
-    });
+    })
+    .sort((a, b) => (a.structName < b.structName ? -1 : 1));
 
   return { enums };
 }

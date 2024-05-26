@@ -24,4 +24,5 @@ members = [
   "./struct-with-array",
   "./tuple-simple",
   "./vector-simple",
+  "libs-for-testing",
 ]

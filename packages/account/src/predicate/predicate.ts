@@ -192,6 +192,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     return resources.map((resource) => ({
       ...resource,
       predicate: hexlify(this.bytes),
+      predicateData: hexlify(this.getPredicateData()),
     }));
   }
 

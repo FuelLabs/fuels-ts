@@ -7,6 +7,7 @@ import { build } from './cli/commands/build';
 import { deploy } from './cli/commands/deploy';
 import { dev } from './cli/commands/dev';
 import { init } from './cli/commands/init';
+import { node } from './cli/commands/node';
 import { withBinaryPaths } from './cli/commands/withBinaryPaths';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
@@ -65,6 +66,11 @@ export const configureCli = () => {
     .description('Start a Fuel node and run build + deploy on every file change')
     .addOption(pathOption)
     .action(withConfig(command, Commands.dev, dev));
+
+  (command = program.command(Commands.node))
+    .description('Start a Fuel node')
+    .addOption(pathOption)
+    .action(withConfig(command, Commands.node, node));
 
   (command = program.command(Commands.build))
     .description('Build Sway programs and generate Typescript for them')
