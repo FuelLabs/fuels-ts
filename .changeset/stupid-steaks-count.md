@@ -2,4 +2,4 @@
 "@fuel-ts/logger": minor
 ---
 
-chore: add initial logger
+chore!: add debug logger for fuel-ts ecosystem

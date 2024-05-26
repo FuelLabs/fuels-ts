@@ -8,10 +8,10 @@ A logging component that can be used to log messages to the console or to a file
 
 - [`@fuel-ts/logger`](#fuel-tslogger)
 - [Table of contents](#table-of-contents)
-	- [Installation](#installation)
-	- [Contributing](#contributing)
-	- [Changelog](#changelog)
-	- [License](#license)
+  - [Installation](#installation)
+  - [Contributing](#contributing)
+  - [Changelog](#changelog)
+  - [License](#license)
 
 ## Installation
 
