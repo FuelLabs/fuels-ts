@@ -9,7 +9,7 @@ labels:
       title: "^fix:"
   - label: "chore"
     matcher:
-      title: "^\\(chore|build|ci\\):"
+      title: "^(chore|build|ci):"
   - label: "docs"
     matcher:
       title: "^docs:"
