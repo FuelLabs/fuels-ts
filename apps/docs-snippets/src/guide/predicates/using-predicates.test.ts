@@ -39,7 +39,7 @@ describe(__filename, () => {
 
     // transferring funds to the predicate
     const tx1 = await wallet.transfer(predicate.address, 1000, baseAssetId, {
-      gasLimit: 1000,
+      gasLimit: 10_000,
     });
 
     // #endregion predicate-with-configurable-pin-2

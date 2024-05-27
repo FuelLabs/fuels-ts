@@ -85,7 +85,7 @@ export default defineConfig({
               },
               {
                 text: 'Creating a Fuel dApp with Predicates',
-                link: '/guide/creating-a-fuel-dapp/using-predicates',
+                link: '/guide/creating-a-fuel-dapp/creating-a-fuel-dapp-with-predicates',
               },
             ],
           },

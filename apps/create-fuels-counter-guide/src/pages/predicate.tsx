@@ -3,7 +3,8 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
+/** @knipignore */
+import { TestPredicateAbi__factory } from "@/sway-api";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
