@@ -15,7 +15,7 @@ test('counter contract - increment function call works properly', async ({ page 
 
   await page.reload();
 
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(5000);
 
   const incrementButton = page.getByText('Increment Counter');
   await incrementButton.click();
