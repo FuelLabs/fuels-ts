@@ -2,11 +2,7 @@ import { mockLogger } from '../../test/utils/mockLogger';
 import * as promptsMod from '../prompts';
 
 import type { PackageManager } from './getPackageManager';
-import {
-  availablePackageManagers,
-  getPackageManager,
-  packageMangerCommands,
-} from './getPackageManager';
+import { availablePackageManagers, getPackageManager, packageMangers } from './getPackageManager';
 
 const mockAllDeps = (opts: { packageManager?: PackageManager } = {}) => {
   const { warn } = mockLogger();
@@ -20,18 +16,54 @@ const mockAllDeps = (opts: { packageManager?: PackageManager } = {}) => {
   };
 };
 
+const installScenarios: [PackageManager, string][] = [
+  ['pnpm', 'pnpm install'],
+  ['npm', 'npm install'],
+  ['bun', 'bun install'],
+];
+
+const runCommand = 'fuels:dev';
+const runScenarios: [PackageManager, string][] = [
+  ['pnpm', 'pnpm fuels:dev'],
+  ['npm', 'npm run fuels:dev'],
+  ['bun', 'bun run fuels:dev'],
+];
+
 /**
  * @group node
  */
 describe('getPackageManager', () => {
   it.each(availablePackageManagers)(
-    `should return '%s' from the options`,
+    `should get the correct package manager for %s`,
     async (packageManager: PackageManager) => {
+      const expectedPackageManager = packageMangers[packageManager];
       const opts = { [packageManager]: true };
 
       const result = await getPackageManager(opts);
 
-      expect(result).toEqual(packageManager);
+      expect(result).toEqual(expectedPackageManager);
+    }
+  );
+
+  it.each(installScenarios)(
+    'should have the correct install commands',
+    async (packageManager, expectedInstallCommand) => {
+      const command = await getPackageManager({ [packageManager]: true });
+
+      const install = command.install;
+
+      expect(install).toEqual(expectedInstallCommand);
+    }
+  );
+
+  it.each(runScenarios)(
+    'should have the correct run commands',
+    async (packageManager, expectedRunCommand) => {
+      const command = await getPackageManager({ [packageManager]: true });
+
+      const run = command.run(runCommand);
+
+      expect(run).toEqual(expectedRunCommand);
     }
   );
 
@@ -46,9 +78,10 @@ describe('getPackageManager', () => {
   });
 
   it('should allow inputting of a package manager via prompt', async () => {
-    const expectedPackageManager = 'npm';
+    const packageManager = 'npm';
+    const expectedPackageManager = packageMangers[packageManager];
     const { warn, promptForPackageManager } = mockAllDeps({
-      packageManager: expectedPackageManager,
+      packageManager,
     });
     const opts = {};
 
@@ -60,7 +93,8 @@ describe('getPackageManager', () => {
   });
 
   it('should default to pnpm if no package manager is selected', async () => {
-    const expectedDefaultPackageManager = 'pnpm';
+    const packageManager = 'pnpm';
+    const expectedPackageManager = packageMangers[packageManager];
     const { warn, promptForPackageManager } = mockAllDeps();
     const opts = {};
 
@@ -68,43 +102,6 @@ describe('getPackageManager', () => {
 
     expect(warn).not.toBeCalled();
     expect(promptForPackageManager).toBeCalled();
-    expect(result).toEqual(expectedDefaultPackageManager);
-  });
-
-  describe('packageManagerCommands', () => {
-    const installScenarios: [PackageManager, string][] = [
-      ['pnpm', 'pnpm install'],
-      ['npm', 'npm install'],
-      ['bun', 'bun install'],
-    ];
-
-    it.each(installScenarios)(
-      'should have the correct install commands',
-      (packageManager, expectedInstallCommand) => {
-        const command = packageMangerCommands[packageManager];
-
-        const install = command.install;
-
-        expect(install).toEqual(expectedInstallCommand);
-      }
-    );
-
-    const runCommand = 'fuels:dev';
-    const runScenarios: [PackageManager, string][] = [
-      ['pnpm', 'pnpm fuels:dev'],
-      ['npm', 'npm run fuels:dev'],
-      ['bun', 'bun run fuels:dev'],
-    ];
-
-    it.each(runScenarios)(
-      'should have the correct run commands',
-      (packageManager, expectedRunCommand) => {
-        const command = packageMangerCommands[packageManager as PackageManager];
-
-        const run = command.run(runCommand);
-
-        expect(run).toEqual(expectedRunCommand);
-      }
-    );
+    expect(result).toEqual(expectedPackageManager);
   });
 });

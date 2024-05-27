@@ -11,7 +11,7 @@ const runnableApplicator =
   (command: string = '') =>
     `${commandPrefix} ${command}`;
 
-export const packageMangerCommands = {
+export const packageMangers = {
   pnpm: {
     install: 'pnpm install',
     run: runnableApplicator('pnpm'),
@@ -48,5 +48,5 @@ export const getPackageManager = async (opts: ProgramOptions) => {
   if (!packageManager) {
     packageManager = 'pnpm';
   }
-  return packageManager;
+  return packageMangers[packageManager];
 };

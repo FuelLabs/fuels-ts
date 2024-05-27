@@ -8,7 +8,7 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
-import { getPackageManager, packageMangerCommands } from './lib/getPackageManager';
+import { getPackageManager } from './lib/getPackageManager';
 import type { ProgramOptions } from './lib/setupProgram';
 import { promptForProgramsToInclude, promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
@@ -64,7 +64,6 @@ export const runScaffoldCli = async ({
   const opts = program.opts<ProgramOptions>();
   const verboseEnabled = opts.verbose ?? false;
   const packageManager = await getPackageManager(opts);
-  const packageManagerCommand = packageMangerCommands[packageManager];
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
@@ -164,7 +163,7 @@ export const runScaffoldCli = async ({
 
   if (shouldInstallDeps) {
     process.chdir(projectPath);
-    execSync(packageManagerCommand.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+    execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
   }
 
   installDepsSpinner.succeed('Installed dependencies!');
@@ -177,8 +176,8 @@ export const runScaffoldCli = async ({
   log('To get started:');
   log();
   log(`- cd into the project directory: cd ${projectPath}`);
-  log(`- Start a local Fuel dev server: ${packageManagerCommand.run('fuels:dev')}`);
-  log(`- Run the frontend: ${packageManagerCommand.run('dev')}`);
+  log(`- Start a local Fuel dev server: ${packageManager.run('fuels:dev')}`);
+  log(`- Run the frontend: ${packageManager.run('dev')}`);
   log();
   log();
   log('-> TS SDK docs: https://docs.fuel.network/docs/fuels-ts/');
