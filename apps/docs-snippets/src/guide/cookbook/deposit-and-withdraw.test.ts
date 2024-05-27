@@ -25,7 +25,9 @@ describe(__filename, () => {
     provider = sender.provider;
     baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    liquidityPoolContract = await factory.deployContract();
+    liquidityPoolContract = await factory.deployContract({
+      configurableConstants: { TOKEN: { bits: baseAssetId } },
+    });
   });
 
   it('deposit and withdraw cookbook guide', async () => {
