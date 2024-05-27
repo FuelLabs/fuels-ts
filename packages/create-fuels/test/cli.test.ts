@@ -1,20 +1,18 @@
 import { mkdirSync } from 'fs';
-import { glob } from 'glob';
 
 import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
-import { bootstrapProject, cleanupFilesystem, resetFilesystem } from './utils/bootstrapProject';
+import {
+  bootstrapProject,
+  cleanupFilesystem,
+  copyTemplate,
+  resetFilesystem,
+} from './utils/bootstrapProject';
+import { generateArgv } from './utils/generateArgs';
 import { mockLogger } from './utils/mockLogger';
-
-const getAllFiles = async (pathToDir: string) => {
-  const files = await glob(`${pathToDir}/**/*`, {
-    ignore: ['**/node_modules/**', '**/.next/**', '**/sway-api/**'],
-  });
-  const filesWithoutPrefix = files.map((file) => file.replace(pathToDir, ''));
-  return filesWithoutPrefix;
-};
+import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
 const possibleProgramsToInclude: ProgramsToInclude[] = [
   { contract: true, predicate: false, script: false },
@@ -26,51 +24,6 @@ const possibleProgramsToInclude: ProgramsToInclude[] = [
   { contract: true, predicate: true, script: true },
 ];
 
-const defaultFlags = ['--pnpm'];
-
-const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string) => {
-  const args = ['', ''];
-  if (projectName) {
-    args.push(projectName);
-  }
-  if (programsToInclude.contract) {
-    args.push('-c');
-  }
-  if (programsToInclude.predicate) {
-    args.push('-p');
-  }
-  if (programsToInclude.script) {
-    args.push('-s');
-  }
-  args.push(...defaultFlags);
-  return args;
-};
-
-const filterOriginalTemplateFiles = (files: string[], programsToInclude: ProgramsToInclude) => {
-  let newFiles = [...files];
-
-  newFiles = newFiles.filter((file) => {
-    if (file.includes('CHANGELOG')) {
-      return false;
-    }
-    if (!programsToInclude.contract && file.includes('contract')) {
-      return false;
-    }
-    if (!programsToInclude.predicate && file.includes('predicate')) {
-      return false;
-    }
-    if (!programsToInclude.script && file.includes('script')) {
-      return false;
-    }
-    if (['/gitignore', '/env'].includes(file)) {
-      return false;
-    }
-    return true;
-  });
-
-  return newFiles;
-};
-
 /**
  * @group node
  */
@@ -80,6 +33,7 @@ describe('CLI', () => {
 
   beforeEach(() => {
     paths = bootstrapProject(__filename);
+    copyTemplate(paths.sourceTemplate, paths.template);
   });
 
   afterEach(() => {
@@ -95,7 +49,7 @@ describe('CLI', () => {
   test.each(possibleProgramsToInclude)(
     'create-fuels extracts the template to the specified directory',
     async (programsToInclude) => {
-      const args = generateArgs(programsToInclude, paths.root);
+      const args = generateArgv(programsToInclude, paths.root);
 
       await runScaffoldCli({
         program: setupProgram(),
@@ -113,7 +67,7 @@ describe('CLI', () => {
   );
 
   test('create-fuels reports an error if the project directory already exists', async () => {
-    const args = generateArgs(
+    const args = generateArgv(
       {
         contract: true,
         predicate: true,
@@ -140,7 +94,7 @@ describe('CLI', () => {
   });
 
   test('create-fuels reports an error if no programs are chosen to be included', async () => {
-    const args = generateArgs(
+    const args = generateArgv(
       {
         contract: false,
         predicate: false,
