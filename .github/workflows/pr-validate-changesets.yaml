@@ -2,9 +2,10 @@ name: Validate Changesets
 
 on:
   pull_request:
-  push:
-    branches:
-      - master
+    types:
+      - opened
+      - edited
+      - synchronize
 
 permissions:
   contents: write
