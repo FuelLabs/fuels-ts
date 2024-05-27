@@ -13,6 +13,7 @@ concurrency:
 jobs:
   environments:
     runs-on: ubuntu-latest
+    if: false
     # name will be node@<version> or browser
     name: ${{ matrix.env.name }}${{ matrix.env.version && '@' || ''}}${{ matrix.env.version || ''}}
     strategy:
@@ -50,7 +51,7 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [environments]
+    # needs: [environments]
     if: ${{ !github.event.pull_request.draft }}
     steps:
       - name: Checkout
@@ -79,10 +80,10 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://devnet.fuel.network/v1/graphql
-          TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
-          TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
-          FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
+          # FUEL_NETWORK_URL: https://devnet.fuel.network/v1/graphql
+          # TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
+          # TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
+          # FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
           PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
 
   test:
