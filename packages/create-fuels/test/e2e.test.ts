@@ -14,7 +14,7 @@ const { log } = console;
 
 const PUBLISHED_NPM_VERSION = process.env.PUBLISHED_NPM_VERSION;
 const programsToInclude = { contract: true, predicate: true, script: true };
-const availablePackages = ['pnpm'];
+const availablePackages = ['pnpm', 'bun'];
 
 /**
  * @group e2e
