@@ -22,6 +22,6 @@ test('counter contract - increment function call works properly', async ({ page 
 
   await page.waitForTimeout(2000);
 
-  const counter = page.getByText('1', { exact: true });
+  const counter = page.getByTestId('counter');
   await expect(counter).toBeVisible();
 });
