@@ -99,6 +99,7 @@ export const getCoder: GetCoderFn = (
   const components = resolvedAbiType.components!;
 
   const arrayMatch = arrayRegEx.exec(resolvedAbiType.type)?.groups;
+
   if (arrayMatch) {
     const length = parseInt(arrayMatch.length, 10);
     const arg = components[0];

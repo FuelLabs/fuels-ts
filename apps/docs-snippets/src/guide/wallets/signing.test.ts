@@ -45,7 +45,7 @@ describe(__filename, () => {
 
   it('should sign a transaction using wallet instance [DETAILED]', async () => {
     const wallet = WalletUnlocked.generate({ provider });
-    await seedTestWallet(wallet, [[10_000, baseAssetId]]);
+    await seedTestWallet(wallet, [[100_000, baseAssetId]]);
 
     // #region signing-2
     const request = new ScriptTransactionRequest({
@@ -77,7 +77,7 @@ describe(__filename, () => {
 
   it('should sign a transaction using wallet instance [SIMPLIFIED]', async () => {
     const wallet = WalletUnlocked.generate({ provider });
-    await seedTestWallet(wallet, [[10_000, baseAssetId]]);
+    await seedTestWallet(wallet, [[100_000, baseAssetId]]);
 
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
