@@ -14,6 +14,12 @@ describe('launching a test node', () => {
     // #import { launchTestNode };
 
     using launched = await launchTestNode();
+
+    /*
+      The method `launch.cleanp()` will be automatically
+      called when the variable `launched` goes out of scope.
+    */
+
     // #endregion automatic-cleanup
   });
 
@@ -22,6 +28,12 @@ describe('launching a test node', () => {
     // #import { launchTestNode };
 
     const launched = await launchTestNode();
+
+    /*
+      Do your things, run your tests, and then call
+      `launched.cleanup()` to dispose of everything.
+    */
+
     launched.cleanup();
     // #endregion manual-cleanup
   });
@@ -99,6 +111,8 @@ describe('launching a test node', () => {
   test('configuring custom fuel-core args', async () => {
     // #region custom-fuel-core-args
     process.env.DEFAULT_FUEL_CORE_ARGS = `--tx-max-depth 20`;
+
+    // If you inform, `nodeOptions.args` will override the above values
 
     using launched = await launchTestNode();
     // #endregion custom-fuel-core-args
