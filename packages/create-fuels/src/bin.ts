@@ -4,6 +4,8 @@ import { log } from 'console';
 
 import { runScaffoldCli, setupProgram } from './cli';
 
+log('process.argv', process.argv);
+
 runScaffoldCli({
   program: setupProgram(),
   args: process.argv,
