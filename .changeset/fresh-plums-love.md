@@ -1,4 +1,4 @@
 ---
 ---
 
-build: add a ci workflow for automating labels
+ci: add a ci workflow for automating PR labels
