@@ -49,7 +49,7 @@ Thirdly, we will add a button that calls the `changePin` function when clicked.
 
 Congratulations! That's all. You should now be able to see the modified predicate dApp running at `http://localhost:3000` with our newly added change pin functionality.
 
-You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide/src/predicate.tsx)..
+You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 
 ## Next Steps
 
