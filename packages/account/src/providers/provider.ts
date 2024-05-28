@@ -29,11 +29,12 @@ import type {
   GqlFeeParameters as FeeParameters,
   GqlGasCosts as GasCosts,
   GqlGetBlocksQueryVariables,
-  GqlMessage,
   GqlPredicateParameters as PredicateParameters,
-  GqlRelayedTransactionFailed,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
+  GqlPageInfo,
+  GqlMessage,
+  GqlRelayedTransactionFailed,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -93,6 +94,11 @@ export type Block = {
 
 export type GetCoinsResponse = {
   coins: Coin[];
+  pageInfo: GqlPageInfo;
+};
+
+export type GetMessagesResponse = {
+  messages: Message[];
   pageInfo: GqlPageInfo;
 };
 
@@ -1553,30 +1559,35 @@ Supported fuel-core version: ${supportedVersion}.`
   async getMessages(
     address: string | AbstractAddress,
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Message[]> {
-    const result = await this.operations.getMessages({
-      first: 10,
+  ): Promise<GetMessagesResponse> {
+    const {
+      messages: { edges, pageInfo },
+    } = await this.operations.getMessages({
+      first: 100,
       ...paginationArgs,
       owner: Address.fromAddressOrString(address).toB256(),
     });
 
-    const messages = result.messages.edges.map((edge) => edge.node);
-
-    return messages.map((message) => ({
+    const messages = edges.map(({ node }) => ({
       messageId: InputMessageCoder.getMessageId({
-        sender: message.sender,
-        recipient: message.recipient,
-        nonce: message.nonce,
-        amount: bn(message.amount),
-        data: message.data,
+        sender: node.sender,
+        recipient: node.recipient,
+        nonce: node.nonce,
+        amount: bn(node.amount),
+        data: node.data,
       }),
-      sender: Address.fromAddressOrString(message.sender),
-      recipient: Address.fromAddressOrString(message.recipient),
-      nonce: message.nonce,
-      amount: bn(message.amount),
-      data: InputMessageCoder.decodeData(message.data),
-      daHeight: bn(message.daHeight),
+      sender: Address.fromAddressOrString(node.sender),
+      recipient: Address.fromAddressOrString(node.recipient),
+      nonce: node.nonce,
+      amount: bn(node.amount),
+      data: InputMessageCoder.decodeData(node.data),
+      daHeight: bn(node.daHeight),
     }));
+
+    return {
+      messages,
+      pageInfo,
+    };
   }
 
   /**
