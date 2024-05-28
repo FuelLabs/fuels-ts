@@ -238,6 +238,10 @@ describe('launching a test node', () => {
       },
     });
 
+    const { provider } = launched;
+
+    recipient.provider = provider;
+
     const [message] = await recipient.getMessages();
     // message.nonce === testMessage.nonce
     // #endregion test-messages-chain
