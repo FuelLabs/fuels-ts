@@ -15,7 +15,7 @@ import * as launchNodeMod from './launchNode';
 import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
 import { TestMessage } from './test-message';
 
-const BaseAssetId = `0x${defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.base_asset_id}`;
+const BaseAssetId = defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.base_asset_id;
 /**
  * @group node
  */
@@ -144,7 +144,7 @@ describe('setupTestProviderAndWallets', () => {
 
     const coins = await wallet.getCoins();
     expect(coins.length).toBe(2);
-    coins.sort((a, b) => (bn(a.assetId).gt(bn(b.assetId)) ? 1 : -1));
+    coins.sort((a) => (a.assetId === BaseAssetId ? -1 : 1));
 
     const coin1 = coins[0];
 
