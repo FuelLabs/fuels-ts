@@ -3,13 +3,13 @@ version: v1
 labels:
   - label: "feat"
     matcher:
-      title: "^feat:"
+      title: "^feat(!)?:"
   - label: "bug"
     matcher:
-      title: "^fix:"
+      title: "^fix(!)?:"
   - label: "chore"
     matcher:
-      title: "^(chore|build|ci):"
+      title: "^(chore|build|ci)(!)?::"
   - label: "docs"
     matcher:
-      title: "^docs:"
+      title: "^docs(!)?:"
