@@ -375,7 +375,7 @@ export default defineConfig({
               },
               {
                 text: 'Test Node Options',
-                link: '/guide/testing/node-options',
+                link: '/guide/testing/test-node-options',
               },
               {
                 text: 'Fuel Core Options',
