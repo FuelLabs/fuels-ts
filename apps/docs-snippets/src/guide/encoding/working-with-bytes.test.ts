@@ -16,6 +16,9 @@ import {
   hexlify,
 } from 'fuels';
 
+/**
+ * @group node
+ */
 describe('working with bytes', () => {
   it('integers', () => {
     // #region working-with-bytes-1

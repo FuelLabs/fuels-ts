@@ -12,6 +12,9 @@ import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataRece
 
 import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';
 
+/**
+ * @group node
+ */
 describe('encode and decode', () => {
   let wallet: Account;
 
