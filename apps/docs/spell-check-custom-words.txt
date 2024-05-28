@@ -321,3 +321,4 @@ deployer
 overriden
 typesafe
 launchTestNode
+Vitest
