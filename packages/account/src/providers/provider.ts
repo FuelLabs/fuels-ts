@@ -91,6 +91,11 @@ export type Block = {
   transactionIds: string[];
 };
 
+export type GetCoinsResponse = {
+  coins: Coin[];
+  pageInfo: GqlPageInfo;
+};
+
 /**
  * Deployed Contract bytecode and contract id
  */
@@ -1258,24 +1263,29 @@ Supported fuel-core version: ${supportedVersion}.`
     owner: string | AbstractAddress,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Coin[]> {
+  ): Promise<GetCoinsResponse> {
     const ownerAddress = Address.fromAddressOrString(owner);
-    const result = await this.operations.getCoins({
-      first: 10,
+    const {
+      coins: { edges, pageInfo },
+    } = await this.operations.getCoins({
+      first: 100,
       ...paginationArgs,
       filter: { owner: ownerAddress.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    const coins = result.coins.edges.map((edge) => edge.node);
-
-    return coins.map((coin) => ({
-      id: coin.utxoId,
-      assetId: coin.assetId,
-      amount: bn(coin.amount),
-      owner: Address.fromAddressOrString(coin.owner),
-      blockCreated: bn(coin.blockCreated),
-      txCreatedIdx: bn(coin.txCreatedIdx),
+    const coins = edges.map(({ node }) => ({
+      id: node.utxoId,
+      assetId: node.assetId,
+      amount: bn(node.amount),
+      owner: Address.fromAddressOrString(node.owner),
+      blockCreated: bn(node.blockCreated),
+      txCreatedIdx: bn(node.txCreatedIdx),
     }));
+
+    return {
+      coins,
+      pageInfo,
+    };
   }
 
   /**
