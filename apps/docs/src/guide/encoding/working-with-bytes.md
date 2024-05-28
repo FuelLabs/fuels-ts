@@ -40,4 +40,4 @@ These are the types that will contain nested types and no additional encoding is
 
 Heap types are types that have a dynamic length that we do not know at compile time. These are `Vec`, `String`, `raw_slice`. These types are encoded with a `u64` representing the length of the data, followed by the data itself.
 
-<<< @/../../docs-snippets/src/guide/encoding/working-with-bytes.test.ts#working-with-bytes-6{ts:line-num-numbers}
+<<< @/../../docs-snippets/src/guide/encoding/working-with-bytes.test.ts#working-with-bytes-6{ts:line-numbers}
