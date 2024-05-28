@@ -144,33 +144,11 @@ export class Account extends AbstractAccount {
    * @param assetId - The asset ID of the coins to retrieve (optional).
    * @returns A promise that resolves to an array of Coins.
    */
-  async getCoins(assetId?: BytesLike): Promise<Coin[]> {
-    const coins = [];
-
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageCoins = await this.provider.getCoins(this.address, assetId, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      coins.push(...pageCoins);
-
-      const hasNextPage = pageCoins.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} coins exceed the current supported limit.`
-      );
-    }
-
-    return coins;
+  async getCoins(
+    assetId?: BytesLike,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetCoinsResponse> {
+    return this.provider.getCoins(this.address, assetId, paginationArgs);
   }
 
   /**
