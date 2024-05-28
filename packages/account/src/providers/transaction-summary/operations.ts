@@ -192,13 +192,13 @@ export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
 export function getWithdrawFromFuelOperations({
   inputs,
   receipts,
-  assetId,
-}: InputParam & ReceiptParam & { assetId: string }): Operation[] {
+  baseAssetId,
+}: InputParam & ReceiptParam & { baseAssetId: string }): Operation[] {
   const messageOutReceipts = getReceiptsMessageOut(receipts);
 
   const withdrawFromFuelOperations = messageOutReceipts.reduce(
     (prevWithdrawFromFuelOps, receipt) => {
-      const input = getInputFromAssetId(inputs, assetId);
+      const input = getInputFromAssetId(inputs, baseAssetId);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
         const newWithdrawFromFuelOps = addOperation(prevWithdrawFromFuelOps, {
@@ -215,7 +215,7 @@ export function getWithdrawFromFuelOperations({
           assetsSent: [
             {
               amount: receipt.amount,
-              assetId,
+              assetId: baseAssetId,
             },
           ],
         });
