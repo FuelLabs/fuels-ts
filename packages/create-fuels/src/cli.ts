@@ -154,6 +154,24 @@ export const runScaffoldCli = async ({
   const newForcTomlContents = processWorkspaceToml(forcTomlContents, programsToInclude);
   writeFileSync(forcTomlPath, newForcTomlContents);
 
+  // Rewrite the package.json file
+  // Note: `pnpm run xprebuild` -> rewritten to -> `pnpm run prebuild` (on prePublish script)
+  const packageJsonPath = join(projectPath, 'package.json');
+  const packageJsonContents = readFileSync(packageJsonPath, 'utf-8');
+  const newPackageJsonContents = packageJsonContents.replace(
+    `pnpm run prebuild`,
+    packageManager.run('prebuild')
+  );
+  writeFileSync(packageJsonPath, newPackageJsonContents);
+
+  // Rewrite the READMD.md file
+  const readmePath = join(projectPath, 'README.md');
+  const readmeContents = readFileSync(readmePath, 'utf-8');
+  const newReadmeContents = readmeContents
+    .replace('npm run fuels:dev', packageManager.run('fuels:dev'))
+    .replace('npm run dev', packageManager.run('dev'));
+  writeFileSync(readmePath, newReadmeContents);
+
   fileCopySpinner.succeed('Copied template files!');
 
   const installDepsSpinner = ora({
