@@ -1,6 +1,6 @@
 # Test Node Options
 
-This reference describes all the options of the [`launchTestNode`](./index.md#launching-a-test-node) utility:
+This reference describes all the options of the [`launchTestNode`](./launching-a-test-node.md) utility:
 
 - [`walletConfig`](./test-node-options.md#walletconfig)
 - [`deployContracts`](./test-node-options.md#deploycontracts)
@@ -14,11 +14,11 @@ This reference describes all the options of the [`launchTestNode`](./index.md#la
 Used to set the node's genesis block state (coins and messages).
 
 - `count`: number of wallets/addresses to generate on the genesis block.
-- `assets`: configure how many unique assets each wallet will own with the base asset included. Can be `number` or `AssetId[]`.
+- `assets`: configure how many unique assets each wallet will own with the base asset included. Can be `number` or `AssetId[]`. More on assets [below](./test-node-options.md#walletconfig-assets).
   - The `AssetId` utility simplifies testing when different assets are necessary.
 - `coinsPerAsset`: number of coins (UTXOs) per asset id.
 - `amountPerCoin`: for each coin, the amount it'll contain.
-- `messages`: messages to assign to the wallets. The [`TestMessage`](./test-node-options.md#testmessage) utility is used to generate them. The `recipient` field of the message is overriden to be the wallet's address.
+- `messages`: messages to assign to the wallets. More on messages [below](./test-node-options.md#walletconfig-messages).
 
 ### `walletConfig.assets`
 
@@ -28,7 +28,7 @@ The `AssetId` utility integrates with [`walletConfig`](./test-node-options.md#wa
 
 ### `walletConfig.messages`
 
-The `TestMessage` helper class is used to create messages for testing purposes.
+The `TestMessage` helper class is used to create messages for testing purposes. When passed via `walletConfig.messages`, the `recipient` field of the message is overriden to be the wallet's address.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#test-messages{ts:line-numbers}
 
