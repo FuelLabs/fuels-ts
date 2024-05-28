@@ -478,7 +478,7 @@ export function getOperations({
   abiMap,
   rawPayload,
   maxInputs,
-  assetId,
+  baseAssetId,
 }: GetOperationParams): Operation[] {
   if (isTypeCreate(transactionType)) {
     return [
@@ -498,7 +498,7 @@ export function getOperations({
         rawPayload,
         maxInputs,
       }),
-      ...getWithdrawFromFuelOperations({ inputs, receipts, assetId }),
+      ...getWithdrawFromFuelOperations({ inputs, receipts, baseAssetId }),
     ];
   }
   // at this point we are sure it's a mint transaction

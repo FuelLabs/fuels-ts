@@ -267,7 +267,7 @@ describe('operations', () => {
       const operations = getWithdrawFromFuelOperations({
         inputs: [MOCK_INPUT_COIN],
         receipts: [MOCK_RECEIPT_MESSAGE_OUT, MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);
@@ -278,7 +278,7 @@ describe('operations', () => {
       const operations = getWithdrawFromFuelOperations({
         inputs: [],
         receipts: [MOCK_RECEIPT_MESSAGE_OUT, MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(0);
@@ -294,7 +294,7 @@ describe('operations', () => {
           MOCK_RECEIPT_RETURN_DATA_2,
           MOCK_RECEIPT_SCRIPT_RESULT,
         ],
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(0);
@@ -353,7 +353,7 @@ describe('operations', () => {
           MOCK_RECEIPT_SCRIPT_RESULT,
         ],
         maxInputs: bn(255),
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
       expect(operations.length).toEqual(2);
       expect(operations).toStrictEqual(expected);
@@ -404,7 +404,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
         receipts: receiptsCallNoAmount,
         maxInputs: bn(255),
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(2);
@@ -436,7 +436,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
         maxInputs: bn(255),
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
       expect(operations.length).toEqual(1);
 
@@ -470,7 +470,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_COIN, { ...MOCK_OUTPUT_CHANGE, to: sender }],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
         maxInputs: bn(255),
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);
@@ -501,7 +501,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_COIN],
         receipts: [],
         maxInputs: bn(255),
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);
@@ -526,7 +526,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE],
         receipts: [],
         maxInputs: bn(255),
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);
@@ -551,7 +551,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_CONTRACT_CREATED, MOCK_OUTPUT_CHANGE],
         receipts: [],
         maxInputs: bn(255),
-        assetId: ZeroBytes32,
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);

@@ -83,7 +83,7 @@ describe('TransactionSummary', () => {
       abiMap: {},
       maxGasPerTx,
       gasPrice: bn(1),
-      assetId: baseAssetId,
+      baseAssetId,
     });
 
     expect(transactionSummary).toMatchObject(expected);
