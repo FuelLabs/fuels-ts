@@ -37,7 +37,7 @@ describe(__filename, () => {
       abi,
       inputData: [inputAddress],
     });
-    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
+    await seedTestWallet(predicate, [[100_000, baseAssetId]]);
   });
 
   it('should get predicate resources and add them to the predicate data', async () => {
