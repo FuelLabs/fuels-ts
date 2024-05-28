@@ -66,7 +66,7 @@ describe('encode and decode', () => {
             type: 0,
             typeArguments: null,
           },
-          offset: 888,
+          offset: 784,
         },
       ],
     };
