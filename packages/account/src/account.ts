@@ -9,21 +9,22 @@ import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
 import type {
-  TransactionRequestLike,
-  CallResult,
   TransactionRequest,
-  Coin,
   CoinQuantityLike,
   CoinQuantity,
-  Message,
   Resource,
   ExcludeResourcesOption,
   Provider,
   ScriptTransactionRequestLike,
-  ProviderSendTxParams,
   TransactionResponse,
-  EstimateTransactionParams,
   TransactionCost,
+  EstimateTransactionParams,
+  CursorPaginationArgs,
+  TransactionRequestLike,
+  ProviderSendTxParams,
+  CallResult,
+  GetCoinsResponse,
+  GetMessagesResponse,
 } from './providers';
 import {
   withdrawScript,
@@ -156,33 +157,8 @@ export class Account extends AbstractAccount {
    *
    * @returns A promise that resolves to an array of Messages.
    */
-  async getMessages(): Promise<Message[]> {
-    const messages = [];
-
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageMessages = await this.provider.getMessages(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      messages.push(...pageMessages);
-
-      const hasNextPage = pageMessages.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} messages exceed the current supported limit.`
-      );
-    }
-
-    return messages;
+  async getMessages(paginationArgs?: CursorPaginationArgs): Promise<GetMessagesResponse> {
+    return this.provider.getMessages(this.address, paginationArgs);
   }
 
   /**
