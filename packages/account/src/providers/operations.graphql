@@ -644,6 +644,9 @@ query getCoins(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...coinFragment
@@ -734,6 +737,9 @@ query getMessages(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...messageFragment
