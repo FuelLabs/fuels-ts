@@ -24,6 +24,7 @@ export enum SwayType {
   contract = 'contract',
   script = 'script',
   predicate = 'predicate',
+  library = 'library',
 }
 
 export const forcFiles = new Map<string, ForcToml>();
@@ -55,7 +56,11 @@ export function readSwayType(path: string) {
 
   if (!swayFiles.has(swayEntryPath)) {
     const swayFile = readFileSync(swayEntryPath, 'utf8');
-    const [swayType] = swayFile.split(';\n');
+    const swayTypeLines = Object.values(SwayType).map((type) => `${type};`);
+    const swayType = swayFile
+      .split('\n')
+      .find((line) => swayTypeLines.some((swayTypeLine) => line === swayTypeLine))
+      ?.split(';')[0];
     swayFiles.set(swayEntryPath, swayType as SwayType);
   }
 
