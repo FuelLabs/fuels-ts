@@ -18,7 +18,7 @@ npm create fuels@{{fuels}} [project-name] [options]
 ```
 
 ```sh-vue [bun]
-bun create fuels@{{fuels}} [project-name] [options]
+bunx --bun create-fuels@{{fuels}} [project-name] [options]
 ```
 
 :::

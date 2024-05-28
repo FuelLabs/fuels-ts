@@ -24,7 +24,7 @@ pnpm create fuels@{{fuels}}
 ```
 
 ```sh-vue [bun]
-bun create fuels@{{fuels}}
+bunx --bun create-fuels@{{fuels}}
 ```
 
 :::
