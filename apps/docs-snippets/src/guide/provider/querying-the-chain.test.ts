@@ -61,7 +61,7 @@ describe('querying the chain', () => {
       [100, assetIdA],
     ]);
 
-    const walletBalances = await wallet.getBalances();
+    const { balances: walletBalances } = await wallet.getBalances();
     // [
     //   { amount: bn(42), assetId: baseAssetId }
     //   { amount: bn(100), assetId: assetIdA }

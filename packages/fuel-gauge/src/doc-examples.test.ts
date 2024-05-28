@@ -1,12 +1,5 @@
 import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
-import type {
-  Bech32Address,
-  BigNumberish,
-  Bytes,
-  CoinQuantity,
-  JsonAbi,
-  WalletLocked,
-} from 'fuels';
+import type { Bech32Address, BigNumberish, Bytes, JsonAbi, WalletLocked } from 'fuels';
 import {
   Predicate,
   bn,
@@ -169,7 +162,7 @@ describe('Doc Examples', () => {
 
     const newlyLockedWallet = unlockedWallet.lock();
     const balance: BigNumberish = await myWallet.getBalance(baseAssetId);
-    const balances: CoinQuantity[] = await myWallet.getBalances();
+    const { balances } = await myWallet.getBalances();
 
     expect(newlyLockedWallet.address).toEqual(someWallet.address);
     expect(balance).toBeTruthy();
@@ -224,9 +217,9 @@ describe('Doc Examples', () => {
     const walletC = await generateTestWallet(provider);
 
     // retrieve balances of wallets
-    const walletABalances = await walletA.getBalances();
-    const walletBBalances = await walletB.getBalances();
-    const walletCBalances = await walletC.getBalances();
+    const { balances: walletABalances } = await walletA.getBalances();
+    const { balances: walletBBalances } = await walletB.getBalances();
+    const { balances: walletCBalances } = await walletC.getBalances();
 
     // validate balances
     expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(42) }]);
@@ -334,6 +327,7 @@ describe('Doc Examples', () => {
       ],
       loggedTypes: [],
       configurables: [],
+      messagesTypes: [],
     };
     const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
     const signature1 = await wallet1.signMessage(dataToSign);
