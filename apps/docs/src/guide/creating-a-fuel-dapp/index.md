@@ -137,7 +137,7 @@ You should now be able to see the counter dApp running at `http://localhost:3000
 
 :::
 
-**Note** If you selected `Predicate` from the interactive menu of `create fuels`, and you want to learn more about how you could create a Fuel dApp that uses predicates, check out our [Create a Predicate dApp Guide](./using-predidcates.md) guide.
+**Note** If you selected `Predicate` from the interactive menu of `create fuels`, and you want to learn more about how you could create a Fuel dApp that uses predicates, check out our [Create a Predicate dApp Guide](./creating-a-fuel-dapp-with-predicates.md) guide.
 
 ---
 
