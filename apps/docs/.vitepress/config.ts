@@ -370,12 +370,28 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Reference',
-                link: '/guide/testing/reference',
+                text: 'Launching a Test Node',
+                link: '/guide/testing/launching-a-test-node',
               },
               {
-                text: 'Tweaking the Blockchain',
-                link: '/guide/testing/tweaking-the-blockchain',
+                text: 'Test Node Options',
+                link: '/guide/testing/test-node-options',
+              },
+              {
+                text: 'Fuel Core Options',
+                link: '/guide/testing/fuel-core-options',
+              },
+              {
+                text: 'Basic Example',
+                link: '/guide/testing/basic-example',
+              },
+              {
+                text: 'Advanced Example',
+                link: '/guide/testing/advanced-example',
+              },
+              {
+                text: 'Custom Blocks',
+                link: '/guide/testing/custom-blocks',
               },
             ],
           },

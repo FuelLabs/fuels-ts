@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { WalletUnlocked } from 'fuels';
 import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
@@ -14,6 +15,12 @@ describe('launching a test node', () => {
     // #import { launchTestNode };
 
     using launched = await launchTestNode();
+
+    /*
+      The method `launch.cleanup()` will be automatically
+      called when the variable `launched` goes out of block scope.
+    */
+
     // #endregion automatic-cleanup
   });
 
@@ -22,12 +29,26 @@ describe('launching a test node', () => {
     // #import { launchTestNode };
 
     const launched = await launchTestNode();
+
+    /*
+      Do your things, run your tests, and then call
+      `launched.cleanup()` to dispose of everything.
+    */
+
     launched.cleanup();
     // #endregion manual-cleanup
   });
 
+  test('options', async () => {
+    // #region options
+    // #import { launchTestNode };
+
+    using launched = await launchTestNode(/* options */);
+    // #endregion options
+  });
+
   test('simple contract deployment', async () => {
-    // #region deploy-contract
+    // #region basic-example
     // #import { launchTestNode };
 
     // #context import { TestContract__factory } from 'path/to/typegen/output';
@@ -49,14 +70,14 @@ describe('launching a test node', () => {
     } = launched;
 
     const response = await contract.functions.get_count().call();
-    // #endregion deploy-contract
+    // #endregion basic-example
     expect(response.value.toNumber()).toBe(0);
     expect(provider).toBeDefined();
     expect(wallets).toBeDefined();
   });
 
   test('multiple contracts and wallets', async () => {
-    // #region multiple-contracts-and-wallets
+    // #region advanced-example
     // #import { launchTestNode, AssetId, TestMessage };
 
     // #context import { TestContract__factory } from 'path/to/typegen/output';
@@ -87,7 +108,7 @@ describe('launching a test node', () => {
       contracts: [contract],
       wallets: [wallet1, wallet2, wallet3, wallet4],
     } = launched;
-    // #endregion multiple-contracts-and-wallets
+    // #endregion advanced-example
 
     expect(contract).toBeDefined();
     expect(wallet1).toBeDefined();
@@ -98,7 +119,11 @@ describe('launching a test node', () => {
 
   test('configuring custom fuel-core args', async () => {
     // #region custom-fuel-core-args
+    // #import { launchTestNode };
+
     process.env.DEFAULT_FUEL_CORE_ARGS = `--tx-max-depth 20`;
+
+    // `nodeOptions.args` will override the above values if provided.
 
     using launched = await launchTestNode();
     // #endregion custom-fuel-core-args
@@ -113,6 +138,8 @@ describe('launching a test node', () => {
     const snapshotDirPath = join(__dirname, '../../../../../', '.fuel-core', 'configs');
 
     // #region custom-chain-config
+    // #import { launchTestNode };
+
     process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = snapshotDirPath;
 
     using launched = await launchTestNode();
@@ -187,6 +214,33 @@ describe('launching a test node', () => {
     const [message] = await wallet.getMessages();
     // message.nonce === testMessage.nonce
     // #endregion test-messages
+
+    expect(message.nonce).toEqual(testMessage.nonce);
+  });
+
+  test('generating test messages directly on chain', async () => {
+    // #region test-messages-chain
+    // #import { launchTestNode, TestMessage, WalletUnlocked };
+
+    const recipient = WalletUnlocked.generate();
+    const testMessage = new TestMessage({
+      amount: 1000,
+      recipient: recipient.address,
+    });
+
+    using launched = await launchTestNode({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [testMessage.toChainMessage()],
+          },
+        },
+      },
+    });
+
+    const [message] = await recipient.getMessages();
+    // message.nonce === testMessage.nonce
+    // #endregion test-messages-chain
 
     expect(message.nonce).toEqual(testMessage.nonce);
   });
