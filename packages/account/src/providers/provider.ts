@@ -102,6 +102,11 @@ export type GetMessagesResponse = {
   pageInfo: GqlPageInfo;
 };
 
+export type GetBalancesResponse = {
+  balances: CoinQuantity[];
+  pageInfo: GqlPageInfo;
+};
+
 /**
  * Deployed Contract bytecode and contract id
  */
@@ -1534,19 +1539,21 @@ Supported fuel-core version: ${supportedVersion}.`
   async getBalances(
     owner: string | AbstractAddress,
     paginationArgs?: CursorPaginationArgs
-  ): Promise<CoinQuantity[]> {
-    const result = await this.operations.getBalances({
-      first: 10,
+  ): Promise<GetBalancesResponse> {
+    const {
+      balances: { edges, pageInfo },
+    } = await this.operations.getBalances({
+      first: 100,
       ...paginationArgs,
       filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
-    const balances = result.balances.edges.map((edge) => edge.node);
-
-    return balances.map((balance) => ({
-      assetId: balance.assetId,
-      amount: bn(balance.amount),
+    const balances = edges.map(({ node }) => ({
+      assetId: node.assetId,
+      amount: bn(node.amount),
     }));
+
+    return { balances, pageInfo };
   }
 
   /**

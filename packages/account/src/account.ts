@@ -25,6 +25,7 @@ import type {
   CallResult,
   GetCoinsResponse,
   GetMessagesResponse,
+  GetBalancesResponse,
 } from './providers';
 import {
   withdrawScript,
@@ -178,33 +179,8 @@ export class Account extends AbstractAccount {
    *
    * @returns A promise that resolves to an array of Coins and their quantities.
    */
-  async getBalances(): Promise<CoinQuantity[]> {
-    const balances = [];
-
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageBalances = await this.provider.getBalances(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      balances.push(...pageBalances);
-
-      const hasNextPage = pageBalances.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} balances exceed the current supported limit.`
-      );
-    }
-
-    return balances;
+  async getBalances(paginationArgs?: CursorPaginationArgs): Promise<GetBalancesResponse> {
+    return this.provider.getBalances(this.address, paginationArgs);
   }
 
   /**
