@@ -138,7 +138,7 @@ pnpm dev
 ```
 
 ```sh [bun]
-bun dev
+bun run dev
 ```
 
 :::

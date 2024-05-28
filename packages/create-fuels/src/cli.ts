@@ -164,7 +164,7 @@ export const runScaffoldCli = async ({
   );
   writeFileSync(packageJsonPath, newPackageJsonContents);
 
-  // Rewrite the READMD.md file
+  // Rewrite the README.md file
   const readmePath = join(projectPath, 'README.md');
   const readmeContents = readFileSync(readmePath, 'utf-8');
   const newReadmeContents = readmeContents
