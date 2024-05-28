@@ -10,7 +10,7 @@ import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 import { ScriptTransactionRequest, Provider } from './providers';
 import * as providersMod from './providers';
-import type { Coin, CoinQuantity, Message, Resource } from './providers';
+import type { CoinQuantity, Resource } from './providers';
 import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 
@@ -64,40 +64,13 @@ describe('Account', () => {
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
-    const coins = await account.getCoins();
+    const { coins } = await account.getCoins();
     const assetA = coins.find((c) => c.assetId === assets[0]);
     expect(assetA?.amount.gt(1)).toBeTruthy();
     const assetB = coins.find((c) => c.assetId === assets[1]);
     expect(assetB?.amount.gt(1)).toBeTruthy();
     const assetC = coins.find((c) => c.assetId === assets[2]);
     expect(assetC?.amount.gt(1)).toBeTruthy();
-  });
-
-  it('should throw if coins length is higher than 9999', async () => {
-    const dummyCoins: Coin[] = new Array(10000);
-
-    vi.spyOn(Provider.prototype, 'getCoins').mockImplementation(async () =>
-      Promise.resolve(dummyCoins)
-    );
-
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
-
-    let result;
-    let error;
-
-    try {
-      result = await account.getCoins();
-    } catch (err) {
-      error = err;
-    }
-
-    expect(result).toBeUndefined();
-    expect((<Error>error).message).toEqual(
-      'Wallets containing more than 9999 coins exceed the current supported limit.'
-    );
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
@@ -135,35 +108,12 @@ describe('Account', () => {
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
       provider
     );
-    const messages = await account.getMessages();
+    const { messages, pageInfo } = await account.getMessages();
+
+    expect(pageInfo.hasNextPage).toBeFalsy();
+    expect(pageInfo.hasPreviousPage).toBeFalsy();
+
     expect(messages.length).toEqual(1);
-  });
-
-  it('should throw if messages length is higher than 9999', async () => {
-    const dummyMessages: Message[] = new Array(10000);
-
-    vi.spyOn(Provider.prototype, 'getMessages').mockImplementation(async () =>
-      Promise.resolve(dummyMessages)
-    );
-
-    const account = new Account(
-      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
-      provider
-    );
-
-    let result;
-    let error;
-
-    try {
-      result = await account.getMessages();
-    } catch (err) {
-      error = err;
-    }
-
-    expect(result).toBeUndefined();
-    expect((<Error>error).message).toEqual(
-      'Wallets containing more than 9999 messages exceed the current supported limit.'
-    );
   });
 
   it('should get single asset balance just fine', async () => {
@@ -528,7 +478,7 @@ describe('Account', () => {
       [500_000, baseAssetId],
     ]);
 
-    const coins = await user.getCoins();
+    const { coins } = await user.getCoins();
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expect(
@@ -570,7 +520,7 @@ describe('Account', () => {
 
     await response.wait();
 
-    const receiverACoins = await receiverA.getCoins();
+    const { coins: receiverACoins } = await receiverA.getCoins();
     expect(receiverACoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),
@@ -578,7 +528,7 @@ describe('Account', () => {
       ])
     );
 
-    const receiverBCoins = await receiverB.getCoins();
+    const { coins: receiverBCoins } = await receiverB.getCoins();
     expect(receiverBCoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),

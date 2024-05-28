@@ -18,11 +18,11 @@ describe('querying the chain', () => {
     ]);
 
     // get single coin
-    const coin = await wallet.getCoins(baseAssetId);
+    const { coins: coin } = await wallet.getCoins(baseAssetId);
     // [{ amount: bn(42), assetId: baseAssetId }]
 
     // get all coins
-    const coins = await wallet.getCoins();
+    const { coins } = await wallet.getCoins();
     // [
     //   { amount: bn(42), assetId: baseAssetId }
     //   { amount: bn(100), assetId: assetIdA }

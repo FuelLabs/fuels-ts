@@ -16,6 +16,8 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
+import { seedTestWallet } from '../test-utils';
+import { Wallet } from '../wallet';
 
 import type { ChainInfo, NodeInfo } from './provider';
 import Provider from './provider';
@@ -1503,5 +1505,74 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     expect(message).toBeDefined();
     expect(message?.nonce).toEqual(nonce);
+  });
+
+  test('can properly use getCoins pagination args', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+    const wallet = Wallet.generate({ provider });
+
+    const defaultNumberOfCoins = 100;
+    const coinsToSeed = 120;
+
+    await seedTestWallet(wallet, [[10_000, baseAssetId]], coinsToSeed);
+
+    let { coins, pageInfo } = await wallet.getCoins(baseAssetId, {
+      first: coinsToSeed - 1,
+    });
+
+    expect(coins.length).toBe(coinsToSeed - 1);
+    expect(pageInfo.hasNextPage).toBeTruthy();
+    expect(pageInfo.hasPreviousPage).toBeFalsy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId, {
+      after: pageInfo.endCursor,
+    }));
+
+    expect(coins.length).toBe(1);
+    expect(pageInfo.hasNextPage).toBeFalsy();
+    expect(pageInfo.hasPreviousPage).toBeTruthy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId));
+
+    // default number of coins to fetch should be 100
+    expect(coins.length).toBe(defaultNumberOfCoins);
+  });
+
+  test('can properly use getMessages pagination args', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.fromPrivateKey(
+      '0x906d420305ffc528e2558310e85e7f3bef10c117c583cab5ae812a0fddf4561d',
+      provider
+    );
+
+    const accountTotalMessages = 3;
+
+    let { messages, pageInfo } = await wallet.getMessages({ first: accountTotalMessages - 1 });
+
+    expect(messages.length).toBe(accountTotalMessages - 1);
+    expect(pageInfo.hasNextPage).toBeTruthy();
+    expect(pageInfo.hasPreviousPage).toBeFalsy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ messages, pageInfo } = await wallet.getMessages({
+      after: pageInfo.endCursor,
+    }));
+
+    expect(messages.length).toBe(1);
+    expect(pageInfo.hasNextPage).toBeFalsy();
+    expect(pageInfo.hasPreviousPage).toBeTruthy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ messages, pageInfo } = await wallet.getMessages());
+
+    // default number of coins to fetch should be 100
+    expect(messages.length).toBe(accountTotalMessages);
   });
 });
