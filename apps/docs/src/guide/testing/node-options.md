@@ -7,13 +7,7 @@ This reference describes all the options of the [`launchTestNode`](./index.md#la
 - `nodeOptions`
 - `providerOptions`
 
-<!-- TODO: Consider replacing hard-coded snippet with full example -->
-
-```ts
-import { launchTestNode } from "fuels/test-utils";
-
-using launched = await launchTestNode(/* options */);
-```
+<<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#options{ts:line-numbers}
 
 ## `walletConfig`
 
@@ -34,14 +28,17 @@ The `AssetId` utility integrates with [`walletConfig`](./reference.md#walletconf
 
 ### `walletConfig.messages`
 
-A helper class to create messages for testing purposes. Used in tandem with [`walletConfig`](./reference.md#walletconfig).
-It can also be used standalone and passed into the initial state of a chain via the `TestMessage.toChainMessage` instance method.
+The `TestMessage` helper class is used to create messages for testing purposes.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#test-messages{ts:line-numbers}
 
+It can also be used standalone and passed into the initial state of the chain via the `TestMessage.toChainMessage` instance method.
+
+<<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#test-messages-chain{ts:line-numbers}
+
 ## `deployContracts`
 
-Used to deploy contracts on the node `launchTestNode` utility launches. It's an array of objects with the following properties:
+Used to deploy contracts on the node the `launchTestNode` utility launches. It's an array of objects with the following properties:
 
 - `deployer`: contract deployer object compatible with factories outputted by `pnpm fuels typegen`. You can also pass in your custom object that satisfies the interface.
 - `bytecode`: the contract's bytecode.

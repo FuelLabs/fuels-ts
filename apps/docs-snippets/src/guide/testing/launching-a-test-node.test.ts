@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { WalletUnlocked } from 'fuels';
 import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
@@ -16,8 +17,8 @@ describe('launching a test node', () => {
     using launched = await launchTestNode();
 
     /*
-      The method `launch.cleanp()` will be automatically
-      called when the variable `launched` goes out of scope.
+      The method `launch.cleanup()` will be automatically
+      called when the variable `launched` goes out of block scope.
     */
 
     // #endregion automatic-cleanup
@@ -36,6 +37,14 @@ describe('launching a test node', () => {
 
     launched.cleanup();
     // #endregion manual-cleanup
+  });
+
+  test('options', async () => {
+    // #region options
+    // #import { launchTestNode };
+
+    using launched = await launchTestNode(/* options */);
+    // #endregion options
   });
 
   test('simple contract deployment', async () => {
@@ -110,9 +119,11 @@ describe('launching a test node', () => {
 
   test('configuring custom fuel-core args', async () => {
     // #region custom-fuel-core-args
+    // #import { launchTestNode };
+
     process.env.DEFAULT_FUEL_CORE_ARGS = `--tx-max-depth 20`;
 
-    // If you inform, `nodeOptions.args` will override the above values
+    // `nodeOptions.args` will override the above values if provided.
 
     using launched = await launchTestNode();
     // #endregion custom-fuel-core-args
@@ -127,6 +138,8 @@ describe('launching a test node', () => {
     const snapshotDirPath = join(__dirname, '../../../../../', '.fuel-core', 'configs');
 
     // #region custom-chain-config
+    // #import { launchTestNode };
+
     process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = snapshotDirPath;
 
     using launched = await launchTestNode();
@@ -201,6 +214,33 @@ describe('launching a test node', () => {
     const [message] = await wallet.getMessages();
     // message.nonce === testMessage.nonce
     // #endregion test-messages
+
+    expect(message.nonce).toEqual(testMessage.nonce);
+  });
+
+  test('generating test messages directly on chain', async () => {
+    // #region test-messages-chain
+    // #import { launchTestNode, TestMessage, WalletUnlocked };
+
+    const recipient = WalletUnlocked.generate();
+    const testMessage = new TestMessage({
+      amount: 1000,
+      recipient: recipient.address,
+    });
+
+    using launched = await launchTestNode({
+      nodeOptions: {
+        snapshotConfig: {
+          stateConfig: {
+            messages: [testMessage.toChainMessage()],
+          },
+        },
+      },
+    });
+
+    const [message] = await recipient.getMessages();
+    // message.nonce === testMessage.nonce
+    // #endregion test-messages-chain
 
     expect(message.nonce).toEqual(testMessage.nonce);
   });
