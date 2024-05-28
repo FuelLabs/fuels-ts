@@ -198,7 +198,7 @@ export function getWithdrawFromFuelOperations({
   const withdrawFromFuelOperations = messageOutReceipts.reduce(
     (prevWithdrawFromFuelOps, receipt) => {
       // TODO: replace this hardcode with receipt.assetId when assetId gets added to MessageOutReceipt
-      const assetId = '0x0000000000000000000000000000000000000000000000000000000000000000';
+      const assetId = '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07';
       const input = getInputFromAssetId(inputs, assetId);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
