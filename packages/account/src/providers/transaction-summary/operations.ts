@@ -192,13 +192,12 @@ export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
 export function getWithdrawFromFuelOperations({
   inputs,
   receipts,
-}: InputParam & ReceiptParam): Operation[] {
+  assetId,
+}: InputParam & ReceiptParam & { assetId: string }): Operation[] {
   const messageOutReceipts = getReceiptsMessageOut(receipts);
 
   const withdrawFromFuelOperations = messageOutReceipts.reduce(
     (prevWithdrawFromFuelOps, receipt) => {
-      // TODO: replace this hardcode with receipt.assetId when assetId gets added to MessageOutReceipt
-      const assetId = '0x0000000000000000000000000000000000000000000000000000000000000000';
       const input = getInputFromAssetId(inputs, assetId);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
@@ -479,6 +478,7 @@ export function getOperations({
   abiMap,
   rawPayload,
   maxInputs,
+  assetId,
 }: GetOperationParams): Operation[] {
   if (isTypeCreate(transactionType)) {
     return [
@@ -498,7 +498,7 @@ export function getOperations({
         rawPayload,
         maxInputs,
       }),
-      ...getWithdrawFromFuelOperations({ inputs, receipts }),
+      ...getWithdrawFromFuelOperations({ inputs, receipts, assetId }),
     ];
   }
   // at this point we are sure it's a mint transaction
