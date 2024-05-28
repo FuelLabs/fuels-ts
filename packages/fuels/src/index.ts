@@ -5,6 +5,7 @@ export * from '@fuel-ts/address';
 export * from '@fuel-ts/address/configs';
 export * from '@fuel-ts/contract';
 export * from '@fuel-ts/crypto';
+export * from '@fuel-ts/errors';
 export * from '@fuel-ts/hasher';
 export * from '@fuel-ts/interfaces';
 export * from '@fuel-ts/math';
