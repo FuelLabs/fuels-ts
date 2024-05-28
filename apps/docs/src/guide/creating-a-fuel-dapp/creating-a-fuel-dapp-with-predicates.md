@@ -34,13 +34,6 @@ It would also be useful to change the placeholder text to say "Enter a new pin" 
       />
 ```
 
-:::
-
-**Note** If we had wanted to create a completely new Predicate and deploy it to the same address, we could have done it as follows:
-
----
-<<< @/../../docs-snippets/src/guide/predicates/using-predicates.test.ts#predicate-with-configurable-pin-2{ts:line-numbers}
-
 Thirdly, we will add a button that calls the `changePin` function when clicked.
 
 ```tsx
