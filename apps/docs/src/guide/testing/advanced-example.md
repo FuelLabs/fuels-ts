@@ -6,11 +6,13 @@
 
 # Advanced Example
 
-A more complex example showcasing genesis block state configuration with [`walletConfig`](./reference.md#walletconfig) and deployment of multiple contracts is shown below.
+A more complex example showcasing genesis block state configuration with [`walletConfig`](./test-node-options.md#walletconfig) and deployment of multiple contracts is shown below.
 
-<<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#multiple-contracts-and-wallets{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#advanced-example{ts:line-numbers}
 
 ## Summary
 
-1.  This thing
-1.  That thing as well
+1. All points listed in the [basic example](./basic-example.md#summary) apply here as well.
+1. Multiple wallets were generated with highly-specific coins and messages.
+1. It's possible to specify the wallet to be used for contract deployment via `walletIndex`.
+1. The test contract can be deployed with all the options available for real contract deployment.

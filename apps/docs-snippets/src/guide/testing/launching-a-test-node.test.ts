@@ -48,7 +48,7 @@ describe('launching a test node', () => {
   });
 
   test('simple contract deployment', async () => {
-    // #region deploy-contract
+    // #region basic-example
     // #import { launchTestNode };
 
     // #context import { TestContract__factory } from 'path/to/typegen/output';
@@ -70,14 +70,14 @@ describe('launching a test node', () => {
     } = launched;
 
     const response = await contract.functions.get_count().call();
-    // #endregion deploy-contract
+    // #endregion basic-example
     expect(response.value.toNumber()).toBe(0);
     expect(provider).toBeDefined();
     expect(wallets).toBeDefined();
   });
 
   test('multiple contracts and wallets', async () => {
-    // #region multiple-contracts-and-wallets
+    // #region advanced-example
     // #import { launchTestNode, AssetId, TestMessage };
 
     // #context import { TestContract__factory } from 'path/to/typegen/output';
@@ -108,7 +108,7 @@ describe('launching a test node', () => {
       contracts: [contract],
       wallets: [wallet1, wallet2, wallet3, wallet4],
     } = launched;
-    // #endregion multiple-contracts-and-wallets
+    // #endregion advanced-example
 
     expect(contract).toBeDefined();
     expect(wallet1).toBeDefined();
