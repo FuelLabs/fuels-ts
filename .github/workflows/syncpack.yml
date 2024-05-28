@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "16" # Ensure compatibility with Syncpack
+          node-version: "20"
 
       - name: Run Syncpack to Manage Dependencies
         uses: JamieMason/syncpack-github-action@0.2.3
