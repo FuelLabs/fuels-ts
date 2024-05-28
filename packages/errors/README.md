@@ -75,7 +75,8 @@ describe('this and that' () => {
 ### External usage
 
 ```ts
-import { FuelError, Provider } from "fuels";
+import { Provider } from "fuels";
+import { FuelError } from "@fuel-ts/errors";
 
 type Locale = "pt-BR" | "bs-BA" | "en-GB";
 
