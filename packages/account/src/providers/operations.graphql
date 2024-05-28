@@ -715,6 +715,9 @@ query getBalances(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...balanceFragment
