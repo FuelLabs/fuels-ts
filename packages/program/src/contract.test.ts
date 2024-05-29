@@ -33,6 +33,7 @@ const ABI: JsonAbi = {
     },
   ],
   loggedTypes: [],
+  messagesTypes: [],
   configurables: [],
 };
 

@@ -66,13 +66,12 @@ Options:
 
 Commands:
   init [options]     Create a sample `fuel.config.ts` file
+  node [options]     Start a Fuel node
   dev [options]      Start a Fuel node and run build + deploy on every file change
   build [options]    Build Sway programs and generate Typescript for them
   deploy [options]   Deploy contracts to the Fuel network
   typegen [options]  Generate Typescript from Sway ABI JSON files
   versions           Check for version incompatibilities
-  core               Wrapper around Fuel Core binary
-  forc               Wrapper around Forc binary
   help [command]     Display help for command
 ```
 

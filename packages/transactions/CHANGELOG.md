@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.89.0
+
+### Patch Changes
+
+- 685829b: fix: use `V1` encode for `Upgrade` and `Upload` transaction coders
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [f83502e]
+- Updated dependencies [af3c143]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [f76aa57]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/abi-coder@0.89.0
+  - @fuel-ts/address@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
 ## 0.88.1
 
 ### Patch Changes

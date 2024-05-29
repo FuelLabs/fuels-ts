@@ -40,24 +40,25 @@ describe('init', () => {
     const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
     expect(fuelsContents).toMatch(`workspace: './workspace',`);
     expect(fuelsContents).toMatch(`output: './output',`);
-    expect(fuelsContents).not.toMatch(`useBuiltinForc: true,`);
-    expect(fuelsContents).not.toMatch(`useBuiltinFuelCore: true,`);
+    expect(fuelsContents).not.toMatch(`forcPath: 'fuels-forc',`);
+    expect(fuelsContents).not.toMatch(`fuelCorePath: 'fuels-core',`);
   });
 
-  it('should run `init` command using built-in flags', async () => {
+  it('should run `init` command using custom binaries', async () => {
     await runInit({
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
-      useBuiltinBinaries: true,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
     expect(existsSync(paths.fuelsConfigPath)).toBeTruthy();
     const fuelsContents = readFileSync(paths.fuelsConfigPath, 'utf-8');
     expect(fuelsContents).toMatch(`workspace: './workspace',`);
     expect(fuelsContents).toMatch(`output: './output',`);
-    expect(fuelsContents).toMatch(`useBuiltinForc: true,`);
-    expect(fuelsContents).toMatch(`useBuiltinFuelCore: true,`);
+    expect(fuelsContents).toMatch(`forcPath: 'fuels-forc',`);
+    expect(fuelsContents).toMatch(`fuelCorePath: 'fuels-core',`);
   });
 
   it('should run `init` command and throw for existent config file', async () => {

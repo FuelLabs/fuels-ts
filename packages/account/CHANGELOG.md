@@ -1,5 +1,36 @@
 # Change Log
 
+## 0.89.0
+
+### Minor Changes
+
+- 0b53b85: feat!: pass base asset ID for withdrawals
+- 7c08593: feat!: transfer for multiple addresses
+
+### Patch Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+- 3b27bac: fix: add `predicateData` to predicate resources and inputs
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [f83502e]
+- Updated dependencies [af3c143]
+- Updated dependencies [685829b]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [a96c1fe]
+- Updated dependencies [f76aa57]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/abi-coder@0.89.0
+  - @fuel-ts/transactions@0.89.0
+  - @fuel-ts/address@0.89.0
+  - @fuel-ts/crypto@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/merkle@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
 ## 0.88.1
 
 ### Patch Changes

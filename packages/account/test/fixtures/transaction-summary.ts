@@ -256,6 +256,7 @@ export const MOCK_ABI_MAP: AbiMap = {
       },
     ],
     loggedTypes: [],
+    messagesTypes: [],
     configurables: [],
   },
 };

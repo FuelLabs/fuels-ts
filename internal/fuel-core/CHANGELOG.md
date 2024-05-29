@@ -1,4 +1,12 @@
-# @fuel-ts/fuel-core
+# @internal/fuel-core
+
+## 0.88.2
+
+### Patch Changes
+
+- f83502e: chore: refactor for performance improvements
+
+## 0.86.0
 
 ## 0.88.1
 

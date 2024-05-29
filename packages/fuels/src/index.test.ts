@@ -10,6 +10,7 @@ describe('index.js', () => {
 
     expect(fuels.Interface).toBeTruthy();
     expect(fuels.Address).toBeTruthy();
+    expect(fuels.FuelError).toBeTruthy();
     expect(fuels.Contract).toBeTruthy();
     expect(fuels.Predicate).toBeTruthy();
     expect(fuels.Account).toBeTruthy();
