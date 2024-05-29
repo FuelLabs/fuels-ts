@@ -30,7 +30,7 @@ describe('Predicate', () => {
         wallets: [wallet],
       } = launched;
 
-      const amountToPredicate = 3000;
+      const amountToPredicate = 300_000;
       const predicate = PredicateTrueAbi__factory.createInstance(provider);
 
       // Create a instance of the contract with the predicate as the caller Account
@@ -69,8 +69,8 @@ describe('Predicate', () => {
       );
 
       // setup predicate
-      const amountToPredicate = 20_000;
-      const amountToReceiver = 2_000;
+      const amountToPredicate = 1_000_000;
+      const amountToReceiver = 200_000;
       const predicate = PredicateMainArgsStructAbi__factory.createInstance(provider, [
         {
           has_account: true,
