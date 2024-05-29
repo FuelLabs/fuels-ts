@@ -6,7 +6,7 @@
 
 # Advanced Example
 
-A more complex example showcasing genesis block state configuration with [`walletConfig`](./test-node-options.md#walletconfig) and deployment of multiple contracts is shown below.
+A more complex example showcasing genesis block state configuration with [`walletsConfig`](./test-node-options.md#walletsconfig) and deployment of multiple contracts is shown below.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#advanced-example{ts:line-numbers}
 

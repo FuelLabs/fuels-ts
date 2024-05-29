@@ -9,12 +9,12 @@ import type { WalletUnlocked } from '../wallet';
 import { AssetId } from './asset-id';
 import type { LaunchNodeOptions } from './launchNode';
 import { launchNode } from './launchNode';
-import type { WalletConfigOptions } from './wallet-config';
-import { WalletConfig } from './wallet-config';
+import type { WalletsConfigOptions } from './wallet-config';
+import { WalletsConfig } from './wallet-config';
 
 export interface LaunchCustomProviderAndGetWalletsOptions {
   /** Configures the wallets that should exist in the genesis block of the `fuel-core` node. */
-  walletConfig?: Partial<WalletConfigOptions>;
+  walletsConfig?: Partial<WalletsConfigOptions>;
   /** Options for configuring the provider. */
   providerOptions?: Partial<ProviderOptions>;
   /** Options for configuring the test node. */
@@ -25,7 +25,7 @@ export interface LaunchCustomProviderAndGetWalletsOptions {
   >;
 }
 
-const defaultWalletConfigOptions: WalletConfigOptions = {
+const defaultWalletConfigOptions: WalletsConfigOptions = {
   count: 2,
   assets: [AssetId.A, AssetId.B],
   coinsPerAsset: 1,
@@ -49,18 +49,18 @@ export interface SetupTestProviderAndWalletsReturn extends Disposable {
  *
  */
 export async function setupTestProviderAndWallets({
-  walletConfig: walletConfigOptions = {},
+  walletsConfig: walletsConfigOptions = {},
   providerOptions,
   nodeOptions = {},
 }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {}): Promise<SetupTestProviderAndWalletsReturn> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
-  const walletConfig = new WalletConfig(
+  const walletsConfig = new WalletsConfig(
     nodeOptions.snapshotConfig?.chainConfig?.consensus_parameters?.V1?.base_asset_id ??
       defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.base_asset_id,
     {
       ...defaultWalletConfigOptions,
-      ...walletConfigOptions,
+      ...walletsConfigOptions,
     }
   );
 
@@ -69,7 +69,7 @@ export async function setupTestProviderAndWallets({
     ...nodeOptions,
     snapshotConfig: mergeDeepRight(
       defaultSnapshotConfigs,
-      walletConfig.apply(nodeOptions?.snapshotConfig)
+      walletsConfig.apply(nodeOptions?.snapshotConfig)
     ),
     port: '0',
   });
@@ -83,7 +83,7 @@ export async function setupTestProviderAndWallets({
     throw err;
   }
 
-  const wallets = walletConfig.wallets;
+  const wallets = walletsConfig.wallets;
   wallets.forEach((wallet) => {
     wallet.connect(provider);
   });

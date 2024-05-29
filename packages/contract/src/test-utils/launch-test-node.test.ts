@@ -90,7 +90,7 @@ describe('launchTestNode', () => {
 
     const { error } = await safeExec(() =>
       launchTestNode({
-        deployContracts: [
+        contractsConfigs: [
           {
             deployer: {
               deployContract: () => {
@@ -116,7 +116,7 @@ describe('launchTestNode', () => {
 
   test('a contract can be deployed', async () => {
     using launched = await launchTestNode({
-      deployContracts: [
+      contractsConfigs: [
         {
           deployer: {
             deployContract: async (bytecode, wallet, options) => {
@@ -139,10 +139,10 @@ describe('launchTestNode', () => {
 
   test('multiple contracts can be deployed with different wallets', async () => {
     using launched = await launchTestNode({
-      walletConfig: {
+      walletsConfig: {
         count: 2,
       },
-      deployContracts: [
+      contractsConfigs: [
         {
           deployer: {
             deployContract: async (bytecode, wallet, options) => {
@@ -184,7 +184,7 @@ describe('launchTestNode', () => {
     await expectToThrowFuelError(
       async () => {
         await launchTestNode({
-          deployContracts: [
+          contractsConfigs: [
             {
               deployer: {
                 deployContract: async (bytecode, wallet, options) => {

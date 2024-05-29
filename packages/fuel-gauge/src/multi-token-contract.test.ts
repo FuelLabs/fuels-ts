@@ -20,7 +20,7 @@ describe('MultiTokenContract', () => {
     'can mint and transfer coins',
     async () => {
       using launched = await launchTestNode({
-        deployContracts: [
+        contractsConfigs: [
           {
             deployer: MultiTokenContractAbi__factory,
             bytecode: binHexlified,
@@ -114,7 +114,7 @@ describe('MultiTokenContract', () => {
 
   it('can burn coins', async () => {
     using launched = await launchTestNode({
-      deployContracts: [
+      contractsConfigs: [
         {
           deployer: MultiTokenContractAbi__factory,
           bytecode: binHexlified,

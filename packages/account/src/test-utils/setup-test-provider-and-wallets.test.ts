@@ -131,7 +131,7 @@ describe('setupTestProviderAndWallets', () => {
     const [assetId] = AssetId.random();
     const testMessage = new TestMessage();
     using providerAndWallets = await setupTestProviderAndWallets({
-      walletConfig: {
+      walletsConfig: {
         count: 1,
         assets: [assetId],
         messages: [testMessage],
@@ -177,7 +177,7 @@ describe('setupTestProviderAndWallets', () => {
     const amountPerCoin = 15;
 
     using providerAndWallets = await setupTestProviderAndWallets({
-      walletConfig: {
+      walletsConfig: {
         count: numWallets,
         assets: numOfAssets,
         coinsPerAsset,
@@ -208,7 +208,7 @@ describe('setupTestProviderAndWallets', () => {
     await Promise.all(promises);
   });
 
-  test("gives control to add additional custom coins/messages to the genesis block without overriding walletConfig's settings", async () => {
+  test("gives control to add additional custom coins/messages to the genesis block without overriding walletsConfig's settings", async () => {
     const pk = Signer.generatePrivateKey();
     const signer = new Signer(pk);
     const address = signer.address;

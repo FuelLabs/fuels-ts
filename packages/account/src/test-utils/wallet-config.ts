@@ -8,7 +8,7 @@ import { WalletUnlocked } from '../wallet';
 import { AssetId } from './asset-id';
 import type { TestMessage } from './test-message';
 
-export interface WalletConfigOptions {
+export interface WalletsConfigOptions {
   /**
    * Number of wallets to generate.
    */
@@ -41,9 +41,9 @@ export interface WalletConfigOptions {
 /**
  * Used for configuring the wallets that should exist in the genesis block of a test node.
  */
-export class WalletConfig {
+export class WalletsConfig {
   private initialState: SnapshotConfigs['stateConfig'];
-  private options: WalletConfigOptions;
+  private options: WalletsConfigOptions;
   public wallets: WalletUnlocked[];
 
   private generateWallets: () => WalletUnlocked[] = () => {
@@ -54,8 +54,8 @@ export class WalletConfig {
     return generatedWallets;
   };
 
-  constructor(baseAssetId: string, config: WalletConfigOptions) {
-    WalletConfig.validate(config);
+  constructor(baseAssetId: string, config: WalletsConfigOptions) {
+    WalletsConfig.validate(config);
 
     this.options = config;
 
@@ -64,8 +64,8 @@ export class WalletConfig {
     this.wallets = this.generateWallets();
 
     this.initialState = {
-      messages: WalletConfig.createMessages(this.wallets, messages),
-      coins: WalletConfig.createCoins(
+      messages: WalletsConfig.createMessages(this.wallets, messages),
+      coins: WalletsConfig.createCoins(
         this.wallets,
         baseAssetId,
         assets,
@@ -142,7 +142,7 @@ export class WalletConfig {
     assets,
     coinsPerAsset,
     amountPerCoin,
-  }: WalletConfigOptions) {
+  }: WalletsConfigOptions) {
     if (
       (Array.isArray(wallets) && wallets.length === 0) ||
       (typeof wallets === 'number' && wallets <= 0)

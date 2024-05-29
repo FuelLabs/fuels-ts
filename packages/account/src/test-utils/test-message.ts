@@ -25,7 +25,7 @@ export class TestMessage {
   /**
    * A helper class to create messages for testing purposes.
    *
-   * Used in tandem with `WalletConfig`.
+   * Used in tandem with `WalletsConfig`.
    * It can also be used standalone and passed into the initial state of a chain via the `.toChainMessage` method.
    */
   constructor({

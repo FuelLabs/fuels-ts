@@ -46,7 +46,7 @@ interface LaunchTestNodeOptions<TContractConfigs extends DeployContractConfig[]>
   /**
    * Pass in either the path to the contract's root directory to deploy the contract or use `DeployContractConfig` for more control.
    */
-  deployContracts: TContractConfigs;
+  contractsConfigs: TContractConfigs;
 }
 type TContracts<T extends DeployContractConfig[]> = {
   [K in keyof T]: Awaited<ReturnType<T[K]['deployer']['deployContract']>>;
@@ -131,14 +131,14 @@ function getWalletForDeployment(config: DeployContractConfig, wallets: WalletUnl
 
 export async function launchTestNode<TFactories extends DeployContractConfig[]>({
   providerOptions = {},
-  walletConfig = {},
+  walletsConfig = {},
   nodeOptions = {},
-  deployContracts,
+  contractsConfigs,
 }: Partial<LaunchTestNodeOptions<TFactories>> = {}): Promise<LaunchTestNodeReturn<TFactories>> {
   const snapshotConfig = getChainSnapshot(nodeOptions);
   const args = getFuelCoreArgs(nodeOptions);
   const { provider, wallets, cleanup } = await setupTestProviderAndWallets({
-    walletConfig,
+    walletsConfig,
     providerOptions,
     nodeOptions: {
       ...nodeOptions,
@@ -150,7 +150,7 @@ export async function launchTestNode<TFactories extends DeployContractConfig[]>(
   let contracts: TContracts<TFactories>;
   try {
     contracts = (await Promise.all(
-      (deployContracts ?? []).map(async (config) =>
+      (contractsConfigs ?? []).map(async (config) =>
         config.deployer.deployContract(
           config.bytecode,
           getWalletForDeployment(config, wallets),

@@ -55,7 +55,7 @@ describe('launching a test node', () => {
     // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
 
     using launched = await launchTestNode({
-      deployContracts: [
+      contractsConfigs: [
         {
           deployer: TestContract__factory,
           bytecode,
@@ -87,14 +87,14 @@ describe('launching a test node', () => {
     const message = new TestMessage({ amount: 1000 });
 
     using launched = await launchTestNode({
-      walletConfig: {
+      walletsConfig: {
         count: 4,
         assets,
         coinsPerAsset: 2,
         amountPerCoin: 1_000_000,
         messages: [message],
       },
-      deployContracts: [
+      contractsConfigs: [
         {
           deployer: TestContract__factory,
           bytecode,
@@ -181,7 +181,7 @@ describe('launching a test node', () => {
     const assets = AssetId.random();
 
     using launched = await launchTestNode({
-      walletConfig: {
+      walletsConfig: {
         assets,
       },
     });
@@ -202,7 +202,7 @@ describe('launching a test node', () => {
     const testMessage = new TestMessage({ amount: 1000 });
 
     using launched = await launchTestNode({
-      walletConfig: {
+      walletsConfig: {
         messages: [testMessage],
       },
     });
