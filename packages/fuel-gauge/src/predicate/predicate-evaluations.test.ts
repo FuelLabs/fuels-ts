@@ -1,5 +1,6 @@
 import type { InputValue, Provider, WalletLocked, WalletUnlocked } from 'fuels';
-import { Predicate } from 'fuels';
+import { Address, Predicate, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
@@ -18,30 +19,34 @@ describe('Predicate', () => {
   );
 
   describe('Evaluations', () => {
-    let predicate: Predicate<InputValue[]>;
-    let wallet: WalletUnlocked;
-    let receiver: WalletLocked;
-    let provider: Provider;
-    let baseAssetId: string;
-
-    beforeEach(async () => {
-      [wallet, receiver] = await setupWallets();
-      provider = wallet.provider;
-      baseAssetId = provider.getBaseAssetId();
-    });
-
     it('calls a no argument predicate and returns true', async () => {
-      const amountToReceiver = 50;
+      using launched = await launchTestNode();
+
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+
+      const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
       const initialReceiverBalance = await receiver.getBalance();
 
-      predicate = new Predicate({
+      const predicate = new Predicate({
         bytecode: predicateBytesTrue,
         provider,
       });
 
-      const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-        gasLimit: 1000,
-      });
+      await fundPredicate(wallet, predicate, 200_000);
+
+      const amountToReceiver = 50;
+
+      const tx = await predicate.transfer(
+        receiver.address,
+        amountToReceiver,
+        provider.getBaseAssetId(),
+        {
+          gasLimit: 1000,
+        }
+      );
 
       const { isStatusSuccess } = await tx.waitForResult();
       await assertBalances(receiver, initialReceiverBalance, amountToReceiver);
@@ -50,18 +55,24 @@ describe('Predicate', () => {
     });
 
     it('calls a no argument predicate and returns false', async () => {
-      const amountToPredicate = 200_000;
-      const amountToReceiver = 50;
+      using launched = await launchTestNode();
 
-      predicate = new Predicate({
-        bytecode: predicateBytesFalse,
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+
+      const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
+
+      const predicate = new Predicate({
+        bytecode: predicateBytesTrue,
         provider,
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await fundPredicate(wallet, predicate, 200_000);
 
       await expect(
-        predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
+        predicate.transfer(receiver.address, 50, provider.getBaseAssetId(), {
           gasLimit: 1000,
         })
       ).rejects.toThrow('PredicateVerificationFailed');
