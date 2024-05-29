@@ -37,7 +37,7 @@ Creates a new BaseWalletUnlocked instance.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:40](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L40)
+[packages/account/src/wallet/base-wallet-unlocked.ts:40](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L40)
 
 ## Properties
 
@@ -45,13 +45,15 @@ Creates a new BaseWalletUnlocked instance.
 
 • `Protected` `Optional` **\_connector**: [`FuelConnector`](/api/Account/FuelConnector.md)
 
+The connector for use with external wallets
+
 #### Inherited from
 
 [Account](/api/Account/Account.md).[_connector](/api/Account/Account.md#_connector)
 
 #### Defined in
 
-[packages/account/src/account.ts:67](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L67)
+[packages/account/src/account.ts:76](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L76)
 
 ___
 
@@ -67,7 +69,7 @@ The provider used to interact with the network.
 
 #### Defined in
 
-[packages/account/src/account.ts:65](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L65)
+[packages/account/src/account.ts:71](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L71)
 
 ___
 
@@ -83,7 +85,7 @@ The address associated with the account.
 
 #### Defined in
 
-[packages/account/src/account.ts:60](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L60)
+[packages/account/src/account.ts:66](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L66)
 
 ___
 
@@ -103,7 +105,7 @@ A function that returns the wallet's signer.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:32](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L32)
+[packages/account/src/wallet/base-wallet-unlocked.ts:32](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L32)
 
 ___
 
@@ -115,7 +117,7 @@ Default HDWallet path.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:27](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L27)
+[packages/account/src/wallet/base-wallet-unlocked.ts:27](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L27)
 
 ## Accessors
 
@@ -133,7 +135,7 @@ The private key of the wallet.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:51](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L51)
+[packages/account/src/wallet/base-wallet-unlocked.ts:51](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L51)
 
 ___
 
@@ -159,7 +161,7 @@ Account.provider
 
 #### Defined in
 
-[packages/account/src/account.ts:89](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L89)
+[packages/account/src/account.ts:99](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L99)
 
 • `set` **provider**(`provider`): `void`
 
@@ -181,7 +183,7 @@ Account.provider
 
 #### Defined in
 
-[packages/account/src/account.ts:102](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L102)
+[packages/account/src/account.ts:112](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L112)
 
 ___
 
@@ -197,9 +199,96 @@ Gets the public key of the wallet.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:60](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L60)
+[packages/account/src/wallet/base-wallet-unlocked.ts:60](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L60)
 
 ## Methods
+
+### addBatchTransfer
+
+▸ **addBatchTransfer**(`request`, `transferParams`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+
+Adds multiple transfers to a script transaction request.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md) | The script transaction request to add transfers to. |
+| `transferParams` | [`TransferParams`](/api/Account/index.md#transferparams)[] | An array of `TransferParams` objects representing the transfers to be made. |
+
+#### Returns
+
+[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+
+The updated script transaction request.
+
+#### Inherited from
+
+[Account](/api/Account/Account.md).[addBatchTransfer](/api/Account/Account.md#addbatchtransfer)
+
+#### Defined in
+
+[packages/account/src/account.ts:454](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L454)
+
+___
+
+### addTransfer
+
+▸ **addTransfer**(`request`, `transferParams`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+
+Adds a transfer to the given transaction request.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md) | The script transaction request to add transfers to. |
+| `transferParams` | [`TransferParams`](/api/Account/index.md#transferparams) | The object representing the transfer to be made. |
+
+#### Returns
+
+[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+
+The updated transaction request with the added transfer.
+
+#### Inherited from
+
+[Account](/api/Account/Account.md).[addTransfer](/api/Account/Account.md#addtransfer)
+
+#### Defined in
+
+[packages/account/src/account.ts:436](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L436)
+
+___
+
+### batchTransfer
+
+▸ **batchTransfer**(`transferParams`, `txParams?`): `Promise`&lt;[`TransactionResponse`](/api/Account/TransactionResponse.md)\>
+
+Transfers multiple amounts of a token to multiple recipients.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `transferParams` | [`TransferParams`](/api/Account/index.md#transferparams)[] | An array of `TransferParams` objects representing the transfers to be made. |
+| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | Optional transaction parameters. |
+
+#### Returns
+
+`Promise`&lt;[`TransactionResponse`](/api/Account/TransactionResponse.md)\>
+
+A promise that resolves to a `TransactionResponse` object representing the transaction result.
+
+#### Inherited from
+
+[Account](/api/Account/Account.md).[batchTransfer](/api/Account/Account.md#batchtransfer)
+
+#### Defined in
+
+[packages/account/src/account.ts:419](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L419)
+
+___
 
 ### connect
 
@@ -225,7 +314,7 @@ The updated Provider instance.
 
 #### Defined in
 
-[packages/account/src/account.ts:112](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L112)
+[packages/account/src/account.ts:122](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L122)
 
 ___
 
@@ -241,8 +330,8 @@ A helper that creates a transfer transaction request and returns it.
 | :------ | :------ | :------ |
 | `destination` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the destination. |
 | `amount` | `BigNumberish` | The amount of coins to transfer. |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to transfer. |
-| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The transaction parameters (gasLimit, tip, maturity, maxFee, witnessLimit). |
+| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to transfer (optional). |
+| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The transaction parameters (optional). |
 
 #### Returns
 
@@ -256,7 +345,7 @@ A promise that resolves to the prepared transaction request.
 
 #### Defined in
 
-[packages/account/src/account.ts:371](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L371)
+[packages/account/src/account.ts:381](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L381)
 
 ___
 
@@ -264,19 +353,23 @@ ___
 
 ▸ **encrypt**(`password`): `Promise`&lt;`string`\>
 
+Encrypts an unlocked wallet with a password.
+
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `password` | `string` |
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `password` | `string` | the password to encrypt the wallet with. |
 
 #### Returns
 
 `Promise`&lt;`string`\>
 
+- the encrypted wallet.
+
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:149](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L149)
+[packages/account/src/wallet/base-wallet-unlocked.ts:157](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L157)
 
 ___
 
@@ -303,7 +396,7 @@ Funds a transaction request by adding the necessary resources.
 
 `Promise`&lt;`T`\>
 
-The funded transaction request.
+A promise that resolves to the funded transaction request.
 
 #### Inherited from
 
@@ -311,7 +404,7 @@ The funded transaction request.
 
 #### Defined in
 
-[packages/account/src/account.ts:254](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L254)
+[packages/account/src/account.ts:264](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L264)
 
 ___
 
@@ -325,7 +418,7 @@ Retrieves the balance of the account for the given asset.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID to check the balance for. |
+| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID to check the balance for (optional). |
 
 #### Returns
 
@@ -339,7 +432,7 @@ A promise that resolves to the balance amount.
 
 #### Defined in
 
-[packages/account/src/account.ts:206](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L206)
+[packages/account/src/account.ts:216](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L216)
 
 ___
 
@@ -361,7 +454,7 @@ A promise that resolves to an array of Coins and their quantities.
 
 #### Defined in
 
-[packages/account/src/account.ts:217](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L217)
+[packages/account/src/account.ts:227](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L227)
 
 ___
 
@@ -375,7 +468,7 @@ Retrieves coins owned by the account.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to retrieve. |
+| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to retrieve (optional). |
 
 #### Returns
 
@@ -389,7 +482,7 @@ A promise that resolves to an array of Coins.
 
 #### Defined in
 
-[packages/account/src/account.ts:137](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L137)
+[packages/account/src/account.ts:147](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L147)
 
 ___
 
@@ -411,7 +504,7 @@ A promise that resolves to an array of Messages.
 
 #### Defined in
 
-[packages/account/src/account.ts:171](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L171)
+[packages/account/src/account.ts:181](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L181)
 
 ___
 
@@ -425,8 +518,8 @@ Retrieves resources satisfying the spend query for the account.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `quantities` | [`CoinQuantityLike`](/api/Account/index.md#coinquantitylike)[] | IDs of coins to exclude. |
-| `excludedIds?` | `ExcludeResourcesOption` | IDs of resources to be excluded from the query. |
+| `quantities` | [`CoinQuantityLike`](/api/Account/index.md#coinquantitylike)[] | Quantities of resources to be obtained. |
+| `excludedIds?` | `ExcludeResourcesOption` | IDs of resources to be excluded from the query (optional). |
 
 #### Returns
 
@@ -440,7 +533,7 @@ A promise that resolves to an array of Resources.
 
 #### Defined in
 
-[packages/account/src/account.ts:124](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L124)
+[packages/account/src/account.ts:134](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L134)
 
 ___
 
@@ -470,7 +563,7 @@ The populated transaction request.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:95](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L95)
+[packages/account/src/wallet/base-wallet-unlocked.ts:95](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L95)
 
 ___
 
@@ -499,7 +592,7 @@ A promise that resolves to the TransactionResponse object.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:112](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L112)
+[packages/account/src/wallet/base-wallet-unlocked.ts:114](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L114)
 
 ___
 
@@ -523,11 +616,11 @@ A promise that resolves to the signature as a ECDSA 64 bytes string.
 
 #### Overrides
 
-[Account](/api/Account/Account.md).[signMessage](/api/Account/Account.md#signmessage)
+Account.signMessage
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:70](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L70)
+[packages/account/src/wallet/base-wallet-unlocked.ts:70](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L70)
 
 ___
 
@@ -555,7 +648,7 @@ A promise that resolves to the signature as a ECDSA 64 bytes string.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:81](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L81)
+[packages/account/src/wallet/base-wallet-unlocked.ts:81](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L81)
 
 ___
 
@@ -584,7 +677,7 @@ A promise that resolves to the CallResult object.
 
 #### Defined in
 
-[packages/account/src/wallet/base-wallet-unlocked.ts:132](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/wallet/base-wallet-unlocked.ts#L132)
+[packages/account/src/wallet/base-wallet-unlocked.ts:134](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/wallet/base-wallet-unlocked.ts#L134)
 
 ___
 
@@ -600,8 +693,8 @@ Transfers coins to a destination address.
 | :------ | :------ | :------ |
 | `destination` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the destination. |
 | `amount` | `BigNumberish` | The amount of coins to transfer. |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to transfer. |
-| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The transaction parameters (gasLimit, maturity). |
+| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to transfer (optional). |
+| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The transaction parameters (optional). |
 
 #### Returns
 
@@ -615,7 +708,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/account.ts:410](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L410)
+[packages/account/src/account.ts:402](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L402)
 
 ___
 
@@ -631,8 +724,8 @@ Transfers coins to a contract address.
 | :------ | :------ | :------ |
 | `contractId` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address of the contract. |
 | `amount` | `BigNumberish` | The amount of coins to transfer. |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to transfer. |
-| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The optional transaction parameters. |
+| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of the coins to transfer (optional). |
+| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The transaction parameters (optional). |
 
 #### Returns
 
@@ -646,7 +739,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/account.ts:440](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L440)
+[packages/account/src/account.ts:475](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L475)
 
 ___
 
@@ -662,7 +755,7 @@ Withdraws an amount of the base asset to the base chain.
 | :------ | :------ | :------ |
 | `recipient` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | Address of the recipient on the base chain. |
 | `amount` | `BigNumberish` | Amount of base asset. |
-| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The optional transaction parameters. |
+| `txParams` | [`TxParamsType`](/api/Account/index.md#txparamstype) | The transaction parameters (optional). |
 
 #### Returns
 
@@ -676,4 +769,4 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/account.ts:498](https://github.com/FuelLabs/fuels-ts/blob/c8ec36ca/packages/account/src/account.ts#L498)
+[packages/account/src/account.ts:529](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/account/src/account.ts#L529)
