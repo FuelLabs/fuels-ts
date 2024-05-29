@@ -141,6 +141,7 @@ export type GetOperationParams = {
   transactionType: TransactionType;
   abiMap?: AbiMap;
   maxInputs: BN;
+  baseAssetId: string;
 } & InputOutputParam &
   ReceiptParam &
   RawPayloadParam;

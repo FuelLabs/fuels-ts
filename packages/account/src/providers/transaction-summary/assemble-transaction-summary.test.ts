@@ -28,6 +28,7 @@ import type { GraphqlTransactionStatus, Operation } from './types';
 describe('TransactionSummary', () => {
   let provider: Provider;
   let gasCosts: GasCosts;
+  let baseAssetId: string;
 
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';
   const gasPerByte = bn(2);
@@ -46,6 +47,7 @@ describe('TransactionSummary', () => {
 
   beforeAll(async () => {
     provider = await Provider.create('http://127.0.0.1:4000/v1/graphql');
+    baseAssetId = provider.getBaseAssetId();
     ({
       consensusParameters: { gasCosts },
     } = provider.getChain());
@@ -81,6 +83,7 @@ describe('TransactionSummary', () => {
       abiMap: {},
       maxGasPerTx,
       gasPrice: bn(1),
+      baseAssetId,
     });
 
     expect(transactionSummary).toMatchObject(expected);
