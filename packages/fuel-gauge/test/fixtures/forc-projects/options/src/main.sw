@@ -56,6 +56,11 @@ struct SomeStruct {
     b: u64,
 }
 
+enum DiffSizeEnum {
+    a: u8,
+    b: b256,
+}
+
 storage {
     stuff: StorageMap<Identity, SomeStruct> = StorageMap {},
 }
@@ -71,6 +76,7 @@ abi OptionContract {
     fn echo_array_option(arg: [Option<u16>; 3]) -> [Option<u16>; 3];
     fn print_enum_option_array() -> GardenVector;
     fn echo_deeply_nested_option(arg: DeepStruct) -> DeepStruct;
+    fn echo_enum_diff_sizes(arg: Option<DiffSizeEnum>) -> Option<DiffSizeEnum>;
 }
 
 impl OptionContract for Contract {
@@ -108,6 +114,10 @@ impl OptionContract for Contract {
     }
 
     fn echo_deeply_nested_option(arg: DeepStruct) -> DeepStruct {
+        arg
+    }
+
+    fn echo_enum_diff_sizes(arg: Option<DiffSizeEnum>) -> Option<DiffSizeEnum> {
         arg
     }
 }
