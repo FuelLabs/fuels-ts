@@ -1,5 +1,24 @@
 # @fuel-ts/abi-typegen
 
+## 0.89.0
+
+### Patch Changes
+
+- 20d73c5: feat: support generic enums in `typegen`
+- ceef79a: fix: `typegen` generic enums and `./common` import (predicates, scripts)
+- 6d1db46: feat: make `typegen` factories an object instance
+- 4d65c8c: fix: `typegen` enum using specified generic
+- 4c3b4c8: feat: support `forc build --json-abi-with-callpaths` flag
+- f76aa57: chore: added `messagesTypes` to `JsonAbi`
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [a96c1fe]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
 ## 0.88.1
 
 ### Patch Changes
