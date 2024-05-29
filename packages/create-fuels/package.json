@@ -16,7 +16,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsup",
-    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplateFiles.ts"
+    "prepublishOnly": "tsx ./scripts/prepublish.ts"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
