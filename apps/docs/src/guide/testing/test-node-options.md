@@ -3,7 +3,7 @@
 This reference describes all the options of the [`launchTestNode`](./launching-a-test-node.md) utility:
 
 - [`walletsConfig`](./test-node-options.md#walletsconfig)
-- [`contractsConfigs`](./test-node-options.md#contractsConfigs)
+- [`contractsConfigs`](./test-node-options.md#contractsconfigs)
 - [`nodeOptions`](./test-node-options.md#nodeoptions)
 - [`providerOptions`](./test-node-options.md#provideroptions)
 
