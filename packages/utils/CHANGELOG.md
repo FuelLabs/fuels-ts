@@ -1,5 +1,22 @@
 # @fuel-ts/utils
 
+## 0.89.0
+
+### Minor Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+
+### Patch Changes
+
+- 5a6ca46: feat: improve `arrayify` error message
+- 83bbb7f: chore: use dev-net chain config for local node
+- Updated dependencies [67afa32]
+- Updated dependencies [a96c1fe]
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
 ## 0.88.1
 
 ### Patch Changes
