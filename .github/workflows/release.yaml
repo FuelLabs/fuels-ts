@@ -16,10 +16,14 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # Ensure that the workflow runs only after a commit is pushed into the branch
+    # and not when the branch is created.
+    # This is to avoid running the workflow when a release/* branch is created.
+    if: github.event.before != '0000000000000000000000000000000000000000'
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
@@ -35,8 +39,8 @@ jobs:
         run: |
           pnpm changeset version
           echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
-          echo "FUEL_CORE_VERSION=$(cat ./packages/fuel-core/VERSION)" >> $GITHUB_ENV
-          echo "FORC_VERSION=$(cat ./packages/forc/VERSION)" >> $GITHUB_ENV
+          echo "FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)" >> $GITHUB_ENV
+          echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
           git reset --hard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -139,7 +143,7 @@ jobs:
 
       - name: Checkout API Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: docs
           fetch-depth: 0
@@ -158,6 +162,15 @@ jobs:
           git commit -m "docs: API docs - ${{ env.RELEASE_VERSION }}"
           git push
           git restore apps/docs/.gitignore
+
+      - name: Update docs (nightly)
+        if: env.SHOULD_DEPLOY_DOCS == 'true'
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: update-nightly.yml
+          ref: master
+          repo: FuelLabs/docs-hub
+          token: ${{ secrets.REPO_TOKEN }}
 
       # Upload assets to S3
       - uses: unfor19/install-aws-cli-action@v1.0.3

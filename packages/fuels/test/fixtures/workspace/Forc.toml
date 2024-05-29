@@ -4,4 +4,5 @@ members = [
   "./contracts/foo",
   "./scripts/script",
   "./predicates/predicate",
+  "./libraries/library",
 ]

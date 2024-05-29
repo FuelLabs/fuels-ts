@@ -24,7 +24,7 @@ import {
   Signer,
   ZeroBytes32,
   FUEL_NETWORK_URL,
-  FUEL_BETA_5_NETWORK_URL,
+  FUEL_TESTNET_NETWORK_URL,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -231,16 +231,15 @@ describe('Doc Examples', () => {
     // validate balances
     expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(42) }]);
     expect(walletBBalances).toEqual([
-      { assetId: baseAssetId, amount: bn(30) },
       { assetId: assetIdA, amount: bn(100) },
       { assetId: assetIdB, amount: bn(200) },
+      { assetId: baseAssetId, amount: bn(30) },
     ]);
     expect(walletCBalances).toEqual([]);
   });
 
-  // TODO: remove skip from testnet test
-  it.skip('can connect to testnet', async () => {
-    const provider = await Provider.create(FUEL_BETA_5_NETWORK_URL);
+  it('can connect to testnet', async () => {
+    const provider = await Provider.create(FUEL_TESTNET_NETWORK_URL);
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 

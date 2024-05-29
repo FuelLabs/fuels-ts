@@ -45,7 +45,30 @@ export default defineConfig({
         items: [
           {
             text: 'Getting Started',
-            link: '/getting-started.md',
+            link: '/guide/getting-started/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Installation',
+                link: '/guide/getting-started/installation',
+              },
+              {
+                text: 'Usage',
+                link: '/guide/getting-started/usage',
+              },
+              {
+                text: 'Connecting to Testnet',
+                link: '/guide/getting-started/connecting-to-testnet',
+              },
+              {
+                text: 'Connecting to a Local Node',
+                link: '/guide/getting-started/connecting-to-a-local-node',
+              },
+              {
+                text: 'Further Resources',
+                link: '/guide/getting-started/further-resources',
+              },
+            ],
           },
           {
             text: 'Creating a Fuel dApp',
@@ -74,10 +97,6 @@ export default defineConfig({
               {
                 text: 'Commands',
                 link: '/guide/fuels-cli/commands',
-              },
-              {
-                text: 'Binaries',
-                link: '/guide/fuels-cli/binaries',
               },
               {
                 text: 'ABI Typegen',

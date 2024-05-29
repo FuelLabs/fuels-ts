@@ -1,108 +1,42 @@
 /* eslint-disable no-console */
-import type { BN } from 'fuels';
-import { Provider, WalletUnlocked, bn } from 'fuels';
+import { Provider, TransactionType, WalletUnlocked } from 'fuels';
 
 import { getScript } from './utils';
-
-const U32_VEC = [0, 1, 2];
-const VEC_IN_VEC = [
-  [0, 1, 2],
-  [0, 1, 2],
-];
-const STRUCT_IN_VEC = [{ a: 0 }, { a: 1 }];
-const VEC_IN_STRUCT = { a: [0, 1, 2] };
-const ARRAY_IN_VEC = [
-  [0, 1],
-  [0, 1],
-];
-const VEC_IN_ARRAY = [
-  [0, 1, 2],
-  [0, 1, 2],
-];
-const VEC_IN_ENUM = { a: [0, 1, 2] };
-const ENUM_IN_VEC = [{ a: 0 }, { a: 1 }];
-const TUPLE_IN_VEC = [
-  [0, 0],
-  [1, 1],
-];
-const VEC_IN_TUPLE = [
-  [0, 1, 2],
-  [0, 1, 2],
-];
-const VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC = [
-  {
-    a: [
-      [0, 1, 2],
-      [3, 4, 5],
-    ],
-  },
-  {
-    a: [
-      [6, 7, 8],
-      [9, 10, 11],
-    ],
-  },
-];
-
-type SomeStruct = {
-  a: number;
-};
-
-type SomeStructWithVec = {
-  a: number[];
-};
-
-type VecInAStructInAVec = {
-  a: number[][];
-}[];
-
-type TwoDimensionArray = number[][];
-
-// these Type shapes are here to get the TypeScript inference, they aren't 100% accurate
-type MainArgs = [
-  number[], // U32_VEC
-  TwoDimensionArray, // VEC_IN_VEC
-  SomeStruct[], // STRUCT_IN_VEC
-  SomeStructWithVec, // VEC_IN_STRUCT
-  TwoDimensionArray, // ARRAY_IN_VEC
-  TwoDimensionArray, // VEC_IN_ARRAY
-  SomeStructWithVec, // VEC_IN_ENUM
-  SomeStruct[], // ENUM_IN_VEC
-  TwoDimensionArray, // TUPLE_IN_VEC
-  TwoDimensionArray, // VEC_IN_TUPLE
-  VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
-];
 
 /**
  * @group node
  * @group e2e
  */
 describe('Live Script Test', () => {
-  it('can use script against live Fuel Node', async () => {
+  const MINT_TX_ID = '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e';
+  const UPGRADE_TX_ID = '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094';
+  const UPLOAD_TX_ID = '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73';
+
+  let provider: Provider;
+  let wallet: WalletUnlocked;
+  let shouldSkip: boolean;
+
+  beforeAll(async () => {
     if (!process.env.TEST_WALLET_PVT_KEY || !process.env.FUEL_TESTNET_NETWORK_URL) {
       console.log('Skipping live Fuel Node test');
+      shouldSkip = true;
       return;
     }
 
-    const provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
-    const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
-    const scriptInstance = getScript<MainArgs, BN>('vector-types-script', wallet);
+    provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
+    wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
+  });
 
-    let output: BN = bn(0);
+  it('can use script against live Fuel Node', async () => {
+    if (shouldSkip) {
+      return;
+    }
+
+    const scriptInstance = getScript<[boolean], boolean>('script-main-arg-bool', wallet);
+
+    let output: boolean = false;
     try {
-      const callScope = scriptInstance.functions.main(
-        U32_VEC,
-        VEC_IN_VEC,
-        STRUCT_IN_VEC,
-        VEC_IN_STRUCT,
-        ARRAY_IN_VEC,
-        VEC_IN_ARRAY,
-        VEC_IN_ENUM,
-        ENUM_IN_VEC,
-        TUPLE_IN_VEC,
-        VEC_IN_TUPLE,
-        VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
-      );
+      const callScope = scriptInstance.functions.main(true);
 
       const { value } = await callScope.call();
 
@@ -113,12 +47,25 @@ describe('Live Script Test', () => {
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
-        - add assets: https://faucet-beta-5.fuel.network/
-        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/${address}
+        - add assets: https://faucet-devnet.fuel.network/
+        - check balance: https://app.fuel.network/account/${address}/assets/
         - bech32 address: ${address}
       `);
     }
 
     expect(output).toBe(true);
+  });
+
+  it.each([
+    ['Mint', MINT_TX_ID, TransactionType.Mint],
+    ['Upgrade', UPGRADE_TX_ID, TransactionType.Upgrade],
+    ['Upload', UPLOAD_TX_ID, TransactionType.Upload],
+  ])('can query and decode a %s transaction', async (_, txId, type) => {
+    if (shouldSkip) {
+      return;
+    }
+    const transaction = await provider.getTransaction(txId);
+
+    expect(transaction?.type).toBe(type);
   });
 });

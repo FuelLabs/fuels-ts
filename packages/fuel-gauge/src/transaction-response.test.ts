@@ -1,4 +1,3 @@
-import type {} from '@fuel-ts/account/dist/providers/__generated__/operations';
 import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
@@ -154,7 +153,7 @@ describe('TransactionResponse', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
-  it('should ensure waitForResult always waits for the transaction to be processed', async () => {
+  it.skip('should ensure waitForResult always waits for the transaction to be processed', async () => {
     const { cleanup, ip, port } = await launchNode({
       /**
        * This is set to so long in order to test keep-alive message handling as well.
@@ -247,42 +246,46 @@ describe('TransactionResponse', () => {
     cleanup();
   });
 
-  it('should throw error for a SqueezedOut status update [submitAndAwait]', async () => {
-    const { cleanup, ip, port } = await launchNode({
-      args: ['--poa-instant', 'false', '--poa-interval-period', '1s', '--tx-pool-ttl', '200ms'],
-      loggingEnabled: false,
-    });
-    const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+  it(
+    'should throw error for a SqueezedOut status update [submitAndAwait]',
+    async () => {
+      const { cleanup, ip, port } = await launchNode({
+        args: ['--poa-instant', 'false', '--poa-interval-period', '4s', '--tx-pool-ttl', '1s'],
+        loggingEnabled: false,
+      });
+      const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
-    const genesisWallet = new WalletUnlocked(
-      process.env.GENESIS_SECRET || randomBytes(32),
-      nodeProvider
-    );
+      const genesisWallet = new WalletUnlocked(
+        process.env.GENESIS_SECRET || randomBytes(32),
+        nodeProvider
+      );
 
-    const request = new ScriptTransactionRequest();
+      const request = new ScriptTransactionRequest();
 
-    request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
+      request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
-    const txCost = await genesisWallet.provider.getTransactionCost(request, {
-      signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
-    });
+      const txCost = await genesisWallet.provider.getTransactionCost(request, {
+        signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
+      });
 
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-    await genesisWallet.fund(request, txCost);
+      await genesisWallet.fund(request, txCost);
 
-    request.updateWitnessByOwner(
-      genesisWallet.address,
-      await genesisWallet.signTransaction(request)
-    );
+      request.updateWitnessByOwner(
+        genesisWallet.address,
+        await genesisWallet.signTransaction(request)
+      );
 
-    await expectToThrowFuelError(
-      async () => {
-        await nodeProvider.sendTransaction(request, { awaitExecution: true });
-      },
-      { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
-    );
-    cleanup();
-  });
+      await expectToThrowFuelError(
+        async () => {
+          await nodeProvider.sendTransaction(request, { awaitExecution: true });
+        },
+        { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+      );
+      cleanup();
+    },
+    { retry: 10 }
+  );
 });

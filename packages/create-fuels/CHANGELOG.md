@@ -1,5 +1,30 @@
 # create-fuels
 
+## 0.89.0
+
+### Patch Changes
+
+- 3b00bdb: chore: add test to verify `create fuels` template integrity
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+
+## 0.88.1
+
+## 0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- 30fa103: chore: `create fuels` tests clean up the filesystem
+
+## 0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- 7c3ef04: feat: optionally auto-install `fuelup` during `create fuels` routine
+
 ## 0.84.0
 
 ## 0.83.0

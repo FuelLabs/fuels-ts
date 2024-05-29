@@ -1,5 +1,65 @@
 # @fuel-ts/utils
 
+## 0.89.0
+
+### Minor Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+
+### Patch Changes
+
+- 5a6ca46: feat: improve `arrayify` error message
+- 83bbb7f: chore: use dev-net chain config for local node
+- Updated dependencies [67afa32]
+- Updated dependencies [a96c1fe]
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.88.1
+- @fuel-ts/interfaces@0.88.1
+- @fuel-ts/math@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.88.0
+- @fuel-ts/interfaces@0.88.0
+- @fuel-ts/math@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.87.0
+- @fuel-ts/interfaces@0.87.0
+- @fuel-ts/math@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 316c757: fix: internalize `ethers` functionality and remove dependency
+- 0651a5f: chore: remove `ethers` from `abi-coder`
+- Updated dependencies [316c757]
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
 ## 0.84.0
 
 ### Minor Changes

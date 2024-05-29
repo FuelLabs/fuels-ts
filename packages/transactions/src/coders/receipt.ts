@@ -709,7 +709,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     parts.push(new B256Coder().encode(value.recipient));
     parts.push(new BigNumberCoder('u64').encode(value.amount));
     parts.push(new B256Coder().encode(value.nonce));
-    parts.push(new NumberCoder('u16').encode(value.data.length));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.data.length));
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new ByteArrayCoder(value.data.length).encode(value.data));
 
@@ -728,7 +728,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
     const amount = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const nonce = decoded;
-    [decoded, o] = new NumberCoder('u16').decode(data, o);
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const len = decoded;
     [decoded, o] = new B256Coder().decode(data, o);
     const digest = decoded;
@@ -917,7 +917,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
   encode(value: Receipt): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new NumberCoder('u8').encode(value.type));
+    parts.push(new NumberCoder('u8', { padToWordSize: true }).encode(value.type));
 
     const { type } = value;
 
@@ -986,7 +986,7 @@ export class ReceiptCoder extends Coder<Receipt, Receipt> {
     let decoded;
     let o = offset;
 
-    [decoded, o] = new NumberCoder('u8').decode(data, o);
+    [decoded, o] = new NumberCoder('u8', { padToWordSize: true }).decode(data, o);
     const type = decoded as ReceiptType;
     switch (type) {
       case ReceiptType.Call: {

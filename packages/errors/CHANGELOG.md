@@ -1,5 +1,46 @@
 # @fuel-ts/errors
 
+## 0.89.0
+
+### Patch Changes
+
+- Updated dependencies [67afa32]
+- Updated dependencies [a96c1fe]
+  - @fuel-ts/versions@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- @fuel-ts/versions@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- @fuel-ts/versions@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 316c757: fix: internalize `ethers` functionality and remove dependency
+- Updated dependencies [64e9659]
+  - @fuel-ts/versions@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- f7eacb4: chore: warn on fuel client version incompatibility
+  - @fuel-ts/versions@0.85.0
+
 ## 0.84.0
 
 ### Patch Changes

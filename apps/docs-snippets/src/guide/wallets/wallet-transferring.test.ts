@@ -1,6 +1,6 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
-import type { Contract } from 'fuels';
+import type { Contract, TransferParams } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
@@ -19,8 +19,8 @@ describe(__filename, () => {
     provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
     const wallet = await generateTestWallet(provider, [
-      [200_000, baseAssetId],
-      [200_000, ASSET_A],
+      [1_000_000, baseAssetId],
+      [1_000_000, ASSET_A],
     ]);
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
     privateKey = wallet.privateKey;
@@ -72,6 +72,28 @@ describe(__filename, () => {
     const newBalance = await recipient.getBalance();
 
     expect(newBalance.toNumber()).toBeGreaterThan(0);
+  });
+
+  it('should successfully multi transfer to more than one receiver', async () => {
+    const someOtherAssetId = ASSET_A;
+
+    // #region wallet-transferring-6
+    const myWallet = Wallet.fromPrivateKey(privateKey, provider);
+
+    const recipient1 = Wallet.generate({ provider });
+    const recipient2 = Wallet.generate({ provider });
+
+    const transfersToMake: TransferParams[] = [
+      { amount: 100, destination: recipient1.address, assetId: baseAssetId },
+      { amount: 200, destination: recipient2.address, assetId: baseAssetId },
+      { amount: 300, destination: recipient2.address, assetId: someOtherAssetId },
+    ];
+
+    const tx = await myWallet.batchTransfer(transfersToMake);
+    const { isStatusSuccess } = await tx.waitForResult();
+    // #endregion wallet-transferring-6
+
+    expect(isStatusSuccess).toBeTruthy();
   });
 
   it('should transfer assets to a deployed contract instance just fine', async () => {

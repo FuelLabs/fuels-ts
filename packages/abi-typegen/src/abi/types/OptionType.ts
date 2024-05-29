@@ -7,7 +7,7 @@ export class OptionType extends AType implements IType {
 
   public name = 'option';
 
-  static MATCH_REGEX: RegExp = /^enum Option$/m;
+  static MATCH_REGEX: RegExp = /^enum (std::option::)?Option$/m;
 
   static isSuitableFor(params: { type: string }) {
     return OptionType.MATCH_REGEX.test(params.type);

@@ -6,40 +6,34 @@ import {
   GqlPredicateParametersVersion,
   GqlScriptParametersVersion,
   GqlTxParametersVersion,
-  type GqlChainInfoFragmentFragment,
+  type GqlChainInfoFragment,
 } from '../../src/providers/__generated__/operations';
 
-export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
-  __typename: 'ChainInfo',
+export const MOCK_CHAIN: GqlChainInfoFragment = {
   name: 'local_testnet',
   daHeight: '234',
   consensusParameters: {
-    __typename: 'ConsensusParameters',
     version: GqlConsensusParametersVersion.V1,
     txParams: {
-      __typename: 'TxParameters',
       version: GqlTxParametersVersion.V1,
       maxInputs: '255',
       maxOutputs: '255',
       maxWitnesses: '255',
-      maxGasPerTx: '500000000',
+      maxGasPerTx: '5000000000',
       maxSize: '17825792',
       maxBytecodeSubsections: '255',
     },
     scriptParams: {
-      __typename: 'ScriptParameters',
       version: GqlScriptParametersVersion.V1,
       maxScriptLength: '1048576',
       maxScriptDataLength: '1048576',
     },
     contractParams: {
-      __typename: 'ContractParameters',
       version: GqlContractParametersVersion.V1,
       contractMaxSize: '16777216',
       maxStorageSlots: '255',
     },
     predicateParams: {
-      __typename: 'PredicateParameters',
       version: GqlPredicateParametersVersion.V1,
       maxPredicateLength: '1048576',
       maxPredicateDataLength: '1048576',
@@ -48,7 +42,7 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
     },
     feeParams: {
       version: GqlFeeParametersVersion.V1,
-      __typename: 'FeeParameters',
+
       gasPerByte: '4',
       gasPriceFactor: '1000000000',
     },
@@ -56,7 +50,7 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
     chainId: '0',
     gasCosts: {
       version: GqlGasCostsVersion.V1,
-      __typename: 'GasCosts',
+
       add: '1',
       addi: '1',
       aloc: '1',
@@ -146,107 +140,107 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
       xor: '1',
       xori: '1',
       call: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '144',
         unitsPerGas: '214',
       },
       ccp: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '15',
         unitsPerGas: '103',
       },
       croo: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '15',
         unitsPerGas: '103',
       },
       csiz: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '17',
         unitsPerGas: '790',
       },
       k256: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '11',
         unitsPerGas: '214',
       },
       ldc: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '15',
         unitsPerGas: '272',
       },
       logd: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '26',
         unitsPerGas: '64',
       },
       mcl: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '1',
         unitsPerGas: '3333',
       },
       mcli: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '1',
         unitsPerGas: '3333',
       },
       mcp: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '1',
         unitsPerGas: '2000',
       },
       mcpi: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '3',
         unitsPerGas: '2000',
       },
       meq: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '1',
         unitsPerGas: '2500',
       },
       retd: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '29',
         unitsPerGas: '62',
       },
       s256: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '2',
         unitsPerGas: '214',
       },
       scwq: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '13',
         unitsPerGas: '5',
       },
       smo: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '209',
         unitsPerGas: '55',
       },
       srwq: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '47',
         unitsPerGas: '5',
       },
       swwq: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '44',
         unitsPerGas: '5',
       },
       contractRoot: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '75',
         unitsPerGas: '1',
       },
       stateRoot: {
-        __typename: 'LightOperation',
+        type: 'LightOperation',
         base: '412',
         unitsPerGas: '1',
       },
       vmInitialization: {
-        __typename: 'HeavyOperation',
+        type: 'HeavyOperation',
         base: '2000',
         gasPerUnit: '0',
       },
@@ -254,13 +248,11 @@ export const MOCK_CHAIN: GqlChainInfoFragmentFragment = {
     },
   },
   latestBlock: {
-    __typename: 'Block',
     id: '0xb9e55ced368c8d8f1aa487d33e97043e5891406792ea5d61f7807d0441d34722',
     height: '234',
-    header: { __typename: 'Header', time: '4611686020122537935' },
+    header: { time: '4611686020122537935' },
     transactions: [
       {
-        __typename: 'Transaction',
         id: '0x304fb90a1a9897d839dcd9a5b93739ca6045638fc6520e2cf5735dd84b2de4a7',
       },
     ],

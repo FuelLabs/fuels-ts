@@ -34,27 +34,24 @@ describe('cli.js', () => {
 
     const init = cmd(Commands.init);
     const dev = cmd(Commands.dev);
+    const node = cmd(Commands.node);
     const build = cmd(Commands.build);
     const deploy = cmd(Commands.deploy);
-    const forc = cmd('forc');
-    const core = cmd('core');
 
     expect(init).toBeTruthy();
     expect(dev).toBeTruthy();
+    expect(node).toBeTruthy();
     expect(build).toBeTruthy();
     expect(deploy).toBeTruthy();
-    expect(forc).toBeTruthy();
-    expect(core).toBeTruthy();
 
     // checking default options
     const path = process.cwd();
 
     expect(init?.opts()).toEqual({ path });
     expect(dev?.opts()).toEqual({ path });
+    expect(node?.opts()).toEqual({ path });
     expect(build?.opts()).toEqual({ path });
     expect(deploy?.opts()).toEqual({ path });
-    expect(forc?.opts()).toEqual({});
-    expect(core?.opts()).toEqual({});
   });
 
   it('preAction should configure logging', () => {

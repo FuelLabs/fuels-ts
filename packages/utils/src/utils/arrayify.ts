@@ -2,15 +2,19 @@ import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 
 /**
- * Converts a bytes-like value to a `Uint8Array`.
+ * Get a typed Uint8Array from a BytesLike object.
  *
- * @param value - the value to convert to a Uint8Array
- * @returns the Uint8Array
+ * @param value - the BytesLike data.
+ * @param name - a display name for the error result.
+ * @param copy - create a copy of the original data (if applicable).
+ * @returns - a typed Uint8Array.
  */
-export const arrayify = (value: BytesLike): Uint8Array => {
-  // Return buffers as a new byte array
+export const arrayify = (value: BytesLike, name?: string, copy: boolean = true): Uint8Array => {
   if (value instanceof Uint8Array) {
-    return new Uint8Array(value);
+    if (copy) {
+      return new Uint8Array(value);
+    }
+    return value;
   }
 
   if (typeof value === 'string' && value.match(/^0x([0-9a-f][0-9a-f])*$/i)) {
@@ -23,5 +27,7 @@ export const arrayify = (value: BytesLike): Uint8Array => {
     return result;
   }
 
-  throw new FuelError(ErrorCode.PARSE_FAILED, 'invalid BytesLike value');
+  const nameMessage = name ? ` ${name} -` : '';
+  const message = `invalid data:${nameMessage} ${value}\nIf you are attempting to transform a hex value, please make sure it is being passed as a string and wrapped in quotes.`;
+  throw new FuelError(ErrorCode.INVALID_DATA, message);
 };

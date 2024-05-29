@@ -4,7 +4,6 @@ import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { getPortPromise } from 'portfinder';
 
 import type { FuelsConfig } from '../../types';
-import { getBinarySource } from '../../utils/getBinarySource';
 import { log, loggingConfig } from '../../utils/logger';
 
 export type FuelCoreNode = {
@@ -28,7 +27,7 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
   let fuelCore: FuelCoreNode | undefined;
 
   if (config.autoStartFuelCore) {
-    log(`Starting ${getBinarySource(config.useBuiltinFuelCore)} 'fuel-core' node..`);
+    log(`Starting node using: '${config.fuelCorePath}'`);
 
     const bindIp = '0.0.0.0';
     const accessIp = '127.0.0.1';
@@ -40,14 +39,14 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
     const { cleanup, snapshotDir } = await launchNode({
       args: [
         ['--snapshot', config.snapshotDir],
-        ['--db-type', 'rocks-db'],
+        ['--db-type', 'in-memory'],
       ].flat() as string[],
       ip: bindIp,
       port: port.toString(),
       loggingEnabled: loggingConfig.isLoggingEnabled,
       debugEnabled: loggingConfig.isDebugEnabled,
       basePath: config.basePath,
-      useSystemFuelCore: !config.useBuiltinFuelCore,
+      fuelCorePath: config.fuelCorePath,
     });
 
     fuelCore = {

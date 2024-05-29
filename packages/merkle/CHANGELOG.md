@@ -1,5 +1,47 @@
 # Change Log
 
+## 0.89.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.89.0
+- @fuel-ts/math@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.88.1
+- @fuel-ts/math@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.88.0
+- @fuel-ts/math@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.87.0
+- @fuel-ts/math@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- @fuel-ts/hasher@0.86.0
+- @fuel-ts/math@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- @fuel-ts/math@0.85.0
+- @fuel-ts/hasher@0.85.0
+
 ## 0.84.0
 
 ### Patch Changes

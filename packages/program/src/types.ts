@@ -14,9 +14,6 @@ export type ContractCall = {
   fnSelector: string;
   fnSelectorBytes: Uint8Array;
   encoding?: EncodingVersion;
-  isInputDataPointer: boolean;
-  isOutputDataHeap: boolean;
-  outputEncodedLength: number;
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
@@ -41,7 +38,6 @@ export type TxParams = Partial<{
   maxFee?: BigNumberish;
   witnessLimit?: BigNumberish;
   variableOutputs: number;
-  optimizeGas?: boolean;
 }>;
 
 /**

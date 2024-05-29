@@ -27,11 +27,11 @@ export default createConfig({
     {{/if}}
   {{/if}}
   output: '{{output}}',
-  {{#if (isDefined useBuiltinForc)}}
-  useBuiltinForc: {{useBuiltinForc}},
+  {{#if (isDefined forcPath)}}
+  forcPath: '{{forcPath}}',
   {{/if}}
-  {{#if (isDefined useBuiltinFuelCore)}}
-  useBuiltinFuelCore: {{useBuiltinFuelCore}},
+  {{#if (isDefined fuelCorePath)}}
+  fuelCorePath: '{{fuelCorePath}}',
   {{/if}}
   {{#if (isDefined autoStartFuelCore)}}
   autoStartFuelCore: {{autoStartFuelCore}},
@@ -40,5 +40,5 @@ export default createConfig({
 
 /**
  * Check the docs:
- * https://fuellabs.github.io/fuels-ts/tooling/cli/fuels/config-file
+ * https://docs.fuel.network/docs/fuels-ts/fuels-cli/config-file/
  */

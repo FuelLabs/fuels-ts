@@ -26,8 +26,8 @@ export const createWallet = async () => {
   const provider = await Provider.create(FUEL_NETWORK_URL);
   const baseAssetId = provider.getBaseAssetId();
   walletInstance = await generateTestWallet(provider, [
-    [5_000_000, baseAssetId],
-    [5_000_000, ASSET_A],
+    [500_000_000, baseAssetId],
+    [500_000_000, ASSET_A],
   ]);
   return walletInstance;
 };
@@ -38,17 +38,22 @@ export type SetupConfig = {
   cache?: boolean;
 };
 
-export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
+export const setup = async <T extends Contract = Contract>({
+  contractBytecode,
+  abi,
+  cache,
+}: SetupConfig) => {
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
   const contract = await deployContract(factory, wallet.provider, cache);
-  return contract;
+  return contract as T;
 };
 
 export const createSetupConfig =
-  (defaultConfig: SetupConfig) => async (config?: Partial<SetupConfig>) =>
-    setup({
+  <T extends Contract = Contract>(defaultConfig: SetupConfig) =>
+  async (config?: Partial<SetupConfig>) =>
+    setup<T>({
       contractBytecode: defaultConfig.contractBytecode,
       abi: defaultConfig.abi,
       ...config,

@@ -10,7 +10,7 @@ import {
   MOCK_REQUEST_MESSAGE_INPUT,
   MOCK_REQUEST_PREDICATE_INPUT,
 } from '../../../test/fixtures/inputs-and-outputs';
-import type { GqlDependentCost } from '../__generated__/operations';
+import type { GqlHeavyOperation, GqlLightOperation } from '../__generated__/operations';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -35,8 +35,7 @@ describe('gas', () => {
   describe('resolveGasDependentCosts', () => {
     it('calculates cost correctly for LightOperation', () => {
       const byteSize = new BN('100');
-      const gasDependentCost: GqlDependentCost = {
-        __typename: 'LightOperation',
+      const gasDependentCost: GqlLightOperation = {
         base: '10',
         unitsPerGas: '10',
       };
@@ -48,8 +47,7 @@ describe('gas', () => {
 
     it('calculates cost correctly for HeavyOperation', () => {
       const byteSize = new BN('500');
-      const gasDependentCost: GqlDependentCost = {
-        __typename: 'HeavyOperation',
+      const gasDependentCost: GqlHeavyOperation = {
         base: '10',
         gasPerUnit: '2',
       };

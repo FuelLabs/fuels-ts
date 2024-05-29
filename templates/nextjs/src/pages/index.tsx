@@ -82,7 +82,9 @@ export default function Home() {
         <>
           <h3 className="text-xl font-semibold">Counter</h3>
 
-          <span className="text-gray-400 text-6xl">{counter}</span>
+          <span data-testid="counter" className="text-gray-400 text-6xl">
+            {counter}
+          </span>
 
           <Button onClick={onIncrementPressed} className="mt-6">
             Increment Counter
