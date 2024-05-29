@@ -16,6 +16,9 @@ vi.mock('@fuel-ts/versions', () => ({
   },
 }));
 
+/**
+ * @group node
+ */
 describe('rewriteTemplateFiles', () => {
   let paths: ProjectPaths;
 
