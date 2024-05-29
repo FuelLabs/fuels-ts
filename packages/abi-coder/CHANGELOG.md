@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.89.0
+
+### Patch Changes
+
+- f83502e: chore: refactor for performance improvements
+- af3c143: fix: `enum` size validation
+- f76aa57: chore: added `messagesTypes` to `JsonAbi`
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [83bbb7f]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/crypto@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
 ## 0.88.1
 
 ### Patch Changes
