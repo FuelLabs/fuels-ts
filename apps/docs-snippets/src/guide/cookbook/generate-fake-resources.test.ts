@@ -13,6 +13,9 @@ import {
   getDocsSnippetsForcProject,
 } from '../../../test/fixtures/forc-projects';
 
+/**
+ * @group node
+ */
 describe(__filename, () => {
   it('should generate fake resources just fine', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
