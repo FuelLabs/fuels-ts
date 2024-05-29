@@ -49,14 +49,30 @@ describe('arrayify', () => {
   test('should throw a FuelError for an invalid hex string', () => {
     const invalidHexString = '0xgg0102030405';
     expect(() => arrayify(invalidHexString)).toThrowError(
-      new FuelError(ErrorCode.INVALID_DATA, 'invalid data - ')
+      new FuelError(
+        ErrorCode.INVALID_DATA,
+        'invalid data: 0xgg0102030405\nIf you are attempting to transform a hex value, please make sure it is being passed as a string and wrapped in quotes.'
+      )
     );
   });
 
   test('should throw a FuelError for an invalid input', () => {
     const invalidInput = 123 as unknown as BytesLike;
     expect(() => arrayify(invalidInput, 'invalid input')).toThrowError(
-      new FuelError(ErrorCode.INVALID_DATA, 'invalid data - invalid input')
+      new FuelError(
+        ErrorCode.INVALID_DATA,
+        'invalid data: invalid input - 123\nIf you are attempting to transform a hex value, please make sure it is being passed as a string and wrapped in quotes.'
+      )
+    );
+  });
+
+  test('should throw for integer hex value', () => {
+    const invalidHexString = 0xd5579c46 as unknown as BytesLike;
+    expect(() => arrayify(invalidHexString, 'hex')).toThrowError(
+      new FuelError(
+        ErrorCode.INVALID_DATA,
+        'invalid data: hex - 3579288646\nIf you are attempting to transform a hex value, please make sure it is being passed as a string and wrapped in quotes.'
+      )
     );
   });
 });

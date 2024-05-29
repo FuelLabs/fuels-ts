@@ -85,6 +85,21 @@ jobs:
           FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
           PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
 
+  create-fuels-template-integration:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Run UI tests
+        run: sh ./scripts/create-fuels-template-integration.sh
+
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
