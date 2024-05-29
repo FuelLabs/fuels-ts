@@ -192,4 +192,26 @@ describe('Options Tests', () => {
 
     expect(value).toStrictEqual(undefined);
   });
+
+  it('echoes option enum diff sizes', async () => {
+    const { value } = await contractInstance.functions.echo_enum_diff_sizes(undefined).call();
+
+    expect(value).toStrictEqual(undefined);
+
+    const { value: value2 } = await contractInstance.functions
+      .echo_enum_diff_sizes({ a: U8_MAX })
+      .call();
+
+    expect(value2).toStrictEqual({ a: U8_MAX });
+
+    const { value: value3 } = await contractInstance.functions
+      .echo_enum_diff_sizes({
+        b: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',
+      })
+      .call();
+
+    expect(value3).toStrictEqual({
+      b: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',
+    });
+  });
 });
