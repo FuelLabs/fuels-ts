@@ -3,7 +3,7 @@ name: Sync Dependencies with Syncpack
 on:
   pull_request:
     branches:
-      - main # Run this action on pull requests targeting the main branch
+      - master # Run this action on pull requests targeting the main branch
 
 jobs:
   syncpack:
