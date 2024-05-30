@@ -22,7 +22,7 @@ describe('Predicate', () => {
       FuelGaugeProjectsEnum.PREDICATE_SUM
     );
 
-    const amount1 = bn(100_000);
+    const amount1 = bn(500_000);
     const amount2 = bn(200_000);
     const amount3 = bn(300_000);
     const amountToTransferBaseAsset = bn(1000);
@@ -46,8 +46,8 @@ describe('Predicate', () => {
     const fakeCoins = predicate.generateFakeResources(fakeCoinsConfig);
 
     let request = new ScriptTransactionRequest({
-      gasLimit: bn(1500),
-      maxFee: bn(1700),
+      gasLimit: bn(270_000),
+      maxFee: bn(250_000),
     });
 
     fakeCoins.forEach((coin) => {

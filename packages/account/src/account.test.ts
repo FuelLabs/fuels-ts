@@ -677,8 +677,8 @@ describe('Account', () => {
 
     const fakeCoins = sender.generateFakeResources(fakeCoinsConfig);
     const request = new ScriptTransactionRequest({
-      gasLimit: bn(1500),
-      maxFee: bn(1700),
+      gasLimit: bn(60_000),
+      maxFee: bn(62_000),
     });
 
     request.addResources(fakeCoins);
