@@ -93,7 +93,7 @@
     "eslint-plugin-tsdoc": "^0.2.17",
     "glob": "^10.2.6",
     "knip": "^5.9.3",
-    "memfs": "^4.8.2",
+    "memfs": "^4.9.2",
     "nodemon": "^3.0.3",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
