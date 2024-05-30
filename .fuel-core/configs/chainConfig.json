@@ -82,9 +82,9 @@
           "lw": 2,
           "mint": 29024,
           "mlog": 2,
-          "mod_op": 2,
+          "mod": 2,
           "modi": 2,
-          "move_op": 2,
+          "move": 2,
           "movi": 2,
           "mroo": 4,
           "mul": 2,
@@ -98,8 +98,8 @@
           "popl": 3,
           "pshh": 4,
           "pshl": 4,
-          "ret": 134,
-          "rvrt": 153,
+          "ret_contract": 134,
+          "rvrt_contract": 153,
           "sb": 2,
           "sll": 2,
           "slli": 2,
@@ -201,7 +201,7 @@
               "units_per_gas": 766
             }
           },
-          "retd": {
+          "retd_contract": {
             "LightOperation": {
               "base": 485,
               "units_per_gas": 3
