@@ -366,8 +366,8 @@ importers:
         specifier: ^4.6.0
         version: 4.6.0(eslint@8.38.0)
       eslint-plugin-react-refresh:
-        specifier: ^0.3.4
-        version: 0.3.4(eslint@8.38.0)
+        specifier: ^0.4.7
+        version: 0.4.7(eslint@8.38.0)
       typescript:
         specifier: ~5.2.2
         version: 5.2.2
@@ -6665,8 +6665,8 @@ packages:
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
 
-  eslint-plugin-react-refresh@0.3.4:
-    resolution: {integrity: sha512-E0ViBglxSQAERBp6eTj5fPgtCRtDonnbCFiVQBhf4Dto2blJRxg1dFUMdMh7N6ljTI4UwPhHwYDQ3Dyo4m6bwA==}
+  eslint-plugin-react-refresh@0.4.7:
+    resolution: {integrity: sha512-yrj+KInFmwuQS2UQcg1SF83ha1tuHC1jMQbRNyuWtlEzzKRDgAl7L4Yp4NlDUZTZNlWvHEzOtJhMi40R7JxcSw==}
     peerDependencies:
       eslint: '>=7'
 
@@ -19472,7 +19472,7 @@ snapshots:
     dependencies:
       eslint: 8.54.0
 
-  eslint-plugin-react-refresh@0.3.4(eslint@8.38.0):
+  eslint-plugin-react-refresh@0.4.7(eslint@8.38.0):
     dependencies:
       eslint: 8.38.0
 
