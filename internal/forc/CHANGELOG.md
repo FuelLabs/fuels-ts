@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.88.2
+
+### Patch Changes
+
+- a96c1fe: chore: upgrade forc 0.60.0
+
 ## 0.88.1
 
 ## 0.88.0
