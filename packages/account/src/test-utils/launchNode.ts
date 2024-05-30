@@ -1,4 +1,4 @@
-import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import { BYTES_32 } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
 import { defaultSnapshotConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
@@ -177,7 +177,7 @@ export const launchNode = async ({
         process.env.GENESIS_SECRET = hexlify(pk);
 
         stateConfigJson.coins.push({
-          tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
+          tx_id: hexlify(randomBytes(BYTES_32)),
           owner: signer.address.toHexString(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           amount: '18446744073709551615' as any,
