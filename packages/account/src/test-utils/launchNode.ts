@@ -120,6 +120,9 @@ export const launchNode = async ({
     const poaInstantFlagValue = getFlagValueFromArgs(args, '--poa-instant');
     const poaInstant = poaInstantFlagValue === 'true' || poaInstantFlagValue === undefined;
 
+    const nativeExecutorVersionFlagValue = getFlagValueFromArgs(args, '--native-executor-version');
+    const nativeExecutorVersion = nativeExecutorVersionFlagValue || '0';
+
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
@@ -214,6 +217,7 @@ export const launchNode = async ({
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
         ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
+        ['--native-executor-version', nativeExecutorVersion],
         ['--consensus-key', consensusKey],
         ['--snapshot', snapshotDirToUse as string],
         '--vm-backtrace',
