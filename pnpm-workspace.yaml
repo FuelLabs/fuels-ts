@@ -3,3 +3,4 @@ packages:
   - "internal/*"
   - "packages/*"
   - "templates/*"
+  - "create-fuels-integration-test-project/*"
