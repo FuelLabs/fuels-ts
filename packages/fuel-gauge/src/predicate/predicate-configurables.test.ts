@@ -18,7 +18,7 @@ describe('Predicate', () => {
 
   describe('Configurables', () => {
     let wallet: WalletUnlocked;
-    const amountToPredicate = 2000;
+    const amountToPredicate = 300_000;
     let baseAssetId: string;
 
     const defaultValues = {
@@ -32,7 +32,7 @@ describe('Predicate', () => {
 
       const quantities: CoinQuantityLike[] = [
         {
-          amount: 1_000_000,
+          amount: 100_000_000,
           assetId: baseAssetId,
         },
       ];
@@ -179,6 +179,8 @@ describe('Predicate', () => {
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,
       });
+
+      await fundPredicate(wallet, predicate, amountToPredicate);
 
       await expect(
         predicate.transfer(destination.address, 300, baseAssetId, { gasLimit: 1000 })

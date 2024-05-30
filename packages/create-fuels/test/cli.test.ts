@@ -1,20 +1,18 @@
-import fs, { cp } from 'fs/promises';
-import { glob } from 'glob';
-import { join } from 'path';
-import type { MockInstance } from 'vitest';
+import { mkdirSync } from 'fs';
 
 import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
-let writeSpy: MockInstance;
-
-const getAllFiles = async (pathToDir: string) => {
-  const files = await glob(`${pathToDir}/**/*`, {
-    ignore: ['**/node_modules/**', '**/.next/**', '**/sway-api/**'],
-  });
-  const filesWithoutPrefix = files.map((file) => file.replace(pathToDir, ''));
-  return filesWithoutPrefix;
-};
+import type { ProjectPaths } from './utils/bootstrapProject';
+import {
+  bootstrapProject,
+  cleanupFilesystem,
+  copyTemplate,
+  resetFilesystem,
+} from './utils/bootstrapProject';
+import { generateArgv } from './utils/generateArgs';
+import { mockLogger } from './utils/mockLogger';
+import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
 const possibleProgramsToInclude: ProgramsToInclude[] = [
   { contract: true, predicate: false, script: false },
@@ -26,171 +24,96 @@ const possibleProgramsToInclude: ProgramsToInclude[] = [
   { contract: true, predicate: true, script: true },
 ];
 
-const defaultFlags = ['--pnpm'];
-
-const generateArgs = (programsToInclude: ProgramsToInclude, projectName?: string) => {
-  const args = ['', ''];
-  if (projectName) {
-    args.push(projectName);
-  }
-  if (programsToInclude.contract) {
-    args.push('-c');
-  }
-  if (programsToInclude.predicate) {
-    args.push('-p');
-  }
-  if (programsToInclude.script) {
-    args.push('-s');
-  }
-  args.push(...defaultFlags);
-  return args;
-};
-
-const filterOriginalTemplateFiles = (files: string[], programsToInclude: ProgramsToInclude) => {
-  let newFiles = [...files];
-
-  newFiles = newFiles.filter((file) => {
-    if (file.includes('CHANGELOG')) {
-      return false;
-    }
-    if (!programsToInclude.contract && file.includes('contract')) {
-      return false;
-    }
-    if (!programsToInclude.predicate && file.includes('predicate')) {
-      return false;
-    }
-    if (!programsToInclude.script && file.includes('script')) {
-      return false;
-    }
-    if (['/gitignore', '/env'].includes(file)) {
-      return false;
-    }
-    return true;
-  });
-
-  return newFiles;
-};
-
-beforeEach(async () => {
-  // move the templates folder from the root of the project to the root of the create-fuels package temporarily.
-  // this is needed because of the way the create-fuels package is setup.
-  // it expects the templates folder to be in the root of the create-fuels package. we move it there in the prepublishOnly script
-  await cp(join(__dirname, '../../../templates'), join(__dirname, '../templates'), {
-    recursive: true,
-  });
-  writeSpy = vi.spyOn(process.stdout, 'write').mockImplementation(() => true);
-});
-
-afterEach(async () => {
-  await fs.rm(join(__dirname, '../templates'), { recursive: true });
-  writeSpy.mockRestore();
-});
-
 /**
  * @group node
  */
-test.each(possibleProgramsToInclude)(
-  'create-fuels extracts the template to the specified directory',
-  async (programsToInclude) => {
-    const args = generateArgs(programsToInclude, 'test-project');
-    const program = setupProgram();
-    program.parse(args);
+describe('CLI', () => {
+  const { error } = mockLogger();
+  let paths: ProjectPaths;
 
+  beforeEach(() => {
+    paths = bootstrapProject(__filename);
+    copyTemplate(paths.sourceTemplate, paths.template);
+  });
+
+  afterEach(() => {
+    resetFilesystem(paths.root);
+    resetFilesystem(paths.template);
+    vi.resetAllMocks();
+  });
+
+  afterAll(() => {
+    cleanupFilesystem();
+  });
+
+  test.each(possibleProgramsToInclude)(
+    'create-fuels extracts the template to the specified directory',
+    async (programsToInclude) => {
+      const args = generateArgv(programsToInclude, paths.root);
+
+      await runScaffoldCli({
+        program: setupProgram(),
+        args,
+        shouldInstallDeps: false,
+      });
+
+      let originalTemplateFiles = await getAllFiles(paths.template);
+      originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
+
+      const testProjectFiles = await getAllFiles(paths.root);
+
+      expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
+    }
+  );
+
+  test('create-fuels reports an error if the project directory already exists', async () => {
+    const args = generateArgv(
+      {
+        contract: true,
+        predicate: true,
+        script: true,
+      },
+      paths.root
+    );
+
+    // Generate the project once
+    mkdirSync(paths.root, { recursive: true });
+
+    // Generate the project again
     await runScaffoldCli({
-      program,
+      program: setupProgram(),
       args,
       shouldInstallDeps: false,
+    }).catch((e) => {
+      expect(e).toBeInstanceOf(Error);
     });
 
-    let originalTemplateFiles = await getAllFiles(join(__dirname, '../templates/nextjs'));
-    originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
-
-    const testProjectFiles = await getAllFiles('test-project');
-
-    expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
-
-    await fs.rm('test-project', { recursive: true });
-  }
-);
-
-test('create-fuels reports an error if the project directory already exists', async () => {
-  await fs.mkdir('test-project-2');
-
-  const args = generateArgs(
-    {
-      contract: true,
-      predicate: true,
-      script: true,
-    },
-    'test-project-2'
-  );
-  const program = setupProgram();
-  program.parse(args);
-
-  await runScaffoldCli({
-    program,
-    args,
-    shouldInstallDeps: false,
-  }).catch((e) => {
-    expect(e).toBeInstanceOf(Error);
+    expect(error).toHaveBeenCalledWith(
+      expect.stringContaining(`A folder already exists at ${paths.root}`)
+    );
   });
 
-  expect(writeSpy).toHaveBeenCalledWith(
-    expect.stringContaining('A folder already exists at test-project-2')
-  );
+  test('create-fuels reports an error if no programs are chosen to be included', async () => {
+    const args = generateArgv(
+      {
+        contract: false,
+        predicate: false,
+        script: false,
+      },
+      paths.root
+    );
 
-  await fs.rm('test-project-2', { recursive: true });
-});
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+      shouldInstallDeps: false,
+      forceDisablePrompts: true,
+    }).catch((e) => {
+      expect(e).toBeInstanceOf(Error);
+    });
 
-test('create-fuels reports an error if no programs are chosen to be included', async () => {
-  const args = generateArgs(
-    {
-      contract: false,
-      predicate: false,
-      script: false,
-    },
-    'test-project-3'
-  );
-  const program = setupProgram();
-  program.parse(args);
-
-  await runScaffoldCli({
-    program,
-    args,
-    shouldInstallDeps: false,
-    forceDisablePrompts: true,
-  }).catch((e) => {
-    expect(e).toBeInstanceOf(Error);
+    expect(error).toHaveBeenCalledWith(
+      expect.stringContaining('You must include at least one Sway program.')
+    );
   });
-
-  expect(writeSpy).toHaveBeenCalledWith(
-    expect.stringContaining('You must include at least one Sway program.')
-  );
-});
-
-test('setupProgram takes in args properly', () => {
-  const program = setupProgram();
-  program.parse(['', '', 'test-project-name', '-c', '-p', '-s', '--pnpm', '--npm']);
-  expect(program.args[0]).toBe('test-project-name');
-  expect(program.opts().contract).toBe(true);
-  expect(program.opts().predicate).toBe(true);
-  expect(program.opts().script).toBe(true);
-  expect(program.opts().pnpm).toBe(true);
-  expect(program.opts().npm).toBe(true);
-});
-
-test('setupProgram takes in combined args properly', () => {
-  const program = setupProgram();
-  program.parse(['', '', '-cps']);
-  expect(program.opts().contract).toBe(true);
-  expect(program.opts().predicate).toBe(true);
-  expect(program.opts().script).toBe(true);
-});
-
-test('setupProgram - no args', () => {
-  const program = setupProgram();
-  program.parse([]);
-  expect(program.opts().contract).toBe(undefined);
-  expect(program.opts().predicate).toBe(undefined);
-  expect(program.opts().script).toBe(undefined);
 });

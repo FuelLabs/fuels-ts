@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.84.0",
+  "version": "0.89.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -43,9 +43,10 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "pnpm build:forc",
+    "pretest": "run-s build:forc-callpaths build:forc",
     "build": "tsup",
     "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
+    "build:forc-callpaths": "pnpm fuels-forc build -p test/fixtures/forc-projects --json-abi-with-callpaths",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
@@ -62,7 +63,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
-    "@fuel-ts/forc": "workspace:*",
+    "@internal/forc": "workspace:*",
     "@types/mkdirp": "^1.0.2",
     "@types/ramda": "^0.29.3",
     "@types/rimraf": "^3.0.2"

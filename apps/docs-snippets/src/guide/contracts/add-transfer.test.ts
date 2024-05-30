@@ -1,5 +1,5 @@
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
-import type { Account, Contract, Provider } from 'fuels';
+import type { Account, Contract, Provider, TransferParams } from 'fuels';
 import { Wallet } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
@@ -19,9 +19,9 @@ describe(__filename, () => {
     provider = contract.provider;
     baseAssetId = provider.getBaseAssetId();
     wallet = await getTestWallet([
-      [5000, baseAssetId],
-      [5000, ASSET_A],
-      [5000, ASSET_B],
+      [500_000, baseAssetId],
+      [500_000, ASSET_A],
+      [500_000, ASSET_B],
     ]);
 
     contract.account = wallet;
@@ -31,7 +31,14 @@ describe(__filename, () => {
     // #region add-transfer-1
     const recipient = Wallet.generate({ provider });
 
-    await contract.functions.echo_u64(100).addTransfer(recipient.address, 100, baseAssetId).call();
+    await contract.functions
+      .echo_u64(100)
+      .addTransfer({
+        destination: recipient.address,
+        amount: 100,
+        assetId: baseAssetId,
+      })
+      .call();
     // #endregion add-transfer-1
 
     const recipientBalance = await recipient.getBalance(baseAssetId);
@@ -44,12 +51,13 @@ describe(__filename, () => {
     const recipient1 = Wallet.generate({ provider });
     const recipient2 = Wallet.generate({ provider });
 
-    await contract.functions
-      .echo_u64(100)
-      .addTransfer(recipient1.address, 100, baseAssetId)
-      .addTransfer(recipient1.address, 400, ASSET_A)
-      .addTransfer(recipient2.address, 300, ASSET_B)
-      .call();
+    const transferParams: TransferParams[] = [
+      { destination: recipient1.address, amount: 100, assetId: baseAssetId },
+      { destination: recipient1.address, amount: 400, assetId: ASSET_A },
+      { destination: recipient2.address, amount: 300, assetId: ASSET_B },
+    ];
+
+    await contract.functions.echo_u64(100).addBatchTransfer(transferParams).call();
     // #endregion add-transfer-2
 
     const recipient1BalanceBaseAsset = await recipient1.getBalance(baseAssetId);

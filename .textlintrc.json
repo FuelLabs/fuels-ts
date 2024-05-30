@@ -2,12 +2,15 @@
   "plugins": {},
   "filters": {},
   "rules": {
+    "@elasticpath/no-dead-relative-link": true,
     "no-dead-link": {
       "ignoreRedirects": true,
       "checkRelative": false,
       "ignore": [
         "https://learnmeabitcoin.com/**",
-        "https://faucet-beta-5.fuel.network/"
+        "https://devnet.fuel.network/",
+        "https://thebitcoinmanual.com/**",
+        "https://forum.fuel.network/"
       ]
     }
   }

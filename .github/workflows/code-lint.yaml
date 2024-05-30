@@ -1,0 +1,47 @@
+name: "Lint Code"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docs:
+    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
+    with:
+      doc-folder-path: "apps/docs/src"
+      spellcheck-config-path: "apps/docs/.spellcheck.yml"
+
+  lint:
+    runs-on: ubuntu-latest
+    name: Lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: CI Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Verify package.json integrity
+        run: pnpm lint:package-jsons
+
+      - name: Verify package exports integrity
+        run: pnpm verify:package-exports
+
+      - name: Forc Format Check
+        run: pnpm forc:check
+
+      # linting of some tests depends on pretest being run so that it generates the necessary files
+      - name: Pretest
+        run: pnpm pretest
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Lint markdown files
+        run: pnpm lint:md-links

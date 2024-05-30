@@ -1,11 +1,11 @@
 <script setup>
   import { data } from '../../versions.data'
-  const { fuels } = data
+  const { fuels, forc, fuelCore } = data
 </script>
 
 # Commands
 
-The `fuels` CLI consists of a couple commands.
+The `fuels` CLI consists of a couple of commands.
 
 ## `fuels init`
 
@@ -36,7 +36,7 @@ npx fuels@{{fuels}} init --workspace ./sway-programs --output ./src/sway-program
 
 This will give you a minimal configuration:
 
-<<< @../../../demo-fuels/fuels.config.ts#config{ts:line-numbers}
+<<< @../../../demo-fuels/fuels.config.minimal.ts#config{ts:line-numbers}
 
 In a nutshell:
 
@@ -72,8 +72,8 @@ Examples:
 npx fuels@{{fuels}} build
 ```
 
-1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](#commands-for-wrapped-utiltities)</sup>
-1.  Generate types for them using `fuels-typegen` <sup>[2](#typegen)</sup>
+1.  Build all Sway programs under your `workspace` using `forc` <sup>[1](https://docs.fuel.network/docs/forc/commands/forc_build/)</sup>
+1.  Generate types for them using `fuels-typegen` <sup>[2](#fuels-typegen)</sup>
 
 ```console-vue
 npx fuels@{{fuels}} build --deploy
@@ -127,9 +127,17 @@ The `fuels dev` command does three things:
 
 1. Auto-start a short-lived `fuel-core` node ([docs](./config-file.md#autostartfuelcore))
 1. Runs `build` and `deploy` once at the start
-1. Watches your Forc workspace and repeats previous step on every change
+1. Watches your Forc workspace and repeats the previous step on every change
 
 > _In `dev` mode, every time you update a contract on your Forc `workspace`, we re-generate type definitions and factory classes for it, following your pre-configured [`output`](./config-file.md#output) directory. If it's part of another build system running in dev mode (i.e. `next dev`), you can expect it to re-build / auto-reload as well._
+
+## `fuels node`
+
+```console-vue
+npx fuels@{{fuels}} node
+```
+
+The `fuels node` command starts a short-lived `fuel-core` node ([docs](./config-file.md#autostartfuelcore)).
 
 ## `fuels typegen`
 
@@ -155,37 +163,20 @@ For more info, check:
 
 ## `fuels versions`
 
-Check for version incompatibilities between your [Fuel Toolchain](#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
+Check for version incompatibilities between your [Fuel Toolchain](https://docs.fuel.network/docs/sway/introduction/fuel_toolchain/#the-fuel-toolchain) component versions, matching them against the ones supported by the Typescript SDK version that you have.
 
 ```console-vue
 npx fuels@{{fuels}} versions
 ```
 
-```
+```console-vue
+┌───────────┬───────────┬────────────────┬─────────────┐
+│           │ Supported │ Yours / System │ System Path │
+├───────────┼───────────┼────────────────┼─────────────┤
+│ Forc      │ {{forc}}    │ {{forc}}         │ forc        │
+├───────────┼───────────┼────────────────┼─────────────┤
+│ Fuel-Core │ {{fuelCore}}    │ {{fuelCore}}         │ fuel-core   │
+└───────────┴───────────┴────────────────┴─────────────┘
+
 You have all the right versions! ⚡
-┌───────────┬───────────┬─────────────────┐
-│           │ Supported │ Yours / System  │
-├───────────┼───────────┼─────────────────┤
-│ Forc      │ 0.30.0    │ 0.30.0          │
-├───────────┼───────────┼─────────────────┤
-│ Fuel-Core │ 0.14.0    │ 0.14.0          │
-└───────────┴───────────┴─────────────────┘
 ```
-
-## `fuels forc`
-
-Simple [wrapper](./binaries.md) around the `forc` binary.
-
-Check also:
-
-- [Built-in Binaries](./binaries.md)
-- [`forc` documentation](https://docs.fuel.network/docs/forc/commands/)
-
-## `fuels core`
-
-Simple [wrapper](./binaries.md) around the `fuel-core` binary.
-
-Check also:
-
-- [Built-in Binaries](./binaries.md)
-- [`fuel-core` documentation](https://docs.fuel.network/guides/running-a-node/running-a-local-node/)

@@ -20,7 +20,7 @@ async function getChangelogInfo(
   changeset: NewChangeset,
 ): Promise<ChangelogInfo> {
   const changesetCommit = execSync(
-    `git log -n 1 --oneline --pretty=format:%H -- ${join(
+    `git log -n 1 --diff-filter=A --oneline --pretty=format:%H -- ${join(
       process.cwd(),
       ".changeset",
       `${changeset.id}.md`,
@@ -46,7 +46,7 @@ async function getChangelogInfo(
   const prType = title.replace(/(\w+).*/, "$1"); // chore!: add something -> chore
   const isBreaking = title.includes(`${prType}!`);
 
-  const titleDescription = title.replace(/\w+\W+(.*)/, "$1"); // chore!: add something -> add something
+  const titleDescription = title.replace(/\w+!?:(.*)/, "$1").trim(); // chore!: add something -> add something
   const summary =
     titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 

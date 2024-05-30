@@ -1,5 +1,145 @@
 # Change Log
 
+## 0.89.0
+
+### Minor Changes
+
+- 0b53b85: feat!: pass base asset ID for withdrawals
+- 7c08593: feat!: transfer for multiple addresses
+
+### Patch Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+- 3b27bac: fix: add `predicateData` to predicate resources and inputs
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [f83502e]
+- Updated dependencies [af3c143]
+- Updated dependencies [685829b]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [a96c1fe]
+- Updated dependencies [f76aa57]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/abi-coder@0.89.0
+  - @fuel-ts/transactions@0.89.0
+  - @fuel-ts/address@0.89.0
+  - @fuel-ts/crypto@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/merkle@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- Updated dependencies [64b90a9]
+  - @fuel-ts/abi-coder@0.88.1
+  - @fuel-ts/transactions@0.88.1
+  - @fuel-ts/address@0.88.1
+  - @fuel-ts/crypto@0.88.1
+  - @fuel-ts/errors@0.88.1
+  - @fuel-ts/hasher@0.88.1
+  - @fuel-ts/interfaces@0.88.1
+  - @fuel-ts/math@0.88.1
+  - @fuel-ts/merkle@0.88.1
+  - @fuel-ts/utils@0.88.1
+  - @fuel-ts/versions@0.88.1
+
+## 0.88.0
+
+### Minor Changes
+
+- 3f86778: chore!: update testnet URLs
+- 60337b5: chore!: update `forc` to `0.59.0`
+
+### Patch Changes
+
+- d5116ce: fix: validate status from estimation dry-run
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/transactions@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/crypto@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/merkle@0.88.0
+  - @fuel-ts/utils@0.88.0
+  - @fuel-ts/versions@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- Updated dependencies [0da455a]
+  - @fuel-ts/abi-coder@0.87.0
+  - @fuel-ts/transactions@0.87.0
+  - @fuel-ts/address@0.87.0
+  - @fuel-ts/crypto@0.87.0
+  - @fuel-ts/errors@0.87.0
+  - @fuel-ts/hasher@0.87.0
+  - @fuel-ts/interfaces@0.87.0
+  - @fuel-ts/math@0.87.0
+  - @fuel-ts/merkle@0.87.0
+  - @fuel-ts/utils@0.87.0
+  - @fuel-ts/versions@0.87.0
+
+## 0.86.0
+
+### Minor Changes
+
+- ee969d3: fix!: avoid add witnesses for predicates
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+### Patch Changes
+
+- 316c757: fix: internalize `ethers` functionality and remove dependency
+- 0651a5f: chore: remove `ethers` from `abi-coder`
+- Updated dependencies [316c757]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/crypto@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/transactions@0.86.0
+  - @fuel-ts/versions@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/hasher@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/merkle@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Minor Changes
+
+- fb0e12f: chore!: remove `__typename` from GraphQL types
+
+### Patch Changes
+
+- 9bc893b: fix: avoid overriding user `gasLimit` and `maxFee` inputs
+- 1115ade: fix: added CDN path for icon assets
+- f7eacb4: chore: warn on fuel client version incompatibility
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/address@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/transactions@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/merkle@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
 ## 0.84.0
 
 ### Minor Changes

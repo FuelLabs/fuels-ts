@@ -1,5 +1,26 @@
 # @fuel-ts/versions
 
+## 0.89.0
+
+### Patch Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+- a96c1fe: chore: upgrade forc 0.60.0
+
+## 0.88.1
+
+## 0.88.0
+
+## 0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+## 0.85.0
+
 ## 0.84.0
 
 ### Minor Changes

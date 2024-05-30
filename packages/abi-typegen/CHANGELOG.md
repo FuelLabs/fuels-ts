@@ -1,5 +1,74 @@
 # @fuel-ts/abi-typegen
 
+## 0.89.0
+
+### Patch Changes
+
+- 20d73c5: feat: support generic enums in `typegen`
+- ceef79a: fix: `typegen` generic enums and `./common` import (predicates, scripts)
+- 6d1db46: feat: make `typegen` factories an object instance
+- 4d65c8c: fix: `typegen` enum using specified generic
+- 4c3b4c8: feat: support `forc build --json-abi-with-callpaths` flag
+- f76aa57: chore: added `messagesTypes` to `JsonAbi`
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [a96c1fe]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.88.1
+- @fuel-ts/interfaces@0.88.1
+- @fuel-ts/utils@0.88.1
+- @fuel-ts/versions@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.88.0
+- @fuel-ts/interfaces@0.88.0
+- @fuel-ts/utils@0.88.0
+- @fuel-ts/versions@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.87.0
+- @fuel-ts/interfaces@0.87.0
+- @fuel-ts/utils@0.87.0
+- @fuel-ts/versions@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- Updated dependencies [316c757]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/versions@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- d0e9b1a: feat: support `Result<T, E>` type in typegen
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
 ## 0.84.0
 
 ### Patch Changes

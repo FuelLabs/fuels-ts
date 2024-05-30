@@ -5,40 +5,59 @@
 
 # Fragments
 
-fragment transactionStatusFragment on TransactionStatus {
+fragment SubmittedStatusFragment on SubmittedStatus {
   type: __typename
+  time
+}
+
+fragment SuccessStatusFragment on SuccessStatus {
+  type: __typename
+  block {
+    id
+  }
+  time
+  programState {
+    returnType
+    data
+  }
+  receipts {
+    ...receiptFragment
+  }
+  totalGas
+  totalFee
+}
+
+fragment FailureStatusFragment on FailureStatus {
+  type: __typename
+  block {
+    id
+  }
+  totalGas
+  totalFee
+  time
+  reason
+  receipts {
+    ...receiptFragment
+  }
+}
+
+fragment SqueezedOutStatusFragment on SqueezedOutStatus {
+  type: __typename
+  reason
+}
+
+fragment transactionStatusFragment on TransactionStatus {
   ... on SubmittedStatus {
-    time
+    ...SubmittedStatusFragment
   }
   ... on SuccessStatus {
-    block {
-      id
-    }
-    time
-    programState {
-      returnType
-      data
-    }
-    receipts {
-      ...receiptFragment
-    }
-    totalGas
-    totalFee
+    ...SuccessStatusFragment
   }
   ... on FailureStatus {
-    block {
-      id
-    }
-    totalGas
-    totalFee
-    time
-    reason
-    receipts {
-      ...receiptFragment
-    }
+    ...FailureStatusFragment
   }
   ... on SqueezedOutStatus {
-    reason
+    ...SqueezedOutStatusFragment
   }
 }
 
@@ -73,6 +92,7 @@ fragment transactionEstimatePredicatesFragment on Transaction {
 }
 
 fragment dryRunFailureStatusFragment on DryRunFailureStatus {
+  type: __typename
   totalGas
   totalFee
   reason
@@ -83,6 +103,7 @@ fragment dryRunFailureStatusFragment on DryRunFailureStatus {
 }
 
 fragment dryRunSuccessStatusFragment on DryRunSuccessStatus {
+  type: __typename
   totalGas
   totalFee
   programState {
@@ -153,7 +174,7 @@ fragment blockFragment on Block {
 }
 
 fragment coinFragment on Coin {
-  __typename
+  type: __typename
   utxoId
   owner
   amount
@@ -163,7 +184,7 @@ fragment coinFragment on Coin {
 }
 
 fragment messageCoinFragment on MessageCoin {
-  __typename
+  type: __typename
   sender
   recipient
   nonce
@@ -270,12 +291,13 @@ fragment FeeParametersFragment on FeeParameters {
 }
 
 fragment DependentCostFragment on DependentCost {
-  __typename
   ... on LightOperation {
+    type: __typename
     base
     unitsPerGas
   }
   ... on HeavyOperation {
+    type: __typename
     base
     gasPerUnit
   }
