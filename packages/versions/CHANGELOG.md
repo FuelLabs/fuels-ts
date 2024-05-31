@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+
 ## 0.89.0
 
 ### Patch Changes
