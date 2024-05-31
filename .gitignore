@@ -144,6 +144,10 @@ Forc.lock
 **/out/release
 **/test-predicate-*/index.ts
 
+## Ignore perf test files
+*clinic*
+.clinic/*
+
 # Ignore typegen test files
 **/test/typegen
 

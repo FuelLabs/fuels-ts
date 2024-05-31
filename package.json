@@ -26,10 +26,20 @@
     "test:browser": "vitest --run --coverage --config vitest.browser.config.mts $(scripts/tests-find.sh --browser)",
     "test:browser:filter": "vitest --run --coverage --config vitest.browser.config.mts",
     "test:e2e": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --e2e)",
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
     "bench:node": "vitest bench --run --config vitest.node.config.mts $(scripts/tests-find.sh)",
     "bench:node:filter": "vitest bench --run --config vitest.node.config.mts",
     "bench:browser": "vitest bench --run --config vitest.browser.config.mts $(scripts/tests-find.sh --browser)",
     "bench:browser:filter": "vitest bench --run --config --coverage vite.browser.config.mts",
+<<<<<<< Updated upstream
+=======
+    "profile": "clinic bubbleprof --autocannon [ -c 5 -a 500 / ] -- node packages/abi-coder/dist/test/perf/profile.js",
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --max-warnings 0",
     "lint:fix": "pnpm lint:check --fix",
@@ -67,10 +77,10 @@
     "@changesets/get-github-info": "^0.5.2",
     "@changesets/read": "^0.6.0",
     "@changesets/types": "^6.0.0",
-    "@internal/forc": "workspace:*",
-    "@internal/fuel-core": "workspace:*",
     "@elasticpath/textlint-rule-no-dead-relative-link": "^1.1.1",
     "@fuel-ts/utils": "workspace:*",
+    "@internal/forc": "workspace:*",
+    "@internal/fuel-core": "workspace:*",
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@playwright/test": "^1.44.0",
@@ -81,6 +91,8 @@
     "@typescript-eslint/parser": "^6.9.0",
     "@vitest/browser": "^1.6.0",
     "@vitest/coverage-istanbul": "^1.6.0",
+    "autocannon": "^7.15.0",
+    "clinic": "^13.0.0",
     "compare-versions": "^6.1.0",
     "coverage-diff": "^3.2.0",
     "eslint": "^8.52.0",
