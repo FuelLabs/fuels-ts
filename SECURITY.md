@@ -10,7 +10,7 @@ If you find a vulnerability or exploit, please [**report privately**](https://gi
 
 Please **DO NOT file a public issue**.
 
-We will send a response indicating the next steps in handling your report. After the initial reply to your report, the security team will keep you informed of the progress towards a fix and full announcement, and may ask for additional information or guidance.
+We will send a response indicating the next steps to handle your report. The security team will let you know about the progress toward a fix and full announcement and may ask for additional information or guidance.
 
 If the issue is an implementation weakness that cannot be immediately exploited or something that has not yet been deployed, just discuss it openly.
 
