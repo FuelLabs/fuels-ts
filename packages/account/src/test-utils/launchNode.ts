@@ -120,8 +120,7 @@ export const launchNode = async ({
     const poaInstantFlagValue = getFlagValueFromArgs(args, '--poa-instant');
     const poaInstant = poaInstantFlagValue === 'true' || poaInstantFlagValue === undefined;
 
-    const nativeExecutorVersionFlagValue = getFlagValueFromArgs(args, '--native-executor-version');
-    const nativeExecutorVersion = nativeExecutorVersionFlagValue || '0';
+    const nativeExecutorVersion = getFlagValueFromArgs(args, '--native-executor-version') || '0';
 
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
