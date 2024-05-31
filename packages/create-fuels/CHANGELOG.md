@@ -1,5 +1,7 @@
 # create-fuels
 
+## 0.89.1
+
 ## 0.89.0
 
 ### Patch Changes
