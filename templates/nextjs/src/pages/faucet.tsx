@@ -3,7 +3,7 @@ import { Input } from "@/components/Input";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
 import { BN, bn } from "fuels";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Faucet() {
@@ -11,8 +11,16 @@ export default function Faucet() {
 
   const { refreshWalletBalance } = useActiveWallet();
 
-  const [receiverAddress, setReceiverAddress] = useState<string>();
-  const [amountToSend, setAmountToSend] = useState<BN>();
+  const { wallet } = useActiveWallet();
+
+  const [receiverAddress, setReceiverAddress] = useState<string | undefined>();
+  const [amountToSend, setAmountToSend] = useState<BN | undefined>(bn(10_000));
+
+  useEffect(() => {
+    if (wallet && !receiverAddress) {
+      setReceiverAddress(wallet.address.toB256());
+    }
+  }, [wallet]);
 
   const sendFunds = async () => {
     if (!faucetWallet) {
