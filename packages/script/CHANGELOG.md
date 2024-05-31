@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/account@0.89.1
+  - @fuel-ts/program@0.89.1
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/abi-coder@0.89.1
+  - @fuel-ts/address@0.89.1
+  - @fuel-ts/transactions@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
 ## 0.89.0
 
 ### Patch Changes
