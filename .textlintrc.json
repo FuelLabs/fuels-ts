@@ -9,6 +9,7 @@
       "ignore": [
         "https://learnmeabitcoin.com/**",
         "https://testnet.fuel.network/",
+        "https://faucet-testnet.fuel.network/",
         "https://thebitcoinmanual.com/**",
         "https://forum.fuel.network/"
       ]
