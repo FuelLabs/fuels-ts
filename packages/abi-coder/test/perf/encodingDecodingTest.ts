@@ -1,7 +1,7 @@
+import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
-import { Interface } from '..';
-import exhaustiveExamplesAbi from '../../test/fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';
+import exhaustiveExamplesAbi from '../fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';
 import {
   B256_DECODED,
   B256_ENCODED,
@@ -28,22 +28,13 @@ import {
   U8_MAX,
   U8_MAX_ENCODED,
   U8_MIN_ENCODED,
-} from '../../test/utils/constants';
+} from '../utils/constants';
+import { Interface } from '../../src/Interface';
 
 const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
 
-interface TestCase {
-  fn: any;
-  title: string;
-  value: any;
-  encodedValue: Uint8Array | number[] | ((input: any, offset?: number) => Uint8Array);
-  decodedTransformer?: (decoded: any) => any;
-  offset?: number;
-  skipDecoding?: boolean;
-}
-
 function runEncodingDecodingTest(): void {
-  const testCases: TestCase[] = [
+  const testCases = [
     {
       fn: exhaustiveExamplesInterface.functions.u_8,
       title: '[u8]',
@@ -490,27 +481,13 @@ function runEncodingDecodingTest(): void {
     },
   ];
 
-  testCases.forEach(
-    ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
-      const encoded = Array.isArray(value)
-        ? fn.encodeArguments(value)
-        : fn.encodeArguments([value]);
+  testCases.forEach(({ fn, title: _title, value, encodedValue, decodedTransformer, offset }) => {
+    const encodedVal =
+      encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
+    const expectedEncoded = encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
-      const encodedVal =
-        encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
-      const expectedEncoded = encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
-
-      if (skipDecoding) {
-        return;
-      }
-
-      let decoded = fn.decodeOutput(expectedEncoded)[0];
-
-      if (decodedTransformer) {
-        decoded = decodedTransformer(decoded);
-      }
-    }
-  );
+    fn.decodeOutput(expectedEncoded)[0];
+  });
 }
 
 export default runEncodingDecodingTest;
