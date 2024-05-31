@@ -1,6 +1,6 @@
 ---
-"@fuel-ts/account": patch
-"fuels": patch
+"@fuel-ts/account": minor
+"fuels": minor
 ---
 
-fix: updated assets
+fix!: updated chain assets, removed `beta-5` network
