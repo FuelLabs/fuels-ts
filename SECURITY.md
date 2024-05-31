@@ -1,6 +1,6 @@
 # Security Policy
 
-The Fuel Typescript SDK is still in it's development phase. This means that there may be issues in our implementation.
+The Fuel Typescript SDK is still in development, which means that our implementation may have issues.
 
 We take security vulnerabilities very seriously. If you discover a security issue, please immediately bring it to our attention!
 
