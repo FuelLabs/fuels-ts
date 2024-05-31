@@ -6,5 +6,6 @@ export const CHAIN_IDS = {
   fuel: {
     beta5: 0,
     devnet: 10,
+    testnet: 0,
   },
 };

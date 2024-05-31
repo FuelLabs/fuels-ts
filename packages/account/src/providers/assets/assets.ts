@@ -31,6 +31,12 @@ export const rawAssets: Assets = [
         decimals: 9,
         assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
       },
+      {
+        type: 'fuel',
+        chainId: CHAIN_IDS.fuel.testnet,
+        decimals: 9,
+        assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07'
+      }
     ],
   },
 ];
