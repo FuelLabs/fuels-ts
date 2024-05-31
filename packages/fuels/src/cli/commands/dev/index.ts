@@ -3,7 +3,7 @@ import { watch } from 'chokidar';
 import { globSync } from 'glob';
 
 import { loadConfig } from '../../config/loadConfig';
-import type { FuelsConfig } from '../../types';
+import { Commands, type FuelsConfig } from '../../types';
 import { error, log } from '../../utils/logger';
 import { build } from '../build';
 import { deploy } from '../deploy';
@@ -18,7 +18,24 @@ export const closeAllFileHandlers = (handlers: FSWatcher[]) => {
 
 export const buildAndDeploy = async (config: FuelsConfig) => {
   await build(config);
-  return deploy(config);
+  config.onSuccess?.(
+    {
+      type: Commands.build,
+      data: null,
+    },
+    config
+  );
+
+  const deployedContracts = await deploy(config);
+  config.onSuccess?.(
+    {
+      type: Commands.deploy,
+      data: deployedContracts,
+    },
+    config
+  );
+
+  return deployedContracts;
 };
 
 export const getConfigFilepathsToWatch = (config: FuelsConfig) => {
