@@ -7,7 +7,7 @@ please bring it to our attention right away!
 
 ## Reporting a Vulnerability
 
-If you find a vulnerability or exploit please [**report privately**](https://github.com/FuelLabs/fuels-ts/security/advisories/new).
+If you find a vulnerability or exploit, please [**report privately**](https://github.com/FuelLabs/fuels-ts/security/advisories/new).
 
 Please **DO NOT file a public issue**.
 
