@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/utils/src/utils/defaultSnapshotConfigs.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/defaultSnapshotConfigs.ts#L11)
+[packages/utils/src/utils/defaultSnapshotConfigs.ts:11](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/defaultSnapshotConfigs.ts#L11)
 
 ___
 
@@ -241,16 +241,16 @@ ___
 | `metadataJson.table_encoding` | { `Json`: { `filepath`: `string` = "stateConfig.json" }  } |
 | `metadataJson.table_encoding.Json` | { `filepath`: `string` = "stateConfig.json" } |
 | `metadataJson.table_encoding.Json.filepath` | `string` |
-| `stateConfigJson` | { `block_height`: `number` = 0; `coins`: { `amount`: `number` = 18446744073709551615; `asset_id`: `string` = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07"; `output_index`: `number` = 0; `owner`: `string` = "0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d"; `tx_id`: `string` = "0x260eabfd50937e92939fd92687e9302a72e91c5065f64f853f2ccbe02396fe09d665"; `tx_pointer_block_height`: `number` = 0; `tx_pointer_tx_idx`: `number` = 0 }[] ; `contracts`: `never`[] = []; `da_block_height`: `number` = 0; `messages`: { `amount`: `number` = 18446744073709551615; `da_height`: `number` = 0; `data`: `string` = ""; `nonce`: `string` = "0101010101010101010101010101010101010101010101010101010101010101"; `recipient`: `string` = "0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba"; `sender`: `string` = "0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f" }[]  } |
+| `stateConfigJson` | { `block_height`: `number` = 0; `coins`: { `amount`: `number` = 18446744073709551615; `asset_id`: `string` = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07"; `output_index`: `number` = 0; `owner`: `string` = "0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d"; `tx_id`: `string` = "0x0000000000000000000000000000000000000000000000000000000000000001"; `tx_pointer_block_height`: `number` = 0; `tx_pointer_tx_idx`: `number` = 0 }[] ; `contracts`: `never`[] = []; `da_block_height`: `number` = 0; `messages`: { `amount`: `number` = 18446744073709551615; `da_height`: `number` = 0; `data`: `string` = ""; `nonce`: `string` = "0101010101010101010101010101010101010101010101010101010101010101"; `recipient`: `string` = "0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba"; `sender`: `string` = "0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f" }[]  } |
 | `stateConfigJson.block_height` | `number` |
-| `stateConfigJson.coins` | { `amount`: `number` = 18446744073709551615; `asset_id`: `string` = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07"; `output_index`: `number` = 0; `owner`: `string` = "0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d"; `tx_id`: `string` = "0x260eabfd50937e92939fd92687e9302a72e91c5065f64f853f2ccbe02396fe09d665"; `tx_pointer_block_height`: `number` = 0; `tx_pointer_tx_idx`: `number` = 0 }[] |
+| `stateConfigJson.coins` | { `amount`: `number` = 18446744073709551615; `asset_id`: `string` = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07"; `output_index`: `number` = 0; `owner`: `string` = "0x94ffcc53b892684acefaebc8a3d4a595e528a8cf664eeb3ef36f1020b0809d0d"; `tx_id`: `string` = "0x0000000000000000000000000000000000000000000000000000000000000001"; `tx_pointer_block_height`: `number` = 0; `tx_pointer_tx_idx`: `number` = 0 }[] |
 | `stateConfigJson.contracts` | `never`[] |
 | `stateConfigJson.da_block_height` | `number` |
 | `stateConfigJson.messages` | { `amount`: `number` = 18446744073709551615; `da_height`: `number` = 0; `data`: `string` = ""; `nonce`: `string` = "0101010101010101010101010101010101010101010101010101010101010101"; `recipient`: `string` = "0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba"; `sender`: `string` = "0xc43454aa38dd91f88109a4b7aef5efb96ce34e3f24992fe0f81d233ca686f80f" }[] |
 
 #### Defined in
 
-[packages/utils/src/utils/defaultSnapshotConfigs.ts:5](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/defaultSnapshotConfigs.ts#L5)
+[packages/utils/src/utils/defaultSnapshotConfigs.ts:5](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/defaultSnapshotConfigs.ts#L5)
 
 ## Functions
 
@@ -276,7 +276,7 @@ Get a typed Uint8Array from a BytesLike object.
 
 #### Defined in
 
-[packages/utils/src/utils/arrayify.ts:12](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/arrayify.ts#L12)
+[packages/utils/src/utils/arrayify.ts:12](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/arrayify.ts#L12)
 
 ___
 
@@ -296,7 +296,7 @@ ___
 
 #### Defined in
 
-[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/capitalizeString.ts#L1)
+[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/capitalizeString.ts#L1)
 
 ___
 
@@ -321,7 +321,7 @@ An array of byte arrays of a specified size
 
 #### Defined in
 
-[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
+[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
 
 ___
 
@@ -345,7 +345,7 @@ Concatenates multiple BytesLike into a single Uint8Array.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/concat.ts#L38)
+[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/concat.ts#L38)
 
 ___
 
@@ -369,7 +369,7 @@ Concatenates multiple Uint8Arrays into a single Uint8Array.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/concat.ts#L11)
+[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/concat.ts#L11)
 
 ___
 
@@ -395,7 +395,7 @@ Returns a hex string by slicing data from the start offset to the end offset.
 
 #### Defined in
 
-[packages/utils/src/utils/dataSlice.ts:15](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/dataSlice.ts#L15)
+[packages/utils/src/utils/dataSlice.ts:15](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/dataSlice.ts#L15)
 
 ___
 
@@ -415,7 +415,7 @@ ___
 
 #### Defined in
 
-[packages/utils/src/utils/base58.ts:51](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/base58.ts#L51)
+[packages/utils/src/utils/base58.ts:51](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/base58.ts#L51)
 
 ___
 
@@ -437,7 +437,7 @@ Encode value as a Base58-encoded string.
 
 #### Defined in
 
-[packages/utils/src/utils/base58.ts:30](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/base58.ts#L30)
+[packages/utils/src/utils/base58.ts:30](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/base58.ts#L30)
 
 ___
 
@@ -459,7 +459,7 @@ Returns a hex representation of the inputted bytes.
 
 #### Defined in
 
-[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/hexlify.ts#L10)
+[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/hexlify.ts#L10)
 
 ___
 
@@ -485,7 +485,7 @@ value is T
 
 #### Defined in
 
-[packages/utils/src/utils/isDefined.ts:1](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/isDefined.ts#L1)
+[packages/utils/src/utils/isDefined.ts:1](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/isDefined.ts#L1)
 
 ___
 
@@ -512,7 +512,7 @@ Examples:
 
 #### Defined in
 
-[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/normalizeString.ts#L11)
+[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/normalizeString.ts#L11)
 
 ___
 
@@ -539,7 +539,7 @@ Returns the UTF-8 byte representation of str.
 
 #### Defined in
 
-[packages/utils/src/utils/toUtf8Bytes.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/toUtf8Bytes.ts#L11)
+[packages/utils/src/utils/toUtf8Bytes.ts:11](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/toUtf8Bytes.ts#L11)
 
 ___
 
@@ -563,4 +563,4 @@ the string represented by the UTF-8 data bytes
 
 #### Defined in
 
-[packages/utils/src/utils/toUtf8String.ts:179](https://github.com/FuelLabs/fuels-ts/blob/2be8967b/packages/utils/src/utils/toUtf8String.ts#L179)
+[packages/utils/src/utils/toUtf8String.ts:179](https://github.com/FuelLabs/fuels-ts/blob/12602001/packages/utils/src/utils/toUtf8String.ts#L179)
