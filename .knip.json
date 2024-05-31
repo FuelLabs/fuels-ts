@@ -28,6 +28,7 @@
     "@elasticpath/textlint-rule-no-dead-relative-link",
     "tree-kill",
     "ts-generator",
-    "webdriverio"
+    "webdriverio",
+    "syncpack"
   ]
 }
