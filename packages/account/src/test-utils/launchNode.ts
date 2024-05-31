@@ -1,4 +1,4 @@
-import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
+import { BYTES_32 } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
 import { defaultSnapshotConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
@@ -120,6 +120,8 @@ export const launchNode = async ({
     const poaInstantFlagValue = getFlagValueFromArgs(args, '--poa-instant');
     const poaInstant = poaInstantFlagValue === 'true' || poaInstantFlagValue === undefined;
 
+    const nativeExecutorVersion = getFlagValueFromArgs(args, '--native-executor-version') || '0';
+
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
@@ -174,7 +176,7 @@ export const launchNode = async ({
         process.env.GENESIS_SECRET = hexlify(pk);
 
         stateConfigJson.coins.push({
-          tx_id: hexlify(randomBytes(UTXO_ID_LEN)),
+          tx_id: hexlify(randomBytes(BYTES_32)),
           owner: signer.address.toHexString(),
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           amount: '18446744073709551615' as any,
@@ -214,6 +216,7 @@ export const launchNode = async ({
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
         ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
+        ['--native-executor-version', nativeExecutorVersion],
         ['--consensus-key', consensusKey],
         ['--snapshot', snapshotDirToUse as string],
         '--vm-backtrace',
