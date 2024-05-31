@@ -14,8 +14,6 @@ We will send a response indicating the next steps to handle your report. The sec
 
 If the issue is an implementation weakness that cannot be immediately exploited or something that has not yet been deployed, just discuss it openly.
 
-If you need assistance, please reach out to [security@fuel.sh](mailto:security@fuel.sh).
-
 ## Reporting a non security bug
 
 For non-security bugs, please simply file a GitHub [issue](https://github.com/FuelLabs/fuels-ts/issues/new).
