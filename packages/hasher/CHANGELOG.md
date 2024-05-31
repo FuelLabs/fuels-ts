@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/crypto@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
 ## 0.89.0
 
 ### Patch Changes
