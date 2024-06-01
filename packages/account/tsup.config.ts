@@ -10,6 +10,7 @@ const configs: Options = {
   entry: {
     index: 'src/index.ts',
     configs: 'src/configs.ts',
+    profile: 'src/perf/profile.ts',
     'test-utils': 'src/test-utils/index.ts',
   },
   // eslint-disable-next-line @typescript-eslint/require-await

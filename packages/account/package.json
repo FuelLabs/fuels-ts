@@ -79,7 +79,9 @@
     "@graphql-codegen/typescript-generic-sdk": "^3.1.0",
     "@graphql-codegen/typescript-operations": "^2.5.5",
     "@types/ramda": "^0.29.3",
+    "@types/restify": "^8.5.12",
     "@types/uuid": "^9.0.1",
-    "get-graphql-schema": "^2.1.2"
+    "get-graphql-schema": "^2.1.2",
+    "restify": "^11.1.0"
   }
 }

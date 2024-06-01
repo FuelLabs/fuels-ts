@@ -737,12 +737,18 @@ importers:
       '@types/ramda':
         specifier: ^0.29.3
         version: 0.29.3
+      '@types/restify':
+        specifier: ^8.5.12
+        version: 8.5.12
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.1
       get-graphql-schema:
         specifier: ^2.1.2
         version: 2.1.2
+      restify:
+        specifier: ^11.1.0
+        version: 11.1.0
 
   packages/address:
     dependencies:
@@ -4275,6 +4281,9 @@ packages:
   '@types/bonjour@3.5.10':
     resolution: {integrity: sha512-p7ienRMiS41Nu2/igbJxxLDWrSZ0WxM8UQgCeO9KhoVF7cOVFkrKsiDr1EsJIla8vV3oEEjGcz11jc5yimhzZw==}
 
+  '@types/bunyan@1.8.11':
+    resolution: {integrity: sha512-758fRH7umIMk5qt5ELmRMff4mLDlN+xyYzC+dkPTdKwbSkJFvz6xwyScrytPU0QIBbRRwbiE8/BIg8bpajerNQ==}
+
   '@types/cli-table@0.3.1':
     resolution: {integrity: sha512-m3+6WWfSSl6zqoXy8uQQifbgqV7Gt6fsyWnHLgUWVtJQk75+OfUB+edSZ52YDj7leSiZtX7w1/E4w2x/Hb0orA==}
 
@@ -4307,6 +4316,9 @@ packages:
 
   '@types/flexsearch@0.7.3':
     resolution: {integrity: sha512-HXwADeHEP4exXkCIwy2n1+i0f1ilP1ETQOH5KDOugjkTFZPntWo0Gr8stZOaebkxsdx+k0X/K6obU/+it07ocg==}
+
+  '@types/formidable@1.2.8':
+    resolution: {integrity: sha512-6psvrUy5VDYb+yaPJReF1WrRsz+FBwyJutK9Twz1Efa27tm07bARNIkK2B8ZPWq80dXqpKfrxTO96xrtPp+AuA==}
 
   '@types/glob@8.1.0':
     resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
@@ -4467,6 +4479,9 @@ packages:
   '@types/responselike@1.0.3':
     resolution: {integrity: sha512-H/+L+UkTV33uf49PH5pCAUBVPNj2nDBXTN+qS1dOwyyg24l3CcicicCA7ca+HMvJBZcFgl5r8e+RR6elsb4Lyw==}
 
+  '@types/restify@8.5.12':
+    resolution: {integrity: sha512-tW9y4O/B0gNIhin/88PzLTPgolkzOOrFK0IfgdiiYjGgjXI+PDTwp7QThhQy0p0l5FuNy59NW2PXU3Qx3r5cOQ==}
+
   '@types/retry@0.12.0':
     resolution: {integrity: sha512-wWKOClTTiizcZhXnPY4wikVAwmdYHp8q6DmC+EJUzAMsycb7HB32Kh9RN4+0gExjmPmZSAQjgURXIGATPegAvA==}
 
@@ -4496,6 +4511,9 @@ packages:
 
   '@types/sockjs@0.3.33':
     resolution: {integrity: sha512-f0KEEe05NvUnat+boPTZ0dgaLZ4SfSouXUgv5noUiefG2ajgKjmETo9ZJyuqsl7dfl2aHlLJUiki6B4ZYldiiw==}
+
+  '@types/spdy@3.4.9':
+    resolution: {integrity: sha512-ZYGzQrZX6j4GEy9x9+e4bjWOPOiZqFPm/3GnZ9xS0SMJqs+FbNiF6hBzr8EjSF2Z6TFY/PzUWOswUiRcZxW3FQ==}
 
   '@types/stack-utils@2.0.1':
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
@@ -17568,6 +17586,10 @@ snapshots:
     dependencies:
       '@types/node': 20.11.13
 
+  '@types/bunyan@1.8.11':
+    dependencies:
+      '@types/node': 20.11.13
+
   '@types/cli-table@0.3.1': {}
 
   '@types/connect-history-api-fallback@1.5.0':
@@ -17610,6 +17632,10 @@ snapshots:
       '@types/serve-static': 1.15.2
 
   '@types/flexsearch@0.7.3': {}
+
+  '@types/formidable@1.2.8':
+    dependencies:
+      '@types/node': 20.11.13
 
   '@types/glob@8.1.0':
     dependencies:
@@ -17771,6 +17797,13 @@ snapshots:
     dependencies:
       '@types/node': 20.11.13
 
+  '@types/restify@8.5.12':
+    dependencies:
+      '@types/bunyan': 1.8.11
+      '@types/formidable': 1.2.8
+      '@types/node': 20.11.13
+      '@types/spdy': 3.4.9
+
   '@types/retry@0.12.0': {}
 
   '@types/rimraf@3.0.2':
@@ -17802,6 +17835,10 @@ snapshots:
       '@types/node': 20.11.13
 
   '@types/sockjs@0.3.33':
+    dependencies:
+      '@types/node': 20.11.13
+
+  '@types/spdy@3.4.9':
     dependencies:
       '@types/node': 20.11.13
 
@@ -28702,7 +28739,7 @@ snapshots:
     dependencies:
       assert-plus: 1.0.0
       core-util-is: 1.0.2
-      extsprintf: 1.3.0
+      extsprintf: 1.4.1
 
   version-selector-type@3.0.0:
     dependencies:
