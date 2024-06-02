@@ -17,7 +17,7 @@
     "@fuel-ts/versions": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "fuels": "workspace:*",
-    "typedoc-plugin-markdown": "^3.15.3"
+    "typedoc-plugin-markdown": "^4.0.3"
   },
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
