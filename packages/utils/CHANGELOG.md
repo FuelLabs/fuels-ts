@@ -1,5 +1,16 @@
 # @fuel-ts/utils
 
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+- Updated dependencies [eb6460b]
+  - @fuel-ts/versions@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
 ## 0.89.0
 
 ### Minor Changes
