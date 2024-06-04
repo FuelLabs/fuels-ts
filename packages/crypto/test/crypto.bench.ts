@@ -45,8 +45,6 @@ describe('crypto bench', () => {
     };
 
     const encryptedResult = await encrypt(password, data);
-    console.log('encryptedResult', encryptedResult);
-
     expect(encryptedResult.data).toBeTruthy();
     expect(encryptedResult.iv).toBeTruthy();
     expect(encryptedResult.salt).toBeTruthy();
