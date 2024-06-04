@@ -11,7 +11,7 @@
     "pretest": "pnpm original:build"
   },
   "dependencies": {
-    "@fuels/vm-asm": "0.49.0",
+    "@fuels/vm-asm": "0.50.0",
     "fuels": "workspace:*",
     "react-dom": "^18.2.0",
     "react": "^18.2.0"
@@ -24,7 +24,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.38.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.3.4",
+    "eslint-plugin-react-refresh": "^0.4.7",
     "typescript": "~5.2.2",
     "vite": "^5.2.9"
   }

@@ -27,6 +27,7 @@ module.exports = {
         selector: 'ForOfStatement',
       },
     ],
+    'no-trailing-spaces': 'error',
     '@typescript-eslint/no-non-null-assertion': 1,
     // Disable error on devDependencies importing since this isn't a TS library
     'require-await': 'off',
@@ -75,6 +76,13 @@ module.exports = {
       files: ['*.test.ts'],
       rules: {
         '@typescript-eslint/no-unused-expressions': 'off',
+      },
+    },
+    {
+      files: ['**/test/typegen/**/*.ts'],
+      rules: {
+        'eslint-comments/no-unlimited-disable': 'off',
+        'eslint-comments/no-unused-disable': 'off',
       },
     },
   ],

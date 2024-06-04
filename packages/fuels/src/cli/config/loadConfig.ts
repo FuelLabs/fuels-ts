@@ -1,18 +1,19 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { defaultConsensusKey } from '@fuel-ts/utils';
+import { tryFindBinaries } from '@fuel-ts/utils/cli-utils';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
-import { shouldUseBuiltinForc } from '../commands/init/shouldUseBuiltinForc';
-import { shouldUseBuiltinFuelCore } from '../commands/init/shouldUseBuiltinFuelCore';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
 
-import { readForcToml, readSwayType } from './forcUtils';
+import { SwayType, readForcToml, readSwayType } from './forcUtils';
 import { validateConfig } from './validateConfig';
 
-export async function loadConfig(cwd: string): Promise<FuelsConfig> {
+export async function loadUserConfig(
+  cwd: string
+): Promise<{ userConfig: UserFuelsConfig; configPath: string }> {
   const configJoycon = new JoyCon();
 
   const configPath = await configJoycon.resolve({
@@ -38,15 +39,21 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
   });
 
   const userConfig: UserFuelsConfig = result.mod.default;
+  return { configPath, userConfig };
+}
 
+export async function loadConfig(cwd: string): Promise<FuelsConfig> {
+  const { configPath, userConfig } = await loadUserConfig(cwd);
   await validateConfig(userConfig);
-
-  const useBuiltinForc = userConfig.useBuiltinForc ?? shouldUseBuiltinForc();
-  const useBuiltinFuelCore = userConfig.useBuiltinFuelCore ?? shouldUseBuiltinFuelCore();
 
   const { forcBuildFlags = [] } = userConfig;
   const releaseFlag = forcBuildFlags.find((f) => f === '--release');
   const buildMode = releaseFlag ? 'release' : 'debug';
+
+  const { forcPath, fuelCorePath } = tryFindBinaries({
+    forcPath: userConfig.forcPath,
+    fuelCorePath: userConfig.fuelCorePath,
+  });
 
   // Start clone-object while initializing optional props
   const config: FuelsConfig = {
@@ -60,8 +67,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     privateKey: defaultConsensusKey,
     ...userConfig,
     basePath: cwd,
-    useBuiltinForc,
-    useBuiltinFuelCore,
+    forcPath,
+    fuelCorePath,
     configPath,
     forcBuildFlags,
     buildMode,
@@ -95,10 +102,10 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
 
     const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
 
-    swayMembers.forEach((path) => {
-      const type = readSwayType(path);
-      config[`${type}s`].push(path);
-    });
+    swayMembers
+      .map((path) => ({ path, type: readSwayType(path) }))
+      .filter(({ type }) => type !== SwayType.library)
+      .forEach(({ path, type }) => config[`${type as Exclude<SwayType, 'library'>}s`].push(path));
 
     config.workspace = workspace;
   }

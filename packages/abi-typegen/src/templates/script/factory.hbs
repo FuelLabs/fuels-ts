@@ -9,7 +9,7 @@ import {
 {{/if}}
 
 {{#if commonTypesInUse}}
-import type { {{commonTypesInUse}} } from "./common";
+import type { {{commonTypesInUse}} } from "../common";
 {{/if}}
 
 
@@ -17,15 +17,15 @@ import type { {{commonTypesInUse}} } from "./common";
 {{#if inputNativeValues}}
 export enum {{structName}}Input { {{inputNativeValues}} };
 {{else}}
-export type {{structName}}Input = Enum<{ {{inputValues}} }>;
+export type {{structName}}Input{{typeAnnotations}} = Enum<{ {{inputValues}} }>;
 {{/if}}
 {{#if outputNativeValues}}
 export enum {{structName}}Output { {{outputNativeValues}} };
 {{else}}
   {{#if recycleRef}}
-export type {{structName}}Output = {{structName}}Input;
+export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
   {{else}}
-export type {{structName}}Output = Enum<{ {{outputValues}} }>;
+export type {{structName}}Output{{typeAnnotations}} = Enum<{ {{outputValues}} }>;
   {{/if}}
 {{/if}}
 {{/each}}
@@ -55,19 +55,17 @@ const _abi = {{abiJsonString}}
 
 const _bin = '{{hexlifiedBinString}}'
 
-export class {{capitalizedName}}__factory {
+export const {{capitalizedName}}__factory = {
 
-  static readonly abi = _abi
-  static readonly bin = _bin
+  abi: _abi,
+  bin: _bin,
 
-  static createInstance(wallet: Account) {
-
-    const { abi, bin } = {{capitalizedName}}__factory
+  createInstance(wallet: Account) {
 
     const script = new Script<
       {{capitalizedName}}Inputs,
       {{capitalizedName}}Output
-    >(bin, abi, wallet);
+    >(_bin, _abi, wallet);
 
     return script;
 

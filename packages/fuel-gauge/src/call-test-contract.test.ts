@@ -2,17 +2,15 @@ import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { BN, bn, toHex } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import type { CallTestContractAbi } from '../test/typegen/contracts';
+import { CallTestContractAbi__factory } from '../test/typegen/contracts';
+import binHexlified from '../test/typegen/contracts/CallTestContractAbi.hex';
 
 import { createSetupConfig } from './utils';
 
-const { binHexlified, abiContents } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-);
-
-const setupContract = createSetupConfig({
+const setupContract = createSetupConfig<CallTestContractAbi>({
   contractBytecode: binHexlified,
-  abi: abiContents,
+  abi: CallTestContractAbi__factory.abi,
   cache: true,
 });
 

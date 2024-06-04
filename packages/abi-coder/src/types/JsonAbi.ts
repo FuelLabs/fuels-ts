@@ -6,6 +6,7 @@ export interface JsonAbi {
   readonly types: readonly JsonAbiType[];
   readonly loggedTypes: readonly JsonAbiLoggedType[];
   readonly functions: readonly JsonAbiFunction[];
+  readonly messagesTypes: readonly JsonAbiMessagesType[];
   readonly configurables: readonly JsonAbiConfigurable[];
   readonly encoding?: string;
 }
@@ -16,15 +17,25 @@ export interface JsonAbiType {
   readonly components: readonly JsonAbiArgument[] | null;
   readonly typeParameters: readonly number[] | null;
 }
+
 export interface JsonAbiArgument {
   readonly type: number;
   readonly name: string;
   readonly typeArguments: readonly JsonAbiArgument[] | null;
 }
 
+export interface JsonAbiArgumentWithoutName {
+  readonly type: number;
+  readonly typeArguments: readonly JsonAbiArgumentWithoutName[] | null;
+}
+
 export interface JsonAbiLoggedType {
-  readonly logId: number;
+  readonly logId: string;
   readonly loggedType: JsonAbiArgument;
+}
+
+export interface JsonAbiMessagesType {
+  readonly messageDataType: JsonAbiArgumentWithoutName;
 }
 
 export interface JsonAbiFunction {

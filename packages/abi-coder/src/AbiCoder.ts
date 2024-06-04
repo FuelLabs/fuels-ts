@@ -9,7 +9,7 @@ export abstract class AbiCoder {
     abi: JsonAbi,
     argument: JsonAbiArgument,
     options: EncodingOptions = {
-      isSmallBytes: false,
+      padToWordSize: false,
     }
   ): Coder {
     const resolvedAbiType = new ResolvedAbiType(abi, argument);

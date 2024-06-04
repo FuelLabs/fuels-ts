@@ -30,6 +30,8 @@ describe(
         root: paths.root,
         workspace: paths.workspaceDir,
         output: paths.outputDir,
+        forcPath: paths.forcPath,
+        fuelCorePath: paths.fuelCorePath,
       });
 
       await runBuild({ root: paths.root });

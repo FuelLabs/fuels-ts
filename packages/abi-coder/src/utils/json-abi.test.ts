@@ -1,7 +1,7 @@
 import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
 
-import { ENCODING_V0, ENCODING_V1 } from './constants';
+import { ENCODING_V1 } from './constants';
 import {
   findFunctionByName,
   findNonEmptyInputs,
@@ -22,7 +22,7 @@ const MOCK_ABI: JsonAbi = {
   configurables: [],
 };
 
-const DEFAULT_ENCODING_VERSION = '0';
+const DEFAULT_ENCODING_VERSION = ENCODING_V1;
 
 /**
  * @group node
@@ -39,16 +39,13 @@ describe('json-abi', () => {
       expect(actual).toBe(expected);
     });
 
-    it.each([ENCODING_V0, ENCODING_V1])(
-      'should return the encoding version (when defined)',
-      (version) => {
-        const expected = version;
+    it('should return the encoding version (when defined)', () => {
+      const expected = ENCODING_V1;
 
-        const actual = getEncodingVersion(version);
+      const actual = getEncodingVersion(ENCODING_V1);
 
-        expect(actual).toBe(expected);
-      }
-    );
+      expect(actual).toBe(expected);
+    });
 
     it('should throw an error if the encoding version is not supported', () => {
       const encodingVersion = '-1';
