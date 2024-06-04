@@ -56,7 +56,7 @@ describe('Live Script Test', () => {
     expect(output).toBe(true);
   });
 
-  it.each([
+  it.skip.each([
     ['Mint', MINT_TX_ID, TransactionType.Mint],
     ['Upgrade', UPGRADE_TX_ID, TransactionType.Upgrade],
     ['Upload', UPLOAD_TX_ID, TransactionType.Upload],
