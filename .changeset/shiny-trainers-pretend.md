@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-chore: re-enable dev connector, bump dependencies
+chore: re-enable connectors, bump dependencies
