@@ -147,17 +147,19 @@ export async function launchTestNode<TFactories extends DeployContractConfig[]>(
     },
   });
 
-  let contracts: TContracts<TFactories>;
+  const contracts: TContracts<TFactories> = [] as TContracts<TFactories>;
+  const configs = contractsConfigs ?? [];
   try {
-    contracts = (await Promise.all(
-      (contractsConfigs ?? []).map(async (config) =>
-        config.deployer.deployContract(
+    for (let i = 0; i < configs.length; i++) {
+      const config = configs[i];
+      contracts.push(
+        await config.deployer.deployContract(
           config.bytecode,
           getWalletForDeployment(config, wallets),
           config.options ?? {}
         )
-      )
-    )) as TContracts<TFactories>;
+      );
+    }
   } catch (err) {
     cleanup();
     throw err;

@@ -137,6 +137,40 @@ describe('launchTestNode', () => {
     expect(response.value).toBe(true);
   });
 
+  test('multiple contracts can be deployed', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: {
+            deployContract: async (bytecode, wallet, options) => {
+              const factory = new ContractFactory(bytecode, abiContents, wallet);
+              return factory.deployContract(options);
+            },
+          },
+          bytecode: binHexlified,
+        },
+        {
+          deployer: {
+            deployContract: async (bytecode, wallet, options) => {
+              const factory = new ContractFactory(bytecode, abiContents, wallet);
+              return factory.deployContract(options);
+            },
+          },
+          bytecode: binHexlified,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract, contract2],
+    } = launched;
+
+    const response1 = await contract.functions.test_function().call();
+    const response2 = await contract2.functions.test_function().call();
+    expect(response1.value).toBe(true);
+    expect(response2.value).toBe(true);
+  });
+
   test('multiple contracts can be deployed with different wallets', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
