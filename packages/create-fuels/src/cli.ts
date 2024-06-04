@@ -8,11 +8,7 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
-import {
-  promptForProgramsToInclude,
-  promptForPackageManager,
-  promptForProjectPath,
-} from './prompts';
+import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
 
 export { setupProgram } from './lib/setupProgram';
@@ -65,6 +61,8 @@ export const runScaffoldCli = async ({
 }) => {
   program.parse(args);
 
+  console.log('Args', args);
+
   let projectPath = program.args[0] ?? (await promptForProjectPath());
   const verboseEnabled = program.opts().verbose ?? false;
 
@@ -101,7 +99,7 @@ export const runScaffoldCli = async ({
 
   const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
 
-  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
+  let packageManager = cliChosenPackageManager ?? 'pnpm';
 
   if (!packageManager) {
     packageManager = 'pnpm';
@@ -118,9 +116,11 @@ export const runScaffoldCli = async ({
   if (hasAnyCliProgramsToInclude) {
     programsToInclude = cliProgramsToInclude;
   } else {
-    programsToInclude = await promptForProgramsToInclude({
-      forceDisablePrompts,
-    });
+    programsToInclude = {
+      contract: true,
+      predicate: true,
+      script: true,
+    };
   }
 
   while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
@@ -131,9 +131,9 @@ export const runScaffoldCli = async ({
       throw new Error();
     }
 
-    programsToInclude = await promptForProgramsToInclude({
-      forceDisablePrompts,
-    });
+    // programsToInclude = await promptForProgramsToInclude({
+    //   forceDisablePrompts,
+    // });
   }
 
   const fileCopySpinner = ora({
