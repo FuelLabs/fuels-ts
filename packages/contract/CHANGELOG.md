@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.89.2
+
+### Patch Changes
+
+- Updated dependencies [78c2d73]
+  - @fuel-ts/account@0.89.2
+  - @fuel-ts/program@0.89.2
+  - @fuel-ts/abi-coder@0.89.2
+  - @fuel-ts/crypto@0.89.2
+  - @fuel-ts/errors@0.89.2
+  - @fuel-ts/hasher@0.89.2
+  - @fuel-ts/interfaces@0.89.2
+  - @fuel-ts/merkle@0.89.2
+  - @fuel-ts/transactions@0.89.2
+  - @fuel-ts/utils@0.89.2
+
 ## 0.89.1
 
 ### Patch Changes
