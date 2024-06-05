@@ -1,19 +1,15 @@
 # Security Policy
 
-The Fuel Typescript SDK is still in development, which means that our implementation may have issues.
+The Fuel Typescript SDK is still in development, and we take security very seriously.
 
-We take security vulnerabilities very seriously. If you discover a security issue, please immediately bring it to our attention!
+## Security Issues
 
-## Reporting a Vulnerability
+If you find a vulnerability or exploit, please report it immediately and privately:
+ - https://github.com/FuelLabs/fuels-ts/security/advisories/new
 
-If you find a vulnerability or exploit, please [**report privately**](https://github.com/FuelLabs/fuels-ts/security/advisories/new).
+      > Please **DO NOT** file a public issue.
 
-Please **DO NOT file a public issue**.
+## Non-Security Issues
 
-We will send a response indicating the next steps to handle your report. The security team will let you know about the progress toward a fix and full announcement and may ask for additional information or guidance.
-
-If the issue is an implementation weakness that cannot be immediately exploited or something that has not yet been deployed, just discuss it openly.
-
-## Reporting a non security bug
-
-For non-security bugs, please simply file a GitHub [issue](https://github.com/FuelLabs/fuels-ts/issues/new).
+If the issue is not security-related, please report it publicly:
+ - https://github.com/FuelLabs/fuels-ts/issues/new
