@@ -17,7 +17,7 @@ describe('launching a test node', () => {
     using launched = await launchTestNode();
 
     /*
-      The method `launch.cleanup()` will be automatically
+      The method `launched.cleanup()` will be automatically
       called when the variable `launched` goes out of block scope.
     */
 
