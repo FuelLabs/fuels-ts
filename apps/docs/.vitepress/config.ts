@@ -355,6 +355,10 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
+                text: 'Generate Fake Resources',
+                link: '/guide/cookbook/generate-fake-resources',
+              },
+              {
                 text: 'Transactions with Multiple Signers',
                 link: '/guide/cookbook/transactions-with-multiple-signers',
               },
