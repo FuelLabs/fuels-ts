@@ -172,10 +172,6 @@ export default defineConfig({
                 text: 'Locking and Unlocking',
                 link: '/guide/wallets/locking-and-unlocking',
               },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
             ],
           },
           {
@@ -378,16 +374,28 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing in TS',
-                link: '/guide/testing/testing-in-ts',
+                text: 'Launching a Test Node',
+                link: '/guide/testing/launching-a-test-node',
               },
               {
-                text: 'Setting Up a Custom Chain',
-                link: '/guide/testing/setting-up-a-custom-chain',
+                text: 'Test Node Options',
+                link: '/guide/testing/test-node-options',
               },
               {
-                text: 'Tweaking the Blockchain',
-                link: '/guide/testing/tweaking-the-blockchain',
+                text: 'Fuel Core Options',
+                link: '/guide/testing/fuel-core-options',
+              },
+              {
+                text: 'Basic Example',
+                link: '/guide/testing/basic-example',
+              },
+              {
+                text: 'Advanced Example',
+                link: '/guide/testing/advanced-example',
+              },
+              {
+                text: 'Custom Blocks',
+                link: '/guide/testing/custom-blocks',
               },
             ],
           },
