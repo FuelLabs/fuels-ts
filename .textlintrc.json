@@ -8,7 +8,8 @@
       "checkRelative": false,
       "ignore": [
         "https://learnmeabitcoin.com/**",
-        "https://devnet.fuel.network/",
+        "https://testnet.fuel.network/",
+        "https://faucet-testnet.fuel.network/",
         "https://thebitcoinmanual.com/**",
         "https://forum.fuel.network/"
       ]
