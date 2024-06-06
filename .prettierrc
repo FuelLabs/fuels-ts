@@ -24,14 +24,6 @@
       "options": {
         "useTabs": false
       }
-    },
-    {
-      "files": ["pnpm-lock.yaml"],
-      "options": {
-        "singleQuote": true,
-        "printWidth": 300,
-        "bracketSpacing": false
-      }
     }
   ]
 }
