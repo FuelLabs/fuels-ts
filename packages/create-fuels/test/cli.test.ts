@@ -1,4 +1,5 @@
-import { mkdirSync } from 'fs';
+import { mkdirSync, readFileSync } from 'fs';
+import { join } from 'path';
 
 import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
@@ -65,6 +66,33 @@ describe('CLI', () => {
       expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
     }
   );
+
+  test('should rewrite for the appropriate package manager', async () => {
+    const args = generateArgv(
+      {
+        contract: true,
+        predicate: true,
+        script: true,
+      },
+      paths.root,
+      'bun'
+    );
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+      shouldInstallDeps: false,
+    });
+
+    const packageJsonPath = join(paths.root, 'package.json');
+    const packageJson = readFileSync(packageJsonPath, 'utf-8');
+    expect(packageJson).toContain('bun run prebuild');
+
+    const readmePath = join(paths.root, 'README.md');
+    const readme = readFileSync(readmePath, 'utf-8');
+    expect(readme).toContain('bun run fuels:dev');
+    expect(readme).toContain('bun run dev');
+  });
 
   test('create-fuels reports an error if the project directory already exists', async () => {
     const args = generateArgv(

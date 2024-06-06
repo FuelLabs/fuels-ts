@@ -60,6 +60,8 @@ jobs:
 
       - name: Test Setup
         uses: ./.github/actions/test-setup
+        with:
+          should-install-bun: true
 
       - name: Publish PR to NPM
         id: release
