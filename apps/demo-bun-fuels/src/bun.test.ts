@@ -93,21 +93,10 @@ describe('ExampleContract', () => {
       sample: depoloyed.id,
     };
 
-    // #region using-generated-files
-    // #context import { SampleAbi__factory } from './sway-programs-api';
-    // #context import contractsIds from './sway-programs-api/contract-ids.json';
-
-    // #context /**
-    // #context   * Get IDs using:
-    // #context   *   contractsIds.<my-contract-name>
-    // #context   */
-
-    // #context const wallet = new Wallet.fromPrivateKey(process.env.PRIVATE_KEY);
     const contract = SampleAbi__factory.connect(contractsIds.sample, wallet);
 
     const { value } = await contract.functions.return_input(1337).dryRun();
 
     expect(value.toHex()).toEqual(toHex(1337));
-    // #endregion using-generated-files
   });
 });
