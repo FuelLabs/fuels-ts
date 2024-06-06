@@ -1,5 +1,12 @@
 # create-fuels
 
+## 0.89.2
+
+### Patch Changes
+
+- 78c2d73: fix: update testnet URL
+- 889789c: chore: re-enable connectors, bump dependencies
+
 ## 0.89.1
 
 ## 0.89.0

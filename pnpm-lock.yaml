@@ -238,6 +238,22 @@ importers:
         specifier: ^5
         version: 5.2.2
 
+  apps/demo-bun-fuels:
+    dependencies:
+      '@fuel-ts/account':
+        specifier: workspace:^
+        version: link:../../packages/account
+      '@fuel-ts/errors':
+        specifier: workspace:^
+        version: link:../../packages/errors
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+    devDependencies:
+      bun:
+        specifier: ^1.1.9
+        version: 1.1.12
+
   apps/demo-fuels:
     dependencies:
       '@fuel-ts/account':
@@ -3922,6 +3938,46 @@ packages:
   '@octokit/types@12.6.0':
     resolution: {integrity: sha512-1rhSOfRa6H9w4YwK0yrf5faDaDTb+yLyBUKOCV4xtCDB5VmIPqd/v9yr9o6SAzOAlRxMiRiCic6JVM1/kunVkw==}
 
+  '@oven/bun-darwin-aarch64@1.1.12':
+    resolution: {integrity: sha512-g8nmDXIYDmbEnP6moX3ZTS5BsikX8dz/XB0PAfL+LEBJEGECyor2Hv1yvhGQfeR1/lvfSXsWnk0Hhk9Mrj6uoQ==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64-baseline@1.1.12':
+    resolution: {integrity: sha512-KXBwaeD9y4GuxSqC1uDNIktTC/jY2DtagiURuUOF1rniYxkkLRNgXotTvVA5NvP2PBCoWyrxZ67WJSBm0AIyjQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-darwin-x64@1.1.12':
+    resolution: {integrity: sha512-XWL6atcLxyh4KgOlqqyHUOh4Ylm46CExipJmAdKs30gyYqbw3E+HTFhADsyFEtugOe0qPUNlo0aMo+ZMc1yIQA==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oven/bun-linux-aarch64@1.1.12':
+    resolution: {integrity: sha512-6Jen4+b5BzInF7bbRjMIWoy3xIuK/kQQn9xehvrAYnr3J9p3vCD5VhzDP20hW9yQcmZtO2kE6pIYCbaaxPNKtg==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oven/bun-linux-x64-baseline@1.1.12':
+    resolution: {integrity: sha512-luwWf/QGMJ23+yIRBMDnhjYuxh9zXy+Vw4lAzwvLB7phYXCs7IPEhIhZxhcZQ3XMafWtHlWAVo5P6NZZdFRMUQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-linux-x64@1.1.12':
+    resolution: {integrity: sha512-X4dqnIOv4M9HAL4tAj9bb14WjsfKby5xWNV/otUxtfSDsDrV2ukYUekivEmHqchxHFUHOHyc/cv+/jtfvedDZg==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oven/bun-windows-x64-baseline@1.1.12':
+    resolution: {integrity: sha512-MRn+zcJO1hcVqwJmFxpUSdb6ZvrYC8Xp2N1fPOzdw3YSskz9iHkJuUKzx7s9iCC7jTpo6XI/H51EFr/M2U7Ipg==}
+    cpu: [x64]
+    os: [win32]
+
+  '@oven/bun-windows-x64@1.1.12':
+    resolution: {integrity: sha512-ufvTeXXI9tJSJUhvdPnFUmGqCNBKBazEwjvQ5c8vhtZ8hdBHV54LoURVDIBYCgzfdv5NQT3sr8qRLFqy4mlMLg==}
+    cpu: [x64]
+    os: [win32]
+
   '@parcel/watcher-android-arm64@2.4.1':
     resolution: {integrity: sha512-LOi/WTbbh3aTn2RYddrO8pnapixAziFl6SMxHM69r3tvdSm94JtCenaKgk1GRg5FJ5wpMCpHeW+7yqPlvZv7kg==}
     engines: {node: '>= 10.0.0'}
@@ -6330,6 +6386,12 @@ packages:
 
   builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
+
+  bun@1.1.12:
+    resolution: {integrity: sha512-NZzeZuZk7VwCs8VAXnXUHCPOlTS/IyHCscChtT1M1FLSwhBcVMsGVStYlXaaoqsinBKgp0CGJdhnJw2gR3NkDw==}
+    cpu: [arm64, x64]
+    os: [darwin, linux, win32]
+    hasBin: true
 
   bundle-name@3.0.0:
     resolution: {integrity: sha512-PKA4BeSvBpQKQ8iPOGCSiell+N8P+Tf1DlwqmYhpe2gAhKPHn8EYOxVT+ShuGmhg8lN8XiSlS80yiExKXrURlw==}
@@ -18308,6 +18370,30 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 20.0.0
 
+  '@oven/bun-darwin-aarch64@1.1.12':
+    optional: true
+
+  '@oven/bun-darwin-x64-baseline@1.1.12':
+    optional: true
+
+  '@oven/bun-darwin-x64@1.1.12':
+    optional: true
+
+  '@oven/bun-linux-aarch64@1.1.12':
+    optional: true
+
+  '@oven/bun-linux-x64-baseline@1.1.12':
+    optional: true
+
+  '@oven/bun-linux-x64@1.1.12':
+    optional: true
+
+  '@oven/bun-windows-x64-baseline@1.1.12':
+    optional: true
+
+  '@oven/bun-windows-x64@1.1.12':
+    optional: true
+
   '@parcel/watcher-android-arm64@2.4.1':
     optional: true
 
@@ -21836,6 +21922,17 @@ snapshots:
   builtins@5.1.0:
     dependencies:
       semver: 7.5.4
+
+  bun@1.1.12:
+    optionalDependencies:
+      '@oven/bun-darwin-aarch64': 1.1.12
+      '@oven/bun-darwin-x64': 1.1.12
+      '@oven/bun-darwin-x64-baseline': 1.1.12
+      '@oven/bun-linux-aarch64': 1.1.12
+      '@oven/bun-linux-x64': 1.1.12
+      '@oven/bun-linux-x64-baseline': 1.1.12
+      '@oven/bun-windows-x64': 1.1.12
+      '@oven/bun-windows-x64-baseline': 1.1.12
 
   bundle-name@3.0.0:
     dependencies:

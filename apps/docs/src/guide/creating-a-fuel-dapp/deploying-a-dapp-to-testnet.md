@@ -34,7 +34,7 @@ You should see a message similar to this:
 ```md
 Contract deploy-to-testnet Deployed!
 
-Network: https://devnet.fuel.network
+Network: https://testnet.fuel.network
 Contract ID: 0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 Deployed in block 0x4ea52b6652836c499e44b7e42f7c22d1ed1f03cf90a1d94cd0113b9023dfa636
 ```
