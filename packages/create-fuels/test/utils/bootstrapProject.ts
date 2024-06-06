@@ -1,6 +1,8 @@
 import { cpSync, existsSync, readdirSync, rmSync } from 'fs';
 import { basename, join } from 'path';
 
+import { rewriteTemplateFiles } from '../../src/lib/rewriteTemplateFiles';
+
 export type ProjectPaths = {
   root: string;
   template: string;
@@ -37,9 +39,13 @@ export const bootstrapProject = (
   };
 };
 
-export const copyTemplate = (srcDir: string, destDir: string) => {
+export const copyTemplate = (srcDir: string, destDir: string, shouldRewrite: boolean = true) => {
   if (!existsSync(destDir)) {
     cpSync(srcDir, destDir, { recursive: true });
+  }
+
+  if (shouldRewrite) {
+    rewriteTemplateFiles(destDir);
   }
 };
 

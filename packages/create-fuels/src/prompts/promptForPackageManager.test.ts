@@ -21,7 +21,7 @@ const mockPrompts = (params: { results: unknown[] }) => {
   };
 };
 
-const responses = ['pnpm', 'npm'];
+const responses = ['pnpm', 'npm', 'bun'];
 
 /**
  * @group node
@@ -46,6 +46,7 @@ describe('promptForPackageManager', () => {
         choices: [
           { title: 'pnpm', value: 'pnpm' },
           { title: 'npm', value: 'npm' },
+          { title: 'bun', value: 'bun' },
         ],
       }),
       expect.any(Object)
