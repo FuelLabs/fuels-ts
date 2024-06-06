@@ -58,7 +58,7 @@ describe('EnumCoder', () => {
   it('should throw an error when encoding if no enum key is provided', async () => {
     await expectToThrowFuelError(
       () => coder.encode({} as never),
-      new FuelError(ErrorCode.DECODE_ERROR, 'A field for the case must be provided.')
+      new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
     );
   });
 
@@ -68,7 +68,7 @@ describe('EnumCoder', () => {
     await expectToThrowFuelError(
       () => coder.decode(input, 0),
       new FuelError(
-        ErrorCode.DECODE_ERROR,
+        ErrorCode.INVALID_DECODE_VALUE,
         'Invalid caseIndex "283686952306183". Valid cases: a,b.'
       )
     );
