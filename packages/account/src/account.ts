@@ -1,10 +1,12 @@
+import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
+import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import { arrayify, isDefined } from '@fuel-ts/utils';
+import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
@@ -55,6 +57,8 @@ export type EstimatedTxParams = Pick<
   'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
 >;
 const MAX_FUNDING_ATTEMPTS = 2;
+
+export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
 
 /**
  * `Account` provides an abstraction for interacting with accounts or wallets on the network.
@@ -638,6 +642,22 @@ export class Account extends AbstractAccount {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.simulate(transactionRequest, { estimateTxDependencies: false });
+  }
+
+  /**
+   * Generates an array of fake resources based on the provided coins.
+   *
+   * @param coins - An array of `FakeResources` objects representing the coins.
+   * @returns An array of `Resource` objects with generated properties.
+   */
+  generateFakeResources(coins: FakeResources[]): Array<Resource> {
+    return coins.map((coin) => ({
+      id: hexlify(randomBytes(UTXO_ID_LEN)),
+      owner: this.address,
+      blockCreated: bn(1),
+      txCreatedIdx: bn(1),
+      ...coin,
+    }));
   }
 
   /** @hidden * */
