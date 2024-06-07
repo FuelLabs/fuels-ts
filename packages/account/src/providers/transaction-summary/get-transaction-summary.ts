@@ -75,6 +75,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     gasCosts,
     maxGasPerTx,
     gasPrice,
+    baseAssetId: provider.getBaseAssetId(),
   });
 
   return {
@@ -116,6 +117,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
     gasCosts,
     maxGasPerTx,
     gasPrice,
+    baseAssetId: provider.getBaseAssetId(),
   });
 
   return transactionSummary;
@@ -180,6 +182,7 @@ export async function getTransactionsSummaries(
       gasCosts,
       maxGasPerTx,
       gasPrice,
+      baseAssetId: provider.getBaseAssetId(),
     });
 
     const output: TransactionResult = {
