@@ -209,7 +209,6 @@ export class TransactionResponse {
       gasCosts,
       maxGasPerTx,
       gasPrice,
-      baseAssetId: this.provider.getBaseAssetId(),
     });
 
     return transactionSummary;
