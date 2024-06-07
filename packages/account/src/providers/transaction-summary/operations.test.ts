@@ -270,6 +270,7 @@ describe('operations', () => {
       const operations = getWithdrawFromFuelOperations({
         inputs: [MOCK_INPUT_COIN],
         receipts: [MOCK_RECEIPT_MESSAGE_OUT, MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+        baseAssetId: ASSET_A,
       });
 
       expect(operations.length).toEqual(1);
@@ -280,6 +281,7 @@ describe('operations', () => {
       const operations = getWithdrawFromFuelOperations({
         inputs: [],
         receipts: [MOCK_RECEIPT_MESSAGE_OUT, MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
+        baseAssetId: ASSET_A,
       });
 
       expect(operations.length).toEqual(0);
@@ -295,6 +297,7 @@ describe('operations', () => {
           MOCK_RECEIPT_RETURN_DATA_2,
           MOCK_RECEIPT_SCRIPT_RESULT,
         ],
+        baseAssetId: ASSET_A,
       });
 
       expect(operations.length).toEqual(0);

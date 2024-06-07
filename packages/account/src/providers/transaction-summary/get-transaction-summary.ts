@@ -61,7 +61,7 @@ export async function getTransactionSummary<TTransactionType = void>(
   } = provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = await provider.getBaseAssetId();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
@@ -106,7 +106,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   const transactionBytes = transactionRequest.toTransactionBytes();
 
   const gasPrice = await provider.getLatestGasPrice();
-  const baseAssetId = await provider.getBaseAssetId();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
     receipts,
@@ -155,6 +155,7 @@ export async function getTransactionsSummaries(
   } = provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
@@ -170,7 +171,6 @@ export async function getTransactionsSummaries(
     }
 
     const receipts = txReceipts.map(processGqlReceipt);
-    const baseAssetId = provider.getBaseAssetId();
 
     const transactionSummary = assembleTransactionSummary({
       id,
