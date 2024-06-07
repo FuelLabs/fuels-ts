@@ -240,10 +240,11 @@ export function getContractCallOperations({
   abiMap,
   rawPayload,
   maxInputs,
+  baseAssetId,
 }: InputOutputParam &
   ReceiptParam &
   Pick<GetOperationParams, 'abiMap' | 'maxInputs'> &
-  RawPayloadParam): Operation[] {
+  RawPayloadParam & { baseAssetId: string; }): Operation[] {
   const contractCallReceipts = getReceiptsCall(receipts);
   const contractOutputs = getOutputsContract(outputs);
 
@@ -253,7 +254,8 @@ export function getContractCallOperations({
     if (contractInput) {
       const newCallOps = contractCallReceipts.reduce((prevContractCallOps, receipt) => {
         if (receipt.to === contractInput.contractID) {
-          const input = getInputFromAssetId(inputs, receipt.assetId);
+          const assetId = receipt.amount.gt(0) ? receipt.assetId : baseAssetId;
+          const input = getInputFromAssetId(inputs, assetId);
           if (input) {
             const inputAddress = getInputAccountAddress(input);
             const calls = [];
@@ -479,6 +481,7 @@ export function getOperations({
   abiMap,
   rawPayload,
   maxInputs,
+  baseAssetId,
 }: GetOperationParams): Operation[] {
   if (isTypeCreate(transactionType)) {
     return [
@@ -497,6 +500,7 @@ export function getOperations({
         abiMap,
         rawPayload,
         maxInputs,
+        baseAssetId,
       }),
       ...getWithdrawFromFuelOperations({ inputs, receipts }),
     ];
