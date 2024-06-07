@@ -1,5 +1,6 @@
 import { BN, bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
+import { ASSET_A } from '@fuel-ts/utils/test-utils';
 
 import {
   MOCK_RECEIPT_CALL,
@@ -43,6 +44,7 @@ describe('TransactionSummary', () => {
     MOCK_RECEIPT_RETURN_DATA_2,
     MOCK_RECEIPT_SCRIPT_RESULT,
   ];
+  const baseAssetId = ASSET_A;
 
   beforeAll(async () => {
     provider = await Provider.create('http://127.0.0.1:4000/v1/graphql');
@@ -81,6 +83,7 @@ describe('TransactionSummary', () => {
       abiMap: {},
       maxGasPerTx,
       gasPrice: bn(1),
+      baseAssetId,
     });
 
     expect(transactionSummary).toMatchObject(expected);
