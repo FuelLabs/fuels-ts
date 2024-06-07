@@ -195,7 +195,6 @@ export class TransactionResponse {
     const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = this.provider.getGasConfig();
     const gasPrice = await this.provider.getLatestGasPrice();
     const maxInputs = this.provider.getChain().consensusParameters.txParameters.maxInputs;
-    const baseAssetId = this.provider.getBaseAssetId();
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
@@ -210,7 +209,6 @@ export class TransactionResponse {
       gasCosts,
       maxGasPerTx,
       gasPrice,
-      baseAssetId,
     });
 
     return transactionSummary;

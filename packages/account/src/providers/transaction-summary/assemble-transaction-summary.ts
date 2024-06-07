@@ -33,7 +33,6 @@ export interface AssembleTransactionSummaryParams {
   gasCosts: GasCosts;
   maxGasPerTx: BN;
   gasPrice: BN;
-  baseAssetId: string;
 }
 
 /** @hidden */
@@ -53,7 +52,6 @@ export function assembleTransactionSummary<TTransactionType = void>(
     gasCosts,
     maxGasPerTx,
     gasPrice,
-    baseAssetId,
   } = params;
 
   const gasUsed = getGasUsedFromReceipts(receipts);
@@ -68,7 +66,6 @@ export function assembleTransactionSummary<TTransactionType = void>(
     rawPayload,
     abiMap,
     maxInputs,
-    baseAssetId,
   });
 
   const typeName = getTransactionTypeName(transaction.type);

@@ -143,7 +143,7 @@ export type GetOperationParams = {
   maxInputs: BN;
 } & InputOutputParam &
   ReceiptParam &
-  RawPayloadParam & { baseAssetId: string };
+  RawPayloadParam;
 
 export interface MintedAsset {
   subId: B256Address;
