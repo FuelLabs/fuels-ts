@@ -5,6 +5,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
+import type { FakeResources } from '../account';
 import { Account } from '../account';
 import {
   transactionRequestify,
@@ -191,6 +192,20 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     );
     return resources.map((resource) => ({
       ...resource,
+      predicate: hexlify(this.bytes),
+      predicateData: hexlify(this.getPredicateData()),
+    }));
+  }
+
+  /**
+   * Generates an array of fake resources based on the provided coins.
+   *
+   * @param coins - An array of `FakeResources` objects representing the coins.
+   * @returns An array of `Resource` objects with generated properties.
+   */
+  generateFakeResources(coins: FakeResources[]): Array<Resource> {
+    return super.generateFakeResources(coins).map((coin) => ({
+      ...coin,
       predicate: hexlify(this.bytes),
       predicateData: hexlify(this.getPredicateData()),
     }));

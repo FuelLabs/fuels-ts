@@ -17,6 +17,10 @@ pnpm create fuels@{{fuels}} [project-name] [options]
 npm create fuels@{{fuels}} [project-name] [options]
 ```
 
+```sh-vue [bun]
+bunx --bun create-fuels@{{fuels}} [project-name] [options]
+```
+
 :::
 
 ## `-c, --contract`
@@ -38,6 +42,10 @@ Notifies the tool to use pnpm as the package manager to install the necessary de
 ## `--npm`
 
 Notifies the tool to use npm as the package manager to install the necessary dependencies.
+
+## `--bun`
+
+Notifies the tool to use bun as the package manager to install the necessary dependencies.
 
 ## `-cs, -cp, -sp, -cps`
 
