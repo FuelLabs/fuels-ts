@@ -15,17 +15,17 @@ describe(__filename, () => {
   });
 
   it('should successfully echo a simple enum in a contract call', async () => {
-    // #region enum-3
+    // #region simple-enum-3
     const enumVariant = 'Completed';
 
     const { value } = await contract.functions.echo_state_error_enum(enumVariant).simulate();
 
     expect(value).toEqual(enumVariant);
-    // #endregion enum-3
+    // #endregion simple-enum-3
   });
 
   it('should successfully echo a enum in a contract call (UserError Enum)', async () => {
-    // #region enum-6
+    // #region enum-of-enums-3
     const userErroVar = 'InsufficientPermissions';
 
     const enumParam = { UserError: userErroVar };
@@ -33,11 +33,11 @@ describe(__filename, () => {
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
-    // #endregion enum-6
+    // #endregion enum-of-enums-3
   });
 
   it('should successfully echo a enum in a contract call (StateError Enum)', async () => {
-    // #region enum-7
+    // #region enum-of-enums-4
     const stateErrorVar = 'Completed';
 
     const enumParam = { StateError: stateErrorVar };
@@ -45,7 +45,7 @@ describe(__filename, () => {
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
-    // #endregion enum-7
+    // #endregion enum-of-enums-4
   });
 
   it('should throw when enum value is not present in Sway enum values', async () => {
