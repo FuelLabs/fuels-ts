@@ -10,7 +10,7 @@ Consider the following basic Sway Enum called `StateError`:
 
 The type `()` indicates that there is no additional data associated with each Enum variant. Sway allows you to create Enums of Enums or associate types with Enum variants.
 
-## Using Sway Enums As Function Parameters
+### Using Sway Enums As Function Parameters
 
 Let's define a Sway contract function that takes a `StateError` Enum variant as an argument and returns it:
 
@@ -28,7 +28,7 @@ In this example, the `Error` Enum is an Enum of two other Enums: `StateError` an
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/echo-enum/src/main.sw#enum-of-enums-1{rust:line-numbers}
 
-## Using Enums of Enums with Contract Functions
+### Using Enums of Enums with Contract Functions
 
 Now, let's create a Sway contract function that accepts any variant of the `Error` Enum as a parameter and returns it immediately. This variant could be from either the `StateError` or `UserError` Enums.
 
