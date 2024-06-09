@@ -1,4 +1,5 @@
-import type { Contract } from 'fuels';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { FuelError, type Contract } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -45,5 +46,23 @@ describe(__filename, () => {
 
     expect(value).toEqual(enumParam);
     // #endregion enum-7
+  });
+
+  it('should throw when enum value is not present in Sway enum values', async () => {
+    const unknownEnumVariant = 'NotSwayEnumValue';
+
+    await expectToThrowFuelError(
+      () => contract.functions.echo_state_error_enum(unknownEnumVariant).simulate(),
+      new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'Only one field must be provided.')
+    );
+  });
+
+  it('should throw when the enum param is not present in Sway enum values', async () => {
+    const unknownEnumParam = { StateError: 'NotSwayEnumValue' };
+
+    await expectToThrowFuelError(
+      () => contract.functions.echo_state_error_enum(unknownEnumParam).simulate(),
+      new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'Only one field must be provided.')
+    );
   });
 });

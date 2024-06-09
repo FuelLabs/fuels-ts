@@ -92,6 +92,8 @@ When the value is more than the max value.
 
 Ensure that the value is less than the max value.
 
+## `INVALID_DECODE_VALUE`
+
 ## `INVALID_ENTROPY`
 
 When the entropy is not: between 16 and 32 bytes; a multiple of 4.
