@@ -42,7 +42,7 @@ describe('encode and decode', () => {
         {
           inputs: [
             {
-              name: 'inpputed_amount',
+              name: 'inputted_amount',
               type: 0,
               typeArguments: null,
             },
@@ -83,7 +83,7 @@ describe('encode and decode', () => {
     const bin: string = factory.bin;
     const argument: JsonAbiArgument = abi.functions
       .find((f) => f.name === 'main')
-      ?.inputs.find((i) => i.name === 'inpputed_amount') as JsonAbiArgument;
+      ?.inputs.find((i) => i.name === 'inputted_amount') as JsonAbiArgument;
 
     // Create the script invocation scope
     const script = new Script(bin, abi, wallet);
