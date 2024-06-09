@@ -3,7 +3,7 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { OPTION_CODER_TYPE, WORD_SIZE } from '../../utils/constants';
+import { OPTION_CODER_TYPE } from '../../utils/constants';
 import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
@@ -36,7 +36,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   constructor(name: string, coders: TCoders) {
     const caseIndexCoder = new BigNumberCoder('u64');
     const encodedValueSize = Object.values(coders).reduce(
-      (max, coder) => Math.max(max, coder.encodedLength),
+      (min, coder) => Math.min(min, coder.encodedLength),
       0
     );
     super(`enum ${name}`, `enum ${name}`, caseIndexCoder.encodedLength + encodedValueSize);
@@ -80,7 +80,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   }
 
   decode(data: Uint8Array, offset: number): [DecodedValueOf<TCoders>, number] {
-    if (this.#shouldValidateLength && data.length < this.#encodedValueSize) {
+    if (this.#shouldValidateLength && data.length < this.encodedLength) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid enum data size.`);
     }
 
@@ -93,9 +93,12 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
         `Invalid caseIndex "${caseIndex}". Valid cases: ${Object.keys(this.coders)}.`
       );
     }
-
     const valueCoder = this.coders[caseKey];
-    const offsetAndCase = offset + WORD_SIZE;
+    const offsetAndCase = offset + this.#caseIndexCoder.encodedLength;
+
+    if (this.#shouldValidateLength && data.length < offsetAndCase + valueCoder.encodedLength) {
+      throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid enum data size.`);
+    }
 
     const [decoded, newOffset] = valueCoder.decode(data, offsetAndCase);
 

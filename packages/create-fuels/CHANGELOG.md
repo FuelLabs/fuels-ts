@@ -1,5 +1,21 @@
 # create-fuels
 
+## 0.89.2
+
+### Patch Changes
+
+- 78c2d73: fix: update testnet URL
+- 889789c: chore: re-enable connectors, bump dependencies
+
+## 0.89.1
+
+## 0.89.0
+
+### Patch Changes
+
+- 3b00bdb: chore: add test to verify `create fuels` template integrity
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+
 ## 0.88.1
 
 ## 0.88.0
