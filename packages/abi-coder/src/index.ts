@@ -12,6 +12,5 @@ export {
   UTXO_ID_LEN,
   BYTES_32,
   calculateVmTxMemory,
-  type EncodingVersion,
   ENCODING_V1,
 } from './utils/constants';
