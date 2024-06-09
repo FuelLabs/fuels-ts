@@ -24,5 +24,6 @@ export const generateArgs = (
 
 export const generateArgv = (
   programsToInclude: ProgramsToInclude,
-  projectName?: string
-): string[] => ['', '', ...generateArgs(programsToInclude, projectName)];
+  projectName?: string,
+  packageManager: string = 'pnpm'
+): string[] => ['', '', ...generateArgs(programsToInclude, projectName, packageManager)];
