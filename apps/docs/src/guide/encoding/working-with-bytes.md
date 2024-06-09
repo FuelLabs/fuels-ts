@@ -4,7 +4,7 @@ This guide aims to give a high-level overview of how to work with bytes in the S
 
 ## Core Types
 
-These are the types who's sizes are known at compile time. They are the building blocks of the more complex types and are the most common types you will encounter.
+We know the sizes of all core types at compile time. They are the building blocks of the more complex types and are the most common types you will encounter.
 
 ### Unsigned Integer (`u8` / `u16` / `u32` / `u64` / `u128` / `u256`)
 
