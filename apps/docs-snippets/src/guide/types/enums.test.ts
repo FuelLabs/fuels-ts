@@ -26,9 +26,7 @@ describe(__filename, () => {
 
   it('should successfully echo a enum in a contract call (UserError Enum)', async () => {
     // #region enum-of-enums-3
-    const userErroVar = 'InsufficientPermissions';
-
-    const enumParam = { UserError: userErroVar };
+    const enumParam = { UserError: 'InsufficientPermissions' };
 
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
@@ -38,9 +36,7 @@ describe(__filename, () => {
 
   it('should successfully echo a enum in a contract call (StateError Enum)', async () => {
     // #region enum-of-enums-4
-    const stateErrorVar = 'Completed';
-
-    const enumParam = { StateError: stateErrorVar };
+    const enumParam = { StateError: 'Completed' };
 
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
