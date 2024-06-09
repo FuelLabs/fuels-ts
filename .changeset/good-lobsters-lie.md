@@ -4,4 +4,4 @@
 "@fuel-ts/program": patch
 ---
 
-feat!: remove rendundant exports from `v1` encoding
+feat!: remove redundant exports from `v1` encoding
