@@ -11,7 +11,6 @@ import type { FunctionInvocationScope } from './functions/invocation-scope';
 export type ContractCall = {
   contractId: AbstractAddress;
   data: BytesLike;
-  fnSelector: string;
   fnSelectorBytes: Uint8Array;
   amount?: BigNumberish;
   assetId?: BytesLike;
