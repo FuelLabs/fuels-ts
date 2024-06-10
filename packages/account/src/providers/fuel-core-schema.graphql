@@ -495,6 +495,11 @@ type Genesis {
 
 type Header {
   """
+  Version of the header
+  """
+  version: HeaderVersion!
+
+  """
   Hash of the header
   """
   id: BlockId!
@@ -558,6 +563,10 @@ type Header {
   Hash of the application header.
   """
   applicationHash: Bytes32!
+}
+
+enum HeaderVersion {
+  V1
 }
 
 type HeavyOperation {
