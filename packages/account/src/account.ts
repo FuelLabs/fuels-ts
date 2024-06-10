@@ -28,6 +28,7 @@ import type {
   GetCoinsResponse,
   GetMessagesResponse,
   GetBalancesResponse,
+  Coin,
 } from './providers';
 import {
   withdrawScript,
