@@ -1,5 +1,12 @@
-import { Provider, FUEL_DEVNET_NETWORK_URL, FUEL_TESTNET_NETWORK_URL, assets, CHAIN_IDS, rawAssets } from 'fuels';
-
+/* eslint-disable no-console */
+import {
+  Provider,
+  FUEL_DEVNET_NETWORK_URL,
+  FUEL_TESTNET_NETWORK_URL,
+  assets,
+  CHAIN_IDS,
+  rawAssets,
+} from 'fuels';
 
 type FuelChainId = keyof typeof CHAIN_IDS.fuel;
 
@@ -20,7 +27,7 @@ describe('e2e-assets', () => {
     networks = [
       ['devnet', await Provider.create(FUEL_DEVNET_NETWORK_URL)],
       ['testnet', await Provider.create(FUEL_TESTNET_NETWORK_URL)],
-    ]
+    ];
   });
 
   it(`should have correct assets`, () => {
@@ -42,7 +49,7 @@ describe('e2e-assets', () => {
               assetId: provider.getBaseAssetId(),
             },
           ]),
-        }
+        },
       ];
 
       expect(CHAIN_IDS.fuel[chainKey as FuelChainId]).toEqual(provider.getChainId());
