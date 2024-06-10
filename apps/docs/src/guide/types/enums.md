@@ -56,6 +56,8 @@ Thrown when the type being passed to the enum does not match that expected by it
 
 ### Using an invalid enum value
 
+Thrown when the parameter passed is not an expected enum value.
+
 <<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-error-value-mismatch{ts:line-numbers}
 
 ### Using an invalid enum case key
