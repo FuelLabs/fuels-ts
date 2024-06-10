@@ -129,6 +129,12 @@
           "wqmm": 10,
           "xor": 2,
           "xori": 2,
+          "alloc": {
+            "LightOperation": {
+              "base": "2",
+              "unitsPerGas": "214"
+            }
+          },
           "call": {
             "LightOperation": {
               "base": 18190,
