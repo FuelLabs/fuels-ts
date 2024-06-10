@@ -38,6 +38,13 @@ describe('EnumCoder', () => {
         new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
       );
     });
+
+    it('should throw an error when enum case key is incorrect', async () => {
+      await expectToThrowFuelError(
+        () => coder.encode({ c: 'test' } as never),
+        new FuelError(ErrorCode.INVALID_DECODE_VALUE, `Invalid case 'c'. Valid cases: 'a', 'b'.`)
+      );
+    });
   });
 
   describe('decode', () => {
