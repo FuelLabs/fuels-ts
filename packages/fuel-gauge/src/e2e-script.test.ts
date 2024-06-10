@@ -1,7 +1,24 @@
 /* eslint-disable no-console */
-import { FUEL_TESTNET_NETWORK_URL, Provider, TransactionType, WalletUnlocked } from 'fuels';
+import {
+  FUEL_DEVNET_NETWORK_URL,
+  FUEL_TESTNET_NETWORK_URL,
+  Provider,
+  TransactionType,
+  WalletUnlocked,
+} from 'fuels';
 
 import { getScript } from './utils';
+
+const networks = {
+  devnet: {
+    networkUrl: FUEL_DEVNET_NETWORK_URL,
+    privateKey: process.env.DEVNET_WALLET_PVT_KEY,
+  },
+  testnet: {
+    networkUrl: FUEL_TESTNET_NETWORK_URL,
+    privateKey: process.env.TESTNET_WALLET_PVT_KEY,
+  },
+} as const;
 
 /**
  * @group node
@@ -12,19 +29,22 @@ describe('Live Script Test', () => {
   const UPGRADE_TX_ID = '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094';
   const UPLOAD_TX_ID = '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73';
 
+  const selectedNetwork: keyof typeof networks = 'testnet';
   let provider: Provider;
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
 
   beforeAll(async () => {
-    if (!process.env.TEST_WALLET_PVT_KEY) {
+    const network = networks[selectedNetwork];
+
+    if (!network.privateKey) {
       console.log('Skipping live Fuel Node test');
       shouldSkip = true;
       return;
     }
 
-    provider = await Provider.create(FUEL_TESTNET_NETWORK_URL);
-    wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
+    provider = await Provider.create(network.networkUrl);
+    wallet = new WalletUnlocked(network.privateKey, provider);
   });
 
   it('can use script against live Fuel Node', async () => {
@@ -47,8 +67,7 @@ describe('Live Script Test', () => {
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
-        - add assets: https://faucet-testnet.fuel.network/
-        - check balance: https://app.fuel.network/account/${address}/assets/
+        - add assets: https://faucet-${selectedNetwork}.fuel.network/
         - bech32 address: ${address}
       `);
     }
