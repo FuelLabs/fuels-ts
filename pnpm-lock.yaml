@@ -582,14 +582,14 @@ importers:
   internal/forc:
     dependencies:
       node-fetch:
-        specifier: ^2.6.7
-        version: 2.7.0
+        specifier: ^3.3.2
+        version: 3.3.2
 
   internal/fuel-core:
     dependencies:
       node-fetch:
-        specifier: ^2.7.0
-        version: 2.7.0
+        specifier: ^3.3.2
+        version: 3.3.2
 
   internal/tsup: {}
 
