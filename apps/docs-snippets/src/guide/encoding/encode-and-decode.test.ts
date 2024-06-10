@@ -78,7 +78,7 @@ describe('encode and decode', () => {
   it('encodes and decodes', async () => {
     // #region encode-and-decode-3
     // #import { JsonAbi, JsonAbiArgument, Script, AbiCoder, FunctionInvocationResult, ReceiptType, TransactionResultReturnDataReceipt, arrayify};
-    // import { factory } from './sway-programs-api';
+    // #context import { factory } from './sway-programs-api';
 
     // Retrieve the script ABI and bytecode that we use to inform the encoding
     const abi: JsonAbi = factory.abi;
