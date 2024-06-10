@@ -79,7 +79,7 @@
     "@vitest/coverage-istanbul": "^1.6.0",
     "compare-versions": "^6.1.0",
     "coverage-diff": "^3.2.0",
-    "eslint": "^8.52.0",
+    "eslint": "^8.57.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
