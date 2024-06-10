@@ -29,7 +29,7 @@ describe('Live Script Test', () => {
   const UPGRADE_TX_ID = '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094';
   const UPLOAD_TX_ID = '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73';
 
-  const selectedNetwork: keyof typeof networks = 'testnet';
+  const selectedNetwork: keyof typeof networks = 'devnet';
   let provider: Provider;
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
