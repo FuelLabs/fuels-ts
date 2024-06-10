@@ -61,6 +61,12 @@ describe('Doc Examples', () => {
   let baseAssetId: string;
 
   beforeAll(async () => {
+    // Avoids using the actual network.
+    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
+    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
+  });
+
+  beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     baseAssetId = provider.getBaseAssetId();
   });

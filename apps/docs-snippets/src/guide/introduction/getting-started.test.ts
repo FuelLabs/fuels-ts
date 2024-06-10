@@ -11,9 +11,10 @@ import {
  * @group browser
  */
 describe('Getting started', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     // Avoids using the actual network.
-    vi.spyOn(Provider, 'create').mockImplementationOnce(() => Provider.create(FUEL_NETWORK_URL));
+    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
+    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
   });
 
   it('can connect to a local network', async () => {
