@@ -94,7 +94,7 @@ Ensure that the value is less than the max value.
 
 ## `INVALID_DECODE_VALUE`
 
-When you provide an incorrect value to contract, these are documented under [Enums](../types/enums#errors).
+When you provide an incorrect value to contract, these are documented under [Enums](../types/enums.md#errors).
 
 Ensure that the value (and type) matches the expected format.
 
