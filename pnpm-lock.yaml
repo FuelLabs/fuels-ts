@@ -472,8 +472,8 @@ importers:
         specifier: ^12.2.3
         version: 12.2.3
       '@vue/devtools-api':
-        specifier: ^6.5.0
-        version: 6.5.0
+        specifier: ^6.6.2
+        version: 6.6.2
       flexsearch:
         specifier: ^0.7.31
         version: 0.7.31
@@ -750,6 +750,9 @@ importers:
       get-graphql-schema:
         specifier: ^2.1.2
         version: 2.1.2
+      type-fest:
+        specifier: ^4.6.0
+        version: 4.19.0
 
   packages/address:
     dependencies:
@@ -804,6 +807,19 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
+      ramda:
+        specifier: ^0.29.0
+        version: 0.29.0
+    devDependencies:
+      '@internal/forc':
+        specifier: workspace:*
+        version: link:../../internal/forc
+      '@types/ramda':
+        specifier: ^0.29.3
+        version: 0.29.3
 
   packages/create-fuels:
     dependencies:
@@ -5366,8 +5382,8 @@ packages:
   '@vue/compiler-ssr@3.4.27':
     resolution: {integrity: sha512-CVRzSJIltzMG5FcidsW0jKNQnNRYC8bT21VegyMMtHmhW3UOI7knmUehzswXLrExDLE6lQCZdrhD4ogI7c+vuw==}
 
-  '@vue/devtools-api@6.5.0':
-    resolution: {integrity: sha512-o9KfBeaBmCKl10usN4crU53fYtC1r7jJwdGKjPT24t348rHxgfpZ0xL3Xm/gLUYnc0oTp8LAmrxOeLyu6tbk2Q==}
+  '@vue/devtools-api@6.6.2':
+    resolution: {integrity: sha512-134clD8u7cBBXdmBbXI282gHGF7T/eAbD/G7mAK2llQF62IbI4ny28IVamZVMoJSvfImC2Xxnj732hXkJvUj6g==}
 
   '@vue/devtools-api@7.2.1':
     resolution: {integrity: sha512-6oNCtyFOrNdqm6GUkFujsCgFlpbsHLnZqq7edeM/+cxAbMyCWvsaCsIMUaz7AiluKLccCGEM8fhOsjaKgBvb7g==}
@@ -13194,6 +13210,10 @@ packages:
     resolution: {integrity: sha512-StmrZmK3eD9mDF9Vt7UhqthrDSk66O9iYl5t5a0TSoVkHjl0XZx/xuc/BRz4urAXXGHOY5OLsE0RdJFIApSFmw==}
     engines: {node: '>=14.16'}
 
+  type-fest@4.19.0:
+    resolution: {integrity: sha512-CN2l+hWACRiejlnr68vY0/7734Kzu+9+TOslUXbSCQ1ruY9XIHDBSceVXCcHm/oXrdzhtLMMdJEKfemf1yXiZQ==}
+    engines: {node: '>=16'}
+
   type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
@@ -20253,7 +20273,7 @@ snapshots:
       '@vue/compiler-dom': 3.4.27
       '@vue/shared': 3.4.27
 
-  '@vue/devtools-api@6.5.0': {}
+  '@vue/devtools-api@6.6.2': {}
 
   '@vue/devtools-api@7.2.1(vue@3.4.27(typescript@5.2.2))':
     dependencies:
@@ -30485,6 +30505,8 @@ snapshots:
   type-fest@2.19.0: {}
 
   type-fest@3.1.0: {}
+
+  type-fest@4.19.0: {}
 
   type-is@1.6.18:
     dependencies:

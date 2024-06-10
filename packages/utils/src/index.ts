@@ -5,6 +5,8 @@ export * from './utils/arrayify';
 export * from './utils/hexlify';
 export * from './utils/normalizeString';
 export * from './utils/date-time';
+export * from './utils/types';
+export * from './utils/sleep';
 export * from './utils/defaultSnapshotConfigs';
 export * from './utils/isDefined';
 export * from './utils/base58';
