@@ -16,6 +16,8 @@ Check out our [Help Wanted](https://github.com/FuelLabs/fuels-ts/issues?q=is%3Ao
 
 If you are planning something big, for example, changes related to multiple components or changes to current behaviors, make sure to [open an issue](https://github.com/FuelLabs/fuels-ts/issues/new) to discuss with us before starting on the implementation.
 
+If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
+
 # Setting up
 
 ```sh
