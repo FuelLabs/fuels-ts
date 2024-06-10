@@ -754,6 +754,7 @@ type Mutation {
   dryRun(
     txs: [HexString!]!
     utxoValidation: Boolean
+    gasPrice: U64
   ): [DryRunTransactionExecutionStatus!]!
 
   """
