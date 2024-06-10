@@ -43,3 +43,19 @@ In this case, since the variant `InsufficientPermissions` belongs to the `UserEr
 We would follow the same approach if we intended to use a variant from the `StateError` Enum:
 
 <<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-of-enums-4{ts:line-numbers}
+
+## Errors
+
+While working with enums, you may run into the following issues:
+
+### Using an invalid enum type
+
+<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-error-mismatch-type{ts:line-numbers}
+
+### Using an invalid enum value
+
+<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-error-value-mismatch{ts:line-numbers}
+
+### Using an invalid enum case key
+
+<<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-error-case-key-mismatch{ts:line-numbers}

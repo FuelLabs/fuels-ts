@@ -44,21 +44,42 @@ describe(__filename, () => {
     // #endregion enum-of-enums-4
   });
 
-  it('should throw when enum value is not present in Sway enum values', async () => {
-    const unknownEnumVariant = 'NotSwayEnumValue';
+  it('should throw when enum value is not the correct type', async () => {
+    // #region enum-error-mismatch-type
+    // Valid values: 'Void', 'Pending', 'Completed'
+    const emumValue = 1;
 
     await expectToThrowFuelError(
-      () => contract.functions.echo_state_error_enum(unknownEnumVariant).simulate(),
-      new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'Only one field must be provided.')
+      () => contract.functions.echo_state_error_enum(emumValue).simulate(),
+      new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
     );
+    // #endregion enum-error-mismatch-type
   });
 
-  it('should throw when the enum param is not present in Sway enum values', async () => {
-    const unknownEnumParam = { StateError: 'NotSwayEnumValue' };
+  it('should throw when enum value is not present in Sway enum values', async () => {
+    // #region enum-error-value-mismatch
+    // Valid values: 'Void', 'Pending', 'Completed'
+    const emumValue = 'NotStateEnumValue';
 
     await expectToThrowFuelError(
-      () => contract.functions.echo_state_error_enum(unknownEnumParam).simulate(),
+      () => contract.functions.echo_state_error_enum(emumValue).simulate(),
       new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'Only one field must be provided.')
     );
+    // #endregion enum-error-value-mismatch
+  });
+
+  it('should throw when using incorrect key for enum of enums', async () => {
+    // #region enum-error-case-key-mismatch
+    // Valid case keys: 'StateError', 'UserError'
+    const enumParam = { UnknownKey: 'Completed' };
+
+    await expectToThrowFuelError(
+      () => contract.functions.echo_error_enum(enumParam).simulate(),
+      new FuelError(
+        FuelError.CODES.INVALID_DECODE_VALUE,
+        `Invalid case 'UnknownKey'. Valid cases: 'StateError', 'UserError'.`
+      )
+    );
+    // #endregion enum-error-case-key-mismatch
   });
 });
