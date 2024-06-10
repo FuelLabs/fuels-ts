@@ -46,8 +46,8 @@ describe(__filename, () => {
 
   it('should throw when enum value is not the correct type', async () => {
     // #region enum-error-mismatch-type
-    // Valid values: 'Void', 'Pending', 'Completed'
-    const emumValue = 1;
+    // Valid types: string
+    const emumValue: number = 1;
 
     await expectToThrowFuelError(
       () => contract.functions.echo_state_error_enum(emumValue).simulate(),

@@ -50,6 +50,8 @@ While working with enums, you may run into the following issues:
 
 ### Using an invalid enum type
 
+Thrown when the type being passed to the enum does not match that expected by it.
+
 <<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-error-mismatch-type{ts:line-numbers}
 
 ### Using an invalid enum value
@@ -57,5 +59,7 @@ While working with enums, you may run into the following issues:
 <<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-error-value-mismatch{ts:line-numbers}
 
 ### Using an invalid enum case key
+
+Thrown when the passed enum case is not an expected enum case value.
 
 <<< @/../../docs-snippets/src/guide/types/enums.test.ts#enum-error-case-key-mismatch{ts:line-numbers}
