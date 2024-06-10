@@ -1,3 +1,4 @@
+// intentionally added comment to test sway program type extraction
 contract;
 
 abi BarContract {

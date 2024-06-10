@@ -160,3 +160,7 @@ Forc.lock
 .fuel-core/configs/chainConfig.json
 .fuel-core/configs/metadata.json
 .fuel-core/configs/stateConfig.json
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

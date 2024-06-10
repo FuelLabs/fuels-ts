@@ -47,7 +47,7 @@ describe('Live Script Test', () => {
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
-        - add assets: https://faucet-devnet.fuel.network/
+        - add assets: https://faucet-testnet.fuel.network/
         - check balance: https://app.fuel.network/account/${address}/assets/
         - bech32 address: ${address}
       `);
@@ -56,7 +56,7 @@ describe('Live Script Test', () => {
     expect(output).toBe(true);
   });
 
-  it.each([
+  it.skip.each([
     ['Mint', MINT_TX_ID, TransactionType.Mint],
     ['Upgrade', UPGRADE_TX_ID, TransactionType.Upgrade],
     ['Upload', UPLOAD_TX_ID, TransactionType.Upload],

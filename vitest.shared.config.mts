@@ -10,6 +10,7 @@ export default defineConfig({
       namedExport: false,
     }),
   ],
+  esbuild: { target: "es2022" },
   test: {
     coverage: {
       enabled: true,
