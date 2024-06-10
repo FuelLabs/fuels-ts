@@ -9,7 +9,7 @@ describe('Configs', () => {
 
   it('exports FUEL_DEVNET_NETWORK_URL', async () => {
     const configs = await import('./configs');
-    expect(configs.FUEL_TESTNET_NETWORK_URL).toBe('https://devnet.fuel.network/v1/graphql');
+    expect(configs.FUEL_DEVNET_NETWORK_URL).toBe('https://devnet.fuel.network/v1/graphql');
   });
 
   it('exports FUEL_TESTNET_NETWORK_URL', async () => {
