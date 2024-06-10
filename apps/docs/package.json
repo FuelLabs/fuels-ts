@@ -21,14 +21,14 @@
   },
   "devDependencies": {
     "@types/markdown-it": "^12.2.3",
-    "@vue/devtools-api": "^6.5.0",
+    "@vue/devtools-api": "^6.6.2",
     "flexsearch": "^0.7.31",
     "markdown-it": "^13.0.1",
     "nodemon": "^3.0.3",
     "replace": "^1.2.2",
     "typedoc": "^0.25.1",
     "typedoc-plugin-merge-modules": "^5.1.0",
-    "vitepress": "1.0.0-rc.40",
+    "vitepress": "1.2.2",
     "vitepress-plugin-search": "1.0.4-alpha.19",
     "vue": "^3.4.15"
   }

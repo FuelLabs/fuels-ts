@@ -1,4 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
 
 import type { LaunchNodeOptions } from './launchNode';
@@ -31,7 +32,7 @@ function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
         // The `Binding GraphQL provider to` message simulates a fuel-core
         // successful startup log message, usually meaning that the node
         // is up and waiting for connections
-        fn('Binding GraphQL provider to');
+        fn('Binding GraphQL provider to 0.0.0.0:4000');
       }
     }
   };
@@ -63,6 +64,35 @@ const defaultLaunchNodeConfig: Partial<LaunchNodeOptions> = {
  * @group node
  */
 describe('launchNode', () => {
+  test('using ephemeral port 0 is possible', async () => {
+    const { cleanup, port, url } = await launchNode({ port: '0' });
+    expect(await fetch(url)).toBeTruthy();
+    expect(port).not.toEqual('0');
+
+    cleanup();
+  });
+
+  it('cleanup kills the started node', async () => {
+    const { cleanup, url } = await launchNode({});
+    expect(await fetch(url)).toBeTruthy();
+
+    cleanup();
+
+    await waitUntilUnreachable(url);
+  });
+
+  test('should start `fuel-core` node using built-in binary', async () => {
+    mockSpawn();
+
+    const { cleanup, ip, port } = await launchNode({
+      ...defaultLaunchNodeConfig,
+    });
+
+    expect(ip).toBe('0.0.0.0');
+    expect(port).toBe('4000');
+    cleanup();
+  });
+
   test('should start `fuel-core` node using system binary', async () => {
     mockSpawn();
 

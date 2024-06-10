@@ -23,6 +23,10 @@ npm create fuels@{{fuels}}
 pnpm create fuels@{{fuels}}
 ```
 
+```sh-vue [bun]
+bunx --bun create-fuels@{{fuels}}
+```
+
 :::
 
 Once you run the command, you will be greeted with a few simple questions. We will answer them as follows:
@@ -108,11 +112,15 @@ Let's first start our Fuel Dev server. This will start a local Fuel node and con
 ::: code-group
 
 ```sh [npm]
-pnpm fuels:dev
+npm fuels:dev
 ```
 
 ```sh [pnpm]
 pnpm fuels:dev
+```
+
+```sh [bun]
+bun run fuels:dev
 ```
 
 :::
@@ -127,6 +135,10 @@ pnpm dev
 
 ```sh [pnpm]
 pnpm dev
+```
+
+```sh [bun]
+bun run dev
 ```
 
 :::
