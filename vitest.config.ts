@@ -3,7 +3,7 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     coverage: {
-      enabled: true,
+      enabled: false,
       provider: 'istanbul',
       reporter: ['json', 'text', 'html'],
       include: ['packages', 'internal', 'apps'],

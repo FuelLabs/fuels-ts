@@ -68,7 +68,7 @@ export function logger(name: string): Logger {
   // info logging is a no-op by default
   let info: debug.Debugger = createDisabledLogger(`${name}:info`);
 
-  // look at all the debug names and see if trace logging has explicitly been enabled
+  // look at all the debug names and see if info logging has explicitly been enabled
   if (
     debug.enabled(`${name}:info`) &&
     debug.names.map((r) => r.toString()).find((n) => n.includes(':info')) != null

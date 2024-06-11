@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/logger",
-  "version": "0.88.1",
+  "version": "0.89.2",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "description": "A logger for the Fuel-TS ecosystem",
   "main": "dist/index.js",
@@ -25,6 +25,9 @@
   },
   "keywords": [
     "Fuel"
+  ],
+  "files": [
+    "dist"
   ],
   "dependencies": {
     "debug": "^4.3.4",
