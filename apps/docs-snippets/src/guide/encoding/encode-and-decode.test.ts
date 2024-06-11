@@ -10,6 +10,7 @@ import {
 } from 'fuels';
 import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
 
+import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
 import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';
 
 /**
@@ -25,54 +26,7 @@ describe('encode and decode', () => {
   });
 
   it('generates valid ABI', () => {
-    // #region encode-and-decode-2
-    // #import { JsonAbi };
-
-    const ABI: JsonAbi = {
-      encoding: '1',
-      types: [
-        {
-          typeId: 0,
-          type: 'u32',
-          components: null,
-          typeParameters: null,
-        },
-      ],
-      functions: [
-        {
-          inputs: [
-            {
-              name: 'inputted_amount',
-              type: 0,
-              typeArguments: null,
-            },
-          ],
-          name: 'main',
-          output: {
-            name: '',
-            type: 0,
-            typeArguments: null,
-          },
-          attributes: null,
-        },
-      ],
-      loggedTypes: [],
-      messagesTypes: [],
-      configurables: [
-        {
-          name: 'AMOUNT',
-          configurableType: {
-            name: '',
-            type: 0,
-            typeArguments: null,
-          },
-          offset: 784,
-        },
-      ],
-    };
-    // #endregion encode-and-decode-2
-
-    expect(ABI).toEqual(factory.abi);
+    expect(abiSnippet).toEqual(factory.abi);
   });
 
   it('encodes and decodes', async () => {
@@ -96,7 +50,7 @@ describe('encode and decode', () => {
     const request = await invocationScope.getTransactionRequest();
 
     // Encode the argument we want to pass to the function. The argument is required
-// as a function parameter for all `AbiCoder` functions and we can extract it from the ABI itself
+    // as a function parameter for all `AbiCoder` functions and we can extract it from the ABI itself
     const argument: JsonAbiArgument = abi.functions
       .find((f) => f.name === 'main')
       ?.inputs.find((i) => i.name === 'inputted_amount') as JsonAbiArgument;
@@ -129,7 +83,7 @@ describe('encode and decode', () => {
       script
     );
 
-// The decoded value can be destructured from the `invocationResult`
+    // The decoded value can be destructured from the `invocationResult`
     const { value } = invocationResult;
 
     // Or we can decode the returned bytes ourselves, by retrieving the return data

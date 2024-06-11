@@ -24,7 +24,7 @@ forc build
 
 It will produce the following ABI:
 
-<<< @/../../docs-snippets/src/guide/encoding/encode-and-decode.test.ts#encode-and-decode-2{ts:line-numbers}
+<<< @/../../docs-snippets/test/fixtures/abi/encode-and-decode.jsonc#encode-and-decode-2{json:line-numbers}
 
 Now, let's prepare some data to pass to the `main` function to retrieve the combined integer. The function expects and returns a `u32` integer. So here, we will encode the `u32` to pass it to the function and receive the same `u32` back, as bytes, that we'll use for decoding.
 
