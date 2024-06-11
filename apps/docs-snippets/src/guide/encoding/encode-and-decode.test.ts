@@ -130,7 +130,7 @@ describe('encode and decode', () => {
       script
     );
 
-    // We can pick off the decoded value like so:
+// The decoded value can be destructured from the `invocationResult`
     const { value } = invocationResult;
 
     // Or we can decode the returned bytes ourselves, by retrieving the return data
