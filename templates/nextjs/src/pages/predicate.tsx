@@ -21,15 +21,11 @@ export default function PredicateExample() {
 
   const [pin, setPin] = useState<string>();
 
-  const [configurable, setConfigurable] = useState<{ PIN: BN }>();
-
   useAsync(async () => {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
       const predicate = TestPredicateAbi__factory.createInstance(
         wallet.provider,
-        [bn(pin)],
-        configurable,
       );
       setPredicate(predicate);
       setPredicateBalance(await predicate.getBalance());
@@ -68,7 +64,6 @@ export default function PredicateExample() {
       const reInitializePredicate = TestPredicateAbi__factory.createInstance(
         wallet.provider,
         [bn(pin)],
-        configurable,
       );
 
       if (!reInitializePredicate) {
@@ -98,62 +93,6 @@ export default function PredicateExample() {
       );
     }
   };
-
-  // #region change-pin-react-function
-  const changePin = async () => {
-    if (!wallet) {
-      return toast.error("Wallet not loaded");
-    }
-    if (!predicate) {
-      return toast.error("Predicate not loaded");
-    }
-
-    if (walletBalance?.eq(0)) {
-      return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
-      );
-    }
-
-    if (!pin) {
-      return toast.error("Please enter a pin");
-    }
-
-    setConfigurable({ PIN: bn(pin) });
-
-    // instantiate predicate with configurable constants
-    const reInitializePredicate = TestPredicateAbi__factory.createInstance(
-      wallet.provider,
-      [bn(pin)],
-      { PIN: bn(pin) },
-    );
-
-    if (!reInitializePredicate) {
-      return toast.error("Failed to initialize predicate");
-    }
-
-    // transferring funds to the predicate
-    const tx = await wallet.transfer(
-      reInitializePredicate.address,
-      1000,
-      baseAssetId,
-      {
-        gasLimit: 10_000,
-      },
-    );
-
-    const { isStatusSuccess } = await tx.wait();
-
-    if (!isStatusSuccess) {
-      toast.error("Failed to update pin in  predicate");
-    }
-
-    if (isStatusSuccess) {
-      toast.success("Predicate pin updated");
-    }
-
-    await refreshWalletBalance?.();
-  };
-  // #endregion change-pin-react-function
 
   return (
     <>
@@ -190,13 +129,11 @@ export default function PredicateExample() {
         Transfer 0.1 ETH to Predicate
       </Button>
 
-      <Button onClick={changePin}>Change Pin</Button>
-
       <Input
         className="w-[300px] mt-8"
         value={pin as string}
         onChange={(e) => setPin(e.target.value)}
-        placeholder="Enter a new pin"
+        placeholder="Hint - the correct pin is 1337"
       />
 
       <Button

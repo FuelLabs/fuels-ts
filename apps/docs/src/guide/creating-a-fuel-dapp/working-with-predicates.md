@@ -1,9 +1,9 @@
 
-# Creating a Fuel dApp with Predicates
+# Working with Predicates
 
 This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've gotten the dApp there up and running, then you can continue here via clicking the Predicate Example link. We will modify the predicate we created in the previous guide. The final result will look like this:
 
-![End result of this guide](../../public/creating-a-fuel-dapp-predicates-end-result.png)
+![End result of this guide](../../public/working-with-predicates-end-result.png)
 
 ## Adding a Configurable pin
 

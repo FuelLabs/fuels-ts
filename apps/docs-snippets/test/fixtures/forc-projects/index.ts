@@ -34,7 +34,6 @@ export enum DocSnippetProjectsEnum {
   SCRIPT_SIGNING = 'script-signing',
   INPUT_OUTPUT_TYPES = 'input-output-types',
   BYTECODE_INPUT = 'bytecode-input',
-  CONFIGURABLE_PIN = 'configurable-pin',
 }
 
 export const getDocsSnippetsForcProject = (project: DocSnippetProjectsEnum) =>
