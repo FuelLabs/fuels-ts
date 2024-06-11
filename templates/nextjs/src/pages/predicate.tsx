@@ -164,16 +164,30 @@ export default function PredicateExample() {
 
       <div className="mt-12 items-baseline flex gap-2">
         <h5 className="font-semibold text-xl">Wallet Balance:</h5>
-        <span className="text-gray-400">{walletBalance?.toString()}</span>
+        <span className="text-gray-400">
+          {walletBalance?.format({
+            precision: 3,
+          })}{" "}
+          ETH
+        </span>
       </div>
 
       <div className="items-baseline flex gap-2">
         <h5 className="font-semibold text-xl">Predicate Balance:</h5>
-        <span className="text-gray-400">{predicateBalance?.toString()}</span>
+        <span className="text-gray-400">
+          {predicateBalance?.format({
+            precision: 3,
+          })}{" "}
+          ETH
+        </span>
       </div>
 
-      <Button onClick={async () => await transferFundsToPredicate(bn(1000))}>
-        Transfer 1000 to Predicate
+      <Button
+        onClick={async () =>
+          await transferFundsToPredicate(bn.parseUnits("0.1"))
+        }
+      >
+        Transfer 0.1 ETH to Predicate
       </Button>
 
       <Button onClick={changePin}>Change Pin</Button>
@@ -187,17 +201,17 @@ export default function PredicateExample() {
 
       <Button
         onClick={async () =>
-          await unlockPredicateAndTransferFundsBack(bn(1000))
+          await unlockPredicateAndTransferFundsBack(bn.parseUnits("0.09"))
         }
       >
-        Unlock Predicate and Transfer 1000 back to Wallet
+        Unlock Predicate and Transfer 0.09 ETH back to Wallet
       </Button>
 
       <span className="mt-8 w-[400px] text-gray-400">
         Do note that when you 'unlock' a predicate, the predicate also pays for
         the gas of the transaction. <br />
         This is why you will notice that the balance of the predicate gets
-        reduced by 1000 + a nominal gas fee.
+        reduced by 0.09 ETH + a nominal gas fee.
       </span>
 
       <Link
