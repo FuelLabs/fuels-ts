@@ -1,13 +1,13 @@
 contract;
 
-// #region enum-1
-// #region enum-4
+// #region simple-enum-1
+// #region enum-of-enums-1
 pub enum StateError {
     Void: (),
     Pending: (),
     Completed: (),
 }
-// #endregion enum-1
+// #endregion simple-enum-1
 
 pub enum UserError {
     Unauthorized: (),
@@ -18,7 +18,7 @@ pub enum Error {
     StateError: StateError,
     UserError: UserError,
 }
-// #endregion enum-4
+// #endregion enum-of-enums-1
 
 abi EchoEnum {
     fn echo_state_error_enum(state_error: StateError) -> StateError;
@@ -29,18 +29,18 @@ abi EchoEnum {
 }
 
 impl EchoEnum for Contract {
-    // #region enum-2
+    // #region simple-enum-2
     fn echo_state_error_enum(state_error: StateError) -> StateError {
         state_error
     }
-    // #endregion enum-2
+    // #endregion simple-enum-2
     fn echo_user_error_enum(user_error: UserError) -> UserError {
         user_error
     }
 
-    // #region enum-5
+    // #region enum-of-enums-2
     fn echo_error_enum(error: Error) -> Error {
         error
     }
-    // #endregion enum-5
+    // #endregion enum-of-enums-2
 }
