@@ -18,7 +18,7 @@ type ConfiguredNetwork = {
   networkUrl: string;
   privateKey?: string;
   faucetUrl: string;
-  transactions?: {
+  txIds?: {
     [TransactionType.Mint]: string;
     [TransactionType.Upgrade]: string;
     [TransactionType.Upload]: string;
@@ -30,7 +30,7 @@ const configuredNetworks = {
     networkUrl: DEVNET_NETWORK_URL,
     privateKey: process.env.DEVNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-devnet.fuel.network/`,
-    transactions: {
+    txIds: {
       [TransactionType.Mint]: '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e',
       [TransactionType.Upgrade]:
         '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094',
@@ -42,7 +42,7 @@ const configuredNetworks = {
     networkUrl: TESTNET_NETWORK_URL,
     privateKey: process.env.TESTNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-testnet.fuel.network/`,
-    transactions: undefined,
+    txIds: undefined,
   } as ConfiguredNetwork,
 };
 
@@ -106,13 +106,13 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       return;
     }
 
-    const { transactions } = configuredNetworks[selectedNetwork];
-    if (undefined === transactions) {
+    const { txIds } = configuredNetworks[selectedNetwork];
+    if (undefined === txIds) {
       console.log(`Skipping ${type} transaction test for ${selectedNetwork} network`);
       return;
     }
 
-    const txId = transactions[type as keyof ConfiguredNetwork['transactions']];
+    const txId = txIds[type as keyof ConfiguredNetwork['txIds']];
     const transaction = await provider.getTransaction(txId);
     expect(transaction?.type).toBe(type);
   });
