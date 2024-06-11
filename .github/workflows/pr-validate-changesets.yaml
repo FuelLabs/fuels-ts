@@ -6,10 +6,6 @@ on:
       - opened
       - edited
       - synchronize
-  workflow_run:
-    workflows: ["Tests"]
-    types:
-      - completed
 
 permissions:
   contents: write
