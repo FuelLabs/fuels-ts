@@ -112,7 +112,7 @@ describe('encode and decode', () => {
     // The encoded value can now be set on the transaction via the script data property
     request.scriptData = encodedArguments;
 
-    // Now we can build out the rest of the transaction, including funding it
+    // Now we can build out the rest of the transaction and then fund it
     const txCost = await wallet.provider.getTransactionCost(request);
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
