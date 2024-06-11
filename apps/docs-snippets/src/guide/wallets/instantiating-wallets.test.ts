@@ -1,5 +1,5 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, FUEL_TESTNET_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, TESTNET_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
 
 /**
  * @group node
@@ -106,7 +106,7 @@ describe(__filename, () => {
     const myWallet = Wallet.fromAddress(address);
 
     // #region instantiating-wallets-9
-    const provider = await Provider.create(FUEL_TESTNET_NETWORK_URL);
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
 
     myWallet.connect(provider);
     // #endregion instantiating-wallets-9

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import {
-  FUEL_DEVNET_NETWORK_URL,
-  FUEL_TESTNET_NETWORK_URL,
+  DEVNET_NETWORK_URL,
+  TESTNET_NETWORK_URL,
   Provider,
   TransactionType,
   WalletUnlocked,
@@ -11,11 +11,11 @@ import { getScript } from './utils';
 
 const networks = {
   devnet: {
-    networkUrl: FUEL_DEVNET_NETWORK_URL,
+    networkUrl: DEVNET_NETWORK_URL,
     privateKey: process.env.DEVNET_WALLET_PVT_KEY,
   },
   testnet: {
-    networkUrl: FUEL_TESTNET_NETWORK_URL,
+    networkUrl: TESTNET_NETWORK_URL,
     privateKey: process.env.TESTNET_WALLET_PVT_KEY,
   },
 } as const;

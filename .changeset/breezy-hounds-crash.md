@@ -1,7 +1,7 @@
 ---
 "@fuel-ts/versions": patch
-"@fuel-ts/account": patch
-"fuels": patch
+"@fuel-ts/account": minor
+"fuels": minor
 ---
 
-chore: upgrade fuel core to `0.28.0`
+chore!: upgrade fuel core to `0.28.0`
