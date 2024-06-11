@@ -4,7 +4,7 @@
   "types": [
     {
       "typeId": 0,
-      "type": "u8",
+      "type": "u32",
       "components": null,
       "typeParameters": null
     }
@@ -37,7 +37,7 @@
         "type": 0,
         "typeArguments": null
       },
-      "offset": 568
+      "offset": 784
     }
   ]
 }
