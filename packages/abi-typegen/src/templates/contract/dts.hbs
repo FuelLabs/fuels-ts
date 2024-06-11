@@ -54,14 +54,6 @@ interface {{capitalizedName}}Interface extends Interface {
     {{this}}: FunctionFragment;
     {{/each}}
   };
-
-  {{#each encoders}}
-  encodeFunctionData(functionFragment: '{{functionName}}', values: [{{input}}]): Uint8Array;
-  {{/each}}
-
-  {{#each decoders}}
-  decodeFunctionData(functionFragment: '{{functionName}}', data: BytesLike): DecodedValue;
-  {{/each}}
 }
 
 
