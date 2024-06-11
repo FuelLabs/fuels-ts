@@ -311,6 +311,21 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Encoding',
+            link: '/guide/encoding/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Encode and Decode',
+                link: '/guide/encoding/encode-and-decode',
+              },
+              {
+                text: 'Working with Bytes',
+                link: '/guide/encoding/working-with-bytes',
+              },
+            ],
+          },
+          {
             text: 'Utilities',
             link: '/guide/utilities/',
             collapsed: true,
