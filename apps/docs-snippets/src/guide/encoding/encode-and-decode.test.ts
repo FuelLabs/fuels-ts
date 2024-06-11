@@ -96,8 +96,7 @@ describe('encode and decode', () => {
     const request = await invocationScope.getTransactionRequest();
 
     // Encode the argument we want to pass to the function. The argument is required
-    // as a function parameter for all `AbiCoder` functions and we can pick it off
-    // of the ABI itself
+// as a function parameter for all `AbiCoder` functions and we can extract it from the ABI itself
     const argument: JsonAbiArgument = abi.functions
       .find((f) => f.name === 'main')
       ?.inputs.find((i) => i.name === 'inputted_amount') as JsonAbiArgument;
