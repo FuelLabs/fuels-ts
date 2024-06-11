@@ -11,7 +11,8 @@
         "https://testnet.fuel.network/",
         "https://faucet-testnet.fuel.network/",
         "https://thebitcoinmanual.com/**",
-        "https://forum.fuel.network/"
+        "https://forum.fuel.network/",
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date"
       ]
     }
   }
