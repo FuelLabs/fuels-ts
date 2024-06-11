@@ -5,6 +5,9 @@ import {
   Provider,
   TransactionType,
   WalletUnlocked,
+  CHAIN_IDS,
+  rawAssets,
+  assets,
 } from 'fuels';
 
 import { getScript } from './utils';
@@ -121,5 +124,31 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     const txId = txIds[type as keyof ConfiguredNetwork['txIds']];
     const transaction = await provider.getTransaction(txId);
     expect(transaction?.type).toBe(type);
+  });
+
+  it(`should have correct assets`, () => {
+    if (shouldSkip) {
+      return;
+    }
+
+    const expected = [
+      {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        icon: expect.stringContaining('eth.svg'),
+        networks: expect.arrayContaining([
+          {
+            type: 'fuel',
+            decimals: 9,
+            chainId: provider.getChainId(),
+            assetId: provider.getBaseAssetId(),
+          },
+        ]),
+      },
+    ];
+
+    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
+    expect(rawAssets).toEqual(expected);
+    expect(assets).toEqual(expected);
   });
 });
