@@ -5,46 +5,61 @@ import {
   Provider,
   TransactionType,
   WalletUnlocked,
+  FuelError,
 } from 'fuels';
 
 import { getScript } from './utils';
 
-const networks = {
-  devnet: {
+enum Networks {
+  DEVNET = 'devnet',
+  TESTNET = 'testnet',
+}
+
+const configuredNetworks = {
+  [Networks.DEVNET]: {
     networkUrl: DEVNET_NETWORK_URL,
     privateKey: process.env.DEVNET_WALLET_PVT_KEY,
+    faucetUrl: `https://faucet-devnet.fuel.network/`,
   },
-  testnet: {
+  [Networks.TESTNET]: {
     networkUrl: TESTNET_NETWORK_URL,
     privateKey: process.env.TESTNET_WALLET_PVT_KEY,
+    faucetUrl: `https://faucet-testnet.fuel.network/`,
   },
 } as const;
+
+const selectedNetworks: Networks[] = [Networks.DEVNET];
 
 /**
  * @group node
  * @group e2e
  */
-describe('Live Script Test', () => {
+describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   const MINT_TX_ID = '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e';
   const UPGRADE_TX_ID = '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094';
   const UPLOAD_TX_ID = '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73';
 
-  const selectedNetwork: keyof typeof networks = 'devnet';
   let provider: Provider;
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
 
   beforeAll(async () => {
-    const network = networks[selectedNetwork];
-
-    if (!network.privateKey) {
+    if (process.env.SHOULD_SKIP_E2E === 'true') {
       console.log('Skipping live Fuel Node test');
       shouldSkip = true;
       return;
     }
 
-    provider = await Provider.create(network.networkUrl);
-    wallet = new WalletUnlocked(network.privateKey, provider);
+    const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
+    if (!privateKey) {
+      throw new FuelError(
+        FuelError.CODES.MISSING_REQUIRED_PARAMETER,
+        `Missing private key for network: '${selectedNetwork}'`
+      );
+    }
+
+    provider = await Provider.create(networkUrl);
+    wallet = new WalletUnlocked(privateKey, provider);
   });
 
   it('can use script against live Fuel Node', async () => {
@@ -67,7 +82,7 @@ describe('Live Script Test', () => {
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
-        - add assets: https://faucet-${selectedNetwork}.fuel.network/
+        - add assets: ${configuredNetworks[selectedNetwork].faucetUrl}
         - bech32 address: ${address}
       `);
     }

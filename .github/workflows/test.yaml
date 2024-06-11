@@ -79,6 +79,7 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
+          SHOULD_SKIP_E2E: false
           TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
           DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
           PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
