@@ -31,10 +31,11 @@ describe('encode and decode', () => {
 
   it('encodes and decodes', async () => {
     // #region encode-and-decode-3
-    // #import { JsonAbi, JsonAbiArgument, Script, AbiCoder, FunctionInvocationResult, ReceiptType, TransactionResultReturnDataReceipt, arrayify};
+    // #import { JsonAbi, Script };
     // #context import { factory } from './sway-programs-api';
 
-    // Retrieve the script ABI and bytecode that we use to inform the encoding
+    // First we need to build out the transaction via the script that we want to encode.
+    // For that we'll need the ABI and the bytecode of the script
     const abi: JsonAbi = factory.abi;
     const bytecode: string = factory.bin;
 
@@ -48,15 +49,20 @@ describe('encode and decode', () => {
     // Create the transaction request, this can be picked off the invocation
     // scope so the script bytecode is preset on the transaction
     const request = await invocationScope.getTransactionRequest();
+    // #endregion encode-and-decode-3
 
-    // Encode the argument we want to pass to the function. The argument is required
+    // #region encode-and-decode-4
+    // #import { JsonAbiArgument, AbiCoder};
+
+    // Now we can encode the argument we want to pass to the function. The argument is required
     // as a function parameter for all `AbiCoder` functions and we can extract it from the ABI itself
     const argument: JsonAbiArgument = abi.functions
       .find((f) => f.name === 'main')
       ?.inputs.find((i) => i.name === 'inputted_amount') as JsonAbiArgument;
-    const argumentToAdd = 10;
+
     // Using the `AbiCoder`'s `encode` method,  we can now create the encoding required for
     // a u32 which takes 4 bytes up of property space
+    const argumentToAdd = 10;
     const encodedArguments = AbiCoder.encode(abi, argument, [argumentToAdd]);
     // Therefore the value of 10 will be encoded to:
     // Uint8Array([0, 0, 0, 10]
@@ -70,11 +76,16 @@ describe('encode and decode', () => {
     request.gasLimit = txCost.gasUsed;
     await wallet.fund(request, txCost);
 
-    // Submit the built transaction
+    // Finally, submit the built transaction
     const response = await wallet.sendTransaction(request);
     await response.waitForResult();
+    // #endregion encode-and-decode-4
 
-    // Get result of the transaction, including the contract call result
+    // #region encode-and-decode-5
+    // #import { FunctionInvocationResult, AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify};
+
+    // Get result of the transaction, including the contract call result. For this we'll need
+    // the previously created invocation scope, the transaction response and the script
     const invocationResult = await FunctionInvocationResult.build(
       [invocationScope],
       response,
@@ -82,7 +93,7 @@ describe('encode and decode', () => {
       script
     );
 
-    // The decoded value can be destructured from the `invocationResult`
+    // The decoded value can be destructured from the `FunctionInvocationResult`
     const { value } = invocationResult;
 
     // Or we can decode the returned bytes ourselves, by retrieving the return data
@@ -91,16 +102,17 @@ describe('encode and decode', () => {
     const returnDataReceipt = invocationResult.transactionResult.receipts.find(
       (r) => r.type === ReceiptType.ReturnData
     ) as TransactionResultReturnDataReceipt;
+
     // The data is in hex format so it makes sense to use arrayify so that the data
     // is more human readable
     const returnData = arrayify(returnDataReceipt.data);
     // returnData = new Uint8Array([0, 0, 0, 20]
 
     // And now we can decode the returned bytes in a similar fashion to how they were
-    // encoded
+    // encoded, via the `AbiCoder`
     const [decodedReturnData] = AbiCoder.decode(abi, argument, returnData, 0);
     // 20
-    // #endregion encode-and-decode-3
+    // #endregion encode-and-decode-5
 
     const totalValue = argumentToAdd + initialValue;
     expect(value).toBe(totalValue);
