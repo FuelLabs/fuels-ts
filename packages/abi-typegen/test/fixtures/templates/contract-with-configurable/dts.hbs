@@ -26,10 +26,6 @@ interface MyContractAbiInterface extends Interface {
   functions: {
     main: FunctionFragment;
   };
-
-  encodeFunctionData(functionFragment: 'main', values: [string, string]): Uint8Array;
-
-  decodeFunctionData(functionFragment: 'main', data: BytesLike): DecodedValue;
 }
 
 export class MyContractAbi extends Contract {
