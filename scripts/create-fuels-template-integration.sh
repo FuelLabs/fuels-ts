@@ -15,6 +15,7 @@ if [ -x "$(command -v fuelup)" ]; then
 else
   echo "Fuelup does not exist - installing 'fuelup'"
   curl -fsSL https://install.fuel.network/ | sh -s -- --no-modify-path
+  export PATH="${HOME}/.fuelup/bin:${PATH}"
 fi
 
 fuelup toolchain new $TOOLCHAIN
