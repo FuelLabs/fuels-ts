@@ -5,7 +5,6 @@ import {
   Provider,
   TransactionType,
   WalletUnlocked,
-  FuelError,
 } from 'fuels';
 
 import { getScript } from './utils';
