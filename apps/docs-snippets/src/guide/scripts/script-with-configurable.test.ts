@@ -20,7 +20,7 @@ describe(__filename, () => {
     wallet = await getTestWallet();
   });
 
-  it('should successfully sum setted configurable constant with inpputed value', async () => {
+  it('should successfully sum setted configurable constant with inputted value', async () => {
     // #region script-with-configurable-contants-2
     const script = new Script(binHexlified, abiContents, wallet);
 
@@ -30,11 +30,11 @@ describe(__filename, () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const inpputedValue = 10;
+    const inputtedValue = 10;
 
-    const { value } = await script.functions.main(inpputedValue).call();
+    const { value } = await script.functions.main(inputtedValue).call();
 
-    const expectedTotal = inpputedValue + configurableConstants.AMOUNT;
+    const expectedTotal = inputtedValue + configurableConstants.AMOUNT;
 
     expect(new BN(value as number).toNumber()).toEqual(expectedTotal);
     // #endregion script-with-configurable-contants-2
