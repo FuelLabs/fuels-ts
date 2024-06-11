@@ -37,7 +37,7 @@ describe(__filename, () => {
       abi,
       inputData: [inputAddress],
     });
-    await seedTestWallet(predicate, [[10_000_000, baseAssetId]]);
+    await seedTestWallet(predicate, [[100_000_000, baseAssetId]]);
   });
 
   it('should get predicate resources and add them to the predicate data', async () => {
@@ -125,7 +125,7 @@ describe(__filename, () => {
 
     // #region interacting-with-predicates-4
     let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-    transactionRequest.addCoinOutput(receiver.address, 1000000, baseAssetId);
+    transactionRequest.addCoinOutput(receiver.address, 10000000, baseAssetId);
 
     const predicateResources = await provider.getResourcesToSpend(predicate.address, quantity);
 
