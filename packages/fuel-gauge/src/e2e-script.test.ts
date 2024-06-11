@@ -44,18 +44,11 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let shouldSkip: boolean;
 
   beforeAll(async () => {
-    if (process.env.SHOULD_SKIP_E2E === 'true') {
+    const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
+    if (!privateKey) {
       console.log('Skipping live Fuel Node test');
       shouldSkip = true;
       return;
-    }
-
-    const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
-    if (!privateKey) {
-      throw new FuelError(
-        FuelError.CODES.MISSING_REQUIRED_PARAMETER,
-        `Missing private key for network: '${selectedNetwork}'`
-      );
     }
 
     provider = await Provider.create(networkUrl);
