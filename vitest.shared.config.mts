@@ -15,7 +15,7 @@ export default defineConfig({
   esbuild: { target: "es2022" },
   test: {
     coverage: {
-      enabled: false,
+      enabled: true,
       provider: "istanbul",
       reporter: ["json", "text", "html"],
       include: ["packages", "internal", "apps"],
