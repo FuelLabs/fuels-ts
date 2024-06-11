@@ -14,18 +14,37 @@ enum Networks {
   TESTNET = 'testnet',
 }
 
+type ConfiguredNetwork = {
+  networkUrl: string;
+  privateKey?: string;
+  faucetUrl: string;
+  transactions?: {
+    [TransactionType.Mint]: string;
+    [TransactionType.Upgrade]: string;
+    [TransactionType.Upload]: string;
+  };
+};
+
 const configuredNetworks = {
   [Networks.DEVNET]: {
     networkUrl: DEVNET_NETWORK_URL,
     privateKey: process.env.DEVNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-devnet.fuel.network/`,
-  },
+    transactions: {
+      [TransactionType.Mint]: '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e',
+      [TransactionType.Upgrade]:
+        '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094',
+      [TransactionType.Upload]:
+        '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73',
+    },
+  } as ConfiguredNetwork,
   [Networks.TESTNET]: {
     networkUrl: TESTNET_NETWORK_URL,
     privateKey: process.env.TESTNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-testnet.fuel.network/`,
-  },
-} as const;
+    transactions: undefined,
+  } as ConfiguredNetwork,
+};
 
 const selectedNetworks: Networks[] = [Networks.DEVNET];
 
@@ -34,10 +53,6 @@ const selectedNetworks: Networks[] = [Networks.DEVNET];
  * @group e2e
  */
 describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
-  const MINT_TX_ID = '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e';
-  const UPGRADE_TX_ID = '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094';
-  const UPLOAD_TX_ID = '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73';
-
   let provider: Provider;
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
@@ -82,16 +97,23 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     expect(output).toBe(true);
   });
 
-  it.skip.each([
-    ['Mint', MINT_TX_ID, TransactionType.Mint],
-    ['Upgrade', UPGRADE_TX_ID, TransactionType.Upgrade],
-    ['Upload', UPLOAD_TX_ID, TransactionType.Upload],
-  ])('can query and decode a %s transaction', async (_, txId, type) => {
+  it.each([
+    ['Mint', TransactionType.Mint],
+    ['Upgrade', TransactionType.Upgrade],
+    ['Upload', TransactionType.Upload],
+  ])('can query and decode a %s transaction', async (_, type) => {
     if (shouldSkip) {
       return;
     }
-    const transaction = await provider.getTransaction(txId);
 
+    const { transactions } = configuredNetworks[selectedNetwork];
+    if (undefined === transactions) {
+      console.log(`Skipping ${type} transaction test for ${selectedNetwork} network`);
+      return;
+    }
+
+    const txId = transactions[type as keyof ConfiguredNetwork['transactions']];
+    const transaction = await provider.getTransaction(txId);
     expect(transaction?.type).toBe(type);
   });
 });
