@@ -42,7 +42,13 @@ const configuredNetworks = {
     networkUrl: TESTNET_NETWORK_URL,
     privateKey: process.env.TESTNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-testnet.fuel.network/`,
-    txIds: undefined,
+    txIds: {
+      [TransactionType.Mint]: '0x4a7b49a5dcc4b4ff65f13429ba09c0dbfb2ca21f2f16ebe4b495bc73c2979f3b',
+      [TransactionType.Upgrade]:
+        '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
+      [TransactionType.Upload]:
+        '0x996eec87a702ac978663fe67dbde7ab94d31f32b1860fbfc527d4b5447b3446c',
+    },
   } as ConfiguredNetwork,
 };
 
