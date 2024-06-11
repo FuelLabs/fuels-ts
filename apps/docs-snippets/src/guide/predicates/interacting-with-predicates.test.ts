@@ -125,7 +125,7 @@ describe(__filename, () => {
 
     // #region interacting-with-predicates-4
     let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-    transactionRequest.addCoinOutput(receiver.address, 10000000, baseAssetId);
+    transactionRequest.addCoinOutput(receiver.address, 1000, baseAssetId);
 
     const predicateResources = await provider.getResourcesToSpend(predicate.address, quantity);
 
