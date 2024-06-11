@@ -55,8 +55,7 @@ describe('encode and decode', () => {
       .find((f) => f.name === 'main')
       ?.inputs.find((i) => i.name === 'inputted_amount') as JsonAbiArgument;
     const argumentToAdd = 10;
-    // Using the `AbiCoder`, we can now use the argument and the ABI to form it of the
-    // encoding that is required for value that we are passing to it. Here we are passing
+    // Using the `AbiCoder`'s `encode` method,  we can now create the encoding required for
     // a u32 which takes 4 bytes up of property space
     const encodedArguments = AbiCoder.encode(abi, argument, [argumentToAdd]);
     // Therefore the value of 10 will be encoded to:
