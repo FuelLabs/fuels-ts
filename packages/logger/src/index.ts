@@ -34,6 +34,8 @@
 import { toBech32 } from '@fuel-ts/address';
 import type { Address } from '@fuel-ts/address';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
+import { bn } from '@fuel-ts/math';
 import debug from 'debug';
 
 import { truncateWalletAddress } from './utils';
@@ -95,12 +97,36 @@ export function enabled(namespaces: string): boolean {
   return debug.enabled(namespaces);
 }
 
+// Add a formatter for outputting a comma separated BN string
+debug.formatters.a = (v?: BN): string => {
+  if (!v) {
+    return 'undefined';
+  }
+  return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+};
+
+// Converts a hex string to a BN string
+debug.formatters.n = (hex: string): string => {
+  if (!hex) {
+    return 'undefined';
+  }
+  try {
+    const bnValue = bn(hex, 'hex');
+    return bnValue.toString();
+  } catch (error) {
+    return 'invalid hex';
+  }
+};
+
 // Add a formatter for converting to a b256 string
 debug.formatters.b = (v?: AbstractAddress): string => (v == null ? 'undefined' : v.toB256());
 
 // Add a formatter for outputting a bech32 address
 debug.formatters.n = (v?: AbstractAddress): string =>
   v == null ? 'undefined' : toBech32(v.toAddress());
+
+// Add a formatter for outputting a BN hex string
+debug.formatters.h = (v?: BN): string => (v == null ? 'undefined' : v.toHex());
 
 export interface Logger {
   (formatter: unknown, ...args: unknown[]): void;

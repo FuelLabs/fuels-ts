@@ -32,7 +32,8 @@
   "dependencies": {
     "debug": "^4.3.4",
     "@fuel-ts/address": "workspace:*",
-    "@fuel-ts/interfaces": "workspace:*"
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*"
   },
   "devDependencies": {
     "@types/debug": "^4.1.12"

@@ -686,6 +686,9 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
+      '@fuel-ts/logger':
+        specifier: workspace:*
+        version: link:../logger
       '@fuel-ts/math':
         specifier: workspace:*
         version: link:../math
@@ -1023,6 +1026,9 @@ importers:
       '@fuel-ts/interfaces':
         specifier: workspace:*
         version: link:../interfaces
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
       debug:
         specifier: ^4.3.4
         version: 4.3.4(supports-color@5.5.0)
