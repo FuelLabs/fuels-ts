@@ -9,8 +9,8 @@ export const setupProgram = () => {
     .option('-c, --contract', 'Include contract program')
     .option('-p, --predicate', 'Include predicate program')
     .option('-s, --script', 'Include script program')
-    .option('--pnpm', 'Use pnpm as the package manager')
-    .option('--npm', 'Use npm as the package manager')
+    .option('--pnpm', 'Use pnpm to install dependencies')
+    .option('--npm', 'Use npm to install dependencies')
     .option('--verbose', 'Enable verbose logging')
     .addHelpCommand()
     .showHelpAfterError(true);

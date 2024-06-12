@@ -52,12 +52,10 @@ export const runScaffoldCli = async ({
   program,
   args = process.argv,
   shouldInstallDeps = false,
-  forceDisablePrompts = false,
 }: {
   program: Command;
   args: string[];
   shouldInstallDeps?: boolean;
-  forceDisablePrompts?: boolean;
 }) => {
   program.parse(args);
 
@@ -99,11 +97,7 @@ export const runScaffoldCli = async ({
 
   const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
 
-  let packageManager = cliChosenPackageManager ?? 'pnpm';
-
-  if (!packageManager) {
-    packageManager = 'pnpm';
-  }
+  let packageManager = cliChosenPackageManager ?? 'npm'; // default to npm if the user has not specified a package manager (eg. --pnpm)
 
   const cliProgramsToInclude = {
     contract: program.opts().contract,
@@ -130,10 +124,6 @@ export const runScaffoldCli = async ({
     if (process.env.VITEST) {
       throw new Error();
     }
-
-    // programsToInclude = await promptForProgramsToInclude({
-    //   forceDisablePrompts,
-    // });
   }
 
   const fileCopySpinner = ora({
