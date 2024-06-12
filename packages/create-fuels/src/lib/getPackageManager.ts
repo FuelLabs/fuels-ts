@@ -25,7 +25,7 @@ export const packageMangers = {
   },
 } as const;
 
-export const getPackageManager = async (opts: ProgramOptions) => {
+export const getPackageManager = (opts: ProgramOptions) => {
   const packageMangerOpts = {
     pnpm: opts.pnpm,
     npm: opts.npm,
