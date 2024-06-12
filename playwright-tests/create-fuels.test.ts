@@ -34,7 +34,6 @@ test('faucet page', async ({ page }) => {
   // check if the two fields are pre-filled
   const receiverAddressInput = page.getByLabel('Receiving address:');
   await expect(receiverAddressInput).not.toBeEmpty();
-  const receiverAddress = await receiverAddressInput.inputValue();
 
   const amountToSendInput = page.getByLabel('Amount (ETH):');
   await expect(amountToSendInput).toHaveValue('5');
