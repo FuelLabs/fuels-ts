@@ -13,8 +13,8 @@ export default function Faucet() {
 
   const { wallet } = useActiveWallet();
 
-  const [receiverAddress, setReceiverAddress] = useState<string | undefined>();
-  const [amountToSend, setAmountToSend] = useState<BN | undefined>(bn(10_000));
+  const [receiverAddress, setReceiverAddress] = useState<string>();
+  const [amountToSend, setAmountToSend] = useState<string>("5");
 
   useEffect(() => {
     if (wallet && !receiverAddress) {
@@ -51,23 +51,29 @@ export default function Faucet() {
       <h3 className="text-2xl font-semibold">Local Faucet</h3>
 
       <div className="flex gap-4 items-center">
-        <span className="text-gray-400">Receiving address:</span>
+        <label htmlFor="receiver-address-input" className="text-gray-400">
+          Receiving address:
+        </label>
         <Input
           className="w-full"
           value={receiverAddress}
           onChange={(e) => setReceiverAddress(e.target.value)}
           placeholder="0x..."
+          id="receiver-address-input"
         />
       </div>
 
       <div className="flex gap-4 items-center">
-        <span className="text-gray-400">Amount (ETH):</span>
+        <label htmlFor="amount-input" className="text-gray-400">
+          Amount (ETH):
+        </label>
         <Input
           className="w-full"
           value={amountToSend?.toString()}
           onChange={(e) => setAmountToSend(e.target.value ?? undefined)}
           placeholder="5"
           type="number"
+          id="amount-input"
         />
       </div>
 
