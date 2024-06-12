@@ -8,11 +8,9 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
-
 import { getPackageManager } from './lib/getPackageManager';
 import type { ProgramOptions } from './lib/setupProgram';
 import { promptForProjectPath } from './prompts';
-
 import { error, log } from './utils/logger';
 
 export { setupProgram } from './lib/setupProgram';
@@ -58,8 +56,6 @@ export const runScaffoldCli = async ({
   shouldInstallDeps?: boolean;
 }) => {
   program.parse(args);
-
-  console.log('Args', args);
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
 
