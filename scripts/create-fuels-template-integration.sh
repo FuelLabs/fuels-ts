@@ -9,6 +9,8 @@ TOOLCHAIN="CI"
 PROJECT_DIR="test-project"
 PUBLISHED_NPM_VERSION="next"
 
+pkill fuel-core
+
 echo "1. Install toolchains"
 if [ -x "$(command -v fuelup)" ]; then
   echo "Fuelup exists"
@@ -22,7 +24,6 @@ fuelup toolchain new $TOOLCHAIN
 fuelup default $TOOLCHAIN
 fuelup component add fuel-core@$FUEL_CORE_VERSION
 fuelup component add forc@$FORC_VERSION
-fuelup show
 
 echo "2. Scaffold a new project with 'create fuels@$PUBLISHED_NPM_VERSION'"
 if [ -d "$PROJECT_DIR" ]; then
@@ -33,26 +34,29 @@ pnpm create fuels@$PUBLISHED_NPM_VERSION $PROJECT_DIR --pnpm -cps
 
 echo "3. Intialise the project"
 cd $PROJECT_DIR
-pnpm add fuels@$PUBLISHED_NPM_VERSION
+pnpm add fuels@$PUBLISHED_NPM_VERSION > /dev/null 2>&1
+pnpm  --ignore-workspace install > /dev/null 2>&1
 cp .env.example .env.local
 
 
 echo "4. Running fuels:dev command"
-pnpm run fuels:dev &
-FUELS_DEV_PID="$!"
+pnpm run fuels:dev > /dev/null 2>&1 &
 
 # Wait for fuel-core
-wait 10000
+sleep 5
 
 echo "5. Running dev command"
-pnpm run dev &
-DEV_PID="$!"
+pnpm run dev > /dev/null 2>&1  &
 
 echo "6. Running tests"
 cd ..
 pnpm exec playwright install --with-deps
 pnpm exec playwright test
+TEST_RESULT=$?
 
 # Cleanup
-kill $FUELS_DEV_PID
-kill $DEV_PID
+pkill fuel-core
+pkill next-server
+rm -rf $PROJECT_DIR
+
+exit $TEST_RESULT
