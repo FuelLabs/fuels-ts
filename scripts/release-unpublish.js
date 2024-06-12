@@ -11,6 +11,11 @@ const { version: CURRENT_VERSION } = require('../packages/fuels/package.json');
 const DELETE_PACKAGES = process.env.DELETE_PACKAGES === 'true';
 const dryRun = DELETE_PACKAGES ? '' : '--dry-run';
 
+// MESSAGES
+const SUCCESS_EMOJI = DELETE_PACKAGES ? '✅' : '🧪';
+const SUCCESS_MESSAGE = DELETE_PACKAGES ? 'deleted' : 'CAN be deleted (dry-run)';
+const DRY_RUN_DISCLAIMER = DELETE_PACKAGES ? '' : '(dry-run)';
+
 const { log, error } = console;
 
 const getPublicPackages = () => {
@@ -42,14 +47,22 @@ const main = async () => {
     );
     log('The following versions will be deleted:');
     log(versionsToDelete.map((v) => `   - ${v}`).join('\n'));
-    versionsToDelete.map(async (versionToDelete) => {
-      const { stderr } = await exec(`npm unpublish ${packageName}@${versionToDelete} ${dryRun}`);
-      if (stderr) {
-        log(`❌ Error ${packageName}@${versionToDelete} not deleted!\n`);
-      } else {
-        log(`✅ Package ${packageName}@${versionToDelete} deleted!\n`);
+
+    for (const versionToDelete of versionsToDelete) {
+      try {
+        const { stderr } = await exec(`npm unpublish ${packageName}@${versionToDelete} ${dryRun}`);
+        if (stderr) {
+          throw new Error(stderr);
+        }
+
+        log(`${SUCCESS_EMOJI} Package ${packageName}@${versionToDelete} ${SUCCESS_MESSAGE}!\n`);
+      } catch (err) {
+        error(
+          `❌ Failed attempting to delete ${packageName}@${versionToDelete} ${DRY_RUN_DISCLAIMER}!\n`
+        );
+        error(err);
       }
-    });
+    }
   });
 };
 
