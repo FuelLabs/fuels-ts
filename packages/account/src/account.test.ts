@@ -1,7 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { logger } from '@fuel-ts/logger';
 import { bn } from '@fuel-ts/math';
 import { PolicyType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';

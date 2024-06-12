@@ -732,9 +732,6 @@ importers:
         specifier: ^9.0.0
         version: 9.0.0
     devDependencies:
-      '@fuel-ts/logger':
-        specifier: workspace:*
-        version: link:../logger
       '@graphql-codegen/cli':
         specifier: ^2.13.7
         version: 2.13.7(@babel/core@7.22.5)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2))(typescript@5.2.2)(utf-8-validate@6.0.4)
@@ -20157,7 +20154,7 @@ snapshots:
       '@vitest/utils': 1.6.0
       magic-string: 0.30.5
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.18.2)
+      vitest: 1.6.0(@types/node@20.11.13)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.18.2)
     optionalDependencies:
       playwright: 1.44.0
       webdriverio: 8.36.1(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@6.0.4)

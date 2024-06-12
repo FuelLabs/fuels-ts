@@ -4,7 +4,6 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import { logger } from '@fuel-ts/logger';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
@@ -88,12 +87,10 @@ export class Account extends AbstractAccount {
    * @param connector - A FuelConnector instance (optional).
    */
   constructor(address: string | AbstractAddress, provider?: Provider, connector?: FuelConnector) {
-    const log = logger('account');
     super();
     this._provider = provider;
     this._connector = connector;
     this.address = Address.fromDynamicInput(address);
-    log('account address is: %b ', this.address);
   }
 
   /**

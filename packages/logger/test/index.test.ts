@@ -6,7 +6,7 @@ import { logger } from '../src/index';
  * @group node
  */
 describe('Logger Tests', () => {
-  let debugSpy: any;
+  let debugSpy;
 
   beforeEach(() => {
     debug.enable('test');
