@@ -7,6 +7,11 @@ describe('Configs', () => {
     expect(configs.FUEL_NETWORK_URL).toBe('http://127.0.0.1:4000/v1/graphql');
   });
 
+  it('exports LOCAL_NETWORK_URL', async () => {
+    const configs = await import('./configs');
+    expect(configs.LOCAL_NETWORK_URL).toBe('http://127.0.0.1:4000/v1/graphql');
+  });
+
   it('exports DEVNET_NETWORK_URL', async () => {
     const configs = await import('./configs');
     expect(configs.DEVNET_NETWORK_URL).toBe('https://devnet.fuel.network/v1/graphql');
