@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Debugging
+# PUBLISHED_NPM_VERSION="next"
+
 # Versions
 FUEL_CORE_VERSION="0.27.0"
 FORC_VERSION="0.60.0"
@@ -7,7 +10,6 @@ TOOLCHAIN="CI"
 
 # Project
 PROJECT_DIR="test-project"
-PUBLISHED_NPM_VERSION="next"
 
 pkill fuel-core
 

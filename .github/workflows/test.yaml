@@ -114,6 +114,8 @@ jobs:
 
       - name: Run UI tests
         run: sh ./scripts/create-fuels-template-integration.sh
+        env:
+          PUBLISHED_NPM_VERSION: ${{ needs.publish.outputs.published_version }}
 
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
