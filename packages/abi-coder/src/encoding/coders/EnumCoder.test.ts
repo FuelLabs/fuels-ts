@@ -33,6 +33,19 @@ describe('EnumCoder', () => {
       expect(actual).toStrictEqual(expected);
     });
 
+    it('encodes a native enum', () => {
+      const nativeCoder = new EnumCoder('Native', {
+        One: new BooleanCoder(),
+        Two: new BigNumberCoder('u64'),
+        Three: new TupleCoder([]),
+      });
+
+      const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
+      // @ts-expect-error native
+      const actual = nativeCoder.encode('Three');
+      expect(actual).toStrictEqual(expected);
+    });
+
     it('should throw an error when encoding if no enum key is provided', async () => {
       await expectToThrowFuelError(
         () => coder.encode({} as never),
@@ -73,31 +86,6 @@ describe('EnumCoder', () => {
       expect(actualLength).toBe(expectedLength);
     });
 
-    it('should throw an error when decoded value accesses an invalid index', async () => {
-      const input = new Uint8Array(Array.from(Array(8).keys()));
-
-      await expectToThrowFuelError(
-        () => coder.decode(input, 0),
-        new FuelError(
-          ErrorCode.INVALID_DECODE_VALUE,
-          'Invalid caseIndex "283686952306183". Valid cases: a,b.'
-        )
-      );
-    });
-
-    it('encodes a native enum', () => {
-      const nativeCoder = new EnumCoder('Native', {
-        One: new BooleanCoder(),
-        Two: new BigNumberCoder('u64'),
-        Three: new TupleCoder([]),
-      });
-
-      const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
-      // @ts-expect-error native
-      const actual = nativeCoder.encode('Three');
-      expect(actual).toStrictEqual(expected);
-    });
-
     it('decodes a native enum', () => {
       const nativeCoder = new EnumCoder('TestEnum', {
         a: new BooleanCoder(),
@@ -114,13 +102,6 @@ describe('EnumCoder', () => {
 
       expect(actualValue).toStrictEqual(expectedValue);
       expect(actualLength).toBe(expectedLength);
-    });
-
-    it('should throw an error when encoding if no enum key is provided', async () => {
-      await expectToThrowFuelError(
-        () => coder.encode({} as never),
-        new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
-      );
     });
 
     it('should throw an error when decoded value accesses an invalid index', async () => {
