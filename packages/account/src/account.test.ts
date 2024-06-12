@@ -5,7 +5,7 @@ import { bn } from '@fuel-ts/math';
 import { PolicyType } from '@fuel-ts/transactions';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
-import type { TransferParams } from './account';
+import type { FakeResources, TransferParams } from './account';
 import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 import { ScriptTransactionRequest, Provider } from './providers';
@@ -657,6 +657,41 @@ describe('Account', () => {
 
     const receiverBalances = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(110) }]);
+  });
+
+  it('can generate and use fake coins', async () => {
+    const sender = Wallet.generate({
+      provider,
+    });
+
+    const amount1 = bn(100_000);
+    const amount2 = bn(200_000);
+    const amount3 = bn(300_000);
+    const amountToTransferBaseAsset = bn(1000);
+
+    const fakeCoinsConfig: FakeResources[] = [
+      { amount: amount1, assetId: baseAssetId },
+      { amount: amount2, assetId: ASSET_A },
+      { amount: amount3, assetId: ASSET_B },
+    ];
+
+    const fakeCoins = sender.generateFakeResources(fakeCoinsConfig);
+    const request = new ScriptTransactionRequest({
+      gasLimit: bn(60_000),
+      maxFee: bn(62_000),
+    });
+
+    request.addResources(fakeCoins);
+    request.addCoinOutput(Address.fromRandom(), amountToTransferBaseAsset, baseAssetId);
+    request.addCoinOutput(Address.fromRandom(), amount2, ASSET_A);
+    request.addCoinOutput(Address.fromRandom(), amount3, ASSET_B);
+
+    const { dryRunStatus } = await provider.call(request, {
+      utxoValidation: false,
+      estimateTxDependencies: false,
+    });
+
+    expect(dryRunStatus?.type).toBe('DryRunSuccessStatus');
   });
 
   it('can withdraw an amount of base asset using mutiple uxtos', async () => {

@@ -60,6 +60,8 @@ jobs:
 
       - name: Test Setup
         uses: ./.github/actions/test-setup
+        with:
+          should-install-bun: true
 
       - name: Publish PR to NPM
         id: release
@@ -77,10 +79,10 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://devnet.fuel.network/v1/graphql
+          FUEL_NETWORK_URL: https://testnet.fuel.network/v1/graphql
+          FUEL_TESTNET_NETWORK_URL: https://testnet.fuel.network/v1/graphql
           TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
           TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
-          FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
           PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
 
   create-fuels-template-integration:

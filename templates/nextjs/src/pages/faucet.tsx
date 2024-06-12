@@ -35,7 +35,10 @@ export default function Faucet() {
       return toast.error("Amount cannot be empty");
     }
 
-    const tx = await faucetWallet.transfer(receiverAddress, amountToSend);
+    const tx = await faucetWallet.transfer(
+      receiverAddress,
+      bn.parseUnits(amountToSend.toString()),
+    );
     await tx.waitForResult();
 
     toast.success("Funds sent!");
@@ -58,14 +61,12 @@ export default function Faucet() {
       </div>
 
       <div className="flex gap-4 items-center">
-        <span className="text-gray-400">Amount:</span>
+        <span className="text-gray-400">Amount (ETH):</span>
         <Input
           className="w-full"
           value={amountToSend?.toString()}
-          onChange={(e) =>
-            setAmountToSend(e.target.value ? bn(e.target.value) : undefined)
-          }
-          placeholder="100"
+          onChange={(e) => setAmountToSend(e.target.value ?? undefined)}
+          placeholder="5"
           type="number"
         />
       </div>

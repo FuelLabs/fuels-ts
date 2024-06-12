@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { error } from './cli/utils/logger';
 import { run } from './run';
 

@@ -87,3 +87,6 @@ export const getScript = <TInput extends unknown[], TOutput>(
         wallet
       )
   );
+
+export const getProgramDir = (name: string) =>
+  join(__dirname, `../test/fixtures/forc-projects/${name}`);

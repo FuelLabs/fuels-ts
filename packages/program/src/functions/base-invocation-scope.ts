@@ -31,9 +31,7 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
 
   return {
     contractId: (program as AbstractContract).id,
-    fnSelector: func.selector,
     fnSelectorBytes: func.selectorBytes,
-    encoding: func.encoding,
     data,
     assetId: forward?.assetId,
     amount: forward?.amount,

@@ -100,7 +100,7 @@ describe(__filename, () => {
     const myWallet = Wallet.fromAddress(address);
 
     // #region instantiating-wallets-9
-    const provider = await Provider.create('https://devnet.fuel.network/v1/graphql');
+    const provider = await Provider.create('https://testnet.fuel.network/v1/graphql');
 
     myWallet.connect(provider);
     // #endregion instantiating-wallets-9
