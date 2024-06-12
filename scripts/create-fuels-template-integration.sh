@@ -32,7 +32,7 @@ if [ -d "$PROJECT_DIR" ]; then
   echo "Removing existing project directory '$PROJECT_DIR'"
   rm -rf $PROJECT_DIR
 fi
-pnpm create fuels@$PUBLISHED_NPM_VERSION $PROJECT_DIR --pnpm -cps
+pnpm create fuels@$PUBLISHED_NPM_VERSION $PROJECT_DIR --pnpm -cps --no-install
 
 echo "3. Intialise the project"
 cd $PROJECT_DIR
