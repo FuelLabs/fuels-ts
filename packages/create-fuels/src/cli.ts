@@ -51,12 +51,10 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
 export const runScaffoldCli = async ({
   program,
   args = process.argv,
-  shouldInstallDeps = false,
   forceDisablePrompts = false,
 }: {
   program: Command;
   args: string[];
-  shouldInstallDeps?: boolean;
   forceDisablePrompts?: boolean;
 }) => {
   program.parse(args);
@@ -177,17 +175,16 @@ export const runScaffoldCli = async ({
 
   fileCopySpinner.succeed('Copied template files!');
 
-  const installDepsSpinner = ora({
-    text: 'Installing dependencies..',
-    color: 'green',
-  }).start();
+  if (opts['no-install'] === false) {
+    const installDepsSpinner = ora({
+      text: 'Installing dependencies..',
+      color: 'green',
+    }).start();
 
-  if (shouldInstallDeps) {
     process.chdir(projectPath);
     execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+    installDepsSpinner.succeed('Installed dependencies!');
   }
-
-  installDepsSpinner.succeed('Installed dependencies!');
 
   log();
   log();
