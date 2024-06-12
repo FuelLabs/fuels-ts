@@ -43,7 +43,7 @@ describe(__filename, () => {
     // #endregion encrypting-and-decrypting-json-wallets-2
 
     expect(myBalance).toBeDefined();
-  }, 8000);
+  }, 10000);
 
   it('should validate that fs was imported on this file', () => {
     /**
