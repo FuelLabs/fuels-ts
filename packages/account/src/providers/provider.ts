@@ -742,7 +742,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param sendTransactionParams - The provider call parameters (optional).
    * @returns A promise that resolves to the call result object.
    */
-  async call(
+  async dryRun(
     transactionRequestLike: TransactionRequestLike,
     { utxoValidation, estimateTxDependencies = true }: ProviderCallParams = {}
   ): Promise<CallResult> {
