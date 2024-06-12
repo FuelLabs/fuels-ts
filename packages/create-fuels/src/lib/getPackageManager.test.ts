@@ -1,10 +1,9 @@
 import { mockLogger } from '../../test/utils/mockLogger';
-import * as promptsMod from '../prompts';
 
 import type { PackageManager } from './getPackageManager';
 import { availablePackageManagers, getPackageManager, packageMangers } from './getPackageManager';
 
-const mockAllDeps = (opts: { packageManager?: PackageManager } = {}) => {
+const mockAllDeps = () => {
   const { warn } = mockLogger();
 
   return {
