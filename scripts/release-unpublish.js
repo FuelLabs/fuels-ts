@@ -9,6 +9,7 @@ const DELETE_TAGS = /next|pr/;
 const { version: CURRENT_VERSION } = require('../packages/fuels/package.json');
 
 const DELETE_PACKAGES = process.env.DELETE_PACKAGES === 'true';
+const FILTER_BY_PACKAGE_NAME = process.env.FILTER_BY_PACKAGE_NAME ?? '';
 const dryRun = DELETE_PACKAGES ? '' : '--dry-run';
 
 // MESSAGES
@@ -34,7 +35,11 @@ const getPublicPackages = () => {
 };
 
 const main = async () => {
-  const packages = getPublicPackages();
+  let packages = getPublicPackages();
+  if (FILTER_BY_PACKAGE_NAME !== '') {
+    packages = packages.filter((packageName) => packageName === FILTER_BY_PACKAGE_NAME);
+  }
+
   await packages.map(async (packageName) => {
     log(`📦 Fetching ${packageName} versions`);
     const { versions: packageVersions } = await fetch(

@@ -8,6 +8,11 @@ on:
         description: Delete packages? otherwise dry-run mode will be used
         default: false
 
+      filter_by_package_name:
+        type: string
+        description: Filter by package name
+        default: ""
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -32,4 +37,5 @@ jobs:
         run: |
           node ./scripts/release-unpublish.js
         env:
-          DELETE_PACKAGES: ${{ github.event.inputs.delete_packages}}
+          DELETE_PACKAGES: ${{ github.event.inputs.delete_packages }}
+          FILTER_BY_PACKAGE_NAME: ${{ github.event.inputs.filter_by_package_name }}
