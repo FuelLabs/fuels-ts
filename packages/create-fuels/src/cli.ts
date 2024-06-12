@@ -49,12 +49,10 @@ function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude)
 export const runScaffoldCli = async ({
   program,
   args = process.argv,
-  shouldInstallDeps = false,
   forceDisablePrompts = false,
 }: {
   program: Command;
   args: string[];
-  shouldInstallDeps?: boolean;
   forceDisablePrompts?: boolean;
 }) => {
   program.parse(args);
@@ -179,7 +177,7 @@ export const runScaffoldCli = async ({
     color: 'green',
   }).start();
 
-  if (shouldInstallDeps) {
+  if (opts.install) {
     process.chdir(projectPath);
     execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
   }
