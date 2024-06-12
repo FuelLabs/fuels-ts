@@ -5,18 +5,18 @@ The **Testnet** is a public network that allows you to interact with a Fuel Virt
 > [!NOTE] Latest Testnet
 > Dev Testnet
 >
-> `https://devnet.fuel.network/v1/graphql`
+> `https://testnet.fuel.network/v1/graphql`
 
 We have some useful resources for the Testnet:
 
-- [**Faucet**](https://faucet-devnet.fuel.network/) - for funding wallets that have been created.
+- [**Faucet**](https://faucet-testnet.fuel.network/) - for funding wallets that have been created.
 - [**Explorer**](https://app.fuel.network/) - for viewing transactions and blocks.
-- [**GraphQL Playground**](https://devnet.fuel.network/v1/playground) - for testing GraphQL queries and mutations.
+- [**GraphQL Playground**](https://testnet.fuel.network/v1/playground) - for testing GraphQL queries and mutations.
 
 ---
 
 In the example below, we connect a [Provider](../provider/index.md) to the latest testnet and create a new wallet from a private key.
 
-> **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-devnet.fuel.network/) to fund your wallet.
+> **Note:** New wallets on the Testnet will not have any assets! You can use the [Faucet](https://faucet-testnet.fuel.network/) to fund your wallet.
 
 <<< @/../../docs-snippets/src/guide/introduction/getting-started.test.ts#connecting-to-the-testnet{ts:line-numbers}

@@ -8,7 +8,7 @@ export const CURRENT_ENVIRONMENT: DappEnvironment =
 export const NODE_URL =
   CURRENT_ENVIRONMENT === 'local'
     ? `http://127.0.0.1:${process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000}/v1/graphql`
-    : 'https://devnet.fuel.network/v1/graphql';
+    : 'https://testnet.fuel.network/v1/graphql';
 
 /**
  * Enable the Fuel dev connector.
@@ -23,4 +23,4 @@ export interface AppWallet {
   refreshWalletBalance?: () => Promise<void>;
 }
 
-export const TESTNET_FAUCET_LINK = 'https://faucet-devnet.fuel.network/';
+export const TESTNET_FAUCET_LINK = 'https://faucet-testnet.fuel.network/';

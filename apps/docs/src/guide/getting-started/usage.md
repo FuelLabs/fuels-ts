@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     async () => {
-      const provider = await Provider.create("https://devnet.fuel.network/v1/graphql");
+      const provider = await Provider.create("https://testnet.fuel.network/v1/graphql");
       const myWallet = Wallet.fromAddress("0x...", provider);
       myWallet.getBalances().then((data) => {
         setBalance(new BN(data[0].amount).toNumber());
@@ -40,7 +40,7 @@ For a quick test or just playing around, you can load it in your Web Apps straig
 
   const exec = async () => {
     const provider = await Provider.create(
-      "https://devnet.fuel.network/v1/graphql",
+      "https://testnet.fuel.network/v1/graphql",
     );
     const { name } = provider.getChain();
     console.log(name);
