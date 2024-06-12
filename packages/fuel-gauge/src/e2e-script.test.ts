@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { Provider, TransactionType, WalletUnlocked } from 'fuels';
+import { FUEL_DEVNET_NETWORK_URL, Provider, TransactionType, WalletUnlocked } from 'fuels';
 
 import { getScript } from './utils';
 
@@ -17,14 +17,14 @@ describe('Live Script Test', () => {
   let shouldSkip: boolean;
 
   beforeAll(async () => {
-    if (!process.env.TEST_WALLET_PVT_KEY || !process.env.FUEL_TESTNET_NETWORK_URL) {
+    if (!process.env.DEVNET_WALLET_PVT_KEY) {
       console.log('Skipping live Fuel Node test');
       shouldSkip = true;
       return;
     }
 
-    provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
-    wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
+    provider = await Provider.create(FUEL_DEVNET_NETWORK_URL);
+    wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY, provider);
   });
 
   it('can use script against live Fuel Node', async () => {
@@ -56,7 +56,7 @@ describe('Live Script Test', () => {
     expect(output).toBe(true);
   });
 
-  it.skip.each([
+  it.each([
     ['Mint', MINT_TX_ID, TransactionType.Mint],
     ['Upgrade', UPGRADE_TX_ID, TransactionType.Upgrade],
     ['Upload', UPLOAD_TX_ID, TransactionType.Upload],
