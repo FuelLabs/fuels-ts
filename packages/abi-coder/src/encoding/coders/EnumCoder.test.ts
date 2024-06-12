@@ -7,6 +7,7 @@ import { U64_MAX } from '../../../test/utils/constants';
 import { BigNumberCoder } from './BigNumberCoder';
 import { BooleanCoder } from './BooleanCoder';
 import { EnumCoder } from './EnumCoder';
+import { TupleCoder } from './TupleCoder';
 
 /**
  * @group node
@@ -48,6 +49,37 @@ describe('EnumCoder', () => {
     const expectedLength = 16;
     const [actualValue, actualLength] = coder.decode(
       new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1, 255, 255, 255, 255, 255, 255, 255, 255]),
+      0
+    );
+
+    expect(actualValue).toStrictEqual(expectedValue);
+    expect(actualLength).toBe(expectedLength);
+  });
+
+  it('encodes a native enum', () => {
+    const nativeCoder = new EnumCoder('Native', {
+      One: new BooleanCoder(),
+      Two: new BigNumberCoder('u64'),
+      Three: new TupleCoder([]),
+    });
+
+    const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
+    // @ts-expect-error native
+    const actual = nativeCoder.encode('Three');
+    expect(actual).toStrictEqual(expected);
+  });
+
+  it('decodes a native enum', () => {
+    const nativeCoder = new EnumCoder('TestEnum', {
+      a: new BooleanCoder(),
+      b: new BigNumberCoder('u64'),
+      c: new TupleCoder([]),
+    });
+
+    const expectedValue = 'c';
+    const expectedLength = 8;
+    const [actualValue, actualLength] = nativeCoder.decode(
+      new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]),
       0
     );
 
