@@ -26,7 +26,11 @@ export const WalletDisplay = () => {
           onClick={() => copyToClipboard(wallet.address.toB256() as string)}
         />
         <span className="text-gray-400">
-          Balance: {walletBalance?.toString()}
+          Balance:{" "}
+          {walletBalance?.format({
+            precision: 3,
+          })}{" "}
+          ETH
         </span>
       </div>
     )

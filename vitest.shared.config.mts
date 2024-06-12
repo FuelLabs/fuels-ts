@@ -1,4 +1,5 @@
 import { loadEnv } from "vite";
+import json5Plugin from "vite-plugin-json5";
 import plainText from "vite-plugin-plain-text";
 import { defineConfig } from "vitest/config";
 
@@ -6,6 +7,7 @@ const mode = process.env.NODE_ENV || "test";
 
 export default defineConfig({
   plugins: [
+    json5Plugin(),
     plainText("**/*.hbs", {
       namedExport: false,
     }),

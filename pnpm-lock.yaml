@@ -164,6 +164,9 @@ importers:
       vite:
         specifier: ^5.2.10
         version: 5.2.10(@types/node@18.15.3)(terser@5.18.2)
+      vite-plugin-json5:
+        specifier: ^1.1.2
+        version: 1.1.2(@rollup/pluginutils@5.1.0(rollup@4.16.4))(vite@5.2.10(@types/node@18.15.3)(terser@5.18.2))
       vite-plugin-node-polyfills:
         specifier: ^0.21.0
         version: 0.21.0(rollup@4.16.4)(vite@5.2.10(@types/node@18.15.3)(terser@5.18.2))
@@ -333,7 +336,7 @@ importers:
         version: 18.2.0(react@18.2.0)
       react-scripts:
         specifier: 5.0.1
-        version: 5.0.1(@babel/plugin-syntax-flow@7.24.6(@babel/core@7.22.5))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.22.5))(@types/babel__core@7.20.5)(bufferutil@4.0.8)(esbuild@0.17.19)(eslint@8.57.0)(react@18.2.0)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.2.2))(type-fest@3.1.0)(typescript@5.2.2)(utf-8-validate@6.0.4)
+        version: 5.0.1(@babel/plugin-syntax-flow@7.24.6(@babel/core@7.22.5))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.22.5))(@types/babel__core@7.20.5)(bufferutil@4.0.8)(esbuild@0.17.19)(eslint@8.57.0)(react@18.2.0)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.2.2))(type-fest@4.19.0)(typescript@5.2.2)(utf-8-validate@6.0.4)
       typescript:
         specifier: ~5.2.2
         version: 5.2.2
@@ -13605,6 +13608,12 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
+  vite-plugin-json5@1.1.2:
+    resolution: {integrity: sha512-V0EowrUhYRXAYPy62L9KLgPqd1L7lfVZcjvLh1fj+DIo5X2t6DT2/HOoiAV9FE4YEljdgFJByA+XwKxZ78uQww==}
+    peerDependencies:
+      '@rollup/pluginutils': '>= 3.0.0 || ^4.0.0 || ^5.0.0'
+      vite: ^3.0.0 || ^4.0.0 || ^5.0.0
+
   vite-plugin-node-polyfills@0.21.0:
     resolution: {integrity: sha512-Sk4DiKnmxN8E0vhgEhzLudfJQfaT8k4/gJ25xvUPG54KjLJ6HAmDKbr4rzDD/QWEY+Lwg80KE85fGYBQihEPQA==}
     peerDependencies:
@@ -18456,7 +18465,7 @@ snapshots:
     dependencies:
       playwright: 1.44.0
 
-  '@pmmmwh/react-refresh-webpack-plugin@0.5.10(react-refresh@0.11.0)(type-fest@3.1.0)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)(webpack@5.88.0(esbuild@0.17.19)))(webpack@5.88.0(esbuild@0.17.19))':
+  '@pmmmwh/react-refresh-webpack-plugin@0.5.10(react-refresh@0.11.0)(type-fest@4.19.0)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)(webpack@5.88.0(esbuild@0.17.19)))(webpack@5.88.0(esbuild@0.17.19))':
     dependencies:
       ansi-html-community: 0.0.8
       common-path-prefix: 3.0.0
@@ -18470,7 +18479,7 @@ snapshots:
       source-map: 0.7.4
       webpack: 5.88.0(esbuild@0.17.19)
     optionalDependencies:
-      type-fest: 3.1.0
+      type-fest: 4.19.0
       webpack-dev-server: 4.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)(webpack@5.88.0(esbuild@0.17.19))
 
   '@pnpm/constants@7.1.1': {}
@@ -20129,7 +20138,7 @@ snapshots:
       '@vitest/utils': 1.6.0
       magic-string: 0.30.5
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@20.11.13)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.18.2)
+      vitest: 1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.18.2)
     optionalDependencies:
       playwright: 1.44.0
       webdriverio: 8.36.1(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@6.0.4)
@@ -28632,10 +28641,10 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.2.9
 
-  react-scripts@5.0.1(@babel/plugin-syntax-flow@7.24.6(@babel/core@7.22.5))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.22.5))(@types/babel__core@7.20.5)(bufferutil@4.0.8)(esbuild@0.17.19)(eslint@8.57.0)(react@18.2.0)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.2.2))(type-fest@3.1.0)(typescript@5.2.2)(utf-8-validate@6.0.4):
+  react-scripts@5.0.1(@babel/plugin-syntax-flow@7.24.6(@babel/core@7.22.5))(@babel/plugin-transform-react-jsx@7.23.4(@babel/core@7.22.5))(@types/babel__core@7.20.5)(bufferutil@4.0.8)(esbuild@0.17.19)(eslint@8.57.0)(react@18.2.0)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.2.2))(type-fest@4.19.0)(typescript@5.2.2)(utf-8-validate@6.0.4):
     dependencies:
       '@babel/core': 7.22.5
-      '@pmmmwh/react-refresh-webpack-plugin': 0.5.10(react-refresh@0.11.0)(type-fest@3.1.0)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)(webpack@5.88.0(esbuild@0.17.19)))(webpack@5.88.0(esbuild@0.17.19))
+      '@pmmmwh/react-refresh-webpack-plugin': 0.5.10(react-refresh@0.11.0)(type-fest@4.19.0)(webpack-dev-server@4.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)(webpack@5.88.0(esbuild@0.17.19)))(webpack@5.88.0(esbuild@0.17.19))
       '@svgr/webpack': 5.5.0
       babel-jest: 27.5.1(@babel/core@7.22.5)
       babel-loader: 8.3.0(@babel/core@7.22.5)(webpack@5.88.0(esbuild@0.17.19))
@@ -30852,6 +30861,12 @@ snapshots:
       - sugarss
       - supports-color
       - terser
+
+  vite-plugin-json5@1.1.2(@rollup/pluginutils@5.1.0(rollup@4.16.4))(vite@5.2.10(@types/node@18.15.3)(terser@5.18.2)):
+    dependencies:
+      '@rollup/pluginutils': 5.1.0(rollup@4.16.4)
+      json5: 2.2.3
+      vite: 5.2.10(@types/node@18.15.3)(terser@5.18.2)
 
   vite-plugin-node-polyfills@0.21.0(rollup@4.16.4)(vite@5.2.10(@types/node@18.15.3)(terser@5.18.2)):
     dependencies:
