@@ -75,6 +75,16 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     }
     const valueCoder = this.coders[caseKey];
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
+    if (caseIndex === -1) {
+      const validCases = Object.keys(this.coders)
+        .map((v) => `'${v}'`)
+        .join(', ');
+      throw new FuelError(
+        ErrorCode.INVALID_DECODE_VALUE,
+        `Invalid case '${caseKey}'. Valid cases: ${validCases}.`
+      );
+    }
+
     const encodedValue = valueCoder.encode(value[caseKey]);
 
     return new Uint8Array([...this.#caseIndexCoder.encode(caseIndex), ...encodedValue]);
