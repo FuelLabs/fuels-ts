@@ -26,7 +26,7 @@ test('counter contract - increment function call works properly', async ({ page 
   await expect(counter).toBeVisible();
 });
 
-test.only('faucet page', async ({ page }) => {
+test('faucet page', async ({ page }) => {
   await page.goto('http://127.0.0.1:3000/faucet', { waitUntil: 'networkidle' });
 
   await page.waitForTimeout(2000);
