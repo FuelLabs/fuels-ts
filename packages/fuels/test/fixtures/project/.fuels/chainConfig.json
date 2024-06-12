@@ -129,7 +129,7 @@
           "wqmm": 11,
           "xor": 2,
           "xori": 2,
-          "alloc": {
+          "alocDependentCost": {
             "LightOperation": {
               "base": "2",
               "unitsPerGas": "214"
