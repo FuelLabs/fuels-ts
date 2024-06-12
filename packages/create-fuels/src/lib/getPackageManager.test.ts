@@ -6,13 +6,9 @@ import { availablePackageManagers, getPackageManager, packageMangers } from './g
 
 const mockAllDeps = (opts: { packageManager?: PackageManager } = {}) => {
   const { warn } = mockLogger();
-  const promptForPackageManager = vi
-    .spyOn(promptsMod, 'promptForPackageManager')
-    .mockResolvedValue(opts.packageManager);
 
   return {
     warn,
-    promptForPackageManager,
   };
 };
 
@@ -68,40 +64,23 @@ describe('getPackageManager', () => {
   );
 
   it('should warn the user if more than one package manager selected', async () => {
-    const { warn, promptForPackageManager } = mockAllDeps();
+    const { warn } = mockAllDeps();
     const opts = { pnpm: true, npm: true };
 
     await getPackageManager(opts);
 
-    expect(promptForPackageManager).toBeCalled();
     expect(warn).toBeCalledWith('More than one package manager was selected.');
-  });
-
-  it('should allow inputting of a package manager via prompt', async () => {
-    const packageManager = 'npm';
-    const expectedPackageManager = packageMangers[packageManager];
-    const { warn, promptForPackageManager } = mockAllDeps({
-      packageManager,
-    });
-    const opts = {};
-
-    const result = await getPackageManager(opts);
-
-    expect(warn).not.toBeCalled();
-    expect(promptForPackageManager).toBeCalled();
-    expect(result).toEqual(expectedPackageManager);
   });
 
   it('should default to pnpm if no package manager is selected', async () => {
     const packageManager = 'pnpm';
     const expectedPackageManager = packageMangers[packageManager];
-    const { warn, promptForPackageManager } = mockAllDeps();
+    const { warn } = mockAllDeps();
     const opts = {};
 
     const result = await getPackageManager(opts);
 
     expect(warn).not.toBeCalled();
-    expect(promptForPackageManager).toBeCalled();
     expect(result).toEqual(expectedPackageManager);
   });
 });
