@@ -17,12 +17,19 @@ jobs:
     name: Unpublish versions next and pr
     runs-on: buildjet-4vcpu-ubuntu-2204
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/ci-setup
-      - uses: FuelLabs/github-actions/setups/npm@master
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Setup NPM registry
+        uses: FuelLabs/github-actions/setups/npm@master
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
-      - run: |
+
+      - name: Unpublish old versions
+        run: |
           node ./scripts/release-unpublish.js
         env:
           DELETE_PACKAGES: ${{ github.event.inputs.delete_packages}}
