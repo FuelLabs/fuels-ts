@@ -1,4 +1,3 @@
-import { promptForPackageManager } from '../prompts';
 import { warn } from '../utils/logger';
 
 import type { ProgramOptions } from './setupProgram';
@@ -41,12 +40,9 @@ export const getPackageManager = async (opts: ProgramOptions) => {
   if (cliChosenPackageManagerSelected.length > 1) {
     warn('More than one package manager was selected.');
   }
-  if (cliChosenPackageManagerSelected.length !== 1) {
-    packageManager = await promptForPackageManager();
-  }
 
   if (!packageManager) {
-    packageManager = 'pnpm';
+    packageManager = 'npm'; // default to npm if the user has not specified a package manager (eg. --pnpm, --bun)
   }
   return packageMangers[packageManager];
 };
