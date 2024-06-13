@@ -1,6 +1,11 @@
 # Minted Token Asset ID
 
-The asset ID of a token on the Fuel network is determined by two factors: a sub identifier (sub ID) and the ID of the contract that minted the token. Both are [bits256](../types/bits256.md) strings.
+The asset ID of a token on the Fuel network is determined by two factors:
+
+- A sub-identifier (Sub ID).
+- The ID of the contract that minted the token.
+
+> Both of which are [bits256](../types/bits256.md) strings.
 
 The process involves applying a SHA-256 hash algorithm to the combination of the Contract ID and the Sub ID, to derive an Asset ID - as explained [here](https://docs.fuel.network/docs/specs/identifiers/asset/#asset-id).
 
