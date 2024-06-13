@@ -49,6 +49,11 @@ pub enum ColorEnum {
     Blue: (),
 }
 
+pub enum MixedNativeEnum {
+    Native: (),
+    NotNative: u32,
+}
+
 enum MyContractError {
     DivisionByZero: (),
 }
@@ -109,6 +114,7 @@ abi CoverageContract {
     fn echo_struct_vector_first(vector: Vec<BigStruct>) -> BigStruct;
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct;
     fn color_enum(input: ColorEnum) -> ColorEnum;
+    fn mixed_native_enum(input: MixedNativeEnum) -> MixedNativeEnum;
     fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn vec_in_vec(arg: Vec<Vec<u32>>);
@@ -405,6 +411,13 @@ impl CoverageContract for Contract {
             ColorEnum::Red => ColorEnum::Green,
             ColorEnum::Green => ColorEnum::Blue,
             ColorEnum::Blue => ColorEnum::Red,
+        }
+    }
+
+    fn mixed_native_enum(input: MixedNativeEnum) -> MixedNativeEnum {
+        match input {
+            MixedNativeEnum::Native => MixedNativeEnum::NotNative(12),
+            MixedNativeEnum::NotNative => MixedNativeEnum::Native,
         }
     }
 
