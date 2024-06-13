@@ -236,6 +236,10 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Minted Token Asset ID',
+                link: '/guide/contracts/minted-token-asset-id',
+              },
+              {
                 text: 'Managing Deployed Contracts',
                 link: '/guide/contracts/managing-deployed-contracts',
               },
