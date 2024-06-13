@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+<<<<<<< Updated upstream
+=======
+import { randomBytes } from '@fuel-ts/crypto';
+>>>>>>> Stashed changes
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
@@ -754,7 +758,7 @@ describe('Abi interface', () => {
   describe('decodeLog', () => {
     it('should return decoded log by id', () => {
       const data = exhaustiveExamplesInterface.decodeLog(
-        hexlify(Uint8Array.from([1, 0, 0, 0, 32])),
+        Uint8Array.from([1, 0, 0, 0, 32]),
         '8500535089865083573'
       );
       expect(data).toEqual({
@@ -780,11 +784,12 @@ describe('Abi interface', () => {
   });
 
   describe('decodeFunctionResult', () => {
-    it('should return decoded function result', () => {
+    it('should return decoded function result', async () => {
       const data = exhaustiveExamplesInterface.decodeFunctionResult(
         'struct_simple',
         hexlify(Uint8Array.from([1, 0, 0, 0, 32]))
       );
+
       expect(data).toEqual({
         a: true,
         b: 32,
