@@ -11,6 +11,7 @@ import {
   ScriptTransactionRequest,
   hexlify,
 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 import type { MockInstance } from 'vitest';
 
 async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {
@@ -250,12 +251,14 @@ describe('TransactionResponse', () => {
   it(
     'should throw error for a SqueezedOut status update [submitAndAwait]',
     async () => {
-      const { cleanup, ip, port } = await launchNode({
-        args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '500ms'],
-        loggingEnabled: true,
-        debugEnabled: true,
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '500ms'],
+          loggingEnabled: true,
+          debugEnabled: true,
+        },
       });
-      const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+      const { provider: nodeProvider } = launched;
 
       const genesisWallet = new WalletUnlocked(
         process.env.GENESIS_SECRET || randomBytes(32),
@@ -312,8 +315,6 @@ describe('TransactionResponse', () => {
 
         throw e;
       }
-
-      cleanup();
     },
     { repeats: 100 }
   );
