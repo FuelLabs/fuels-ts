@@ -77,7 +77,8 @@ jobs:
           startsWith(env.COMMIT_MSG, 'ci(changesets)')
         run: |
           git log -1
-          git show --format='commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n    %s'          echo $COMMIT_MSG
+          git show --format='commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n    %s'
+          echo $COMMIT_MSG
           echo $RELEASE_VERSION
           echo $CURRENT_VERSION
         env:
