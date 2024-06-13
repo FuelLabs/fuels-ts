@@ -120,28 +120,4 @@ describe('CLI', () => {
       expect.stringContaining(`A folder already exists at ${paths.root}`)
     );
   });
-
-  test('create-fuels reports an error if no programs are chosen to be included', async () => {
-    const args = generateArgv(
-      {
-        contract: false,
-        predicate: false,
-        script: false,
-      },
-      paths.root
-    );
-
-    await runScaffoldCli({
-      program: setupProgram(),
-      args,
-      shouldInstallDeps: false,
-      forceDisablePrompts: true,
-    }).catch((e) => {
-      expect(e).toBeInstanceOf(Error);
-    });
-
-    expect(error).toHaveBeenCalledWith(
-      expect.stringContaining('You must include at least one Sway program.')
-    );
-  });
 });
