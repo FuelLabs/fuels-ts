@@ -34,7 +34,7 @@ describe('getPackageManager', () => {
       const expectedPackageManager = packageMangers[packageManager];
       const opts = { [packageManager]: true };
 
-      const result = await getPackageManager(opts);
+      const result = getPackageManager(opts);
 
       expect(result).toEqual(expectedPackageManager);
     }
@@ -43,7 +43,7 @@ describe('getPackageManager', () => {
   it.each(installScenarios)(
     'should have the correct install commands',
     async (packageManager, expectedInstallCommand) => {
-      const command = await getPackageManager({ [packageManager]: true });
+      const command = getPackageManager({ [packageManager]: true });
 
       const install = command.install;
 
@@ -54,7 +54,7 @@ describe('getPackageManager', () => {
   it.each(runScenarios)(
     'should have the correct run commands',
     async (packageManager, expectedRunCommand) => {
-      const command = await getPackageManager({ [packageManager]: true });
+      const command = getPackageManager({ [packageManager]: true });
 
       const run = command.run(runCommand);
 
@@ -66,18 +66,18 @@ describe('getPackageManager', () => {
     const { warn } = mockAllDeps();
     const opts = { pnpm: true, npm: true };
 
-    await getPackageManager(opts);
+    getPackageManager(opts);
 
     expect(warn).toBeCalledWith('More than one package manager was selected.');
   });
 
-  it('should default to pnpm if no package manager is selected', async () => {
-    const packageManager = 'pnpm';
+  it('should default to npm if no package manager is selected', async () => {
+    const packageManager = 'npm';
     const expectedPackageManager = packageMangers[packageManager];
     const { warn } = mockAllDeps();
     const opts = {};
 
-    const result = await getPackageManager(opts);
+    const result = getPackageManager(opts);
 
     expect(warn).not.toBeCalled();
     expect(result).toEqual(expectedPackageManager);

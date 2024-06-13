@@ -61,7 +61,7 @@ export const runScaffoldCli = async ({
 
   const opts = program.opts<ProgramOptions>();
   const verboseEnabled = opts.verbose ?? false;
-  const packageManager = await getPackageManager(opts);
+  const packageManager = getPackageManager(opts);
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
