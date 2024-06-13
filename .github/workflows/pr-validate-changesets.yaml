@@ -67,6 +67,8 @@ jobs:
           git log -1
           COMMIT_MSG=$(git log -1 --format=%B)
           echo ${{ github.event.head_commit.message }}
+          echo workflow_run
+          echo ${{ github.event.workflow_run.head_commit.message }}
           echo $COMMIT_MSG
           echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
           git reset --hard
