@@ -5,9 +5,19 @@ struct Validation {
     total_complete: u64,
 }
 
-fn main(received: Validation) -> bool {
-    let expected_has_account: bool = true;
-    let expected_total_complete: u64 = 100;
+enum MyGenericEnum<T> {
+    a: T,
+}
 
-    received.has_account == expected_has_account && received.total_complete == expected_total_complete
+struct MyGenericStruct<T> {
+    a: T,
+}
+
+fn main(
+    vec: Vec<Validation>,
+    enm: MyGenericEnum<u16>,
+    opt: Option<u8>,
+    res: Result<MyGenericStruct<str[4]>, u64>,
+) -> bool {
+    return true;
 }

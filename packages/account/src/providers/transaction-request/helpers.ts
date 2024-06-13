@@ -1,3 +1,4 @@
+import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -21,6 +22,15 @@ export const isRequestInputResource = (
   input: TransactionRequestInput
 ): input is CoinTransactionRequestInput | MessageTransactionRequestInput =>
   isRequestInputCoin(input) || isRequestInputMessage(input);
+
+export const getRequestInputResourceOwner = (
+  input: CoinTransactionRequestInput | MessageTransactionRequestInput
+) => (isRequestInputCoin(input) ? input.owner : input.recipient);
+
+export const isRequestInputResourceFromOwner = (
+  input: CoinTransactionRequestInput | MessageTransactionRequestInput,
+  owner: AbstractAddress
+) => getRequestInputResourceOwner(input) === owner.toB256();
 
 export const getAssetAmountInRequestInputs = (
   inputs: TransactionRequestInput[],
@@ -48,6 +58,25 @@ export const cacheRequestInputsResources = (inputs: TransactionRequestInput[]) =
         cache.messages.push(input.nonce);
       }
       return cache;
+    },
+    {
+      utxos: [],
+      messages: [],
+    } as Required<ExcludeResourcesOption>
+  );
+
+export const cacheRequestInputsResourcesFromOwner = (
+  inputs: TransactionRequestInput[],
+  owner: AbstractAddress
+): ExcludeResourcesOption =>
+  inputs.reduce(
+    (acc, input) => {
+      if (isRequestInputCoin(input) && input.owner === owner.toB256()) {
+        acc.utxos.push(input.id);
+      } else if (isRequestInputMessage(input) && input.recipient === owner.toB256()) {
+        acc.messages.push(input.nonce);
+      }
+      return acc;
     },
     {
       utxos: [],

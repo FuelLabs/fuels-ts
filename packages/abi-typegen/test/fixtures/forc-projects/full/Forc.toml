@@ -5,3 +5,4 @@ license = "Apache-2.0"
 name = "full"
 
 [dependencies]
+libs-for-testing = { path = "../libs-for-testing" }

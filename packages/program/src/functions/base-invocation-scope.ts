@@ -1,17 +1,12 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult, Account } from '@fuel-ts/account';
+import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type {
-  AbstractAccount,
-  AbstractAddress,
-  AbstractContract,
-  AbstractProgram,
-} from '@fuel-ts/interfaces';
-import type { BN, BigNumberish } from '@fuel-ts/math';
+import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
 import { isDefined } from '@fuel-ts/utils';
@@ -19,7 +14,6 @@ import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import { POINTER_DATA_OFFSET } from '../script-request';
 import type { ContractCall, InvocationScopeLike, TxParams } from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
 
@@ -31,22 +25,14 @@ import { InvocationCallResult, FunctionInvocationResult } from './invocation-res
  * @param funcScope - The invocation scope containing the necessary information for the contract call.
  * @returns The contract call object.
  */
-function createContractCall(funcScope: InvocationScopeLike, offset: number): ContractCall {
+function createContractCall(funcScope: InvocationScopeLike): ContractCall {
   const { program, args, forward, func, callParameters, externalAbis } = funcScope.getCallConfig();
-  const DATA_POINTER_OFFSET = funcScope.getCallConfig().func.isInputDataPointer
-    ? POINTER_DATA_OFFSET
-    : 0;
-  const data = func.encodeArguments(args as Array<InputValue>, offset + DATA_POINTER_OFFSET);
+  const data = func.encodeArguments(args as Array<InputValue>);
 
   return {
     contractId: (program as AbstractContract).id,
-    fnSelector: func.selector,
     fnSelectorBytes: func.selectorBytes,
-    encoding: func.encoding,
     data,
-    isInputDataPointer: func.isInputDataPointer,
-    isOutputDataHeap: func.outputMetadata.isHeapType,
-    outputEncodedLength: func.outputMetadata.encodedLength,
     assetId: forward?.assetId,
     amount: forward?.amount,
     gas: callParameters?.gasLimit,
@@ -97,11 +83,7 @@ export class BaseInvocationScope<TReturn = any> {
         'Provider chain info cache is empty. Please make sure to initialize the `Provider` properly by running `await Provider.create()``'
       );
     }
-    const maxInputs = consensusParams.consensusParameters.txParameters.maxInputs;
-    const script = getContractCallScript(this.functionInvocationScopes, maxInputs);
-    return this.functionInvocationScopes.map((funcScope) =>
-      createContractCall(funcScope, script.getScriptDataOffset(maxInputs.toNumber()))
-    );
+    return this.functionInvocationScopes.map((funcScope) => createContractCall(funcScope));
   }
 
   /**
@@ -321,17 +303,36 @@ export class BaseInvocationScope<TReturn = any> {
   /**
    * Adds an asset transfer to an Account on the contract call transaction request.
    *
-   * @param destination - The address of the destination.
-   * @param amount - The amount of coins to transfer.
-   * @param assetId - The asset ID of the coins to transfer.
+   * @param transferParams - The object representing the transfer to be made.
    * @returns The current instance of the class.
    */
-  addTransfer(destination: string | AbstractAddress, amount: BigNumberish, assetId: string) {
+  addTransfer(transferParams: TransferParams) {
+    const { amount, destination, assetId } = transferParams;
+    const baseAssetId = this.getProvider().getBaseAssetId();
     this.transactionRequest = this.transactionRequest.addCoinOutput(
       Address.fromAddressOrString(destination),
       amount,
-      assetId
+      assetId || baseAssetId
     );
+
+    return this;
+  }
+
+  /**
+   * Adds multiple transfers to the contract call transaction request.
+   *
+   * @param transferParams - An array of `TransferParams` objects representing the transfers to be made.
+   * @returns The current instance of the class.
+   */
+  addBatchTransfer(transferParams: TransferParams[]) {
+    const baseAssetId = this.getProvider().getBaseAssetId();
+    transferParams.forEach(({ destination, amount, assetId }) => {
+      this.transactionRequest = this.transactionRequest.addCoinOutput(
+        Address.fromAddressOrString(destination),
+        amount,
+        assetId || baseAssetId
+      );
+    });
 
     return this;
   }

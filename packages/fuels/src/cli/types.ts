@@ -5,6 +5,8 @@ export enum Commands {
   deploy = 'deploy',
   dev = 'dev',
   init = 'init',
+  versions = 'versions',
+  node = 'node',
 }
 
 export type CommandEvent =
@@ -22,6 +24,14 @@ export type CommandEvent =
     }
   | {
       type: Commands.init;
+      data: unknown;
+    }
+  | {
+      type: Commands.versions;
+      data: unknown;
+    }
+  | {
+      type: Commands.node;
       data: unknown;
     };
 
@@ -75,14 +85,14 @@ export type UserFuelsConfig = {
   /** Static of dyanmic deploy configs to be used when deploying contracts */
   deployConfig?: DeployContractOptions | OptionsFunction;
 
-  /** Opt-in or out from using builtin Forc binaries */
-  useBuiltinForc?: boolean;
-
-  /** Opt-in or out from using builtin Fuel Core binaries */
-  useBuiltinFuelCore?: boolean;
-
   /** If set to false, you will need to spin up a Fuel core node by yourself */
   autoStartFuelCore?: boolean;
+
+  /** If set, will use absolute path to forc binary  */
+  forcPath?: string;
+
+  /** If set, will use absolute path to forc binary  */
+  fuelCorePath?: string;
 
   /**
    * Port to use when starting a `fuel-core` node
@@ -121,9 +131,9 @@ export type FuelsConfig = UserFuelsConfig &
       | 'predicates'
       | 'scripts'
       | 'deployConfig'
-      | 'useBuiltinForc'
-      | 'useBuiltinFuelCore'
       | 'autoStartFuelCore'
+      | 'forcPath'
+      | 'fuelCorePath'
       | 'providerUrl'
       | 'forcBuildFlags'
     >

@@ -9,7 +9,7 @@ import { assets } from '../assets';
 describe('Network Utils', () => {
   test('getDefaultChainId', async () => {
     expect(getDefaultChainId('ethereum')).toBe(11155111);
-    expect(getDefaultChainId('fuel')).toBe(0);
+    expect(getDefaultChainId('fuel')).toBe(CHAIN_IDS.fuel.testnet);
   })
 
   test('getAssetWithNetwork - Ethereum', async () => {
@@ -27,12 +27,12 @@ describe('Network Utils', () => {
 
   test('getAssetWithNetwork - Fuel', async () => {
     const asset = assets[0] as Asset
-    const assetFuel = getAssetWithNetwork({ asset, networkType: 'fuel', chainId: CHAIN_IDS.fuel.beta5 })
+    const assetFuel = getAssetWithNetwork({ asset, networkType: 'fuel', chainId: CHAIN_IDS.fuel.testnet })
     expect(assetFuel).toEqual({
       type: 'fuel',
-      chainId: CHAIN_IDS.fuel.beta5,
+      chainId: CHAIN_IDS.fuel.testnet,
       decimals: 9,
-      assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
       icon: 'https://cdn.fuel.network/assets/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH'
@@ -61,12 +61,12 @@ describe('Network Utils', () => {
   test('getAssetFuel', async () => {
     const asset = assets[0] as Asset
     const assetFuel = getAssetFuel(asset)
-    
+
     expect(assetFuel).toEqual({
       type: 'fuel',
-      chainId: CHAIN_IDS.fuel.beta5,
+      chainId: CHAIN_IDS.fuel.testnet,
       decimals: 9,
-      assetId: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
       icon: 'https://cdn.fuel.network/assets/eth.svg',
       name: 'Ethereum',
       symbol: 'ETH',

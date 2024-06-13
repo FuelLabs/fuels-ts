@@ -11,16 +11,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  docs:
-    uses: FuelLabs/github-actions/.github/workflows/vp-docs.yml@master
-    with:
-      doc-folder-path: "apps/docs/src"
-      spellcheck-config-path: "apps/docs/.spellcheck.yml"
-
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
-    name: ${{ matrix.env.name }}${{ matrix.env.name == 'node' && '@' || ''}}${{ matrix.env.name == 'node' && matrix.env.version || ''}}
+    name: ${{ matrix.env.name }}${{ matrix.env.version && '@' || ''}}${{ matrix.env.version || ''}}
     strategy:
       fail-fast: false
       matrix:
@@ -33,154 +27,138 @@ jobs:
     timeout-minutes: 25
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
         with:
           node-version: ${{ matrix.env.version || 20 }}
 
-      # - name: Verify package.json integrity
-      #   run: pnpm lint:package-jsons
-
-      # - name: Verify package exports integrity
-      #   run: pnpm verify:package-exports
-
-      # - name: Forc Format Check
-      #   run: pnpm forc:check
-
-      # linting of some tests depends on pretest being run so that it generates the necessary files
-      - name: Pretest
-        run: pnpm pretest
-
-      # - name: Lint
-      #   run: pnpm lint
-
-      # - name: Validate Tests
-      #   run: pnpm test:validate
+      - name: Validate Tests
+        run: pnpm test:validate
 
       - name: Run Tests - ${{ matrix.env.name }}
         run: pnpm ci:test --${{ matrix.env.name }}
 
-      # - name: Upload Coverage - ${{ matrix.env.name }}
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: ${{ matrix.env.name }}
-      #     path: coverage/environments/${{ matrix.env.name }}
+      - name: Upload Coverage - ${{ matrix.env.name }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.env.name }}
+          path: coverage/environments/${{ matrix.env.name }}
+          overwrite: true
 
-  # e2e:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 10
-  #   needs: [environments]
-  #   if: ${{ !github.event.pull_request.draft }}
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [environments]
+    if: ${{ !github.event.pull_request.draft }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - name: CI Setup
-  #       uses: ./.github/actions/test-setup
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+        with:
+          should-install-bun: true
 
-  #     - name: Pretest
-  #       run: pnpm pretest
+      - name: Publish PR to NPM
+        id: release
+        uses: ./.github/actions/pr-release
+        with:
+          npm-token: ${{ secrets.NPM_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  #     - name: Run Isolated Tests
-  #       run: pnpm test:e2e
-  #       env:
-  #         FUEL_NETWORK_URL: https://beta-5.fuel.network/graphql
-  #         TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
-  #         TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
-  #         FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
+      - name: Echo Published Version
+        run: echo ${{ steps.release.outputs.published_version }}
 
-  # test:
-  #   if: github.base_ref == 'master' || github.ref_name == 'master'
-  #   runs-on: ubuntu-latest
-  #   needs: [environments, e2e]
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+      - name: Pretest
+        run: pnpm pretest
 
-  #     - name: CI Setup
-  #       uses: ./.github/actions/test-setup
+      - name: Run Isolated Tests
+        run: pnpm test:e2e
+        env:
+          FUEL_NETWORK_URL: https://testnet.fuel.network/v1/graphql
+          FUEL_TESTNET_NETWORK_URL: https://testnet.fuel.network/v1/graphql
+          TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
+          TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
+          PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
 
-  #     - name: Generate Coverage Directory
-  #       run: mkdir -p coverage/environments
+  create-fuels-template-integration:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-  #     - name: Download Coverage Artifact for Node Tests
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: node
-  #         path: coverage/environments
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
 
-  #     - name: Generate Coverage
-  #       run: pnpm test:coverage-merge
+      - name: Run UI tests
+        run: sh ./scripts/create-fuels-template-integration.sh
 
-  #     - name: Find PR Number
-  #       uses: jwalton/gh-find-current-pr@v1
-  #       id: findPr
+  test:
+    if: github.base_ref == 'master' || github.ref_name == 'master'
+    runs-on: ubuntu-latest
+    needs: [environments, e2e]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  #     - name: Upload Master Coverage Artifact
-  #       uses: actions/upload-artifact@v3
-  #       if: ${{ !steps.findPr.outputs.number }}
-  #       with:
-  #         name: coverage-master
-  #         path: coverage/report
+      - name: CI Setup
+        uses: ./.github/actions/test-setup
 
-  #     - name: Download Master Coverage Artifact
-  #       uses: dawidd6/action-download-artifact@v2
-  #       if: ${{ steps.findPr.outputs.number }}
-  #       with:
-  #         workflow: test.yaml
-  #         branch: master
-  #         name: coverage-master
-  #         path: coverage-master
+      - name: Generate Coverage Directory
+        run: mkdir -p coverage/environments
 
-  #     - name: Generate Coverage Diff
-  #       if: ${{ (steps.findPr.outputs.number) }}
-  #       run: pnpm test:coverage-diff
+      - name: Download Coverage Artifact for Node Tests
+        uses: actions/download-artifact@v4
+        with:
+          name: node
+          path: coverage/environments
 
-  #     - name: Report Coverage
-  #       uses: thollander/actions-comment-pull-request@v2
-  #       if: ${{ steps.findPr.outputs.number }}
-  #       with:
-  #         filePath: coverage/report/coverage-diff.txt
-  #         pr_number: ${{ (steps.findPr.outputs.number) }}
-  #         comment_tag: diff
-  #         mode: recreate
-  #         create_if_not_exists: true
-  # create-changeset:
-  # needs: [test]
-  # name: Create Changeset
-  # runs-on: ubuntu-latest
-  # if: github.actor  == 'dependabot[bot]'
+      - name: Download Coverage Artifact for Browser Tests
+        uses: actions/download-artifact@v4
+        with:
+          name: browser
+          path: coverage/environments
 
-  # steps:
-  #   - uses: actions/checkout@v3
-  #     with:
-  #       fetch-depth: 0
-  #       ref: ${{ github.event.client_payload.ref }}
+      - name: Generate Coverage
+        run: pnpm test:coverage-merge
 
-  #   - name: Setup PNPM
-  #     uses: pnpm/action-setup@v2.1.0
-  #     with:
-  #       version: 9.0.5
-  #       run_install: true
+      - name: Find PR Number
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
 
-  #   - name: Install jq
-  #     run: sudo apt-get install -y jq
+      - name: Upload Master Coverage Artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !steps.findPr.outputs.number }}
+        with:
+          name: coverage-master
+          path: coverage/report
 
-  #   - name: Run dependabot changeset script
-  #     run: pnpm changeset:dependabot
-  #     env:
-  #       PR_TITLE: ${{ github.event.pull_request.title }}
+      - name: Download Master Coverage Artifact
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          workflow: test.yaml
+          branch: master
+          name: coverage-master
+          path: coverage-master
 
-  #   - name: Commit Changeset
-  #     run: |
-  #       git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-  #       git config user.name "github-actions[bot]"
-  #       git add .
-  #       git commit -m "build: update dependency changeset [skip ci]"
-  #       git push origin HEAD:${{ github.event.pull_request.head.ref }}
-  #     env:
-  #       GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+      - name: Generate Coverage Diff
+        if: ${{ (steps.findPr.outputs.number) }}
+        run: pnpm test:coverage-diff
+
+      - name: Report Coverage
+        uses: thollander/actions-comment-pull-request@v2
+        if: ${{ steps.findPr.outputs.number }}
+        with:
+          filePath: coverage/report/coverage-diff.txt
+          pr_number: ${{ (steps.findPr.outputs.number) }}
+          comment_tag: diff
+          mode: recreate
+          create_if_not_exists: true

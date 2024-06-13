@@ -4,7 +4,7 @@ export const CHAIN_IDS = {
     foundry: 31337,
   },
   fuel: {
-    beta5: 0,
-    devnet: 10,
+    devnet: 0,
+    testnet: 0,
   },
 };

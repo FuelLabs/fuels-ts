@@ -6,26 +6,38 @@ inputs:
   pnpm-version:
     description: "PNPM version"
     default: 9.0.5
+  should-install-bun:
+    description: "Should install Bun"
+    default: false
+  bun-version:
+    description: "Bun version"
+    default: 1.1.10
 runs:
   using: "composite"
   steps:
     - name: Cache PNPM modules
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.local/share/pnpm/store/v4
         key: ${{ runner.os }}-node-${{ inputs.node-version }}-pnpm-${{ inputs.pnpm-version }}-lock-${{ hashFiles('**/pnpm-lock.yaml') }}
 
     - name: Setup Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
         registry-url: "https://registry.npmjs.org"
 
     - name: Setup PNPM
-      uses: pnpm/action-setup@v2.1.0
+      uses: pnpm/action-setup@v4
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
+
+    - name: Setup Bun
+      if: ${{ inputs.should-install-bun == 'true' }}
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: ${{ inputs.bun-version }}
 
     - name: Build
       run: pnpm build

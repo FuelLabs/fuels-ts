@@ -1,23 +1,9 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BN } from 'fuels';
-import { Provider, Wallet, ContractFactory, bn, FUEL_NETWORK_URL } from 'fuels';
+import { Wallet, bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-const setup = async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-
-  const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
-  );
-
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract();
-  return contract;
-};
+import { MultiTokenContractAbi__factory } from '../test/typegen/contracts';
+import binHexlified from '../test/typegen/contracts/MultiTokenContractAbi.hex';
 
 // hardcoded subIds on MultiTokenContract
 const subIds = [
@@ -33,10 +19,21 @@ describe('MultiTokenContract', () => {
   it(
     'can mint and transfer coins',
     async () => {
-      const provider = await Provider.create(FUEL_NETWORK_URL);
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            deployer: MultiTokenContractAbi__factory,
+            bytecode: binHexlified,
+          },
+        ],
+      });
+      const {
+        provider,
+        contracts: [multiTokenContract],
+      } = launched;
       // New wallet to transfer coins and check balance
       const userWallet = Wallet.generate({ provider });
-      const multiTokenContract = await setup();
+
       const contractId = { bits: multiTokenContract.id.toB256() };
 
       const helperDict: { [key: string]: { assetId: string; amount: number } } = {
@@ -116,7 +113,17 @@ describe('MultiTokenContract', () => {
   );
 
   it('can burn coins', async () => {
-    const multiTokenContract = await setup();
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: MultiTokenContractAbi__factory,
+          bytecode: binHexlified,
+        },
+      ],
+    });
+    const {
+      contracts: [multiTokenContract],
+    } = launched;
     const contractId = { bits: multiTokenContract.id.toB256() };
 
     const helperDict: {

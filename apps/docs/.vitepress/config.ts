@@ -45,7 +45,30 @@ export default defineConfig({
         items: [
           {
             text: 'Getting Started',
-            link: '/getting-started.md',
+            link: '/guide/getting-started/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Installation',
+                link: '/guide/getting-started/installation',
+              },
+              {
+                text: 'Usage',
+                link: '/guide/getting-started/usage',
+              },
+              {
+                text: 'Connecting to Testnet',
+                link: '/guide/getting-started/connecting-to-testnet',
+              },
+              {
+                text: 'Connecting to a Local Node',
+                link: '/guide/getting-started/connecting-to-a-local-node',
+              },
+              {
+                text: 'Further Resources',
+                link: '/guide/getting-started/further-resources',
+              },
+            ],
           },
           {
             text: 'Creating a Fuel dApp',
@@ -74,10 +97,6 @@ export default defineConfig({
               {
                 text: 'Commands',
                 link: '/guide/fuels-cli/commands',
-              },
-              {
-                text: 'Binaries',
-                link: '/guide/fuels-cli/binaries',
               },
               {
                 text: 'ABI Typegen',
@@ -152,10 +171,6 @@ export default defineConfig({
               {
                 text: 'Locking and Unlocking',
                 link: '/guide/wallets/locking-and-unlocking',
-              },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
               },
             ],
           },
@@ -296,6 +311,21 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Encoding',
+            link: '/guide/encoding/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Encode and Decode',
+                link: '/guide/encoding/encode-and-decode',
+              },
+              {
+                text: 'Working with Bytes',
+                link: '/guide/encoding/working-with-bytes',
+              },
+            ],
+          },
+          {
             text: 'Utilities',
             link: '/guide/utilities/',
             collapsed: true,
@@ -340,6 +370,10 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
+                text: 'Generate Fake Resources',
+                link: '/guide/cookbook/generate-fake-resources',
+              },
+              {
                 text: 'Transactions with Multiple Signers',
                 link: '/guide/cookbook/transactions-with-multiple-signers',
               },
@@ -355,16 +389,28 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing in TS',
-                link: '/guide/testing/testing-in-ts',
+                text: 'Launching a Test Node',
+                link: '/guide/testing/launching-a-test-node',
               },
               {
-                text: 'Setting Up a Custom Chain',
-                link: '/guide/testing/setting-up-a-custom-chain',
+                text: 'Test Node Options',
+                link: '/guide/testing/test-node-options',
               },
               {
-                text: 'Tweaking the Blockchain',
-                link: '/guide/testing/tweaking-the-blockchain',
+                text: 'Fuel Core Options',
+                link: '/guide/testing/fuel-core-options',
+              },
+              {
+                text: 'Basic Example',
+                link: '/guide/testing/basic-example',
+              },
+              {
+                text: 'Advanced Example',
+                link: '/guide/testing/advanced-example',
+              },
+              {
+                text: 'Custom Blocks',
+                link: '/guide/testing/custom-blocks',
               },
             ],
           },

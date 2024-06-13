@@ -12,6 +12,7 @@
     "**/.turbo": true,
     "**/dist": true
   },
+  "files.trimTrailingWhitespace": true,
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },

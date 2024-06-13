@@ -2,12 +2,17 @@
   "plugins": {},
   "filters": {},
   "rules": {
+    "@elasticpath/no-dead-relative-link": true,
     "no-dead-link": {
       "ignoreRedirects": true,
       "checkRelative": false,
       "ignore": [
         "https://learnmeabitcoin.com/**",
-        "https://faucet-beta-5.fuel.network/"
+        "https://testnet.fuel.network/",
+        "https://faucet-testnet.fuel.network/",
+        "https://thebitcoinmanual.com/**",
+        "https://forum.fuel.network/",
+        "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date"
       ]
     }
   }

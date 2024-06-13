@@ -7,7 +7,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { DateTime, arrayify, hexlify } from '@fuel-ts/utils';
+import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -16,6 +16,7 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
+import { setupTestProviderAndWallets, launchNode } from '../test-utils';
 
 import type { ChainInfo, NodeInfo } from './provider';
 import Provider from './provider';
@@ -26,7 +27,6 @@ import type {
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
-import { sleep } from './utils';
 import * as gasMod from './utils/gas';
 
 afterEach(() => {
@@ -58,15 +58,17 @@ const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
  */
 describe('Provider', () => {
   it('can getVersion()', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.26.0');
+    expect(version).toEqual('0.27.0');
   });
 
   it('can call()', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     const baseAssetId = provider.getBaseAssetId();
 
     const CoinInputs: CoinTransactionRequestInput[] = [
@@ -76,14 +78,14 @@ describe('Provider', () => {
         owner: baseAssetId,
         assetId: baseAssetId,
         txPointer: '0x00000000000000000000000000000000',
-        amount: 1000,
+        amount: 500_000,
         witnessIndex: 0,
       },
     ];
     const transactionRequest = new ScriptTransactionRequest({
       tip: 0,
-      gasLimit: 500,
-      maxFee: 1000,
+      gasLimit: 100_000,
+      maxFee: 120_000,
       script:
         /*
           Opcode::ADDI(0x10, REG_ZERO, 0xCA)
@@ -96,11 +98,6 @@ describe('Provider', () => {
       inputs: CoinInputs,
       witnesses: ['0x'],
     });
-
-    const { maxFee, gasUsed } = await provider.getTransactionCost(transactionRequest);
-
-    transactionRequest.maxFee = maxFee;
-    transactionRequest.gasLimit = gasUsed;
 
     const callResult = await provider.call(transactionRequest);
 
@@ -125,7 +122,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(0x5d3),
+        gasUsed: bn(170),
       },
     ];
 
@@ -138,7 +135,8 @@ describe('Provider', () => {
   // as we test this in other modules like call contract its ok to
   // skip for now
   it.skip('can sendTransaction()', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const response = await provider.sendTransaction({
       type: TransactionType.Script,
@@ -184,7 +182,9 @@ describe('Provider', () => {
   });
 
   it('can get all chain info', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const { consensusParameters } = provider.getChain();
 
     expect(consensusParameters.version).toBeDefined();
@@ -229,38 +229,29 @@ describe('Provider', () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
 
-    expect(baseAssetId).toBe('0x0000000000000000000000000000000000000000000000000000000000000000');
+    expect(baseAssetId).toBeDefined();
   });
 
   it('can change the provider url of the current instance', async () => {
-    const providerUrl1 = FUEL_NETWORK_URL;
-    const providerUrl2 = 'http://127.0.0.1:8080/graphql';
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
-    const provider = await Provider.create(providerUrl1, {
-      fetch: (url: string, options?: RequestInit) =>
-        getCustomFetch('getVersion', { nodeInfo: { nodeVersion: url } })(url, options),
-    });
+    const { cleanup, url } = await launchNode({ port: '0' });
 
-    expect(provider.url).toBe(providerUrl1);
-    expect(await provider.getVersion()).toEqual(providerUrl1);
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
 
-    const spyFetchChainAndNodeInfo = vi
-      .spyOn(Provider.prototype, 'fetchChainAndNodeInfo')
-      .mockResolvedValue({
-        chain: {} as ChainInfo,
-        nodeInfo: {} as NodeInfo,
-      });
-
-    await provider.connect(providerUrl2);
-    expect(provider.url).toBe(providerUrl2);
-
-    expect(await provider.getVersion()).toEqual(providerUrl2);
+    await provider.connect(url);
+    expect(provider.url).toBe(url);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    cleanup();
   });
 
   it('can accept a custom fetch function', async () => {
-    const providerUrl = FUEL_NETWORK_URL;
+    using launched = await setupTestProviderAndWallets();
+    const { provider: providerForUrl } = launched;
+
+    const providerUrl = providerForUrl.url;
 
     const provider = await Provider.create(providerUrl, {
       fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
@@ -270,7 +261,10 @@ describe('Provider', () => {
   });
 
   it('can accept options override in connect method', async () => {
-    const providerUrl = FUEL_NETWORK_URL;
+    using launched = await setupTestProviderAndWallets();
+    const { provider: providerForUrl } = launched;
+
+    const providerUrl = providerForUrl.url;
 
     /**
      * Mocking and initializing Provider with an invalid fetcher just
@@ -304,8 +298,8 @@ describe('Provider', () => {
   });
 
   it('can force-produce blocks', async () => {
-    // #region Provider-produce-blocks
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -324,14 +318,14 @@ describe('Provider', () => {
     const newest: Date = DateTime.fromTai64(producedBlock?.time || DateTime.TAI64_NULL);
 
     expect(newest >= oldest).toBeTruthy();
-    // #endregion Provider-produce-blocks
   });
 
   // TODO: Add back support for producing blocks with intervals by supporting the new
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
   it.skip('can force-produce blocks with custom timestamps', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const block = await provider.getBlock('latest');
     if (!block) {
@@ -373,27 +367,30 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [undefined]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(provider.cache).toEqual(undefined);
   });
 
   it('can cacheUtxo [numerical]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 2500,
-    });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 2500 } });
+    const { provider } = launched;
 
     expect(provider.cache).toBeTruthy();
     expect(provider.cache?.ttl).toEqual(2_500);
   });
 
   it('can cacheUtxo [invalid numerical]', async () => {
-    const { error } = await safeExec(() => Provider.create(FUEL_NETWORK_URL, { cacheUtxo: -500 }));
+    const { error } = await safeExec(async () => {
+      await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
+    });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
   it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     const transactionRequest = new ScriptTransactionRequest();
 
     const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
@@ -403,9 +400,13 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 1,
+    using launched = await setupTestProviderAndWallets({
+      providerOptions: {
+        cacheUtxo: 1,
+      },
     });
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
     const MessageInput: MessageTransactionRequestInput = {
       type: InputType.Message,
@@ -427,9 +428,9 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
@@ -487,9 +488,9 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
@@ -563,9 +564,9 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
@@ -623,9 +624,9 @@ describe('Provider', () => {
   });
 
   it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 10000,
-    });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
     const EXPECTED: BytesLike[] = [
       '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
@@ -711,7 +712,8 @@ describe('Provider', () => {
   });
 
   it('can getBlocks', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
     const blocks = await provider.getBlocks({
@@ -765,11 +767,11 @@ describe('Provider', () => {
   });
 
   it('can connect', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     // check if the provider was initialized properly
     expect(provider).toBeInstanceOf(Provider);
-    expect(provider.url).toEqual(FUEL_NETWORK_URL);
     expect(provider.getChain()).toBeDefined();
     expect(provider.getNode()).toBeDefined();
   });
@@ -777,7 +779,8 @@ describe('Provider', () => {
   it('should cache chain and node info', async () => {
     Provider.clearChainAndNodeCaches();
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(provider.getChain()).toBeDefined();
     expect(provider.getNode()).toBeDefined();
@@ -790,7 +793,8 @@ describe('Provider', () => {
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -811,7 +815,8 @@ describe('Provider', () => {
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
     expect(spyFetchChain).toHaveBeenCalledTimes(1);
@@ -825,7 +830,8 @@ describe('Provider', () => {
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const gasConfig = provider.getGasConfig();
 
@@ -836,7 +842,8 @@ describe('Provider', () => {
   });
 
   it('should throws when using getChain or getNode and without cached data', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     Provider.clearChainAndNodeCaches();
 
@@ -922,7 +929,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     await expectToThrowFuelError(
       async () => {
@@ -945,18 +953,20 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('default timeout is undefined', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     expect(provider.options.timeout).toBeUndefined();
   });
 
   it('throws TimeoutError on timeout when calling an operation', async () => {
     const timeout = 500;
-    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { timeout } });
     vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
       sleep(timeout).then(() =>
         fetch(args[0] as RequestInfo | URL, args[1] as RequestInit | undefined)
       )
     );
+    const { provider } = launched;
 
     const { error } = await safeExec(async () => {
       await provider.getBlocks({});
@@ -971,7 +981,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
   it('throws TimeoutError on timeout when calling a subscription', async () => {
     const timeout = 500;
-    const provider = await Provider.create(FUEL_NETWORK_URL, { timeout });
+    using launched = await setupTestProviderAndWallets({ providerOptions: { timeout } });
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce((...args: unknown[]) =>
       sleep(timeout).then(() =>
@@ -994,7 +1005,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     });
   });
   it('should ensure calculateMaxgas considers gasLimit for ScriptTransactionRequest', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const gasLimit = bn(1000);
@@ -1023,7 +1035,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('should ensure calculateMaxgas does NOT considers gasLimit for CreateTransactionRequest', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     const { gasPerByte, maxGasPerTx } = provider.getGasConfig();
 
     const transactionRequest = new CreateTransactionRequest({
@@ -1053,8 +1066,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
   // TODO: validate if this test still makes sense
   it.skip('should ensure estimated fee values on getTransactionCost are never 0', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
     const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
@@ -1069,7 +1082,9 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('should accept string addresses in methods that require an address', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
     const b256Str = Address.fromRandom().toB256();
 

@@ -16,6 +16,8 @@ Check out our [Help Wanted](https://github.com/FuelLabs/fuels-ts/issues?q=is%3Ao
 
 If you are planning something big, for example, changes related to multiple components or changes to current behaviors, make sure to [open an issue](https://github.com/FuelLabs/fuels-ts/issues/new) to discuss with us before starting on the implementation.
 
+If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
+
 # Setting up
 
 ```sh
@@ -89,7 +91,7 @@ pnpm link --global @fuel-ts/wallet
 
 See also:
 
-- [Developing](#Developing)
+- [Developing](#developing)
 
 # Testing
 
@@ -138,7 +140,7 @@ During the CI process an automated end-to-end (e2e) test is executed. This test 
 The e2e test can be found at:
 `packages/fuel-gauge/src/e2e-script.test.ts`
 
-The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-beta-5.fuel.network/).
+The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
@@ -151,12 +153,12 @@ cp .env.example .env.test
 And changing the below variables:
 
 ```sh
-FUEL_NETWORK_URL=https://beta-5.fuel.network/graphql
+FUEL_NETWORK_URL=https://testnet.fuel.network/v1/graphql
 TEST_WALLET_PVT_KEY=0x...
 TEST_WALLET_ADDRESS=fuel...
 ```
 
-<!-- TODO: add/fix block explorer URL after beta-5 support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
+<!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
 
 # Commit Convention
 
@@ -224,7 +226,7 @@ After this you should run tests and fix any incompatibilities.
 
 # Updating Fuel Core version
 
-Manually edit the `packages/fuel-core/VERSION` file, add the right version, and then:
+Manually edit the `internal/fuel-core/VERSION` file, add the right version, and then:
 
 ```sh
 pnpm install # will download new binaries

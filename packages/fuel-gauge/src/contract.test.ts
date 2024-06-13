@@ -8,6 +8,7 @@ import type {
   TransactionType,
   JsonAbi,
   ScriptTransactionRequest,
+  TransferParams,
 } from 'fuels';
 import {
   BN,
@@ -97,6 +98,7 @@ const jsonFragment: JsonAbi = {
       attributes: [],
     },
   ],
+  messagesTypes: [],
 };
 
 const complexFragment: JsonAbi = {
@@ -157,6 +159,7 @@ const complexFragment: JsonAbi = {
       attributes: [],
     },
   ],
+  messagesTypes: [],
 };
 
 const txPointer = '0x00000000000000000000000000000000';
@@ -842,7 +845,7 @@ describe('Contract', () => {
     const amountToContract = 5_000;
 
     const gasLimit = 80_000;
-    const maxFee = 40_000;
+    const maxFee = 70_000;
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId, {
       gasLimit,
@@ -948,7 +951,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
@@ -959,7 +962,11 @@ describe('Contract', () => {
 
     await contract.functions
       .sum(40, 50)
-      .addTransfer(receiver.address, amountToTransfer, baseAssetId)
+      .addTransfer({
+        destination: receiver.address,
+        amount: amountToTransfer,
+        assetId: baseAssetId,
+      })
       .call();
 
     const finalBalance = await receiver.getBalance();
@@ -973,9 +980,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [50_000, baseAssetId],
-      [50_000, ASSET_A],
-      [50_000, ASSET_B],
+      [300_000, baseAssetId],
+      [300_000, ASSET_A],
+      [300_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -990,12 +997,13 @@ describe('Contract', () => {
     const amountToTransfer2 = 699;
     const amountToTransfer3 = 122;
 
-    await contract.functions
-      .sum(40, 50)
-      .addTransfer(receiver1.address, amountToTransfer1, baseAssetId)
-      .addTransfer(receiver2.address, amountToTransfer2, ASSET_A)
-      .addTransfer(receiver3.address, amountToTransfer3, ASSET_B)
-      .call();
+    const transferParams: TransferParams[] = [
+      { destination: receiver1.address, amount: amountToTransfer1, assetId: baseAssetId },
+      { destination: receiver2.address, amount: amountToTransfer2, assetId: ASSET_A },
+      { destination: receiver3.address, amount: amountToTransfer3, assetId: ASSET_B },
+    ];
+
+    await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
 
     const finalBalance1 = await receiver1.getBalance(baseAssetId);
     const finalBalance2 = await receiver2.getBalance(ASSET_A);
@@ -1012,9 +1020,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [50_000, baseAssetId],
-      [50_000, ASSET_A],
-      [50_000, ASSET_B],
+      [300_000, baseAssetId],
+      [300_000, ASSET_A],
+      [300_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1143,7 +1151,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[50_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[200_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
@@ -1173,7 +1181,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[150_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[350_000, baseAssetId]]);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
     const storageContract = await factory.deployContract();
