@@ -49,23 +49,6 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     );
   }
 
-  decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
-    const fragment =
-      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
-
-    return fragment.decodeArguments(data);
-  }
-
-  encodeFunctionData(
-    functionFragment: FunctionFragment | string,
-    values: Array<InputValue>
-  ): Uint8Array {
-    const fragment =
-      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
-
-    return fragment.encodeArguments(values);
-  }
-
   // Decode the result of a function call
   decodeFunctionResult(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =

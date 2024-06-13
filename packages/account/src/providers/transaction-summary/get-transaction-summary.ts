@@ -97,7 +97,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 ): Promise<TransactionSummary<TTransactionType>> {
   const { provider, transactionRequest, abiMap } = params;
 
-  const { receipts } = await provider.call(transactionRequest);
+  const { receipts } = await provider.dryRun(transactionRequest);
 
   const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = provider.getGasConfig();
   const maxInputs = provider.getChain().consensusParameters.txParameters.maxInputs;
