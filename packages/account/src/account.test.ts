@@ -610,7 +610,7 @@ describe('Account', () => {
     request.addCoinOutput(Address.fromRandom(), amount2, ASSET_A);
     request.addCoinOutput(Address.fromRandom(), amount3, ASSET_B);
 
-    const { dryRunStatus } = await provider.call(request, {
+    const { dryRunStatus } = await provider.dryRun(request, {
       utxoValidation: false,
       estimateTxDependencies: false,
     });

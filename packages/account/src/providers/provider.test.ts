@@ -100,7 +100,7 @@ describe('Provider', () => {
       witnesses: ['0x'],
     });
 
-    const callResult = await provider.call(transactionRequest);
+    const callResult = await provider.dryRun(transactionRequest);
 
     const expectedReceipts: Receipt[] = [
       {

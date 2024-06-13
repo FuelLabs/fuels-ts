@@ -92,6 +92,12 @@ When the value is more than the max value.
 
 Ensure that the value is less than the max value.
 
+## `INVALID_DECODE_VALUE`
+
+When you provide an incorrect value to contract, these are documented under [Enums](../types/enums.md#errors).
+
+Ensure that the value (and type) matches the expected format.
+
 ## `INVALID_ENTROPY`
 
 When the entropy is not: between 16 and 32 bytes; a multiple of 4.
