@@ -59,6 +59,32 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/ci-setup
 
+      - name: Bump and Collect Versions
+        run: |
+          echo "CURRENT_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          pnpm changeset version
+          echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          COMMIT_MSG=$(git log -1 --format=%B)
+          echo $COMMIT_MSG
+          echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
+          git reset --hard
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release Pull Request or Publish to npm
+        if: |
+          ${{ env.RELEASE_VERSION != env.CURRENT_VERSION }} ||
+          startsWith(env.COMMIT_MSG, 'ci(changesets)')
+        run: |
+          git log -1
+          git show --format='commit %H%nAuthor: %an <%ae>%nDate:   %ad%n%n    %s'          echo $COMMIT_MSG
+          echo $RELEASE_VERSION
+          echo $CURRENT_VERSION
+        env:
+          COMMIT_MSG: ${{ env.COMMIT_MSG }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          CURRENT_VERSION: ${{ env.CURRENT_VERSION }}
+
       - name: Validate Changeset
         run: pnpm changeset status --since=origin/${{ github.base_ref }}
 

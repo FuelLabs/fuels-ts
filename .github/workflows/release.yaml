@@ -37,10 +37,12 @@ jobs:
       # if there are changesets present, package.json will be bumped
       - name: Bump and Collect Versions
         run: |
+          echo "CURRENT_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           pnpm changeset version
           echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           echo "FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)" >> $GITHUB_ENV
           echo "FORC_VERSION=$(cat ./internal/forc/VERSION)" >> $GITHUB_ENV
+          echo "COMMIT_MSG=$(git log -n 1 --format=%B)" >> $GITHUB_ENV
           git reset --hard
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,6 +67,7 @@ jobs:
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
+        if: ${{ env.RELEASE_VERSION != env.CURRENT_VERSION && !startsWith(env.COMMIT_MSG, "ci(changesets)") }}
         uses: FuelLabs/changesets-action@main
         with:
           publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
