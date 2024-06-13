@@ -3,7 +3,7 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
-import { concat, hexlify } from '@fuel-ts/utils';
+import { concat } from '@fuel-ts/utils';
 
 import { Interface } from '../src';
 /** @knipignore */
@@ -768,10 +768,7 @@ describe('Abi interface', () => {
       const randomLogId = randomBytes(20).join('');
       await expectToThrowFuelError(
         () => {
-          exhaustiveExamplesInterface.decodeLog(
-            hexlify(Uint8Array.from([1, 0, 0, 0, 32])),
-            randomLogId
-          );
+          exhaustiveExamplesInterface.decodeLog(Uint8Array.from([1, 0, 0, 0, 32]), randomLogId);
         },
         new FuelError(
           ErrorCode.LOG_TYPE_NOT_FOUND,
@@ -785,7 +782,7 @@ describe('Abi interface', () => {
     it('should return decoded function result', async () => {
       const data = exhaustiveExamplesInterface.decodeFunctionResult(
         'struct_simple',
-        hexlify(Uint8Array.from([1, 0, 0, 0, 32]))
+        Uint8Array.from([1, 0, 0, 0, 32])
       );
 
       expect(data).toEqual({
@@ -799,7 +796,7 @@ describe('Abi interface', () => {
         () => {
           exhaustiveExamplesInterface.decodeFunctionResult(
             'doesnt_exist',
-            hexlify(Uint8Array.from([1, 0, 0, 0, 32]))
+            Uint8Array.from([1, 0, 0, 0, 32])
           );
         },
         new FuelError(ErrorCode.FUNCTION_NOT_FOUND, `Function doesnt_exist not found.`)
