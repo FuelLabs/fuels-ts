@@ -126,7 +126,7 @@ export class BaseWalletUnlocked extends Account {
   }
 
   /**
-   * Populates the witness signature for a transaction and sends a call to the network using `provider.call`.
+   * Populates the witness signature for a transaction and sends a call to the network using `provider.dryRun`.
    *
    * @param transactionRequestLike - The transaction request to simulate.
    * @returns A promise that resolves to the CallResult object.
@@ -139,7 +139,7 @@ export class BaseWalletUnlocked extends Account {
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
-    return this.provider.call(
+    return this.provider.dryRun(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {
         utxoValidation: true,

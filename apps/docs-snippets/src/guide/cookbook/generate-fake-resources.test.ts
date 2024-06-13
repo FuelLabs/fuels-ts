@@ -42,7 +42,7 @@ describe(__filename, () => {
 
     transactionRequest.addResources(resources);
 
-    const dryrunResult = await provider.call(transactionRequest);
+    const dryrunResult = await provider.dryRun(transactionRequest);
 
     const returnReceipt = dryrunResult.receipts.find(
       (receipt) => receipt.type === ReceiptType.ReturnData
