@@ -8,7 +8,6 @@ import { getScript } from './utils';
  * @group e2e
  */
 describe('Live Script Test', () => {
-  const MINT_TX_ID = '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e';
   const UPGRADE_TX_ID = '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094';
   const UPLOAD_TX_ID = '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73';
 
@@ -57,7 +56,6 @@ describe('Live Script Test', () => {
   });
 
   it.skip.each([
-    ['Mint', MINT_TX_ID, TransactionType.Mint],
     ['Upgrade', UPGRADE_TX_ID, TransactionType.Upgrade],
     ['Upload', UPLOAD_TX_ID, TransactionType.Upload],
   ])('can query and decode a %s transaction', async (_, txId, type) => {
