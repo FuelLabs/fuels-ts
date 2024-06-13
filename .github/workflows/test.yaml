@@ -51,7 +51,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [environments]
-    if: ${{ !github.event.pull_request.draft }}
+    # Revert this, want to generate coverage for draft
+    # if: ${{ !github.event.pull_request.draft }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
