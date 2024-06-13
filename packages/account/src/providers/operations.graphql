@@ -570,6 +570,9 @@ query getTransactions(
         ...transactionFragment
       }
     }
+    pageInfo {
+      ...pageInfoFragment
+    }
   }
 }
 

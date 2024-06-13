@@ -34,6 +34,7 @@ import type {
   GqlRelayedTransactionFailed,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
+  GqlPageInfo,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -89,6 +90,11 @@ export type Block = {
   height: BN;
   time: string;
   transactionIds: string[];
+};
+
+export type GetTransactionsResponse = {
+  transactions: Transaction[];
+  pageInfo: GqlPageInfo;
 };
 
 /**
@@ -1452,6 +1458,24 @@ Supported fuel-core version: ${supportedVersion}.`
       arrayify(transaction.rawPayload),
       0
     )?.[0] as Transaction<TTransactionType>;
+  }
+
+  /**
+   * Retrieves transactions based on the provided pagination arguments.
+   * @param paginationArgs - The pagination arguments for retrieving transactions.
+   * @returns A promise that resolves to an object containing the retrieved transactions and pagination information.
+   */
+  async getTransactions(paginationArgs?: CursorPaginationArgs): Promise<GetTransactionsResponse> {
+    const {
+      transactions: { edges, pageInfo },
+    } = await this.operations.getTransactions(paginationArgs);
+
+    const coder = new TransactionCoder();
+    const transactions = edges.map(
+      ({ node: { rawPayload } }) => coder.decode(arrayify(rawPayload), 0)[0]
+    );
+
+    return { transactions, pageInfo };
   }
 
   /**

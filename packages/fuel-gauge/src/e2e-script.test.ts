@@ -34,7 +34,6 @@ const configuredNetworks = {
     privateKey: process.env.DEVNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-devnet.fuel.network/`,
     txIds: {
-      [TransactionType.Mint]: '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e',
       [TransactionType.Upgrade]:
         '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094',
       [TransactionType.Upload]:
@@ -46,7 +45,6 @@ const configuredNetworks = {
     privateKey: process.env.TESTNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-testnet.fuel.network/`,
     txIds: {
-      [TransactionType.Mint]: '0x4a7b49a5dcc4b4ff65f13429ba09c0dbfb2ca21f2f16ebe4b495bc73c2979f3b',
       [TransactionType.Upgrade]:
         '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
       [TransactionType.Upload]:
@@ -107,7 +105,6 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   });
 
   it.each([
-    ['Mint', TransactionType.Mint],
     ['Upgrade', TransactionType.Upgrade],
     ['Upload', TransactionType.Upload],
   ])('can query and decode a %s transaction', async (_, type) => {
