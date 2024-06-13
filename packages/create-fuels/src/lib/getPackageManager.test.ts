@@ -30,7 +30,7 @@ const runScenarios: [PackageManager, string][] = [
 describe('getPackageManager', () => {
   it.each(availablePackageManagers)(
     `should get the correct package manager for %s`,
-    async (packageManager: PackageManager) => {
+    (packageManager: PackageManager) => {
       const expectedPackageManager = packageMangers[packageManager];
       const opts = { [packageManager]: true };
 
@@ -42,7 +42,7 @@ describe('getPackageManager', () => {
 
   it.each(installScenarios)(
     'should have the correct install commands',
-    async (packageManager, expectedInstallCommand) => {
+    (packageManager, expectedInstallCommand) => {
       const command = getPackageManager({ [packageManager]: true });
 
       const install = command.install;
@@ -53,7 +53,7 @@ describe('getPackageManager', () => {
 
   it.each(runScenarios)(
     'should have the correct run commands',
-    async (packageManager, expectedRunCommand) => {
+    (packageManager, expectedRunCommand) => {
       const command = getPackageManager({ [packageManager]: true });
 
       const run = command.run(runCommand);
@@ -62,7 +62,7 @@ describe('getPackageManager', () => {
     }
   );
 
-  it('should warn the user if more than one package manager selected', async () => {
+  it('should warn the user if more than one package manager selected', () => {
     const { warn } = mockAllDeps();
     const opts = { pnpm: true, npm: true };
 
@@ -71,7 +71,7 @@ describe('getPackageManager', () => {
     expect(warn).toBeCalledWith('More than one package manager was selected.');
   });
 
-  it('should default to npm if no package manager is selected', async () => {
+  it('should default to npm if no package manager is selected', () => {
     const packageManager = 'npm';
     const expectedPackageManager = packageMangers[packageManager];
     const { warn } = mockAllDeps();
