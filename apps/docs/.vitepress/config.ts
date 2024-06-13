@@ -172,10 +172,6 @@ export default defineConfig({
                 text: 'Locking and Unlocking',
                 link: '/guide/wallets/locking-and-unlocking',
               },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
-              },
             ],
           },
           {
@@ -238,6 +234,10 @@ export default defineConfig({
               {
                 text: 'Configurable Constants',
                 link: '/guide/contracts/configurable-constants',
+              },
+              {
+                text: 'Minted Token Asset ID',
+                link: '/guide/contracts/minted-token-asset-id',
               },
               {
                 text: 'Managing Deployed Contracts',
@@ -315,6 +315,21 @@ export default defineConfig({
             ],
           },
           {
+            text: 'Encoding',
+            link: '/guide/encoding/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Encode and Decode',
+                link: '/guide/encoding/encode-and-decode',
+              },
+              {
+                text: 'Working with Bytes',
+                link: '/guide/encoding/working-with-bytes',
+              },
+            ],
+          },
+          {
             text: 'Utilities',
             link: '/guide/utilities/',
             collapsed: true,
@@ -359,6 +374,10 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
+                text: 'Generate Fake Resources',
+                link: '/guide/cookbook/generate-fake-resources',
+              },
+              {
                 text: 'Transactions with Multiple Signers',
                 link: '/guide/cookbook/transactions-with-multiple-signers',
               },
@@ -374,16 +393,28 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing in TS',
-                link: '/guide/testing/testing-in-ts',
+                text: 'Launching a Test Node',
+                link: '/guide/testing/launching-a-test-node',
               },
               {
-                text: 'Setting Up a Custom Chain',
-                link: '/guide/testing/setting-up-a-custom-chain',
+                text: 'Test Node Options',
+                link: '/guide/testing/test-node-options',
               },
               {
-                text: 'Tweaking the Blockchain',
-                link: '/guide/testing/tweaking-the-blockchain',
+                text: 'Fuel Core Options',
+                link: '/guide/testing/fuel-core-options',
+              },
+              {
+                text: 'Basic Example',
+                link: '/guide/testing/basic-example',
+              },
+              {
+                text: 'Advanced Example',
+                link: '/guide/testing/advanced-example',
+              },
+              {
+                text: 'Custom Blocks',
+                link: '/guide/testing/custom-blocks',
               },
             ],
           },

@@ -1,5 +1,61 @@
 # Change Log
 
+## 0.89.2
+
+### Patch Changes
+
+- Updated dependencies [78c2d73]
+  - @fuel-ts/account@0.89.2
+  - @fuel-ts/abi-coder@0.89.2
+  - @fuel-ts/address@0.89.2
+  - @fuel-ts/errors@0.89.2
+  - @fuel-ts/interfaces@0.89.2
+  - @fuel-ts/math@0.89.2
+  - @fuel-ts/transactions@0.89.2
+  - @fuel-ts/utils@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+- Updated dependencies [eb6460b]
+  - @fuel-ts/account@0.89.1
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/abi-coder@0.89.1
+  - @fuel-ts/address@0.89.1
+  - @fuel-ts/transactions@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
+## 0.89.0
+
+### Minor Changes
+
+- 7c08593: feat!: transfer for multiple addresses
+
+### Patch Changes
+
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [3b27bac]
+- Updated dependencies [f83502e]
+- Updated dependencies [0b53b85]
+- Updated dependencies [af3c143]
+- Updated dependencies [685829b]
+- Updated dependencies [7c08593]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [f76aa57]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/account@0.89.0
+  - @fuel-ts/abi-coder@0.89.0
+  - @fuel-ts/transactions@0.89.0
+  - @fuel-ts/address@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
 ## 0.88.1
 
 ### Patch Changes

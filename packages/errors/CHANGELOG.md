@@ -1,5 +1,26 @@
 # @fuel-ts/errors
 
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/versions@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/versions@0.89.1
+
+## 0.89.0
+
+### Patch Changes
+
+- Updated dependencies [67afa32]
+- Updated dependencies [a96c1fe]
+  - @fuel-ts/versions@0.89.0
+
 ## 0.88.1
 
 ### Patch Changes

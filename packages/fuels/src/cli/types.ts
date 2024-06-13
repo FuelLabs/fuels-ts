@@ -6,6 +6,7 @@ export enum Commands {
   dev = 'dev',
   init = 'init',
   versions = 'versions',
+  node = 'node',
 }
 
 export type CommandEvent =
@@ -27,6 +28,10 @@ export type CommandEvent =
     }
   | {
       type: Commands.versions;
+      data: unknown;
+    }
+  | {
+      type: Commands.node;
       data: unknown;
     };
 

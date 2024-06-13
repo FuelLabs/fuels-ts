@@ -29,10 +29,7 @@ describe(__filename, () => {
   });
 
   it('sets gas requirements (contract)', async () => {
-    const wallet = Wallet.fromPrivateKey(
-      '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
-      provider
-    );
+    const wallet = Wallet.generate({ provider });
     await seedTestWallet(wallet, [[500_000, baseAssetId]]);
 
     /**
@@ -72,10 +69,7 @@ describe(__filename, () => {
   });
 
   it('sets gas requirements (script)', async () => {
-    const sender = Wallet.fromPrivateKey(
-      '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
-      provider
-    );
+    const sender = Wallet.generate({ provider });
     await seedTestWallet(sender, [[500_000, baseAssetId]]);
 
     /**
@@ -160,10 +154,7 @@ describe(__filename, () => {
     /**
      * Setup account
      */
-    const wallet = Wallet.fromPrivateKey(
-      '0x0f44a619bf8c19f3eb903be38d1d26d36d08a10341e1a4282ffa87214da0cea8',
-      provider
-    );
+    const wallet = Wallet.generate({ provider });
     await seedTestWallet(wallet, [[500_000, baseAssetId]]);
 
     /**

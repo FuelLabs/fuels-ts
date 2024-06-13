@@ -30,7 +30,7 @@ describe(__filename, () => {
       inputData: [inputAddress],
     });
     baseAssetId = provider.getBaseAssetId();
-    await seedTestWallet(predicate, [[100_000, baseAssetId]]);
+    await seedTestWallet(predicate, [[500_000, baseAssetId]]);
   });
 
   it('should successfully use predicate to spend assets', async () => {
@@ -201,7 +201,7 @@ describe(__filename, () => {
       inputData: [inputAddress],
     });
 
-    const amountToPredicate = 10_000;
+    const amountToPredicate = 300_000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1_000,
@@ -213,11 +213,13 @@ describe(__filename, () => {
       provider,
     });
 
+    const transferAmount = 1000;
+
     // #region predicates-prestage-transaction
     // Prepare the transaction
     const preparedTx = await predicate.createTransfer(
       receiverWallet.address,
-      amountToPredicate,
+      transferAmount,
       baseAssetId
     );
 

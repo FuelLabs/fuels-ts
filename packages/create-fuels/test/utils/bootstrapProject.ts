@@ -1,9 +1,12 @@
 import { cpSync, existsSync, readdirSync, rmSync } from 'fs';
 import { basename, join } from 'path';
 
+import { rewriteTemplateFiles } from '../../src/lib/rewriteTemplateFiles';
+
 export type ProjectPaths = {
   root: string;
   template: string;
+  sourceTemplate: string;
 };
 
 /**
@@ -21,9 +24,6 @@ export const bootstrapProject = (
   // Template paths
   const templateDir = join(templatesDir, templateName);
   const localTemplateDir = join(testTemplateDir, templateName);
-  if (!existsSync(localTemplateDir)) {
-    cpSync(templateDir, localTemplateDir, { recursive: true });
-  }
 
   // Unique name
   const testFilename = basename(testFilepath.replace(/\./g, '-'));
@@ -35,7 +35,18 @@ export const bootstrapProject = (
   return {
     root,
     template: localTemplateDir,
+    sourceTemplate: templateDir,
   };
+};
+
+export const copyTemplate = (srcDir: string, destDir: string, shouldRewrite: boolean = true) => {
+  if (!existsSync(destDir)) {
+    cpSync(srcDir, destDir, { recursive: true });
+  }
+
+  if (shouldRewrite) {
+    rewriteTemplateFiles(destDir);
+  }
 };
 
 export const resetFilesystem = (dirPath: string) => {

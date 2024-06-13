@@ -104,8 +104,8 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
 
     swayMembers
       .map((path) => ({ path, type: readSwayType(path) }))
-      .filter(({ type }) => Object.values(SwayType).includes(type))
-      .forEach(({ path, type }) => config[`${type}s`].push(path));
+      .filter(({ type }) => type !== SwayType.library)
+      .forEach(({ path, type }) => config[`${type as Exclude<SwayType, 'library'>}s`].push(path));
 
     config.workspace = workspace;
   }

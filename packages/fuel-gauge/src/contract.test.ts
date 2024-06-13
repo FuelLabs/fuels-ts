@@ -845,7 +845,7 @@ describe('Contract', () => {
     const amountToContract = 5_000;
 
     const gasLimit = 80_000;
-    const maxFee = 40_000;
+    const maxFee = 70_000;
 
     const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId, {
       gasLimit,
@@ -951,7 +951,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
@@ -980,9 +980,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [50_000, baseAssetId],
-      [50_000, ASSET_A],
-      [50_000, ASSET_B],
+      [300_000, baseAssetId],
+      [300_000, ASSET_A],
+      [300_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1020,9 +1020,9 @@ describe('Contract', () => {
     );
 
     const wallet = await generateTestWallet(provider, [
-      [50_000, baseAssetId],
-      [50_000, ASSET_A],
-      [50_000, ASSET_B],
+      [300_000, baseAssetId],
+      [300_000, ASSET_A],
+      [300_000, ASSET_B],
     ]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
@@ -1151,7 +1151,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[50_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[200_000, baseAssetId]]);
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
@@ -1181,7 +1181,7 @@ describe('Contract', () => {
       FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
     );
 
-    const wallet = await generateTestWallet(provider, [[150_000, baseAssetId]]);
+    const wallet = await generateTestWallet(provider, [[350_000, baseAssetId]]);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
     const storageContract = await factory.deployContract();

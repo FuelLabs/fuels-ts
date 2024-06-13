@@ -27,5 +27,7 @@ export const arrayify = (value: BytesLike, name?: string, copy: boolean = true):
     return result;
   }
 
-  throw new FuelError(ErrorCode.INVALID_DATA, `invalid data - ${name || ''}`);
+  const nameMessage = name ? ` ${name} -` : '';
+  const message = `invalid data:${nameMessage} ${value}\nIf you are attempting to transform a hex value, please make sure it is being passed as a string and wrapped in quotes.`;
+  throw new FuelError(ErrorCode.INVALID_DATA, message);
 };

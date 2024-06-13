@@ -150,7 +150,7 @@ describe('Advanced Logging', () => {
     ];
 
     beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
+      wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     });
 
     it('when using InvacationScope', async () => {
@@ -233,7 +233,7 @@ describe('Advanced Logging', () => {
     ];
 
     beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
+      wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
     });
 
     it('when using InvocationScope', async () => {

@@ -12,6 +12,7 @@ export enum DocSnippetProjectsEnum {
   SUM_OPTION_U8 = 'sum-option-u8',
   ECHO_U64_ARRAY = 'echo-u64-array',
   RETURN_CONTEXT = 'return-context',
+  RETURN_SCRIPT = 'return-script',
   TOKEN_DEPOSITOR = 'token-depositor',
   TOKEN = 'token',
   LIQUIDITY_POOL = 'liquidity-pool',

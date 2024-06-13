@@ -61,6 +61,7 @@ export async function getTransactionSummary<TTransactionType = void>(
   } = provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
@@ -75,6 +76,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     gasCosts,
     maxGasPerTx,
     gasPrice,
+    baseAssetId,
   });
 
   return {
@@ -95,7 +97,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 ): Promise<TransactionSummary<TTransactionType>> {
   const { provider, transactionRequest, abiMap } = params;
 
-  const { receipts } = await provider.call(transactionRequest);
+  const { receipts } = await provider.dryRun(transactionRequest);
 
   const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = provider.getGasConfig();
   const maxInputs = provider.getChain().consensusParameters.txParameters.maxInputs;
@@ -104,6 +106,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   const transactionBytes = transactionRequest.toTransactionBytes();
 
   const gasPrice = await provider.getLatestGasPrice();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
     receipts,
@@ -116,6 +119,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
     gasCosts,
     maxGasPerTx,
     gasPrice,
+    baseAssetId,
   });
 
   return transactionSummary;
@@ -151,6 +155,7 @@ export async function getTransactionsSummaries(
   } = provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
@@ -180,6 +185,7 @@ export async function getTransactionsSummaries(
       gasCosts,
       maxGasPerTx,
       gasPrice,
+      baseAssetId,
     });
 
     const output: TransactionResult = {

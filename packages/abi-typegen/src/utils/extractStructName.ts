@@ -5,7 +5,8 @@ import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 export function extractStructName(params: { rawAbiType: IRawAbiTypeRoot; regex: RegExp }) {
   const { rawAbiType, regex } = params;
 
-  const match = rawAbiType.type.match(params.regex)?.[1];
+  const matches = rawAbiType.type.match(regex);
+  const match = matches?.[2] ?? matches?.[1];
 
   if (!match) {
     let errorMessage = `Couldn't extract struct name with: '${regex}'.\n\n`;

@@ -1,10 +1,11 @@
+import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { WalletLocked, WalletUnlocked, BigNumberish } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, Predicate } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
 
-import { setupWallets, assertBalances, fundPredicate } from './utils/predicate';
+import { setupWallets, assertBalances } from './utils/predicate';
 
 /**
  * @group node
@@ -31,7 +32,7 @@ describe('Predicate', () => {
     let provider: Provider;
     let baseAssetId: string;
     const amountToReceiver = 50;
-    const amountToPredicate = 4000;
+    const amountToPredicate = 900_000;
 
     beforeAll(async () => {
       provider = await Provider.create(FUEL_NETWORK_URL);
@@ -51,7 +52,7 @@ describe('Predicate', () => {
         inputData: ['0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a'],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
@@ -70,7 +71,7 @@ describe('Predicate', () => {
         provider,
         inputData: ['0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada'],
       });
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
@@ -88,7 +89,7 @@ describe('Predicate', () => {
         inputData: [1078],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
@@ -108,7 +109,7 @@ describe('Predicate', () => {
         inputData: [100],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       expect(initialReceiverBalance.toHex()).toEqual(toHex(0));
@@ -127,7 +128,7 @@ describe('Predicate', () => {
         provider,
         inputData: [{ has_account: true, total_complete: 100 }],
       });
-      await fundPredicate(wallet, predicateInstanceForBalance, amountToPredicate);
+      await seedTestWallet(predicateInstanceForBalance, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-struct-arg
@@ -160,7 +161,7 @@ describe('Predicate', () => {
         ],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
 
       await expect(
         predicate.transfer(receiver.address, 50, baseAssetId, { gasLimit: 1000 })
@@ -175,7 +176,7 @@ describe('Predicate', () => {
         inputData: [[42]],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
@@ -195,7 +196,7 @@ describe('Predicate', () => {
         inputData: [20, 30],
       });
 
-      await fundPredicate(wallet, predicateForBalance, amountToPredicate);
+      await seedTestWallet(predicateForBalance, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-multi-args
@@ -223,7 +224,7 @@ describe('Predicate', () => {
         inputData: [20, 30],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
       const initialReceiverBalance = await receiver.getBalance();
 
       const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
@@ -243,7 +244,7 @@ describe('Predicate', () => {
         inputData: [20, 20],
       });
 
-      await fundPredicate(wallet, predicate, amountToPredicate);
+      await seedTestWallet(predicate, [[amountToPredicate, baseAssetId]], 3);
 
       await expect(
         predicate.transfer(receiver.address, 50, baseAssetId, { gasLimit: 1000 })

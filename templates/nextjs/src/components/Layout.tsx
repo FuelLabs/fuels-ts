@@ -8,6 +8,7 @@ import { useBrowserWallet } from "@/hooks/useBrowserWallet";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
 import Head from "next/head";
+import { bn } from "fuels";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { faucetWallet } = useFaucet();
@@ -33,7 +34,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         return toast.error("Faucet wallet not found.");
       }
 
-      const tx = await faucetWallet?.transfer(wallet.address, 10_000);
+      const tx = await faucetWallet?.transfer(
+        wallet.address,
+        bn.parseUnits("5"),
+      );
       await tx?.waitForResult();
 
       toast.success("Wallet topped up!");
@@ -49,7 +53,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const showTopUpButton = walletBalance?.lt(10_000);
+  const showTopUpButton = walletBalance?.lt(bn.parseUnits("5"));
 
   const showAddNetworkButton =
     browserWallet &&

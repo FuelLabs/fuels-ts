@@ -171,7 +171,7 @@ describe('Policies', () => {
       tip: 11,
       witnessLimit: 2000,
       maturity: await randomMaturity(),
-      maxFee: 5000,
+      maxFee: 70_000,
     };
 
     const { transactionRequest: txRequest } = factory.createTransactionRequest(txParams);
@@ -207,7 +207,7 @@ describe('Policies', () => {
       tip: 5,
       maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
-      maxFee: 3000,
+      maxFee: 70_000,
     });
 
     const txRequest = await callScope.getTransactionRequest();
@@ -237,7 +237,7 @@ describe('Policies', () => {
       tip: 2,
       maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
-      maxFee: 3000,
+      maxFee: 70_000,
     });
 
     const txRequest = await callScope.getTransactionRequest();
@@ -259,7 +259,7 @@ describe('Policies', () => {
       tip: 4,
       maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
-      maxFee: 3000,
+      maxFee: 70_000,
     };
 
     const pendingTx = await wallet.transfer(receiver.address, 500, baseAssetId, txParams);
@@ -287,7 +287,7 @@ describe('Policies', () => {
       tip: 1,
       maturity: await randomMaturity(),
       witnessLimit: randomNumber(800, 900),
-      maxFee: 3000,
+      maxFee: 70_000,
     };
 
     const pendingTx = await wallet.transferToContract(contract.id, 500, baseAssetId, txParams);
