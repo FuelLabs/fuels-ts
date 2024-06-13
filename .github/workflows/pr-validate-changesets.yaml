@@ -64,6 +64,7 @@ jobs:
           echo "CURRENT_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
           pnpm changeset version
           echo "RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)" >> $GITHUB_ENV
+          git log -1
           COMMIT_MSG=$(git log -1 --format=%B)
           echo $COMMIT_MSG
           echo "COMMIT_MSG=$COMMIT_MSG" >> $GITHUB_ENV
