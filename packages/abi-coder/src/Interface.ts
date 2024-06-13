@@ -58,7 +58,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   decodeLog(data: BytesLike, logId: string): any {
-    const loggedType = this.jsonAbi.loggedTypes.find((type) => type.logId.toString() === logId);
+    const loggedType = this.jsonAbi.loggedTypes.find((type) => type.logId === logId);
     if (!loggedType) {
       throw new FuelError(
         ErrorCode.LOG_TYPE_NOT_FOUND,
