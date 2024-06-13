@@ -45,7 +45,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   // We parse a native enum as an empty tuple, so we are looking for a tuple with no child coders.
   // The '()' is enough but the child coders is a stricter check.
   #isNativeEnum(coder: Coder): boolean {
-    if (this.type !== 'enum Option' && coder.type === '()') {
+    if (this.type !== OPTION_CODER_TYPE && coder.type === '()') {
       const tupleCoder = coder as TupleCoder<[]>;
       return tupleCoder.coders.length === 0;
     }
