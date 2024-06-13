@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-<<<<<<< Updated upstream
-=======
 import { randomBytes } from '@fuel-ts/crypto';
->>>>>>> Stashed changes
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
@@ -10,7 +7,7 @@ import { concat, hexlify } from '@fuel-ts/utils';
 
 import { Interface } from '../src';
 /** @knipignore */
-import type { JsonAbiConfigurable } from '../src/json-abi';
+import type { JsonAbiConfigurable } from '../src/types/JsonAbi';
 
 import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';
 import {
@@ -768,16 +765,17 @@ describe('Abi interface', () => {
     });
 
     it('should throw an error when log does not exist', async () => {
+      const randomLogId = randomBytes(20).join('');
       await expectToThrowFuelError(
         () => {
           exhaustiveExamplesInterface.decodeLog(
             hexlify(Uint8Array.from([1, 0, 0, 0, 32])),
-            '8500535089865083573'
+            randomLogId
           );
         },
         new FuelError(
           ErrorCode.LOG_TYPE_NOT_FOUND,
-          `Log type with logId '8500535089865083573' doesn't exist in the ABI.`
+          `Log type with logId '${randomLogId}' doesn't exist in the ABI.`
         )
       );
     });
