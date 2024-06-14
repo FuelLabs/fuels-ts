@@ -24,7 +24,7 @@ import {
   Signer,
   ZeroBytes32,
   FUEL_NETWORK_URL,
-  FUEL_TESTNET_NETWORK_URL,
+  TESTNET_NETWORK_URL,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -59,6 +59,12 @@ const ADDRESS_BYTES = new Uint8Array([
  */
 describe('Doc Examples', () => {
   let baseAssetId: string;
+
+  beforeAll(async () => {
+    // Avoids using the actual network.
+    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
+    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
+  });
 
   beforeAll(async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -239,7 +245,7 @@ describe('Doc Examples', () => {
   });
 
   it('can connect to testnet', async () => {
-    const provider = await Provider.create(FUEL_TESTNET_NETWORK_URL);
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 

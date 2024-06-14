@@ -48,6 +48,7 @@ input BalanceFilterInput {
 }
 
 type Block {
+  version: BlockVersion!
   id: BlockId!
   height: U32!
   header: Header!
@@ -88,6 +89,10 @@ type BlockEdge {
 }
 
 scalar BlockId
+
+enum BlockVersion {
+  V1
+}
 
 """
 Breakpoint, defined as a tuple of contract ID and relative PC offset inside it
@@ -436,6 +441,7 @@ type GasCosts {
   wqmm: U64!
   xor: U64!
   xori: U64!
+  alocDependentCost: DependentCost!
   call: DependentCost!
   ccp: DependentCost!
   croo: DependentCost!
@@ -493,6 +499,11 @@ type Genesis {
 }
 
 type Header {
+  """
+  Version of the header
+  """
+  version: HeaderVersion!
+
   """
   Hash of the header
   """
@@ -557,6 +568,10 @@ type Header {
   Hash of the application header.
   """
   applicationHash: Bytes32!
+}
+
+enum HeaderVersion {
+  V1
 }
 
 type HeavyOperation {
@@ -739,6 +754,7 @@ type Mutation {
   dryRun(
     txs: [HexString!]!
     utxoValidation: Boolean
+    gasPrice: U64
   ): [DryRunTransactionExecutionStatus!]!
 
   """
