@@ -52,8 +52,11 @@ test('top-up wallet button', async ({ page }) => {
 
 test('faucet page', async ({ page }) => {
   await page.goto(FAUCET_URL, { waitUntil: 'networkidle' });
-
   await page.waitForTimeout(2000);
+
+  // Check empty balance
+  const walletBalance = page.getByTestId('wallet-balance');
+  await expect(walletBalance).toContainText('Balance: 0.000 ETH');
 
   // check if the two fields are pre-filled
   const receiverAddressInput = page.getByLabel('Receiving address:');
@@ -71,5 +74,6 @@ test('faucet page', async ({ page }) => {
   const successToast = page.getByText('Funds sent!');
   await expect(successToast).toBeVisible();
 
-  // TODO: Validate and assert that the balance has been updated. We need to use `fuels` as a dependency to do this.
+  // Check balance changed
+  await expect(walletBalance).not.toContainText('Balance: 0.000 ETH');
 });
