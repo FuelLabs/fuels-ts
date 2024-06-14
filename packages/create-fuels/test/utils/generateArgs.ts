@@ -3,7 +3,8 @@ import type { ProgramsToInclude } from '../../src/cli';
 export const generateArgs = (
   programsToInclude: ProgramsToInclude,
   projectName?: string,
-  packageManager: string = 'pnpm'
+  packageManager: string = 'pnpm',
+  shouldInstall: boolean = false
 ): string[] => {
   const args = [];
   if (projectName) {
@@ -18,8 +19,10 @@ export const generateArgs = (
   if (programsToInclude.script) {
     args.push('-s');
   }
+  if (!shouldInstall) {
+    args.push(`--no-install`);
+  }
   args.push(`--${packageManager}`);
-  args.push(`--no-install`);
   return args;
 };
 

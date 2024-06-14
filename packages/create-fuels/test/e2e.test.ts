@@ -50,7 +50,7 @@ describe('`create fuels` package integrity', () => {
         return;
       }
 
-      const args = generateArgs(programsToInclude, paths.root, packageManager).join(' ');
+      const args = generateArgs(programsToInclude, paths.root, packageManager, true).join(' ');
       const expectedTemplateFiles = await getAllFiles(paths.sourceTemplate).then((files) =>
         filterOriginalTemplateFiles(files, programsToInclude)
           .filter(filterForcBuildFiles)
