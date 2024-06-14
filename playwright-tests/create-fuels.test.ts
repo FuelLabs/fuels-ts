@@ -1,7 +1,10 @@
 import { test, expect } from '@playwright/test';
 
+const WEB_SERVER_URL = 'http://127.0.0.1:3000';
+const FAUCET_URL = `${WEB_SERVER_URL}/faucet`;
+
 test('counter contract - increment function call works properly', async ({ page }) => {
-  await page.goto('http://127.0.0.1:3000/', { waitUntil: 'networkidle' });
+  await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
 
   await page.waitForTimeout(2000);
 
@@ -23,7 +26,7 @@ test('counter contract - increment function call works properly', async ({ page 
 });
 
 test('faucet page', async ({ page }) => {
-  await page.goto('http://127.0.0.1:3000/faucet', { waitUntil: 'networkidle' });
+  await page.goto(FAUCET_URL, { waitUntil: 'networkidle' });
 
   await page.waitForTimeout(2000);
 
