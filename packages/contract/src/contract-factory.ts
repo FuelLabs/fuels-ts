@@ -148,14 +148,16 @@ export default class ContractFactory {
 
     const { maxFee: setMaxFee } = deployContractOptions;
 
-    if (isDefined(setMaxFee) && txCost.maxFee.gt(setMaxFee)) {
-      throw new FuelError(
-        ErrorCode.MAX_FEE_TOO_LOW,
-        `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
-      );
+    if (isDefined(setMaxFee)) {
+      if (txCost.maxFee.gt(setMaxFee)) {
+        throw new FuelError(
+          ErrorCode.MAX_FEE_TOO_LOW,
+          `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
+        );
+      }
+    } else {
+      transactionRequest.maxFee = txCost.maxFee;
     }
-
-    transactionRequest.maxFee = txCost.maxFee;
 
     await this.account.fund(transactionRequest, txCost);
     await this.account.sendTransaction(transactionRequest, {
