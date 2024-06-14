@@ -11,11 +11,7 @@ test('counter contract - increment function call works properly', async ({ page 
   const welcomeToFuelText = page.getByText('Welcome to Fuel');
   await expect(welcomeToFuelText).toBeVisible();
 
-  await page.waitForTimeout(2000);
-
-  await page.reload();
-
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(4000);
 
   const incrementButton = page.getByText('Increment Counter');
   await incrementButton.click();
