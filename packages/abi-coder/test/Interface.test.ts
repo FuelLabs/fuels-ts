@@ -779,7 +779,7 @@ describe('Abi interface', () => {
   });
 
   describe('decodeFunctionResult', () => {
-    it('should return decoded function result', async () => {
+    it('should return decoded function result', () => {
       const data = exhaustiveExamplesInterface.decodeFunctionResult(
         'struct_simple',
         Uint8Array.from([1, 0, 0, 0, 32])
