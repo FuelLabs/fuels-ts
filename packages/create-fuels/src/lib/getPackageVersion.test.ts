@@ -48,7 +48,7 @@ describe('getPackageVersion', () => {
   });
 
   const prVersion = '0.0.0-pr-2524-20240616051538';
-    
+
   it('should get the version from an inline create-fuels binary', () => {
     const binDir = 'node_modules/create-fuels';
     const expectedPackageJsonPath = `${binDir}/package.json`;
