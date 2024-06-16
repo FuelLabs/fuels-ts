@@ -2,7 +2,6 @@ import { safeExec } from '@fuel-ts/errors/test-utils';
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 
-import * as cliMod from '../src/cli';
 import type { PackageManager } from '../src/lib/getPackageManager';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
@@ -65,12 +64,6 @@ describe('`create fuels` package integrity', () => {
         })
       );
 
-      const runScaffoldCli = vi.spyOn(cliMod, 'runScaffoldCli');
-      expect(runScaffoldCli).toHaveBeenCalledWith(
-        expect.objectContaining({
-          args: expect.arrayContaining([`${createCommand}@${PUBLISHED_NPM_VERSION}`]),
-        })
-      );
       expect(createFuelsError).toBeUndefined();
       const actualTemplateFiles = await getAllFiles(paths.root);
       expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
