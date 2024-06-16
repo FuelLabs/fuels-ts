@@ -47,20 +47,22 @@ describe('getPackageVersion', () => {
     vi.resetAllMocks();
   });
 
+  const prVersion = '0.0.0-pr-2524-20240616051538';
+    
   it('should get the version from an inline create-fuels binary', () => {
     const binDir = 'node_modules/create-fuels';
     const expectedPackageJsonPath = `${binDir}/package.json`;
     const argv = ['node', `${binDir}/create-fuels.js`];
     const { readFileSync, existsSync } = mockDeps({
       binDir,
-      createFuelsVersion: '0.0.0-pr-2524-20240616051538',
+      createFuelsVersion: prVersion,
     });
     existsSync.mockReturnValueOnce(true);
 
     const version = getPackageVersion(argv);
 
     expect(readFileSync).toBeCalledWith(expectedPackageJsonPath, 'utf8');
-    expect(version).toBe('0.0.0-pr-2524-20240616051538');
+    expect(version).toBe(prVersion);
   });
 
   it('should get the version from a .bin relative create-fuels binary', () => {
@@ -69,7 +71,7 @@ describe('getPackageVersion', () => {
     const argv = ['node', `${binDir}/create-fuels`];
     const { readFileSync, existsSync } = mockDeps({
       binDir,
-      createFuelsVersion: '0.0.0-pr-2524-20240616051538',
+      createFuelsVersion: prVersion,
     });
     existsSync.mockReturnValueOnce(false);
     existsSync.mockReturnValueOnce(true);
@@ -77,7 +79,7 @@ describe('getPackageVersion', () => {
     const version = getPackageVersion(argv);
 
     expect(readFileSync).toBeCalledWith(expectedPackageJsonPath, 'utf8');
-    expect(version).toBe('0.0.0-pr-2524-20240616051538');
+    expect(version).toBe(prVersion);
   });
 
   it(`should default to '@fuel-ts/versions' when unable to read version`, () => {
