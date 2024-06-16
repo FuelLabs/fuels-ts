@@ -50,7 +50,7 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [environments]
+    # needs: [environments]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
