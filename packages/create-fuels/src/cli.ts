@@ -59,6 +59,8 @@ export const runScaffoldCli = async ({
 }) => {
   program.parse(args);
 
+  log('Args', args);
+
   let projectPath = program.args[0] ?? (await promptForProjectPath());
 
   const opts = program.opts<ProgramOptions>();
