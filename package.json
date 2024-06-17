@@ -6,9 +6,9 @@
   "private": true,
   "engines": {
     "node": "^18.18.2 || ^20.0.0 || ^22.0.0",
-    "pnpm": "^9.0.3"
+    "pnpm": "^9.3.0"
   },
-  "packageManager": "pnpm@9.0.3",
+  "packageManager": "pnpm@9.3.0",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build --cache-dir=.turbo",

@@ -56,7 +56,7 @@ jobs:
       - uses: ./.github/actions/ci-setup
         with:
           node-version: 20.10.0
-          pnpm-version: 9.0.3
+          pnpm-version: 9.3.0
       - uses: FuelLabs/github-actions/setups/npm@master
         with:
           npm-token: ${{ secrets.NPM_TOKEN }}
