@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext, useContext, useMemo } from "react";
 import { useBrowserWallet } from "./useBrowserWallet";
 import { useBurnerWallet } from "./useBurnerWallet";
 import { AppWallet } from "@/lib";
@@ -9,7 +9,14 @@ import { AppWallet } from "@/lib";
  */
 type WalletTypes = "burner" | "browser";
 
-export const useActiveWallet = (): AppWallet => {
+const ActiveWalletContext = createContext<AppWallet>({});
+
+export const ActiveWalletProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [activeWallet, setActiveWallet] = useState<WalletTypes>("burner");
   const {
     wallet: burnerWallet,
     walletBalance: burnerWalletBalance,
@@ -22,8 +29,6 @@ export const useActiveWallet = (): AppWallet => {
     isConnected: isBrowserWalletConnected,
   } = useBrowserWallet();
 
-  const [activeWallet, setActiveWallet] = useState<WalletTypes>("burner");
-
   useEffect(() => {
     if (isBrowserWalletConnected) {
       setActiveWallet("browser");
@@ -34,7 +39,7 @@ export const useActiveWallet = (): AppWallet => {
     }
   }, [isBrowserWalletConnected]);
 
-  return {
+  const value = {
     wallet: activeWallet === "browser" ? browserWallet : burnerWallet,
     walletBalance:
       activeWallet === "browser" ? browserWalletBalance : burnerWalletBalance,
@@ -43,4 +48,12 @@ export const useActiveWallet = (): AppWallet => {
         ? refreshBrowserWalletBalance
         : refreshBurnerWalletBalance,
   };
+
+  return (
+    <ActiveWalletContext.Provider value={value}>
+      {children}
+    </ActiveWalletContext.Provider>
+  );
 };
+
+export const useActiveWallet = (): AppWallet => useContext(ActiveWalletContext);
