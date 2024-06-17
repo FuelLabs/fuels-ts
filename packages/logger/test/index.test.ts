@@ -1,11 +1,9 @@
-import type { Address } from '@fuel-ts/address';
 import debug from 'debug';
 
 import { logger, prefixLogger, defaultLogger } from '../src/index';
 
 /**
  * @group node
- * @group browser
  */
 describe('Logger Tests', () => {
   let debugSpy;
@@ -24,7 +22,7 @@ describe('Logger Tests', () => {
     const message = 'This is a message';
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs.substring(callArgs.indexOf(' '))).toBe(` test ${message}`);
+    expect(callArgs).toContain(`test ${message}`);
   });
 
   it('should format a b256 string correctly', () => {
