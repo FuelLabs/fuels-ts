@@ -244,7 +244,22 @@ The following example is for releasing a patch for `v0.69.0` -> `v0.69.1`.
 - Create PRs with base set to that release branch
   - When the PR is merged, a changeset PR is created
   - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
-- After release, delete the release branch from GitHub
+- After release, the release branch will be automatically deleted
+
+# Patching latest release
+
+Imagine the scenario:
+
+1. We release `v0.80.0`
+1. One day later, we have a new changesets PR that will bump things to `v0.81.0`
+1. Before releasing `v0.81.0`, we find an issue and need to make a `v0.80.1` patch
+
+We'd follow the same approach as explained in the [Patching old releases](#patching-old-releases) section above, bearing in mind the following after the release:
+
+- A PR merging the `latest` release's branch into `master` will be automatically created,
+- The automatically-created PR **must** be merged as soon as possible in order to
+  - have the versions of packages on `master` match the `latest` released package versions,
+  - have the released functionality on `master` as well
 
 # FAQ
 
