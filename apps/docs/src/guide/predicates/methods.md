@@ -56,6 +56,6 @@ The `createTransfer` method creates a transfer request and add the transfer deta
 
 ### `transfer`
 
-You can send funds to another wallet using the `transfer` method.
+You can send funds to another address using the `transfer` method.
 
 <<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
