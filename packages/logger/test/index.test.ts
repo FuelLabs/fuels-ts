@@ -1,9 +1,11 @@
+import type { Address } from '@fuel-ts/address';
 import debug from 'debug';
 
-import { logger } from '../src/index';
+import { logger, prefixLogger, defaultLogger } from '../src/index';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Logger Tests', () => {
   let debugSpy;
@@ -37,5 +39,31 @@ describe('Logger Tests', () => {
 
     const callArgs = debugSpy.mock.calls[0][0];
     expect(callArgs).toContain('0x123456789abcdef');
+  });
+
+  it('should prefix log messages correctly using prefixLogger', () => {
+    const prefix = 'my-node';
+    const component = 'my-component';
+    const message = 'hello world';
+    const prefixedLogger = prefixLogger(prefix);
+    const log = prefixedLogger.forComponent(component);
+
+    debug.enable('my-node:my-component');
+
+    log(message);
+    const callArgs = debugSpy.mock.calls[0][0];
+    expect(callArgs).toContain(`${prefix}:${component} ${message}`);
+  });
+
+  it('should create a default logger and log messages correctly', () => {
+    const defaultLog = defaultLogger();
+    const log = defaultLog.forComponent('test-component');
+    debug.enable('test-component');
+    const message = 'default logger test message';
+
+    log(message);
+
+    const callArgs = debugSpy.mock.calls[0][0];
+    expect(callArgs).toContain(`test-component ${message}`);
   });
 });
