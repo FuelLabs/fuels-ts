@@ -2,6 +2,10 @@ import type { Address } from '@fuel-ts/address';
 
 import { truncateWalletAddress } from '../src/utils';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('truncateWalletAddress Tests', () => {
   it('should correctly truncate a wallet address', () => {
     const mockAddress: Address = {
