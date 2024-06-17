@@ -46,6 +46,11 @@ enum ColorEnumOutput {
   Blue = 'Blue',
 }
 
+enum MixedNativeEnum {
+  Native = 'Native',
+  NotNative = 12,
+}
+
 /**
  * @group node
  */
@@ -559,6 +564,22 @@ describe('Coverage Contract', () => {
 
     const { value } = await contractInstance.functions.color_enum(INPUT).call();
     expect(value).toStrictEqual(OUTPUT);
+  });
+
+  it('should test mixed native enum [Native->NotNative]', async () => {
+    const input = MixedNativeEnum.Native;
+    const expected = { NotNative: MixedNativeEnum.NotNative };
+
+    const { value } = await contractInstance.functions.mixed_native_enum(input).call();
+    expect(value).toStrictEqual(expected);
+  });
+
+  it('should test mixed native enum [NotNative->Native]', async () => {
+    const input = { NotNative: MixedNativeEnum.NotNative };
+    const expected = 'Native';
+
+    const { value } = await contractInstance.functions.mixed_native_enum(input).call();
+    expect(value).toStrictEqual(expected);
   });
 
   it('should try vec_as_only_param', async () => {

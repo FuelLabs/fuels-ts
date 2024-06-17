@@ -212,6 +212,7 @@ fragment messageProofFragment on MessageProof {
     proofIndex
   }
   messageBlockHeader {
+    version
     id
     daHeight
     consensusParametersVersion
@@ -227,6 +228,7 @@ fragment messageProofFragment on MessageProof {
     applicationHash
   }
   commitBlockHeader {
+    version
     id
     daHeight
     consensusParametersVersion
@@ -393,6 +395,9 @@ fragment GasCostsFragment on GasCosts {
   wqmm
   xor
   xori
+  alocDependentCost {
+    ...DependentCostFragment
+  }
   call {
     ...DependentCostFragment
   }
@@ -784,8 +789,16 @@ query getRelayedTransactionStatus(
   }
 }
 
-mutation dryRun($encodedTransactions: [HexString!]!, $utxoValidation: Boolean) {
-  dryRun(txs: $encodedTransactions, utxoValidation: $utxoValidation) {
+mutation dryRun(
+  $encodedTransactions: [HexString!]!
+  $utxoValidation: Boolean
+  $gasPrice: U64
+) {
+  dryRun(
+    txs: $encodedTransactions
+    utxoValidation: $utxoValidation
+    gasPrice: $gasPrice
+  ) {
     ...dryRunTransactionExecutionStatusFragment
   }
 }
