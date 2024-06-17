@@ -232,7 +232,7 @@ describe('WalletUnlocked', () => {
       );
 
     const call = vi
-      .spyOn(providersMod.Provider.prototype, 'call')
+      .spyOn(providersMod.Provider.prototype, 'dryRun')
       .mockImplementation(() => Promise.resolve(callResult));
 
     const populateTransactionWitnessesSignatureSpy = vi
