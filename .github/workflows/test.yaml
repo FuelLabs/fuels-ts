@@ -22,6 +22,7 @@ jobs:
           [
             { name: node, version: 18.18.2 },
             { name: node, version: 20 },
+            { name: node, version: 22 },
             { name: browser },
           ]
     timeout-minutes: 25
