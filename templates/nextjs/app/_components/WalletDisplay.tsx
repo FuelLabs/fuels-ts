@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useActiveWallet } from "../_hooks/useActiveWallet";
 
 const getTruncatedAddress = (address: string) => {
   return address.slice(0, 6) + "..." + address.slice(-4);
@@ -26,11 +26,7 @@ export const WalletDisplay = () => {
           onClick={() => copyToClipboard(wallet.address.toB256() as string)}
         />
         <span className="text-gray-400">
-          Balance:{" "}
-          {walletBalance?.format({
-            precision: 3,
-          })}{" "}
-          ETH
+          Balance: {walletBalance?.toString()}
         </span>
       </div>
     )

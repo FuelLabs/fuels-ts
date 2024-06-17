@@ -1,15 +1,17 @@
-import type { TestContractAbi } from "@/sway-api";
-import { TestContractAbi__factory } from "@/sway-api";
-import contractIds from "@/sway-api/contract-ids.json";
-import { FuelLogo } from "@/components/FuelLogo";
+"use client";
+
+import type { TestContractAbi } from "../sway-api";
+import { TestContractAbi__factory } from "../sway-api";
+import contractIds from "../sway-api/contract-ids.json";
+import { FuelLogo } from "./_components/FuelLogo";
 import { bn } from "fuels";
 import { useState } from "react";
-import { Link } from "@/components/Link";
-import { Button } from "@/components/Button";
+import { Link } from "./_components/Link";
+import { Button } from "./_components/Button";
 import toast from "react-hot-toast";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useActiveWallet } from "./_hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT } from "@/lib";
+import { CURRENT_ENVIRONMENT } from "./lib";
 
 const contractId =
   CURRENT_ENVIRONMENT === "local"

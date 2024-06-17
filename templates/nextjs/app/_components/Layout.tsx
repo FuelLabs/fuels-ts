@@ -1,14 +1,13 @@
 import toast, { Toaster } from "react-hot-toast";
-import { Link } from "./Link";
+import { Link } from "./Link"
 import { Button } from "./Button";
-import { CURRENT_ENVIRONMENT, NODE_URL, TESTNET_FAUCET_LINK } from "@/lib";
+import { CURRENT_ENVIRONMENT, NODE_URL, TESTNET_FAUCET_LINK } from "../lib";
 import { useConnectUI, useDisconnect } from "@fuels/react";
 import { WalletDisplay } from "./WalletDisplay";
-import { useBrowserWallet } from "@/hooks/useBrowserWallet";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { useFaucet } from "@/hooks/useFaucet";
+import { useBrowserWallet } from "../_hooks/useBrowserWallet";
+import { useActiveWallet } from "../_hooks/useActiveWallet";
+import { useFaucet } from "../_hooks/useFaucet";
 import Head from "next/head";
-import { bn } from "fuels";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { faucetWallet } = useFaucet();
@@ -34,10 +33,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         return toast.error("Faucet wallet not found.");
       }
 
-      const tx = await faucetWallet?.transfer(
-        wallet.address,
-        bn.parseUnits("5"),
-      );
+      const tx = await faucetWallet?.transfer(wallet.address, 10_000);
       await tx?.waitForResult();
 
       toast.success("Wallet topped up!");
@@ -53,7 +49,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const showTopUpButton = walletBalance?.lt(bn.parseUnits("5"));
+  const showTopUpButton = walletBalance?.lt(10_000);
 
   const showAddNetworkButton =
     browserWallet &&
