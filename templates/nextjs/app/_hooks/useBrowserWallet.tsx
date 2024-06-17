@@ -1,6 +1,6 @@
-import { AppWallet } from "@/lib";
+import { AppWallet } from "../lib";
 import { useIsConnected, useNetwork, useWallet } from "@fuels/react";
-import { Account, BN, WalletLocked } from "fuels";
+import { BN } from "fuels";
 import { useCallback, useState } from "react";
 import useAsync from "react-use/lib/useAsync";
 

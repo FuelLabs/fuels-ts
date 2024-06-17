@@ -141,11 +141,11 @@ export const runScaffoldCli = async ({
   }
   if (!programsToInclude.predicate) {
     rmSync(join(projectPath, 'sway-programs/predicate'), { recursive: true });
-    rmSync(join(projectPath, 'src/pages/predicate.tsx'), { recursive: true });
+    rmSync(join(projectPath, 'app/predicate'), { recursive: true });
   }
   if (!programsToInclude.script) {
     rmSync(join(projectPath, 'sway-programs/script'), { recursive: true });
-    rmSync(join(projectPath, 'src/pages/script.tsx'), { recursive: true });
+    rmSync(join(projectPath, 'app/script'), { recursive: true });
   }
 
   // remove the programs that are not included from the Forc.toml members field and rewrite the file

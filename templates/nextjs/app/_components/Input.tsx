@@ -4,8 +4,7 @@ export const Input: React.FC<{
   placeholder?: string;
   type?: string;
   className?: string;
-  id?: string;
-}> = ({ value, onChange, placeholder, type, className, id }) => {
+}> = ({ value, onChange, placeholder, type, className }) => {
   return (
     <input
       value={value}
@@ -13,7 +12,6 @@ export const Input: React.FC<{
       placeholder={placeholder}
       type={type}
       className={`border-2 border-gray-700 placeholder:text-gray-600 text-gray-400 rounded-md px-4 py-2 bg-transparent outline-none ${className}`}
-      id={id}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { NODE_URL } from "@/lib";
+import { NODE_URL } from "../lib";
 import { Provider, Wallet, WalletUnlocked } from "fuels";
 import { useState } from "react";
 import useAsync from "react-use/lib/useAsync";
