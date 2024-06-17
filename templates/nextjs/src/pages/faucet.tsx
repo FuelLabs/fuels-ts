@@ -3,7 +3,7 @@ import { Input } from "@/components/Input";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
 import { BN, bn } from "fuels";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Faucet() {
@@ -11,8 +11,16 @@ export default function Faucet() {
 
   const { refreshWalletBalance } = useActiveWallet();
 
+  const { wallet } = useActiveWallet();
+
   const [receiverAddress, setReceiverAddress] = useState<string>();
-  const [amountToSend, setAmountToSend] = useState<BN>();
+  const [amountToSend, setAmountToSend] = useState<string>("5");
+
+  useEffect(() => {
+    if (wallet && !receiverAddress) {
+      setReceiverAddress(wallet.address.toB256());
+    }
+  }, [wallet]);
 
   const sendFunds = async () => {
     if (!faucetWallet) {
@@ -27,7 +35,10 @@ export default function Faucet() {
       return toast.error("Amount cannot be empty");
     }
 
-    const tx = await faucetWallet.transfer(receiverAddress, amountToSend);
+    const tx = await faucetWallet.transfer(
+      receiverAddress,
+      bn.parseUnits(amountToSend.toString()),
+    );
     await tx.waitForResult();
 
     toast.success("Funds sent!");
@@ -40,25 +51,29 @@ export default function Faucet() {
       <h3 className="text-2xl font-semibold">Local Faucet</h3>
 
       <div className="flex gap-4 items-center">
-        <span className="text-gray-400">Receiving address:</span>
+        <label htmlFor="receiver-address-input" className="text-gray-400">
+          Receiving address:
+        </label>
         <Input
           className="w-full"
           value={receiverAddress}
           onChange={(e) => setReceiverAddress(e.target.value)}
           placeholder="0x..."
+          id="receiver-address-input"
         />
       </div>
 
       <div className="flex gap-4 items-center">
-        <span className="text-gray-400">Amount:</span>
+        <label htmlFor="amount-input" className="text-gray-400">
+          Amount (ETH):
+        </label>
         <Input
           className="w-full"
           value={amountToSend?.toString()}
-          onChange={(e) =>
-            setAmountToSend(e.target.value ? bn(e.target.value) : undefined)
-          }
-          placeholder="100"
+          onChange={(e) => setAmountToSend(e.target.value ?? undefined)}
+          placeholder="5"
           type="number"
+          id="amount-input"
         />
       </div>
 

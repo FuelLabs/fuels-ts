@@ -1,4 +1,4 @@
-import type { TransactionResult } from '@fuel-ts/account';
+import type { Account, TransactionResult } from '@fuel-ts/account';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
@@ -106,6 +106,23 @@ describe('Contract Factory', () => {
       txParameters: undefined,
       forward: undefined,
     });
+  });
+
+  it('should not override user input maxFee when calling deployContract', async () => {
+    const factory = await createContractFactory();
+    const setFee = bn(120_000);
+
+    const spy = vi.spyOn(factory.account as Account, 'sendTransaction');
+
+    await factory.deployContract({
+      maxFee: setFee,
+    });
+
+    const transactionRequestArg = spy.mock.calls[0][0];
+
+    expect(transactionRequestArg.maxFee?.toString()).toEqual(setFee.toString());
+
+    vi.restoreAllMocks();
   });
 
   it('Creates a contract with initial storage fixed var names', async () => {
