@@ -66,8 +66,8 @@ export default function Faucet() {
         </label>
         <Input
           className="w-full"
-          value={amountToSend?.toString()}
-          onChange={(e) => setAmountToSend(e.target.value ?? undefined)}
+          value={amountToSend}
+          onChange={(e) => setAmountToSend(e.target.value)}
           placeholder="5"
           type="number"
           id="amount-input"
