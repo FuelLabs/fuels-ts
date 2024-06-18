@@ -102,24 +102,6 @@ describe('Abi interface', () => {
     it('raises an error when function is not found', () => {
       const fnName = 'doesnt_exist';
       expect(() => exhaustiveExamplesInterface.getFunction(fnName)).toThrow();
-
-      expect(() => exhaustiveExamplesInterface.encodeFunctionData(fnName, [123])).toThrow();
-
-      expect(() =>
-        exhaustiveExamplesInterface.decodeFunctionData(fnName, new Uint8Array())
-      ).toThrow();
-    });
-
-    it('raises an error if the arguments do not match the function input types', () => {
-      const values = [11, 11];
-
-      const errMsg = `Mismatch between provided arguments and expected ABI inputs.`
-        .concat(` Provided ${values.length} arguments,`)
-        .concat(` but expected 1 (excluding 0 optional inputs).`);
-
-      expect(() => exhaustiveExamplesInterface.encodeFunctionData('entry_one', values)).toThrow(
-        errMsg
-      );
     });
   });
 

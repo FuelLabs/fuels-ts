@@ -7,9 +7,19 @@ describe('Configs', () => {
     expect(configs.FUEL_NETWORK_URL).toBe('http://127.0.0.1:4000/v1/graphql');
   });
 
-  it('exports FUEL_TESTNET_NETWORK_URL', async () => {
+  it('exports LOCAL_NETWORK_URL', async () => {
     const configs = await import('./configs');
-    expect(configs.FUEL_TESTNET_NETWORK_URL).toBe('https://devnet.fuel.network/v1/graphql');
+    expect(configs.LOCAL_NETWORK_URL).toBe('http://127.0.0.1:4000/v1/graphql');
+  });
+
+  it('exports DEVNET_NETWORK_URL', async () => {
+    const configs = await import('./configs');
+    expect(configs.DEVNET_NETWORK_URL).toBe('https://devnet.fuel.network/v1/graphql');
+  });
+
+  it('exports TESTNET_NETWORK_URL', async () => {
+    const configs = await import('./configs');
+    expect(configs.TESTNET_NETWORK_URL).toBe('https://testnet.fuel.network/v1/graphql');
   });
 });
 

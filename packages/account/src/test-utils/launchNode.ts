@@ -1,6 +1,7 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
-import { defaultSnapshotConfigs, defaultConsensusKey, hexlify } from '@fuel-ts/utils';
+import type { SnapshotConfigs } from '@fuel-ts/utils';
+import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
@@ -43,12 +44,18 @@ export type LaunchNodeOptions = {
   loggingEnabled?: boolean;
   debugEnabled?: boolean;
   basePath?: string;
+  /**
+   * The snapshot configuration to use.
+   * Passing in a snapshot configuration path via the `--snapshot` flag in `args` will override this.
+   * */
+  snapshotConfig?: SnapshotConfigs;
 };
 
 export type LaunchNodeResult = Promise<{
   cleanup: () => void;
   ip: string;
   port: string;
+  url: string;
   snapshotDir: string;
 }>;
 
@@ -80,6 +87,50 @@ export const killNode = (params: KillNodeParams) => {
   }
 };
 
+function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) {
+  const defaultCoins = defaultSnapshotConfigs.stateConfig.coins.map((coin) => ({
+    ...coin,
+    amount: '18446744073709551615',
+  }));
+  const defaultMessages = defaultSnapshotConfigs.stateConfig.messages.map((message) => ({
+    ...message,
+    amount: '18446744073709551615',
+  }));
+
+  const coins = defaultCoins
+    .concat(stateConfig.coins.map((coin) => ({ ...coin, amount: coin.amount.toString() })))
+    .filter((coin, index, self) => self.findIndex((c) => c.tx_id === coin.tx_id) === index);
+  const messages = defaultMessages
+    .concat(stateConfig.messages.map((msg) => ({ ...msg, amount: msg.amount.toString() })))
+    .filter((msg, index, self) => self.findIndex((m) => m.nonce === msg.nonce) === index);
+
+  // If there's no genesis key, generate one and some coins to the genesis block.
+  if (!process.env.GENESIS_SECRET) {
+    const pk = Signer.generatePrivateKey();
+    const signer = new Signer(pk);
+    process.env.GENESIS_SECRET = hexlify(pk);
+
+    coins.push({
+      tx_id: hexlify(randomBytes(BYTES_32)),
+      owner: signer.address.toHexString(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      amount: '18446744073709551615' as any,
+      asset_id: chainConfig.consensus_parameters.V1.base_asset_id,
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+    });
+  }
+  const json = JSON.stringify({
+    ...stateConfig,
+    coins,
+    messages,
+  });
+
+  const regexMakeNumber = /("amount":)"(\d+)"/gm;
+  return json.replace(regexMakeNumber, '$1$2');
+}
+
 // #region launchNode-launchNodeOptions
 /**
  * Launches a fuel-core node.
@@ -100,6 +151,7 @@ export const launchNode = async ({
   loggingEnabled = true,
   debugEnabled = false,
   basePath,
+  snapshotConfig = defaultSnapshotConfigs,
 }: LaunchNodeOptions): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -142,69 +194,27 @@ export const launchNode = async ({
 
     const prefix = basePath || os.tmpdir();
     const suffix = basePath ? '' : randomUUID();
-    const tempDirPath = path.join(prefix, '.fuels', suffix, 'snapshotDir');
+    const tempDir = path.join(prefix, '.fuels', suffix, 'snapshotDir');
 
     if (snapshotDir) {
       snapshotDirToUse = snapshotDir;
     } else {
-      if (!existsSync(tempDirPath)) {
-        mkdirSync(tempDirPath, { recursive: true });
+      if (!existsSync(tempDir)) {
+        mkdirSync(tempDir, { recursive: true });
       }
+      const { metadata } = snapshotConfig;
 
-      let { stateConfigJson } = defaultSnapshotConfigs;
-      const { chainConfigJson, metadataJson } = defaultSnapshotConfigs;
+      const metadataPath = path.join(tempDir, 'metadata.json');
+      const chainConfigPath = path.join(tempDir, metadata.chain_config);
+      const stateConfigPath = path.join(tempDir, metadata.table_encoding.Json.filepath);
+      const stateTransitionPath = path.join(tempDir, 'state_transition_bytecode.wasm');
 
-      stateConfigJson = {
-        ...stateConfigJson,
-        coins: [
-          ...stateConfigJson.coins.map((coin) => ({
-            ...coin,
-            amount: '18446744073709551615',
-          })),
-        ],
-        messages: stateConfigJson.messages.map((message) => ({
-          ...message,
-          amount: '18446744073709551615',
-        })),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any;
+      writeFileSync(chainConfigPath, JSON.stringify(snapshotConfig.chainConfig), 'utf8');
+      writeFileSync(stateConfigPath, getFinalStateConfigJSON(snapshotConfig), 'utf8');
+      writeFileSync(metadataPath, JSON.stringify(metadata), 'utf8');
+      writeFileSync(stateTransitionPath, JSON.stringify(''));
 
-      // If there's no genesis key, generate one and some coins to the genesis block.
-      if (!process.env.GENESIS_SECRET) {
-        const pk = Signer.generatePrivateKey();
-        const signer = new Signer(pk);
-        process.env.GENESIS_SECRET = hexlify(pk);
-
-        stateConfigJson.coins.push({
-          tx_id: hexlify(randomBytes(BYTES_32)),
-          owner: signer.address.toHexString(),
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          amount: '18446744073709551615' as any,
-          asset_id: chainConfigJson.consensus_parameters.V1.base_asset_id,
-          output_index: 0,
-          tx_pointer_block_height: 0,
-          tx_pointer_tx_idx: 0,
-        });
-      }
-
-      let fixedStateConfigJSON = JSON.stringify(stateConfigJson);
-
-      const regexMakeNumber = /("amount":)"(\d+)"/gm;
-
-      fixedStateConfigJSON = fixedStateConfigJSON.replace(regexMakeNumber, '$1$2');
-
-      // Write a temporary chain configuration files.
-      const chainConfigWritePath = path.join(tempDirPath, 'chainConfig.json');
-      const stateConfigWritePath = path.join(tempDirPath, 'stateConfig.json');
-      const metadataWritePath = path.join(tempDirPath, 'metadata.json');
-      const stateTransitionWritePath = path.join(tempDirPath, 'state_transition_bytecode.wasm');
-
-      writeFileSync(chainConfigWritePath, JSON.stringify(chainConfigJson), 'utf8');
-      writeFileSync(stateConfigWritePath, fixedStateConfigJSON, 'utf8');
-      writeFileSync(metadataWritePath, JSON.stringify(metadataJson), 'utf8');
-      writeFileSync(stateTransitionWritePath, JSON.stringify(''));
-
-      snapshotDirToUse = tempDirPath;
+      snapshotDirToUse = tempDir;
     }
 
     const child = spawn(
@@ -213,7 +223,7 @@ export const launchNode = async ({
         'run',
         ['--ip', ipToUse],
         ['--port', portToUse],
-        useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDirPath],
+        useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDir],
         ['--min-gas-price', '1'],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--native-executor-version', nativeExecutorVersion],
@@ -239,7 +249,7 @@ export const launchNode = async ({
 
     const cleanupConfig: KillNodeParams = {
       child,
-      configPath: tempDirPath,
+      configPath: tempDir,
       killFn: treeKill,
       state: {
         isDead: false,
@@ -247,19 +257,27 @@ export const launchNode = async ({
     };
 
     // Look for a specific graphql start point in the output.
-    child.stderr.on('data', (chunk: string) => {
+    child.stderr.on('data', (chunk: string | Buffer) => {
+      const text = typeof chunk === 'string' ? chunk : chunk.toString(); // chunk is sometimes Buffer and sometimes string...
       // Look for the graphql service start.
-      if (chunk.indexOf(graphQLStartSubstring) !== -1) {
+      if (text.indexOf(graphQLStartSubstring) !== -1) {
+        const rows = text.split('\n');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const rowWithUrl = rows.find((row) => row.indexOf(graphQLStartSubstring) !== -1)!;
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
+
         // Resolve with the cleanup method.
         resolve({
           cleanup: () => killNode(cleanupConfig),
-          ip: ipToUse,
-          port: portToUse,
+          ip: realIp,
+          port: realPort,
+          url: `http://${realIp}:${realPort}/v1/graphql`,
           snapshotDir: snapshotDirToUse as string,
         });
       }
-      if (/error/i.test(chunk)) {
-        reject(chunk.toString());
+      if (/error/i.test(text)) {
+        reject(text.toString());
       }
     });
 

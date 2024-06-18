@@ -1,3 +1,4 @@
+// #region minted-token-asset-id-1
 contract;
 
 use std::asset::{burn, mint, transfer};
@@ -27,3 +28,4 @@ impl Token for Contract {
         burn(sub_id, burn_amount);
     }
 }
+// #endregion minted-token-asset-id-1

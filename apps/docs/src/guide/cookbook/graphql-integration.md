@@ -1,6 +1,6 @@
 # GraphQL Integration
 
-The Fuel Network provides a [GraphQL API](https://docs.fuel.network/docs/graphql/overview/) to query the blockchain. To get a better understanding of the underlying schema and other operations, you can visit the [playground](https://devnet.fuel.network/v1/playground) for an interactive deep dive.
+The Fuel Network provides a [GraphQL API](https://docs.fuel.network/docs/graphql/overview/) to query the blockchain. To get a better understanding of the underlying schema and other operations, you can visit the [playground](https://testnet.fuel.network/v1/playground) for an interactive deep dive.
 
 ## Operations
 

@@ -175,6 +175,10 @@ pnpm install dotenv
 npm install dotenv
 ```
 
+```sh [bun]
+bun install dotenv
+```
+
 :::
 
 Then, you can use it in your `fuels.config.ts` file:
