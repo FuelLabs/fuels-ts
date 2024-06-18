@@ -51,8 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [environments]
-    # Revert this, want to generate coverage for draft
-    # if: ${{ !github.event.pull_request.draft }}
+    if: ${{ !github.event.pull_request.draft }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -102,9 +101,7 @@ jobs:
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
-    needs: [environments]
-    # REVERT THIS
-    # needs: [environments, e2e]
+    needs: [environments, e2e]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
