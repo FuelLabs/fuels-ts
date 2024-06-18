@@ -1,4 +1,4 @@
 ---
 ---
 
-chore: Switching `Error` to FuelError
+chore: switching `Error` to `FuelError`
