@@ -2,9 +2,11 @@ import { Provider } from '@fuel-ts/account';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import { spawn } from 'node:child_process';
 
-function startServer(): Promise<{ serverUrl: string; killServer: () => void } & Disposable> {
+function startServer(
+  port: number = 0
+): Promise<{ serverUrl: string; killServer: () => void } & Disposable> {
   return new Promise((resolve, reject) => {
-    const cp = spawn('pnpm tsx packages/fuels/src/setup-launch-node-server.ts 0', {
+    const cp = spawn(`pnpm tsx packages/fuels/src/setup-launch-node-server.ts ${port}`, {
       detached: true,
       shell: 'sh',
     });
@@ -17,9 +19,8 @@ function startServer(): Promise<{ serverUrl: string; killServer: () => void } & 
 
     cp.stdout?.on('data', (chunk) => {
       // first message is server url
-      const message = chunk.toString();
-      const serverUrl = message.startsWith('http://') ? message : '';
-
+      const message: string[] = chunk.toString().split('\n');
+      const serverUrl = message[0].startsWith('http://') ? message[0] : '';
       // teardown
       resolve({
         serverUrl,
@@ -38,6 +39,11 @@ function startServer(): Promise<{ serverUrl: string; killServer: () => void } & 
  * @group node
  */
 describe('setup-launch-node-server', () => {
+  test('can start server on specific port', async () => {
+    using launched = await startServer(9876);
+    expect(launched.serverUrl).toEqual('http://localhost:9876');
+  });
+
   test('returns a valid fuel-core node url on request', async () => {
     using launched = await startServer();
 
