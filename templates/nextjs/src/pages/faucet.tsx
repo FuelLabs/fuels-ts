@@ -8,10 +8,7 @@ import toast from "react-hot-toast";
 
 export default function Faucet() {
   const { faucetWallet } = useFaucet();
-
-  const { refreshWalletBalance } = useActiveWallet();
-
-  const { wallet } = useActiveWallet();
+  const { wallet, refreshWalletBalance } = useActiveWallet();
 
   const [receiverAddress, setReceiverAddress] = useState<string>("");
   const [amountToSend, setAmountToSend] = useState<string>("5");
