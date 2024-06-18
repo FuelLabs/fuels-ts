@@ -13,6 +13,11 @@ on:
         description: Filter by package name
         default: ""
 
+      filter_by_package_version:
+        type: string
+        description: Filter by package version
+        default: ""
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -39,3 +44,4 @@ jobs:
         env:
           DELETE_PACKAGES: ${{ github.event.inputs.delete_packages }}
           FILTER_BY_PACKAGE_NAME: ${{ github.event.inputs.filter_by_package_name }}
+          FILTER_BY_VERSION: ${{ github.event.inputs.filter_by_package_version }}

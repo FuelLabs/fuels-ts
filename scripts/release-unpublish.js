@@ -10,6 +10,7 @@ const { version: CURRENT_VERSION } = require('../packages/fuels/package.json');
 
 const DELETE_PACKAGES = process.env.DELETE_PACKAGES === 'true';
 const FILTER_BY_PACKAGE_NAME = process.env.FILTER_BY_PACKAGE_NAME ?? '';
+const FILTER_BY_VERSION = process.env.FILTER_BY_VERSION ?? '';
 const dryRun = DELETE_PACKAGES ? '' : '--dry-run';
 
 // MESSAGES
@@ -46,10 +47,14 @@ const main = async () => {
       `https://registry.npmjs.org/${packageName}`
     ).then((resp) => resp.json());
 
-    const versionsToDelete = Object.keys(packageVersions).filter(
+    let versionsToDelete = Object.keys(packageVersions).filter(
       (packageVersion) =>
         packageVersion.search(DELETE_TAGS) > -1 && !compare(packageVersion, CURRENT_VERSION, '>=')
     );
+    if (FILTER_BY_VERSION !== '') {
+      versionsToDelete = versionsToDelete.filter((version) => version === FILTER_BY_VERSION);
+    }
+
     log('The following versions will be deleted:');
     log(versionsToDelete.map((v) => `   - ${v}`).join('\n'));
 
