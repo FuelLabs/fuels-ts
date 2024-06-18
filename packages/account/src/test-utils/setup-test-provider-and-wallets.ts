@@ -64,7 +64,7 @@ export async function setupTestProviderAndWallets({
     }
   );
 
-  const { cleanup, url } = await launchNode({
+  const launchNodeOptions = {
     loggingEnabled: false,
     ...nodeOptions,
     snapshotConfig: mergeDeepRight(
@@ -72,7 +72,25 @@ export async function setupTestProviderAndWallets({
       walletsConfig.apply(nodeOptions?.snapshotConfig)
     ),
     port: '0',
-  });
+  };
+
+  let cleanup: () => void;
+  let url: string;
+  if (process.env.LAUNCH_NODE_SERVER_PORT) {
+    const serverUrl = `http://localhost:${process.env.LAUNCH_NODE_SERVER_PORT}`;
+    url = await (
+      await fetch(serverUrl, { method: 'POST', body: JSON.stringify(launchNodeOptions) })
+    ).text();
+
+    cleanup = () => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      fetch(`${serverUrl}/cleanup/${url}`);
+    };
+  } else {
+    const settings = await launchNode(launchNodeOptions);
+    url = settings.url;
+    cleanup = settings.cleanup;
+  }
 
   let provider: Provider;
 
