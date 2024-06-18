@@ -33,21 +33,24 @@ test('counter contract - increment function call works properly', async ({ page 
 });
 
 test('top-up wallet button', async ({ page }) => {
-  await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(4000);
+  // #TODO: Remove this test once the top-up UI is fixed
+  for (let i = 0; i < 1000; i++) {
+    await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
+    await page.waitForTimeout(4000);
 
-  // Check empty balance
-  const walletBalance = page.getByTestId('wallet-balance');
-  await expect(walletBalance).toContainText('Balance: 0.000 ETH');
+    // Check empty balance
+    const walletBalance = page.getByTestId('wallet-balance');
+    await expect(walletBalance).toContainText('Balance: 0.000 ETH');
 
-  // Perform top-up
-  const topUpWalletButton = page.getByText('Top-up Wallet');
-  await topUpWalletButton.click();
+    // Perform top-up
+    const topUpWalletButton = page.getByText('Top-up Wallet');
+    await topUpWalletButton.click();
 
-  await page.waitForTimeout(1000);
+    await page.waitForTimeout(1000);
 
-  // Expect the balance to be updated
-  await expect(walletBalance).not.toContainText('Balance: 0.000 ETH');
+    // Expect the balance to be updated
+    await expect(walletBalance).not.toContainText('Balance: 0.000 ETH');
+  }
 });
 
 test('faucet page', async ({ page }) => {
