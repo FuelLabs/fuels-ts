@@ -17,7 +17,7 @@ The base asset is the underlying asset used to perform any transaction on a chai
 
 ## `getCoins`
 
-Returns UTXOs coins from an account address, optionally filtered by asset ID. This method supports [pagination](./pagination).
+Returns UTXOs coins from an account address, optionally filtered by asset ID. This method supports [pagination](./pagination.md).
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-coins-1{ts:line-numbers}
 
@@ -37,7 +37,7 @@ This method is also available in the `Account` class and can be used without pro
 
 ## `getBalances`
 
-Returns the sum of all UTXOs coins and unspent message coins amounts for all assets. Unlike `getCoins`, it only returns the total amounts, not the individual coins. This method supports [pagination](./pagination):
+Returns the sum of all UTXOs coins and unspent message coins amounts for all assets. Unlike `getCoins`, it only returns the total amounts, not the individual coins. This method supports [pagination](./pagination.md):
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-balances-1{ts:line-numbers}
 
@@ -47,7 +47,7 @@ This method is also available in the `Account` class and can be used without pro
 
 ## `getBlocks`
 
-The `getBlocks` method returns blocks from the blockchain matching the given `paginationArgs` parameter, supporting [pagination](./pagination). The below code snippet shows how to get the last 10 blocks.
+The `getBlocks` method returns blocks from the blockchain matching the given `paginationArgs` parameter, supporting [pagination](./pagination.md). The below code snippet shows how to get the last 10 blocks.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Provider-get-blocks{ts:line-numbers}
 
