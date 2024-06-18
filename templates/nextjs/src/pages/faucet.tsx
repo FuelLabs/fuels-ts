@@ -2,7 +2,7 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
-import { BN, bn } from "fuels";
+import { bn } from "fuels";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
