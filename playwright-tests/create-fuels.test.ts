@@ -34,7 +34,7 @@ test('counter contract - increment function call works properly', async ({ page 
 
 test('top-up wallet button', async ({ page }) => {
   await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(4000);
 
   // Check empty balance
   const walletBalance = page.getByTestId('wallet-balance');
