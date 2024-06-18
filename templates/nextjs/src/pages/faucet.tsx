@@ -14,7 +14,7 @@ export default function Faucet() {
   const [amountToSend, setAmountToSend] = useState<string>("5");
 
   useEffect(() => {
-    if (wallet && !receiverAddress) {
+    if (wallet) {
       setReceiverAddress(wallet.address.toB256());
     }
   }, [wallet]);
