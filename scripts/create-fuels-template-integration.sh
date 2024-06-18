@@ -4,8 +4,8 @@
 # PUBLISHED_NPM_VERSION="next"
 
 # Versions
-FUEL_CORE_VERSION="0.28.0"
-FORC_VERSION="0.60.0"
+FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)
+FORC_VERSION=$(cat ./internal/forc/VERSION)
 TOOLCHAIN="CI"
 
 # Project
