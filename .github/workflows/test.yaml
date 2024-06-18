@@ -64,6 +64,7 @@ jobs:
           should-install-bun: true
 
       - name: Publish PR to NPM
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         id: release
         uses: ./.github/actions/pr-release
         with:
