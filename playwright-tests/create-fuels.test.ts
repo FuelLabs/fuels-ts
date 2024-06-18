@@ -36,7 +36,7 @@ test('top-up wallet button', async ({ page }) => {
   // #TODO: Remove this test once the top-up UI is fixed
   for (let i = 0; i < 1000; i++) {
     await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
-    await page.waitForTimeout(4000);
+    await page.waitForTimeout(5000);
 
     // Check empty balance
     const walletBalance = page.getByTestId('wallet-balance');
@@ -46,7 +46,7 @@ test('top-up wallet button', async ({ page }) => {
     const topUpWalletButton = page.getByText('Top-up Wallet');
     await topUpWalletButton.click();
 
-    await page.waitForTimeout(1000);
+    await page.waitForTimeout(5000);
 
     // Expect the balance to be updated
     await expect(walletBalance).not.toContainText('Balance: 0.000 ETH');
