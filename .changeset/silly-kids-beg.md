@@ -1,0 +1,4 @@
+---
+---
+
+Switching `Error` to FuelError
