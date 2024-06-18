@@ -17,7 +17,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: "istanbul",
-      reporter: ["json", "text"],
+      reporter: ["json", "text", "html"],
       include: ["packages", "internal", "apps"],
       exclude: [
         "**/*.js",
