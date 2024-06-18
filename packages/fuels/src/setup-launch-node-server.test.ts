@@ -34,6 +34,9 @@ function startServer(): Promise<{ serverUrl: string; killServer: () => void } & 
   });
 }
 
+/**
+ * @group node
+ */
 describe('setup-launch-node-server', () => {
   test('returns a valid fuel-core node url on request', async () => {
     using launched = await startServer();
