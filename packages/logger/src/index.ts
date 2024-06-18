@@ -105,6 +105,16 @@ debug.formatters.a = (v?: BN): string => {
   return v.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
 
+// Add a formatter for converting to a b256 string
+debug.formatters.b = (v?: AbstractAddress): string => (v == null ? 'undefined' : v.toB256());
+
+// Add a formatter for outputting a bech32 address
+debug.formatters.c = (v?: AbstractAddress): string =>
+  v == null ? 'undefined' : toBech32(v.toString());
+
+// Add a formatter for outputting a BN hex string
+debug.formatters.h = (v?: BN): string => (v == null ? 'undefined' : v.toHex());
+
 // Converts a hex string to a BN string
 debug.formatters.n = (hex: string): string => {
   if (!hex) {
@@ -117,16 +127,6 @@ debug.formatters.n = (hex: string): string => {
     return 'invalid hex';
   }
 };
-
-// Add a formatter for converting to a b256 string
-debug.formatters.b = (v?: AbstractAddress): string => (v == null ? 'undefined' : v.toB256());
-
-// Add a formatter for outputting a bech32 address
-debug.formatters.n = (v?: AbstractAddress): string =>
-  v == null ? 'undefined' : toBech32(v.toAddress());
-
-// Add a formatter for outputting a BN hex string
-debug.formatters.h = (v?: BN): string => (v == null ? 'undefined' : v.toHex());
 
 export interface Logger {
   (formatter: unknown, ...args: unknown[]): void;
