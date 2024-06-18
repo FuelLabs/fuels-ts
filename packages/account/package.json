@@ -59,7 +59,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuels/vm-asm": "0.50.0",
+    "@fuels/vm-asm": "0.54.0",
     "@noble/curves": "^1.3.0",
     "events": "^3.3.0",
     "graphql": "^16.8.1",

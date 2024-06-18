@@ -1,3 +1,4 @@
+import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
@@ -9,6 +10,7 @@ import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
 import { getPackageManager } from './lib/getPackageManager';
+import { getPackageVersion } from './lib/getPackageVersion';
 import type { ProgramOptions } from './lib/setupProgram';
 import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
@@ -154,10 +156,11 @@ export const runScaffoldCli = async ({
   // Note: `pnpm run xprebuild` -> rewritten to -> `pnpm run prebuild` (on prePublish script)
   const packageJsonPath = join(projectPath, 'package.json');
   const packageJsonContents = readFileSync(packageJsonPath, 'utf-8');
-  const newPackageJsonContents = packageJsonContents.replace(
-    `pnpm run prebuild`,
-    packageManager.run('prebuild')
-  );
+  const fuelsVersion = getPackageVersion(args);
+  const newPackageJsonContents = packageJsonContents
+    .replace(`pnpm run prebuild`, packageManager.run('prebuild'))
+    .replace(`"fuels": "${versions.FUELS}"`, `"fuels": "${fuelsVersion}"`);
+
   writeFileSync(packageJsonPath, newPackageJsonContents);
 
   // Rewrite the README.md file
