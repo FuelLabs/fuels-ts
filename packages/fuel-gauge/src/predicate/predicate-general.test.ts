@@ -62,7 +62,7 @@ describe('Predicate', () => {
 
     request = await provider.estimatePredicates(request);
 
-    const { dryRunStatus } = await provider.call(request, {
+    const { dryRunStatus } = await provider.dryRun(request, {
       utxoValidation: false,
       estimateTxDependencies: false,
     });
