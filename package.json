@@ -5,7 +5,7 @@
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "private": true,
   "engines": {
-    "node": "^18.18.2 || ^20.0.0 || ^22.0.0",
+    "node": "^18.20.3 || ^20.0.0 || ^22.0.0",
     "pnpm": "^9.3.0"
   },
   "packageManager": "pnpm@9.3.0",
