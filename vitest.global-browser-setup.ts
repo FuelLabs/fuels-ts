@@ -12,12 +12,12 @@ export default async function setup() {
       // it will kill the server
       resolve(() => {
         // https://github.com/nodejs/node/issues/2098#issuecomment-169549789
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         process.kill(-cp.pid!);
       });
     });
 
     cp.on('error', (err) => {
-      console.log('failed to start launchNode server', err);
       reject(err);
     });
   });
