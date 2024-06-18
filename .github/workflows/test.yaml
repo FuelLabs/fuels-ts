@@ -21,7 +21,7 @@ jobs:
         env:
           [
             { name: node, version: 18.20.3 },
-            { name: node, version: 20 },
+            { name: node, version: 20.14.0 },
             { name: node, version: 22.3.0 },
             { name: browser },
           ]
