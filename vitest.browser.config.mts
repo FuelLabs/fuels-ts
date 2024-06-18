@@ -39,7 +39,6 @@ const config: UserConfig = {
     },
     globalSetup: ["./vitest.global-browser-setup.ts"],
     coverage: {
-      enabled: true,
       reportsDirectory: "coverage/environments/browser",
     },
     browser: {
