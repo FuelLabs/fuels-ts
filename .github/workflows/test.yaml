@@ -102,7 +102,9 @@ jobs:
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
-    needs: [environments, e2e]
+    needs: [environments]
+    # REVERT THIS
+    # needs: [environments, e2e]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -119,7 +121,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node
-          path: coverage/environments
+          path: coverage/environments/node
 
       - run: ls coverage/environments
 
@@ -127,7 +129,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: browser
-          path: coverage/environments
+          path: coverage/environments/browser
 
       - run: ls coverage/environments
 
