@@ -10,7 +10,7 @@ The `Predicate` class extends the [`Account`](https://docs.fuel.network/docs/fue
 
 ### `getBalances`
 
-This will return the balances of the account that owns the resources in the predicate.
+This will return the balances of all assets owned by the predicate.
 
 <<< @/../../docs-snippets/src/guide/wallets/checking-balances.test.ts#checking-balances-2{ts:line-numbers}
 
