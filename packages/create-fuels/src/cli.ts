@@ -3,7 +3,7 @@ import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
 import type { Command } from 'commander';
-import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
 import ora from 'ora';
 import { join } from 'path';
@@ -17,30 +17,18 @@ import { error, log } from './utils/logger';
 
 export { setupProgram } from './lib/setupProgram';
 
-export type ProgramsToInclude = Pick<ProgramOptions, 'contract' | 'predicate' | 'script'>;
-
-const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsToInclude) => {
+const processWorkspaceToml = (fileContents: string) => {
   const parsed = toml.parse(fileContents) as {
     workspace: {
       members: ('predicate' | 'contract' | 'script')[];
     };
   };
 
-  parsed.workspace.members = parsed.workspace.members.filter((m) => programsToInclude[m]);
-
   return toml.stringify(parsed);
 };
 
-function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude) {
-  /*
-   * Should be like:
-   * NEXT_PUBLIC_HAS_CONTRACT=true
-   * NEXT_PUBLIC_HAS_PREDICATE=false
-   * NEXT_PUBLIC_HAS_SCRIPT=true
-   */
-  let newFileContents = Object.entries(programsToInclude)
-    .map(([program, include]) => `NEXT_PUBLIC_HAS_${program.toUpperCase()}=${include}`)
-    .join('\n');
+function writeEnvFile(envFilePath: string) {
+  let newFileContents = '';
 
   newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
   newFileContents += `\nNEXT_PUBLIC_DAPP_ENVIRONMENT=local`;
@@ -91,33 +79,6 @@ export const runScaffoldCli = async ({
     projectPath = await promptForProjectPath();
   }
 
-  const cliProgramsToInclude = {
-    contract: opts.contract,
-    predicate: opts.predicate,
-    script: opts.script,
-  };
-  const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
-
-  let programsToInclude: ProgramsToInclude;
-  if (hasAnyCliProgramsToInclude) {
-    programsToInclude = cliProgramsToInclude;
-  } else {
-    programsToInclude = {
-      contract: true,
-      predicate: true,
-      script: true,
-    };
-  }
-
-  while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
-    error('You must include at least one Sway program.');
-
-    // Exit the program if we are testing to prevent hanging
-    if (process.env.VITEST) {
-      throw new Error();
-    }
-  }
-
   const fileCopySpinner = ora({
     text: 'Copying template files..',
     color: 'green',
@@ -131,25 +92,11 @@ export const runScaffoldCli = async ({
   });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
-  writeEnvFile(join(projectPath, '.env.local'), programsToInclude);
+  writeEnvFile(join(projectPath, '.env.local'));
 
-  // delete the programs that are not to be included
-  if (!programsToInclude.contract) {
-    rmSync(join(projectPath, 'sway-programs/contract'), { recursive: true });
-  }
-  if (!programsToInclude.predicate) {
-    rmSync(join(projectPath, 'sway-programs/predicate'), { recursive: true });
-    rmSync(join(projectPath, 'src/pages/predicate.tsx'), { recursive: true });
-  }
-  if (!programsToInclude.script) {
-    rmSync(join(projectPath, 'sway-programs/script'), { recursive: true });
-    rmSync(join(projectPath, 'src/pages/script.tsx'), { recursive: true });
-  }
-
-  // remove the programs that are not included from the Forc.toml members field and rewrite the file
   const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
   const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
-  const newForcTomlContents = processWorkspaceToml(forcTomlContents, programsToInclude);
+  const newForcTomlContents = processWorkspaceToml(forcTomlContents);
   writeFileSync(forcTomlPath, newForcTomlContents);
 
   // Rewrite the package.json file
