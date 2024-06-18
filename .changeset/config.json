@@ -7,18 +7,20 @@
   "baseBranch": "master",
   "updateInternalDependencies": "patch",
   "ignore": [
+    "template-nextjs",
     "fuel-gauge",
     "docs",
+    "demo-wallet-sdk-react",
+    "demo-typegen",
+    "demo-react-vite",
+    "demo-react-cra",
+    "demo-node-esm",
+    "demo-nextjs",
     "demo-fuels",
     "demo-bun-fuels",
-    "demo-react-cra",
-    "demo-react-vite",
-    "demo-nextjs",
-    "demo-node-esm",
-    "demo-typegen",
-    "@fuel-ts/docs-snippets",
-    "template-nextjs",
     "create-fuels-counter-guide",
-    "demo-wallet-sdk-react"
+    "@internal/fuel-core",
+    "@internal/forc",
+    "@fuel-ts/docs-snippets"
   ]
 }
