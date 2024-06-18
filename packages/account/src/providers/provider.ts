@@ -28,7 +28,6 @@ import type {
   GqlDryRunSuccessStatusFragment,
   GqlFeeParameters as FeeParameters,
   GqlGasCosts as GasCosts,
-  GqlGetBlocksQueryVariables,
   GqlPredicateParameters as PredicateParameters,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
@@ -1412,7 +1411,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param params - The parameters to query blocks.
    * @returns A promise that resolves to the blocks.
    */
-  async getBlocks(params: GqlGetBlocksQueryVariables): Promise<Block[]> {
+  async getBlocks(params: CursorPaginationArgs): Promise<Block[]> {
     const { blocks: fetchedData } = await this.operations.getBlocks(params);
 
     const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
