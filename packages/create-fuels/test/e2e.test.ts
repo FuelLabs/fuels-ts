@@ -1,5 +1,6 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { execSync } from 'child_process';
+import { readFileSync } from 'fs';
 
 import type { PackageManager } from '../src/lib/getPackageManager';
 
@@ -63,9 +64,11 @@ describe('`create fuels` package integrity', () => {
         })
       );
 
-      const actualTemplateFiles = await getAllFiles(paths.root);
       expect(createFuelsError).toBeUndefined();
+      const actualTemplateFiles = await getAllFiles(paths.root);
       expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
+      const packageJson = readFileSync(paths.packageJson, 'utf-8');
+      expect(packageJson).toContain(`"fuels": "${PUBLISHED_NPM_VERSION}"`);
     },
     { timeout: 30000 }
   );
