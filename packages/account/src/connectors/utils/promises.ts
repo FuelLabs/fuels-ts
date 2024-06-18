@@ -1,3 +1,5 @@
+import { FuelError } from '@fuel-ts/errors';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type DeferPromise<R = unknown> = {
   promise: Promise<R>;
@@ -23,7 +25,7 @@ export async function withTimeout<F extends Promise<unknown>, RT = Awaited<F>>(
 ): Promise<RT> {
   const timeoutPromise = new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(new Error('Promise timed out'));
+      reject(new FuelError(FuelError.CODES.TIMEOUT_EXCEEDED, 'Promise timed out'));
     }, timeout);
   });
   return Promise.race([timeoutPromise, promise]) as any;

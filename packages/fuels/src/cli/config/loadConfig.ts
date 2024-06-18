@@ -1,4 +1,5 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
+import { FuelError } from '@fuel-ts/errors';
 import { defaultConsensusKey } from '@fuel-ts/utils';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
@@ -23,7 +24,7 @@ export async function loadUserConfig(
   });
 
   if (!configPath) {
-    throw new Error('Config file not found!');
+    throw new FuelError(FuelError.CODES.CONFIG_FILE_NOT_FOUND, 'Config file not found!');
   }
 
   const esbuildOptions: BuildOptions = {
@@ -97,7 +98,10 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
       const swayProgramType = readSwayType(workspace);
       const exampleMsg = `Try using '${swayProgramType}s' instead of 'workspace' in:\n  ${configPath}`;
 
-      throw new Error([workspaceMsg, exampleMsg].join('\n\n'));
+      throw new FuelError(
+        FuelError.CODES.WORKSPACE_NOT_DETECTED,
+        [workspaceMsg, exampleMsg].join('\n\n')
+      );
     }
 
     const swayMembers = forcToml.workspace.members.map((member) => resolve(workspace, member));
