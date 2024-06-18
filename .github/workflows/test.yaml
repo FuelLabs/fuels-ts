@@ -20,7 +20,7 @@ jobs:
       matrix:
         env:
           [
-            { name: node, version: 18.18.2 },
+            { name: node, version: 18.20.3 },
             { name: node, version: 20 },
             { name: node, version: 22 },
             { name: browser },
