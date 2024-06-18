@@ -13,7 +13,7 @@ export default function Faucet() {
 
   const { wallet } = useActiveWallet();
 
-  const [receiverAddress, setReceiverAddress] = useState<string>();
+  const [receiverAddress, setReceiverAddress] = useState<string>("");
   const [amountToSend, setAmountToSend] = useState<string>("5");
 
   useEffect(() => {
