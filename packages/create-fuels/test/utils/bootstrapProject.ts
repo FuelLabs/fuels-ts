@@ -7,6 +7,7 @@ export type ProjectPaths = {
   root: string;
   template: string;
   sourceTemplate: string;
+  packageJson: string;
 };
 
 /**
@@ -31,11 +32,13 @@ export const bootstrapProject = (
 
   // Test paths
   const root = join(testDir, projectName);
+  const packageJson = join(root, 'package.json');
 
   return {
     root,
     template: localTemplateDir,
     sourceTemplate: templateDir,
+    packageJson,
   };
 };
 
