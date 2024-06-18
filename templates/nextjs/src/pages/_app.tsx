@@ -7,6 +7,7 @@ import type { FuelConfig } from "fuels";
 import { defaultConnectors } from "@fuels/connectors";
 import { ENABLE_FUEL_DEV_CONNECTOR } from "@/lib";
 import React, { useEffect } from "react";
+import { ActiveWalletProvider } from "@/hooks/useActiveWallet";
 
 const queryClient: QueryClient = new QueryClient();
 
@@ -25,9 +26,11 @@ export default function App({ Component, pageProps }: AppProps) {
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
         <FuelProvider fuelConfig={fuelConfig}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <ActiveWalletProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ActiveWalletProvider>
         </FuelProvider>
       </QueryClientProvider>
     </React.StrictMode>

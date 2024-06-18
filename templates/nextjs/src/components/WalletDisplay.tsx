@@ -25,7 +25,7 @@ export const WalletDisplay = () => {
           className="cursor-pointer h-5 hover:opacity-80 active:scale-[90%]"
           onClick={() => copyToClipboard(wallet.address.toB256() as string)}
         />
-        <span className="text-gray-400">
+        <span data-testid="wallet-balance" className="text-gray-400">
           Balance:{" "}
           {walletBalance?.format({
             precision: 3,
