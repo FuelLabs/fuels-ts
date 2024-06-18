@@ -122,6 +122,10 @@ export default defineConfig({
                 link: '/guide/provider/provider-options',
               },
               {
+                text: 'Pagination',
+                link: '/guide/provider/pagination',
+              },
+              {
                 text: 'Querying the Chain',
                 link: '/guide/provider/querying-the-chain',
               },
