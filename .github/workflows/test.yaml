@@ -112,15 +112,11 @@ jobs:
       - name: Generate Coverage Directory
         run: mkdir -p coverage/environments
 
-      - run: ls coverage
-
       - name: Download Coverage Artifact for Node Tests
         uses: actions/download-artifact@v4
         with:
           name: node
           path: coverage/environments/node
-
-      - run: ls coverage/environments
 
       - name: Download Coverage Artifact for Browser Tests
         uses: actions/download-artifact@v4
@@ -128,14 +124,8 @@ jobs:
           name: browser
           path: coverage/environments/browser
 
-      - run: ls coverage/environments
-
       - name: Generate Coverage
         run: pnpm test:coverage-merge
-
-      - run: ls coverage
-
-      - run: ls coverage/report
 
       - name: Find PR Number
         uses: jwalton/gh-find-current-pr@v1
