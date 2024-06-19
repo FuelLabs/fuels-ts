@@ -234,20 +234,22 @@ describe('Predicate', () => {
       );
     });
 
-    it('throws when setting a configurable with no ABI', () => {
-      const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
-
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: predicateBytesConfigurable,
-          provider: wallet.provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            NOPE: 'NADA',
-          },
-        });
-      }).toThrow(errMsg);
+    it('throws when setting a configurable with no ABI', async () => {
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: predicateBytesConfigurable,
+            provider: wallet.provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              NOPE: 'NADA',
+            },
+          }),
+        new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`
+        )
+      );
     });
   });
 });
