@@ -1,5 +1,24 @@
 # @fuel-ts/abi-typegen
 
+## 0.90.0
+
+### Minor Changes
+
+- 1beab0e: feat!: remove redundant exports from `v1` encoding
+
+### Patch Changes
+
+- af3202c: feat: support for `bun`
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [81a77d3]
+- Updated dependencies [af3202c]
+- Updated dependencies [90e8cba]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
 ## 0.89.2
 
 ### Patch Changes
