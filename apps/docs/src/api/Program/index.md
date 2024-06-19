@@ -44,7 +44,7 @@ Represents configuration for calling a contract function.
 
 #### Defined in
 
-[types.ts:48](https://github.com/FuelLabs/fuels-ts/blob/8c34efed/packages/program/src/types.ts#L48)
+[types.ts:46](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L46)
 
 ___
 
@@ -56,7 +56,7 @@ Represents call parameters for a contract call.
 
 #### Defined in
 
-[types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8c34efed/packages/program/src/types.ts#L26)
+[types.ts:24](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L24)
 
 ___
 
@@ -74,15 +74,13 @@ Represents a contract call.
 | `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
 | `contractId` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
 | `data` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `encoding?` | `EncodingVersion` |
 | `externalContractsAbis?` | `Record`&lt;`string`, `JsonAbi`\> |
-| `fnSelector` | `string` |
 | `fnSelectorBytes` | `Uint8Array` |
 | `gas?` | `BigNumberish` |
 
 #### Defined in
 
-[types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8c34efed/packages/program/src/types.ts#L11)
+[types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L11)
 
 ___
 
@@ -106,7 +104,7 @@ Represents a like object of InvocationScope with a method to get its call config
 
 #### Defined in
 
-[types.ts:81](https://github.com/FuelLabs/fuels-ts/blob/8c34efed/packages/program/src/types.ts#L81)
+[types.ts:79](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L79)
 
 ___
 
@@ -118,7 +116,7 @@ Represents options for calculating the transaction cost.
 
 #### Defined in
 
-[types.ts:92](https://github.com/FuelLabs/fuels-ts/blob/8c34efed/packages/program/src/types.ts#L92)
+[types.ts:90](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L90)
 
 ___
 
@@ -130,4 +128,4 @@ Represents transaction parameters for a contract call.
 
 #### Defined in
 
-[types.ts:34](https://github.com/FuelLabs/fuels-ts/blob/8c34efed/packages/program/src/types.ts#L34)
+[types.ts:32](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L32)

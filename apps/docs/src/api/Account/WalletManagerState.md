@@ -10,4 +10,4 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/8c34efed/packages/account/src/wallet-manager/types.ts#L31)
+[packages/account/src/wallet-manager/types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/types.ts#L31)
