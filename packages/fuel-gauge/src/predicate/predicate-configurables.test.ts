@@ -1,6 +1,15 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { CoinQuantityLike } from 'fuels';
-import { getRandomB256, Provider, WalletUnlocked, Predicate, FUEL_NETWORK_URL } from 'fuels';
+import {
+  getRandomB256,
+  Provider,
+  WalletUnlocked,
+  Predicate,
+  FUEL_NETWORK_URL,
+  FuelError,
+  ErrorCode,
+} from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
@@ -187,19 +196,23 @@ describe('Predicate', () => {
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
-    it('throws when setting configurable but predicate has none', () => {
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: predicateBytesTrue,
-          abi: predicateAbiTrue,
-          provider: wallet.provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            constant: 'NADA',
-          },
-        });
-      }).toThrow('Predicate has no configurable constants to be set');
+    it('throws when setting configurable but predicate has none', async () => {
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: predicateBytesTrue,
+            abi: predicateAbiTrue,
+            provider: wallet.provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              constant: 'NADA',
+            },
+          }),
+        new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Predicate has no configurable constants to be set'
+        )
+      );
     });
 
     it('throws when setting invalid configurable', () => {
