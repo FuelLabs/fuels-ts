@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Debugging
-# PUBLISHED_NPM_VERSION="next"
+# The PUBLISHED_NPM_VERSION variable is required to create a new project with the current published `fuels` version
 
 # Versions
 FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)
