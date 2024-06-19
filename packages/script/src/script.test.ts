@@ -162,7 +162,7 @@ describe('Script', () => {
     await expectToThrowFuelError(
       () => script.setConfigurableConstants({ NOT_DEFINED: 8 }),
       new FuelError(
-        ErrorCode.CONFIGURABLE_NOT_FOUND,
+        ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
         `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`
       )
     );

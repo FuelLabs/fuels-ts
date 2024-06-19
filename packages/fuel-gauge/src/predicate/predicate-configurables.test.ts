@@ -215,21 +215,23 @@ describe('Predicate', () => {
       );
     });
 
-    it('throws when setting invalid configurable', () => {
-      const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
-
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: predicateBytesConfigurable,
-          abi: predicateAbiConfigurable,
-          provider: wallet.provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            NOPE: 'NADA',
-          },
-        });
-      }).toThrow(errMsg);
+    it('throws when setting invalid configurable', async () => {
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: predicateBytesConfigurable,
+            abi: predicateAbiConfigurable,
+            provider: wallet.provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              NOPE: 'NADA',
+            },
+          }),
+        new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`
+        )
+      );
     });
 
     it('throws when setting a configurable with no ABI', () => {
