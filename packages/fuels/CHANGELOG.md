@@ -1,5 +1,49 @@
 # Change Log
 
+## 0.90.0
+
+### Minor Changes
+
+- e165e37: chore!: upgrade fuel core to `0.28.0`
+- 41dc617: fix!: updated chain assets, removed `beta-5` network
+
+### Patch Changes
+
+- bb5a123: feat!: add `launchTestNode` utility
+- af3202c: feat: support for `bun`
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [f8c57ef]
+- Updated dependencies [1beab0e]
+- Updated dependencies [69c3e51]
+- Updated dependencies [b1dbe42]
+- Updated dependencies [3db38af]
+- Updated dependencies [439d0dc]
+- Updated dependencies [81a77d3]
+- Updated dependencies [436f040]
+- Updated dependencies [af3202c]
+- Updated dependencies [038d1f1]
+- Updated dependencies [41dc617]
+- Updated dependencies [90e8cba]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/account@0.90.0
+  - @fuel-ts/contract@0.90.0
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/abi-typegen@0.90.0
+  - @fuel-ts/program@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/script@0.90.0
+  - @fuel-ts/transactions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/merkle@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
 ## 0.89.2
 
 ### Patch Changes
