@@ -1,0 +1,32 @@
+name: "Test Integration"
+
+on:
+  workflow_run:
+    workflow: [Release]
+    types:
+      - completed
+
+jobs:
+  create-fuels-template-integration:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+        with:
+          should-install-bun: true
+
+      - name: Run Isolated Tests
+        run: pnpm test:integration
+        env:
+          PUBLISHED_NPM_VERSION: next
+
+      - name: Run UI tests
+        run: sh ./scripts/create-fuels-template-integration.sh
+        env:
+          PUBLISHED_NPM_VERSION: next
