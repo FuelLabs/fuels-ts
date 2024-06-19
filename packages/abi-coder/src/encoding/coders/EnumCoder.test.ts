@@ -59,6 +59,13 @@ describe('EnumCoder', () => {
         new FuelError(ErrorCode.INVALID_DECODE_VALUE, `Invalid case 'c'. Valid cases: 'a', 'b'.`)
       );
     });
+
+    it('should throw an error when multiple fields are provided', async () => {
+      await expectToThrowFuelError(
+        () => coder.encode({ a: 'test', b: 'test' } as never),
+        new FuelError(ErrorCode.INVALID_DECODE_VALUE, 'Only one field must be provided.')
+      );
+    });
   });
 
   describe('decode', () => {
@@ -119,6 +126,15 @@ describe('EnumCoder', () => {
     it('throws when decoding empty bytes', async () => {
       await expectToThrowFuelError(
         () => coder.decode(new Uint8Array(), 0),
+        new FuelError(ErrorCode.DECODE_ERROR, 'Invalid enum data size.')
+      );
+    });
+
+    it('throws when decoding data that is too short', async () => {
+      const input = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1]);
+
+      await expectToThrowFuelError(
+        () => coder.decode(input, 0),
         new FuelError(ErrorCode.DECODE_ERROR, 'Invalid enum data size.')
       );
     });
