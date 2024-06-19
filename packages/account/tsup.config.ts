@@ -10,7 +10,7 @@ const configs: Options = {
   entry: {
     index: 'src/index.ts',
     configs: 'src/configs.ts',
-    'test-utils': 'src/test-utils/index.ts',
+    'test-utils': 'src/test-utils.ts',
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   onSuccess: async () => {
