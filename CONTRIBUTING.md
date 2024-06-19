@@ -18,6 +18,23 @@ If you are planning something big, for example, changes related to multiple comp
 
 If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
 
+# Adding an Issue to the Backlog
+
+If you have an idea for a new feature or a bug fix, you can add an issue to the backlog using one of our [issue templates](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow you to discuss the issue with core maintainers and it can be triaged and prioritized. All issues will go through the following process:
+
+1. A new issue is added to the backlog
+1. The `triage` label is added to the issue and it is assigned to a core maintainer for investigation
+1. The core maintainer will post the results of the issue investigation and remove the `triage` label
+1. A type label is added to the issue (e.g. `bug`, `feat`, `docs`, `chore`)
+1. The issue is assigned a milestone (e.g. `mainnet`, `post-launch`) and a priority label (e.g. `p0`, `p1`, `p2`) that should give an indication as to when the issue will be delivered
+1. The issue is assigned for development and should be moved to `In Progress`
+1. A pull request is made ready and the issue is now `In Review`
+1. The pull request needs approval by 3 core maintainers, these can be found in the [CODEOWNERS file](https://github.com/FuelLabs/fuels-ts/blob/master/.github/CODEOWNERS)
+1. It can then be merged to `master` and included in a release
+1. The issue is closed automatically and it's status moves to `Done`
+
+> **Note:** If additional information is ever required by the assigned investigator then the `awaiting` label will be added to the issue, these means they require more information from the author. Any `awaiting` issue left unanswered for 2 weeks will go `stale` and will be closed.
+
 # Setting up
 
 ```sh
