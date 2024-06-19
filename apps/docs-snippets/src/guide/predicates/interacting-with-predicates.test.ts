@@ -1,5 +1,5 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
-import type { CoinQuantityLike, Provider, WalletUnlocked } from 'fuels';
+import type { Provider, WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, bn, Predicate, BN } from 'fuels';
 
 import {
