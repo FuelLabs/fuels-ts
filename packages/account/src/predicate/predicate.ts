@@ -229,7 +229,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
     try {
       if (!abiInterface) {
         throw new FuelError(
-          ErrorCode.JSON_ABI_ERROR,
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
           'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
         );
       }
