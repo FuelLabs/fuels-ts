@@ -258,3 +258,9 @@ It could be that the passphrase is incorrect and/or the wallet does _not_ exist 
 
 The hashing algorithm is currently locked, any subsequent attempts to register a new implementation will throw this error.
 The purpose of the lock function is to provide a way to ensure that the implementation of the specific hashing algorithm cannot be changed once it is locked. This can be useful in scenarios where you want to guarantee the integrity and consistency of the hashing function throughout your application.
+
+## `UNKNOWN_ERROR`
+
+In cases where the error code is not known, this error will be thrown.
+
+This may caused by a bug in the SDK or the Fuel Stack, please report the issue to the team.

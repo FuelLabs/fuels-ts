@@ -103,4 +103,7 @@ export enum ErrorCode {
 
   // graphql
   STREAM_PARSING_ERROR = 'stream-parsing-error',
+
+  // Unknown
+  UNKNOWN_ERROR = 'unknown-error',
 }

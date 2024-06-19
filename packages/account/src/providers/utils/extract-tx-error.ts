@@ -88,8 +88,10 @@ export const assembleRevertError = (
         break;
 
       default:
-        reason = 'unknown';
-        errorMessage = `The transaction reverted with an unknown reason: ${revertReceipt.val}`;
+        throw new FuelError(
+          ErrorCode.UNKNOWN_ERROR,
+          `The transaction reverted with an unknown reason: ${revertReceipt.val}`
+        );
     }
   }
 
