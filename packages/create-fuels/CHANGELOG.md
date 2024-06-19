@@ -1,5 +1,15 @@
 # create-fuels
 
+## 0.90.0
+
+### Patch Changes
+
+- e5236ca: chore: show all create-fuels template balances in ETH
+- 301a98e: chore: add version detection to `create fuels`
+- af3202c: feat: support for `bun`
+- ca0fc65: fix: `create-fuels` balance refresh
+- 977d58b: fix: flaky faucet test
+
 ## 0.89.2
 
 ### Patch Changes

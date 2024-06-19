@@ -13,7 +13,7 @@ export const getDefaultChainId = (networkType: NetworkTypes): number | undefined
     return CHAIN_IDS.eth.sepolia;
   }
   if (networkType === 'fuel') {
-    return CHAIN_IDS.fuel.devnet;
+    return CHAIN_IDS.fuel.testnet;
   }
 
   return undefined;

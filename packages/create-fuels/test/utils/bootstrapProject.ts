@@ -1,10 +1,13 @@
 import { cpSync, existsSync, readdirSync, rmSync } from 'fs';
 import { basename, join } from 'path';
 
+import { rewriteTemplateFiles } from '../../src/lib/rewriteTemplateFiles';
+
 export type ProjectPaths = {
   root: string;
   template: string;
   sourceTemplate: string;
+  packageJson: string;
 };
 
 /**
@@ -29,17 +32,23 @@ export const bootstrapProject = (
 
   // Test paths
   const root = join(testDir, projectName);
+  const packageJson = join(root, 'package.json');
 
   return {
     root,
     template: localTemplateDir,
     sourceTemplate: templateDir,
+    packageJson,
   };
 };
 
-export const copyTemplate = (srcDir: string, destDir: string) => {
+export const copyTemplate = (srcDir: string, destDir: string, shouldRewrite: boolean = true) => {
   if (!existsSync(destDir)) {
     cpSync(srcDir, destDir, { recursive: true });
+  }
+
+  if (shouldRewrite) {
+    rewriteTemplateFiles(destDir);
   }
 };
 

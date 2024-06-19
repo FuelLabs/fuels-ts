@@ -16,6 +16,8 @@ Check out our [Help Wanted](https://github.com/FuelLabs/fuels-ts/issues?q=is%3Ao
 
 If you are planning something big, for example, changes related to multiple components or changes to current behaviors, make sure to [open an issue](https://github.com/FuelLabs/fuels-ts/issues/new) to discuss with us before starting on the implementation.
 
+If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
+
 # Setting up
 
 ```sh
@@ -153,7 +155,6 @@ And changing the below variables:
 ```sh
 FUEL_NETWORK_URL=https://testnet.fuel.network/v1/graphql
 TEST_WALLET_PVT_KEY=0x...
-TEST_WALLET_ADDRESS=fuel...
 ```
 
 <!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
