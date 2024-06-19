@@ -38,12 +38,6 @@ The `simulateTransaction` method should be used to dry-run a predicate call, ens
 
 <<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-3{ts:line-numbers}
 
-### `populateTransactionPredicateData`
-
-Once you've instantiated a `new Predicate` you will want to create a transaction request containing the `gasLimit` and `maxFee` and then pass this to the `populateTransactionPredicateData` method, which will populate the transaction with the required data to be sent to the node.
-
-<<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-4{ts:line-numbers}
-
 ## Transfers
 
 ### `createTransfer`

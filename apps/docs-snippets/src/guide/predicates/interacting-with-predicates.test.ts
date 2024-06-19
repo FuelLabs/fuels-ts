@@ -119,33 +119,4 @@ describe(__filename, () => {
       },
     ]);
   });
-
-  it('should successfully populate the transaction with predicate data', async () => {
-    const quantity: CoinQuantityLike[] = [[500, baseAssetId]];
-
-    // #region interacting-with-predicates-4
-    let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-    transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
-
-    const predicateResources = await provider.getResourcesToSpend(predicate.address, quantity);
-
-    transactionRequest.addResources(predicateResources);
-
-    transactionRequest = predicate.populateTransactionPredicateData(transactionRequest);
-    transactionRequest = await provider.estimatePredicates(transactionRequest);
-
-    const txCost = await provider.getTransactionCost(transactionRequest);
-
-    transactionRequest.gasLimit = txCost.gasUsed;
-    transactionRequest.maxFee = txCost.maxFee;
-
-    await predicate.fund(transactionRequest, txCost);
-
-    const tx = await provider.sendTransaction(transactionRequest);
-    // #endregion interacting-with-predicates-4
-
-    const { isStatusSuccess } = await tx.waitForResult();
-
-    expect(isStatusSuccess).toBeTruthy();
-  });
 });
