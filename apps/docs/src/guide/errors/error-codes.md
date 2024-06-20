@@ -261,6 +261,6 @@ The purpose of the lock function is to provide a way to ensure that the implemen
 
 ## `UNKNOWN_ERROR`
 
-In cases where the error code is not known, this error will be thrown.
+In cases where the error hasn't been mapped yet, this code will be used.
 
 This may caused by a bug in the SDK or the Fuel Stack, please report the issue to the team.
