@@ -34,7 +34,7 @@ It would also be useful to change the placeholder text to say "Enter a new pin" 
       />
 ```
 
-Thirdly, we will add a button that calls the `changePin` function when clicked.
+Finally, we will add a button that calls the `changePin` function when clicked.
 
 ```tsx
   <Button onClick={changePin}>Change Pin</Button>
