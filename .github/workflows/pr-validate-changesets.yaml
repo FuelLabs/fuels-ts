@@ -38,13 +38,13 @@ jobs:
 
       - name: Commit Changeset
         run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add .
-          git commit -m "build: update dependency changeset [skip ci]"
+          git commit -m "build: update dependency changeset"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
   validate-changeset:
     name: Validate PR Changeset

@@ -63,7 +63,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.27.0');
+    expect(version).toEqual('0.30.0');
   });
 
   it('can call()', async () => {
@@ -99,7 +99,7 @@ describe('Provider', () => {
       witnesses: ['0x'],
     });
 
-    const callResult = await provider.call(transactionRequest);
+    const callResult = await provider.dryRun(transactionRequest);
 
     const expectedReceipts: Receipt[] = [
       {

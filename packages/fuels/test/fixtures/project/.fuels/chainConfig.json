@@ -129,6 +129,12 @@
           "wqmm": 11,
           "xor": 2,
           "xori": 2,
+          "alocDependentCost": {
+            "LightOperation": {
+              "base": "2",
+              "unitsPerGas": "214"
+            }
+          },
           "call": {
             "LightOperation": {
               "base": 21687,

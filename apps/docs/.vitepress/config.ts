@@ -236,6 +236,10 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Minted Token Asset ID',
+                link: '/guide/contracts/minted-token-asset-id',
+              },
+              {
                 text: 'Managing Deployed Contracts',
                 link: '/guide/contracts/managing-deployed-contracts',
               },
@@ -307,6 +311,21 @@ export default defineConfig({
               {
                 text: 'Transaction Policies',
                 link: '/guide/transactions/transaction-policies',
+              },
+            ],
+          },
+          {
+            text: 'Encoding',
+            link: '/guide/encoding/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Encode and Decode',
+                link: '/guide/encoding/encode-and-decode',
+              },
+              {
+                text: 'Working with Bytes',
+                link: '/guide/encoding/working-with-bytes',
               },
             ],
           },

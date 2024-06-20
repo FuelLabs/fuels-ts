@@ -51,7 +51,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [environments]
-    if: ${{ !github.event.pull_request.draft }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -64,6 +63,7 @@ jobs:
           should-install-bun: true
 
       - name: Publish PR to NPM
+        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
         id: release
         uses: ./.github/actions/pr-release
         with:
@@ -79,10 +79,8 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://testnet.fuel.network/v1/graphql
-          FUEL_TESTNET_NETWORK_URL: https://testnet.fuel.network/v1/graphql
-          TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
-          TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
+          TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
+          DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
           PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
 
   create-fuels-template-integration:
@@ -118,13 +116,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node
-          path: coverage/environments
+          path: coverage/environments/node
 
       - name: Download Coverage Artifact for Browser Tests
         uses: actions/download-artifact@v4
         with:
           name: browser
-          path: coverage/environments
+          path: coverage/environments/browser
 
       - name: Generate Coverage
         run: pnpm test:coverage-merge
