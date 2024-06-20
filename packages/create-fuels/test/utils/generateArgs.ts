@@ -6,6 +6,9 @@ export const generateArgs = (
   packageManager: string = 'pnpm'
 ): string[] => {
   const args = [];
+  if (packageManager === 'npm') {
+    args.push('--');
+  }
   if (projectName) {
     args.push(projectName);
   }

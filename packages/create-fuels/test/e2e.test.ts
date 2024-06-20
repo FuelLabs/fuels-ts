@@ -15,11 +15,12 @@ import {
 
 const { log } = console;
 
-const PUBLISHED_NPM_VERSION = process.env.PUBLISHED_NPM_VERSION;
+const PUBLISHED_NPM_VERSION = process.env.PUBLISHED_NPM_VERSION ?? 'next';
 const programsToInclude = { contract: true, predicate: true, script: true };
 const packageManagerCreateCommands: [PackageManager, string, string[]][] = [
   ['pnpm', 'pnpm --ignore-workspace create fuels', []],
   ['bun', 'bunx --bun create-fuels', ['/bun.lockb']],
+  ['npm', 'npm create fuels', []],
 ];
 
 /**
