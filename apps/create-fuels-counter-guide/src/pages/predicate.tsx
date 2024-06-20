@@ -123,6 +123,7 @@ export default function PredicateExample() {
 
     if (!isStatusSuccess) {
       toast.error("Failed to update pin in  predicate");
+      return;
     }
 
     if (isStatusSuccess) {
