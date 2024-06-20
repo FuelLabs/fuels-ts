@@ -10,6 +10,9 @@ import {
 } from '../test/typegen';
 import contractBytes from '../test/typegen/contracts/StrSliceAbi.hex';
 
+/**
+ * @group node
+ */
 describe('str slice', () => {
   let provider: Provider;
   let baseAssetId: string;
