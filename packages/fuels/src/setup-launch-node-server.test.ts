@@ -2,9 +2,12 @@ import { Provider } from '@fuel-ts/account';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import { spawn } from 'node:child_process';
 
-function startServer(
-  port: number = 0
-): Promise<{ serverUrl: string; killServer: () => void } & Disposable> {
+interface ServerInfo extends Disposable {
+  serverUrl: string;
+  killServer: () => void;
+}
+
+function startServer(port: number = 0): Promise<ServerInfo> {
   return new Promise((resolve, reject) => {
     const cp = spawn(`pnpm tsx packages/fuels/src/setup-launch-node-server.ts ${port}`, {
       detached: true,
@@ -18,19 +21,25 @@ function startServer(
     };
 
     cp.stdout?.on('data', (chunk) => {
-      // first message is server url
+      // first message is server url and we resolve immediately because that's what we care about
       const message: string[] = chunk.toString().split('\n');
-      const serverUrl = message[0].startsWith('http://') ? message[0] : '';
-      // teardown
+
       resolve({
-        serverUrl,
+        serverUrl: message[0],
         killServer,
         [Symbol.dispose]: killServer,
       });
     });
 
     cp.on('error', (err) => {
+      killServer();
       reject(err);
+    });
+
+    cp.on('exit', (code) => {
+      if (code !== 0) {
+        reject(new Error(`Server process exited with code ${code}`));
+      }
     });
   });
 }

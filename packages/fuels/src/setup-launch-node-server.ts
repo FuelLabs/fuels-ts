@@ -6,14 +6,18 @@ import type { AddressInfo } from 'net';
 
 process.setMaxListeners(Infinity);
 
-async function parseBody(req: http.IncomingMessage) {
-  return new Promise<string>((resolve, reject) => {
+async function parseBody(req: http.IncomingMessage): Promise<LaunchNodeOptions> {
+  return new Promise<LaunchNodeOptions>((resolve, reject) => {
     const body: Buffer[] = [];
     req.on('data', (chunk) => {
       body.push(chunk);
     });
     req.on('end', () => {
-      resolve(JSON.parse(body.length === 0 ? '{}' : Buffer.concat(body).toString()));
+      try {
+        resolve(JSON.parse(body.length === 0 ? '{}' : Buffer.concat(body).toString()));
+      } catch (err) {
+        reject(err);
+      }
     });
     req.on('error', reject);
   });
@@ -29,19 +33,24 @@ const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
 
   if (req.url === '/') {
-    const body = (await parseBody(req)) as LaunchNodeOptions;
+    try {
+      const body = await parseBody(req);
 
-    const node = await launchNode({
-      port: '0',
-      ...body,
-      fuelCorePath: 'fuels-core',
-    });
-    cleanupFns.set(node.url, () => {
-      node.cleanup();
-      cleanupFns.delete(node.url);
-    });
-    res.write(node.url);
-    res.end();
+      const node = await launchNode({
+        port: '0',
+        ...body,
+        fuelCorePath: 'fuels-core',
+      });
+      cleanupFns.set(node.url, () => {
+        node.cleanup();
+        cleanupFns.delete(node.url);
+      });
+      res.end(node.url);
+    } catch (err) {
+      console.error(err);
+      res.writeHead(500, { 'Content-Type': 'text/plain' });
+      res.end(JSON.stringify(err));
+    }
     return;
   }
 

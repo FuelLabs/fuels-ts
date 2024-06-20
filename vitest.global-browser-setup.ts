@@ -7,18 +7,29 @@ export default async function setup() {
       shell: 'sh',
     });
 
-    cp.stdout?.on('data', () => {
-      // return teardown function to be called when tests finish
-      // it will kill the server
-      resolve(() => {
+    const killServer = () => {
+      if (cp.pid) {
         // https://github.com/nodejs/node/issues/2098#issuecomment-169549789
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        process.kill(-cp.pid!);
-      });
+        process.kill(-cp.pid);
+      }
+    };
+
+    cp.stdout?.on('data', () => {
+      // Return teardown function to be called when tests finish
+      // It will kill the server
+      resolve(killServer);
     });
 
     cp.on('error', (err) => {
+      // Ensure server is killed if there's an error
+      killServer();
       reject(err);
+    });
+
+    cp.on('exit', (code) => {
+      if (code !== 0) {
+        reject(new Error(`Server process exited with code ${code}`));
+      }
     });
   });
 }
