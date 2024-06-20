@@ -1,7 +1,6 @@
 import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
@@ -14,16 +13,6 @@ import {
 import { generateArgv } from './utils/generateArgs';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
-
-const possibleProgramsToInclude: ProgramsToInclude[] = [
-  { contract: true, predicate: false, script: false },
-  { contract: false, predicate: true, script: false },
-  { contract: false, predicate: false, script: true },
-  { contract: true, predicate: true, script: false },
-  { contract: true, predicate: false, script: true },
-  { contract: false, predicate: true, script: true },
-  { contract: true, predicate: true, script: true },
-];
 
 /**
  * @group node
@@ -47,35 +36,24 @@ describe('CLI', () => {
     cleanupFilesystem();
   });
 
-  test.each(possibleProgramsToInclude)(
-    'create-fuels extracts the template to the specified directory',
-    async (programsToInclude) => {
-      const args = generateArgv(programsToInclude, paths.root);
+  test('create-fuels extracts the template to the specified directory', async () => {
+    const args = generateArgv(paths.root);
 
-      await runScaffoldCli({
-        program: setupProgram(),
-        args,
-      });
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
 
-      let originalTemplateFiles = await getAllFiles(paths.template);
-      originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
+    let originalTemplateFiles = await getAllFiles(paths.template);
+    originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles);
 
-      const testProjectFiles = await getAllFiles(paths.root);
+    const testProjectFiles = await getAllFiles(paths.root);
 
-      expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
-    }
-  );
+    expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
+  });
 
   test('should rewrite for the appropriate package manager', async () => {
-    const args = generateArgv(
-      {
-        contract: true,
-        predicate: true,
-        script: true,
-      },
-      paths.root,
-      'bun'
-    );
+    const args = generateArgv(paths.root, 'bun');
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -93,14 +71,7 @@ describe('CLI', () => {
   });
 
   test('create-fuels reports an error if the project directory already exists', async () => {
-    const args = generateArgv(
-      {
-        contract: true,
-        predicate: true,
-        script: true,
-      },
-      paths.root
-    );
+    const args = generateArgv(paths.root);
 
     // Generate the project once
     mkdirSync(paths.root, { recursive: true });
@@ -119,19 +90,11 @@ describe('CLI', () => {
   });
 
   test('create-fuels reports an error if no programs are chosen to be included', async () => {
-    const args = generateArgv(
-      {
-        contract: false,
-        predicate: false,
-        script: false,
-      },
-      paths.root
-    );
+    const args = generateArgv(paths.root);
 
     await runScaffoldCli({
       program: setupProgram(),
       args,
-      forceDisablePrompts: true,
     }).catch((e) => {
       expect(e).toBeInstanceOf(Error);
     });
