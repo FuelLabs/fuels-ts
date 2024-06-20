@@ -16,7 +16,6 @@ import {
 const { log } = console;
 
 const PUBLISHED_NPM_VERSION = process.env.PUBLISHED_NPM_VERSION;
-const programsToInclude = { contract: true, predicate: true, script: true };
 const packageManagerCreateCommands: [PackageManager, string, string[]][] = [
   ['pnpm', 'pnpm --ignore-workspace create fuels', []],
   ['bun', 'bunx --bun create-fuels', ['/bun.lockb']],
@@ -51,11 +50,9 @@ describe('`create fuels` package integrity', () => {
         return;
       }
 
-      const args = generateArgs(programsToInclude, paths.root, packageManager).join(' ');
+      const args = generateArgs(paths.root, packageManager).join(' ');
       const expectedTemplateFiles = await getAllFiles(paths.sourceTemplate).then((files) =>
-        filterOriginalTemplateFiles(files, programsToInclude)
-          .filter(filterForcBuildFiles)
-          .concat(additionalFiles)
+        filterOriginalTemplateFiles(files).filter(filterForcBuildFiles).concat(additionalFiles)
       );
 
       const { error: createFuelsError } = await safeExec(() =>
