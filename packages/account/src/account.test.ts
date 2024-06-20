@@ -709,4 +709,89 @@ describe('Account', () => {
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
   });
+
+  test('can properly use getCoins pagination args', async () => {
+    const wallet = Wallet.generate({ provider });
+
+    const defaultNumberOfCoins = 100;
+    const coinsToSeed = 120;
+
+    await seedTestWallet(wallet, [[10_000, baseAssetId]], coinsToSeed);
+
+    let { coins, pageInfo } = await wallet.getCoins(baseAssetId, {
+      first: coinsToSeed - 1,
+    });
+
+    expect(coins.length).toBe(coinsToSeed - 1);
+    expect(pageInfo.hasNextPage).toBeTruthy();
+    expect(pageInfo.hasPreviousPage).toBeFalsy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId, {
+      after: pageInfo.endCursor,
+    }));
+
+    expect(coins.length).toBe(1);
+    expect(pageInfo.hasNextPage).toBeFalsy();
+    expect(pageInfo.hasPreviousPage).toBeTruthy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId));
+
+    // default number of coins to fetch should be the first 100
+    expect(coins.length).toBe(defaultNumberOfCoins);
+  });
+
+  test('can properly use getMessages pagination args', async () => {
+    const wallet = Wallet.fromPrivateKey(
+      '0x906d420305ffc528e2558310e85e7f3bef10c117c583cab5ae812a0fddf4561d',
+      provider
+    );
+
+    const accountTotalMessages = 3;
+
+    let { messages, pageInfo } = await wallet.getMessages({ first: accountTotalMessages - 1 });
+
+    expect(messages.length).toBe(accountTotalMessages - 1);
+    expect(pageInfo.hasNextPage).toBeTruthy();
+    expect(pageInfo.hasPreviousPage).toBeFalsy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ messages, pageInfo } = await wallet.getMessages({
+      after: pageInfo.endCursor,
+    }));
+
+    expect(messages.length).toBe(1);
+    expect(pageInfo.hasNextPage).toBeFalsy();
+    expect(pageInfo.hasPreviousPage).toBeTruthy();
+    expect(pageInfo.startCursor).toBeDefined();
+    expect(pageInfo.endCursor).toBeDefined();
+
+    ({ messages, pageInfo } = await wallet.getMessages());
+
+    // default number of messages to fetch should be the first 100
+    expect(messages.length).toBe(accountTotalMessages);
+  });
+
+  test('can properly use getBalances', async () => {
+    const wallet = Wallet.generate({ provider });
+
+    const fundAmount = 10_000;
+
+    await seedTestWallet(wallet, [
+      [fundAmount, baseAssetId],
+      [fundAmount, ASSET_A],
+    ]);
+
+    const { balances } = await wallet.getBalances();
+
+    expect(balances.length).toBe(2);
+    balances.forEach((balance) => {
+      expect(balance.amount.toNumber()).toBe(fundAmount);
+      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+    });
+  });
 });
