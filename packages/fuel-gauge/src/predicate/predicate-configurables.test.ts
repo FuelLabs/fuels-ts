@@ -208,10 +208,10 @@ describe('Predicate', () => {
               constant: 'NADA',
             },
           }),
-        {
-          code: ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          message: expect.stringContaining('Predicate has no configurable constants to be set'),
-        }
+        new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Predicate has no configurable constants to be set'
+        )
       );
     });
 
