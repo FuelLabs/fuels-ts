@@ -103,7 +103,6 @@ export type GetMessagesResponse = {
 
 export type GetBalancesResponse = {
   balances: CoinQuantity[];
-  pageInfo: GqlPageInfo;
 };
 
 export type GetTransactionsResponse = {
@@ -1558,15 +1557,15 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(
-    owner: string | AbstractAddress,
-    paginationArgs?: CursorPaginationArgs
-  ): Promise<GetBalancesResponse> {
+  async getBalances(owner: string | AbstractAddress): Promise<GetBalancesResponse> {
     const {
-      balances: { edges, pageInfo },
+      balances: { edges },
     } = await this.operations.getBalances({
-      first: 100,
-      ...paginationArgs,
+      /**
+       * The query signature for this method was create to support pagination but the
+       * current Fuel-Core implementation does not support pagination yet
+       */
+      first: 10000,
       filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
@@ -1575,7 +1574,7 @@ Supported fuel-core version: ${supportedVersion}.`
       amount: bn(node.amount),
     }));
 
-    return { balances, pageInfo };
+    return { balances };
   }
 
   /**

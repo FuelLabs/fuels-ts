@@ -184,8 +184,8 @@ export class Account extends AbstractAccount {
    *
    * @returns A promise that resolves to an array of Coins and their quantities.
    */
-  async getBalances(paginationArgs?: CursorPaginationArgs): Promise<GetBalancesResponse> {
-    return this.provider.getBalances(this.address, paginationArgs);
+  async getBalances(): Promise<GetBalancesResponse> {
+    return this.provider.getBalances(this.address);
   }
 
   /**
