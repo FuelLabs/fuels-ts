@@ -12,6 +12,16 @@ import { VecCoder } from './VecCoder';
  * @group node
  */
 describe('VecCoder', () => {
+  it('should decode an empty Vec', () => {
+    const coder = new VecCoder(new NumberCoder('u8'));
+    const input = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
+    const expected: number[] = [];
+    const [actual, newOffset] = coder.decode(input, 0);
+
+    expect(actual).toEqual(expected);
+    expect(newOffset).toEqual(8);
+  });
+
   it('should encode a Vec of Booleans', () => {
     const coder = new VecCoder(new BooleanCoder());
     const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 6, 1, 0, 1, 0, 1, 1]);

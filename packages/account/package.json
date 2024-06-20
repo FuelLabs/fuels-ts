@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/account",
-  "version": "0.89.2",
+  "version": "0.90.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -32,7 +32,7 @@
         "./dist/configs.d.ts"
       ],
       "test-utils": [
-        "./dist/test-utils/index.d.ts"
+        "./dist/test-utils.d.ts"
       ]
     }
   },
