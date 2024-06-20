@@ -469,7 +469,7 @@ importers:
         version: link:../../packages/fuels
       typedoc-plugin-markdown:
         specifier: ^3.15.3
-        version: 3.15.3(typedoc@0.25.3(typescript@5.2.2))
+        version: 3.15.3(typedoc@0.25.13(typescript@5.2.2))
     devDependencies:
       '@types/markdown-it':
         specifier: ^12.2.3
@@ -490,11 +490,11 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       typedoc:
-        specifier: ^0.25.1
-        version: 0.25.3(typescript@5.2.2)
+        specifier: ^0.25.13
+        version: 0.25.13(typescript@5.2.2)
       typedoc-plugin-merge-modules:
         specifier: ^5.1.0
-        version: 5.1.0(typedoc@0.25.3(typescript@5.2.2))
+        version: 5.1.0(typedoc@0.25.13(typescript@5.2.2))
       vitepress:
         specifier: 1.2.2
         version: 1.2.2(@algolia/client-search@4.22.1)(@types/node@20.11.13)(@types/react@18.2.9)(change-case@4.1.2)(idb-keyval@6.2.1)(postcss@8.4.38)(qrcode@1.5.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(search-insights@2.11.0)(terser@5.18.2)(typescript@5.2.2)
@@ -729,8 +729,8 @@ importers:
         specifier: ^1.2.2
         version: 1.2.2
       uuid:
-        specifier: ^9.0.0
-        version: 9.0.0
+        specifier: ^10.0.0
+        version: 10.0.0
     devDependencies:
       '@graphql-codegen/cli':
         specifier: ^2.13.7
@@ -12344,8 +12344,8 @@ packages:
   shell-quote@1.8.1:
     resolution: {integrity: sha512-6j1W9l1iAs/4xYBI1SYOVZyFcCis9b4KCLQ8fgAGG07QvzaRLVVRQvAy85yNmmZSjYjg4MWh4gNvlPujU/5LpA==}
 
-  shiki@0.14.3:
-    resolution: {integrity: sha512-U3S/a+b0KS+UkTyMjoNojvTgrBHjgp7L6ovhFVZsXmBGnVdQ4K4U9oK0z63w538S91ATngv1vXigHCSWOwnr+g==}
+  shiki@0.14.7:
+    resolution: {integrity: sha512-dNPAPrxSc87ua2sKJ3H5dQ/6ZaY8RNnaAqK+t0eG7p0Soi2ydiqbGOTaZCqaYvA/uZYfS1LJnemt3Q+mSfcPCg==}
 
   shiki@1.6.0:
     resolution: {integrity: sha512-P31ROeXcVgW/k3Z+vUUErcxoTah7ZRaimctOpzGuqAntqnnSmx1HOsvnbAB8Z2qfXPRhw61yptAzCsuKOhTHwQ==}
@@ -13240,12 +13240,12 @@ packages:
     peerDependencies:
       typedoc: 0.24.x || 0.25.x
 
-  typedoc@0.25.3:
-    resolution: {integrity: sha512-Ow8Bo7uY1Lwy7GTmphRIMEo6IOZ+yYUyrc8n5KXIZg1svpqhZSWgni2ZrDhe+wLosFS8yswowUzljTAV/3jmWw==}
+  typedoc@0.25.13:
+    resolution: {integrity: sha512-pQqiwiJ+Z4pigfOnnysObszLiU3mVLWAExSPf+Mu06G/qsc3wzbuM56SZQvONhHLncLUhYzOVkjFFpFfL5AzhQ==}
     engines: {node: '>= 16'}
     hasBin: true
     peerDependencies:
-      typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x
+      typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x
 
   types-ramda@0.29.4:
     resolution: {integrity: sha512-XO/820iRsCDwqLjE8XE+b57cVGPyk1h+U9lBGpDWvbEky+NQChvHVwaKM05WnW1c5z3EVQh8NhXFmh2E/1YazQ==}
@@ -13516,12 +13516,12 @@ packages:
     resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
-  uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
+  uuid@10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
     hasBin: true
 
-  uuid@9.0.0:
-    resolution: {integrity: sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==}
+  uuid@8.3.2:
+    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
 
   uuid@9.0.1:
@@ -29304,7 +29304,7 @@ snapshots:
 
   shell-quote@1.8.1: {}
 
-  shiki@0.14.3:
+  shiki@0.14.7:
     dependencies:
       ansi-sequence-parser: 1.1.0
       jsonc-parser: 3.2.0
@@ -30406,21 +30406,21 @@ snapshots:
     dependencies:
       is-typedarray: 1.0.0
 
-  typedoc-plugin-markdown@3.15.3(typedoc@0.25.3(typescript@5.2.2)):
+  typedoc-plugin-markdown@3.15.3(typedoc@0.25.13(typescript@5.2.2)):
     dependencies:
       handlebars: 4.7.7
-      typedoc: 0.25.3(typescript@5.2.2)
+      typedoc: 0.25.13(typescript@5.2.2)
 
-  typedoc-plugin-merge-modules@5.1.0(typedoc@0.25.3(typescript@5.2.2)):
+  typedoc-plugin-merge-modules@5.1.0(typedoc@0.25.13(typescript@5.2.2)):
     dependencies:
-      typedoc: 0.25.3(typescript@5.2.2)
+      typedoc: 0.25.13(typescript@5.2.2)
 
-  typedoc@0.25.3(typescript@5.2.2):
+  typedoc@0.25.13(typescript@5.2.2):
     dependencies:
       lunr: 2.3.9
       marked: 4.3.0
       minimatch: 9.0.3
-      shiki: 0.14.3
+      shiki: 0.14.7
       typescript: 5.2.2
 
   types-ramda@0.29.4:
@@ -30676,9 +30676,9 @@ snapshots:
 
   utils-merge@1.0.1: {}
 
-  uuid@8.3.2: {}
+  uuid@10.0.0: {}
 
-  uuid@9.0.0: {}
+  uuid@8.3.2: {}
 
   uuid@9.0.1: {}
 
