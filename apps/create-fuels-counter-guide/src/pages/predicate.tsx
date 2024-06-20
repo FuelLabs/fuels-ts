@@ -71,6 +71,7 @@ export default function PredicateExample() {
 
       if (!isStatusSuccess) {
         toast.error("Failed to unlock predicate");
+        return;
       }
 
       if (isStatusSuccess) {
