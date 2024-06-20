@@ -37,7 +37,7 @@ This method is also available in the `Account` class and can be used without pro
 
 ## `getBalances`
 
-Returns the sum of all UTXOs coins and unspent message coins amounts for all assets. Unlike `getCoins`, it only returns the total amounts, not the individual coins. This method supports [pagination](./pagination.md):
+Returns the sum of all UTXOs coins and unspent message coins amounts for all assets. Unlike `getCoins`, it only returns the total amounts, not the individual coins:
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-balances-1{ts:line-numbers}
 

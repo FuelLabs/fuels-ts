@@ -98,7 +98,7 @@ describe('querying the chain', () => {
       [100, assetIdA],
     ]);
 
-    const { balances, pageInfo } = await provider.getBalances(wallet.address);
+    const { balances } = await provider.getBalances(wallet.address);
     // [
     //   { amount: bn(42), assetId: baseAssetId } // total amount of baseAssetId
     //   { amount: bn(100), assetId: assetIdA } // total amount of assetIdA
@@ -110,7 +110,6 @@ describe('querying the chain', () => {
     // #endregion get-balances-2
 
     expect(balances).toBeDefined();
-    expect(pageInfo).toBeDefined();
   });
 
   it('can getBlocks', async () => {
