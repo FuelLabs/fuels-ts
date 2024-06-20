@@ -60,7 +60,7 @@
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@fuels/vm-asm": "0.54.0",
-    "@noble/curves": "^1.3.0",
+    "@noble/curves": "^1.4.0",
     "events": "^3.3.0",
     "graphql": "^16.8.1",
     "graphql-request": "7.0.1",
@@ -68,7 +68,7 @@
     "portfinder": "^1.0.32",
     "ramda": "^0.29.0",
     "tree-kill": "^1.2.2",
-    "uuid": "^9.0.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "type-fest": "^4.6.0",
