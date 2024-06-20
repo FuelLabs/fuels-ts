@@ -42,7 +42,6 @@ describe('CLI', () => {
     await runScaffoldCli({
       program: setupProgram(),
       args,
-      shouldInstallDeps: false,
     });
 
     let originalTemplateFiles = await getAllFiles(paths.template);
@@ -59,7 +58,6 @@ describe('CLI', () => {
     await runScaffoldCli({
       program: setupProgram(),
       args,
-      shouldInstallDeps: false,
     });
 
     const packageJsonPath = join(paths.root, 'package.json');
@@ -82,7 +80,6 @@ describe('CLI', () => {
     await runScaffoldCli({
       program: setupProgram(),
       args,
-      shouldInstallDeps: false,
     }).catch((e) => {
       expect(e).toBeInstanceOf(Error);
     });

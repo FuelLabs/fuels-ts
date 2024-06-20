@@ -14,7 +14,7 @@ pnpm create fuels@{{fuels}} [project-name] [options]
 ```
 
 ```sh-vue [npm]
-npm create fuels@{{fuels}} [project-name] [options]
+npm create fuels@{{fuels}} -- [project-name] [options]
 ```
 
 ```sh-vue [bun]
