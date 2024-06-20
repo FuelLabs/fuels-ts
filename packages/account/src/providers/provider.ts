@@ -1278,6 +1278,7 @@ Supported fuel-core version: ${supportedVersion}.`
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetCoinsResponse> {
+    this.validatePaginationArgs(paginationArgs);
     const ownerAddress = Address.fromAddressOrString(owner);
     const {
       coins: { edges, pageInfo },
@@ -1588,6 +1589,7 @@ Supported fuel-core version: ${supportedVersion}.`
     address: string | AbstractAddress,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetMessagesResponse> {
+    this.validatePaginationArgs(paginationArgs);
     const {
       messages: { edges, pageInfo },
     } = await this.operations.getMessages({
@@ -1829,6 +1831,19 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return relayedTransactionStatus;
+  }
+
+  /**
+   * @hidden
+   */
+  private validatePaginationArgs({ first, last }: CursorPaginationArgs = {}) {
+    const MAX_PAGINATION_LIMIT = 1000;
+    if ((first || 0) > MAX_PAGINATION_LIMIT || (last || 0) > MAX_PAGINATION_LIMIT) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'Pagination limit cannot exceed 1000 items'
+      );
+    }
   }
 
   /**

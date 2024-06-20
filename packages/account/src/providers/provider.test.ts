@@ -1561,6 +1561,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     // default number of coins to fetch should be the first 100
     expect(coins.length).toBe(defaultNumberOfCoins);
+
+    await expectToThrowFuelError(
+      () => provider.getCoins(wallet.address, baseAssetId, { first: 1001 }),
+      new FuelError(ErrorCode.INVALID_INPUT_PARAMETERS, 'Pagination limit cannot exceed 1000 items')
+    );
   });
 
   test('can properly use getMessages pagination args', async () => {
@@ -1596,6 +1601,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     // default number of messages to fetch should be the first 100
     expect(messages.length).toBe(accountTotalMessages);
+
+    await expectToThrowFuelError(
+      () => provider.getMessages(wallet.address, { first: 1001 }),
+      new FuelError(ErrorCode.INVALID_INPUT_PARAMETERS, 'Pagination limit cannot exceed 1000 items')
+    );
   });
 
   test('can properly use getBalances', async () => {
