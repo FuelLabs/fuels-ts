@@ -5,4 +5,4 @@
 "@fuel-ts/script": patch
 ---
 
-chore: switching `Error` to `FuelError`
+chore: replacing all generic errors with `FuelError`
