@@ -1562,8 +1562,8 @@ Supported fuel-core version: ${supportedVersion}.`
       balances: { edges },
     } = await this.operations.getBalances({
       /**
-       * The query signature for this method was create to support pagination but the
-       * current Fuel-Core implementation does not support pagination yet
+       * The query parameters for this method were designed to support pagination,
+       * but the current Fuel-Core implementation does not support pagination yet.
        */
       first: 10000,
       filter: { owner: Address.fromAddressOrString(owner).toB256() },
