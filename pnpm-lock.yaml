@@ -1015,6 +1015,25 @@ importers:
 
   packages/interfaces: {}
 
+  packages/logger:
+    dependencies:
+      '@fuel-ts/address':
+        specifier: workspace:*
+        version: link:../address
+      '@fuel-ts/interfaces':
+        specifier: workspace:*
+        version: link:../interfaces
+      '@fuel-ts/math':
+        specifier: workspace:*
+        version: link:../math
+      debug:
+        specifier: ^4.3.4
+        version: 4.3.4(supports-color@5.5.0)
+    devDependencies:
+      '@types/debug':
+        specifier: ^4.1.12
+        version: 4.1.12
+
   packages/math:
     dependencies:
       '@fuel-ts/errors':
