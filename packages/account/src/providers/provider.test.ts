@@ -8,6 +8,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
+import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -1536,7 +1537,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     await seedTestWallet(wallet, [[10_000, baseAssetId]], coinsToSeed);
 
-    let { coins, pageInfo } = await wallet.getCoins(baseAssetId, {
+    let { coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
       first: coinsToSeed - 1,
     });
 
@@ -1546,7 +1547,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(pageInfo.startCursor).toBeDefined();
     expect(pageInfo.endCursor).toBeDefined();
 
-    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId, {
+    ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
       after: pageInfo.endCursor,
     }));
 
@@ -1556,9 +1557,9 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(pageInfo.startCursor).toBeDefined();
     expect(pageInfo.endCursor).toBeDefined();
 
-    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId));
+    ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId));
 
-    // default number of coins to fetch should be 100
+    // default number of coins to fetch should be the first 100
     expect(coins.length).toBe(defaultNumberOfCoins);
   });
 
@@ -1571,7 +1572,9 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const accountTotalMessages = 3;
 
-    let { messages, pageInfo } = await wallet.getMessages({ first: accountTotalMessages - 1 });
+    let { messages, pageInfo } = await provider.getMessages(wallet.address, {
+      first: accountTotalMessages - 1,
+    });
 
     expect(messages.length).toBe(accountTotalMessages - 1);
     expect(pageInfo.hasNextPage).toBeTruthy();
@@ -1579,7 +1582,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(pageInfo.startCursor).toBeDefined();
     expect(pageInfo.endCursor).toBeDefined();
 
-    ({ messages, pageInfo } = await wallet.getMessages({
+    ({ messages, pageInfo } = await provider.getMessages(wallet.address, {
       after: pageInfo.endCursor,
     }));
 
@@ -1589,9 +1592,30 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(pageInfo.startCursor).toBeDefined();
     expect(pageInfo.endCursor).toBeDefined();
 
-    ({ messages, pageInfo } = await wallet.getMessages());
+    ({ messages, pageInfo } = await provider.getMessages(wallet.address));
 
-    // default number of coins to fetch should be 100
+    // default number of messages to fetch should be the first 100
     expect(messages.length).toBe(accountTotalMessages);
+  });
+
+  test('can properly use getBalances', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+    const wallet = Wallet.generate({ provider });
+
+    const fundAmount = 10_000;
+
+    await seedTestWallet(wallet, [
+      [fundAmount, baseAssetId],
+      [fundAmount, ASSET_A],
+    ]);
+
+    const { balances } = await provider.getBalances(wallet.address);
+
+    expect(balances.length).toBe(2);
+    balances.forEach((balance) => {
+      expect(balance.amount.toNumber()).toBe(fundAmount);
+      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+    });
   });
 });
