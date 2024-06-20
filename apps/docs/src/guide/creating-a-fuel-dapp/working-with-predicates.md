@@ -19,7 +19,7 @@ The first step is to modify the predicate contract to accept a configurable pin.
 
 We will now add new button to the frontend that will update the `pin` in the predicate when clicked. To do this, we will modify the `./src/pages/predicate.tsx` file.
 
-Firstly, we will add a function called `changePin`, which will use the current pin in state to update the pin in the predicate as well as transfer 1000 to the predicate.
+We will add a function called `changePin`, which will use the current pin in state to update the pin in the predicate as well as transfer 1000 to the predicate.
 
 <<< @/../../create-fuels-counter-guide/src/pages/predicate.tsx#change-pin-react-function{ts:line-numbers}
 
