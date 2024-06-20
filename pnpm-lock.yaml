@@ -1021,8 +1021,8 @@ importers:
         specifier: workspace:*
         version: link:../errors
       '@types/bn.js':
-        specifier: ^5.1.1
-        version: 5.1.1
+        specifier: ^5.1.5
+        version: 5.1.5
       bn.js:
         specifier: ^5.2.1
         version: 5.2.1
@@ -4905,8 +4905,8 @@ packages:
   '@types/babel__traverse@7.20.1':
     resolution: {integrity: sha512-MitHFXnhtgwsGZWtT68URpOvLN4EREih1u3QtQiN4VdAxWKRVvGCSvw/Qth0M0Qq3pJpnGOu5JaM/ydK7OGbqg==}
 
-  '@types/bn.js@5.1.1':
-    resolution: {integrity: sha512-qNrYbZqMx0uJAfKnKclPh+dTwK33KfLHYqtyODwd5HnXOjnkhc4qgn3BrK6RWyGZm5+sIFE7Q7Vz6QQtJB7w7g==}
+  '@types/bn.js@5.1.5':
+    resolution: {integrity: sha512-V46N0zwKRF5Q00AZ6hWtN0T8gGmDUaUzLWQvHFo5yThtVwK/VCenFY3wXVbOvNfajEpsTfQM4IN9k/d6gUVX3A==}
 
   '@types/body-parser@1.19.2':
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
@@ -19578,7 +19578,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.24.6
 
-  '@types/bn.js@5.1.1':
+  '@types/bn.js@5.1.5':
     dependencies:
       '@types/node': 20.11.13
 
