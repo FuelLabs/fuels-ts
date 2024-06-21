@@ -42,9 +42,9 @@ You can use the `simulateTransaction` method to dry-run a predicate call without
 
 ### `createTransfer`
 
-The `createTransfer` method creates a transfer request and add the transfer details to that request. This method estimates the transaction cost via a dry-run, and then funds it with predicate resources, which is useful since the returned transaction request can now be submitted with greater certainty that it will succeed.
+The `createTransfer` method creates a transaction request with all the necessary transfer details. It automatically estimates the transaction costs via a dry-run call and funds the request with the required predicate resources. After this, one can submit the returned transaction request with greater certainty that it will succeed.
 
- This can be useful should you need to modify the transfer request or use its properties before sending it to the node.
+However, please remember that you can still modify the transfer request details and use its properties before submitting it to the node.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
 
