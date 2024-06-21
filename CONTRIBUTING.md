@@ -18,7 +18,7 @@ If you are planning something big, for example, changes related to multiple comp
 
 If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
 
-# Adding an Issue to the Backlog
+# Issue Prioritization
 
 If you have an idea for a new feature or a bug fix, you can add an issue to the backlog using one of our [issue templates](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow you to discuss the issue with core maintainers and it can be triaged and prioritized. All issues will go through the following process:
 
