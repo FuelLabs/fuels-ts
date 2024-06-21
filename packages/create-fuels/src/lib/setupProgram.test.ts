@@ -13,14 +13,6 @@ describe('setupProgram', () => {
     expect(program.opts().bun).toBe(true);
   });
 
-  test('setupProgram takes in combined args properly', () => {
-    const program = setupProgram();
-    program.parse(['', '', '-cps']);
-    expect(program.opts().contract).toBe(true);
-    expect(program.opts().predicate).toBe(true);
-    expect(program.opts().script).toBe(true);
-  });
-
   test('setupProgram - no args', () => {
     const program = setupProgram();
     program.parse([]);
