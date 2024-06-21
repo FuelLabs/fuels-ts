@@ -4,14 +4,12 @@ on:
   pull_request:
     types: [opened, edited]
 
-permissions:
-  contents: read
-  pull-requests: write
-
 jobs:
   label_pull_request:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: fuxingloh/multi-labeler@v4
         with:
