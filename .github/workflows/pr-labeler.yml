@@ -6,7 +6,7 @@ on:
 
 permissions:
   contents: read
-  pull_requests: write
+  pull-requests: write
 
 jobs:
   label_pull_request:
