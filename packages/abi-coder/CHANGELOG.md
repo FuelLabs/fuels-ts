@@ -1,5 +1,25 @@
 # Change Log
 
+## 0.90.0
+
+### Minor Changes
+
+- 1beab0e: feat!: remove redundant exports from `v1` encoding
+
+### Patch Changes
+
+- 1b9fb19: fix: validate empty `Vec` encoded length
+- 439d0dc: docs: document the SDKs approach to encoding
+- 436f040: feat: support mixed native and non-native enums
+- be92daf: chore: validate incorrect case key for `EnumCoder`
+- Updated dependencies [bb5a123]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
 ## 0.89.2
 
 ### Patch Changes

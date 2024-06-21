@@ -69,7 +69,6 @@ If you run your frontend now, you should be able to interact with your contract 
 To deploy your frontend to the cloud, you can use any service like [Vercel](https://vercel.com/). Make sure that you setup your environment variables correctly and that your contract ID is correct. Your environment variables should look something like this:
 
 ```md
-NEXT_PUBLIC_HAS_CONTRACT=true
 NEXT_PUBLIC_DAPP_ENVIRONMENT=testnet
 NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 
