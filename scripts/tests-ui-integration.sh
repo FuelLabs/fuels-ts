@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # The PUBLISHED_NPM_VERSION variable is required to create a new project with the current published `fuels` version
+PUBLISHED_NPM_VERSION="${PUBLISHED_NPM_VERSION-"next"}"
 
 # Versions
 FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)
@@ -8,9 +9,9 @@ FORC_VERSION=$(cat ./internal/forc/VERSION)
 TOOLCHAIN="CI"
 
 # Project
-PROJECT_DIR="test-project"
-
-pkill fuel-core
+ROOT_DIR=$(pwd)
+PLAYWRIGHT_DIR="$ROOT_DIR"
+PROJECT_DIR="$ROOT_DIR/test-project"
 
 echo "1. Install toolchains"
 if [ -x "$(command -v fuelup)" ]; then
@@ -39,25 +40,11 @@ pnpm add fuels@$PUBLISHED_NPM_VERSION > /dev/null 2>&1
 pnpm  --ignore-workspace install > /dev/null 2>&1
 cp .env.example .env.local
 
-
-echo "4. Running fuels:dev command"
-pnpm run fuels:dev > /dev/null 2>&1 &
-
-# Wait for fuel-core
-sleep 5
-
-echo "5. Running dev command"
-pnpm run dev > /dev/null 2>&1  &
-
-echo "6. Running tests"
-cd ..
-pnpm exec playwright install --with-deps
-pnpm exec playwright test
+echo "4. Running UI tests"
+cd $ROOT_DIR
+PROJECT_DIR=$PROJECT_DIR sh ./scripts/tests-ui.sh
 TEST_RESULT=$?
 
-# Cleanup
-pkill fuel-core
-pkill next-server
 rm -rf $PROJECT_DIR
 
 exit $TEST_RESULT
