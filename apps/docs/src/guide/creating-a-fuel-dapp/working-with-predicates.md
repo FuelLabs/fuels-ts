@@ -26,12 +26,12 @@ We will add a function called `changePin`, which will use the current pin in sta
 It would also be useful to change the placeholder text to say "Enter a new pin" instead of "Hint - the correct pin is 1337".
 
 ```tsx
-  <Input
-        className="w-[300px] mt-8"
-        value={pin as string}
-        onChange={(e) => setPin(e.target.value)}
-        placeholder="Enter a new pin"
-      />
+<Input
+  className="w-[300px] mt-8"
+  value={pin as string}
+  onChange={(e) => setPin(e.target.value)}
+  placeholder="Enter a new pin"
+/>
 ```
 
 Finally, we will add a button that calls the `changePin` function when clicked.
