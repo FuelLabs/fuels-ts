@@ -50,28 +50,9 @@ export const setup = async <T extends Contract = Contract>({
   return contract as T;
 };
 
-export const createSetupConfig =
-  <T extends Contract = Contract>(defaultConfig: SetupConfig) =>
-  async (config?: Partial<SetupConfig>) =>
-    setup<T>({
-      contractBytecode: defaultConfig.contractBytecode,
-      abi: defaultConfig.abi,
-      ...config,
-    });
-
 const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
   next(
     join(__dirname, `../test/fixtures/forc-projects/${contractName}/out/release/${contractName}`)
-  );
-
-export const getSetupContract = (
-  contractName: string
-): ((config?: Partial<SetupConfig>) => Promise<Contract>) =>
-  getFullPath(contractName, (fullPath: string) =>
-    createSetupConfig({
-      contractBytecode: readFileSync(`${fullPath}.bin`),
-      abi: JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
-    })
   );
 
 export const getScript = <TInput extends unknown[], TOutput>(

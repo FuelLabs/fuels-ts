@@ -31,13 +31,11 @@ import {
 import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { CallTestContractAbi__factory } from '../test/typegen/contracts';
+import binHexlified from '../test/typegen/contracts/CallTestContractAbi.hex';
 
 const { binHexlified: predicateBytecode } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.PREDICATE_TRUE
-);
-
-const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
 );
 
 const setupContract = async () => {
@@ -45,7 +43,7 @@ const setupContract = async () => {
     contracts: [contract],
     cleanup,
   } = await launchTestNode({
-    contractsConfigs: [{ deployer: abi, contractBytecode }],
+    contractsConfigs: [{ deployer: CallTestContractAbi__factory, bytecode: binHexlified }],
   });
   return Object.assign(contract, { [Symbol.dispose]: cleanup });
 };

@@ -5,8 +5,6 @@ import { Script, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { getSetupContract } from './utils';
-
 const setupContract = getSetupContract('advanced-logging');
 const setupOtherContract = getSetupContract('advanced-logging-other-contract');
 
