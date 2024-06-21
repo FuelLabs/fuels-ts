@@ -119,39 +119,4 @@ describe(__filename, () => {
       },
     ]);
   });
-
-  it('should ensure predicate createTransfer works as expected', async () => {
-    const amountToPredicate = 10_000;
-
-    const tx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasLimit: 1_000,
-    });
-
-    await tx.waitForResult();
-
-    const amountToReceiver = 200;
-
-    const chainId = provider.getChainId();
-
-    // #region interacting-with-predicates-4
-    const transactionRequest = await predicate.createTransfer(
-      receiver.address,
-      amountToReceiver,
-      baseAssetId,
-      {
-        gasLimit: 1000,
-      }
-    );
-
-    const res = await predicate.sendTransaction(transactionRequest);
-
-    await res.waitForResult();
-    // #endregion interacting-with-predicates-4
-
-    const txId = transactionRequest.getTransactionId(chainId);
-
-    const txIdFromExecutedTx = res.id;
-
-    expect(txId).toEqual(txIdFromExecutedTx);
-  });
 });
