@@ -253,7 +253,7 @@ describe('TransactionSummary', () => {
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO ACCOUNT)', async () => {
       const wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
 
-      const contract = await setupContract();
+      using contract = await setupContract();
       contract.account = wallet;
 
       const recipient = Wallet.generate({ provider });
