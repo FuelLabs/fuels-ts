@@ -105,5 +105,5 @@ export enum ErrorCode {
   STREAM_PARSING_ERROR = 'stream-parsing-error',
 
   // Unknown
-  UNKNOWN_ERROR = 'unknown-error',
+  UNKNOWN = 'unknown',
 }

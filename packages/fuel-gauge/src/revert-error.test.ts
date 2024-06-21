@@ -226,7 +226,13 @@ describe('Revert Error Testing', () => {
   it('should throw UNKNOWN Error for revert', async () => {
     await expectToThrowFuelError(
       () => contractInstance.functions.revert_with_0().call(),
-      new FuelError(ErrorCode.UNKNOWN_ERROR, `The transaction reverted with an unknown reason: 0`)
+      new FuelError(ErrorCode.UNKNOWN, `The transaction reverted with an unknown reason: 0`, {
+        logs: [],
+        receipts: expect.any(Array<TransactionResultReceipt>),
+        panic: false,
+        revert: true,
+        reason: 'unknown',
+      })
     );
   });
 
