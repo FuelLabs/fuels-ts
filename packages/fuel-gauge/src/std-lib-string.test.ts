@@ -4,14 +4,11 @@ import type { Contract } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { getScript, getSetupContract } from './utils';
-
-const setupContract = getSetupContract('std-lib-string');
-let contractInstance: Contract;
+import { getScript, setupContract } from './utils';
 
 let baseAssetId: string;
 beforeAll(async () => {
-  contractInstance = await setupContract();
+  using contractInstance = await setupContract(FuelGaugeProjectsEnum.STD_LIB_STRING);
   baseAssetId = contractInstance.provider.getBaseAssetId();
 });
 
@@ -26,17 +23,20 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group browser
  */
 describe('std-lib-string Tests', () => {
   const { binHexlified: predicateStdString, abiContents: predicateStdStringAbi } =
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);
 
   it('should test std-lib-string return', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.STD_LIB_STRING);
     const { value } = await contractInstance.functions.return_dynamic_string().call<string>();
     expect(value).toBe('Hello World');
   });
 
   it('should test std-lib-string input', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.STD_LIB_STRING);
     const INPUT = 'Hello World';
 
     const { value } = await contractInstance.functions.accepts_dynamic_string(INPUT).call();

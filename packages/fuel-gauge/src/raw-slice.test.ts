@@ -1,10 +1,10 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import type { BN } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { getScript, getSetupContract } from './utils';
+import { getScript, setupContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -26,19 +26,20 @@ const setup = async (balance = 500_000) => {
   return wallet;
 };
 
-const setupContract = getSetupContract('raw-slice');
-let contractInstance: Contract;
 let baseAssetId: string;
 beforeAll(async () => {
-  contractInstance = await setupContract();
+  using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
   baseAssetId = contractInstance.provider.getBaseAssetId();
 });
 
 /**
  * @group node
+ * @group browser
  */
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
+
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_raw_slice(INPUT).call();
@@ -47,6 +48,8 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
+
     const INPUT = [40, 41, 42];
 
     const { value } = await contractInstance.functions.accept_raw_slice(INPUT).call<number[]>();
@@ -55,6 +58,8 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [nested]', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
+
     const slice = [40, 41, 42];
     const INPUT = {
       inner: [slice, slice],

@@ -4,10 +4,10 @@ import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures
 import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
 import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
 
-import { getSetupContract } from './utils';
-
+import { setupContract } from './utils';
 /**
  * @group node
+ * @group browser
  */
 describe('bytecode computations', () => {
   test('compute_bytecode_root', async () => {
@@ -15,8 +15,7 @@ describe('bytecode computations', () => {
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
     );
 
-    const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
-    const contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
 
     const { logs } = await contract.functions
       .compute_bytecode_root(arrayify(bytecodeFromFile))
@@ -33,8 +32,7 @@ describe('bytecode computations', () => {
       FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB
     );
 
-    const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
-    const contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
 
     const { value } = await contract.functions
       .verify_contract_bytecode(
@@ -59,8 +57,7 @@ describe('bytecode computations', () => {
 
     const address = predicate.address;
 
-    const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
-    const contract = await setupContract();
+    const contract = await setupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
 
     const { value } = await contract.functions
       .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))

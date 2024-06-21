@@ -1,16 +1,18 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 
-import { getSetupContract } from './utils';
+import { FuelGaugeProjectsEnum } from '../test/fixtures';
+
+import { setupContract } from './utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
-    const contract = await getSetupContract('collision_in_fn_names')();
-
-    expect((await contract.functions.new().call()).value.toNumber()).toEqual(12345);
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.COLLISION_IN_FN_NAMES);
+    expect((await contractInstance.functions.new().call()).value.toNumber()).toEqual(12345);
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {

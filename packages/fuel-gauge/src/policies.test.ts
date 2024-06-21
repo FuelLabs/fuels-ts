@@ -29,6 +29,7 @@ const setupContract = async () => {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Policies', () => {
   let provider: Provider;

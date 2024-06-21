@@ -1,16 +1,10 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import type { BN } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { getScript, getSetupContract } from './utils';
-
-const setupContract = getSetupContract('bytes');
-let contractInstance: Contract;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-});
+import { getScript, setupContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -33,6 +27,7 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Bytes Tests', () => {
   let baseAssetId: string;
@@ -42,6 +37,7 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes output', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.BYTES);
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -50,6 +46,8 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes output [100 items]', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.BYTES);
+
     const INPUT = 100;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -58,6 +56,8 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input', async () => {
+    using contractInstance = await setupContract(FuelGaugeProjectsEnum.BYTES);
+
     const INPUT = [40, 41, 42];
 
     const { value } = await contractInstance.functions.accept_bytes(INPUT).call<number[]>();

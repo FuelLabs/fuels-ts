@@ -1,22 +1,44 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { readFileSync } from 'fs';
-import type { Interface, Contract, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
-import { Script, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
+import { Script, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { Interface, WalletUnlocked, JsonAbi, BytesLike, Contract } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-let contractInstance: Contract;
-const deployContract = async (
-  factory: ContractFactory,
-  provider: Provider,
-  useCache: boolean = true
-) => {
-  if (contractInstance && useCache) {
-    return contractInstance;
-  }
-  contractInstance = await factory.deployContract();
-  return contractInstance;
-};
+import { FuelGaugeProjectsEnum } from '../test/fixtures';
+import {
+  AdvancedLoggingAbi__factory,
+  AdvancedLoggingOtherContractAbi__factory,
+  BytecodeSwayLibAbi__factory,
+  CallTestContractAbi__factory,
+  ConfigurableContractAbi__factory,
+  CoverageContractAbi__factory,
+  BytesAbi__factory,
+  CollisionInFnNamesAbi__factory,
+  OptionsAbi__factory,
+  StdLibStringAbi__factory,
+  StorageTestContractAbi__factory,
+  RawSliceAbi__factory,
+  MultiTokenContractAbi__factory,
+  VectorTypesContractAbi__factory,
+  VectorsAbi__factory,
+} from '../test/typegen/contracts';
+import advancedLoggingBytecode from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
+import advancedLoggingOtherContractBytecode from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
+import bytecodeSwayLibBytecode from '../test/typegen/contracts/BytecodeSwayLibAbi.hex';
+import bytesBytecode from '../test/typegen/contracts/BytesAbi.hex';
+import callTestBytecode from '../test/typegen/contracts/CallTestContractAbi.hex';
+import collisionInFnNamesBytecode from '../test/typegen/contracts/CollisionInFnNamesAbi.hex';
+import configurableContractBytecode from '../test/typegen/contracts/ConfigurableContractAbi.hex';
+import coverageContractBytecode from '../test/typegen/contracts/CoverageContractAbi.hex';
+import multiTokenContractBytecode from '../test/typegen/contracts/MultiTokenContractAbi.hex';
+import optionsBytecode from '../test/typegen/contracts/OptionsAbi.hex';
+import rawSliceBytecode from '../test/typegen/contracts/RawSliceAbi.hex';
+import stdLibStringBytecode from '../test/typegen/contracts/StdLibStringAbi.hex';
+import storageTestContractBytecode from '../test/typegen/contracts/StorageTestContractAbi.hex';
+import vectorTypesContractBytecode from '../test/typegen/contracts/VectorTypesContractAbi.hex';
+import vectorsBytecode from '../test/typegen/contracts/VectorsAbi.hex';
 
 let walletInstance: WalletUnlocked;
 export const createWallet = async () => {
@@ -36,18 +58,6 @@ export type SetupConfig = {
   contractBytecode: BytesLike;
   abi: JsonAbi | Interface;
   cache?: boolean;
-};
-
-export const setup = async <T extends Contract = Contract>({
-  contractBytecode,
-  abi,
-  cache,
-}: SetupConfig) => {
-  // Create wallet
-  const wallet = await createWallet();
-  const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory, wallet.provider, cache);
-  return contract as T;
 };
 
 const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
@@ -71,3 +81,105 @@ export const getScript = <TInput extends unknown[], TOutput>(
 
 export const getProgramDir = (name: string) =>
   join(__dirname, `../test/fixtures/forc-projects/${name}`);
+
+export interface DisposableContract extends Contract {
+  [Symbol.dispose]: () => Promise<void>;
+}
+
+export const setupContract = async (type: FuelGaugeProjectsEnum): Promise<DisposableContract> => {
+  let deployer;
+  let bytecode: string;
+
+  switch (type) {
+    case FuelGaugeProjectsEnum.ADVANCED_LOGGING:
+      deployer = AdvancedLoggingAbi__factory;
+      bytecode = advancedLoggingBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT:
+      deployer = AdvancedLoggingOtherContractAbi__factory;
+      bytecode = advancedLoggingOtherContractBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.BYTES:
+      deployer = BytesAbi__factory;
+      bytecode = bytesBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB:
+      deployer = BytecodeSwayLibAbi__factory;
+      bytecode = bytecodeSwayLibBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.CALL_TEST_CONTRACT:
+      deployer = CallTestContractAbi__factory;
+      bytecode = callTestBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.COLLISION_IN_FN_NAMES:
+      deployer = CollisionInFnNamesAbi__factory;
+      bytecode = collisionInFnNamesBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT:
+      deployer = ConfigurableContractAbi__factory;
+      bytecode = configurableContractBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.COVERAGE_CONTRACT:
+      deployer = CoverageContractAbi__factory;
+      bytecode = coverageContractBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT:
+      deployer = MultiTokenContractAbi__factory;
+      bytecode = multiTokenContractBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.OPTIONS:
+      deployer = OptionsAbi__factory;
+      bytecode = optionsBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.RAW_SLICE:
+      deployer = RawSliceAbi__factory;
+      bytecode = rawSliceBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.STD_LIB_STRING:
+      deployer = StdLibStringAbi__factory;
+      bytecode = stdLibStringBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT:
+      deployer = StorageTestContractAbi__factory;
+      bytecode = storageTestContractBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.VECTORS:
+      deployer = VectorsAbi__factory;
+      bytecode = vectorsBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.VECTOR_TYPES_CONTRACT:
+      deployer = VectorTypesContractAbi__factory;
+      bytecode = vectorTypesContractBytecode;
+      break;
+
+    default:
+      throw new Error('Invalid contract type');
+  }
+
+  const {
+    contracts: [contract],
+    cleanup,
+  } = await launchTestNode({
+    contractsConfigs: [
+      {
+        deployer,
+        bytecode,
+      },
+    ],
+  });
+  return Object.assign(contract, { [Symbol.dispose]: () => Promise.resolve(cleanup()) });
+};
