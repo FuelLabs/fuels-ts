@@ -1,13 +1,12 @@
 name: Pull Request Labeler
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, edited]
 
 jobs:
   label_pull_request:
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: fuxingloh/multi-labeler@v4
         with:
