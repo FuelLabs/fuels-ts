@@ -4,7 +4,7 @@ import { spawn } from 'node:child_process';
 
 interface ServerInfo extends Disposable {
   serverUrl: string;
-  killServer: () => void;
+  closeServer: () => Promise<void>;
 }
 
 function startServer(port: number = 0): Promise<ServerInfo> {
@@ -14,25 +14,37 @@ function startServer(port: number = 0): Promise<ServerInfo> {
       shell: 'sh',
     });
 
-    const killServer = () => {
-      // https://github.com/nodejs/node/issues/2098#issuecomment-169549789
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      process.kill(-cp.pid!);
+    const server = {
+      killed: false,
+      url: undefined as string | undefined,
     };
+
+    const closeServer = async () => {
+      if (server.killed) {
+        return;
+      }
+      server.killed = true;
+      await fetch(`${server.url}/close-server`);
+    };
+
+    cp.stderr?.on('data', (chunk) => {
+      console.log(chunk.toString());
+    });
 
     cp.stdout?.on('data', (chunk) => {
       // first message is server url and we resolve immediately because that's what we care about
       const message: string[] = chunk.toString().split('\n');
-
+      const serverUrl = message[0];
+      server.url ??= serverUrl;
       resolve({
-        serverUrl: message[0],
-        killServer,
-        [Symbol.dispose]: killServer,
+        serverUrl,
+        closeServer,
+        [Symbol.dispose]: closeServer,
       });
     });
 
-    cp.on('error', (err) => {
-      killServer();
+    cp.on('error', async (err) => {
+      await closeServer();
       reject(err);
     });
 
@@ -41,6 +53,13 @@ function startServer(port: number = 0): Promise<ServerInfo> {
         reject(new Error(`Server process exited with code ${code}`));
       }
     });
+
+    process.on('SIGINT', closeServer);
+    process.on('SIGUSR1', closeServer);
+    process.on('SIGUSR2', closeServer);
+    process.on('uncaughtException', closeServer);
+    process.on('unhandledRejection', closeServer);
+    process.on('beforeExit', closeServer);
   });
 }
 
@@ -56,6 +75,13 @@ describe('setup-launch-node-server', () => {
     },
     { timeout: 10000 }
   );
+
+  test('the /close-server endpoint closes the server', async () => {
+    const { serverUrl } = await startServer();
+    await fetch(`${serverUrl}/close-server`);
+
+    await waitUntilUnreachable(serverUrl);
+  });
 
   test(
     'returns a valid fuel-core node url on request',
@@ -87,11 +113,11 @@ describe('setup-launch-node-server', () => {
   test(
     'kills all nodes when the server is shut down',
     async () => {
-      const { serverUrl, killServer } = await startServer();
+      const { serverUrl, closeServer: killServer } = await startServer();
       const url1 = await (await fetch(serverUrl)).text();
       const url2 = await (await fetch(serverUrl)).text();
 
-      killServer();
+      await killServer();
 
       // if the nodes remained live then the test would time out
       await waitUntilUnreachable(url1);

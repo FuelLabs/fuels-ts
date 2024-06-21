@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable no-console */
-import type { LaunchNodeOptions, LaunchNodeResult } from '@fuel-ts/account/test-utils';
+import type { LaunchNodeOptions } from '@fuel-ts/account/test-utils';
 import { launchNode } from '@fuel-ts/account/test-utils';
+import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import http from 'http';
 import type { AddressInfo } from 'net';
 
@@ -23,11 +25,7 @@ async function parseBody(req: http.IncomingMessage): Promise<LaunchNodeOptions> 
   });
 }
 
-const cleanupFns: Map<string, Awaited<LaunchNodeResult>['cleanup']> = new Map();
-
-function cleanupAllNodes() {
-  cleanupFns.forEach((fn) => fn());
-}
+const cleanupFns: Map<string, () => Promise<void>> = new Map();
 
 const server = http.createServer(async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -38,13 +36,18 @@ const server = http.createServer(async (req, res) => {
 
       const node = await launchNode({
         port: '0',
+        loggingEnabled: false,
+        debugEnabled: false,
         ...body,
         fuelCorePath: 'fuels-core',
       });
-      cleanupFns.set(node.url, () => {
+
+      cleanupFns.set(node.url, async () => {
         node.cleanup();
+        await waitUntilUnreachable(node.url);
         cleanupFns.delete(node.url);
       });
+
       res.end(node.url);
     } catch (err) {
       console.error(err);
@@ -58,9 +61,34 @@ const server = http.createServer(async (req, res) => {
     const nodeUrl = req.url?.match(/\/cleanup\/(.+)/)?.[1];
     if (nodeUrl) {
       const cleanupFn = cleanupFns.get(nodeUrl);
-      cleanupFn?.();
+      await cleanupFn?.();
       res.end();
     }
+  }
+});
+
+function closeServer() {
+  return new Promise<void>((resolve) => {
+    if (!server.listening) {
+      resolve();
+      return;
+    }
+
+    server.close(async () => {
+      const cleanupCalls: Promise<void>[] = [];
+      cleanupFns.forEach((fn) => cleanupCalls.push(fn()));
+      await Promise.all(cleanupCalls);
+      process.exit();
+    });
+
+    resolve();
+  });
+}
+
+server.on('request', async (req, res) => {
+  if (req.url === '/close-server') {
+    await closeServer();
+    res.end();
   }
 });
 
@@ -77,42 +105,38 @@ server.on('listening', () => {
   console.log(
     "To kill the node, make a POST request to '/cleanup/<url>' where <url> is the url of the node you want to kill."
   );
-  console.log('All nodes will be killed when the server is killed.');
-});
-
-server.on('close', () => {
-  console.log('close');
-  cleanupAllNodes();
+  console.log('All nodes will be killed when the server is closed.');
+  console.log('You can close the server by sending a request to /close-server.');
 });
 
 process.on('exit', () => {
   console.log('exit');
-  cleanupAllNodes();
+  closeServer();
 });
 process.on('SIGINT', () => {
   console.log('sigint');
-  cleanupAllNodes();
+  closeServer();
 });
 process.on('SIGUSR1', () => {
   console.log('SIGUSR1');
-  cleanupAllNodes();
+  closeServer();
 });
 process.on('SIGUSR2', () => {
   console.log('SIGUSR2');
-  cleanupAllNodes();
+  closeServer();
 });
 process.on('uncaughtException', (e) => {
   console.log('uncaughtException');
   console.log(e);
-  cleanupAllNodes();
+  closeServer();
 });
 process.on('unhandledRejection', (reason) => {
   console.log('unhandledRejection');
   console.log(reason);
 
-  cleanupAllNodes();
+  closeServer();
 });
 process.on('beforeExit', () => {
   console.log('beforeExit');
-  cleanupAllNodes();
+  closeServer();
 });
