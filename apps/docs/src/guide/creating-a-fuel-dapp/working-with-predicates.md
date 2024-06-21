@@ -37,7 +37,7 @@ It would also be useful to change the placeholder text to say "Enter a new pin" 
 Finally, we will add a button that calls the `changePin` function when clicked.
 
 ```tsx
-  <Button onClick={changePin}>Change Pin</Button>
+<Button onClick={changePin}>Change Pin</Button>
 ```
 
 Congratulations! That's all. You should now be able to see the modified predicate dApp running at `http://localhost:3000` with our newly added change pin functionality.
