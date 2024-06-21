@@ -210,7 +210,7 @@ describe('Predicate', () => {
           }),
         new FuelError(
           ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
-          'Predicate has no configurable constants to be set'
+          'Error setting configurable constants: Predicate has no configurable constants to be set.'
         )
       );
     });
