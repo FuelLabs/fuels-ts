@@ -354,10 +354,6 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Transferring Assets',
-                link: '/guide/cookbook/transferring-assets',
-              },
-              {
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',
               },

@@ -1,14 +1,59 @@
 # Wallet Transferring
 
-This guide demonstrates how to transfer assets between accounts and contracts, and how to validate your balance prior to a transfer.
+This guide provides instructions for transferring assets between wallets and contracts using the SDK. It includes methods for initiating transfers, handling transaction requests, and ensuring sufficient balance before transfers.
 
-## Transferring Between Wallets
+## Transferring Assets Between Accounts
 
-Transferring assets between wallets is really simple within the SDK.
+The `account.transfer` method initiates a transaction request that transfers an asset from one wallet to another. This method requires three parameters:
+
+1. The receiver's wallet address.
+2. The amount of the asset to be transferred.
+3. The ID of the asset to be transferred (Optional - Defaults to the base asset id).
+
+Upon execution, this function returns a promise that resolves to a transaction response. To wait for the transaction to be processed, call `response.wait()`.
+
+### Example
+
+Here is an illustration of how to use the `account.transfer` function:
+
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
+
+In the previous example, we used the `transfer` method, which essentially creates a `ScriptTransactionRequest`, populates its data with the provided transfer information, and submits the transaction request to the node.
+
+However, there may be times when you need the Transaction ID before actually submitting it to the node. To achieve this, you can simply call the `createTransfer` method instead.
+
+This method also creates a `ScriptTransactionRequest` and populates it with the provided data, but instead of submitting it to the node, it returns the request.
+
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-2{ts:line-numbers}
+
+Once you initiate a transaction request, any changes will create a new, separate transaction with a `different` ID. Therefore, avoid modifying the transaction request if you want to keep the same ID.
+
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-3{ts:line-numbers}
+
+## Transferring Assets To Contracts
+
+When transferring assets to a deployed contract, we use the `transferToContract` method, which shares a similar parameter structure with the `account.transfer` method.
+
+However, instead of supplying the target wallet's address, as done in `destination.address` for the transfer method, we need to provide an instance of [Address](../types/address.md) created from the deployed contract id.
+
+If you have the [Contract](../contracts/) instance of the deployed contract, you can simply use its `id` property. However, if the contract was deployed with `forc deploy` or not by you, you will likely only have its ID in a hex string format. In such cases, you can create an [Address](../types/address.md) instance from the contract ID using `Address.fromAddressOrString('0x123...')`.
+
+### Example
+
+Here's an example demonstrating how to use `transferToContract`:
+
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-4{ts:line-numbers}
+
+Always remember to call the `waitForResult()` function on the transaction response. That ensures the transaction has been mined successfully before proceeding.
+
+
+## Transferring Assets Between Wallets
+
+Transferring assets between wallets is straightforward within the SDK.
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-1{ts:line-numbers}
 
-After waiting the transaction to be processed, the assets are successfully moved to the recipient's wallet.
+After waiting for the transaction to be processed, the assets are successfully moved to the recipient's wallet.
 
 It is also possible to specify the recipient's address as a string:
 
@@ -18,25 +63,16 @@ When transferring the base chain coin like ETH, you can omit the `assetId`:
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-3{ts:line-numbers}
 
-## Transferring To Multiple Wallets
+## Transferring Assets To Multiple Wallets
 
 To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-6{ts:line-numbers}
 
-## Transferring To Contracts
+This section demonstrates additional examples of transferring assets between wallets and to contracts.
 
-Transferring assets from your wallet to a deployed contract is straightforward. All you need is the contract's address.
 
-You can transfer assets to a deployed contract instance by using its `id`:
-
-<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-4{ts:line-numbers}
-
-Alternatively, you can simply use the contract's string address in the [`Bech32`](../types/bech32.md) format:
-
-<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-5{ts:line-numbers}
-
-# Balances
+## Checking Balances
 
 Before transferring assets, ensure your wallet has sufficient funds. Attempting a transfer without enough funds will result in an error: `not enough coins to fit the target`.
 
