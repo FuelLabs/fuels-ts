@@ -20,7 +20,7 @@ If you find a vulnerability or suspect it may be a security issue, please read o
 
 # Issue Prioritization
 
-If you have an idea for a new feature or a bug fix, you can add an issue to the backlog using one of our [issue templates](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow you to discuss the issue with core maintainers and it can be triaged and prioritized. All issues will go through the following process:
+If you would like to create an issue, please use the relevant [issue template](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow us to correctly triage and prioritize it. Every externally submitted issue goes through the following process:
 
 1. A new issue is added to the backlog
 1. The `triage` label is added to the issue and it is assigned to a core maintainer for investigation
