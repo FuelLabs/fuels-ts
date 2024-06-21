@@ -28,6 +28,7 @@ function startServer(port: number = 0): Promise<ServerInfo> {
     };
 
     cp.stderr?.on('data', (chunk) => {
+      // eslint-disable-next-line no-console
       console.log(chunk.toString());
     });
 

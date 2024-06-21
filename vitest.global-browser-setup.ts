@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { spawn } from 'node:child_process';
 
