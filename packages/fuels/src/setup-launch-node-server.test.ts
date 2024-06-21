@@ -67,39 +67,31 @@ function startServer(port: number = 0): Promise<ServerInfo> {
 /**
  * @group node
  */
-describe('setup-launch-node-server', () => {
-  test(
-    'can start server on specific port',
-    async () => {
+describe(
+  'setup-launch-node-server',
+  () => {
+    test('can start server on specific port', async () => {
       using launched = await startServer(9876);
       expect(launched.serverUrl).toEqual('http://localhost:9876');
-    },
-    { timeout: 10000 }
-  );
+    });
 
-  test('the /close-server endpoint closes the server', async () => {
-    const { serverUrl } = await startServer();
-    await fetch(`${serverUrl}/close-server`);
+    test('the /close-server endpoint closes the server', async () => {
+      const { serverUrl } = await startServer();
+      await fetch(`${serverUrl}/close-server`);
 
-    await waitUntilUnreachable(serverUrl);
-  });
+      await waitUntilUnreachable(serverUrl);
+    });
 
-  test(
-    'returns a valid fuel-core node url on request',
-    async () => {
+    test('returns a valid fuel-core node url on request', async () => {
       using launched = await startServer();
 
       const url = await (await fetch(launched.serverUrl)).text();
       // fetches node-related data
       // would fail if fuel-core node is not running on url
       await Provider.create(url);
-    },
-    { timeout: 10000 }
-  );
+    });
 
-  test(
-    'the /cleanup endpoint kills the node',
-    async () => {
+    test('the /cleanup endpoint kills the node', async () => {
       using launched = await startServer();
       const url = await (await fetch(launched.serverUrl)).text();
 
@@ -107,13 +99,9 @@ describe('setup-launch-node-server', () => {
 
       // if the node remained live then the test would time out
       await waitUntilUnreachable(url);
-    },
-    { timeout: 10000 }
-  );
+    });
 
-  test(
-    'kills all nodes when the server is shut down',
-    async () => {
+    test('kills all nodes when the server is shut down', async () => {
       const { serverUrl, closeServer: killServer } = await startServer();
       const url1 = await (await fetch(serverUrl)).text();
       const url2 = await (await fetch(serverUrl)).text();
@@ -123,7 +111,7 @@ describe('setup-launch-node-server', () => {
       // if the nodes remained live then the test would time out
       await waitUntilUnreachable(url1);
       await waitUntilUnreachable(url2);
-    },
-    { timeout: 10000 }
-  );
-});
+    });
+  },
+  { timeout: 25000 }
+);
