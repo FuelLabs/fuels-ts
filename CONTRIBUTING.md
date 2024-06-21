@@ -22,16 +22,15 @@ If you find a vulnerability or suspect it may be a security issue, please read o
 
 If you would like to create an issue, please use the relevant [issue template](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow us to correctly triage and prioritize it. Every externally submitted issue goes through the following process:
 
-1. A new issue is added to the backlog
-1. The `triage` label is added to the issue and it is assigned to a core maintainer for investigation
-1. The core maintainer will post the results of the issue investigation and remove the `triage` label
-1. A type label is added to the issue (e.g. `bug`, `feat`, `docs`, `chore`)
-1. The issue is assigned a milestone (e.g. `mainnet`, `post-launch`) and a priority label (e.g. `p0`, `p1`, `p2`) that should give an indication as to when the issue will be delivered
+1. A new issue is created and is given the `triage` label
+1. It is assigned to a core maintainer for investigation
+1. Once the assigned core maintainer has completed their investigation, they remove the `triage` label and assign the relevant label to the issue i.e. `bug` , `feat`, `chore`, `docs`
+1. The issue is assigned a milestone (e.g. `mainnet`, `post-launch`) and a prioritization label where `p0` is the highest priority and `p2` is the lowest priority
 1. The issue is assigned for development and should be moved to `In Progress`
 1. A pull request is made ready and the issue is now `In Review`
 1. The pull request needs approval by 3 core maintainers, these can be found in the [CODEOWNERS file](https://github.com/FuelLabs/fuels-ts/blob/master/.github/CODEOWNERS)
 1. It can then be merged to `master` and included in a release
-1. The issue is closed automatically and it's status moves to `Done`
+1. The issue is closed automatically and it's status is moved to `Done`
 
 > **Note:** If additional information is ever required by the assigned investigator then the `awaiting` label will be added to the issue, these means they require more information from the author. Any `awaiting` issue left unanswered for 2 weeks will go `stale` and will be closed.
 
