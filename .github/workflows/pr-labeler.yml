@@ -7,9 +7,7 @@ on:
 jobs:
   label_pull_request:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     steps:
       - uses: fuxingloh/multi-labeler@v4
         with:
