@@ -62,6 +62,11 @@ export type CallConfig<T = unknown> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> {
   (...args: TArgs): FunctionInvocationScope<TArgs, TReturn>;
+  /**
+   * Checks if the function is read-only i.e. it only reads from storage, does not write to it.
+   *
+   * @returns True if the function is read-only or pure, false otherwise.
+   */
   isReadOnly: () => boolean;
 }
 
