@@ -56,6 +56,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs: 
+      page_url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
     name: Deploy
@@ -73,6 +75,6 @@ jobs:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
-          message: |
-           "Here is preview link: ${{ steps.deployment.outputs.page_url }}"
-
+          message: "Here is the preview link: ${{ needs.deploy.outputs.page_url }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
