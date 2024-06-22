@@ -26,7 +26,7 @@ jobs:
       - name: Install PNPM
         uses: pnpm/action-setup@v3
         with:
-          version: 8
+          version: 9.0.5
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -40,6 +40,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Build project
+        run: pnpm build
+
       - name: Build with VitePress
         working-directory: apps/docs
         run: pnpm build
@@ -47,7 +50,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: apps/docs/.vitepress/dist/
+          path: apps/docs/dist
 
   deploy:
     environment:
