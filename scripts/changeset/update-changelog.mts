@@ -12,6 +12,7 @@ const {
   RELEASE_TAG,
   REF_NAME,
   LATEST_RELEASE,
+  RELEASE_VERSION_HIGHER_THAN_LATEST,
 } = process.env;
 
 function sleep(time: number) {
@@ -156,7 +157,7 @@ await (async () => {
       return;
     }
 
-    if (REF_NAME !== "master") {
+    if (RELEASE_VERSION_HIGHER_THAN_LATEST !== "true") {
       await reapplyLatestTagToActualLatestRelease();
     }
 
