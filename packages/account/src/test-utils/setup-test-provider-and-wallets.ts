@@ -23,6 +23,7 @@ export interface LaunchCustomProviderAndGetWalletsOptions {
       snapshotConfig: PartialDeep<SnapshotConfigs>;
     }
   >;
+  launchNodeServerPort?: string;
 }
 
 const defaultWalletConfigOptions: WalletsConfigOptions = {
@@ -52,6 +53,7 @@ export async function setupTestProviderAndWallets({
   walletsConfig: walletsConfigOptions = {},
   providerOptions,
   nodeOptions = {},
+  launchNodeServerPort = process.env.LAUNCH_NODE_SERVER_PORT || undefined,
 }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {}): Promise<SetupTestProviderAndWalletsReturn> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
@@ -64,7 +66,7 @@ export async function setupTestProviderAndWallets({
     }
   );
 
-  const launchNodeOptions = {
+  const launchNodeOptions: LaunchNodeOptions = {
     loggingEnabled: false,
     ...nodeOptions,
     snapshotConfig: mergeDeepRight(
@@ -76,8 +78,8 @@ export async function setupTestProviderAndWallets({
 
   let cleanup: () => void;
   let url: string;
-  if (process.env.LAUNCH_NODE_SERVER_PORT) {
-    const serverUrl = `http://localhost:${process.env.LAUNCH_NODE_SERVER_PORT}`;
+  if (launchNodeServerPort) {
+    const serverUrl = `http://localhost:${launchNodeServerPort}`;
     url = await (
       await fetch(serverUrl, { method: 'POST', body: JSON.stringify(launchNodeOptions) })
     ).text();
