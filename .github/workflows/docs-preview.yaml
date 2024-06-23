@@ -60,7 +60,6 @@ jobs:
       page_url: ${{ steps.deployment.outputs.page_url }}
     needs: build
     runs-on: ubuntu-latest
-    name: Deploy
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
@@ -69,9 +68,6 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
