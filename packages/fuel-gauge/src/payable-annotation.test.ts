@@ -1,29 +1,17 @@
 import { bn } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
-const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
-);
-
-const setupContract = async () => {
-  const {
-    contracts: [contract],
-    cleanup,
-  } = await launchTestNode({
-    contractsConfigs: [{ deployer: abi, contractBytecode }],
-  });
-  return Object.assign(contract, { [Symbol.dispose]: cleanup });
-};
+import { setupContract } from './utils';
 
 beforeAll(() => {});
 
 /**
  * @group node
+ * @group browser
  */
 test('allow sending coins to payable functions', async () => {
-  using contract = await setupContract();
+  using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should not fail because the function is payable
@@ -41,7 +29,7 @@ test('allow sending coins to payable functions', async () => {
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
-  using contract = await setupContract();
+  using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should fail because the function is not payable

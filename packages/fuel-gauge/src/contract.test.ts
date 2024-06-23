@@ -28,25 +28,18 @@ import {
   Predicate,
   PolicyType,
 } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-import { CallTestContractAbi__factory } from '../test/typegen/contracts';
-import binHexlified from '../test/typegen/contracts/CallTestContractAbi.hex';
+
+import { setupContract } from './utils';
+
+const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeForcProject(
+  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+);
 
 const { binHexlified: predicateBytecode } = getFuelGaugeForcProject(
   FuelGaugeProjectsEnum.PREDICATE_TRUE
 );
-
-const setupContract = async () => {
-  const {
-    contracts: [contract],
-    cleanup,
-  } = await launchTestNode({
-    contractsConfigs: [{ deployer: CallTestContractAbi__factory, bytecode: binHexlified }],
-  });
-  return Object.assign(contract, { [Symbol.dispose]: cleanup });
-};
 
 const jsonFragment: JsonAbi = {
   configurables: [],
@@ -224,7 +217,7 @@ describe('Contract', () => {
   });
 
   it('should fail to execute call if gasLimit is too low', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     let failed;
     try {
@@ -242,8 +235,8 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on invocation', async () => {
-    using contract = await setupContract();
-    using otherContract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+    using otherContract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const scope = contract.functions.call_external_foo(1336, otherContract.id.toB256());
 
@@ -253,8 +246,8 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on multicalls', async () => {
-    using contract = await setupContract();
-    using otherContract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+    using otherContract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const calls = [
       contract.functions.foo(1336),
@@ -280,7 +273,7 @@ describe('Contract', () => {
   });
 
   it('submits multiple calls', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -289,7 +282,7 @@ describe('Contract', () => {
   });
 
   it('submits multiple calls, six calls', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value: results } = await contract
       .multiCall([
@@ -308,7 +301,7 @@ describe('Contract', () => {
   });
 
   it('submits multiple calls, eight calls', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value: results } = await contract
       .multiCall([
@@ -337,7 +330,7 @@ describe('Contract', () => {
   });
 
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     let failed;
     try {
@@ -355,8 +348,8 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on multicalls', async () => {
-    using contract = await setupContract();
-    using otherContract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+    using otherContract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
@@ -377,7 +370,7 @@ describe('Contract', () => {
   });
 
   it('dryRuns multiple calls', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -386,7 +379,7 @@ describe('Contract', () => {
   });
 
   it('simulates multiple calls', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value, callResult, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -397,7 +390,7 @@ describe('Contract', () => {
   });
 
   it('Returns gasUsed and transactionId', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { transactionId, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -407,7 +400,7 @@ describe('Contract', () => {
   });
 
   it('Single call with forwarding a alt token', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
     const { value } = await contract.functions
       .return_context_amount()
       .callParams({
@@ -422,7 +415,7 @@ describe('Contract', () => {
   });
 
   it('MultiCall with multiple forwarding', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value } = await contract
       .multiCall([
@@ -444,7 +437,7 @@ describe('Contract', () => {
   });
 
   it('Check if gas per call is lower than transaction', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     await expect(
       contract
@@ -468,7 +461,7 @@ describe('Contract', () => {
   });
 
   it('can forward gas to multicall calls', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value } = await contract
       .multiCall([
@@ -496,7 +489,7 @@ describe('Contract', () => {
   });
 
   it('Get transaction cost', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
@@ -521,7 +514,7 @@ describe('Contract', () => {
   });
 
   it('Fail before submit if gasLimit is lower than gasUsed', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const invocationScope = contract.functions.return_context_amount().callParams({
       forward: [100, baseAssetId],
@@ -539,7 +532,7 @@ describe('Contract', () => {
   });
 
   it('calls array functions', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value: arrayBoolean } = await contract.functions
       .take_array_boolean([true, false, false])
@@ -571,7 +564,7 @@ describe('Contract', () => {
   });
 
   it('calls enum functions', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const { value: enumB256ReturnValue } = await contract.functions
       .take_b256_enum({
@@ -627,7 +620,7 @@ describe('Contract', () => {
   });
 
   it('dryRun and get should not validate the signature', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
@@ -643,7 +636,7 @@ describe('Contract', () => {
   });
 
   it('Parse TX to JSON and parse back to TX', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const num = 1337;
     const struct = { a: true, b: 1337 };
@@ -703,7 +696,7 @@ describe('Contract', () => {
   });
 
   it('Provide a custom provider and public wallet to the contract instance', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const externalWallet = Wallet.generate({
       provider,
@@ -783,18 +776,7 @@ describe('Contract', () => {
   });
 
   it('should ensure multicall allows multiple heap types', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(wallet, [
-      {
-        amount: bn(500_000),
-        assetId: baseAssetId,
-      },
-    ]);
-    const factory = new ContractFactory(contractBytecode, abi, wallet);
-
-    const contract = await factory.deployContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const vector = [5, 4, 3, 2, 1];
 
@@ -810,7 +792,7 @@ describe('Contract', () => {
   });
 
   it('Read only call', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
     const { value } = await contract.functions.echo_b256(contract.id.toB256()).simulate();
     expect(value).toEqual(contract.id.toB256());
   });
@@ -824,7 +806,7 @@ describe('Contract', () => {
   it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
 
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
@@ -842,7 +824,7 @@ describe('Contract', () => {
 
   it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
     const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
     const amountToContract = 5_000;
 
     const gasLimit = 80_000;
@@ -865,7 +847,7 @@ describe('Contract', () => {
   it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
     const wallet = await generateTestWallet(provider, [[1000, baseAssetId]]);
 
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const amountToContract = 100;
 
@@ -890,7 +872,7 @@ describe('Contract', () => {
       [200, asset],
     ]);
 
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const initialBalance = new BN(await contract.getBalance(asset)).toNumber();
 
@@ -908,7 +890,7 @@ describe('Contract', () => {
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
     const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
 
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
 
@@ -934,7 +916,7 @@ describe('Contract', () => {
   });
 
   it('should ensure TX revert error can be extracted for dryRun and simulate calls', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const scope = contract.functions.assert_u8(10, 11);
 
@@ -1046,7 +1028,7 @@ describe('Contract', () => {
   });
 
   it('should throw when using "simulate" with an unfunded wallet', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     contract.account = Wallet.generate({ provider: contract.provider });
 
@@ -1061,7 +1043,7 @@ describe('Contract', () => {
   });
 
   it('should throw when using "simulate" without a wallet', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     contract.account = null;
     await expect(
@@ -1075,7 +1057,7 @@ describe('Contract', () => {
   });
 
   it('should throw when using "simulate" with a locked wallet', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     contract.account = Wallet.fromAddress(getRandomB256());
 
@@ -1090,7 +1072,7 @@ describe('Contract', () => {
   });
 
   it('should use "dryRun" with an unfunded wallet just fine', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     contract.account = Wallet.generate({ provider: contract.provider });
 
@@ -1105,7 +1087,7 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" does not spend any funds', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const balance = await contract.account?.getBalance();
 
@@ -1120,7 +1102,7 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" can be used to execute a contract call without a wallet', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     // contract with no account set
     const contractToCall = new Contract(contract.id, contract.interface, contract.provider);
@@ -1132,7 +1114,7 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" can be used to execute a contract call with an unfunded wallet', async () => {
-    using contract = await setupContract();
+    using contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const unfundedWallet = Wallet.generate({ provider: contract.provider });
 
@@ -1208,9 +1190,7 @@ describe('Contract', () => {
   });
 
   it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
-    const contract = await setupContract({
-      cache: false,
-    });
+    const contract = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
 
     const gasLimit = 500_000;
     const maxFee = 250_000;

@@ -1,16 +1,15 @@
 import { toHex } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
+import { setupContract } from './utils';
 /**
  * @group node
+ * @group browser
  */
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
-    const contract = await setup({
-      abi: abiJSON,
-      contractBytecode,
-    });
+    using contract = await setupContract(FuelGaugeProjectsEnum.GENERIC_TYPES_CONTRACT);
 
     const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
     const bimArg1 = 'Yes';

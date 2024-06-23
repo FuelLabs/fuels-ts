@@ -13,6 +13,7 @@ enum SmallEnum {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Vector Tests', () => {
   it('should test u8 vector input/output', async () => {

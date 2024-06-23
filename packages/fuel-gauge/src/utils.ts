@@ -8,12 +8,14 @@ import { join } from 'path';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 import {
+  AuthTestingContractAbi__factory,
   AdvancedLoggingAbi__factory,
   AdvancedLoggingOtherContractAbi__factory,
   BytecodeSwayLibAbi__factory,
   CallTestContractAbi__factory,
   ConfigurableContractAbi__factory,
   CoverageContractAbi__factory,
+  PayableAnnotationAbi__factory,
   BytesAbi__factory,
   CollisionInFnNamesAbi__factory,
   OptionsAbi__factory,
@@ -26,6 +28,7 @@ import {
 } from '../test/typegen/contracts';
 import advancedLoggingBytecode from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
 import advancedLoggingOtherContractBytecode from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
+import authTestingBytecode from '../test/typegen/contracts/AuthTestingContractAbi.hex';
 import bytecodeSwayLibBytecode from '../test/typegen/contracts/BytecodeSwayLibAbi.hex';
 import bytesBytecode from '../test/typegen/contracts/BytesAbi.hex';
 import callTestBytecode from '../test/typegen/contracts/CallTestContractAbi.hex';
@@ -34,6 +37,7 @@ import configurableContractBytecode from '../test/typegen/contracts/Configurable
 import coverageContractBytecode from '../test/typegen/contracts/CoverageContractAbi.hex';
 import multiTokenContractBytecode from '../test/typegen/contracts/MultiTokenContractAbi.hex';
 import optionsBytecode from '../test/typegen/contracts/OptionsAbi.hex';
+import payableAnnotationBytecode from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 import rawSliceBytecode from '../test/typegen/contracts/RawSliceAbi.hex';
 import stdLibStringBytecode from '../test/typegen/contracts/StdLibStringAbi.hex';
 import storageTestContractBytecode from '../test/typegen/contracts/StorageTestContractAbi.hex';
@@ -86,7 +90,7 @@ export interface DisposableContract extends Contract {
   [Symbol.dispose]: () => Promise<void>;
 }
 
-export const setupContract = async (type: FuelGaugeProjectsEnum): Promise<DisposableContract> => {
+export async function setupContract(type: FuelGaugeProjectsEnum): Promise<DisposableContract> {
   let deployer;
   let bytecode: string;
 
@@ -94,6 +98,11 @@ export const setupContract = async (type: FuelGaugeProjectsEnum): Promise<Dispos
     case FuelGaugeProjectsEnum.ADVANCED_LOGGING:
       deployer = AdvancedLoggingAbi__factory;
       bytecode = advancedLoggingBytecode;
+      break;
+
+    case FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT:
+      deployer = AuthTestingContractAbi__factory;
+      bytecode = authTestingBytecode;
       break;
 
     case FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT:
@@ -141,6 +150,11 @@ export const setupContract = async (type: FuelGaugeProjectsEnum): Promise<Dispos
       bytecode = optionsBytecode;
       break;
 
+    case FuelGaugeProjectsEnum.PAYABLE_ANNOTATION:
+      deployer = PayableAnnotationAbi__factory;
+      bytecode = payableAnnotationBytecode;
+      break;
+
     case FuelGaugeProjectsEnum.RAW_SLICE:
       deployer = RawSliceAbi__factory;
       bytecode = rawSliceBytecode;
@@ -182,4 +196,4 @@ export const setupContract = async (type: FuelGaugeProjectsEnum): Promise<Dispos
     ],
   });
   return Object.assign(contract, { [Symbol.dispose]: () => Promise.resolve(cleanup()) });
-};
+}

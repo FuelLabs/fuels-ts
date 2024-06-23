@@ -3,6 +3,7 @@ import { Provider, WalletUnlocked, randomBytes, Wallet, FUEL_NETWORK_URL } from 
 
 /**
  * @group node
+ * @group browser
  */
 describe('await-execution', () => {
   test('awaiting execution of a transaction on the provider works', async () => {

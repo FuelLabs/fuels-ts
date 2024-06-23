@@ -6,8 +6,11 @@ import { BN, bn, toHex, Interface, Provider, ContractFactory, FUEL_NETWORK_URL }
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
+import { setupContract } from './utils';
+
 /**
  * @group node
+ * @group browser
  */
 describe('Contract Factory', () => {
   let baseAssetId: string;
@@ -29,32 +32,27 @@ describe('Contract Factory', () => {
   };
 
   it('Creates a factory from inputs that can return call results', async () => {
-    const factory = await createContractFactory();
+    using contract = await setupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+    expect(contract.interface).toBeInstanceOf(Interface);
 
-    const contact = await factory.deployContract();
-
-    expect(contact.interface).toBeInstanceOf(Interface);
-
-    const { value: valueInitial } = await contact.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await contract.functions.initialize_counter(41).call();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const { value } = await contact.functions.increment_counter(1).call();
+    const { value } = await contract.functions.increment_counter(1).call();
     expect(value.toHex()).toEqual(toHex(42));
 
-    const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
+    const { value: value2 } = await contract.functions.increment_counter(1).dryRun();
     expect(value2.toHex()).toEqual(toHex(43));
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
-    const factory = await createContractFactory();
+    using contract = await setupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
 
-    const contact = await factory.deployContract();
+    expect(contract.interface).toBeInstanceOf(Interface);
 
-    expect(contact.interface).toBeInstanceOf(Interface);
+    await contract.functions.initialize_counter(100).call();
 
-    await contact.functions.initialize_counter(100).call();
-
-    const { transactionResult } = await contact.functions.increment_counter(1).call();
+    const { transactionResult } = await contract.functions.increment_counter(1).call();
     expect(transactionResult).toEqual<TransactionResult>({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
@@ -85,7 +83,7 @@ describe('Contract Factory', () => {
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
-    const { callResult } = await contact.functions.increment_counter(1).dryRun();
+    const { callResult } = await contract.functions.increment_counter(1).dryRun();
     expect(callResult).toMatchObject({
       receipts: expect.arrayContaining([expect.any(Object)]),
     });

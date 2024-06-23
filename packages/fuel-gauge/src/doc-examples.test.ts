@@ -56,6 +56,7 @@ const ADDRESS_BYTES = new Uint8Array([
 
 /**
  * @group node
+ * @group browser
  */
 describe('Doc Examples', () => {
   let baseAssetId: string;

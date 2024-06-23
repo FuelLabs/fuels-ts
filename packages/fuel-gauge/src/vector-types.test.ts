@@ -87,6 +87,7 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Vector Types Validation', () => {
   let baseAssetId: string;
