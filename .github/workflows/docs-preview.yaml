@@ -24,25 +24,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install PNPM
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.0.5
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Build project
         run: pnpm build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Build with VitePress
         working-directory: apps/docs
