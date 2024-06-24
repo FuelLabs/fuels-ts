@@ -52,7 +52,7 @@ If the second transaction attempts to use the same UTXO(s) that the first transa
 Transaction is not inserted. UTXO does not exist: 0xf5...
 ```
 
-This error indicates that the UTXO(s) used by the second transaction no longer exist, as they were already spent by the first transaction.
+This error indicates that the UTXO(s) used by the second transaction no longer exist, as the first transaction already spent them.
 
 To prevent this issue, you can use the `cacheUtxo` flag. This flag sets a TTL (Time-To-Live) for caching UTXO(s) used in a transaction, preventing them from being reused in subsequent transactions within the specified time.
 
