@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-migrated to nextJS app router
+feat: migrate to NextJS app router
