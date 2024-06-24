@@ -17,6 +17,7 @@
 "fuels": patch
 "@fuel-ts/utils": patch
 "@fuel-ts/math": patch
+"@fuel-ts/logger": patch
 ---
 
 build: add support for latest node versions
