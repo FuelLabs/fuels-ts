@@ -67,7 +67,7 @@ jobs:
       - name: Wait for release to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: 'refs/heads/master'
+          ref: "refs/heads/master"
           check-name: "Release"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
