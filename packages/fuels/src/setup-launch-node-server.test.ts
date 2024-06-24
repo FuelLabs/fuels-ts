@@ -2,6 +2,8 @@ import { Provider } from '@fuel-ts/account';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import { spawn } from 'node:child_process';
 
+import { launchTestNode } from './test-utils';
+
 interface ServerInfo extends Disposable {
   serverUrl: string;
   closeServer: () => Promise<void>;
@@ -111,6 +113,18 @@ describe(
       // if the nodes remained live then the test would time out
       await waitUntilUnreachable(url1);
       await waitUntilUnreachable(url2);
+    });
+
+    test('launchTestNode launches and kills node ', async () => {
+      using launchedServer = await startServer();
+      const port = launchedServer.serverUrl.split(':')[2];
+      const { cleanup, provider } = await launchTestNode({
+        launchNodeServerPort: port,
+      });
+
+      cleanup();
+
+      await waitUntilUnreachable(provider.url);
     });
   },
   { timeout: 25000 }

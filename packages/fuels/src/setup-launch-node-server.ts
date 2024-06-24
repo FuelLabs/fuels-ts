@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable no-console */
 import type { LaunchNodeOptions } from '@fuel-ts/account/test-utils';
 import { launchNode } from '@fuel-ts/account/test-utils';
@@ -67,7 +66,11 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-function closeServer() {
+const closeServer = (event?: string) => (reason?: unknown) => {
+  console.log(event);
+  if (reason) {
+    console.log(reason);
+  }
   return new Promise<void>((resolve) => {
     if (!server.listening) {
       resolve();
@@ -83,11 +86,11 @@ function closeServer() {
 
     resolve();
   });
-}
+};
 
 server.on('request', async (req, res) => {
   if (req.url === '/close-server') {
-    await closeServer();
+    await closeServer('request to /close-server')();
     res.end();
   }
 });
@@ -109,34 +112,10 @@ server.on('listening', () => {
   console.log('You can close the server by sending a request to /close-server.');
 });
 
-process.on('exit', () => {
-  console.log('exit');
-  closeServer();
-});
-process.on('SIGINT', () => {
-  console.log('sigint');
-  closeServer();
-});
-process.on('SIGUSR1', () => {
-  console.log('SIGUSR1');
-  closeServer();
-});
-process.on('SIGUSR2', () => {
-  console.log('SIGUSR2');
-  closeServer();
-});
-process.on('uncaughtException', (e) => {
-  console.log('uncaughtException');
-  console.log(e);
-  closeServer();
-});
-process.on('unhandledRejection', (reason) => {
-  console.log('unhandledRejection');
-  console.log(reason);
-
-  closeServer();
-});
-process.on('beforeExit', () => {
-  console.log('beforeExit');
-  closeServer();
-});
+process.on('exit', closeServer('exit'));
+process.on('SIGINT', closeServer('SIGINT'));
+process.on('SIGUSR1', closeServer('SIGUSR1'));
+process.on('SIGUSR2', closeServer('SIGUSR2'));
+process.on('uncaughtException', closeServer('uncaughtException'));
+process.on('unhandledRejection', closeServer('unhandledRejection'));
+process.on('beforeExit', closeServer('beforeExit'));

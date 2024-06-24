@@ -18,6 +18,22 @@ If you are planning something big, for example, changes related to multiple comp
 
 If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
 
+# Issue Prioritization
+
+If you would like to create an issue, please use the relevant [issue template](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow us to correctly triage and prioritize it. Every externally submitted issue goes through the following process:
+
+1. A new issue is created and is given the `triage` label
+1. It is assigned to a core maintainer for investigation
+1. Once the assigned core maintainer has completed their investigation, they remove the `triage` label and assign the relevant label to the issue i.e. `bug` , `feat`, `chore`, `docs`
+1. The issue is assigned a milestone (e.g. `mainnet`, `post-launch`) and a prioritization label where `p0` is the highest priority and `p2` is the lowest priority
+1. The issue is assigned for development and should be moved to `In Progress`
+1. A pull request is made ready and the issue is now `In Review`
+1. The pull request needs approval by 3 core maintainers, these can be found in the [CODEOWNERS file](https://github.com/FuelLabs/fuels-ts/blob/master/.github/CODEOWNERS)
+1. It can then be merged to `master` and included in a release
+1. The issue is closed automatically and it's status is moved to `Done`
+
+> **Note:** If additional information is ever required by the assigned investigator then the `awaiting` label will be added to the issue, these means they require more information from the author. Any `awaiting` issue left unanswered for 2 weeks will go `stale` and will be closed.
+
 # Setting up
 
 ```sh
@@ -244,7 +260,22 @@ The following example is for releasing a patch for `v0.69.0` -> `v0.69.1`.
 - Create PRs with base set to that release branch
   - When the PR is merged, a changeset PR is created
   - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
-- After release, delete the release branch from GitHub
+- After release, the release branch will be automatically deleted
+
+# Patching latest release
+
+Imagine the scenario:
+
+1. We release `v0.80.0`
+1. One day later, we have a new changesets PR that will bump things to `v0.81.0`
+1. Before releasing `v0.81.0`, we find an issue and need to make a `v0.80.1` patch
+
+We'd follow the same approach as explained in the [Patching old releases](#patching-old-releases) section above, bearing in mind the following after the release:
+
+- A PR merging the `latest` release's branch into `master` will be automatically created,
+- The automatically-created PR **must** be merged as soon as possible in order to
+  - have the versions of packages on `master` match the `latest` released package versions,
+  - have the released functionality on `master` as well
 
 # FAQ
 
