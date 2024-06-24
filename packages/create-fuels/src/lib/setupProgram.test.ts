@@ -6,11 +6,11 @@ import { setupProgram } from './setupProgram';
 describe('setupProgram', () => {
   test('setupProgram takes in args properly', () => {
     const program = setupProgram();
-    program.parse(['', '', 'test-project-name', '--pnpm', '--npm']);
+    program.parse(['', '', 'test-project-name', '--pnpm', '--npm', '--bun']);
     expect(program.args[0]).toBe('test-project-name');
     expect(program.opts().pnpm).toBe(true);
     expect(program.opts().npm).toBe(true);
-    expect(program.opts().bun).toBe(undefined);
+    expect(program.opts().bun).toBe(true);
   });
 
   test('setupProgram - no args', () => {
