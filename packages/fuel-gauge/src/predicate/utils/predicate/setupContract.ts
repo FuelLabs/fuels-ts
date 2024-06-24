@@ -45,7 +45,7 @@ export const setup = async ({ contractBytecode, abi, cache }: SetupConfig) => {
   return contract;
 };
 
-export const setupContractWithConfig =
+export const launchTestContractWithConfig =
   (defaultConfig: SetupConfig) => async (config?: Partial<SetupConfig>) =>
     setup({
       contractBytecode: defaultConfig.contractBytecode,

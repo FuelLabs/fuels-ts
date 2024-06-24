@@ -4,7 +4,7 @@ import type { BN } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { getScript, setupContract } from './utils';
+import { getScript, launchTestContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -37,7 +37,7 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes output', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.BYTES);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.BYTES);
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -46,7 +46,7 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes output [100 items]', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.BYTES);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.BYTES);
 
     const INPUT = 100;
 
@@ -56,7 +56,7 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.BYTES);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.BYTES);
 
     const INPUT = [40, 41, 42];
 

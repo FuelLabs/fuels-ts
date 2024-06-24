@@ -6,7 +6,7 @@ import { BN, bn, toHex, Interface, Provider, ContractFactory, FUEL_NETWORK_URL }
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 
 /**
  * @group node
@@ -32,7 +32,7 @@ describe('Contract Factory', () => {
   };
 
   it('Creates a factory from inputs that can return call results', async () => {
-    using contract = await setupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+    using contract = await launchTestContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
     expect(contract.interface).toBeInstanceOf(Interface);
 
     const { value: valueInitial } = await contract.functions.initialize_counter(41).call();
@@ -46,7 +46,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
-    using contract = await setupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+    using contract = await launchTestContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
 
     expect(contract.interface).toBeInstanceOf(Interface);
 

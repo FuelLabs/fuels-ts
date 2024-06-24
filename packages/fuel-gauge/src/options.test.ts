@@ -3,7 +3,7 @@ import type { WalletUnlocked } from 'fuels';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 
 const U8_MAX = 255;
 const U16_MAX = 65535;
@@ -12,7 +12,7 @@ const U32_MAX = 4294967295;
 let wallet: WalletUnlocked;
 
 beforeAll(async () => {
-  using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+  using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
   wallet = await generateTestWallet(contractInstance.provider, [
     [200_000, contractInstance.provider.getBaseAssetId()],
   ]);
@@ -24,7 +24,7 @@ beforeAll(async () => {
  */
 describe('Options Tests', () => {
   it('calls', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
     const { value } = await contractInstance.functions.print_enum_option_array().call();
 
     expect(value).toStrictEqual({
@@ -47,7 +47,7 @@ describe('Options Tests', () => {
     const someInput = U8_MAX;
     const noneInput = undefined;
 
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value: someValue } = await contractInstance.functions.echo_option(someInput).call();
 
@@ -66,7 +66,7 @@ describe('Options Tests', () => {
       two: U32_MAX,
     };
 
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value: someValue } = await contractInstance.functions
       .echo_struct_enum_option(someInput)
@@ -91,7 +91,7 @@ describe('Options Tests', () => {
   it('echos vec option', async () => {
     const someInput = [U8_MAX, U16_MAX, U32_MAX];
 
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value: someValue } = await contractInstance.functions.echo_vec_option(someInput).call();
 
@@ -115,7 +115,7 @@ describe('Options Tests', () => {
   it('echos tuple option', async () => {
     const someInput = [U8_MAX, U16_MAX];
 
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value: someValue } = await contractInstance.functions
       .echo_tuple_option(someInput)
@@ -143,7 +143,7 @@ describe('Options Tests', () => {
   it('echoes enum option', async () => {
     const someInput = { a: U8_MAX };
 
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value: someValue } = await contractInstance.functions
       .echo_enum_option(someInput)
@@ -163,7 +163,7 @@ describe('Options Tests', () => {
   it('echos array option', async () => {
     const someInput = [U8_MAX, U16_MAX, 123];
 
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value: someValue } = await contractInstance.functions
       .echo_array_option(someInput)
@@ -195,7 +195,7 @@ describe('Options Tests', () => {
       },
     };
 
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value } = await contractInstance.functions.echo_deeply_nested_option(input).call();
 
@@ -203,7 +203,7 @@ describe('Options Tests', () => {
   });
 
   it('prints struct option', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value } = await contractInstance.functions
       .get_some_struct({ Address: { bits: wallet.address.toB256() } })
@@ -213,7 +213,7 @@ describe('Options Tests', () => {
   });
 
   it('echoes option enum diff sizes', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.OPTIONS);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.OPTIONS);
 
     const { value } = await contractInstance.functions.echo_enum_diff_sizes(undefined).call();
 

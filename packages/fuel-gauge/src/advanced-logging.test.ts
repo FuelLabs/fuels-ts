@@ -5,7 +5,7 @@ import { Script, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 
 let provider: Provider;
 let advancedLogId: string;
@@ -13,8 +13,8 @@ let otherLogId: string;
 let baseAssetId: string;
 
 beforeAll(async () => {
-  using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
-  using otherAdvancedLogContract = await setupContract(
+  using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+  using otherAdvancedLogContract = await launchTestContract(
     FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
   );
 
@@ -30,7 +30,7 @@ beforeAll(async () => {
  */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
-    using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+    using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
 
     const { value, logs } = await advancedLogContract.functions.test_function().call();
 
@@ -76,7 +76,7 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=true]', async () => {
-    using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+    using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
 
     const { value, logs } = await advancedLogContract.functions
       .test_function_with_require(1, 1)
@@ -87,7 +87,7 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=false]', async () => {
-    using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+    using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
 
     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
     try {
@@ -118,8 +118,9 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from a downstream Contract', async () => {
-    using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
-    using otherAdvancedLogContract = await setupContract(
+    // TODO: this test should use the same node
+    using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+    using otherAdvancedLogContract = await launchTestContract(
       FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
     );
 
@@ -139,9 +140,9 @@ describe('Advanced Logging', () => {
   });
 
   describe('should properly decode all logs in a multicall with inter-contract calls', async () => {
-    using callTest = await setupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
-    using configurable = await setupContract(FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT);
-    using coverage = await setupContract(FuelGaugeProjectsEnum.COVERAGE_CONTRACT);
+    using callTest = await launchTestContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
+    using configurable = await launchTestContract(FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT);
+    using coverage = await launchTestContract(FuelGaugeProjectsEnum.COVERAGE_CONTRACT);
 
     let wallet: WalletUnlocked;
     const testStruct = {
@@ -164,8 +165,8 @@ describe('Advanced Logging', () => {
     });
 
     it('when using InvacationScope', async () => {
-      using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
-      using otherAdvancedLogContract = await setupContract(
+      using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+      using otherAdvancedLogContract = await launchTestContract(
         FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
       );
 
@@ -186,8 +187,8 @@ describe('Advanced Logging', () => {
     });
 
     it('when using ScriptTransactionRequest', async () => {
-      using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
-      using otherAdvancedLogContract = await setupContract(
+      using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+      using otherAdvancedLogContract = await launchTestContract(
         FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
       );
 
@@ -249,8 +250,8 @@ describe('Advanced Logging', () => {
     });
 
     it('when using InvocationScope', async () => {
-      using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
-      using otherAdvancedLogContract = await setupContract(
+      using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+      using otherAdvancedLogContract = await launchTestContract(
         FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
       );
 
@@ -264,8 +265,8 @@ describe('Advanced Logging', () => {
     });
 
     it('when using ScriptTransactionRequest', async () => {
-      using advancedLogContract = await setupContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
-      using otherAdvancedLogContract = await setupContract(
+      using advancedLogContract = await launchTestContract(FuelGaugeProjectsEnum.ADVANCED_LOGGING);
+      using otherAdvancedLogContract = await launchTestContract(
         FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
       );
 

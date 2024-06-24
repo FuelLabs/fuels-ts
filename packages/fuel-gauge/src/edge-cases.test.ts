@@ -3,7 +3,7 @@ import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 
 /**
  * @group node
@@ -11,7 +11,7 @@ import { setupContract } from './utils';
  */
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.COLLISION_IN_FN_NAMES);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.COLLISION_IN_FN_NAMES);
     expect((await contractInstance.functions.new().call()).value.toNumber()).toEqual(12345);
   });
 

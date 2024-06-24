@@ -2,7 +2,7 @@ import { bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 
 beforeAll(() => {});
 
@@ -11,7 +11,7 @@ beforeAll(() => {});
  * @group browser
  */
 test('allow sending coins to payable functions', async () => {
-  using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+  using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should not fail because the function is payable
@@ -29,7 +29,7 @@ test('allow sending coins to payable functions', async () => {
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
-  using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+  using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should fail because the function is not payable

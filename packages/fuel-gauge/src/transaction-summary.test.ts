@@ -24,7 +24,7 @@ import {
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 
 /**
  * @group node
@@ -230,7 +230,7 @@ describe('TransactionSummary', () => {
         [10_000, ASSET_A],
       ]);
 
-      using contract1 = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using contract1 = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
 
       const amount = 234;
 
@@ -252,7 +252,7 @@ describe('TransactionSummary', () => {
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO ACCOUNT)', async () => {
       const wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
 
-      using contract = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using contract = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
       contract.account = wallet;
 
       const recipient = Wallet.generate({ provider });
@@ -286,7 +286,7 @@ describe('TransactionSummary', () => {
         [50_000, ASSET_B],
       ]);
 
-      using senderContract = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using senderContract = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
       senderContract.account = wallet;
       const fundAmount = 5_000;
 
@@ -343,10 +343,10 @@ describe('TransactionSummary', () => {
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO CONTRACT)', async () => {
       const wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
 
-      using contractSender = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using contractSender = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
       contractSender.account = wallet;
 
-      using contractRecipient = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using contractRecipient = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
       const {
         transactionResult: { mintedAssets },
       } = await contractSender.functions.mint_coins(100000).call();
@@ -379,7 +379,7 @@ describe('TransactionSummary', () => {
         [60_000, ASSET_B],
       ]);
 
-      using senderContract = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using senderContract = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
       senderContract.account = wallet;
       const fundAmount = 5_000;
 
@@ -389,8 +389,8 @@ describe('TransactionSummary', () => {
         await tx.waitForResult();
       }
 
-      using contractRecipient1 = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
-      using contractRecipient2 = await setupContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using contractRecipient1 = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
+      using contractRecipient2 = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
 
       const transferData1 = {
         address: contractRecipient1.id,

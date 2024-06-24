@@ -4,7 +4,7 @@ import { Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 
 let wallet: WalletUnlocked;
 let baseAssetId: string;
@@ -21,7 +21,7 @@ describe('Auth Testing', () => {
   });
 
   it('can get is_caller_external', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
 
     const { value } = await contractInstance.functions.is_caller_external().call();
 
@@ -29,7 +29,7 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id]', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
 
     const { value } = await contractInstance.functions
       .check_msg_sender({ bits: wallet.address.toB256() })
@@ -39,7 +39,7 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
 
     await expect(
       contractInstance.functions.check_msg_sender({ bits: getRandomB256() }).call()

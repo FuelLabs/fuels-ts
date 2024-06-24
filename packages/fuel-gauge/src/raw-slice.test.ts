@@ -4,7 +4,7 @@ import type { BN } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { getScript, setupContract } from './utils';
+import { getScript, launchTestContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -28,7 +28,7 @@ const setup = async (balance = 500_000) => {
 
 let baseAssetId: string;
 beforeAll(async () => {
-  using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
+  using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.RAW_SLICE);
   baseAssetId = contractInstance.provider.getBaseAssetId();
 });
 
@@ -38,7 +38,7 @@ beforeAll(async () => {
  */
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.RAW_SLICE);
 
     const INPUT = 10;
 
@@ -48,7 +48,7 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.RAW_SLICE);
 
     const INPUT = [40, 41, 42];
 
@@ -58,7 +58,7 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [nested]', async () => {
-    using contractInstance = await setupContract(FuelGaugeProjectsEnum.RAW_SLICE);
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.RAW_SLICE);
 
     const slice = [40, 41, 42];
     const INPUT = {

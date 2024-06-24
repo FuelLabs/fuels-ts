@@ -22,7 +22,7 @@ interface ContractDeployer {
   ): Promise<Contract>;
 }
 
-interface DeployContractConfig {
+export interface DeployContractConfig {
   /**
    * Contract deployer object compatible with factories outputted by `pnpm fuels typegen`.
    */

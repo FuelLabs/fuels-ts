@@ -13,8 +13,10 @@ import {
 } from 'fuels';
 
 import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures';
+import { PayableAnnotationAbi__factory } from '../test/typegen/contracts';
+import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
-import { setupContract } from './utils';
+import { launchTestContract } from './utils';
 /**
  * @group node
  * @group browser
@@ -193,7 +195,10 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (BaseInvocationScope)', async () => {
-    using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+    using contract = await launchTestContract({
+      deployer: PayableAnnotationAbi__factory,
+      bytecode: PayableAnnotationAbiHex,
+    });
 
     const callScope = contract.functions.payable().txParams({
       tip: 5,
@@ -265,7 +270,7 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (Account Contract Transfer)', async () => {
-    using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+    using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
 
     const txParams: CustomTxParams = {
       tip: 1,
@@ -318,7 +323,7 @@ describe('Policies', () => {
     });
 
     it('on account transferring to contract', async () => {
-      using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+      using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
 
       const maxFee = 1;
 
@@ -371,7 +376,7 @@ describe('Policies', () => {
     });
 
     it('on a contract call', async () => {
-      using contract = await setupContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+      using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
 
       const maxFee = 1;
 
