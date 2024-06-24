@@ -3,7 +3,7 @@ import { watch } from 'chokidar';
 import { globSync } from 'glob';
 
 import { loadConfig } from '../../config/loadConfig';
-import { Commands, type FuelsConfig } from '../../types';
+import { type FuelsConfig } from '../../types';
 import { error, log } from '../../utils/logger';
 import { build } from '../build';
 import { deploy } from '../deploy';

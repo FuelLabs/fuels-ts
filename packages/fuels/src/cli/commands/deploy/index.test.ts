@@ -15,8 +15,6 @@ import * as saveContractIdsMod from './saveContractIds';
  */
 describe('deploy', () => {
   const mockAll = () => {
-    const { debug } = mockLogger();
-
     const onDeploy = vi.fn();
 
     const provider = { url: FUEL_NETWORK_URL } as Provider;
