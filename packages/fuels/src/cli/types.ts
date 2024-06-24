@@ -50,6 +50,11 @@ export type OptionsFunction = (
   options: ContractDeployOptions
 ) => DeployContractOptions | Promise<DeployContractOptions>;
 
+export type FuelsEventListener<CType extends Commands> = (
+  data: Extract<CommandEvent, { type: CType }>['data'],
+  config: FuelsConfig
+) => void;
+
 export type UserFuelsConfig = {
   /** Relative directory path to Forc workspace */
   workspace?: string;
@@ -109,11 +114,36 @@ export type UserFuelsConfig = {
   forcBuildFlags?: string[];
 
   /**
-   * Function callback, will be called after a successful run
-   * @param event - The event that triggered this execution
+   * Function callback, will be called after a successful build operation
+   *
+   * @param data - The event that triggered this execution
    * @param config - The loaded `fuels.config.ts`
    */
-  onSuccess?: (event: CommandEvent, config: FuelsConfig) => void;
+  onBuild?: FuelsEventListener<Commands.build>;
+
+  /**
+   * Function callback, will be called after a successful deploy operation
+   *
+   * @param data - The event that triggered this execution
+   * @param config - The loaded `fuels.config.ts`
+   */
+  onDeploy?: FuelsEventListener<Commands.deploy>;
+
+  /**
+   * Function callback, will be called after a successful dev operation
+   *
+   * @param data - The event that triggered this execution
+   * @param config - The loaded `fuels.config.ts`
+   */
+  onDev?: FuelsEventListener<Commands.dev>;
+
+  /**
+   * Function callback, will be called after a successful Node refresh operation
+   *
+   * @param data - The event that triggered this execution
+   * @param config - The loaded `fuels.config.ts`
+   */
+  onNode?: FuelsEventListener<Commands.node>;
 
   /**
    * Function callback, will be called in case of errors

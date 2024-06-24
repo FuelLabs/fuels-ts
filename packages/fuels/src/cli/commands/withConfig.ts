@@ -33,15 +33,7 @@ export function withConfig<CType extends Commands>(
     }
 
     try {
-      const eventData = await fn(config, program);
-      config.onSuccess?.(
-        {
-          type: command,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data: eventData as any,
-        },
-        config
-      );
+      await fn(config, program);
       log(`🎉  ${capitalizeString(command)} completed successfully!`);
     } catch (err: unknown) {
       await withConfigErrorHandler(<Error>err, config);

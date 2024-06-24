@@ -30,6 +30,7 @@ describe('dev', () => {
   function mockAll() {
     const { autoStartFuelCore, fuelCore, killChildProcess } = mockStartFuelCore();
 
+    const onDev = vi.fn();
     const onFailure = vi.fn();
 
     const withConfigErrorHandler = vi
@@ -50,6 +51,7 @@ describe('dev', () => {
       fuelCore,
       killChildProcess,
       loadConfig,
+      onDev,
       onFailure,
       withConfigErrorHandler,
     };
@@ -64,6 +66,15 @@ describe('dev', () => {
     expect(log).toHaveBeenCalledTimes(1);
     expect(build).toHaveBeenCalledTimes(1);
     expect(deploy).toHaveBeenCalledTimes(1);
+  });
+
+  test('should call `onDev` callback on success', async () => {
+    const { onDev } = mockAll();
+    const config: FuelsConfig = { ...fuelsConfig, onDev };
+
+    await dev(config);
+
+    expect(onDev).toHaveBeenCalledWith(null, config);
   });
 
   it('dev should handle and log error from `buildAndDeploy`', async () => {
