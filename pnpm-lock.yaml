@@ -635,8 +635,8 @@ importers:
         specifier: workspace:*
         version: link:../versions
       commander:
-        specifier: ^9.4.1
-        version: 9.4.1
+        specifier: ^12.1.0
+        version: 12.1.0
       glob:
         specifier: ^10.2.6
         version: 10.2.6
@@ -833,8 +833,8 @@ importers:
         specifier: '4'
         version: 4.1.2
       commander:
-        specifier: ^9.4.1
-        version: 9.4.1
+        specifier: ^12.1.0
+        version: 12.1.0
       ora:
         specifier: 5.4.1
         version: 5.4.1
@@ -958,8 +958,8 @@ importers:
         specifier: ^3.5.3
         version: 3.5.3
       commander:
-        specifier: ^9.4.1
-        version: 9.4.1
+        specifier: ^12.1.0
+        version: 12.1.0
       esbuild:
         specifier: ^0.19.3
         version: 0.19.3
@@ -6844,6 +6844,10 @@ packages:
 
   command-exists@1.2.9:
     resolution: {integrity: sha512-LTQ/SGc+s0Xc0Fu5WaKnR0YiygZkm9eKFvyS+fRsU7/ZWFF8ykFM6Pc9aCVf1+xasOOZpO3BAVgVrKvsqKHV7w==}
+
+  commander@12.1.0:
+    resolution: {integrity: sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==}
+    engines: {node: '>=18'}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -13814,34 +13818,6 @@ packages:
       terser:
         optional: true
 
-  vite@5.2.11:
-    resolution: {integrity: sha512-HndV31LWW05i1BLPMUCE1B9E9GFbOu1MbenhS58FuK6owSO5qHm7GiCotrNY1YE5rMeQSFBGmT5ZaLEjFizgiQ==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-
   vite@5.3.1:
     resolution: {integrity: sha512-XBmSKRLXLxiaPYamLv3/hnP/KXDai1NDexN0FpkTaZXTfycHvkRHoenpgl/fvuK/kPbB6xAgoyiryAhQNxYmAQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -20402,7 +20378,7 @@ snapshots:
       '@vitest/utils': 1.6.0
       magic-string: 0.30.5
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@18.15.3)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.18.2)
+      vitest: 1.6.0(@types/node@20.11.13)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.18.2)
     optionalDependencies:
       playwright: 1.44.0
       webdriverio: 8.36.1(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@6.0.4)
@@ -22411,6 +22387,8 @@ snapshots:
       delayed-stream: 1.0.0
 
   command-exists@1.2.9: {}
+
+  commander@12.1.0: {}
 
   commander@2.20.3: {}
 
@@ -31123,7 +31101,7 @@ snapshots:
       debug: 4.3.4(supports-color@5.5.0)
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.11(@types/node@20.11.13)(terser@5.18.2)
+      vite: 5.3.1(@types/node@20.11.13)(terser@5.18.2)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -31165,16 +31143,6 @@ snapshots:
       terser: 5.18.2
 
   vite@5.2.10(@types/node@20.11.13)(terser@5.18.2):
-    dependencies:
-      esbuild: 0.20.2
-      postcss: 8.4.38
-      rollup: 4.16.4
-    optionalDependencies:
-      '@types/node': 20.11.13
-      fsevents: 2.3.3
-      terser: 5.18.2
-
-  vite@5.2.11(@types/node@20.11.13)(terser@5.18.2):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
