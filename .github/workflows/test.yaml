@@ -75,12 +75,12 @@ jobs:
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
-          PUBLISHED_NPM_VERSION: next
+          PUBLISHED_NPM_TAG: next
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/create-fuels-template-integration.sh
         env:
-          PUBLISHED_NPM_VERSION: next
+          PUBLISHED_NPM_TAG: next
 
   e2e:
     runs-on: ubuntu-latest

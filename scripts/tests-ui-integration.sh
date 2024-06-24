@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# The PUBLISHED_NPM_VERSION variable is required to create a new project with the current published `fuels` version
-PUBLISHED_NPM_VERSION="${PUBLISHED_NPM_VERSION-"next"}"
+# The PUBLISHED_NPM_TAG variable is required to create a new project with the current published `fuels` version
+PUBLISHED_NPM_TAG="${PUBLISHED_NPM_TAG-"next"}"
 
 # Versions
 FUEL_CORE_VERSION=$(cat ./internal/fuel-core/VERSION)
@@ -27,16 +27,16 @@ fuelup default $TOOLCHAIN
 fuelup component add fuel-core@$FUEL_CORE_VERSION
 fuelup component add forc@$FORC_VERSION
 
-echo "2. Scaffold a new project with 'create fuels@$PUBLISHED_NPM_VERSION'"
+echo "2. Scaffold a new project with 'create fuels@$PUBLISHED_NPM_TAG'"
 if [ -d "$PROJECT_DIR" ]; then
   echo "Removing existing project directory '$PROJECT_DIR'"
   rm -rf $PROJECT_DIR
 fi
-pnpm create fuels@$PUBLISHED_NPM_VERSION $PROJECT_DIR --pnpm -cps --no-install
+pnpm create fuels@$PUBLISHED_NPM_TAG $PROJECT_DIR --pnpm -cps --no-install
 
 echo "3. Intialise the project"
 cd $PROJECT_DIR
-pnpm add fuels@$PUBLISHED_NPM_VERSION > /dev/null 2>&1
+pnpm add fuels@$PUBLISHED_NPM_TAG > /dev/null 2>&1
 pnpm  --ignore-workspace install > /dev/null 2>&1
 cp .env.example .env.local
 
