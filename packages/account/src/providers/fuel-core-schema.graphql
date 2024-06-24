@@ -785,7 +785,7 @@ type NodeInfo {
 scalar Nonce
 
 union Output =
-    CoinOutput
+  | CoinOutput
   | ContractOutput
   | ChangeOutput
   | VariableOutput
@@ -1305,7 +1305,7 @@ type TransactionEdge {
 scalar TransactionId
 
 union TransactionStatus =
-    SubmittedStatus
+  | SubmittedStatus
   | SuccessStatus
   | SqueezedOutStatus
   | FailureStatus
