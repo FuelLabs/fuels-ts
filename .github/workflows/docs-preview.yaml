@@ -58,11 +58,7 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  comment:
-    runs-on: ubuntu-latest
-    needs: deploy
-    steps:
-      - name: Comment PR
+      - name: Comment on PR
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: "Documentation preview: ${{ needs.deploy.outputs.page_url }}"
