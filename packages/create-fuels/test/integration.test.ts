@@ -23,7 +23,7 @@ const packageManagerCreateCommands: [PackageManager, string][] = [
 ];
 
 /**
- * @group e2e
+ * @group integration
  */
 describe('`create fuels` package integrity', () => {
   let paths: ProjectPaths;
