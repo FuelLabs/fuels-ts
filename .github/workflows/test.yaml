@@ -110,7 +110,7 @@ jobs:
           DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
 
   test:
-    if: github.base_ref == 'master' || startsWith(github.head_ref, 'changeset-release') == true
+    if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
     needs: [environments, e2e]
     steps:
