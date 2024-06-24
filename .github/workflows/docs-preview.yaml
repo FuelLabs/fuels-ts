@@ -73,6 +73,6 @@ jobs:
       - name: Comment PR
         uses: thollander/actions-comment-pull-request@v2
         with:
-          message: "Here is the preview link: ${{ needs.deploy.outputs.page_url }}"
+          message: "Documentation preview: ${{ needs.deploy.outputs.page_url }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
