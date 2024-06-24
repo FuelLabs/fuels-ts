@@ -65,7 +65,6 @@ jobs:
         run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
-        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: 'refs/heads/master'
@@ -74,13 +73,11 @@ jobs:
           wait-interval: 30
 
       - name: Run tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
         run: pnpm test:integration
         env:
           PUBLISHED_NPM_VERSION: next
 
       - name: Run UI tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
         run: sh ./scripts/create-fuels-template-integration.sh
         env:
           PUBLISHED_NPM_VERSION: next
