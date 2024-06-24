@@ -59,7 +59,7 @@ jobs:
       - name: Test Setup
         uses: ./.github/actions/test-setup
         with:
-          should-install-bun: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+          should-install-bun: true
 
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
