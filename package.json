@@ -106,7 +106,7 @@
     "tsup": "^6.7.0",
     "tsx": "^4.7.0",
     "turbo": "^2.0.4",
-    "typescript": "~5.2.2",
+    "typescript": "~5.4.5",
     "vite": "^5.2.10",
     "vite-plugin-json5": "^1.1.2",
     "vite-plugin-node-polyfills": "^0.21.0",
