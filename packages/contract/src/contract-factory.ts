@@ -1,7 +1,12 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import { CreateTransactionRequest } from '@fuel-ts/account';
-import type { Account, CreateTransactionRequestLike, Provider } from '@fuel-ts/account';
+import type {
+  Account,
+  CreateTransactionRequestLike,
+  Provider,
+  TransactionResponse,
+} from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
@@ -19,7 +24,13 @@ export type DeployContractOptions = {
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
   configurableConstants?: { [name: string]: unknown };
+  awaitExecution?: boolean;
 } & CreateTransactionRequestLike;
+
+export type DeployContractResult<T extends Contract = Contract> = {
+  transactionResponse: TransactionResponse;
+  contract: T;
+};
 
 /**
  * `ContractFactory` provides utilities for deploying and configuring contracts.
@@ -131,36 +142,27 @@ export default class ContractFactory {
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContract(deployContractOptions: DeployContractOptions = {}) {
-    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
-    const account = this.getAccount();
-
-    await account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
-    });
-
-    return new Contract(contractId, this.interface, account);
-  }
-
   /**
-   * Deploys a contract asynchronously.
-   *
-   * @param deployContractOptions - The options for deploying the contract (optional).
-   * @returns An object containing the deployed contract and the transaction response.
+   * Deploys a contract and returns the transaction response and the deployed contract instance.
+   * @template T - The type of the contract to be deployed.
+   * @param deployContractOptions - The options for deploying the contract.
+   * @returns A promise that resolves to the transaction response and the deployed contract instance.
    */
-  async deployContractAsync(deployContractOptions: DeployContractOptions = {}) {
+  async deployContract<T extends Contract = Contract>(
+    deployContractOptions: DeployContractOptions = {}
+  ): Promise<DeployContractResult<T>> {
     const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
     const account = this.getAccount();
+
+    const { awaitExecution } = deployContractOptions;
 
     const transactionResponse = await account.sendTransaction(transactionRequest, {
-      awaitExecution: false,
+      awaitExecution,
     });
 
     const contract = new Contract(contractId, this.interface, account);
-    return {
-      contract,
-      transactionResponse,
-    };
+
+    return { transactionResponse, contract: contract as T };
   }
 
   /**
