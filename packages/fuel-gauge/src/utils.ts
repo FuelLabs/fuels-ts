@@ -14,7 +14,7 @@ const deployContract = async (
   if (contractInstance && useCache) {
     return contractInstance;
   }
-  contractInstance = await factory.deployContract();
+  ({ contract: contractInstance } = await factory.deployContract({ awaitExecution: true }));
   return contractInstance;
 };
 
