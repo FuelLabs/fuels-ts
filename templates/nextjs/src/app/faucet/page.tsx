@@ -4,22 +4,19 @@ import { Button } from "@/components/Button";
 import { Input } from "@/components/Input";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
-import { BN, bn } from "fuels";
+import { bn } from "fuels";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Faucet() {
   const { faucetWallet } = useFaucet();
+  const { wallet, refreshWalletBalance } = useActiveWallet();
 
-  const { refreshWalletBalance } = useActiveWallet();
-
-  const { wallet } = useActiveWallet();
-
-  const [receiverAddress, setReceiverAddress] = useState<string>();
+  const [receiverAddress, setReceiverAddress] = useState<string>("");
   const [amountToSend, setAmountToSend] = useState<string>("5");
 
   useEffect(() => {
-    if (wallet && !receiverAddress) {
+    if (wallet) {
       setReceiverAddress(wallet.address.toB256());
     }
   }, [wallet]);
@@ -71,8 +68,8 @@ export default function Faucet() {
         </label>
         <Input
           className="w-full"
-          value={amountToSend?.toString()}
-          onChange={(e) => setAmountToSend(e.target.value ?? undefined)}
+          value={amountToSend}
+          onChange={(e) => setAmountToSend(e.target.value)}
           placeholder="5"
           type="number"
           id="amount-input"

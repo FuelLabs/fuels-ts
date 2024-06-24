@@ -1,5 +1,35 @@
 # Change Log
 
+## 0.90.0
+
+### Patch Changes
+
+- 1beab0e: feat!: remove redundant exports from `v1` encoding
+- 81a77d3: chore: upgrading `fuel-core` to `0.29.0`
+- 90e8cba: chore: upgrading `fuel-core` to `0.30.0`
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [1beab0e]
+- Updated dependencies [69c3e51]
+- Updated dependencies [b1dbe42]
+- Updated dependencies [3db38af]
+- Updated dependencies [439d0dc]
+- Updated dependencies [81a77d3]
+- Updated dependencies [436f040]
+- Updated dependencies [038d1f1]
+- Updated dependencies [41dc617]
+- Updated dependencies [90e8cba]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/account@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/transactions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
 ## 0.89.2
 
 ### Patch Changes
