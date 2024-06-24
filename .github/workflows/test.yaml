@@ -78,7 +78,7 @@ jobs:
           PUBLISHED_NPM_TAG: next
 
       - name: Run UI tests (with published version)
-        run: sh ./scripts/create-fuels-template-integration.sh
+        run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: next
 
