@@ -47,6 +47,44 @@ jobs:
           path: coverage/environments/${{ matrix.env.name }}
           overwrite: true
 
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+        with:
+          should-install-bun: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+
+      - name: Run UI tests (on template)
+        run: sh ./scripts/tests-ui.sh
+
+      - name: Wait for release to succeed
+        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: 'refs/heads/master'
+          check-name: "Release"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 30
+
+      - name: Run tests (with published version)
+        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+        run: pnpm test:integration
+        env:
+          PUBLISHED_NPM_VERSION: next
+
+      - name: Run UI tests (with published version)
+        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+        run: sh ./scripts/create-fuels-template-integration.sh
+        env:
+          PUBLISHED_NPM_VERSION: next
+
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -59,19 +97,6 @@ jobs:
 
       - name: Test Setup
         uses: ./.github/actions/test-setup
-        with:
-          should-install-bun: true
-
-      - name: Publish PR to NPM
-        if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-        id: release
-        uses: ./.github/actions/pr-release
-        with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Echo Published Version
-        run: echo ${{ steps.release.outputs.published_version }}
 
       - name: Pretest
         run: pnpm pretest
@@ -81,22 +106,6 @@ jobs:
         env:
           TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
           DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
-          PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
-
-  create-fuels-template-integration:
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Test Setup
-        uses: ./.github/actions/test-setup
-
-      - name: Run UI tests
-        run: sh ./scripts/create-fuels-template-integration.sh
 
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
