@@ -91,6 +91,23 @@ describe('Contract Factory', () => {
     });
   });
 
+  it('can deploy a contract asynchronously without waiting for the TX to be processed', async () => {
+    const factory = await createContractFactory();
+
+    const { transactionResponse, contract } = await factory.deployContractAsync();
+
+    expect(transactionResponse.gqlTransaction).toBeUndefined();
+
+    const deployResult = await transactionResponse.waitForResult();
+
+    expect(deployResult.isStatusSuccess).toBeTruthy();
+    expect(transactionResponse.gqlTransaction).toBeDefined();
+
+    const { value } = await contract.functions.increment_counter(1).call();
+
+    expect(value.toNumber()).toEqual(1);
+  });
+
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
