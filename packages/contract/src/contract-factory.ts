@@ -203,7 +203,7 @@ export default class ContractFactory {
 
   private getAccount(): Account {
     if (!this.account) {
-      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
+      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Account not assigned to contract.');
     }
     return this.account;
   }
