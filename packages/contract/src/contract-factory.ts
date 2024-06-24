@@ -210,4 +210,37 @@ export default class ContractFactory {
     return this.account;
   }
 
+  private async prepareDeploy(deployContractOptions: DeployContractOptions) {
+    const { configurableConstants } = deployContractOptions;
+
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
+    }
+
+    const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
+
+    const account = this.getAccount();
+
+    const txCost = await account.provider.getTransactionCost(transactionRequest);
+
+    const { maxFee: setMaxFee } = deployContractOptions;
+
+    if (isDefined(setMaxFee)) {
+      if (txCost.maxFee.gt(setMaxFee)) {
+        throw new FuelError(
+          ErrorCode.MAX_FEE_TOO_LOW,
+          `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
+        );
+      }
+    } else {
+      transactionRequest.maxFee = txCost.maxFee;
+    }
+
+    await account.fund(transactionRequest, txCost);
+
+    return {
+      contractId,
+      transactionRequest,
+    };
+  }
 }
