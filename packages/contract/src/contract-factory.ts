@@ -142,6 +142,25 @@ export default class ContractFactory {
     return new Contract(contractId, this.interface, account);
   }
 
+  /**
+   * Deploys a contract asynchronously.
+   *
+   * @param deployContractOptions - The options for deploying the contract (optional).
+   * @returns An object containing the deployed contract and the transaction response.
+   */
+  async deployContractAsync(deployContractOptions: DeployContractOptions = {}) {
+    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
+    const account = this.getAccount();
+
+    const transactionResponse = await account.sendTransaction(transactionRequest, {
+      awaitExecution: false,
+    });
+
+    const contract = new Contract(contractId, this.interface, account);
+    return {
+      contract,
+      transactionResponse,
+    };
   }
 
   /**
