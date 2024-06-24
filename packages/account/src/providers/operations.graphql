@@ -624,6 +624,9 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
 
 query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   blocks(after: $after, before: $before, first: $first, last: $last) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...blockFragment

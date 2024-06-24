@@ -110,6 +110,11 @@ export type GetTransactionsResponse = {
   pageInfo: GqlPageInfo;
 };
 
+export type GetBlocksResponse = {
+  blocks: Block[];
+  pageInfo: GqlPageInfo;
+};
+
 /**
  * Deployed Contract bytecode and contract id
  */
@@ -1411,17 +1416,19 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param params - The parameters to query blocks.
    * @returns A promise that resolves to the blocks.
    */
-  async getBlocks(params: CursorPaginationArgs): Promise<Block[]> {
-    const { blocks: fetchedData } = await this.operations.getBlocks(params);
+  async getBlocks(params?: CursorPaginationArgs): Promise<GetBlocksResponse> {
+    const {
+      blocks: { edges, pageInfo },
+    } = await this.operations.getBlocks(params);
 
-    const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
+    const blocks: Block[] = edges.map(({ node: block }) => ({
       id: block.id,
       height: bn(block.height),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
 
-    return blocks;
+    return { blocks, pageInfo };
   }
 
   /**

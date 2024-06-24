@@ -718,7 +718,7 @@ describe('Provider', () => {
     const { provider } = launched;
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
-    const blocks = await provider.getBlocks({
+    const { blocks } = await provider.getBlocks({
       last: 10,
     });
     expect(blocks.length).toBe(10);
