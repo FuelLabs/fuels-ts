@@ -949,8 +949,8 @@ importers:
         specifier: workspace:*
         version: link:../versions
       bundle-require:
-        specifier: ^4.0.1
-        version: 4.0.1(esbuild@0.19.3)
+        specifier: ^5.0.0
+        version: 5.0.0(esbuild@0.19.3)
       chalk:
         specifier: '4'
         version: 4.0.0
@@ -6552,6 +6552,12 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     peerDependencies:
       esbuild: '>=0.17'
+
+  bundle-require@5.0.0:
+    resolution: {integrity: sha512-GuziW3fSSmopcx4KRymQEJVbZUfqlCqcq7dvs6TYwKRZiegK/2buMxQTPs6MGlNv50wms1699qYO54R8XfRX4w==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    peerDependencies:
+      esbuild: '>=0.18'
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -22071,7 +22077,7 @@ snapshots:
       esbuild: 0.17.19
       load-tsconfig: 0.2.5
 
-  bundle-require@4.0.1(esbuild@0.19.3):
+  bundle-require@5.0.0(esbuild@0.19.3):
     dependencies:
       esbuild: 0.19.3
       load-tsconfig: 0.2.5
