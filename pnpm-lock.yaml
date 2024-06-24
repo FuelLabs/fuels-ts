@@ -156,8 +156,8 @@ importers:
         specifier: ^4.7.0
         version: 4.7.0
       turbo:
-        specifier: ^1.13.3
-        version: 1.13.3
+        specifier: ^2.0.4
+        version: 2.0.4
       typescript:
         specifier: ~5.4.5
         version: 5.4.5
@@ -229,8 +229,8 @@ importers:
         specifier: ^8
         version: 8.54.0
       eslint-config-next:
-        specifier: 14.0.1
-        version: 14.0.1(eslint@8.54.0)(typescript@5.2.2)
+        specifier: 14.2.4
+        version: 14.2.4(eslint@8.54.0)(typescript@5.2.2)
       postcss:
         specifier: ^8
         version: 8.4.33
@@ -734,13 +734,13 @@ importers:
     devDependencies:
       '@graphql-codegen/cli':
         specifier: ^2.13.7
-        version: 2.13.7(@babel/core@7.22.5)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)
+        version: 2.13.7(@babel/core@7.24.4)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)
       '@graphql-codegen/typescript':
         specifier: ^2.8.0
         version: 2.8.0(graphql@16.8.1)
       '@graphql-codegen/typescript-generic-sdk':
-        specifier: ^3.1.0
-        version: 3.1.0(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)
+        specifier: ^4.0.1
+        version: 4.0.1(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)
       '@graphql-codegen/typescript-operations':
         specifier: ^2.5.5
         version: 2.5.5(graphql@16.8.1)
@@ -1227,8 +1227,8 @@ importers:
         specifier: ^8
         version: 8.54.0
       eslint-config-next:
-        specifier: 14.0.1
-        version: 14.0.1(eslint@8.54.0)(typescript@5.2.2)
+        specifier: 14.2.4
+        version: 14.2.4(eslint@8.54.0)(typescript@5.2.2)
       postcss:
         specifier: ^8
         version: 8.4.24
@@ -3381,8 +3381,9 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
-  '@graphql-codegen/typescript-generic-sdk@3.1.0':
-    resolution: {integrity: sha512-nQZi/YGRI1+qCZZsh0V5nz6+hCHSN4OU9tKyOTDsEPyDFnGEukDuRdCH2IZasGn22a3Iu5TUDkgp5w9wEQwGmg==}
+  '@graphql-codegen/typescript-generic-sdk@4.0.1':
+    resolution: {integrity: sha512-DBezPLnzeWnD28EOj6KhNpG463bh7PvkoRf2om4qeLPiaPKwril+xX5o4pxVbUzlYMwfYK9IJ2GrfU6c2mwJTA==}
+    engines: {node: '>= 16.0.0'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-tag: ^2.0.0
@@ -3944,8 +3945,8 @@ packages:
   '@next/env@14.2.4':
     resolution: {integrity: sha512-3EtkY5VDkuV2+lNmKlbkibIJxcO4oIHEhBWne6PaAp+76J9KoSsGvNikp6ivzAT8dhhBMYrm6op2pS1ApG0Hzg==}
 
-  '@next/eslint-plugin-next@14.0.1':
-    resolution: {integrity: sha512-bLjJMwXdzvhnQOnxvHoTTUh/+PYk6FF/DCgHi4BXwXCINer+o1ZYfL9aVeezj/oI7wqGJOqwGIXrlBvPbAId3w==}
+  '@next/eslint-plugin-next@14.2.4':
+    resolution: {integrity: sha512-svSFxW9f3xDaZA3idQmlFw7SusOuWTpDTAeBlO3AEPDltrraV+lqs7mAc6A27YdnpQVVIA3sODqUAAHdWhVWsA==}
 
   '@next/swc-darwin-arm64@14.2.4':
     resolution: {integrity: sha512-AH3mO4JlFUqsYcwFUHb1wAKlebHU/Hv2u2kb1pAuRanDZ7pD/A/KPD98RHZmwsJpdHQwfEc/06mgpSzwrJYnNg==}
@@ -7741,8 +7742,8 @@ packages:
       eslint: ^7.32.0 || ^8.2.0
       eslint-plugin-import: ^2.25.3
 
-  eslint-config-next@14.0.1:
-    resolution: {integrity: sha512-QfIFK2WD39H4WOespjgf6PLv9Bpsd7KGGelCtmq4l67nGvnlsGpuvj0hIT+aIy6p5gKH+lAChYILsyDlxP52yg==}
+  eslint-config-next@14.2.4:
+    resolution: {integrity: sha512-Qr0wMgG9m6m4uYy2jrYJmyuNlYZzPRQq5Kvb9IDlYwn+7yq6W6sfMNFgb+9guM1KYwuIo6TIaiFhZJ6SnQ/Efw==}
     peerDependencies:
       eslint: ^7.23.0 || ^8.0.0
       typescript: '>=3.3.1'
@@ -7765,9 +7766,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  eslint-import-resolver-node@0.3.7:
-    resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
 
   eslint-import-resolver-node@0.3.9:
     resolution: {integrity: sha512-WFj2isz22JahUv+B788TlO3N6zL3nNJGU8CcZbPZvVEkBPaJdCV4vy5wyghty5ROFbCRnm132v8BScu5/1BQ8g==}
@@ -8498,12 +8496,13 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
 
+  glob@10.3.10:
+    resolution: {integrity: sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    hasBin: true
+
   glob@7.1.6:
     resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
-    deprecated: Glob versions prior to v9 are no longer supported
-
-  glob@7.1.7:
-    resolution: {integrity: sha512-OvD9ENzPLbegENnYP5UUfJIirTg4+XwMWGaQfQTY0JenxNvvIKP3U3/tAQSPIu/lHxXYSZmpXlUHeqAIdKzBLQ==}
     deprecated: Glob versions prior to v9 are no longer supported
 
   glob@7.2.3:
@@ -9337,6 +9336,10 @@ packages:
 
   jackspeak@2.2.1:
     resolution: {integrity: sha512-MXbxovZ/Pm42f6cDIDkl3xpwv1AGwObKwfmjs2nQePiy85tP3fatofl3FC1aBsOtP/6fq5SbtgHwWcMsLP+bDw==}
+    engines: {node: '>=14'}
+
+  jackspeak@2.3.6:
+    resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
     engines: {node: '>=14'}
 
   jake@10.8.7:
@@ -10990,6 +10993,10 @@ packages:
     resolution: {integrity: sha512-tZFEaRQbMLjwrsmidsGJ6wDMv0iazJWk6SfIKnY4Xru8auXgmJkOBa5DUbYFcFD2Rzk2+KDlIiF0GVXNCbgC7g==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  path-scurry@1.11.1:
+    resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
+    engines: {node: '>=16 || 14 >=14.18'}
+
   path-temp@2.1.0:
     resolution: {integrity: sha512-cMMJTAZlion/RWRRC48UbrDymEIt+/YSD/l8NqjneyDw2rDOBQcP5yRkMB4CYGn47KMhZvbblBP7Z79OsMw72w==}
     engines: {node: '>=8.15'}
@@ -12306,10 +12313,6 @@ packages:
   safaridriver@0.1.2:
     resolution: {integrity: sha512-4R309+gWflJktzPXBQCobbWEHlzC4aK3a+Ov3tz2Ib2aBxiwd11phkdIBH1l0EO22x24CJMUQkpKFumRriCSRg==}
 
-  safe-array-concat@1.0.0:
-    resolution: {integrity: sha512-9dVEFruWIsnie89yym+xWTAYASdpw3CJV7Li/6zBewGf9z2i1j31rP6jnY0pHEO4QZh6N0K11bFjWmdR8UGdPQ==}
-    engines: {node: '>=0.4'}
-
   safe-array-concat@1.0.1:
     resolution: {integrity: sha512-6XbUAseYE2KtOuGueyeobCySj9L4+66Tn6KQMOPQJrAJEowYKW/YR/MGJZl7FdydUdaFu4LYyDZjxf4/Nmo23Q==}
     engines: {node: '>=0.4'}
@@ -13289,38 +13292,38 @@ packages:
     resolution: {integrity: sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==}
     engines: {node: '>=0.6.11 <=0.7.0 || >=0.7.3'}
 
-  turbo-darwin-64@1.13.3:
-    resolution: {integrity: sha512-glup8Qx1qEFB5jerAnXbS8WrL92OKyMmg5Hnd4PleLljAeYmx+cmmnsmLT7tpaVZIN58EAAwu8wHC6kIIqhbWA==}
+  turbo-darwin-64@2.0.4:
+    resolution: {integrity: sha512-x9mvmh4wudBstML8Z8IOmokLWglIhSfhQwnh2gBCSqabgVBKYvzl8Y+i+UCNPxheCGTgtsPepTcIaKBIyFIcvw==}
     cpu: [x64]
     os: [darwin]
 
-  turbo-darwin-arm64@1.13.3:
-    resolution: {integrity: sha512-/np2xD+f/+9qY8BVtuOQXRq5f9LehCFxamiQnwdqWm5iZmdjygC5T3uVSYuagVFsZKMvX3ycySwh8dylGTl6lg==}
+  turbo-darwin-arm64@2.0.4:
+    resolution: {integrity: sha512-/B1Ih8zPRGVw5vw4SlclOf3C/woJ/2T6ieH6u54KT4wypoaVyaiyMqBcziIXycdObIYr7jQ+raHO7q3mhay9/A==}
     cpu: [arm64]
     os: [darwin]
 
-  turbo-linux-64@1.13.3:
-    resolution: {integrity: sha512-G+HGrau54iAnbXLfl+N/PynqpDwi/uDzb6iM9hXEDG+yJnSJxaHMShhOkXYJPk9offm9prH33Khx2scXrYVW1g==}
+  turbo-linux-64@2.0.4:
+    resolution: {integrity: sha512-6aG670e5zOWu6RczEYcB81nEl8EhiGJEvWhUrnAfNEUIMBEH1pR5SsMmG2ol5/m3PgiRM12r13dSqTxCLcHrVg==}
     cpu: [x64]
     os: [linux]
 
-  turbo-linux-arm64@1.13.3:
-    resolution: {integrity: sha512-qWwEl5VR02NqRyl68/3pwp3c/olZuSp+vwlwrunuoNTm6JXGLG5pTeme4zoHNnk0qn4cCX7DFrOboArlYxv0wQ==}
+  turbo-linux-arm64@2.0.4:
+    resolution: {integrity: sha512-AXfVOjst+mCtPDFT4tCu08Qrfv12Nj7NDd33AjGwV79NYN1Y1rcFY59UQ4nO3ij3rbcvV71Xc+TZJ4csEvRCSg==}
     cpu: [arm64]
     os: [linux]
 
-  turbo-windows-64@1.13.3:
-    resolution: {integrity: sha512-Nudr4bRChfJzBPzEmpVV85VwUYRCGKecwkBFpbp2a4NtrJ3+UP1VZES653ckqCu2FRyRuS0n03v9euMbAvzH+Q==}
+  turbo-windows-64@2.0.4:
+    resolution: {integrity: sha512-QOnUR9hKl0T5gq5h1fAhVEqBSjpcBi/BbaO71YGQNgsr6pAnCQdbG8/r3MYXet53efM0KTdOhieWeO3KLNKybA==}
     cpu: [x64]
     os: [win32]
 
-  turbo-windows-arm64@1.13.3:
-    resolution: {integrity: sha512-ouJCgsVLd3icjRLmRvHQDDZnmGzT64GBupM1Y+TjtYn2LVaEBoV6hicFy8x5DUpnqdLy+YpCzRMkWlwhmkX7sQ==}
+  turbo-windows-arm64@2.0.4:
+    resolution: {integrity: sha512-3v8WpdZy1AxZw0gha0q3caZmm+0gveBQ40OspD6mxDBIS+oBtO5CkxhIXkFJJW+jDKmDlM7wXDIGfMEq+QyNCQ==}
     cpu: [arm64]
     os: [win32]
 
-  turbo@1.13.3:
-    resolution: {integrity: sha512-n17HJv4F4CpsYTvKzUJhLbyewbXjq1oLCi90i5tW1TiWDz16ML1eDG7wi5dHaKxzh5efIM56SITnuVbMq5dk4g==}
+  turbo@2.0.4:
+    resolution: {integrity: sha512-Ilme/2Q5kYw0AeRr+aw3s02+WrEYaY7U8vPnqSZU/jaDG/qd6jHVN6nRWyd/9KXvJGYM69vE6JImoGoyNjLwaw==}
     hasBin: true
 
   type-check@0.4.0:
@@ -14531,13 +14534,13 @@ snapshots:
 
   '@ardatan/relay-compiler@12.0.0(graphql@16.8.1)':
     dependencies:
-      '@babel/core': 7.22.5
-      '@babel/generator': 7.23.4
+      '@babel/core': 7.24.4
+      '@babel/generator': 7.24.4
       '@babel/parser': 7.24.7
       '@babel/runtime': 7.23.4
-      '@babel/traverse': 7.22.5
+      '@babel/traverse': 7.24.1
       '@babel/types': 7.24.6
-      babel-preset-fbjs: 3.4.0(@babel/core@7.22.5)
+      babel-preset-fbjs: 3.4.0(@babel/core@7.24.4)
       chalk: 4.1.2
       fb-watchman: 2.0.2
       fbjs: 3.0.5
@@ -14978,7 +14981,7 @@ snapshots:
     dependencies:
       '@babel/helper-function-name': 7.22.5
       '@babel/template': 7.22.5
-      '@babel/traverse': 7.22.5
+      '@babel/traverse': 7.24.1
       '@babel/types': 7.24.6
     transitivePeerDependencies:
       - supports-color
@@ -15039,7 +15042,7 @@ snapshots:
 
   '@babel/parser@7.23.9':
     dependencies:
-      '@babel/types': 7.23.4
+      '@babel/types': 7.24.6
 
   '@babel/parser@7.24.4':
     dependencies:
@@ -15149,15 +15152,6 @@ snapshots:
       '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
       '@babel/plugin-syntax-numeric-separator': 7.10.4(@babel/core@7.24.4)
-
-  '@babel/plugin-proposal-object-rest-spread@7.20.7(@babel/core@7.22.5)':
-    dependencies:
-      '@babel/compat-data': 7.22.5
-      '@babel/core': 7.22.5
-      '@babel/helper-compilation-targets': 7.22.5(@babel/core@7.22.5)
-      '@babel/helper-plugin-utils': 7.22.5
-      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.22.5)
-      '@babel/plugin-transform-parameters': 7.22.5(@babel/core@7.22.5)
 
   '@babel/plugin-proposal-object-rest-spread@7.20.7(@babel/core@7.24.4)':
     dependencies:
@@ -17385,7 +17379,7 @@ snapshots:
 
   '@fuels/vm-asm@0.54.0': {}
 
-  '@graphql-codegen/cli@2.13.7(@babel/core@7.22.5)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)':
+  '@graphql-codegen/cli@2.13.7(@babel/core@7.24.4)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)':
     dependencies:
       '@babel/generator': 7.23.4
       '@babel/template': 7.22.15
@@ -17393,9 +17387,9 @@ snapshots:
       '@graphql-codegen/core': 2.6.2(graphql@16.8.1)
       '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.8.1)
       '@graphql-tools/apollo-engine-loader': 7.3.26(graphql@16.8.1)
-      '@graphql-tools/code-file-loader': 7.3.23(@babel/core@7.22.5)(graphql@16.8.1)
-      '@graphql-tools/git-loader': 7.3.0(@babel/core@7.22.5)(graphql@16.8.1)
-      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.22.5)(@types/node@20.11.13)(graphql@16.8.1)
+      '@graphql-tools/code-file-loader': 7.3.23(@babel/core@7.24.4)(graphql@16.8.1)
+      '@graphql-tools/git-loader': 7.3.0(@babel/core@7.24.4)(graphql@16.8.1)
+      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.24.4)(@types/node@20.11.13)(graphql@16.8.1)
       '@graphql-tools/graphql-file-loader': 7.5.17(graphql@16.8.1)
       '@graphql-tools/json-file-loader': 7.4.18(graphql@16.8.1)
       '@graphql-tools/load': 7.8.14(graphql@16.8.1)
@@ -17472,14 +17466,14 @@ snapshots:
       graphql: 16.8.1
       tslib: 2.4.1
 
-  '@graphql-codegen/typescript-generic-sdk@3.1.0(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)':
+  '@graphql-codegen/typescript-generic-sdk@4.0.1(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 3.1.2(graphql@16.8.1)
       '@graphql-codegen/visitor-plugin-common': 2.13.1(graphql@16.8.1)
       auto-bind: 4.0.0
       graphql: 16.8.1
       graphql-tag: 2.12.6(graphql@16.8.1)
-      tslib: 2.4.1
+      tslib: 2.6.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -17560,9 +17554,9 @@ snapshots:
       tslib: 2.6.0
       value-or-promise: 1.0.12
 
-  '@graphql-tools/code-file-loader@7.3.23(@babel/core@7.22.5)(graphql@16.8.1)':
+  '@graphql-tools/code-file-loader@7.3.23(@babel/core@7.24.4)(graphql@16.8.1)':
     dependencies:
-      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.22.5)(graphql@16.8.1)
+      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.24.4)(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       globby: 11.1.0
       graphql: 16.8.1
@@ -17632,9 +17626,9 @@ snapshots:
       tslib: 2.6.0
       value-or-promise: 1.0.12
 
-  '@graphql-tools/git-loader@7.3.0(@babel/core@7.22.5)(graphql@16.8.1)':
+  '@graphql-tools/git-loader@7.3.0(@babel/core@7.24.4)(graphql@16.8.1)':
     dependencies:
-      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.22.5)(graphql@16.8.1)
+      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.24.4)(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       graphql: 16.8.1
       is-glob: 4.0.3
@@ -17645,11 +17639,11 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  '@graphql-tools/github-loader@7.3.28(@babel/core@7.22.5)(@types/node@20.11.13)(graphql@16.8.1)':
+  '@graphql-tools/github-loader@7.3.28(@babel/core@7.24.4)(@types/node@20.11.13)(graphql@16.8.1)':
     dependencies:
       '@ardatan/sync-fetch': 0.0.1
       '@graphql-tools/executor-http': 0.1.10(@types/node@20.11.13)(graphql@16.8.1)
-      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.22.5)(graphql@16.8.1)
+      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.24.4)(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       '@whatwg-node/fetch': 0.8.8
       graphql: 16.8.1
@@ -17670,10 +17664,10 @@ snapshots:
       tslib: 2.6.0
       unixify: 1.0.0
 
-  '@graphql-tools/graphql-tag-pluck@7.5.2(@babel/core@7.22.5)(graphql@16.8.1)':
+  '@graphql-tools/graphql-tag-pluck@7.5.2(@babel/core@7.24.4)(graphql@16.8.1)':
     dependencies:
       '@babel/parser': 7.24.7
-      '@babel/plugin-syntax-import-assertions': 7.22.5(@babel/core@7.22.5)
+      '@babel/plugin-syntax-import-assertions': 7.22.5(@babel/core@7.24.4)
       '@babel/traverse': 7.23.4
       '@babel/types': 7.23.9
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
@@ -18431,9 +18425,9 @@ snapshots:
 
   '@next/env@14.2.4': {}
 
-  '@next/eslint-plugin-next@14.0.1':
+  '@next/eslint-plugin-next@14.2.4':
     dependencies:
-      glob: 7.1.7
+      glob: 10.3.10
 
   '@next/swc-darwin-arm64@14.2.4':
     optional: true
@@ -18711,7 +18705,7 @@ snapshots:
   '@pkgr/utils@2.4.2':
     dependencies:
       cross-spawn: 7.0.3
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       is-glob: 4.0.3
       open: 9.1.0
       picocolors: 1.0.0
@@ -21376,7 +21370,7 @@ snapshots:
 
   archiver-utils@5.0.2:
     dependencies:
-      glob: 10.2.6
+      glob: 10.3.10
       graceful-fs: 4.2.11
       is-stream: 2.0.1
       lazystream: 1.0.1
@@ -21414,7 +21408,7 @@ snapshots:
 
   aria-query@4.2.2:
     dependencies:
-      '@babel/runtime': 7.22.5
+      '@babel/runtime': 7.23.4
       '@babel/runtime-corejs3': 7.22.5
 
   aria-query@5.1.3:
@@ -21429,7 +21423,7 @@ snapshots:
 
   array-buffer-byte-length@1.0.0:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       is-array-buffer: 3.0.2
 
   array-flatten@1.1.1: {}
@@ -21496,9 +21490,9 @@ snapshots:
 
   array.prototype.reduce@1.0.5:
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
       es-array-method-boxes-properly: 1.0.0
       is-string: 1.0.7
 
@@ -21514,7 +21508,7 @@ snapshots:
     dependencies:
       array-buffer-byte-length: 1.0.0
       call-bind: 1.0.5
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.3
       get-intrinsic: 1.2.2
       is-array-buffer: 3.0.2
@@ -21677,7 +21671,7 @@ snapshots:
 
   babel-plugin-macros@3.1.0:
     dependencies:
-      '@babel/runtime': 7.22.5
+      '@babel/runtime': 7.23.4
       cosmiconfig: 7.1.0
       resolve: 1.22.8
 
@@ -21775,35 +21769,35 @@ snapshots:
       '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.24.4)
       '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.24.4)
 
-  babel-preset-fbjs@3.4.0(@babel/core@7.22.5):
+  babel-preset-fbjs@3.4.0(@babel/core@7.24.4):
     dependencies:
-      '@babel/core': 7.22.5
-      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.22.5)
-      '@babel/plugin-proposal-object-rest-spread': 7.20.7(@babel/core@7.22.5)
-      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.22.5)
-      '@babel/plugin-syntax-flow': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-syntax-jsx': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.22.5)
-      '@babel/plugin-transform-arrow-functions': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-block-scoped-functions': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-block-scoping': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-classes': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-computed-properties': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-destructuring': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-flow-strip-types': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-for-of': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-function-name': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-literals': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-member-expression-literals': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-modules-commonjs': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-object-super': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-parameters': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-property-literals': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-react-display-name': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-react-jsx': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-shorthand-properties': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-spread': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-template-literals': 7.22.5(@babel/core@7.22.5)
+      '@babel/core': 7.24.4
+      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.24.4)
+      '@babel/plugin-proposal-object-rest-spread': 7.20.7(@babel/core@7.24.4)
+      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.24.4)
+      '@babel/plugin-syntax-flow': 7.24.6(@babel/core@7.24.4)
+      '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-transform-arrow-functions': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-block-scoped-functions': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-block-scoping': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-classes': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-computed-properties': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-destructuring': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-flow-strip-types': 7.24.6(@babel/core@7.24.4)
+      '@babel/plugin-transform-for-of': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-function-name': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-literals': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-member-expression-literals': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-modules-commonjs': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-object-super': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-parameters': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-property-literals': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-react-display-name': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.4)
+      '@babel/plugin-transform-shorthand-properties': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-spread': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-template-literals': 7.22.5(@babel/core@7.24.4)
       babel-plugin-syntax-trailing-function-commas: 7.0.0-beta.0
     transitivePeerDependencies:
       - supports-color
@@ -22881,9 +22875,9 @@ snapshots:
   deep-equal@2.2.1:
     dependencies:
       array-buffer-byte-length: 1.0.0
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       es-get-iterator: 1.1.3
-      get-intrinsic: 1.2.1
+      get-intrinsic: 1.2.2
       is-arguments: 1.1.1
       is-array-buffer: 3.0.2
       is-date-object: 1.0.5
@@ -22893,7 +22887,7 @@ snapshots:
       object-is: 1.1.5
       object-keys: 1.1.1
       object.assign: 4.1.4
-      regexp.prototype.flags: 1.5.0
+      regexp.prototype.flags: 1.5.1
       side-channel: 1.0.4
       which-boxed-primitive: 1.0.2
       which-collection: 1.0.1
@@ -22935,7 +22929,7 @@ snapshots:
 
   define-data-property@1.1.1:
     dependencies:
-      get-intrinsic: 1.2.1
+      get-intrinsic: 1.2.2
       gopd: 1.0.1
       has-property-descriptors: 1.0.0
 
@@ -23313,8 +23307,8 @@ snapshots:
 
   es-get-iterator@1.1.3:
     dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.2.1
+      call-bind: 1.0.5
+      get-intrinsic: 1.2.2
       has-symbols: 1.0.3
       is-arguments: 1.1.1
       is-map: 2.0.2
@@ -23523,9 +23517,9 @@ snapshots:
       eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.29.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
 
-  eslint-config-next@14.0.1(eslint@8.54.0)(typescript@5.2.2):
+  eslint-config-next@14.2.4(eslint@8.54.0)(typescript@5.2.2):
     dependencies:
-      '@next/eslint-plugin-next': 14.0.1
+      '@next/eslint-plugin-next': 14.2.4
       '@rushstack/eslint-patch': 1.6.1
       '@typescript-eslint/parser': 6.9.1(eslint@8.54.0)(typescript@5.2.2)
       eslint: 8.54.0
@@ -23572,14 +23566,6 @@ snapshots:
       - jest
       - supports-color
 
-  eslint-import-resolver-node@0.3.7:
-    dependencies:
-      debug: 3.2.7
-      is-core-module: 2.12.1
-      resolve: 1.22.8
-    transitivePeerDependencies:
-      - supports-color
-
   eslint-import-resolver-node@0.3.9:
     dependencies:
       debug: 3.2.7
@@ -23595,7 +23581,7 @@ snapshots:
       eslint: 8.54.0
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.9.1(eslint@8.54.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.54.0)(typescript@5.2.2))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.0)(eslint@8.54.0))(eslint@8.54.0)
       eslint-plugin-import: 2.29.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint@8.54.0)
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       get-tsconfig: 4.7.2
       is-core-module: 2.13.1
       is-glob: 4.0.3
@@ -23605,13 +23591,13 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@5.59.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.7)(eslint@8.57.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@5.59.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 5.59.0(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
-      eslint-import-resolver-node: 0.3.7
+      eslint-import-resolver-node: 0.3.9
     transitivePeerDependencies:
       - supports-color
 
@@ -23667,8 +23653,8 @@ snapshots:
       debug: 2.6.9
       doctrine: 2.1.0
       eslint: 8.57.0
-      eslint-import-resolver-node: 0.3.7
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.59.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.7)(eslint@8.57.0)
+      eslint-import-resolver-node: 0.3.9
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@5.59.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint@8.57.0)
       has: 1.0.3
       is-core-module: 2.12.1
       is-glob: 4.0.3
@@ -23802,10 +23788,10 @@ snapshots:
 
   eslint-plugin-jsx-a11y@6.7.1(eslint@8.57.0):
     dependencies:
-      '@babel/runtime': 7.22.5
+      '@babel/runtime': 7.23.4
       aria-query: 5.3.0
-      array-includes: 3.1.6
-      array.prototype.flatmap: 1.3.1
+      array-includes: 3.1.7
+      array.prototype.flatmap: 1.3.2
       ast-types-flow: 0.0.7
       axe-core: 4.7.2
       axobject-query: 3.2.1
@@ -23817,8 +23803,8 @@ snapshots:
       language-tags: 1.0.5
       minimatch: 3.1.2
       object.entries: 1.1.6
-      object.fromentries: 2.0.6
-      semver: 6.3.0
+      object.fromentries: 2.0.7
+      semver: 6.3.1
 
   eslint-plugin-prettier@5.0.1(@types/eslint@8.40.2)(eslint-config-prettier@9.0.0(eslint@8.57.0))(eslint@8.57.0)(prettier@3.3.2):
     dependencies:
@@ -23862,8 +23848,8 @@ snapshots:
 
   eslint-plugin-react@7.33.2(eslint@8.54.0):
     dependencies:
-      array-includes: 3.1.6
-      array.prototype.flatmap: 1.3.1
+      array-includes: 3.1.7
+      array.prototype.flatmap: 1.3.2
       array.prototype.tosorted: 1.1.2
       doctrine: 2.1.0
       es-iterator-helpers: 1.0.15
@@ -23872,9 +23858,9 @@ snapshots:
       jsx-ast-utils: 3.3.3
       minimatch: 3.1.2
       object.entries: 1.1.6
-      object.fromentries: 2.0.6
+      object.fromentries: 2.0.7
       object.hasown: 1.1.2
-      object.values: 1.1.6
+      object.values: 1.1.7
       prop-types: 15.8.1
       resolve: 2.0.0-next.4
       semver: 6.3.1
@@ -24561,15 +24547,15 @@ snapshots:
 
   function.prototype.name@1.1.5:
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
       functions-have-names: 1.2.3
 
   function.prototype.name@1.1.6:
     dependencies:
       call-bind: 1.0.5
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.3
       functions-have-names: 1.2.3
 
@@ -24641,8 +24627,8 @@ snapshots:
 
   get-symbol-description@1.0.0:
     dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.2.1
+      call-bind: 1.0.5
+      get-intrinsic: 1.2.2
 
   get-tsconfig@4.7.2:
     dependencies:
@@ -24679,16 +24665,15 @@ snapshots:
       minipass: 6.0.2
       path-scurry: 1.10.0
 
-  glob@7.1.6:
+  glob@10.3.10:
     dependencies:
-      fs.realpath: 1.0.0
-      inflight: 1.0.6
-      inherits: 2.0.4
-      minimatch: 3.1.2
-      once: 1.4.0
-      path-is-absolute: 1.0.1
+      foreground-child: 3.1.1
+      jackspeak: 2.3.6
+      minimatch: 9.0.3
+      minipass: 7.0.4
+      path-scurry: 1.11.1
 
-  glob@7.1.7:
+  glob@7.1.6:
     dependencies:
       fs.realpath: 1.0.0
       inflight: 1.0.6
@@ -24741,7 +24726,7 @@ snapshots:
 
   gopd@1.0.1:
     dependencies:
-      get-intrinsic: 1.2.1
+      get-intrinsic: 1.2.2
 
   got@12.6.1:
     dependencies:
@@ -25240,13 +25225,13 @@ snapshots:
 
   is-arguments@1.1.1:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-tostringtag: 1.0.0
 
   is-array-buffer@3.0.2:
     dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.2.1
+      call-bind: 1.0.5
+      get-intrinsic: 1.2.2
       is-typed-array: 1.1.10
 
   is-arrayish@0.2.1: {}
@@ -25265,7 +25250,7 @@ snapshots:
 
   is-boolean-object@1.1.2:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-tostringtag: 1.0.0
 
   is-buffer@1.1.6: {}
@@ -25304,7 +25289,7 @@ snapshots:
 
   is-finalizationregistry@1.0.2:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
 
   is-fullwidth-code-point@2.0.0: {}
 
@@ -25373,7 +25358,7 @@ snapshots:
 
   is-regex@1.1.4:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-tostringtag: 1.0.0
 
   is-regexp@1.0.0: {}
@@ -25388,7 +25373,7 @@ snapshots:
 
   is-shared-array-buffer@1.0.2:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
 
   is-stream@2.0.1: {}
 
@@ -25409,7 +25394,7 @@ snapshots:
   is-typed-array@1.1.10:
     dependencies:
       available-typed-arrays: 1.0.5
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       for-each: 0.3.3
       gopd: 1.0.1
       has-tostringtag: 1.0.0
@@ -25436,12 +25421,12 @@ snapshots:
 
   is-weakref@1.0.2:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
 
   is-weakset@2.0.2:
     dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.2.1
+      call-bind: 1.0.5
+      get-intrinsic: 1.2.2
 
   is-windows@1.0.2: {}
 
@@ -25583,6 +25568,12 @@ snapshots:
       set-function-name: 2.0.1
 
   jackspeak@2.2.1:
+    dependencies:
+      '@isaacs/cliui': 8.0.2
+    optionalDependencies:
+      '@pkgjs/parseargs': 0.11.0
+
+  jackspeak@2.3.6:
     dependencies:
       '@isaacs/cliui': 8.0.2
     optionalDependencies:
@@ -27512,8 +27503,8 @@ snapshots:
 
   object-is@1.1.5:
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.2.0
+      call-bind: 1.0.5
+      define-properties: 1.2.1
 
   object-keys@1.1.1: {}
 
@@ -27549,10 +27540,10 @@ snapshots:
   object.getownpropertydescriptors@2.1.6:
     dependencies:
       array.prototype.reduce: 1.0.5
-      call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
-      safe-array-concat: 1.0.0
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
+      safe-array-concat: 1.0.1
 
   object.groupby@1.0.1:
     dependencies:
@@ -27865,6 +27856,11 @@ snapshots:
     dependencies:
       lru-cache: 10.0.0
       minipass: 6.0.2
+
+  path-scurry@1.11.1:
+    dependencies:
+      lru-cache: 10.2.0
+      minipass: 7.0.4
 
   path-temp@2.1.0:
     dependencies:
@@ -29128,10 +29124,10 @@ snapshots:
 
   reflect.getprototypeof@1.0.4:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       define-properties: 1.2.1
       es-abstract: 1.22.3
-      get-intrinsic: 1.2.1
+      get-intrinsic: 1.2.2
       globalthis: 1.0.3
       which-builtin-type: 1.1.3
 
@@ -29160,7 +29156,7 @@ snapshots:
   regexp.prototype.flags@1.5.1:
     dependencies:
       call-bind: 1.0.5
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       set-function-name: 2.0.1
 
   regexpu-core@5.3.2:
@@ -29278,7 +29274,7 @@ snapshots:
 
   resolve@1.19.0:
     dependencies:
-      is-core-module: 2.12.1
+      is-core-module: 2.13.1
       path-parse: 1.0.7
 
   resolve@1.22.2:
@@ -29295,7 +29291,7 @@ snapshots:
 
   resolve@2.0.0-next.4:
     dependencies:
-      is-core-module: 2.12.1
+      is-core-module: 2.13.1
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
@@ -29406,13 +29402,6 @@ snapshots:
 
   safaridriver@0.1.2: {}
 
-  safe-array-concat@1.0.0:
-    dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.2.1
-      has-symbols: 1.0.3
-      isarray: 2.0.5
-
   safe-array-concat@1.0.1:
     dependencies:
       call-bind: 1.0.5
@@ -29426,8 +29415,8 @@ snapshots:
 
   safe-regex-test@1.0.0:
     dependencies:
-      call-bind: 1.0.2
-      get-intrinsic: 1.2.1
+      call-bind: 1.0.5
+      get-intrinsic: 1.2.2
       is-regex: 1.1.4
 
   safe-stable-stringify@2.4.3: {}
@@ -29955,38 +29944,38 @@ snapshots:
 
   string.prototype.trim@1.2.7:
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
 
   string.prototype.trim@1.2.8:
     dependencies:
       call-bind: 1.0.5
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.3
 
   string.prototype.trimend@1.0.6:
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
 
   string.prototype.trimend@1.0.7:
     dependencies:
       call-bind: 1.0.5
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.3
 
   string.prototype.trimstart@1.0.6:
     dependencies:
-      call-bind: 1.0.2
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      call-bind: 1.0.5
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
 
   string.prototype.trimstart@1.0.7:
     dependencies:
       call-bind: 1.0.5
-      define-properties: 1.2.0
+      define-properties: 1.2.1
       es-abstract: 1.22.3
 
   string_decoder@1.1.1:
@@ -30120,7 +30109,7 @@ snapshots:
       csso: 4.2.0
       js-yaml: 3.14.1
       mkdirp: 0.5.6
-      object.values: 1.1.6
+      object.values: 1.1.7
       sax: 1.2.4
       stable: 0.1.8
       unquote: 1.1.1
@@ -30659,32 +30648,32 @@ snapshots:
 
   tunnel@0.0.6: {}
 
-  turbo-darwin-64@1.13.3:
+  turbo-darwin-64@2.0.4:
     optional: true
 
-  turbo-darwin-arm64@1.13.3:
+  turbo-darwin-arm64@2.0.4:
     optional: true
 
-  turbo-linux-64@1.13.3:
+  turbo-linux-64@2.0.4:
     optional: true
 
-  turbo-linux-arm64@1.13.3:
+  turbo-linux-arm64@2.0.4:
     optional: true
 
-  turbo-windows-64@1.13.3:
+  turbo-windows-64@2.0.4:
     optional: true
 
-  turbo-windows-arm64@1.13.3:
+  turbo-windows-arm64@2.0.4:
     optional: true
 
-  turbo@1.13.3:
+  turbo@2.0.4:
     optionalDependencies:
-      turbo-darwin-64: 1.13.3
-      turbo-darwin-arm64: 1.13.3
-      turbo-linux-64: 1.13.3
-      turbo-linux-arm64: 1.13.3
-      turbo-windows-64: 1.13.3
-      turbo-windows-arm64: 1.13.3
+      turbo-darwin-64: 2.0.4
+      turbo-darwin-arm64: 2.0.4
+      turbo-linux-64: 2.0.4
+      turbo-linux-arm64: 2.0.4
+      turbo-windows-64: 2.0.4
+      turbo-windows-arm64: 2.0.4
 
   type-check@0.4.0:
     dependencies:
@@ -30742,7 +30731,7 @@ snapshots:
 
   typed-array-length@1.0.4:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       for-each: 0.3.3
       is-typed-array: 1.1.10
 
@@ -30792,7 +30781,7 @@ snapshots:
 
   unbox-primitive@1.0.2:
     dependencies:
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
@@ -31005,8 +30994,8 @@ snapshots:
 
   util.promisify@1.0.1:
     dependencies:
-      define-properties: 1.2.0
-      es-abstract: 1.21.2
+      define-properties: 1.2.1
+      es-abstract: 1.22.3
       has-symbols: 1.0.3
       object.getownpropertydescriptors: 2.1.6
 
@@ -31627,7 +31616,7 @@ snapshots:
 
   which-builtin-type@1.1.3:
     dependencies:
-      function.prototype.name: 1.1.5
+      function.prototype.name: 1.1.6
       has-tostringtag: 1.0.0
       is-async-function: 2.0.0
       is-date-object: 1.0.5
@@ -31638,7 +31627,7 @@ snapshots:
       isarray: 2.0.5
       which-boxed-primitive: 1.0.2
       which-collection: 1.0.1
-      which-typed-array: 1.1.9
+      which-typed-array: 1.1.13
 
   which-collection@1.0.1:
     dependencies:
@@ -31665,7 +31654,7 @@ snapshots:
   which-typed-array@1.1.9:
     dependencies:
       available-typed-arrays: 1.0.5
-      call-bind: 1.0.2
+      call-bind: 1.0.5
       for-each: 0.3.3
       gopd: 1.0.1
       has-tostringtag: 1.0.0
