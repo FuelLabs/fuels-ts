@@ -3,7 +3,6 @@ import { Wallet } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
-import { mockLogger } from '../../../../test/utils/mockLogger';
 import type { DeployedContract } from '../../types';
 
 import { deploy } from '.';
