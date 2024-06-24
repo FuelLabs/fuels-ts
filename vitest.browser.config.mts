@@ -20,6 +20,9 @@ const config: UserConfig = {
         "timers/promises",
         "util",
         "stream",
+        "path",
+        "fs",
+        "os",
       ],
       overrides: {
         fs: "memfs",
@@ -31,6 +34,10 @@ const config: UserConfig = {
     include: ["events", "timers/promises"],
   },
   test: {
+    env: {
+      LAUNCH_NODE_SERVER_PORT: "49342",
+    },
+    globalSetup: ["./vitest.global-browser-setup.ts"],
     coverage: {
       reportsDirectory: "coverage/environments/browser",
     },
