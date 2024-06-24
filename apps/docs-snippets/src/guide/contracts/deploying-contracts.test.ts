@@ -53,4 +53,29 @@ describe(__filename, () => {
     expect(value).toBe(15);
     // #endregion contract-setup-4
   });
+
+  it('should successfully deploy a contract async and execute contract function', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+
+    const byteCodePath = join(projectsPath, `${contractName}/out/release/${contractName}.bin`);
+    const byteCode = readFileSync(byteCodePath);
+
+    const abiJsonPath = join(projectsPath, `${contractName}/out/release/${contractName}-abi.json`);
+    const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
+
+    // #region contract-async-1
+    const factory = new ContractFactory(byteCode, abi, wallet);
+
+    const { contract, transactionResponse } = await factory.deployContractAsync();
+
+    const deployResult = await transactionResponse.waitForResult();
+    // #endregion contract-async-1
+
+    const { value } = await contract.functions.echo_u8(15).simulate();
+
+    expect(deployResult).toBeDefined();
+    expect(value).toBe(15);
+  });
 });
