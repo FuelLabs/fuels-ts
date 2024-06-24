@@ -202,4 +202,12 @@ export default class ContractFactory {
       );
     }
   }
+
+  private getAccount(): Account {
+    if (!this.account) {
+      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
+    }
+    return this.account;
+  }
+
 }
