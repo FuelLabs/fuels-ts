@@ -186,8 +186,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2(fuels@packages+fuels)
       '@fuels/react':
-        specifier: ^0.18.1
-        version: 0.18.1(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^0.20.0
+        version: 0.20.0(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^5.29.2
         version: 5.29.2(react@18.2.0)
@@ -416,8 +416,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2(fuels@packages+fuels)
       '@fuels/react':
-        specifier: ^0.18.1
-        version: 0.18.1(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^0.20.0
+        version: 0.20.0(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^5.29.2
         version: 5.29.2(react@18.2.0)
@@ -475,8 +475,8 @@ importers:
         specifier: ^12.2.3
         version: 12.2.3
       '@vue/devtools-api':
-        specifier: ^6.6.2
-        version: 6.6.2
+        specifier: ^6.6.3
+        version: 6.6.3
       flexsearch:
         specifier: ^0.7.43
         version: 0.7.43
@@ -3338,13 +3338,6 @@ packages:
     peerDependencies:
       fuels: '>=0.88.1'
 
-  '@fuels/react@0.18.1':
-    resolution: {integrity: sha512-Hduy5GcHcY7I112JjPOVYu/4xGMKuMNqD/YO0c2D401RAA9nlh6G14yMFNZ3G/LJx4gJ/Ayx7rlVRh1z43cP/A==}
-    peerDependencies:
-      '@tanstack/react-query': '>=5.0.0'
-      fuels: '>=0.74.0'
-      react: ^18.2.0
-
   '@fuels/react@0.20.0':
     resolution: {integrity: sha512-oAjHUegWY6qiOQA2xMN1qz9HmNfhccL2dZdaD/fGe6LEqzCwmtJE5z5MLy6IussB+u9AaOulJouqv9bgcbY6/A==}
     peerDependencies:
@@ -5551,8 +5544,8 @@ packages:
   '@vue/compiler-ssr@3.4.29':
     resolution: {integrity: sha512-rFbwCmxJ16tDp3N8XCx5xSQzjhidYjXllvEcqX/lopkoznlNPz3jyy0WGJCyhAaVQK677WWFt3YO/WUEkMMUFQ==}
 
-  '@vue/devtools-api@6.6.2':
-    resolution: {integrity: sha512-134clD8u7cBBXdmBbXI282gHGF7T/eAbD/G7mAK2llQF62IbI4ny28IVamZVMoJSvfImC2Xxnj732hXkJvUj6g==}
+  '@vue/devtools-api@6.6.3':
+    resolution: {integrity: sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==}
 
   '@vue/devtools-api@7.2.1':
     resolution: {integrity: sha512-6oNCtyFOrNdqm6GUkFujsCgFlpbsHLnZqq7edeM/+cxAbMyCWvsaCsIMUaz7AiluKLccCGEM8fhOsjaKgBvb7g==}
@@ -17325,18 +17318,6 @@ snapshots:
       - vue
       - zod
 
-  '@fuels/react@0.18.1(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
-    dependencies:
-      '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.4)(@types/react@18.2.9)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@tanstack/react-query': 5.29.2(react@18.2.0)
-      events: 3.3.0
-      fuels: link:packages/fuels
-      react: 18.2.0
-    transitivePeerDependencies:
-      - '@types/react'
-      - '@types/react-dom'
-      - react-dom
-
   '@fuels/react@0.20.0(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.4)(@types/react@18.2.9)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -20453,7 +20434,7 @@ snapshots:
       '@vue/compiler-dom': 3.4.29
       '@vue/shared': 3.4.29
 
-  '@vue/devtools-api@6.6.2': {}
+  '@vue/devtools-api@6.6.3': {}
 
   '@vue/devtools-api@7.2.1(vue@3.4.29(typescript@5.4.5))':
     dependencies:
