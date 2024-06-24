@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "apps/docs/**"
+      - "apps/docs-snippets/**"
 
 permissions:
   contents: read
