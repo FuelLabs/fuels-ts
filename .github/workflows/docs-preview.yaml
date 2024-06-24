@@ -1,6 +1,7 @@
 name: Docs Preview on PR
 
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - "apps/docs/**"
