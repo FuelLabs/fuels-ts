@@ -12,4 +12,6 @@ elif [[ $* == *--browser* ]]; then
   grep -lE "@group\s+browser" $FILES
 elif [[ $* == *--e2e* ]]; then
   grep -lE "@group\s+e2e" $FILES
+elif [[ $* == *--integration* ]]; then
+  grep -lE "@group\s+integration" $FILES
 fi
