@@ -475,8 +475,8 @@ importers:
         specifier: ^14.1.1
         version: 14.1.1
       '@vue/devtools-api':
-        specifier: ^6.6.2
-        version: 6.6.2
+        specifier: ^6.6.3
+        version: 6.6.3
       flexsearch:
         specifier: ^0.7.31
         version: 0.7.31
@@ -5545,8 +5545,8 @@ packages:
   '@vue/compiler-ssr@3.4.29':
     resolution: {integrity: sha512-rFbwCmxJ16tDp3N8XCx5xSQzjhidYjXllvEcqX/lopkoznlNPz3jyy0WGJCyhAaVQK677WWFt3YO/WUEkMMUFQ==}
 
-  '@vue/devtools-api@6.6.2':
-    resolution: {integrity: sha512-134clD8u7cBBXdmBbXI282gHGF7T/eAbD/G7mAK2llQF62IbI4ny28IVamZVMoJSvfImC2Xxnj732hXkJvUj6g==}
+  '@vue/devtools-api@6.6.3':
+    resolution: {integrity: sha512-0MiMsFma/HqA6g3KLKn+AGpL1kgKhFWszC9U29NfpWK5LE7bjeXxySWJrOJ77hBz+TBrBQ7o4QJqbPbqbs8rJw==}
 
   '@vue/devtools-api@7.2.1':
     resolution: {integrity: sha512-6oNCtyFOrNdqm6GUkFujsCgFlpbsHLnZqq7edeM/+cxAbMyCWvsaCsIMUaz7AiluKLccCGEM8fhOsjaKgBvb7g==}
@@ -20460,7 +20460,7 @@ snapshots:
       '@vue/compiler-dom': 3.4.29
       '@vue/shared': 3.4.29
 
-  '@vue/devtools-api@6.6.2': {}
+  '@vue/devtools-api@6.6.3': {}
 
   '@vue/devtools-api@7.2.1(vue@3.4.29(typescript@5.4.5))':
     dependencies:
