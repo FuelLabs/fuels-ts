@@ -132,39 +132,16 @@ export default class ContractFactory {
    * @returns A promise that resolves to the deployed contract instance.
    */
   async deployContract(deployContractOptions: DeployContractOptions = {}) {
-    if (!this.account) {
-      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
-    }
+    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
+    const account = this.getAccount();
 
-    const { configurableConstants } = deployContractOptions;
-
-    if (configurableConstants) {
-      this.setConfigurableConstants(configurableConstants);
-    }
-
-    const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
-
-    const txCost = await this.account.provider.getTransactionCost(transactionRequest);
-
-    const { maxFee: setMaxFee } = deployContractOptions;
-
-    if (isDefined(setMaxFee)) {
-      if (txCost.maxFee.gt(setMaxFee)) {
-        throw new FuelError(
-          ErrorCode.MAX_FEE_TOO_LOW,
-          `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
-        );
-      }
-    } else {
-      transactionRequest.maxFee = txCost.maxFee;
-    }
-
-    await this.account.fund(transactionRequest, txCost);
-    await this.account.sendTransaction(transactionRequest, {
+    await account.sendTransaction(transactionRequest, {
       awaitExecution: true,
     });
 
-    return new Contract(contractId, this.interface, this.account);
+    return new Contract(contractId, this.interface, account);
+  }
+
   }
 
   /**
