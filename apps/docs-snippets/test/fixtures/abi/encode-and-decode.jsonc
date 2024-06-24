@@ -6,8 +6,8 @@
       "typeId": 0,
       "type": "u32",
       "components": null,
-      "typeParameters": null
-    }
+      "typeParameters": null,
+    },
   ],
   "functions": [
     {
@@ -15,17 +15,17 @@
         {
           "name": "inputted_amount",
           "type": 0,
-          "typeArguments": null
-        }
+          "typeArguments": null,
+        },
       ],
       "name": "main",
       "output": {
         "name": "",
         "type": 0,
-        "typeArguments": null
+        "typeArguments": null,
       },
-      "attributes": null
-    }
+      "attributes": null,
+    },
   ],
   "loggedTypes": [],
   "messagesTypes": [],
@@ -35,7 +35,7 @@
       "configurableType": {
         "name": "",
         "type": 0,
-        "typeArguments": null
+        "typeArguments": null,
       },
       "offset": 736
     }
