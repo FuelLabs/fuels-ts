@@ -186,8 +186,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2(fuels@packages+fuels)
       '@fuels/react':
-        specifier: ^0.18.1
-        version: 0.18.1(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^0.20.0
+        version: 0.20.0(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^5.29.2
         version: 5.29.2(react@18.2.0)
@@ -416,8 +416,8 @@ importers:
         specifier: ^0.2.2
         version: 0.2.2(fuels@packages+fuels)
       '@fuels/react':
-        specifier: ^0.18.1
-        version: 0.18.1(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^0.20.0
+        version: 0.20.0(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@tanstack/react-query':
         specifier: ^5.29.2
         version: 5.29.2(react@18.2.0)
@@ -3337,13 +3337,6 @@ packages:
     resolution: {integrity: sha512-lwafZPzWO9dxOcUXYYrQPaOMRtmrmyn0SEb0RYwk/B5f8WeOKfiTL5yxP7QXaTYPNAyb1qW0Gx9Dykn517XxqA==}
     peerDependencies:
       fuels: '>=0.88.1'
-
-  '@fuels/react@0.18.1':
-    resolution: {integrity: sha512-Hduy5GcHcY7I112JjPOVYu/4xGMKuMNqD/YO0c2D401RAA9nlh6G14yMFNZ3G/LJx4gJ/Ayx7rlVRh1z43cP/A==}
-    peerDependencies:
-      '@tanstack/react-query': '>=5.0.0'
-      fuels: '>=0.74.0'
-      react: ^18.2.0
 
   '@fuels/react@0.20.0':
     resolution: {integrity: sha512-oAjHUegWY6qiOQA2xMN1qz9HmNfhccL2dZdaD/fGe6LEqzCwmtJE5z5MLy6IussB+u9AaOulJouqv9bgcbY6/A==}
@@ -17324,18 +17317,6 @@ snapshots:
       - utf-8-validate
       - vue
       - zod
-
-  '@fuels/react@0.18.1(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
-    dependencies:
-      '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.4)(@types/react@18.2.9)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      '@tanstack/react-query': 5.29.2(react@18.2.0)
-      events: 3.3.0
-      fuels: link:packages/fuels
-      react: 18.2.0
-    transitivePeerDependencies:
-      - '@types/react'
-      - '@types/react-dom'
-      - react-dom
 
   '@fuels/react@0.20.0(@tanstack/react-query@5.29.2(react@18.2.0))(@types/react-dom@18.2.4)(@types/react@18.2.9)(fuels@packages+fuels)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
