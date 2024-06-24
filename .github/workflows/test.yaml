@@ -68,7 +68,7 @@ jobs:
         if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: ${{ github.ref }}
+          ref: 'refs/heads/master'
           check-name: "Release"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
