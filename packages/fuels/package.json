@@ -68,7 +68,7 @@
     "bundle-require": "^5.0.0",
     "chalk": "4",
     "chokidar": "^3.5.3",
-    "commander": "^9.4.1",
+    "commander": "^12.1.0",
     "esbuild": "^0.19.3",
     "glob": "^10.2.6",
     "handlebars": "^4.7.8",
