@@ -734,13 +734,13 @@ importers:
     devDependencies:
       '@graphql-codegen/cli':
         specifier: ^2.13.7
-        version: 2.13.7(@babel/core@7.22.5)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)
+        version: 2.13.7(@babel/core@7.24.4)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)
       '@graphql-codegen/typescript':
         specifier: ^2.8.0
         version: 2.8.0(graphql@16.8.1)
       '@graphql-codegen/typescript-generic-sdk':
-        specifier: ^3.1.0
-        version: 3.1.0(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)
+        specifier: ^4.0.1
+        version: 4.0.1(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)
       '@graphql-codegen/typescript-operations':
         specifier: ^2.5.5
         version: 2.5.5(graphql@16.8.1)
@@ -3243,8 +3243,9 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
-  '@graphql-codegen/typescript-generic-sdk@3.1.0':
-    resolution: {integrity: sha512-nQZi/YGRI1+qCZZsh0V5nz6+hCHSN4OU9tKyOTDsEPyDFnGEukDuRdCH2IZasGn22a3Iu5TUDkgp5w9wEQwGmg==}
+  '@graphql-codegen/typescript-generic-sdk@4.0.1':
+    resolution: {integrity: sha512-DBezPLnzeWnD28EOj6KhNpG463bh7PvkoRf2om4qeLPiaPKwril+xX5o4pxVbUzlYMwfYK9IJ2GrfU6c2mwJTA==}
+    engines: {node: '>= 16.0.0'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
       graphql-tag: ^2.0.0
@@ -14355,13 +14356,13 @@ snapshots:
 
   '@ardatan/relay-compiler@12.0.0(graphql@16.8.1)':
     dependencies:
-      '@babel/core': 7.22.5
-      '@babel/generator': 7.23.4
+      '@babel/core': 7.24.4
+      '@babel/generator': 7.24.4
       '@babel/parser': 7.24.7
       '@babel/runtime': 7.23.4
-      '@babel/traverse': 7.22.5
+      '@babel/traverse': 7.24.1
       '@babel/types': 7.24.6
-      babel-preset-fbjs: 3.4.0(@babel/core@7.22.5)
+      babel-preset-fbjs: 3.4.0(@babel/core@7.24.4)
       chalk: 4.1.2
       fb-watchman: 2.0.2
       fbjs: 3.0.5
@@ -14802,7 +14803,7 @@ snapshots:
     dependencies:
       '@babel/helper-function-name': 7.22.5
       '@babel/template': 7.22.5
-      '@babel/traverse': 7.22.5
+      '@babel/traverse': 7.24.1
       '@babel/types': 7.24.6
     transitivePeerDependencies:
       - supports-color
@@ -14863,7 +14864,7 @@ snapshots:
 
   '@babel/parser@7.23.9':
     dependencies:
-      '@babel/types': 7.23.4
+      '@babel/types': 7.24.6
 
   '@babel/parser@7.24.4':
     dependencies:
@@ -14973,15 +14974,6 @@ snapshots:
       '@babel/core': 7.24.4
       '@babel/helper-plugin-utils': 7.22.5
       '@babel/plugin-syntax-numeric-separator': 7.10.4(@babel/core@7.24.4)
-
-  '@babel/plugin-proposal-object-rest-spread@7.20.7(@babel/core@7.22.5)':
-    dependencies:
-      '@babel/compat-data': 7.22.5
-      '@babel/core': 7.22.5
-      '@babel/helper-compilation-targets': 7.22.5(@babel/core@7.22.5)
-      '@babel/helper-plugin-utils': 7.22.5
-      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.22.5)
-      '@babel/plugin-transform-parameters': 7.22.5(@babel/core@7.22.5)
 
   '@babel/plugin-proposal-object-rest-spread@7.20.7(@babel/core@7.24.4)':
     dependencies:
@@ -17140,7 +17132,7 @@ snapshots:
 
   '@fuels/vm-asm@0.54.0': {}
 
-  '@graphql-codegen/cli@2.13.7(@babel/core@7.22.5)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)':
+  '@graphql-codegen/cli@2.13.7(@babel/core@7.24.4)(@types/node@20.11.13)(bufferutil@4.0.8)(enquirer@2.3.6)(graphql@16.8.1)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.4.5))(typescript@5.4.5)(utf-8-validate@6.0.4)':
     dependencies:
       '@babel/generator': 7.23.4
       '@babel/template': 7.22.15
@@ -17148,9 +17140,9 @@ snapshots:
       '@graphql-codegen/core': 2.6.2(graphql@16.8.1)
       '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.8.1)
       '@graphql-tools/apollo-engine-loader': 7.3.26(graphql@16.8.1)
-      '@graphql-tools/code-file-loader': 7.3.23(@babel/core@7.22.5)(graphql@16.8.1)
-      '@graphql-tools/git-loader': 7.3.0(@babel/core@7.22.5)(graphql@16.8.1)
-      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.22.5)(@types/node@20.11.13)(graphql@16.8.1)
+      '@graphql-tools/code-file-loader': 7.3.23(@babel/core@7.24.4)(graphql@16.8.1)
+      '@graphql-tools/git-loader': 7.3.0(@babel/core@7.24.4)(graphql@16.8.1)
+      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.24.4)(@types/node@20.11.13)(graphql@16.8.1)
       '@graphql-tools/graphql-file-loader': 7.5.17(graphql@16.8.1)
       '@graphql-tools/json-file-loader': 7.4.18(graphql@16.8.1)
       '@graphql-tools/load': 7.8.14(graphql@16.8.1)
@@ -17227,14 +17219,14 @@ snapshots:
       graphql: 16.8.1
       tslib: 2.4.1
 
-  '@graphql-codegen/typescript-generic-sdk@3.1.0(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)':
+  '@graphql-codegen/typescript-generic-sdk@4.0.1(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 3.1.2(graphql@16.8.1)
       '@graphql-codegen/visitor-plugin-common': 2.13.1(graphql@16.8.1)
       auto-bind: 4.0.0
       graphql: 16.8.1
       graphql-tag: 2.12.6(graphql@16.8.1)
-      tslib: 2.4.1
+      tslib: 2.6.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -17315,9 +17307,9 @@ snapshots:
       tslib: 2.6.0
       value-or-promise: 1.0.12
 
-  '@graphql-tools/code-file-loader@7.3.23(@babel/core@7.22.5)(graphql@16.8.1)':
+  '@graphql-tools/code-file-loader@7.3.23(@babel/core@7.24.4)(graphql@16.8.1)':
     dependencies:
-      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.22.5)(graphql@16.8.1)
+      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.24.4)(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       globby: 11.1.0
       graphql: 16.8.1
@@ -17387,9 +17379,9 @@ snapshots:
       tslib: 2.6.0
       value-or-promise: 1.0.12
 
-  '@graphql-tools/git-loader@7.3.0(@babel/core@7.22.5)(graphql@16.8.1)':
+  '@graphql-tools/git-loader@7.3.0(@babel/core@7.24.4)(graphql@16.8.1)':
     dependencies:
-      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.22.5)(graphql@16.8.1)
+      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.24.4)(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       graphql: 16.8.1
       is-glob: 4.0.3
@@ -17400,11 +17392,11 @@ snapshots:
       - '@babel/core'
       - supports-color
 
-  '@graphql-tools/github-loader@7.3.28(@babel/core@7.22.5)(@types/node@20.11.13)(graphql@16.8.1)':
+  '@graphql-tools/github-loader@7.3.28(@babel/core@7.24.4)(@types/node@20.11.13)(graphql@16.8.1)':
     dependencies:
       '@ardatan/sync-fetch': 0.0.1
       '@graphql-tools/executor-http': 0.1.10(@types/node@20.11.13)(graphql@16.8.1)
-      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.22.5)(graphql@16.8.1)
+      '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.24.4)(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       '@whatwg-node/fetch': 0.8.8
       graphql: 16.8.1
@@ -17425,10 +17417,10 @@ snapshots:
       tslib: 2.6.0
       unixify: 1.0.0
 
-  '@graphql-tools/graphql-tag-pluck@7.5.2(@babel/core@7.22.5)(graphql@16.8.1)':
+  '@graphql-tools/graphql-tag-pluck@7.5.2(@babel/core@7.24.4)(graphql@16.8.1)':
     dependencies:
       '@babel/parser': 7.24.7
-      '@babel/plugin-syntax-import-assertions': 7.22.5(@babel/core@7.22.5)
+      '@babel/plugin-syntax-import-assertions': 7.22.5(@babel/core@7.24.4)
       '@babel/traverse': 7.23.4
       '@babel/types': 7.23.9
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
@@ -21532,35 +21524,35 @@ snapshots:
       '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.24.4)
       '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.24.4)
 
-  babel-preset-fbjs@3.4.0(@babel/core@7.22.5):
+  babel-preset-fbjs@3.4.0(@babel/core@7.24.4):
     dependencies:
-      '@babel/core': 7.22.5
-      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.22.5)
-      '@babel/plugin-proposal-object-rest-spread': 7.20.7(@babel/core@7.22.5)
-      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.22.5)
-      '@babel/plugin-syntax-flow': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-syntax-jsx': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.22.5)
-      '@babel/plugin-transform-arrow-functions': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-block-scoped-functions': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-block-scoping': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-classes': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-computed-properties': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-destructuring': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-flow-strip-types': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-for-of': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-function-name': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-literals': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-member-expression-literals': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-modules-commonjs': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-object-super': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-parameters': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-property-literals': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-react-display-name': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-react-jsx': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-shorthand-properties': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-spread': 7.22.5(@babel/core@7.22.5)
-      '@babel/plugin-transform-template-literals': 7.22.5(@babel/core@7.22.5)
+      '@babel/core': 7.24.4
+      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.24.4)
+      '@babel/plugin-proposal-object-rest-spread': 7.20.7(@babel/core@7.24.4)
+      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.24.4)
+      '@babel/plugin-syntax-flow': 7.24.6(@babel/core@7.24.4)
+      '@babel/plugin-syntax-jsx': 7.23.3(@babel/core@7.24.4)
+      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.24.4)
+      '@babel/plugin-transform-arrow-functions': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-block-scoped-functions': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-block-scoping': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-classes': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-computed-properties': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-destructuring': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-flow-strip-types': 7.24.6(@babel/core@7.24.4)
+      '@babel/plugin-transform-for-of': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-function-name': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-literals': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-member-expression-literals': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-modules-commonjs': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-object-super': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-parameters': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-property-literals': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-react-display-name': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.24.4)
+      '@babel/plugin-transform-shorthand-properties': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-spread': 7.22.5(@babel/core@7.24.4)
+      '@babel/plugin-transform-template-literals': 7.22.5(@babel/core@7.24.4)
       babel-plugin-syntax-trailing-function-commas: 7.0.0-beta.0
     transitivePeerDependencies:
       - supports-color
