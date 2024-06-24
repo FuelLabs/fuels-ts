@@ -39,3 +39,25 @@ Provide a custom `fetch` function that'll replace the default fetch call.
 _Note: If defined, `requestMiddleware`, `timeout` and `retryOptions` are applied to this custom `fetch` function as well._
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-fetch{ts:line-numbers}
+
+### `cacheUtxo`
+
+When using the SDK, it may be necessary to submit multiple transactions from the same account in a short period. In such cases, the SDK creates and funds these transactions, then submits them to the node.
+
+However, if a second transaction is created before the first one is processed, there is a chance of using the same UTXO(s) for both transactions. This happens because the UTXO(s) used in the first transaction are still unspent until the transaction is fully processed.
+
+If the second transaction attempts to use the same UTXO(s) that the first transaction has already spent, it will result in the following error:
+
+```console
+Transaction is not inserted. UTXO does not exist: 0xf5...
+```
+
+This error indicates that the UTXO(s) used by the second transaction no longer exist, as they were already spent by the first transaction.
+
+To prevent this issue, you can use the `cacheUtxo` flag. This flag sets a TTL (Time-To-Live) for caching UTXO(s) used in a transaction, preventing them from being reused in subsequent transactions within the specified time.
+
+<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-cache-utxo{ts:line-numbers}
+
+It's important to note that you can only submit multiple transactions from the same account without waiting for the previous transactions to complete if your account has multiple UTXOs available. If you only have one UTXO, the first transaction will spend it, and any remaining amount will be converted into a new UTXO with a different ID.
+
+By ensuring your account has multiple UTXOs, you can effectively use the `cacheUtxo` flag to manage transactions without conflicts.
