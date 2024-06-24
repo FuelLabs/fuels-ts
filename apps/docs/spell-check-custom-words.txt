@@ -324,3 +324,4 @@ overriden
 typesafe
 launchTestNode
 Vitest
+CODEOWNERS
