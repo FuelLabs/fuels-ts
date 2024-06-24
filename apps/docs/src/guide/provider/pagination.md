@@ -1,6 +1,6 @@
 # Pagination
 
-Pagination is highly efficient when dealing with large sets of data. Because of this some methods from the `Provider` class support GraphQL cursor pagination, allowing you to efficiently navigate through data chunks.
+Pagination is highly efficient when dealing with large sets of data. Because of this some methods from the `Provider` class support [GraphQL cursor pagination](https://graphql.org/learn/pagination/), allowing you to efficiently navigate through data chunks.
 
 ## Pagination Arguments
 
