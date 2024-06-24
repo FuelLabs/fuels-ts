@@ -641,8 +641,8 @@ importers:
         specifier: ^10.2.6
         version: 10.2.6
       handlebars:
-        specifier: ^4.7.7
-        version: 4.7.7
+        specifier: ^4.7.8
+        version: 4.7.8
       mkdirp:
         specifier: ^1.0.4
         version: 1.0.4
@@ -949,8 +949,8 @@ importers:
         specifier: workspace:*
         version: link:../versions
       bundle-require:
-        specifier: ^4.0.1
-        version: 4.0.1(esbuild@0.19.3)
+        specifier: ^5.0.0
+        version: 5.0.0(esbuild@0.19.3)
       chalk:
         specifier: '4'
         version: 4.0.0
@@ -967,8 +967,8 @@ importers:
         specifier: ^10.2.6
         version: 10.2.6
       handlebars:
-        specifier: ^4.7.7
-        version: 4.7.7
+        specifier: ^4.7.8
+        version: 4.7.8
       joycon:
         specifier: ^3.1.1
         version: 3.1.1
@@ -6553,6 +6553,12 @@ packages:
     peerDependencies:
       esbuild: '>=0.17'
 
+  bundle-require@5.0.0:
+    resolution: {integrity: sha512-GuziW3fSSmopcx4KRymQEJVbZUfqlCqcq7dvs6TYwKRZiegK/2buMxQTPs6MGlNv50wms1699qYO54R8XfRX4w==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    peerDependencies:
+      esbuild: '>=0.18'
+
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
     engines: {node: '>=10.16.0'}
@@ -8597,6 +8603,11 @@ packages:
 
   handlebars@4.7.7:
     resolution: {integrity: sha512-aAcXm5OAfE/8IXkcZvCepKU3VzW1/39Fb5ZuqMtgI/hT8X2YgoMvBY5dLhq/cpOvw7Lk1nK/UF71aLG/ZnVYRA==}
+    engines: {node: '>=0.4.7'}
+    hasBin: true
+
+  handlebars@4.7.8:
+    resolution: {integrity: sha512-vafaFqs8MZkRrSX7sFVUdo3ap/eNiLnb4IakshzvP56X5Nr1iGKAIqdX6tMlm6HcNRIkr6AxO5jFEoJzzpT8aQ==}
     engines: {node: '>=0.4.7'}
     hasBin: true
 
@@ -22071,7 +22082,7 @@ snapshots:
       esbuild: 0.17.19
       load-tsconfig: 0.2.5
 
-  bundle-require@4.0.1(esbuild@0.19.3):
+  bundle-require@5.0.0(esbuild@0.19.3):
     dependencies:
       esbuild: 0.19.3
       load-tsconfig: 0.2.5
@@ -24832,6 +24843,15 @@ snapshots:
   handle-thing@2.0.1: {}
 
   handlebars@4.7.7:
+    dependencies:
+      minimist: 1.2.8
+      neo-async: 2.6.2
+      source-map: 0.6.1
+      wordwrap: 1.0.0
+    optionalDependencies:
+      uglify-js: 3.17.4
+
+  handlebars@4.7.8:
     dependencies:
       minimist: 1.2.8
       neo-async: 2.6.2
