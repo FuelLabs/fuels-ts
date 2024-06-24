@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@fuels/connectors": "^0.2.2",
-    "@fuels/react": "^0.18.1",
+    "@fuels/react": "^0.20.0",
     "fuels": "workspace:*",
     "@tanstack/react-query": "^5.29.2",
     "dotenv": "^16.4.5",
