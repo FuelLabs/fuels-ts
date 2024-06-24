@@ -54,7 +54,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract();
+    const { contract } = await factory.deployContract({ awaitExecution: true });
 
     // minting coins
     let balanceBefore = await wallet.getBalance();
@@ -178,7 +178,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract();
+    const { contract } = await factory.deployContract({ awaitExecution: true });
 
     const balanceBefore = await wallet.getBalance();
 
@@ -205,7 +205,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract();
+    const { contract } = await factory.deployContract({ awaitExecution: true });
 
     const balanceBefore = await wallet.getBalance();
 
@@ -236,7 +236,7 @@ describe('Fee', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const contract = await factory.deployContract();
+    const { contract } = await factory.deployContract({ awaitExecution: true });
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 

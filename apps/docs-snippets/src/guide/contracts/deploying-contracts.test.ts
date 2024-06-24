@@ -44,7 +44,7 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const contract = await factory.deployContract();
+    const { contract } = await factory.deployContract({ awaitExecution: true });
     // #endregion contract-setup-3
 
     // #region contract-setup-4
@@ -68,7 +68,9 @@ describe(__filename, () => {
     // #region contract-async-1
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const { contract, transactionResponse } = await factory.deployContractAsync();
+    const { contract, transactionResponse } = await factory.deployContract({
+      awaitExecution: true,
+    });
 
     const deployResult = await transactionResponse.waitForResult();
     // #endregion contract-async-1
