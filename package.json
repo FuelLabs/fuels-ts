@@ -26,6 +26,7 @@
     "test:browser": "vitest --run --coverage --config vitest.browser.config.mts $(scripts/tests-find.sh --browser)",
     "test:browser:filter": "vitest --run --coverage false --config vitest.browser.config.mts",
     "test:e2e": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --e2e)",
+    "test:integration": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --integration)",
     "lint": "run-s lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --max-warnings 0",
     "lint:fix": "pnpm lint:check --fix",
@@ -112,7 +113,7 @@
     "vite-plugin-node-polyfills": "^0.21.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.6.0",
-    "webdriverio": "^8.36.1"
+    "webdriverio": "^8.39.0"
   },
   "pnpm": {
     "overrides": {

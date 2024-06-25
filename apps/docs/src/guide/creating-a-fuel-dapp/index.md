@@ -147,6 +147,12 @@ You should now be able to see the counter dApp running at `http://localhost:3000
 
 ![Fullstack Fuel Dev Workflow](../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
 
+:::
+
+**Note** You may wish to learn more about how you could create a Fuel dApp that uses predicates, check out our [Working with Predicates](./working-with-predicates.md) guide.
+
+---
+
 ## Adding Decrement Functionality
 
 To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/pages/index.tsx` file to add a button that calls this function.
@@ -197,8 +203,11 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 - Now that you have a basic counter dApp running and have the `npm create fuels` workflow powering you, you can start building more complex dApps using the Fuel Stack. A good place to start for ideas and reference code is the [Sway Applications Repo](https://github.com/FuelLabs/sway-applications).
 
+- As you may have noticed, there are different types of programs in your dApp, feel free to explore [Predicates](https://docs.fuel.network/docs/fuels-ts/predicates/) and [Scripts](https://docs.fuel.network/docs/fuels-ts/scripts/), which are both important differentiators in the Fuel Stack.
+
 - If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./deploying-a-dapp-to-testnet.md) guide.
 
 - If you have any questions or need help, feel free to reach out to us on the [Official Fuel Forum](https://forum.fuel.network/).
 
 - If you want to learn more about the Fuel Stack, check out the [Fuel Docs](https://docs.fuel.network/).
+
