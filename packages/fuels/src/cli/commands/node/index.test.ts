@@ -71,7 +71,7 @@ describe('node', () => {
     await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
 
     // configFileChanged() internals
-    expect(onNode).toHaveBeenCalledTimes(1);
+    expect(onNode).toHaveBeenCalledWith(config);
     expect(log).toHaveBeenCalledTimes(1);
     expect(close).toHaveBeenCalledTimes(2);
     expect(killChildProcess).toHaveBeenCalledTimes(1);

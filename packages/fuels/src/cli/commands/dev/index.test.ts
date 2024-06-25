@@ -74,7 +74,7 @@ describe('dev', () => {
 
     await dev(config);
 
-    expect(onDev).toHaveBeenCalledWith(null, config);
+    expect(onDev).toHaveBeenCalledWith(config);
   });
 
   it('dev should handle and log error from `buildAndDeploy`', async () => {

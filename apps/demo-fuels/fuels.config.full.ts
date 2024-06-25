@@ -85,28 +85,28 @@ export default createConfig({
   // #endregion deployConfig-fn
 
   // #region onBuild
-  onBuild: (data: unknown, config: FuelsConfig) => {
-    console.log('fuels:onBuild', { data, config });
+  onBuild: (config: FuelsConfig) => {
+    console.log('fuels:onBuild', { config });
   },
   // #endregion onBuild
 
   // #region onDeploy
   // #import { DeployedContract, FuelsConfig };
 
-  onDeploy: (data: DeployedContract[], config: FuelsConfig) => {
-    console.log('fuels:onDeploy', { data, config });
+  onDeploy: (config: FuelsConfig, data: DeployedContract[]) => {
+    console.log('fuels:onDeploy', { config, data });
   },
   // #endregion onDeploy
 
   // #region onDev
-  onDev: (data: unknown, config: FuelsConfig) => {
-    console.log('fuels:onDev', { data, config });
+  onDev: (config: FuelsConfig) => {
+    console.log('fuels:onDev', { config });
   },
   // #endregion onDev
 
   // #region onNode
-  onNode: (data: unknown, config: FuelsConfig) => {
-    console.log('fuels:onNode', { data, config });
+  onNode: (config: FuelsConfig) => {
+    console.log('fuels:onNode', { config });
   },
   // #endregion onNode
 

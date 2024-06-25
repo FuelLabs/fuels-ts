@@ -13,7 +13,7 @@ export async function build(config: FuelsConfig, program?: Command) {
 
   await buildSwayPrograms(config);
   await generateTypes(config);
-  config.onBuild?.(null, config);
+  config.onBuild?.(config);
 
   const options = program?.opts();
   if (options?.deploy) {

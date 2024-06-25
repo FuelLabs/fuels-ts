@@ -127,7 +127,6 @@ A callback function that is called after a build event has been successful.
 
 Parameters:
 
-- `data` — The data (always `null` for `onBuild`)
 - `config` — The loaded config (`fuels.config.ts`)
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onBuild{ts:line-numbers}
@@ -138,8 +137,8 @@ A callback function that is called after a deployment event has been successful.
 
 Parameters:
 
-- `data` — The data (an array of deployed contracts)
 - `config` — The loaded config (`fuels.config.ts`)
+- `data` — The data (an array of deployed contracts)
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onDeploy{ts:line-numbers}
 
@@ -149,7 +148,6 @@ A callback function that is called after the [`fuels dev`](./commands.md#fuels-d
 
 Parameters:
 
-- `data` — The data (always `null` for `onDev`)
 - `config` — The loaded config (`fuels.config.ts`)
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onDev{ts:line-numbers}
@@ -160,7 +158,6 @@ A callback function that is called after the [`fuels node`](./commands.md#fuels-
 
 Parameters:
 
-- `data` — The data (always `null` for `onNode`)
 - `config` — The loaded config (`fuels.config.ts`)
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onNode{ts:line-numbers}

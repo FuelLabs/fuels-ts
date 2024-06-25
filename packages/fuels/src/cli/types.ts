@@ -12,7 +12,7 @@ export enum Commands {
 export type CommandEvent =
   | {
       type: Commands.build;
-      data: unknown;
+      data: void;
     }
   | {
       type: Commands.deploy;
@@ -20,19 +20,19 @@ export type CommandEvent =
     }
   | {
       type: Commands.dev;
-      data: unknown;
+      data: void;
     }
   | {
       type: Commands.init;
-      data: unknown;
+      data: void;
     }
   | {
       type: Commands.versions;
-      data: unknown;
+      data: void;
     }
   | {
       type: Commands.node;
-      data: unknown;
+      data: void;
     };
 
 export type DeployedContract = {
@@ -51,8 +51,8 @@ export type OptionsFunction = (
 ) => DeployContractOptions | Promise<DeployContractOptions>;
 
 export type FuelsEventListener<CType extends Commands> = (
-  data: Extract<CommandEvent, { type: CType }>['data'],
-  config: FuelsConfig
+  config: FuelsConfig,
+  data: Extract<CommandEvent, { type: CType }>['data']
 ) => void;
 
 export type UserFuelsConfig = {
@@ -116,7 +116,6 @@ export type UserFuelsConfig = {
   /**
    * Function callback, will be called after a successful build operation
    *
-   * @param data - The event that triggered this execution
    * @param config - The loaded `fuels.config.ts`
    */
   onBuild?: FuelsEventListener<Commands.build>;
@@ -124,15 +123,14 @@ export type UserFuelsConfig = {
   /**
    * Function callback, will be called after a successful deploy operation
    *
-   * @param data - The event that triggered this execution
    * @param config - The loaded `fuels.config.ts`
+   * @param data - the deployed contracts
    */
   onDeploy?: FuelsEventListener<Commands.deploy>;
 
   /**
    * Function callback, will be called after a successful dev operation
    *
-   * @param data - The event that triggered this execution
    * @param config - The loaded `fuels.config.ts`
    */
   onDev?: FuelsEventListener<Commands.dev>;
@@ -140,7 +138,6 @@ export type UserFuelsConfig = {
   /**
    * Function callback, will be called after a successful Node refresh operation
    *
-   * @param data - The event that triggered this execution
    * @param config - The loaded `fuels.config.ts`
    */
   onNode?: FuelsEventListener<Commands.node>;

@@ -43,6 +43,6 @@ describe('build', () => {
 
     await build(config);
 
-    expect(onBuild).toHaveBeenCalledWith(null, config);
+    expect(onBuild).toHaveBeenCalledWith(config);
   });
 });

@@ -35,6 +35,6 @@ describe('deploy', () => {
 
     await deploy(config);
 
-    expect(onDeploy).toHaveBeenCalledWith(expectedContracts, config);
+    expect(onDeploy).toHaveBeenCalledWith(config, expectedContracts);
   });
 });
