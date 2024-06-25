@@ -8,7 +8,7 @@ import { error, log } from '../utils/logger';
 export const withConfigErrorHandler = async (err: Error, config?: FuelsConfig) => {
   error(err.message);
   if (config) {
-    await config.onFailure?.(<Error>err, config);
+    await config.onFailure?.(config, <Error>err);
   }
 };
 

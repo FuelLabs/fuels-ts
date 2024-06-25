@@ -144,10 +144,10 @@ export type UserFuelsConfig = {
 
   /**
    * Function callback, will be called in case of errors
-   * @param error - Original error object
    * @param config - Configuration in use
+   * @param error - Original error object
    */
-  onFailure?: (event: Error, config: FuelsConfig) => void;
+  onFailure?: (config: FuelsConfig, error: Error) => void;
 };
 
 export type FuelsConfig = UserFuelsConfig &

@@ -111,8 +111,8 @@ export default createConfig({
   // #endregion onNode
 
   // #region onFailure
-  onFailure: (error: Error, config: FuelsConfig) => {
-    console.log('fuels:onFailure', { error, config });
+  onFailure: (config: FuelsConfig, error: Error) => {
+    console.log('fuels:onFailure', { config, error });
   },
   // #endregion onFailure
 

@@ -168,8 +168,8 @@ Pass a callback function to be called in case of errors.
 
 Parameters:
 
-- `error` — Original error object
 - `config` — The loaded config (`fuels.config.ts`)
+- `error` — Original error object
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onFailure{ts:line-numbers}
 

@@ -72,7 +72,7 @@ describe('withConfig', () => {
 
     expect(error).toHaveBeenCalledTimes(1);
     expect(onFailure).toHaveBeenCalledTimes(1);
-    expect(onFailure.mock.calls[0][0].toString()).toMatch(/something.+happened/i);
+    expect(onFailure.mock.calls[0][1].toString()).toMatch(/something.+happened/i);
   });
 
   test('should handle error when loading config file', async () => {
