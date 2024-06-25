@@ -51,5 +51,12 @@ it('converts error to plain object', () => {
   const message = 'It happens';
   const metadata = { name: 'FuelLabs' };
   const err = new FuelError(code, message, metadata);
-  expect(err.toObject()).toEqual({ code, name, message, VERSIONS: err.VERSIONS, metadata });
+  expect(err.toObject()).toEqual({
+    code,
+    name,
+    message,
+    VERSIONS: err.VERSIONS,
+    metadata,
+    rawError: {},
+  });
 });
