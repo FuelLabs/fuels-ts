@@ -1,5 +1,43 @@
 # Change Log
 
+## 0.90.0
+
+### Minor Changes
+
+- bb5a123: feat!: add `launchTestNode` utility
+- e165e37: chore!: upgrade fuel core to `0.28.0`
+- 69c3e51: chore!: rename Provider `call` to `dryRun`
+- 41dc617: fix!: updated chain assets, removed `beta-5` network
+
+### Patch Changes
+
+- b1dbe42: feat: implement `generateFakeResources` on `Account` class
+- 3db38af: chore: add test to validate mint transactions serialization
+- 81a77d3: chore: upgrading `fuel-core` to `0.29.0`
+- 038d1f1: fix: type declarations for `@fuel-ts/account/test-utils`
+- 90e8cba: chore: upgrading `fuel-core` to `0.30.0`
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [1beab0e]
+- Updated dependencies [439d0dc]
+- Updated dependencies [81a77d3]
+- Updated dependencies [436f040]
+- Updated dependencies [af3202c]
+- Updated dependencies [90e8cba]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/transactions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/merkle@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
 ## 0.89.2
 
 ### Patch Changes
