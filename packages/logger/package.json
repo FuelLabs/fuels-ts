@@ -10,7 +10,7 @@
     "url": "https://github.com/FuelLabs/fuels-ts/issues"
   },
   "engines": {
-    "node": "^18.18.2 || ^20.0.0"
+    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },
   "exports": {
     ".": {

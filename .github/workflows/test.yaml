@@ -14,15 +14,16 @@ jobs:
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
-    name: ${{ matrix.env.name }}${{ matrix.env.version && '@' || ''}}${{ matrix.env.version || ''}}
+    name: ${{ matrix.env.display-name }}
     strategy:
       fail-fast: false
       matrix:
         env:
           [
-            { name: node, version: 18.18.2 },
-            { name: node, version: 20 },
-            { name: browser },
+            { name: node, version: 18.20.3, display-name: "node@18" },
+            { name: node, version: 20.14.0, display-name: "node@20" },
+            { name: node, version: 22.3.0, display-name: "node@22" },
+            { name: browser, display-name: "browser" },
           ]
     timeout-minutes: 25
     steps:
