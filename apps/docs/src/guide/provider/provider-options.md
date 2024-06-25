@@ -58,6 +58,8 @@ To prevent this issue, you can use the `cacheUtxo` flag. This flag sets a TTL (T
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-cache-utxo{ts:line-numbers}
 
-It's important to note that you can only submit multiple transactions from the same account without waiting for the previous transactions to complete if your account has multiple UTXOs available. If you only have one UTXO, the first transaction will spend it, and any remaining amount will be converted into a new UTXO with a different ID.
+**Note:**
+
+If you would like to submit multiple transactions without waiting on each transaction to be completed, your account must have multiple UTXOs available. If you only have one UTXO, the first transaction will spend it, and any remaining amount will be converted into a new UTXO with a different ID.
 
 By ensuring your account has multiple UTXOs, you can effectively use the `cacheUtxo` flag to manage transactions without conflicts.
