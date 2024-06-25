@@ -83,6 +83,10 @@ export default defineConfig({
                 text: 'Deploying a dApp to Testnet',
                 link: '/guide/creating-a-fuel-dapp/deploying-a-dapp-to-testnet',
               },
+              {
+                text: 'Working with Predicates',
+                link: '/guide/creating-a-fuel-dapp/working-with-predicates',
+              },
             ],
           },
           {
@@ -288,6 +292,10 @@ export default defineConfig({
               {
                 text: 'Send And Spend Funds From Predicates',
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
+              },
+              {
+                text: 'Methods',
+                link: '/guide/predicates/methods',
               },
             ],
           },

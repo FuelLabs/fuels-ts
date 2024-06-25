@@ -33,4 +33,5 @@ members = [
   "script-signing",
   "input-output-types",
   "bytecode-input",
+  "configurable-pin",
 ]
