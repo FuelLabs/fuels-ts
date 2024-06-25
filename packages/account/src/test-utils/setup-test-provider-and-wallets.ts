@@ -23,7 +23,6 @@ export interface LaunchCustomProviderAndGetWalletsOptions {
       snapshotConfig: PartialDeep<SnapshotConfigs>;
     }
   >;
-  launchNodeServerPort?: string;
 }
 
 const defaultWalletConfigOptions: WalletsConfigOptions = {
@@ -53,7 +52,6 @@ export async function setupTestProviderAndWallets({
   walletsConfig: walletsConfigOptions = {},
   providerOptions,
   nodeOptions = {},
-  launchNodeServerPort = process.env.LAUNCH_NODE_SERVER_PORT || undefined,
 }: Partial<LaunchCustomProviderAndGetWalletsOptions> = {}): Promise<SetupTestProviderAndWalletsReturn> {
   // @ts-expect-error this is a polyfill (see https://devblogs.microsoft.com/typescript/announcing-typescript-5-2/#using-declarations-and-explicit-resource-management)
   Symbol.dispose ??= Symbol('Symbol.dispose');
@@ -66,7 +64,7 @@ export async function setupTestProviderAndWallets({
     }
   );
 
-  const launchNodeOptions: LaunchNodeOptions = {
+  const { cleanup, url } = await launchNode({
     loggingEnabled: false,
     ...nodeOptions,
     snapshotConfig: mergeDeepRight(
@@ -74,25 +72,7 @@ export async function setupTestProviderAndWallets({
       walletsConfig.apply(nodeOptions?.snapshotConfig)
     ),
     port: '0',
-  };
-
-  let cleanup: () => void;
-  let url: string;
-  if (launchNodeServerPort) {
-    const serverUrl = `http://localhost:${launchNodeServerPort}`;
-    url = await (
-      await fetch(serverUrl, { method: 'POST', body: JSON.stringify(launchNodeOptions) })
-    ).text();
-
-    cleanup = () => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      fetch(`${serverUrl}/cleanup/${url}`);
-    };
-  } else {
-    const settings = await launchNode(launchNodeOptions);
-    url = settings.url;
-    cleanup = settings.cleanup;
-  }
+  });
 
   let provider: Provider;
 

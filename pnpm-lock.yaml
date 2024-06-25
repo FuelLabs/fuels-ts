@@ -235,8 +235,8 @@ importers:
         specifier: ^8
         version: 8.4.33
       tailwindcss:
-        specifier: ^3.3.0
-        version: 3.3.2(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2))
+        specifier: ^3.4.4
+        version: 3.4.4(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2))
       typescript:
         specifier: ^5
         version: 5.2.2
@@ -450,8 +450,8 @@ importers:
         specifier: ^8
         version: 8.4.33
       tailwindcss:
-        specifier: ^3.3.0
-        version: 3.3.2(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2))
+        specifier: ^3.4.4
+        version: 3.4.4(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2))
       typescript:
         specifier: ^5
         version: 5.2.2
@@ -1233,8 +1233,8 @@ importers:
         specifier: ^8
         version: 8.4.24
       tailwindcss:
-        specifier: ^3.3.0
-        version: 3.3.2(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2))
+        specifier: ^3.4.4
+        version: 3.4.4(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2))
       typescript:
         specifier: ^5
         version: 5.2.2
@@ -3705,10 +3705,6 @@ packages:
     resolution: {integrity: sha512-u3UPsIilWKOM3F9CXtrG8LEJmNxwoCQC/XVj4IKYXvvpx7QIi/Kg1LI5uDmDpKlac62NUtX7eLjRh+jVZcLOzw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  '@jridgewell/gen-mapping@0.3.3':
-    resolution: {integrity: sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ==}
-    engines: {node: '>=6.0.0'}
-
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
     engines: {node: '>=6.0.0'}
@@ -3719,10 +3715,6 @@ packages:
 
   '@jridgewell/resolve-uri@3.1.1':
     resolution: {integrity: sha512-dSYZh7HhCDtCKm4QakX0xFpsRDqjjtZf/kjI/v3T3Nwt5r8/qz/M19F9ySyOqU94SXBmeG9ttTul+YnR4LOxFA==}
-    engines: {node: '>=6.0.0'}
-
-  '@jridgewell/set-array@1.1.2':
-    resolution: {integrity: sha512-xnkseuNADM0gt2bs+BvhO0p78Mk762YnZdsuzFV018NoG1Sj1SCQvpSqa7XUaTam5vAGasABV9qXASMKnFMwMw==}
     engines: {node: '>=6.0.0'}
 
   '@jridgewell/set-array@1.2.1':
@@ -9607,10 +9599,6 @@ packages:
       node-notifier:
         optional: true
 
-  jiti@1.18.2:
-    resolution: {integrity: sha512-QAdOptna2NYiSSpv0O/BwoHBSmz4YhpzJHyi+fnMRTXFjp7B8i/YG5Z8IfusxB1ufjcD2Sre1F3R+nX3fvy7gg==}
-    hasBin: true
-
   jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
@@ -11813,7 +11801,6 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
-
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qr-code-styling@1.6.0-rc.1:
@@ -13033,8 +13020,8 @@ packages:
     resolution: {integrity: sha512-Y4X9zqrCftUhMeH2EptSSERdVKt/nEdijTOacGD/97EKjhQ/Qs8RTlEGABSJNNN8lac9kheH+af7yAkEWlgneA==}
     engines: {node: '>=10.0.0'}
 
-  tailwindcss@3.3.2:
-    resolution: {integrity: sha512-9jPkMiIBXvPc2KywkraqsUfbfj+dHDb+JPWtSJa9MLFdrPyazI7q6WX2sUrm7R9eVR7qqv3Pas7EvQFzxKnI6w==}
+  tailwindcss@3.4.4:
+    resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -18175,12 +18162,6 @@ snapshots:
       '@types/yargs': 17.0.24
       chalk: 4.1.2
 
-  '@jridgewell/gen-mapping@0.3.3':
-    dependencies:
-      '@jridgewell/set-array': 1.1.2
-      '@jridgewell/sourcemap-codec': 1.4.15
-      '@jridgewell/trace-mapping': 0.3.25
-
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
       '@jridgewell/set-array': 1.2.1
@@ -18190,8 +18171,6 @@ snapshots:
   '@jridgewell/resolve-uri@3.1.0': {}
 
   '@jridgewell/resolve-uri@3.1.1': {}
-
-  '@jridgewell/set-array@1.1.2': {}
 
   '@jridgewell/set-array@1.2.1': {}
 
@@ -23811,7 +23790,7 @@ snapshots:
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.values: 1.1.6
-      resolve: 1.22.2
+      resolve: 1.22.8
       tsconfig-paths: 3.14.2
     optionalDependencies:
       '@typescript-eslint/parser': 5.59.0(eslint@8.57.0)(typescript@5.4.5)
@@ -24604,7 +24583,7 @@ snapshots:
       '@babel/code-frame': 7.24.6
       '@types/json-schema': 7.0.12
       chalk: 4.1.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       cosmiconfig: 6.0.0
       deepmerge: 4.3.1
       fs-extra: 9.1.0
@@ -24857,7 +24836,7 @@ snapshots:
     dependencies:
       array-union: 2.1.0
       dir-glob: 3.0.1
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       ignore: 5.3.0
       merge2: 1.4.1
       slash: 3.0.0
@@ -26220,8 +26199,6 @@ snapshots:
       - supports-color
       - ts-node
       - utf-8-validate
-
-  jiti@1.18.2: {}
 
   jiti@1.21.0: {}
 
@@ -28270,9 +28247,9 @@ snapshots:
       postcss: 8.4.33
       postcss-value-parser: 4.2.0
 
-  postcss-import@15.1.0(postcss@8.4.33):
+  postcss-import@15.1.0(postcss@8.4.38):
     dependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
       postcss-value-parser: 4.2.0
       read-cache: 1.0.0
       resolve: 1.22.8
@@ -28281,10 +28258,10 @@ snapshots:
     dependencies:
       postcss: 8.4.33
 
-  postcss-js@4.0.1(postcss@8.4.33):
+  postcss-js@4.0.1(postcss@8.4.38):
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.33
+      postcss: 8.4.38
 
   postcss-lab-function@4.2.1(postcss@8.4.33):
     dependencies:
@@ -28300,28 +28277,28 @@ snapshots:
       postcss: 8.4.38
       ts-node: 10.9.1(@types/node@18.15.3)(typescript@5.4.5)
 
-  postcss-load-config@4.0.1(postcss@8.4.33)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5)):
+  postcss-load-config@4.0.1(postcss@8.4.38)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 2.3.1
     optionalDependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
       ts-node: 10.9.1(@types/node@16.18.34)(typescript@5.4.5)
 
-  postcss-load-config@4.0.1(postcss@8.4.33)(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2)):
+  postcss-load-config@4.0.1(postcss@8.4.38)(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 2.3.1
     optionalDependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
       ts-node: 10.9.1(@types/node@20.10.5)(typescript@5.2.2)
 
-  postcss-load-config@4.0.1(postcss@8.4.33)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2)):
+  postcss-load-config@4.0.1(postcss@8.4.38)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 2.3.1
     optionalDependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
       ts-node: 10.9.1(@types/node@20.11.13)(typescript@5.2.2)
 
   postcss-loader@6.2.1(postcss@8.4.33)(webpack@5.88.0(esbuild@0.17.19)):
@@ -28399,9 +28376,9 @@ snapshots:
       icss-utils: 5.1.0(postcss@8.4.38)
       postcss: 8.4.38
 
-  postcss-nested@6.0.1(postcss@8.4.33):
+  postcss-nested@6.0.1(postcss@8.4.38):
     dependencies:
-      postcss: 8.4.33
+      postcss: 8.4.38
       postcss-selector-parser: 6.0.13
 
   postcss-nesting@10.2.0(postcss@8.4.33):
@@ -29090,7 +29067,7 @@ snapshots:
       semver: 7.3.8
       source-map-loader: 3.0.2(webpack@5.88.0(esbuild@0.17.19))
       style-loader: 3.3.3(webpack@5.88.0(esbuild@0.17.19))
-      tailwindcss: 3.3.2(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5))
+      tailwindcss: 3.4.4(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5))
       terser-webpack-plugin: 5.3.9(esbuild@0.17.19)(webpack@5.88.0(esbuild@0.17.19))
       webpack: 5.88.0(esbuild@0.17.19)
       webpack-dev-server: 4.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)(webpack@5.88.0(esbuild@0.17.19))
@@ -30213,7 +30190,7 @@ snapshots:
 
   sucrase@3.32.0:
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.3
+      '@jridgewell/gen-mapping': 0.3.5
       commander: 4.1.1
       glob: 7.1.6
       lines-and-columns: 1.2.4
@@ -30297,85 +30274,82 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
 
-  tailwindcss@3.3.2(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5)):
+  tailwindcss@3.4.4(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       didyoumean: 1.2.2
       dlv: 1.1.3
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       glob-parent: 6.0.2
       is-glob: 4.0.3
-      jiti: 1.18.2
+      jiti: 1.21.0
       lilconfig: 2.1.0
       micromatch: 4.0.5
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.33
-      postcss-import: 15.1.0(postcss@8.4.33)
-      postcss-js: 4.0.1(postcss@8.4.33)
-      postcss-load-config: 4.0.1(postcss@8.4.33)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5))
-      postcss-nested: 6.0.1(postcss@8.4.33)
+      postcss: 8.4.38
+      postcss-import: 15.1.0(postcss@8.4.38)
+      postcss-js: 4.0.1(postcss@8.4.38)
+      postcss-load-config: 4.0.1(postcss@8.4.38)(ts-node@10.9.1(@types/node@16.18.34)(typescript@5.4.5))
+      postcss-nested: 6.0.1(postcss@8.4.38)
       postcss-selector-parser: 6.0.13
-      postcss-value-parser: 4.2.0
       resolve: 1.22.8
       sucrase: 3.32.0
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.3.2(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2)):
+  tailwindcss@3.4.4(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       didyoumean: 1.2.2
       dlv: 1.1.3
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       glob-parent: 6.0.2
       is-glob: 4.0.3
-      jiti: 1.18.2
+      jiti: 1.21.0
       lilconfig: 2.1.0
       micromatch: 4.0.5
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.33
-      postcss-import: 15.1.0(postcss@8.4.33)
-      postcss-js: 4.0.1(postcss@8.4.33)
-      postcss-load-config: 4.0.1(postcss@8.4.33)(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2))
-      postcss-nested: 6.0.1(postcss@8.4.33)
+      postcss: 8.4.38
+      postcss-import: 15.1.0(postcss@8.4.38)
+      postcss-js: 4.0.1(postcss@8.4.38)
+      postcss-load-config: 4.0.1(postcss@8.4.38)(ts-node@10.9.1(@types/node@20.10.5)(typescript@5.2.2))
+      postcss-nested: 6.0.1(postcss@8.4.38)
       postcss-selector-parser: 6.0.13
-      postcss-value-parser: 4.2.0
       resolve: 1.22.8
       sucrase: 3.32.0
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.3.2(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2)):
+  tailwindcss@3.4.4(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       didyoumean: 1.2.2
       dlv: 1.1.3
-      fast-glob: 3.3.1
+      fast-glob: 3.3.2
       glob-parent: 6.0.2
       is-glob: 4.0.3
-      jiti: 1.18.2
+      jiti: 1.21.0
       lilconfig: 2.1.0
       micromatch: 4.0.5
       normalize-path: 3.0.0
       object-hash: 3.0.0
       picocolors: 1.0.0
-      postcss: 8.4.33
-      postcss-import: 15.1.0(postcss@8.4.33)
-      postcss-js: 4.0.1(postcss@8.4.33)
-      postcss-load-config: 4.0.1(postcss@8.4.33)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2))
-      postcss-nested: 6.0.1(postcss@8.4.33)
+      postcss: 8.4.38
+      postcss-import: 15.1.0(postcss@8.4.38)
+      postcss-js: 4.0.1(postcss@8.4.38)
+      postcss-load-config: 4.0.1(postcss@8.4.38)(ts-node@10.9.1(@types/node@20.11.13)(typescript@5.2.2))
+      postcss-nested: 6.0.1(postcss@8.4.38)
       postcss-selector-parser: 6.0.13
-      postcss-value-parser: 4.2.0
       resolve: 1.22.8
       sucrase: 3.32.0
     transitivePeerDependencies:
@@ -31669,7 +31643,7 @@ snapshots:
       '@types/ws': 8.5.5
       ansi-html-community: 0.0.8
       bonjour-service: 1.1.1
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       colorette: 2.0.20
       compression: 1.7.4
       connect-history-api-fallback: 2.0.0
