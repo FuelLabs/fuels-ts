@@ -2,10 +2,10 @@ name: "CI Setup"
 inputs:
   node-version:
     description: "Node version"
-    default: 20.10.0
+    default: 20.14.0
   pnpm-version:
     description: "PNPM version"
-    default: 9.0.5
+    default: 9.4.0
 runs:
   using: "composite"
   steps:
