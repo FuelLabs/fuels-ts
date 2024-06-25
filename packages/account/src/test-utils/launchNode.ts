@@ -3,6 +3,7 @@ import { randomBytes } from '@fuel-ts/crypto';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
+import { spawn } from 'child_process';
 import { randomUUID } from 'crypto';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
@@ -215,8 +216,6 @@ export const launchNode = async ({
 
       snapshotDirToUse = tempDir;
     }
-
-    const { spawn } = await import('child_process');
 
     const child = spawn(
       command,
