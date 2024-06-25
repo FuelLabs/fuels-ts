@@ -60,7 +60,7 @@ jobs:
       - name: Test Setup
         uses: ./.github/actions/test-setup
         with:
-          should-install-bun: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+          should-install-bun: true
 
       - name: Run UI tests (on template)
         run: sh ./scripts/tests-ui.sh
@@ -69,7 +69,7 @@ jobs:
         if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
-          ref: 'refs/heads/master'
+          ref: "refs/heads/master"
           check-name: "Release"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
@@ -78,13 +78,13 @@ jobs:
         if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
         run: pnpm test:integration
         env:
-          PUBLISHED_NPM_VERSION: next
+          PUBLISHED_NPM_TAG: next
 
       - name: Run UI tests (with published version)
         if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
-        run: sh ./scripts/create-fuels-template-integration.sh
+        run: sh ./scripts/tests-ui-integration.sh
         env:
-          PUBLISHED_NPM_VERSION: next
+          PUBLISHED_NPM_TAG: next
 
   e2e:
     runs-on: ubuntu-latest
