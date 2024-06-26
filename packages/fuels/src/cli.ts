@@ -42,7 +42,7 @@ export const configureCli = () => {
    * Defining local commands
    */
 
-  const pathOption = new Option('-p, --path <path>', 'Path to project root').default(process.cwd());
+  const pathOption = new Option('--path <path>', 'Path to project root').default(process.cwd());
 
   let command: Command;
 
