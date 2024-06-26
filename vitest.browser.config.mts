@@ -31,7 +31,7 @@ const config: UserConfig = {
   ],
   optimizeDeps: {
     exclude: ["fsevents", "path-scurry"],
-    include: ["events", "timers/promises"],
+    include: ["events", "timers/promises", "@vitest/coverage-istanbul"],
   },
   test: {
     env: {
