@@ -1,4 +1,4 @@
 ---
 ---
 
-chore: remove breaking changes PR workflow
+ci: remove breaking changes PR workflow
