@@ -17,6 +17,9 @@ function generateChecksum(
     .digest(encoding || 'hex');
 }
 
+/**
+ * @group node
+ */
 describe('fuel-core-schema.graphql', () => {
   it('should not change on schema build', async () => {
     const preSyncChecksum = await readFile(FUEL_CORE_SCHEMA_FILE_PATH).then(generateChecksum);
