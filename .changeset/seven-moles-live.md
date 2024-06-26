@@ -4,4 +4,4 @@
 "@fuel-ts/abi-typegen": patch
 ---
 
-chore!: upgrade commander to 12.1.0
+chore!: upgrade `commander` to`12.1.0`
