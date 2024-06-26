@@ -512,6 +512,8 @@ export default defineConfig({
           {
             text: 'Errors',
             link: '/guide/errors.md',
+            collapsed: false,
+            items: [],
           },
           apiLinks,
         ],
