@@ -1,5 +1,51 @@
 # create-fuels
 
+## 0.90.0
+
+### Patch Changes
+
+- e5236ca: chore: show all create-fuels template balances in ETH
+- 301a98e: chore: add version detection to `create fuels`
+- af3202c: feat: support for `bun`
+- ca0fc65: fix: `create-fuels` balance refresh
+- 977d58b: fix: flaky faucet test
+
+## 0.89.2
+
+### Patch Changes
+
+- 78c2d73: fix: update testnet URL
+- 889789c: chore: re-enable connectors, bump dependencies
+
+## 0.89.1
+
+## 0.89.0
+
+### Patch Changes
+
+- 3b00bdb: chore: add test to verify `create fuels` template integrity
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+
+## 0.88.1
+
+## 0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- 30fa103: chore: `create fuels` tests clean up the filesystem
+
+## 0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- 7c3ef04: feat: optionally auto-install `fuelup` during `create fuels` routine
+
+## 0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

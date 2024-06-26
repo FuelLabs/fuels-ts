@@ -1,5 +1,245 @@
 # Change Log
 
+## 0.90.0
+
+### Minor Changes
+
+- bb5a123: feat!: add `launchTestNode` utility
+- e165e37: chore!: upgrade fuel core to `0.28.0`
+- 69c3e51: chore!: rename Provider `call` to `dryRun`
+- 41dc617: fix!: updated chain assets, removed `beta-5` network
+
+### Patch Changes
+
+- b1dbe42: feat: implement `generateFakeResources` on `Account` class
+- 3db38af: chore: add test to validate mint transactions serialization
+- 81a77d3: chore: upgrading `fuel-core` to `0.29.0`
+- 038d1f1: fix: type declarations for `@fuel-ts/account/test-utils`
+- 90e8cba: chore: upgrading `fuel-core` to `0.30.0`
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [1beab0e]
+- Updated dependencies [439d0dc]
+- Updated dependencies [81a77d3]
+- Updated dependencies [436f040]
+- Updated dependencies [af3202c]
+- Updated dependencies [90e8cba]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/transactions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/merkle@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- 78c2d73: fix: update testnet URL
+  - @fuel-ts/abi-coder@0.89.2
+  - @fuel-ts/address@0.89.2
+  - @fuel-ts/crypto@0.89.2
+  - @fuel-ts/errors@0.89.2
+  - @fuel-ts/hasher@0.89.2
+  - @fuel-ts/interfaces@0.89.2
+  - @fuel-ts/math@0.89.2
+  - @fuel-ts/merkle@0.89.2
+  - @fuel-ts/transactions@0.89.2
+  - @fuel-ts/utils@0.89.2
+  - @fuel-ts/versions@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+- Updated dependencies [eb6460b]
+  - @fuel-ts/versions@0.89.1
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/abi-coder@0.89.1
+  - @fuel-ts/address@0.89.1
+  - @fuel-ts/crypto@0.89.1
+  - @fuel-ts/hasher@0.89.1
+  - @fuel-ts/transactions@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/merkle@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
+## 0.89.0
+
+### Minor Changes
+
+- 0b53b85: feat!: pass base asset ID for withdrawals
+- 7c08593: feat!: transfer for multiple addresses
+
+### Patch Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+- 3b27bac: fix: add `predicateData` to predicate resources and inputs
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [f83502e]
+- Updated dependencies [af3c143]
+- Updated dependencies [685829b]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [a96c1fe]
+- Updated dependencies [f76aa57]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/abi-coder@0.89.0
+  - @fuel-ts/transactions@0.89.0
+  - @fuel-ts/address@0.89.0
+  - @fuel-ts/crypto@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/merkle@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- Updated dependencies [64b90a9]
+  - @fuel-ts/abi-coder@0.88.1
+  - @fuel-ts/transactions@0.88.1
+  - @fuel-ts/address@0.88.1
+  - @fuel-ts/crypto@0.88.1
+  - @fuel-ts/errors@0.88.1
+  - @fuel-ts/hasher@0.88.1
+  - @fuel-ts/interfaces@0.88.1
+  - @fuel-ts/math@0.88.1
+  - @fuel-ts/merkle@0.88.1
+  - @fuel-ts/utils@0.88.1
+  - @fuel-ts/versions@0.88.1
+
+## 0.88.0
+
+### Minor Changes
+
+- 3f86778: chore!: update testnet URLs
+- 60337b5: chore!: update `forc` to `0.59.0`
+
+### Patch Changes
+
+- d5116ce: fix: validate status from estimation dry-run
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/transactions@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/crypto@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/merkle@0.88.0
+  - @fuel-ts/utils@0.88.0
+  - @fuel-ts/versions@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- Updated dependencies [0da455a]
+  - @fuel-ts/abi-coder@0.87.0
+  - @fuel-ts/transactions@0.87.0
+  - @fuel-ts/address@0.87.0
+  - @fuel-ts/crypto@0.87.0
+  - @fuel-ts/errors@0.87.0
+  - @fuel-ts/hasher@0.87.0
+  - @fuel-ts/interfaces@0.87.0
+  - @fuel-ts/math@0.87.0
+  - @fuel-ts/merkle@0.87.0
+  - @fuel-ts/utils@0.87.0
+  - @fuel-ts/versions@0.87.0
+
+## 0.86.0
+
+### Minor Changes
+
+- ee969d3: fix!: avoid add witnesses for predicates
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+### Patch Changes
+
+- 316c757: fix: internalize `ethers` functionality and remove dependency
+- 0651a5f: chore: remove `ethers` from `abi-coder`
+- Updated dependencies [316c757]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/crypto@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/transactions@0.86.0
+  - @fuel-ts/versions@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/hasher@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/merkle@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Minor Changes
+
+- fb0e12f: chore!: remove `__typename` from GraphQL types
+
+### Patch Changes
+
+- 9bc893b: fix: avoid overriding user `gasLimit` and `maxFee` inputs
+- 1115ade: fix: added CDN path for icon assets
+- f7eacb4: chore: warn on fuel client version incompatibility
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/address@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/transactions@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/merkle@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+- 214f9fc: fix!: deprecate getNetwork from `account`
+
+### Patch Changes
+
+- 86543ed: build: update deps
+- 4aca0b8: feat: add `getMessageByNonce` to `Provider`
+- 6231f7a: docs: updated inconsistent `@fuel-ts/account` README
+- 2dd75b9: fix: handling optional policies
+- 506f788: fix: throw proper error for not enough resources to cover fee
+- Updated dependencies [2990edb]
+  - @fuel-ts/transactions@0.84.0
+  - @fuel-ts/versions@0.84.0
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/abi-coder@0.84.0
+  - @fuel-ts/address@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/merkle@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

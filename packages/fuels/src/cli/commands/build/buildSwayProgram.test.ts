@@ -1,4 +1,3 @@
-import * as findBinPathMod from '@fuel-ts/utils/cli-utils';
 import * as childProcessMod from 'child_process';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
@@ -24,8 +23,6 @@ describe('buildSwayPrograms', () => {
   });
 
   function mockAll(params: { shouldError: boolean } = { shouldError: false }) {
-    const findBinPath = vi.spyOn(findBinPathMod, 'findBinPath').mockReturnValue('');
-
     const spawnMocks = {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       on: vi.fn((eventName: string, fn: (..._: any) => void) => {
@@ -48,7 +45,6 @@ describe('buildSwayPrograms', () => {
     return {
       spawn,
       spawnMocks,
-      findBinPath,
     };
   }
 

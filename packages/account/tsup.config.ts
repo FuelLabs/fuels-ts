@@ -4,17 +4,13 @@ import { join } from 'path';
 import type { Options } from 'tsup';
 
 import { assets } from './src/providers/assets';
-import { resolveIconPaths } from './src/providers/assets/utils';
 
 const configs: Options = {
   ...tsupDefaults,
   entry: {
     index: 'src/index.ts',
     configs: 'src/configs.ts',
-    'test-utils': 'src/test-utils/index.ts',
-  },
-  env: {
-    BASE_URL: process.env.ASSETS_BASE_URL || '',
+    'test-utils': 'src/test-utils.ts',
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   onSuccess: async () => {
@@ -22,8 +18,7 @@ const configs: Options = {
     mkdirSync(outputDir, {
       recursive: true,
     });
-    const assetsData = resolveIconPaths(assets, process.env.ASSETS_BASE_URL as string);
-    writeFileSync(join(outputDir, './assets.json'), JSON.stringify(assetsData));
+    writeFileSync(join(outputDir, './assets.json'), JSON.stringify(assets));
   },
 };
 

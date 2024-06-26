@@ -86,6 +86,16 @@ export function isTypeScript(transactionType: TransactionType) {
 }
 
 /** @hidden */
+export function isTypeUpgrade(transactionType: TransactionType) {
+  return isType(transactionType, TransactionTypeName.Upgrade);
+}
+
+/** @hidden */
+export function isTypeUpload(transactionType: TransactionType) {
+  return isType(transactionType, TransactionTypeName.Upload);
+}
+
+/** @hidden */
 export function hasSameAssetId(a: OperationCoin) {
   return (b: OperationCoin) => a.assetId === b.assetId;
 }
@@ -182,14 +192,13 @@ export function getReceiptsTransferOut(receipts: TransactionResultReceipt[]) {
 export function getWithdrawFromFuelOperations({
   inputs,
   receipts,
-}: InputParam & ReceiptParam): Operation[] {
+  baseAssetId,
+}: InputParam & ReceiptParam & { baseAssetId: string }): Operation[] {
   const messageOutReceipts = getReceiptsMessageOut(receipts);
 
   const withdrawFromFuelOperations = messageOutReceipts.reduce(
     (prevWithdrawFromFuelOps, receipt) => {
-      // TODO: replace this hardcode with receipt.assetId when assetId gets added to MessageOutReceipt
-      const assetId = '0x0000000000000000000000000000000000000000000000000000000000000000';
-      const input = getInputFromAssetId(inputs, assetId);
+      const input = getInputFromAssetId(inputs, baseAssetId);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
         const newWithdrawFromFuelOps = addOperation(prevWithdrawFromFuelOps, {
@@ -206,7 +215,7 @@ export function getWithdrawFromFuelOperations({
           assetsSent: [
             {
               amount: receipt.amount,
-              assetId,
+              assetId: baseAssetId,
             },
           ],
         });
@@ -469,6 +478,7 @@ export function getOperations({
   abiMap,
   rawPayload,
   maxInputs,
+  baseAssetId,
 }: GetOperationParams): Operation[] {
   if (isTypeCreate(transactionType)) {
     return [
@@ -488,7 +498,7 @@ export function getOperations({
         rawPayload,
         maxInputs,
       }),
-      ...getWithdrawFromFuelOperations({ inputs, receipts }),
+      ...getWithdrawFromFuelOperations({ inputs, receipts, baseAssetId }),
     ];
   }
   // at this point we are sure it's a mint transaction

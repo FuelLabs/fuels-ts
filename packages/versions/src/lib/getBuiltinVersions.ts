@@ -1,7 +1,7 @@
 export function getBuiltinVersions() {
   return {
-    FORC: '0.56.0',
-    FUEL_CORE: '0.24.3',
-    FUELS: '0.83.0',
+    FORC: '0.60.0',
+    FUEL_CORE: '0.30.0',
+    FUELS: '0.90.0',
   };
 }

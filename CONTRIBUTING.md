@@ -16,6 +16,24 @@ Check out our [Help Wanted](https://github.com/FuelLabs/fuels-ts/issues?q=is%3Ao
 
 If you are planning something big, for example, changes related to multiple components or changes to current behaviors, make sure to [open an issue](https://github.com/FuelLabs/fuels-ts/issues/new) to discuss with us before starting on the implementation.
 
+If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
+
+# Issue Prioritization
+
+If you would like to create an issue, please use the relevant [issue template](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow us to correctly triage and prioritize it. Every externally submitted issue goes through the following process:
+
+1. A new issue is created and is given the `triage` label
+1. It is assigned to a core maintainer for investigation
+1. Once the assigned core maintainer has completed their investigation, they remove the `triage` label and assign the relevant label to the issue i.e. `bug` , `feat`, `chore`, `docs`
+1. The issue is assigned a milestone (e.g. `mainnet`, `post-launch`) and a prioritization label where `p0` is the highest priority and `p2` is the lowest priority
+1. The issue is assigned for development and should be moved to `In Progress`
+1. A pull request is made ready and the issue is now `In Review`
+1. The pull request needs approval by 3 core maintainers, these can be found in the [CODEOWNERS file](https://github.com/FuelLabs/fuels-ts/blob/master/.github/CODEOWNERS)
+1. It can then be merged to `master` and included in a release
+1. The issue is closed automatically and it's status is moved to `Done`
+
+> **Note:** If additional information is ever required by the assigned investigator then the `awaiting` label will be added to the issue, these means they require more information from the author. Any `awaiting` issue left unanswered for 2 weeks will go `stale` and will be closed.
+
 # Setting up
 
 ```sh
@@ -89,7 +107,7 @@ pnpm link --global @fuel-ts/wallet
 
 See also:
 
-- [Developing](#Developing)
+- [Developing](#developing)
 
 # Testing
 
@@ -138,7 +156,7 @@ During the CI process an automated end-to-end (e2e) test is executed. This test 
 The e2e test can be found at:
 `packages/fuel-gauge/src/e2e-script.test.ts`
 
-The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-beta-5.fuel.network/).
+The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
@@ -151,12 +169,11 @@ cp .env.example .env.test
 And changing the below variables:
 
 ```sh
-FUEL_NETWORK_URL=https://beta-5.fuel.network/graphql
+FUEL_NETWORK_URL=https://testnet.fuel.network/v1/graphql
 TEST_WALLET_PVT_KEY=0x...
-TEST_WALLET_ADDRESS=fuel...
 ```
 
-<!-- TODO: add/fix block explorer URL after beta-5 support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
+<!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
 
 # Commit Convention
 
@@ -187,7 +204,7 @@ the following categories:
 
 1. Fork the fuels-ts repository and clone your fork
 
-2. Create a new branch out of the `master` branch.
+2. Create a new branch out of the `master` branch with the naming convention `<username>/<fix|feat|chore|build|docs>/<branch-name>`.
 
 3. Make and commit your changes following the
    [commit convention](https://github.com/FuelLabs/fuels-ts/blob/master/README.md#commit-convention).
@@ -199,6 +216,8 @@ the following categories:
    [Learn more about Changeset](https://github.com/changesets/changesets/tree/main/packages/cli).
    Please note that you might have to run `git fetch origin master` (where
    origin will be your fork on GitHub) before `pnpm changeset` works.
+
+5. We adhere to the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification for semantic versioning, and given that we currently do not have a major release yet, only breaking changes would require a `minor` version bump. All other API compatible changes would be a `patch` version bump.
 
 > If you made minor changes like CI config, prettier, etc, you can run
 > `pnpm changeset add --empty` to generate an empty changeset file to document
@@ -222,7 +241,7 @@ After this you should run tests and fix any incompatibilities.
 
 # Updating Fuel Core version
 
-Manually edit the `packages/fuel-core/VERSION` file, add the right version, and then:
+Manually edit the `internal/fuel-core/VERSION` file, add the right version, and then:
 
 ```sh
 pnpm install # will download new binaries
@@ -241,7 +260,22 @@ The following example is for releasing a patch for `v0.69.0` -> `v0.69.1`.
 - Create PRs with base set to that release branch
   - When the PR is merged, a changeset PR is created
   - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
-- After release, delete the release branch from GitHub
+- After release, the release branch will be automatically deleted
+
+# Patching latest release
+
+Imagine the scenario:
+
+1. We release `v0.80.0`
+1. One day later, we have a new changesets PR that will bump things to `v0.81.0`
+1. Before releasing `v0.81.0`, we find an issue and need to make a `v0.80.1` patch
+
+We'd follow the same approach as explained in the [Patching old releases](#patching-old-releases) section above, bearing in mind the following after the release:
+
+- A PR merging the `latest` release's branch into `master` will be automatically created,
+- The automatically-created PR **must** be merged as soon as possible in order to
+  - have the versions of packages on `master` match the `latest` released package versions,
+  - have the released functionality on `master` as well
 
 # FAQ
 

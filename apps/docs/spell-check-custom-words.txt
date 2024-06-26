@@ -302,6 +302,7 @@ MULTICALL
 TTL
 Bech
 CLIs
+typedoc
 backoff
 extractable
 SHA-256
@@ -315,3 +316,12 @@ Gwei
 onchain
 Vercel
 hardcoded
+differentiators
+updatable
+tsconfig
+deployer
+overriden
+typesafe
+launchTestNode
+Vitest
+CODEOWNERS

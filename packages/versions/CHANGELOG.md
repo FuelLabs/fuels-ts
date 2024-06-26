@@ -1,5 +1,49 @@
 # @fuel-ts/versions
 
+## 0.90.0
+
+### Patch Changes
+
+- e165e37: chore!: upgrade fuel core to `0.28.0`
+- 81a77d3: chore: upgrading `fuel-core` to `0.29.0`
+- af3202c: feat: support for `bun`
+- 90e8cba: chore: upgrading `fuel-core` to `0.30.0`
+
+## 0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+
+## 0.89.0
+
+### Patch Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+- a96c1fe: chore: upgrade forc 0.60.0
+
+## 0.88.1
+
+## 0.88.0
+
+## 0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+## 0.85.0
+
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+
 ## 0.83.0
 
 ### Minor Changes

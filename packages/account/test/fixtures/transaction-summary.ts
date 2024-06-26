@@ -256,6 +256,7 @@ export const MOCK_ABI_MAP: AbiMap = {
       },
     ],
     loggedTypes: [],
+    messagesTypes: [],
     configurables: [],
   },
 };
@@ -282,36 +283,34 @@ export const MOCK_TRANSACTION: Transaction = {
 };
 
 export const MOCK_SUCCESS_STATUS: SuccessStatus = {
-  __typename: 'SuccessStatus',
   time: '4611686020122012518',
   type: 'SuccessStatus',
   block: {
-    __typename: 'Block',
     id: '0x123',
   },
   receipts: [],
+  totalFee: '1000',
+  totalGas: '1000',
 };
 
 export const MOCK_FAILURE_STATUS: FailureStatus = {
-  __typename: 'FailureStatus',
   type: 'FailureStatus',
   block: {
-    __typename: 'Block',
     id: '0x123',
   },
   reason: 'reason',
   time: '4611686020122012535',
   receipts: [],
+  totalFee: '1000',
+  totalGas: '1000',
 };
 
 export const MOCK_SUBMITTED_STATUS: SubmittedStatus = {
-  __typename: 'SubmittedStatus',
   time: '4611686020122012562',
   type: 'SubmittedStatus',
 };
 
 export const MOCK_SQUEEZEDOUT_STATUS: SqueezedOutStatus = {
-  __typename: 'SqueezedOutStatus',
   type: 'SqueezedOutStatus',
   reason: 'Transaction removed.',
 };

@@ -9,8 +9,7 @@ import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
-import type { GqlGasCosts } from '../__generated__/operations';
-import type { ChainInfo } from '../provider';
+import type { ChainInfo, GasCosts } from '../provider';
 import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
 
 import { hashTransaction } from './hash-transaction';
@@ -153,9 +152,19 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this.outputs.length - 1;
   }
 
+  /**
+   * Calculates the maximum gas for the transaction.
+   *
+   * @param chainInfo - The chain information.
+   * @param minGas - The minimum gas.
+   * @returns the maximum gas.
+   */
   calculateMaxGas(chainInfo: ChainInfo, minGas: BN): BN {
     const { consensusParameters } = chainInfo;
-    const { gasPerByte, maxGasPerTx } = consensusParameters;
+    const {
+      feeParameters: { gasPerByte },
+      txParameters: { maxGasPerTx },
+    } = consensusParameters;
 
     const witnessesLength = this.toTransaction().witnesses.reduce(
       (acc, wit) => acc + wit.dataLength,
@@ -224,7 +233,7 @@ export class ScriptTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
-  metadataGas(gasCosts: GqlGasCosts): BN {
+  metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxScript({
       gasCosts,
       txBytesSize: this.byteSize(),

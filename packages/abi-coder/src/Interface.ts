@@ -7,7 +7,7 @@ import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
-import { ENCODING_V0, type EncodingVersion } from './utils/constants';
+import { type EncodingVersion } from './utils/constants';
 import { findTypeById, getEncodingVersion } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
@@ -49,24 +49,6 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     );
   }
 
-  decodeFunctionData(functionFragment: FunctionFragment | string, data: BytesLike): any {
-    const fragment =
-      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
-
-    return fragment.decodeArguments(data);
-  }
-
-  encodeFunctionData(
-    functionFragment: FunctionFragment | string,
-    values: Array<InputValue>,
-    offset = 0
-  ): Uint8Array {
-    const fragment =
-      typeof functionFragment === 'string' ? this.getFunction(functionFragment) : functionFragment;
-
-    return fragment.encodeArguments(values, offset);
-  }
-
   // Decode the result of a function call
   decodeFunctionResult(functionFragment: FunctionFragment | string, data: BytesLike): any {
     const fragment =
@@ -75,7 +57,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     return fragment.decodeOutput(data);
   }
 
-  decodeLog(data: BytesLike, logId: number): any {
+  decodeLog(data: BytesLike, logId: string): any {
     const loggedType = this.jsonAbi.loggedTypes.find((type) => type.logId === logId);
     if (!loggedType) {
       throw new FuelError(
@@ -99,9 +81,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     }
 
     return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
-      isRightPadded: true,
-      // TODO: Review support for configurables in v1 encoding when it becomes available
-      encoding: ENCODING_V0,
+      encoding: this.encoding,
     });
   }
 

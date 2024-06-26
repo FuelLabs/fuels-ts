@@ -49,6 +49,23 @@ pub enum ColorEnum {
     Blue: (),
 }
 
+pub enum MixedNativeEnum {
+    Native: (),
+    NotNative: u32,
+}
+
+enum MyContractError {
+    DivisionByZero: (),
+}
+
+fn divide(numerator: u64, denominator: u64) -> Result<u64, MyContractError> {
+    if (denominator == 0) {
+        return Err(MyContractError::DivisionByZero);
+    } else {
+        Ok(numerator / denominator)
+    }
+}
+
 abi CoverageContract {
     fn produce_logs_variables();
     fn get_id() -> b256;
@@ -97,6 +114,7 @@ abi CoverageContract {
     fn echo_struct_vector_first(vector: Vec<BigStruct>) -> BigStruct;
     fn echo_struct_vector_last(vector: Vec<ComplexStruct>) -> ComplexStruct;
     fn color_enum(input: ColorEnum) -> ColorEnum;
+    fn mixed_native_enum(input: MixedNativeEnum) -> MixedNativeEnum;
     fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn u32_and_vec_params(foo: u32, input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>);
     fn vec_in_vec(arg: Vec<Vec<u32>>);
@@ -107,6 +125,7 @@ abi CoverageContract {
         inputC: b256,
         inputD: b256,
     ) -> Vec<b256>;
+    fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
 }
 
 pub fn vec_from(vals: [u32; 3]) -> Vec<u32> {
@@ -395,6 +414,13 @@ impl CoverageContract for Contract {
         }
     }
 
+    fn mixed_native_enum(input: MixedNativeEnum) -> MixedNativeEnum {
+        match input {
+            MixedNativeEnum::Native => MixedNativeEnum::NotNative(12),
+            MixedNativeEnum::NotNative => MixedNativeEnum::Native,
+        }
+    }
+
     fn vec_as_only_param(input: Vec<u64>) -> (u64, Option<u64>, Option<u64>, Option<u64>) {
         (input.len(), input.get(0), input.get(1), input.get(2))
     }
@@ -424,5 +450,17 @@ impl CoverageContract for Contract {
         inputD: b256,
     ) -> Vec<b256> {
         inputB
+    }
+
+    fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]> {
+        if (x.is_err()) {
+            return Err(__to_str_array("InputError"));
+        }
+
+        let result = divide(20, x.unwrap());
+        match result {
+            Ok(value) => Ok(value),
+            Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
+        }
     }
 }

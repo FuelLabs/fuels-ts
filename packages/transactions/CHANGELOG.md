@@ -1,5 +1,154 @@
 # Change Log
 
+## 0.90.0
+
+### Patch Changes
+
+- Updated dependencies [bb5a123]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [1beab0e]
+- Updated dependencies [439d0dc]
+- Updated dependencies [436f040]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.89.2
+- @fuel-ts/address@0.89.2
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/hasher@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/utils@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/abi-coder@0.89.1
+  - @fuel-ts/address@0.89.1
+  - @fuel-ts/hasher@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
+## 0.89.0
+
+### Patch Changes
+
+- 685829b: fix: use `V1` encode for `Upgrade` and `Upload` transaction coders
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [f83502e]
+- Updated dependencies [af3c143]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [f76aa57]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/abi-coder@0.89.0
+  - @fuel-ts/address@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- Updated dependencies [64b90a9]
+  - @fuel-ts/abi-coder@0.88.1
+  - @fuel-ts/address@0.88.1
+  - @fuel-ts/errors@0.88.1
+  - @fuel-ts/hasher@0.88.1
+  - @fuel-ts/interfaces@0.88.1
+  - @fuel-ts/math@0.88.1
+  - @fuel-ts/utils@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/utils@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- Updated dependencies [0da455a]
+  - @fuel-ts/abi-coder@0.87.0
+  - @fuel-ts/address@0.87.0
+  - @fuel-ts/errors@0.87.0
+  - @fuel-ts/hasher@0.87.0
+  - @fuel-ts/interfaces@0.87.0
+  - @fuel-ts/math@0.87.0
+  - @fuel-ts/utils@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+- Updated dependencies [316c757]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/hasher@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/address@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+
+### Patch Changes
+
+- Updated dependencies [2990edb]
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/abi-coder@0.84.0
+  - @fuel-ts/address@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

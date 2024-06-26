@@ -23,6 +23,10 @@ npm create fuels@{{fuels}}
 pnpm create fuels@{{fuels}}
 ```
 
+```sh-vue [bun]
+bunx --bun create-fuels@{{fuels}}
+```
+
 :::
 
 Once you run the command, you will be greeted with a few simple questions. We will answer them as follows:
@@ -108,11 +112,15 @@ Let's first start our Fuel Dev server. This will start a local Fuel node and con
 ::: code-group
 
 ```sh [npm]
-pnpm fuels:dev
+npm fuels:dev
 ```
 
 ```sh [pnpm]
 pnpm fuels:dev
+```
+
+```sh [bun]
+bun run fuels:dev
 ```
 
 :::
@@ -129,11 +137,21 @@ pnpm dev
 pnpm dev
 ```
 
+```sh [bun]
+bun run dev
+```
+
 :::
 
 You should now be able to see the counter dApp running at `http://localhost:3000`. You can try changing the contents of the `./sway-programs/contract/src/main.sw` file and see the changes reflected in the UI without having to restart the server.
 
 ![Fullstack Fuel Dev Workflow](../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
+
+:::
+
+**Note** You may wish to learn more about how you could create a Fuel dApp that uses predicates, check out our [Working with Predicates](./working-with-predicates.md) guide.
+
+---
 
 ## Adding Decrement Functionality
 
@@ -185,8 +203,11 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 - Now that you have a basic counter dApp running and have the `npm create fuels` workflow powering you, you can start building more complex dApps using the Fuel Stack. A good place to start for ideas and reference code is the [Sway Applications Repo](https://github.com/FuelLabs/sway-applications).
 
+- As you may have noticed, there are different types of programs in your dApp, feel free to explore [Predicates](https://docs.fuel.network/docs/fuels-ts/predicates/) and [Scripts](https://docs.fuel.network/docs/fuels-ts/scripts/), which are both important differentiators in the Fuel Stack.
+
 - If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./deploying-a-dapp-to-testnet.md) guide.
 
 - If you have any questions or need help, feel free to reach out to us on the [Official Fuel Forum](https://forum.fuel.network/).
 
 - If you want to learn more about the Fuel Stack, check out the [Fuel Docs](https://docs.fuel.network/).
+

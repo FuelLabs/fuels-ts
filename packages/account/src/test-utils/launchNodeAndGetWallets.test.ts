@@ -25,7 +25,6 @@ describe('launchNode', () => {
   }, 10000);
 
   test('launchNodeAndGetWallets - custom config', async () => {
-    // #region launchNode-custom-config
     const snapshotDir = path.join(cwd(), '.fuel-core/configs');
 
     const { stop, provider } = await launchNodeAndGetWallets({
@@ -36,7 +35,9 @@ describe('launchNode', () => {
     });
 
     const {
-      consensusParameters: { gasPerByte },
+      consensusParameters: {
+        feeParameters: { gasPerByte },
+      },
     } = provider.getChain();
 
     const expectedGasPerByte = 63;
@@ -44,7 +45,6 @@ describe('launchNode', () => {
     expect(gasPerByte.toNumber()).toEqual(expectedGasPerByte);
 
     stop();
-    // #endregion launchNode-custom-config
   });
 
   test('launchNodeAndGetWallets - custom walletCount', async () => {

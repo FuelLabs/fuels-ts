@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-import { ENCODING_V0 } from '@fuel-ts/abi-coder';
 import type {
   CallResult,
   JsonAbisFromAllCalls,
@@ -98,14 +97,9 @@ export class InvocationResult<T = any> {
       return callResultToInvocationResult<T>(callResult, callConfig, logs);
     }
 
-    const outputAsIterableHeap =
-      (callConfig?.func.encoding === ENCODING_V0 && callConfig?.func.outputMetadata.isHeapType) ||
-      false;
-
     const encodedResults = decodeContractCallScriptResult(
       callResult,
       (callConfig?.program as AbstractContract).id,
-      outputAsIterableHeap,
       logs
     );
     const returnValues = encodedResults.map((encodedResult, i) => {

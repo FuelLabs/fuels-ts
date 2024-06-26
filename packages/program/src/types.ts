@@ -1,4 +1,4 @@
-import type { FunctionFragment, JsonAbi, EncodingVersion } from '@fuel-ts/abi-coder';
+import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/account';
 import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -11,12 +11,7 @@ import type { FunctionInvocationScope } from './functions/invocation-scope';
 export type ContractCall = {
   contractId: AbstractAddress;
   data: BytesLike;
-  fnSelector: string;
   fnSelectorBytes: Uint8Array;
-  encoding?: EncodingVersion;
-  isInputDataPointer: boolean;
-  isOutputDataHeap: boolean;
-  outputEncodedLength: number;
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
@@ -41,7 +36,6 @@ export type TxParams = Partial<{
   maxFee?: BigNumberish;
   witnessLimit?: BigNumberish;
   variableOutputs: number;
-  optimizeGas?: boolean;
 }>;
 
 /**
@@ -68,6 +62,11 @@ export type CallConfig<T = unknown> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> {
   (...args: TArgs): FunctionInvocationScope<TArgs, TReturn>;
+  /**
+   * Checks if the function is read-only i.e. it only reads from storage, does not write to it.
+   *
+   * @returns True if the function is read-only or pure, false otherwise.
+   */
   isReadOnly: () => boolean;
 }
 

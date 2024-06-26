@@ -1,6 +1,6 @@
 # Deploying a dApp to Testnet
 
-In this guide, we will deploy a full-stack dApp bootstrapped with `npm create fuels` to the Fuel beta-5 testnet.
+In this guide, we will deploy a full-stack dApp bootstrapped with `npm create fuels` to the Fuel testnet.
 
 > Make sure you have already bootstrapped a dApp using `npm create fuels`. If you haven't, please follow [this guide](./index.md).
 
@@ -32,9 +32,9 @@ forc deploy --testnet
 You should see a message similar to this:
 
 ```md
-Contract deploy-to-beta-5 Deployed!
+Contract deploy-to-testnet Deployed!
 
-Network: https://beta-5.fuel.network
+Network: https://testnet.fuel.network
 Contract ID: 0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 Deployed in block 0x4ea52b6652836c499e44b7e42f7c22d1ed1f03cf90a1d94cd0113b9023dfa636
 ```
@@ -69,7 +69,6 @@ If you run your frontend now, you should be able to interact with your contract 
 To deploy your frontend to the cloud, you can use any service like [Vercel](https://vercel.com/). Make sure that you setup your environment variables correctly and that your contract ID is correct. Your environment variables should look something like this:
 
 ```md
-NEXT_PUBLIC_HAS_CONTRACT=true
 NEXT_PUBLIC_DAPP_ENVIRONMENT=testnet
 NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 

@@ -9,8 +9,7 @@ import { getSetupContract } from './utils';
 /**
  * @group node
  */
-// TODO: Unskip test after sway-libs become compatible with latest forc (0.52+)
-describe.skip('bytecode computations', () => {
+describe('bytecode computations', () => {
   test('compute_bytecode_root', async () => {
     const { binHexlified: bytecodeFromFile } = getFuelGaugeForcProject(
       FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
@@ -42,7 +41,7 @@ describe.skip('bytecode computations', () => {
         {
           bits: contract.id.toB256(),
         },
-        arrayify(bytecodeFromFile)
+        Array.from(arrayify(bytecodeFromFile))
       )
       .call();
 
@@ -64,7 +63,7 @@ describe.skip('bytecode computations', () => {
     const contract = await setupContract();
 
     const { value } = await contract.functions
-      .compute_predicate_address(arrayify(defaultPredicateBytecode))
+      .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))
       .call();
 
     expect(value.bits).toEqual(address.toB256());

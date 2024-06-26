@@ -48,6 +48,9 @@ export function bootstrapProject(testFilepath: string) {
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
   const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi__factory.ts');
 
+  const forcPath = 'fuels-forc';
+  const fuelCorePath = 'fuels-core';
+
   return {
     root,
     workspaceDir,
@@ -60,6 +63,8 @@ export function bootstrapProject(testFilepath: string) {
     outputDir,
     contractsJsonPath,
     fooContractFactoryPath,
+    forcPath,
+    fuelCorePath,
   };
 }
 
@@ -82,7 +87,8 @@ export type InitParams = BaseParams & {
   scripts?: string;
   predicates?: string;
   output: string;
-  useBuiltinBinaries?: boolean;
+  forcPath?: string;
+  fuelCorePath?: string;
   autoStartFuelCore?: boolean;
   build?: boolean;
 };
@@ -99,7 +105,8 @@ export async function runInit(params: InitParams) {
     predicates,
     root,
     scripts,
-    useBuiltinBinaries,
+    forcPath,
+    fuelCorePath,
     workspace,
   } = params;
 
@@ -107,13 +114,14 @@ export async function runInit(params: InitParams) {
     value ? (flags as string[]) : [];
 
   const flags = [
-    flag(['-p', root], root),
+    flag(['--path', root], root),
     flag(['-o', output], output),
     flag(['-w', workspace], workspace),
     flag(['--contracts', contracts], contracts),
     flag(['--scripts', scripts], scripts),
     flag(['--predicates', predicates], predicates),
-    flag(['--use-builtin-forc', '--use-builtin-fuel-core'], useBuiltinBinaries),
+    flag(['--forc-path', forcPath], forcPath),
+    flag(['--fuel-core-path', fuelCorePath], fuelCorePath),
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
   ].flat();
 
@@ -122,16 +130,16 @@ export async function runInit(params: InitParams) {
 
 export async function runBuild(params: BuildParams) {
   const { root, deploy } = params;
-  const flags = [['-p', root], deploy ? ['--deploy'] : []].flat();
+  const flags = [['--path', root], deploy ? ['--deploy'] : []].flat();
   return runCommand(Commands.build, flags);
 }
 
 export async function runDeploy(params: BaseParams) {
-  return runCommand(Commands.deploy, ['-p', params.root]);
+  return runCommand(Commands.deploy, ['--path', params.root]);
 }
 
 export async function runDev(params: BaseParams) {
-  return runCommand(Commands.dev, ['-p', params.root]);
+  return runCommand(Commands.dev, ['--path', params.root]);
 }
 
 /**

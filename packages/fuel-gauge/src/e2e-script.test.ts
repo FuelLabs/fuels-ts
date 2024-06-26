@@ -1,108 +1,91 @@
 /* eslint-disable no-console */
-import type { BN } from 'fuels';
-import { Provider, WalletUnlocked, bn } from 'fuels';
+import {
+  DEVNET_NETWORK_URL,
+  TESTNET_NETWORK_URL,
+  Provider,
+  TransactionType,
+  WalletUnlocked,
+  CHAIN_IDS,
+  rawAssets,
+  assets,
+} from 'fuels';
 
 import { getScript } from './utils';
 
-const U32_VEC = [0, 1, 2];
-const VEC_IN_VEC = [
-  [0, 1, 2],
-  [0, 1, 2],
-];
-const STRUCT_IN_VEC = [{ a: 0 }, { a: 1 }];
-const VEC_IN_STRUCT = { a: [0, 1, 2] };
-const ARRAY_IN_VEC = [
-  [0, 1],
-  [0, 1],
-];
-const VEC_IN_ARRAY = [
-  [0, 1, 2],
-  [0, 1, 2],
-];
-const VEC_IN_ENUM = { a: [0, 1, 2] };
-const ENUM_IN_VEC = [{ a: 0 }, { a: 1 }];
-const TUPLE_IN_VEC = [
-  [0, 0],
-  [1, 1],
-];
-const VEC_IN_TUPLE = [
-  [0, 1, 2],
-  [0, 1, 2],
-];
-const VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC = [
-  {
-    a: [
-      [0, 1, 2],
-      [3, 4, 5],
-    ],
-  },
-  {
-    a: [
-      [6, 7, 8],
-      [9, 10, 11],
-    ],
-  },
-];
+enum Networks {
+  DEVNET = 'devnet',
+  TESTNET = 'testnet',
+}
 
-type SomeStruct = {
-  a: number;
+type ConfiguredNetwork = {
+  networkUrl: string;
+  privateKey?: string;
+  faucetUrl: string;
+  txIds?: {
+    [TransactionType.Mint]: string;
+    [TransactionType.Upgrade]: string;
+    [TransactionType.Upload]: string;
+  };
 };
 
-type SomeStructWithVec = {
-  a: number[];
+const configuredNetworks = {
+  [Networks.DEVNET]: {
+    networkUrl: DEVNET_NETWORK_URL,
+    privateKey: process.env.DEVNET_WALLET_PVT_KEY,
+    faucetUrl: `https://faucet-devnet.fuel.network/`,
+    txIds: {
+      [TransactionType.Upgrade]:
+        '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094',
+      [TransactionType.Upload]:
+        '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73',
+    },
+  } as ConfiguredNetwork,
+  [Networks.TESTNET]: {
+    networkUrl: TESTNET_NETWORK_URL,
+    privateKey: process.env.TESTNET_WALLET_PVT_KEY,
+    faucetUrl: `https://faucet-testnet.fuel.network/`,
+    txIds: {
+      [TransactionType.Upgrade]:
+        '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
+      [TransactionType.Upload]:
+        '0x996eec87a702ac978663fe67dbde7ab94d31f32b1860fbfc527d4b5447b3446c',
+    },
+  } as ConfiguredNetwork,
 };
 
-type VecInAStructInAVec = {
-  a: number[][];
-}[];
-
-type TwoDimensionArray = number[][];
-
-// these Type shapes are here to get the TypeScript inference, they aren't 100% accurate
-type MainArgs = [
-  number[], // U32_VEC
-  TwoDimensionArray, // VEC_IN_VEC
-  SomeStruct[], // STRUCT_IN_VEC
-  SomeStructWithVec, // VEC_IN_STRUCT
-  TwoDimensionArray, // ARRAY_IN_VEC
-  TwoDimensionArray, // VEC_IN_ARRAY
-  SomeStructWithVec, // VEC_IN_ENUM
-  SomeStruct[], // ENUM_IN_VEC
-  TwoDimensionArray, // TUPLE_IN_VEC
-  TwoDimensionArray, // VEC_IN_TUPLE
-  VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
-];
+const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
 
 /**
  * @group node
  * @group e2e
  */
-describe('Live Script Test', () => {
-  it('can use script against live Fuel Node', async () => {
-    if (!process.env.TEST_WALLET_PVT_KEY || !process.env.FUEL_TESTNET_NETWORK_URL) {
+describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
+  let provider: Provider;
+  let wallet: WalletUnlocked;
+  let shouldSkip: boolean;
+
+  beforeAll(async () => {
+    const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
+    if (!privateKey) {
       console.log('Skipping live Fuel Node test');
+      shouldSkip = true;
       return;
     }
 
-    const provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
-    const wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
-    const scriptInstance = getScript<MainArgs, BN>('vector-types-script', wallet);
+    provider = await Provider.create(networkUrl);
+    wallet = new WalletUnlocked(privateKey, provider);
+  });
 
-    let output: BN = bn(0);
+  it('can use script against live Fuel Node', async () => {
+    if (shouldSkip) {
+      return;
+    }
+
+    const scriptInstance = getScript<[boolean], boolean>('script-main-arg-bool', wallet);
+
+    let output: boolean = false;
     try {
-      const callScope = scriptInstance.functions.main(
-        U32_VEC,
-        VEC_IN_VEC,
-        STRUCT_IN_VEC,
-        VEC_IN_STRUCT,
-        ARRAY_IN_VEC,
-        VEC_IN_ARRAY,
-        VEC_IN_ENUM,
-        ENUM_IN_VEC,
-        TUPLE_IN_VEC,
-        VEC_IN_TUPLE,
-        VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
-      );
+      const callScope = scriptInstance.functions.main(true);
 
       const { value } = await callScope.call();
 
@@ -113,12 +96,56 @@ describe('Live Script Test', () => {
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
-        - add assets: https://faucet-beta-5.fuel.network/
-        - check balance: https://fuellabs.github.io/block-explorer-v2/beta-5/#/address/${address}
+        - add assets: ${configuredNetworks[selectedNetwork].faucetUrl}
         - bech32 address: ${address}
       `);
     }
 
     expect(output).toBe(true);
+  });
+
+  it.each([
+    ['Upgrade', TransactionType.Upgrade],
+    ['Upload', TransactionType.Upload],
+  ])('can query and decode a %s transaction', async (_, type) => {
+    if (shouldSkip) {
+      return;
+    }
+
+    const { txIds } = configuredNetworks[selectedNetwork];
+    if (undefined === txIds) {
+      console.log(`Skipping ${type} transaction test for ${selectedNetwork} network`);
+      return;
+    }
+
+    const txId = txIds[type as keyof ConfiguredNetwork['txIds']];
+    const transaction = await provider.getTransaction(txId);
+    expect(transaction?.type).toBe(type);
+  });
+
+  it(`should have correct assets`, () => {
+    if (shouldSkip) {
+      return;
+    }
+
+    const expected = [
+      {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        icon: expect.stringContaining('eth.svg'),
+        networks: expect.arrayContaining([
+          {
+            type: 'fuel',
+            decimals: 9,
+            chainId: provider.getChainId(),
+            assetId: provider.getBaseAssetId(),
+          },
+        ]),
+      },
+    ];
+
+    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
+    expect(rawAssets).toEqual(expected);
+    expect(assets).toEqual(expected);
   });
 });

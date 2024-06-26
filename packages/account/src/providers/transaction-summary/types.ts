@@ -3,20 +3,23 @@ import type { B256Address } from '@fuel-ts/interfaces';
 import type { BN, BNInput } from '@fuel-ts/math';
 import type { Input, Output, Transaction, TransactionType } from '@fuel-ts/transactions';
 
-import type { GqlGetTransactionQuery } from '../__generated__/operations';
+import type {
+  GqlFailureStatusFragment,
+  GqlGetTransactionQuery,
+  GqlSqueezedOutStatusFragment,
+  GqlSubmittedStatusFragment,
+  GqlSuccessStatusFragment,
+} from '../__generated__/operations';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 export type GqlTransaction = NonNullable<GqlGetTransactionQuery['transaction']>;
 
 export type GraphqlTransactionStatus = GqlTransaction['status'];
 
-export type SuccessStatus = Extract<GraphqlTransactionStatus, { __typename: 'SuccessStatus' }>;
-export type FailureStatus = Extract<GraphqlTransactionStatus, { __typename: 'FailureStatus' }>;
-export type SubmittedStatus = Extract<GraphqlTransactionStatus, { __typename: 'SubmittedStatus' }>;
-export type SqueezedOutStatus = Extract<
-  GraphqlTransactionStatus,
-  { __typename: 'SqueezedOutStatus' }
->;
+export type SuccessStatus = GqlSuccessStatusFragment;
+export type FailureStatus = GqlFailureStatusFragment;
+export type SubmittedStatus = GqlSubmittedStatusFragment;
+export type SqueezedOutStatus = GqlSqueezedOutStatusFragment;
 
 export type Reason = FailureStatus['reason'];
 export type ProgramState = SuccessStatus['programState'];
@@ -30,6 +33,8 @@ export enum TransactionTypeName {
   Create = 'Create',
   Mint = 'Mint',
   Script = 'Script',
+  Upgrade = 'Upgrade',
+  Upload = 'Upload',
 }
 
 /**
@@ -136,6 +141,7 @@ export type GetOperationParams = {
   transactionType: TransactionType;
   abiMap?: AbiMap;
   maxInputs: BN;
+  baseAssetId: string;
 } & InputOutputParam &
   ReceiptParam &
   RawPayloadParam;
@@ -154,6 +160,7 @@ export type TransactionSummary<TTransactionType = void> = {
   time?: string;
   operations: Operation[];
   gasUsed: BN;
+  tip: BN;
   fee: BN;
   type: TransactionTypeName;
   blockId?: BlockId;
@@ -161,6 +168,8 @@ export type TransactionSummary<TTransactionType = void> = {
   isTypeMint: boolean;
   isTypeCreate: boolean;
   isTypeScript: boolean;
+  isTypeUpgrade: boolean;
+  isTypeUpload: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;

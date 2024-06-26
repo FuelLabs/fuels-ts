@@ -8,7 +8,7 @@ import {
   B512_CODER_TYPE,
   BOOL_CODER_TYPE,
   BYTES_CODER_TYPE,
-  ENCODING_V0,
+  ENCODING_V1,
   OPTION_CODER_TYPE,
   RAW_PTR_CODER_TYPE,
   RAW_SLICE_CODER_TYPE,
@@ -28,22 +28,22 @@ import {
 } from '../../utils/constants';
 import { findVectorBufferArgument } from '../../utils/json-abi';
 import type { Coder } from '../coders/AbstractCoder';
-import { ArrayCoder } from '../coders/v0/ArrayCoder';
-import { B256Coder } from '../coders/v0/B256Coder';
-import { B512Coder } from '../coders/v0/B512Coder';
-import { BigNumberCoder } from '../coders/v0/BigNumberCoder';
-import { BooleanCoder } from '../coders/v1/BooleanCoder';
-import { ByteCoder } from '../coders/v1/ByteCoder';
-import { EnumCoder } from '../coders/v1/EnumCoder';
-import { NumberCoder } from '../coders/v1/NumberCoder';
-import { OptionCoder } from '../coders/v1/OptionCoder';
-import { RawSliceCoder } from '../coders/v1/RawSliceCoder';
-import { StdStringCoder } from '../coders/v1/StdStringCoder';
-import { StrSliceCoder } from '../coders/v1/StrSliceCoder';
-import { StringCoder } from '../coders/v1/StringCoder';
-import { StructCoder } from '../coders/v1/StructCoder';
-import { TupleCoder } from '../coders/v1/TupleCoder';
-import { VecCoder } from '../coders/v1/VecCoder';
+import { ArrayCoder } from '../coders/ArrayCoder';
+import { B256Coder } from '../coders/B256Coder';
+import { B512Coder } from '../coders/B512Coder';
+import { BigNumberCoder } from '../coders/BigNumberCoder';
+import { BooleanCoder } from '../coders/BooleanCoder';
+import { ByteCoder } from '../coders/ByteCoder';
+import { EnumCoder } from '../coders/EnumCoder';
+import { NumberCoder } from '../coders/NumberCoder';
+import { OptionCoder } from '../coders/OptionCoder';
+import { RawSliceCoder } from '../coders/RawSliceCoder';
+import { StdStringCoder } from '../coders/StdStringCoder';
+import { StrSliceCoder } from '../coders/StrSliceCoder';
+import { StringCoder } from '../coders/StringCoder';
+import { StructCoder } from '../coders/StructCoder';
+import { TupleCoder } from '../coders/TupleCoder';
+import { VecCoder } from '../coders/VecCoder';
 
 import { getCoders } from './getCoders';
 
@@ -99,6 +99,7 @@ export const getCoder: GetCoderFn = (
   const components = resolvedAbiType.components!;
 
   const arrayMatch = arrayRegEx.exec(resolvedAbiType.type)?.groups;
+
   if (arrayMatch) {
     const length = parseInt(arrayMatch.length, 10);
     const arg = components[0];
@@ -109,7 +110,7 @@ export const getCoder: GetCoderFn = (
       );
     }
 
-    const arrayElementCoder = getCoder(arg, { isSmallBytes: true });
+    const arrayElementCoder = getCoder(arg);
     return new ArrayCoder(arrayElementCoder as Coder, length);
   }
 
@@ -117,13 +118,13 @@ export const getCoder: GetCoderFn = (
     const arg = findVectorBufferArgument(components);
     const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
 
-    const itemCoder = getCoder(argType, { isSmallBytes: true, encoding: ENCODING_V0 });
+    const itemCoder = getCoder(argType, { encoding: ENCODING_V1 });
     return new VecCoder(itemCoder as Coder);
   }
 
   const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
   if (structMatch) {
-    const coders = getCoders(components, { isRightPadded: true, getCoder });
+    const coders = getCoders(components, { getCoder });
     return new StructCoder(structMatch.name, coders);
   }
 
@@ -140,9 +141,7 @@ export const getCoder: GetCoderFn = (
 
   const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
   if (tupleMatch) {
-    const coders = components.map((component) =>
-      getCoder(component, { isRightPadded: true, encoding: ENCODING_V0 })
-    );
+    const coders = components.map((component) => getCoder(component, { encoding: ENCODING_V1 }));
     return new TupleCoder(coders as Coder[]);
   }
 

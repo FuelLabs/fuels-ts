@@ -6,7 +6,7 @@ import { arrayify } from '@fuel-ts/utils';
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
   GqlPageInfo,
-  GqlReceiptFragmentFragment,
+  GqlReceiptFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { TransactionRequest } from '../transaction-request';
@@ -44,7 +44,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     0
   );
 
-  let txReceipts: GqlReceiptFragmentFragment[] = [];
+  let txReceipts: GqlReceiptFragment[] = [];
 
   if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
     txReceipts = gqlTransaction.status.receipts;
@@ -53,10 +53,15 @@ export async function getTransactionSummary<TTransactionType = void>(
   const receipts = txReceipts.map(processGqlReceipt);
 
   const {
-    consensusParameters: { gasPerByte, gasPriceFactor, maxInputs, gasCosts, maxGasPerTx },
+    consensusParameters: {
+      feeParameters: { gasPerByte, gasPriceFactor },
+      txParameters: { maxInputs, maxGasPerTx },
+      gasCosts,
+    },
   } = provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactionInfo = assembleTransactionSummary<TTransactionType>({
     id: gqlTransaction.id,
@@ -71,6 +76,7 @@ export async function getTransactionSummary<TTransactionType = void>(
     gasCosts,
     maxGasPerTx,
     gasPrice,
+    baseAssetId,
   });
 
   return {
@@ -91,15 +97,16 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 ): Promise<TransactionSummary<TTransactionType>> {
   const { provider, transactionRequest, abiMap } = params;
 
-  const { receipts } = await provider.call(transactionRequest);
+  const { receipts } = await provider.dryRun(transactionRequest);
 
   const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = provider.getGasConfig();
-  const maxInputs = provider.getChain().consensusParameters.maxInputs;
+  const maxInputs = provider.getChain().consensusParameters.txParameters.maxInputs;
 
   const transaction = transactionRequest.toTransaction();
   const transactionBytes = transactionRequest.toTransactionBytes();
 
   const gasPrice = await provider.getLatestGasPrice();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
     receipts,
@@ -112,6 +119,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
     gasCosts,
     maxGasPerTx,
     gasPrice,
+    baseAssetId,
   });
 
   return transactionSummary;
@@ -139,10 +147,15 @@ export async function getTransactionsSummaries(
   const { edges, pageInfo } = transactionsByOwner;
 
   const {
-    consensusParameters: { gasPerByte, gasPriceFactor, maxInputs, gasCosts, maxGasPerTx },
+    consensusParameters: {
+      feeParameters: { gasPerByte, gasPriceFactor },
+      txParameters: { maxInputs, maxGasPerTx },
+      gasCosts,
+    },
   } = provider.getChain();
 
   const gasPrice = await provider.getLatestGasPrice();
+  const baseAssetId = provider.getBaseAssetId();
 
   const transactions = edges.map((edge) => {
     const { node: gqlTransaction } = edge;
@@ -151,7 +164,7 @@ export async function getTransactionsSummaries(
 
     const [decodedTransaction] = new TransactionCoder().decode(arrayify(rawPayload), 0);
 
-    let txReceipts: GqlReceiptFragmentFragment[] = [];
+    let txReceipts: GqlReceiptFragment[] = [];
 
     if (gqlTransaction?.status && 'receipts' in gqlTransaction.status) {
       txReceipts = gqlTransaction.status.receipts;
@@ -172,6 +185,7 @@ export async function getTransactionsSummaries(
       gasCosts,
       maxGasPerTx,
       gasPrice,
+      baseAssetId,
     });
 
     const output: TransactionResult = {

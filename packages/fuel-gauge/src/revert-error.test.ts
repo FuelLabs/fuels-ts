@@ -223,18 +223,31 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw for explicit "revert" call', async () => {
+  it('should throw UNKNOWN Error for revert', async () => {
     await expectToThrowFuelError(
       () => contractInstance.functions.revert_with_0().call(),
+      new FuelError(ErrorCode.UNKNOWN, `The transaction reverted with an unknown reason: 0`, {
+        logs: [],
+        receipts: expect.any(Array<TransactionResultReceipt>),
+        panic: false,
+        revert: true,
+        reason: 'unknown',
+      })
+    );
+  });
+
+  it('should ensure errors from getTransactionCost dry-run are properly thrown', async () => {
+    await expectToThrowFuelError(
+      () => contractInstance.functions.assert_value_ne_5(5).getTransactionCost(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
-        `The transaction reverted with an unknown reason: 0`,
+        `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
         {
-          logs: [],
+          logs: [5, 5],
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
-          reason: 'unknown',
+          reason: 'assert_ne',
         }
       )
     );

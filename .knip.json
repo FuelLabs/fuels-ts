@@ -7,7 +7,10 @@
     "templates/**"
   ],
   "ignoreDependencies": [
+    "@/sway-api/*",
     "@fuel-ts/*",
+    "@internal/fuel-core",
+    "@internal/forc",
     "@types/jest",
     "@types/rimraf",
     "@graphql-codegen*",
@@ -23,6 +26,7 @@
     "open",
     "textlint",
     "textlint-rule-no-dead-link",
+    "@elasticpath/textlint-rule-no-dead-relative-link",
     "tree-kill",
     "ts-generator",
     "webdriverio"

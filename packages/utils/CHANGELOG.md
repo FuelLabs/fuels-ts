@@ -1,5 +1,110 @@
 # @fuel-ts/utils
 
+## 0.90.0
+
+### Patch Changes
+
+- bb5a123: feat!: add `launchTestNode` utility
+- Updated dependencies [e165e37]
+- Updated dependencies [81a77d3]
+- Updated dependencies [af3202c]
+- Updated dependencies [90e8cba]
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/versions@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+- Updated dependencies [eb6460b]
+  - @fuel-ts/versions@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
+## 0.89.0
+
+### Minor Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+
+### Patch Changes
+
+- 5a6ca46: feat: improve `arrayify` error message
+- 83bbb7f: chore: use dev-net chain config for local node
+- Updated dependencies [67afa32]
+- Updated dependencies [a96c1fe]
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.88.1
+- @fuel-ts/interfaces@0.88.1
+- @fuel-ts/math@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.88.0
+- @fuel-ts/interfaces@0.88.0
+- @fuel-ts/math@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.87.0
+- @fuel-ts/interfaces@0.87.0
+- @fuel-ts/math@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 316c757: fix: internalize `ethers` functionality and remove dependency
+- 0651a5f: chore: remove `ethers` from `abi-coder`
+- Updated dependencies [316c757]
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
+## 0.84.0
+
+### Minor Changes
+
+- 2990edb: chore!: upgrade `fuel-core` to `0.26.0`
+
+### Patch Changes
+
+- @fuel-ts/errors@0.84.0
+- @fuel-ts/interfaces@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

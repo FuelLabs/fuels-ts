@@ -1,5 +1,151 @@
 # Change Log
 
+## 0.90.0
+
+### Minor Changes
+
+- 1beab0e: feat!: remove redundant exports from `v1` encoding
+
+### Patch Changes
+
+- 1b9fb19: fix: validate empty `Vec` encoded length
+- 439d0dc: docs: document the SDKs approach to encoding
+- 436f040: feat: support mixed native and non-native enums
+- be92daf: chore: validate incorrect case key for `EnumCoder`
+- Updated dependencies [bb5a123]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.89.2
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/hasher@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/utils@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/crypto@0.89.1
+  - @fuel-ts/hasher@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
+## 0.89.0
+
+### Patch Changes
+
+- f83502e: chore: refactor for performance improvements
+- af3c143: fix: `enum` size validation
+- f76aa57: chore: added `messagesTypes` to `JsonAbi`
+- Updated dependencies [5a6ca46]
+- Updated dependencies [67afa32]
+- Updated dependencies [83bbb7f]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/crypto@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- 64b90a9: feat: disable `option` length validation at `enum Option` level
+  - @fuel-ts/crypto@0.88.1
+  - @fuel-ts/errors@0.88.1
+  - @fuel-ts/hasher@0.88.1
+  - @fuel-ts/interfaces@0.88.1
+  - @fuel-ts/math@0.88.1
+  - @fuel-ts/utils@0.88.1
+
+## 0.88.0
+
+### Minor Changes
+
+- 60337b5: chore!: update `forc` to `0.59.0`
+
+### Patch Changes
+
+- 0b8e1a8: feat: find deeply nested `option` coders
+  - @fuel-ts/crypto@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/utils@0.88.0
+
+## 0.87.0
+
+### Minor Changes
+
+- 0da455a: feat!: remove nested option size validation
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.87.0
+- @fuel-ts/errors@0.87.0
+- @fuel-ts/hasher@0.87.0
+- @fuel-ts/interfaces@0.87.0
+- @fuel-ts/math@0.87.0
+- @fuel-ts/utils@0.87.0
+
+## 0.86.0
+
+### Minor Changes
+
+- 64e9659: feat!: upgrade `forc@0.58.0` and remove `V0` encoding
+
+### Patch Changes
+
+- 16196b6: feat: `VecCoder@v1` accepts `UInt8Array` as encode input
+- 0651a5f: chore: remove `ethers` from `abi-coder`
+- Updated dependencies [316c757]
+- Updated dependencies [0651a5f]
+  - @fuel-ts/crypto@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/hasher@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+
+## 0.84.0
+
+### Patch Changes
+
+- Updated dependencies [2990edb]
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes

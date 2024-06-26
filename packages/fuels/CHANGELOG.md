@@ -1,5 +1,303 @@
 # Change Log
 
+## 0.90.0
+
+### Minor Changes
+
+- e165e37: chore!: upgrade fuel core to `0.28.0`
+- 41dc617: fix!: updated chain assets, removed `beta-5` network
+
+### Patch Changes
+
+- bb5a123: feat!: add `launchTestNode` utility
+- af3202c: feat: support for `bun`
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [f8c57ef]
+- Updated dependencies [1beab0e]
+- Updated dependencies [69c3e51]
+- Updated dependencies [b1dbe42]
+- Updated dependencies [3db38af]
+- Updated dependencies [439d0dc]
+- Updated dependencies [81a77d3]
+- Updated dependencies [436f040]
+- Updated dependencies [af3202c]
+- Updated dependencies [038d1f1]
+- Updated dependencies [41dc617]
+- Updated dependencies [90e8cba]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/account@0.90.0
+  - @fuel-ts/contract@0.90.0
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/abi-typegen@0.90.0
+  - @fuel-ts/program@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/script@0.90.0
+  - @fuel-ts/transactions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/merkle@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- 78c2d73: fix: update testnet URL
+- Updated dependencies [78c2d73]
+  - @fuel-ts/account@0.89.2
+  - @fuel-ts/contract@0.89.2
+  - @fuel-ts/program@0.89.2
+  - @fuel-ts/script@0.89.2
+  - @fuel-ts/abi-coder@0.89.2
+  - @fuel-ts/abi-typegen@0.89.2
+  - @fuel-ts/address@0.89.2
+  - @fuel-ts/crypto@0.89.2
+  - @fuel-ts/errors@0.89.2
+  - @fuel-ts/hasher@0.89.2
+  - @fuel-ts/interfaces@0.89.2
+  - @fuel-ts/math@0.89.2
+  - @fuel-ts/merkle@0.89.2
+  - @fuel-ts/transactions@0.89.2
+  - @fuel-ts/utils@0.89.2
+  - @fuel-ts/versions@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+- Updated dependencies [eb6460b]
+  - @fuel-ts/versions@0.89.1
+  - @fuel-ts/account@0.89.1
+  - @fuel-ts/program@0.89.1
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/abi-typegen@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/contract@0.89.1
+  - @fuel-ts/script@0.89.1
+  - @fuel-ts/abi-coder@0.89.1
+  - @fuel-ts/address@0.89.1
+  - @fuel-ts/crypto@0.89.1
+  - @fuel-ts/hasher@0.89.1
+  - @fuel-ts/transactions@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/merkle@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
+## 0.89.0
+
+### Minor Changes
+
+- 67afa32: chore!: remove built-in binaries for `forc` and `fuel-core`
+
+### Patch Changes
+
+- 267ae29: fix: reading of sway types when loading `fuels.config.ts`
+- ba0f3d0: feat: add new `node` command to `fuels` CLI
+- 80e0c23: chore: exporting `FuelError` class in umbrella package
+- Updated dependencies [5a6ca46]
+- Updated dependencies [20d73c5]
+- Updated dependencies [ceef79a]
+- Updated dependencies [67afa32]
+- Updated dependencies [3b27bac]
+- Updated dependencies [6d1db46]
+- Updated dependencies [f83502e]
+- Updated dependencies [4d65c8c]
+- Updated dependencies [0b53b85]
+- Updated dependencies [af3c143]
+- Updated dependencies [685829b]
+- Updated dependencies [7c08593]
+- Updated dependencies [83bbb7f]
+- Updated dependencies [a96c1fe]
+- Updated dependencies [4c3b4c8]
+- Updated dependencies [f76aa57]
+  - @fuel-ts/utils@0.89.0
+  - @fuel-ts/abi-typegen@0.89.0
+  - @fuel-ts/account@0.89.0
+  - @fuel-ts/versions@0.89.0
+  - @fuel-ts/abi-coder@0.89.0
+  - @fuel-ts/transactions@0.89.0
+  - @fuel-ts/program@0.89.0
+  - @fuel-ts/address@0.89.0
+  - @fuel-ts/contract@0.89.0
+  - @fuel-ts/crypto@0.89.0
+  - @fuel-ts/hasher@0.89.0
+  - @fuel-ts/script@0.89.0
+  - @fuel-ts/errors@0.89.0
+  - @fuel-ts/merkle@0.89.0
+  - @fuel-ts/math@0.89.0
+  - @fuel-ts/interfaces@0.89.0
+
+## 0.88.1
+
+### Patch Changes
+
+- Updated dependencies [64b90a9]
+  - @fuel-ts/abi-coder@0.88.1
+  - @fuel-ts/account@0.88.1
+  - @fuel-ts/contract@0.88.1
+  - @fuel-ts/program@0.88.1
+  - @fuel-ts/script@0.88.1
+  - @fuel-ts/transactions@0.88.1
+  - @fuel-ts/abi-typegen@0.88.1
+  - @fuel-ts/address@0.88.1
+  - @fuel-ts/crypto@0.88.1
+  - @fuel-ts/errors@0.88.1
+  - @fuel-ts/forc@0.88.1
+  - @fuel-ts/fuel-core@0.88.1
+  - @fuel-ts/hasher@0.88.1
+  - @fuel-ts/interfaces@0.88.1
+  - @fuel-ts/math@0.88.1
+  - @fuel-ts/merkle@0.88.1
+  - @fuel-ts/utils@0.88.1
+  - @fuel-ts/versions@0.88.1
+
+## 0.88.0
+
+### Patch Changes
+
+- Updated dependencies [d5116ce]
+- Updated dependencies [3f86778]
+- Updated dependencies [60337b5]
+- Updated dependencies [0b8e1a8]
+  - @fuel-ts/account@0.88.0
+  - @fuel-ts/program@0.88.0
+  - @fuel-ts/abi-coder@0.88.0
+  - @fuel-ts/forc@0.88.0
+  - @fuel-ts/contract@0.88.0
+  - @fuel-ts/script@0.88.0
+  - @fuel-ts/transactions@0.88.0
+  - @fuel-ts/abi-typegen@0.88.0
+  - @fuel-ts/address@0.88.0
+  - @fuel-ts/crypto@0.88.0
+  - @fuel-ts/errors@0.88.0
+  - @fuel-ts/fuel-core@0.88.0
+  - @fuel-ts/hasher@0.88.0
+  - @fuel-ts/interfaces@0.88.0
+  - @fuel-ts/math@0.88.0
+  - @fuel-ts/merkle@0.88.0
+  - @fuel-ts/utils@0.88.0
+  - @fuel-ts/versions@0.88.0
+
+## 0.87.0
+
+### Patch Changes
+
+- Updated dependencies [0da455a]
+  - @fuel-ts/abi-coder@0.87.0
+  - @fuel-ts/account@0.87.0
+  - @fuel-ts/contract@0.87.0
+  - @fuel-ts/program@0.87.0
+  - @fuel-ts/script@0.87.0
+  - @fuel-ts/transactions@0.87.0
+  - @fuel-ts/abi-typegen@0.87.0
+  - @fuel-ts/address@0.87.0
+  - @fuel-ts/crypto@0.87.0
+  - @fuel-ts/errors@0.87.0
+  - @fuel-ts/forc@0.87.0
+  - @fuel-ts/fuel-core@0.87.0
+  - @fuel-ts/hasher@0.87.0
+  - @fuel-ts/interfaces@0.87.0
+  - @fuel-ts/math@0.87.0
+  - @fuel-ts/merkle@0.87.0
+  - @fuel-ts/utils@0.87.0
+  - @fuel-ts/versions@0.87.0
+
+## 0.86.0
+
+### Patch Changes
+
+- 8866c09: fix: ignore libraries in `fuels` CLI
+- Updated dependencies [316c757]
+- Updated dependencies [ee969d3]
+- Updated dependencies [16196b6]
+- Updated dependencies [0651a5f]
+- Updated dependencies [64e9659]
+  - @fuel-ts/account@0.86.0
+  - @fuel-ts/crypto@0.86.0
+  - @fuel-ts/utils@0.86.0
+  - @fuel-ts/errors@0.86.0
+  - @fuel-ts/abi-coder@0.86.0
+  - @fuel-ts/transactions@0.86.0
+  - @fuel-ts/versions@0.86.0
+  - @fuel-ts/program@0.86.0
+  - @fuel-ts/script@0.86.0
+  - @fuel-ts/forc@0.86.0
+  - @fuel-ts/contract@0.86.0
+  - @fuel-ts/address@0.86.0
+  - @fuel-ts/hasher@0.86.0
+  - @fuel-ts/abi-typegen@0.86.0
+  - @fuel-ts/math@0.86.0
+  - @fuel-ts/merkle@0.86.0
+  - @fuel-ts/fuel-core@0.86.0
+  - @fuel-ts/interfaces@0.86.0
+
+## 0.85.0
+
+### Patch Changes
+
+- c880c5e: fix: use an in memory DB rather than rocks DB for fuels CLI
+- Updated dependencies [9bc893b]
+- Updated dependencies [d0e9b1a]
+- Updated dependencies [1115ade]
+- Updated dependencies [fb0e12f]
+- Updated dependencies [f7eacb4]
+  - @fuel-ts/account@0.85.0
+  - @fuel-ts/program@0.85.0
+  - @fuel-ts/abi-typegen@0.85.0
+  - @fuel-ts/errors@0.85.0
+  - @fuel-ts/contract@0.85.0
+  - @fuel-ts/script@0.85.0
+  - @fuel-ts/abi-coder@0.85.0
+  - @fuel-ts/address@0.85.0
+  - @fuel-ts/crypto@0.85.0
+  - @fuel-ts/math@0.85.0
+  - @fuel-ts/transactions@0.85.0
+  - @fuel-ts/utils@0.85.0
+  - @fuel-ts/hasher@0.85.0
+  - @fuel-ts/merkle@0.85.0
+  - @fuel-ts/forc@0.85.0
+  - @fuel-ts/fuel-core@0.85.0
+  - @fuel-ts/interfaces@0.85.0
+  - @fuel-ts/versions@0.85.0
+
+## 0.84.0
+
+### Patch Changes
+
+- 86543ed: build: update deps
+- Updated dependencies [86543ed]
+- Updated dependencies [4aca0b8]
+- Updated dependencies [6231f7a]
+- Updated dependencies [2990edb]
+- Updated dependencies [214f9fc]
+- Updated dependencies [2dd75b9]
+- Updated dependencies [506f788]
+  - @fuel-ts/account@0.84.0
+  - @fuel-ts/transactions@0.84.0
+  - @fuel-ts/fuel-core@0.84.0
+  - @fuel-ts/versions@0.84.0
+  - @fuel-ts/program@0.84.0
+  - @fuel-ts/script@0.84.0
+  - @fuel-ts/utils@0.84.0
+  - @fuel-ts/contract@0.84.0
+  - @fuel-ts/abi-typegen@0.84.0
+  - @fuel-ts/errors@0.84.0
+  - @fuel-ts/abi-coder@0.84.0
+  - @fuel-ts/address@0.84.0
+  - @fuel-ts/crypto@0.84.0
+  - @fuel-ts/hasher@0.84.0
+  - @fuel-ts/math@0.84.0
+  - @fuel-ts/merkle@0.84.0
+  - @fuel-ts/forc@0.84.0
+  - @fuel-ts/interfaces@0.84.0
+
 ## 0.83.0
 
 ### Minor Changes
