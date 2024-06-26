@@ -1,27 +1,21 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { WalletUnlocked } from 'fuels';
-import { Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
+import { getRandomB256 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum } from '../test/fixtures';
+import { AuthTestingContractAbi__factory } from '../test/typegen/contracts';
+import AuthTestingAbiHex from '../test/typegen/contracts/AuthTestingContractAbi.hex';
 
 import { launchTestContract } from './utils';
-
-let wallet: WalletUnlocked;
-let baseAssetId: string;
 
 /**
  * @group node
  * @group browser
  */
 describe('Auth Testing', () => {
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
-  });
-
   it('can get is_caller_external', async () => {
-    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
+    using contractInstance = await launchTestContract({
+      deployer: AuthTestingContractAbi__factory,
+      bytecode: AuthTestingAbiHex,
+    });
 
     const { value } = await contractInstance.functions.is_caller_external().call();
 
@@ -29,7 +23,16 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with correct id]', async () => {
-    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { deployer: AuthTestingContractAbi__factory, bytecode: AuthTestingAbiHex },
+      ],
+    });
+
+    const {
+      contracts: [contractInstance],
+      wallets: [wallet],
+    } = launched;
 
     const { value } = await contractInstance.functions
       .check_msg_sender({ bits: wallet.address.toB256() })
@@ -39,7 +42,10 @@ describe('Auth Testing', () => {
   });
 
   it('can check_msg_sender [with incorrect id]', async () => {
-    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.AUTH_TESTING_CONTRACT);
+    using contractInstance = await launchTestContract({
+      deployer: AuthTestingContractAbi__factory,
+      bytecode: AuthTestingAbiHex,
+    });
 
     await expect(
       contractInstance.functions.check_msg_sender({ bits: getRandomB256() }).call()
