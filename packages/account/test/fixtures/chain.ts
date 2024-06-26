@@ -140,9 +140,19 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
       xor: '1',
       xori: '1',
       alocDependentCost: {
-        type: 'LightOperation',
+        type: 'HeavyOperation',
         base: '2',
-        unitsPerGas: '214',
+        gasPerUnit: '0',
+      },
+      cfe: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
+      },
+      cfeiDependentCost: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
       },
       call: {
         type: 'LightOperation',

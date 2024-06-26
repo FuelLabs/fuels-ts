@@ -7,7 +7,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.18.2 || ^20.0.0"
+    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },
   "exports": {
     ".": {
@@ -75,7 +75,7 @@
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@graphql-codegen/cli": "^2.13.7",
+    "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^2.8.0",
     "@graphql-codegen/typescript-generic-sdk": "^4.0.1",
     "@graphql-codegen/typescript-operations": "^2.5.5",

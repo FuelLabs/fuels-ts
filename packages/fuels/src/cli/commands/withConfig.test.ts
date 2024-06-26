@@ -1,4 +1,4 @@
-import { program } from 'commander';
+import { Command } from 'commander';
 
 import { fuelsConfig } from '../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../test/utils/mockLogger';
@@ -32,9 +32,9 @@ describe('withConfig', () => {
 
     const configPath = '/a/real/path';
 
-    const command = program
+    const command = new Command()
       .command(Commands.deploy)
-      .option('-p, --path <path>', 'Path to project root', configPath);
+      .option('--path <path>', 'Path to project root', configPath);
 
     const loadConfig = vi.spyOn(loadConfigMod, 'loadConfig').mockImplementation(() => {
       if (params?.shouldErrorOnLoadConfig) {

@@ -1,7 +1,6 @@
 name: 🐛 Bug Report
 description: Something is wrong with fuels-ts.
-labels:
-  - "bug"
+labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
