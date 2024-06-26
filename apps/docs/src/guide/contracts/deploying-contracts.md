@@ -27,7 +27,7 @@ Load the contract bytecode and JSON ABI, generated from the Sway source, into th
 
 ## 4. Deploying the Contract
 
-To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deployContract` method. This method resolves as soon as the transaction to deploy the contract is submitted and returns two objects: a `TransactionResponse` and a `Contract` instance.
+To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deployContract` method. This method resolves when the transaction to deploy the contract is submitted, returning two objects: a `TransactionResponse` and a `Contract` instance.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-3{ts:line-numbers}
 
