@@ -5,6 +5,9 @@ import { readFile } from 'fs/promises';
 const FUEL_CORE_SCHEMA_FILE_PATH = 'packages/account/src/providers/fuel-core-schema.graphql';
 const FUEL_CORE_SCHEMA_SYNC_COMMAND = 'pnpm --filter @fuel-ts/account build:schema';
 
+/**
+ * @group node
+ */
 describe('fuel-core-schema.graphql', () => {
   it('should not change on schema build', async () => {
     const preSyncSchema = await readFile(FUEL_CORE_SCHEMA_FILE_PATH);
