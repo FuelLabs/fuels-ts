@@ -1,3 +1,5 @@
+import { versions } from '@fuel-ts/versions';
+import toml from '@iarna/toml';
 import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -50,6 +52,24 @@ describe('CLI', () => {
     const testProjectFiles = await getAllFiles(paths.root);
 
     expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
+  });
+
+  test('create-fuels checks the versions on the fuel-toolchain file', async () => {
+    const args = generateArgv(paths.root);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const fuelToolchainPath = join(paths.root, 'sway-programs', 'fuel-toolchain.toml');
+    const fuelToolchain = readFileSync(fuelToolchainPath, 'utf-8');
+    const parsedFuelToolchain = toml.parse(fuelToolchain);
+
+    const { toolchain, components } = parsedFuelToolchain;
+
+    expect(toolchain).toEqual({ channel: 'testnet' });
+    expect(components).toEqual({ forc: versions.FORC, 'fuel-core': versions.FUEL_CORE });
   });
 
   test('should rewrite for the appropriate package manager', async () => {
