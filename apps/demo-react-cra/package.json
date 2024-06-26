@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@fuels/vm-asm": "0.54.0",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^16.0.0",
     "@types/node": "^16.18.34",
     "@types/react": "^18.2.9",
     "@types/react-dom": "^18.2.4",
@@ -13,7 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "typescript": "~5.2.2",
+    "typescript": "~5.4.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

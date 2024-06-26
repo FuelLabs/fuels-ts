@@ -179,8 +179,12 @@ describe(__filename, () => {
       }
     );
 
-    const chainId = provider.getChainId();
+    /*
+      You can retrieve the transaction ID before actually submitting it to the node
+      like this:
+     */
 
+    const chainId = provider.getChainId();
     const txId = transactionRequest.getTransactionId(chainId);
 
     const res = await predicate.sendTransaction(transactionRequest);

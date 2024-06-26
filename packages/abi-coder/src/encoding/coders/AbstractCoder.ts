@@ -26,9 +26,8 @@ export type DecodedValue =
   | { [key: string]: DecodedValue }
   | Record<string, Primitive>;
 
-export type TypesOfCoder<TCoder> = TCoder extends Coder<infer TInput, infer TDecoded>
-  ? { Input: TInput; Decoded: TDecoded }
-  : never;
+export type TypesOfCoder<TCoder> =
+  TCoder extends Coder<infer TInput, infer TDecoded> ? { Input: TInput; Decoded: TDecoded } : never;
 
 export abstract class Coder<TInput = unknown, TDecoded = unknown> {
   readonly name: string;
