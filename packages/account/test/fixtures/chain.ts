@@ -144,6 +144,16 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
         base: '2',
         unitsPerGas: '214',
       },
+      cfe: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
+      },
+      cfeiDependentCost: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
+      },
       call: {
         type: 'LightOperation',
         base: '144',
