@@ -1,4 +1,4 @@
-import { program } from 'commander';
+import { Command } from 'commander';
 
 import { fuelsConfig } from '../../../test/fixtures/fuels.config';
 import { mockLogger } from '../../../test/utils/mockLogger';
@@ -12,9 +12,9 @@ const mockAllDeps = (
 ) => {
   const { forcPath, fuelCorePath, configPath } = params;
 
-  const command = program
+  const command = new Command()
     .command(Commands.versions)
-    .option('-p, --path <path>', 'Path to project root', configPath);
+    .option('--path <path>', 'Path to project root', configPath);
 
   const runVersions = vi.fn();
 
