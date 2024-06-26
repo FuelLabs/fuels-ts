@@ -146,7 +146,7 @@ export default class ContractFactory {
    * Deploys a contract and returns the transaction response and the deployed contract instance.
    * @template T - The type of the contract to be deployed.
    * @param deployContractOptions - The options for deploying the contract.
-   * @returns A promise that resolves to the transaction response and the deployed contract instance.
+   * @returns A promise that resolves the transaction response and the deployed contract instance.
    */
   async deployContract<T extends Contract = Contract>(
     deployContractOptions: DeployContractOptions = {}
