@@ -4,4 +4,4 @@
 "@fuel-ts/abi-typegen": patch
 ---
 
-removed -p flag, bumped commander dep to latest
+chore!: upgrade commander to 12.1.0
