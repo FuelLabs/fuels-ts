@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/Button";
 import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
