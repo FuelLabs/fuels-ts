@@ -511,7 +511,7 @@ export default defineConfig({
           },
           {
             text: 'Errors',
-            link: '/guide/errors.md',
+            link: '/guide/errors/',
             collapsed: false,
             items: [],
           },
