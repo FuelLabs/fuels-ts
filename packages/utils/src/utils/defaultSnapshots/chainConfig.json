@@ -131,8 +131,8 @@
           "xori": 2,
           "alocDependentCost": {
             "LightOperation": {
-              "base": "2",
-              "unitsPerGas": "214"
+              "base": 2,
+              "unitsPerGas": 214
             }
           },
           "cfe": {
