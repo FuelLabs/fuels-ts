@@ -130,9 +130,9 @@
           "xor": 2,
           "xori": 2,
           "alocDependentCost": {
-            "LightOperation": {
+            "HeavyOperation": {
               "base": 2,
-              "unitsPerGas": 214
+              "gasPerUnit": 0
             }
           },
           "cfe": {
