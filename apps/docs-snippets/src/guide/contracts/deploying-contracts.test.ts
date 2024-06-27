@@ -71,6 +71,7 @@ describe(__filename, () => {
     const factory = new ContractFactory(byteCode, abi, wallet);
 
     // #region contract-setup-5
+    // Contract will be ready to use after the this call
     const { contract, transactionResponse } = await factory.deployContract({
       awaitExecution: true,
     });

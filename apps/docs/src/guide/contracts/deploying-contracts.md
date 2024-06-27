@@ -33,7 +33,7 @@ To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/C
 
 **Important**: The contract instance can only be safely used after the promise from `transactionResponse.waitForResult` is resolved. To avoid blocking your code, attach this promise to a hook or listener that awaits it to ensure you don't use the contract before its deployment finishes.
 
-You can also call `deployContract` in a way that waits for the transaction execution by using the `awaitExecution` flag.
+You can also call `deployContract` in a way that waits for the transaction execution by using the `awaitExecution` flag. The call for `deployContract` will only resolve when the contract is deployed and ready to be used. By doing so, there is no need to call `transactionResponse.waitForResult`.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-5{ts:line-numbers}
 
