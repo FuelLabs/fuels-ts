@@ -1,6 +1,6 @@
 # Errors
 
-All errors thrown from our SDK are instances of the `FuelError` class, which will have an accompanying `ErrorCode`.
+All errors thrown from the SDK are instances of the `FuelError` class which will have an accompanying `ErrorCode`.
 
 ## Error Codes
 
@@ -8,15 +8,15 @@ Here is a list of the expected error codes the SDK can throw. These error codes 
 
 ### `ABI_MAIN_METHOD_MISSING`
 
-When your ABI does not have a main method.
+When your ABI does not have a `main` method.
 
-This can be resolved by adding a main method to your ABI.
+This can be resolved by adding a `main` method to your ABI. This is prevalent in scripts and predicates that must contain a `main` method.
 
 ### `ABI_TYPES_AND_VALUES_MISMATCH`
 
 When the arguments supplied to the function do not match the minimum required input length.
 
-Check that the arguments supplied to the function, match the required type.
+Check that the arguments supplied to the function match the required type.
 
 ### `ACCOUNT_REQUIRED`
 
@@ -40,7 +40,7 @@ Ensure that there are no duplicate (by type) policies for a transaction.
 
 When more than one of the following options is passed: `path`, `address`, `txId`, `blockNumber`.
 
-Check that only one of the following options is passed: `path`, `address`, `txId`, `blockNumber`.
+Check that only one of the above is passed.
 
 ### `FUNCTION_NOT_FOUND`
 
@@ -92,9 +92,9 @@ Ensure that the password is correct.
 
 ### `INVALID_DATA`
 
-When the value is more than the max value.
+When the value being passed is not considered valid, as defined by the function.
 
-Ensure that the value is less than the max value.
+Check the function signature and ensure that the passed value is valid.
 
 ### `INVALID_ENTROPY`
 
@@ -118,7 +118,7 @@ The error message will determine which parameter is missing. It could be that th
 
 When the supplied mnemonic is invalid.
 
-Check the message for more details. It could be that the mnemonic phrase word length is \_not\_\_ one of the following: 12, 15, 18, 21, or 24 lengths.
+Check the message for more details. It could be that the mnemonic phrase word length is _not_ one of the following: 12, 15, 18, 21, or 24 lengths.
 
 ### `INVALID_MULTICALL`
 
