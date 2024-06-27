@@ -160,7 +160,7 @@ describe('runTypegen.js', () => {
   });
 
   test('should log messages to stdout', async () => {
-    const stdoutWrite = vi.spyOn(process.stdout, 'write').mockResolvedValue(true);
+    const logSpy = vi.spyOn(console, 'log');
 
     // setup temp sway project
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
@@ -189,7 +189,7 @@ describe('runTypegen.js', () => {
     // validates execution was ok
     expect(error).toBeFalsy();
 
-    expect(stdoutWrite).toHaveBeenCalledTimes(5);
+    expect(logSpy).toHaveBeenCalledTimes(5);
   });
 
   test('should raise error for non-existent Script BIN file', async () => {
@@ -279,7 +279,7 @@ describe('runTypegen.js', () => {
     cpSync(fromBin, toBin);
 
     // mocking
-    const write = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
+    const logSpy = vi.spyOn(console, 'log');
 
     // executes program
     const fn = () =>
@@ -313,7 +313,7 @@ describe('runTypegen.js', () => {
       expect(existsSync(f)).toEqual(true);
     });
 
-    expect(write).toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalled();
   });
 
   test('should error for no ABI in inputs', async () => {
