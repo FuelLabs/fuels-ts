@@ -5,7 +5,7 @@
  * It ensures that built code is fully working.
  */
 
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet } from 'fuels/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
 

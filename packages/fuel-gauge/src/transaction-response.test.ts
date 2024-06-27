@@ -1,4 +1,4 @@
-import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
+import { generateTestWallet, launchNode } from 'fuels/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import {

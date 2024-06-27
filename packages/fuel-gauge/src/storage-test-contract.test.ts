@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet } from 'fuels/test-utils';
 import { toHex, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';

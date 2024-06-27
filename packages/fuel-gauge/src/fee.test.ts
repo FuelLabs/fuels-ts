@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet } from 'fuels/test-utils';
 import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BN, BaseWalletUnlocked } from 'fuels';
 import {

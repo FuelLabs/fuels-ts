@@ -1,4 +1,4 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
+import { seedTestWallet } from 'fuels/test-utils';
 import {
   Address,
   FUEL_NETWORK_URL,

@@ -1,5 +1,5 @@
 import { Wallet } from '@fuel-ts/account';
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet } from 'fuels/test-utils';
 import { Address, FUEL_NETWORK_URL, Provider } from 'fuels';
 
 export const setupWallets = async () => {

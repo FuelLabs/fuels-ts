@@ -1,4 +1,4 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { generateTestWallet } from 'fuels/test-utils';
 import type { CoinQuantity, WalletUnlocked } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, bn } from 'fuels';
 
