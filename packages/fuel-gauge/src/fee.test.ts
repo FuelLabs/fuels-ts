@@ -1,5 +1,5 @@
 import { generateTestWallet } from 'fuels/test-utils';
-import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 import type { BN, BaseWalletUnlocked } from 'fuels';
 import {
   ContractFactory,

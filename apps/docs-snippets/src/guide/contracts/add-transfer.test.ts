@@ -1,4 +1,4 @@
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 import type { Account, Contract, Provider, TransferParams } from 'fuels';
 import { Wallet } from 'fuels';
 

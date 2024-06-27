@@ -1,5 +1,5 @@
 import { generateTestWallet } from 'fuels/test-utils';
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 import { Provider, FUEL_NETWORK_URL, Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';

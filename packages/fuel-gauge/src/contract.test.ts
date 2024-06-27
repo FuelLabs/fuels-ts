@@ -1,7 +1,7 @@
 import { generateTestWallet, seedTestWallet } from 'fuels/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 import type {
   TransactionRequestLike,
   TransactionResponse,

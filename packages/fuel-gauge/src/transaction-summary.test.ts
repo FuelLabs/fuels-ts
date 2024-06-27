@@ -1,5 +1,5 @@
 import { generateTestWallet } from 'fuels/test-utils';
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 import type {
   WalletUnlocked,
   TransactionResultReceipt,
