@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/logger": minor
+"@fuel-ts/logger": patch
 ---
 
-chore!: add debug logger for fuel-ts ecosystem
+feat: add debug logger for fuel-ts ecosystem
