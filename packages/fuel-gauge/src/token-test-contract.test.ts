@@ -1,6 +1,6 @@
 import { generateTestWallet } from 'fuels/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 import type { AssetId, BN } from 'fuels';
 import { toHex, Provider, Wallet, ContractFactory, bn, FUEL_NETWORK_URL } from 'fuels';
 

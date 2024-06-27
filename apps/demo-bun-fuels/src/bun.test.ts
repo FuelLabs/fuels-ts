@@ -6,7 +6,7 @@
  */
 
 import { generateTestWallet } from 'fuels/test-utils';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { safeExec } from 'fuels/test-utils';
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
 import { SampleAbi__factory } from './sway-programs-api';

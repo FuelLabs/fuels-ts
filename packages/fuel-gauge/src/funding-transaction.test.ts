@@ -1,6 +1,6 @@
 import { seedTestWallet } from 'fuels/test-utils';
 import { FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet, bn } from 'fuels';
 

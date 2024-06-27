@@ -1,5 +1,5 @@
 import { seedTestWallet } from 'fuels/test-utils';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { safeExec } from 'fuels/test-utils';
 import type { Provider } from 'fuels';
 import { WalletUnlocked, Predicate, getRandomB256 } from 'fuels';
 

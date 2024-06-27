@@ -1,4 +1,3 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
@@ -8,6 +7,7 @@ import {
   resetConfigAndMocks,
   resetDiskAndMocks,
 } from '../../../test/utils/runCommands';
+import { safeExec } from '../../test-utils';
 import type { FuelsConfig } from '../types';
 
 import { readForcToml, readSwayType } from './forcUtils';
@@ -56,7 +56,6 @@ describe('loadConfig', () => {
     const libraries = readForcToml(paths.workspaceDir)
       .workspace.members.map((member) => resolve(paths.workspaceDir, member))
       .map((member) => readSwayType(member))
-      // @ts-expect-error should be SwayType enum which doesn't include library
       .filter((type) => type === 'library');
 
     expect(libraries.length).toEqual(1);

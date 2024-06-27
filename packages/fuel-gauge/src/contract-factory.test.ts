@@ -1,7 +1,7 @@
 import type { Account, TransactionResult } from '@fuel-ts/account';
 import { generateTestWallet } from 'fuels/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 import { BN, bn, toHex, Interface, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';

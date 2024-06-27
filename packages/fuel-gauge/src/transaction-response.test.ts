@@ -1,6 +1,6 @@
 import { generateTestWallet, launchNode } from 'fuels/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 import {
   FUEL_NETWORK_URL,
   Provider,
