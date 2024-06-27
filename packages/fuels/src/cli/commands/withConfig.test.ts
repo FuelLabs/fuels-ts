@@ -21,12 +21,10 @@ describe('withConfig', () => {
   });
 
   function mockAll(params?: { shouldErrorOnDeploy?: boolean; shouldErrorOnLoadConfig?: boolean }) {
-    const onSuccess = vi.fn();
     const onFailure = vi.fn();
 
     const copyConfig: FuelsConfig = {
       ...structuredClone(fuelsConfig),
-      onSuccess,
       onFailure,
     };
 
@@ -57,30 +55,13 @@ describe('withConfig', () => {
       command,
       deploy,
       loadConfig,
-      onSuccess,
       onFailure,
       error,
     };
   }
 
-  test('onSuccess hook in config file', async () => {
-    const { command, deploy, configPath, loadConfig, onSuccess, onFailure } = mockAll({
-      shouldErrorOnDeploy: false,
-    });
-
-    await withConfig(command, Commands.deploy, deploy)();
-
-    expect(loadConfig).toHaveBeenCalledTimes(1);
-    expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
-
-    expect(onSuccess).toHaveBeenCalledTimes(1);
-    expect(onSuccess.mock.calls[0][0]).toEqual({ data: [], type: 'deploy' });
-
-    expect(onFailure).toHaveBeenCalledTimes(0);
-  });
-
   test('onFailure hook in config file', async () => {
-    const { command, deploy, error, loadConfig, configPath, onSuccess, onFailure } = mockAll({
+    const { command, deploy, error, loadConfig, configPath, onFailure } = mockAll({
       shouldErrorOnDeploy: true,
     });
 
@@ -89,15 +70,13 @@ describe('withConfig', () => {
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
 
-    expect(onSuccess).toHaveBeenCalledTimes(0);
-
     expect(error).toHaveBeenCalledTimes(1);
     expect(onFailure).toHaveBeenCalledTimes(1);
-    expect(onFailure.mock.calls[0][0].toString()).toMatch(/something.+happened/i);
+    expect(onFailure.mock.calls[0][1].toString()).toMatch(/something.+happened/i);
   });
 
   test('should handle error when loading config file', async () => {
-    const { command, deploy, error, loadConfig, configPath, onSuccess } = mockAll({
+    const { command, deploy, error, loadConfig, configPath } = mockAll({
       shouldErrorOnLoadConfig: true,
     });
 
@@ -105,8 +84,6 @@ describe('withConfig', () => {
 
     expect(loadConfig).toHaveBeenCalledTimes(1);
     expect(loadConfig.mock.calls[0][0]).toEqual(configPath);
-
-    expect(onSuccess).toHaveBeenCalledTimes(0);
 
     expect(error).toHaveBeenCalledTimes(1);
   });
