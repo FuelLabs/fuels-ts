@@ -1,6 +1,6 @@
-import { ASSET_A } from 'fuels/test-utils';
 import type { Contract } from 'fuels';
 import { BN, bn, toHex } from 'fuels';
+import { ASSET_A } from 'fuels/test-utils';
 
 import type { CallTestContractAbi } from '../test/typegen/contracts';
 import { CallTestContractAbi__factory } from '../test/typegen/contracts';

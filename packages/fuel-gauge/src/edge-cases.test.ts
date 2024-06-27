@@ -1,5 +1,5 @@
-import { generateTestWallet } from 'fuels/test-utils';
 import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { getSetupContract } from './utils';
 

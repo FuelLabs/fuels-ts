@@ -1,4 +1,3 @@
-import { seedTestWallet } from 'fuels/test-utils';
 import type { Account, Coin, Resource } from 'fuels';
 import {
   CreateTransactionRequest,
@@ -12,6 +11,7 @@ import {
   FUEL_NETWORK_URL,
   WalletUnlocked,
 } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,

@@ -1,7 +1,4 @@
-import { generateTestWallet, seedTestWallet } from 'fuels/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from 'fuels/test-utils';
-import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 import type {
   TransactionRequestLike,
   TransactionResponse,
@@ -28,6 +25,7 @@ import {
   Predicate,
   PolicyType,
 } from 'fuels';
+import { generateTestWallet, seedTestWallet , expectToThrowFuelError , ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 

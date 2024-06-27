@@ -5,9 +5,8 @@
  * It ensures that built code is fully working.
  */
 
-import { generateTestWallet } from 'fuels/test-utils';
-import { safeExec } from 'fuels/test-utils';
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { generateTestWallet , safeExec } from 'fuels/test-utils';
 
 import { SampleAbi__factory } from './sway-programs-api';
 import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
