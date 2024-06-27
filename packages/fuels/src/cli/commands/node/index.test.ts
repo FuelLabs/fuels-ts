@@ -20,6 +20,7 @@ describe('node', () => {
   function mockAll() {
     const { autoStartFuelCore, fuelCore, killChildProcess } = mockStartFuelCore();
 
+    const onNode = vi.fn();
     const onFailure = vi.fn();
 
     const withConfigErrorHandler = vi
@@ -35,6 +36,7 @@ describe('node', () => {
       fuelCore,
       killChildProcess,
       loadConfig,
+      onNode,
       onFailure,
       withConfigErrorHandler,
     };
@@ -53,16 +55,23 @@ describe('node', () => {
 
   test('should restart everything when config file changes', async () => {
     const { log } = mockLogger();
-    const { autoStartFuelCore, fuelCore, killChildProcess, loadConfig, withConfigErrorHandler } =
-      mockAll();
+    const {
+      autoStartFuelCore,
+      fuelCore,
+      killChildProcess,
+      loadConfig,
+      withConfigErrorHandler,
+      onNode,
+    } = mockAll();
 
-    const config = structuredClone(fuelsConfig);
+    const config = { ...fuelsConfig, onNode };
     const close = vi.fn();
     const watchHandlers = [{ close }, { close }] as unknown as FSWatcher[];
 
     await configFileChanged({ config, fuelCore, watchHandlers })('event', 'some/path');
 
     // configFileChanged() internals
+    expect(onNode).toHaveBeenCalledWith(config);
     expect(log).toHaveBeenCalledTimes(1);
     expect(close).toHaveBeenCalledTimes(2);
     expect(killChildProcess).toHaveBeenCalledTimes(1);

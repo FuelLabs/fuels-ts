@@ -34,6 +34,7 @@ export const configFileChanged = (state: NodeState) => async (_event: string, pa
   try {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     await node(await loadConfig(state.config.basePath));
+    state.config.onNode?.(state.config);
   } catch (err: unknown) {
     await withConfigErrorHandler(<Error>err, state.config);
   }
