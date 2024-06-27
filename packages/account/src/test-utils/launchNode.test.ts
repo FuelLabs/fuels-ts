@@ -107,12 +107,7 @@ describe('launchNode', () => {
 
     expect(error).toBeTruthy();
 
-    const logs = logSpy.mock.calls.map((mock) => mock[0]);
-    const errorLogged = logs.some((log) =>
-      (log as string | undefined)?.includes((error as Error).message)
-    );
-
-    expect(errorLogged).toBe(true);
+    expect(logSpy).toHaveBeenCalledWith(error?.message);
   });
 
   test('logs fuel-core outputs via console.log', async () => {
