@@ -120,12 +120,6 @@ When the supplied mnemonic is invalid.
 
 Check the message for more details. It could be that the mnemonic phrase word length is _not_ one of the following: 12, 15, 18, 21, or 24 lengths.
 
-### `INVALID_MULTICALL`
-
-When the multi-call has a call that returns a heap type that is not the last call, or the multi-call has more than one call that returns a heap type.
-
-Ensure that the multi-call has only one call that returns a heap type (which should be the last call).
-
 ### `INVALID_PASSWORD`
 
 When the provided password is incorrect.
