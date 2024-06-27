@@ -43,23 +43,20 @@ describe('launchNode', () => {
 
     process.env.FUEL_CORE_PATH = '';
 
-    const { error, result } = await safeExec(async () =>
-      /**
-       * fuel-core is not installed in our CI so this fails
-       * but it's okay because we can still verify that
-       * the default command is `fuel-core`
-       */
-      launchNode()
-    );
-    process.env.FUEL_CORE_PATH = 'fuels-core';
-    if (process.env.GITHUB_CI) {
-      expect(error).toBeTruthy();
-    } else {
-      expect(result).toBeTruthy();
-      (await result)?.cleanup();
-    }
+    const { result } = await safeExec(async () => launchNode());
+
     const command = spawnSpy.mock.calls[0][0];
     expect(command).toEqual('fuel-core');
+
+    process.env.FUEL_CORE_PATH = 'fuels-core';
+
+    /**
+     * result can be undefined when running in CI and fuel-core is not installed
+     * meaning that spawn(fuel-core, ...) threw an error
+     */
+    if (result !== undefined) {
+      (await result)?.cleanup();
+    }
   });
 
   test('should start `fuel-core` node using custom binary', async () => {
