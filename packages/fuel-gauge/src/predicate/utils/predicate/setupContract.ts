@@ -1,6 +1,6 @@
 import { ContractFactory, FUEL_NETWORK_URL, Provider } from 'fuels';
 import type { Interface, JsonAbi, Contract, WalletUnlocked, BytesLike } from 'fuels';
-import { generateTestWallet , ASSET_A } from 'fuels/test-utils';
+import { generateTestWallet, ASSET_A } from 'fuels/test-utils';
 
 let walletInstance: WalletUnlocked;
 let contractInstance: Contract;

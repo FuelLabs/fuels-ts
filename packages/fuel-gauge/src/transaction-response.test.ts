@@ -8,7 +8,7 @@ import {
   WalletUnlocked,
   ScriptTransactionRequest,
 } from 'fuels';
-import { generateTestWallet, launchNode , expectToThrowFuelError } from 'fuels/test-utils';
+import { generateTestWallet, launchNode, expectToThrowFuelError } from 'fuels/test-utils';
 import type { MockInstance } from 'vitest';
 
 async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {

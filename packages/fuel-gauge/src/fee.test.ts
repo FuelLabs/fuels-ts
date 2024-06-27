@@ -8,7 +8,7 @@ import {
   Wallet,
   getRandomB256,
 } from 'fuels';
-import { generateTestWallet , ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
+import { generateTestWallet, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 

@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import type { Interface, Contract, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
 import { Script, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
-import { ASSET_A , generateTestWallet } from 'fuels/test-utils';
+import { ASSET_A, generateTestWallet } from 'fuels/test-utils';
 import { join } from 'path';
 
 let contractInstance: Contract;

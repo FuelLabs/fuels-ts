@@ -1,6 +1,6 @@
 import type { Provider } from 'fuels';
 import { WalletUnlocked, Predicate, getRandomB256 } from 'fuels';
-import { seedTestWallet , safeExec } from 'fuels/test-utils';
+import { seedTestWallet, safeExec } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,

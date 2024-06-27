@@ -1,6 +1,6 @@
 import type { Contract, TransferParams } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
-import { generateTestWallet , ASSET_A } from 'fuels/test-utils';
+import { generateTestWallet, ASSET_A } from 'fuels/test-utils';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';

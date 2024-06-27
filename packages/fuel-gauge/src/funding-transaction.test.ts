@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet, bn } from 'fuels';
-import { expectToThrowFuelError , seedTestWallet } from 'fuels/test-utils';
+import { expectToThrowFuelError, seedTestWallet } from 'fuels/test-utils';
 
 /**
  * @group node

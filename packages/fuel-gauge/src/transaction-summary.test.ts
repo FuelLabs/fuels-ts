@@ -19,7 +19,7 @@ import {
   AddressType,
   OperationName,
 } from 'fuels';
-import { generateTestWallet , ASSET_A, ASSET_B } from 'fuels/test-utils';
+import { generateTestWallet, ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
