@@ -7,7 +7,11 @@ changed_files=$(git diff-tree --no-commit-id --name-only -r "$first_commit")
 
 # Get the list of relevant package.json changes
 changed_packages=$(echo "$changed_files" | grep -E "packages/.+/package.json" | xargs jq -r '.name')
+changed_packages=$(echo "$changed_files" | grep -E "packages/.+/package.json" | xargs jq -r '.name')
 changed_templates=$(echo "$changed_files" | grep -E "templates/.+/package.json")
+
+echo "changed packages: $changed_packages"
+echo "changed templates: $changed_templates"
 
 # Create the changeset content
 changeset_content="---\n"
