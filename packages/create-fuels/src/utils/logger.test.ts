@@ -8,6 +8,7 @@ import { configureLogging, debug, error, log, loggingConfig, warn } from './logg
  */
 describe('logger', () => {
   const loggingBackup = structuredClone(loggingConfig);
+
   beforeEach(() => {
     configureLogging(loggingBackup);
   });
