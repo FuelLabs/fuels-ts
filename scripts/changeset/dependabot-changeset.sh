@@ -2,6 +2,7 @@
 
 # Get the first dependabot commit which contains the changed files
 first_commit=$(git log master..HEAD --oneline --reverse | xargs | awk '{print $1;}')
+echo "First commit: $first_commit"
 
 changed_files=$(git diff-tree --no-commit-id --name-only -r "$first_commit")
 echo "changed files: $changed_files"
