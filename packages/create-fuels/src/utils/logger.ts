@@ -29,5 +29,5 @@ export function error(...data: unknown[]) {
 }
 
 export function warn(...data: unknown[]) {
-  log(chalk.yellow(`${data.join(' ')}`));
+  log(chalk.yellow(data.join(' ')));
 }
