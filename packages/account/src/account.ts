@@ -10,6 +10,7 @@ import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
+import type { Predicate } from './predicate';
 import type {
   TransactionRequestLike,
   CallResult,
@@ -26,12 +27,14 @@ import type {
   TransactionResponse,
   EstimateTransactionParams,
   TransactionCost,
+  TransactionCostParams,
 } from './providers';
 import {
   withdrawScript,
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  TransactionType,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -39,6 +42,7 @@ import {
   isRequestInputCoin,
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
+import { mergeQuantities } from './providers/utils/merge-quantities';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -505,8 +509,7 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractAddress);
 
-    const txCost = await this.provider.getTransactionCost(request, {
-      resourcesOwner: this,
+    const txCost = await this.getTransactionCost(request, {
       quantitiesToContract: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
     });
 
@@ -555,7 +558,7 @@ export class Account extends AbstractAccount {
     let request = new ScriptTransactionRequest(params);
     const quantitiesToContract = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
+    const txCost = await this.getTransactionCost(request, { quantitiesToContract });
 
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
@@ -567,6 +570,51 @@ export class Account extends AbstractAccount {
     await this.fund(request, txCost);
 
     return this.sendTransaction(request);
+  }
+
+  async getTransactionCost(
+    transactionRequestLike: TransactionRequestLike,
+    { signatureCallback, quantitiesToContract = [] }: TransactionCostParams = {}
+  ): Promise<TransactionCost> {
+    const txRequestClone = clone(transactionRequestify(transactionRequestLike));
+    const isScriptTransaction = txRequestClone.type === TransactionType.Script;
+    const baseAssetId = this.provider.getBaseAssetId();
+
+    // Fund with fake UTXOs to avoid not enough funds error
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
+    // Funding transaction with fake utxos
+    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, this.address);
+
+    /**
+     * Estimate predicates gasUsed
+     */
+    // Remove gasLimit to avoid gasLimit when estimating predicates
+    if (isScriptTransaction) {
+      txRequestClone.gasLimit = bn(0);
+    }
+
+    /**
+     * The fake utxos added above can be from a predicate
+     * If the resources owner is a predicate,
+     * we need to populate the resources with the predicate's data
+     * so that predicate estimation can happen.
+     */
+    if (this && 'populateTransactionPredicateData' in this) {
+      (this as unknown as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
+    }
+
+    const txCost = await this.provider.getTransactionCost(txRequestClone, {
+      signatureCallback,
+      funded: true,
+    });
+
+    return {
+      ...txCost,
+      requiredQuantities: allQuantities,
+    };
   }
 
   /**
@@ -676,9 +724,7 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType
   ) {
     let request = transactionRequest;
-    const txCost = await this.provider.getTransactionCost(request, {
-      resourcesOwner: this,
-    });
+    const txCost = await this.getTransactionCost(request);
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
       gasUsed: txCost.gasUsed,

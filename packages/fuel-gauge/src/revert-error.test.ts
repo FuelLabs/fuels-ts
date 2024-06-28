@@ -196,7 +196,7 @@ describe('Revert Error Testing', () => {
       ])
       .getTransactionRequest();
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

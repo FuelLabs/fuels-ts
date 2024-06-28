@@ -222,7 +222,7 @@ describe('TransactionResponse', () => {
 
     request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
-    const txCost = await genesisWallet.provider.getTransactionCost(request);
+    const txCost = await genesisWallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -264,7 +264,7 @@ describe('TransactionResponse', () => {
 
       request.addCoinOutput(Wallet.generate(), 100, baseAssetId);
 
-      const txCost = await genesisWallet.provider.getTransactionCost(request, {
+      const txCost = await genesisWallet.getTransactionCost(request, {
         signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
       });
 

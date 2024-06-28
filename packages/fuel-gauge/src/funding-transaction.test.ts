@@ -40,7 +40,7 @@ describe(__filename, () => {
     const resources = await mainWallet.getResourcesToSpend([[totalAmount + 2_000, baseAssetId]]);
     request.addResources(resources);
 
-    const txCost = await mainWallet.provider.getTransactionCost(request);
+    const txCost = await mainWallet.getTransactionCost(request);
 
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
@@ -70,7 +70,7 @@ describe(__filename, () => {
 
     request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
@@ -118,7 +118,7 @@ describe(__filename, () => {
     request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
     request.addResources(enoughtResources);
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     // TX request already carries enough resources, it does not need to be funded
     expect(request.inputs.length).toBe(1);
@@ -161,7 +161,7 @@ describe(__filename, () => {
     const amountToTransfer = 1000;
     request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     // TX request does NOT carry any resources, it needs to be funded
     expect(request.inputs.length).toBe(0);
@@ -206,7 +206,7 @@ describe(__filename, () => {
     const amountToTransfer = 1000;
     request.addCoinOutput(receiver.address, amountToTransfer, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     expect(request.inputs.length).toBe(0);
 
@@ -267,7 +267,7 @@ describe(__filename, () => {
     transactionRequest.addCoinOutput(receiver.address, totalInAssetA, assetA);
 
     // Executing getTransactionCost to proper estimate maxFee and gasLimit
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet1.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
@@ -328,7 +328,7 @@ describe(__filename, () => {
     transactionRequest.addCoinOutput(receiver.address, 3000, assetA);
     transactionRequest.addCoinOutput(receiver.address, 4500, assetB);
 
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await fundedWallet.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;

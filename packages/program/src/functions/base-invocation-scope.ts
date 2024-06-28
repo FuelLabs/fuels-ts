@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
-import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { ScriptTransactionRequest, mergeQuantities } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
@@ -223,12 +223,20 @@ export class BaseInvocationScope<TReturn = any> {
    */
   async getTransactionCost() {
     const provider = this.getProvider();
-
+    const baseAssetId = provider.getBaseAssetId();
     const request = await this.getTransactionRequest();
+
+    // Fund with fake UTXOs to avoid not enough funds error
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantities = request.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const allQuantities = mergeQuantities(coinOutputsQuantities, this.getRequiredCoins());
+    // Funding transaction with fake utxos
+    request.fundWithFakeUtxos(allQuantities, baseAssetId, this.program.account?.address);
+
     const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: this.program.account as AbstractAccount,
-      quantitiesToContract: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
+      funded: true,
     });
 
     return txCost;

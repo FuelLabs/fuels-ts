@@ -687,7 +687,7 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const txCost = await provider.getTransactionCost(transactionRequestParsed);
+    const txCost = await wallet.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = txCost.gasUsed;
     transactionRequestParsed.maxFee = txCost.maxFee;
@@ -754,7 +754,7 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const txCost = await contract.provider.getTransactionCost(transactionRequestParsed);
+    const txCost = await contract.account.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = txCost.gasUsed;
     transactionRequestParsed.maxFee = txCost.maxFee;

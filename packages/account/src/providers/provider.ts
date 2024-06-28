@@ -332,6 +332,11 @@ export type TransactionCostParams = EstimateTransactionParams & {
    * @returns A promise that resolves to the signed transaction request.
    */
   signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
+
+  /**
+   * Whether the transaction is already funded with fake UTXO's
+   */
+  funded?: boolean;
 };
 
 /**
@@ -1110,36 +1115,44 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { resourcesOwner, signatureCallback, quantitiesToContract = [] }: TransactionCostParams = {}
+    {
+      resourcesOwner,
+      signatureCallback,
+      quantitiesToContract = [],
+      funded = true,
+    }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
-    const baseAssetId = this.getBaseAssetId();
     const updateMaxFee = txRequestClone.maxFee.eq(0);
-    // Fund with fake UTXOs to avoid not enough funds error
-    // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
-    // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
-    // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, resourcesOwner?.address);
 
-    /**
-     * Estimate predicates gasUsed
-     */
-    // Remove gasLimit to avoid gasLimit when estimating predicates
-    if (isScriptTransaction) {
-      txRequestClone.gasLimit = bn(0);
-    }
+    if (!funded) {
+      const baseAssetId = this.getBaseAssetId();
+      // Fund with fake UTXOs to avoid not enough funds error
+      // Getting coin quantities from amounts being transferred
+      const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+      // Combining coin quantities from amounts being transferred and forwarding to contracts
+      const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
+      // Funding transaction with fake utxos
+      txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, resourcesOwner?.address);
 
-    /**
-     * The fake utxos added above can be from a predicate
-     * If the resources owner is a predicate,
-     * we need to populate the resources with the predicate's data
-     * so that predicate estimation can happen.
-     */
-    if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
-      (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
+      /**
+       * Estimate predicates gasUsed
+       */
+      // Remove gasLimit to avoid gasLimit when estimating predicates
+      if (isScriptTransaction) {
+        txRequestClone.gasLimit = bn(0);
+      }
+
+      /**
+       * The fake utxos added above can be from a predicate
+       * If the resources owner is a predicate,
+       * we need to populate the resources with the predicate's data
+       * so that predicate estimation can happen.
+       */
+      if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
+        (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
+      }
     }
 
     const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
@@ -1192,7 +1205,7 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return {
-      requiredQuantities: allQuantities,
+      requiredQuantities: [],
       receipts,
       gasUsed,
       gasPrice,

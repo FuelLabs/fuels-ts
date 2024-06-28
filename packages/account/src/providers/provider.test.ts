@@ -1067,13 +1067,15 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   // TODO: validate if this test still makes sense
   it.skip('should ensure estimated fee values on getTransactionCost are never 0', async () => {
     using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    const {
+      wallets: [wallet],
+    } = launched;
     const request = new ScriptTransactionRequest();
 
     // forcing calculatePriceWithFactor to return 0
     const calculateGasFeeMock = vi.spyOn(gasMod, 'calculateGasFee').mockReturnValue(bn(0));
 
-    const { minFee, maxFee } = await provider.getTransactionCost(request);
+    const { minFee, maxFee } = await wallet.getTransactionCost(request);
 
     expect(calculateGasFeeMock).toHaveBeenCalled();
 
