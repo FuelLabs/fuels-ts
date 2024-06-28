@@ -4,6 +4,7 @@
 first_commit=$(git log master..HEAD --oneline --reverse | xargs | awk '{print $1;}')
 
 changed_files=$(git diff-tree --no-commit-id --name-only -r "$first_commit")
+echo "changed files: $changed_files"
 
 # Get the list of relevant package.json changes
 changed_packages=$(echo "$changed_files" | grep -E "packages/.+/package.json" | xargs jq -r '.name')
