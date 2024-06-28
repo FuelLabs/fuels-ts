@@ -28,7 +28,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   function log(...args: unknown[]) {
     if (!silent) {
       // eslint-disable-next-line no-console
-      console.log(`${args.join(' ')}\n`);
+      console.log(args.join(' '));
     }
   }
 
