@@ -216,7 +216,7 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Gets the transaction cost ny dry running the transaction.
+   * Gets the transaction cost for dry running the transaction.
    *
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
