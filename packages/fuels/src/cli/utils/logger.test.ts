@@ -30,7 +30,7 @@ describe('logger', () => {
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
     log('message');
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith('message\n');
+    expect(logSpy).toHaveBeenCalledWith('message');
   });
 
   test('should not log', () => {
@@ -47,7 +47,7 @@ describe('logger', () => {
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
     debug('message');
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith('message\n');
+    expect(logSpy).toHaveBeenCalledWith('message');
   });
 
   test('should not log', () => {
@@ -62,13 +62,13 @@ describe('logger', () => {
     const logSpy = vi.spyOn(console, 'log');
     warn('message1', 'message2');
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith(`${chalk.yellow('message1 message2')}\n`);
+    expect(logSpy).toHaveBeenCalledWith(chalk.yellow('message1 message2'));
   });
 
   test('should error', () => {
     const logSpy = vi.spyOn(console, 'log');
     error('message1', 'message2');
     expect(logSpy).toHaveBeenCalledTimes(1);
-    expect(logSpy).toHaveBeenCalledWith(`${chalk.red('message1 message2')}\n`);
+    expect(logSpy).toHaveBeenCalledWith(chalk.red('message1 message2'));
   });
 });
