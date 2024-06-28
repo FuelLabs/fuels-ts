@@ -11,6 +11,7 @@ describe('logger', () => {
   beforeEach(() => {
     configureLogging(loggingBackup);
   });
+
   test('should configure logging', () => {
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
     expect(loggingConfig.isLoggingEnabled).toEqual(true);
