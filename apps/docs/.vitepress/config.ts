@@ -71,6 +71,12 @@ export default defineConfig({
             ],
           },
           {
+            text: 'The UTXO Model',
+            link: '/guide/the-utxo-model/',
+            collapsed: false,
+            items: [],
+          },
+          {
             text: 'Creating a Fuel dApp',
             link: '/guide/creating-a-fuel-dapp/',
             collapsed: true,

@@ -102,26 +102,30 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     }
 
     expect(output).toBe(true);
-  });
+  }, 15_000);
 
   it.each([
     ['Upgrade', TransactionType.Upgrade],
     ['Upload', TransactionType.Upload],
-  ])('can query and decode a %s transaction', async (_, type) => {
-    if (shouldSkip) {
-      return;
-    }
+  ])(
+    'can query and decode a %s transaction',
+    async (_, type) => {
+      if (shouldSkip) {
+        return;
+      }
 
-    const { txIds } = configuredNetworks[selectedNetwork];
-    if (undefined === txIds) {
-      console.log(`Skipping ${type} transaction test for ${selectedNetwork} network`);
-      return;
-    }
+      const { txIds } = configuredNetworks[selectedNetwork];
+      if (undefined === txIds) {
+        console.log(`Skipping ${type} transaction test for ${selectedNetwork} network`);
+        return;
+      }
 
-    const txId = txIds[type as keyof ConfiguredNetwork['txIds']];
-    const transaction = await provider.getTransaction(txId);
-    expect(transaction?.type).toBe(type);
-  });
+      const txId = txIds[type as keyof ConfiguredNetwork['txIds']];
+      const transaction = await provider.getTransaction(txId);
+      expect(transaction?.type).toBe(type);
+    },
+    15_000
+  );
 
   it(`should have correct assets`, () => {
     if (shouldSkip) {
@@ -147,5 +151,5 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
     expect(rawAssets).toEqual(expected);
     expect(assets).toEqual(expected);
-  });
+  }, 15_000);
 });
