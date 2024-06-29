@@ -60,4 +60,8 @@ export class Fuels {
   wallet(address: string): WalletLocked | WalletUnlocked {
     return Wallet.fromAddress(address, this.provider);
   }
+
+  // tx(..): Tx {
+  //   return {..};
+  // }
 }

@@ -5,6 +5,7 @@ import { Fuels } from './fuels';
 
 export * from './fuels';
 
+// QUESTION: should we support callback usage?
 export type FuelsCallback = (params: Fuels, error?: FuelError) => unknown;
 
 // 1. (networkUrl) => Promise<Fuels>
