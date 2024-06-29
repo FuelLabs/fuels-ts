@@ -4,14 +4,14 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 
 import { fuels, NETWORK_URL } from '..';
 
-import { Counter } from './typegend';
+import { CounterContract } from './typegend';
 
 /**
  * Default
  */
 export async function main() {
   const { contract } = await fuels(NETWORK_URL);
-  const { value } = await contract(Counter).functions.getCount().get();
+  const { value } = await contract(CounterContract).functions.getCount().get();
   console.log({ value });
 }
 
@@ -19,7 +19,7 @@ export async function main() {
  * Callback
  */
 fuels(NETWORK_URL, async ({ contract }) => {
-  const { value } = await contract(Counter).functions.getCount().get();
+  const { value } = await contract(CounterContract).functions.getCount().get();
   console.log({ value });
 });
 
@@ -28,7 +28,7 @@ fuels(NETWORK_URL, async ({ contract }) => {
  */
 fuels(NETWORK_URL)
   .then(async ({ contract }) => {
-    const { value } = await contract(Counter).functions.getCount().get();
+    const { value } = await contract(CounterContract).functions.getCount().get();
     console.log({ value });
   })
   .catch(console.error);
@@ -49,7 +49,7 @@ fuels(NETWORK_URL, async ({ contract }) => {
   const {
     value,
     transactionResult: { gasUsed }, // txResponse?
-  } = await contract(Counter).functions.increment().call(); // .submit()?
+  } = await contract(CounterContract).functions.increment().call(); // .submit()?
 
   console.log({ value, gasUsed });
 });

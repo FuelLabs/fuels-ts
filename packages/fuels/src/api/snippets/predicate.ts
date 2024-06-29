@@ -4,7 +4,7 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 
 import { fuels, NETWORK_URL } from '..';
 
-import { Vault } from './typegend';
+import { VaultPredicate } from './typegend';
 
 // Dummy transfer data
 const to = 'destination';
@@ -16,7 +16,7 @@ const asset = 'assetId';
  */
 export async function main() {
   const { predicate } = await fuels(NETWORK_URL);
-  const { waitForResult } = await predicate(Vault).transfer(to, amount, asset);
+  const { waitForResult } = await predicate(VaultPredicate).transfer(to, amount, asset);
   const { logs } = await waitForResult();
   console.log({ logs });
 }
@@ -26,7 +26,7 @@ export async function main() {
  */
 fuels(NETWORK_URL)
   .then(async ({ predicate }) => {
-    const { waitForResult } = await predicate(Vault).transfer(to, amount, asset);
+    const { waitForResult } = await predicate(VaultPredicate).transfer(to, amount, asset);
     const { logs } = await waitForResult();
     console.log({ logs });
   })
@@ -36,7 +36,7 @@ fuels(NETWORK_URL)
  * Callback
  */
 fuels(NETWORK_URL, async ({ predicate }) => {
-  const { waitForResult } = await predicate(Vault).transfer(to, amount, asset);
+  const { waitForResult } = await predicate(VaultPredicate).transfer(to, amount, asset);
   const { logs } = await waitForResult();
   console.log({ logs });
 });
@@ -46,8 +46,8 @@ fuels(NETWORK_URL, async ({ predicate }) => {
  */
 fuels(NETWORK_URL, async ({ Predicate, provider }) => {
   const predicate = new Predicate({
-    bytecode: Vault.bytecode,
-    abi: Vault.abi as JsonAbi,
+    bytecode: VaultPredicate.bytecode,
+    abi: VaultPredicate.abi as JsonAbi,
     provider,
   });
 

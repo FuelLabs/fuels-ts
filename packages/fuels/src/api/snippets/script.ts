@@ -4,7 +4,7 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 
 import { fuels, NETWORK_URL } from '..';
 
-import { Dispatcher } from './typegend';
+import { DispatcherScript } from './typegend';
 
 /**
  * Default
@@ -12,7 +12,7 @@ import { Dispatcher } from './typegend';
 export async function main() {
   const { wallet, script } = await fuels(NETWORK_URL);
   const vault = wallet('0x..');
-  const { value } = await script(Dispatcher, vault).functions.main().call();
+  const { value } = await script(DispatcherScript, vault).functions.main().call();
   console.log({ value });
 }
 
@@ -21,7 +21,7 @@ export async function main() {
  */
 fuels(NETWORK_URL, async ({ script, wallet }) => {
   const vault = await wallet('0x..');
-  const { value } = await script(Dispatcher, vault).functions.main().call();
+  const { value } = await script(DispatcherScript, vault).functions.main().call();
   console.log({ value });
 });
 
@@ -31,7 +31,7 @@ fuels(NETWORK_URL, async ({ script, wallet }) => {
 fuels(NETWORK_URL)
   .then(async ({ script, wallet }) => {
     const vault = wallet('0x..');
-    const { value } = await script(Dispatcher, vault).functions.main().get();
+    const { value } = await script(DispatcherScript, vault).functions.main().get();
     console.log({ value });
   })
   .catch(console.error);
@@ -54,7 +54,7 @@ fuels(NETWORK_URL, async ({ Script, wallet }) => {
  */
 fuels(NETWORK_URL, async ({ script, wallet }) => {
   const account = await wallet('0x..');
-  const res = await script(Dispatcher, account).functions.main().call(); // .submit()
+  const res = await script(DispatcherScript, account).functions.main().call(); // .submit()
   const {
     value,
     transactionResult: { gasUsed },

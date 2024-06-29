@@ -1,3 +1,3 @@
-export * from './Counter';
-export * from './Dispatcher';
-export * from './Vault';
+export * from './CounterContract';
+export * from './DispatcherScript';
+export * from './VaultPredicate';
