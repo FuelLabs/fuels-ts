@@ -1,7 +1,9 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { TransactionResponse, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum } from '../test/fixtures';
+import { CollisionInFnNamesAbi__factory } from '../test/typegen/contracts';
+import CollisionInFnNamesAbiHex from '../test/typegen/contracts/CollisionInFnNamesAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -11,12 +13,15 @@ import { launchTestContract } from './utils';
  */
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
-    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.COLLISION_IN_FN_NAMES);
+    using contractInstance = await launchTestContract({
+      deployer: CollisionInFnNamesAbi__factory,
+      bytecode: CollisionInFnNamesAbiHex,
+    });
     expect((await contractInstance.functions.new().call()).value.toNumber()).toEqual(12345);
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const { provider } = await launchTestNode();
     const baseAssetId = provider.getBaseAssetId();
     const adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 

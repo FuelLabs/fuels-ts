@@ -23,7 +23,6 @@ import {
   FunctionInvocationResult,
   Wallet,
   ContractFactory,
-  ZeroBytes32,
   FUEL_NETWORK_URL,
   Predicate,
   PolicyType,
@@ -32,14 +31,6 @@ import {
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { launchTestContract } from './utils';
-
-const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-);
-
-const { binHexlified: predicateBytecode } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.PREDICATE_TRUE
-);
 
 const jsonFragment: JsonAbi = {
   configurables: [],
@@ -166,17 +157,13 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
  * @group browser
  */
 describe('Contract', () => {
-  let provider: Provider;
-  let baseAssetId: string;
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('generates function methods on a simple contract', async () => {
-    const spy = vi.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
-    const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
+    using contract = await launchTestContract({
+      deployer: jsonFragment,
+      bytecode: jsonFragmentHex,
+    });
+    const spy = vi.spyOn(contract.account as Account, 'sendTransaction');
+
     const fragment = contract.interface.getFunction('entry_one');
     const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 
@@ -192,8 +179,7 @@ describe('Contract', () => {
 
   it('generates function methods on a complex contract', async () => {
     const spy = vi.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
-    const contract = new Contract(ZeroBytes32, complexFragment, wallet);
+
     const fragment = contract.interface.getFunction('tuple_function');
     const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 

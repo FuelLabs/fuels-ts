@@ -26,20 +26,9 @@ import {
   FUEL_NETWORK_URL,
   TESTNET_NETWORK_URL,
 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-const { abiContents: callTestAbi } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-);
-
-const { binHexlified: predicateTriple } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.PREDICATE_TRIPLE_SIG
-);
-
-const { binHexlified: testPredicateTrue } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.PREDICATE_TRUE
-);
+import { CallTestContractAbi__factory } from '../test/typegen/contracts';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -59,18 +48,6 @@ const ADDRESS_BYTES = new Uint8Array([
  * @group browser
  */
 describe('Doc Examples', () => {
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    // Avoids using the actual network.
-    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
-    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
-  });
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
   test('it has an Address class using bech32Address', () => {
     const address = new Address(ADDRESS_BECH32);
 
@@ -135,8 +112,16 @@ describe('Doc Examples', () => {
   });
 
   test('it has conversion tools', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
+    using node = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: CallTestContractAbi__factory,
+          bytecode: CallTestContractAbiHex,
+        },
+      ],
+      walletsConfig: [{}],
+    });
+    const { provider } = node;
     const assetId: string = ZeroBytes32;
     const randomB256Bytes: Bytes = randomBytes(32);
     const hexedB256: string = hexlify(randomB256Bytes);
@@ -155,8 +140,7 @@ describe('Doc Examples', () => {
   });
 
   test('it can work with wallets', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
+    const { provider } = await launchTestNode();
     // use the `generate` helper to make an Unlocked Wallet
     const myWallet: WalletUnlocked = Wallet.generate({
       provider,
@@ -175,7 +159,7 @@ describe('Doc Examples', () => {
     unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
     const newlyLockedWallet = unlockedWallet.lock();
-    const balance: BigNumberish = await myWallet.getBalance(baseAssetId);
+    const balance: BigNumberish = await myWallet.getBalance(provider.getBaseAssetId());
     const balances: CoinQuantity[] = await myWallet.getBalances();
 
     expect(newlyLockedWallet.address).toEqual(someWallet.address);

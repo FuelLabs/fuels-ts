@@ -13,13 +13,11 @@ import {
 } from 'fuels';
 
 import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures';
-import { PayableAnnotationAbi__factory } from '../test/typegen/contracts';
-import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
-import { launchTestContract } from './utils';
+import { createSetupConfig } from './utils';
+
 /**
  * @group node
- * @group browser
  */
 describe('Policies', () => {
   let provider: Provider;
@@ -195,10 +193,15 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (BaseInvocationScope)', async () => {
-    using contract = await launchTestContract({
-      deployer: PayableAnnotationAbi__factory,
-      bytecode: PayableAnnotationAbiHex,
-    });
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
+    );
+
+    const contract = await createSetupConfig({
+      contractBytecode: binHexlified,
+      abi: abiContents,
+      cache: true,
+    })();
 
     const callScope = contract.functions.payable().txParams({
       tip: 5,
@@ -270,7 +273,15 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (Account Contract Transfer)', async () => {
-    using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+    const { binHexlified, abiContents } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
+    );
+
+    const contract = await createSetupConfig({
+      contractBytecode: binHexlified,
+      abi: abiContents,
+      cache: true,
+    })();
 
     const txParams: CustomTxParams = {
       tip: 1,
@@ -323,9 +334,17 @@ describe('Policies', () => {
     });
 
     it('on account transferring to contract', async () => {
-      using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
-
       const maxFee = 1;
+
+      const { binHexlified, abiContents } = getFuelGaugeForcProject(
+        FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
+      );
+
+      const contract = await createSetupConfig({
+        contractBytecode: binHexlified,
+        abi: abiContents,
+        cache: true,
+      })();
 
       const txParams: CustomTxParams = {
         maturity: await randomMaturity(),
@@ -376,9 +395,17 @@ describe('Policies', () => {
     });
 
     it('on a contract call', async () => {
-      using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
-
       const maxFee = 1;
+
+      const { binHexlified, abiContents } = getFuelGaugeForcProject(
+        FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
+      );
+
+      const contract = await createSetupConfig({
+        contractBytecode: binHexlified,
+        abi: abiContents,
+        cache: true,
+      })();
 
       const txParams: CustomTxParams = {
         maturity: await randomMaturity(),

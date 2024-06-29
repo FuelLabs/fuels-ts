@@ -1,17 +1,23 @@
 import { bn } from 'fuels';
 
-import { FuelGaugeProjectsEnum } from '../test/fixtures';
+import { PayableAnnotationAbi__factory } from '../test/typegen/contracts';
+import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
 import { launchTestContract } from './utils';
 
-beforeAll(() => {});
+async function launchPayableContract() {
+  return launchTestContract({
+    bytecode: PayableAnnotationAbiHex,
+    deployer: PayableAnnotationAbi__factory,
+  });
+}
 
 /**
  * @group node
  * @group browser
  */
 test('allow sending coins to payable functions', async () => {
-  using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+  using contract = await launchPayableContract();
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should not fail because the function is payable
@@ -29,7 +35,7 @@ test('allow sending coins to payable functions', async () => {
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
-  using contract = await launchTestContract(FuelGaugeProjectsEnum.PAYABLE_ANNOTATION);
+  using contract = await launchPayableContract();
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should fail because the function is not payable
