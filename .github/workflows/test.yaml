@@ -14,15 +14,16 @@ jobs:
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
-    name: ${{ matrix.env.name }}${{ matrix.env.version && '@' || ''}}${{ matrix.env.version || ''}}
+    name: ${{ matrix.env.display-name }}
     strategy:
       fail-fast: false
       matrix:
         env:
           [
-            { name: node, version: 18.18.2 },
-            { name: node, version: 20 },
-            { name: browser },
+            { name: node, version: 18.20.3, display-name: "node@18" },
+            { name: node, version: 20.14.0, display-name: "node@20" },
+            { name: node, version: 22.3.0, display-name: "node@22" },
+            { name: browser, display-name: "browser" },
           ]
     timeout-minutes: 25
     steps:
@@ -65,7 +66,7 @@ jobs:
         run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
-        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: "refs/heads/master"
@@ -74,13 +75,13 @@ jobs:
           wait-interval: 30
 
       - name: Run tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         run: pnpm test:integration
         env:
           PUBLISHED_NPM_TAG: next
 
       - name: Run UI tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changesets-release/master'
+        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: next
@@ -105,7 +106,7 @@ jobs:
         run: pnpm test:e2e
         env:
           TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
-          DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
+          DEVNET_WALLET_PVT_KEY: ${{ github.head_ref == 'changeset-release/master' && secrets.DEVNET_WALLET_PVT_KEY || '' }}
 
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'

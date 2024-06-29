@@ -21,11 +21,14 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.client_payload.ref }}
+          # workaround to ensure changeset file is pushed with REPO_TOKEN owner's account
+          # see https://github.com/changesets/action/issues/70
+          persist-credentials: false
 
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: 9.0.5
+          version: 9.4.0
           run_install: true
 
       - name: Install jq

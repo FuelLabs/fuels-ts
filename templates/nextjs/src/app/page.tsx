@@ -1,3 +1,5 @@
+"use client";
+
 import type { TestContractAbi } from "@/sway-api";
 import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
