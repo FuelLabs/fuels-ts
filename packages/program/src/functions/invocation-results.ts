@@ -1,14 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable max-classes-per-file */
-import type {
-  CallResult,
-  JsonAbisFromAllCalls,
-  TransactionResponse,
-  TransactionResult,
-  TransactionResultReceipt,
-} from '@fuel-ts/account';
+import type { CallResult, JsonAbisFromAllCalls, TransactionResultReceipt } from '@fuel-ts/account';
 import { getDecodedLogs } from '@fuel-ts/account';
-import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { AbstractContract } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import type { ReceiptScriptResult } from '@fuel-ts/transactions';
@@ -124,73 +118,6 @@ export class InvocationResult<T = any> {
     const { main, otherContractsAbis } = this.getAbiFromAllCalls();
 
     return getDecodedLogs(receipts, main, otherContractsAbis);
-  }
-}
-
-/**
- * Represents the result of a function invocation with transaction details.
- *
- * @template T - The type of the returned value.
- * @template TTransactionType - The type of the transaction.
- */
-export class FunctionInvocationResult<
-  T = any,
-  TTransactionType = void,
-> extends InvocationResult<T> {
-  readonly transactionId: string;
-  readonly transactionResponse: TransactionResponse;
-  readonly transactionResult: TransactionResult<TTransactionType>;
-  readonly program: AbstractProgram;
-  readonly logs!: Array<any>;
-
-  /**
-   * Constructs an instance of FunctionInvocationResult.
-   *
-   * @param funcScopes - The function scopes.
-   * @param transactionResponse - The transaction response.
-   * @param transactionResult - The transaction result.
-   * @param program - The program.
-   * @param isMultiCall - Whether it's a multi-call.
-   */
-  constructor(
-    funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
-    transactionResponse: TransactionResponse,
-    transactionResult: TransactionResult<TTransactionType>,
-    program: AbstractProgram,
-    isMultiCall: boolean
-  ) {
-    super(funcScopes, transactionResult, isMultiCall);
-    this.transactionResponse = transactionResponse;
-    this.transactionResult = transactionResult;
-    this.transactionId = this.transactionResponse.id;
-    this.program = program;
-    this.logs = this.getDecodedLogs(transactionResult.receipts);
-  }
-
-  /**
-   * Builds an instance of FunctionInvocationResult.
-   *
-   * @param funcScope - The function scope.
-   * @param transactionResponse - The transaction response.
-   * @param isMultiCall - Whether it's a multi-call.
-   * @param program - The program.
-   * @returns The function invocation result.
-   */
-  static async build<T, TTransactionType = void>(
-    funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
-    transactionResponse: TransactionResponse,
-    isMultiCall: boolean,
-    program: AbstractProgram
-  ) {
-    const txResult = await transactionResponse.waitForResult<TTransactionType>();
-    const fnResult = new FunctionInvocationResult<T, TTransactionType>(
-      funcScope,
-      transactionResponse,
-      txResult,
-      program,
-      isMultiCall
-    );
-    return fnResult;
   }
 }
 
