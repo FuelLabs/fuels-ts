@@ -40,7 +40,7 @@ fuels(NETWORK_URL)
  * Constructing Directly
  */
 fuels(NETWORK_URL, async ({ Script, wallet }) => {
-  const bytecode = 'asdf';
+  const bytecode = '<contract-bytecode>';
   const abi: JsonAbi = {} as JsonAbi;
   const account = await wallet('0x..');
 
