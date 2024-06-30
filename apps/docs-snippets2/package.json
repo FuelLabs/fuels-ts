@@ -6,8 +6,7 @@
   "scripts": {
     "build:forc": "pnpm fuels build",
     "wrap:snippets": "tsx scripts/wrap-snippets.ts",
-    "pretest": "run-s wrap:snippets build:forc",
-    "test": "vitest --run"
+    "pretest": "run-s wrap:snippets build:forc"
   },
   "dependencies": {
     "fuels": "workspace:*"
