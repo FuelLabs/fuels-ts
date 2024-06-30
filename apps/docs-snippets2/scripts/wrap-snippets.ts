@@ -3,7 +3,7 @@ import { globSync } from 'glob';
 
 const importsReg = /import[\s\S]+from.+['"];/gm;
 
-const wrapper = `export const main = async (): Promise<any[]> => {
+const wrapper = `export const main = async (): Promise<any | any[]> => {
   const logs: any[] = [];
   const console = { log (...args: any[]) { logs.push(args) }};
   // ———>>>
