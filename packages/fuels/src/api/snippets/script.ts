@@ -2,7 +2,7 @@
 
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 
-import { fuels, NETWORK_URL } from '..';
+import { fuels, TESTNET_NETWORK_URL } from '..';
 
 import { DispatcherScript } from './typegend';
 
@@ -10,7 +10,7 @@ import { DispatcherScript } from './typegend';
  * Default
  */
 export async function main() {
-  const { wallet, script } = await fuels(NETWORK_URL);
+  const { wallet, script } = await fuels(TESTNET_NETWORK_URL);
   const vault = wallet('0x..');
   const { value } = await script(DispatcherScript, vault).functions.main().call();
   console.log({ value });
@@ -19,7 +19,7 @@ export async function main() {
 /**
  * Callback
  */
-fuels(NETWORK_URL, async ({ script, wallet }) => {
+fuels(TESTNET_NETWORK_URL, async ({ script, wallet }) => {
   const vault = await wallet('0x..');
   const { value } = await script(DispatcherScript, vault).functions.main().call();
   console.log({ value });
@@ -28,7 +28,7 @@ fuels(NETWORK_URL, async ({ script, wallet }) => {
 /**
  * Promise
  */
-fuels(NETWORK_URL)
+fuels(TESTNET_NETWORK_URL)
   .then(async ({ script, wallet }) => {
     const vault = wallet('0x..');
     const { value } = await script(DispatcherScript, vault).functions.main().get();
@@ -39,7 +39,7 @@ fuels(NETWORK_URL)
 /**
  * Constructing Directly
  */
-fuels(NETWORK_URL, async ({ Script, wallet }) => {
+fuels(TESTNET_NETWORK_URL, async ({ Script, wallet }) => {
   const bytecode = '<contract-bytecode>';
   const abi: JsonAbi = {} as JsonAbi;
   const account = await wallet('0x..');
@@ -52,7 +52,7 @@ fuels(NETWORK_URL, async ({ Script, wallet }) => {
 /**
  * Using Transaction Result
  */
-fuels(NETWORK_URL, async ({ script, wallet }) => {
+fuels(TESTNET_NETWORK_URL, async ({ script, wallet }) => {
   const account = await wallet('0x..');
   const res = await script(DispatcherScript, account).functions.main().call(); // .submit()
   const {

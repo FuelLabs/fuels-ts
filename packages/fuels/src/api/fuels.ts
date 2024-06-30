@@ -1,6 +1,7 @@
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
 import type { Account, Provider } from '@fuel-ts/account';
 import { WalletLocked, WalletUnlocked, Predicate, Wallet } from '@fuel-ts/account';
+import * as configs from '@fuel-ts/account/configs';
 import { Contract } from '@fuel-ts/program';
 import { Script } from '@fuel-ts/script';
 
@@ -10,7 +11,8 @@ import { Script } from '@fuel-ts/script';
 export { Predicate, Script, Contract, WalletUnlocked, WalletLocked };
 export { JsonAbi } from '@fuel-ts/abi-coder';
 
-export const NETWORK_URL = 'asdf';
+export const DEVNET_NETWORK_URL = configs.DEVNET_NETWORK_URL;
+export const TESTNET_NETWORK_URL = configs.TESTNET_NETWORK_URL;
 
 /**
  * ABI bundles (?)

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 
-import { fuels, NETWORK_URL } from '..';
+import { fuels, TESTNET_NETWORK_URL } from '..';
 
 // Dummy transfer data
 const to = 'destination';
@@ -11,7 +11,7 @@ const asset = 'assetId';
  * Default
  */
 export async function main() {
-  const { wallet } = await fuels(NETWORK_URL);
+  const { wallet } = await fuels(TESTNET_NETWORK_URL);
   const balances = await wallet('0x..').getBalances();
   console.log({ balances });
 }
@@ -20,7 +20,7 @@ export async function main() {
  * Constructing Directly
  */
 export async function main2() {
-  const { Wallet } = await fuels(NETWORK_URL);
+  const { Wallet } = await fuels(TESTNET_NETWORK_URL);
   const balances = await Wallet.fromAddress('0x..').getBalances();
   console.log({ balances });
 }
@@ -28,7 +28,7 @@ export async function main2() {
 /**
  * Callback + waitForResult
  */
-fuels(NETWORK_URL, async ({ wallet }) => {
+fuels(TESTNET_NETWORK_URL, async ({ wallet }) => {
   const { waitForResult } = await wallet('0x..').transfer(to, amount, asset);
   const { gasUsed } = await waitForResult();
   console.log({ gasUsed });

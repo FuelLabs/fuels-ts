@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 
 import type { JsonAbi } from '..';
-import { fuels, NETWORK_URL } from '..';
+import { fuels, TESTNET_NETWORK_URL } from '..';
 
 import { CounterContract } from './typegend';
 
@@ -9,7 +9,7 @@ import { CounterContract } from './typegend';
  * Default
  */
 export async function main() {
-  const { contract } = await fuels(NETWORK_URL);
+  const { contract } = await fuels(TESTNET_NETWORK_URL);
   const { value } = await contract(CounterContract).functions.getCount().get();
   console.log({ value });
 }
@@ -17,7 +17,7 @@ export async function main() {
 /**
  * Callback
  */
-fuels(NETWORK_URL, async ({ contract }) => {
+fuels(TESTNET_NETWORK_URL, async ({ contract }) => {
   const { value } = await contract(CounterContract).functions.getCount().get();
   console.log({ value });
 });
@@ -25,7 +25,7 @@ fuels(NETWORK_URL, async ({ contract }) => {
 /**
  * Promise
  */
-fuels(NETWORK_URL)
+fuels(TESTNET_NETWORK_URL)
   .then(async ({ contract }) => {
     const { value } = await contract(CounterContract).functions.getCount().get();
     console.log({ value });
@@ -35,7 +35,7 @@ fuels(NETWORK_URL)
 /**
  * Constructing Directly
  */
-fuels(NETWORK_URL, async ({ Contract, provider }) => {
+fuels(TESTNET_NETWORK_URL, async ({ Contract, provider }) => {
   const counter = new Contract('0x..', {} as JsonAbi, provider);
   const { value } = await counter.functions.getCount().get();
   console.log({ value });
@@ -44,7 +44,7 @@ fuels(NETWORK_URL, async ({ Contract, provider }) => {
 /**
  * Using Transaction Result
  */
-fuels(NETWORK_URL, async ({ contract }) => {
+fuels(TESTNET_NETWORK_URL, async ({ contract }) => {
   const {
     value,
     transactionResult: { gasUsed }, // txResponse?

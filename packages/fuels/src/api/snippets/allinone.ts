@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 
-import { fuels, NETWORK_URL } from '..';
+import { fuels, TESTNET_NETWORK_URL } from '..';
 
 import { CounterContract, DispatcherScript, VaultPredicate } from './typegend';
 
 export async function main() {
-  const { wallet, contract, script, predicate } = await fuels(NETWORK_URL);
+  const { wallet, contract, script, predicate } = await fuels(TESTNET_NETWORK_URL);
 
   const account = wallet('0x..');
 
