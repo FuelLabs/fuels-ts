@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-classes-per-file */
+
 import type { CallResult, JsonAbisFromAllCalls, TransactionResultReceipt } from '@fuel-ts/account';
 import { getDecodedLogs } from '@fuel-ts/account';
 import type { AbstractContract } from '@fuel-ts/interfaces';
@@ -118,47 +118,5 @@ export class InvocationResult<T = any> {
     const { main, otherContractsAbis } = this.getAbiFromAllCalls();
 
     return getDecodedLogs(receipts, main, otherContractsAbis);
-  }
-}
-
-/**
- * Represents the result of an invocation call.
- *
- * @template T - The type of the returned value.
- */
-export class InvocationCallResult<T = any> extends InvocationResult<T> {
-  readonly callResult: CallResult;
-
-  /**
-   * Constructs an instance of InvocationCallResult.
-   *
-   * @param funcScopes - The function scopes.
-   * @param callResult - The call result.
-   * @param isMultiCall - Whether it's a multi-call.
-   */
-  constructor(
-    funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
-    callResult: CallResult,
-    isMultiCall: boolean
-  ) {
-    super(funcScopes, callResult, isMultiCall);
-    this.callResult = callResult;
-  }
-
-  /**
-   * Builds an instance of InvocationCallResult.
-   *
-   * @param funcScopes - The function scopes.
-   * @param callResult - The call result.
-   * @param isMultiCall - Whether it's a multi-call.
-   * @returns The invocation call result.
-   */
-  static async build<T>(
-    funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
-    callResult: CallResult,
-    isMultiCall: boolean
-  ) {
-    const fnResult = await new InvocationCallResult<T>(funcScopes, callResult, isMultiCall);
-    return fnResult;
   }
 }
