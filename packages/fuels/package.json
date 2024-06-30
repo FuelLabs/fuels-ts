@@ -69,7 +69,7 @@
     "chalk": "4",
     "chokidar": "^3.5.3",
     "commander": "12.1.0",
-    "esbuild": "^0.19.3",
+    "esbuild": "^0.21.5",
     "glob": "^10.2.6",
     "handlebars": "^4.7.8",
     "joycon": "^3.1.1",
