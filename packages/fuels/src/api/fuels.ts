@@ -44,25 +44,24 @@ export class Fuels {
     this.provider = provider;
   }
 
-  contract(factory: ContractBundle): Contract {
+  contract = (factory: ContractBundle): Contract => {
     const { id, abi } = factory;
     return new Contract(id, abi, this.provider);
-  }
+  };
 
-  predicate(factory: PredicateBundle): Predicate<InputValue[]> {
+  predicate = (factory: PredicateBundle): Predicate<InputValue[]> => {
     const { bytecode, abi } = factory;
     const { provider } = this;
     return new Predicate({ bytecode, abi, provider });
-  }
+  };
 
-  script(factory: ScriptBundle, account: Account): Script<unknown[], unknown> {
+  script = (factory: ScriptBundle, account: Account): Script<unknown[], unknown> => {
     const { bytecode, abi } = factory;
     return new Script(bytecode, abi, account);
-  }
+  };
 
-  wallet(address: string): WalletLocked | WalletUnlocked {
-    return Wallet.fromAddress(address, this.provider);
-  }
+  wallet = (address: string): WalletLocked | WalletUnlocked =>
+    Wallet.fromAddress(address, this.provider);
 
   // tx(..): Tx {
   //   return {..};
