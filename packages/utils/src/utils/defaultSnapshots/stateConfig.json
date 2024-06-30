@@ -466,30 +466,6 @@
       "amount": 18446744073709551615,
       "data": "",
       "da_height": 0
-    },
-    {
-      "sender": "0xbb18456fef301df282ee9311b25f31315a563eb901255207f43c5d39b85f4047",
-      "recipient": "0x88a3467430f8971c6acda91a0f48a82d6a57ef288e4972db0e455fb3100e7cc8",
-      "nonce": "0x3217a0408218725bf3ac744c99cb73b3b3b386c7d3b723b744f30fd83e28bebd",
-      "amount": 18446744073709551615,
-      "data": "",
-      "da_height": 0
-    },
-    {
-      "sender": "0xd761d0612bc8125f59cd84d5e1db66342932f2f3cb684a3a1a3501b49fdc0656",
-      "recipient": "0x88a3467430f8971c6acda91a0f48a82d6a57ef288e4972db0e455fb3100e7cc8",
-      "nonce": "0x235beb4d685377b67dc915de8a1bab443aab48a47819b203dd709ce34fb62106",
-      "amount": 18446744073709551615,
-      "data": "",
-      "da_height": 0
-    },
-    {
-      "sender": "0xf99941a4ef44577a87027af7a3d655c6e182cd6d4580347dc4cc4a1a4f5bd07d",
-      "recipient": "0x88a3467430f8971c6acda91a0f48a82d6a57ef288e4972db0e455fb3100e7cc8",
-      "nonce": "0x03d7ad03b6a14262fc7efc59a9b95afb43af702f4becdaba866364b438b0ebd3",
-      "amount": 18446744073709551615,
-      "data": "",
-      "da_height": 0
     }
   ],
   "contracts": [],
