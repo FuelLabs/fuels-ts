@@ -18,6 +18,11 @@
       "import": "./dist/index.mjs",
       "types": "./dist/index.d.ts"
     },
+    "./api": {
+      "require": "./dist/api.js",
+      "import": "./dist/api.mjs",
+      "types": "./dist/api.d.ts"
+    },
     "./cli": {
       "require": "./dist/cli.js",
       "import": "./dist/cli.mjs",
@@ -31,6 +36,9 @@
   },
   "typesVersions": {
     "*": {
+      "api": [
+        "./dist/cli.d.ts"
+      ],
       "cli": [
         "./dist/cli.d.ts"
       ],
