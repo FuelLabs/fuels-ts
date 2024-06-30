@@ -31,6 +31,7 @@ export async function fuels(
   fn?: FuelsCallback
 ): Promise<Fuels | void> {
   const isOptionFn = typeof optionsOrFn === 'function';
+
   const options = !isOptionFn ? optionsOrFn : undefined;
   const fnc = fn ?? (isOptionFn ? <FuelsCallback>optionsOrFn : undefined);
 
