@@ -1843,14 +1843,45 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  private validatePaginationArgs({ first, last }: CursorPaginationArgs = {}) {
+  private validatePaginationArgs(inputArgs: CursorPaginationArgs = {}): CursorPaginationArgs {
     const MAX_PAGINATION_LIMIT = 1000;
+    const cursorArgs = { ...inputArgs };
+    const { first, last, after, before } = cursorArgs;
+
+    if (after && before) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'Pagination arguments "after" and "before" cannot be used together'
+      );
+    }
+
     if ((first || 0) > MAX_PAGINATION_LIMIT || (last || 0) > MAX_PAGINATION_LIMIT) {
       throw new FuelError(
         ErrorCode.INVALID_INPUT_PARAMETERS,
         'Pagination limit cannot exceed 1000 items'
       );
     }
+
+    if (first && before) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'The use of pagination argument "first" with "before" is not supported'
+      );
+    }
+
+    if (last && after) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'The use of pagination argument "last" with "after" is not supported'
+      );
+    }
+
+    // If neither first nor last is provided, set a default first value
+    if (!first && !last) {
+      cursorArgs.first = 100;
+    }
+
+    return cursorArgs;
   }
 
   /**
