@@ -254,8 +254,8 @@ importers:
         version: link:../../packages/fuels
     devDependencies:
       bun:
-        specifier: ^1.1.9
-        version: 1.1.12
+        specifier: ^1.1.17
+        version: 1.1.17
 
   apps/demo-fuels:
     dependencies:
@@ -4127,43 +4127,43 @@ packages:
   '@octokit/types@12.6.0':
     resolution: {integrity: sha512-1rhSOfRa6H9w4YwK0yrf5faDaDTb+yLyBUKOCV4xtCDB5VmIPqd/v9yr9o6SAzOAlRxMiRiCic6JVM1/kunVkw==}
 
-  '@oven/bun-darwin-aarch64@1.1.12':
-    resolution: {integrity: sha512-g8nmDXIYDmbEnP6moX3ZTS5BsikX8dz/XB0PAfL+LEBJEGECyor2Hv1yvhGQfeR1/lvfSXsWnk0Hhk9Mrj6uoQ==}
+  '@oven/bun-darwin-aarch64@1.1.17':
+    resolution: {integrity: sha512-HQ02LWSjQ8al2I/lqzlFA30Kqr39/8Cc9CrhPbVoZDvM1oC6rgJOeyiTfWSm9QX5wA6tZZAHrI/mJffC0on+8w==}
     cpu: [arm64]
     os: [darwin]
 
-  '@oven/bun-darwin-x64-baseline@1.1.12':
-    resolution: {integrity: sha512-KXBwaeD9y4GuxSqC1uDNIktTC/jY2DtagiURuUOF1rniYxkkLRNgXotTvVA5NvP2PBCoWyrxZ67WJSBm0AIyjQ==}
+  '@oven/bun-darwin-x64-baseline@1.1.17':
+    resolution: {integrity: sha512-2y0VY4TjX1YAM0Lo0iMKylF6Z9lU9RItYoHRHWGRRAgdJbxD4sMk4RMP4Q7vcj9kiCmzfxH9vRap5OPpP6CWaw==}
     cpu: [x64]
     os: [darwin]
 
-  '@oven/bun-darwin-x64@1.1.12':
-    resolution: {integrity: sha512-XWL6atcLxyh4KgOlqqyHUOh4Ylm46CExipJmAdKs30gyYqbw3E+HTFhADsyFEtugOe0qPUNlo0aMo+ZMc1yIQA==}
+  '@oven/bun-darwin-x64@1.1.17':
+    resolution: {integrity: sha512-OiXCKBz3FehOCMCxAA7pUHgE+/Kmbu+INAO+0zUnvLSV2S++UxZVPpseCW/COGtbHVN1F+qTo52rBLNcZBKSLw==}
     cpu: [x64]
     os: [darwin]
 
-  '@oven/bun-linux-aarch64@1.1.12':
-    resolution: {integrity: sha512-6Jen4+b5BzInF7bbRjMIWoy3xIuK/kQQn9xehvrAYnr3J9p3vCD5VhzDP20hW9yQcmZtO2kE6pIYCbaaxPNKtg==}
+  '@oven/bun-linux-aarch64@1.1.17':
+    resolution: {integrity: sha512-uzP+V2uuVtDiDBWExbUwop9JgSWCgICSPiAuHYODk6zqJMsMnXocVlREVy9g7wS3mxOApn0IE9ak4SyHjsTodw==}
     cpu: [arm64]
     os: [linux]
 
-  '@oven/bun-linux-x64-baseline@1.1.12':
-    resolution: {integrity: sha512-luwWf/QGMJ23+yIRBMDnhjYuxh9zXy+Vw4lAzwvLB7phYXCs7IPEhIhZxhcZQ3XMafWtHlWAVo5P6NZZdFRMUQ==}
+  '@oven/bun-linux-x64-baseline@1.1.17':
+    resolution: {integrity: sha512-rwBJT8TCeA2dplaTLLniOz6HU+eWIoYEKHlvp2WJ0uWP/1nWyXd78Xq0G69vgFJPcOVT52R3aE/K5hK9MkTEbg==}
     cpu: [x64]
     os: [linux]
 
-  '@oven/bun-linux-x64@1.1.12':
-    resolution: {integrity: sha512-X4dqnIOv4M9HAL4tAj9bb14WjsfKby5xWNV/otUxtfSDsDrV2ukYUekivEmHqchxHFUHOHyc/cv+/jtfvedDZg==}
+  '@oven/bun-linux-x64@1.1.17':
+    resolution: {integrity: sha512-aP+0FclnRNrz0s5DTaRbccqW0ZsGWNImHeVw2xUazTNfLiK35YcyIakgzSSE5D+Q/c2wh23Yk6TR6f4Nhmcqtg==}
     cpu: [x64]
     os: [linux]
 
-  '@oven/bun-windows-x64-baseline@1.1.12':
-    resolution: {integrity: sha512-MRn+zcJO1hcVqwJmFxpUSdb6ZvrYC8Xp2N1fPOzdw3YSskz9iHkJuUKzx7s9iCC7jTpo6XI/H51EFr/M2U7Ipg==}
+  '@oven/bun-windows-x64-baseline@1.1.17':
+    resolution: {integrity: sha512-mSATxyrFXmoMHk5Xz8rsAsc9fmhp0JCMO8++qaQh0dTeObOKtbgx/O5Txv3RQV8PfndYGOjiRHBmV3Mqqlatfg==}
     cpu: [x64]
     os: [win32]
 
-  '@oven/bun-windows-x64@1.1.12':
-    resolution: {integrity: sha512-ufvTeXXI9tJSJUhvdPnFUmGqCNBKBazEwjvQ5c8vhtZ8hdBHV54LoURVDIBYCgzfdv5NQT3sr8qRLFqy4mlMLg==}
+  '@oven/bun-windows-x64@1.1.17':
+    resolution: {integrity: sha512-ap9ZVcC2hsoNRyf77C4aZ6hWupXXOQG4WmL/K3i07p9toTPAhJUmcsr5jGQ9wH98lm6vRsGd49jjOp0tIDUUhA==}
     cpu: [x64]
     os: [win32]
 
@@ -6559,8 +6559,9 @@ packages:
   builtins@5.1.0:
     resolution: {integrity: sha512-SW9lzGTLvWTP1AY8xeAMZimqDrIaSdLQUcVr9DMef51niJ022Ri87SwRRKYm4A6iHfkPaiVUu/Duw2Wc4J7kKg==}
 
-  bun@1.1.12:
-    resolution: {integrity: sha512-NZzeZuZk7VwCs8VAXnXUHCPOlTS/IyHCscChtT1M1FLSwhBcVMsGVStYlXaaoqsinBKgp0CGJdhnJw2gR3NkDw==}
+  bun@1.1.17:
+    resolution: {integrity: sha512-x2vUqI75XQ11Qxb3FzQCd/AkbA8A3AiJ35xfw49JeNgu0MTi0RCuW+1zOyFf5iJM0xU07LKf2H69n4ASuEqhtQ==}
+    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -11778,6 +11779,7 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qr-code-styling@1.6.0-rc.1:
@@ -18622,28 +18624,28 @@ snapshots:
     dependencies:
       '@octokit/openapi-types': 20.0.0
 
-  '@oven/bun-darwin-aarch64@1.1.12':
+  '@oven/bun-darwin-aarch64@1.1.17':
     optional: true
 
-  '@oven/bun-darwin-x64-baseline@1.1.12':
+  '@oven/bun-darwin-x64-baseline@1.1.17':
     optional: true
 
-  '@oven/bun-darwin-x64@1.1.12':
+  '@oven/bun-darwin-x64@1.1.17':
     optional: true
 
-  '@oven/bun-linux-aarch64@1.1.12':
+  '@oven/bun-linux-aarch64@1.1.17':
     optional: true
 
-  '@oven/bun-linux-x64-baseline@1.1.12':
+  '@oven/bun-linux-x64-baseline@1.1.17':
     optional: true
 
-  '@oven/bun-linux-x64@1.1.12':
+  '@oven/bun-linux-x64@1.1.17':
     optional: true
 
-  '@oven/bun-windows-x64-baseline@1.1.12':
+  '@oven/bun-windows-x64-baseline@1.1.17':
     optional: true
 
-  '@oven/bun-windows-x64@1.1.12':
+  '@oven/bun-windows-x64@1.1.17':
     optional: true
 
   '@parcel/watcher-android-arm64@2.4.1':
@@ -22086,16 +22088,16 @@ snapshots:
     dependencies:
       semver: 7.5.4
 
-  bun@1.1.12:
+  bun@1.1.17:
     optionalDependencies:
-      '@oven/bun-darwin-aarch64': 1.1.12
-      '@oven/bun-darwin-x64': 1.1.12
-      '@oven/bun-darwin-x64-baseline': 1.1.12
-      '@oven/bun-linux-aarch64': 1.1.12
-      '@oven/bun-linux-x64': 1.1.12
-      '@oven/bun-linux-x64-baseline': 1.1.12
-      '@oven/bun-windows-x64': 1.1.12
-      '@oven/bun-windows-x64-baseline': 1.1.12
+      '@oven/bun-darwin-aarch64': 1.1.17
+      '@oven/bun-darwin-x64': 1.1.17
+      '@oven/bun-darwin-x64-baseline': 1.1.17
+      '@oven/bun-linux-aarch64': 1.1.17
+      '@oven/bun-linux-x64': 1.1.17
+      '@oven/bun-linux-x64-baseline': 1.1.17
+      '@oven/bun-windows-x64': 1.1.17
+      '@oven/bun-windows-x64-baseline': 1.1.17
 
   bundle-name@3.0.0:
     dependencies:
