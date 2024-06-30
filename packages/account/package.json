@@ -78,7 +78,7 @@
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typescript": "^2.8.0",
     "@graphql-codegen/typescript-generic-sdk": "^4.0.1",
-    "@graphql-codegen/typescript-operations": "^2.5.5",
+    "@graphql-codegen/typescript-operations": "^4.2.2",
     "@types/ramda": "^0.29.3",
     "@types/uuid": "^9.0.1",
     "get-graphql-schema": "^2.1.2"
