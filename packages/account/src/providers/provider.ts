@@ -1283,13 +1283,11 @@ Supported fuel-core version: ${supportedVersion}.`
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetCoinsResponse> {
-    this.validatePaginationArgs(paginationArgs);
     const ownerAddress = Address.fromAddressOrString(owner);
     const {
       coins: { edges, pageInfo },
     } = await this.operations.getCoins({
-      first: 100,
-      ...paginationArgs,
+      ...this.validatePaginationArgs(paginationArgs),
       filter: { owner: ownerAddress.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
@@ -1419,7 +1417,7 @@ Supported fuel-core version: ${supportedVersion}.`
   async getBlocks(params?: CursorPaginationArgs): Promise<GetBlocksResponse> {
     const {
       blocks: { edges, pageInfo },
-    } = await this.operations.getBlocks(params);
+    } = await this.operations.getBlocks({ ...this.validatePaginationArgs(params) });
 
     const blocks: Block[] = edges.map(({ node: block }) => ({
       id: block.id,
@@ -1596,12 +1594,10 @@ Supported fuel-core version: ${supportedVersion}.`
     address: string | AbstractAddress,
     paginationArgs?: CursorPaginationArgs
   ): Promise<GetMessagesResponse> {
-    this.validatePaginationArgs(paginationArgs);
     const {
       messages: { edges, pageInfo },
     } = await this.operations.getMessages({
-      first: 100,
-      ...paginationArgs,
+      ...this.validatePaginationArgs(paginationArgs),
       owner: Address.fromAddressOrString(address).toB256(),
     });
 
