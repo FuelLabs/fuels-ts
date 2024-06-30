@@ -774,6 +774,18 @@ export const getMintedAssetId = (contractId: string, subId: string): string => {
   return sha256(concat([contractIdBytes, subIdBytes]));
 };
 
+type AssetIdInput = {
+  bits: string;
+};
+
+export const createAssetId = (contractId: string, subId: string): AssetIdInput => {
+  const bits = getMintedAssetId(contractId, subId);
+  const assetId: AssetIdInput = {
+    bits,
+  };
+  return assetId;
+};
+
 export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
   constructor() {
     super('ReceiptMint', 'struct ReceiptMint', 0);

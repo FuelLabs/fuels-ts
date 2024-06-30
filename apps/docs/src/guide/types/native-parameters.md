@@ -74,3 +74,11 @@ To pass an `AssetId` as an input parameter to a Sway program, you can define the
 For a Sway program that returns an `AssetId` type, you can convert the returned value to a `string` as shown below:
 
 <<< @/../../docs-snippets/src/guide/types/contract-types.test.ts#asset-id-output
+
+### `CreateAssetId`
+
+To create an `AssetId` from a `contractId` and `subId`. You can create the `assetId` as shown below:
+
+```
+ const assetId = createAssetId(contractId, subId);
+```
