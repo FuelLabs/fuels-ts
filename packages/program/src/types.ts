@@ -1,7 +1,13 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
-import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/account';
+import type {
+  CoinQuantity,
+  CoinQuantityLike,
+  TransactionResponse,
+  TransactionResult,
+  TransactionType,
+} from '@fuel-ts/account';
 import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
 
@@ -95,3 +101,16 @@ export type InvocationScopeLike<T = unknown> = {
 export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
 }>;
+
+export type SubmitResult<TReturn> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly logs: Array<any>;
+  readonly value: TReturn;
+  readonly gasUsed: BN;
+  readonly program: AbstractProgram;
+  readonly isMultiCall: boolean;
+  readonly transactionId: string;
+  readonly functionScopes: Array<InvocationScopeLike>;
+  readonly transactionResponse: TransactionResponse;
+  readonly transactionResult: TransactionResult<TransactionType.Script>;
+};
