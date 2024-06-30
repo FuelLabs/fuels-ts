@@ -8,8 +8,7 @@ import { Script } from '@fuel-ts/script';
 /**
  * Cross-Export
  */
-export { Predicate, Script, Contract, WalletUnlocked, WalletLocked };
-export { JsonAbi } from '@fuel-ts/abi-coder';
+export { Predicate, Script, Contract, WalletUnlocked, WalletLocked, JsonAbi };
 
 export const DEVNET_NETWORK_URL = configs.DEVNET_NETWORK_URL;
 export const TESTNET_NETWORK_URL = configs.TESTNET_NETWORK_URL;
