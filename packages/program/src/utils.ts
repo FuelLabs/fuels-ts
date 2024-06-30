@@ -1,9 +1,9 @@
 import { getDecodedLogs } from '@fuel-ts/account';
 import type {
-  CallResult,
   JsonAbisFromAllCalls,
   TransactionResponse,
   TransactionResult,
+  TransactionResultReceipt,
 } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
@@ -50,6 +50,32 @@ export function getAbisFromAllCalls(
   }, {} as JsonAbisFromAllCalls);
 }
 
+export const extractInvocationResult = <T>(
+  functionScopes: Array<InvocationScopeLike>,
+  receipts: TransactionResultReceipt[],
+  isMultiCall: boolean,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  logs: any[]
+) => {
+  const mainCallConfig = functionScopes[0]?.getCallConfig();
+
+  if (functionScopes.length === 1 && mainCallConfig && 'bytes' in mainCallConfig.program) {
+    return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs);
+  }
+  const encodedResults = decodeContractCallScriptResult(
+    { receipts },
+    (mainCallConfig?.program as AbstractContract).id,
+    logs
+  );
+
+  const decodedResults = encodedResults.map((encodedResult, i) => {
+    const { func } = functionScopes[i].getCallConfig();
+    return func.decodeOutput(encodedResult)?.[0];
+  });
+
+  return (isMultiCall ? decodedResults : decodedResults?.[0]) as T;
+};
+
 export const buildSubmitResult = async <T>(
   funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
   transactionResponse: TransactionResponse,
@@ -65,28 +91,10 @@ export const buildSubmitResult = async <T>(
 
   const receipts = txResult.receipts;
   const logs = mainCallConfig ? getDecodedLogs(receipts, main, otherContractsAbis) : [];
-  const callResult: CallResult = { receipts };
 
-  let returnValues: T;
+  const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs);
 
-  if (functionScopes.length === 1 && mainCallConfig && 'bytes' in mainCallConfig.program) {
-    returnValues = callResultToInvocationResult<T>(callResult, mainCallConfig, logs);
-  } else {
-    const encodedResults = decodeContractCallScriptResult(
-      { receipts },
-      (mainCallConfig?.program as AbstractContract).id,
-      logs
-    );
-
-    const decodedResults = encodedResults.map((encodedResult, i) => {
-      const { func } = functionScopes[i].getCallConfig();
-      return func.decodeOutput(encodedResult)?.[0];
-    });
-
-    returnValues = (isMultiCall ? decodedResults : decodedResults?.[0]) as T;
-  }
-
-  const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
+  const scriptResult = receipts.find((r) => r.type === ReceiptType.ScriptResult) as
     | ReceiptScriptResult
     | undefined;
 
@@ -95,7 +103,7 @@ export const buildSubmitResult = async <T>(
   const submitResult: SubmitResult<T> = {
     isMultiCall,
     functionScopes,
-    value: returnValues,
+    value,
     program,
     transactionResult: txResult as TransactionResult<TransactionType.Script>,
     transactionResponse,
