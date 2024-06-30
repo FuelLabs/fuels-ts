@@ -8,6 +8,7 @@ import { Script } from '@fuel-ts/script';
  * Cross-Export
  */
 export { Predicate, Script, Contract, WalletUnlocked, WalletLocked };
+export { JsonAbi } from '@fuel-ts/abi-coder';
 
 export const NETWORK_URL = 'asdf';
 

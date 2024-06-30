@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 
-import type { JsonAbi } from '@fuel-ts/abi-coder';
-
+import type { JsonAbi } from '..';
 import { fuels, NETWORK_URL } from '..';
 
 import { CounterContract } from './typegend';

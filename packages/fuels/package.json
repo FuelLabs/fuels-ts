@@ -37,7 +37,7 @@
   "typesVersions": {
     "*": {
       "api": [
-        "./dist/cli.d.ts"
+        "./dist/api.d.ts"
       ],
       "cli": [
         "./dist/cli.d.ts"
