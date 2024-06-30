@@ -14,10 +14,10 @@ import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import type { ContractCall, InvocationScopeLike, TxParams } from '../types';
-import { assert, getAbisFromAllCalls } from '../utils';
+import type { ContractCall, InvocationScopeLike, TxParams, SubmitResult } from '../types';
+import { buildSubmitResult, assert, getAbisFromAllCalls } from '../utils';
 
-import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
+import { InvocationCallResult } from './invocation-results';
 
 /**
  * Creates a contract call object based on the provided invocation scope.
@@ -359,7 +359,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the function invocation.
    */
-  async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
+  async call<T = TReturn>(): Promise<SubmitResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.fundWithRequiredCoins();
@@ -369,7 +369,7 @@ export class BaseInvocationScope<TReturn = any> {
       estimateTxDependencies: false,
     });
 
-    return FunctionInvocationResult.build<T>(
+    return buildSubmitResult<T>(
       this.functionInvocationScopes,
       response,
       this.isMultiCall,
