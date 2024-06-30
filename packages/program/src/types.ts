@@ -1,5 +1,6 @@
 import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
 import type {
+  CallResult,
   CoinQuantity,
   CoinQuantityLike,
   TransactionResponse,
@@ -113,4 +114,12 @@ export type SubmitResult<TReturn> = {
   readonly functionScopes: Array<InvocationScopeLike>;
   readonly transactionResponse: TransactionResponse;
   readonly transactionResult: TransactionResult<TransactionType.Script>;
+};
+
+export type DryRunResult<TReturn> = {
+  readonly gasUsed: BN;
+  readonly value: TReturn;
+  readonly isMultiCall: boolean;
+  readonly callResult: CallResult;
+  readonly functionScopes: Array<InvocationScopeLike>;
 };
