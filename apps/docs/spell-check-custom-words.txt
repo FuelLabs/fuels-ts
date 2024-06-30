@@ -317,6 +317,8 @@ Gwei
 onchain
 Vercel
 hardcoded
+differentiators
+updatable
 tsconfig
 deployer
 overriden

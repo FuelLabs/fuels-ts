@@ -20,10 +20,10 @@
     "typedoc-plugin-markdown": "^3.15.3"
   },
   "devDependencies": {
-    "@types/markdown-it": "^12.2.3",
-    "@vue/devtools-api": "^6.6.2",
-    "flexsearch": "^0.7.31",
-    "markdown-it": "^13.0.1",
+    "@types/markdown-it": "^14.1.1",
+    "@vue/devtools-api": "^6.6.3",
+    "flexsearch": "^0.7.43",
+    "markdown-it": "^14.1.0",
     "nodemon": "^3.0.3",
     "replace": "^1.2.2",
     "typedoc": "^0.25.13",

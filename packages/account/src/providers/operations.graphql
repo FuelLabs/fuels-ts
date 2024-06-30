@@ -398,6 +398,12 @@ fragment GasCostsFragment on GasCosts {
   alocDependentCost {
     ...DependentCostFragment
   }
+  cfe {
+    ...DependentCostFragment
+  }
+  cfeiDependentCost {
+    ...DependentCostFragment
+  }
   call {
     ...DependentCostFragment
   }
