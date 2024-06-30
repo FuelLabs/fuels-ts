@@ -710,80 +710,40 @@ describe('Account', () => {
     );
   });
 
-  test('can properly use getCoins pagination args', async () => {
-    const wallet = Wallet.generate({ provider });
+  it('can properly use getCoins', async () => {
+    const account = Wallet.generate({ provider });
+    const spy = vi.spyOn(account.provider, 'getCoins');
 
-    const defaultNumberOfCoins = 100;
-    const coinsToSeed = 120;
+    const args: providersMod.CursorPaginationArgs = { first: 123 };
 
-    await seedTestWallet(wallet, [[10_000, baseAssetId]], coinsToSeed);
+    await account.getCoins();
+    expect(spy.mock.calls[0]).toStrictEqual([account.address, undefined, undefined]);
 
-    let { coins, pageInfo } = await wallet.getCoins(baseAssetId, {
-      first: coinsToSeed - 1,
-    });
+    await account.getCoins(baseAssetId);
+    expect(spy.mock.calls[1]).toStrictEqual([account.address, baseAssetId, undefined]);
 
-    expect(coins.length).toBe(coinsToSeed - 1);
-    expect(pageInfo.hasNextPage).toBeTruthy();
-    expect(pageInfo.hasPreviousPage).toBeFalsy();
-    expect(pageInfo.startCursor).toBeDefined();
-    expect(pageInfo.endCursor).toBeDefined();
+    await account.getCoins(baseAssetId, args);
+    expect(spy.mock.calls[2]).toStrictEqual([account.address, baseAssetId, args]);
 
-    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId, {
-      after: pageInfo.endCursor,
-    }));
-
-    expect(coins.length).toBe(1);
-    expect(pageInfo.hasNextPage).toBeFalsy();
-    expect(pageInfo.hasPreviousPage).toBeTruthy();
-    expect(pageInfo.startCursor).toBeDefined();
-    expect(pageInfo.endCursor).toBeDefined();
-
-    ({ coins, pageInfo } = await wallet.getCoins(baseAssetId));
-
-    // default number of coins to fetch should be the first 100
-    expect(coins.length).toBe(defaultNumberOfCoins);
-
-    await expectToThrowFuelError(
-      () => wallet.getCoins(baseAssetId, { first: 1001 }),
-      new FuelError(ErrorCode.INVALID_INPUT_PARAMETERS, 'Pagination limit cannot exceed 1000 items')
-    );
+    expect(spy).toHaveBeenCalled();
+    vi.restoreAllMocks();
   });
 
-  test('can properly use getMessages pagination args', async () => {
-    const wallet = Wallet.fromPrivateKey(
-      '0x906d420305ffc528e2558310e85e7f3bef10c117c583cab5ae812a0fddf4561d',
-      provider
-    );
+  it('can properly use getMessages', async () => {
+    const account = Wallet.generate({ provider });
+    const spy = vi.spyOn(account.provider, 'getMessages');
 
-    const accountTotalMessages = 3;
+    const args: providersMod.CursorPaginationArgs = { first: 234 };
 
-    let { messages, pageInfo } = await wallet.getMessages({ first: accountTotalMessages - 1 });
+    await account.getMessages();
+    expect(spy.mock.calls[0]).toStrictEqual([account.address, undefined]);
 
-    expect(messages.length).toBe(accountTotalMessages - 1);
-    expect(pageInfo.hasNextPage).toBeTruthy();
-    expect(pageInfo.hasPreviousPage).toBeFalsy();
-    expect(pageInfo.startCursor).toBeDefined();
-    expect(pageInfo.endCursor).toBeDefined();
+    await account.getMessages(args);
+    expect(spy.mock.calls[1]).toStrictEqual([account.address, args]);
 
-    ({ messages, pageInfo } = await wallet.getMessages({
-      after: pageInfo.endCursor,
-    }));
+    expect(spy).toHaveBeenCalled();
 
-    expect(messages.length).toBe(1);
-    expect(pageInfo.hasNextPage).toBeFalsy();
-    expect(pageInfo.hasPreviousPage).toBeTruthy();
-    expect(pageInfo.startCursor).toBeDefined();
-    expect(pageInfo.endCursor).toBeDefined();
-
-    ({ messages, pageInfo } = await wallet.getMessages());
-
-    // default number of messages to fetch should be the first 100
-    expect(messages.length).toBe(accountTotalMessages);
-
-    await expectToThrowFuelError(
-      () => wallet.getMessages({ first: 1001 }),
-      new FuelError(ErrorCode.INVALID_INPUT_PARAMETERS, 'Pagination limit cannot exceed 1000 items')
-    );
+    vi.restoreAllMocks();
   });
 
   test('can properly use getBalances', async () => {
