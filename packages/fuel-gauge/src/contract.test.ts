@@ -5,7 +5,6 @@ import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import type {
   TransactionRequestLike,
   TransactionResponse,
-  TransactionType,
   JsonAbi,
   ScriptTransactionRequest,
   TransferParams,
@@ -20,13 +19,13 @@ import {
   Provider,
   Contract,
   transactionRequestify,
-  FunctionInvocationResult,
   Wallet,
   ContractFactory,
   ZeroBytes32,
   FUEL_NETWORK_URL,
   Predicate,
   PolicyType,
+  buildSubmitResult,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -660,7 +659,7 @@ describe('Contract', () => {
     const {
       value: [resultA, resultB],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+    } = await buildSubmitResult<any>(invocationScopes, response, true, contract);
 
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
@@ -767,12 +766,7 @@ describe('Contract', () => {
       value: [resultA, resultB],
       transactionResult,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await FunctionInvocationResult.build<any, TransactionType.Script>(
-      invocationScopes,
-      response,
-      true,
-      contract
-    );
+    } = await buildSubmitResult<any>(invocationScopes, response, true, contract);
 
     expect(transactionResult.transaction.witnesses.length).toEqual(1);
     expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);

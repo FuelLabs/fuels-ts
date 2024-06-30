@@ -1,5 +1,5 @@
 import type { BN, JsonAbi, WalletUnlocked } from 'fuels';
-import { ContractFactory, FunctionInvocationResult, Wallet, Contract, bn } from 'fuels';
+import { ContractFactory, Wallet, Contract, bn, buildSubmitResult } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -35,7 +35,7 @@ describe('Custom Transactions from Contract Calls', () => {
     expect(initialBalance.toNumber()).toBe(0);
 
     // #region custom-transactions-contract-calls
-    // #import { bn, Contract, FunctionInvocationResult };
+    // #import { bn, Contract };
 
     const amountToRecipient = bn(10_000); // 0x2710
     // Connect to the contract
@@ -63,7 +63,7 @@ describe('Custom Transactions from Contract Calls', () => {
     const response = await senderWallet.sendTransaction(transactionRequest);
     await response.waitForResult();
     // Get result of contract call
-    const { value } = await FunctionInvocationResult.build([scope], response, false, contract);
+    const { value } = await buildSubmitResult([scope], response, false, contract);
     // <BN: 0x2710>
     // #endregion custom-transactions-contract-calls
 
