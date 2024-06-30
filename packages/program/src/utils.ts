@@ -1,5 +1,6 @@
 import { getDecodedLogs } from '@fuel-ts/account';
 import type {
+  CallResult,
   JsonAbisFromAllCalls,
   TransactionResponse,
   TransactionResult,
@@ -13,7 +14,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 
 import { decodeContractCallScriptResult } from './contract-call-script';
 import { callResultToInvocationResult } from './script-request';
-import type { InvocationScopeLike, SubmitResult } from './types';
+import type { DryRunResult, InvocationScopeLike, SubmitResult } from './types';
 
 /**
  * @hidden
@@ -110,6 +111,36 @@ export const buildSubmitResult = async <T>(
     transactionId: transactionResponse.id,
     logs,
     gasUsed,
+  };
+
+  return submitResult;
+};
+
+export const buildDryRunResult = <T>(
+  funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
+  callResult: CallResult,
+  isMultiCall: boolean
+): DryRunResult<T> => {
+  const functionScopes = Array.isArray(funcScopes) ? funcScopes : [funcScopes];
+  const { receipts } = callResult;
+  const mainCallConfig = functionScopes[0]?.getCallConfig();
+  const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
+  const logs = mainCallConfig ? getDecodedLogs(receipts, main, otherContractsAbis) : [];
+
+  const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs);
+
+  const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
+    | ReceiptScriptResult
+    | undefined;
+
+  const gasUsed = scriptResult?.gasUsed || bn(0);
+
+  const submitResult: DryRunResult<T> = {
+    functionScopes,
+    callResult,
+    isMultiCall,
+    gasUsed,
+    value,
   };
 
   return submitResult;
