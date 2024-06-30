@@ -1,4 +1,4 @@
-import { getDecodedLogs } from '@fuel-ts/account';
+import { getDecodedLogs, getGasUsedFromReceipts } from '@fuel-ts/account';
 import type {
   CallResult,
   JsonAbisFromAllCalls,
@@ -8,9 +8,7 @@ import type {
 } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
-import { bn } from '@fuel-ts/math';
-import type { ReceiptScriptResult, TransactionType } from '@fuel-ts/transactions';
-import { ReceiptType } from '@fuel-ts/transactions';
+import type { TransactionType } from '@fuel-ts/transactions';
 
 import { decodeContractCallScriptResult } from './contract-call-script';
 import { callResultToInvocationResult } from './script-request';
@@ -83,23 +81,16 @@ export const buildSubmitResult = async <T>(
   isMultiCall: boolean,
   program: AbstractProgram
 ): Promise<SubmitResult<T>> => {
-  const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
-
   const txResult = await transactionResponse.waitForResult();
+  const { receipts } = txResult;
+
+  const functionScopes = Array.isArray(funcScope) ? funcScope : [funcScope];
   const mainCallConfig = functionScopes[0]?.getCallConfig();
 
   const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
-
-  const receipts = txResult.receipts;
   const logs = mainCallConfig ? getDecodedLogs(receipts, main, otherContractsAbis) : [];
-
   const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs);
-
-  const scriptResult = receipts.find((r) => r.type === ReceiptType.ScriptResult) as
-    | ReceiptScriptResult
-    | undefined;
-
-  const gasUsed = scriptResult?.gasUsed || bn(0);
+  const gasUsed = getGasUsedFromReceipts(receipts);
 
   const submitResult: SubmitResult<T> = {
     isMultiCall,
@@ -126,14 +117,8 @@ export const buildDryRunResult = <T>(
   const mainCallConfig = functionScopes[0]?.getCallConfig();
   const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
   const logs = mainCallConfig ? getDecodedLogs(receipts, main, otherContractsAbis) : [];
-
   const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs);
-
-  const scriptResult = callResult.receipts.find((r) => r.type === ReceiptType.ScriptResult) as
-    | ReceiptScriptResult
-    | undefined;
-
-  const gasUsed = scriptResult?.gasUsed || bn(0);
+  const gasUsed = getGasUsedFromReceipts(receipts);
 
   const submitResult: DryRunResult<T> = {
     functionScopes,
