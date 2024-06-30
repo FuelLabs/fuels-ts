@@ -14,10 +14,14 @@ import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import type { ContractCall, InvocationScopeLike, TxParams, SubmitResult } from '../types';
-import { buildSubmitResult, assert, getAbisFromAllCalls } from '../utils';
-
-import { InvocationCallResult } from './invocation-results';
+import type {
+  ContractCall,
+  InvocationScopeLike,
+  TxParams,
+  SubmitResult,
+  DryRunResult,
+} from '../types';
+import { buildSubmitResult, assert, getAbisFromAllCalls, buildDryRunResult } from '../utils';
 
 /**
  * Creates a contract call object based on the provided invocation scope.
@@ -382,7 +386,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the invocation call.
    */
-  async simulate<T = TReturn>(): Promise<InvocationCallResult<T>> {
+  async simulate<T = TReturn>(): Promise<DryRunResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
     if (!('populateTransactionWitnessesSignature' in this.program.account)) {
@@ -397,7 +401,7 @@ export class BaseInvocationScope<TReturn = any> {
       estimateTxDependencies: false,
     });
 
-    return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
+    return buildDryRunResult<T>(this.functionInvocationScopes, result, this.isMultiCall);
   }
 
   /**
@@ -405,32 +409,24 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the invocation call.
    */
-  async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
+  async dryRun<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
 
     const callResult: CallResult = {
       receipts,
     };
 
-    return InvocationCallResult.build<T>(
-      this.functionInvocationScopes,
-      callResult,
-      this.isMultiCall
-    );
+    return buildDryRunResult<T>(this.functionInvocationScopes, callResult, this.isMultiCall);
   }
 
-  async get<T = TReturn>(): Promise<InvocationCallResult<T>> {
+  async get<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
 
     const callResult: CallResult = {
       receipts,
     };
 
-    return InvocationCallResult.build<T>(
-      this.functionInvocationScopes,
-      callResult,
-      this.isMultiCall
-    );
+    return buildDryRunResult<T>(this.functionInvocationScopes, callResult, this.isMultiCall);
   }
 
   getProvider(): Provider {
