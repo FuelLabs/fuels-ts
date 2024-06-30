@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-feat: drafting `fuels` entry point #1684
+feat: drafting `fuels` entry point
