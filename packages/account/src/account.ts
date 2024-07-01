@@ -603,7 +603,7 @@ export class Account extends AbstractAccount {
   /**
    * Sends a transaction to the network.
    *
-   * @param transactionRequestLike - An array of transaction requests to be sent.
+   * @param transactionRequestLike - The transaction request to be sent.
    * @param sendTransactionParams - The provider send transaction parameters (optional).
    * @returns A promise that resolves to the transaction response.
    */
@@ -629,7 +629,7 @@ export class Account extends AbstractAccount {
   /**
    * Sends a multiple transactions to the network.
    *
-   * @param transactionRequestLike - The transaction request to be sent.
+   * @param transactionRequestLike - An array of transaction requests to be sent.
    * @param sendMultipleTransactionsParams - The provider send transaction parameters (optional).
    */
   async sendMultipleTransactions(
