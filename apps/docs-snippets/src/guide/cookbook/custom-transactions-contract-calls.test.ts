@@ -63,7 +63,12 @@ describe('Custom Transactions from Contract Calls', () => {
     const response = await senderWallet.sendTransaction(transactionRequest);
     await response.waitForResult();
     // Get result of contract call
-    const { value } = await buildSubmitResult([scope], response, false, contract);
+    const { value } = await buildSubmitResult({
+      funcScope: scope,
+      isMultiCall: false,
+      program: contract,
+      transactionResponse: response,
+    });
     // <BN: 0x2710>
     // #endregion custom-transactions-contract-calls
 

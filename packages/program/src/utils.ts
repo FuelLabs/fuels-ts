@@ -76,13 +76,18 @@ export const extractInvocationResult = <T>(
   return (isMultiCall ? decodedResults : decodedResults?.[0]) as T;
 };
 
+type BuiltSubmitResultParams = {
+  funcScope: InvocationScopeLike | Array<InvocationScopeLike>;
+  transactionResponse: TransactionResponse;
+  isMultiCall: boolean;
+  program: AbstractProgram;
+};
+
 /** @hidden */
 export const buildSubmitResult = async <T>(
-  funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
-  transactionResponse: TransactionResponse,
-  isMultiCall: boolean,
-  program: AbstractProgram
+  params: BuiltSubmitResultParams
 ): Promise<SubmitResult<T>> => {
+  const { funcScope, isMultiCall, program, transactionResponse } = params;
   const txResult = await transactionResponse.waitForResult();
   const { receipts } = txResult;
 
@@ -109,12 +114,15 @@ export const buildSubmitResult = async <T>(
   return submitResult;
 };
 
+type BuiltDryRunResultParams = {
+  funcScopes: InvocationScopeLike | Array<InvocationScopeLike>;
+  callResult: CallResult;
+  isMultiCall: boolean;
+};
+
 /** @hidden * */
-export const buildDryRunResult = <T>(
-  funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
-  callResult: CallResult,
-  isMultiCall: boolean
-): DryRunResult<T> => {
+export const buildDryRunResult = <T>(params: BuiltDryRunResultParams): DryRunResult<T> => {
+  const { funcScopes, callResult, isMultiCall } = params;
   const functionScopes = Array.isArray(funcScopes) ? funcScopes : [funcScopes];
   const { receipts } = callResult;
   const mainCallConfig = functionScopes[0]?.getCallConfig();

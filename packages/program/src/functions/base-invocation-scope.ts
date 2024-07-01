@@ -373,12 +373,12 @@ export class BaseInvocationScope<TReturn = any> {
       estimateTxDependencies: false,
     });
 
-    return buildSubmitResult<T>(
-      this.functionInvocationScopes,
-      response,
-      this.isMultiCall,
-      this.program as AbstractContract
-    );
+    return buildSubmitResult<T>({
+      funcScope: this.functionInvocationScopes,
+      isMultiCall: this.isMultiCall,
+      program: this.program,
+      transactionResponse: response,
+    });
   }
 
   /**
@@ -397,11 +397,15 @@ export class BaseInvocationScope<TReturn = any> {
     }
     const transactionRequest = await this.fundWithRequiredCoins();
 
-    const result = await this.program.account.simulateTransaction(transactionRequest, {
+    const callResult = await this.program.account.simulateTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });
 
-    return buildDryRunResult<T>(this.functionInvocationScopes, result, this.isMultiCall);
+    return buildDryRunResult<T>({
+      funcScopes: this.functionInvocationScopes,
+      callResult,
+      isMultiCall: this.isMultiCall,
+    });
   }
 
   /**
@@ -416,7 +420,11 @@ export class BaseInvocationScope<TReturn = any> {
       receipts,
     };
 
-    return buildDryRunResult<T>(this.functionInvocationScopes, callResult, this.isMultiCall);
+    return buildDryRunResult<T>({
+      funcScopes: this.functionInvocationScopes,
+      callResult,
+      isMultiCall: this.isMultiCall,
+    });
   }
 
   async get<T = TReturn>(): Promise<DryRunResult<T>> {
@@ -426,7 +434,11 @@ export class BaseInvocationScope<TReturn = any> {
       receipts,
     };
 
-    return buildDryRunResult<T>(this.functionInvocationScopes, callResult, this.isMultiCall);
+    return buildDryRunResult<T>({
+      funcScopes: this.functionInvocationScopes,
+      callResult,
+      isMultiCall: this.isMultiCall,
+    });
   }
 
   getProvider(): Provider {

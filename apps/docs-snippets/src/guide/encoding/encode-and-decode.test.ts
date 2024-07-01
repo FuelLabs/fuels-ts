@@ -86,7 +86,12 @@ describe('encode and decode', () => {
 
     // Get result of the transaction, including the contract call result. For this we'll need
     // the previously created invocation scope, the transaction response and the script
-    const invocationResult = await buildSubmitResult([invocationScope], response, false, script);
+    const invocationResult = await buildSubmitResult({
+      funcScope: invocationScope,
+      isMultiCall: false,
+      program: script,
+      transactionResponse: response,
+    });
 
     // The decoded value can be destructured from the `FunctionInvocationResult`
     const { value } = invocationResult;
