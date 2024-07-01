@@ -14,6 +14,7 @@ const subIds = [
 
 /**
  * @group node
+ * @group browse
  */
 describe('MultiTokenContract', () => {
   it(

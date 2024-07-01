@@ -1,27 +1,29 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { Contract, WalletUnlocked } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { getSetupContract } from './utils';
+import { OptionsAbi__factory } from '../test/typegen/contracts';
+import OptionsAbiHex from '../test/typegen/contracts/OptionsAbi.hex';
+
+import { launchTestContract } from './utils';
 
 const U8_MAX = 255;
 const U16_MAX = 65535;
 const U32_MAX = 4294967295;
 
-const setupContract = getSetupContract('options');
-let contractInstance: Contract;
-let wallet: WalletUnlocked;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-  wallet = await generateTestWallet(contractInstance.provider, [
-    [200_000, contractInstance.provider.getBaseAssetId()],
-  ]);
-});
+async function launchOptionsContract() {
+  return launchTestContract({
+    bytecode: OptionsAbiHex,
+    deployer: OptionsAbi__factory,
+  });
+}
 
 /**
  * @group node
+ * @group browser
  */
 describe('Options Tests', () => {
   it('calls', async () => {
+    using contractInstance = await launchOptionsContract();
+
     const { value } = await contractInstance.functions.print_enum_option_array().call();
 
     expect(value).toStrictEqual({
@@ -44,6 +46,8 @@ describe('Options Tests', () => {
     const someInput = U8_MAX;
     const noneInput = undefined;
 
+    using contractInstance = await launchOptionsContract();
+
     const { value: someValue } = await contractInstance.functions.echo_option(someInput).call();
 
     expect(someValue).toBe(someInput);
@@ -60,6 +64,8 @@ describe('Options Tests', () => {
       },
       two: U32_MAX,
     };
+
+    using contractInstance = await launchOptionsContract();
 
     const { value: someValue } = await contractInstance.functions
       .echo_struct_enum_option(someInput)
@@ -84,6 +90,8 @@ describe('Options Tests', () => {
   it('echos vec option', async () => {
     const someInput = [U8_MAX, U16_MAX, U32_MAX];
 
+    using contractInstance = await launchOptionsContract();
+
     const { value: someValue } = await contractInstance.functions.echo_vec_option(someInput).call();
 
     expect(someValue).toStrictEqual(someInput);
@@ -105,6 +113,8 @@ describe('Options Tests', () => {
 
   it('echos tuple option', async () => {
     const someInput = [U8_MAX, U16_MAX];
+
+    using contractInstance = await launchOptionsContract();
 
     const { value: someValue } = await contractInstance.functions
       .echo_tuple_option(someInput)
@@ -132,6 +142,8 @@ describe('Options Tests', () => {
   it('echoes enum option', async () => {
     const someInput = { a: U8_MAX };
 
+    using contractInstance = await launchOptionsContract();
+
     const { value: someValue } = await contractInstance.functions
       .echo_enum_option(someInput)
       .call();
@@ -149,6 +161,8 @@ describe('Options Tests', () => {
 
   it('echos array option', async () => {
     const someInput = [U8_MAX, U16_MAX, 123];
+
+    using contractInstance = await launchOptionsContract();
 
     const { value: someValue } = await contractInstance.functions
       .echo_array_option(someInput)
@@ -180,12 +194,28 @@ describe('Options Tests', () => {
       },
     };
 
+    using contractInstance = await launchOptionsContract();
+
     const { value } = await contractInstance.functions.echo_deeply_nested_option(input).call();
 
     expect(value).toStrictEqual(input);
   });
 
   it('prints struct option', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: OptionsAbi__factory,
+          bytecode: OptionsAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contractInstance],
+      wallets: [wallet],
+    } = launched;
+
     const { value } = await contractInstance.functions
       .get_some_struct({ Address: { bits: wallet.address.toB256() } })
       .call();
@@ -194,6 +224,11 @@ describe('Options Tests', () => {
   });
 
   it('echoes option enum diff sizes', async () => {
+    using contractInstance = await launchTestContract({
+      bytecode: OptionsAbiHex,
+      deployer: OptionsAbi__factory,
+    });
+
     const { value } = await contractInstance.functions.echo_enum_diff_sizes(undefined).call();
 
     expect(value).toStrictEqual(undefined);

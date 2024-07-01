@@ -1,31 +1,42 @@
-import { FuelGaugeProjectsEnum } from '../test/fixtures';
+import { StorageTestContractAbi__factory } from '../test/typegen/contracts';
+import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
-import { getSetupContract } from './utils';
+import { launchTestContract } from './utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('isReadOnly', () => {
   test('isReadOnly returns true for a read-only function', async () => {
-    const contract = await getSetupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT)();
+    using contractInstance = await launchTestContract({
+      deployer: StorageTestContractAbi__factory,
+      bytecode: StorageTestContractAbiHex,
+    });
 
-    const isReadOnly = contract.functions.counter.isReadOnly();
+    const isReadOnly = contractInstance.functions.counter.isReadOnly();
 
     expect(isReadOnly).toBe(true);
   });
 
   test('isReadOnly returns false for a function containing write operations', async () => {
-    const contract = await getSetupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT)();
+    using contractInstance = await launchTestContract({
+      deployer: StorageTestContractAbi__factory,
+      bytecode: StorageTestContractAbiHex,
+    });
 
-    const isReadOnly = contract.functions.increment_counter.isReadOnly();
+    const isReadOnly = contractInstance.functions.increment_counter.isReadOnly();
 
     expect(isReadOnly).toBe(false);
   });
 
   test('isReadOnly does not throw a runtime error for a function that does not use storage', async () => {
-    const contract = await getSetupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT)();
+    using contractInstance = await launchTestContract({
+      deployer: StorageTestContractAbi__factory,
+      bytecode: StorageTestContractAbiHex,
+    });
 
-    const isReadOnly = contract.functions.return_true.isReadOnly();
+    const isReadOnly = contractInstance.functions.return_true.isReadOnly();
 
     expect(isReadOnly).toBe(true);
   });

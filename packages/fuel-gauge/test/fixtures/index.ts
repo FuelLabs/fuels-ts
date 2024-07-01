@@ -18,6 +18,7 @@ export enum FuelGaugeProjectsEnum {
   COVERAGE_CONTRACT = 'coverage-contract',
   GENERIC_TYPES_CONTRACT = 'generic-types-contract',
   MULTI_TOKEN_CONTRACT = 'multi-token-contract',
+  OPTIONS = 'options',
   PAYABLE_ANNOTATION = 'payable-annotation',
   PREDICATE_ADDRESS = 'predicate-address',
   PREDICATE_ASSERT_VALUE = 'predicate-assert-value',

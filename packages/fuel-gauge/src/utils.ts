@@ -1,22 +1,11 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { readFileSync } from 'fs';
-import type { Interface, Contract, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
-import { Script, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
+import { Script, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { Interface, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
+import type { DeployContractConfig } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
-
-let contractInstance: Contract;
-const deployContract = async (
-  factory: ContractFactory,
-  provider: Provider,
-  useCache: boolean = true
-) => {
-  if (contractInstance && useCache) {
-    return contractInstance;
-  }
-  contractInstance = await factory.deployContract();
-  return contractInstance;
-};
 
 let walletInstance: WalletUnlocked;
 export const createWallet = async () => {
@@ -38,40 +27,9 @@ export type SetupConfig = {
   cache?: boolean;
 };
 
-export const setup = async <T extends Contract = Contract>({
-  contractBytecode,
-  abi,
-  cache,
-}: SetupConfig) => {
-  // Create wallet
-  const wallet = await createWallet();
-  const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory, wallet.provider, cache);
-  return contract as T;
-};
-
-export const createSetupConfig =
-  <T extends Contract = Contract>(defaultConfig: SetupConfig) =>
-  async (config?: Partial<SetupConfig>) =>
-    setup<T>({
-      contractBytecode: defaultConfig.contractBytecode,
-      abi: defaultConfig.abi,
-      ...config,
-    });
-
 const getFullPath = <T>(contractName: string, next: (fullPath: string) => T) =>
   next(
     join(__dirname, `../test/fixtures/forc-projects/${contractName}/out/release/${contractName}`)
-  );
-
-export const getSetupContract = (
-  contractName: string
-): ((config?: Partial<SetupConfig>) => Promise<Contract>) =>
-  getFullPath(contractName, (fullPath: string) =>
-    createSetupConfig({
-      contractBytecode: readFileSync(`${fullPath}.bin`),
-      abi: JSON.parse(readFileSync(`${fullPath}-abi.json`, 'utf8')),
-    })
   );
 
 export const getScript = <TInput extends unknown[], TOutput>(
@@ -90,3 +48,13 @@ export const getScript = <TInput extends unknown[], TOutput>(
 
 export const getProgramDir = (name: string) =>
   join(__dirname, `../test/fixtures/forc-projects/${name}`);
+
+export async function launchTestContract<T extends DeployContractConfig>(config: T) {
+  const {
+    contracts: [contract],
+    cleanup,
+  } = await launchTestNode({
+    contractsConfigs: [config],
+  });
+  return Object.assign(contract, { [Symbol.dispose]: () => Promise.resolve(cleanup()) });
+}

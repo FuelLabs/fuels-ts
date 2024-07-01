@@ -1,20 +1,10 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish } from 'fuels';
-import { Provider, bn, Script, FUEL_NETWORK_URL } from 'fuels';
+import { bn, Script } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
 import { getScript } from './utils';
-
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
-
-  return wallet;
-};
 
 type Baz = {
   x: number;
@@ -24,12 +14,16 @@ type Baz = {
  * @group node
  */
 describe('Script Coverage', () => {
-  const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
-  );
-
   it('can call script and use main arguments', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
+    );
+
     // #region script-call-factory
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
@@ -42,7 +36,11 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [two args, read logs]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
     const foo = 33;
     const bar: Baz = {
@@ -56,7 +54,11 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [two args, struct return]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
     const foo = 1;
     const bar: Baz = {
@@ -71,7 +73,15 @@ describe('Script Coverage', () => {
   });
 
   it('can call script and use main arguments [tx params]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
+      FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
+    );
+
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
 

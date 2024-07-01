@@ -8,9 +8,6 @@ import { createAndDeployContractFromProject } from '../../utils';
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-  let baseAssetId: string;
   beforeAll(async () => {
     contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
     provider = contract.provider;

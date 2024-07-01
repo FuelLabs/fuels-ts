@@ -4,7 +4,7 @@ import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuel
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
-import { getScript, getSetupContract } from './utils';
+import { getScript, launchTestContract } from './utils';
 
 const U32_VEC = [0, 1, 2];
 const VEC_IN_VEC = [
@@ -87,6 +87,7 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Vector Types Validation', () => {
   let baseAssetId: string;
@@ -99,8 +100,7 @@ describe('Vector Types Validation', () => {
   });
 
   it('can use supported vector types [vector-types-contract]', async () => {
-    const setupContract = getSetupContract('vector-types-contract');
-    const contractInstance = await setupContract();
+    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.VECTOR_TYPES_CONTRACT);
 
     const { value } = await contractInstance.functions
       .test_all(

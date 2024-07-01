@@ -1,16 +1,12 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
+import type { BN } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { BytesAbi__factory } from '../test/typegen/contracts';
+import BytesAbiHex from '../test/typegen/contracts/BytesAbi.hex';
 
-import { getScript, getSetupContract } from './utils';
-
-const setupContract = getSetupContract('bytes');
-let contractInstance: Contract;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-});
+import { getScript, launchTestContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -33,15 +29,14 @@ const setup = async (balance = 500_000) => {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Bytes Tests', () => {
-  let baseAssetId: string;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('should test bytes output', async () => {
+    using contractInstance = await launchTestContract({
+      deployer: BytesAbi__factory,
+      bytecode: BytesAbiHex,
+    });
     const INPUT = 10;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -50,6 +45,11 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes output [100 items]', async () => {
+    using contractInstance = await launchTestContract({
+      deployer: BytesAbi__factory,
+      bytecode: BytesAbiHex,
+    });
+
     const INPUT = 100;
 
     const { value } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
@@ -58,6 +58,11 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input', async () => {
+    using contractInstance = await launchTestContract({
+      deployer: BytesAbi__factory,
+      bytecode: BytesAbiHex,
+    });
+
     const INPUT = [40, 41, 42];
 
     const { value } = await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
@@ -65,6 +70,10 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [nested]', async () => {
+    using contractInstance = await launchTestContract({
+      deployer: BytesAbi__factory,
+      bytecode: BytesAbiHex,
+    });
     const bytes = [40, 41, 42];
 
     const INPUT: Wrapper = {
@@ -77,6 +86,11 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
+    using launched = await launchTestContract({
+      deployer: BytesAbi__factory,
+      bytecode: BytesAbiHex,
+    });
+
     const wallet = await setup(1_000_000);
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 500_000;
@@ -101,16 +115,26 @@ describe('Bytes Tests', () => {
     });
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const setupTx = await wallet.transfer(
+      predicate.address,
+      amountToPredicate,
+      launched.provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     await setupTx.waitForResult();
 
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx = await predicate.transfer(
+      receiver.address,
+      amountToReceiver,
+      launched.provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
 
     const { isStatusSuccess } = await tx.waitForResult();
 
