@@ -136,7 +136,6 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
  * @param args - additional arguments to pass to fuel-core.
  * @param fuelCorePath - the path to the fuel-core binary. (optional, defaults to 'fuel-core')
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
- * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
  * */
 // #endregion launchNode-launchNodeOptions
