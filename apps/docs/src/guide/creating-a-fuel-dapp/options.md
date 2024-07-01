@@ -14,7 +14,7 @@ pnpm create fuels@{{fuels}} [project-name] [options]
 ```
 
 ```sh-vue [npm]
-npm create fuels@{{fuels}} [project-name] [options]
+npm create fuels@{{fuels}} -- [project-name] [options]
 ```
 
 ```sh-vue [bun]
@@ -22,18 +22,6 @@ bunx --bun create-fuels@{{fuels}} [project-name] [options]
 ```
 
 :::
-
-## `-c, --contract`
-
-Notifies the tool to include a Sway contract program in your project.
-
-## `-p, --predicate`
-
-Notifies the tool to include a Sway predicate program in your project.
-
-## `-s, --script`
-
-Notifies the tool to include a Sway script program in your project.
 
 ## `--pnpm`
 
@@ -46,10 +34,6 @@ Notifies the tool to use npm as the package manager to install the necessary dep
 ## `--bun`
 
 Notifies the tool to use bun as the package manager to install the necessary dependencies.
-
-## `-cs, -cp, -sp, -cps`
-
-Shorthand to include a combination of contract, script and predicate programs.
 
 ## `--verbose`
 
