@@ -14,7 +14,6 @@ describe(__filename, () => {
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
-  beforeAll(async () => {});
 
   it('should successfully use predicate to spend assets', async () => {
     using launched = await launchTestNode();
