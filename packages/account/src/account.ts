@@ -603,7 +603,7 @@ export class Account extends AbstractAccount {
   /**
    * Sends a transaction to the network.
    *
-   * @param transactionRequestLike - The transaction request to be sent.
+   * @param transactionRequestLike - An array of transaction requests to be sent.
    * @param sendTransactionParams - The provider send transaction parameters (optional).
    * @returns A promise that resolves to the transaction response.
    */
@@ -624,6 +624,39 @@ export class Account extends AbstractAccount {
       awaitExecution,
       estimateTxDependencies: false,
     });
+  }
+
+  /**
+   * Sends a multiple transactions to the network.
+   *
+   * @param transactionRequestLike - The transaction request to be sent.
+   * @param sendMultipleTransactionsParams - The provider send transaction parameters (optional).
+   */
+  async sendMultipleTransactions(
+    transactionRequestLike: TransactionRequestLike[],
+    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
+  ) {
+    const multipleTransactions = transactionRequestLike.map((t) => transactionRequestify(t));
+
+    if (estimateTxDependencies) {
+      await this.provider.estimateMultipleTxDependencies(multipleTransactions);
+    }
+
+    for (const tx of multipleTransactions) {
+      const response = await this.provider.sendTransaction(tx, {
+        awaitExecution,
+        estimateTxDependencies: false,
+      });
+
+      const result = await response.waitForResult();
+
+      if (!result) {
+        throw new FuelError(
+          ErrorCode.TRANSACTION_FAILED,
+          'Transaction failed during batch processing. Aborting further transactions.'
+        );
+      }
+    }
   }
 
   /**
