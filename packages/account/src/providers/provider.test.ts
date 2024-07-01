@@ -1093,7 +1093,6 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const methodCalls = [
       () => provider.getBalance(b256Str, baseAssetId),
       () => provider.getCoins(b256Str),
-      () => provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
       () => provider.getResourcesToSpend(b256Str, []),
       () => provider.getContractBalance(b256Str, baseAssetId),
       () => provider.getBalances(b256Str),

@@ -1224,48 +1224,6 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Get the required quantities and associated resources for a transaction.
-   *
-   * @param owner - address to add resources from.
-   * @param transactionRequestLike - transaction request to populate resources for.
-   * @param quantitiesToContract - quantities for the contract (optional).
-   *
-   * @returns a promise resolving to the required quantities for the transaction.
-   */
-  async getResourcesForTransaction(
-    owner: string | AbstractAddress,
-    transactionRequestLike: TransactionRequestLike,
-    quantitiesToContract: CoinQuantity[] = []
-  ) {
-    const ownerAddress = Address.fromAddressOrString(owner);
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
-    const transactionCost = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-
-    // Add the required resources to the transaction from the owner
-    transactionRequest.addResources(
-      await this.getResourcesToSpend(ownerAddress, transactionCost.requiredQuantities)
-    );
-    // Refetch transaction costs with the new resources
-    // TODO: we could find a way to avoid fetch estimatePredicates again, by returning the transaction or
-    // returning a specific gasUsed by the predicate.
-    // Also for the dryRun we could have the same issue as we are going to run twice the dryRun and the
-    // estimateTxDependencies as we don't have access to the transaction, maybe returning the transaction would
-    // be better.
-    const { requiredQuantities, ...txCost } = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-    const resources = await this.getResourcesToSpend(ownerAddress, requiredQuantities);
-
-    return {
-      resources,
-      requiredQuantities,
-      ...txCost,
-    };
-  }
-
-  /**
    * Returns coins for the given owner.
    *
    * @param owner - The address to get coins for.
