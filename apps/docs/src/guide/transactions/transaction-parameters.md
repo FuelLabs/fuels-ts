@@ -10,13 +10,13 @@ The maximum amount of gas you're willing to allow the transaction to consume. If
 
 ### `Max Fee`
 
-The maximum amount you're willing to pay for the transaction using the base asset.
+The maximum amount you're willing to pay for the transaction using the base asset. This allows users to set an upper limit on the transaction fee they are willing to pay, preventing unexpected high costs due to sudden network congestion or fee spikes.
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-2{ts:line-numbers}
 
 ### `Tip`
 
-Optional amount on the base asset to incentivize block producer to include transaction. The value set here will be added to the final fee required to process the transaction.
+Optional amount on the base asset to incentivize block producer to include transaction, ensuring faster processing for those willing to pay more. The value set here will be added to the transaction `maxFee`.
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-3{ts:line-numbers}
 
