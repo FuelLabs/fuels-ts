@@ -16,7 +16,7 @@ The maximum amount you're willing to pay for the transaction using the base asse
 
 ### `Tip`
 
-Optional amount on the base asset to incentivize block producer to include transaction, ensuring faster processing for those willing to pay more. The value set here will be added to the transaction `maxFee`.
+Optional amount on the base asset to incentivise block producer to include transaction, ensuring faster processing for those willing to pay more. The value set here will be added to the transaction `maxFee`.
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-3{ts:line-numbers}
 

@@ -4,7 +4,7 @@ Transaction policies are rules that can govern how a transaction is processed, i
 
 ### `Tip`
 
-Optional amount on the base asset to incentivize block producer to include transaction. The value set here will be added to the final fee required to process the transaction.
+Optional amount on the base asset to incentivise block producer to include transaction. The value set here will be added to the final fee required to process the transaction.
 
 ### `Witness Limit`
 
