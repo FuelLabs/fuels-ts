@@ -1,39 +1,29 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import type { Provider } from 'fuels';
 import { WalletUnlocked, Predicate, getRandomB256 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
   getDocsSnippetsForcProject,
 } from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let walletWithFunds: WalletUnlocked;
-  let provider: Provider;
-  let baseAssetId: string;
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
     DocSnippetProjectsEnum.SIMPLE_PREDICATE
   );
-  beforeAll(async () => {
-    walletWithFunds = await getTestWallet();
-    provider = walletWithFunds.provider;
-    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
-    const predicate = new Predicate({
-      bytecode: bin,
-      provider,
-      abi,
-      inputData: [inputAddress],
-    });
-    baseAssetId = provider.getBaseAssetId();
-    await seedTestWallet(predicate, [[500_000, baseAssetId]]);
-  });
+  beforeAll(async () => {});
 
   it('should successfully use predicate to spend assets', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [walletWithFunds],
+    } = launched;
+    const baseAssetId = provider.getBaseAssetId();
+
     // #region send-and-spend-funds-from-predicates-2
     const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
     const predicate = new Predicate({
@@ -80,6 +70,13 @@ describe(__filename, () => {
   });
 
   it('should fail when trying to spend predicates entire amount', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [walletWithFunds],
+    } = launched;
+    const baseAssetId = provider.getBaseAssetId();
+
     const predicate = new Predicate({
       bytecode: bin,
       provider,
@@ -111,6 +108,13 @@ describe(__filename, () => {
   });
 
   it('should fail when set wrong input data for predicate', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [walletWithFunds],
+    } = launched;
+    const baseAssetId = provider.getBaseAssetId();
+
     const predicateOwner = WalletUnlocked.generate({
       provider,
     });
@@ -147,6 +151,13 @@ describe(__filename, () => {
   });
 
   it('should ensure predicate createTransfer works as expected', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [walletWithFunds],
+    } = launched;
+    const baseAssetId = provider.getBaseAssetId();
+
     const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
     const predicate = new Predicate({
       bytecode: bin,
@@ -197,6 +208,13 @@ describe(__filename, () => {
   });
 
   it('should be able to pre-stage a transaction, get TX ID, and then send the transaction', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [walletWithFunds],
+    } = launched;
+    const baseAssetId = provider.getBaseAssetId();
+
     const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
     const predicate = new Predicate({
       bytecode: bin,
