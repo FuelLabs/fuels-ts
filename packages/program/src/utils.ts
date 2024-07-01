@@ -49,6 +49,7 @@ export function getAbisFromAllCalls(
   }, {} as JsonAbisFromAllCalls);
 }
 
+/** @hidden */
 export const extractInvocationResult = <T>(
   functionScopes: Array<InvocationScopeLike>,
   receipts: TransactionResultReceipt[],
@@ -75,6 +76,7 @@ export const extractInvocationResult = <T>(
   return (isMultiCall ? decodedResults : decodedResults?.[0]) as T;
 };
 
+/** @hidden */
 export const buildSubmitResult = async <T>(
   funcScope: InvocationScopeLike | Array<InvocationScopeLike>,
   transactionResponse: TransactionResponse,
@@ -107,6 +109,7 @@ export const buildSubmitResult = async <T>(
   return submitResult;
 };
 
+/** @hidden * */
 export const buildDryRunResult = <T>(
   funcScopes: InvocationScopeLike | Array<InvocationScopeLike>,
   callResult: CallResult,
