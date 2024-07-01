@@ -336,6 +336,51 @@ describe('Account', () => {
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
   });
 
+  it.only('should execute sendMultipleTransactions just fine', async () => {
+    const multipleTransactionRequestLike: providersMod.TransactionRequestLike[] = [
+      {
+        type: providersMod.TransactionType.Script,
+      },
+      {
+        type: providersMod.TransactionType.Script,
+      },
+      {
+        type: providersMod.TransactionType.Script,
+      },
+    ];
+
+    const transactionRequest = new ScriptTransactionRequest();
+    const transactionResponse =
+      'transactionResponse' as unknown as providersMod.TransactionResponse;
+
+    const transactionRequestify = vi.spyOn(providersMod, 'transactionRequestify');
+
+    const estimateMultipleTxDependencies = vi
+      .spyOn(providersMod.Provider.prototype, 'estimateMultipleTxDependencies')
+      .mockImplementation(() =>
+        Promise.resolve([
+          { receipts: [], missingContractIds: [], outputVariables: 0 },
+          { receipts: [], missingContractIds: [], outputVariables: 0 },
+          { receipts: [], missingContractIds: [], outputVariables: 0 },
+        ])
+      );
+
+    const sendTransaction = vi
+      .spyOn(providersMod.Provider.prototype, 'sendTransaction')
+      .mockImplementation(() => Promise.resolve(transactionResponse));
+
+    const account = new Account(
+      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
+      provider
+    );
+
+    await account.sendMultipleTransactions(multipleTransactionRequestLike);
+
+    expect(sendTransaction.mock.calls.length).toEqual(3);
+    expect(transactionRequestify.mock.calls.length).toBe(3);
+    expect(estimateMultipleTxDependencies.mock.calls.length).toBe(1);
+  });
+
   it('should execute simulateTransaction just fine', async () => {
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,

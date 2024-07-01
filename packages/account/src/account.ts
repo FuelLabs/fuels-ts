@@ -620,6 +620,8 @@ export class Account extends AbstractAccount {
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
+
+    console.log(transactionRequest);
     return this.provider.sendTransaction(transactionRequest, {
       awaitExecution,
       estimateTxDependencies: false,
@@ -636,27 +638,27 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike[],
     { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
   ) {
-    const multipleTransactions = transactionRequestLike.map((t) => transactionRequestify(t));
+    const transactionsRequest = transactionRequestLike.map((t) => transactionRequestify(t));
 
     if (estimateTxDependencies) {
-      await this.provider.estimateMultipleTxDependencies(multipleTransactions);
+      await this.provider.estimateMultipleTxDependencies(transactionsRequest);
     }
 
-    for (const tx of multipleTransactions) {
+    for (const tx of transactionsRequest) {
       const response = await this.provider.sendTransaction(tx, {
         awaitExecution,
         estimateTxDependencies: false,
       });
 
-      const result = await response.waitForResult();
-
-      if (!result) {
+      if (!response) {
         throw new FuelError(
           ErrorCode.TRANSACTION_FAILED,
           'Transaction failed during batch processing. Aborting further transactions.'
         );
       }
     }
+
+    // TODO: decide whether we should return an array of successful transactions or non
   }
 
   /**
