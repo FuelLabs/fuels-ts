@@ -35,7 +35,7 @@ describe('Custom Transactions from Contract Calls', () => {
     expect(initialBalance.toNumber()).toBe(0);
 
     // #region custom-transactions-contract-calls
-    // #import { bn, Contract };
+    // #import { bn, Contract, buildSubmitResult };
 
     const amountToRecipient = bn(10_000); // 0x2710
     // Connect to the contract
