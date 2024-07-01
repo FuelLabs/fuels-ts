@@ -82,7 +82,7 @@ describe('encode and decode', () => {
     // #endregion encode-and-decode-4
 
     // #region encode-and-decode-5
-    // #import { AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify};
+    // #import { AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify, buildSubmitResult };
 
     // Get result of the transaction, including the contract call result. For this we'll need
     // the previously created invocation scope, the transaction response and the script
