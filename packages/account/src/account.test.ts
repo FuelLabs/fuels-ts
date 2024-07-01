@@ -336,7 +336,7 @@ describe('Account', () => {
     expect(sendTransaction.mock.calls[0][0]).toEqual(transactionRequest);
   });
 
-  it.only('should execute sendMultipleTransactions just fine', async () => {
+  it('should execute sendMultipleTransactions just fine', async () => {
     const multipleTransactionRequestLike: providersMod.TransactionRequestLike[] = [
       {
         type: providersMod.TransactionType.Script,

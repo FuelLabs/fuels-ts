@@ -621,7 +621,6 @@ export class Account extends AbstractAccount {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
 
-    console.log(transactionRequest);
     return this.provider.sendTransaction(transactionRequest, {
       awaitExecution,
       estimateTxDependencies: false,
@@ -638,7 +637,7 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike[],
     { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
   ) {
-    const transactionsRequest = transactionRequestLike.map((t) => transactionRequestify(t));
+    const transactionsRequest = transactionRequestLike.map(transactionRequestify);
 
     if (estimateTxDependencies) {
       await this.provider.estimateMultipleTxDependencies(transactionsRequest);
