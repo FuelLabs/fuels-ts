@@ -65,9 +65,7 @@ describe(__filename, () => {
     const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
     transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(transactionRequest, {
-      resourcesOwner: predicate,
-    });
+    const txCost = await predicate.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
@@ -91,9 +89,7 @@ describe(__filename, () => {
     const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
     transactionRequest.addCoinOutput(receiver.address, 1000000, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(transactionRequest, {
-      resourcesOwner: predicate,
-    });
+    const txCost = await predicate.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
