@@ -1125,6 +1125,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const updateMaxFee = txRequestClone.maxFee.eq(0);
+    let requiredQuantities: CoinQuantity[] = [];
 
     if (!funded) {
       const baseAssetId = this.getBaseAssetId();
@@ -1132,9 +1133,9 @@ Supported fuel-core version: ${supportedVersion}.`
       // Getting coin quantities from amounts being transferred
       const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
       // Combining coin quantities from amounts being transferred and forwarding to contracts
-      const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
+      requiredQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
       // Funding transaction with fake utxos
-      txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, resourcesOwner?.address);
+      txRequestClone.fundWithFakeUtxos(requiredQuantities, baseAssetId, resourcesOwner?.address);
 
       /**
        * Estimate predicates gasUsed
@@ -1205,7 +1206,7 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return {
-      requiredQuantities: [],
+      requiredQuantities,
       receipts,
       gasUsed,
       gasPrice,

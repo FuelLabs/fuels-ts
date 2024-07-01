@@ -1,7 +1,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
+import type {
+  Provider,
+  CoinQuantity,
+  CallResult,
+  Account,
+  TransferParams,
+  Predicate,
+} from '@fuel-ts/account';
 import { ScriptTransactionRequest, mergeQuantities } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -224,22 +231,45 @@ export class BaseInvocationScope<TReturn = any> {
   async getTransactionCost() {
     const provider = this.getProvider();
     const baseAssetId = provider.getBaseAssetId();
-    const request = await this.getTransactionRequest();
+    const request = clone(await this.getTransactionRequest());
+    const isScriptTransaction = request.type === TransactionType.Script;
 
     // Fund with fake UTXOs to avoid not enough funds error
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantities = request.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, this.getRequiredCoins());
+    const quantitiesToContract = this.getRequiredCoins();
+    const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
     // Funding transaction with fake utxos
-    request.fundWithFakeUtxos(allQuantities, baseAssetId, this.program.account?.address);
+    request.fundWithFakeUtxos(requiredQuantities, baseAssetId, this.program.account?.address);
+
+    /**
+     * Estimate predicates gasUsed
+     */
+    // Remove gasLimit to avoid gasLimit when estimating predicates
+    if (isScriptTransaction) {
+      request.gasLimit = bn(0);
+    }
+
+    /**
+     * The fake utxos added above can be from a predicate
+     * If the resources owner is a predicate,
+     * we need to populate the resources with the predicate's data
+     * so that predicate estimation can happen.
+     */
+    if (this.program.account && 'populateTransactionPredicateData' in this.program.account) {
+      (this.program.account as unknown as Predicate<[]>).populateTransactionPredicateData(request);
+    }
 
     const txCost = await provider.getTransactionCost(request, {
       signatureCallback: this.addSignersCallback,
       funded: true,
     });
 
-    return txCost;
+    return {
+      ...txCost,
+      requiredQuantities,
+    };
   }
 
   /**
