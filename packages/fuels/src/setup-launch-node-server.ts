@@ -1,9 +1,9 @@
 /* eslint-disable no-console */
-import type { LaunchNodeOptions } from '@fuel-ts/account/test-utils';
-import { launchNode } from '@fuel-ts/account/test-utils';
-import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import http from 'http';
 import type { AddressInfo } from 'net';
+
+import type { LaunchNodeOptions } from './test-utils';
+import { waitUntilUnreachable, launchNode } from './test-utils';
 
 process.setMaxListeners(Infinity);
 

@@ -1,5 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import type {
   WalletUnlocked,
   TransactionResultReceipt,
@@ -21,6 +19,7 @@ import {
   AddressType,
   OperationName,
 } from 'fuels';
+import { generateTestWallet, ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum } from '../test/fixtures';
 
