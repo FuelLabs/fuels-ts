@@ -1,6 +1,6 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { WalletLocked, WalletUnlocked, BigNumberish } from 'fuels';
 import { Provider, FUEL_NETWORK_URL, toHex, Predicate } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';
