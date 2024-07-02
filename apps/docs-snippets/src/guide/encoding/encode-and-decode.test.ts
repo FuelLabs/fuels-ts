@@ -6,7 +6,7 @@ import {
   Script,
   ReceiptType,
   arrayify,
-  buildSubmitResult,
+  buildFunctionResult,
 } from 'fuels';
 import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
 
@@ -82,11 +82,11 @@ describe('encode and decode', () => {
     // #endregion encode-and-decode-4
 
     // #region encode-and-decode-5
-    // #import { AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify, buildSubmitResult };
+    // #import { AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify, buildFunctionResult };
 
     // Get result of the transaction, including the contract call result. For this we'll need
     // the previously created invocation scope, the transaction response and the script
-    const invocationResult = await buildSubmitResult({
+    const invocationResult = await buildFunctionResult({
       funcScope: invocationScope,
       isMultiCall: false,
       program: script,

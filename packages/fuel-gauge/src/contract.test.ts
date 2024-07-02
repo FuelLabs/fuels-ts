@@ -25,7 +25,7 @@ import {
   FUEL_NETWORK_URL,
   Predicate,
   PolicyType,
-  buildSubmitResult,
+  buildFunctionResult,
 } from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
@@ -659,7 +659,7 @@ describe('Contract', () => {
     const {
       value: [resultA, resultB],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await buildSubmitResult<any>({
+    } = await buildFunctionResult<any>({
       funcScope: invocationScopes,
       transactionResponse: response,
       isMultiCall: true,
@@ -771,7 +771,7 @@ describe('Contract', () => {
       value: [resultA, resultB],
       transactionResult,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await buildSubmitResult<any>({
+    } = await buildFunctionResult<any>({
       funcScope: invocationScopes,
       transactionResponse: response,
       isMultiCall: true,

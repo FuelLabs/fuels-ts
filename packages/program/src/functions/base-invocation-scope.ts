@@ -18,10 +18,10 @@ import type {
   ContractCall,
   InvocationScopeLike,
   TxParams,
-  SubmitResult,
+  FunctionResult,
   DryRunResult,
 } from '../types';
-import { buildSubmitResult, assert, getAbisFromAllCalls, buildDryRunResult } from '../utils';
+import { buildFunctionResult, assert, getAbisFromAllCalls, buildDryRunResult } from '../utils';
 
 /**
  * Creates a contract call object based on the provided invocation scope.
@@ -363,7 +363,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the function invocation.
    */
-  async call<T = TReturn>(): Promise<SubmitResult<T>> {
+  async call<T = TReturn>(): Promise<FunctionResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.fundWithRequiredCoins();
@@ -373,7 +373,7 @@ export class BaseInvocationScope<TReturn = any> {
       estimateTxDependencies: false,
     });
 
-    return buildSubmitResult<T>({
+    return buildFunctionResult<T>({
       funcScope: this.functionInvocationScopes,
       isMultiCall: this.isMultiCall,
       program: this.program,

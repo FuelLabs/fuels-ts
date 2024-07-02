@@ -12,7 +12,7 @@ import type { TransactionType } from '@fuel-ts/transactions';
 
 import { decodeContractCallScriptResult } from './contract-call-script';
 import { callResultToInvocationResult } from './script-request';
-import type { DryRunResult, InvocationScopeLike, SubmitResult } from './types';
+import type { DryRunResult, InvocationScopeLike, FunctionResult } from './types';
 
 /**
  * @hidden
@@ -76,7 +76,7 @@ export const extractInvocationResult = <T>(
   return (isMultiCall ? decodedResults : decodedResults?.[0]) as T;
 };
 
-type BuiltSubmitResultParams = {
+type BuiltFunctionResultParams = {
   funcScope: InvocationScopeLike | Array<InvocationScopeLike>;
   transactionResponse: TransactionResponse;
   isMultiCall: boolean;
@@ -84,9 +84,9 @@ type BuiltSubmitResultParams = {
 };
 
 /** @hidden */
-export const buildSubmitResult = async <T>(
-  params: BuiltSubmitResultParams
-): Promise<SubmitResult<T>> => {
+export const buildFunctionResult = async <T>(
+  params: BuiltFunctionResultParams
+): Promise<FunctionResult<T>> => {
   const { funcScope, isMultiCall, program, transactionResponse } = params;
   const txResult = await transactionResponse.waitForResult();
   const { receipts } = txResult;
@@ -99,7 +99,7 @@ export const buildSubmitResult = async <T>(
   const value = extractInvocationResult<T>(functionScopes, receipts, isMultiCall, logs);
   const gasUsed = getGasUsedFromReceipts(receipts);
 
-  const submitResult: SubmitResult<T> = {
+  const submitResult: FunctionResult<T> = {
     isMultiCall,
     functionScopes,
     value,

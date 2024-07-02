@@ -103,7 +103,7 @@ export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
 }>;
 
-export type SubmitResult<TReturn> = {
+export type FunctionResult<TReturn> = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly logs: Array<any>;
   readonly value: TReturn;
