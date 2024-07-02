@@ -107,6 +107,16 @@ describe('Provider', () => {
     // #endregion options-fetch
   });
 
+  it('options: cacheUtxo', async () => {
+    // #region options-cache-utxo
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      cacheUtxo: 5000, // cache UTXO for 5 seconds
+    });
+    // #endregion options-cache-utxo
+
+    expect(provider).toBeDefined();
+  });
+
   it('fetches the base asset ID', async () => {
     const recipientAddress = Address.fromRandom();
 
