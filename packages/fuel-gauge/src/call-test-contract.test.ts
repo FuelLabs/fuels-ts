@@ -1,4 +1,3 @@
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { BN, bn, toHex } from 'fuels';
 

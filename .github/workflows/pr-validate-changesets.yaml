@@ -39,9 +39,16 @@ jobs:
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
 
+      - name: Set up .netrc file
+        run: |
+          echo "machine github.com" > $HOME/.netrc
+          echo "login github-actions[bot]" >> $HOME/.netrc
+          echo "password ${{ secrets.REPO_TOKEN }}" >> $HOME/.netrc
+          chmod 600 $HOME/.netrc
+
       - name: Commit Changeset
         run: |
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add .
           git commit -m "build: update dependency changeset"

@@ -1,4 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { FuelError } from '@fuel-ts/errors';
 import { Script, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';

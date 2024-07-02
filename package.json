@@ -100,7 +100,7 @@
     "nyc": "^15.1.0",
     "open": "^8.4.0",
     "prettier": "^3.3.2",
-    "rimraf": "^3.0.2",
+    "rimraf": "^5.0.7",
     "textlint": "^13.3.2",
     "textlint-rule-no-dead-link": "^5.1.2",
     "ts-generator": "^0.1.1",
@@ -110,7 +110,7 @@
     "typescript": "~5.4.5",
     "vite": "^5.2.10",
     "vite-plugin-json5": "^1.1.2",
-    "vite-plugin-node-polyfills": "^0.21.0",
+    "vite-plugin-node-polyfills": "^0.22.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.6.0",
     "webdriverio": "^8.39.0"
