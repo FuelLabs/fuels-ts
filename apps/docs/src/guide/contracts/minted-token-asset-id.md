@@ -18,3 +18,11 @@ Imagine that this contract is already deployed and we are about to mint some coi
 <<< @/../../docs-snippets/src/guide/contracts/minted-token-asset-id.test.ts#minted-token-asset-id-2{ts:line-numbers}
 
 Since the asset ID depends on the contract ID, which is always dynamic (unlike the sub ID, which can be set to a fixed value), the helper `getMintedAssetId` can be used to easily obtain the asset ID for a given contract ID and sub ID.
+
+## `Create Asset Id`
+
+This is an extension of the Minted Token Asset ID, but it returns an [AssetId](https://github.com/FuelLabs/fuels-ts/blob/1fb529bf03e5751e61afac69bfbd488e05577d10/packages/interfaces/src/index.ts#L33). Under the hood, the `createAssetId` calls the `getMintedAssetId`
+
+A sample usage is as shown below:
+
+<<< @/../../docs-snippets/src/guide/contracts/minted-token-asset-id.test.ts#create-asset-id-1{ts:line-numbers}
