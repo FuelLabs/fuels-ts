@@ -10,7 +10,7 @@ The `transfer` method initiates a transaction request that transfers an asset fr
 2. The amount of the asset to be transferred
 3. The ID of the asset to be transferred (optional - defaults to the base asset ID)
 
-Upon execution, this function returns a promise that resolves to a transaction response. To wait for the transaction to be processed, call `response.wait()`.
+Upon execution, this function returns a promise that resolves to a transaction response. To wait for the transaction to be processed, call `response.waitForResult()`.
 
 ### Example
 
