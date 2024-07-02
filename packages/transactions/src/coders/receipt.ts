@@ -2,6 +2,7 @@
 import { Coder, BigNumberCoder, B256Coder, NumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { sha256 } from '@fuel-ts/hasher';
+import type { AssetId } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { arrayify, concat } from '@fuel-ts/utils';
 
@@ -773,6 +774,10 @@ export const getMintedAssetId = (contractId: string, subId: string): string => {
 
   return sha256(concat([contractIdBytes, subIdBytes]));
 };
+
+export const createAssetId = (contractId: string, subId: string): AssetId => ({
+  bits: getMintedAssetId(contractId, subId),
+});
 
 export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
   constructor() {
