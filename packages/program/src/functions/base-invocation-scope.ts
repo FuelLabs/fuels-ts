@@ -14,6 +14,7 @@ import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
+import { buildDryRunResult, buildFunctionResult } from '../response';
 import type {
   ContractCall,
   InvocationScopeLike,
@@ -21,7 +22,7 @@ import type {
   FunctionResult,
   DryRunResult,
 } from '../types';
-import { buildFunctionResult, assert, getAbisFromAllCalls, buildDryRunResult } from '../utils';
+import { assert, getAbisFromAllCalls } from '../utils';
 
 /**
  * Creates a contract call object based on the provided invocation scope.
