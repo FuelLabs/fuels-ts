@@ -176,6 +176,6 @@ describe('cli.ts', () => {
     });
 
     expect(exit).toBeCalledWith(1);
-    expect(logSpy).toBeCalledWith(`error: ${runTypegenError.message}\n`);
+    expect(logSpy).toBeCalledWith(`error: ${runTypegenError.message}`);
   });
 });

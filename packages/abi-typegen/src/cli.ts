@@ -50,7 +50,7 @@ export function runCliAction(options: ICliParams) {
     });
   } catch (err) {
     // eslint-disable-next-line no-console
-    console.log(`error: ${(<Error>err).message}\n`);
+    console.log(`error: ${(<Error>err).message}`);
     process.exit(1);
   }
 }
