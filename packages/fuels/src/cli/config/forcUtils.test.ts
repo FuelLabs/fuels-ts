@@ -1,4 +1,4 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { safeExec } from '../../test-utils';
 
 import { readForcToml } from './forcUtils';
 

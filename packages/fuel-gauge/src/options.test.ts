@@ -1,5 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { Contract, WalletUnlocked } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { getSetupContract } from './utils';
 
