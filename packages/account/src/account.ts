@@ -620,10 +620,44 @@ export class Account extends AbstractAccount {
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
+
     return this.provider.sendTransaction(transactionRequest, {
       awaitExecution,
       estimateTxDependencies: false,
     });
+  }
+
+  /**
+   * Sends a multiple transactions to the network.
+   *
+   * @param transactionRequestLike - An array of transaction requests to be sent.
+   * @param sendMultipleTransactionsParams - The provider send transaction parameters (optional).
+   */
+  async sendMultipleTransactions(
+    transactionRequestLike: TransactionRequestLike[],
+    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
+  ) {
+    const transactionsRequest = transactionRequestLike.map(transactionRequestify);
+
+    if (estimateTxDependencies) {
+      await this.provider.estimateMultipleTxDependencies(transactionsRequest);
+    }
+
+    for (const tx of transactionsRequest) {
+      const response = await this.provider.sendTransaction(tx, {
+        awaitExecution,
+        estimateTxDependencies: false,
+      });
+
+      if (!response) {
+        throw new FuelError(
+          ErrorCode.TRANSACTION_FAILED,
+          'Transaction failed during batch processing. Aborting further transactions.'
+        );
+      }
+    }
+
+    // TODO: decide whether we should return an array of successful transactions or non
   }
 
   /**
