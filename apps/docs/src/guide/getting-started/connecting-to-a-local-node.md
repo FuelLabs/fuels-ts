@@ -7,4 +7,4 @@ Firstly, you will need a local node running on your machine. We recommend one of
 
 In the following example, we create a provider to connect to the local node and sign a message.
 
-<<< @/../../docs-snippets/src/guide/introduction/getting-started.test.ts#connecting-to-the-local-node{ts:line-numbers}
+<<< @/../../docs-snippets2/src/introduction/connecting-to-localnode.ts#main{ts:line-numbers}
