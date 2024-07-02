@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+
 ## 0.90.0
 
 ## 0.89.2
