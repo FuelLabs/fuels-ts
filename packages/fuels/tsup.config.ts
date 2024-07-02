@@ -5,6 +5,7 @@ const options: Options = {
   ...indexBinAndCliConfig,
   entry: {
     ...indexBinAndCliConfig.entry,
+    api: 'src/api.ts',
     'test-utils': 'src/test-utils.ts',
     'cli-utils': 'src/cli-utils.ts',
   },
