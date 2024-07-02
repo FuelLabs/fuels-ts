@@ -23,3 +23,5 @@ CHANGELOG.md
 *.hbs
 
 templates/nextjs
+
+*.wrapped.ts
