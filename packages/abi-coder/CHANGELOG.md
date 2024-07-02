@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- 3be2251: build(deps-dev): bump prettier from 3.0.3 to 3.3.2
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
 ## 0.90.0
 
 ### Minor Changes
