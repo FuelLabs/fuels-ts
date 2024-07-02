@@ -8,6 +8,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
+import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -16,9 +17,15 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
-import { setupTestProviderAndWallets, launchNode } from '../test-utils';
+import {
+  setupTestProviderAndWallets,
+  launchNode,
+  seedTestWallet,
+  TestMessage,
+} from '../test-utils';
+import { Wallet } from '../wallet';
 
-import type { ChainInfo, NodeInfo } from './provider';
+import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider from './provider';
 import type {
   CoinTransactionRequestInput,
@@ -716,7 +723,7 @@ describe('Provider', () => {
     const { provider } = launched;
     // Force-producing some blocks to make sure that 10 blocks exist
     await provider.produceBlocks(10);
-    const blocks = await provider.getBlocks({
+    const { blocks } = await provider.getBlocks({
       last: 10,
     });
     expect(blocks.length).toBe(10);
@@ -1523,5 +1530,263 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     expect(message).toBeDefined();
     expect(message?.nonce).toEqual(nonce);
+  });
+
+  describe('paginated methods', () => {
+    const defaultItemsPerPage = 100;
+
+    test('can properly use getCoins', async () => {
+      const totalCoins = 1001;
+
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: totalCoins,
+          amountPerCoin: totalCoins,
+        },
+      });
+
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+
+      // can fetch 1000 coins
+      let { coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
+        first: totalCoins - 1,
+      });
+
+      expect(coins.length).toBe(totalCoins - 1);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can list next page with 1 coin
+      ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
+        after: pageInfo.endCursor,
+        first: 100,
+      }));
+
+      expect(coins.length).toBe(1);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can show previous page with less coins
+      const last = 50;
+      ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
+        before: pageInfo.startCursor,
+        last,
+      }));
+
+      expect(coins.length).toBe(last);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can fetch default 100 items
+      ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId));
+
+      expect(coins.length).toBe(defaultItemsPerPage);
+    });
+
+    test('can properly use getMessages', async () => {
+      const totalMessages = 1001;
+      const fakeMessages = Array.from({ length: totalMessages }, (_) => new TestMessage());
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          messages: fakeMessages,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+
+      let { messages, pageInfo } = await provider.getMessages(wallet.address, {
+        first: totalMessages - 1,
+      });
+
+      expect(messages.length).toBe(totalMessages - 1);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ messages, pageInfo } = await provider.getMessages(wallet.address, {
+        after: pageInfo.endCursor,
+      }));
+
+      expect(messages.length).toBe(1);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can show previous page with less messages
+      const last = 50;
+      ({ messages, pageInfo } = await provider.getMessages(wallet.address, {
+        before: pageInfo.startCursor,
+        last,
+      }));
+
+      expect(messages.length).toBe(last);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ messages, pageInfo } = await provider.getMessages(wallet.address));
+
+      // can fetch default 100 items
+      expect(messages.length).toBe(defaultItemsPerPage);
+    });
+
+    test('can properly use getBlocks', async () => {
+      const blocksToProduce = 10;
+      // one is produced when the node starts
+      const totalBlocksProduced = blocksToProduce + 1;
+
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
+
+      await provider.produceBlocks(blocksToProduce);
+
+      let { blocks, pageInfo } = await provider.getBlocks({
+        first: totalBlocksProduced - 1,
+      });
+
+      expect(blocks.length).toBe(totalBlocksProduced - 1);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ blocks, pageInfo } = await provider.getBlocks({
+        after: pageInfo.endCursor,
+      }));
+
+      expect(blocks.length).toBe(1);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can show previous page with less blocks
+      const last = 5;
+      ({ blocks, pageInfo } = await provider.getBlocks({
+        before: pageInfo.startCursor,
+        last,
+      }));
+
+      expect(blocks.length).toBe(last);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+    });
+
+    describe('pagination arguments', async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: 100,
+        },
+      });
+      const { provider } = launched;
+      const baseAssetId = provider.getBaseAssetId();
+      const itemsPerPage = 1001;
+      const address = Address.fromRandom();
+
+      function getInvocations(args: CursorPaginationArgs) {
+        return [
+          { name: 'getCoins', invocation: () => provider.getCoins(address, baseAssetId, args) },
+          { name: 'getMessages', invocation: () => provider.getMessages(address, args) },
+          { name: 'getBlocks', invocation: () => provider.getBlocks(args) },
+        ];
+      }
+
+      const args1: CursorPaginationArgs = { first: itemsPerPage };
+      const invocations1 = getInvocations(args1);
+      it.each(invocations1)('validate max items on $name', async ({ invocation }) => {
+        await expectToThrowFuelError(
+          () => invocation(),
+          new FuelError(
+            ErrorCode.INVALID_INPUT_PARAMETERS,
+            'Pagination limit cannot exceed 1000 items'
+          )
+        );
+      });
+
+      const args2: CursorPaginationArgs = { after: 'after', before: 'before' };
+      const invocations2 = getInvocations(args2);
+      it.each(invocations2)(
+        "validate use of 'after' with 'before' on $name",
+        async ({ invocation }) => {
+          await expectToThrowFuelError(
+            () => invocation(),
+            new FuelError(
+              ErrorCode.INVALID_INPUT_PARAMETERS,
+              'Pagination arguments "after" and "before" cannot be used together'
+            )
+          );
+        }
+      );
+
+      const args3: CursorPaginationArgs = { before: 'before', first: 10 };
+      const invocations3 = getInvocations(args3);
+      it.each(invocations3)(
+        "validate use of 'after' with 'last' on $name",
+        async ({ invocation }) => {
+          await expectToThrowFuelError(
+            () => invocation(),
+            new FuelError(
+              ErrorCode.INVALID_INPUT_PARAMETERS,
+              'The use of pagination argument "first" with "before" is not supported'
+            )
+          );
+        }
+      );
+
+      const args4: CursorPaginationArgs = { after: 'after', last: 10 };
+      const invocations4 = getInvocations(args4);
+      it.each(invocations4)(
+        "validate use of 'before' with 'first' on $name",
+        async ({ invocation }) => {
+          await expectToThrowFuelError(
+            () => invocation(),
+            new FuelError(
+              ErrorCode.INVALID_INPUT_PARAMETERS,
+              'The use of pagination argument "last" with "after" is not supported'
+            )
+          );
+        }
+      );
+    });
+  });
+
+  test('can properly use getBalances', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+    const wallet = Wallet.generate({ provider });
+
+    const fundAmount = 10_000;
+
+    await seedTestWallet(wallet, [
+      [fundAmount, baseAssetId],
+      [fundAmount, ASSET_A],
+    ]);
+
+    const { balances } = await provider.getBalances(wallet.address);
+
+    expect(balances.length).toBe(2);
+    balances.forEach((balance) => {
+      expect(balance.amount.toNumber()).toBe(fundAmount);
+      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+    });
   });
 });

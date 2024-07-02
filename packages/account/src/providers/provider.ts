@@ -28,13 +28,12 @@ import type {
   GqlDryRunSuccessStatusFragment,
   GqlFeeParameters as FeeParameters,
   GqlGasCosts as GasCosts,
-  GqlGetBlocksQueryVariables,
-  GqlMessage,
   GqlPredicateParameters as PredicateParameters,
-  GqlRelayedTransactionFailed,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
   GqlPageInfo,
+  GqlRelayedTransactionFailed,
+  GqlMessage,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -92,8 +91,27 @@ export type Block = {
   transactionIds: string[];
 };
 
+export type GetCoinsResponse = {
+  coins: Coin[];
+  pageInfo: GqlPageInfo;
+};
+
+export type GetMessagesResponse = {
+  messages: Message[];
+  pageInfo: GqlPageInfo;
+};
+
+export type GetBalancesResponse = {
+  balances: CoinQuantity[];
+};
+
 export type GetTransactionsResponse = {
   transactions: Transaction[];
+  pageInfo: GqlPageInfo;
+};
+
+export type GetBlocksResponse = {
+  blocks: Block[];
   pageInfo: GqlPageInfo;
 };
 
@@ -1264,24 +1282,28 @@ Supported fuel-core version: ${supportedVersion}.`
     owner: string | AbstractAddress,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Coin[]> {
+  ): Promise<GetCoinsResponse> {
     const ownerAddress = Address.fromAddressOrString(owner);
-    const result = await this.operations.getCoins({
-      first: 10,
-      ...paginationArgs,
+    const {
+      coins: { edges, pageInfo },
+    } = await this.operations.getCoins({
+      ...this.validatePaginationArgs(paginationArgs),
       filter: { owner: ownerAddress.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    const coins = result.coins.edges.map((edge) => edge.node);
-
-    return coins.map((coin) => ({
-      id: coin.utxoId,
-      assetId: coin.assetId,
-      amount: bn(coin.amount),
-      owner: Address.fromAddressOrString(coin.owner),
-      blockCreated: bn(coin.blockCreated),
-      txCreatedIdx: bn(coin.txCreatedIdx),
+    const coins = edges.map(({ node }) => ({
+      id: node.utxoId,
+      assetId: node.assetId,
+      amount: bn(node.amount),
+      owner: Address.fromAddressOrString(node.owner),
+      blockCreated: bn(node.blockCreated),
+      txCreatedIdx: bn(node.txCreatedIdx),
     }));
+
+    return {
+      coins,
+      pageInfo,
+    };
   }
 
   /**
@@ -1392,17 +1414,19 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param params - The parameters to query blocks.
    * @returns A promise that resolves to the blocks.
    */
-  async getBlocks(params: GqlGetBlocksQueryVariables): Promise<Block[]> {
-    const { blocks: fetchedData } = await this.operations.getBlocks(params);
+  async getBlocks(params?: CursorPaginationArgs): Promise<GetBlocksResponse> {
+    const {
+      blocks: { edges, pageInfo },
+    } = await this.operations.getBlocks({ ...this.validatePaginationArgs(params) });
 
-    const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
+    const blocks: Block[] = edges.map(({ node: block }) => ({
       id: block.id,
       height: bn(block.height),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
 
-    return blocks;
+    return { blocks, pageInfo };
   }
 
   /**
@@ -1539,22 +1563,24 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(
-    owner: string | AbstractAddress,
-    paginationArgs?: CursorPaginationArgs
-  ): Promise<CoinQuantity[]> {
-    const result = await this.operations.getBalances({
-      first: 10,
-      ...paginationArgs,
+  async getBalances(owner: string | AbstractAddress): Promise<GetBalancesResponse> {
+    const {
+      balances: { edges },
+    } = await this.operations.getBalances({
+      /**
+       * The query parameters for this method were designed to support pagination,
+       * but the current Fuel-Core implementation does not support pagination yet.
+       */
+      first: 10000,
       filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
-    const balances = result.balances.edges.map((edge) => edge.node);
-
-    return balances.map((balance) => ({
-      assetId: balance.assetId,
-      amount: bn(balance.amount),
+    const balances = edges.map(({ node }) => ({
+      assetId: node.assetId,
+      amount: bn(node.amount),
     }));
+
+    return { balances };
   }
 
   /**
@@ -1567,30 +1593,34 @@ Supported fuel-core version: ${supportedVersion}.`
   async getMessages(
     address: string | AbstractAddress,
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Message[]> {
-    const result = await this.operations.getMessages({
-      first: 10,
-      ...paginationArgs,
+  ): Promise<GetMessagesResponse> {
+    const {
+      messages: { edges, pageInfo },
+    } = await this.operations.getMessages({
+      ...this.validatePaginationArgs(paginationArgs),
       owner: Address.fromAddressOrString(address).toB256(),
     });
 
-    const messages = result.messages.edges.map((edge) => edge.node);
-
-    return messages.map((message) => ({
+    const messages = edges.map(({ node }) => ({
       messageId: InputMessageCoder.getMessageId({
-        sender: message.sender,
-        recipient: message.recipient,
-        nonce: message.nonce,
-        amount: bn(message.amount),
-        data: message.data,
+        sender: node.sender,
+        recipient: node.recipient,
+        nonce: node.nonce,
+        amount: bn(node.amount),
+        data: node.data,
       }),
-      sender: Address.fromAddressOrString(message.sender),
-      recipient: Address.fromAddressOrString(message.recipient),
-      nonce: message.nonce,
-      amount: bn(message.amount),
-      data: InputMessageCoder.decodeData(message.data),
-      daHeight: bn(message.daHeight),
+      sender: Address.fromAddressOrString(node.sender),
+      recipient: Address.fromAddressOrString(node.recipient),
+      nonce: node.nonce,
+      amount: bn(node.amount),
+      data: InputMessageCoder.decodeData(node.data),
+      daHeight: bn(node.daHeight),
     }));
+
+    return {
+      messages,
+      pageInfo,
+    };
   }
 
   /**
@@ -1804,6 +1834,50 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return relayedTransactionStatus;
+  }
+
+  /**
+   * @hidden
+   */
+  private validatePaginationArgs(inputArgs: CursorPaginationArgs = {}): CursorPaginationArgs {
+    const MAX_PAGINATION_LIMIT = 1000;
+    const cursorArgs = { ...inputArgs };
+    const { first, last, after, before } = cursorArgs;
+
+    if (after && before) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'Pagination arguments "after" and "before" cannot be used together'
+      );
+    }
+
+    if ((first || 0) > MAX_PAGINATION_LIMIT || (last || 0) > MAX_PAGINATION_LIMIT) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'Pagination limit cannot exceed 1000 items'
+      );
+    }
+
+    if (first && before) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'The use of pagination argument "first" with "before" is not supported'
+      );
+    }
+
+    if (last && after) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'The use of pagination argument "last" with "after" is not supported'
+      );
+    }
+
+    // If neither first nor last is provided, set a default first value
+    if (!first && !last) {
+      cursorArgs.first = 100;
+    }
+
+    return cursorArgs;
   }
 
   /**
