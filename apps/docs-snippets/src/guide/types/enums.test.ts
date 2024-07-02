@@ -1,5 +1,5 @@
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { FuelError, type Contract } from 'fuels';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';

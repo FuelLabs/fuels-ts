@@ -1,7 +1,7 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { FuelError } from '@fuel-ts/errors';
 import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { Script, bn } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 

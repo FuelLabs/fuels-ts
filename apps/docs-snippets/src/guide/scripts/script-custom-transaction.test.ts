@@ -1,4 +1,3 @@
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import {
   BN,
   ContractFactory,
@@ -8,6 +7,7 @@ import {
   Provider,
 } from 'fuels';
 import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
+import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
