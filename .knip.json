@@ -4,7 +4,8 @@
     "**/*/.vitepress/*",
     "/apps/docs/*",
     "/packages/abi-typegen/test/**",
-    "templates/**"
+    "templates/**",
+    "/apps/docs-snippets2/**/*.test.ts"
   ],
   "ignoreDependencies": [
     "@/sway-api/*",
