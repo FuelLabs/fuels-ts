@@ -35,6 +35,7 @@ export type AssetId = {
 };
 
 export type StdString = string;
+export type StrSlice = string;
 
 /**
  * @hidden

@@ -22,11 +22,6 @@ impl EchoValues for Contract {
         value
     }
 
-    // Avoid executing this function; it is currently unsupported.
-    // Refer to: https://github.com/FuelLabs/sway/issues/5110 for more details.
-    // The function is defined here to include the type 'str' in the ABI,
-    // ensuring Typegen can accurately interpret it.
-    // For further information, see: https://github.com/FuelLabs/fuels-ts/issues/1469
     fn echo_str(value: str) -> str {
         value
     }
