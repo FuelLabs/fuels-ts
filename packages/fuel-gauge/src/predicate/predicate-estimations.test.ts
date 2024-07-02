@@ -1,4 +1,3 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -16,6 +15,7 @@ import {
   WalletUnlocked,
   isRequestInputResource,
 } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 import type { Validation } from '../types/predicate';

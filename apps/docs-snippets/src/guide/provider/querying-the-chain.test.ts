@@ -1,6 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { CoinQuantityLike, ExcludeResourcesOption } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 /**
  * @group node

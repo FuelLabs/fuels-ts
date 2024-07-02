@@ -1,11 +1,11 @@
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { defaultConsensusKey } from '@fuel-ts/utils';
-import { tryFindBinaries } from '@fuel-ts/utils/cli-utils';
 import { bundleRequire } from 'bundle-require';
 import type { BuildOptions } from 'esbuild';
 import JoyCon from 'joycon';
 import { resolve, parse } from 'path';
 
+import { tryFindBinaries } from '../../cli-utils';
 import type { FuelsConfig, UserFuelsConfig } from '../types';
 
 import { SwayType, readForcToml, readSwayType } from './forcUtils';

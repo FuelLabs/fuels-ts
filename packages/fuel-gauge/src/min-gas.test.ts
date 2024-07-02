@@ -1,4 +1,3 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import {
   ContractFactory,
   Wallet,
@@ -13,6 +12,7 @@ import {
   getGasUsedFromReceipts,
   BigNumberCoder,
 } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
