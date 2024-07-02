@@ -1,6 +1,15 @@
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { CoinQuantityLike } from 'fuels';
-import { getRandomB256, Provider, WalletUnlocked, Predicate, FUEL_NETWORK_URL } from 'fuels';
+import {
+  getRandomB256,
+  Provider,
+  WalletUnlocked,
+  Predicate,
+  FUEL_NETWORK_URL,
+  FuelError,
+  ErrorCode,
+} from 'fuels';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 
@@ -187,52 +196,60 @@ describe('Predicate', () => {
       ).rejects.toThrow(/PredicateVerificationFailed/);
     });
 
-    it('throws when setting configurable but predicate has none', () => {
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: predicateBytesTrue,
-          abi: predicateAbiTrue,
-          provider: wallet.provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            constant: 'NADA',
-          },
-        });
-      }).toThrow('Predicate has no configurable constants to be set');
+    it('throws when setting configurable but predicate has none', async () => {
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: predicateBytesTrue,
+            abi: predicateAbiTrue,
+            provider: wallet.provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              constant: 'NADA',
+            },
+          }),
+        new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Error setting configurable constants: Predicate has no configurable constants to be set.'
+        )
+      );
     });
 
-    it('throws when setting invalid configurable', () => {
-      const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
-
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: predicateBytesConfigurable,
-          abi: predicateAbiConfigurable,
-          provider: wallet.provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            NOPE: 'NADA',
-          },
-        });
-      }).toThrow(errMsg);
+    it('throws when setting invalid configurable', async () => {
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: predicateBytesConfigurable,
+            abi: predicateAbiConfigurable,
+            provider: wallet.provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              NOPE: 'NADA',
+            },
+          }),
+        new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`
+        )
+      );
     });
 
-    it('throws when setting a configurable with no ABI', () => {
-      const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
-
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: predicateBytesConfigurable,
-          provider: wallet.provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            NOPE: 'NADA',
-          },
-        });
-      }).toThrow(errMsg);
+    it('throws when setting a configurable with no ABI', async () => {
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: predicateBytesConfigurable,
+            provider: wallet.provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              NOPE: 'NADA',
+            },
+          }),
+        new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`
+        )
+      );
     });
   });
 });

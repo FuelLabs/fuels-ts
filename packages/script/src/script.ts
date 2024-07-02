@@ -91,12 +91,18 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   setConfigurableConstants(configurables: { [name: string]: unknown }) {
     try {
       if (!Object.keys(this.interface.configurables).length) {
-        throw new Error(`The script does not have configurable constants to be set`);
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          `The script does not have configurable constants to be set`
+        );
       }
 
       Object.entries(configurables).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`The script does not have a configurable constant named: '${key}'`);
+          throw new FuelError(
+            ErrorCode.CONFIGURABLE_NOT_FOUND,
+            `The script does not have a configurable constant named: '${key}'`
+          );
         }
 
         const { offset } = this.interface.configurables[key];
