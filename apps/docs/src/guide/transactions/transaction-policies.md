@@ -2,19 +2,19 @@
 
 Transaction policies are rules that can govern how a transaction is processed, introduced by the [transaction parameters](./transaction-parameters.md) that you pass to a transaction request. The available policies are as follows:
 
-### `Tip`
+### Tip
 
-Optional amount on the base asset to incentivise block producer to include transaction. The value set here will be added to the final fee required to process the transaction.
+Optional amount on the base asset to incentivise block producer to include transaction, ensuring faster processing for those willing to pay more. The value set here will be added to the transaction `maxFee`.
 
-### `Witness Limit`
+### Witness Limit
 
 The maximum byte length allowed for the transaction witnesses array.
 
-### `Maturity`
+### Maturity
 
 The number of blocks that must pass before the transaction can be included in a block.
 
-### `Max Fee`
+### Max Fee
 
 The maximum amount you're willing to pay for the transaction using the base asset.
 

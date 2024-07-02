@@ -2,25 +2,25 @@
 
 Transaction parameters allow you to configure various aspects of your blockchain transactions. Dependent on these parameters, it may introduce a [transaction policy](./transaction-policies.md). The parameters are:
 
-### `Gas Limit`
+### Gas Limit
 
 The maximum amount of gas you're willing to allow the transaction to consume. If the transaction requires more gas than this limit, it will fail.
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-1{ts:line-numbers}
 
-### `Max Fee`
+### Max Fee
 
 The maximum amount you're willing to pay for the transaction using the base asset. This allows users to set an upper limit on the transaction fee they are willing to pay, preventing unexpected high costs due to sudden network congestion or fee spikes.
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-2{ts:line-numbers}
 
-### `Tip`
+### Tip
 
-Optional amount on the base asset to incentivise block producer to include transaction, ensuring faster processing for those willing to pay more. The value set here will be added to the transaction `maxFee`.
+An optional amount of the base asset to incentivise the block producer to include the transaction, ensuring faster processing for those willing to pay more. The value set here will be added to the transaction `maxFee`.
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-3{ts:line-numbers}
 
-### `Maturity`
+### Maturity
 
 The number of blocks that must pass before the transaction can be included in a block. This is useful for time-sensitive transactions, such as those involving time-locked assets.
 
@@ -28,13 +28,13 @@ For example, if the chain produces a new block every second, setting Maturity to
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-4{ts:line-numbers}
 
-### `Witness Limit`
+### Witness Limit
 
 The maximum byte length allowed for the transaction witnesses array. For instance, imagine a transaction that will deploy a contract. The contract bytecode will be one of the entries in the transaction witnesses. If you set this limit to `5000` and the contract bytecode length is `6000`, the transaction will be rejected because the witnesses bytes length exceeds the maximum value set.
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-parameters.test.ts#transaction-parameters-5{ts:line-numbers}
 
-### `Variable Outputs`
+### Variable Outputs
 
 The number of variable outputs that should be added to the transaction request. You can read more about it on this [guide](../contracts/variable-outputs.md)
 
