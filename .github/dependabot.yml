@@ -1,5 +1,6 @@
 version: 2
 updates:
+
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -11,3 +12,31 @@ updates:
       prefix: "build(deps):"
       prefix-development: "build(deps-dev):"
     versioning-strategy: "increase"
+    groups:
+      dev-deps:
+        dependency-type: "development"
+        applies-to: "version-updates"
+        update-types:
+        - "minor"
+        - "patch"
+    groups:
+      deps:
+        dependency-type: "production"
+        applies-to: "version-updates"
+        update-types:
+        - "patch"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 1
+    labels:
+      - "chore"
+    commit-message:
+      prefix: "ci(dep):"
+    versioning-strategy: "increase"
+    groups:
+      actions-deps:
+        patterns:
+          - "*"
