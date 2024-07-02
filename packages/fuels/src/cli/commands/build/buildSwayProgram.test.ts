@@ -18,6 +18,8 @@ vi.mock('child_process', async () => {
  * @group node
  */
 describe('buildSwayPrograms', () => {
+  const log = 'log';
+  const debugLog = 'debug log';
   beforeEach(() => {
     mockLogger();
   });
@@ -33,10 +35,14 @@ describe('buildSwayPrograms', () => {
         }
       }),
       stderr: {
-        pipe: vi.fn(),
+        on: vi.fn((eventName: string, cb: (...args: unknown[]) => void) => {
+          cb(log);
+        }),
       },
       stdout: {
-        pipe: vi.fn(),
+        on: vi.fn((eventName: string, cb: (...args: unknown[]) => void) => {
+          cb(debugLog);
+        }),
       },
     } as unknown as childProcessMod.ChildProcessWithoutNullStreams;
 
@@ -48,31 +54,28 @@ describe('buildSwayPrograms', () => {
     };
   }
 
-  test('should pipe stdout', async () => {
-    const { spawn, spawnMocks } = mockAll();
+  test('logs to console when logging is enabled', async () => {
+    const { spawn } = mockAll();
+    const logSpy = vi.spyOn(console, 'log');
 
-    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: false });
 
     await buildSwayProgram(fuelsConfig, '/any/workspace/path');
 
     expect(spawn).toHaveBeenCalledTimes(1);
-    expect(spawnMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-    expect(spawnMocks.stdout.pipe).toHaveBeenCalledTimes(0);
+
+    expect(logSpy).toHaveBeenCalledWith(log);
+    expect(logSpy).not.toHaveBeenCalledWith(debugLog);
   });
 
-  test('should pipe stdout and stderr', async () => {
-    const { spawn, spawnMocks } = mockAll();
-
-    vi.spyOn(process.stderr, 'write').mockReturnValue(true);
-    vi.spyOn(process.stdout, 'write').mockReturnValue(true);
+  test('logs debug to console when debug is enabled', async () => {
+    const { spawn } = mockAll();
+    const logSpy = vi.spyOn(console, 'log');
     configureLogging({ isLoggingEnabled: true, isDebugEnabled: true });
 
     await buildSwayProgram(fuelsConfig, '/any/workspace/path');
 
     expect(spawn).toHaveBeenCalledTimes(1);
-    expect(spawnMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-    expect(spawnMocks.stdout.pipe).toHaveBeenCalledTimes(1);
-    expect(spawnMocks.on).toHaveBeenCalledTimes(2);
+    expect(logSpy).toHaveBeenCalledWith(debugLog);
   });
 });

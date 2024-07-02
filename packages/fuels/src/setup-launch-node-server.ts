@@ -36,7 +36,6 @@ const server = http.createServer(async (req, res) => {
       const node = await launchNode({
         port: '0',
         loggingEnabled: false,
-        debugEnabled: false,
         ...body,
         fuelCorePath: 'fuels-core',
       });

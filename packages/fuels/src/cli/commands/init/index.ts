@@ -38,7 +38,8 @@ export function init(program: Command) {
 
   if (noneIsInformed) {
     // mimicking commander property validation
-    process.stdout.write(`error: required option '-w, --workspace <path>' not specified\r`);
+    // eslint-disable-next-line no-console
+    console.log(`error: required option '-w, --workspace <path>' not specified\r`);
     process.exit(1);
   } else {
     const fuelsConfigPath = join(path, 'fuels.config.ts');
