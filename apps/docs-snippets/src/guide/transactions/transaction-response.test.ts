@@ -56,7 +56,7 @@ describe('Transaction Response', () => {
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
 
     // Fund the transaction
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
     transactionRequest.gasLimit = txCost.gasUsed;
@@ -81,7 +81,7 @@ describe('Transaction Response', () => {
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
 
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
     transactionRequest.gasLimit = txCost.gasUsed;

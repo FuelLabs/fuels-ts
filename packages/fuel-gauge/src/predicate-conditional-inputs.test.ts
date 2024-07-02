@@ -60,7 +60,7 @@ describe('PredicateConditionalInputs', () => {
       .addResources(predicateResoruces)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
 
-    const txCost = await aliceWallet.provider.getTransactionCost(request, {
+    const txCost = await aliceWallet.getTransactionCost(request, {
       resourcesOwner: aliceWallet,
     });
 
@@ -149,7 +149,7 @@ describe('PredicateConditionalInputs', () => {
       .addResources(predicateResources)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
 
-    const txCost = await aliceWallet.provider.getTransactionCost(request);
+    const txCost = await aliceWallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

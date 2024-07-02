@@ -498,7 +498,7 @@ describe('Coverage Contract', () => {
 
     request.addCoinOutput(recipient.address, 10, baseAssetId);
 
-    const txCost = await sender.provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

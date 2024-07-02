@@ -559,7 +559,7 @@ describe('Account', () => {
       [amount, assetIdB],
     ]);
 
-    const txCost = await sender.provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -739,6 +739,29 @@ describe('Account', () => {
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+  });
+
+  it('should getResourcesForTransaction with basic transaction request', async () => {
+    const sender = await generateTestWallet(provider, [[100_000, baseAssetId]]);
+
+    const resources = await sender.getResourcesForTransaction(new ScriptTransactionRequest());
+
+    expect(resources).toBeTruthy();
+    expect(resources).toBeTypeOf('object');
+  });
+
+  it('should getResourcesForTransaction with quantities to contract', async () => {
+    const sender = await generateTestWallet(provider, [[100_000, baseAssetId]]);
+    const quantities = [{ amount: 1, assetId: baseAssetId }].map(providersMod.coinQuantityfy);
+
+    const resources = await sender.getResourcesForTransaction(
+      new ScriptTransactionRequest(),
+      quantities
+    );
+
+    expect(resources).toBeTruthy();
+    expect(resources).toBeTypeOf('object');
+    expect(resources.requiredQuantities).toEqual(quantities);
   });
 
   it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
