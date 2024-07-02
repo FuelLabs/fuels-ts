@@ -1,0 +1,55 @@
+name: Testnet tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      masterMnemonic:
+        description: Mnemonic of the wallet that will fund the tests
+        required: false
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests-e2e-contracts:
+    name: E2E Contract Tests - Testnet
+    runs-on: buildjet-4vcpu-ubuntu-2204
+    steps:
+      - uses: actions/checkout@v3
+      - uses: FuelLabs/github-actions/setups/node@master
+        with:
+          node-version: 18.18.0
+          pnpm-version: 8.15.7
+      - uses: FuelLabs/github-actions/setups/docker@master
+        with:
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Cache PNPM dependencies (if available)
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies (if cache not restored)
+        run: pnpm recursive install --frozen-lockfile
+        condition: ${{ ! steps.cache-pnpm-dependencies.outputs }}
+
+      - name: Generate .env app (only if missing)
+        run: cp packages/app/.env.example packages/app/.env
+        condition: ${{ ! exists('packages/app/.env') }}
+
+      - name: Generate .env e2e-contracts (only if missing)
+        run: cp packages/e2e-contract-tests/.env.example packages/e2e-contract-tests/.env
+        condition: ${{ ! exists('packages/e2e-contract-tests/.env') }}
+
+      - name: Run E2E Contract Tests - Testnet
+        uses: ./.github/actions/e2e-tests-contracts
+        with:
+          providerUrl: "https://testnet.fuel.network/v1/graphql"
+          masterMnemonic: ${{ inputs.masterMnemonic || secrets.VITE_MASTER_WALLET_MNEMONIC }}
