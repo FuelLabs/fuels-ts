@@ -1,5 +1,6 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
+import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
@@ -273,7 +274,7 @@ export const launchNode = async ({
       if (/error/i.test(text)) {
         // eslint-disable-next-line no-console
         console.log(text);
-        reject(new Error(text));
+        reject(new FuelError(FuelError.CODES.NODE_LAUNCH_FAILED, text));
       }
     });
 

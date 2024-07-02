@@ -1,4 +1,5 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { defaultSnapshotConfigs } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
@@ -98,17 +99,21 @@ describe('launchNode', () => {
       amount: 0,
     };
 
-    const { error } = await safeExec(async () =>
-      launchNode({
-        loggingEnabled: false,
-        snapshotConfig: {
-          ...defaultSnapshotConfigs,
-          stateConfig: {
-            coins: [invalidCoin],
-            messages: [],
+    const error = await expectToThrowFuelError(
+      async () =>
+        launchNode({
+          loggingEnabled: false,
+          snapshotConfig: {
+            ...defaultSnapshotConfigs,
+            stateConfig: {
+              coins: [invalidCoin],
+              messages: [],
+            },
           },
-        },
-      })
+        }),
+      {
+        code: ErrorCode.NODE_LAUNCH_FAILED,
+      }
     );
 
     expect(error).toBeTruthy();
