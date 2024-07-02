@@ -1,7 +1,6 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import type { CoinQuantity, BN } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { generateTestWallet, ASSET_A } from 'fuels/test-utils';
 
 /**
  * @group node

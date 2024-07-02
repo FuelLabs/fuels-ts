@@ -1,5 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
 import type { BN, BaseWalletUnlocked } from 'fuels';
 import {
   ContractFactory,
@@ -10,6 +8,7 @@ import {
   Wallet,
   getRandomB256,
 } from 'fuels';
+import { generateTestWallet, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 

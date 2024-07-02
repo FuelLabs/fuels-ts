@@ -1,4 +1,3 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { CoinQuantityLike, ExcludeResourcesOption, Resource, WalletUnlocked } from 'fuels';
 import {
   Provider,
@@ -9,6 +8,7 @@ import {
   bn,
   isCoin,
 } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../../test/fixtures';
 

@@ -1,4 +1,3 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import {
   Address,
   FUEL_NETWORK_URL,
@@ -8,6 +7,7 @@ import {
   WalletUnlocked,
   hashMessage,
 } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 /**
  * @group node
