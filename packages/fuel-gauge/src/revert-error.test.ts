@@ -25,7 +25,7 @@ describe('Revert Error Testing', () => {
     );
 
     const factory = new ContractFactory(bytecode, FactoryAbi, wallet);
-    contractInstance = await factory.deployContract();
+    ({ contract: contractInstance } = await factory.deployContract({ awaitExecution: true }));
   });
 
   it('can pass require checks [valid]', async () => {
@@ -180,7 +180,7 @@ describe('Revert Error Testing', () => {
     );
 
     const factory = new ContractFactory(tokenBytecode, tokenAbi, wallet);
-    const tokenContract = await factory.deployContract();
+    const { contract: tokenContract } = await factory.deployContract({ awaitExecution: true });
 
     const addresses = [
       { bits: getRandomB256() },

@@ -19,8 +19,9 @@ const setup = async () => {
   // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
 
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({
+  const { contract } = await factory.deployContract({
     storageSlots,
+    awaitExecution: true,
   });
   // #endregion contract-deployment-storage-slots
 
@@ -54,7 +55,7 @@ describe('StorageTestContract', () => {
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const factory = new ContractFactory(bytecode, abi, wallet);
     // #region contract-deployment-storage-slots-inline
-    const contract = await factory.deployContract({
+    const { contract } = await factory.deployContract({
       storageSlots: [
         {
           key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',
@@ -77,6 +78,7 @@ describe('StorageTestContract', () => {
           value: '000000000000000a000000000000000000000000000000000000000000000000',
         },
       ],
+      awaitExecution: true,
     });
     // #endregion contract-deployment-storage-slots-inline
     const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();

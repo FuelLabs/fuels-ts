@@ -1,4 +1,8 @@
-export { default as ContractFactory, DeployContractOptions } from './contract-factory';
+export {
+  default as ContractFactory,
+  DeployContractOptions,
+  DeployContractResult,
+} from './contract-factory';
 /**
  * @hidden
  */

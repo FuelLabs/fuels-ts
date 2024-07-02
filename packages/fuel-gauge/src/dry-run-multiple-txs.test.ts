@@ -47,25 +47,29 @@ describe('dry-run-multiple-txs', () => {
   const deployContracts = async () => {
     const revertFactory = new ContractFactory(binRevert, abiRevert, wallet);
 
-    const revertContract = await revertFactory.deployContract({
+    const { contract: revertContract } = await revertFactory.deployContract({
       maxFee: 70_000,
+      awaitExecution: true,
     });
 
     const multiTokenFactory = new ContractFactory(binMultiToken, abiMultiToken, wallet);
 
-    const multiTokenContract = await multiTokenFactory.deployContract({
+    const { contract: multiTokenContract } = await multiTokenFactory.deployContract({
       maxFee: 70_000,
+      awaitExecution: true,
     });
 
     const logFactory = new ContractFactory(binLog, abiLog, wallet);
 
-    const logContract = await logFactory.deployContract({
+    const { contract: logContract } = await logFactory.deployContract({
       maxFee: 70_000,
+      awaitExecution: true,
     });
     const logOtherFactory = new ContractFactory(binLogOther, abiLogOther, wallet);
 
-    const logOtherContract = await logOtherFactory.deployContract({
+    const { contract: logOtherContract } = await logOtherFactory.deployContract({
       maxFee: 70_000,
+      awaitExecution: true,
     });
 
     return { revertContract, multiTokenContract, logContract, logOtherContract };
@@ -74,8 +78,9 @@ describe('dry-run-multiple-txs', () => {
   it('should properly dry-run multiple TXs requests', async () => {
     const revertFactory = new ContractFactory(binRevert, abiRevert, wallet);
 
-    const revertContract = await revertFactory.deployContract({
+    const { contract: revertContract } = await revertFactory.deployContract({
       maxFee: 70_000,
+      awaitExecution: true,
     });
 
     const resources = await wallet.getResourcesToSpend([[500_000, baseAssetId]]);

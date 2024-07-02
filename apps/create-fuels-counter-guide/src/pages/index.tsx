@@ -12,7 +12,7 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT } from '@/lib'
+import { CURRENT_ENVIRONMENT } from '@/lib';
 
 // #region deploying-dapp-to-testnet-frontend-contract-id
 const contractId =
@@ -37,7 +37,7 @@ export default function Home() {
    */
   useAsync(async () => {
     if (hasContract && wallet) {
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
+      const { contract: testContract } = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
       const { value } = await testContract.functions.get_count().get();
       setCounter(value.toNumber());

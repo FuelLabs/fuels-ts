@@ -44,13 +44,42 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const contract = await factory.deployContract();
+    const { contract, transactionResponse } = await factory.deployContract();
+
+    // Wait for the transaction to be processed
+    const deployResult = await transactionResponse.waitForResult();
     // #endregion contract-setup-3
 
     // #region contract-setup-4
-    const { value } = await contract.functions.echo_u8(15).simulate();
-
-    expect(value).toBe(15);
+    const { value } = await contract.functions.echo_u8(15).call();
     // #endregion contract-setup-4
+
+    expect(deployResult.isStatusSuccess).toBeTruthy();
+    expect(value).toBe(15);
+  });
+
+  it('should successfully deploy and execute contract function', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+
+    const byteCodePath = join(projectsPath, `${contractName}/out/release/${contractName}.bin`);
+    const byteCode = readFileSync(byteCodePath);
+
+    const abiJsonPath = join(projectsPath, `${contractName}/out/release/${contractName}-abi.json`);
+    const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
+
+    const factory = new ContractFactory(byteCode, abi, wallet);
+
+    // #region contract-setup-5
+    // Contract will be ready to use after the this call
+    const { contract, transactionResponse } = await factory.deployContract({
+      awaitExecution: true,
+    });
+    // #endregion contract-setup-5
+
+    const { value } = await contract.functions.echo_u8(15).call();
+
+    expect(transactionResponse.gqlTransaction).toBeDefined();
+    expect(value).toBe(15);
   });
 });
