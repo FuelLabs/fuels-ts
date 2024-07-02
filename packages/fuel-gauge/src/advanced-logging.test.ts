@@ -222,7 +222,12 @@ describe('Advanced Logging', () => {
           { deployer: ConfigurableContractAbi__factory, bytecode: ConfigurableContractAbiHex },
           { deployer: CoverageContractAbi__factory, bytecode: CoverageContractAbiHex },
         ],
+        walletsConfig: {
+          amountPerCoin: 500_000,
+        },
       });
+
+      const wallet = launched.wallets[0];
 
       // #TODO: Find a cleaner way to infer these types
       const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
@@ -230,10 +235,6 @@ describe('Advanced Logging', () => {
       const callTest = launched.contracts[2] as CallTestContractAbi;
       const configurable = launched.contracts[3] as ConfigurableContractAbi;
       const coverage = launched.contracts[4] as CoverageContractAbi;
-
-      const wallet = await generateTestWallet(launched.provider, [
-        [500_000, launched.provider.getBaseAssetId()],
-      ]);
 
       const request = await callTest
         .multiCall([
@@ -293,14 +294,15 @@ describe('Advanced Logging', () => {
             bytecode: AdvancedLoggingOtherContractAbiHex,
           },
         ],
+        walletsConfig: {
+          amountPerCoin: 300_000,
+        },
       });
 
       const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
       const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingAbi;
 
-      const wallet = await generateTestWallet(launched.provider, [
-        [300_000, launched.provider.getBaseAssetId()],
-      ]);
+      const wallet = launched.wallets[0];
 
       const { abiContents, binHexlified } = getFuelGaugeForcProject(
         FuelGaugeProjectsEnum.SCRIPT_CALL_CONTRACT
@@ -323,14 +325,16 @@ describe('Advanced Logging', () => {
             bytecode: AdvancedLoggingOtherContractAbiHex,
           },
         ],
+        walletsConfig: {
+          amountPerCoin: 300_000,
+        },
       });
 
       const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
       const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingAbi;
 
-      const wallet = await generateTestWallet(launched.provider, [
-        [300_000, launched.provider.getBaseAssetId()],
-      ]);
+      const wallet = launched.wallets[0];
+
       const { abiContents, binHexlified } = getFuelGaugeForcProject(
         FuelGaugeProjectsEnum.SCRIPT_CALL_CONTRACT
       );

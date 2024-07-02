@@ -2,6 +2,7 @@ import type { Account, TransactionResult } from '@fuel-ts/account';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { BN, bn, toHex, Interface, ContractFactory } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { StorageTestContractAbi__factory } from '../test/typegen/contracts';
 import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
@@ -96,8 +97,21 @@ describe('Contract Factory', () => {
   });
 
   it('should not override user input maxFee when calling deployContract', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 5_000_000,
+      },
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const setFee = bn(120_000);
-    const factory = await createContractFactory();
+    const factory = new ContractFactory(
+      StorageTestContractAbiHex,
+      StorageTestContractAbi__factory.abi,
+      wallet
+    );
     const spy = vi.spyOn(factory.account as Account, 'sendTransaction');
 
     await factory.deployContract({
@@ -139,7 +153,20 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
-    const factory = await createContractFactory();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 5_000_000,
+      },
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      StorageTestContractAbiHex,
+      StorageTestContractAbi__factory.abi,
+      wallet
+    );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contact = await factory.deployContract({
@@ -153,15 +180,25 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 5_000_000,
+      },
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const factory = new ContractFactory(
       StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi
+      StorageTestContractAbi__factory.abi,
+      wallet
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const contract = await factory.deployContract({
       storageSlots: [
-        ...storageSlots, // initializing from storage_slots.json
+        ...StorageTestContractAbi__factory.storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });

@@ -22,12 +22,13 @@ import {
   WalletUnlocked,
   Signer,
   ZeroBytes32,
-  FUEL_NETWORK_URL,
-  TESTNET_NETWORK_URL,
 } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { AssetId, launchTestNode } from 'fuels/test-utils';
 
 import { CallTestContractAbi__factory } from '../test/typegen/contracts';
+import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
+import { PredicateTrueAbi__factory } from '../test/typegen/predicates';
+import { PredicateTripleSigAbi__factory } from '../test/typegen/predicates/factories/PredicateTripleSigAbi__factory';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -179,7 +180,9 @@ describe('Doc Examples', () => {
   });
 
   it('it can work sign messages with wallets', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     const wallet = WalletUnlocked.generate({
       provider,
     });
@@ -195,23 +198,13 @@ describe('Doc Examples', () => {
   });
 
   it('can create wallets', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+    using launched = await launchTestNode();
 
-    // single asset
-    const walletA = await generateTestWallet(provider, [[42, baseAssetId]]);
+    const { provider } = launched;
 
-    // multiple assets
-    const walletB = await generateTestWallet(provider, [
-      // [Amount, AssetId]
-      [100, assetIdA],
-      [200, assetIdB],
-      [30, baseAssetId],
-    ]);
-
-    // this wallet has no assets
-    const walletC = await generateTestWallet(provider);
+    const walletA = Wallet.generate({ provider });
+    const walletB = Wallet.generate({ provider });
+    const walletC = Wallet.generate({ provider });
 
     // retrieve balances of wallets
     const walletABalances = await walletA.getBalances();
@@ -219,17 +212,18 @@ describe('Doc Examples', () => {
     const walletCBalances = await walletC.getBalances();
 
     // validate balances
-    expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(42) }]);
+    expect(walletABalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(100) }]);
     expect(walletBBalances).toEqual([
-      { assetId: assetIdA, amount: bn(100) },
-      { assetId: assetIdB, amount: bn(200) },
-      { assetId: baseAssetId, amount: bn(30) },
+      { assetId: AssetId.A, amount: bn(100) },
+      { assetId: AssetId.B, amount: bn(100) },
+      { assetId: provider.getBaseAssetId(), amount: bn(100) },
     ]);
     expect(walletCBalances).toEqual([]);
   });
 
   it('can connect to testnet', async () => {
-    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
@@ -239,28 +233,30 @@ describe('Doc Examples', () => {
   });
 
   it('can connect to a local provider', async () => {
-    const localProvider = await Provider.create(FUEL_NETWORK_URL);
-
+    using launched = await launchTestNode();
+    const { provider } = launched;
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
-    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, localProvider);
+    const wallet: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     const signer = new Signer(PRIVATE_KEY);
 
     expect(wallet.address).toEqual(signer.address);
   });
 
   it('can create a predicate', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
     const predicate = new Predicate({
-      bytecode: testPredicateTrue,
+      bytecode: PredicateTrueAbi__factory.bin,
       provider,
     });
 
     expect(predicate.address).toBeTruthy();
-    expect(predicate.bytes).toEqual(arrayify(testPredicateTrue));
+    expect(predicate.bytes).toEqual(arrayify(PredicateTrueAbi__factory.bin));
   });
 
   it('can create a predicate and use', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
     // Setup a private key
     const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
     const PRIVATE_KEY_2 = '0x37fa81c84ccd547c30c176b118d5cb892bdb113e8e80141f266519422ef9eefd';
@@ -271,10 +267,6 @@ describe('Doc Examples', () => {
     const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
     const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
     const receiver = Wallet.generate({ provider });
-
-    await seedTestWallet(wallet1, [{ assetId: baseAssetId, amount: bn(1_000_000) }]);
-    await seedTestWallet(wallet2, [{ assetId: baseAssetId, amount: bn(2_000_000) }]);
-    await seedTestWallet(wallet3, [{ assetId: baseAssetId, amount: bn(300_000) }]);
 
     const AbiInputs: JsonAbi = {
       types: [
@@ -331,7 +323,7 @@ describe('Doc Examples', () => {
     const signature3 = await wallet3.signMessage(dataToSign);
     const signatures = [signature1, signature2, signature3];
     const predicate = new Predicate({
-      bytecode: predicateTriple,
+      bytecode: PredicateTripleSigAbi__factory.bin,
       provider,
       abi: AbiInputs,
       inputData: [signatures],
@@ -339,20 +331,36 @@ describe('Doc Examples', () => {
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;
 
-    const response = await wallet1.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const response = await wallet1.transfer(
+      predicate.address,
+      amountToPredicate,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
+
     await response.waitForResult();
 
-    const depositOnPredicate = await wallet1.transfer(predicate.address, 1000, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const depositOnPredicate = await wallet1.transfer(
+      predicate.address,
+      1000,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     // Wait for Transaction to succeed
     await depositOnPredicate.waitForResult();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx = await predicate.transfer(
+      receiver.address,
+      amountToReceiver,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     const { isStatusSuccess } = await tx.waitForResult();
 
     // check balance

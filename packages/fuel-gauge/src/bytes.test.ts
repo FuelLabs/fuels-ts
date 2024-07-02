@@ -1,5 +1,6 @@
-import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { bn, Predicate, Wallet, Address } from 'fuels';
 import type { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 import { BytesAbi__factory } from '../test/typegen/contracts';
@@ -16,16 +17,6 @@ type Wrapper = {
   inner: number[][];
   inner_enum: SomeEnum;
 };
-
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
-
-  return wallet;
-};
-
 /**
  * @group node
  * @group browser
@@ -85,12 +76,22 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [predicate-bytes]', async () => {
-    using launched = await launchTestContract({
-      deployer: BytesAbi__factory,
-      bytecode: BytesAbiHex,
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: BytesAbi__factory,
+          bytecode: BytesAbiHex,
+        },
+      ],
+      walletsConfig: {
+        amountPerCoin: 1_000_000,
+      },
     });
 
-    const wallet = await setup(1_000_000);
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 500_000;
     const amountToReceiver = 50;
@@ -147,7 +148,16 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [script-bytes]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 500_000,
+      },
+    });
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-bytes', wallet);
 

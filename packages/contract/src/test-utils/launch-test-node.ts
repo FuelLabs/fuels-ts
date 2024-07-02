@@ -8,11 +8,14 @@ import { FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { Contract } from '@fuel-ts/program';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
+import { EventEmitter } from 'events';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
+
+EventEmitter.defaultMaxListeners = 20;
 
 interface ContractDeployer {
   deployContract(

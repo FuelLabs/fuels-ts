@@ -1,6 +1,6 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { Account, CoinTransactionRequestInput, Provider } from 'fuels';
+import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { ScriptTransactionRequest, Wallet, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 

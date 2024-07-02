@@ -30,16 +30,6 @@ import { launchTestContract } from './utils';
  * @group browser
  */
 describe('TransactionSummary', () => {
-  let provider: Provider;
-  let adminWallet: WalletUnlocked;
-
-  let baseAssetId: string;
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    adminWallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
-  });
-
   const verifyTransactionSummary = (params: {
     transaction: TransactionResult | TransactionSummary;
     isRequest?: boolean;
@@ -224,13 +214,6 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure transfer operation is assembled (ACCOUNT TRANSFER TO CONTRACT)', async () => {
-      const wallet = await generateTestWallet(provider, [
-        [300_000, baseAssetId],
-        [10_000, ASSET_A],
-      ]);
-
-      using contract1 = await launchTestContract(FuelGaugeProjectsEnum.TOKEN_CONTRACT);
-
       const amount = 234;
 
       const tx1 = await wallet.transferToContract(contract1.id, amount, ASSET_A);

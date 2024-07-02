@@ -1,4 +1,5 @@
-import { FUEL_NETWORK_URL, Predicate, Provider, arrayify } from 'fuels';
+import { Predicate, arrayify } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
 import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
@@ -48,7 +49,9 @@ describe('bytecode computations', () => {
   });
 
   test('compute_predicate_address', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+
+    const { provider } = launched;
 
     const predicate = new Predicate({
       bytecode: defaultPredicateBytecode,

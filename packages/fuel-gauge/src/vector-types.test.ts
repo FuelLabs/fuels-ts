@@ -1,8 +1,10 @@
 import type { BigNumberish } from 'fuels';
-import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { bn, Predicate, Wallet, Address } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { VectorTypesContractAbi__factory } from '../test/typegen/contracts';
+import VectorTypesContractAbiHex from '../test/typegen/contracts/VectorTypesContractAbi.hex';
+import { PredicateVectorTypesAbi__factory } from '../test/typegen/predicates';
 
 import { getScript, launchTestContract } from './utils';
 
@@ -75,32 +77,16 @@ type MainArgs = [
   VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
-
-  return wallet;
-};
-
 /**
  * @group node
  * @group browser
  */
 describe('Vector Types Validation', () => {
-  let baseAssetId: string;
-  const { binHexlified: predicateVectorTypes, abiContents: predicateVectorTypesAbi } =
-    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_VECTOR_TYPES);
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('can use supported vector types [vector-types-contract]', async () => {
-    using contractInstance = await launchTestContract(FuelGaugeProjectsEnum.VECTOR_TYPES_CONTRACT);
+    using contractInstance = await launchTestContract({
+      deployer: VectorTypesContractAbi__factory,
+      bytecode: VectorTypesContractAbiHex,
+    });
 
     const { value } = await contractInstance.functions
       .test_all(
@@ -121,7 +107,10 @@ describe('Vector Types Validation', () => {
   });
 
   it('can use supported vector types [vector-types-script]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
     const scriptInstance = getScript<MainArgs, BigNumberish>('vector-types-script', wallet);
 
     const { value } = await scriptInstance.functions
@@ -144,14 +133,20 @@ describe('Vector Types Validation', () => {
   });
 
   it('can use supported vector types [predicate-vector-types]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     const predicate = new Predicate<MainArgs>({
-      bytecode: predicateVectorTypes,
+      bytecode: PredicateVectorTypesAbi__factory.bin,
       provider: wallet.provider,
-      abi: predicateVectorTypesAbi,
+      abi: PredicateVectorTypesAbi__factory.abi,
       inputData: [
         U32_VEC,
         VEC_IN_VEC,
@@ -168,16 +163,26 @@ describe('Vector Types Validation', () => {
     });
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const setupTx = await wallet.transfer(
+      predicate.address,
+      amountToPredicate,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     await setupTx.waitForResult();
 
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx = await predicate.transfer(
+      receiver.address,
+      amountToReceiver,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     const { isStatusSuccess } = await tx.waitForResult();
 
     // Check the balance of the receiver
