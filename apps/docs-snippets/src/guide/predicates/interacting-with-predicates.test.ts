@@ -1,6 +1,6 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Provider, WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, bn, Predicate, BN } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,

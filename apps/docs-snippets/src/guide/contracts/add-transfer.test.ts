@@ -1,6 +1,6 @@
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import type { Account, Contract, Provider, TransferParams } from 'fuels';
 import { Wallet } from 'fuels';
+import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
