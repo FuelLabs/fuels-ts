@@ -1,7 +1,7 @@
 export {
   default as ContractFactory,
   DeployContractOptions,
-  DeployContractResult,
+  DeployContractAsyncResult,
 } from './contract-factory';
 /**
  * @hidden
