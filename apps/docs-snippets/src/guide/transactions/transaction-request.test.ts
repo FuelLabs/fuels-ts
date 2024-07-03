@@ -1,4 +1,3 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import type { Account, Coin, Resource } from 'fuels';
 import {
   CreateTransactionRequest,
@@ -12,6 +11,7 @@ import {
   FUEL_NETWORK_URL,
   WalletUnlocked,
 } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
@@ -224,7 +224,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0x8c1e78a1c6efc2301eea8a50c653ce1d936144af0948f911eb95e53254ccc721'
+      '0xdc83dc7d36caaaacd96e4bf4649c3ef5c372a87c3fb49b14d218e3d8a5b8d240'
     );
   });
 });

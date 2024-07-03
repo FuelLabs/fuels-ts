@@ -1,5 +1,5 @@
-import { getForcProject } from '@fuel-ts/utils/test-utils';
 import type { JsonAbi } from 'fuels';
+import { getForcProject } from 'fuels/test-utils';
 import { join } from 'path';
 
 export enum DocSnippetProjectsEnum {
