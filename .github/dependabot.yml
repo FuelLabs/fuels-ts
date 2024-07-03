@@ -35,4 +35,3 @@ updates:
       - "chore"
     commit-message:
       prefix: "ci(deps):"
-    versioning-strategy: "increase"
