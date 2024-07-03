@@ -47,9 +47,8 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { contract } = await factory.deployContract({
+    const contract = await factory.deployContract({
       configurableConstants,
-      awaitExecution: true,
     });
     // #endregion configurable-constants-2
 
@@ -69,9 +68,8 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const { contract } = await factory.deployContract({
+    const contract = await factory.deployContract({
       configurableConstants,
-      awaitExecution: true,
     });
     // #endregion configurable-constants-3
 
@@ -96,7 +94,6 @@ describe('configurable-constants', () => {
     await expect(
       factory.deployContract({
         configurableConstants,
-        awaitExecution: true,
       })
     ).rejects.toThrowError();
     // #endregion configurable-constants-4

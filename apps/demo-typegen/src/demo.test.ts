@@ -1,6 +1,6 @@
 // #region Testing-in-ts-ts
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL, Address } from 'fuels';
-import { generateTestWallet , safeExec } from 'fuels/test-utils';
+import { generateTestWallet, safeExec } from 'fuels/test-utils';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
 
@@ -27,7 +27,7 @@ describe('ExampleContract', () => {
     // #region typegen-demo-contract-storage-slots
     // #context import storageSlots from './contract/out/debug/demo-contract-storage_slots.json';
 
-    const { contract } = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
+    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
       storageSlots,
     });
     // #endregion typegen-demo-contract-storage-slots
@@ -40,7 +40,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
-    const { contract } = await factory.deployContract({ awaitExecution: true });
+    const contract = await factory.deployContract();
     const contractId = contract.id;
 
     // Call
@@ -68,7 +68,7 @@ describe('ExampleContract', () => {
     // #context import bytecode from './types/DemoContractAbi.hex';
 
     // Deploy
-    const { contract } = await DemoContractAbi__factory.deployContract(bytecode, wallet);
+    const contract = await DemoContractAbi__factory.deployContract(bytecode, wallet);
 
     // #endregion typegen-demo-contract-factory-deploy
 
@@ -87,7 +87,7 @@ it('should throw when simulating via contract factory with wallet with no resour
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
-  const { contract } = await factory.deployContract({ awaitExecution: true });
+  const contract = await factory.deployContract();
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
   const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
@@ -101,7 +101,7 @@ it('should not throw when dry running via contract factory with wallet with no r
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
-  const { contract } = await factory.deployContract({ awaitExecution: true });
+  const contract = await factory.deployContract();
   const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
 
   await expect(contractInstance.functions.return_input(1337).dryRun()).resolves.not.toThrow();

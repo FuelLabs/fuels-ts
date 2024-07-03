@@ -21,17 +21,17 @@ describe(__filename, () => {
     const tokenArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_TOKEN);
     const depositorArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.TOKEN_DEPOSITOR);
 
-    ({ contract: simpleToken } = await new ContractFactory(
+    simpleToken = await new ContractFactory(
       tokenArtifacts.binHexlified,
       tokenArtifacts.abiContents,
       wallet
-    ).deployContract({ awaitExecution: true }));
+    ).deployContract();
 
-    ({ contract: tokenDepositor } = await new ContractFactory(
+    tokenDepositor = await new ContractFactory(
       depositorArtifacts.binHexlified,
       depositorArtifacts.abiContents,
       wallet
-    ).deployContract({ awaitExecution: true }));
+    ).deployContract();
   });
 
   it('should successfully make call to another contract', async () => {

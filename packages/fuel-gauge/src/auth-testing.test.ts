@@ -22,7 +22,7 @@ describe('Auth Testing', () => {
     );
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    ({ contract: contractInstance } = await factory.deployContract({ awaitExecution: true }));
+    contractInstance = await factory.deployContract();
   });
 
   it('can get is_caller_external', async () => {

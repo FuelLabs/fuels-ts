@@ -24,10 +24,10 @@ describe('Custom Transactions from Contract Calls', () => {
     senderWallet = await getTestWallet();
     receiverWallet = Wallet.generate({ provider: senderWallet.provider });
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
-    ({ contract } = await factory.deployContract({ storageSlots, awaitExecution: true }));
+    contract = await factory.deployContract({ storageSlots });
     abi = abiContents;
     baseAssetId = senderWallet.provider.getBaseAssetId();
-    ({ contract } = await factory.deployContract({ storageSlots, awaitExecution: true }));
+    contract = await factory.deployContract({ storageSlots });
   });
 
   it('creates a custom transaction from a contract call', async () => {

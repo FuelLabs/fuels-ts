@@ -56,9 +56,8 @@ export const createAndDeployContractFromProject = async (
 
   const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
-  const { contract } = await contractFactory.deployContract({
+  const contract = await contractFactory.deployContract({
     storageSlots,
-    awaitExecution: true,
   });
 
   return contract;

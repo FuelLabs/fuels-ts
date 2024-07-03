@@ -23,10 +23,10 @@ describe('Reentrant Contract Calls', () => {
     wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     const factoryBar = new ContractFactory(bar.binHexlified, bar.abiContents, wallet);
-    ({ contract: barContract } = await factoryBar.deployContract({ awaitExecution: true }));
+    barContract = await factoryBar.deployContract();
 
     const factoryFoo = new ContractFactory(foo.binHexlified, foo.abiContents, wallet);
-    ({ contract: fooContract } = await factoryFoo.deployContract({ awaitExecution: true }));
+    fooContract = await factoryFoo.deployContract();
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
@@ -64,11 +64,11 @@ describe('Reentrant Contract Calls', () => {
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call on multi-call', async () => {
-    const { contract: storageContract } = await new ContractFactory(
+    const storageContract = await new ContractFactory(
       storageTest.binHexlified,
       storageTest.abiContents,
       wallet
-    ).deployContract({ storageSlots: storageTest.storageSlots, awaitExecution: true });
+    ).deployContract({ storageSlots: storageTest.storageSlots });
 
     const reentrantCall = fooContract.functions.foo(
       { bits: fooContract.id.toB256() },

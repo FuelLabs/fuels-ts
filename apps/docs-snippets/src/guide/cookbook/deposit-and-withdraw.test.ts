@@ -25,10 +25,9 @@ describe(__filename, () => {
     provider = sender.provider;
     baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    ({ contract: liquidityPoolContract } = await factory.deployContract({
+    liquidityPoolContract = await factory.deployContract({
       configurableConstants: { TOKEN: { bits: baseAssetId } },
-      awaitExecution: true,
-    }));
+    });
   });
 
   it('deposit and withdraw cookbook guide', async () => {

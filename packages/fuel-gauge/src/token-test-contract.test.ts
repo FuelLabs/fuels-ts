@@ -18,7 +18,7 @@ const setup = async () => {
 
   // Deploy contract
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const { contract } = await factory.deployContract({ awaitExecution: true });
+  const contract = await factory.deployContract();
 
   return contract;
 };

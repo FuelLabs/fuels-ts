@@ -5,7 +5,7 @@ import { ASSET_A, generateTestWallet } from 'fuels/test-utils';
 import { join } from 'path';
 
 let contractInstance: Contract;
-const deployContract = async (
+const deployContract = async <TContract extends Contract = Contract>(
   factory: ContractFactory,
   provider: Provider,
   useCache: boolean = true
@@ -13,7 +13,7 @@ const deployContract = async (
   if (contractInstance && useCache) {
     return contractInstance;
   }
-  ({ contract: contractInstance } = await factory.deployContract({ awaitExecution: true }));
+  contractInstance = await factory.deployContract<TContract>();
   return contractInstance;
 };
 
@@ -37,7 +37,7 @@ export type SetupConfig = {
   cache?: boolean;
 };
 
-export const setup = async <T extends Contract = Contract>({
+export const setup = async <TContract extends Contract = Contract>({
   contractBytecode,
   abi,
   cache,
@@ -45,8 +45,8 @@ export const setup = async <T extends Contract = Contract>({
   // Create wallet
   const wallet = await createWallet();
   const factory = new ContractFactory(contractBytecode, abi, wallet);
-  const contract = await deployContract(factory, wallet.provider, cache);
-  return contract as T;
+  const contract = await deployContract<TContract>(factory, wallet.provider, cache);
+  return contract as TContract;
 };
 
 export const createSetupConfig =

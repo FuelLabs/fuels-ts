@@ -44,17 +44,17 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const { contract, transactionResponse } = await factory.deployContract();
+    const { transactionResult, waitForDeploy } = await factory.deployContractAsync();
 
     // Wait for the transaction to be processed
-    const deployResult = await transactionResponse.waitForResult();
+    const contract = await waitForDeploy();
     // #endregion contract-setup-3
 
     // #region contract-setup-4
     const { value } = await contract.functions.echo_u8(15).call();
     // #endregion contract-setup-4
 
-    expect(deployResult.isStatusSuccess).toBeTruthy();
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
     expect(value).toBe(15);
   });
 
@@ -72,14 +72,11 @@ describe(__filename, () => {
 
     // #region contract-setup-5
     // Contract will be ready to use after the this call
-    const { contract, transactionResponse } = await factory.deployContract({
-      awaitExecution: true,
-    });
+    const contract = await factory.deployContract();
     // #endregion contract-setup-5
 
     const { value } = await contract.functions.echo_u8(15).call();
 
-    expect(transactionResponse.gqlTransaction).toBeDefined();
     expect(value).toBe(15);
   });
 });

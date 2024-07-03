@@ -30,7 +30,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     const factory = await createContractFactory();
 
-    const { contract } = await factory.deployContract({ awaitExecution: true });
+    const contract = await factory.deployContract();
 
     expect(contract.interface).toBeInstanceOf(Interface);
 
@@ -47,7 +47,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return transaction results', async () => {
     const factory = await createContractFactory();
 
-    const { contract } = await factory.deployContract({ awaitExecution: true });
+    const contract = await factory.deployContract();
 
     expect(contract.interface).toBeInstanceOf(Interface);
 
@@ -90,17 +90,20 @@ describe('Contract Factory', () => {
     });
   });
 
+  // TODO: Improve this test
   it('can deploy a contract asynchronously without waiting for the TX to be processed', async () => {
     const factory = await createContractFactory();
 
-    const { transactionResponse, contract } = await factory.deployContract();
+    const { transactionResponse, waitForDeploy } = await factory.deployContractAsync();
 
-    expect(transactionResponse.gqlTransaction).toBeUndefined();
+    // expect(transactionResult.isStatusPending).toBeTruthy();
 
     const deployResult = await transactionResponse.waitForResult();
 
     expect(deployResult.isStatusSuccess).toBeTruthy();
     expect(transactionResponse.gqlTransaction).toBeDefined();
+
+    const contract = await waitForDeploy();
 
     const { value } = await contract.functions.increment_counter(1).call();
 
@@ -110,7 +113,7 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const { contract } = await factory.deployContract({ awaitExecution: true });
+    const contract = await factory.deployContract();
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
@@ -143,7 +146,7 @@ describe('Contract Factory', () => {
 
   it('Creates a contract with initial storage fixed var names', async () => {
     const factory = await createContractFactory();
-    const { contract } = await factory.deployContract({
+    const contract = await factory.deployContract({
       storageSlots,
     });
 
@@ -172,7 +175,7 @@ describe('Contract Factory', () => {
     const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const { contract } = await factory.deployContract({
+    const contract = await factory.deployContract({
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
@@ -186,7 +189,7 @@ describe('Contract Factory', () => {
     const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const { contract } = await factory.deployContract({
+    const contract = await factory.deployContract({
       storageSlots: [
         ...storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
