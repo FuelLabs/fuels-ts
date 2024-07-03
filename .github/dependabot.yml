@@ -36,7 +36,3 @@ updates:
     commit-message:
       prefix: "ci(deps):"
     versioning-strategy: "increase"
-    groups:
-      actions-deps:
-        patterns:
-          - "*"
