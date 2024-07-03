@@ -10,9 +10,13 @@ type Octokit = ReturnType<typeof github.getOctokit>;
 interface ChangelogInfo {
   isBreaking: boolean;
   prType: string;
-  markdown: string;
+  shortSummary: string;
+  breakingChangeDescription: string | undefined;
 }
 
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 const prTypes = ["feat", "fix", "refactor", "chore", "docs"];
 
 async function getChangelogInfo(
@@ -36,7 +40,7 @@ async function getChangelogInfo(
   });
 
   const {
-    data: { title },
+    data: { title, body },
   } = await octokit.rest.pulls.get({
     ...github.context.repo,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -47,14 +51,23 @@ async function getChangelogInfo(
   const isBreaking = title.includes(`${prType}!`);
 
   const titleDescription = title.replace(/\w+!?:(.*)/, "$1").trim(); // chore!: add something -> add something
-  const summary =
-    titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 
-  const markdown = `- ${prLink} - ${summary}, by ${user}`;
+  const shortSummary = `- ${prLink} - ${capitalize(titleDescription)}, by ${user}`;
+
+  const breakingChangeDescription = body
+    ?.split(
+      "<!--START: Breaking changes section. Used in automation so do not remove this comment. -->",
+    )[1]
+    ?.split(
+      "<!--END: Breaking changes section. Used in automation so do not remove  this comment. -->",
+    )[0]
+    .trim();
+
   return {
     prType,
     isBreaking,
-    markdown,
+    shortSummary,
+    breakingChangeDescription,
   };
 }
 
@@ -106,17 +119,18 @@ function mapPrTypeToTitle(prType: string) {
 function groupChangelogsForListing(changelogs: ChangelogInfo[]) {
   const prTypeWithChangelogs = prTypes.reduce(
     (acc, prType) => {
-      acc[prType] = changelogs
-        .filter((c) => c.prType === prType)
-        .map((c) => c.markdown);
+      acc[prType] = changelogs.filter((c) => c.prType === prType);
       return acc;
     },
-    {} as Record<string, string[]>,
+    {} as Record<string, ChangelogInfo[]>,
   );
 
   return Object.entries(prTypeWithChangelogs)
     .filter(([, c]) => c.length > 0)
-    .map(([prType, c]) => [mapPrTypeToTitle(prType), c] as [string, string[]]);
+    .map(
+      ([prType, c]) =>
+        [mapPrTypeToTitle(prType), c] as [string, ChangelogInfo[]],
+    );
 }
 
 function listBreakingMd(changelogs: ChangelogInfo[]) {
@@ -127,9 +141,29 @@ function listBreakingMd(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `- ${groupTitle}
-${c.map((x) => `    ${x}`).join("\n")}`,
+${c.map((changelog) => `    ${changelog.shortSummary}`).join("\n")}`,
     )
     .join("\n")
+    .trim();
+}
+
+function listMigrationNotes(changelogs: ChangelogInfo[]) {
+  const changelogGroups = groupChangelogsForListing(
+    changelogs.filter((x) => x.isBreaking),
+  );
+
+  return changelogGroups
+    .map(
+      ([groupTitle, c]) => `## ${groupTitle}
+${c
+  .map(
+    (changelog) => `${changelog.shortSummary}
+
+${changelog.breakingChangeDescription}`,
+  )
+  .join("\n")}`,
+    )
+    .join("\n\n")
     .trim();
 }
 
@@ -141,7 +175,7 @@ function listNonBreakingMd(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `# ${groupTitle}
-${c.join("\n")}`,
+${c.map((changelog) => changelog.shortSummary).join("\n")}`,
     )
     .join("\n\n")
     .trim();
@@ -154,12 +188,17 @@ export async function getFullChangelog(octokit: Octokit) {
 
   const breaking = listBreakingMd(changelogs);
   const nonBreaking = listNonBreakingMd(changelogs);
+  const migrationNotes = listMigrationNotes(changelogs);
 
-  let content = ``;
+  let content = "";
 
   content += breaking ? `# Breaking\n\n${breaking}` : "";
   content += breaking && nonBreaking && "\n\n---\n\n";
   content += nonBreaking;
+
+  content += migrationNotes
+    ? `\n\n---\n\n# Migration Notes\n\n${migrationNotes}`
+    : "";
 
   return content.trim();
 }
