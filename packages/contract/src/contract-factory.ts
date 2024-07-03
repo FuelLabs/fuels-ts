@@ -28,8 +28,8 @@ export type DeployContractOptions = {
   configurableConstants?: { [name: string]: unknown };
 } & CreateTransactionRequestLike;
 
-export type DeployContractAsyncResult<T extends Contract = Contract> = {
-  waitForDeploy: () => Promise<T>;
+export type DeployContractAsyncResult<TContract extends Contract = Contract> = {
+  waitForDeploy: () => Promise<TContract>;
   transactionResponse: TransactionResponse;
   transactionResult: TransactionResult<TransactionType.Create>;
 };
