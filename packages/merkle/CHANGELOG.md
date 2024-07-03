@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [a9ece17]
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/math@0.91.0
+
 ## 0.90.0
 
 ### Patch Changes
