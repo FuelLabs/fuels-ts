@@ -6,6 +6,8 @@ import type {
   CreateTransactionRequestLike,
   Provider,
   TransactionResponse,
+  TransactionResult,
+  TransactionType,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -24,12 +26,12 @@ export type DeployContractOptions = {
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
   configurableConstants?: { [name: string]: unknown };
-  awaitExecution?: boolean;
 } & CreateTransactionRequestLike;
 
-export type DeployContractResult<T extends Contract = Contract> = {
+export type DeployContractAsyncResult<T extends Contract = Contract> = {
+  waitForDeploy: () => Promise<T>;
   transactionResponse: TransactionResponse;
-  contract: T;
+  transactionResult: TransactionResult<TransactionType.Create>;
 };
 
 /**
@@ -155,24 +157,29 @@ export default class ContractFactory {
     return new Contract(contractId, this.interface, account) as TContract;
   }
 
+  /**
+   * Deploys a contract asynchronously.
+   *
+   * @template TContract - The type of the contract to be deployed.
    * @param deployContractOptions - The options for deploying the contract.
-   * @returns A promise that resolves the transaction response and the deployed contract instance.
+   * @returns A promise that resolves waitForResult, transactionResult, and transactionResponse.
    */
-  async deployContract<T extends Contract = Contract>(
+  async deployContractAsync<TContract extends Contract = Contract>(
     deployContractOptions: DeployContractOptions = {}
-  ): Promise<DeployContractResult<T>> {
+  ): Promise<DeployContractAsyncResult<TContract>> {
     const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
     const account = this.getAccount();
 
-    const { awaitExecution } = deployContractOptions;
+    const transactionResponse = await account.sendTransaction(transactionRequest);
+    const transactionResult = await transactionResponse.assembleResult<TransactionType.Create>();
 
-    const transactionResponse = await account.sendTransaction(transactionRequest, {
-      awaitExecution,
-    });
+    const waitForDeploy = async () => {
+      await transactionResponse.waitForResult<TransactionType.Create>();
+      const contract = new Contract(contractId, this.interface, account);
+      return contract as TContract;
+    };
 
-    const contract = new Contract(contractId, this.interface, account);
-
-    return { transactionResponse, contract: contract as T };
+    return { waitForDeploy, transactionResult, transactionResponse };
   }
 
   /**
