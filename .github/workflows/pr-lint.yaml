@@ -53,3 +53,18 @@ jobs:
             echo "PR title is too long (greater than 72 characters)"
             exit 1
           fi
+
+  validate-body:
+    name: Validate PR body
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify PR has breaking change section
+        if: contains(github.event.pull_request.body, '!')
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [[ "${PR_BODY}" != *"# Breaking changes"*"# Checklist"* ]]; then
+              echo "This is a breaking change PR.
+          Please add a '# Breaking changes' section in the PR's body before the '# Checklist' section."
+              exit 1
+          fi
