@@ -53,6 +53,7 @@ jobs:
             echo "PR title is too long (greater than 72 characters)"
             exit 1
           fi
+
       - name: Verify PR has breaking changes section
         if: contains(github.event.pull_request.title, '!')
         env:
