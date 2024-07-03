@@ -11,7 +11,7 @@ Please write a summary of your changes and why you made them.
 Not all PRs will be complex or substantial enough to require this section, so you can remove it if you think it's unnecessary.
 -->
 
-# Breaking changes
+# Breaking Changes
 
 <!--
 If the PR has breaking changes, please detail them in this section and remove this comment.
