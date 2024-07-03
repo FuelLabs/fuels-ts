@@ -1,7 +1,7 @@
 ---
-"create-fuels": patch
 "@fuel-ts/abi-typegen": patch
 "@fuel-ts/contract": patch
+"@fuel-ts/account": patch
 "fuels": patch
 ---
 
