@@ -4,8 +4,9 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
-    open-pull-requests-limit: 1
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 5
     labels:
       - "chore"
     commit-message:
@@ -19,7 +20,6 @@ updates:
         update-types:
         - "minor"
         - "patch"
-    groups:
       deps:
         dependency-type: "production"
         applies-to: "version-updates"
@@ -29,12 +29,13 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "daily"
-    open-pull-requests-limit: 1
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 5
     labels:
       - "chore"
     commit-message:
-      prefix: "ci(dep):"
+      prefix: "ci(deps):"
     versioning-strategy: "increase"
     groups:
       actions-deps:
