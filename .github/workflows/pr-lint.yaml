@@ -27,7 +27,7 @@ jobs:
       - name: Validate Dependencies
         run: pnpm depcheck
 
-  validate-title:
+  validate-pr:
     name: Validate PR title
     runs-on: ubuntu-latest
     steps:
@@ -53,13 +53,8 @@ jobs:
             echo "PR title is too long (greater than 72 characters)"
             exit 1
           fi
-
-  validate-body:
-    name: Validate PR body
-    runs-on: ubuntu-latest
-    steps:
-      - name: Verify PR has breaking change section
-        if: contains(github.event.pull_request.body, '!')
+      - name: Verify PR has breaking changes section
+        if: contains(github.event.pull_request.title, '!')
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
