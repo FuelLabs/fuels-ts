@@ -6,19 +6,20 @@ import type {
 } from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
+import type { Contract } from '@fuel-ts/program';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
 
-import type { DeployContractOptions, DeployContractResult } from '../contract-factory';
+import type { DeployContractOptions } from '../contract-factory';
 
 interface ContractDeployer {
   deployContract(
     bytecode: BytesLike,
     wallet: Account,
     options?: DeployContractOptions
-  ): Promise<DeployContractResult>;
+  ): Promise<Contract>;
 }
 
 interface DeployContractConfig {
@@ -48,7 +49,7 @@ interface LaunchTestNodeOptions<TContractConfigs extends DeployContractConfig[]>
   contractsConfigs: TContractConfigs;
 }
 type TContracts<T extends DeployContractConfig[]> = {
-  [K in keyof T]: Awaited<ReturnType<T[K]['deployer']['deployContract']>>['contract'];
+  [K in keyof T]: Awaited<ReturnType<T[K]['deployer']['deployContract']>>;
 };
 interface LaunchTestNodeReturn<TFactories extends DeployContractConfig[]>
   extends SetupTestProviderAndWalletsReturn {
@@ -151,16 +152,13 @@ export async function launchTestNode<TFactories extends DeployContractConfig[]>(
   try {
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
-      const options: DeployContractOptions = {
-        awaitExecution: true,
-        ...config.options,
-      };
-      const { contract } = await config.deployer.deployContract(
-        config.bytecode,
-        getWalletForDeployment(config, wallets),
-        options
+      contracts.push(
+        await config.deployer.deployContract(
+          config.bytecode,
+          getWalletForDeployment(config, wallets),
+          config.options ?? {}
+        )
       );
-      contracts.push(contract);
     }
   } catch (err) {
     cleanup();
