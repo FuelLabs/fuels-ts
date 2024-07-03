@@ -49,7 +49,8 @@ export function runCliAction(options: ICliParams) {
       silent: !!silent,
     });
   } catch (err) {
-    process.stderr.write(`error: ${(<Error>err).message}\n`);
+    // eslint-disable-next-line no-console
+    console.log(`error: ${(<Error>err).message}`);
     process.exit(1);
   }
 }
