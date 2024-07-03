@@ -43,6 +43,7 @@ jobs:
             docs
             ci
             rc
+
       - name: Check PR title length
         env:
           TITLE: ${{ github.event.pull_request.title }}
