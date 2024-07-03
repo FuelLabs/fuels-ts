@@ -1,5 +1,32 @@
 # Change Log
 
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [ab1f8bf]
+- Updated dependencies [7befc6a]
+- Updated dependencies [a9ece17]
+- Updated dependencies [34f1ac7]
+- Updated dependencies [eec0806]
+- Updated dependencies [0206568]
+- Updated dependencies [3be2251]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/account@0.91.0
+  - @fuel-ts/transactions@0.91.0
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/program@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/merkle@0.91.0
+  - @fuel-ts/utils@0.91.0
+
 ## 0.90.0
 
 ### Patch Changes

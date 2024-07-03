@@ -1,5 +1,16 @@
 # @fuel-ts/errors
 
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- eec0806: chore: add `UNKNOWN` error code
+- dddde62: docs: merge error related pages
+- Updated dependencies [a9ece17]
+- Updated dependencies [8676a9e]
+  - @fuel-ts/versions@0.91.0
+
 ## 0.90.0
 
 ### Patch Changes

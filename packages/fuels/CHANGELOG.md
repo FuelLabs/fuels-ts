@@ -1,5 +1,51 @@
 # Change Log
 
+## 0.91.0
+
+### Minor Changes
+
+- e159582: feat!: separate `onSuccess` events for the Fuels CLI
+- a6c45fd: chore!: upgrade `commander` to`12.1.0`
+
+### Patch Changes
+
+- 7befc6a: fix!: stop piping into `process.stdout/stderr` and use `console.log`
+- 041805f: chore: export test and cli utilities in `fuels` umbrella package
+- a9ece17: build: add support for latest node versions
+- 5599d96: build(deps): bump yup from 0.32.11 to 1.4.0
+- 9a31f6a: build(deps): bump bundle-require from 4.0.1 to 5.0.0
+- fbfe9b9: build(deps): bump handlebars from 4.7.7 to 4.7.8
+- 52aba8c: build(deps): bump esbuild from 0.19.3 to 0.22.0
+- Updated dependencies [ab1f8bf]
+- Updated dependencies [7befc6a]
+- Updated dependencies [a9ece17]
+- Updated dependencies [34f1ac7]
+- Updated dependencies [a6c45fd]
+- Updated dependencies [31764d6]
+- Updated dependencies [fbfe9b9]
+- Updated dependencies [eec0806]
+- Updated dependencies [0206568]
+- Updated dependencies [3be2251]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/account@0.91.0
+  - @fuel-ts/abi-typegen@0.91.0
+  - @fuel-ts/transactions@0.91.0
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/contract@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/address@0.91.0
+  - @fuel-ts/program@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/merkle@0.91.0
+  - @fuel-ts/script@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
 ## 0.90.0
 
 ### Minor Changes

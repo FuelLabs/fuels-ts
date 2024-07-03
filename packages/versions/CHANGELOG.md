@@ -1,5 +1,12 @@
 # @fuel-ts/versions
 
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- 8676a9e: chore: support `forc@0.61.1`
+
 ## 0.90.0
 
 ### Patch Changes
