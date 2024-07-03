@@ -14,12 +14,9 @@ Not all PRs will be complex or substantial enough to require this section, so yo
 # Breaking changes
 
 <!--
-If the PR has breaking changes, please detail them in this section between the START and END comments below.
+If the PR has breaking changes, please detail them in this section and remove this comment.
+Remove this section if there are no breaking changes.
 -->
-
-<!--START: Breaking changes section. Used in automation so do not remove this comment. -->
-
-<!--END: Breaking changes section. Used in automation so do not remove  this comment. -->
 
 # Checklist
 
