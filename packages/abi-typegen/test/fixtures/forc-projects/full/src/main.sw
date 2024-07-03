@@ -80,6 +80,7 @@ abi MyContract {
     fn types_evm_address(x: EvmAddress) -> EvmAddress;
     fn types_bytes(x: Bytes) -> Bytes;
     fn types_raw_slice(x: raw_slice) -> raw_slice;
+    fn types_str_slice(x: str) -> str;
     fn types_std_string(x: String) -> String;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
     fn type_address(x: Address) -> Address;
@@ -173,6 +174,9 @@ impl MyContract for Contract {
         x
     }
     fn types_raw_slice(x: raw_slice) -> raw_slice {
+        x
+    }
+    fn types_str_slice(x: str) -> str {
         x
     }
     fn types_std_string(x: String) -> String {

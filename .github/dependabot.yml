@@ -3,11 +3,11 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: "sunday"
-    open-pull-requests-limit: 10
+      interval: "daily"
+    open-pull-requests-limit: 1
     labels:
       - "chore"
     commit-message:
       prefix: "build(deps):"
       prefix-development: "build(deps-dev):"
+    versioning-strategy: "increase"

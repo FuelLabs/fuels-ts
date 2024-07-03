@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.90.0",
+  "version": "0.91.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,7 +10,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.18.2 || ^20.0.0"
+    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },
   "exports": {
     ".": {
@@ -27,6 +27,11 @@
       "require": "./dist/test-utils.js",
       "import": "./dist/test-utils.mjs",
       "types": "./dist/test-utils.d.ts"
+    },
+    "./cli-utils": {
+      "require": "./dist/cli-utils.js",
+      "import": "./dist/cli-utils.mjs",
+      "types": "./dist/cli-utils.d.ts"
     }
   },
   "typesVersions": {
@@ -36,6 +41,9 @@
       ],
       "test-utils": [
         "./dist/test-utils.d.ts"
+      ],
+      "./cli-utils": [
+        "/dist/cli-utils.d.ts"
       ]
     }
   },
@@ -65,19 +73,19 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "bundle-require": "^4.0.1",
+    "bundle-require": "^5.0.0",
     "chalk": "4",
     "chokidar": "^3.5.3",
-    "commander": "^9.4.1",
-    "esbuild": "^0.19.3",
+    "commander": "12.1.0",
+    "esbuild": "^0.22.0",
     "glob": "^10.2.6",
-    "handlebars": "^4.7.7",
+    "handlebars": "^4.7.8",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
     "toml": "^3.0.0",
     "tree-kill": "^1.2.2",
-    "yup": "^0.32.11"
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.7",

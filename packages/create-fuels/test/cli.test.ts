@@ -1,7 +1,8 @@
+import { versions } from '@fuel-ts/versions';
+import toml from '@iarna/toml';
 import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
-import type { ProgramsToInclude } from '../src/cli';
 import { runScaffoldCli, setupProgram } from '../src/cli';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
@@ -14,16 +15,6 @@ import {
 import { generateArgv } from './utils/generateArgs';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
-
-const possibleProgramsToInclude: ProgramsToInclude[] = [
-  { contract: true, predicate: false, script: false },
-  { contract: false, predicate: true, script: false },
-  { contract: false, predicate: false, script: true },
-  { contract: true, predicate: true, script: false },
-  { contract: true, predicate: false, script: true },
-  { contract: false, predicate: true, script: true },
-  { contract: true, predicate: true, script: true },
-];
 
 /**
  * @group node
@@ -47,41 +38,46 @@ describe('CLI', () => {
     cleanupFilesystem();
   });
 
-  test.each(possibleProgramsToInclude)(
-    'create-fuels extracts the template to the specified directory',
-    async (programsToInclude) => {
-      const args = generateArgv(programsToInclude, paths.root);
-
-      await runScaffoldCli({
-        program: setupProgram(),
-        args,
-        shouldInstallDeps: false,
-      });
-
-      let originalTemplateFiles = await getAllFiles(paths.template);
-      originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles, programsToInclude);
-
-      const testProjectFiles = await getAllFiles(paths.root);
-
-      expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
-    }
-  );
-
-  test('should rewrite for the appropriate package manager', async () => {
-    const args = generateArgv(
-      {
-        contract: true,
-        predicate: true,
-        script: true,
-      },
-      paths.root,
-      'bun'
-    );
+  test('create-fuels extracts the template to the specified directory', async () => {
+    const args = generateArgv(paths.root);
 
     await runScaffoldCli({
       program: setupProgram(),
       args,
-      shouldInstallDeps: false,
+    });
+
+    let originalTemplateFiles = await getAllFiles(paths.template);
+    originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles);
+
+    const testProjectFiles = await getAllFiles(paths.root);
+
+    expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
+  });
+
+  test('create-fuels checks the versions on the fuel-toolchain file', async () => {
+    const args = generateArgv(paths.root);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    });
+
+    const fuelToolchainPath = join(paths.root, 'sway-programs', 'fuel-toolchain.toml');
+    const fuelToolchain = readFileSync(fuelToolchainPath, 'utf-8');
+    const parsedFuelToolchain = toml.parse(fuelToolchain);
+
+    const { toolchain, components } = parsedFuelToolchain;
+
+    expect(toolchain).toEqual({ channel: 'testnet' });
+    expect(components).toEqual({ forc: versions.FORC, 'fuel-core': versions.FUEL_CORE });
+  });
+
+  test('should rewrite for the appropriate package manager', async () => {
+    const args = generateArgv(paths.root, 'bun');
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
     });
 
     const packageJsonPath = join(paths.root, 'package.json');
@@ -95,14 +91,7 @@ describe('CLI', () => {
   });
 
   test('create-fuels reports an error if the project directory already exists', async () => {
-    const args = generateArgv(
-      {
-        contract: true,
-        predicate: true,
-        script: true,
-      },
-      paths.root
-    );
+    const args = generateArgv(paths.root);
 
     // Generate the project once
     mkdirSync(paths.root, { recursive: true });
@@ -111,37 +100,12 @@ describe('CLI', () => {
     await runScaffoldCli({
       program: setupProgram(),
       args,
-      shouldInstallDeps: false,
     }).catch((e) => {
       expect(e).toBeInstanceOf(Error);
     });
 
     expect(error).toHaveBeenCalledWith(
       expect.stringContaining(`A folder already exists at ${paths.root}`)
-    );
-  });
-
-  test('create-fuels reports an error if no programs are chosen to be included', async () => {
-    const args = generateArgv(
-      {
-        contract: false,
-        predicate: false,
-        script: false,
-      },
-      paths.root
-    );
-
-    await runScaffoldCli({
-      program: setupProgram(),
-      args,
-      shouldInstallDeps: false,
-      forceDisablePrompts: true,
-    }).catch((e) => {
-      expect(e).toBeInstanceOf(Error);
-    });
-
-    expect(error).toHaveBeenCalledWith(
-      expect.stringContaining('You must include at least one Sway program.')
     );
   });
 });

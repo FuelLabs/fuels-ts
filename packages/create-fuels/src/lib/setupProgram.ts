@@ -10,19 +10,18 @@ export interface ProgramOptions {
   npm?: boolean;
   bun?: boolean;
   verbose?: boolean;
+  'no-install'?: boolean;
 }
 
 export const setupProgram = () => {
   const program = new Command(packageJson.name)
     .version(packageJson.version)
     .arguments('[projectDirectory]')
-    .option('-c, --contract', 'Include contract program')
-    .option('-p, --predicate', 'Include predicate program')
-    .option('-s, --script', 'Include script program')
-    .option('--pnpm', 'Use pnpm as the package manager')
-    .option('--npm', 'Use npm as the package manager')
-    .option('--bun', 'Use bun as the package manager')
+    .option('--pnpm', 'Use pnpm to install dependencies')
+    .option('--npm', 'Use npm to install dependencies')
+    .option('--bun', 'Use bun to install dependencies')
     .option('--verbose', 'Enable verbose logging')
+    .option('--no-install', `Do not install dependencies after scaffolding`, false)
     .addHelpCommand()
     .showHelpAfterError(true);
   return program;

@@ -1,8 +1,7 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Contract, WalletUnlocked, TransactionResultReceipt } from 'fuels';
 import { bn, ContractFactory, Provider, FUEL_NETWORK_URL, getRandomB256 } from 'fuels';
+import { expectToThrowFuelError, generateTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -223,20 +222,16 @@ describe('Revert Error Testing', () => {
     );
   });
 
-  it('should throw for explicit "revert" call', async () => {
+  it('should throw UNKNOWN Error for revert', async () => {
     await expectToThrowFuelError(
       () => contractInstance.functions.revert_with_0().call(),
-      new FuelError(
-        ErrorCode.SCRIPT_REVERTED,
-        `The transaction reverted with an unknown reason: 0`,
-        {
-          logs: [],
-          receipts: expect.any(Array<TransactionResultReceipt>),
-          panic: false,
-          revert: true,
-          reason: 'unknown',
-        }
-      )
+      new FuelError(ErrorCode.UNKNOWN, `The transaction reverted with an unknown reason: 0`, {
+        logs: [],
+        receipts: expect.any(Array<TransactionResultReceipt>),
+        panic: false,
+        revert: true,
+        reason: 'unknown',
+      })
     );
   });
 

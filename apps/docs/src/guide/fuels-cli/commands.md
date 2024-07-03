@@ -61,7 +61,7 @@ npx fuels@{{fuels}} help build
 
 ```console
 Options:
-  -p, --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts/apps/docs")
+  --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts/apps/docs")
   -d, --deploy       Deploy contracts after build (auto-starts a `fuel-core` node if needed)
   -h, --help         Display help
 ```

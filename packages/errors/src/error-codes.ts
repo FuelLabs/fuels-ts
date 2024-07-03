@@ -94,13 +94,16 @@ export enum ErrorCode {
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',
 
-  // contract
-  INVALID_MULTICALL = 'invalid-multicall',
-
   // script
   SCRIPT_REVERTED = 'script-reverted',
   SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
 
   // graphql
   STREAM_PARSING_ERROR = 'stream-parsing-error',
+
+  // launchNode
+  NODE_LAUNCH_FAILED = 'node-launch-failed',
+
+  // Unknown
+  UNKNOWN = 'unknown',
 }
