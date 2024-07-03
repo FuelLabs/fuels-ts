@@ -1,5 +1,24 @@
 # @fuel-ts/abi-typegen
 
+## 0.91.0
+
+### Patch Changes
+
+- 7befc6a: fix!: stop piping into `process.stdout/stderr` and use `console.log`
+- a9ece17: build: add support for latest node versions
+- a6c45fd: chore!: upgrade `commander` to`12.1.0`
+- 31764d6: build(deps): bump rimraf from 3.0.2 to 5.0.7
+- fbfe9b9: build(deps): bump handlebars from 4.7.7 to 4.7.8
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/utils@0.91.0
+
 ## 0.90.0
 
 ### Minor Changes
