@@ -5,4 +5,4 @@
 "fuels": patch
 ---
 
-feat!: add a non-blocking call for deploy contract
+feat: add a non-blocking call for deploy contract
