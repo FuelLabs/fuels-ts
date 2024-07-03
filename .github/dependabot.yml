@@ -1,6 +1,5 @@
 version: 2
 updates:
-
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -18,14 +17,13 @@ updates:
         dependency-type: "development"
         applies-to: "version-updates"
         update-types:
-        - "minor"
-        - "patch"
-    groups:
+          - "minor"
+          - "patch"
       deps:
         dependency-type: "production"
         applies-to: "version-updates"
         update-types:
-        - "patch"
+          - "patch"
 
   - package-ecosystem: "github-actions"
     directory: "/"
