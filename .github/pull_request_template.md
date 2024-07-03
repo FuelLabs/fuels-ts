@@ -1,7 +1,7 @@
 <!--
 List the issues this PR closes (if any) in a bullet list format, e.g.:
-- closes https://github.com/FuelLabs/fuels-ts/issues/ABCD
-- closes https://github.com/FuelLabs/fuels-ts/issues/EFGH
+- Closes #ABCD
+- Closes #EFGH
 -->
 
 # Summary
