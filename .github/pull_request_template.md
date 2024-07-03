@@ -23,7 +23,7 @@ If the PR has breaking changes, please detail them in this section between the S
 
 # Checklist
 
-- [ ] I added tests
-- [ ] I triple-checked the docs
-- [ ] I reviewed the entire PR myself
-- [ ] I described all breaking changes
+- [ ] I **_added_** — `tests` to prove my changes
+- [ ] I **_updated_** — all the necessary `docs`
+- [ ] I **_reviewed_** — the entire PR myself, using the GitHub UI
+- [ ] I **_described_** — all breaking changes and the Migration Guide
