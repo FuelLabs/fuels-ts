@@ -27,20 +27,26 @@ Load the contract bytecode and JSON ABI, generated from the Sway source, into th
 
 ## 4. Deploying the Contract
 
-To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deployContract` method. This method resolves when the transaction to deploy the contract is submitted, returning two objects: a `TransactionResponse` and a `Contract` instance.
+To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deployContract` method. This method returns a promise that will resolve to a `Contract` instance, ready to be used to interact with the deployed smart contract.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-3{ts:line-numbers}
 
-**Important**: The contract instance can only be safely used after the promise from `transactionResponse.waitForResult` is resolved. To avoid blocking your code, attach this promise to a hook or listener that awaits it to ensure you don't use the contract before its deployment finishes.
+The `deployContract` method resolves only after the deploy contract transaction has been processed and the smart contract is deployed on the blockchain. This process can take several seconds and will block any subsequent code execution.
 
-You can also call `deployContract` in a way that waits for the transaction execution by using the `awaitExecution` flag. The call for `deployContract` will only resolve when the contract is deployed and ready to be used. By doing so, there is no need to call `transactionResponse.waitForResult`.
+If this blocking is not suitable for your dApp, you can use the `deployContractAsync` method.
 
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-5{ts:line-numbers}
+## 5. Deploying the Contract Asynchronously
 
-## 5. Executing a Contract Call
+In some cases, you may not want to wait for the deploy contract transaction to finish processing. In these instances, you can use `deployContractAsync`. This method resolves as soon as the transaction to deploy the contract is submitted and returns three things:
+
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-4{ts:line-numbers}
+
+The `contract` instance will be returned only after calling `waitForDeploy` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed.
+
+## 6. Executing a Contract Call
 
 Now that the contract is deployed, you can interact with it. In the following steps, you'll learn how to execute contract calls.
 
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-4{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-5{ts:line-numbers}
 
 For a more comprehensive TypeScript-backed Fuel usage, learn how to [generate types from ABI](../fuels-cli/generating-types.md)

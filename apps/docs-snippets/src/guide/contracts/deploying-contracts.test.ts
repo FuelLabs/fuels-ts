@@ -44,23 +44,21 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const { transactionResult, waitForDeploy } = await factory.deployContractAsync();
-
-    // Wait for the transaction to be processed
-    const contract = await waitForDeploy();
+    const contract = await factory.deployContract();
     // #endregion contract-setup-3
 
-    // #region contract-setup-4
+    // #region contract-setup-5
     const { value } = await contract.functions.echo_u8(15).call();
-    // #endregion contract-setup-4
+    // #endregion contract-setup-5
 
-    expect(transactionResult.isStatusSuccess).toBeTruthy();
+    // expect(transactionResult.isStatusSuccess).toBeTruthy();
     expect(value).toBe(15);
   });
 
-  it('should successfully deploy and execute contract function', async () => {
+  it('should successfully deploy a contract async', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
+    // #context const contractName = "contract-name"
 
     const byteCodePath = join(projectsPath, `${contractName}/out/release/${contractName}.bin`);
     const byteCode = readFileSync(byteCodePath);
@@ -68,14 +66,26 @@ describe(__filename, () => {
     const abiJsonPath = join(projectsPath, `${contractName}/out/release/${contractName}-abi.json`);
     const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
 
+    // #region contract-setup-4
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    // #region contract-setup-5
-    // Contract will be ready to use after the this call
-    const contract = await factory.deployContract();
-    // #endregion contract-setup-5
+    const {
+      // instance of TransactionResponse,
+      transactionResponse,
+      // the transaction result of the deployment (status its submited)
+      transactionResult,
+      // callback to wait for the contract to be deployed
+      waitForDeploy,
+    } = await factory.deployContractAsync();
+
+    // It will only resolve once the contract is deployed
+    const contract = await waitForDeploy();
+    // #endregion contract-setup-4
 
     const { value } = await contract.functions.echo_u8(15).call();
+
+    expect(transactionResult).toBeDefined();
+    expect(transactionResponse).toBeDefined();
 
     expect(value).toBe(15);
   });
