@@ -101,6 +101,9 @@ export enum ErrorCode {
   // graphql
   STREAM_PARSING_ERROR = 'stream-parsing-error',
 
+  // launchNode
+  NODE_LAUNCH_FAILED = 'node-launch-failed',
+
   // Unknown
   UNKNOWN = 'unknown',
 }
