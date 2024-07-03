@@ -79,23 +79,23 @@ export const MyContractAbi__factory = {
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<{{capitalizedName}}> {
+  ): Promise<MyContractAbi> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    return factory.deployContract<{{capitalizedName}}>({
+    return factory.deployContract<MyContractAbi>({
       storageSlots: _storageSlots,
       ...options,
     });
   },
 
-  async deployContractAsync<{{capitalizedName}}>(
+  async deployContractAsync<MyContractAbi>(
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<DeployContractAsyncResult<{{capitalizedName}}>> {
+  ): Promise<DeployContractAsyncResult<MyContractAbi>> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    return factory.deployContractAsync<{{capitalizedName}}>({
+    return factory.deployContractAsync<MyContractAbi>({
       storageSlots: _storageSlots,
       ...options,
     });
