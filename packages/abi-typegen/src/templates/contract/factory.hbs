@@ -35,5 +35,18 @@ export const {{capitalizedName}}__factory = {
       storageSlots: _storageSlots,
       ...options,
     });
+  },
+
+  async deployContractAsync<{{capitalizedName}}>(
+    bytecode: BytesLike,
+    wallet: Account,
+    options: DeployContractOptions = {}
+  ): Promise<DeployContractAsyncResult<{{capitalizedName}}>> {
+    const factory = new ContractFactory(bytecode, _abi, wallet);
+
+    return factory.deployContractAsync<{{capitalizedName}}>({
+      storageSlots: _storageSlots,
+      ...options,
+    });
   }
 }
