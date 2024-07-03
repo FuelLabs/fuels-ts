@@ -1,6 +1,6 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish } from 'fuels';
 import { FUEL_NETWORK_URL, Provider } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { getScript } from './utils';
 
