@@ -19,8 +19,6 @@ If the PR has breaking changes, please detail them in this section between the S
 
 <!--START: Breaking changes section. Used in automation so do not remove this comment. -->
 
-Ovdje ja pisem svoj breaking change.
-
 <!--END: Breaking changes section. Used in automation so do not remove  this comment. -->
 
 # Checklist
