@@ -56,8 +56,9 @@ async function getChangelogInfo(
 
   const bulletPoint = `- ${formattedPrLink} - ${capitalize(titleDescription)}, by ${user}`;
 
-  const breakingChangeDescription =
-    body?.split("# Breaking changes")[1]?.split("# Checklist")[0].trim() ?? "";
+  const breakingChangeDescription = body
+    ?.replace(/[\s\S]+# Breaking changes([\s\S]+)# Checklist[\s\S]+/, "$1")
+    .trim();
 
   const prLink = formattedPrLink?.replace(/.*\((.*)\)/, "$1"); // [#2637](https://github.com/FuelLabs/fuels-ts/pull/2637) -> https://github.com/FuelLabs/fuels-ts/pull/2637
   const migrationNote = `### [#${prNo} - ${capitalize(titleDescription)}](${prLink})
