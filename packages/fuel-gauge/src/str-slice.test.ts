@@ -1,6 +1,5 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { WalletUnlocked } from 'fuels';
-import { Wallet, bn, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import type { PredicateStrSliceAbiInputs } from '../test/typegen';
 import {
@@ -14,28 +13,36 @@ import contractBytes from '../test/typegen/contracts/StrSliceAbi.hex';
  * @group node
  */
 describe('str slice', () => {
-  let provider: Provider;
-  let baseAssetId: string;
-  let sender: WalletUnlocked;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-  });
-
   it('echoes a str slice [CONTRACT]', async () => {
-    const contract = await StrSliceAbi__factory.deployContract(contractBytes, sender);
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: StrSliceAbi__factory,
+          bytecode: contractBytes,
+        },
+      ],
+    });
+    const {
+      contracts: [strSliceContract],
+    } = launched;
+
     const input = 'contract-input';
     const output = 'contract-return';
-    const { value } = await contract.functions.echoes_str_slice(input).call();
+    const { value } = await strSliceContract.functions.echoes_str_slice(input).call();
     expect(value).toEqual(output);
   });
 
   it('validates a str slice [PREDICATE]', async () => {
-    const receiver = Wallet.generate({ provider });
-    const input: PredicateStrSliceAbiInputs = ['predicate-input'];
-    const predicate = PredicateStrSliceAbi__factory.createInstance(provider, input);
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [sender, receiver],
+      provider,
+    } = launched;
+
+    const predicateData: PredicateStrSliceAbiInputs = ['predicate-input'];
+    const predicate = PredicateStrSliceAbi__factory.createInstance(provider, predicateData);
+    const baseAssetId = provider.getBaseAssetId();
 
     const amountToPredicate = 250_000;
     const amountToReceiver = 50_000;
@@ -55,6 +62,12 @@ describe('str slice', () => {
   });
 
   it('echoes a str slice [SCRIPT]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [sender],
+    } = launched;
+
     const script = await ScriptStrSliceAbi__factory.createInstance(sender);
     const input = 'script-input';
     const output = 'script-return';
