@@ -364,22 +364,27 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the function invocation.
    */
-  async call<T = TReturn>(): Promise<FunctionResult<T>> {
+  async call<T = TReturn>(
+    invocationConfig: { awaitExecution?: boolean } = {}
+  ): Promise<{ waitForResult: () => Promise<FunctionResult<T>> }> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.fundWithRequiredCoins();
 
     const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
+      awaitExecution: invocationConfig.awaitExecution,
       estimateTxDependencies: false,
     });
 
-    return buildFunctionResult<T>({
-      funcScope: this.functionInvocationScopes,
-      isMultiCall: this.isMultiCall,
-      program: this.program,
-      transactionResponse: response,
-    });
+    return {
+      waitForResult: () =>
+        buildFunctionResult<T>({
+          funcScope: this.functionInvocationScopes,
+          isMultiCall: this.isMultiCall,
+          program: this.program,
+          transactionResponse: response,
+        }),
+    };
   }
 
   /**
