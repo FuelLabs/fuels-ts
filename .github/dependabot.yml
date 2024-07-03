@@ -20,6 +20,7 @@ updates:
         update-types:
         - "minor"
         - "patch"
+    groups:
       deps:
         dependency-type: "production"
         applies-to: "version-updates"
