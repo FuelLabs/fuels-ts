@@ -44,7 +44,6 @@ export const autoStartFuelCore = async (config: FuelsConfig) => {
       ip: bindIp,
       port: port.toString(),
       loggingEnabled: loggingConfig.isLoggingEnabled,
-      debugEnabled: loggingConfig.isDebugEnabled,
       basePath: config.basePath,
       fuelCorePath: config.fuelCorePath,
     });
