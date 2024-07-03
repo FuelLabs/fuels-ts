@@ -1,4 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import {
   FUEL_NETWORK_URL,
   Provider,
@@ -9,6 +8,7 @@ import {
   arrayify,
 } from 'fuels';
 import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
 import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';

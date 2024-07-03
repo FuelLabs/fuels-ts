@@ -1,9 +1,9 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { FSWatcher } from 'chokidar';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
 import { mockStartFuelCore } from '../../../../test/utils/mockAutoStartFuelCore';
 import { mockLogger } from '../../../../test/utils/mockLogger';
+import { safeExec } from '../../../test-utils';
 import * as loadConfigMod from '../../config/loadConfig';
 import type { FuelsConfig } from '../../types';
 import * as buildMod from '../build';

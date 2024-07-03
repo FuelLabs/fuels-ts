@@ -14,12 +14,12 @@
     "@tanstack/react-query": "^5.29.2",
     "fuels": "workspace:*",
     "next": "14.2.4",
-    "react": "^18",
+    "react": "^18.3.1",
     "react-dom": "^18"
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "postcss": "^8",

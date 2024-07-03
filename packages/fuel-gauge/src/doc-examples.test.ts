@@ -1,4 +1,3 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   Bech32Address,
   BigNumberish,
@@ -26,6 +25,7 @@ import {
   FUEL_NETWORK_URL,
   TESTNET_NETWORK_URL,
 } from 'fuels';
+import { generateTestWallet, seedTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 

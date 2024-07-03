@@ -1,4 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BaseTransactionRequest, BigNumberish, Transaction, WalletUnlocked } from 'fuels';
 import {
   ContractFactory,
@@ -11,6 +10,7 @@ import {
   Wallet,
   bn,
 } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures';
 

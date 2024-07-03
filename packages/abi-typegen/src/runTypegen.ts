@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import mkdirp from 'mkdirp';
 import { basename } from 'path';
-import rimraf from 'rimraf';
+import { rimrafSync } from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
 import type { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
@@ -27,7 +27,8 @@ export function runTypegen(params: IGenerateFilesParams) {
 
   function log(...args: unknown[]) {
     if (!silent) {
-      process.stdout.write(`${args.join(' ')}\n`);
+      // eslint-disable-next-line no-console
+      console.log(args.join(' '));
     }
   }
 
@@ -85,7 +86,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   mkdirp.sync(`${output}/factories`);
 
   abiTypeGen.files.forEach((file) => {
-    rimraf.sync(file.path);
+    rimrafSync(file.path);
     writeFileSync(file.path, file.contents);
     const trimPathRegex = new RegExp(`^.+${cwdBasename}/`, 'm');
     log(` - ${file.path.replace(trimPathRegex, '')}`);

@@ -1,7 +1,6 @@
 // #region Testing-in-ts-ts
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL, Address } from 'fuels';
+import { generateTestWallet , safeExec } from 'fuels/test-utils';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
 
