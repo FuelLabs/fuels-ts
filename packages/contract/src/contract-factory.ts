@@ -142,9 +142,19 @@ export default class ContractFactory {
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  /**
-   * Deploys a contract and returns the transaction response and the deployed contract instance.
-   * @template T - The type of the contract to be deployed.
+  async deployContract<TContract extends Contract = Contract>(
+    deployContractOptions: DeployContractOptions = {}
+  ) {
+    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
+    const account = this.getAccount();
+
+    await account.sendTransaction(transactionRequest, {
+      awaitExecution: true,
+    });
+
+    return new Contract(contractId, this.interface, account) as TContract;
+  }
+
    * @param deployContractOptions - The options for deploying the contract.
    * @returns A promise that resolves the transaction response and the deployed contract instance.
    */
