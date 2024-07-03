@@ -10,8 +10,10 @@ type Octokit = ReturnType<typeof github.getOctokit>;
 interface ChangelogInfo {
   isBreaking: boolean;
   prType: string;
-  shortSummary: string;
-  breakingChangeDescription: string | undefined;
+  views: {
+    bulletPoint: string;
+    migrationNote: string;
+  };
 }
 
 function capitalize(str: string) {
@@ -32,7 +34,7 @@ async function getChangelogInfo(
   ).toString(); // e.g. d603eecd1e453c60fe8cadfd1bfe530050ff0cfe
 
   const {
-    links: { pull: prLink, user },
+    links: { pull: formattedPrLink, user },
     pull: prNo,
   } = await getInfo({
     repo: process.env.GITHUB_REPOSITORY ?? "This should be set by GitHub",
@@ -52,22 +54,30 @@ async function getChangelogInfo(
 
   const titleDescription = title.replace(/\w+!?:(.*)/, "$1").trim(); // chore!: add something -> add something
 
-  const shortSummary = `- ${prLink} - ${capitalize(titleDescription)}, by ${user}`;
+  const bulletPoint = `- ${formattedPrLink} - ${capitalize(titleDescription)}, by ${user}`;
 
-  const breakingChangeDescription = body
-    ?.split(
-      "<!--START: Breaking changes section. Used in automation so do not remove this comment. -->",
-    )[1]
-    ?.split(
-      "<!--END: Breaking changes section. Used in automation so do not remove  this comment. -->",
-    )[0]
-    .trim();
+  const breakingChangeDescription =
+    body
+      ?.split(
+        "<!--START: Breaking changes section. Used in automation so do not remove this comment. -->",
+      )[1]
+      ?.split(
+        "<!--END: Breaking changes section. Used in automation so do not remove  this comment. -->",
+      )[0]
+      .trim() ?? "";
+
+  const prLink = formattedPrLink?.replace(/.*\((.*)\)/, "$1"); // [#2637](https://github.com/FuelLabs/fuels-ts/pull/2637) -> https://github.com/FuelLabs/fuels-ts/pull/2637
+  const migrationNote = `### [#${prNo} - ${capitalize(titleDescription)}](${prLink})
+
+  ${breakingChangeDescription}`;
 
   return {
     prType,
     isBreaking,
-    shortSummary,
-    breakingChangeDescription,
+    views: {
+      bulletPoint,
+      migrationNote,
+    },
   };
 }
 
@@ -141,7 +151,7 @@ function listBreakingMd(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `- ${groupTitle}
-${c.map((changelog) => `    ${changelog.shortSummary}`).join("\n")}`,
+${c.map((changelog) => `    ${changelog.views.bulletPoint}`).join("\n")}`,
     )
     .join("\n")
     .trim();
@@ -155,13 +165,7 @@ function listMigrationNotes(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `## ${groupTitle}
-${c
-  .map(
-    (changelog) => `${changelog.shortSummary}
-
-${changelog.breakingChangeDescription}`,
-  )
-  .join("\n")}`,
+${c.map((changelog) => changelog.views.migrationNote).join("\n")}`,
     )
     .join("\n\n")
     .trim();
@@ -175,7 +179,7 @@ function listNonBreakingMd(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `# ${groupTitle}
-${c.map((changelog) => changelog.shortSummary).join("\n")}`,
+${c.map((changelog) => changelog.views.bulletPoint).join("\n")}`,
     )
     .join("\n\n")
     .trim();
