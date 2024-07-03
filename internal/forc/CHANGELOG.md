@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.88.3
+
+### Patch Changes
+
+- 6ed0093: chore: triggerable `devnet` e2e tests
+
 ## 0.88.2
 
 ### Patch Changes
