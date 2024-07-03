@@ -63,7 +63,7 @@ Date.constructor
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:130](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L130)
+[packages/utils/src/utils/date-time.ts:130](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L130)
 
 ## Properties
 
@@ -73,7 +73,7 @@ Date.constructor
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L99)
+[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L99)
 
 ## Methods
 
@@ -103,7 +103,7 @@ Date.[toPrimitive]
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:116
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:116
 
 ▸ **[toPrimitive]**(`hint`): `string`
 
@@ -129,7 +129,7 @@ Date.[toPrimitive]
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:120
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:120
 
 ▸ **[toPrimitive]**(`hint`): `number`
 
@@ -155,7 +155,7 @@ Date.[toPrimitive]
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:124
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:124
 
 ▸ **[toPrimitive]**(`hint`): `string` \| `number`
 
@@ -187,7 +187,7 @@ Date.[toPrimitive]
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:133
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:133
 
 ___
 
@@ -211,7 +211,7 @@ Date.getDate
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:789
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:798
 
 ___
 
@@ -235,7 +235,7 @@ Date.getDay
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:793
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:802
 
 ___
 
@@ -259,7 +259,7 @@ Date.getFullYear
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:781
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:790
 
 ___
 
@@ -283,7 +283,7 @@ Date.getHours
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:797
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:806
 
 ___
 
@@ -307,7 +307,7 @@ Date.getMilliseconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:809
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:818
 
 ___
 
@@ -331,7 +331,7 @@ Date.getMinutes
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:801
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:810
 
 ___
 
@@ -355,7 +355,7 @@ Date.getMonth
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:785
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:794
 
 ___
 
@@ -379,7 +379,7 @@ Date.getSeconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:805
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:814
 
 ___
 
@@ -403,7 +403,7 @@ Date.getTime
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:779
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:788
 
 ___
 
@@ -427,7 +427,7 @@ Date.getTimezoneOffset
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:813
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:822
 
 ___
 
@@ -451,7 +451,7 @@ Date.getUTCDate
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:791
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:800
 
 ___
 
@@ -475,7 +475,7 @@ Date.getUTCDay
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:795
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:804
 
 ___
 
@@ -499,7 +499,7 @@ Date.getUTCFullYear
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:783
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:792
 
 ___
 
@@ -523,7 +523,7 @@ Date.getUTCHours
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:799
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:808
 
 ___
 
@@ -547,7 +547,7 @@ Date.getUTCMilliseconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:811
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:820
 
 ___
 
@@ -571,7 +571,7 @@ Date.getUTCMinutes
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:803
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:812
 
 ___
 
@@ -595,7 +595,7 @@ Date.getUTCMonth
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:787
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:796
 
 ___
 
@@ -619,7 +619,7 @@ Date.getUTCSeconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:807
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:816
 
 ___
 
@@ -649,7 +649,7 @@ Date.setDate
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:876
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:885
 
 ___
 
@@ -681,7 +681,7 @@ Date.setFullYear
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:900
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:909
 
 ___
 
@@ -714,7 +714,7 @@ Date.setHours
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:863
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:872
 
 ___
 
@@ -744,7 +744,7 @@ Date.setMilliseconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:823
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:832
 
 ___
 
@@ -776,7 +776,7 @@ Date.setMinutes
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:848
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:857
 
 ___
 
@@ -807,7 +807,7 @@ Date.setMonth
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:887
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:896
 
 ___
 
@@ -838,7 +838,7 @@ Date.setSeconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:835
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:844
 
 ___
 
@@ -868,7 +868,7 @@ Date.setTime
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:818
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:827
 
 ___
 
@@ -898,7 +898,7 @@ Date.setUTCDate
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:881
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:890
 
 ___
 
@@ -930,7 +930,7 @@ Date.setUTCFullYear
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:907
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:916
 
 ___
 
@@ -963,7 +963,7 @@ Date.setUTCHours
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:871
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:880
 
 ___
 
@@ -993,7 +993,7 @@ Date.setUTCMilliseconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:828
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:837
 
 ___
 
@@ -1025,7 +1025,7 @@ Date.setUTCMinutes
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:855
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:864
 
 ___
 
@@ -1056,7 +1056,7 @@ Date.setUTCMonth
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:893
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:902
 
 ___
 
@@ -1087,7 +1087,7 @@ Date.setUTCSeconds
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:841
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:850
 
 ___
 
@@ -1111,7 +1111,7 @@ Date.toDateString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:767
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:776
 
 ___
 
@@ -1135,7 +1135,7 @@ Date.toISOString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:911
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:920
 
 ___
 
@@ -1165,7 +1165,7 @@ Date.toJSON
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:913
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:922
 
 ___
 
@@ -1189,7 +1189,7 @@ Date.toLocaleDateString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:773
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:782
 
 ▸ **toLocaleDateString**(`locales?`, `options?`): `string`
 
@@ -1216,7 +1216,7 @@ Date.toLocaleDateString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:4546
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:4555
 
 ▸ **toLocaleDateString**(`locales?`, `options?`): `string`
 
@@ -1243,7 +1243,7 @@ Date.toLocaleDateString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2020.date.d.ts:34
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2020.date.d.ts:34
 
 ___
 
@@ -1267,7 +1267,7 @@ Date.toLocaleString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:771
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:780
 
 ▸ **toLocaleString**(`locales?`, `options?`): `string`
 
@@ -1294,7 +1294,7 @@ Date.toLocaleString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:4540
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:4549
 
 ▸ **toLocaleString**(`locales?`, `options?`): `string`
 
@@ -1321,7 +1321,7 @@ Date.toLocaleString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2020.date.d.ts:27
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2020.date.d.ts:27
 
 ___
 
@@ -1345,7 +1345,7 @@ Date.toLocaleTimeString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:775
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:784
 
 ▸ **toLocaleTimeString**(`locales?`, `options?`): `string`
 
@@ -1372,7 +1372,7 @@ Date.toLocaleTimeString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:4553
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:4562
 
 ▸ **toLocaleTimeString**(`locales?`, `options?`): `string`
 
@@ -1399,7 +1399,7 @@ Date.toLocaleTimeString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2020.date.d.ts:41
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2020.date.d.ts:41
 
 ___
 
@@ -1423,7 +1423,7 @@ Date.toString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:765
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:774
 
 ___
 
@@ -1441,7 +1441,7 @@ the Tai64 timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L139)
+[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L139)
 
 ___
 
@@ -1465,7 +1465,7 @@ Date.toTimeString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:769
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:778
 
 ___
 
@@ -1489,7 +1489,7 @@ Date.toUTCString
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:909
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:918
 
 ___
 
@@ -1505,7 +1505,7 @@ the unix milliseconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L146)
+[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L146)
 
 ___
 
@@ -1521,7 +1521,7 @@ the unix seconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L153)
+[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L153)
 
 ___
 
@@ -1545,7 +1545,7 @@ Date.valueOf
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:777
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:786
 
 ___
 
@@ -1577,7 +1577,7 @@ Date.UTC
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:947
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:956
 
 ▸ **UTC**(`year`, `monthIndex?`, `date?`, `hours?`, `minutes?`, `seconds?`, `ms?`): `number`
 
@@ -1605,7 +1605,7 @@ Date.UTC
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es2017.date.d.ts:30
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2017.date.d.ts:30
 
 ___
 
@@ -1629,7 +1629,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L107)
+[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L107)
 
 ___
 
@@ -1651,7 +1651,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L115)
+[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L115)
 
 ___
 
@@ -1673,7 +1673,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/utils/src/utils/date-time.ts#L123)
+[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/utils/src/utils/date-time.ts#L123)
 
 ___
 
@@ -1693,7 +1693,7 @@ Date.now
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:949
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:958
 
 ___
 
@@ -1719,4 +1719,4 @@ Date.parse
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.2.2/node_modules/typescript/lib/lib.es5.d.ts:936
+node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:945

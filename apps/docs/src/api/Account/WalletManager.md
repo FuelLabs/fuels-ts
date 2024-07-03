@@ -35,7 +35,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L71)
+[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L71)
 
 ## Properties
 
@@ -45,7 +45,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:69](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L69)
+[packages/account/src/wallet-manager/wallet-manager.ts:69](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L69)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:68](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L68)
+[packages/account/src/wallet-manager/wallet-manager.ts:68](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L68)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:67](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L67)
+[packages/account/src/wallet-manager/wallet-manager.ts:67](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L67)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L64)
+[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L64)
 
 ___
 
@@ -89,7 +89,7 @@ Persistent encrypted data. `The default storage works only on memory`.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L62)
+[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L62)
 
 ___
 
@@ -106,7 +106,7 @@ Each vault has access to its own state
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L56)
+[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L56)
 
 ___
 
@@ -186,7 +186,7 @@ node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:327
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L76)
+[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L76)
 
 ## Methods
 
@@ -210,7 +210,7 @@ Deserialize all vaults to state
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:287](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L287)
+[packages/account/src/wallet-manager/wallet-manager.ts:287](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L287)
 
 ___
 
@@ -234,7 +234,7 @@ Serialize all vaults to store
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:274](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L274)
+[packages/account/src/wallet-manager/wallet-manager.ts:274](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L274)
 
 ___
 
@@ -258,13 +258,13 @@ If not vaults are adds it will return error
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L143)
+[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L143)
 
 ___
 
 ### addListener
 
-▸ **addListener**(`eventName`, `listener`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **addListener**(`eventName`, `listener`): `this`
 
 Alias for `emitter.on(eventName, listener)`.
 
@@ -281,7 +281,7 @@ v0.1.26
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -312,7 +312,7 @@ didn't found it will throw.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L170)
+[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L170)
 
 ___
 
@@ -439,7 +439,7 @@ Export specific account privateKey
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L128)
+[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L128)
 
 ___
 
@@ -468,7 +468,7 @@ the format of the return depends on the Vault type.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L84)
+[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L84)
 
 ___
 
@@ -484,7 +484,7 @@ List all accounts on the Wallet Manager not vault information is revealed
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L105)
+[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L105)
 
 ___
 
@@ -531,7 +531,7 @@ typeof [`MnemonicVault`](/api/Account/MnemonicVault.md) \| typeof [`PrivateKeyVa
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:301](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L301)
+[packages/account/src/wallet-manager/wallet-manager.ts:301](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L301)
 
 ___
 
@@ -547,7 +547,7 @@ List all vaults on the Wallet Manager, this function not return secret's
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L94)
+[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L94)
 
 ___
 
@@ -569,7 +569,7 @@ Create a Wallet instance for the specific account
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L115)
+[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L115)
 
 ___
 
@@ -653,7 +653,7 @@ Retrieve and decrypt WalletManager state from storage
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L246)
+[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L246)
 
 ___
 
@@ -670,13 +670,13 @@ secrets.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L191)
+[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L191)
 
 ___
 
 ### off
 
-▸ **off**(`eventName`, `listener`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **off**(`eventName`, `listener`): `this`
 
 Alias for `emitter.removeListener()`.
 
@@ -693,7 +693,7 @@ v10.0.0
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -707,7 +707,7 @@ ___
 
 ### on
 
-▸ **on**(`eventName`, `listener`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **on**(`eventName`, `listener`): `this`
 
 Adds the `listener` function to the end of the listeners array for the
 event named `eventName`. No checks are made to see if the `listener` has
@@ -748,7 +748,7 @@ v0.1.101
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -762,7 +762,7 @@ ___
 
 ### once
 
-▸ **once**(`eventName`, `listener`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **once**(`eventName`, `listener`): `this`
 
 Adds a **one-time**`listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -801,7 +801,7 @@ v0.3.0
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -815,7 +815,7 @@ ___
 
 ### prependListener
 
-▸ **prependListener**(`eventName`, `listener`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **prependListener**(`eventName`, `listener`): `this`
 
 Adds the `listener` function to the _beginning_ of the listeners array for the
 event named `eventName`. No checks are made to see if the `listener` has
@@ -843,7 +843,7 @@ v6.0.0
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -857,7 +857,7 @@ ___
 
 ### prependOnceListener
 
-▸ **prependOnceListener**(`eventName`, `listener`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **prependOnceListener**(`eventName`, `listener`): `this`
 
 Adds a **one-time**`listener` function for the event named `eventName` to the _beginning_ of the listeners array. The next time `eventName` is triggered, this
 listener is removed, and then invoked.
@@ -883,7 +883,7 @@ v6.0.0
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -952,7 +952,7 @@ ___
 
 ### removeAllListeners
 
-▸ **removeAllListeners**(`event?`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **removeAllListeners**(`event?`): `this`
 
 Removes all listeners, or those of the specified `eventName`.
 
@@ -974,7 +974,7 @@ v0.1.26
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -988,7 +988,7 @@ ___
 
 ### removeListener
 
-▸ **removeListener**(`eventName`, `listener`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **removeListener**(`eventName`, `listener`): `this`
 
 Removes the specified `listener` from the listener array for the event named`eventName`.
 
@@ -1080,7 +1080,7 @@ v0.1.26
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -1111,7 +1111,7 @@ created by the vault.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L161)
+[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L161)
 
 ___
 
@@ -1127,13 +1127,13 @@ Store encrypted WalletManager state on storage
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:259](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L259)
+[packages/account/src/wallet-manager/wallet-manager.ts:259](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L259)
 
 ___
 
 ### setMaxListeners
 
-▸ **setMaxListeners**(`n`): [`WalletManager`](/api/Account/WalletManager.md)
+▸ **setMaxListeners**(`n`): `this`
 
 By default `EventEmitter`s will print a warning if more than `10` listeners are
 added for a particular event. This is a useful default that helps finding
@@ -1154,7 +1154,7 @@ v0.3.5
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+`this`
 
 #### Inherited from
 
@@ -1185,7 +1185,7 @@ Vaults with secrets are not unlocked or instantiated on this moment.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L205)
+[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L205)
 
 ___
 
@@ -1208,7 +1208,7 @@ Update WalletManager encryption passphrase
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet-manager/wallet-manager.ts#L227)
+[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet-manager/wallet-manager.ts#L227)
 
 ___
 

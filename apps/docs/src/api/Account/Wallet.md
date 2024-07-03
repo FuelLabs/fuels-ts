@@ -20,11 +20,11 @@
 
 ▪ `Static` **fromEncryptedJson**: (`jsonWallet`: `string`, `password`: `string`, `provider?`: [`Provider`](/api/Account/Provider.md)) => `Promise`&lt;[`WalletUnlocked`](/api/Account/WalletUnlocked.md)\> = `WalletUnlocked.fromEncryptedJson`
 
+Create a Wallet Unlocked from an encrypted JSON.
+
 #### Type declaration
 
 ▸ (`jsonWallet`, `password`, `provider?`): `Promise`&lt;[`WalletUnlocked`](/api/Account/WalletUnlocked.md)\>
-
-Create a Wallet Unlocked from an encrypted JSON.
 
 ##### Parameters
 
@@ -38,11 +38,9 @@ Create a Wallet Unlocked from an encrypted JSON.
 
 `Promise`&lt;[`WalletUnlocked`](/api/Account/WalletUnlocked.md)\>
 
-An unlocked wallet instance.
-
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallet.ts#L79)
+[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallet.ts#L79)
 
 ___
 
@@ -50,11 +48,11 @@ ___
 
 ▪ `Static` **fromExtendedKey**: (`extendedKey`: `string`, `provider?`: [`Provider`](/api/Account/Provider.md)) => [`WalletUnlocked`](/api/Account/WalletUnlocked.md) = `WalletUnlocked.fromExtendedKey`
 
+Create a Wallet Unlocked from an extended key.
+
 #### Type declaration
 
 ▸ (`extendedKey`, `provider?`): [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
-
-Create a Wallet Unlocked from an extended key.
 
 ##### Parameters
 
@@ -67,11 +65,9 @@ Create a Wallet Unlocked from an extended key.
 
 [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
 
-An unlocked wallet instance.
-
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallet.ts#L69)
+[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallet.ts#L69)
 
 ___
 
@@ -79,11 +75,11 @@ ___
 
 ▪ `Static` **fromMnemonic**: (`mnemonic`: `string`, `path?`: `string`, `passphrase?`: [`BytesLike`](/api/Interfaces/index.md#byteslike), `provider?`: [`Provider`](/api/Account/Provider.md)) => [`WalletUnlocked`](/api/Account/WalletUnlocked.md) = `WalletUnlocked.fromMnemonic`
 
+Create a Wallet Unlocked from a mnemonic phrase.
+
 #### Type declaration
 
 ▸ (`mnemonic`, `path?`, `passphrase?`, `provider?`): [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
-
-Create a Wallet Unlocked from a mnemonic phrase.
 
 ##### Parameters
 
@@ -98,11 +94,9 @@ Create a Wallet Unlocked from a mnemonic phrase.
 
 [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
 
-An unlocked wallet instance.
-
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallet.ts#L60)
+[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallet.ts#L60)
 
 ___
 
@@ -110,11 +104,11 @@ ___
 
 ▪ `Static` **fromSeed**: (`seed`: `string`, `path?`: `string`, `provider?`: [`Provider`](/api/Account/Provider.md)) => [`WalletUnlocked`](/api/Account/WalletUnlocked.md) = `WalletUnlocked.fromSeed`
 
+Create a Wallet Unlocked from a seed.
+
 #### Type declaration
 
 ▸ (`seed`, `path?`, `provider?`): [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
-
-Create a Wallet Unlocked from a seed.
 
 ##### Parameters
 
@@ -128,11 +122,9 @@ Create a Wallet Unlocked from a seed.
 
 [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
 
-An unlocked wallet instance.
-
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallet.ts#L49)
+[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallet.ts#L49)
 
 ___
 
@@ -140,11 +132,11 @@ ___
 
 ▪ `Static` **generate**: (`generateOptions?`: [`GenerateOptions`](/api/Account/GenerateOptions.md)) => [`WalletUnlocked`](/api/Account/WalletUnlocked.md) = `WalletUnlocked.generate`
 
+Generate a new Wallet Unlocked with a random key pair.
+
 #### Type declaration
 
 ▸ (`generateOptions?`): [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
-
-Generate a new Wallet Unlocked with a random key pair.
 
 ##### Parameters
 
@@ -156,11 +148,9 @@ Generate a new Wallet Unlocked with a random key pair.
 
 [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
 
-An unlocked wallet instance.
-
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallet.ts#L39)
+[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallet.ts#L39)
 
 ## Methods
 
@@ -185,7 +175,7 @@ A locked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallet.ts#L18)
+[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallet.ts#L18)
 
 ___
 
@@ -210,4 +200,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallet.ts#L29)
+[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallet.ts#L29)

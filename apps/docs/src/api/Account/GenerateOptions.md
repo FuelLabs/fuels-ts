@@ -12,7 +12,7 @@ Additional entropy for the random bytes
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallets.ts#L19)
+[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallets.ts#L19)
 
 ___
 
@@ -22,4 +22,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/account/src/wallet/wallets.ts#L20)
+[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/account/src/wallet/wallets.ts#L20)

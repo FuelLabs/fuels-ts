@@ -29,13 +29,15 @@ Represents a function that can be invoked.
 
 #### Defined in
 
-[types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L64)
+[types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L64)
 
 ## Properties
 
 ### isReadOnly
 
 • **isReadOnly**: () => `boolean`
+
+Checks if the function is read-only i.e. it only reads from storage, does not write to it.
 
 #### Type declaration
 
@@ -47,4 +49,4 @@ Represents a function that can be invoked.
 
 #### Defined in
 
-[types.ts:65](https://github.com/FuelLabs/fuels-ts/blob/719534a2/packages/program/src/types.ts#L65)
+[types.ts:70](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L70)
