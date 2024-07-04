@@ -57,17 +57,19 @@ async function getChangelogInfo(
 
   const bulletPoint = `- ${formattedPrLink} - ${capitalize(titleDescription)}, by ${user}`;
 
-  const breakingChangeDescription = body
-    ?.replace(/[\s\S]+# Breaking Changes([\s\S]+)# Checklist[\s\S]+/, "$1")
-    .trim();
+  const breakingChangesRegex =
+    /[\s\S]+# Breaking Changes([\s\S]+)# Checklist[\s\S]+/m;
 
-  const releaseNotes =
-    body?.replace(/[\s\S]*# Release Notes([\s\S]+)# \w/, "$1").trim() ?? "";
+  const breakingChanges =
+    breakingChangesRegex.exec(body ?? "")?.[1].trim() ?? "";
+
+  const releaseNotesRegex = /[\s\S]*# Release Notes([\s\S]+)# [\s\S]*/m;
+  const releaseNotes = releaseNotesRegex.exec(body ?? "")?.[1].trim() ?? "";
 
   const prLink = formattedPrLink?.replace(/.*\((.*)\)/, "$1"); // [#2637](https://github.com/FuelLabs/fuels-ts/pull/2637) -> https://github.com/FuelLabs/fuels-ts/pull/2637
   const migrationNote = `### [#${prNo} - ${capitalize(titleDescription)}](${prLink})
 
-  ${breakingChangeDescription}`;
+  ${breakingChanges}`;
 
   return {
     prType,
