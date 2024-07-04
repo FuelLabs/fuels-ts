@@ -13,6 +13,7 @@ interface ChangelogInfo {
   views: {
     bulletPoint: string;
     migrationNote: string;
+    releaseNotes: string;
   };
 }
 
@@ -60,6 +61,9 @@ async function getChangelogInfo(
     ?.replace(/[\s\S]+# Breaking Changes([\s\S]+)# Checklist[\s\S]+/, "$1")
     .trim();
 
+  const releaseNotes =
+    body?.replace(/[\s\S]*# Release Notes([\s\S]+)# \w/, "$1").trim() ?? "";
+
   const prLink = formattedPrLink?.replace(/.*\((.*)\)/, "$1"); // [#2637](https://github.com/FuelLabs/fuels-ts/pull/2637) -> https://github.com/FuelLabs/fuels-ts/pull/2637
   const migrationNote = `### [#${prNo} - ${capitalize(titleDescription)}](${prLink})
 
@@ -71,6 +75,7 @@ async function getChangelogInfo(
     views: {
       bulletPoint,
       migrationNote,
+      releaseNotes,
     },
   };
 }
@@ -137,6 +142,13 @@ function groupChangelogsForListing(changelogs: ChangelogInfo[]) {
     );
 }
 
+function listReleaseNotes(changelogs: ChangelogInfo[]) {
+  return changelogs
+    .map((c) => c.views.releaseNotes)
+    .filter((releaseNote) => releaseNote !== "")
+    .join("\n");
+}
+
 function listBreakingMd(changelogs: ChangelogInfo[]) {
   const changelogGroups = groupChangelogsForListing(
     changelogs.filter((x) => x.isBreaking),
@@ -184,16 +196,19 @@ export async function getFullChangelog(octokit: Octokit) {
 
   const changelogs = await getChangelogs(octokit, changesets);
 
+  const releaseNotes = listReleaseNotes(changelogs);
   const breaking = listBreakingMd(changelogs);
   const nonBreaking = listNonBreakingMd(changelogs);
   const migrationNotes = listMigrationNotes(changelogs);
 
   let content = "";
 
+  content += releaseNotes
+    ? `# Summary\n\nIn this release we:\n${releaseNotes}\n\n`
+    : "";
   content += breaking ? `# Breaking\n\n${breaking}` : "";
   content += breaking && nonBreaking && "\n\n---\n\n";
   content += nonBreaking;
-
   content += migrationNotes
     ? `\n\n---\n\n# Migration Notes\n\n${migrationNotes}`
     : "";

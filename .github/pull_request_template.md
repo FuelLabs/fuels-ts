@@ -4,6 +4,19 @@ List the issues this PR closes (if any) in a bullet list format, e.g.:
 - Closes #EFGH
 -->
 
+# Release notes
+
+<!--
+Use this only if this PR requires a mention in the Release Notes Summary.
+Valuable features and critical fixes are good examples.
+For everything else, please delete the whole section.
+
+List the release notes in a bullet-point format:
+- Did this and that
+- Improved here and there
+- etc.
+-->
+
 # Summary
 
 <!--
