@@ -36,8 +36,8 @@ describe(__filename, () => {
     const subID = '0xc7fd1d987ada439fc085cfa3c49416cf2b504ac50151e3c2335d60595cb90745';
 
     const assetId = createAssetId(contract.id.toB256(), subID);
-    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
     // #endregion create-asset-id-1
+    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
 
     expect(assetId).toBeDefined();
     expect(value).toBeTruthy();
