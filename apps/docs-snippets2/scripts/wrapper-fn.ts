@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-global-assign */
 
-export const main = async (url?: string): Promise<any | any[]> => {
+export const main = async (localNetworkUrl?: string): Promise<any | any[]> => {
   const logs: any[] = [];
   console = {
     ...console,
     log: (...args: any[]) => logs.push(args),
   };
-  if (url) {
-    const LOCAL_NETWORK_URL = url;
+  if (localNetworkUrl) {
+    const LOCAL_NETWORK_URL = localNetworkUrl;
   }
   // ———>>>
   // %SNIPPET%
