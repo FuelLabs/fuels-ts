@@ -4,7 +4,6 @@ import { main } from './connecting-to-testnet.wrapped';
 
 /**
  * @group node
- * @group browser
  */
 test('it works', async () => {
   const { provider } = await launchTestNode();
