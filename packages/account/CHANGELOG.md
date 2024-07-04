@@ -1,5 +1,37 @@
 # Change Log
 
+## 0.91.0
+
+### Minor Changes
+
+- 7befc6a: fix!: stop piping into `process.stdout/stderr` and use `console.log`
+
+### Patch Changes
+
+- ab1f8bf: build(deps-dev): bump @graphql-codegen/typescript-\*
+- a9ece17: build: add support for latest node versions
+- 34f1ac7: chore: add browser testing infrastructure
+- eec0806: chore: add `UNKNOWN` error code
+- 3be2251: build(deps-dev): bump prettier from 3.0.3 to 3.3.2
+- 6d63732: fix: sync chain config schema
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [3be2251]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/transactions@0.91.0
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/address@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/merkle@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
 ## 0.90.0
 
 ### Minor Changes
