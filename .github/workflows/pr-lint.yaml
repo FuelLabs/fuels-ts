@@ -60,8 +60,8 @@ jobs:
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
-          if [[ "${PR_BODY}" != *"# Breaking changes"*"# Checklist"* ]]; then
+          if [[ "${PR_BODY}" != *"# Breaking Changes"*"# Checklist"* ]]; then
               echo "This is a breaking change PR."
-              echo "Please add a '# Breaking changes' section in the PR's body before the '# Checklist' section."
+              echo "Please add a '# Breaking Changes' section in the PR's body before the '# Checklist' section."
               exit 1
           fi
