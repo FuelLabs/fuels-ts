@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
 
-const importsReg = /import[\s\S]+from.+['"];/gm;
+const importsReg = /^[\s\S]+from.+['"];/gm;
 
 const wrapperFnFilepath = join(__dirname, 'wrapper-fn.ts');
 const wrapperFnContents = readFileSync(wrapperFnFilepath, 'utf-8');
