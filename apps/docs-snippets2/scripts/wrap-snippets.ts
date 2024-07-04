@@ -1,17 +1,11 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
+import { join } from 'path';
 
 const importsReg = /import[\s\S]+from.+['"];/gm;
 
-const wrapper = `export const main = async (): Promise<any | any[]> => {
-  const logs: any[] = [];
-  const console = { log (...args: any[]) { logs.push(args) }};
-  // ———>>>
-  %SNIPPET%
-  // <<<———
-  const singleCall = logs.length === 1 && logs[0].length === 1;
-  return singleCall ? logs[0][0] : logs;
-}`.replace(/^\s{4}/gm, '  ');
+const wrapperFnFilepath = join(__dirname, 'wrapper-fn.ts');
+const wrapperFnContents = readFileSync(wrapperFnFilepath, 'utf-8');
 
 export const wrapSnippet = (filepath: string) => {
   const raw = readFileSync(filepath, 'utf8');
@@ -22,7 +16,7 @@ export const wrapSnippet = (filepath: string) => {
 
   // format
   const indented = snippet.replace(/^/gm, '  ').trim();
-  const formatted = wrapper.replace('%SNIPPET%', indented);
+  const formatted = wrapperFnContents.replace('// %SNIPPET%', indented);
 
   // write
   const wrappedPath = filepath.replace('.ts', '.wrapped.ts');
