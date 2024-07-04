@@ -12,7 +12,7 @@ Valuable features and critical fixes are good examples.
 For everything else, please delete the whole section.
 -->
 
-In this release we:
+In this release, we:
 
 - Did this and that <!-- edit this text only -->
 
