@@ -63,7 +63,7 @@ async function getChangelogInfo(
   const breakingChanges =
     breakingChangesRegex.exec(body ?? "")?.[1].trim() ?? "";
 
-  const releaseNotesRegex = /[\s\S]*In this release we:([\s\S]+?)# [\s\S]*/m;
+  const releaseNotesRegex = /[\s\S]*In this release, we:([\s\S]+?)# [\s\S]*/m;
   const releaseNotes = releaseNotesRegex.exec(body ?? "")?.[1].trim() ?? "";
 
   const prLink = formattedPrLink?.replace(/.*\((.*)\)/, "$1"); // [#2637](https://github.com/FuelLabs/fuels-ts/pull/2637) -> https://github.com/FuelLabs/fuels-ts/pull/2637
