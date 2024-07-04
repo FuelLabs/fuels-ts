@@ -4,7 +4,7 @@ import { launchTestNode } from 'fuels/test-utils';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { vi } from 'vitest';
 
-export const mockLocalNetworkWithTestNode = async () => {
+export const mockProviderForLocalNetwork = async () => {
   const { provider } = await launchTestNode();
   vi.doMock('fuels', async () => {
     const module = await vi.importActual('fuels');

@@ -10,5 +10,5 @@ const provider = await Provider.create(TESTNET_NETWORK_URL);
 const wallet = Wallet.fromAddress(ADDRESS, provider);
 const balances = await wallet.getBalances();
 
-console.log({ balances });
+console.log({ balances, providerUrl: provider.url });
 // #endregion main
