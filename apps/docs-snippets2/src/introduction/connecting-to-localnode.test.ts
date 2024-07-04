@@ -1,3 +1,5 @@
+import { launchTestNode } from 'fuels/test-utils';
+
 import { main } from './connecting-to-testnet.wrapped';
 
 /**
@@ -5,7 +7,8 @@ import { main } from './connecting-to-testnet.wrapped';
  * @group browser
  */
 test('it works', async () => {
-  const { balances } = await main();
+  const { provider } = await launchTestNode();
+  const { balances } = await main(provider.url);
   expect(balances).toBeTruthy();
   expect(balances).toBeInstanceOf(Array);
 });
