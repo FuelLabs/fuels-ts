@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-global-assign */
 
 export const main = async (localNetworkUrl?: string): Promise<any | any[]> => {
   const logs: any[] = [];
+  // eslint-disable-next-line no-global-assign
   console = {
     ...console,
     log: (...args: any[]) => logs.push(args),
   };
   if (localNetworkUrl) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const LOCAL_NETWORK_URL = localNetworkUrl;
   }
   // ———>>>
