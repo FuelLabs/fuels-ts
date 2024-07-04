@@ -9,7 +9,9 @@ export const mockLocalNetworkWithTestNode = async () => {
     return {
       __esModule: true,
       ...mod,
-      LOCAL_NETWORK_URL: provider.url,
+      Provider: {
+        create: () => provider,
+      },
     };
   });
   return { provider };
