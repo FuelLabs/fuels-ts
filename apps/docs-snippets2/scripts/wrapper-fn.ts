@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+// eslint-disable-next-line @typescript-eslint/require-await
 export const main = async (localNetworkUrl?: string): Promise<any | any[]> => {
   const logs: any[] = [];
   // eslint-disable-next-line no-global-assign
