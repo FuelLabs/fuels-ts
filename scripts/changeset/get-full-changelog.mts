@@ -206,7 +206,7 @@ export async function getFullChangelog(octokit: Octokit) {
   let content = "";
 
   content += releaseNotes
-    ? `# Summary\n\nIn this release we:\n${releaseNotes}\n\n`
+    ? `# Summary\n\nIn this release, we:\n${releaseNotes}\n\n`
     : "";
   content += breaking ? `# Breaking\n\n${breaking}` : "";
   content += breaking && nonBreaking && "\n\n---\n\n";
