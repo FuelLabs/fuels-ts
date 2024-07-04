@@ -1,13 +1,12 @@
-import { launchTestNode } from 'fuels/test-utils';
-
-import { main } from './connecting-to-testnet.wrapped';
+import { mockLocalNetwork } from '../../test/importMocked';
 
 /**
  * @group node
  */
 test('it works', async () => {
-  const { provider } = await launchTestNode();
-  const { balances } = await main(provider.url);
+  await mockLocalNetwork();
+  const { main } = await import('./connecting-to-localnode.wrapped');
+  const { balances } = await main();
   expect(balances).toBeTruthy();
   expect(balances).toBeInstanceOf(Array);
 });
