@@ -45,22 +45,6 @@ Here's an example demonstrating how to use `transferToContract`:
 Always remember to call the `waitForResult()` function on the transaction response. That ensures the transaction has been mined successfully before proceeding.
 
 
-## Transferring Assets Between Wallets
-
-Transferring assets between wallets is straightforward within the SDK.
-
-<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-1{ts:line-numbers}
-
-After waiting for the transaction to be processed, the assets are successfully moved to the recipient's wallet.
-
-It is also possible to specify the recipient's address as a string:
-
-<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-2{ts:line-numbers}
-
-When transferring the base chain coin like ETH, you can omit the `assetId`:
-
-<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-3{ts:line-numbers}
-
 ## Transferring Assets To Multiple Wallets
 
 To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
