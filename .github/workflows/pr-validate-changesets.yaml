@@ -25,21 +25,29 @@ jobs:
           # see https://github.com/changesets/action/issues/70
           persist-credentials: false
 
+      - name: Get PR's changeset file
+        run: |
+          echo "CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/${{ github.base_ref }} .changeset/*.md)" >> $GITHUB_ENV
+
       - name: Setup PNPM
+        if: env.CHANGESET_FILE == ''
         uses: pnpm/action-setup@v4
         with:
           version: 9.4.0
           run_install: true
 
       - name: Install jq
+        if: env.CHANGESET_FILE == ''
         run: sudo apt-get install -y jq
 
       - name: Run dependabot changeset script
+        if: env.CHANGESET_FILE == ''
         run: pnpm changeset:dependabot
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
 
       - name: Set up .netrc file
+        if: env.CHANGESET_FILE == ''
         run: |
           echo "machine github.com" > $HOME/.netrc
           echo "login github-actions[bot]" >> $HOME/.netrc
@@ -47,6 +55,7 @@ jobs:
           chmod 600 $HOME/.netrc
 
       - name: Commit Changeset
+        if: env.CHANGESET_FILE == ''
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
