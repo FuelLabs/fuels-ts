@@ -404,6 +404,32 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
+   * Calls the function and waits for the transaction to be executed.
+   *
+   * @returns A promise that resolves to the function result.
+   * @template T - The type of the function result.
+   */
+  async callAndWait<T = TReturn>(): Promise<FunctionResult<T>> {
+    assert(this.program.account, 'Wallet is required!');
+
+    const transactionRequest = await this.fundWithRequiredCoins();
+
+    const response = await this.program.account.sendTransaction(transactionRequest, {
+      awaitExecution: true,
+      estimateTxDependencies: false,
+    });
+
+    const functionResult = await buildFunctionResult<T>({
+      funcScope: this.functionInvocationScopes,
+      isMultiCall: this.isMultiCall,
+      program: this.program,
+      transactionResponse: response,
+    });
+
+    return functionResult;
+  }
+
+  /**
    * Simulates a transaction.
    *
    * @returns The result of the invocation call.
