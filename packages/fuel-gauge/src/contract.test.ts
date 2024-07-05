@@ -223,6 +223,30 @@ describe('Contract', () => {
     expect(contract.provider).toEqual(provider);
   });
 
+  it('should executes a contract call just nice [call]', async () => {
+    const contract = await setupContract();
+
+    const numberToSend = 1336;
+
+    const { waitForResult } = await contract.functions.foo(numberToSend).call();
+
+    const { value, transactionResult } = await waitForResult();
+
+    expect(value.toNumber()).toEqual(numberToSend + 1);
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
+  });
+
+  it('should executes a contract call just nice [callAndWait]', async () => {
+    const contract = await setupContract();
+
+    const numberToSend = 1336;
+
+    const { value, transactionResult } = await contract.functions.foo(numberToSend).callAndWait();
+
+    expect(value.toNumber()).toEqual(numberToSend + 1);
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
+  });
+
   it('should fail to execute call if gasLimit is too low', async () => {
     const contract = await setupContract();
 
