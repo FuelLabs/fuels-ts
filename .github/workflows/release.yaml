@@ -198,7 +198,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       # Upload assets to S3
-      - uses: unfor19/install-aws-cli-action@v1.0.3
+      - uses: unfor19/install-aws-cli-action@v1.0.7
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           version: 2
