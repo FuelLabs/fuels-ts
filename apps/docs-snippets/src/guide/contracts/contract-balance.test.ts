@@ -37,7 +37,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, baseAssetId],
       })
-      .call();
+      .callAndWait();
 
     const contractBalance = await contract.getBalance(baseAssetId);
 

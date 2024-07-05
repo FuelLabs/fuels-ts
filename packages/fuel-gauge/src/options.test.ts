@@ -22,7 +22,7 @@ beforeAll(async () => {
  */
 describe('Options Tests', () => {
   it('calls', async () => {
-    const { value } = await contractInstance.functions.print_enum_option_array().call();
+    const { value } = await contractInstance.functions.print_enum_option_array().callAndWait();
 
     expect(value).toStrictEqual({
       inner: [
@@ -44,11 +44,15 @@ describe('Options Tests', () => {
     const someInput = U8_MAX;
     const noneInput = undefined;
 
-    const { value: someValue } = await contractInstance.functions.echo_option(someInput).call();
+    const { value: someValue } = await contractInstance.functions
+      .echo_option(someInput)
+      .callAndWait();
 
     expect(someValue).toBe(someInput);
 
-    const { value: noneValue } = await contractInstance.functions.echo_option(noneInput).call();
+    const { value: noneValue } = await contractInstance.functions
+      .echo_option(noneInput)
+      .callAndWait();
 
     expect(noneValue).toBe(noneInput);
   });
@@ -63,7 +67,7 @@ describe('Options Tests', () => {
 
     const { value: someValue } = await contractInstance.functions
       .echo_struct_enum_option(someInput)
-      .call();
+      .callAndWait();
 
     expect(someValue).toStrictEqual(someInput);
 
@@ -76,7 +80,7 @@ describe('Options Tests', () => {
 
     const { value: noneValue } = await contractInstance.functions
       .echo_struct_enum_option(noneInput)
-      .call();
+      .callAndWait();
 
     expect(noneValue).toStrictEqual(noneInput);
   });
@@ -84,13 +88,17 @@ describe('Options Tests', () => {
   it('echos vec option', async () => {
     const someInput = [U8_MAX, U16_MAX, U32_MAX];
 
-    const { value: someValue } = await contractInstance.functions.echo_vec_option(someInput).call();
+    const { value: someValue } = await contractInstance.functions
+      .echo_vec_option(someInput)
+      .callAndWait();
 
     expect(someValue).toStrictEqual(someInput);
 
     const noneInput = [undefined, undefined, undefined];
 
-    const { value: noneValue } = await contractInstance.functions.echo_vec_option(noneInput).call();
+    const { value: noneValue } = await contractInstance.functions
+      .echo_vec_option(noneInput)
+      .callAndWait();
 
     expect(noneValue).toStrictEqual(noneInput);
 
@@ -98,7 +106,7 @@ describe('Options Tests', () => {
 
     const { value: mixedValue } = await contractInstance.functions
       .echo_vec_option(mixedInput)
-      .call();
+      .callAndWait();
 
     expect(mixedValue).toStrictEqual(mixedInput);
   });
@@ -108,7 +116,7 @@ describe('Options Tests', () => {
 
     const { value: someValue } = await contractInstance.functions
       .echo_tuple_option(someInput)
-      .call();
+      .callAndWait();
 
     expect(someValue).toStrictEqual(someInput);
 
@@ -116,7 +124,7 @@ describe('Options Tests', () => {
 
     const { value: noneValue } = await contractInstance.functions
       .echo_tuple_option(noneInput)
-      .call();
+      .callAndWait();
 
     expect(noneValue).toStrictEqual(noneInput);
 
@@ -124,7 +132,7 @@ describe('Options Tests', () => {
 
     const { value: mixedValue } = await contractInstance.functions
       .echo_tuple_option(mixedInput)
-      .call();
+      .callAndWait();
 
     expect(mixedValue).toStrictEqual(mixedInput);
   });
@@ -134,7 +142,7 @@ describe('Options Tests', () => {
 
     const { value: someValue } = await contractInstance.functions
       .echo_enum_option(someInput)
-      .call();
+      .callAndWait();
 
     expect(someValue).toStrictEqual(someInput);
 
@@ -142,7 +150,7 @@ describe('Options Tests', () => {
 
     const { value: noneValue } = await contractInstance.functions
       .echo_enum_option(noneInput)
-      .call();
+      .callAndWait();
 
     expect(noneValue).toStrictEqual(noneInput);
   });
@@ -152,7 +160,7 @@ describe('Options Tests', () => {
 
     const { value: someValue } = await contractInstance.functions
       .echo_array_option(someInput)
-      .call();
+      .callAndWait();
 
     expect(someValue).toStrictEqual(someInput);
 
@@ -160,7 +168,7 @@ describe('Options Tests', () => {
 
     const { value: noneValue } = await contractInstance.functions
       .echo_array_option(noneInput)
-      .call();
+      .callAndWait();
 
     expect(noneValue).toStrictEqual(noneInput);
 
@@ -168,7 +176,7 @@ describe('Options Tests', () => {
 
     const { value: mixedValue } = await contractInstance.functions
       .echo_array_option(mixedInput)
-      .call();
+      .callAndWait();
 
     expect(mixedValue).toStrictEqual(mixedInput);
   });
@@ -180,7 +188,9 @@ describe('Options Tests', () => {
       },
     };
 
-    const { value } = await contractInstance.functions.echo_deeply_nested_option(input).call();
+    const { value } = await contractInstance.functions
+      .echo_deeply_nested_option(input)
+      .callAndWait();
 
     expect(value).toStrictEqual(input);
   });
@@ -188,19 +198,21 @@ describe('Options Tests', () => {
   it('prints struct option', async () => {
     const { value } = await contractInstance.functions
       .get_some_struct({ Address: { bits: wallet.address.toB256() } })
-      .call();
+      .callAndWait();
 
     expect(value).toStrictEqual(undefined);
   });
 
   it('echoes option enum diff sizes', async () => {
-    const { value } = await contractInstance.functions.echo_enum_diff_sizes(undefined).call();
+    const { value } = await contractInstance.functions
+      .echo_enum_diff_sizes(undefined)
+      .callAndWait();
 
     expect(value).toStrictEqual(undefined);
 
     const { value: value2 } = await contractInstance.functions
       .echo_enum_diff_sizes({ a: U8_MAX })
-      .call();
+      .callAndWait();
 
     expect(value2).toStrictEqual({ a: U8_MAX });
 
@@ -208,7 +220,7 @@ describe('Options Tests', () => {
       .echo_enum_diff_sizes({
         b: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',
       })
-      .call();
+      .callAndWait();
 
     expect(value3).toStrictEqual({
       b: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',

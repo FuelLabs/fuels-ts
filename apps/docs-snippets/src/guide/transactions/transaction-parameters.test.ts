@@ -97,7 +97,7 @@ describe(__filename, () => {
       .txParams({
         variableOutputs: 1,
       })
-      .call();
+      .callAndWait();
     // #endregion transaction-parameters-8
 
     expect(transactionResult.isStatusSuccess).toBeTruthy();

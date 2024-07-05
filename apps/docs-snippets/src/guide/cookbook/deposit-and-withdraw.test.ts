@@ -45,7 +45,7 @@ describe(__filename, () => {
       .deposit({ bits: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, baseAssetId] })
       .txParams({ variableOutputs: 1 })
-      .call();
+      .callAndWait();
 
     const liquidityAmount = await liquidityOwner.getBalance(assetId);
 
@@ -57,7 +57,7 @@ describe(__filename, () => {
       .withdraw({ bits: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, baseAssetId] })
       .txParams({ variableOutputs: 1 })
-      .call();
+      .callAndWait();
 
     const baseAssetAfterWithdraw = await liquidityOwner.getBalance(baseAssetId);
 

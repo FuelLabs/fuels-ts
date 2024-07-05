@@ -36,7 +36,7 @@ test('allow sending coins to payable functions', async () => {
           assetId: baseAssetId,
         },
       })
-      .call()
+      .callAndWait()
   ).resolves.toBeTruthy();
 });
 
@@ -51,7 +51,7 @@ test("don't allow sending coins to non-payable functions", async () => {
           assetId: baseAssetId,
         },
       })
-      .call()
+      .callAndWait()
   ).rejects.toThrowError(
     `The target function non_payable cannot accept forwarded funds as it's not marked as 'payable'.`
   );

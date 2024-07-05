@@ -75,7 +75,7 @@ describe('GenericTypesContract', () => {
           },
         }
       )
-      .call();
+      .callAndWait();
 
     const arg1 = {
       bim: toHex(1),
@@ -106,7 +106,7 @@ describe('GenericTypesContract', () => {
 
     const { value: call2 } = await contract.functions
       .generic_complex_type_function(arg1, arg2)
-      .call();
+      .callAndWait();
 
     expect(value).toEqual(bimArg1);
     expect(JSON.stringify([arg1, arg2])).toEqual(JSON.stringify(call2));

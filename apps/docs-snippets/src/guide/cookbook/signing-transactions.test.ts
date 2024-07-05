@@ -58,7 +58,7 @@ describe('Signing transactions', () => {
         assetId: baseAssetId,
       })
       .addSigners(signer)
-      .call<BN>();
+      .callAndWait<BN>();
     // #endregion multiple-signers-2
 
     expect(value).toBe(true);

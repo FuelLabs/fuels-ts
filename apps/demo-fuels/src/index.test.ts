@@ -6,7 +6,7 @@
  */
 
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet , safeExec } from 'fuels/test-utils';
+import { generateTestWallet, safeExec } from 'fuels/test-utils';
 
 import { SampleAbi__factory } from './sway-programs-api';
 import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
@@ -31,14 +31,14 @@ describe('ExampleContract', () => {
     const contract = await factory.deployContract();
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const { value } = await contract.functions.return_input(1337).callAndWait();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
 
     // You can also make a call using the factory
     const contractInstance = SampleAbi__factory.connect(contract.id, wallet);
-    const { value: v2 } = await contractInstance.functions.return_input(1337).call();
+    const { value: v2 } = await contractInstance.functions.return_input(1337).callAndWait();
     expect(v2.toHex()).toBe(toHex(1337));
   });
 
@@ -50,7 +50,7 @@ describe('ExampleContract', () => {
     const contract = await SampleAbi__factory.deployContract(bytecode, wallet);
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const { value } = await contract.functions.return_input(1337).callAndWait();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));

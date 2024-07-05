@@ -62,7 +62,7 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions.mint_coins(subId, 1_000).call();
+    } = await contract.functions.mint_coins(subId, 1_000).callAndWait();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -75,7 +75,7 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions.mint_coins(subId, 1_000).call();
+    } = await contract.functions.mint_coins(subId, 1_000).callAndWait();
 
     balanceAfter = await wallet.getBalance();
 
@@ -186,7 +186,7 @@ describe('Fee', () => {
     } = await contract.functions
       .sum_multparams(1, 2, 3, 4, 5)
 
-      .call();
+      .callAndWait();
 
     const balanceAfter = await wallet.getBalance();
     const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
@@ -217,7 +217,7 @@ describe('Fee', () => {
 
     const {
       transactionResult: { fee },
-    } = await scope.call();
+    } = await scope.callAndWait();
 
     const balanceAfter = await wallet.getBalance();
     const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
@@ -252,7 +252,7 @@ describe('Fee', () => {
     } = await contract
       .multiCall(calls)
       .txParams({ variableOutputs: calls.length * 3 })
-      .call();
+      .callAndWait();
 
     const balanceAfter = await wallet.getBalance();
 

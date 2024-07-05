@@ -38,7 +38,7 @@ describe(__filename, () => {
     // #region numbers-docs-3
     const originalNumber = 20;
 
-    const { value } = await contract.functions.echo_u64(bn(originalNumber)).call();
+    const { value } = await contract.functions.echo_u64(bn(originalNumber)).callAndWait();
 
     expect(value.toNumber()).toEqual(originalNumber);
     // #endregion numbers-docs-3
@@ -50,7 +50,7 @@ describe(__filename, () => {
     // #region numbers-docs-4
     const originalNumber = 20;
 
-    const { value } = await contract.functions.echo_u8(originalNumber).call();
+    const { value } = await contract.functions.echo_u8(originalNumber).callAndWait();
 
     expect(value).toEqual(originalNumber);
     // #endregion numbers-docs-4

@@ -133,11 +133,8 @@ describe('launchTestNode', () => {
       contracts: [contract],
     } = launched;
 
-    const { waitForResult } = await contract.functions
-      .test_function()
-      .call({ awaitExecution: true });
-    const { value } = await waitForResult();
-    expect(value).toBe(true);
+    const response = await contract.functions.test_function().callAndWait();
+    expect(response.value).toBe(true);
   });
 
   test('multiple contracts can be deployed', async () => {
@@ -168,16 +165,10 @@ describe('launchTestNode', () => {
       contracts: [contract, contract2],
     } = launched;
 
-    const { waitForResult: response1 } = await contract.functions
-      .test_function()
-      .call({ awaitExecution: true });
-    const { value: value1 } = await response1();
-    const { waitForResult: response2 } = await contract2.functions
-      .test_function()
-      .call({ awaitExecution: true });
-    const { value: value2 } = await response2();
-    expect(value1).toBe(true);
-    expect(value2).toBe(true);
+    const response1 = await contract.functions.test_function().callAndWait();
+    const response2 = await contract2.functions.test_function().callAndWait();
+    expect(response1.value).toBe(true);
+    expect(response2.value).toBe(true);
   });
 
   test('multiple contracts can be deployed with different wallets', async () => {
@@ -213,18 +204,10 @@ describe('launchTestNode', () => {
       wallets: [wallet1, wallet2],
     } = launched;
 
-    const { waitForResult: contract1Response } = await contract1.functions
-      .test_function()
-      .call({ awaitExecution: true });
-    const { value: value1 } = await contract1Response();
-    expect(value1).toBe(true);
+    const contract1Response = (await contract1.functions.test_function().callAndWait()).value;
+    const contract2Response = (await contract2.functions.test_function().callAndWait()).value;
 
-    const { waitForResult: contract2Response } = await contract2.functions
-      .test_function()
-      .call({ awaitExecution: true });
-
-    const { value: value2 } = await contract2Response();
-    expect(value2).toBe(true);
+    expect(contract1Response).toBe(true);
     expect(contract2Response).toBe(true);
 
     expect(contract1.account).toEqual(wallet1);

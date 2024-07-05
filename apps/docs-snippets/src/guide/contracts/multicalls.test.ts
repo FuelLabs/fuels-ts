@@ -58,7 +58,7 @@ describe(__filename, () => {
         counterContract.functions.increment_count(2),
         counterContract.functions.increment_count(4),
       ])
-      .call();
+      .callAndWait();
 
     const initialValue = new BN(results[0]).toNumber();
     const incrementedValue1 = new BN(results[1]).toNumber();
@@ -78,7 +78,7 @@ describe(__filename, () => {
       counterContract.functions.increment_count(5),
     ]);
 
-    const { value: results } = await chain.call();
+    const { value: results } = await chain.callAndWait();
 
     const echoedValue = results[0];
     const initialCounterValue = new BN(results[1]).toNumber();
@@ -99,7 +99,7 @@ describe(__filename, () => {
           forward: [100, baseAssetId],
         }),
       ])
-      .call();
+      .callAndWait();
 
     const echoedValue = results[0];
     const fowardedValue = new BN(results[1]).toNumber();

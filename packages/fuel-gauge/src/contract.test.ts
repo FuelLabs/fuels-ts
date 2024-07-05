@@ -233,7 +233,7 @@ describe('Contract', () => {
         .txParams({
           gasLimit: 1,
         })
-        .call();
+        .callAndWait();
     } catch (e) {
       failed = true;
     }
@@ -249,7 +249,7 @@ describe('Contract', () => {
 
     const scope = contract.functions.call_external_foo(1336, otherContract.id.toB256());
 
-    const { value: results } = await scope.call();
+    const { value: results } = await scope.callAndWait();
 
     expect(results.toHex()).toEqual(toHex(1338));
   });
@@ -278,7 +278,7 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
-    const { value: results } = await scope.call();
+    const { value: results } = await scope.callAndWait();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1338)]));
   });
 
@@ -286,7 +286,7 @@ describe('Contract', () => {
     const contract = await setupContract();
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .call();
+      .callAndWait();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
@@ -303,7 +303,7 @@ describe('Contract', () => {
         contract.functions.foo(1336),
         contract.functions.foo(1336),
       ])
-      .call();
+      .callAndWait();
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([bn(1337), bn(1337), bn(1337), bn(1337), bn(1337), bn(1337)])
     );
@@ -323,7 +323,7 @@ describe('Contract', () => {
         contract.functions.foo(1336),
         contract.functions.foo(1336),
       ])
-      .call();
+      .callAndWait();
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([
         bn(1337),
@@ -348,7 +348,7 @@ describe('Contract', () => {
         .txParams({
           gasLimit: 1,
         })
-        .call();
+        .callAndWait();
     } catch (e) {
       failed = true;
     }
@@ -374,7 +374,7 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
-    const { value: results } = await scope.call();
+    const { value: results } = await scope.callAndWait();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337)]));
   });
 
@@ -403,7 +403,7 @@ describe('Contract', () => {
 
     const { transactionId, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
-      .call();
+      .callAndWait();
     expect(transactionId).toBeTruthy();
     expect(toNumber(gasUsed)).toBeGreaterThan(0);
   });
@@ -419,7 +419,7 @@ describe('Contract', () => {
       .txParams({
         gasLimit: 3000000,
       })
-      .call<BN>();
+      .callAndWait<BN>();
     expect(value.toHex()).toEqual(toHex(200));
   });
 
@@ -441,7 +441,7 @@ describe('Contract', () => {
       .txParams({
         gasLimit: 5000000,
       })
-      .call<[BN, BN, BN]>();
+      .callAndWait<[BN, BN, BN]>();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
   });
 
@@ -486,7 +486,7 @@ describe('Contract', () => {
       .txParams({
         gasLimit: 4_000_000,
       })
-      .call<[BN, BN]>();
+      .callAndWait<[BN, BN]>();
 
     const minThreshold = 0.019;
 
@@ -517,7 +517,7 @@ describe('Contract', () => {
       .txParams({
         gasLimit: transactionCost.gasUsed,
       })
-      .call<[string, string]>();
+      .callAndWait<[string, string]>();
 
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
@@ -536,7 +536,7 @@ describe('Contract', () => {
         .txParams({
           gasLimit,
         })
-        .call<BN>()
+        .callAndWait<BN>()
     ).rejects.toThrowError(new RegExp(`Gas limit '${gasLimit}' is lower than the required: `));
   });
 
@@ -545,29 +545,31 @@ describe('Contract', () => {
 
     const { value: arrayBoolean } = await contract.functions
       .take_array_boolean([true, false, false])
-      .call();
+      .callAndWait();
 
     expect(arrayBoolean).toEqual(true);
 
-    const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
+    const { value: arrayNumber } = await contract.functions
+      .take_array_number([1, 2, 3])
+      .callAndWait();
 
     expect(arrayNumber.toHex()).toEqual(toHex(1));
 
     const { value: arrayReturnShuffle } = await contract.functions
       .take_array_string_shuffle(['abc', 'efg', 'hij'])
-      .call();
+      .callAndWait();
 
     expect(arrayReturnShuffle).toEqual(['hij', 'abc', 'efg']);
 
     const { value: arrayReturnSingle } = await contract.functions
       .take_array_string_return_single(['abc', 'efg', 'hij'])
-      .call();
+      .callAndWait();
 
     expect(arrayReturnSingle).toEqual(['abc']);
 
     const { value: arrayReturnSingleElement } = await contract.functions
       .take_array_string_return_single_element(['abc', 'efg', 'hij'])
-      .call();
+      .callAndWait();
 
     expect(arrayReturnSingleElement).toEqual('abc');
   });
@@ -579,7 +581,7 @@ describe('Contract', () => {
       .take_b256_enum({
         Value: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
       })
-      .call();
+      .callAndWait();
 
     expect(enumB256ReturnValue).toEqual(
       '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
@@ -589,7 +591,7 @@ describe('Contract', () => {
       .take_b256_enum({
         Data: '0x1111111111111111111111111111111111111111111111111111111111111111',
       })
-      .call();
+      .callAndWait();
 
     expect(enumB256ReturnData).toEqual(
       '0x1111111111111111111111111111111111111111111111111111111111111111'
@@ -599,7 +601,7 @@ describe('Contract', () => {
       .take_bool_enum({
         Value: true,
       })
-      .call();
+      .callAndWait();
 
     expect(enumBoolReturnValue).toEqual(true);
 
@@ -607,7 +609,7 @@ describe('Contract', () => {
       .take_bool_enum({
         Data: false,
       })
-      .call();
+      .callAndWait();
 
     expect(enumBoolReturnData).toEqual(false);
 
@@ -615,7 +617,7 @@ describe('Contract', () => {
       .take_string_enum({
         Value: 'abc',
       })
-      .call();
+      .callAndWait();
 
     expect(enumStrReturnValue).toEqual('abc');
 
@@ -623,7 +625,7 @@ describe('Contract', () => {
       .take_string_enum({
         Data: 'efg',
       })
-      .call();
+      .callAndWait();
 
     expect(enumStrReturnData).toEqual('efg');
   });
@@ -811,7 +813,7 @@ describe('Contract', () => {
         contract.functions.return_vector(vector), // returns heap type Vec
         contract.functions.return_bytes(),
       ])
-      .call();
+      .callAndWait();
 
     expect(JSON.stringify(value)).toBe(JSON.stringify([bn(0), vector, new Uint8Array()]));
   });
@@ -975,7 +977,7 @@ describe('Contract', () => {
         amount: amountToTransfer,
         assetId: baseAssetId,
       })
-      .call();
+      .callAndWait();
 
     const finalBalance = await receiver.getBalance();
 
@@ -1011,7 +1013,7 @@ describe('Contract', () => {
       { destination: receiver3.address, amount: amountToTransfer3, assetId: ASSET_B },
     ];
 
-    await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
+    await contract.functions.sum(40, 50).addBatchTransfer(transferParams).callAndWait();
 
     const finalBalance1 = await receiver1.getBalance(baseAssetId);
     const finalBalance2 = await receiver2.getBalance(ASSET_A);
@@ -1176,7 +1178,7 @@ describe('Contract', () => {
     expect(value.toNumber()).toBe(0);
 
     // Actually changing the contract state
-    await storageContract.functions.initialize_counter(initialCounterValue).call();
+    await storageContract.functions.initialize_counter(initialCounterValue).callAndWait();
 
     // Validating that the contract state was modified
     ({ value } = await storageContract.functions.counter().get());
@@ -1205,7 +1207,7 @@ describe('Contract', () => {
         gasLimit,
         maxFee,
       })
-      .call();
+      .callAndWait();
 
     const maxFeePolicy = transaction.policies?.find((policy) => policy.type === PolicyType.MaxFee);
     const scriptGasLimit = transaction.scriptGasLimit;
@@ -1236,7 +1238,7 @@ describe('Contract', () => {
         contract.functions.foo(1336),
       ])
       .txParams({ gasLimit, maxFee })
-      .call();
+      .callAndWait();
 
     const { scriptGasLimit, policies } = transaction;
 

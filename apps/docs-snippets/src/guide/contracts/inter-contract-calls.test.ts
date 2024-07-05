@@ -39,18 +39,18 @@ describe(__filename, () => {
     const amountToDeposit = 70;
     const { value: initialBalance } = await simpleToken.functions
       .get_balance(wallet.address.toB256())
-      .call();
+      .callAndWait();
 
     expect(new BN(initialBalance).toNumber()).toBe(0);
 
     await tokenDepositor.functions
       .deposit_to_simple_token(simpleToken.id.toB256(), amountToDeposit)
       .addContracts([simpleToken])
-      .call();
+      .callAndWait();
 
     const { value: finalBalance } = await simpleToken.functions
       .get_balance(wallet.address.toB256())
-      .call();
+      .callAndWait();
 
     expect(new BN(finalBalance).toNumber()).toBe(amountToDeposit);
     // #endregion inter-contract-calls-3

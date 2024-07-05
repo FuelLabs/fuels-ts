@@ -20,7 +20,7 @@ describe('bytecode computations', () => {
 
     const { logs } = await contract.functions
       .compute_bytecode_root(arrayify(bytecodeFromFile))
-      .call();
+      .callAndWait();
 
     const bytecodeRoot: string = logs[0];
 
@@ -43,7 +43,7 @@ describe('bytecode computations', () => {
         },
         Array.from(arrayify(bytecodeFromFile))
       )
-      .call();
+      .callAndWait();
 
     expect(value).toBeTruthy();
   });
@@ -64,7 +64,7 @@ describe('bytecode computations', () => {
 
     const { value } = await contract.functions
       .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))
-      .call();
+      .callAndWait();
 
     expect(value.bits).toEqual(address.toB256());
   });

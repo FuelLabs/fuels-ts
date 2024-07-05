@@ -74,7 +74,7 @@ describe(__filename, () => {
 
       const { value: bytecodeRoot } = await bytecodeContract.functions
         .compute_bytecode_root(bytecodeAsVecU8)
-        .call();
+        .callAndWait();
       // #endregion vector-bytecode-input-ts
 
       expect(bytecodeRoot).toBeDefined();

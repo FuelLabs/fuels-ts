@@ -30,7 +30,7 @@ describe('Transaction Response', () => {
     // #import { TransactionResponse };
 
     // Call a contract function
-    const call = await contract.functions.increment_count(15).call();
+    const call = await contract.functions.increment_count(15).callAndWait();
 
     // Pick off the transaction response
     const transactionResponse: TransactionResponse = call.transactionResponse;

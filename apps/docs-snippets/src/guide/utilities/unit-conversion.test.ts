@@ -42,7 +42,7 @@ describe('unit-conversion', () => {
       // #region contract-calls-1
       const MAX_U64 = bn('18446744073709551615');
 
-      const { value } = await contract.functions.echo_u64(MAX_U64).call();
+      const { value } = await contract.functions.echo_u64(MAX_U64).callAndWait();
 
       value.toString();
       // "18446744073709551615"

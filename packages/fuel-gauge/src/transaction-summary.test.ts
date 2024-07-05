@@ -260,7 +260,7 @@ describe('TransactionSummary', () => {
 
       const {
         transactionResult: { mintedAssets },
-      } = await contract.functions.mint_coins(100000).call();
+      } = await contract.functions.mint_coins(100000).callAndWait();
 
       const { assetId } = mintedAssets[0];
 
@@ -268,7 +268,7 @@ describe('TransactionSummary', () => {
         transactionResult: { operations },
       } = await contract.functions
         .transfer_to_address({ bits: recipient.address.toB256() }, { bits: assetId }, amount)
-        .call();
+        .callAndWait();
 
       validateTransferOperation({
         operations,
@@ -329,7 +329,7 @@ describe('TransactionSummary', () => {
             amount,
           })),
         ])
-        .call();
+        .callAndWait();
 
       validateTransferOperation({
         operations,
@@ -350,7 +350,7 @@ describe('TransactionSummary', () => {
 
       const {
         transactionResult: { mintedAssets },
-      } = await contractSender.functions.mint_coins(100000).call();
+      } = await contractSender.functions.mint_coins(100000).callAndWait();
 
       const amount = 2345;
       const { assetId } = mintedAssets[0];
@@ -362,7 +362,7 @@ describe('TransactionSummary', () => {
           { bits: mintedAssets[0].assetId },
           amount
         )
-        .call();
+        .callAndWait();
 
       validateTransferOperation({
         operations,
@@ -426,7 +426,7 @@ describe('TransactionSummary', () => {
             amount,
           })),
         ])
-        .call();
+        .callAndWait();
 
       validateTransferOperation({
         operations,

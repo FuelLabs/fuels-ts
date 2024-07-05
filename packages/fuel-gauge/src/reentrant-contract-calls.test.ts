@@ -36,7 +36,7 @@ describe('Reentrant Contract Calls', () => {
     } = await fooContract.functions
       .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
       .addContracts([barContract])
-      .call();
+      .callAndWait();
 
     /**
      * First, the test will call:
@@ -77,7 +77,7 @@ describe('Reentrant Contract Calls', () => {
 
     const result = await fooContract
       .multiCall([reentrantCall, storageContract.functions.return_var3(), reentrantCall])
-      .call();
+      .callAndWait();
 
     const expectedReentrantValue = 42;
 

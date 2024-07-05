@@ -13,7 +13,7 @@ test('isReadOnly returns true for read-only functions', async () => {
   if (isReadOnly) {
     await contract.functions.get_count().get();
   } else {
-    await contract.functions.get_count().call();
+    await contract.functions.get_count().callAndWait();
   }
   // #endregion is-function-readonly-1
 

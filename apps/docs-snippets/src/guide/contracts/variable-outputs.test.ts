@@ -16,7 +16,7 @@ describe(__filename, () => {
   it('should successfully execute contract call with variable outputs', async () => {
     const subId = getRandomB256();
 
-    await contract.functions.mint_coins(subId, 100).call();
+    await contract.functions.mint_coins(subId, 100).callAndWait();
 
     const address = { bits: Wallet.generate().address.toB256() };
     const assetId = { bits: getMintedAssetId(contract.id.toB256(), subId) };
@@ -27,7 +27,7 @@ describe(__filename, () => {
       .txParams({
         variableOutputs: 1,
       })
-      .call();
+      .callAndWait();
     // #endregion variable-outputs-2
 
     expect(transactionResult.isStatusSuccess).toBeTruthy();

@@ -40,9 +40,11 @@ describe('StorageTestContract', () => {
     const contract = await setup();
 
     // Call contract
-    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
+    const { value: initializeResult } = await contract.functions
+      .initialize_counter(1300)
+      .callAndWait();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
+    const { value: incrementResult } = await contract.functions.increment_counter(37).callAndWait();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().simulate();
@@ -79,9 +81,11 @@ describe('StorageTestContract', () => {
       ],
     });
     // #endregion contract-deployment-storage-slots-inline
-    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
+    const { value: initializeResult } = await contract.functions
+      .initialize_counter(1300)
+      .callAndWait();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
+    const { value: incrementResult } = await contract.functions.increment_counter(37).callAndWait();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().simulate();

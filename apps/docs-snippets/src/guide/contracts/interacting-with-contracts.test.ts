@@ -18,7 +18,7 @@ describe(__filename, () => {
   });
 
   it('should successfully use "get" to read from the blockchain', async () => {
-    await counterContract.functions.increment_count(1).call();
+    await counterContract.functions.increment_count(1).callAndWait();
 
     const { id: contractId, interface: abi } = counterContract;
 
@@ -58,7 +58,7 @@ describe(__filename, () => {
     const contract = counterContract;
 
     // #region interacting-with-contracts-4
-    await contract.functions.increment_count(10).call();
+    await contract.functions.increment_count(10).callAndWait();
     // #endregion interacting-with-contracts-4
 
     const { value } = await contract.functions.get_count().get();

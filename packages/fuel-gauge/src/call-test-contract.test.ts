@@ -24,7 +24,7 @@ const U64_MAX = bn(2).pow(64).sub(1);
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     using contract = await setupContract();
-    const { value } = await contract.functions.foo(num).call();
+    const { value } = await contract.functions.foo(num).callAndWait();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
 
@@ -37,7 +37,7 @@ describe('CallTestContract', () => {
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
     using contract = await setupContract();
-    const { value } = await contract.functions.boo(struct).call();
+    const { value } = await contract.functions.boo(struct).callAndWait();
     expect(value.a).toEqual(!struct.a);
     expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
@@ -45,18 +45,18 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     using contract = await setupContract();
 
-    const { value: empty } = await contract.functions.empty().call();
+    const { value: empty } = await contract.functions.empty().callAndWait();
     expect(empty.toHex()).toEqual(toHex(63));
 
-    const { value: emptyThenValue } = await contract.functions.empty_then_value(35).call();
+    const { value: emptyThenValue } = await contract.functions.empty_then_value(35).callAndWait();
     expect(emptyThenValue.toHex()).toEqual(toHex(63));
 
-    const { value: valueThenEmpty } = await contract.functions.value_then_empty(35).call();
+    const { value: valueThenEmpty } = await contract.functions.value_then_empty(35).callAndWait();
     expect(valueThenEmpty.toHex()).toEqual(toHex(63));
 
     const { value: valueThenEmptyThenValue } = await contract.functions
       .value_then_empty_then_value(35, 35)
-      .call();
+      .callAndWait();
     expect(valueThenEmptyThenValue.toHex()).toEqual(toHex(63));
   });
 
@@ -64,7 +64,7 @@ describe('CallTestContract', () => {
     using contract = await setupContract();
 
     // Call method with no params but with no result and no value on config
-    const { value } = await contract.functions.return_void().call();
+    const { value } = await contract.functions.return_void().callAndWait();
     expect(value).toEqual(undefined);
   });
 
@@ -140,7 +140,7 @@ describe('CallTestContract', () => {
       // But the function names are type-constrained to correct Contract's type
       using contract = await setupContract();
 
-      const { value } = await (contract as Contract).functions[method](...values).call();
+      const { value } = await (contract as Contract).functions[method](...values).callAndWait();
 
       if (BN.isBN(value)) {
         expect(toHex(value)).toBe(toHex(expected));
@@ -158,7 +158,7 @@ describe('CallTestContract', () => {
       .callParams({
         forward: [1_000_000, baseAssetId],
       })
-      .call();
+      .callAndWait();
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 
@@ -171,7 +171,7 @@ describe('CallTestContract', () => {
       .callParams({
         forward: [0, assetId],
       })
-      .call();
+      .callAndWait();
     expect(value).toBe(assetId);
   });
 
@@ -184,7 +184,7 @@ describe('CallTestContract', () => {
       .callParams({
         forward: [0, assetId],
       })
-      .call();
+      .callAndWait();
     expect(value).toBe(assetId);
   });
 
@@ -208,7 +208,7 @@ describe('CallTestContract', () => {
       // Submit multi-call transaction
       const {
         value: [resultA, resultB, resultC],
-      } = await multiCallScope.call();
+      } = await multiCallScope.callAndWait();
 
       expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
       expect(resultB.a).toEqual(!struct.a);
@@ -226,7 +226,7 @@ describe('CallTestContract', () => {
   it('Calling a simple contract function does only one dry run', async () => {
     using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
-    await contract.functions.no_params().call();
+    await contract.functions.no_params().callAndWait();
     expect(dryRunSpy).toHaveBeenCalledOnce();
   });
 

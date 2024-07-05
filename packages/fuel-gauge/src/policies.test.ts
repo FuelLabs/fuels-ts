@@ -214,7 +214,7 @@ describe('Policies', () => {
 
     const {
       transactionResult: { transaction },
-    } = await callScope.call();
+    } = await callScope.callAndWait();
 
     validatePolicies({
       transaction,
@@ -244,7 +244,7 @@ describe('Policies', () => {
 
     const {
       transactionResult: { transaction },
-    } = await callScope.call();
+    } = await callScope.callAndWait();
 
     validatePolicies({
       transaction,
@@ -414,7 +414,7 @@ describe('Policies', () => {
       };
 
       await expect(async () => {
-        await contract.functions.payable().txParams(txParams).call();
+        await contract.functions.payable().txParams(txParams).callAndWait();
       }).rejects.toThrow(new RegExp(`Max fee '${maxFee}' is lower than the required`));
     });
   });

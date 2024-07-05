@@ -31,7 +31,7 @@ beforeAll(async () => {
  */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
-    const { value, logs } = await advancedLogContract.functions.test_function().call();
+    const { value, logs } = await advancedLogContract.functions.test_function().callAndWait();
 
     expect(value).toBeTruthy();
     logs[5].game_id = logs[5].game_id.toHex();
@@ -77,7 +77,7 @@ describe('Advanced Logging', () => {
   it('can get log data from require [condition=true]', async () => {
     const { value, logs } = await advancedLogContract.functions
       .test_function_with_require(1, 1)
-      .call();
+      .callAndWait();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
@@ -86,7 +86,7 @@ describe('Advanced Logging', () => {
   it('can get log data from require [condition=false]', async () => {
     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
     try {
-      await invocation.call();
+      await invocation.callAndWait();
 
       throw new Error('it should have thrown');
     } catch (error) {
@@ -117,7 +117,7 @@ describe('Advanced Logging', () => {
     const { value, logs } = await advancedLogContract.functions
       .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
       .addContracts([otherAdvancedLogContract])
-      .call();
+      .callAndWait();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual([
@@ -167,7 +167,7 @@ describe('Advanced Logging', () => {
           configurable.functions.echo_struct(),
           coverage.functions.echo_str_8('fuelfuel'),
         ])
-        .call();
+        .callAndWait();
 
       logs.forEach((log, i) => {
         expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
@@ -241,7 +241,7 @@ describe('Advanced Logging', () => {
       const { logs } = await script.functions
         .main(advancedLogId, otherLogId, amount)
         .addContracts([advancedLogContract, otherAdvancedLogContract])
-        .call();
+        .callAndWait();
 
       expect(logs).toStrictEqual(expectedLogs);
     });

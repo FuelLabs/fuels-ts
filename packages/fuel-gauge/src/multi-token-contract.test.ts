@@ -58,7 +58,7 @@ describe('MultiTokenContract', () => {
             multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
           )
         )
-        .call();
+        .callAndWait();
 
       // update assetId on helperDict object
       (transactionResult?.mintedAssets || []).forEach(({ subId, assetId }) => {
@@ -94,7 +94,7 @@ describe('MultiTokenContract', () => {
             )
           )
         )
-        .call();
+        .callAndWait();
 
       const validateTransferPromises = subIds.map(async (subId) => {
         // validates that user wallet has expected balance after transfer
@@ -157,7 +157,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.mint_coins(subId, helperDict[subId].amount)
         )
       )
-      .call();
+      .callAndWait();
 
     // update assetId on helperDict object
     (transactionResult?.mintedAssets || []).forEach(({ subId, assetId }) => {
@@ -189,7 +189,7 @@ describe('MultiTokenContract', () => {
           multiTokenContract.functions.burn_coins(subId, helperDict[subId].amountToBurn)
         )
       )
-      .call();
+      .callAndWait();
 
     const validateBurnPromises = subIds.map(async (subId) => {
       // validates contract has expected balance for each coin after burn

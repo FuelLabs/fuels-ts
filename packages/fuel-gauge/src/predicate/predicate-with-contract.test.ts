@@ -42,7 +42,7 @@ describe('Predicate', () => {
         .callParams({
           forward: [500, provider.getBaseAssetId()],
         })
-        .call();
+        .callAndWait();
 
       expect(value.toString()).toEqual('500');
       expect(transactionResult.isStatusSuccess).toBeTruthy();
@@ -64,7 +64,7 @@ describe('Predicate', () => {
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
-      await expect(contract.functions.mint_coins(200).call()).rejects.toThrow(
+      await expect(contract.functions.mint_coins(200).callAndWait()).rejects.toThrow(
         /not enough coins to fit the target/
       );
 
@@ -94,7 +94,7 @@ describe('Predicate', () => {
 
       ({
         transactionResult: { isStatusSuccess },
-      } = await contract.functions.mint_coins(200).call());
+      } = await contract.functions.mint_coins(200).callAndWait());
 
       expect(isStatusSuccess).toBeTruthy();
     });

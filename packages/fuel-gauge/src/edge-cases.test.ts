@@ -10,7 +10,7 @@ describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
     const contract = await getSetupContract('collision_in_fn_names')();
 
-    expect((await contract.functions.new().call()).value.toNumber()).toEqual(12345);
+    expect((await contract.functions.new().callAndWait()).value.toNumber()).toEqual(12345);
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {

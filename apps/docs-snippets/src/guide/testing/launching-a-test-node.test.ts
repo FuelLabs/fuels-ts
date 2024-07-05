@@ -69,7 +69,7 @@ describe('launching a test node', () => {
       wallets,
     } = launched;
 
-    const response = await contract.functions.get_count().call();
+    const response = await contract.functions.get_count().callAndWait();
     // #endregion basic-example
     expect(response.value.toNumber()).toBe(0);
     expect(provider).toBeDefined();

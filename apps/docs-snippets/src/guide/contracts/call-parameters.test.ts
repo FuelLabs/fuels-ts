@@ -26,7 +26,7 @@ describe(__filename, () => {
       .callParams({
         forward: [amountToForward, baseAssetId],
       })
-      .call();
+      .callAndWait();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);
     // #endregion call-params-1
@@ -42,7 +42,7 @@ describe(__filename, () => {
           forward: [10, baseAssetId],
           gasLimit: 1,
         })
-        .call()
+        .callAndWait()
     ).rejects.toThrow('The transaction reverted with reason: "OutOfGas"');
     // #endregion call-params-2
   });
@@ -62,7 +62,7 @@ describe(__filename, () => {
       .txParams({
         gasLimit: transactionGasLimit,
       })
-      .call();
+      .callAndWait();
 
     const { value } = result;
     const expectedValue = 10;

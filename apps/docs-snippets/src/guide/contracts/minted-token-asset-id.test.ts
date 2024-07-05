@@ -22,7 +22,7 @@ describe(__filename, () => {
     const subID = '0xc7fd1d987ada439fc085cfa3c49416cf2b504ac50151e3c2335d60595cb90745';
     const mintAmount = bn(1000);
 
-    const txResult = await contract.functions.mint_coins(subID, mintAmount).call();
+    const txResult = await contract.functions.mint_coins(subID, mintAmount).callAndWait();
 
     const mintedAssetId = getMintedAssetId(subID, contract.id.toB256());
     // #endregion minted-token-asset-id-2

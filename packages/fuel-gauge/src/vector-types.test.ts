@@ -116,7 +116,7 @@ describe('Vector Types Validation', () => {
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
-      .call();
+      .callAndWait();
     expect(value).toBe(true);
   });
 
@@ -138,7 +138,7 @@ describe('Vector Types Validation', () => {
         VEC_IN_TUPLE,
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
-      .call();
+      .callAndWait();
 
     expect(value).toBe(true);
   });

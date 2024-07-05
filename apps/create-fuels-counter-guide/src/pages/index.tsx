@@ -12,7 +12,7 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT } from '@/lib'
+import { CURRENT_ENVIRONMENT } from '@/lib';
 
 // #region deploying-dapp-to-testnet-frontend-contract-id
 const contractId =
@@ -56,7 +56,7 @@ export default function Home() {
       );
     }
 
-    const { value } = await contract.functions.increment_counter(bn(1)).call();
+    const { value } = await contract.functions.increment_counter(bn(1)).callAndWait();
     setCounter(value.toNumber());
 
     await refreshWalletBalance?.();
@@ -74,7 +74,7 @@ export default function Home() {
       );
     }
 
-    const { value } = await contract.functions.decrement_counter(bn(1)).call();
+    const { value } = await contract.functions.decrement_counter(bn(1)).callAndWait();
     setCounter(value.toNumber());
 
     await refreshWalletBalance?.();
