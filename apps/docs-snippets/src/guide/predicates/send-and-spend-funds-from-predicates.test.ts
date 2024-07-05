@@ -38,7 +38,6 @@ describe(__filename, () => {
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1000,
     });
-    console.log('transferred');
 
     let { isStatusSuccess } = await tx.waitForResult();
     expect(isStatusSuccess).toBeTruthy();
