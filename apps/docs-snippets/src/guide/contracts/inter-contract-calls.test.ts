@@ -37,9 +37,11 @@ describe(__filename, () => {
   it('should successfully make call to another contract', async () => {
     // #region inter-contract-calls-3
     const amountToDeposit = 70;
-    const { value: initialBalance } = await simpleToken.functions
+    const { waitForResult } = await simpleToken.functions
       .get_balance(wallet.address.toB256())
-      .callAndWait();
+      .call();
+
+    const { value: initialBalance } = await waitForResult();
 
     expect(new BN(initialBalance).toNumber()).toBe(0);
 

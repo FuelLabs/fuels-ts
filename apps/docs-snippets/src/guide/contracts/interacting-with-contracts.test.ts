@@ -54,14 +54,26 @@ describe(__filename, () => {
     expect(value.toNumber()).toBeGreaterThanOrEqual(10);
   });
 
-  it('should successfully execute a contract call without a wallet', async () => {
+  it('should successfully execute a contract call without a wallet [call]', async () => {
     const contract = counterContract;
 
     // #region interacting-with-contracts-4
-    await contract.functions.increment_count(10).callAndWait();
+    const { transactionId, waitForResult } = await contract.functions.increment_count(10).call();
+
+    const { value } = await waitForResult();
     // #endregion interacting-with-contracts-4
 
-    const { value } = await contract.functions.get_count().get();
+    expect(transactionId).toBeDefined();
+    expect(value.toNumber()).toBeGreaterThanOrEqual(10);
+  });
+
+  it('should successfully execute a contract call without a wallet [callAndWait]', async () => {
+    const contract = counterContract;
+
+    // #region interacting-with-contracts-5
+    const { value } = await contract.functions.increment_count(10).callAndWait();
+    // #endregion interacting-with-contracts-5
+
     expect(value.toNumber()).toBeGreaterThanOrEqual(10);
   });
 });
