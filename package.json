@@ -105,7 +105,7 @@
     "textlint-rule-no-dead-link": "^5.1.2",
     "ts-generator": "^0.1.1",
     "tsup": "^6.7.0",
-    "tsx": "^4.7.0",
+    "tsx": "^4.16.0",
     "turbo": "^2.0.4",
     "typescript": "~5.4.5",
     "vite": "^5.2.10",
