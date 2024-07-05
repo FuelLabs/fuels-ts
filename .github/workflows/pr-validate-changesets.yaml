@@ -25,7 +25,7 @@ jobs:
           # see https://github.com/changesets/action/issues/70
           persist-credentials: false
 
-      - name: Verify no changeset was added
+      - name: Get PR's changeset file
         run: |
           echo "CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/${{ github.base_ref }} .changeset/*.md)" >> $GITHUB_ENV
 
