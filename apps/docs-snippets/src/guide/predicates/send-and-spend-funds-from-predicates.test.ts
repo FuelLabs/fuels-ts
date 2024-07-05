@@ -33,11 +33,12 @@ describe(__filename, () => {
     // #endregion send-and-spend-funds-from-predicates-2
 
     // #region send-and-spend-funds-from-predicates-3
-    const amountToPredicate = 1000;
+    const amountToPredicate = 100_000_000;
     const amountToReceiver = 200;
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1000,
     });
+    console.log('transferred');
 
     let { isStatusSuccess } = await tx.waitForResult();
     expect(isStatusSuccess).toBeTruthy();
@@ -82,7 +83,7 @@ describe(__filename, () => {
       inputData: ['0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4'],
     });
 
-    const amountToPredicate = 100;
+    const amountToPredicate = 100_000_000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1_000,
@@ -123,7 +124,7 @@ describe(__filename, () => {
       inputData: [getRandomB256()],
     });
 
-    const amountToPredicate = 10000;
+    const amountToPredicate = 100_000_000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1000,
@@ -164,7 +165,7 @@ describe(__filename, () => {
       inputData: [inputAddress],
     });
 
-    const amountToPredicate = 10_000;
+    const amountToPredicate = 100_000_000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1_000,
@@ -221,7 +222,7 @@ describe(__filename, () => {
       inputData: [inputAddress],
     });
 
-    const amountToPredicate = 300_000;
+    const amountToPredicate = 100_000_000;
 
     const tx = await walletWithFunds.transfer(predicate.address, amountToPredicate, baseAssetId, {
       gasLimit: 1_000,
