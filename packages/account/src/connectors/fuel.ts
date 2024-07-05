@@ -42,7 +42,43 @@ export type Status = {
   connected: boolean;
 };
 
-export class Fuel extends FuelConnector {
+interface FuelSdk {
+  // #region fuel-sdk-method-connectors
+  connectors: () => Promise<Array<FuelConnector>>;
+  // #endregion fuel-sdk-method-connectors
+  // #region fuel-sdk-method-getConnector
+  getConnector: (connector: FuelConnector | string) => FuelConnector | null;
+  // #endregion fuel-sdk-method-getConnector
+  // #region fuel-sdk-method-hasConnector
+  hasConnector(): Promise<boolean>;
+  // #endregion fuel-sdk-method-hasConnector
+  // #region fuel-sdk-method-selectConnector
+  selectConnector(connectorName: string, options: FuelConnectorSelectOptions): Promise<boolean>;
+  // #endregion fuel-sdk-method-selectConnector
+  // #region fuel-sdk-method-currentConnector
+  currentConnector(): FuelConnector | null | undefined;
+  // #endregion fuel-sdk-method-currentConnector
+  // #region fuel-sdk-method-hasWallet
+  hasWallet(): Promise<boolean>;
+  // #endregion fuel-sdk-method-hasWallet
+  // #region fuel-sdk-method-getWallet
+  getWallet(
+    address: string | AbstractAddress,
+    providerOrNetwork?: Provider | Network
+  ): Promise<Account>;
+  // #endregion fuel-sdk-method-getWallet
+  // #region fuel-sdk-method-unsubscribe
+  unsubscribe(): void;
+  // #endregion fuel-sdk-method-unsubscribe
+  // #region fuel-sdk-method-clean
+  clean(): Promise<void>;
+  // #endregion fuel-sdk-method-clean
+  // #region fuel-sdk-method-destroy
+  destroy(): Promise<void>;
+  // #endregion fuel-sdk-method-destroy
+}
+
+export class Fuel extends FuelConnector implements FuelSdk {
   static STORAGE_KEY = 'fuel-current-connector';
   static defaultConfig: FuelConfig = {};
   private _storage?: StorageAbstract | null = null;
