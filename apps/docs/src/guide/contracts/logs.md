@@ -6,7 +6,7 @@ Consider the following example contract:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/log-values/src/main.sw#log-1{rust:line-numbers}
 
-To access the logged values in TypeScript, use the `logs` property in the `FunctionInvocationResult` of a contract call result. The logs data will be stored in an `Array<any>`:
+To access the logged values in TypeScript, use the `logs` property in the response of a contract call. The logs data will be stored in an `Array<any>`:
 
 <<< @/../../docs-snippets/src/guide/contracts/logs.test.ts#log-2{ts:line-numbers}
 
