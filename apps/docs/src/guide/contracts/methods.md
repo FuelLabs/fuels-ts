@@ -24,11 +24,19 @@ A funded wallet it's required:
 
 ## `call`
 
-The `call` method should be used to submit a real contract call transaction to the node.
+The `call` method submits a real contract call transaction to the node. It resolves as soon as the transaction is submitted and returns a `transactionId` along with a `waitForResult` callback to wait for the transaction execution.
 
 Real resources are consumed, and any operations executed by the contract function will be processed on the blockchain.
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-4{ts:line-numbers}
+
+## `callAndWait`
+
+The `callAndWait` method also submits a real contract call transaction, but unlike `call`, it resolves only when the transaction has finished processing.
+
+Real resources are consumed, and any operations executed by the contract function will be processed on the blockchain.
+
+<<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-5{ts:line-numbers}
 
 ## `isReadOnly` (utility)
 
