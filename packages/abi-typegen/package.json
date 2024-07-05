@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.90.0",
+  "version": "0.91.0",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -60,7 +60,7 @@
     "handlebars": "^4.7.8",
     "mkdirp": "^1.0.4",
     "ramda": "^0.29.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^5.0.7"
   },
   "devDependencies": {
     "@internal/forc": "workspace:*",

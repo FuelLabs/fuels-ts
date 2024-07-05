@@ -1,5 +1,6 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
 import { randomBytes } from '@fuel-ts/crypto';
+import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
 import type { ChildProcessWithoutNullStreams } from 'child_process';
@@ -41,7 +42,6 @@ export type LaunchNodeOptions = {
   args?: string[];
   fuelCorePath?: string;
   loggingEnabled?: boolean;
-  debugEnabled?: boolean;
   basePath?: string;
   /**
    * The snapshot configuration to use.
@@ -76,7 +76,6 @@ export const killNode = (params: KillNodeParams) => {
     }
 
     // Remove all the listeners we've added.
-    child.stdout.removeAllListeners();
     child.stderr.removeAllListeners();
 
     // Remove the temporary folder and all its contents.
@@ -138,7 +137,6 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
  * @param args - additional arguments to pass to fuel-core.
  * @param fuelCorePath - the path to the fuel-core binary. (optional, defaults to 'fuel-core')
  * @param loggingEnabled - whether the node should output logs. (optional, defaults to true)
- * @param debugEnabled - whether the node should log debug messages. (optional, defaults to false)
  * @param basePath - the base path to use for the temporary folder. (optional, defaults to os.tmpdir())
  * */
 // #endregion launchNode-launchNodeOptions
@@ -146,12 +144,11 @@ export const launchNode = async ({
   ip,
   port,
   args = [],
-  fuelCorePath = process.env.FUEL_CORE_PATH ?? undefined,
+  fuelCorePath = process.env.FUEL_CORE_PATH || undefined,
   loggingEnabled = true,
-  debugEnabled = false,
   basePath,
   snapshotConfig = defaultSnapshotConfigs,
-}: LaunchNodeOptions): LaunchNodeResult =>
+}: LaunchNodeOptions = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
     // filter out the flags chain, consensus-key, db-type, and poa-instant. we don't want to pass them twice to fuel-core. see line 214.
@@ -176,7 +173,7 @@ export const launchNode = async ({
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
 
-    const command = fuelCorePath ?? 'fuel-core';
+    const command = fuelCorePath || 'fuel-core';
 
     const ipToUse = ip || '0.0.0.0';
 
@@ -235,17 +232,14 @@ export const launchNode = async ({
         '--debug',
         ...remainingArgs,
       ].flat(),
-      {
-        stdio: 'pipe',
-      }
+      { stdio: 'pipe' }
     );
 
     if (loggingEnabled) {
-      child.stderr.pipe(process.stderr);
-    }
-
-    if (debugEnabled) {
-      child.stdout.pipe(process.stdout);
+      child.stderr.on('data', (chunk) => {
+        // eslint-disable-next-line no-console
+        console.log(chunk.toString());
+      });
     }
 
     const cleanupConfig: KillNodeParams = {
@@ -278,7 +272,9 @@ export const launchNode = async ({
         });
       }
       if (/error/i.test(text)) {
-        reject(text.toString());
+        // eslint-disable-next-line no-console
+        console.log(text);
+        reject(new FuelError(FuelError.CODES.NODE_LAUNCH_FAILED, text));
       }
     });
 

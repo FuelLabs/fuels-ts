@@ -1,5 +1,5 @@
-import { launchNode } from '@fuel-ts/account/test-utils';
 import { Provider, WalletUnlocked, randomBytes, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { launchNode } from 'fuels/test-utils';
 
 /**
  * @group node

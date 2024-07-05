@@ -1,6 +1,5 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import { WalletUnlocked, Predicate, getRandomB256 } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { launchTestNode, safeExec } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
