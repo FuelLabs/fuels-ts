@@ -51,7 +51,6 @@ describe(__filename, () => {
     const { value } = await contract.functions.echo_u8(15).call();
     // #endregion contract-setup-5
 
-    // expect(transactionResult.isStatusSuccess).toBeTruthy();
     expect(value).toBe(15);
   });
 
