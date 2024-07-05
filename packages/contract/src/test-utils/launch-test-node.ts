@@ -14,7 +14,7 @@ import { mergeDeepRight } from 'ramda';
 
 import type { DeployContractOptions } from '../contract-factory';
 
-interface ContractDeployer {
+export interface ContractDeployer {
   deployContract(
     bytecode: BytesLike,
     wallet: Account,
@@ -22,7 +22,7 @@ interface ContractDeployer {
   ): Promise<Contract>;
 }
 
-interface DeployContractConfig {
+export interface DeployContractConfig {
   /**
    * Contract deployer object compatible with factories outputted by `pnpm fuels typegen`.
    */
@@ -41,7 +41,7 @@ interface DeployContractConfig {
   walletIndex?: number;
 }
 
-interface LaunchTestNodeOptions<TContractConfigs extends DeployContractConfig[]>
+export interface LaunchTestNodeOptions<TContractConfigs extends DeployContractConfig[]>
   extends LaunchCustomProviderAndGetWalletsOptions {
   /**
    * Pass in either the path to the contract's root directory to deploy the contract or use `DeployContractConfig` for more control.
@@ -51,7 +51,7 @@ interface LaunchTestNodeOptions<TContractConfigs extends DeployContractConfig[]>
 type TContracts<T extends DeployContractConfig[]> = {
   [K in keyof T]: Awaited<ReturnType<T[K]['deployer']['deployContract']>>;
 };
-interface LaunchTestNodeReturn<TFactories extends DeployContractConfig[]>
+export interface LaunchTestNodeReturn<TFactories extends DeployContractConfig[]>
   extends SetupTestProviderAndWalletsReturn {
   contracts: TContracts<TFactories>;
 }
