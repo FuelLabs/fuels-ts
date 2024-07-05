@@ -48,7 +48,7 @@ export interface LaunchTestNodeOptions<TContractConfigs extends DeployContractCo
    */
   contractsConfigs: TContractConfigs;
 }
-type TContracts<T extends DeployContractConfig[]> = {
+export type TContracts<T extends DeployContractConfig[]> = {
   [K in keyof T]: Awaited<ReturnType<T[K]['deployer']['deployContract']>>;
 };
 export interface LaunchTestNodeReturn<TFactories extends DeployContractConfig[]>
