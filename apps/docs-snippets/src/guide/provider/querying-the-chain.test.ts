@@ -1,5 +1,5 @@
-import type { ReceiptCall, TransactionResultMessageOutReceipt } from 'fuels';
-import { Address, FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet, bn } from 'fuels';
+import type { TransactionResultMessageOutReceipt } from 'fuels';
+import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, bn } from 'fuels';
 import { AssetId, TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
 
 /**
