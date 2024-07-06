@@ -106,7 +106,8 @@ jobs:
         run: pnpm test:e2e
         env:
           TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
-          DEVNET_WALLET_PVT_KEY: ${{ github.head_ref == 'changeset-release/master' && secrets.DEVNET_WALLET_PVT_KEY || '' }}
+          # uncomment the below line to test against devnet
+          # DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
 
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
@@ -149,7 +150,7 @@ jobs:
           path: coverage/report
 
       - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml
