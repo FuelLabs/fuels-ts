@@ -1,4 +1,4 @@
-import { ContractFactory, ReceiptType, bn } from 'fuels';
+import { ContractFactory, ReceiptType, bn, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import type { ReentrantBarAbi, ReentrantFooAbi } from '../test/typegen/contracts';
@@ -16,6 +16,11 @@ import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestCont
  * @group browser
  */
 describe('Reentrant Contract Calls', () => {
+  it.only('dummy test', async () => {
+    console.log('before');
+    using node = await launchTestNode();
+    console.log('after');
+  });
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

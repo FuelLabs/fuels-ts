@@ -1,41 +1,34 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AssetId, BN } from 'fuels';
-import { toHex, Provider, Wallet, ContractFactory, bn, FUEL_NETWORK_URL } from 'fuels';
-import { expectToThrowFuelError, generateTestWallet } from 'fuels/test-utils';
+import { toHex, Wallet, bn } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-const { binHexlified: bytecode, abiContents: abi } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.TOKEN_CONTRACT
-);
-
-let provider: Provider;
-let baseAssetId: string;
-
-const setup = async () => {
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
-
-  // Deploy contract
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract();
-
-  return contract;
-};
-
-beforeAll(async () => {
-  provider = await Provider.create(FUEL_NETWORK_URL);
-  baseAssetId = provider.getBaseAssetId();
-});
+import { TokenAbi__factory } from '../test/typegen';
+import TokenAbiHex from '../test/typegen/contracts/TokenAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
+
 describe('TokenTestContract', () => {
   it('Can mint and transfer coins', async () => {
     // New wallet to transfer coins and check balance
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: MultiTokenContractAbi__factory,
+          bytecode: MultiTokenContractAbiHex,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      contracts: [token],
+    } = launched;
+
     const userWallet = Wallet.generate({ provider });
-    const token = await setup();
     const tokenContractId = { bits: token.id.toB256() };
     const addressId = { bits: userWallet.address.toB256() };
 

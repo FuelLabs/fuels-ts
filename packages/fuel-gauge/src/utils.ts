@@ -54,5 +54,7 @@ export async function launchTestContract<T extends DeployContractConfig>(config:
   } = await launchTestNode({
     contractsConfigs: [config],
   });
-  return Object.assign(contract, { [Symbol.dispose]: () => Promise.resolve(cleanup()) });
+  return Object.assign(contract, {
+    [Symbol.dispose]: () => Promise.resolve(cleanup()),
+  });
 }

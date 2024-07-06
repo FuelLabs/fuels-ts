@@ -1,43 +1,27 @@
 import { toHex, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-const {
-  binHexlified: bytecode,
-  abiContents: abi,
-  storageSlots,
-} = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
-
-const setup = async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
-  // Deploy contract
-  // #region contract-deployment-storage-slots
-  // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
-
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({
-    storageSlots,
-  });
-  // #endregion contract-deployment-storage-slots
-
-  return contract;
-};
+import { StorageTestContractAbi__factory } from '../test/typegen';
+import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe('StorageTestContract', () => {
-  let baseAssetId: string;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
   it('can increment counter', async () => {
-    const contract = await setup();
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: StorageTestContractAbi__factory,
+          bytecode: StorageTestContractAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
 
     // Call contract
     const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
@@ -50,9 +34,17 @@ describe('StorageTestContract', () => {
   });
 
   it('can increment counter - using custom inline storage slots', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-    const factory = new ContractFactory(bytecode, abi, wallet);
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      StorageTestContractAbiHex,
+      StorageTestContractAbi__factory.abi,
+      wallet
+    );
     // #region contract-deployment-storage-slots-inline
     const contract = await factory.deployContract({
       storageSlots: [
