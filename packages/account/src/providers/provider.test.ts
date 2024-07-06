@@ -63,7 +63,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.30.0');
+    expect(version).toEqual('0.30.1');
   });
 
   it('can call()', async () => {
@@ -254,10 +254,10 @@ describe('Provider', () => {
     const providerUrl = providerForUrl.url;
 
     const provider = await Provider.create(providerUrl, {
-      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.1' } }),
     });
 
-    expect(await provider.getVersion()).toEqual('0.30.0');
+    expect(await provider.getVersion()).toEqual('0.30.1');
   });
 
   it('can accept options override in connect method', async () => {
@@ -291,10 +291,10 @@ describe('Provider', () => {
     fetchChainAndNodeInfo.mockRestore();
 
     await provider.connect(providerUrl, {
-      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.0' } }),
+      fetch: getCustomFetch('getVersion', { nodeInfo: { nodeVersion: '0.30.1' } }),
     });
 
-    expect(await provider.getVersion()).toEqual('0.30.0');
+    expect(await provider.getVersion()).toEqual('0.30.1');
   });
 
   it('can force-produce blocks', async () => {
