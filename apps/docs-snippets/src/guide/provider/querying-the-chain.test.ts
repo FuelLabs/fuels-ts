@@ -1,5 +1,5 @@
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, bn } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { AssetId, TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -124,5 +124,49 @@ describe('querying the chain', () => {
     expect(message).toBeDefined();
     expect(message?.nonce).toEqual(nonce);
     // #endregion getMessageByNonce
+  });
+
+  it('can getMessage', async () => {
+    // #region Message-getMessages
+    // #import { TestMessage, launchTestNode };
+
+    const testMessage = new TestMessage({ amount: 100 });
+
+    using launched = await launchTestNode({ walletsConfig: { messages: [testMessage] } });
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const [message] = await wallet.getMessages();
+    // #endregion Message-getMessages
+    expect(message.nonce).toEqual(testMessage.nonce);
+  });
+
+  it('can getResourcesToSpend', async () => {
+    // #region Message-getResourcesToSpend
+    // #import { launchTestNode, AssetId };
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        assets: [AssetId.A, AssetId.B],
+        coinsPerAsset: 2,
+        amountPerCoin: 100,
+      },
+    });
+
+    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const spendableResources = await wallet.getResourcesToSpend([
+      { amount: 40, assetId: assetIdA },
+      { amount: 50, assetId: assetIdB },
+    ]);
+    // #endregion Message-getResourcesToSpend
+    expect(spendableResources[0].amount).toEqual(bn(100));
+    expect(spendableResources[1].amount).toEqual(bn(100));
   });
 });
