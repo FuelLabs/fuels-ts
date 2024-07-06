@@ -1,4 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type {
   CallResult,
   DryRunStatus,
@@ -7,6 +6,7 @@ import type {
   WalletUnlocked,
 } from 'fuels';
 import { ContractFactory, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 

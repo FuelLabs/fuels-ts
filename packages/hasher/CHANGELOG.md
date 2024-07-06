@@ -1,5 +1,16 @@
 # Change Log
 
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [a9ece17]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/utils@0.91.0
+
 ## 0.90.0
 
 ### Patch Changes

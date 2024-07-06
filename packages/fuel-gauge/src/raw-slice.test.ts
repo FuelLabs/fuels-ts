@@ -1,6 +1,6 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
@@ -112,8 +112,7 @@ describe('Raw Slice Tests', () => {
     expect(isStatusSuccess);
   });
 
-  // see https://github.com/FuelLabs/fuels-ts/issues/1344
-  it.skip('should test raw slice input [script-raw-slice]', async () => {
+  it('should test raw slice input [script-raw-slice]', async () => {
     const wallet = await setup();
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
@@ -124,7 +123,7 @@ describe('Raw Slice Tests', () => {
       inner_enum: { Second: bytes },
     };
 
-    const { value } = await scriptInstance.functions.main(1, INPUT).call<BN[]>();
-    expect(value).toStrictEqual([1, 2, 3]);
+    const { value } = await scriptInstance.functions.main(3, INPUT).call<BN[]>();
+    expect(value).toStrictEqual([0, 1, 2]);
   });
 });
