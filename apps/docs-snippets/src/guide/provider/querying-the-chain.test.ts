@@ -1,4 +1,5 @@
-import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, bn } from 'fuels';
+import type { ReceiptCall, TransactionResultMessageOutReceipt } from 'fuels';
+import { Address, FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet, bn } from 'fuels';
 import { AssetId, TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -168,5 +169,36 @@ describe('querying the chain', () => {
     // #endregion Message-getResourcesToSpend
     expect(spendableResources[0].amount).toEqual(bn(100));
     expect(spendableResources[1].amount).toEqual(bn(100));
+  });
+
+  it('can Message-getMessageProof', async () => {
+    // #region Message-Message-getMessageProof
+    // #import { launchTestNode, TransactionResultMessageOutReceipt };
+
+    using launched = await launchTestNode({
+      walletsConfig: {
+        count: 2,
+      },
+    });
+
+    const {
+      wallets: [sender, recipient],
+      provider,
+    } = launched;
+
+    const recipientAddress = recipient.address.toB256();
+
+    const tx = await sender.transfer(recipientAddress, 100, provider.getBaseAssetId());
+    const result = await tx.waitForResult();
+    const messageOutReceipt = result.receipts[0] as TransactionResultMessageOutReceipt;
+
+    const messageProof = await provider.getMessageProof(
+      result.gqlTransaction.id,
+      messageOutReceipt.nonce
+    );
+
+    // #endregion Message-getMessageProof
+    expect(messageProof?.amount.toNumber()).toEqual(100);
+    expect(messageProof?.sender.toHexString()).toEqual(result.id);
   });
 });
