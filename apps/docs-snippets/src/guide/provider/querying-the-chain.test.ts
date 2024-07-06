@@ -171,8 +171,8 @@ describe('querying the chain', () => {
     expect(spendableResources[1].amount).toEqual(bn(100));
   });
 
-  it('can Message-getMessageProof', async () => {
-    // #region Message-Message-getMessageProof
+  it('can getMessageProof', async () => {
+    // #region Message-getMessageProof
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
     using launched = await launchTestNode({
