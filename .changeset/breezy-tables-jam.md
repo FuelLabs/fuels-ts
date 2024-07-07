@@ -3,4 +3,4 @@
 "fuels": minor
 ---
 
-fix!: `launchNode.cleanup` not killing node in single test
+fix!: `launchNode.cleanup` not killing node in last test of test group
