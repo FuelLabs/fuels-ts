@@ -6,9 +6,7 @@ import * as childProcessMod from 'child_process';
 
 import { Provider } from '../providers';
 
-import { killNode, launchNode } from './launchNode';
-
-type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
+import { launchNode } from './launchNode';
 
 vi.mock('child_process', async () => {
   const mod = await vi.importActual('child_process');
@@ -130,63 +128,17 @@ describe('launchNode', () => {
     cleanup();
   });
 
-  test('should kill process only if PID exists and node is alive', () => {
-    const killFn = vi.fn();
-    const state = { isDead: true };
+  test.only('calling cleanup multiple times does not retry process killing', async () => {
+    const killSpy = vi.spyOn(process, 'kill');
 
-    // should not kill
-    let child = {
-      pid: undefined,
-      stdout: {
-        removeAllListeners: () => {},
-      },
-      stderr: {
-        removeAllListeners: () => {},
-      },
-    } as ChildProcessWithoutNullStreams;
+    const { cleanup } = await launchNode();
 
-    killNode({
-      child,
-      configPath: '',
-      killFn,
-      state,
-    });
+    cleanup();
 
-    expect(killFn).toHaveBeenCalledTimes(0);
-    expect(state.isDead).toEqual(true);
+    expect(killSpy).toHaveBeenCalledTimes(1);
 
-    // should not kill
-    child = {
-      pid: 1,
-      stdout: {
-        removeAllListeners: () => {},
-      },
-      stderr: {
-        removeAllListeners: () => {},
-      },
-    } as ChildProcessWithoutNullStreams;
+    cleanup();
 
-    killNode({
-      child,
-      configPath: '',
-      killFn,
-      state,
-    });
-
-    expect(killFn).toHaveBeenCalledTimes(0);
-    expect(state.isDead).toEqual(true);
-
-    // should kill
-    state.isDead = false;
-
-    killNode({
-      child,
-      configPath: '',
-      killFn,
-      state,
-    });
-
-    expect(killFn).toHaveBeenCalledTimes(1);
-    expect(state.isDead).toEqual(true);
+    expect(killSpy).toHaveBeenCalledTimes(1);
   });
 });

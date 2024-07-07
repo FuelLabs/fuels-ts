@@ -3,13 +3,11 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
-import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { randomUUID } from 'crypto';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
-import treeKill from 'tree-kill';
 
 import { Provider } from '../providers';
 import { Signer } from '../signer';
@@ -57,33 +55,6 @@ export type LaunchNodeResult = Promise<{
   url: string;
   snapshotDir: string;
 }>;
-
-export type KillNodeParams = {
-  child: ChildProcessWithoutNullStreams;
-  configPath: string;
-  killFn: (pid: number) => void;
-  state: {
-    isDead: boolean;
-  };
-};
-
-export const killNode = (params: KillNodeParams) => {
-  const { child, configPath, state } = params;
-  if (!state.isDead) {
-    if (child.pid) {
-      state.isDead = true;
-      process.kill(-child.pid);
-    }
-
-    // Remove all the listeners we've added.
-    child.stderr.removeAllListeners();
-
-    // Remove the temporary folder and all its contents.
-    if (existsSync(configPath)) {
-      rmSync(configPath, { recursive: true });
-    }
-  }
-};
 
 function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) {
   const defaultCoins = defaultSnapshotConfigs.stateConfig.coins.map((coin) => ({
@@ -242,13 +213,25 @@ export const launchNode = async ({
       });
     }
 
-    const cleanupConfig: KillNodeParams = {
-      child,
-      configPath: tempDir,
-      killFn: treeKill,
-      state: {
-        isDead: false,
-      },
+    const childState = {
+      isDead: false,
+    };
+
+    const cleanup = () => {
+      if (!childState.isDead) {
+        if (child.pid) {
+          childState.isDead = true;
+          process.kill(-child.pid);
+        }
+
+        // Remove all the listeners we've added.
+        child.stderr.removeAllListeners();
+
+        // Remove the temporary folder and all its contents.
+        if (existsSync(tempDir)) {
+          rmSync(tempDir, { recursive: true });
+        }
+      }
     };
 
     // Look for a specific graphql start point in the output.
@@ -264,7 +247,7 @@ export const launchNode = async ({
 
         // Resolve with the cleanup method.
         resolve({
-          cleanup: () => killNode(cleanupConfig),
+          cleanup,
           ip: realIp,
           port: realPort,
           url: `http://${realIp}:${realPort}/v1/graphql`,
@@ -279,18 +262,18 @@ export const launchNode = async ({
     });
 
     // Process exit.
-    process.on('exit', () => killNode(cleanupConfig));
+    process.on('exit', cleanup);
 
     // Catches ctrl+c event.
-    process.on('SIGINT', () => killNode(cleanupConfig));
+    process.on('SIGINT', cleanup);
 
     // Catches "kill pid" (for example: nodemon restart).
-    process.on('SIGUSR1', () => killNode(cleanupConfig));
-    process.on('SIGUSR2', () => killNode(cleanupConfig));
+    process.on('SIGUSR1', cleanup);
+    process.on('SIGUSR2', cleanup);
 
     // Catches uncaught exceptions.
-    process.on('beforeExit', () => killNode(cleanupConfig));
-    process.on('uncaughtException', () => killNode(cleanupConfig));
+    process.on('beforeExit', cleanup);
+    process.on('uncaughtException', cleanup);
 
     child.on('error', reject);
   });

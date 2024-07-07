@@ -67,7 +67,6 @@
     "graphql-tag": "^2.12.6",
     "portfinder": "^1.0.32",
     "ramda": "^0.29.0",
-    "tree-kill": "^1.2.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
