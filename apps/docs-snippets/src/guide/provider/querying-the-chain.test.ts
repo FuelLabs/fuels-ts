@@ -188,7 +188,7 @@ describe('querying the chain', () => {
 
     const recipientAddress = recipient.address.toB256();
 
-    const tx = await sender.transfer(recipientAddress, 100, provider.getBaseAssetId());
+    const tx = await sender.withdrawToBaseLayer(recipientAddress, 100);
     const result = await tx.waitForResult();
     const messageOutReceipt = result.receipts[0] as TransactionResultMessageOutReceipt;
 
