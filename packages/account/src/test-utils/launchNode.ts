@@ -68,11 +68,11 @@ export type KillNodeParams = {
 };
 
 export const killNode = (params: KillNodeParams) => {
-  const { child, configPath, state, killFn } = params;
+  const { child, configPath, state } = params;
   if (!state.isDead) {
     if (child.pid) {
       state.isDead = true;
-      killFn(Number(child.pid));
+      process.kill(-child.pid);
     }
 
     // Remove all the listeners we've added.
@@ -232,7 +232,7 @@ export const launchNode = async ({
         '--debug',
         ...remainingArgs,
       ].flat(),
-      { stdio: 'pipe' }
+      { stdio: 'pipe', detached: true }
     );
 
     if (loggingEnabled) {
