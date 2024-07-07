@@ -218,19 +218,20 @@ export const launchNode = async ({
     };
 
     const cleanup = () => {
-      if (!childState.isDead) {
-        if (child.pid) {
-          childState.isDead = true;
-          process.kill(-child.pid);
-        }
+      if (childState.isDead) {
+        return;
+      }
+      childState.isDead = true;
 
-        // Remove all the listeners we've added.
-        child.stderr.removeAllListeners();
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      process.kill(-child.pid!);
 
-        // Remove the temporary folder and all its contents.
-        if (existsSync(tempDir)) {
-          rmSync(tempDir, { recursive: true });
-        }
+      // Remove all the listeners we've added.
+      child.stderr.removeAllListeners();
+
+      // Remove the temporary folder and all its contents.
+      if (existsSync(tempDir)) {
+        rmSync(tempDir, { recursive: true });
       }
     };
 
