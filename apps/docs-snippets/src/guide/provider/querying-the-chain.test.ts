@@ -131,15 +131,19 @@ describe('querying the chain', () => {
     // #region Message-getMessages
     // #import { TestMessage, launchTestNode };
 
+    // Creates a test message with an amount of 100
     const testMessage = new TestMessage({ amount: 100 });
 
+    // Launches a test node with the test message configured
     using launched = await launchTestNode({ walletsConfig: { messages: [testMessage] } });
     const {
       wallets: [wallet],
     } = launched;
 
+    // Retrieves messages from the wallet
     const [message] = await wallet.getMessages();
     // #endregion Message-getMessages
+
     expect(message.nonce).toEqual(testMessage.nonce);
   });
 
@@ -147,6 +151,7 @@ describe('querying the chain', () => {
     // #region Message-getResourcesToSpend
     // #import { launchTestNode, AssetId };
 
+    // Launches a test node with pre-configured assets
     using launched = await launchTestNode({
       walletsConfig: {
         assets: [AssetId.A, AssetId.B],
@@ -155,6 +160,7 @@ describe('querying the chain', () => {
       },
     });
 
+    // Defines asset IDs
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const assetIdB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 
@@ -162,11 +168,13 @@ describe('querying the chain', () => {
       wallets: [wallet],
     } = launched;
 
+    // Retrieves spendable resources for the specified asset amounts
     const spendableResources = await wallet.getResourcesToSpend([
       { amount: 40, assetId: assetIdA },
       { amount: 50, assetId: assetIdB },
     ]);
     // #endregion Message-getResourcesToSpend
+
     expect(spendableResources[0].amount).toEqual(bn(100));
     expect(spendableResources[1].amount).toEqual(bn(100));
   });
@@ -175,6 +183,7 @@ describe('querying the chain', () => {
     // #region Message-getMessageProof
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
+    // Launches a test node with two wallets established
     using launched = await launchTestNode({
       walletsConfig: {
         count: 2,
@@ -186,18 +195,23 @@ describe('querying the chain', () => {
       provider,
     } = launched;
 
+    // Defines the recipient address
     const recipientAddress = recipient.address.toB256();
 
+    // Performs a withdrawal transaction from sender to recipient
     const tx = await sender.withdrawToBaseLayer(recipientAddress, 100);
     const result = await tx.waitForResult();
+
+    // Retrieves the message out receipt from the transaction result
     const messageOutReceipt = result.receipts[0] as TransactionResultMessageOutReceipt;
 
+    // Retrieves the message proof for the transaction ID and nonce
     const messageProof = await provider.getMessageProof(
       result.gqlTransaction.id,
       messageOutReceipt.nonce
     );
-
     // #endregion Message-getMessageProof
+
     expect(messageProof?.amount.toNumber()).toEqual(100);
     expect(messageProof?.sender.toHexString()).toEqual(result.id);
   });
