@@ -88,9 +88,9 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "@types/lodash.camelcase": "^4.3.7",
+    "@types/lodash.camelcase": "^4.3.9",
     "@types/rimraf": "^3.0.2",
-    "vite": "^5.2.9"
+    "vite": "^5.3.3"
   },
   "keywords": [
     "ethereum",
