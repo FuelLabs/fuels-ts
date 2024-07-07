@@ -1,7 +1,7 @@
 import { launchNode } from './launchNode';
 
 /**
- * The test runner creates an test environment per file,
+ * The test runner creates a test environment per file,
  * which we can use to isolate the faulty behavior.
  */
 describe('launchNode-singular-test', () => {
