@@ -1,4 +1,4 @@
-import { toHex, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
+import { toHex, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { StorageTestContractAbi__factory } from '../test/typegen';
@@ -10,18 +10,26 @@ import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestCont
  */
 describe('StorageTestContract', () => {
   it('can increment counter', async () => {
-    using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: StorageTestContractAbi__factory,
-          bytecode: StorageTestContractAbiHex,
-        },
-      ],
-    });
+    using launched = await launchTestNode();
 
     const {
-      contracts: [contract],
+      wallets: [wallet],
     } = launched;
+
+    const { storageSlots } = StorageTestContractAbi__factory;
+
+    // #region contract-deployment-storage-slots
+    // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
+
+    const factory = new ContractFactory(
+      StorageTestContractAbiHex,
+      StorageTestContractAbi__factory.abi,
+      wallet
+    );
+    const contract = await factory.deployContract({
+      storageSlots,
+    });
+    // #endregion contract-deployment-storage-slots
 
     // Call contract
     const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();

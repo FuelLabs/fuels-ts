@@ -2,7 +2,7 @@ import type { BigNumberish } from 'fuels';
 import { bn, Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { ScriptMainArgsAbi__factory } from '../test/typegen';
 
 import { getScript } from './utils';
 
@@ -12,6 +12,7 @@ type Baz = {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Script Coverage', () => {
   it('can call script and use main arguments', async () => {
@@ -20,13 +21,13 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
-    );
-
     // #region script-call-factory
     const foo = 33;
-    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
+    const scriptInstance = new Script<BigNumberish[], BigNumberish>(
+      ScriptMainArgsAbi__factory.bin,
+      ScriptMainArgsAbi__factory.abi,
+      wallet
+    );
 
     const { value, logs } = await scriptInstance.functions.main(foo).call();
     // #endregion script-call-factory
@@ -78,11 +79,11 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const { binHexlified: scriptBin, abiContents: scriptAbi } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.SCRIPT_MAIN_ARGS
+    const scriptInstance = new Script<BigNumberish[], BigNumberish>(
+      ScriptMainArgsAbi__factory.bin,
+      ScriptMainArgsAbi__factory.abi,
+      wallet
     );
-
-    const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
     const foo = 42;
 
     await expect(

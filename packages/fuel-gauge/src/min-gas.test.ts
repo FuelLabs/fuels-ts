@@ -1,6 +1,4 @@
 import {
-  ContractFactory,
-  Wallet,
   bn,
   TransactionStatus,
   ScriptTransactionRequest,
@@ -12,8 +10,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-import { ComplexPredicateAbi__factory } from '../test/typegen/predicates';
+import { ComplexPredicateAbi__factory } from '../test/typegen';
 
 /**
  * @group node

@@ -1,4 +1,4 @@
-import { Provider, FUEL_NETWORK_URL, Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
+import { Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateConditionalInputsAbi__factory } from '../test/typegen/predicates';

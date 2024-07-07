@@ -4,9 +4,9 @@ import type { TransactionResultReceipt } from 'fuels';
 import { bn, getRandomB256, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-import { RevertErrorAbi__factory } from '../test/typegen/contracts';
+import { RevertErrorAbi__factory, TokenContractAbi__factory } from '../test/typegen/contracts';
 import RevertErrorAbiHex from '../test/typegen/contracts/RevertErrorAbi.hex';
+import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -191,11 +191,8 @@ describe('Revert Error Testing', () => {
       wallets: [wallet],
       provider,
     } = launched;
-    const { binHexlified: tokenBytecode, abiContents: tokenAbi } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.TOKEN_CONTRACT
-    );
 
-    const factory = new ContractFactory(tokenBytecode, tokenAbi, wallet);
+    const factory = new ContractFactory(TokenContractAbiHex, TokenContractAbi__factory.abi, wallet);
     const tokenContract = await factory.deployContract();
 
     const addresses = [

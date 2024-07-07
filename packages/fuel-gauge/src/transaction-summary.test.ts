@@ -7,11 +7,9 @@ import type {
 } from 'fuels';
 import {
   BN,
-  FUEL_NETWORK_URL,
   getTransactionsSummaries,
   getTransactionSummary,
   getTransactionSummaryFromRequest,
-  Provider,
   ScriptTransactionRequest,
   TransactionTypeName,
   Wallet,
