@@ -4,6 +4,9 @@ import { launchNode } from './launchNode';
  * The test runner creates a test environment per file,
  * which we can use to isolate the faulty behavior.
  */
+/**
+ * @group node
+ */
 describe('launchNode-singular-test', () => {
   let killedNodeUrl = '';
   afterAll(async () => {
