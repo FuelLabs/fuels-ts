@@ -223,9 +223,6 @@ export const launchNode = async ({
       }
       childState.isDead = true;
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      process.kill(-child.pid!);
-
       // Remove all the listeners we've added.
       child.stderr.removeAllListeners();
 
@@ -233,6 +230,9 @@ export const launchNode = async ({
       if (existsSync(tempDir)) {
         rmSync(tempDir, { recursive: true });
       }
+
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      process.kill(-child.pid!);
     };
 
     // Look for a specific graphql start point in the output.
