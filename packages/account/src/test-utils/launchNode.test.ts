@@ -128,7 +128,7 @@ describe('launchNode', () => {
     cleanup();
   });
 
-  test.only('calling cleanup multiple times does not retry process killing', async () => {
+  test('calling cleanup multiple times does not retry process killing', async () => {
     const killSpy = vi.spyOn(process, 'kill');
 
     const { cleanup } = await launchNode();
