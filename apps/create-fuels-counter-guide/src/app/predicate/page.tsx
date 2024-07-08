@@ -178,11 +178,13 @@ export default function PredicateExample() {
         Transfer 0.1 ETH to Predicate
       </Button>
 
+      <Button onClick={changePin}>Change Pin</Button>
+
       <Input
         className="w-[300px] mt-8"
         value={pin as string}
         onChange={(e) => setPin(e.target.value)}
-        placeholder="Hint - the correct pin is 1337"
+        placeholder="Enter a new pin"
       />
 
       <Button

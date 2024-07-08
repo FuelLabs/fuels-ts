@@ -1,5 +1,9 @@
 predicate;
 
-fn main(password: u64) -> bool {
-    return password == 1337;
+configurable {
+    PIN: u64 = 1337,
+}
+
+fn main(pin: u64) -> bool {
+    return PIN == pin;
 }
