@@ -1,4 +1,5 @@
 ---
+"create-fuels": patch
 "@internal/fuel-core": patch
 "@fuel-ts/versions": patch
 "@fuel-ts/account": patch
