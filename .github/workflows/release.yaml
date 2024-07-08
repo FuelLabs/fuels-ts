@@ -131,7 +131,7 @@ jobs:
 
       - name: Upload Docs Artifact
         if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: apps/docs/dist
 
