@@ -606,45 +606,6 @@ export class Account extends AbstractAccount {
   }
 
   /**
-   * Get the required quantities and associated resources for a transaction.
-   *
-   * @param transactionRequestLike - transaction request to populate resources for.
-   * @param quantitiesToContract - quantities for the contract (optional).
-   *
-   * @returns a promise resolving to the required quantities for the transaction.
-   */
-  async getResourcesForTransaction(
-    transactionRequestLike: TransactionRequestLike,
-    quantitiesToContract: CoinQuantity[] = []
-  ) {
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
-    const transactionCost = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-
-    // Add the required resources to the transaction from the owner
-    transactionRequest.addResources(
-      await this.getResourcesToSpend(transactionCost.requiredQuantities)
-    );
-    // Refetch transaction costs with the new resources
-    // TODO: we could find a way to avoid fetch estimatePredicates again, by returning the transaction or
-    // returning a specific gasUsed by the predicate.
-    // Also for the dryRun we could have the same issue as we are going to run twice the dryRun and the
-    // estimateTxDependencies as we don't have access to the transaction, maybe returning the transaction would
-    // be better.
-    const { requiredQuantities, ...txCost } = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-    const resources = await this.getResourcesToSpend(requiredQuantities);
-
-    return {
-      resources,
-      requiredQuantities,
-      ...txCost,
-    };
-  }
-
-  /**
    * Sign a message from the account via the connector.
    *
    * @param message - the message to sign.
