@@ -73,7 +73,7 @@ describe('Account', () => {
     expect(assetC?.amount.gt(1)).toBeTruthy();
   });
 
-  it('should throw if coins length is higher than 100', async () => {
+  it('should throw if coins length is higher than 512', async () => {
     const dummyCoins: Coin[] = new Array(10000);
 
     vi.spyOn(Provider.prototype, 'getCoins').mockImplementation(async () =>
@@ -96,7 +96,7 @@ describe('Account', () => {
 
     expect(result).toBeUndefined();
     expect((<Error>error).message).toEqual(
-      'Wallets containing more than 100 coins exceed the current supported limit.'
+      'Wallets containing more than 512 coins exceed the current supported limit.'
     );
   });
 
@@ -139,7 +139,7 @@ describe('Account', () => {
     expect(messages.length).toEqual(1);
   });
 
-  it('should throw if messages length is higher than 100', async () => {
+  it('should throw if messages length is higher than 512', async () => {
     const dummyMessages: Message[] = new Array(10000);
 
     vi.spyOn(Provider.prototype, 'getMessages').mockImplementation(async () =>
@@ -162,7 +162,7 @@ describe('Account', () => {
 
     expect(result).toBeUndefined();
     expect((<Error>error).message).toEqual(
-      'Wallets containing more than 100 messages exceed the current supported limit.'
+      'Wallets containing more than 512 messages exceed the current supported limit.'
     );
   });
 
@@ -186,7 +186,7 @@ describe('Account', () => {
     expect(balances.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('should throw if balances length is higher than 100', async () => {
+  it('should throw if balances length is higher than 9999', async () => {
     const dummyBalances: CoinQuantity[] = new Array(10000);
 
     vi.spyOn(Provider.prototype, 'getBalances').mockImplementation(async () =>
@@ -208,7 +208,7 @@ describe('Account', () => {
 
     expect(result).toBeUndefined();
     expect((<Error>error).message).toEqual(
-      'Wallets containing more than 100 balances exceed the current supported limit.'
+      'Wallets containing more than 9999 balances exceed the current supported limit.'
     );
   });
 

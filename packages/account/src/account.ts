@@ -151,7 +151,7 @@ export class Account extends AbstractAccount {
   async getCoins(assetId?: BytesLike): Promise<Coin[]> {
     const coins = [];
 
-    const pageSize = 100;
+    const pageSize = 512;
     let cursor;
     // eslint-disable-next-line no-unreachable-loop
     for (;;) {
@@ -185,7 +185,7 @@ export class Account extends AbstractAccount {
   async getMessages(): Promise<Message[]> {
     const messages = [];
 
-    const pageSize = 100;
+    const pageSize = 512;
     let cursor;
     // eslint-disable-next-line no-unreachable-loop
     for (;;) {
@@ -231,7 +231,7 @@ export class Account extends AbstractAccount {
   async getBalances(): Promise<CoinQuantity[]> {
     const balances = [];
 
-    const pageSize = 100;
+    const pageSize = 9999;
     let cursor;
     // eslint-disable-next-line no-unreachable-loop
     for (;;) {
