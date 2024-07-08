@@ -1,6 +1,6 @@
 import type { TransactionResultMessageOutReceipt } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, bn } from 'fuels';
-import { AssetId, TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
+import { TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
