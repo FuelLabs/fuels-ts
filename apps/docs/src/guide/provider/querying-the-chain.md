@@ -51,12 +51,6 @@ You can use the `getMessages` method to retrieve a list of messages from the blo
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessages{ts:line-numbers}
 
-## Get resources
-
-You can use the `getResourcesToSpend` method to retrieve a list of all the resources (coins + assets) that can be spent by a given address.
-
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getResourcesToSpend{ts:line-numbers}
-
 ## Get message proof
 
 A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
