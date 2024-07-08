@@ -4,11 +4,11 @@
     "**/*/.vitepress/*",
     "/apps/docs/*",
     "/packages/abi-typegen/test/**",
-    "templates/**"
+    "templates/**",
+    "apps/create-fuels-counter-guide/**"
   ],
   "ignoreDependencies": [
     "bun",
-    "@/sway-api",
     "@/sway-api/*",
     "@fuel-ts/*",
     "@internal/fuel-core",
