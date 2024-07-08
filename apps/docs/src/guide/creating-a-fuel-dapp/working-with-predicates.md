@@ -1,4 +1,3 @@
-
 # Working with Predicates
 
 This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've gotten the dApp there up and running, then you can continue here via clicking the Predicate Example link. We will modify the predicate we created in the previous guide. The final result will look like this:
@@ -21,7 +20,7 @@ We will now add new button to the frontend that will update the `pin` in the pre
 
 We will add a function called `changePin`, which will use the current pin in state to update the pin in the predicate as well as transfer 1000 to the predicate.
 
-<<< @/../../create-fuels-counter-guide/src/pages/predicate.tsx#change-pin-react-function{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/app/predicate/page.tsx#change-pin-react-function{ts:line-numbers}
 
 It would also be useful to change the placeholder text to say "Enter a new pin" instead of "Hint - the correct pin is 1337".
 
