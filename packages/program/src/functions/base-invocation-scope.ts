@@ -5,14 +5,14 @@ import type {
   Provider,
   CoinQuantity,
   CallResult,
-  Account,
   TransferParams,
-  Predicate,
+  TransactionCost,
+  Account,
 } from '@fuel-ts/account';
-import { ScriptTransactionRequest, mergeQuantities } from '@fuel-ts/account';
+import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
+import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { InputType, TransactionType } from '@fuel-ts/transactions';
@@ -228,48 +228,14 @@ export class BaseInvocationScope<TReturn = any> {
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
-  async getTransactionCost() {
-    const provider = this.getProvider();
-    const baseAssetId = provider.getBaseAssetId();
+  async getTransactionCost(): Promise<TransactionCost> {
     const request = clone(await this.getTransactionRequest());
-    const isScriptTransaction = request.type === TransactionType.Script;
-
-    // Fund with fake UTXOs to avoid not enough funds error
-    // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = request.getCoinOutputsQuantities();
-    // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const quantitiesToContract = this.getRequiredCoins();
-    const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
-    // Funding transaction with fake utxos
-    request.fundWithFakeUtxos(requiredQuantities, baseAssetId, this.program.account?.address);
-
-    /**
-     * Estimate predicates gasUsed
-     */
-    // Remove gasLimit to avoid gasLimit when estimating predicates
-    if (isScriptTransaction) {
-      request.gasLimit = bn(0);
-    }
-
-    /**
-     * The fake utxos added above can be from a predicate
-     * If the resources owner is a predicate,
-     * we need to populate the resources with the predicate's data
-     * so that predicate estimation can happen.
-     */
-    if (this.program.account && 'populateTransactionPredicateData' in this.program.account) {
-      (this.program.account as unknown as Predicate<[]>).populateTransactionPredicateData(request);
-    }
-
-    const txCost = await provider.getTransactionCost(request, {
+    const account: AbstractAccount =
+      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+    return account.getTransactionCost(request, {
+      quantitiesToContract: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
-      funded: true,
     });
-
-    return {
-      ...txCost,
-      requiredQuantities,
-    };
   }
 
   /**
