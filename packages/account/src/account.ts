@@ -578,16 +578,6 @@ export class Account extends AbstractAccount {
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
-    const baseAssetId = this.provider.getBaseAssetId();
-
-    // Fund with fake UTXOs to avoid not enough funds error
-    // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
-    // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
-    // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, this.address);
-
     /**
      * Estimate predicates gasUsed
      */
@@ -596,15 +586,13 @@ export class Account extends AbstractAccount {
       txRequestClone.gasLimit = bn(0);
     }
 
-    /**
-     * The fake utxos added above can be from a predicate
-     * If the resources owner is a predicate,
-     * we need to populate the resources with the predicate's data
-     * so that predicate estimation can happen.
-     */
-    if (this && 'populateTransactionPredicateData' in this) {
-      (this as unknown as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
-    }
+    // Fund with fake UTXOs to avoid not enough funds error
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
+    const resources = this.generateFakeResources(allQuantities);
+    txRequestClone.addResources(resources);
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
