@@ -1,6 +1,4 @@
-import { generateTestWallet, launchNode } from '@fuel-ts/account/test-utils';
 import { ErrorCode } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import {
   FUEL_NETWORK_URL,
   Provider,
@@ -10,6 +8,7 @@ import {
   WalletUnlocked,
   ScriptTransactionRequest,
 } from 'fuels';
+import { generateTestWallet, launchNode, expectToThrowFuelError } from 'fuels/test-utils';
 import type { MockInstance } from 'vitest';
 
 async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {

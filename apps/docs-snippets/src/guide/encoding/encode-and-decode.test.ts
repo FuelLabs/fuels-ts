@@ -1,14 +1,14 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import {
   FUEL_NETWORK_URL,
   Provider,
   AbiCoder,
-  FunctionInvocationResult,
   Script,
   ReceiptType,
   arrayify,
+  buildFunctionResult,
 } from 'fuels';
 import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
 import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';
@@ -82,16 +82,16 @@ describe('encode and decode', () => {
     // #endregion encode-and-decode-4
 
     // #region encode-and-decode-5
-    // #import { FunctionInvocationResult, AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify};
+    // #import { AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify, buildFunctionResult };
 
     // Get result of the transaction, including the contract call result. For this we'll need
     // the previously created invocation scope, the transaction response and the script
-    const invocationResult = await FunctionInvocationResult.build(
-      [invocationScope],
-      response,
-      false,
-      script
-    );
+    const invocationResult = await buildFunctionResult({
+      funcScope: invocationScope,
+      isMultiCall: false,
+      program: script,
+      transactionResponse: response,
+    });
 
     // The decoded value can be destructured from the `FunctionInvocationResult`
     const { value } = invocationResult;

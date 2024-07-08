@@ -57,4 +57,6 @@ export const expectToThrowFuelError = async (
 
   expect(thrownError.name).toEqual('FuelError');
   expect(thrownError).toMatchObject(expectedError);
+
+  return thrownError;
 };

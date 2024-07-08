@@ -1,6 +1,6 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
 import type { BN, Contract } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 
