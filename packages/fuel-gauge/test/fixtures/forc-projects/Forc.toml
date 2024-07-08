@@ -66,4 +66,5 @@ members = [
   "vector-types-script",
   "vectors",
   "options",
+  "NFT-contract"
 ]
