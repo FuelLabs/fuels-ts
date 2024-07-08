@@ -1,2 +1,3 @@
 [workspace]
-members = [ "contract", "predicate", "script" ]
+authors = ["Fuel Labs <contact@fuel.sh>"]]
+members = ["contract", "predicate", "script"]
