@@ -1,0 +1,50 @@
+name: Bug Report
+description: Open an issue for a problem you've identified with `fuels`.
+labels: ["triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping to improve our Typescript SDK!
+
+        Before submitting an issue, please ensure you are using the latest version of the SDK, as well as `forc` and `fuel-core`. Additionally, search through
+        the [documentation](https://docs.fuel.network/docs/fuels-ts/) or on our [forum](https://forum.fuel.network/c/typescript-sdk) as it's possible your problem
+        has already been solved there.
+
+        Failing that, please submit an issue using the form below.
+  - type: input
+    attributes:
+      label: `fuels` Version
+      description: What version of `fuels` are you using? Before opening an issue, please make sure you are up to date.
+      placeholder: fuels@x.y.z
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: `forc` and `fuel-core` Version
+      description: What version of `forc` and `fuel-core` are you using? Please share the result of running `fuelup show`.
+      placeholder: forc@x.y.z and fuel-core@x.y.z
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the Problem
+      description: Please describe what you expected to happen vs what did happen? Please include steps to reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Code Snippet
+      description: If possible, please include a **short and concise** code snippet that can reproduce this issue.
+      render: shell
+  - type: textarea
+    attributes:
+      label: Contract ABI
+      description: If this involves a contract, please include any **concise and relevant** ABI fragments.
+      render: shell
+  - type: textarea
+    id: errors
+    attributes:
+      label: Errors
+      description: If there is an error, please include the **entire error** (redacting any sensitive information).
+      render: shell
