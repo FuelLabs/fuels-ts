@@ -22,7 +22,7 @@ type Result<T> = {
 /**
  * Represents a function that can be invoked within a script.
  */
-type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
+export type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
   ...args: TArgs
 ) => ScriptInvocationScope<TArgs, TReturn>;
 
@@ -61,6 +61,11 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   functions: { main: InvokeMain<TInput, TOutput> };
 
   /**
+   * The main function that can be invoked within the script.
+   */
+  main: InvokeMain<TInput, TOutput>;
+
+  /**
    * Create a new instance of the Script class.
    *
    * @param bytecode - The compiled bytecode of the script.
@@ -79,6 +84,8 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
       main: (...args: TInput) =>
         new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
     };
+
+    this.main = this.functions.main;
   }
 
   /**
