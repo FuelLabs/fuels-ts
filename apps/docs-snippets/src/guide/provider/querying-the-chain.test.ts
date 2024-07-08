@@ -179,11 +179,7 @@ describe('querying the chain', () => {
     const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
 
     // Retrieves the message proof for the transaction ID and nonce using blockId
-    const messageProof = await provider.getMessageProof(
-      result.gqlTransaction.id,
-      nonce,
-      blockId
-    );
+    const messageProof = await provider.getMessageProof(result.gqlTransaction.id, nonce, blockId);
     // #endregion Message-getMessageProof-blockId
 
     expect(messageProof?.amount.toNumber()).toEqual(100);
