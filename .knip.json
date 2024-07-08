@@ -7,6 +7,7 @@
     "templates/**"
   ],
   "ignoreDependencies": [
+    "bun",
     "@/sway-api/*",
     "@fuel-ts/*",
     "@internal/fuel-core",
