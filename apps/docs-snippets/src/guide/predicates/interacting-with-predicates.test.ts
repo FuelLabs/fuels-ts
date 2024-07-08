@@ -1,5 +1,5 @@
 import { seedTestWallet } from '@fuel-ts/account/test-utils';
-import type { Provider, WalletUnlocked } from 'fuels';
+import type { WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, bn, Predicate, BN } from 'fuels';
 
 import {
@@ -15,7 +15,6 @@ describe(__filename, () => {
   let wallet: WalletUnlocked;
   let receiver: WalletUnlocked;
   let baseAssetId: string;
-  let provider: Provider;
   let predicate: Predicate<[string]>;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
@@ -27,7 +26,6 @@ describe(__filename, () => {
   beforeAll(async () => {
     wallet = await getTestWallet();
     receiver = await getTestWallet();
-    provider = wallet.provider;
 
     baseAssetId = wallet.provider.getBaseAssetId();
 
