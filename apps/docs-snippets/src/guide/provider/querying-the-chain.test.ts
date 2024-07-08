@@ -179,8 +179,8 @@ describe('querying the chain', () => {
     expect(spendableResources[1].amount).toEqual(bn(100));
   });
 
-  it('can getMessageProof', async () => {
-    // #region Message-getMessageProof
+  it('can getMessageProof with blockId', async () => {
+    // #region Message-getMessageProof-blockId
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
     // Launches a test node with two wallets established
@@ -202,15 +202,66 @@ describe('querying the chain', () => {
     const tx = await sender.withdrawToBaseLayer(recipientAddress, 100);
     const result = await tx.waitForResult();
 
-    // Retrieves the message out receipt from the transaction result
-    const messageOutReceipt = result.receipts[0] as TransactionResultMessageOutReceipt;
+    // Wait for the next block to be minter on out case we are using a local provider
+    // so we can create a new tx to generate next block
+    const resp = await sender.withdrawToBaseLayer(recipientAddress, 100);
+    const { blockId } = await resp.waitForResult();
 
-    // Retrieves the message proof for the transaction ID and nonce
+    // Retrieves the message out receipt from the transaction result
+    const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
+
+    // Retrieves the message proof for the transaction ID and nonce using blockId
     const messageProof = await provider.getMessageProof(
       result.gqlTransaction.id,
-      messageOutReceipt.nonce
+      nonce,
+      blockId
     );
-    // #endregion Message-getMessageProof
+    // #endregion Message-getMessageProof-blockId
+
+    expect(messageProof?.amount.toNumber()).toEqual(100);
+    expect(messageProof?.sender.toHexString()).toEqual(result.id);
+  });
+
+  it('can getMessageProof with blockHeight', async () => {
+    // #region Message-getMessageProof-blockHeight
+    // #import { launchTestNode, TransactionResultMessageOutReceipt };
+
+    // Launches a test node with two wallets established
+    using launched = await launchTestNode({
+      walletsConfig: {
+        count: 2,
+      },
+    });
+
+    const {
+      wallets: [sender, recipient],
+      provider,
+    } = launched;
+
+    // Defines the recipient address
+    const recipientAddress = recipient.address.toB256();
+
+    // Performs a withdrawal transaction from sender to recipient
+    const tx = await sender.withdrawToBaseLayer(recipientAddress, 100);
+    const result = await tx.waitForResult();
+
+    // Wait for the next block to be minter on out case we are using a local provider
+    await sender.withdrawToBaseLayer(recipientAddress, 100);
+
+    // Retrieves the message out receipt from the transaction result
+    const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
+
+    // Retrives the latest block
+    const latestBlock = await provider.getBlock('latest');
+
+    // Retrieves the message proof for the transaction ID and nonce using blockHeight
+    const messageProof = await provider.getMessageProof(
+      result.gqlTransaction.id,
+      nonce,
+      undefined,
+      latestBlock?.height
+    );
+    // #endregion Message-getMessageProof-blockHeight
 
     expect(messageProof?.amount.toNumber()).toEqual(100);
     expect(messageProof?.sender.toHexString()).toEqual(result.id);

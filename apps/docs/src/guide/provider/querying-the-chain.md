@@ -45,22 +45,26 @@ You can use the `getMessageByNonce` method to retrieve a message by its nonce.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#getMessageByNonce{ts:line-numbers}
 
-## Get messages
+## Get Messages
 
 You can use the `getMessages` method to retrieve a list of messages from the blockchain.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessages{ts:line-numbers}
 
-## Get resources
+## Get Resources
 
 You can use the `getResourcesToSpend` method to retrieve a list of all the resources (coins + assets) that can be spent by a given address.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getResourcesToSpend{ts:line-numbers}
 
-## Get message proof
+## Get Message Proof
 
 A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof{ts:line-numbers}
+### With blockId
 
-<!-- TODO: Add docs for the two new parameters `commitBlockId` and `commitBlockHeight` -->
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof-blockId{ts:line-numbers}
+
+### With blockHeight
+
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof-blockHeight{ts:line-numbers}
