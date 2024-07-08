@@ -1101,7 +1101,7 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * Returns a transaction cost to enable user
    * to set gasLimit and also reserve balance amounts
-   * on the the transaction.
+   * on the transaction.
    *
    * @param transactionRequestLike - The transaction request object.
    * @param transactionCostParams - The transaction cost parameters (optional).
