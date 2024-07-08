@@ -8,13 +8,15 @@ import { launchNode } from './launchNode';
  * @group node
  */
 describe('launchNode-singular-test', () => {
-  let killedNodeUrl = '';
+  const killedNode = {
+    url: '',
+  };
   afterAll(async () => {
-    await expect(fetch(killedNodeUrl)).rejects.toThrow('fetch failed');
+    await expect(fetch(killedNode.url)).rejects.toThrow('fetch failed');
   });
   test.only('synchronous cleanup kills node before test runner exits', async () => {
     const { cleanup, url } = await launchNode();
-    killedNodeUrl = url;
+    killedNode.url = url;
     cleanup();
   });
 });
