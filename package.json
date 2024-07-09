@@ -93,7 +93,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-tsdoc": "^0.3.0",
     "glob": "^10.2.6",
-    "knip": "^5.24.1",
+    "knip": "^5.25.1",
     "memfs": "^4.9.3",
     "nodemon": "^3.1.4",
     "npm-run-all": "^4.1.5",
