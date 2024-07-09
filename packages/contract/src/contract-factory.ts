@@ -1,14 +1,13 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
-import { CreateTransactionRequest } from '@fuel-ts/account';
 import type {
   Account,
   CreateTransactionRequestLike,
   Provider,
-  TransactionResponse,
   TransactionResult,
   TransactionType,
 } from '@fuel-ts/account';
+import { CreateTransactionRequest } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
@@ -28,10 +27,12 @@ export type DeployContractOptions = {
   configurableConstants?: { [name: string]: unknown };
 } & CreateTransactionRequestLike;
 
-export type DeployContractAsyncResult<TContract extends Contract = Contract> = {
-  waitForDeploy: () => Promise<TContract>;
-  transactionResponse: TransactionResponse;
-  transactionResult: TransactionResult<TransactionType.Create>;
+export type DeployContractResult<TContract extends Contract = Contract> = {
+  transactionId: string;
+  waitForResult: () => Promise<{
+    contract: TContract;
+    transactionResult: TransactionResult<TransactionType.Create>;
+  }>;
 };
 
 /**
@@ -146,40 +147,22 @@ export default class ContractFactory {
    */
   async deployContract<TContract extends Contract = Contract>(
     deployContractOptions: DeployContractOptions = {}
-  ) {
+  ): Promise<DeployContractResult<TContract>> {
     const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
     const account = this.getAccount();
 
-    await account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
+    const transactionResponse = await account.sendTransaction(transactionRequest, {
+      awaitExecution: false,
     });
 
-    return new Contract(contractId, this.interface, account) as TContract;
-  }
+    const waitForResult = async () => {
+      const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
+      const contract = new Contract(contractId, this.interface, account) as TContract;
 
-  /**
-   * Deploys a contract asynchronously.
-   *
-   * @template TContract - The type of the contract to be deployed.
-   * @param deployContractOptions - The options for deploying the contract.
-   * @returns A promise that resolves waitForResult, transactionResult, and transactionResponse.
-   */
-  async deployContractAsync<TContract extends Contract = Contract>(
-    deployContractOptions: DeployContractOptions = {}
-  ): Promise<DeployContractAsyncResult<TContract>> {
-    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
-    const account = this.getAccount();
-
-    const transactionResponse = await account.sendTransaction(transactionRequest);
-    const transactionResult = await transactionResponse.assembleResult<TransactionType.Create>();
-
-    const waitForDeploy = async () => {
-      await transactionResponse.waitForResult<TransactionType.Create>();
-      const contract = new Contract(contractId, this.interface, account);
-      return contract as TContract;
+      return { contract, transactionResult };
     };
 
-    return { waitForDeploy, transactionResult, transactionResponse };
+    return { waitForResult, transactionId: transactionResponse.id };
   }
 
   /**
