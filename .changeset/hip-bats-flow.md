@@ -1,0 +1,3 @@
+---
+"@fuel-ts/account": patch
+---
