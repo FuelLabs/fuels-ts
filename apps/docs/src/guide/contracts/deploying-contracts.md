@@ -27,23 +27,15 @@ Load the contract bytecode and JSON ABI, generated from the Sway source, into th
 
 ## 4. Deploying the Contract
 
-To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deployContract` method. This method returns a promise that will resolve to a `Contract` instance, ready to be used to interact with the deployed smart contract.
+To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deployContract` method. This call resolves as soon as the transaction to deploy the contract is submitted and returns two items: the `transactionId` and a `waitForResult` function.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-3{ts:line-numbers}
 
-The `deployContract` method resolves only after the deploy contract transaction has been processed and the smart contract is deployed on the blockchain. This process can take several seconds and will block any subsequent code execution.
-
-If this blocking is not suitable for your dApp, you can use the `deployContractAsync` method.
-
-## 5. Deploying the Contract Asynchronously
-
-In some cases, you may not want to wait for the deploy contract transaction to finish processing. In these instances, you can use `deployContractAsync`. This method resolves as soon as the transaction to deploy the contract is submitted and returns three things:
+The `contract` instance will be returned only after calling `waitForResult` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-4{ts:line-numbers}
 
-The `contract` instance will be returned only after calling `waitForDeploy` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed.
-
-## 6. Executing a Contract Call
+## 5. Executing a Contract Call
 
 Now that the contract is deployed, you can interact with it. In the following steps, you'll learn how to execute contract calls.
 
