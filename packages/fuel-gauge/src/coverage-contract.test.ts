@@ -512,7 +512,8 @@ describe('Coverage Contract', () => {
   });
 
   it('should get initial state messages from node', async () => {
-    const { provider } = await setupContract();
+    using launched = await setupContract();
+    const { provider } = launched;
 
     // #region Message-getMessages
     const WALLET_A = Wallet.fromPrivateKey(

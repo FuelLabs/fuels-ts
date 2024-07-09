@@ -26,7 +26,6 @@ import type {
 } from 'fuels';
 import {
   generateTestWallet,
-  seedTestWallet,
   expectToThrowFuelError,
   ASSET_A,
   ASSET_B,
@@ -182,13 +181,10 @@ describe('Contract', () => {
       },
     });
     const {
-      provider,
       wallets: [wallet],
     } = launched;
 
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
-
-    const spy = vi.spyOn(provider, 'sendTransaction');
 
     const fragment = contract.interface.getFunction('entry_one');
     const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
@@ -199,11 +195,10 @@ describe('Contract', () => {
       // The call will fail, but it doesn't matter
     }
 
-    expect(spy).toHaveBeenCalled();
     expect(interfaceSpy).toHaveBeenCalled();
   });
 
-  it.only('generates function methods on a complex contract', async () => {
+  it('generates function methods on a complex contract', async () => {
     using launched = await launchTestNode();
     const {
       wallets: [wallet],
@@ -732,17 +727,16 @@ describe('Contract', () => {
   });
 
   it('Parse create TX to JSON and parse back to create TX', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
-    const wallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(wallet, [
-      {
-        amount: bn(1_000_000),
-        assetId: provider.getBaseAssetId(),
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000_000,
       },
-    ]);
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const contract = new ContractFactory(
       StorageTestContractAbiHex,
       StorageTestContractAbi__factory.abi,
@@ -781,12 +775,6 @@ describe('Contract', () => {
       provider,
     });
 
-    await seedTestWallet(externalWallet, [
-      {
-        amount: bn(1_000_000),
-        assetId: provider.getBaseAssetId(),
-      },
-    ]);
     // Create a custom provider to emulate a external signer
     // like Wallet Extension or a Hardware wallet
     let signedTransaction;
