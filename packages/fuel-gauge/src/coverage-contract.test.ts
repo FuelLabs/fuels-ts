@@ -57,7 +57,8 @@ enum MixedNativeEnum {
 describe('Coverage Contract', () => {
   it('can return outputs', async () => {
     // Call contract methods
-    let expectedValue: any = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+    let expectedValue: unknown =
+      '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
     let call = await contractInstance.functions.get_id().call();
     let result = await call.waitForResult();
 
