@@ -29,6 +29,7 @@ export type DeployContractOptions = {
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
   transactionId: string;
+  contractId: string;
   waitForResult: () => Promise<{
     contract: TContract;
     transactionResult: TransactionResult<TransactionType.Create>;
@@ -162,7 +163,7 @@ export default class ContractFactory {
       return { contract, transactionResult };
     };
 
-    return { waitForResult, transactionId: transactionResponse.id };
+    return { waitForResult, contractId, transactionId: transactionResponse.id };
   }
 
   /**

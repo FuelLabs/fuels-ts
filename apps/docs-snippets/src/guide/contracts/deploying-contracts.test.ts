@@ -44,7 +44,7 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const { transactionId, waitForResult } = await factory.deployContract();
+    const { contractId, transactionId, waitForResult } = await factory.deployContract();
     // #endregion contract-setup-3
 
     // #region contract-setup-4
@@ -55,7 +55,8 @@ describe(__filename, () => {
     const { value } = await contract.functions.echo_u8(15).call();
     // #endregion contract-setup-5
 
-    expect(transactionId).toBeDefined();
+    expect(transactionId).toBeInstanceOf(String);
+    expect(contractId).toBeInstanceOf(String);
     expect(transactionResult.isStatusSuccess).toBeTruthy();
     expect(value).toBe(15);
   });
