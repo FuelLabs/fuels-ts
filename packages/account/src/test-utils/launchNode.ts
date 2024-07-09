@@ -213,6 +213,17 @@ export const launchNode = async ({
       });
     }
 
+    const removeSideffects = () => {
+      child.stderr.removeAllListeners();
+
+      if (existsSync(tempDir)) {
+        rmSync(tempDir, { recursive: true });
+      }
+    };
+
+    child.on('error', removeSideffects);
+    child.on('exit', removeSideffects);
+
     const childState = {
       isDead: false,
     };
@@ -222,15 +233,6 @@ export const launchNode = async ({
         return;
       }
       childState.isDead = true;
-
-      // Remove all the listeners we've added.
-      child.stderr.removeAllListeners();
-
-      // Remove the temporary folder and all its contents.
-      if (existsSync(tempDir)) {
-        rmSync(tempDir, { recursive: true });
-      }
-
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       process.kill(-child.pid!);
     };

@@ -1,8 +1,9 @@
 import { ErrorCode } from '@fuel-ts/errors';
 import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { defaultSnapshotConfigs } from '@fuel-ts/utils';
+import { defaultSnapshotConfigs, sleep } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
+import * as fsMod from 'fs';
 
 import { Provider } from '../providers';
 
@@ -10,6 +11,14 @@ import { launchNode } from './launchNode';
 
 vi.mock('child_process', async () => {
   const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
+vi.mock('fs', async () => {
+  const mod = await vi.importActual('fs');
   return {
     __esModule: true,
     ...mod,
@@ -128,10 +137,58 @@ describe('launchNode', () => {
     cleanup();
   });
 
+  test('cleanup removes temporary directory', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
+    const { cleanup } = await launchNode();
+
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+    const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
+    cleanup();
+
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
+  });
+
+  test('temporary directory gets removed on error', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
+
+    const invalidCoin = {
+      asset_id: 'whatever',
+      tx_id: '',
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+      owner: '',
+      amount: 0,
+    };
+
+    const { error } = await safeExec(async () =>
+      launchNode({
+        loggingEnabled: false,
+        snapshotConfig: {
+          ...defaultSnapshotConfigs,
+          stateConfig: {
+            coins: [invalidCoin],
+            messages: [],
+          },
+        },
+      })
+    );
+    expect(error).toBeDefined();
+
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+    const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
+
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
+  });
+
   test('calling cleanup multiple times does not retry process killing', async () => {
     const killSpy = vi.spyOn(process, 'kill');
 
-    const { cleanup } = await launchNode();
+    const { cleanup } = await launchNode({ loggingEnabled: false });
 
     cleanup();
 
