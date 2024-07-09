@@ -66,6 +66,9 @@ import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
+export const RESOURCES_PAGE_SIZE_LIMIT = 512;
+export const BLOCKS_PAGE_SIZE_LIMIT = 5;
+
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
 
@@ -1287,7 +1290,10 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       coins: { edges, pageInfo },
     } = await this.operations.getCoins({
-      ...this.validatePaginationArgs(paginationArgs),
+      ...this.validatePaginationArgs({
+        paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
+        inputArgs: paginationArgs,
+      }),
       filter: { owner: ownerAddress.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
@@ -1417,7 +1423,12 @@ Supported fuel-core version: ${supportedVersion}.`
   async getBlocks(params?: CursorPaginationArgs): Promise<GetBlocksResponse> {
     const {
       blocks: { edges, pageInfo },
-    } = await this.operations.getBlocks({ ...this.validatePaginationArgs(params) });
+    } = await this.operations.getBlocks({
+      ...this.validatePaginationArgs({
+        paginationLimit: BLOCKS_PAGE_SIZE_LIMIT,
+        inputArgs: params,
+      }),
+    });
 
     const blocks: Block[] = edges.map(({ node: block }) => ({
       id: block.id,
@@ -1597,7 +1608,10 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       messages: { edges, pageInfo },
     } = await this.operations.getMessages({
-      ...this.validatePaginationArgs(paginationArgs),
+      ...this.validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
+      }),
       owner: Address.fromAddressOrString(address).toB256(),
     });
 
@@ -1839,10 +1853,12 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  private validatePaginationArgs(inputArgs: CursorPaginationArgs = {}): CursorPaginationArgs {
-    const MAX_PAGINATION_LIMIT = 1000;
-    const cursorArgs = { ...inputArgs };
-    const { first, last, after, before } = cursorArgs;
+  private validatePaginationArgs(params: {
+    inputArgs?: CursorPaginationArgs;
+    paginationLimit: number;
+  }): CursorPaginationArgs {
+    const { paginationLimit, inputArgs = {} } = params;
+    const { first, last, after, before } = inputArgs;
 
     if (after && before) {
       throw new FuelError(
@@ -1851,10 +1867,10 @@ Supported fuel-core version: ${supportedVersion}.`
       );
     }
 
-    if ((first || 0) > MAX_PAGINATION_LIMIT || (last || 0) > MAX_PAGINATION_LIMIT) {
+    if ((first || 0) > paginationLimit || (last || 0) > paginationLimit) {
       throw new FuelError(
         ErrorCode.INVALID_INPUT_PARAMETERS,
-        'Pagination limit cannot exceed 1000 items'
+        `Pagination limit for this query cannot exceed ${paginationLimit} items`
       );
     }
 
@@ -1874,10 +1890,10 @@ Supported fuel-core version: ${supportedVersion}.`
 
     // If neither first nor last is provided, set a default first value
     if (!first && !last) {
-      cursorArgs.first = 100;
+      inputArgs.first = paginationLimit;
     }
 
-    return cursorArgs;
+    return inputArgs;
   }
 
   /**
