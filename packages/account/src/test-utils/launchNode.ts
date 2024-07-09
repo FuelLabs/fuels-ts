@@ -215,7 +215,6 @@ export const launchNode = async ({
 
     const removeSideffects = () => {
       child.stderr.removeAllListeners();
-
       if (existsSync(tempDir)) {
         rmSync(tempDir, { recursive: true });
       }
@@ -233,8 +232,14 @@ export const launchNode = async ({
         return;
       }
       childState.isDead = true;
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      process.kill(-child.pid!);
+
+      if (child.pid !== undefined) {
+        process.kill(child.pid);
+      } else {
+        removeSideffects();
+        // eslint-disable-next-line no-console
+        console.error('No PID available for the child process, unable to kill launched node');
+      }
     };
 
     // Look for a specific graphql start point in the output.
