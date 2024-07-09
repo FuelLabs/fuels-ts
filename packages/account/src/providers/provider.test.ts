@@ -26,7 +26,7 @@ import {
 import { Wallet } from '../wallet';
 
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
-import Provider from './provider';
+import Provider, { BLOCKS_PAGE_SIZE_LIMIT, RESOURCES_PAGE_SIZE_LIMIT } from './provider';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -720,13 +720,14 @@ describe('Provider', () => {
 
   it('can getBlocks', async () => {
     using launched = await setupTestProviderAndWallets();
+    const blocksLenght = 5;
     const { provider } = launched;
-    // Force-producing some blocks to make sure that 10 blocks exist
-    await provider.produceBlocks(10);
+    // Force-producing some blocks to make sure that blocksLenght blocks exist
+    await provider.produceBlocks(blocksLenght);
     const { blocks } = await provider.getBlocks({
-      last: 10,
+      last: 5,
     });
-    expect(blocks.length).toBe(10);
+    expect(blocks.length).toBe(blocksLenght);
     blocks.forEach((block) => {
       expect(block).toEqual(
         expect.objectContaining({
@@ -1533,10 +1534,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   describe('paginated methods', () => {
-    const defaultItemsPerPage = 100;
-
     test('can properly use getCoins', async () => {
-      const totalCoins = 1001;
+      const totalCoins = RESOURCES_PAGE_SIZE_LIMIT + 1;
 
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
@@ -1588,14 +1587,14 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       expect(pageInfo.startCursor).toBeDefined();
       expect(pageInfo.endCursor).toBeDefined();
 
-      // can fetch default 100 items
+      // can fetch default 1000 items
       ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId));
 
-      expect(coins.length).toBe(defaultItemsPerPage);
+      expect(coins.length).toBe(RESOURCES_PAGE_SIZE_LIMIT);
     });
 
     test('can properly use getMessages', async () => {
-      const totalMessages = 1001;
+      const totalMessages = RESOURCES_PAGE_SIZE_LIMIT + 1;
       const fakeMessages = Array.from({ length: totalMessages }, (_) => new TestMessage());
       using launched = await setupTestProviderAndWallets({
         walletsConfig: {
@@ -1644,11 +1643,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       ({ messages, pageInfo } = await provider.getMessages(wallet.address));
 
       // can fetch default 100 items
-      expect(messages.length).toBe(defaultItemsPerPage);
+      expect(messages.length).toBe(RESOURCES_PAGE_SIZE_LIMIT);
     });
 
     test('can properly use getBlocks', async () => {
-      const blocksToProduce = 10;
+      const blocksToProduce = 5;
       // one is produced when the node starts
       const totalBlocksProduced = blocksToProduce + 1;
 
@@ -1678,7 +1677,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       expect(pageInfo.endCursor).toBeDefined();
 
       // can show previous page with less blocks
-      const last = 5;
+      const last = 2;
       ({ blocks, pageInfo } = await provider.getBlocks({
         before: pageInfo.startCursor,
         last,
@@ -1699,25 +1698,38 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       });
       const { provider } = launched;
       const baseAssetId = provider.getBaseAssetId();
-      const itemsPerPage = 1001;
       const address = Address.fromRandom();
+      const exceededLimit = RESOURCES_PAGE_SIZE_LIMIT + 1;
+      const safeLimit = BLOCKS_PAGE_SIZE_LIMIT;
 
       function getInvocations(args: CursorPaginationArgs) {
         return [
-          { name: 'getCoins', invocation: () => provider.getCoins(address, baseAssetId, args) },
-          { name: 'getMessages', invocation: () => provider.getMessages(address, args) },
-          { name: 'getBlocks', invocation: () => provider.getBlocks(args) },
+          {
+            name: 'getCoins',
+            invocation: () => provider.getCoins(address, baseAssetId, args),
+            limit: RESOURCES_PAGE_SIZE_LIMIT,
+          },
+          {
+            name: 'getMessages',
+            invocation: () => provider.getMessages(address, args),
+            limit: RESOURCES_PAGE_SIZE_LIMIT,
+          },
+          {
+            name: 'getBlocks',
+            invocation: () => provider.getBlocks(args),
+            limit: BLOCKS_PAGE_SIZE_LIMIT,
+          },
         ];
       }
 
-      const args1: CursorPaginationArgs = { first: itemsPerPage };
+      const args1: CursorPaginationArgs = { first: exceededLimit };
       const invocations1 = getInvocations(args1);
-      it.each(invocations1)('validate max items on $name', async ({ invocation }) => {
+      it.each(invocations1)('validate max items on $name', async ({ invocation, limit }) => {
         await expectToThrowFuelError(
           () => invocation(),
           new FuelError(
             ErrorCode.INVALID_INPUT_PARAMETERS,
-            'Pagination limit cannot exceed 1000 items'
+            `Pagination limit for this query cannot exceed ${limit} items`
           )
         );
       });
@@ -1737,7 +1749,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         }
       );
 
-      const args3: CursorPaginationArgs = { before: 'before', first: 10 };
+      const args3: CursorPaginationArgs = { before: 'before', first: safeLimit };
       const invocations3 = getInvocations(args3);
       it.each(invocations3)(
         "validate use of 'after' with 'last' on $name",
@@ -1752,7 +1764,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         }
       );
 
-      const args4: CursorPaginationArgs = { after: 'after', last: 10 };
+      const args4: CursorPaginationArgs = { after: 'after', last: safeLimit };
       const invocations4 = getInvocations(args4);
       it.each(invocations4)(
         "validate use of 'before' with 'first' on $name",
