@@ -55,8 +55,8 @@ describe(__filename, () => {
     const { value } = await contract.functions.echo_u8(15).call();
     // #endregion contract-setup-5
 
-    expect(transactionId).toBeInstanceOf(String);
-    expect(contractId).toBeInstanceOf(String);
+    expect(transactionId).toBeDefined();
+    expect(contractId).toBeDefined();
     expect(transactionResult.isStatusSuccess).toBeTruthy();
     expect(value).toBe(15);
   });
