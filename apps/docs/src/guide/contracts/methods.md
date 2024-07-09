@@ -30,14 +30,6 @@ Real resources are consumed, and any operations executed by the contract functio
 
 <<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-4{ts:line-numbers}
 
-## `callAndWait`
-
-The `callAndWait` method also submits a real contract call transaction, but unlike `call`, it resolves only when the transaction has finished processing.
-
-Real resources are consumed, and any operations executed by the contract function will be processed on the blockchain.
-
-<<< @/../../docs-snippets/src/guide/contracts/interacting-with-contracts.test.ts#interacting-with-contracts-5{ts:line-numbers}
-
 ## `isReadOnly` (utility)
 
 If you want to figure out whether a function is read-only, you can use the `isReadOnly` method:
