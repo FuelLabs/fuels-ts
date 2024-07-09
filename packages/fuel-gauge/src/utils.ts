@@ -13,7 +13,8 @@ const deployContract = async <TContract extends Contract = Contract>(
   if (contractInstance && useCache) {
     return contractInstance;
   }
-  contractInstance = await factory.deployContract<TContract>();
+  const { waitForResult } = await factory.deployContract<TContract>();
+  ({ contract: contractInstance } = await waitForResult());
   return contractInstance;
 };
 
