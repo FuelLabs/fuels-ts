@@ -16,12 +16,15 @@ export interface JsonAbi {
 export interface JsonAbiType {
   readonly typeId: string;
   readonly type: string;
-  readonly components: readonly JsonAbiArgument[] | null;
+  readonly components: readonly JsonAbiComponent[] | null;
   readonly typeParameters: readonly string[] | null;
 }
 
-export interface JsonAbiArgument {
+export interface JsonAbiComponent extends JsonAbiArgument {
   readonly name: string;
+}
+
+export interface JsonAbiArgument {
   readonly type: string;
   readonly typeArguments: readonly JsonAbiArgument[] | null;
 }
@@ -37,7 +40,7 @@ export interface JsonAbiMessagesType {
 
 export interface JsonAbiFunction {
   readonly name: string;
-  readonly inputs: readonly JsonAbiArgument[];
+  readonly inputs: readonly JsonAbiComponent[];
   readonly output: JsonAbiArgument;
   readonly attributes: readonly JsonAbiFunctionAttribute[] | null;
 }

@@ -1,6 +1,7 @@
 import { createConfig } from 'fuels';
 import dotenv from 'dotenv';
 import { NODE_URL } from '@/lib';
+import { execSync } from 'child_process';
 
 dotenv.config({
   path: ['.env.local', '.env'],
@@ -15,4 +16,7 @@ export default createConfig({
   providerUrl: NODE_URL,
   forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
+  onBuild: () => {
+    execSync('pnpm transform:abi', { stdio: 'inherit' });
+  },
 });

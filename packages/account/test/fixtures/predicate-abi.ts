@@ -1,15 +1,18 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 
 export const predicateAbi: JsonAbi = {
+  abiVersion: '1',
+  specVersion: '1',
+  encoding: '1',
   types: [
     {
-      typeId: 0,
+      typeId: '0',
       type: 'bool',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 1,
+      typeId: '1',
       type: 'b256',
       components: null,
       typeParameters: null,
@@ -20,14 +23,14 @@ export const predicateAbi: JsonAbi = {
       inputs: [
         {
           name: 'data',
-          type: 1,
+          type: '1',
           typeArguments: null,
         },
       ],
       name: 'main',
       output: {
         name: '',
-        type: 0,
+        type: '0',
         typeArguments: null,
       },
       attributes: null,

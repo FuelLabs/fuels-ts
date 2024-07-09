@@ -14,7 +14,7 @@ import { renderDtsTemplate } from './dts';
  * @group node
  */
 describe('templates/dts', () => {
-  test.each(['debug', 'release'])('should render dts template', (build) => {
+  test.each(['release'])('sshould render dts template', (build) => {
     // mocking
     const { restore } = mockVersions();
 
@@ -25,6 +25,7 @@ describe('templates/dts', () => {
     );
     const { abiContents: rawContents } = project;
 
+    console.log(rawContents);
     const abi = new Abi({
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',

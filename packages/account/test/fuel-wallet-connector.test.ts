@@ -283,6 +283,9 @@ describe('Fuel Connector', () => {
       connectors: [new MockConnector()],
     });
     const isAdded = await fuel.addABI('0x001123', {
+      abiVersion: '1',
+      specVersion: '1',
+      encoding: '1',
       types: [],
       loggedTypes: [],
       functions: [],

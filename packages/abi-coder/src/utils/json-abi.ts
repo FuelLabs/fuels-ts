@@ -51,7 +51,7 @@ export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction 
  * @param typeId - the typeId of the type to find
  * @returns the JsonAbi type object
  */
-export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
+export const findTypeById = (abi: JsonAbi, typeId: string): JsonAbiType => {
   const type = abi.types.find((t) => t.typeId === typeId);
   if (!type) {
     throw new FuelError(

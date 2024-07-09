@@ -8,7 +8,7 @@ const CONTRACT_ID = '0x010101010101010101010101010101010101010101010101010101010
 const ABI: JsonAbi = {
   types: [
     {
-      typeId: 0,
+      typeId: '0',
       type: 'u64',
       typeParameters: null,
       components: null,
@@ -19,13 +19,13 @@ const ABI: JsonAbi = {
       inputs: [
         {
           name: 'input',
-          type: 0,
+          type: '0',
           typeArguments: null,
         },
       ],
       name: 'foo',
       output: {
-        type: 0,
+        type: '0',
         typeArguments: null,
         name: '',
       },
@@ -35,6 +35,9 @@ const ABI: JsonAbi = {
   loggedTypes: [],
   messagesTypes: [],
   configurables: [],
+  specVersion: '1',
+  abiVersion: '1',
+  encoding: '1',
 };
 
 /**

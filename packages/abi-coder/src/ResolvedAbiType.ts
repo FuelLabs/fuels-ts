@@ -40,7 +40,7 @@ export class ResolvedAbiType {
     abi: JsonAbi,
     arg: JsonAbiArgument,
     components: readonly JsonAbiArgument[] | null,
-    typeParameters: readonly number[] | null
+    typeParameters: readonly string[] | null
   ) {
     if (components === null) {
       return null;
@@ -51,7 +51,7 @@ export class ResolvedAbiType {
 
     const typeParametersAndArgsMap = typeParameters.reduce(
       (obj, typeParameter, typeParameterIndex) => {
-        const o: Record<number, JsonAbiArgument> = { ...obj };
+        const o: Record<string, JsonAbiArgument> = { ...obj };
         o[typeParameter] = structuredClone(
           arg.typeArguments?.[typeParameterIndex]
         ) as JsonAbiArgument;
@@ -72,7 +72,7 @@ export class ResolvedAbiType {
   private static resolveGenericArgTypes(
     abi: JsonAbi,
     args: readonly JsonAbiArgument[],
-    typeParametersAndArgsMap: Record<number, JsonAbiArgument>
+    typeParametersAndArgsMap: Record<string, JsonAbiArgument>
   ): readonly JsonAbiArgument[] {
     return args.map((arg) => {
       if (typeParametersAndArgsMap[arg.type] !== undefined) {
@@ -110,13 +110,13 @@ export class ResolvedAbiType {
   private static getImplicitGenericTypeParameters(
     abi: JsonAbi,
     args: readonly JsonAbiArgument[] | null,
-    implicitGenericParametersParam?: number[]
+    implicitGenericParametersParam?: string[]
   ) {
     if (!Array.isArray(args)) {
       return null;
     }
 
-    const implicitGenericParameters: number[] = implicitGenericParametersParam ?? [];
+    const implicitGenericParameters: string[] = implicitGenericParametersParam ?? [];
 
     args.forEach((a) => {
       const argType = findTypeById(abi, a.type);

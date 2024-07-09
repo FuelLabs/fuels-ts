@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import { createConfig } from 'fuels';
 
 export default createConfig({
@@ -6,4 +7,7 @@ export default createConfig({
   forcBuildFlags: ['--release'],
   forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
+  onBuild: () => {
+    execSync('pnpm transform:abi', { stdio: 'inherit' });
+  },
 });

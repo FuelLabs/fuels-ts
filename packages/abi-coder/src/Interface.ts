@@ -85,7 +85,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     });
   }
 
-  getTypeById(typeId: number) {
+  getTypeById(typeId: string) {
     return findTypeById(this.jsonAbi, typeId);
   }
 }

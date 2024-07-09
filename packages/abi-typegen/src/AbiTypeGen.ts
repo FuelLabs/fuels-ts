@@ -1,8 +1,10 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { Abi } from './abi/Abi';
+import { mapAbi } from './transform-abi';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
+import type { IRawAbi } from './types/interfaces/IRawAbi';
 import { assembleContracts } from './utils/assembleContracts';
 import { assemblePredicates } from './utils/assemblePredicates';
 import { assembleScripts } from './utils/assembleScripts';
@@ -56,7 +58,7 @@ export class AbiTypeGen {
 
       const abi = new Abi({
         filepath: abiFile.path,
-        rawContents: JSON.parse(abiFile.contents as string),
+        rawContents: mapAbi(JSON.parse(abiFile.contents as string)) as unknown as IRawAbi,
         hexlifiedBinContents: relatedBinFile?.contents,
         storageSlotsContents: relatedStorageSlotsFile?.contents,
         outputDir,
