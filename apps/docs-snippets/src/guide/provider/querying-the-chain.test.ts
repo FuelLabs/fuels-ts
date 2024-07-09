@@ -116,15 +116,16 @@ describe('querying the chain', () => {
     // #import { Provider, FUEL_NETWORK_URL };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
+    const blockToProduce = 3;
 
     // Force-producing some blocks to make sure that 10 blocks exist
-    await provider.produceBlocks(10);
+    await provider.produceBlocks(blockToProduce);
 
     const { blocks } = await provider.getBlocks({
-      last: 10,
+      last: blockToProduce,
     });
     // #endregion Provider-get-blocks
-    expect(blocks.length).toBe(10);
+    expect(blocks.length).toBe(blockToProduce);
   });
 
   it('can getMessageByNonce', async () => {
