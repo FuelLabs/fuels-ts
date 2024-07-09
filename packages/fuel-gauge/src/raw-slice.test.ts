@@ -123,7 +123,12 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [script-raw-slice]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     type MainArgs = [number, Wrapper];
     const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
 

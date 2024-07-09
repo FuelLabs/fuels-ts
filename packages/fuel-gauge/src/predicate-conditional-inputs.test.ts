@@ -1,5 +1,5 @@
 import { Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { launchTestNode, ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import { PredicateConditionalInputsAbi__factory } from '../test/typegen/predicates';
 
@@ -9,9 +9,16 @@ import { PredicateConditionalInputsAbi__factory } from '../test/typegen/predicat
  */
 describe('PredicateConditionalInputs', () => {
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100_000_000,
+      },
+    });
 
-    const { provider } = launched;
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
 
     const aliceWallet = Wallet.generate({
       provider,
@@ -19,10 +26,10 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const adminWallet = await generateTestWallet(provider, [
-      [800_000, provider.getBaseAssetId()],
-      [800_000, ASSET_A],
-    ]);
+    // const adminWallet = await generateTestWallet(provider, [
+    //   [800_000, provider.getBaseAssetId()],
+    //   [800_000, ASSET_A],
+    // ]);
 
     const predicate = new Predicate({
       bytecode: PredicateConditionalInputsAbi__factory.bin,
@@ -88,9 +95,16 @@ describe('PredicateConditionalInputs', () => {
   });
 
   it('should execute custom transaction where predicate transfer to Alice (PREDICATE PAYS FEES)', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100_000_000,
+      },
+    });
 
-    const { provider } = launched;
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
 
     const aliceWallet = Wallet.generate({
       provider,
@@ -98,11 +112,11 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const adminWallet = await generateTestWallet(provider, [
-      [500_000, provider.getBaseAssetId()],
-      [500_000, ASSET_A],
-      [500_000, ASSET_B],
-    ]);
+    // const adminWallet = await generateTestWallet(provider, [
+    //   [500_000, provider.getBaseAssetId()],
+    //   [500_000, ASSET_A],
+    //   [500_000, ASSET_B],
+    // ]);
 
     const predicate = new Predicate({
       bytecode: PredicateConditionalInputsAbi__factory.bin,

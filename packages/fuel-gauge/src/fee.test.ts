@@ -1,7 +1,6 @@
-import { ASSET_A, ASSET_B, expectToBeInRange } from '@fuel-ts/utils/test-utils';
-import type { BN } from 'fuels';
 import { ContractFactory, Predicate, ScriptTransactionRequest, Wallet, getRandomB256 } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import type { BN } from 'fuels';
+import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange, AssetId } from 'fuels/test-utils';
 
 import {
   CallTestContractAbi__factory,
@@ -300,10 +299,7 @@ describe('Fee', () => {
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
-        assets: 3,
-        count: 3,
-        coinsPerAsset: 2,
-        amountPerCoin: 1_000_000,
+        amountPerCoin: 1_000_000_000,
       },
     });
 
@@ -319,7 +315,7 @@ describe('Fee', () => {
       inputData: [1078],
     });
 
-    const tx1 = await wallet.transfer(predicate.address, 2000, provider.getBaseAssetId());
+    const tx1 = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
     await tx1.wait();
 
     const transferAmount = 100;

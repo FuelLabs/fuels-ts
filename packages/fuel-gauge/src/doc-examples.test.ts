@@ -9,7 +9,6 @@ import type {
 import {
   Predicate,
   bn,
-  Provider,
   hashMessage,
   Address,
   arrayify,
@@ -112,15 +111,8 @@ describe('Doc Examples', () => {
   });
 
   test('it has conversion tools', async () => {
-    using node = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
-      walletsConfig: [{}],
-    });
+    using node = await launchTestNode();
+
     const { provider } = node;
     const assetId: string = ZeroBytes32;
     const randomB256Bytes: Bytes = randomBytes(32);
@@ -128,7 +120,11 @@ describe('Doc Examples', () => {
     const address = Address.fromB256(hexedB256);
     const arrayB256: Uint8Array = arrayify(randomB256Bytes);
     const walletLike: WalletLocked = Wallet.fromAddress(address, provider);
-    const contractLike: Contract = new Contract(address, callTestAbi, provider);
+    const contractLike: Contract = new Contract(
+      address,
+      CallTestContractAbi__factory.abi,
+      provider
+    );
 
     expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
     expect(address.equals(contractLike.id as Address)).toBeTruthy();
@@ -198,12 +194,27 @@ describe('Doc Examples', () => {
   });
 
   it('can create wallets', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100_000_000_000_000,
+        assets: [AssetId.A, AssetId.B],
+      },
+    });
 
-    const { provider } = launched;
+    const {
+      provider,
+      wallets: [fundingWallet],
+    } = launched;
 
     const walletA = Wallet.generate({ provider });
+    await fundingWallet.transfer(walletA.address, 100, provider.getBaseAssetId());
+
     const walletB = Wallet.generate({ provider });
+    await fundingWallet.transfer(walletB.address, 100, AssetId.A.value);
+    await fundingWallet.transfer(walletB.address, 100, AssetId.B.value);
+    await fundingWallet.transfer(walletB.address, 100, provider.getBaseAssetId());
+
+    // this wallet has no assets
     const walletC = Wallet.generate({ provider });
 
     // retrieve balances of wallets
@@ -214,8 +225,8 @@ describe('Doc Examples', () => {
     // validate balances
     expect(walletABalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(100) }]);
     expect(walletBBalances).toEqual([
-      { assetId: AssetId.A, amount: bn(100) },
-      { assetId: AssetId.B, amount: bn(100) },
+      { assetId: AssetId.A.value, amount: bn(100) },
+      { assetId: AssetId.B.value, amount: bn(100) },
       { assetId: provider.getBaseAssetId(), amount: bn(100) },
     ]);
     expect(walletCBalances).toEqual([]);
@@ -255,8 +266,16 @@ describe('Doc Examples', () => {
   });
 
   it('can create a predicate and use', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000_000_000_000,
+      },
+    });
+    const {
+      provider,
+      wallets: [fundingWallet],
+    } = launched;
+
     // Setup a private key
     const PRIVATE_KEY_1 = '0x862512a2363db2b3a375c0d4bbbd27172180d89f23f2e259bac850ab02619301';
     const PRIVATE_KEY_2 = '0x37fa81c84ccd547c30c176b118d5cb892bdb113e8e80141f266519422ef9eefd';
@@ -266,6 +285,11 @@ describe('Doc Examples', () => {
     const wallet1: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_1, provider);
     const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
     const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
+
+    await fundingWallet.transfer(wallet1.address, 1_000_000, provider.getBaseAssetId());
+    await fundingWallet.transfer(wallet2.address, 2_000_000, provider.getBaseAssetId());
+    await fundingWallet.transfer(wallet3.address, 300_000, provider.getBaseAssetId());
+
     const receiver = Wallet.generate({ provider });
 
     const AbiInputs: JsonAbi = {

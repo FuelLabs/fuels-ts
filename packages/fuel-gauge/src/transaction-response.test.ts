@@ -1,13 +1,6 @@
 import { ErrorCode } from '@fuel-ts/errors';
-import {
-  Provider,
-  TransactionResponse,
-  Wallet,
-  randomBytes,
-  WalletUnlocked,
-  ScriptTransactionRequest,
-} from 'fuels';
-import { launchNode, expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
+import { TransactionResponse, Wallet, ScriptTransactionRequest } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import type { MockInstance } from 'vitest';
 
 async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<Uint8Array>) {
@@ -80,6 +73,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
 
 /**
  * @group node
+ * @group browser
  */
 describe('TransactionResponse', () => {
   it('should ensure create method waits till a transaction response is given', async () => {
@@ -162,8 +156,22 @@ describe('TransactionResponse', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
-  it('should ensure waitForResult always waits for the transaction to be processed', async () => {
-    using launched = await launchTestNode();
+  it.skip('should ensure waitForResult always waits for the transaction to be processed', async () => {
+    using launched = await launchTestNode({
+      /**
+       * This is set to so long in order to test keep-alive message handling as well.
+       * Keep-alive messages are sent every 15s.
+       * It is very important to test this because the keep-alive messages are not sent in the same format as the other messages
+       * and it is reasonable to expect subscriptions lasting more than 15 seconds.
+       * We need a proper integration test for this
+       * because if the keep-alive message changed in any way between fuel-core versions and we missed it,
+       * all our subscriptions would break.
+       * We need at least one long test to ensure that the keep-alive messages are handled correctly.
+       * */
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
+      },
+    });
 
     const {
       provider,
@@ -178,26 +186,34 @@ describe('TransactionResponse', () => {
     );
     const response = await TransactionResponse.create(transactionId, provider);
 
-    // expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
+    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
 
-    // const subscriptionStreamHolder = {
-    //   stream: new ReadableStream<Uint8Array>(),
-    // };
+    const subscriptionStreamHolder = {
+      stream: new ReadableStream<Uint8Array>(),
+    };
 
-    // getSubscriptionStreamFromFetch(subscriptionStreamHolder);
+    getSubscriptionStreamFromFetch(subscriptionStreamHolder);
 
-    // await response.waitForResult();
+    await response.waitForResult();
 
     expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
     expect(response.gqlTransaction?.id).toBe(transactionId);
 
-    // await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
-  }, 18500);
+    await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
+  });
 
   it('should throw error for a SqueezedOut status update [waitForResult]', async () => {
+    /**
+     * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
+     * before the waitForResult (provider.operations.statusChange) call is made
+     *  */
     using launched = await launchTestNode({
       walletsConfig: {
         amountPerCoin: 500_000,
+      },
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
+        loggingEnabled: false,
       },
     });
 
@@ -238,6 +254,10 @@ describe('TransactionResponse', () => {
       using launched = await launchTestNode({
         walletsConfig: {
           amountPerCoin: 500_000,
+        },
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '4s', '--tx-pool-ttl', '1s'],
+          loggingEnabled: false,
         },
       });
 

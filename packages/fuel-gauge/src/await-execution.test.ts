@@ -1,5 +1,5 @@
 import { Provider, WalletUnlocked, randomBytes, Wallet, FUEL_NETWORK_URL } from 'fuels';
-import { launchNode, launchTestNode } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -51,15 +51,9 @@ describe('await-execution', () => {
 
     const destination = Wallet.generate({ provider });
 
-    await genesisWallet.transfer(
-      destination.address,
-      100,
-      provider.getBaseAssetId(),
-      {
-        gasLimit: 10_000,
-      }
-      // { awaitExecution: true }
-    );
+    await genesisWallet.transfer(destination.address, 100, provider.getBaseAssetId(), {
+      gasLimit: 10_000,
+    });
 
     expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
     const awaitExecutionArg = sendTransactionSpy.mock.calls[0][1];
@@ -77,14 +71,9 @@ describe('await-execution', () => {
 
     const destination = Wallet.generate({ provider });
 
-    await genesisWallet.withdrawToBaseLayer(
-      destination.address,
-      100,
-      {
-        gasLimit: 10_000,
-      }
-      // { awaitExecution: true }
-    );
+    await genesisWallet.withdrawToBaseLayer(destination.address, 100, {
+      gasLimit: 10_000,
+    });
 
     expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
     const awaitExecutionArg = sendTransactionSpy.mock.calls[0][1];

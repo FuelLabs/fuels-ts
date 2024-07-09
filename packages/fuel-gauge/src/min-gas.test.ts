@@ -7,106 +7,113 @@ import {
   hexlify,
   getGasUsedFromReceipts,
   BigNumberCoder,
+  ContractFactory,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ComplexPredicateAbi__factory } from '../test/typegen';
+import {
+  ComplexPredicateAbi__factory,
+  ComplexScriptAbi__factory,
+  CoverageContractAbi__factory,
+} from '../test/typegen';
+import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAbi.hex';
 
 /**
  * @group node
  * @group browser
  */
 describe(__filename, () => {
-  // it('sets gas requirements (contract)', async () => {
-  //   using launched = await launchTestNode({
-  //     walletsConfig: {
-  //       amountPerCoin: 500_000,
-  //     },
-  //   });
+  it('sets gas requirements (contract)', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 500_000,
+      },
+    });
 
-  //   const {
-  //     provider,
-  //     wallets: [wallet],
-  //   } = launched;
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
-  //   /**
-  //    * Create a contract transaction
-  //    */
+    /**
+     * Create a contract transaction
+     */
 
-  //   const { abiContents, binHexlified, storageSlots } = getFuelGaugeForcProject(
-  //     FuelGaugeProjectsEnum.COVERAGE_CONTRACT
-  //   );
+    const contractFactory = new ContractFactory(
+      CoverageContractAbiHex,
+      CoverageContractAbi__factory.abi,
+      wallet
+    );
 
-  //   const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
-  //   const { transactionRequest: request } = contractFactory.createTransactionRequest({
-  //     storageSlots,
-  //   });
-  //   const resources = await provider.getResourcesToSpend(wallet.address, [
-  //     {
-  //       amount: bn(100_000),
-  //       assetId: provider.getBaseAssetId(),
-  //     },
-  //   ]);
-  //   request.addResources(resources);
+    const { transactionRequest: request } = contractFactory.createTransactionRequest({
+      storageSlots: CoverageContractAbi__factory.storageSlots,
+    });
 
-  //   /**
-  //    * Get the transaction cost to set a strict gasLimit and min gasPrice
-  //    */
-  //   const { maxFee } = await provider.getTransactionCost(request);
+    const resources = await provider.getResourcesToSpend(wallet.address, [
+      {
+        amount: bn(100_000),
+        assetId: provider.getBaseAssetId(),
+      },
+    ]);
+    request.addResources(resources);
 
-  //   request.maxFee = maxFee;
+    /**
+     * Get the transaction cost to set a strict gasLimit and min gasPrice
+     */
+    const { maxFee } = await provider.getTransactionCost(request);
 
-  //   /**
-  //    * Send transaction
-  //    */
-  //   const result = await wallet.sendTransaction(request);
-  //   const { status } = await result.waitForResult();
+    request.maxFee = maxFee;
 
-  //   expect(status).toBe(TransactionStatus.success);
-  // });
+    /**
+     * Send transaction
+     */
+    const result = await wallet.sendTransaction(request);
+    const { status } = await result.waitForResult();
 
-  // it('sets gas requirements (script)', async () => {
-  //   using launched = await launchTestNode({
-  //     walletsConfig: {
-  //       amountPerCoin: 500_000,
-  //     },
-  //   });
+    expect(status).toBe(TransactionStatus.success);
+  });
 
-  //   const {
-  //     provider,
-  //     wallets: [sender],
-  //   } = launched;
+  it('sets gas requirements (script)', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 500_000,
+      },
+    });
 
-  //   /**
-  //    * Create a script transaction
-  //    */
-  //   const { binHexlified } = getFuelGaugeForcProject(FuelGaugeProjectsEnum.COMPLEX_SCRIPT);
+    const {
+      provider,
+      wallets: [sender],
+    } = launched;
 
-  //   const request = new ScriptTransactionRequest({
-  //     script: binHexlified,
-  //     scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
-  //   });
-  //   request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
+    /**
+     * Create a script transaction
+     */
 
-  //   /**
-  //    * Get the transaction cost to set a strict gasLimit and min gasPrice
-  //    */
-  //   const txCost = await provider.getTransactionCost(request);
+    const request = new ScriptTransactionRequest({
+      script: ComplexScriptAbi__factory.bin,
+      scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
+    });
+    request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
 
-  //   request.gasLimit = txCost.gasUsed;
-  //   request.maxFee = txCost.maxFee;
+    /**
+     * Get the transaction cost to set a strict gasLimit and min gasPrice
+     */
+    const txCost = await provider.getTransactionCost(request);
 
-  //   await sender.fund(request, txCost);
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-  //   /**
-  //    * Send transaction
-  //    */
-  //   const result = await sender.sendTransaction(request);
-  //   const { status, gasUsed: txGasUsed } = await result.wait();
+    await sender.fund(request, txCost);
 
-  //   expect(status).toBe(TransactionStatus.success);
-  //   expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
-  // });
+    /**
+     * Send transaction
+     */
+    const result = await sender.sendTransaction(request);
+    const { status, gasUsed: txGasUsed } = await result.wait();
+
+    expect(status).toBe(TransactionStatus.success);
+    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
+  });
 
   it('sets gas requirements (predicate)', async () => {
     using launched = await launchTestNode({
@@ -115,7 +122,10 @@ describe(__filename, () => {
       },
     });
 
-    const { provider } = launched;
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     /**
      * Setup predicate
@@ -130,18 +140,8 @@ describe(__filename, () => {
     /**
      * Fund the predicate
      */
-    const fundRequest = new ScriptTransactionRequest();
-
-    fundRequest.addCoinOutput(Address.fromRandom(), bn(500_000), provider.getBaseAssetId());
-
-    const fundTxCost = await provider.getTransactionCost(fundRequest, {
-      resourcesOwner: predicate,
-    });
-
-    fundRequest.gasLimit = fundTxCost.gasUsed;
-    fundRequest.maxFee = fundTxCost.maxFee;
-
-    await predicate.fund(fundRequest, fundTxCost);
+    const tx = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
+    await tx.wait();
 
     /**
      * Create a script transaction transfer
@@ -170,87 +170,80 @@ describe(__filename, () => {
     expect(txCost.gasUsed.toString()).toBe(gasUsedFromReceipts.toString());
   });
 
-  // it('sets gas requirements (account and predicate with script)', async () => {
-  //   using launched = await launchTestNode({
-  //     walletsConfig: {
-  //       amountPerCoin: 500_000,
-  //     },
-  //   });
+  it('sets gas requirements (account and predicate with script)', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000_000_000,
+      },
+    });
 
-  //   const {
-  //     provider,
-  //     wallets: [wallet],
-  //   } = launched;
-  //   const baseAssetId = provider.getBaseAssetId();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
-  //   /**
-  //    * Setup predicate
-  //    */
-  //   const predicate = new Predicate({
-  //     bytecode: ComplexPredicateAbi__factory.bin,
-  //     abi: ComplexPredicateAbi__factory.abi,
-  //     provider,
-  //     inputData: [bn(1000)],
-  //   });
+    const baseAssetId = provider.getBaseAssetId();
 
-  //   /**
-  //    * Fund the predicate
-  //    */
-  //   const fundRequest = new ScriptTransactionRequest();
-  //   fundRequest.addCoinOutput(predicate.address, bn(500_000), baseAssetId);
+    /**
+     * Setup predicate
+     */
+    const predicate = new Predicate({
+      bytecode: ComplexPredicateAbi__factory.bin,
+      abi: ComplexPredicateAbi__factory.abi,
+      provider,
+      inputData: [bn(1000)],
+    });
 
-  //   const fundTxCost = await provider.getTransactionCost(fundRequest, {
-  //     resourcesOwner: predicate,
-  //   });
+    /**
+     * Fund the predicate
+     */
+    const tx = await wallet.transfer(predicate.address, 1_000_000, baseAssetId);
+    await tx.wait();
 
-  //   await predicate.fund(fundRequest, fundTxCost);
+    /**
+     * Create a script transaction
+     */
+    const request = new ScriptTransactionRequest({
+      script: ComplexScriptAbi__factory.bin,
+      scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
+    });
 
-  //   /**
-  //    * Create a script transaction
-  //    */
-  //   const { binHexlified: scriptBin } = getFuelGaugeForcProject(
-  //     FuelGaugeProjectsEnum.COMPLEX_SCRIPT
-  //   );
-  //   const request = new ScriptTransactionRequest({
-  //     script: scriptBin,
-  //     scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
-  //   });
-  //   // add predicate transfer
-  //   const resourcesPredicate = await predicate.getResourcesToSpend([
-  //     {
-  //       amount: bn(100_000),
-  //       assetId: baseAssetId,
-  //     },
-  //   ]);
-  //   request.addResources(resourcesPredicate);
+    // add predicate transfer
+    const resourcesPredicate = await predicate.getResourcesToSpend([
+      {
+        amount: bn(100_000),
+        assetId: baseAssetId,
+      },
+    ]);
+    request.addResources(resourcesPredicate);
 
-  //   // add account transfer
-  //   request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
+    // add account transfer
+    request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
 
-  //   const txCost = await provider.getTransactionCost(request, {
-  //     resourcesOwner: predicate,
-  //   });
-  //   request.gasLimit = txCost.gasUsed;
-  //   request.maxFee = txCost.maxFee;
+    const txCost = await provider.getTransactionCost(request, {
+      resourcesOwner: predicate,
+    });
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
 
-  //   await wallet.provider.estimatePredicates(request);
+    await wallet.provider.estimatePredicates(request);
 
-  //   await wallet.fund(request, txCost);
+    await wallet.fund(request, txCost);
 
-  //   /**
-  //    * Get the transaction cost to set a strict gasLimit and min gasPrice
-  //    */
+    /**
+     * Get the transaction cost to set a strict gasLimit and min gasPrice
+     */
 
-  //   /**
-  //    * Send transaction predicate
-  //    */
-  //   predicate.populateTransactionPredicateData(request);
-  //   await wallet.populateTransactionWitnessesSignature(request);
-  //   const result = await predicate.sendTransaction(request);
-  //   const { status, receipts } = await result.wait();
-  //   const txGasUsed = getGasUsedFromReceipts(receipts);
+    /**
+     * Send transaction predicate
+     */
+    predicate.populateTransactionPredicateData(request);
+    await wallet.populateTransactionWitnessesSignature(request);
+    const result = await predicate.sendTransaction(request);
+    const { status, receipts } = await result.wait();
+    const txGasUsed = getGasUsedFromReceipts(receipts);
 
-  //   expect(status).toBe(TransactionStatus.success);
-  //   expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
-  // });
+    expect(status).toBe(TransactionStatus.success);
+    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
+  });
 });

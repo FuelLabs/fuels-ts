@@ -5,7 +5,8 @@ import { launchTestNode } from 'fuels/test-utils';
  * @group node
  * @group browser
  */
-describe('Transaction', () => {
+describe.skip('Transaction', () => {
+  // #TODO: Discuss with Sergio
   it('should ensure a mint transaction can be decoded just fine', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;

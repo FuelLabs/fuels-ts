@@ -2,7 +2,7 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { ScriptTransactionRequest, Wallet, bn } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { AssetId, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -281,9 +281,17 @@ describe(__filename, () => {
   });
 
   it('should ensure a partially funded Transaction will require only missing funds', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100_000_000,
+        assets: [AssetId.A, AssetId.B],
+      },
+    });
 
-    const { provider } = launched;
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     const receiver = Wallet.generate({ provider });
     const wallet1 = Wallet.generate({ provider });
@@ -298,16 +306,14 @@ describe(__filename, () => {
      * Funding wallet1 with only half of the required amount in Asset A and with enough amount
      * in the Base Asset to pay the fee
      */
-    await seedTestWallet(wallet1, [
-      [totalInBaseAsset, provider.getBaseAssetId()],
-      [partiallyInAssetA, assetA],
-    ]);
+    await wallet.transfer(wallet1.address, totalInBaseAsset, provider.getBaseAssetId());
+    await wallet.transfer(wallet1.address, partiallyInAssetA, assetA);
 
     /**
      * Funding wallet2 with the remaining amount needed in Asset A.
      * Note: This wallet does not have any additional funds to pay for the transaction fee.
      */
-    await seedTestWallet(wallet2, [[partiallyInAssetA, assetA]]);
+    await wallet.transfer(wallet2.address, totalInAssetA - partiallyInAssetA, assetA);
 
     let transactionRequest = new ScriptTransactionRequest();
 
@@ -357,19 +363,19 @@ describe(__filename, () => {
   });
 
   it('should ensure a funded Transaction will not require more funds from another user', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100_000_000,
+        assets: [AssetId.A, AssetId.B],
+      },
+    });
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
 
-    const fundedWallet = Wallet.generate({ provider });
     const unfundedWallet = Wallet.generate({ provider });
     const receiver = Wallet.generate({ provider });
-
-    // Funding the wallet with sufficient amounts for base and additional assets
-    await seedTestWallet(fundedWallet, [
-      [300_000, provider.getBaseAssetId()],
-      [80_000, assetA],
-      [80_000, assetB],
-    ]);
 
     let transactionRequest = new ScriptTransactionRequest();
 
