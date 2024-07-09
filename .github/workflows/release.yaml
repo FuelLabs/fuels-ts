@@ -138,7 +138,7 @@ jobs:
       - name: Deploy Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
 
       - name: Checkout API Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
