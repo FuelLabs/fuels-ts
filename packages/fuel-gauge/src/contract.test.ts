@@ -801,7 +801,8 @@ describe('Contract', () => {
     ]);
     const factory = new ContractFactory(contractBytecode, abi, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     const vector = [5, 4, 3, 2, 1];
 
@@ -963,7 +964,8 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     const receiver = Wallet.generate({ provider });
     const amountToTransfer = 300;
@@ -995,7 +997,8 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     const receiver1 = Wallet.generate({ provider });
     const receiver2 = Wallet.generate({ provider });
@@ -1035,7 +1038,9 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+
+    const { contract } = await waitForResult();
 
     await expectToThrowFuelError(
       async () => {
@@ -1163,7 +1168,8 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const storageContract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract: storageContract } = await waitForResult();
 
     const initialCounterValue = 20;
 
@@ -1192,7 +1198,8 @@ describe('Contract', () => {
     const wallet = await generateTestWallet(provider, [[350_000, baseAssetId]]);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const storageContract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract: storageContract } = await waitForResult();
 
     const gasLimit = 200_000;
     const maxFee = 100_000;

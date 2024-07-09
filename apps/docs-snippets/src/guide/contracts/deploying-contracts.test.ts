@@ -44,7 +44,9 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+
+    const { contract } = await waitForResult();
     // #endregion contract-setup-3
 
     // #region contract-setup-5
@@ -68,23 +70,16 @@ describe(__filename, () => {
     // #region contract-setup-4
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const {
-      // instance of TransactionResponse,
-      transactionResponse,
-      // the transaction result of the deployment (status its submited)
-      transactionResult,
-      // callback to wait for the contract to be deployed
-      waitForDeploy,
-    } = await factory.deployContractAsync();
+    const { transactionId, waitForResult } = await factory.deployContract();
 
     // It will only resolve once the contract is deployed
-    const contract = await waitForDeploy();
+    const { contract, transactionResult } = await waitForResult();
     // #endregion contract-setup-4
 
     const { value } = await contract.functions.echo_u8(15).call();
 
+    expect(transactionId).toBeDefined();
     expect(transactionResult).toBeDefined();
-    expect(transactionResponse).toBeDefined();
 
     expect(value).toBe(15);
   });
