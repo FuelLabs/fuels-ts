@@ -7,7 +7,7 @@ import { parseConfigurables } from './parseConfigurables';
 describe('parseConfigurables.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {
-      typeId: 1,
+      typeId: '1',
       type: 'mockType',
       components: null,
       typeParameters: null,
@@ -28,7 +28,7 @@ describe('parseConfigurables.ts', () => {
       name: 'mockConfigurable',
       configurableType: {
         name: 'mockConfigurable',
-        type: 1,
+        type: '1',
         typeArguments: null,
       },
       offset: 0,

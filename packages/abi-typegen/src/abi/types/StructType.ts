@@ -1,6 +1,6 @@
-import type { IRawAbiTypeComponent } from '../../index';
 import type { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
+import type { JsonAbiComponent } from '../../types/interfaces/JsonAbiNew';
 import { extractStructName } from '../../utils/extractStructName';
 import { findType } from '../../utils/findType';
 import { parseTypeArguments } from '../../utils/parseTypeArguments';
@@ -46,7 +46,7 @@ export class StructType extends AType implements IType {
     const { components } = this.rawAbiType;
 
     // `components` array guaranteed to always exist for structs/enums
-    const structComponents = components as IRawAbiTypeComponent[];
+    const structComponents = components as JsonAbiComponent[];
 
     // loop through all components
     const members = structComponents.map((component) => {

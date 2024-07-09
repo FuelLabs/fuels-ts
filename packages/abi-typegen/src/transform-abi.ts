@@ -2,19 +2,21 @@ import { copyFileSync, readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import { join, resolve } from 'path';
 
-import type { IRawAbi } from './types/interfaces/IRawAbi';
-import type { IRawAbiTypeComponent, IRawAbiTypeRoot } from './types/interfaces/IRawAbiType';
-import type { JsonAbi, JsonAbiComponent, JsonAbiType } from './types/interfaces/JsonAbiNew';
+import type {
+  JsonAbi,
+  JsonAbiArgument,
+  JsonAbiComponent,
+  JsonAbiType,
+} from './types/interfaces/JsonAbiNew';
 
-export const arrayToObject = () => {};
-function mapComponent(type: IRawAbiTypeComponent): JsonAbiComponent {
+function mapComponent(c: JsonAbiComponent | JsonAbiArgument): JsonAbiComponent {
   return {
-    name: type.name,
-    type: type.type.toString(),
-    typeArguments: type.typeArguments?.map(mapComponent) ?? null,
+    name: 'name' in c ? c.name : '',
+    type: c.type.toString(),
+    typeArguments: c.typeArguments?.map(mapComponent) ?? null,
   };
 }
-function mapType(type: IRawAbiTypeRoot): JsonAbiType {
+function mapType(type: JsonAbiType): JsonAbiType {
   return {
     type: type.type,
     components: type.components?.map(mapComponent) ?? null,
@@ -23,16 +25,12 @@ function mapType(type: IRawAbiTypeRoot): JsonAbiType {
   };
 }
 
-export function mapAbi(contents: IRawAbi) {
+export function mapAbi(contents: JsonAbi) {
   return {
     abiVersion: '1',
     specVersion: '1',
     encoding: '1',
     types: contents.types.map(mapType),
-    configurables: contents.configurables.map((x) => ({
-      ...x,
-      configurableType: mapComponent(x.configurableType),
-    })),
     functions:
       contents.functions.map((x) => ({
         ...x,
@@ -41,15 +39,18 @@ export function mapAbi(contents: IRawAbi) {
       })) ?? null,
     loggedTypes: contents.loggedTypes.map((l) => ({
       logId: l.logId.toString(),
-      // @ts-expect-error bad iraw
       loggedType: mapComponent(l.loggedType),
     })),
     messagesTypes: [],
+    configurables: contents.configurables.map((x) => ({
+      ...x,
+      configurableType: mapComponent(x.configurableType),
+    })),
   } as JsonAbi;
 }
 export const transformAbi = (filepath: string) => {
   copyFileSync(filepath, filepath.replace(`.json`, `.json.bkp`));
-  const contents: IRawAbi = JSON.parse(readFileSync(filepath, 'utf-8'));
+  const contents: JsonAbi = JSON.parse(readFileSync(filepath, 'utf-8'));
 
   const newContents = mapAbi(contents);
 

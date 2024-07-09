@@ -3,7 +3,7 @@ import {
   getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../types/enums/TargetEnum';
-import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiComponent, JsonAbiType } from '../types/interfaces/JsonAbiNew';
 
 import { makeType } from './makeType';
 import { parseTypeArguments } from './parseTypeArguments';
@@ -12,42 +12,41 @@ import { parseTypeArguments } from './parseTypeArguments';
   Sample ABI with components in both fashions:
     — WITH and WITHOUT `typeArguments`
 */
-const defautRawTypes: IRawAbiTypeRoot[] = [
+const defautRawTypes: JsonAbiType[] = [
   {
-    typeId: 0,
+    typeId: '0',
     type: 'bool',
     components: null,
     typeParameters: null,
   },
   {
-    typeId: 1,
+    typeId: '1',
     type: 'generic T',
     components: null,
     typeParameters: null,
   },
   {
-    typeId: 2,
+    typeId: '2',
     type: 'struct A',
     components: [
       {
         name: 'a',
-        type: 1,
+        type: '1',
         typeArguments: null,
       },
     ],
-    typeParameters: [1],
+    typeParameters: ['1'],
   },
   {
-    typeId: 3,
+    typeId: '3',
     type: 'struct B',
     components: [
       {
         name: 'b',
-        type: 2,
+        type: '2',
         typeArguments: [
           {
-            name: '',
-            type: 4,
+            type: '4',
             typeArguments: null,
           },
         ],
@@ -56,7 +55,7 @@ const defautRawTypes: IRawAbiTypeRoot[] = [
     typeParameters: null,
   },
   {
-    typeId: 4,
+    typeId: '4',
     type: 'u8',
     components: null,
     typeParameters: null,
@@ -75,9 +74,9 @@ describe('parseTypeArguments.ts', () => {
     return types;
   }
 
-  function getTypeComponents(params: { typeId: number }) {
+  function getTypeComponents(params: { typeId: string }) {
     const found = defautRawTypes.find((rt) => rt.typeId === params.typeId);
-    return (found as IRawAbiTypeRoot).components as IRawAbiTypeComponent[];
+    return (found as JsonAbiType).components as JsonAbiComponent[];
   }
 
   /*
@@ -85,7 +84,7 @@ describe('parseTypeArguments.ts', () => {
   */
   test('should parse type arguments just fine', () => {
     const types = bundleTypes();
-    const typeArguments = getTypeComponents({ typeId: 2 });
+    const typeArguments = getTypeComponents({ typeId: '2' });
 
     const asInput = parseTypeArguments({ types, target: TargetEnum.INPUT, typeArguments });
     const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });
@@ -96,7 +95,7 @@ describe('parseTypeArguments.ts', () => {
 
   test('should parse type arguments recursively', () => {
     const types = bundleTypes();
-    const typeArguments = getTypeComponents({ typeId: 3 }); // this has `typeArguments`
+    const typeArguments = getTypeComponents({ typeId: '3' }); // this has `typeArguments`
 
     const asInput = parseTypeArguments({ types, target: TargetEnum.INPUT, typeArguments });
     const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });

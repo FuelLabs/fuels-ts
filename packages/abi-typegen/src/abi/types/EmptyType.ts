@@ -1,5 +1,5 @@
-import type { IRawAbiTypeRoot } from '../..';
 import type { IType } from '../../types/interfaces/IType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbiNew';
 
 import { AType } from './AType';
 
@@ -10,7 +10,7 @@ export class EmptyType extends AType implements IType {
 
   static MATCH_REGEX: RegExp = /^\(\)$/m;
 
-  constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
+  constructor(params: { rawAbiType: JsonAbiType }) {
     super(params);
     this.attributes = {
       /**

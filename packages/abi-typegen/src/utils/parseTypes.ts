@@ -1,10 +1,10 @@
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
 
 import { makeType } from './makeType';
 import { shouldSkipAbiType } from './shouldSkipAbiType';
 
-export function parseTypes(params: { rawAbiTypes: IRawAbiTypeRoot[] }) {
+export function parseTypes(params: { rawAbiTypes: JsonAbi['types'] }) {
   const types: IType[] = [];
 
   // First we parse all ROOT nodes

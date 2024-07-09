@@ -1,12 +1,11 @@
-import type { IFunction } from '../types/interfaces/IFunction';
-import type { IRawAbiFunction } from '../types/interfaces/IRawAbiFunction';
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
 
 import { makeFunction } from './makeFunction';
 
-export function parseFunctions(params: { types: IType[]; rawAbiFunctions: IRawAbiFunction[] }) {
+export function parseFunctions(params: { types: IType[]; rawAbiFunctions: JsonAbi['functions'] }) {
   const { types, rawAbiFunctions } = params;
-  const functions: IFunction[] = rawAbiFunctions.map((rawAbiFunction) =>
+  const functions = rawAbiFunctions.map((rawAbiFunction) =>
     makeFunction({ types, rawAbiFunction })
   );
   return functions;

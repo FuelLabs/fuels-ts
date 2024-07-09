@@ -8,7 +8,7 @@ import { makeConfigurable } from './makeConfigurable';
 describe('makeConfigurable.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {
-      typeId: 1,
+      typeId: '1',
       type: 'mockType',
       components: null,
       typeParameters: null,
@@ -29,7 +29,7 @@ describe('makeConfigurable.ts', () => {
       name: 'mockConfigurable',
       configurableType: {
         name: 'mockConfigurable',
-        type: 1,
+        type: '1',
         typeArguments: null,
       },
       offset: 0,

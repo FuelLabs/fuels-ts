@@ -14,18 +14,20 @@ import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptio
 import type { MyContractAbi, MyContractAbiInterface } from "../MyContractAbi";
 
 const _abi = {
+  "abiVersion": "1",
+  "specVersion": "1",
   "encoding": "1",
   "types": [
     {
-      "typeId": 0,
       "type": "bool",
       "components": null,
+      "typeId": "0",
       "typeParameters": null
     },
     {
-      "typeId": 1,
       "type": "str[10]",
       "components": null,
+      "typeId": "1",
       "typeParameters": null
     }
   ],
@@ -34,19 +36,19 @@ const _abi = {
       "inputs": [
         {
           "name": "x",
-          "type": 1,
+          "type": "1",
           "typeArguments": null
         },
         {
           "name": "y",
-          "type": 1,
+          "type": "1",
           "typeArguments": null
         }
       ],
       "name": "main",
       "output": {
         "name": "",
-        "type": 0,
+        "type": "0",
         "typeArguments": null
       },
       "attributes": null

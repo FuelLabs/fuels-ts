@@ -1,5 +1,5 @@
-import type { IRawAbiTypeRoot } from '../../index';
 import type { IType } from '../../types/interfaces/IType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbiNew';
 
 import { AType } from './AType';
 
@@ -10,7 +10,7 @@ export class U8Type extends AType implements IType {
 
   public static MATCH_REGEX: RegExp = /^u8$/m;
 
-  constructor(params: { rawAbiType: IRawAbiTypeRoot }) {
+  constructor(params: { rawAbiType: JsonAbiType }) {
     super(params);
     this.attributes = {
       inputLabel: `BigNumberish`,

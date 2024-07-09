@@ -1,16 +1,15 @@
-import type { IConfigurable } from '../types/interfaces/IConfigurable';
-import type { IRawAbiConfigurable } from '../types/interfaces/IRawAbiConfigurable';
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
 
 import { makeConfigurable } from './makeConfigurable';
 
 export function parseConfigurables(params: {
   types: IType[];
-  rawAbiConfigurables: IRawAbiConfigurable[];
+  rawAbiConfigurables: JsonAbi['configurables'];
 }) {
   const { types, rawAbiConfigurables } = params;
 
-  const configurables: IConfigurable[] = rawAbiConfigurables.map((rawAbiConfigurable) =>
+  const configurables = rawAbiConfigurables.map((rawAbiConfigurable) =>
     makeConfigurable({ types, rawAbiConfigurable })
   );
 

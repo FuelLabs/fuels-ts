@@ -1,6 +1,6 @@
-import type { IRawAbiTypeComponent } from '../../index';
 import type { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
+import type { JsonAbiComponent } from '../../types/interfaces/JsonAbiNew';
 import { extractStructName } from '../../utils/extractStructName';
 import { findType } from '../../utils/findType';
 import { parseTypeArguments } from '../../utils/parseTypeArguments';
@@ -47,7 +47,7 @@ export class EnumType extends AType implements IType {
   public getNativeEnum(params: { types: IType[] }) {
     const { types } = params;
 
-    const typeHash: { [key: number]: IType['rawAbiType']['type'] } = types.reduce(
+    const typeHash: { [key: string]: IType['rawAbiType']['type'] } = types.reduce(
       (hash, row) => ({
         ...hash,
         [row.rawAbiType.typeId]: row.rawAbiType.type,
@@ -58,7 +58,7 @@ export class EnumType extends AType implements IType {
     const { components } = this.rawAbiType;
 
     // `components` array guaranteed to always exist for structs/enums
-    const enumComponents = components as IRawAbiTypeComponent[];
+    const enumComponents = components as JsonAbiComponent[];
 
     if (!enumComponents.every(({ type }) => typeHash[type] === EmptyType.swayType)) {
       return undefined;
@@ -73,14 +73,14 @@ export class EnumType extends AType implements IType {
     const { components } = this.rawAbiType;
 
     // `components` array guaranteed to always exist for structs/enums
-    const enumComponents = components as IRawAbiTypeComponent[];
+    const enumComponents = components as JsonAbiComponent[];
 
     const attributeKey: 'inputLabel' | 'outputLabel' = `${target}Label`;
 
     const contents = enumComponents.map((component) => {
       const { name, type: typeId, typeArguments } = component;
 
-      if (typeId === 0) {
+      if (typeId === '0') {
         return `${name}: []`;
       }
 

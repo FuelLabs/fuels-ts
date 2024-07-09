@@ -26,35 +26,37 @@ export type MyScriptAbiConfigurables = {
 };
 
 const _abi = {
+  "abiVersion": "1",
+  "specVersion": "1",
   "encoding": "1",
   "types": [
     {
-      "typeId": 0,
       "type": "bool",
       "components": null,
+      "typeId": "0",
       "typeParameters": null
     },
     {
-      "typeId": 1,
       "type": "struct Score",
       "components": [
         {
           "name": "user",
-          "type": 2,
+          "type": "2",
           "typeArguments": null
         },
         {
           "name": "points",
-          "type": 2,
+          "type": "2",
           "typeArguments": null
         }
       ],
+      "typeId": "1",
       "typeParameters": null
     },
     {
-      "typeId": 2,
       "type": "u8",
       "components": null,
+      "typeId": "2",
       "typeParameters": null
     }
   ],
@@ -63,14 +65,14 @@ const _abi = {
       "inputs": [
         {
           "name": "score",
-          "type": 1,
+          "type": "1",
           "typeArguments": null
         }
       ],
       "name": "main",
       "output": {
         "name": "",
-        "type": 0,
+        "type": "0",
         "typeArguments": null
       },
       "attributes": null
@@ -83,7 +85,7 @@ const _abi = {
       "name": "SHOULD_RETURN",
       "configurableType": {
         "name": "",
-        "type": 0,
+        "type": "0",
         "typeArguments": null
       },
       "offset": 616
