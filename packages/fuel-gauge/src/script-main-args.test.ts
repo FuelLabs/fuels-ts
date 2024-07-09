@@ -34,7 +34,9 @@ describe('Script Coverage', () => {
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(scriptBin, scriptAbi, wallet);
 
-    const { value, logs } = await scriptInstance.functions.main(foo).callAndWait();
+    const { waitForResult } = await scriptInstance.functions.main(foo).call();
+
+    const { value, logs } = await waitForResult();
     // #endregion script-call-factory
 
     expect(value?.toString()).toEqual(bn(foo).toString());
@@ -49,7 +51,8 @@ describe('Script Coverage', () => {
       x: 12,
     };
 
-    const { value, logs } = await scriptInstance.functions.main(foo, bar).callAndWait();
+    const { waitForResult } = await scriptInstance.functions.main(foo, bar).call();
+    const { value, logs } = await waitForResult();
 
     expect(value?.toString()).toEqual(bn(foo + bar.x).toString());
     expect(logs).toEqual(['u8 foo', 33, 'u8 bar', 12, 'u8 bar', 12]);
@@ -63,7 +66,8 @@ describe('Script Coverage', () => {
       x: 2,
     };
 
-    const { value } = await scriptInstance.functions.main(foo, bar).callAndWait();
+    const { waitForResult } = await scriptInstance.functions.main(foo, bar).call();
+    const { value } = await waitForResult();
 
     expect(value).toEqual({
       x: 3,
@@ -81,7 +85,7 @@ describe('Script Coverage', () => {
         .txParams({
           gasLimit: 10,
         })
-        .callAndWait()
+        .call()
     ).rejects.toThrow(/Gas limit '10' is lower than the required/);
   });
 });

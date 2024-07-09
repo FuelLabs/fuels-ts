@@ -60,9 +60,10 @@ describe('Fee', () => {
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
+    const call1 = await contract.functions.mint_coins(subId, 1_000).call();
     const {
       transactionResult: { fee: fee1 },
-    } = await contract.functions.mint_coins(subId, 1_000).callAndWait();
+    } = await call1.waitForResult();
 
     let balanceAfter = await wallet.getBalance();
 
@@ -73,9 +74,11 @@ describe('Fee', () => {
     // burning coins
     balanceBefore = await wallet.getBalance();
 
+    const call2 = await contract.functions.mint_coins(subId, 1_000).call();
+
     const {
       transactionResult: { fee: fee2 },
-    } = await contract.functions.mint_coins(subId, 1_000).callAndWait();
+    } = await call2.waitForResult();
 
     balanceAfter = await wallet.getBalance();
 
@@ -181,12 +184,11 @@ describe('Fee', () => {
 
     const balanceBefore = await wallet.getBalance();
 
+    const { waitForResult } = await contract.functions.sum_multparams(1, 2, 3, 4, 5).call();
+
     const {
       transactionResult: { fee },
-    } = await contract.functions
-      .sum_multparams(1, 2, 3, 4, 5)
-
-      .callAndWait();
+    } = await waitForResult();
 
     const balanceAfter = await wallet.getBalance();
     const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
@@ -215,9 +217,11 @@ describe('Fee', () => {
       contract.functions.return_bytes(),
     ]);
 
+    const { waitForResult } = await scope.call();
+
     const {
       transactionResult: { fee },
-    } = await scope.callAndWait();
+    } = await waitForResult();
 
     const balanceAfter = await wallet.getBalance();
     const balanceDiff = balanceBefore.sub(balanceAfter).toNumber();
@@ -247,12 +251,14 @@ describe('Fee', () => {
 
     const balanceBefore = await wallet.getBalance();
 
-    const {
-      transactionResult: { fee },
-    } = await contract
+    const { waitForResult } = await contract
       .multiCall(calls)
       .txParams({ variableOutputs: calls.length * 3 })
-      .callAndWait();
+      .call();
+
+    const {
+      transactionResult: { fee },
+    } = await waitForResult();
 
     const balanceAfter = await wallet.getBalance();
 

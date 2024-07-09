@@ -18,7 +18,8 @@ describe(__filename, () => {
   });
 
   it('should successfully use "get" to read from the blockchain', async () => {
-    await counterContract.functions.increment_count(1).callAndWait();
+    const { waitForResult } = await counterContract.functions.increment_count(1).call();
+    await waitForResult();
 
     const { id: contractId, interface: abi } = counterContract;
 
@@ -67,11 +68,12 @@ describe(__filename, () => {
     expect(value.toNumber()).toBeGreaterThanOrEqual(10);
   });
 
-  it('should successfully execute a contract call without a wallet [callAndWait]', async () => {
+  it('should successfully execute a contract call without a wallet [call]', async () => {
     const contract = counterContract;
 
     // #region interacting-with-contracts-5
-    const { value } = await contract.functions.increment_count(10).callAndWait();
+    const { waitForResult } = await contract.functions.increment_count(10).call();
+    const { value } = await waitForResult();
     // #endregion interacting-with-contracts-5
 
     expect(value.toNumber()).toBeGreaterThanOrEqual(10);

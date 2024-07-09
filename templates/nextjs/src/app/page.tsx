@@ -48,9 +48,12 @@ export default function Home() {
       );
     }
 
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .increment_counter(bn(1))
-      .callAndWait();
+      .call();
+
+    const { value } = await waitForResult();
+
     setCounter(value.toNumber());
 
     await refreshWalletBalance?.();

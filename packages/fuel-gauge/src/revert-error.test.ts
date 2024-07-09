@@ -32,9 +32,11 @@ describe('Revert Error Testing', () => {
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(100);
 
-    const { logs } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
-      .callAndWait();
+      .call();
+
+    const { logs } = await waitForResult();
 
     expect(
       logs.map((d) => ({ token_id: d.token_id?.toString(), price: d.price?.toString() }))
@@ -51,7 +53,7 @@ describe('Revert Error Testing', () => {
     const INPUT_TOKEN_ID = bn(100);
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).callAndWait(),
+      () => contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because a "require" statement has thrown "PriceCantBeZero".`,
@@ -71,7 +73,12 @@ describe('Revert Error Testing', () => {
     const INPUT_TOKEN_ID = bn(55);
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).callAndWait(),
+      async () => {
+        const { waitForResult } = await contractInstance.functions
+          .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
+          .call();
+        await waitForResult();
+      },
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because a "require" statement has thrown "InvalidTokenId".`,
@@ -88,7 +95,7 @@ describe('Revert Error Testing', () => {
 
   it('should throw for revert TX with reason "TransferZeroCoins"', async () => {
     await expectToThrowFuelError(
-      () => contractInstance.functions.failed_transfer_revert().callAndWait(),
+      () => contractInstance.functions.failed_transfer_revert().call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted with reason: "TransferZeroCoins".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.TransferZeroCoins',
@@ -108,7 +115,7 @@ describe('Revert Error Testing', () => {
     const INPUT_TOKEN_ID = bn(100);
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).callAndWait(),
+      () => contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted because an "assert" statement failed to evaluate to true.',
@@ -125,7 +132,7 @@ describe('Revert Error Testing', () => {
 
   it('should throw for revert TX with reason "NotEnoughBalance"', async () => {
     await expectToThrowFuelError(
-      () => contractInstance.functions.failed_transfer().callAndWait(),
+      () => contractInstance.functions.failed_transfer().call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted with reason: "NotEnoughBalance".\n\nYou can read more about this error at:\n\nhttps://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html#variant.NotEnoughBalance',
@@ -142,7 +149,7 @@ describe('Revert Error Testing', () => {
 
   it('should throw for "assert_eq" revert TX', async () => {
     await expectToThrowFuelError(
-      () => contractInstance.functions.assert_value_eq_10(9).callAndWait(),
+      () => contractInstance.functions.assert_value_eq_10(9).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_eq" statement comparing 10 and 9.`,
@@ -159,7 +166,7 @@ describe('Revert Error Testing', () => {
 
   it('should throw for "assert_ne" revert TX', async () => {
     await expectToThrowFuelError(
-      () => contractInstance.functions.assert_value_ne_5(5).callAndWait(),
+      () => contractInstance.functions.assert_value_ne_5(5).call(),
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
@@ -224,7 +231,7 @@ describe('Revert Error Testing', () => {
 
   it('should throw UNKNOWN Error for revert', async () => {
     await expectToThrowFuelError(
-      () => contractInstance.functions.revert_with_0().callAndWait(),
+      () => contractInstance.functions.revert_with_0().call(),
       new FuelError(ErrorCode.UNKNOWN, `The transaction reverted with an unknown reason: 0`, {
         logs: [],
         receipts: expect.any(Array<TransactionResultReceipt>),

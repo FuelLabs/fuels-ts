@@ -41,7 +41,7 @@ describe('Predicate', () => {
       const scriptInput = 1;
       scriptInstance.account = receiver;
 
-      await expect(scriptInstance.functions.main(scriptInput).callAndWait()).rejects.toThrow(
+      await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
         /not enough coins to fit the target/
       );
 
@@ -70,7 +70,9 @@ describe('Predicate', () => {
       const { isStatusSuccess } = await tx.waitForResult();
       expect(isStatusSuccess).toBeTruthy();
 
-      const res = await scriptInstance.functions.main(scriptInput).callAndWait();
+      const { waitForResult } = await scriptInstance.functions.main(scriptInput).call();
+      const res = await waitForResult();
+
       expect(res.transactionResult.isStatusSuccess).toBeTruthy();
 
       const receiverFinalBalance = await receiver.getBalance();

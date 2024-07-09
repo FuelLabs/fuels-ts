@@ -31,7 +31,8 @@ export default function ScriptExample() {
         return toast.error("Script not loaded");
       }
 
-      const { value } = await script.functions.main(bn(input)).callAndWait();
+      const { waitForResult } = await script.functions.main(bn(input)).call();
+      const { value } = await waitForResult();
 
       setResult(value.toString());
     } catch (error) {

@@ -92,12 +92,14 @@ describe(__filename, () => {
 
   it('executes contract call with txParams', async () => {
     // #region transaction-parameters-8
-    const { transactionResult } = await contract.functions
+    const { waitForResult } = await contract.functions
       .increment_count(15)
       .txParams({
         variableOutputs: 1,
       })
-      .callAndWait();
+      .call();
+
+    const { transactionResult } = await waitForResult();
     // #endregion transaction-parameters-8
 
     expect(transactionResult.isStatusSuccess).toBeTruthy();

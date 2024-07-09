@@ -32,16 +32,20 @@ describe('std-lib-string Tests', () => {
     getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_STD_LIB_STRING);
 
   it('should test std-lib-string return', async () => {
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .return_dynamic_string()
-      .callAndWait<string>();
+      .call<string>();
+
+    const { value } = await waitForResult();
+
     expect(value).toBe('Hello World');
   });
 
   it('should test std-lib-string input', async () => {
     const INPUT = 'Hello World';
 
-    const { value } = await contractInstance.functions.accepts_dynamic_string(INPUT).callAndWait();
+    const { waitForResult } = await contractInstance.functions.accepts_dynamic_string(INPUT).call();
+    const { value } = await waitForResult();
 
     expect(value).toBeUndefined();
   });
@@ -86,7 +90,8 @@ describe('std-lib-string Tests', () => {
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
     const INPUT = 'Hello World';
 
-    const { value } = await scriptInstance.functions.main(INPUT).callAndWait();
+    const { waitForResult } = await scriptInstance.functions.main(INPUT).call();
+    const { value } = await waitForResult();
 
     expect(value).toBe(true);
   });

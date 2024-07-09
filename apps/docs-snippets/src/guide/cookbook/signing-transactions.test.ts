@@ -50,7 +50,7 @@ describe('Signing transactions', () => {
     // #import { Script };
 
     const script = new Script(bytecode, abi, sender);
-    const { value } = await script.functions
+    const { waitForResult } = await script.functions
       .main(signer.address.toB256())
       .addTransfer({
         destination: receiver.address,
@@ -58,7 +58,9 @@ describe('Signing transactions', () => {
         assetId: baseAssetId,
       })
       .addSigners(signer)
-      .callAndWait<BN>();
+      .call<BN>();
+
+    const { value } = await waitForResult();
     // #endregion multiple-signers-2
 
     expect(value).toBe(true);

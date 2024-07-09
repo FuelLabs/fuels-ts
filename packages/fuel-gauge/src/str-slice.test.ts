@@ -28,7 +28,9 @@ describe('str slice', () => {
 
     const input = 'contract-input';
     const output = 'contract-return';
-    const { value } = await strSliceContract.functions.echoes_str_slice(input).callAndWait();
+    const { waitForResult } = await strSliceContract.functions.echoes_str_slice(input).call();
+    const { value } = await waitForResult();
+
     expect(value).toEqual(output);
   });
 
@@ -71,7 +73,8 @@ describe('str slice', () => {
     const script = await ScriptStrSliceAbi__factory.createInstance(sender);
     const input = 'script-input';
     const output = 'script-return';
-    const { value } = await script.functions.main(input).callAndWait();
+    const { waitForResult } = await script.functions.main(input).call();
+    const { value } = await waitForResult();
     expect(value).toEqual(output);
   });
 });

@@ -30,13 +30,15 @@ describe('Reentrant Contract Calls', () => {
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
+    const { waitForResult } = await fooContract.functions
+      .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
+      .addContracts([barContract])
+      .call();
+
     const {
       value,
       transactionResult: { receipts },
-    } = await fooContract.functions
-      .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
-      .addContracts([barContract])
-      .callAndWait();
+    } = await waitForResult();
 
     /**
      * First, the test will call:
@@ -75,9 +77,11 @@ describe('Reentrant Contract Calls', () => {
       { bits: barContract.id.toB256() }
     );
 
-    const result = await fooContract
+    const { waitForResult } = await fooContract
       .multiCall([reentrantCall, storageContract.functions.return_var3(), reentrantCall])
-      .callAndWait();
+      .call();
+
+    const result = await waitForResult();
 
     const expectedReentrantValue = 42;
 

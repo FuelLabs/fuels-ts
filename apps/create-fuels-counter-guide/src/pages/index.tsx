@@ -56,7 +56,8 @@ export default function Home() {
       );
     }
 
-    const { value } = await contract.functions.increment_counter(bn(1)).callAndWait();
+    const { waitForResult } = await contract.functions.increment_counter(bn(1)).call();
+    const { value } = await waitForResult();
     setCounter(value.toNumber());
 
     await refreshWalletBalance?.();
@@ -74,7 +75,9 @@ export default function Home() {
       );
     }
 
-    const { value } = await contract.functions.decrement_counter(bn(1)).callAndWait();
+    const { waitForResult } = await contract.functions.decrement_counter(bn(1)).call();
+    const { value } = await waitForResult();
+
     setCounter(value.toNumber());
 
     await refreshWalletBalance?.();

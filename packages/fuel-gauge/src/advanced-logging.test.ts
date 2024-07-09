@@ -31,7 +31,8 @@ beforeAll(async () => {
  */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
-    const { value, logs } = await advancedLogContract.functions.test_function().callAndWait();
+    const { waitForResult } = await advancedLogContract.functions.test_function().call();
+    const { value, logs } = await waitForResult();
 
     expect(value).toBeTruthy();
     logs[5].game_id = logs[5].game_id.toHex();
@@ -75,9 +76,11 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=true]', async () => {
-    const { value, logs } = await advancedLogContract.functions
+    const { waitForResult } = await advancedLogContract.functions
       .test_function_with_require(1, 1)
-      .callAndWait();
+      .call();
+
+    const { value, logs } = await waitForResult();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
@@ -86,7 +89,7 @@ describe('Advanced Logging', () => {
   it('can get log data from require [condition=false]', async () => {
     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
     try {
-      await invocation.callAndWait();
+      await invocation.call();
 
       throw new Error('it should have thrown');
     } catch (error) {
@@ -114,10 +117,12 @@ describe('Advanced Logging', () => {
 
   it('can get log data from a downstream Contract', async () => {
     const INPUT = 3;
-    const { value, logs } = await advancedLogContract.functions
+    const { waitForResult } = await advancedLogContract.functions
       .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
       .addContracts([otherAdvancedLogContract])
-      .callAndWait();
+      .call();
+
+    const { value, logs } = await waitForResult();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual([
@@ -158,7 +163,7 @@ describe('Advanced Logging', () => {
       const configurable = await setupConfigurable({ cache: false });
       const coverage = await setupCoverage({ cache: false });
 
-      const { logs } = await callTest
+      const { waitForResult } = await callTest
         .multiCall([
           advancedLogContract.functions
             .test_log_from_other_contract(10, otherLogId)
@@ -167,7 +172,9 @@ describe('Advanced Logging', () => {
           configurable.functions.echo_struct(),
           coverage.functions.echo_str_8('fuelfuel'),
         ])
-        .callAndWait();
+        .call();
+
+      const { logs } = await waitForResult();
 
       logs.forEach((log, i) => {
         expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
@@ -238,10 +245,12 @@ describe('Advanced Logging', () => {
 
     it('when using InvocationScope', async () => {
       const script = new Script(binHexlified, abiContents, wallet);
-      const { logs } = await script.functions
+      const { waitForResult } = await script.functions
         .main(advancedLogId, otherLogId, amount)
         .addContracts([advancedLogContract, otherAdvancedLogContract])
-        .callAndWait();
+        .call();
+
+      const { logs } = await waitForResult();
 
       expect(logs).toStrictEqual(expectedLogs);
     });

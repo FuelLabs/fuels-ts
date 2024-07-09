@@ -44,7 +44,8 @@ describe('ExampleContract', () => {
     const contractId = contract.id;
 
     // Call
-    const { value } = await contract.functions.return_input(1337).callAndWait();
+    const { waitForResult } = await contract.functions.return_input(1337).call();
+    const { value } = await waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -54,7 +55,8 @@ describe('ExampleContract', () => {
     // #context import { DemoContractAbi__factory } from './types';
 
     const contractInstance = DemoContractAbi__factory.connect(contractId, wallet);
-    const { value: v2 } = await contractInstance.functions.return_input(1337).callAndWait();
+    const call2 = await contractInstance.functions.return_input(1337).call();
+    const { value: v2 } = await call2.waitForResult();
     // #endregion typegen-demo-contract-factory-connect
     expect(v2.toHex()).toBe(toHex(1337));
   });
@@ -73,7 +75,8 @@ describe('ExampleContract', () => {
     // #endregion typegen-demo-contract-factory-deploy
 
     // Call
-    const { value } = await contract.functions.return_input(1337).callAndWait();
+    const { waitForResult } = await contract.functions.return_input(1337).call();
+    const { value } = await waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -115,7 +118,8 @@ test('Example script', async () => {
   // #context import { ScriptAbi__factory } from './types';
 
   const script = ScriptAbi__factory.createInstance(wallet);
-  const { value } = await script.functions.main().callAndWait();
+  const { waitForResult } = await script.functions.main().call();
+  const { value } = await waitForResult();
   // #endregion typegen-demo-script
   expect(value).toStrictEqual(10);
 });

@@ -34,10 +34,12 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    const { value: valueInitial } = await contact.functions.initialize_counter(41).callAndWait();
+    const call1 = await contact.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await call1.waitForResult();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const { value } = await contact.functions.increment_counter(1).callAndWait();
+    const call2 = await contact.functions.increment_counter(1).call();
+    const { value } = await call2.waitForResult();
     expect(value.toHex()).toEqual(toHex(42));
 
     const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
@@ -51,9 +53,10 @@ describe('Contract Factory', () => {
 
     expect(contact.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(100).callAndWait();
+    await contact.functions.initialize_counter(100).call();
 
-    const { transactionResult } = await contact.functions.increment_counter(1).callAndWait();
+    const { waitForResult } = await contact.functions.increment_counter(1).call();
+    const { transactionResult } = await waitForResult();
     expect(transactionResult).toEqual<TransactionResult>({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
@@ -130,19 +133,24 @@ describe('Contract Factory', () => {
       storageSlots,
     });
 
-    const { value: var1 } = await contract.functions.return_var1().callAndWait();
+    const call1 = await contract.functions.return_var1().call();
+    const { value: var1 } = await call1.waitForResult();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().callAndWait();
+    const call2 = await contract.functions.return_var2().call();
+    const { value: var2 } = await call2.waitForResult();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().callAndWait();
+    const call3 = await contract.functions.return_var3().call();
+    const { value: var3 } = await call3.waitForResult();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().callAndWait();
+    const call4 = await contract.functions.return_var4().call();
+    const { value: var4 } = await call4.waitForResult();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().callAndWait();
+    const call5 = await contract.functions.return_var5().call();
+    const { value: var5 } = await call5.waitForResult();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -176,19 +184,24 @@ describe('Contract Factory', () => {
       ],
     });
 
-    const { value: var1 } = await contract.functions.return_var1().callAndWait();
+    const call1 = await contract.functions.return_var1().call();
+    const { value: var1 } = await call1.waitForResult();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().callAndWait();
+    const call2 = await contract.functions.return_var2().call();
+    const { value: var2 } = await call2.waitForResult();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().callAndWait();
+    const call3 = await contract.functions.return_var3().call();
+    const { value: var3 } = await call3.waitForResult();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().callAndWait();
+    const call4 = await contract.functions.return_var4().call();
+    const { value: var4 } = await call4.waitForResult();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().callAndWait();
+    const call5 = await contract.functions.return_var5().call();
+    const { value: var5 } = await call5.waitForResult();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
