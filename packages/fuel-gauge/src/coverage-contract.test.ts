@@ -476,11 +476,16 @@ describe('Coverage Contract', () => {
       },
     ];
 
-    const aMessages = await WALLET_A.getMessages();
-    const bMessages = await WALLET_B.getMessages();
+    const { messages: aMessages, pageInfo: pageInfoa } = await WALLET_A.getMessages();
+    const { messages: bMessages, pageInfo: pageInfob } = await WALLET_B.getMessages();
 
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
+    expect(pageInfoa.hasNextPage).toBeFalsy();
+    expect(pageInfoa.hasPreviousPage).toBeFalsy();
+
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
+    expect(pageInfob.hasNextPage).toBeFalsy();
+    expect(pageInfob.hasPreviousPage).toBeFalsy();
     // #endregion Message-getMessages
   });
 
