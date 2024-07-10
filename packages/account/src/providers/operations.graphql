@@ -630,6 +630,9 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
 
 query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   blocks(after: $after, before: $before, first: $first, last: $last) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...blockFragment
@@ -658,6 +661,9 @@ query getCoins(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...coinFragment
@@ -726,6 +732,9 @@ query getBalances(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...balanceFragment
@@ -748,6 +757,9 @@ query getMessages(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...messageFragment
