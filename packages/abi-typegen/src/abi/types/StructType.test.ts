@@ -40,7 +40,7 @@ describe('StructType.ts', () => {
 
     // validating `struct C`, with nested `typeArguments`
     parseTypeArguments.mockClear();
-    const c = findType({ types, typeId: 4 }) as StructType;
+    const c = findType({ types, typeId: '4' }) as StructType;
 
     expect(c.getStructName()).toEqual('StructC');
     expect(c.getStructDeclaration({ types })).toEqual('');
@@ -59,7 +59,7 @@ describe('StructType.ts', () => {
     expect(parseTypeArguments).toHaveBeenCalledTimes(2); // called twice
 
     // validating `struct A`, with multiple `typeParameters` (generics)
-    const a = findType({ types, typeId: 2 }) as StructType;
+    const a = findType({ types, typeId: '2' }) as StructType;
     parseTypeArguments.mockClear();
 
     expect(a.getStructName()).toEqual('StructA');

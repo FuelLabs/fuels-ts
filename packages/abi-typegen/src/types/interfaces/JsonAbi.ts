@@ -43,7 +43,7 @@ export interface JsonAbiMessagesType {
 export interface JsonAbiFunction {
   readonly name: string;
   readonly inputs: readonly JsonAbiArgument[];
-  readonly output: JsonAbiArgument;
+  readonly output: JsonAbiArgumentWithoutName;
   readonly attributes: readonly JsonAbiFunctionAttribute[] | null;
 }
 

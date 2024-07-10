@@ -9,7 +9,7 @@ describe('EmptyType.ts', () => {
       rawAbiType: {
         components: null,
         typeParameters: null,
-        typeId: 0,
+        typeId: '0',
         type: EmptyType.swayType,
       },
     });

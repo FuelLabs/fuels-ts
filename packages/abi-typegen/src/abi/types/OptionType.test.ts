@@ -37,7 +37,7 @@ describe('OptionType.ts', () => {
     const { types } = getTypesForContract();
 
     // validating option
-    const b = findType({ types, typeId: 1 }) as OptionType;
+    const b = findType({ types, typeId: '1' }) as OptionType;
 
     expect(b.attributes.inputLabel).toEqual('Option');
     expect(b.attributes.outputLabel).toEqual('Option');

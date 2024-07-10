@@ -64,7 +64,7 @@ describe('Abi.ts', () => {
 
   function getRawTypeFor(params: { type: string }) {
     const rawAbiType: JsonAbiType = {
-      typeId: 1,
+      typeId: '1',
       type: params.type,
       components: null,
       typeParameters: null,

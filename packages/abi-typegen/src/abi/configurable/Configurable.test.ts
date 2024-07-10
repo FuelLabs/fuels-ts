@@ -14,7 +14,7 @@ import { Configurable } from './Configurable';
 describe('Configurable.ts', () => {
   function mockAllDeps() {
     const rawAbiType: JsonAbiType = {
-      typeId: 1,
+      typeId: '1',
       type: 'mockType',
       components: null,
       typeParameters: null,

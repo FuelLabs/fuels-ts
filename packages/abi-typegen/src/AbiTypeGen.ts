@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import { Abi } from './abi/Abi';
-import { mapAbi } from './transform-abi';
+import { mapAbi } from './transform-abi-mapper';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { assembleContracts } from './utils/assembleContracts';

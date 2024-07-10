@@ -35,7 +35,7 @@ describe('ArrayType.ts', () => {
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     // validating `struct B`, with simple tuples on property `x`
-    const b = findType({ types, typeId: 0 }) as ArrayType;
+    const b = findType({ types, typeId: '0' }) as ArrayType;
 
     expect(b.attributes.inputLabel).toEqual('[BigNumberish, BigNumberish]');
     expect(b.attributes.outputLabel).toEqual('[number, number]');
@@ -52,7 +52,7 @@ describe('ArrayType.ts', () => {
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
-    const a = findType({ types, typeId: 1 }) as ArrayType;
+    const a = findType({ types, typeId: '1' }) as ArrayType;
 
     expect(a.attributes.inputLabel).toEqual(
       '[Generic1Input<Generic2Input<BigNumberish>, string>, Generic1Input<Generic2Input<BigNumberish>, string>]'

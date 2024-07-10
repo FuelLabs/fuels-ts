@@ -10,7 +10,7 @@ describe('RawUntypedSlice.ts', () => {
       rawAbiType: {
         components: null,
         typeParameters: null,
-        typeId: 1,
+        typeId: '1',
         type: RawUntypedSlice.swayType,
       },
     });

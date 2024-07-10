@@ -1,5 +1,5 @@
 import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
+import type { JsonAbi, JsonAbiArgument, JsonAbiFunction } from '../types/JsonAbi';
 
 import { ENCODING_V1 } from './constants';
 import {
@@ -62,11 +62,11 @@ describe('json-abi', () => {
 
   describe('findFunctionByName', () => {
     it('should find a function by name', () => {
-      const expected = {
+      const expected: JsonAbiFunction = {
         name: 'foo',
         attributes: [],
         inputs: [],
-        output: { name: '', type: 1, typeArguments: [] },
+        output: { name: '', type: '1', typeArguments: [] },
       };
 
       const actual = findFunctionByName(MOCK_ABI, 'foo');
@@ -84,19 +84,19 @@ describe('json-abi', () => {
   describe('findTypeById', () => {
     it('should find a type by id', () => {
       const expected = {
-        typeId: 1,
+        typeId: '1',
         type: '()',
         components: [],
         typeParameters: [],
       };
 
-      const actual = findTypeById(MOCK_ABI, 1);
+      const actual = findTypeById(MOCK_ABI, '1');
 
       expect(actual).toEqual(expected);
     });
 
     it('should throw an error if the type is not found', () => {
-      expect(() => findTypeById(MOCK_ABI, -1)).toThrowError(
+      expect(() => findTypeById(MOCK_ABI, '-1')).toThrowError(
         `Type with typeId '-1' doesn't exist in the ABI.`
       );
     });
@@ -105,10 +105,10 @@ describe('json-abi', () => {
   describe('findNonEmptyInputs', () => {
     it('should find non-empty inputs', () => {
       const inputs: JsonAbiArgument[] = [
-        { name: 'a', type: 1, typeArguments: [] },
-        { name: 'b', type: 2, typeArguments: [] },
+        { name: 'a', type: '1', typeArguments: [] },
+        { name: 'b', type: '2', typeArguments: [] },
       ];
-      const expected = [{ name: 'b', type: 2, typeArguments: [] }];
+      const expected = [{ name: 'b', type: '2', typeArguments: [] }];
 
       const actual = findNonEmptyInputs(MOCK_ABI, inputs);
 
@@ -116,7 +116,7 @@ describe('json-abi', () => {
     });
 
     it('should throw an error if the type is not found', () => {
-      const inputs: JsonAbiArgument[] = [{ name: 'a', type: -1, typeArguments: [] }];
+      const inputs: JsonAbiArgument[] = [{ name: 'a', type: '-1', typeArguments: [] }];
 
       expect(() => findNonEmptyInputs(MOCK_ABI, inputs)).toThrowError(
         `Type with typeId '-1' doesn't exist in the ABI.`

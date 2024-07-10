@@ -50,7 +50,7 @@ describe('EnumType.ts', () => {
   test('should properly parse type attributes for: simple enums', () => {
     const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_SIMPLE);
 
-    const myEnum = findType({ types, typeId: 1 }) as EnumType;
+    const myEnum = findType({ types, typeId: '1' }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -64,7 +64,7 @@ describe('EnumType.ts', () => {
   test('should properly parse type attributes for: use native TS enum on a simple enum', () => {
     const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE);
 
-    const myEnum = findType({ types, typeId: 1 }) as EnumType;
+    const myEnum = findType({ types, typeId: '1' }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -78,7 +78,7 @@ describe('EnumType.ts', () => {
   test('should properly parse type attributes for: use SDK enum on a complex enum', () => {
     const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_OF_STRUCTS);
 
-    const myEnum = findType({ types, typeId: 0 }) as EnumType;
+    const myEnum = findType({ types, typeId: '0' }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -92,7 +92,7 @@ describe('EnumType.ts', () => {
   test('should properly parse type attributes for: enums of enums', () => {
     const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_OF_ENUMS);
 
-    const myEnum = findType({ types, typeId: 2 }) as EnumType;
+    const myEnum = findType({ types, typeId: '2' }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -106,7 +106,7 @@ describe('EnumType.ts', () => {
   test('should properly parse type attributes for: enums of structs', () => {
     const { types } = getTypesForContract(AbiTypegenProjectsEnum.ENUM_OF_STRUCTS);
 
-    const myEnum = findType({ types, typeId: 0 }) as EnumType;
+    const myEnum = findType({ types, typeId: '0' }) as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -120,7 +120,7 @@ describe('EnumType.ts', () => {
   test('should properly parse type attributes for: array of enums', () => {
     const { types } = getTypesForContract(AbiTypegenProjectsEnum.ARRAY_OF_ENUMS);
 
-    const myEnum = findType({ types, typeId: 3 }) as EnumType;
+    const myEnum = findType({ types, typeId: '3' }) as EnumType;
 
     expect(myEnum.attributes.structName).toEqual('MyStruct');
     expect(myEnum.attributes.inputLabel).toEqual('MyStructInput');

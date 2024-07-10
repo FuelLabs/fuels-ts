@@ -18,32 +18,32 @@ export function getNewAbiTypegen(
   } = params;
 
   const optionType: JsonAbiType = {
-    typeId: 3,
+    typeId: '3',
     type: 'enum Option',
     components: [
       {
         name: 'None',
-        type: 0,
+        type: '0',
         typeArguments: null,
       },
       {
         name: 'Some',
-        type: 2,
+        type: '2',
         typeArguments: null,
       },
     ],
-    typeParameters: [2],
+    typeParameters: ['2'],
   };
 
   const types: JsonAbiType[] = [
     {
-      typeId: 1,
+      typeId: '1',
       type: 'u8',
       components: null,
       typeParameters: null,
     },
     {
-      typeId: 2,
+      typeId: '2',
       type: 'u16',
       components: null,
       typeParameters: null,
@@ -65,7 +65,7 @@ export function getNewAbiTypegen(
     name: 'main',
     output: {
       name: '',
-      type: 2,
+      type: '2',
       typeArguments: null,
     },
   };
@@ -77,7 +77,7 @@ export function getNewAbiTypegen(
       name: 'configurable',
       configurableType: {
         name: 'configurableType',
-        type: 1,
+        type: '1',
         typeArguments: null,
       },
       offset: 120,

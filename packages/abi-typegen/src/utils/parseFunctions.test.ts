@@ -10,14 +10,14 @@ import { parseFunctions } from './parseFunctions';
 describe('functions.ts', () => {
   test('should parse an array of raw abi functions', () => {
     const rawU8: JsonAbiType = {
-      typeId: 1,
+      typeId: '1',
       type: 'u8',
       components: null,
       typeParameters: null,
     };
 
     const rawU16: JsonAbiType = {
-      typeId: 2,
+      typeId: '2',
       type: 'u16',
       components: null,
       typeParameters: null,

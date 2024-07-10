@@ -10,7 +10,7 @@ describe('StrType.ts', () => {
       rawAbiType: {
         components: null,
         typeParameters: null,
-        typeId: 1,
+        typeId: '1',
         type: StrType.swayType,
       },
     });

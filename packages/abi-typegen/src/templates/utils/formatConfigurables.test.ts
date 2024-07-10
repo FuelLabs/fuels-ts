@@ -6,7 +6,7 @@ import { formatConfigurables } from './formatConfigurables';
 describe('formatConfigurables.ts', () => {
   function mockAllDeps() {
     const rawAbiType = {
-      typeId: 1,
+      typeId: '1',
       type: 'mockType',
       components: null,
       typeParameters: null,

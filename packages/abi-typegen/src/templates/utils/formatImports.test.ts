@@ -11,7 +11,7 @@ describe('formatImports.ts', () => {
 
   const u8 = new U8Type({
     rawAbiType: {
-      typeId: 1,
+      typeId: '1',
       type: 'u8',
       components: null,
       typeParameters: null,
@@ -20,7 +20,7 @@ describe('formatImports.ts', () => {
 
   const u16 = new U8Type({
     rawAbiType: {
-      typeId: 2,
+      typeId: '2',
       type: 'u16',
       components: null,
       typeParameters: null,
@@ -29,7 +29,7 @@ describe('formatImports.ts', () => {
 
   const bool = new BoolType({
     rawAbiType: {
-      typeId: 3,
+      typeId: '3',
       type: 'bool',
       components: null,
       typeParameters: null,
