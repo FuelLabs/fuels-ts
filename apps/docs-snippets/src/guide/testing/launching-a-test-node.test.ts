@@ -191,7 +191,7 @@ describe('launching a test node', () => {
       wallets: [wallet],
     } = launched;
 
-    const coins = await wallet.getCoins(assets[0].value);
+    const { coins } = await wallet.getCoins(assets[0].value);
     // #endregion asset-ids
     expect(coins[0].assetId).toEqual(assets[0].value);
   });
@@ -212,7 +212,9 @@ describe('launching a test node', () => {
       wallets: [wallet],
     } = launched;
 
-    const [message] = await wallet.getMessages();
+    const {
+      messages: [message],
+    } = await wallet.getMessages();
     // message.nonce === testMessage.nonce
     // #endregion test-messages
 
@@ -243,7 +245,9 @@ describe('launching a test node', () => {
 
     recipient.provider = provider;
 
-    const [message] = await recipient.getMessages();
+    const {
+      messages: [message],
+    } = await recipient.getMessages();
     // message.nonce === testMessage.nonce
     // #endregion test-messages-chain
 

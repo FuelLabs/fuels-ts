@@ -11,21 +11,24 @@ import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
 import type {
-  TransactionRequestLike,
-  CallResult,
   TransactionRequest,
-  Coin,
   CoinQuantityLike,
   CoinQuantity,
-  Message,
   Resource,
   ExcludeResourcesOption,
   Provider,
   ScriptTransactionRequestLike,
-  ProviderSendTxParams,
   TransactionResponse,
-  EstimateTransactionParams,
   TransactionCost,
+  EstimateTransactionParams,
+  CursorPaginationArgs,
+  TransactionRequestLike,
+  ProviderSendTxParams,
+  CallResult,
+  GetCoinsResponse,
+  GetMessagesResponse,
+  GetBalancesResponse,
+  Coin,
 } from './providers';
 import {
   withdrawScript,
@@ -148,33 +151,11 @@ export class Account extends AbstractAccount {
    * @param assetId - The asset ID of the coins to retrieve (optional).
    * @returns A promise that resolves to an array of Coins.
    */
-  async getCoins(assetId?: BytesLike): Promise<Coin[]> {
-    const coins = [];
-
-    const pageSize = 512;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageCoins = await this.provider.getCoins(this.address, assetId, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      coins.push(...pageCoins);
-
-      const hasNextPage = pageCoins.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} coins exceed the current supported limit.`
-      );
-    }
-
-    return coins;
+  async getCoins(
+    assetId?: BytesLike,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetCoinsResponse> {
+    return this.provider.getCoins(this.address, assetId, paginationArgs);
   }
 
   /**
@@ -182,33 +163,8 @@ export class Account extends AbstractAccount {
    *
    * @returns A promise that resolves to an array of Messages.
    */
-  async getMessages(): Promise<Message[]> {
-    const messages = [];
-
-    const pageSize = 512;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageMessages = await this.provider.getMessages(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      messages.push(...pageMessages);
-
-      const hasNextPage = pageMessages.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} messages exceed the current supported limit.`
-      );
-    }
-
-    return messages;
+  async getMessages(paginationArgs?: CursorPaginationArgs): Promise<GetMessagesResponse> {
+    return this.provider.getMessages(this.address, paginationArgs);
   }
 
   /**
@@ -228,33 +184,8 @@ export class Account extends AbstractAccount {
    *
    * @returns A promise that resolves to an array of Coins and their quantities.
    */
-  async getBalances(): Promise<CoinQuantity[]> {
-    const balances = [];
-
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageBalances = await this.provider.getBalances(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      balances.push(...pageBalances);
-
-      const hasNextPage = pageBalances.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} balances exceed the current supported limit.`
-      );
-    }
-
-    return balances;
+  async getBalances(): Promise<GetBalancesResponse> {
+    return this.provider.getBalances(this.address);
   }
 
   /**
