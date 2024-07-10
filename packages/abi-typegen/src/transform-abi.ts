@@ -15,7 +15,9 @@ const transformAbi = (filepath: string) => {
 };
 
 const root = resolve(process.argv[2]);
+// eslint-disable-next-line no-console
 console.log('the root', root);
 const files = globSync('**/*-abi.json', { cwd: root });
+// eslint-disable-next-line no-console
 console.log('the files', files);
 files.map((f) => transformAbi(join(root, f)));
