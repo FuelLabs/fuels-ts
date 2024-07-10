@@ -33,13 +33,15 @@ describe('Reentrant Contract Calls', () => {
     const fooContract = launched.contracts[0] as ReentrantFooAbi;
     const barContract = launched.contracts[1] as ReentrantBarAbi;
 
-    const {
-      value,
-      transactionResult: { receipts },
-    } = await fooContract.functions
+    const { waitForResult } = await fooContract.functions
       .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
       .addContracts([barContract])
       .call();
+
+    const {
+      value,
+      transactionResult: { receipts },
+    } = await waitForResult();
 
     /**
      * First, the test will call:
@@ -87,20 +89,24 @@ describe('Reentrant Contract Calls', () => {
     const fooContract = launched.contracts[0] as ReentrantFooAbi;
     const barContract = launched.contracts[1] as ReentrantBarAbi;
 
-    const storageContract = await new ContractFactory(
+    const deploy = await new ContractFactory(
       StorageTestContractAbiHex,
       StorageTestContractAbi__factory.abi,
       wallet
     ).deployContract({ storageSlots: StorageTestContractAbi__factory.storageSlots });
+
+    const { contract: storageContract } = await deploy.waitForResult();
 
     const reentrantCall = fooContract.functions.foo(
       { bits: fooContract.id.toB256() },
       { bits: barContract.id.toB256() }
     );
 
-    const result = await fooContract
+    const { waitForResult } = await fooContract
       .multiCall([reentrantCall, storageContract.functions.return_var3(), reentrantCall])
       .call();
+
+    const result = await waitForResult();
 
     const expectedReentrantValue = 42;
 

@@ -16,7 +16,9 @@ const U64_MAX = bn(2).pow(64).sub(1);
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
     using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
-    const { value } = await contract.functions.foo(num).call();
+
+    const { waitForResult } = await contract.functions.foo(num).call();
+    const { value } = await waitForResult();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
 
@@ -29,7 +31,9 @@ describe('CallTestContract', () => {
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
     using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
-    const { value } = await contract.functions.boo(struct).call();
+
+    const { waitForResult } = await contract.functions.boo(struct).call();
+    const { value } = await waitForResult();
     expect(value.a).toEqual(!struct.a);
     expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
@@ -37,18 +41,21 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
 
-    const { value: empty } = await contract.functions.empty().call();
+    const call1 = await contract.functions.empty().call();
+    const { value: empty } = await call1.waitForResult();
     expect(empty.toHex()).toEqual(toHex(63));
 
-    const { value: emptyThenValue } = await contract.functions.empty_then_value(35).call();
+    const call2 = await contract.functions.empty_then_value(35).call();
+    const { value: emptyThenValue } = await call2.waitForResult();
     expect(emptyThenValue.toHex()).toEqual(toHex(63));
 
-    const { value: valueThenEmpty } = await contract.functions.value_then_empty(35).call();
+    const call3 = await contract.functions.value_then_empty(35).call();
+    const { value: valueThenEmpty } = await call3.waitForResult();
     expect(valueThenEmpty.toHex()).toEqual(toHex(63));
 
-    const { value: valueThenEmptyThenValue } = await contract.functions
-      .value_then_empty_then_value(35, 35)
-      .call();
+    const call4 = await contract.functions.value_then_empty_then_value(35, 35).call();
+
+    const { value: valueThenEmptyThenValue } = await call4.waitForResult();
     expect(valueThenEmptyThenValue.toHex()).toEqual(toHex(63));
   });
 
@@ -56,7 +63,8 @@ describe('CallTestContract', () => {
     using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
 
     // Call method with no params but with no result and no value on config
-    const { value } = await contract.functions.return_void().call();
+    const { waitForResult } = await contract.functions.return_void().call();
+    const { value } = await waitForResult();
     expect(value).toEqual(undefined);
   });
 
@@ -135,7 +143,8 @@ describe('CallTestContract', () => {
         bytecode,
       });
 
-      const { value } = await (contract as Contract).functions[method](...values).call();
+      const { waitForResult } = await (contract as Contract).functions[method](...values).call();
+      const { value } = await waitForResult();
 
       if (BN.isBN(value)) {
         expect(toHex(value)).toBe(toHex(expected));
@@ -148,12 +157,15 @@ describe('CallTestContract', () => {
   it('Forward amount value on contract call', async () => {
     using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
     const baseAssetId = contract.provider.getBaseAssetId();
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [1_000_000, baseAssetId],
       })
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 
@@ -161,12 +173,15 @@ describe('CallTestContract', () => {
     using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
 
     const assetId = ASSET_A;
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value).toBe(assetId);
   });
 
@@ -174,12 +189,15 @@ describe('CallTestContract', () => {
     using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
 
     const assetId = ASSET_A;
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value).toBe(assetId);
   });
 
@@ -201,9 +219,12 @@ describe('CallTestContract', () => {
 
     async function expectContractCall() {
       // Submit multi-call transaction
+      const { waitForResult } = await multiCallScope.call();
+
+      // Wait for the result
       const {
         value: [resultA, resultB, resultC],
-      } = await multiCallScope.call();
+      } = await waitForResult();
 
       expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
       expect(resultB.a).toEqual(!struct.a);

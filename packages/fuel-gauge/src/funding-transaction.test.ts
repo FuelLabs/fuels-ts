@@ -398,7 +398,7 @@ describe(__filename, () => {
      */
     await fundedWallet.fund(transactionRequest, txCost);
 
-    const balances = await unfundedWallet.getBalances();
+    const { balances } = await unfundedWallet.getBalances();
 
     // expect balance to be empty since the wallet was not funded
     expect(balances.length).toBe(0);

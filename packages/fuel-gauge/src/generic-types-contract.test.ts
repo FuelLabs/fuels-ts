@@ -17,7 +17,7 @@ describe('GenericTypesContract', () => {
 
     const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
     const bimArg1 = 'Yes';
-    const { value } = await contract.functions
+    const call1 = await contract.functions
       .generic_type_function(
         [
           {
@@ -74,6 +74,8 @@ describe('GenericTypesContract', () => {
       )
       .call();
 
+    const { value } = await call1.waitForResult();
+
     const arg1 = {
       bim: toHex(1),
       bam: true,
@@ -101,11 +103,10 @@ describe('GenericTypesContract', () => {
       }),
     };
 
-    const { value: call2 } = await contract.functions
-      .generic_complex_type_function(arg1, arg2)
-      .call();
+    const call2 = await contract.functions.generic_complex_type_function(arg1, arg2).call();
+    const { value: value2 } = await call2.waitForResult();
 
     expect(value).toEqual(bimArg1);
-    expect(JSON.stringify([arg1, arg2])).toEqual(JSON.stringify(call2));
+    expect(JSON.stringify([arg1, arg2])).toEqual(JSON.stringify(value2));
   });
 });

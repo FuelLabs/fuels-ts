@@ -16,7 +16,11 @@ describe('Edge Cases', () => {
       deployer: CollisionInFnNamesAbi__factory,
       bytecode: CollisionInFnNamesAbiHex,
     });
-    expect((await contractInstance.functions.new().call()).value.toNumber()).toEqual(12345);
+
+    const { waitForResult } = await contractInstance.functions.new().call();
+    const { value } = await waitForResult();
+
+    expect(value.toNumber()).toEqual(12345);
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {

@@ -1,7 +1,7 @@
 {{header}}
 
 import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot } from "fuels";
+import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot, DeployContractResult } from "fuels";
 import type { {{capitalizedName}}, {{capitalizedName}}Interface } from "../{{capitalizedName}}";
 
 const _abi = {{abiJsonString}};
@@ -28,14 +28,12 @@ export const {{capitalizedName}}__factory = {
     bytecode: BytesLike,
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<{{capitalizedName}}> {
+  ): Promise<DeployContractResult<{{capitalizedName}}>> {
     const factory = new ContractFactory(bytecode, _abi, wallet);
 
-    const contract = await factory.deployContract({
+    return factory.deployContract<{{capitalizedName}}>({
       storageSlots: _storageSlots,
       ...options,
     });
-
-    return contract as unknown as {{capitalizedName}};
-  }
+  },
 }

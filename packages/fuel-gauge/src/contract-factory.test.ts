@@ -21,10 +21,14 @@ describe('Contract Factory', () => {
     });
     expect(contract.interface).toBeInstanceOf(Interface);
 
-    const { value: valueInitial } = await contract.functions.initialize_counter(41).call();
+    const { waitForResult } = await contract.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await waitForResult();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const { value } = await contract.functions.increment_counter(1).call();
+    const { waitForResult: waitForNextResult } = await contract.functions
+      .increment_counter(1)
+      .call();
+    const { value } = await waitForNextResult();
     expect(value.toHex()).toEqual(toHex(42));
 
     const { value: value2 } = await contract.functions.increment_counter(1).dryRun();
@@ -41,7 +45,8 @@ describe('Contract Factory', () => {
 
     await contract.functions.initialize_counter(100).call();
 
-    const { transactionResult } = await contract.functions.increment_counter(1).call();
+    const { waitForResult } = await contract.functions.increment_counter(1).call();
+    const { transactionResult } = await waitForResult();
     expect(transactionResult).toEqual<TransactionResult>({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
@@ -129,21 +134,27 @@ describe('Contract Factory', () => {
     using contract = await launchTestContract({
       deployer: StorageTestContractAbi__factory,
       bytecode: StorageTestContractAbiHex,
+      storageSlots: StorageTestContractAbi__factory.storageSlots,
     });
 
-    const { value: var1 } = await contract.functions.return_var1().call();
+    const { waitForResult } = await contract.functions.return_var1().call();
+    const { value: var1 } = await waitForResult();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().call();
+    const { waitForResult: waitForSecondResult } = await contract.functions.return_var2().call();
+    const { value: var2 } = await waitForSecondResult();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().call();
+    const { waitForResult: waitForThirdResult } = await contract.functions.return_var3().call();
+    const { value: var3 } = await waitForThirdResult();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().call();
+    const { waitForResult: waitForFourthResult } = await contract.functions.return_var4().call();
+    const { value: var4 } = await waitForFourthResult();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().call();
+    const { waitForResult: waitForFifthResult } = await contract.functions.return_var5().call();
+    const { value: var5 } = await waitForFifthResult();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -169,13 +180,14 @@ describe('Contract Factory', () => {
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const contact = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
     });
+    const { contract } = await waitForResult();
 
-    const { value: vB256 } = await contact.functions.return_b256().simulate();
+    const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 
@@ -196,26 +208,32 @@ describe('Contract Factory', () => {
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const contract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       storageSlots: [
         ...StorageTestContractAbi__factory.storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });
+    const { contract } = await waitForResult();
 
-    const { value: var1 } = await contract.functions.return_var1().call();
+    const call1 = await contract.functions.return_var1().call();
+    const { value: var1 } = await call1.waitForResult();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().call();
+    const call2 = await contract.functions.return_var2().call();
+    const { value: var2 } = await call2.waitForResult();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().call();
+    const call3 = await contract.functions.return_var3().call();
+    const { value: var3 } = await call3.waitForResult();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().call();
+    const call4 = await contract.functions.return_var4().call();
+    const { value: var4 } = await call4.waitForResult();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().call();
+    const call5 = await contract.functions.return_var5().call();
+    const { value: var5 } = await call5.waitForResult();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,

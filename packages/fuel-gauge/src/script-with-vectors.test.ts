@@ -22,7 +22,8 @@ describe('Script With Vectors', () => {
     const someArray = [1, 100];
     const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
 
-    const { logs } = await scriptInstance.functions.main(someArray).call();
+    const { waitForResult } = await scriptInstance.functions.main(someArray).call();
+    const { logs } = await waitForResult();
 
     expect(logs.map((n) => n.toNumber())).toEqual([1]);
   });
@@ -43,7 +44,8 @@ describe('Script With Vectors', () => {
 
     const scriptInvocationScope = scriptInstance.functions.main(someVec);
 
-    const { logs } = await scriptInvocationScope.call();
+    const { waitForResult } = await scriptInvocationScope.call();
+    const { logs } = await waitForResult();
 
     const formattedLog = logs.map((l) => (typeof l === 'string' ? l : l.toNumber()));
 
@@ -104,7 +106,8 @@ describe('Script With Vectors', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const scriptInstance = getScript<[any], void>('script-with-vector-mixed', wallet);
 
-    const { value } = await scriptInstance.functions.main(importantDates).call();
+    const { waitForResult } = await scriptInstance.functions.main(importantDates).call();
+    const { value } = await waitForResult();
     expect(value).toBe(true);
   });
 
@@ -179,7 +182,8 @@ describe('Script With Vectors', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const scriptInstance = getScript<[any[]], void>('script-with-vector-advanced', wallet);
 
-    const { value } = await scriptInstance.functions.main(vectorOfStructs).call();
+    const { waitForResult } = await scriptInstance.functions.main(vectorOfStructs).call();
+    const { value } = await waitForResult();
     expect(value).toBe(true);
   });
 });

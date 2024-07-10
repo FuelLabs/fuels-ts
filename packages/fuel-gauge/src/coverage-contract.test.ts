@@ -51,94 +51,80 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     // Call contract methods
-    expect((await contractInstance.functions.get_id().call()).value).toEqual(
-      '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-    );
-    expect(
-      (
-        await contractInstance.functions
-          .get_small_string()
+    let expectedValue: unknown =
+      '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+    let call = await contractInstance.functions.get_id().call();
+    let result = await call.waitForResult();
 
-          .call()
-      ).value
-    ).toEqual('gggggggg');
-    expect(
-      (
-        await contractInstance.functions
-          .get_large_string()
+    expect(result.value).toEqual(expectedValue);
 
-          .call()
-      ).value
-    ).toEqual('ggggggggg');
-    expect(
-      (
-        await contractInstance.functions
-          .get_u32_struct()
+    expectedValue = 'gggggggg';
+    call = await contractInstance.functions.get_small_string().call();
+    result = await call.waitForResult();
 
-          .call()
-      ).value
-    ).toStrictEqual({
+    expect(result.value).toEqual(expectedValue);
+
+    expectedValue = 'ggggggggg';
+    call = await contractInstance.functions.get_large_string().call();
+    result = await call.waitForResult();
+
+    expect(result.value).toEqual(expectedValue);
+
+    expectedValue = {
       foo: 100,
-    });
-    expect(
-      (
-        await contractInstance.functions
-          .get_large_struct()
+    };
+    call = await contractInstance.functions.get_u32_struct().call();
+    result = await call.waitForResult();
 
-          .call()
-      ).value
-    ).toStrictEqual({
+    expect(result.value).toStrictEqual(expectedValue);
+
+    expectedValue = {
       foo: 12,
       bar: 42,
-    });
-    expect(
-      (
-        await contractInstance.functions
-          .get_large_array()
+    };
+    call = await contractInstance.functions.get_large_struct().call();
+    result = await call.waitForResult();
 
-          .call()
-      ).value
-    ).toStrictEqual([1, 2]);
-    expect(
-      (
-        await contractInstance.functions
-          .get_empty_enum()
+    expect(result.value).toStrictEqual(expectedValue);
 
-          .call()
-      ).value
-    ).toStrictEqual(SmallEnum.Empty);
-    expect(
-      (
-        await contractInstance.functions
-          .get_contract_id()
+    expectedValue = [1, 2];
+    call = await contractInstance.functions.get_large_array().call();
+    result = await call.waitForResult();
 
-          .call()
-      ).value
-    ).toStrictEqual({
+    expect(result.value).toStrictEqual(expectedValue);
+
+    expectedValue = SmallEnum.Empty;
+    call = await contractInstance.functions.get_empty_enum().call();
+    result = await call.waitForResult();
+
+    expect(result.value).toStrictEqual(expectedValue);
+
+    expectedValue = {
       bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-    });
-    expect(
-      (
-        await contractInstance.functions
-          .get_some_option_u8()
+    };
+    call = await contractInstance.functions.get_contract_id().call();
+    result = await call.waitForResult();
 
-          .call()
-      ).value
-    ).toEqual(113);
-    expect(
-      (
-        await contractInstance.functions
-          .get_none_option_u8()
+    expect(result.value).toStrictEqual(expectedValue);
 
-          .call()
-      ).value
-    ).toEqual(undefined);
+    expectedValue = 113;
+    call = await contractInstance.functions.get_some_option_u8().call();
+    result = await call.waitForResult();
+
+    expect(result.value).toEqual(113);
+
+    expectedValue = undefined;
+    call = await contractInstance.functions.get_none_option_u8().call();
+    result = await call.waitForResult();
+
+    expect(result.value).toEqual(undefined);
   });
 
   it('should test u8 variable type', async () => {
     using contractInstance = await setupContract();
     // #region U8
-    const { value } = await contractInstance.functions.echo_u8(3).call();
+    const { waitForResult } = await contractInstance.functions.echo_u8(3).call();
+    const { value } = await waitForResult();
     expect(value).toBe(3);
     // #endregion U8
   });
@@ -146,21 +132,23 @@ describe('Coverage Contract', () => {
   it('should test u8 variable type multiple params', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_u8_addition(3, 4, 3).call();
+    const { waitForResult } = await contractInstance.functions.echo_u8_addition(3, 4, 3).call();
+    const { value } = await waitForResult();
     expect(value).toBe(10);
   });
 
   it('should test u16 variable type', async () => {
     using contractInstance = await setupContract();
-
-    const { value } = await contractInstance.functions.echo_u16(RUST_U8_MAX + 1).call();
+    const { waitForResult } = await contractInstance.functions.echo_u16(RUST_U8_MAX + 1).call();
+    const { value } = await waitForResult();
     expect(value).toBe(RUST_U8_MAX + 1);
   });
 
   it('should test u32 variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_u32(RUST_U16_MAX + 1).call();
+    const { waitForResult } = await contractInstance.functions.echo_u32(RUST_U16_MAX + 1).call();
+    const { value } = await waitForResult();
     expect(value).toBe(RUST_U16_MAX + 1);
   });
 
@@ -168,7 +156,8 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = bn(RUST_U32_MAX).add(1).toHex();
-    const { value } = await contractInstance.functions.echo_u64(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_u64(INPUT).call();
+    const { value } = await waitForResult();
     expect(value.toHex()).toBe(INPUT);
   });
 
@@ -176,56 +165,63 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = U256_MAX;
-    const { value } = await contractInstance.functions.echo_u256(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_u256(INPUT).call();
+    const { value } = await waitForResult();
     expect(JSON.stringify(value)).toEqual(JSON.stringify(INPUT));
   });
 
   it('should test bool variable type', async () => {
     using contractInstance = await setupContract();
-
-    const { value } = await contractInstance.functions.echo_bool(false).call();
+    const { waitForResult } = await contractInstance.functions.echo_bool(false).call();
+    const { value } = await waitForResult();
     expect(value).toBe(false);
   });
 
   it('should test b256 variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_b256(B256).call();
+    const { waitForResult } = await contractInstance.functions.echo_b256(B256).call();
+    const { value } = await waitForResult();
     expect(value).toBe(B256);
   });
 
   it('should test b512 variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_b512(B512).call();
+    const { waitForResult } = await contractInstance.functions.echo_b512(B512).call();
+    const { value } = await waitForResult();
+
     expect(value).toBe(B512);
   });
 
   it('should test str[1] variable type', async () => {
     using contractInstance = await setupContract();
-
-    const { value } = await contractInstance.functions.echo_str_1('f').call();
+    const { waitForResult } = await contractInstance.functions.echo_str_1('f').call();
+    const { value } = await waitForResult();
     expect(value).toBe('f');
   });
 
   it('should test str[2] variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_str_2('fu').call();
+    const { waitForResult } = await contractInstance.functions.echo_str_2('fu').call();
+    const { value } = await waitForResult();
     expect(value).toBe('fu');
   });
 
   it('should test str[3] variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_str_3('fue').call();
+    const { waitForResult } = await contractInstance.functions.echo_str_3('fue').call();
+    const { value } = await waitForResult();
     expect(value).toBe('fue');
   });
 
   it('should test str[8] variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_str_8('fuel-sdk').call();
+    const { waitForResult } = await contractInstance.functions.echo_str_8('fuel-sdk').call();
+    const { value } = await waitForResult();
 
     expect(value).toBe('fuel-sdk');
   });
@@ -233,14 +229,16 @@ describe('Coverage Contract', () => {
   it('should test str[9] variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_str_9('fuel-sdks').call();
+    const { waitForResult } = await contractInstance.functions.echo_str_9('fuel-sdks').call();
+    const { value } = await waitForResult();
     expect(value).toBe('fuel-sdks');
   });
 
   it('should test tuple < 8 bytes variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_tuple_u8([21, 22]).call();
+    const { waitForResult } = await contractInstance.functions.echo_tuple_u8([21, 22]).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual([21, 22]);
   });
 
@@ -248,7 +246,8 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = [bn(RUST_U32_MAX).add(1), bn(RUST_U32_MAX).add(2)];
-    const { value } = await contractInstance.functions.echo_tuple_u64(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_tuple_u64(INPUT).call();
+    const { value } = await waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
   });
 
@@ -256,14 +255,16 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = [true, bn(RUST_U32_MAX).add(1)];
-    const { value } = await contractInstance.functions.echo_tuple_mixed(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_tuple_mixed(INPUT).call();
+    const { value } = await waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
   });
 
   it('should test array < 8 bytes variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_array_u8([4, 3]).call();
+    const { waitForResult } = await contractInstance.functions.echo_array_u8([4, 3]).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual([4, 3]);
   });
 
@@ -277,7 +278,8 @@ describe('Coverage Contract', () => {
       toHex(bn('9009', 10)),
       '0x1fffffffffffff',
     ];
-    const { value } = await contractInstance.functions.echo_array_u64(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_array_u64(INPUT).call();
+    const { value } = await waitForResult();
 
     const OUTPUT = INPUT.map((v) => toHex(v));
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(OUTPUT));
@@ -286,7 +288,8 @@ describe('Coverage Contract', () => {
   it('should test array bool variable type', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_array_bool([true, true]).call();
+    const { waitForResult } = await contractInstance.functions.echo_array_bool([true, true]).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual([true, true]);
   });
 
@@ -294,7 +297,8 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = { i: 4 };
-    const { value } = await contractInstance.functions.echo_struct_u8(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_struct_u8(INPUT).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(INPUT);
   });
 
@@ -302,7 +306,8 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = { i: B256 };
-    const { value } = await contractInstance.functions.echo_struct_b256(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_struct_b256(INPUT).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(INPUT);
   });
 
@@ -310,7 +315,8 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = SmallEnum.Empty;
-    const { value } = await contractInstance.functions.echo_enum_small(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_enum_small(INPUT).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(INPUT);
   });
 
@@ -319,7 +325,8 @@ describe('Coverage Contract', () => {
 
     const INPUT = { AddressB: B256 };
 
-    const { value } = await contractInstance.functions.echo_enum_big(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_enum_big(INPUT).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(INPUT);
   });
 
@@ -327,7 +334,8 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = 187;
-    const { value } = await contractInstance.functions.echo_option_u8(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_option_u8(INPUT).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(INPUT);
   });
 
@@ -335,9 +343,11 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT_SOME = 123;
-    const { value: Some } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_option_extract_u32(INPUT_SOME)
       .call();
+
+    const { value: Some } = await waitForResult();
     expect(Some).toStrictEqual(INPUT_SOME);
   });
 
@@ -345,12 +355,16 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT_NONE = undefined;
-    const { value: None } = await contractInstance.functions
-      .echo_option_extract_u32(INPUT_NONE)
-      .call();
+    const call1 = await contractInstance.functions.echo_option_extract_u32(INPUT_NONE).call();
+
+    const { value: None } = await call1.waitForResult();
+
     expect(None).toStrictEqual(500);
 
-    const { value: NoneVoid } = await contractInstance.functions.echo_option_extract_u32().call();
+    const call2 = await contractInstance.functions.echo_option_extract_u32().call();
+
+    const { value: NoneVoid } = await call2.waitForResult();
+
     expect(NoneVoid).toStrictEqual(500);
   });
 
@@ -362,9 +376,11 @@ describe('Coverage Contract', () => {
     const INPUT_C = 5;
 
     // adds the three values (if Some value given) together
-    const { value: Some } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_option_three_u8(INPUT_A, INPUT_B, INPUT_C)
       .call();
+
+    const { value: Some } = await waitForResult();
 
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(10);
@@ -376,7 +392,8 @@ describe('Coverage Contract', () => {
     const INPUT = 1;
 
     // adds the three values together, but only first param value is supplied
-    const { value: Some } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
+    const { value: Some } = await waitForResult();
 
     // we receive the result of adding whatever was passed
     expect(Some).toStrictEqual(1);
@@ -384,17 +401,19 @@ describe('Coverage Contract', () => {
 
   it('should test u8 empty vector input', async () => {
     using contractInstance = await setupContract();
-
-    const { value } = await contractInstance.functions.check_u8_vector([]).call();
+    const { waitForResult } = await contractInstance.functions.check_u8_vector([]).call();
+    const { value } = await waitForResult();
     expect(value).toBeFalsy();
   });
 
   it('should test u8 vector input', async () => {
     using contractInstance = await setupContract();
 
-    const { value, logs } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .check_u8_vector([1, 2, 3, 4, 5])
       .call();
+
+    const { value, logs } = await waitForResult();
 
     expect(value).toBeTruthy();
 
@@ -405,9 +424,11 @@ describe('Coverage Contract', () => {
   it('should echo u8 vector input', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_u8_vector_first([23, 6, 1, 51, 2])
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBe(23);
   });
@@ -415,7 +436,11 @@ describe('Coverage Contract', () => {
   it('should echo a vector of optional u8 input', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions.echo_u8_option_vector_first([28]).call();
+    const { waitForResult } = await contractInstance.functions
+      .echo_u8_option_vector_first([28])
+      .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBe(28);
   });
@@ -424,36 +449,40 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT = bn(54).toHex();
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_u64_vector_last([200, 100, 24, 51, 23, INPUT])
       .call();
+    const { value } = await waitForResult();
     expect(value.toHex()).toBe(INPUT);
   });
 
   it('should echo u32 vector addition of mixed params', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_u32_vector_addition_other_type([100, 2], 47)
       .call();
+    const { value } = await waitForResult();
     expect(value).toBe(147);
   });
 
   it('should echo u32 vector addition', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_u32_vector_addition([100, 2], [24, 54])
       .call();
+    const { value } = await waitForResult();
     expect(value).toBe(124);
   });
 
   it('should echo u32 vector addition [variable lengths]', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_u32_vector_addition([100, 2, 1, 2, 3], [24, 54])
       .call();
+    const { value } = await waitForResult();
     expect(value).toBe(124);
   });
 
@@ -464,7 +493,7 @@ describe('Coverage Contract', () => {
       foo: 1,
       bar: 10,
     };
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_struct_vector_first([
         first,
         {
@@ -477,6 +506,7 @@ describe('Coverage Contract', () => {
         },
       ])
       .call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(first);
   });
 
@@ -488,7 +518,7 @@ describe('Coverage Contract', () => {
       bar: bn(31337).toHex(),
       baz: 'abcdefghi',
     };
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_struct_vector_last([
         {
           foo: 1,
@@ -503,6 +533,7 @@ describe('Coverage Contract', () => {
         last,
       ])
       .call();
+    const { value } = await waitForResult();
     const unhexed = {
       foo: value.foo,
       bar: bn(value.bar).toHex(),
@@ -548,11 +579,16 @@ describe('Coverage Contract', () => {
       },
     ];
 
-    const aMessages = await WALLET_A.getMessages();
-    const bMessages = await WALLET_B.getMessages();
+    const { messages: aMessages, pageInfo: pageInfoa } = await WALLET_A.getMessages();
+    const { messages: bMessages, pageInfo: pageInfob } = await WALLET_B.getMessages();
 
     expect(aMessages).toStrictEqual(EXPECTED_MESSAGES_A);
+    expect(pageInfoa.hasNextPage).toBeFalsy();
+    expect(pageInfoa.hasPreviousPage).toBeFalsy();
+
     expect(bMessages).toStrictEqual(EXPECTED_MESSAGES_B);
+    expect(pageInfob.hasNextPage).toBeFalsy();
+    expect(pageInfob.hasPreviousPage).toBeFalsy();
     // #endregion Message-getMessages
   });
 
@@ -585,27 +621,34 @@ describe('Coverage Contract', () => {
 
   it('supports result type', async () => {
     using contractInstance = await setupContract();
-
+    const { waitForResult } = await contractInstance.functions.types_result({ Ok: 1 }).call();
     const {
       value: { Ok },
-    } = await contractInstance.functions.types_result({ Ok: 1 }).call();
+    } = await waitForResult();
     expect(Ok.toNumber()).toBe(20);
+
+    const call2 = await contractInstance.functions.types_result({ Ok: 0 }).call();
 
     const {
       value: { Err: DivisError },
-    } = await contractInstance.functions.types_result({ Ok: 0 }).call();
+    } = await call2.waitForResult();
+
     expect(DivisError).toBe('DivisError');
+
+    const call3 = await contractInstance.functions.types_result({ Err: 1 }).call();
 
     const {
       value: { Err: InputError },
-    } = await contractInstance.functions.types_result({ Err: 1 }).call();
+    } = await call3.waitForResult();
+
     expect(InputError).toBe('InputError');
   });
 
   it('can read from produce_logs_variables', async () => {
     using contractInstance = await setupContract();
 
-    const { logs } = await contractInstance.functions.produce_logs_variables().call();
+    const { waitForResult } = await contractInstance.functions.produce_logs_variables().call();
+    const { logs } = await waitForResult();
 
     expect(logs[0].toHex()).toEqual(bn(64).toHex());
     expect(logs[1]).toEqual('0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a');
@@ -618,7 +661,8 @@ describe('Coverage Contract', () => {
 
     const INPUT: ColorEnumInput = ColorEnumInput.Red;
     const OUTPUT: ColorEnumOutput = ColorEnumOutput.Green;
-    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
+    const { value } = await waitForResult();
 
     expect(value).toStrictEqual(OUTPUT);
   });
@@ -629,7 +673,8 @@ describe('Coverage Contract', () => {
     const INPUT: ColorEnumInput = ColorEnumInput.Green;
     const OUTPUT: ColorEnumOutput = ColorEnumOutput.Blue;
 
-    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(OUTPUT);
   });
 
@@ -639,7 +684,8 @@ describe('Coverage Contract', () => {
     const INPUT: ColorEnumInput = ColorEnumInput.Blue;
     const OUTPUT: ColorEnumOutput = ColorEnumOutput.Red;
 
-    const { value } = await contractInstance.functions.color_enum(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.color_enum(INPUT).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(OUTPUT);
   });
 
@@ -649,7 +695,8 @@ describe('Coverage Contract', () => {
     const input = MixedNativeEnum.Native;
     const expected = { NotNative: MixedNativeEnum.NotNative };
 
-    const { value } = await contractInstance.functions.mixed_native_enum(input).call();
+    const { waitForResult } = await contractInstance.functions.mixed_native_enum(input).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(expected);
   });
 
@@ -659,16 +706,19 @@ describe('Coverage Contract', () => {
     const input = { NotNative: MixedNativeEnum.NotNative };
     const expected = 'Native';
 
-    const { value } = await contractInstance.functions.mixed_native_enum(input).call();
+    const { waitForResult } = await contractInstance.functions.mixed_native_enum(input).call();
+    const { value } = await waitForResult();
     expect(value).toStrictEqual(expected);
   });
 
   it('should try vec_as_only_param', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .vec_as_only_param([100, 450, 202, 340])
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value.map((v: BN) => v.toHex())).toStrictEqual([
       bn(4).toHex(),
@@ -681,9 +731,11 @@ describe('Coverage Contract', () => {
   it('should try u32_and_vec_params', async () => {
     using contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .u32_and_vec_params(33, [450, 202, 340])
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value.map((v: BN) => v.toHex())).toStrictEqual([
       bn(3).toHex(),
@@ -727,9 +779,11 @@ describe('Coverage Contract', () => {
     const INPUT_C = hexlify(randomBytes(32));
     const INPUT_D = hexlify(randomBytes(32));
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D)
       .call<string[]>();
+
+    const { value } = await waitForResult();
 
     expect(value).toStrictEqual(INPUT_B);
   });
@@ -742,7 +796,7 @@ describe('Coverage Contract', () => {
     const INPUT_C = hexlify(randomBytes(32));
     const INPUT_D = hexlify(randomBytes(32));
 
-    const { value: results } = await contractInstance
+    const { waitForResult } = await contractInstance
       .multiCall([
         contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
         contractInstance.functions.echo_u8(13),
@@ -751,6 +805,9 @@ describe('Coverage Contract', () => {
         contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
+
     expect(results).toStrictEqual([INPUT_B, 13, 23, SmallEnum.Empty, INPUT_A]);
   });
 
@@ -762,7 +819,7 @@ describe('Coverage Contract', () => {
     const INPUT_C = hexlify(randomBytes(32));
     const INPUT_D = hexlify(randomBytes(32));
 
-    const { value: results } = await contractInstance
+    const { waitForResult } = await contractInstance
       .multiCall([
         contractInstance.functions.echo_u8(1),
         contractInstance.functions.echo_u8(2),
@@ -771,6 +828,9 @@ describe('Coverage Contract', () => {
         contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
+
     expect(results).toStrictEqual([1, 2, SmallEnum.Empty, INPUT_B, INPUT_A]);
   });
 });

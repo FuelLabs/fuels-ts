@@ -5,7 +5,6 @@ import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
 import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
 import { BytecodeSwayLibAbi__factory } from '../test/typegen/contracts';
 import BytecodeSwayLibAbiHex from '../test/typegen/contracts/BytecodeSwayLibAbi.hex';
-import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -20,9 +19,11 @@ describe('bytecode computations', () => {
       bytecode: BytecodeSwayLibAbiHex,
     });
 
-    const { logs } = await contract.functions
-      .compute_bytecode_root(Array.from(arrayify(CallTestContractAbiHex)))
+    const { waitForResult } = await contract.functions
+      .compute_bytecode_root(Array.from(arrayify(BytecodeSwayLibAbiHex)))
       .call();
+
+    const { logs } = await waitForResult();
 
     const bytecodeRoot: string = logs[0];
 
@@ -36,7 +37,7 @@ describe('bytecode computations', () => {
       bytecode: BytecodeSwayLibAbiHex,
     });
 
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .verify_contract_bytecode(
         {
           bits: contract.id.toB256(),
@@ -44,6 +45,8 @@ describe('bytecode computations', () => {
         Array.from(arrayify(BytecodeSwayLibAbiHex))
       )
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBeTruthy();
   });
@@ -66,9 +69,11 @@ describe('bytecode computations', () => {
       bytecode: BytecodeSwayLibAbiHex,
     });
 
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value.bits).toEqual(address.toB256());
   });

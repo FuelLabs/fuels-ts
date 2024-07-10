@@ -21,7 +21,11 @@ async function setupContract() {
 describe('std-lib-string Tests', () => {
   it('should test std-lib-string return', async () => {
     using contractInstance = await setupContract();
-    const { value } = await contractInstance.functions.return_dynamic_string().call<string>();
+    const { waitForResult } = await contractInstance.functions
+      .return_dynamic_string()
+      .call<string>();
+
+    const { value } = await waitForResult();
     expect(value).toBe('Hello World');
   });
 
@@ -29,7 +33,8 @@ describe('std-lib-string Tests', () => {
     using contractInstance = await setupContract();
     const INPUT = 'Hello World';
 
-    const { value } = await contractInstance.functions.accepts_dynamic_string(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.accepts_dynamic_string(INPUT).call();
+    const { value } = await waitForResult();
 
     expect(value).toBeUndefined();
   });
@@ -104,7 +109,8 @@ describe('std-lib-string Tests', () => {
     const scriptInstance = getScript<MainArgs, void>('script-std-lib-string', wallet);
     const INPUT = 'Hello World';
 
-    const { value } = await scriptInstance.functions.main(INPUT).call();
+    const { waitForResult } = await scriptInstance.functions.main(INPUT).call();
+    const { value } = await waitForResult();
 
     expect(value).toBe(true);
   });

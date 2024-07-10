@@ -3,6 +3,7 @@ import { Script, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { ScriptCallContractAbi__factory } from '../test/typegen';
 import type {
   AdvancedLoggingAbi,
   AdvancedLoggingOtherContractAbi,
@@ -36,7 +37,8 @@ describe('Advanced Logging', () => {
       bytecode: AdvancedLoggingAbiHex,
     });
 
-    const { value, logs } = await advancedLogContract.functions.test_function().call();
+    const { waitForResult } = await advancedLogContract.functions.test_function().call();
+    const { value, logs } = await waitForResult();
 
     expect(value).toBeTruthy();
     logs[5].game_id = logs[5].game_id.toHex();
@@ -85,9 +87,11 @@ describe('Advanced Logging', () => {
       bytecode: AdvancedLoggingAbiHex,
     });
 
-    const { value, logs } = await advancedLogContract.functions
+    const { waitForResult } = await advancedLogContract.functions
       .test_function_with_require(1, 1)
       .call();
+
+    const { value, logs } = await waitForResult();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
@@ -143,10 +147,12 @@ describe('Advanced Logging', () => {
     const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingOtherContractAbi;
 
     const INPUT = 3;
-    const { value, logs } = await advancedLogContract.functions
+    const { waitForResult } = await advancedLogContract.functions
       .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
       .addContracts([otherAdvancedLogContract])
       .call();
+
+    const { value, logs } = await waitForResult();
 
     expect(value).toBeTruthy();
     expect(logs).toEqual([
@@ -194,7 +200,7 @@ describe('Advanced Logging', () => {
       const configurable = launched.contracts[3] as ConfigurableContractAbi;
       const coverage = launched.contracts[4] as CoverageContractAbi;
 
-      const { logs } = await callTest
+      const { waitForResult } = await callTest
         .multiCall([
           advancedLogContract.functions
             .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
@@ -204,6 +210,8 @@ describe('Advanced Logging', () => {
           coverage.functions.echo_str_8('fuelfuel'),
         ])
         .call();
+
+      const { logs } = await waitForResult();
 
       logs.forEach((log, i) => {
         expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
@@ -304,14 +312,18 @@ describe('Advanced Logging', () => {
 
       const wallet = launched.wallets[0];
 
-      const { abiContents, binHexlified } = getFuelGaugeForcProject(
-        FuelGaugeProjectsEnum.SCRIPT_CALL_CONTRACT
+      const script = new Script(
+        ScriptCallContractAbi__factory.bin,
+        ScriptCallContractAbi__factory.abi,
+        wallet
       );
-      const script = new Script(binHexlified, abiContents, wallet);
-      const { logs } = await script.functions
+
+      const { waitForResult } = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .call();
+
+      const { logs } = await waitForResult();
 
       expect(logs).toStrictEqual(expectedLogs);
     });

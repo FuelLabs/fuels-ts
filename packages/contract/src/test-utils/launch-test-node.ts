@@ -6,14 +6,13 @@ import type {
 } from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import type { Contract } from '@fuel-ts/program';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { EventEmitter } from 'events';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
 
-import type { DeployContractOptions } from '../contract-factory';
+import type { DeployContractOptions, DeployContractResult } from '../contract-factory';
 
 EventEmitter.defaultMaxListeners = 20;
 
@@ -22,7 +21,7 @@ export interface ContractDeployer {
     bytecode: BytesLike,
     wallet: Account,
     options?: DeployContractOptions
-  ): Promise<Contract>;
+  ): Promise<DeployContractResult>;
 }
 
 export interface DeployContractConfig {
@@ -52,7 +51,9 @@ export interface LaunchTestNodeOptions<TContractConfigs extends DeployContractCo
   contractsConfigs: TContractConfigs;
 }
 export type TContracts<T extends DeployContractConfig[]> = {
-  [K in keyof T]: Awaited<ReturnType<T[K]['deployer']['deployContract']>>;
+  [K in keyof T]: Awaited<
+    ReturnType<Awaited<ReturnType<T[K]['deployer']['deployContract']>>['waitForResult']>
+  >['contract'];
 };
 export interface LaunchTestNodeReturn<TFactories extends DeployContractConfig[]>
   extends SetupTestProviderAndWalletsReturn {
@@ -155,13 +156,13 @@ export async function launchTestNode<TFactories extends DeployContractConfig[]>(
   try {
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
-      contracts.push(
-        await config.deployer.deployContract(
-          config.bytecode,
-          getWalletForDeployment(config, wallets),
-          config.options ?? {}
-        )
+      const { waitForResult } = await config.deployer.deployContract(
+        config.bytecode,
+        getWalletForDeployment(config, wallets),
+        config.options ?? {}
       );
+      const { contract } = await waitForResult();
+      contracts.push(contract);
     }
   } catch (err) {
     cleanup();

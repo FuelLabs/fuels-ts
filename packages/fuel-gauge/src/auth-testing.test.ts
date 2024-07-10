@@ -17,7 +17,8 @@ describe('Auth Testing', () => {
       bytecode: AuthTestingAbiHex,
     });
 
-    const { value } = await contractInstance.functions.is_caller_external().call();
+    const { waitForResult } = await contractInstance.functions.is_caller_external().call();
+    const { value } = await waitForResult();
 
     expect(value).toBeTruthy();
   });
@@ -34,9 +35,11 @@ describe('Auth Testing', () => {
       wallets: [wallet],
     } = launched;
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .check_msg_sender({ bits: wallet.address.toB256() })
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBeTruthy();
   });

@@ -28,9 +28,11 @@ describe('Revert Error Testing', () => {
     const INPUT_PRICE = bn(10);
     const INPUT_TOKEN_ID = bn(100);
 
-    const { logs } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
       .call();
+
+    const { logs } = await waitForResult();
 
     expect(
       logs.map((d) => ({ token_id: d.token_id?.toString(), price: d.price?.toString() }))
@@ -71,7 +73,12 @@ describe('Revert Error Testing', () => {
     const INPUT_TOKEN_ID = bn(55);
 
     await expectToThrowFuelError(
-      () => contractInstance.functions.validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE).call(),
+      async () => {
+        const { waitForResult } = await contractInstance.functions
+          .validate_inputs(INPUT_TOKEN_ID, INPUT_PRICE)
+          .call();
+        await waitForResult();
+      },
       new FuelError(
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because a "require" statement has thrown "InvalidTokenId".`,
@@ -193,7 +200,8 @@ describe('Revert Error Testing', () => {
     } = launched;
 
     const factory = new ContractFactory(TokenContractAbiHex, TokenContractAbi__factory.abi, wallet);
-    const tokenContract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract: tokenContract } = await waitForResult();
 
     const addresses = [
       { bits: getRandomB256() },
