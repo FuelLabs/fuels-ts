@@ -15,7 +15,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const {
     wallet: browserWallet,
-    walletBalance: isBrowserWalletConnected,
+    isConnected: isBrowserWalletConnected,
     network: browserWalletNetwork,
   } = useBrowserWallet();
 

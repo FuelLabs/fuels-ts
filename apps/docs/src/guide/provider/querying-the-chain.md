@@ -9,41 +9,53 @@ We can connect to either a _*local*_ or an _*external*_ node:
 
 Let's look at a few examples below.
 
-## Get the Base Asset ID
+## `getBaseAssetId`
 
 The base asset is the underlying asset used to perform any transaction on a chain. This should be fetched from a provider to then be used in transactions.
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#provider-getBaseAssetId{ts:line-numbers}
 
-## Get all coins from an address
+## `getCoins`
 
-This method returns all coins (of an optional given asset ID) from a wallet, including spent ones.
+Returns UTXOs coins from an account address, optionally filtered by asset ID. This method supports [pagination](./pagination.md).
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#wallet-query{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-coins-1{ts:line-numbers}
 
-## Get spendable resources from an address
+This method is also implemented on the `Account` class and can be used without providing the `address`:
 
-The last argument says how much you want to spend. This method returns only spendable, i.e., unspent coins (of a given asset ID). If you ask for more spendable than the amount of unspent coins you have, it returns an error.
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-coins-2{ts:line-numbers}
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#wallet-get-spendable-resources{ts:line-numbers}
+## `getResourcesToSpend`
 
-## Get balances from an address
+Returns spendable resources (coins or messages) for a transaction request. It accepts an optional third parameter, `excludedIds`, to exclude specific UTXO IDs or coin message nonces:
 
-Get all the spendable balances of all assets for an address. This is different from getting the coins because we only return the numbers (the sum of UTXOs coins amount for each asset id) and not the UTXOs coins themselves.
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-spendable-resources-1{ts:line-numbers}
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#wallet-get-balances{ts:line-numbers}
+This method is also available in the `Account` class and can be used without providing the `address`:
 
-## Get blocks
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-spendable-resources-2{ts:line-numbers}
 
-This method returns all the blocks from the blockchain that match the given query. The below code snippet shows how to get the last 10 blocks.
+## `getBalances`
+
+Returns the sum of all UTXOs coins and unspent message coins amounts for all assets. Unlike `getCoins`, it only returns the total amounts, not the individual coins:
+
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-balances-1{ts:line-numbers}
+
+This method is also available in the `Account` class and can be used without providing the `address` parameter:
+
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-balances-2{ts:line-numbers}
+
+## `getBlocks`
+
+The `getBlocks` method returns blocks from the blockchain matching the given `paginationArgs` parameter, supporting [pagination](./pagination.md). The below code snippet shows how to get the last 10 blocks.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Provider-get-blocks{ts:line-numbers}
 
-## Get a message by its nonce
+## `getMessageByNonce`
 
 You can use the `getMessageByNonce` method to retrieve a message by its nonce.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#getMessageByNonce{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-message-by-nonce-1{ts:line-numbers}
 
 <!-- TODO: fix these examples to not reference hardcoded values after #1356 which introduces message generation tools
 ### Get messages
