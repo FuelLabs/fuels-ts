@@ -58,13 +58,15 @@ describe(__filename, () => {
   it('should successfully submit multiple calls from the same contract function', async () => {
     // #region multicall-1
 
-    const { value: results } = await counterContract
+    const { waitForResult } = await counterContract
       .multiCall([
         counterContract.functions.get_count(),
         counterContract.functions.increment_count(2),
         counterContract.functions.increment_count(4),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
 
     const initialValue = new BN(results[0]).toNumber();
     const incrementedValue1 = new BN(results[1]).toNumber();
@@ -84,7 +86,8 @@ describe(__filename, () => {
       counterContract.functions.increment_count(5),
     ]);
 
-    const { value: results } = await chain.call();
+    const { waitForResult } = await chain.call();
+    const { value: results } = await waitForResult();
 
     const echoedValue = results[0];
     const initialCounterValue = new BN(results[1]).toNumber();
@@ -98,7 +101,7 @@ describe(__filename, () => {
   it('should successfully submit multiple calls from different contracts functions', async () => {
     // #region multicall-3
 
-    const { value: results } = await contextContract
+    const { waitForResult } = await contextContract
       .multiCall([
         echoContract.functions.echo_u8(10),
         contextContract.functions.return_context_amount().callParams({
@@ -106,6 +109,8 @@ describe(__filename, () => {
         }),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
 
     const echoedValue = results[0];
     const fowardedValue = new BN(results[1]).toNumber();

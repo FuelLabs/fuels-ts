@@ -41,12 +41,13 @@ describe('ExampleContract', () => {
 
     // Deploy
     const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
-    const { waitForResult } = await factory.deployContract();
-    const { contract } = await waitForResult();
+    const deploy = await factory.deployContract();
+    const { contract } = await deploy.waitForResult();
     const contractId = contract.id;
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const { waitForResult } = await contract.functions.return_input(1337).call();
+    const { value } = await waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -56,7 +57,8 @@ describe('ExampleContract', () => {
     // #context import { DemoContractAbi__factory } from './types';
 
     const contractInstance = DemoContractAbi__factory.connect(contractId, wallet);
-    const { value: v2 } = await contractInstance.functions.return_input(1337).call();
+    const call2 = await contractInstance.functions.return_input(1337).call();
+    const { value: v2 } = await call2.waitForResult();
     // #endregion typegen-demo-contract-factory-connect
     expect(v2.toHex()).toBe(toHex(1337));
   });
@@ -70,13 +72,14 @@ describe('ExampleContract', () => {
     // #context import bytecode from './types/DemoContractAbi.hex';
 
     // Deploy
-    const { waitForResult } = await DemoContractAbi__factory.deployContract(bytecode, wallet);
-    const { contract } = await waitForResult();
+    const deploy = await DemoContractAbi__factory.deployContract(bytecode, wallet);
+    const { contract } = await deploy.waitForResult();
 
     // #endregion typegen-demo-contract-factory-deploy
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const { waitForResult } = await contract.functions.return_input(1337).call();
+    const { value } = await waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -120,7 +123,8 @@ test('Example script', async () => {
   // #context import { ScriptAbi__factory } from './types';
 
   const script = ScriptAbi__factory.createInstance(wallet);
-  const { value } = await script.functions.main().call();
+  const { waitForResult } = await script.functions.main().call();
+  const { value } = await waitForResult();
   // #endregion typegen-demo-script
   expect(value).toStrictEqual(10);
 });

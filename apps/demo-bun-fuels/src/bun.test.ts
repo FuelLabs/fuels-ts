@@ -32,14 +32,20 @@ describe('ExampleContract', () => {
     const { contract } = await waitForResult();
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const call1 = await contract.functions.return_input(1337).call();
+
+    // Wait for result
+    const { value } = await call1.waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
 
     // You can also make a call using the factory
     const contractInstance = SampleAbi__factory.connect(contract.id, wallet);
-    const { value: v2 } = await contractInstance.functions.return_input(1337).call();
+    const call2 = await contractInstance.functions.return_input(1337).call();
+
+    // Wait for result
+    const { value: v2 } = await call2.waitForResult();
     expect(v2.toHex()).toBe(toHex(1337));
   });
 
@@ -48,11 +54,14 @@ describe('ExampleContract', () => {
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     // Deploy
-    const { waitForResult } = await SampleAbi__factory.deployContract(bytecode, wallet);
-    const { contract } = await waitForResult();
+    const deploy = await SampleAbi__factory.deployContract(bytecode, wallet);
+    const { contract } = await deploy.waitForResult();
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const { waitForResult } = await contract.functions.return_input(1337).call();
+
+    // Wait for result
+    const { value } = await waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
