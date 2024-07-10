@@ -7,7 +7,3 @@ export * from './types/interfaces/IConfigurable';
 export * from './types/interfaces/IFile';
 export * from './types/interfaces/IFunction';
 export * from './types/interfaces/JsonAbi';
-export * from './types/interfaces/JsonAbiConfigurable';
-export * from './types/interfaces/JsonAbi';
-export * from './types/interfaces/JsonAbi';
-export * from './types/interfaces/JsonAbi';

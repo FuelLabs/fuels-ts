@@ -1,12 +1,12 @@
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
-import type { JsonAbiConfigurable } from '../types/interfaces/JsonAbiConfigurable';
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbiConfigurable } from '../types/interfaces/JsonAbi';
 
 import { makeConfigurable } from './makeConfigurable';
 
 export function parseConfigurables(params: {
   types: IType[];
-  rawAbiConfigurables: JsonAbiConfigurable[];
+  rawAbiConfigurables: readonly JsonAbiConfigurable[];
 }) {
   const { types, rawAbiConfigurables } = params;
 
