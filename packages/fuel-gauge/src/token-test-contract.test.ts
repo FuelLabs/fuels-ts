@@ -59,7 +59,7 @@ describe('TokenTestContract', () => {
     await token.functions.transfer_to_address(addressId, assetId, 50).call();
 
     // Check new wallet received the coins from the token contract
-    const balances = await userWallet.getBalances();
+    const { balances } = await userWallet.getBalances();
     const tokenBalance = balances.find((b) => b.assetId === assetId.bits);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(50));
   });
@@ -82,15 +82,15 @@ describe('TokenTestContract', () => {
     const { mintedAssets } = transactionResult;
     const assetId = mintedAssets?.[0].assetId;
 
-    let balances = await wallet1.getBalances();
+    let { balances } = await wallet1.getBalances();
     let tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
-    balances = await wallet2.getBalances();
+    ({ balances } = await wallet2.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
-    balances = await wallet3.getBalances();
+    ({ balances } = await wallet3.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(10));
 
@@ -98,28 +98,28 @@ describe('TokenTestContract', () => {
     await functionCallTwo.simulate();
     await functionCallTwo.call();
 
-    balances = await wallet1.getBalances();
+    ({ balances } = await wallet1.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
-    balances = await wallet2.getBalances();
+    ({ balances } = await wallet2.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
-    balances = await wallet3.getBalances();
+    ({ balances } = await wallet3.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(20));
 
     await token.functions.mint_to_addresses(addresses, 10).call();
-    balances = await wallet1.getBalances();
+    ({ balances } = await wallet1.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
 
-    balances = await wallet2.getBalances();
+    ({ balances } = await wallet2.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
 
-    balances = await wallet3.getBalances();
+    ({ balances } = await wallet3.getBalances());
     tokenBalance = balances.find((b) => b.assetId === assetId);
     expect(tokenBalance?.amount.toHex()).toEqual(toHex(30));
   });
