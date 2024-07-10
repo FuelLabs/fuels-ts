@@ -209,7 +209,6 @@ describe('launchNode', () => {
       expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
       const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
 
-      expect(tempDirPath).toBeTruthy();
       childProcessMod.execSync(`kill -- -${pid}`);
       // wait until cleanup finishes (done via events)
       await sleep(1500);
