@@ -55,13 +55,10 @@ You can use the `getMessages` method to retrieve a list of messages from the blo
 
 A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
 
-**Note:**
-You can only use the parameters below. So, you need to decide which ones you're going to use.
-
-### `blockId`
+You can retrieve a message proof by either using it's block ID:
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof-blockId{ts:line-numbers}
 
-### `blockHeight`
+Or by it's block height:
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof-blockHeight{ts:line-numbers}

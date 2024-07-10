@@ -151,7 +151,7 @@ describe('querying the chain', () => {
     // #region Message-getMessageProof-blockId
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
-    // Launches a test node with two wallets established
+    // Launches a test node with two wallets
     using launched = await launchTestNode({
       walletsConfig: {
         count: 2,
@@ -163,19 +163,15 @@ describe('querying the chain', () => {
       provider,
     } = launched;
 
-    // Defines the recipient address
-    const recipientAddress = recipient.address.toB256();
-
     // Performs a withdrawal transaction from sender to recipient
-    const tx = await sender.withdrawToBaseLayer(recipientAddress, 100);
+    const tx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
     const result = await tx.waitForResult();
 
-    // Wait for the next block to be minter on out case we are using a local provider
-    // so we can create a new tx to generate next block
-    const resp = await sender.withdrawToBaseLayer(recipientAddress, 100);
-    const { blockId } = await resp.waitForResult();
+    // Awaiting the transaction processing and the data being recorded on the blockchain
+    const res = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
+    const { blockId } = await res.waitForResult();
 
-    // Retrieves the message out receipt from the transaction result
+    // Retrieves the `nonce` via message out receipt from the transaction result
     const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
 
     // Retrieves the message proof for the transaction ID and nonce using blockId
