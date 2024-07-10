@@ -26,7 +26,7 @@ export class ResolvedAbiType {
     }
 
     this.type = jsonABIType.type;
-    this.originalTypeArguments = argument.typeArguments;
+    this.originalTypeArguments = argument.typeArguments as JsonAbiArgument[];
     this.components = ResolvedAbiType.getResolvedGenericComponents(
       abi,
       argument,
@@ -87,7 +87,7 @@ export class ResolvedAbiType {
           ...structuredClone(arg),
           typeArguments: this.resolveGenericArgTypes(
             abi,
-            arg.typeArguments,
+            arg.typeArguments as JsonAbiArgument[],
             typeParametersAndArgsMap
           ),
         };

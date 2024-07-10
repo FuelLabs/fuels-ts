@@ -2,17 +2,14 @@ import { copyFileSync, readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import { join, resolve } from 'path';
 
-import type {
-  JsonAbi,
-  JsonAbiArgument,
-  JsonAbiComponent,
-  JsonAbiType,
-} from './types/interfaces/JsonAbiNew';
+import type { JsonAbiArgument, JsonAbiType, JsonAbi } from './types/interfaces/JsonAbi';
+import type { JsonAbiComponent } from './types/interfaces/JsonAbiNew';
 
 function mapComponent(c: JsonAbiComponent | JsonAbiArgument): JsonAbiComponent {
   return {
     name: 'name' in c ? c.name : '',
     type: c.type.toString(),
+    // @ts-expect-error asdf
     typeArguments: c.typeArguments?.map(mapComponent) ?? null,
   };
 }

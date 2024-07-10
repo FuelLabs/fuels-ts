@@ -1,7 +1,6 @@
 import type { JsonAbiArgument } from '../../index';
 import type { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
-import type { JsonAbiComponent } from '../../types/interfaces/JsonAbiNew';
 import { extractStructName } from '../../utils/extractStructName';
 import { findType } from '../../utils/findType';
 import { parseTypeArguments } from '../../utils/parseTypeArguments';

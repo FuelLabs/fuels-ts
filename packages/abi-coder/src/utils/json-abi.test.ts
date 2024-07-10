@@ -11,12 +11,16 @@ import {
 } from './json-abi';
 
 const MOCK_ABI: JsonAbi = {
+  abiVersion: '1',
+  messagesTypes: [],
+  specVersion: '1',
+  encoding: '1',
   types: [
-    { typeId: 1, type: '()', components: [], typeParameters: [] },
-    { typeId: 2, type: 'u256', components: [], typeParameters: [] },
+    { typeId: '1', type: '()', components: [], typeParameters: [] },
+    { typeId: '2', type: 'u256', components: [], typeParameters: [] },
   ],
   functions: [
-    { name: 'foo', attributes: [], inputs: [], output: { name: '', type: 1, typeArguments: [] } },
+    { name: 'foo', attributes: [], inputs: [], output: { name: '', type: '1', typeArguments: [] } },
   ],
   loggedTypes: [],
   configurables: [],
