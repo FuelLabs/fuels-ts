@@ -4,4 +4,5 @@
 export * from './AbiTypeGen';
 export * from './types/enums/ProgramTypeEnum';
 export * from './types/interfaces/IFile';
-export * from './types/interfaces/JsonAbiNew';
+export * from './types/interfaces/IFunction';
+export * from './types/interfaces/JsonAbi';

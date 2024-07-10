@@ -1,4 +1,5 @@
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbiFunction, JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { makeFunction } from './makeFunction';
 import { makeType } from './makeType';
@@ -8,15 +9,15 @@ import { makeType } from './makeType';
  */
 describe('functions.ts', () => {
   test('should instantiate a new Function instance', () => {
-    const rawU8 = {
-      typeId: '1',
+    const rawU8: JsonAbiType = {
+      typeId: 1,
       type: 'u8',
       components: null,
       typeParameters: null,
     };
 
-    const rawU16 = {
-      typeId: '2',
+    const rawU16: JsonAbiType = {
+      typeId: 2,
       type: 'u16',
       components: null,
       typeParameters: null,
@@ -27,7 +28,7 @@ describe('functions.ts', () => {
 
     const types: IType[] = [typeU8, typeU16];
 
-    const rawAbiFunction = {
+    const rawAbiFunction: JsonAbiFunction = {
       name: 'f1',
       attributes: [],
       inputs: [{ name: 'u8', type: '1', typeArguments: null }],

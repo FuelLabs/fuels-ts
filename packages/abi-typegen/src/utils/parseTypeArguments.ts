@@ -1,6 +1,6 @@
 import type { TargetEnum } from '../types/enums/TargetEnum';
 import type { IType } from '../types/interfaces/IType';
-import type { JsonAbiArgument, JsonAbiComponent } from '../types/interfaces/JsonAbiNew';
+import type { JsonAbiArgument } from '../types/interfaces/JsonAbi';
 
 import { findType } from './findType';
 
@@ -11,7 +11,7 @@ export function parseTypeArguments(params: {
   types: IType[];
   target: TargetEnum;
   typeArguments: readonly JsonAbiArgument[];
-  parentTypeId?: string;
+  parentTypeId?: number;
 }): string {
   const { types, typeArguments, parentTypeId, target } = params;
 
@@ -40,7 +40,7 @@ export function parseTypeArguments(params: {
         types,
         target,
         parentTypeId: typeArgument.type,
-        typeArguments: typeArgument.typeArguments as JsonAbiComponent[],
+        typeArguments: typeArgument.typeArguments as JsonAbiArgument[],
       });
 
       buffer.push(nestedParsed);

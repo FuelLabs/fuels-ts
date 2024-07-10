@@ -2,6 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
+import type { JsonAbiType } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
@@ -19,7 +20,7 @@ describe('TupleType.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.TUPLE_SIMPLE);
     const rawTypes = project.abiContents.types;
 
-    const types = rawTypes.map((rawAbiType) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     const suitableForTuple = TupleType.isSuitableFor({ type: TupleType.swayType });
     const suitableForArray = TupleType.isSuitableFor({ type: ArrayType.swayType });

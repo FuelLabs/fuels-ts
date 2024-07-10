@@ -2,8 +2,8 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import type { IType } from '../../types/interfaces/IType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import * as findTypeMod from '../../utils/findType';
 
 import { Configurable } from './Configurable';
@@ -13,7 +13,7 @@ import { Configurable } from './Configurable';
  */
 describe('Configurable.ts', () => {
   function mockAllDeps() {
-    const rawAbiType: IRawAbiTypeRoot = {
+    const rawAbiType: JsonAbiType = {
       typeId: 1,
       type: 'mockType',
       components: null,

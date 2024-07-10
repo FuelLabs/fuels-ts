@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { JsonAbiType } from '../types/interfaces/JsonAbiNew';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { supportedTypes } from './supportedTypes';
 

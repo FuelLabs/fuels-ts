@@ -1,5 +1,5 @@
 import type { ITypeAttributes } from '../../types/interfaces/IType';
-import type { JsonAbiType } from '../../types/interfaces/JsonAbiNew';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 
 export class AType {
   public rawAbiType: JsonAbiType;

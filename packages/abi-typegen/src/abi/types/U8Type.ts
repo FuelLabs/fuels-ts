@@ -1,3 +1,4 @@
+import type { JsonAbiType } from '../../index';
 import type { IType } from '../../types/interfaces/IType';
 import type { JsonAbiType } from '../../types/interfaces/JsonAbiNew';
 

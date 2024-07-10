@@ -9,25 +9,23 @@ export interface JsonAbi {
   readonly messagesTypes: readonly JsonAbiMessagesType[];
   readonly configurables: readonly JsonAbiConfigurable[];
   readonly encoding?: string;
-  readonly specVersion: string;
-  readonly abiVersion: string;
 }
 
 export interface JsonAbiType {
-  readonly typeId: string;
+  readonly typeId: number;
   readonly type: string;
   readonly components: readonly JsonAbiArgument[] | null;
-  readonly typeParameters: readonly string[] | null;
+  readonly typeParameters: readonly number[] | null;
 }
 
 export interface JsonAbiArgument {
+  readonly type: number;
   readonly name: string;
-  readonly type: string;
-  readonly typeArguments: readonly JsonAbiArgumentWithoutName[] | null;
+  readonly typeArguments: readonly JsonAbiArgument[] | null;
 }
 
 export interface JsonAbiArgumentWithoutName {
-  readonly type: string;
+  readonly type: number;
   readonly typeArguments: readonly JsonAbiArgumentWithoutName[] | null;
 }
 

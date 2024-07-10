@@ -1,3 +1,4 @@
+import type { IFunction, JsonAbiFunction, IFunctionAttributes } from '../../index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IFunction, IFunctionAttributes } from '../../types/interfaces/IFunction';
 import type { IType } from '../../types/interfaces/IType';

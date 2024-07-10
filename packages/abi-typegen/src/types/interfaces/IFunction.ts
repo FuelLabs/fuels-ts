@@ -1,5 +1,5 @@
 import type { IType } from './IType';
-import type { JsonAbiFunction } from './JsonAbiNew';
+import type { JsonAbiFunction } from './JsonAbi';
 
 export interface IFunctionAttributes {
   inputs: string;

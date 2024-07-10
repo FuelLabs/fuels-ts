@@ -5,7 +5,7 @@ import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IType } from '../types/interfaces/IType';
-import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
+import type { JsonAbi } from '../types/interfaces/JsonAbi';
 import { parseConfigurables } from '../utils/parseConfigurables';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';

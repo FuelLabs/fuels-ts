@@ -3,7 +3,7 @@ import {
   getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../types/enums/TargetEnum';
-import type { JsonAbiComponent, JsonAbiType } from '../types/interfaces/JsonAbiNew';
+import type { JsonAbiType, JsonAbiArgument } from '../types/interfaces/JsonAbi';
 
 import { makeType } from './makeType';
 import { parseTypeArguments } from './parseTypeArguments';
@@ -76,7 +76,7 @@ describe('parseTypeArguments.ts', () => {
 
   function getTypeComponents(params: { typeId: string }) {
     const found = defautRawTypes.find((rt) => rt.typeId === params.typeId);
-    return (found as JsonAbiType).components as JsonAbiComponent[];
+    return (found as JsonAbiType).components as JsonAbiArgument[];
   }
 
   /*

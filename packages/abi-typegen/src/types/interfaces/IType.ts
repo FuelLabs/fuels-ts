@@ -1,4 +1,4 @@
-import type { JsonAbiType } from './JsonAbiNew';
+import type { JsonAbiType } from './JsonAbi';
 
 export interface ITypeAttributes {
   inputLabel: string;
