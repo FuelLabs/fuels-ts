@@ -1,7 +1,7 @@
 // #region fuels-config-file-env
 import { createConfig } from 'fuels';
 import dotenv from 'dotenv';
-import { NODE_URL } from '@/lib'
+import { NODE_URL } from '@/lib';
 
 dotenv.config({
   path: ['.env.local', '.env'],
