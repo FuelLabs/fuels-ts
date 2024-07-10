@@ -89,7 +89,6 @@ export abstract class AbstractContract extends AbstractProgram {
  * @hidden
  */
 export abstract class AbstractScript extends AbstractProgram {
-  abstract account: AbstractAccount;
   abstract bytes: Uint8Array;
 }
 
