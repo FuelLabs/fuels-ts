@@ -54,6 +54,7 @@ export type LaunchNodeResult = Promise<{
   port: string;
   url: string;
   snapshotDir: string;
+  pid: number;
 }>;
 
 function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) {
@@ -260,6 +261,7 @@ export const launchNode = async ({
           port: realPort,
           url: `http://${realIp}:${realPort}/v1/graphql`,
           snapshotDir: snapshotDirToUse as string,
+          pid: child.pid as number,
         });
       }
       if (/error/i.test(text)) {
