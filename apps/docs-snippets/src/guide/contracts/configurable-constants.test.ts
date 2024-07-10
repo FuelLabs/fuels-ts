@@ -47,9 +47,11 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const contract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       configurableConstants,
     });
+
+    const { contract } = await waitForResult();
     // #endregion configurable-constants-2
 
     const { value } = await contract.functions.echo_configurables(true).simulate();
@@ -68,9 +70,11 @@ describe('configurable-constants', () => {
 
     const factory = new ContractFactory(bin, abi, wallet);
 
-    const contract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       configurableConstants,
     });
+
+    const { contract } = await waitForResult();
     // #endregion configurable-constants-3
 
     const { value } = await contract.functions.echo_configurables(false).simulate();
