@@ -1,7 +1,14 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
+import type {
+  Provider,
+  CoinQuantity,
+  CallResult,
+  Account,
+  TransferParams,
+  TransactionResponse,
+} from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -360,26 +367,40 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Submits a transaction.
+   * Submits the contract call transaction and returns a promise that resolves to an object
+   * containing the transaction ID and a function to wait for the result. The promise will resolve
+   * as soon as the transaction is submitted to the node.
    *
-   * @returns The result of the function invocation.
+   * @returns A promise that resolves to an object containing:
+   * - `transactionId`: The ID of the submitted transaction.
+   * - `waitForResult`: A function that waits for the transaction result.
+   * @template T - The type of the return value.
    */
-  async call<T = TReturn>(): Promise<FunctionResult<T>> {
+  async call<T = TReturn>(): Promise<{
+    transactionId: string;
+    waitForResult: () => Promise<FunctionResult<T>>;
+  }> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.fundWithRequiredCoins();
 
-    const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
+    const response = (await this.program.account.sendTransaction(transactionRequest, {
+      awaitExecution: false,
       estimateTxDependencies: false,
-    });
+    })) as TransactionResponse;
 
-    return buildFunctionResult<T>({
-      funcScope: this.functionInvocationScopes,
-      isMultiCall: this.isMultiCall,
-      program: this.program,
-      transactionResponse: response,
-    });
+    const transactionId = response.id;
+
+    return {
+      transactionId,
+      waitForResult: async () =>
+        buildFunctionResult<T>({
+          funcScope: this.functionInvocationScopes,
+          isMultiCall: this.isMultiCall,
+          program: this.program,
+          transactionResponse: response,
+        }),
+    };
   }
 
   /**
