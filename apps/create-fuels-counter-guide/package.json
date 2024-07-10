@@ -12,7 +12,7 @@
     "postbuild": "run-s fuels:build original:build"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.2.2",
+    "@fuels/connectors": "^0.8.1",
     "@fuels/react": "^0.20.0",
     "fuels": "workspace:*",
     "@tanstack/react-query": "^5.29.2",
