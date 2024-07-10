@@ -23,7 +23,8 @@ describe(__filename, () => {
     );
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    deployedContract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    ({ contract: deployedContract } = await waitForResult());
   });
 
   it('should successfully transfer asset to another account', async () => {
