@@ -34,7 +34,7 @@ describe('Provider', () => {
     const wallet = WalletUnlocked.generate({ provider });
 
     // Get the balances of the wallet (this will be empty until we have assets)
-    const balances = await wallet.getBalances();
+    const { balances } = await wallet.getBalances();
     // []
     // #endregion provider-definition
 
