@@ -8,7 +8,7 @@ export function makeType(params: { rawAbiType: JsonAbiType }) {
   const { rawAbiType } = params;
   const { type } = rawAbiType;
 
-  const TypeClass = supportedTypes.find((tc) => tc.isSuitableFor({ type: type.toString() }));
+  const TypeClass = supportedTypes.find((tc) => tc.isSuitableFor({ type }));
 
   if (!TypeClass) {
     throw new FuelError(ErrorCode.TYPE_NOT_SUPPORTED, `Type not supported: ${type}`);

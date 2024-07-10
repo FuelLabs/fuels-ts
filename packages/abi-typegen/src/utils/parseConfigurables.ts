@@ -10,7 +10,7 @@ export function parseConfigurables(params: {
 }) {
   const { types, rawAbiConfigurables } = params;
 
-  const configurables = rawAbiConfigurables.map((rawAbiConfigurable) =>
+  const configurables: IConfigurable[] = rawAbiConfigurables.map((rawAbiConfigurable) =>
     makeConfigurable({ types, rawAbiConfigurable })
   );
 

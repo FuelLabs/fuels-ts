@@ -9,7 +9,7 @@ export function parseFunctions(params: {
   rawAbiFunctions: readonly JsonAbiFunction[];
 }) {
   const { types, rawAbiFunctions } = params;
-  const functions = rawAbiFunctions.map((rawAbiFunction) =>
+  const functions: IFunction[] = rawAbiFunctions.map((rawAbiFunction) =>
     makeFunction({ types, rawAbiFunction })
   );
   return functions;
