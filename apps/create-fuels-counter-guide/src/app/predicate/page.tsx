@@ -1,10 +1,11 @@
+"use client";
+
 import { Button } from "@/components/Button";
 import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-/** @knipignore */
-import { TestPredicateAbi__factory } from "@/sway-api";
+import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
@@ -25,7 +26,9 @@ export default function PredicateExample() {
   useAsync(async () => {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
-      const predicate = TestPredicateAbi__factory.createInstance(wallet.provider);
+      const predicate = TestPredicateAbi__factory.createInstance(
+        wallet.provider,
+      );
       setPredicate(predicate);
       setPredicateBalance(await predicate.getBalance());
     }
@@ -60,18 +63,24 @@ export default function PredicateExample() {
         return toast.error("Wallet not loaded");
       }
 
-      const reInitializePredicate = TestPredicateAbi__factory.createInstance(wallet.provider, [bn(pin)]);
+      const reInitializePredicate = TestPredicateAbi__factory.createInstance(
+        wallet.provider,
+        [bn(pin)],
+      );
 
       if (!reInitializePredicate) {
         return toast.error("Failed to initialize predicate");
       }
 
-      const tx = await reInitializePredicate.transfer(wallet.address, amount, baseAssetId);
+      const tx = await reInitializePredicate.transfer(
+        wallet.address,
+        amount,
+        baseAssetId,
+      );
       const { isStatusSuccess } = await tx.wait();
 
       if (!isStatusSuccess) {
         toast.error("Failed to unlock predicate");
-        return;
       }
 
       if (isStatusSuccess) {
@@ -82,7 +91,7 @@ export default function PredicateExample() {
     } catch (e) {
       console.error(e);
       toast.error(
-        "Failed to unlock predicate. You probably entered the wrong pin, or the predicate does not have enough balance. Try again."
+        "Failed to unlock predicate. You probably entered the wrong pin, or the predicate does not have enough balance. Try again.",
       );
     }
   };
@@ -143,15 +152,31 @@ export default function PredicateExample() {
 
       <div className="mt-12 items-baseline flex gap-2">
         <h5 className="font-semibold text-xl">Wallet Balance:</h5>
-        <span className="text-gray-400">{walletBalance?.toString()}</span>
+        <span className="text-gray-400">
+          {walletBalance?.format({
+            precision: 3,
+          })}{" "}
+          ETH
+        </span>
       </div>
 
       <div className="items-baseline flex gap-2">
         <h5 className="font-semibold text-xl">Predicate Balance:</h5>
-        <span className="text-gray-400">{predicateBalance?.toString()}</span>
+        <span className="text-gray-400">
+          {predicateBalance?.format({
+            precision: 3,
+          })}{" "}
+          ETH
+        </span>
       </div>
 
-      <Button onClick={async () => await transferFundsToPredicate(bn(1000))}>Transfer 1000 to Predicate</Button>
+      <Button
+        onClick={async () =>
+          await transferFundsToPredicate(bn.parseUnits("0.1"))
+        }
+      >
+        Transfer 0.1 ETH to Predicate
+      </Button>
 
       <Button onClick={changePin}>Change Pin</Button>
 
@@ -162,16 +187,25 @@ export default function PredicateExample() {
         placeholder="Enter a new pin"
       />
 
-      <Button onClick={async () => await unlockPredicateAndTransferFundsBack(bn(1000))}>
-        Unlock Predicate and Transfer 1000 back to Wallet
+      <Button
+        onClick={async () =>
+          await unlockPredicateAndTransferFundsBack(bn.parseUnits("0.09"))
+        }
+      >
+        Unlock Predicate and Transfer 0.09 ETH back to Wallet
       </Button>
 
       <span className="mt-8 w-[400px] text-gray-400">
-        Do note that when you 'unlock' a predicate, the predicate also pays for the gas of the transaction. <br />
-        This is why you will notice that the balance of the predicate gets reduced by 1000 + a nominal gas fee.
+        Do note that when you 'unlock' a predicate, the predicate also pays for
+        the gas of the transaction. <br />
+        This is why you will notice that the balance of the predicate gets
+        reduced by 0.09 ETH + a nominal gas fee.
       </span>
 
-      <Link href="https://docs.fuel.network/docs/intro/glossary/#predicate" target="_blank">
+      <Link
+        href="https://docs.fuel.network/docs/intro/glossary/#predicate"
+        target="_blank"
+      >
         Learn more about Predicates
       </Link>
 
