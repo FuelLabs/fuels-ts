@@ -199,21 +199,17 @@ describe('launchNode', () => {
     expect(killSpy).toHaveBeenCalledTimes(1);
   });
 
-  test(
-    'external killing of node runs side-effect cleanup',
-    async () => {
-      const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
+  test('external killing of node runs side-effect cleanup', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
 
-      const { pid } = await launchNode({ loggingEnabled: false });
+    const { pid } = await launchNode({ loggingEnabled: false });
 
-      expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
-      const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+    const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
 
-      childProcessMod.execSync(`kill -- -${pid}`);
-      // wait until cleanup finishes (done via events)
-      await sleep(1500);
-      expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
-    },
-    { timeout: 1000000 }
-  );
+    childProcessMod.execSync(`kill -- -${pid}`);
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
+  });
 });
