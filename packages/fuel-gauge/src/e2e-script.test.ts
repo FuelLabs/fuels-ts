@@ -87,7 +87,8 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     try {
       const callScope = scriptInstance.functions.main(true);
 
-      const { value } = await callScope.call();
+      const { waitForResult } = await callScope.call();
+      const { value } = await waitForResult();
 
       output = value;
     } catch (e) {
