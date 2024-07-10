@@ -1,13 +1,13 @@
-import type { IRawAbiConfigurable } from './IRawAbiConfigurable';
-import type { IRawAbiFunction } from './IRawAbiFunction';
-import type { IRawAbiLoggedTypes } from './IRawAbiLoggedTypes';
-import type { IRawAbiMessagesType } from './IRawAbiMessagesType';
-import type { IRawAbiTypeRoot } from './IRawAbiType';
+import type { JsonAbiConfigurable } from './IRawAbiConfigurable';
+import type { JsonAbiFunction } from './IRawAbiFunction';
+import type { JsonAbiLoggedType } from './IRawAbiLoggedTypes';
+import type { JsonAbiMessagesType } from './IRawAbiMessagesType';
+import type { JsonAbiType } from './IRawAbiType';
 
-export interface IRawAbi {
-  types: IRawAbiTypeRoot[];
-  functions: IRawAbiFunction[];
-  loggedTypes: IRawAbiLoggedTypes[];
-  configurables: IRawAbiConfigurable[];
-  messagesTypes: IRawAbiMessagesType[];
+export interface JsonAbi {
+  types: JsonAbiType[];
+  functions: JsonAbiFunction[];
+  loggedTypes: JsonAbiLoggedType[];
+  configurables: JsonAbiConfigurable[];
+  messagesTypes: JsonAbiMessagesType[];
 }

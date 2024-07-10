@@ -1,4 +1,4 @@
-export interface IRawAbiFunction {
+export interface JsonAbiFunction {
   name: string;
   inputs: IRawAbiFunctionIO[];
   output: IRawAbiFunctionIO;

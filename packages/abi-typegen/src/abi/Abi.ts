@@ -4,7 +4,7 @@ import { normalizeString } from '@fuel-ts/utils';
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
-import type { IRawAbi } from '../types/interfaces/IRawAbi';
+import type { JsonAbi } from '../types/interfaces/IRawAbi';
 import type { IType } from '../types/interfaces/IType';
 import { parseConfigurables } from '../utils/parseConfigurables';
 import { parseFunctions } from '../utils/parseFunctions';
@@ -22,7 +22,7 @@ export class Abi {
 
   public commonTypesInUse: string[] = [];
 
-  public rawContents: IRawAbi;
+  public rawContents: JsonAbi;
   public hexlifiedBinContents?: string;
   public storageSlotsContents?: string;
 
@@ -33,7 +33,7 @@ export class Abi {
   constructor(params: {
     filepath: string;
     programType: ProgramTypeEnum;
-    rawContents: IRawAbi;
+    rawContents: JsonAbi;
     hexlifiedBinContents?: string;
     storageSlotsContents?: string;
     outputDir: string;

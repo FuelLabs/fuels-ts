@@ -1,4 +1,4 @@
-export interface IRawAbiMessagesType {
+export interface JsonAbiMessagesType {
   messageDataType: IRawAbiMessageDataType;
 }
 

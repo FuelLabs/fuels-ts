@@ -1,5 +1,5 @@
 import type { TargetEnum } from '../types/enums/TargetEnum';
-import type { IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiArgument } from '../types/interfaces/IRawAbiType';
 import type { IType } from '../types/interfaces/IType';
 
 import { findType } from './findType';
@@ -10,7 +10,7 @@ import { findType } from './findType';
 export function parseTypeArguments(params: {
   types: IType[];
   target: TargetEnum;
-  typeArguments: IRawAbiTypeComponent[];
+  typeArguments: JsonAbiArgument[];
   parentTypeId?: number;
 }): string {
   const { types, typeArguments, parentTypeId, target } = params;

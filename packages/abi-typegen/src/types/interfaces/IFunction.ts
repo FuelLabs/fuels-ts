@@ -1,4 +1,4 @@
-import type { IRawAbiFunction } from './IRawAbiFunction';
+import type { JsonAbiFunction } from './IRawAbiFunction';
 import type { IType } from './IType';
 
 export interface IFunctionAttributes {
@@ -10,7 +10,7 @@ export interface IFunctionAttributes {
 export interface IFunction {
   types: IType[];
   name: string;
-  rawAbiFunction: IRawAbiFunction;
+  rawAbiFunction: JsonAbiFunction;
   attributes: IFunctionAttributes;
   getDeclaration(): string;
 }

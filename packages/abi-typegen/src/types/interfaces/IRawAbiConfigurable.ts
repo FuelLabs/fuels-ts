@@ -1,4 +1,4 @@
-export interface IRawAbiConfigurable {
+export interface JsonAbiConfigurable {
   name: string;
   configurableType: IRawAbiConfigurableType;
   offset: number;
