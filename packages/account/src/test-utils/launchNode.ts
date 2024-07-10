@@ -234,10 +234,22 @@ export const launchNode = async ({
       }
       childState.isDead = true;
 
+      removeSideffects();
       if (child.pid !== undefined) {
-        process.kill(-child.pid);
+        try {
+          process.kill(-child.pid);
+        } catch (e) {
+          const error = e as Error & { code: string };
+          if (error.code === 'ESRCH') {
+            // eslint-disable-next-line no-console
+            console.log(
+              `fuel-core node under pid ${child.pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
+            );
+          } else {
+            throw e;
+          }
+        }
       } else {
-        removeSideffects();
         // eslint-disable-next-line no-console
         console.error('No PID available for the child process, unable to kill launched node');
       }

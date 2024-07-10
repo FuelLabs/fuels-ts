@@ -212,4 +212,21 @@ describe('launchNode', () => {
     await sleep(1500);
     expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
   });
+
+  test('calling cleanup on externally killed node does not throw', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
+    const logSpy = vi.spyOn(console, 'log');
+
+    const { pid, cleanup } = await launchNode({ loggingEnabled: false });
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+
+    childProcessMod.execSync(`kill -- -${pid}`);
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    cleanup();
+
+    expect(logSpy).toHaveBeenCalledWith(
+      `fuel-core node under pid ${pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
+    );
+  });
 });
