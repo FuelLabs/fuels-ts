@@ -16,14 +16,11 @@ import {
   AddressType,
   OperationName,
 } from 'fuels';
-import { generateTestWallet, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
+import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum } from '../test/fixtures';
 import { MultiTokenContractAbi__factory, TokenContractAbi__factory } from '../test/typegen';
 import MultiTokenContractAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
 import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
-
-import { launchTestContract } from './utils';
 
 /**
  * @group node
@@ -354,12 +351,6 @@ describe('TransactionSummary', () => {
         provider,
         wallets: [wallet],
       } = launched;
-
-      // const wallet = await generateTestWallet(provider, [
-      //   [300_000, baseAssetId],
-      //   [50_000, ASSET_A],
-      //   [50_000, ASSET_B],
-      // ]);
 
       const walletA = Wallet.generate({ provider });
       const walletB = Wallet.generate({ provider });

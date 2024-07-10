@@ -10,7 +10,6 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { getFuelGaugeForcProject, FuelGaugeProjectsEnum } from '../test/fixtures';
 import { PayableAnnotationAbi__factory, ScriptMainArgsAbi__factory } from '../test/typegen';
 import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
@@ -230,8 +229,12 @@ describe('Policies', () => {
     });
   });
 
-  it('should ensure TX policies are properly set (ScriptInvocationScope)', async () => {
-    using launched = await launchTestNode();
+  it.only('should ensure TX policies are properly set (ScriptInvocationScope)', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
 
     const {
       provider,

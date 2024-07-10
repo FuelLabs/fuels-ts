@@ -1,4 +1,3 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { TransactionResponse, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -21,9 +20,18 @@ describe('Edge Cases', () => {
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {
-    const { provider } = await launchTestNode();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000,
+      },
+    });
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
-    const adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     const destination = Wallet.generate({
       provider,

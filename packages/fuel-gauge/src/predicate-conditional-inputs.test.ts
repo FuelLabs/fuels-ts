@@ -26,11 +26,6 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    // const adminWallet = await generateTestWallet(provider, [
-    //   [800_000, provider.getBaseAssetId()],
-    //   [800_000, ASSET_A],
-    // ]);
-
     const predicate = new Predicate({
       bytecode: PredicateConditionalInputsAbi__factory.bin,
       abi: PredicateConditionalInputsAbi__factory.abi,
@@ -111,12 +106,6 @@ describe('PredicateConditionalInputs', () => {
     });
 
     const amountToTransfer = 1000;
-
-    // const adminWallet = await generateTestWallet(provider, [
-    //   [500_000, provider.getBaseAssetId()],
-    //   [500_000, ASSET_A],
-    //   [500_000, ASSET_B],
-    // ]);
 
     const predicate = new Predicate({
       bytecode: PredicateConditionalInputsAbi__factory.bin,

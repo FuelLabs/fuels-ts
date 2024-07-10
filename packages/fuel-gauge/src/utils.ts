@@ -1,23 +1,9 @@
 import { readFileSync } from 'fs';
-import { Script, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { Script } from 'fuels';
 import type { Interface, WalletUnlocked, JsonAbi, BytesLike } from 'fuels';
 import type { DeployContractConfig } from 'fuels/test-utils';
 import { launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
-
-let walletInstance: WalletUnlocked;
-export const createWallet = async () => {
-  if (walletInstance) {
-    return walletInstance;
-  }
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-  walletInstance = await generateTestWallet(provider, [
-    [500_000_000, baseAssetId],
-    [500_000_000, ASSET_A],
-  ]);
-  return walletInstance;
-};
 
 export type SetupConfig = {
   contractBytecode: BytesLike;

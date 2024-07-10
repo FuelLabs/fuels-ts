@@ -5,10 +5,13 @@ import { launchTestNode } from 'fuels/test-utils';
  * @group node
  * @group browser
  */
-describe.skip('Transaction', () => {
-  // #TODO: Discuss with Sergio
+describe('Transaction', () => {
   it('should ensure a mint transaction can be decoded just fine', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
     const { provider } = launched;
 
     const {

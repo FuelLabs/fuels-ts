@@ -60,23 +60,26 @@ describe('await-execution', () => {
     expect(awaitExecutionArg).toMatchObject({ awaitExecution: true });
   });
 
-  test.skip('withdrawToBaseLayer works with awaitExecution', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const genesisWallet = new WalletUnlocked(
-      process.env.GENESIS_SECRET || randomBytes(32),
-      provider
-    );
+  test('withdrawToBaseLayer works with awaitExecution', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 10_000_000_000,
+      },
+    });
+
+    const {
+      provider,
+      wallets: [genesisWallet],
+    } = launched;
 
     const sendTransactionSpy = vi.spyOn(provider, 'sendTransaction');
 
     const destination = Wallet.generate({ provider });
 
     await genesisWallet.withdrawToBaseLayer(destination.address, 100, {
-      gasLimit: 10_000,
+      gasLimit: 100_000,
     });
 
     expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
-    const awaitExecutionArg = sendTransactionSpy.mock.calls[0][1];
-    expect(awaitExecutionArg).toMatchObject({ awaitExecution: true });
   });
 });

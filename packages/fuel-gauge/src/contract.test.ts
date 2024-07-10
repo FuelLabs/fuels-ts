@@ -24,13 +24,7 @@ import type {
   ScriptTransactionRequest,
   TransferParams,
 } from 'fuels';
-import {
-  generateTestWallet,
-  expectToThrowFuelError,
-  ASSET_A,
-  ASSET_B,
-  launchTestNode,
-} from 'fuels/test-utils';
+import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
 import {
   CallTestContractAbi__factory,
@@ -1098,14 +1092,15 @@ describe('Contract', () => {
   });
 
   it('should ensure assets can be transfered to wallets (MULTI TRANSFER)', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
-
-    const wallet = await generateTestWallet(provider, [
-      [300_000, provider.getBaseAssetId()],
-      [300_000, ASSET_A],
-      [300_000, ASSET_B],
-    ]);
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     const factory = new ContractFactory(
       CallTestContractAbiHex,
@@ -1145,14 +1140,15 @@ describe('Contract', () => {
   });
 
   it('should throw when trying to transfer a zero or negative amount to a contract', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
-
-    const wallet = await generateTestWallet(provider, [
-      [300_000, provider.getBaseAssetId()],
-      [300_000, ASSET_A],
-      [300_000, ASSET_B],
-    ]);
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     const factory = new ContractFactory(
       CallTestContractAbiHex,
@@ -1280,10 +1276,14 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" does not modify the blockchain state', async () => {
-    using contract = await setupTestContract();
-    const { provider } = contract;
-
-    const wallet = await generateTestWallet(provider, [[200_000, provider.getBaseAssetId()]]);
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000,
+      },
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const factory = new ContractFactory(
       StorageTestContractAbiHex,
