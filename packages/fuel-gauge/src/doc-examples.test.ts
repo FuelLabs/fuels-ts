@@ -25,7 +25,6 @@ import {
 import { AssetId, launchTestNode } from 'fuels/test-utils';
 
 import { CallTestContractAbi__factory } from '../test/typegen/contracts';
-import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
 import { PredicateTrueAbi__factory } from '../test/typegen/predicates';
 import { PredicateTripleSigAbi__factory } from '../test/typegen/predicates/factories/PredicateTripleSigAbi__factory';
 

@@ -1,4 +1,3 @@
-import type { Contract, Provider } from 'fuels';
 import { BN } from 'fuels';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';

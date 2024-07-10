@@ -157,7 +157,7 @@ describe('Advanced Logging', () => {
     ]);
   });
 
-  describe('should properly decode all logs in a multicall with inter-contract calls', async () => {
+  describe('should properly decode all logs in a multicall with inter-contract calls', () => {
     const testStruct = {
       a: true,
       b: 100000,
@@ -272,7 +272,7 @@ describe('Advanced Logging', () => {
     });
   });
 
-  describe('decode logs from a script set to manually call other contracts', async () => {
+  describe('decode logs from a script set to manually call other contracts', () => {
     const amount = Math.floor(Math.random() * 10) + 1;
 
     const expectedLogs = [

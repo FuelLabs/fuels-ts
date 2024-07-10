@@ -1,4 +1,4 @@
-import { Provider, WalletUnlocked, randomBytes, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { WalletUnlocked, randomBytes, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**

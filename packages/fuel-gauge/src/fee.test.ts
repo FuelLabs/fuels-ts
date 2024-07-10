@@ -1,6 +1,6 @@
 import { ContractFactory, Predicate, ScriptTransactionRequest, Wallet, getRandomB256 } from 'fuels';
 import type { BN } from 'fuels';
-import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange, AssetId } from 'fuels/test-utils';
+import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
 import {
   CallTestContractAbi__factory,
