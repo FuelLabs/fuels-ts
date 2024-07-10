@@ -234,7 +234,7 @@ export const launchNode = async ({
       childState.isDead = true;
 
       if (child.pid !== undefined) {
-        process.kill(child.pid);
+        process.kill(-child.pid);
       } else {
         removeSideffects();
         // eslint-disable-next-line no-console
