@@ -183,8 +183,8 @@ importers:
   apps/create-fuels-counter-guide:
     dependencies:
       '@fuels/connectors':
-        specifier: ^0.2.2
-        version: 0.2.2(fuels@packages+fuels)
+        specifier: ^0.8.1
+        version: 0.8.1(gpdbpx4mlwzz5gl3tn7eyuebsq)
       '@fuels/react':
         specifier: ^0.20.0
         version: 0.20.0(@tanstack/react-query@5.29.2(react@18.3.1))(@types/react-dom@18.3.0)(@types/react@18.3.3)(fuels@packages+fuels)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -199,7 +199,7 @@ importers:
         version: link:../../packages/fuels
       next:
         specifier: 14.2.4
-        version: 14.2.4(@babel/core@7.24.4)(@playwright/test@1.45.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.4(@babel/core@7.24.7)(@playwright/test@1.45.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3
         version: 18.3.1
@@ -1175,8 +1175,8 @@ importers:
   templates/nextjs:
     dependencies:
       '@fuels/connectors':
-        specifier: ^0.5.0
-        version: 0.5.0(gpdbpx4mlwzz5gl3tn7eyuebsq)
+        specifier: ^0.8.1
+        version: 0.8.1(gpdbpx4mlwzz5gl3tn7eyuebsq)
       '@fuels/react':
         specifier: ^0.20.0
         version: 0.20.0(@tanstack/react-query@5.29.2(react@18.3.1))(@types/react-dom@18.3.0)(@types/react@18.3.3)(fuels@packages+fuels)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3038,8 +3038,8 @@ packages:
     peerDependencies:
       fuels: '>=0.78.0'
 
-  '@fuels/connectors@0.5.0':
-    resolution: {integrity: sha512-lwafZPzWO9dxOcUXYYrQPaOMRtmrmyn0SEb0RYwk/B5f8WeOKfiTL5yxP7QXaTYPNAyb1qW0Gx9Dykn517XxqA==}
+  '@fuels/connectors@0.8.1':
+    resolution: {integrity: sha512-y9BUnWdyq7rcBJc3yMp6kAUdJhPOu1D09+/t+c/Ayy+cGuzYiFOfF2H/BMTM37YatlZnpkXmTh1Cf/XHKQfnPw==}
     peerDependencies:
       fuels: '>=0.88.1'
 
@@ -12268,6 +12268,10 @@ packages:
   snake-case@3.0.4:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
 
+  socket.io-client@4.7.2:
+    resolution: {integrity: sha512-vtA0uD4ibrYD793SOIAwlo8cj6haOeMHrGvwPxJsxH7CeIksqJ+3Zc06RvWTIFgiSqx4A3sOnTXpfAEE2Zyz6w==}
+    engines: {node: '>=10.0.0'}
+
   socket.io-client@4.7.5:
     resolution: {integrity: sha512-sJ/tqHOCe7Z50JCBCXrsY3I2k03iOiUe+tj1OmKeD2lXPiGH/RUCdTZFoqVyN7l1MnpIzPrGtLcijffmeouNlQ==}
     engines: {node: '>=10.0.0'}
@@ -17058,13 +17062,14 @@ snapshots:
     dependencies:
       fuels: link:packages/fuels
 
-  '@fuels/connectors@0.5.0(gpdbpx4mlwzz5gl3tn7eyuebsq)':
+  '@fuels/connectors@0.8.1(gpdbpx4mlwzz5gl3tn7eyuebsq)':
     dependencies:
       '@ethereumjs/util': 9.0.3
       '@ethersproject/bytes': 5.7.0
       '@wagmi/core': 2.9.1(@tanstack/query-core@5.29.0)(@types/react@18.3.3)(bufferutil@4.0.8)(immer@9.0.21)(react@18.3.1)(typescript@5.2.2)(utf-8-validate@6.0.4)(viem@2.10.2(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@6.0.4)(zod@3.22.4))(zod@3.22.4)
       '@web3modal/wagmi': 4.1.11(k4bfc6qyzjwxgjdcqevadg3q54)
       fuels: link:packages/fuels
+      socket.io-client: 4.7.2(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       viem: 2.10.2(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@6.0.4)(zod@3.22.4)
     transitivePeerDependencies:
       - '@tanstack/query-core'
@@ -17074,6 +17079,7 @@ snapshots:
       - immer
       - react
       - react-dom
+      - supports-color
       - typescript
       - utf-8-validate
       - vue
@@ -29490,6 +29496,17 @@ snapshots:
     dependencies:
       dot-case: 3.0.4
       tslib: 2.6.0
+
+  socket.io-client@4.7.2(bufferutil@4.0.8)(utf-8-validate@6.0.4):
+    dependencies:
+      '@socket.io/component-emitter': 3.1.2
+      debug: 4.3.5(supports-color@5.5.0)
+      engine.io-client: 6.5.3(bufferutil@4.0.8)(utf-8-validate@6.0.4)
+      socket.io-parser: 4.2.4
+    transitivePeerDependencies:
+      - bufferutil
+      - supports-color
+      - utf-8-validate
 
   socket.io-client@4.7.5(bufferutil@4.0.8)(utf-8-validate@6.0.4):
     dependencies:
