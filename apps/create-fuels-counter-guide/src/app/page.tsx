@@ -1,9 +1,8 @@
-/** @knipignore */
+"use client";
+
 import type { TestContractAbi } from "@/sway-api";
-/** @knipignore */
 import { TestContractAbi__factory } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
-
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
 import { useState } from "react";
@@ -12,7 +11,7 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT } from '@/lib';
+import { CURRENT_ENVIRONMENT } from "@/lib";
 
 // #region deploying-dapp-to-testnet-frontend-contract-id
 const contractId =
@@ -20,11 +19,6 @@ const contractId =
     ? contractIds.testContract
     : (process.env.NEXT_PUBLIC_TESTNET_CONTRACT_ID as string); // Testnet Contract ID
 // #endregion deploying-dapp-to-testnet-frontend-contract-id
-
-
-const hasContract = process.env.NEXT_PUBLIC_HAS_CONTRACT === "true";
-const hasPredicate = process.env.NEXT_PUBLIC_HAS_PREDICATE === "true";
-const hasScript = process.env.NEXT_PUBLIC_HAS_SCRIPT === "true";
 
 export default function Home() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
@@ -36,8 +30,8 @@ export default function Home() {
    * See: https://github.com/streamich/react-use/blob/master/docs/useAsync.md
    */
   useAsync(async () => {
-    if (hasContract && wallet) {
-      const { contract: testContract } = TestContractAbi__factory.connect(contractId, wallet);
+    if (wallet) {
+      const testContract = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
       const { value } = await testContract.functions.get_count().get();
       setCounter(value.toNumber());
@@ -88,12 +82,10 @@ export default function Home() {
         <h1 className="text-2xl font-semibold ali">Welcome to Fuel</h1>
       </div>
 
-      {hasContract && (
-        <span className="text-gray-400">
-          Get started by editing <i>sway-programs/contract/main.sw</i> or{" "}
-          <i>src/pages/index.tsx</i>.
-        </span>
-      )}
+      <span className="text-gray-400">
+        Get started by editing <i>sway-programs/contract/main.sw</i> or{" "}
+        <i>src/pages/index.tsx</i>.
+      </span>
 
       <span className="text-gray-400">
         This template uses the new{" "}
@@ -103,36 +95,31 @@ export default function Home() {
         to enable type-safe hot-reloading for your Sway programs.
       </span>
 
-      {hasContract && (
-        <>
-          <h3 className="text-xl font-semibold">Counter</h3>
+      <>
+        <h3 className="text-xl font-semibold">Counter</h3>
 
-          <span className="text-gray-400 text-6xl">{counter}</span>
+        <span data-testid="counter" className="text-gray-400 text-6xl">
+          {counter}
+        </span>
 
-          <Button onClick={onIncrementPressed} className="mt-6">
-            Increment Counter
-          </Button>
+        <Button onClick={onIncrementPressed} className="mt-6">
+          Increment Counter
+        </Button>
 
-          {/* #region create-fuels-counter-guide-on-decrement-ui */}
-          <Button onClick={onDecrementPressed} className="mt-6">
-            Decrement Counter
-          </Button>
-          {/* #endregion create-fuels-counter-guide-on-decrement-ui */}
-        </>
-      )}
+        {/* #region create-fuels-counter-guide-on-decrement-ui */}
+        <Button onClick={onDecrementPressed} className="mt-6">
+          Decrement Counter
+        </Button>
+        {/* #endregion create-fuels-counter-guide-on-decrement-ui */}
+      </>
 
-      {hasPredicate && (
-        <Link href="/predicate" className="mt-4">
-          Predicate Example
-        </Link>
-      )}
+      <Link href="/predicate" className="mt-4">
+        Predicate Example
+      </Link>
 
-      {hasScript && (
-        <Link href="/script" className="mt-4">
-          Script Example
-        </Link>
-      )}
-
+      <Link href="/script" className="mt-4">
+        Script Example
+      </Link>
       <Link href="https://docs.fuel.network" target="_blank" className="mt-12">
         Fuel Docs
       </Link>
