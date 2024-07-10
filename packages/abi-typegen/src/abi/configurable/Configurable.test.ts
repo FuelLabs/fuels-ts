@@ -2,8 +2,8 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import type { IType } from '../../types/interfaces/IType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import * as findTypeMod from '../../utils/findType';
 
 import { Configurable } from './Configurable';
