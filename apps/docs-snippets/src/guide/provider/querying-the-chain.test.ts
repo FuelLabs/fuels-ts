@@ -157,10 +157,10 @@ describe('querying the chain', () => {
     } = launched;
 
     // Retrieves messages from the wallet
-    const [message] = await wallet.getMessages();
+    const { messages } = await wallet.getMessages();
     // #endregion Message-getMessages
 
-    expect(message.nonce).toEqual(testMessage.nonce);
+    expect(messages[0].nonce).toEqual(testMessage.nonce);
   });
 
   it('can getMessageProof with blockId', async () => {
