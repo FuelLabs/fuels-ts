@@ -7,55 +7,51 @@ export default function setup() {
     const server = {
       closed: false,
     };
+    const serverUrl = 'http://localhost:49342';
+
     const teardown = async () => {
       if (server.closed) {
         return;
       }
       server.closed = true;
-      const serverUrl = `http://localhost:49342`;
       try {
         await fetch(`${serverUrl}/close-server`);
       } catch (e) {
-        console.log('closing of server failed', e);
+        console.log('Closing of server failed', e);
       }
       process.exit();
     };
 
     const cp = spawn('pnpm tsx packages/fuels/src/setup-launch-node-server.ts', {
       detached: true,
-      shell: 'sh',
+      shell: true,
     });
 
     cp.stderr?.on('data', (chunk) => {
-      console.log(chunk.toString());
+      console.error(chunk.toString());
     });
 
     cp.stdout?.on('data', (data) => {
       console.log(data.toString());
-      // Return teardown function to be called when tests finish
-      // It will kill the server
       resolve(teardown);
     });
 
     cp.on('error', (err) => {
-      console.log(err);
-      // Ensure server is killed if there's an error
+      console.error('Child process error:', err);
       teardown();
       reject(err);
     });
 
     cp.on('exit', (code, signal) => {
-      console.log('error code', code, signal);
+      console.log('Child process exited with code', code, 'and signal', signal);
       if (code !== 0) {
         reject(new Error(`Server process exited with code ${code}`));
       }
     });
 
-    process.on('SIGINT', teardown);
-    process.on('SIGUSR1', teardown);
-    process.on('SIGUSR2', teardown);
-    process.on('uncaughtException', teardown);
-    process.on('unhandledRejection', teardown);
-    process.on('beforeExit', teardown);
+    const cleanupEvents = ['SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException', 'unhandledRejection', 'beforeExit'];
+    cleanupEvents.forEach((event) => {
+      process.on(event, teardown);
+    });
   });
 }
