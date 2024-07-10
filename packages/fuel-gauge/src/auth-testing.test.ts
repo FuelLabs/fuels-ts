@@ -27,15 +27,18 @@ describe('Auth Testing', () => {
   });
 
   it('can get is_caller_external', async () => {
-    const { value } = await contractInstance.functions.is_caller_external().call();
+    const { waitForResult } = await contractInstance.functions.is_caller_external().call();
+    const { value } = await waitForResult();
 
     expect(value).toBeTruthy();
   });
 
   it('can check_msg_sender [with correct id]', async () => {
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .check_msg_sender({ bits: wallet.address.toB256() })
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBeTruthy();
   });
