@@ -142,12 +142,12 @@ describe('Advanced Logging', () => {
       ],
     });
 
-    // #TODO: Find a cleaner way to infer these types
-    const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
-    const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingOtherContractAbi;
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+    } = launched;
 
     const INPUT = 3;
-    const { waitForResult } = await advancedLogContract.functions
+    const { waitForResult } = await (advancedLogContract as AdvancedLoggingAbi).functions
       .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
       .addContracts([otherAdvancedLogContract])
       .call();
@@ -193,21 +193,24 @@ describe('Advanced Logging', () => {
         ],
       });
 
-      // #TODO: Find a cleaner way to infer these types
-      const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
-      const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingAbi;
-      const callTest = launched.contracts[2] as CallTestContractAbi;
-      const configurable = launched.contracts[3] as ConfigurableContractAbi;
-      const coverage = launched.contracts[4] as CoverageContractAbi;
+      const {
+        contracts: [
+          advancedLogContract,
+          otherAdvancedLogContract,
+          callTest,
+          configurable,
+          coverage,
+        ],
+      } = launched;
 
       const { waitForResult } = await callTest
         .multiCall([
-          advancedLogContract.functions
+          (advancedLogContract as AdvancedLoggingAbi).functions
             .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
             .addContracts([otherAdvancedLogContract]),
-          callTest.functions.boo(testStruct),
-          configurable.functions.echo_struct(),
-          coverage.functions.echo_str_8('fuelfuel'),
+          (callTest as CallTestContractAbi).functions.boo(testStruct),
+          (configurable as ConfigurableContractAbi).functions.echo_struct(),
+          (coverage as CoverageContractAbi).functions.echo_str_8('fuelfuel'),
         ])
         .call();
 
@@ -235,23 +238,24 @@ describe('Advanced Logging', () => {
         },
       });
 
-      const wallet = launched.wallets[0];
-
-      // #TODO: Find a cleaner way to infer these types
-      const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
-      const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingAbi;
-      const callTest = launched.contracts[2] as CallTestContractAbi;
-      const configurable = launched.contracts[3] as ConfigurableContractAbi;
-      const coverage = launched.contracts[4] as CoverageContractAbi;
-
+      const {
+        contracts: [
+          advancedLogContract,
+          otherAdvancedLogContract,
+          callTest,
+          configurable,
+          coverage,
+        ],
+        wallets: [wallet],
+      } = launched;
       const request = await callTest
         .multiCall([
-          advancedLogContract.functions
+          (advancedLogContract as AdvancedLoggingAbi).functions
             .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
             .addContracts([otherAdvancedLogContract]),
-          callTest.functions.boo(testStruct),
-          configurable.functions.echo_struct(),
-          coverage.functions.echo_str_8('fuelfuel'),
+          (callTest as CallTestContractAbi).functions.boo(testStruct),
+          (configurable as ConfigurableContractAbi).functions.echo_struct(),
+          (coverage as CoverageContractAbi).functions.echo_str_8('fuelfuel'),
         ])
         .getTransactionRequest();
 
