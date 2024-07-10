@@ -116,7 +116,11 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (ScriptTransactionRequest)', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
 
     const {
       provider,
@@ -157,7 +161,11 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (CreateTransactionRequest)', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
 
     const {
       provider,
@@ -231,7 +239,7 @@ describe('Policies', () => {
     });
   });
 
-  it.only('should ensure TX policies are properly set (ScriptInvocationScope)', async () => {
+  it('should ensure TX policies are properly set (ScriptInvocationScope)', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
@@ -271,7 +279,11 @@ describe('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (Account Transfer)', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
 
     const {
       provider,
@@ -310,6 +322,9 @@ describe('Policies', () => {
           bytecode: PayableAnnotationAbiHex,
         },
       ],
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
     });
 
     const {
@@ -341,7 +356,11 @@ describe('Policies', () => {
   });
 
   it('should ensure TX witnessLimit policy limits tx execution as expected', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
 
     const {
       provider,
@@ -369,7 +388,11 @@ describe('Policies', () => {
 
   describe('should ensure TX maxFee policy limits TX execution as expected', () => {
     it('on account transfer', async () => {
-      using launched = await launchTestNode();
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+        },
+      });
 
       const {
         provider,
@@ -456,7 +479,11 @@ describe('Policies', () => {
     });
 
     it('on ContractFactory when deploying contracts', async () => {
-      using launched = await launchTestNode();
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+        },
+      });
 
       const {
         provider,
