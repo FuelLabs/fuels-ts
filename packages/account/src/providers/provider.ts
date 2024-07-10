@@ -63,7 +63,6 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
-import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
@@ -316,11 +315,6 @@ export type EstimateTransactionParams = {
 
 export type TransactionCostParams = EstimateTransactionParams & {
   /**
-   * The account that will provide the resources for the transaction.
-   */
-  resourcesOwner?: AbstractAccount;
-
-  /**
    * The quantities to forward to the contract.
    */
   quantitiesToContract?: CoinQuantity[];
@@ -332,11 +326,6 @@ export type TransactionCostParams = EstimateTransactionParams & {
    * @returns A promise that resolves to the signed transaction request.
    */
   signatureCallback?: (request: ScriptTransactionRequest) => Promise<ScriptTransactionRequest>;
-
-  /**
-   * Whether the transaction is already funded with fake UTXO's
-   */
-  funded?: boolean;
 };
 
 /**
@@ -1115,47 +1104,11 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    {
-      resourcesOwner,
-      signatureCallback,
-      quantitiesToContract = [],
-      funded = true,
-    }: TransactionCostParams = {}
-  ): Promise<TransactionCost> {
+    { signatureCallback }: TransactionCostParams = {}
+  ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const updateMaxFee = txRequestClone.maxFee.eq(0);
-    let requiredQuantities: CoinQuantity[] = [];
-
-    if (!funded) {
-      const baseAssetId = this.getBaseAssetId();
-      // Fund with fake UTXOs to avoid not enough funds error
-      // Getting coin quantities from amounts being transferred
-      const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
-      // Combining coin quantities from amounts being transferred and forwarding to contracts
-      requiredQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
-      // Funding transaction with fake utxos
-      txRequestClone.fundWithFakeUtxos(requiredQuantities, baseAssetId, resourcesOwner?.address);
-
-      /**
-       * Estimate predicates gasUsed
-       */
-      // Remove gasLimit to avoid gasLimit when estimating predicates
-      if (isScriptTransaction) {
-        txRequestClone.gasLimit = bn(0);
-      }
-
-      /**
-       * The fake utxos added above can be from a predicate
-       * If the resources owner is a predicate,
-       * we need to populate the resources with the predicate's data
-       * so that predicate estimation can happen.
-       */
-      if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
-        (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
-      }
-    }
-
     const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
 
     let addedSignatures = 0;
@@ -1206,7 +1159,6 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return {
-      requiredQuantities,
       receipts,
       gasUsed,
       gasPrice,

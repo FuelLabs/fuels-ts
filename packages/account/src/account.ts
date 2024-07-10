@@ -608,7 +608,6 @@ export class Account extends AbstractAccount {
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
-      funded: true,
     });
 
     return {
