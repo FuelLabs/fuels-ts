@@ -1,4 +1,4 @@
-import type { JsonAbiConfigurable } from './IRawAbiConfigurable';
+import type { JsonAbiConfigurable } from './JsonAbiConfigurable';
 import type { IType } from './IType';
 
 export interface IConfigurable {

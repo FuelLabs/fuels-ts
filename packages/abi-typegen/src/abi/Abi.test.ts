@@ -5,7 +5,7 @@ import {
   getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
-import type { JsonAbiType } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 import * as parseConfigurablesMod from '../utils/parseConfigurables';
 import * as parseFunctionsMod from '../utils/parseFunctions';
 import * as parseTypesMod from '../utils/parseTypes';

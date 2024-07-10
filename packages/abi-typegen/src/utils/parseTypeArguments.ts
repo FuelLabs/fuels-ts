@@ -1,5 +1,5 @@
 import type { TargetEnum } from '../types/enums/TargetEnum';
-import type { JsonAbiArgument } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiArgument } from '../types/interfaces/JsonAbi';
 import type { IType } from '../types/interfaces/IType';
 
 import { findType } from './findType';

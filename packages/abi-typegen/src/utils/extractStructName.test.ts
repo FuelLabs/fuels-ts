@@ -1,7 +1,7 @@
 import { EnumType } from '../abi/types/EnumType';
 import { GenericType } from '../abi/types/GenericType';
 import { StructType } from '../abi/types/StructType';
-import type { JsonAbiType } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { extractStructName } from './extractStructName';
 

@@ -4,7 +4,7 @@ import { normalizeString } from '@fuel-ts/utils';
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
-import type { JsonAbi } from '../types/interfaces/IRawAbi';
+import type { JsonAbi } from '../types/interfaces/JsonAbi';
 import type { IType } from '../types/interfaces/IType';
 import { parseConfigurables } from '../utils/parseConfigurables';
 import { parseFunctions } from '../utils/parseFunctions';

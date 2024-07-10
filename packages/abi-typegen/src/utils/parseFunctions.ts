@@ -1,5 +1,5 @@
 import type { IFunction } from '../types/interfaces/IFunction';
-import type { JsonAbiFunction } from '../types/interfaces/IRawAbiFunction';
+import type { JsonAbiFunction } from '../types/interfaces/JsonAbi';
 import type { IType } from '../types/interfaces/IType';
 
 import { makeFunction } from './makeFunction';

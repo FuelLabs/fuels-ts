@@ -1,5 +1,5 @@
 import { Configurable } from '../abi/configurable/Configurable';
-import type { JsonAbiConfigurable } from '../types/interfaces/IRawAbiConfigurable';
+import type { JsonAbiConfigurable } from '../types/interfaces/JsonAbiConfigurable';
 import type { IType } from '../types/interfaces/IType';
 
 export function makeConfigurable(params: {

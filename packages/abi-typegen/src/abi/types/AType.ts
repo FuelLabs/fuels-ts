@@ -1,4 +1,4 @@
-import type { JsonAbiType } from '../../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import type { ITypeAttributes } from '../../types/interfaces/IType';
 
 export class AType {

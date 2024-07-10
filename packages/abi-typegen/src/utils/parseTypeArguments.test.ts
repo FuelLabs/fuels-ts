@@ -3,7 +3,7 @@ import {
   getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../types/enums/TargetEnum';
-import type { JsonAbiType, JsonAbiArgument } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType, JsonAbiArgument } from '../types/interfaces/JsonAbi';
 
 import { makeType } from './makeType';
 import { parseTypeArguments } from './parseTypeArguments';

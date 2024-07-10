@@ -1,4 +1,4 @@
-import type { JsonAbiFunction } from './IRawAbiFunction';
+import type { JsonAbiFunction } from './JsonAbi';
 import type { IType } from './IType';
 
 export interface IFunctionAttributes {

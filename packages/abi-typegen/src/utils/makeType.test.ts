@@ -1,7 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import type { ArrayType } from '../abi/types/ArrayType';
-import type { JsonAbiType } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { makeType } from './makeType';
 

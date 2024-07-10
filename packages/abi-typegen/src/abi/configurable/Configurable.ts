@@ -1,5 +1,5 @@
 import type { IConfigurable } from '../../types/interfaces/IConfigurable';
-import type { JsonAbiConfigurable } from '../../types/interfaces/IRawAbiConfigurable';
+import type { JsonAbiConfigurable } from '../../types/interfaces/JsonAbiConfigurable';
 import type { IType } from '../../types/interfaces/IType';
 import { findType } from '../../utils/findType';
 
