@@ -208,7 +208,7 @@ describe('querying the chain', () => {
     // Wait for the next block to be minter on out case we are using a local provider
     await sender.withdrawToBaseLayer(recipientAddress, 100);
 
-    // Retrieves the message out receipt from the transaction result
+    // Retrieves the `nonce` via message out receipt from the transaction result
     const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
 
     // Retrives the latest block
