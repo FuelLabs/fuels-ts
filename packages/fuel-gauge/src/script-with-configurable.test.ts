@@ -36,7 +36,8 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(defaultValues);
 
-    const { value } = await script.functions.main(defaultValues.FEE).call();
+    const { waitForResult } = await script.functions.main(defaultValues.FEE).call();
+    const { value } = await waitForResult();
 
     expect(value).toBe(true);
   });
@@ -50,7 +51,8 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(defaultValues);
 
-    const { value } = await script.functions.main(configurableConstants.FEE).call();
+    const { waitForResult } = await script.functions.main(configurableConstants.FEE).call();
+    const { value } = await waitForResult();
 
     expect(value).toBe(false);
   });
@@ -62,7 +64,8 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const { value } = await script.functions.main(configurableConstants.FEE).call();
+    const { waitForResult } = await script.functions.main(configurableConstants.FEE).call();
+    const { value } = await waitForResult();
 
     expect(value).toBe(true);
   });
@@ -78,7 +81,8 @@ describe('Script With Configurable', () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const { value } = await script.functions.main(input.FEE).call();
+    const { waitForResult } = await script.functions.main(input.FEE).call();
+    const { value } = await waitForResult();
 
     expect(value).toBe(false);
   });

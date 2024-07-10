@@ -52,7 +52,9 @@ describe(__filename, () => {
     // #endregion contract-setup-4
 
     // #region contract-setup-5
-    const { value } = await contract.functions.echo_u8(15).call();
+    const call = await contract.functions.echo_u8(15).call();
+
+    const { value } = await call.waitForResult();
     // #endregion contract-setup-5
 
     expect(transactionId).toBeDefined();
