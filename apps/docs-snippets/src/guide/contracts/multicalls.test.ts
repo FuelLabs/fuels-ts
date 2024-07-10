@@ -42,11 +42,17 @@ describe(__filename, () => {
       wallet
     );
 
-    echoContract = await factory1.deployContract();
-    counterContract = await factory2.deployContract({
+    let { waitForResult } = await factory1.deployContract();
+    ({ contract: echoContract } = await waitForResult());
+
+    ({ waitForResult } = await factory2.deployContract({
       storageSlots: counterArtifacts.storageSlots,
-    });
-    contextContract = await factory3.deployContract();
+    }));
+
+    ({ contract: counterContract } = await waitForResult());
+
+    ({ waitForResult } = await factory3.deployContract());
+    ({ contract: contextContract } = await waitForResult());
   });
 
   it('should successfully submit multiple calls from the same contract function', async () => {

@@ -30,32 +30,34 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
-    expect(contact.interface).toBeInstanceOf(Interface);
+    expect(contract.interface).toBeInstanceOf(Interface);
 
-    const call1 = await contact.functions.initialize_counter(41).call();
+    const call1 = await contract.functions.initialize_counter(41).call();
     const { value: valueInitial } = await call1.waitForResult();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const call2 = await contact.functions.increment_counter(1).call();
+    const call2 = await contract.functions.increment_counter(1).call();
     const { value } = await call2.waitForResult();
     expect(value.toHex()).toEqual(toHex(42));
 
-    const { value: value2 } = await contact.functions.increment_counter(1).dryRun();
+    const { value: value2 } = await contract.functions.increment_counter(1).dryRun();
     expect(value2.toHex()).toEqual(toHex(43));
   });
 
   it('Creates a factory from inputs that can return transaction results', async () => {
     const factory = await createContractFactory();
 
-    const contact = await factory.deployContract();
+    const callDeploy = await factory.deployContract();
+    const { contract } = await callDeploy.waitForResult();
 
-    expect(contact.interface).toBeInstanceOf(Interface);
+    expect(contract.interface).toBeInstanceOf(Interface);
 
-    await contact.functions.initialize_counter(100).call();
+    await contract.functions.initialize_counter(100).call();
 
-    const { waitForResult } = await contact.functions.increment_counter(1).call();
+    const { waitForResult } = await contract.functions.increment_counter(1).call();
     const { transactionResult } = await waitForResult();
     expect(transactionResult).toEqual<TransactionResult>({
       blockId: expect.stringMatching(/^0x/),
@@ -87,7 +89,7 @@ describe('Contract Factory', () => {
     });
     expect(transactionResult.gasUsed.toNumber()).toBeGreaterThan(0);
 
-    const { callResult } = await contact.functions.increment_counter(1).dryRun();
+    const { callResult } = await contract.functions.increment_counter(1).dryRun();
     expect(callResult).toMatchObject({
       receipts: expect.arrayContaining([expect.any(Object)]),
     });
@@ -96,7 +98,8 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can prepare call data', async () => {
     const factory = await createContractFactory();
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
     expect(prepared).toEqual({
@@ -129,9 +132,10 @@ describe('Contract Factory', () => {
 
   it('Creates a contract with initial storage fixed var names', async () => {
     const factory = await createContractFactory();
-    const contract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       storageSlots,
     });
+    const { contract } = await waitForResult();
 
     const call1 = await contract.functions.return_var1().call();
     const { value: var1 } = await call1.waitForResult();
@@ -163,13 +167,14 @@ describe('Contract Factory', () => {
     const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const contact = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
     });
+    const { contract } = await waitForResult();
 
-    const { value: vB256 } = await contact.functions.return_b256().simulate();
+    const { value: vB256 } = await contract.functions.return_b256().simulate();
     expect(vB256).toEqual(b256);
   });
 
@@ -177,12 +182,13 @@ describe('Contract Factory', () => {
     const factory = await createContractFactory();
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const contract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       storageSlots: [
         ...storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });
+    const { contract } = await waitForResult();
 
     const call1 = await contract.functions.return_var1().call();
     const { value: var1 } = await call1.waitForResult();

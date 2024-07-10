@@ -37,7 +37,7 @@ export default function Home() {
    */
   useAsync(async () => {
     if (hasContract && wallet) {
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
+      const { contract: testContract } = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
       const { value } = await testContract.functions.get_count().get();
       setCounter(value.toNumber());

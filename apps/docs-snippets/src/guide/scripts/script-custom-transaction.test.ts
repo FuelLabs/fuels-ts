@@ -42,7 +42,8 @@ describe(__filename, () => {
     ];
     wallet = await getTestWallet(seedQuantities);
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
-    contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    ({ contract } = await waitForResult());
   });
 
   it('transfer multiple assets to a contract', async () => {
