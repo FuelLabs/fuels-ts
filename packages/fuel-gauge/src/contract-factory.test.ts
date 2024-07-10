@@ -35,10 +35,12 @@ describe('Contract Factory', () => {
 
     expect(contract.interface).toBeInstanceOf(Interface);
 
-    const { value: valueInitial } = await contract.functions.initialize_counter(41).call();
+    const call1 = await contract.functions.initialize_counter(41).call();
+    const { value: valueInitial } = await call1.waitForResult();
     expect(valueInitial.toHex()).toEqual(toHex(41));
 
-    const { value } = await contract.functions.increment_counter(1).call();
+    const call2 = await contract.functions.increment_counter(1).call();
+    const { value } = await call2.waitForResult();
     expect(value.toHex()).toEqual(toHex(42));
 
     const { value: value2 } = await contract.functions.increment_counter(1).dryRun();
@@ -48,14 +50,15 @@ describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return transaction results', async () => {
     const factory = await createContractFactory();
 
-    const { waitForResult } = await factory.deployContract();
-    const { contract } = await waitForResult();
+    const callDeploy = await factory.deployContract();
+    const { contract } = await callDeploy.waitForResult();
 
     expect(contract.interface).toBeInstanceOf(Interface);
 
     await contract.functions.initialize_counter(100).call();
 
-    const { transactionResult } = await contract.functions.increment_counter(1).call();
+    const { waitForResult } = await contract.functions.increment_counter(1).call();
+    const { transactionResult } = await waitForResult();
     expect(transactionResult).toEqual<TransactionResult>({
       blockId: expect.stringMatching(/^0x/),
       receipts: expect.arrayContaining([expect.any(Object)]),
@@ -134,19 +137,24 @@ describe('Contract Factory', () => {
     });
     const { contract } = await waitForResult();
 
-    const { value: var1 } = await contract.functions.return_var1().call();
+    const call1 = await contract.functions.return_var1().call();
+    const { value: var1 } = await call1.waitForResult();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().call();
+    const call2 = await contract.functions.return_var2().call();
+    const { value: var2 } = await call2.waitForResult();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().call();
+    const call3 = await contract.functions.return_var3().call();
+    const { value: var3 } = await call3.waitForResult();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().call();
+    const call4 = await contract.functions.return_var4().call();
+    const { value: var4 } = await call4.waitForResult();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().call();
+    const call5 = await contract.functions.return_var5().call();
+    const { value: var5 } = await call5.waitForResult();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -182,19 +190,24 @@ describe('Contract Factory', () => {
     });
     const { contract } = await waitForResult();
 
-    const { value: var1 } = await contract.functions.return_var1().call();
+    const call1 = await contract.functions.return_var1().call();
+    const { value: var1 } = await call1.waitForResult();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { value: var2 } = await contract.functions.return_var2().call();
+    const call2 = await contract.functions.return_var2().call();
+    const { value: var2 } = await call2.waitForResult();
     expect(var2).toEqual(20);
 
-    const { value: var3 } = await contract.functions.return_var3().call();
+    const call3 = await contract.functions.return_var3().call();
+    const { value: var3 } = await call3.waitForResult();
     expect(var3).toEqual(30);
 
-    const { value: var4 } = await contract.functions.return_var4().call();
+    const call4 = await contract.functions.return_var4().call();
+    const { value: var4 } = await call4.waitForResult();
     expect(var4).toEqual(true);
 
-    const { value: var5 } = await contract.functions.return_var5().call();
+    const call5 = await contract.functions.return_var5().call();
+    const { value: var5 } = await call5.waitForResult();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
