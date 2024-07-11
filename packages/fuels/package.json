@@ -84,7 +84,6 @@
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
     "toml": "^3.0.0",
-    "tree-kill": "^1.2.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {
