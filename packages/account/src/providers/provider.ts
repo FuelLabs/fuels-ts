@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -16,8 +16,6 @@ import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
 import { clone } from 'ramda';
-
-import type { Predicate } from '../predicate';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {

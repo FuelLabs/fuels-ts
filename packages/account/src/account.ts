@@ -10,7 +10,6 @@ import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
-import type { Predicate } from './predicate';
 import type {
   TransactionRequest,
   CoinQuantityLike,
