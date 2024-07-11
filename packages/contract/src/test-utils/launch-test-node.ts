@@ -133,7 +133,7 @@ function getWalletForDeployment(config: DeployContractConfig, wallets: WalletUnl
   return wallets[config.walletIndex];
 }
 
-export async function launchTestNode<TFactories extends DeployContractConfig[]>({
+export async function launchTestNode<const TFactories extends DeployContractConfig[]>({
   providerOptions = {},
   walletsConfig = {},
   nodeOptions = {},

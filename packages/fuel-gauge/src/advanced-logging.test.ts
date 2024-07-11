@@ -2,15 +2,7 @@ import type { FuelError } from '@fuel-ts/errors';
 import { Script, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 import { ScriptCallContractAbi__factory } from '../test/typegen';
-import type {
-  AdvancedLoggingAbi,
-  AdvancedLoggingOtherContractAbi,
-  CallTestContractAbi,
-  ConfigurableContractAbi,
-  CoverageContractAbi,
-} from '../test/typegen/contracts';
 import {
   AdvancedLoggingAbi__factory,
   AdvancedLoggingOtherContractAbi__factory,
@@ -147,7 +139,7 @@ describe('Advanced Logging', () => {
     } = launched;
 
     const INPUT = 3;
-    const { waitForResult } = await (advancedLogContract as AdvancedLoggingAbi).functions
+    const { waitForResult } = await advancedLogContract.functions
       .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
       .addContracts([otherAdvancedLogContract])
       .call();
@@ -205,12 +197,12 @@ describe('Advanced Logging', () => {
 
       const { waitForResult } = await callTest
         .multiCall([
-          (advancedLogContract as AdvancedLoggingAbi).functions
+          advancedLogContract.functions
             .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
             .addContracts([otherAdvancedLogContract]),
-          (callTest as CallTestContractAbi).functions.boo(testStruct),
-          (configurable as ConfigurableContractAbi).functions.echo_struct(),
-          (coverage as CoverageContractAbi).functions.echo_str_8('fuelfuel'),
+          callTest.functions.boo(testStruct),
+          configurable.functions.echo_struct(),
+          coverage.functions.echo_str_8('fuelfuel'),
         ])
         .call();
 
@@ -248,14 +240,15 @@ describe('Advanced Logging', () => {
         ],
         wallets: [wallet],
       } = launched;
+
       const request = await callTest
         .multiCall([
-          (advancedLogContract as AdvancedLoggingAbi).functions
+          advancedLogContract.functions
             .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
             .addContracts([otherAdvancedLogContract]),
-          (callTest as CallTestContractAbi).functions.boo(testStruct),
-          (configurable as ConfigurableContractAbi).functions.echo_struct(),
-          (coverage as CoverageContractAbi).functions.echo_str_8('fuelfuel'),
+          callTest.functions.boo(testStruct),
+          configurable.functions.echo_struct(),
+          coverage.functions.echo_str_8('fuelfuel'),
         ])
         .getTransactionRequest();
 
@@ -311,10 +304,10 @@ describe('Advanced Logging', () => {
         },
       });
 
-      const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
-      const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingAbi;
-
-      const wallet = launched.wallets[0];
+      const {
+        contracts: [advancedLogContract, otherAdvancedLogContract],
+        wallets: [wallet],
+      } = launched;
 
       const script = new Script(
         ScriptCallContractAbi__factory.bin,
@@ -346,16 +339,16 @@ describe('Advanced Logging', () => {
         },
       });
 
-      const advancedLogContract = launched.contracts[0] as AdvancedLoggingAbi;
-      const otherAdvancedLogContract = launched.contracts[1] as AdvancedLoggingAbi;
+      const {
+        contracts: [advancedLogContract, otherAdvancedLogContract],
+        wallets: [wallet],
+      } = launched;
 
-      const wallet = launched.wallets[0];
-
-      const { abiContents, binHexlified } = getFuelGaugeForcProject(
-        FuelGaugeProjectsEnum.SCRIPT_CALL_CONTRACT
+      const script = new Script(
+        ScriptCallContractAbi__factory.bin,
+        ScriptCallContractAbi__factory.abi,
+        wallet
       );
-
-      const script = new Script(binHexlified, abiContents, wallet);
 
       const request = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)

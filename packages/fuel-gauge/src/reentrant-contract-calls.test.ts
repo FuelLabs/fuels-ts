@@ -30,8 +30,9 @@ describe('Reentrant Contract Calls', () => {
       ],
     });
 
-    const fooContract = launched.contracts[0] as ReentrantFooAbi;
-    const barContract = launched.contracts[1] as ReentrantBarAbi;
+    const {
+      contracts: [fooContract, barContract],
+    } = launched;
 
     const { waitForResult } = await fooContract.functions
       .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
@@ -84,10 +85,8 @@ describe('Reentrant Contract Calls', () => {
 
     const {
       wallets: [wallet],
+      contracts: [fooContract, barContract],
     } = launched;
-
-    const fooContract = launched.contracts[0] as ReentrantFooAbi;
-    const barContract = launched.contracts[1] as ReentrantBarAbi;
 
     const deploy = await new ContractFactory(
       StorageTestContractAbiHex,
