@@ -1,6 +1,6 @@
 import { Account, BN, TESTNET_NETWORK_URL } from 'fuels';
 
-const Environments = {
+export const Environments = {
   LOCAL: 'local',
   TESTNET: 'testnet',
 } as const;
