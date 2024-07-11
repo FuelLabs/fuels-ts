@@ -4,10 +4,10 @@ import type { AdvancedLoggingAbi, CallTestContractAbi } from '../test/typegen';
 import { AdvancedLoggingAbi__factory, CallTestContractAbi__factory } from '../test/typegen';
 import AdvancedLoggingBytecode from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
 import CallTestContractBytecode from '../test/typegen/contracts/CallTestContractAbi.hex';
-    /**
-	 * @group node
-	 * @group browser
-    */
+/**
+ * @group node
+ * @group browser
+ */
 describe('type level tests for launchTestNode', () => {
   test('infers types correctly', async () => {
     using launched = await launchTestNode({
