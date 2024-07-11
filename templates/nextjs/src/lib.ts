@@ -1,14 +1,18 @@
-import { Account, BN } from 'fuels';
+import { Account, BN, TESTNET_NETWORK_URL } from 'fuels';
 
-type DappEnvironment = 'local' | 'testnet';
+export const Environments = {
+  LOCAL: 'local',
+  TESTNET: 'testnet',
+} as const;
+type Environment = (typeof Environments)[keyof typeof Environments];
 
-export const CURRENT_ENVIRONMENT: DappEnvironment =
-  (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as DappEnvironment) || 'local';
+export const CURRENT_ENVIRONMENT: Environment =
+  (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as Environment) || Environments.LOCAL;
 
 export const NODE_URL =
-  CURRENT_ENVIRONMENT === 'local'
+  CURRENT_ENVIRONMENT === Environments.LOCAL
     ? `http://127.0.0.1:${process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000}/v1/graphql`
-    : 'https://testnet.fuel.network/v1/graphql';
+    : TESTNET_NETWORK_URL;
 
 export interface AppWallet {
   wallet?: Account;
@@ -17,3 +21,7 @@ export interface AppWallet {
 }
 
 export const TESTNET_FAUCET_LINK = 'https://faucet-testnet.fuel.network/';
+
+export const FAUCET_PRIVATE_KEY = '0x01';
+
+export const DOCS_URL = 'https://docs.fuel.network';
