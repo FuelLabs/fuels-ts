@@ -29,7 +29,7 @@ Represents a function that can be invoked.
 
 #### Defined in
 
-[types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L64)
+[types.ts:71](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L71)
 
 ## Properties
 
@@ -49,4 +49,4 @@ Checks if the function is read-only i.e. it only reads from storage, does not wr
 
 #### Defined in
 
-[types.ts:70](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L70)
+[types.ts:77](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L77)

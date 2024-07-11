@@ -26,7 +26,7 @@ Create a ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:40](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L40)
+[contract-factory.ts:55](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L55)
 
 ## Properties
 
@@ -36,7 +36,7 @@ Create a ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:31](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L31)
+[contract-factory.ts:46](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L46)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:28](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L28)
+[contract-factory.ts:43](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L43)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:29](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L29)
+[contract-factory.ts:44](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L44)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:30](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L30)
+[contract-factory.ts:45](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L45)
 
 ## Methods
 
@@ -90,7 +90,7 @@ A new ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:82](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L82)
+[contract-factory.ts:97](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L97)
 
 ___
 
@@ -119,15 +119,21 @@ The CreateTransactionRequest object for deploying the contract.
 
 #### Defined in
 
-[contract-factory.ts:92](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L92)
+[contract-factory.ts:107](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L107)
 
 ___
 
 ### deployContract
 
-▸ **deployContract**(`deployContractOptions?`): `Promise`&lt;[`Contract`](/api/Program/Contract.md)\>
+▸ **deployContract**&lt;`TContract`\>(`deployContractOptions?`): `Promise`&lt;[`DeployContractResult`](/api/Contract/index.md#deploycontractresult)&lt;`TContract`\>\>
 
 Deploy a contract with the specified options.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TContract` | extends [`Contract`](/api/Program/Contract.md) = [`Contract`](/api/Program/Contract.md) |
 
 #### Parameters
 
@@ -137,13 +143,47 @@ Deploy a contract with the specified options.
 
 #### Returns
 
-`Promise`&lt;[`Contract`](/api/Program/Contract.md)\>
+`Promise`&lt;[`DeployContractResult`](/api/Contract/index.md#deploycontractresult)&lt;`TContract`\>\>
 
 A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[contract-factory.ts:134](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L134)
+[contract-factory.ts:149](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L149)
+
+___
+
+### getAccount
+
+▸ **getAccount**(): [`Account`](/api/Account/Account.md)
+
+#### Returns
+
+[`Account`](/api/Account/Account.md)
+
+#### Defined in
+
+[contract-factory.ts:205](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L205)
+
+___
+
+### prepareDeploy
+
+▸ **prepareDeploy**(`deployContractOptions`): `Promise`&lt;{ `contractId`: `string` ; `transactionRequest`: [`CreateTransactionRequest`](/api/Account/CreateTransactionRequest.md)  }\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `deployContractOptions` | [`DeployContractOptions`](/api/Contract/index.md#deploycontractoptions) |
+
+#### Returns
+
+`Promise`&lt;{ `contractId`: `string` ; `transactionRequest`: [`CreateTransactionRequest`](/api/Account/CreateTransactionRequest.md)  }\>
+
+#### Defined in
+
+[contract-factory.ts:212](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L212)
 
 ___
 
@@ -165,4 +205,4 @@ Set configurable constants of the contract with the specified values.
 
 #### Defined in
 
-[contract-factory.ts:175](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/contract/src/contract-factory.ts#L175)
+[contract-factory.ts:174](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/contract/src/contract-factory.ts#L174)

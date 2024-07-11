@@ -3,11 +3,8 @@
 ## Classes
 
 - [Contract](/api/Program/Contract.md)
-- [FunctionInvocationResult](/api/Program/FunctionInvocationResult.md)
 - [FunctionInvocationScope](/api/Program/FunctionInvocationScope.md)
 - [InstructionSet](/api/Program/InstructionSet.md)
-- [InvocationCallResult](/api/Program/InvocationCallResult.md)
-- [InvocationResult](/api/Program/InvocationResult.md)
 - [MultiCallInvocationScope](/api/Program/MultiCallInvocationScope.md)
 - [ScriptRequest](/api/Program/ScriptRequest.md)
 
@@ -44,7 +41,7 @@ Represents configuration for calling a contract function.
 
 #### Defined in
 
-[types.ts:46](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L46)
+[types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L53)
 
 ___
 
@@ -56,7 +53,7 @@ Represents call parameters for a contract call.
 
 #### Defined in
 
-[types.ts:24](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L24)
+[types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L31)
 
 ___
 
@@ -80,7 +77,63 @@ Represents a contract call.
 
 #### Defined in
 
-[types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L11)
+[types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L18)
+
+___
+
+### DryRunResult
+
+Ƭ **DryRunResult**&lt;`TReturn`\>: `Object`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `TReturn` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `callResult` | [`CallResult`](/api/Account/index.md#callresult) |
+| `functionScopes` | [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike)[] |
+| `gasUsed` | `BN` |
+| `isMultiCall` | `boolean` |
+| `value` | `TReturn` |
+
+#### Defined in
+
+[types.ts:119](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L119)
+
+___
+
+### FunctionResult
+
+Ƭ **FunctionResult**&lt;`TReturn`\>: `Object`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `TReturn` |
+
+#### Type declaration
+
+| Name | Type |
+| :------ | :------ |
+| `functionScopes` | [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike)[] |
+| `gasUsed` | `BN` |
+| `isMultiCall` | `boolean` |
+| `logs` | `any`[] |
+| `program` | `AbstractProgram` |
+| `transactionId` | `string` |
+| `transactionResponse` | [`TransactionResponse`](/api/Account/TransactionResponse.md) |
+| `transactionResult` | `TransactionResult`&lt;[`Script`](/api/Account/TransactionType.md#script)\> |
+| `value` | `TReturn` |
+
+#### Defined in
+
+[types.ts:106](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L106)
 
 ___
 
@@ -104,7 +157,7 @@ Represents a like object of InvocationScope with a method to get its call config
 
 #### Defined in
 
-[types.ts:84](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L84)
+[types.ts:91](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L91)
 
 ___
 
@@ -116,7 +169,7 @@ Represents options for calculating the transaction cost.
 
 #### Defined in
 
-[types.ts:95](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L95)
+[types.ts:102](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L102)
 
 ___
 
@@ -128,4 +181,4 @@ Represents transaction parameters for a contract call.
 
 #### Defined in
 
-[types.ts:32](https://github.com/FuelLabs/fuels-ts/blob/2fe6268581a473148906a6d274886d93d7b1f290/packages/program/src/types.ts#L32)
+[types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/1a41c2e84f24ca93f6aa919bf95adf35ee3263a1/packages/program/src/types.ts#L39)
