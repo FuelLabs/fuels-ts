@@ -8,8 +8,9 @@ import type {
   Account,
   TransferParams,
   TransactionResponse,
+  TransactionCost,
 } from '@fuel-ts/account';
-import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';

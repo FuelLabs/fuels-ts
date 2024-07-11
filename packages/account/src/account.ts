@@ -30,6 +30,7 @@ import type {
   GetMessagesResponse,
   GetBalancesResponse,
   Coin,
+  TransactionCostParams,
 } from './providers';
 import {
   withdrawScript,
@@ -514,9 +515,14 @@ export class Account extends AbstractAccount {
     // Getting coin quantities from amounts being transferred
     const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
-    // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, this.address);
+    const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
+    const resources = this.generateFakeResources(
+      mergeQuantities(
+        [...requiredQuantities],
+        [{ assetId: baseAssetId, amount: bn('100000000000000000') }]
+      )
+    );
+    txRequestClone.addResources(resources);
 
     /**
      * Estimate predicates gasUsed
@@ -526,23 +532,13 @@ export class Account extends AbstractAccount {
       txRequestClone.gasLimit = bn(0);
     }
 
-    /**
-     * The fake utxos added above can be from a predicate
-     * If the resources owner is a predicate,
-     * we need to populate the resources with the predicate's data
-     * so that predicate estimation can happen.
-     */
-    if (this && 'populateTransactionPredicateData' in this) {
-      (this as unknown as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
-    }
-
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
     });
 
     return {
       ...txCost,
-      requiredQuantities: allQuantities,
+      requiredQuantities,
     };
   }
 
