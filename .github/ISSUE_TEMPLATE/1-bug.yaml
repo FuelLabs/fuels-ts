@@ -14,18 +14,27 @@ body:
         Failing that, please submit an issue using the form below.
   - type: input
     attributes:
-      label: `fuels` Version
+      label: fuels-ts SDK Version
       description: What version of `fuels` are you using? Before opening an issue, please make sure you are up to date.
-      placeholder: fuels@x.y.z
+      placeholder: e.g. fuels@x.y.z
     validations:
       required: true
   - type: input
     attributes:
-      label: `forc` and `fuel-core` Version
-      description: What version of `forc` and `fuel-core` are you using? Please share the result of running `fuelup show`.
-      placeholder: forc@x.y.z and fuel-core@x.y.z
+      label: Toolchain Versions
+      description: Please share the result of running `fuelup show` in your terminal.
     validations:
       required: true
+  - type: input
+    attributes:
+      label: Node.js Version
+      description: Specify the version of Node.js you are using.
+      placeholder: e.g. Node.js v22.0.0
+  - type: input
+    attributes:
+      label: Operating System
+      description: Specify your operating system and version.
+      placeholder: e.g., macOS 11.2, Windows 10
   - type: textarea
     attributes:
       label: Describe the Problem
@@ -35,7 +44,7 @@ body:
   - type: textarea
     attributes:
       label: Code Snippet
-      description: If possible, please include a **short and concise** code snippet that can reproduce this issue.
+      description: If possible, please include a **short and concise** code snippet that can reproduce this issue. Or even better, please share a link to a repo or gist with a minimal reproduction of the problem.
       render: shell
   - type: textarea
     attributes:
