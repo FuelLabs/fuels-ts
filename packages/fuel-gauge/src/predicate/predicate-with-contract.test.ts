@@ -37,12 +37,14 @@ describe('Predicate', () => {
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
       await fundPredicate(wallet, predicate, amountToPredicate);
 
-      const { value, transactionResult } = await contractPredicate.functions
+      const { waitForResult } = await contractPredicate.functions
         .return_context_amount()
         .callParams({
           forward: [500, provider.getBaseAssetId()],
         })
         .call();
+
+      const { value, transactionResult } = await waitForResult();
 
       expect(value.toString()).toEqual('500');
       expect(transactionResult.isStatusSuccess).toBeTruthy();
@@ -86,17 +88,16 @@ describe('Predicate', () => {
         amountToReceiver,
         provider.getBaseAssetId()
       );
-      let { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
       expect(isStatusSuccess).toBeTruthy();
 
       const receiverFinalBalance = await receiver.getBalance();
       expect(receiverFinalBalance.gt(receiverInitialBalance)).toBeTruthy();
 
-      ({
-        transactionResult: { isStatusSuccess },
-      } = await contract.functions.mint_coins(200).call());
+      const call = await contract.functions.mint_coins(200).call();
+      const { transactionResult } = await call.waitForResult();
 
-      expect(isStatusSuccess).toBeTruthy();
+      expect(transactionResult.isStatusSuccess).toBeTruthy();
     });
   });
 });

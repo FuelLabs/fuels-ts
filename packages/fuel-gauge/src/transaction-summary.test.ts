@@ -258,17 +258,18 @@ describe('TransactionSummary', () => {
       const recipient = Wallet.generate({ provider });
       const amount = 1055;
 
-      const {
-        transactionResult: { mintedAssets },
-      } = await contract.functions.mint_coins(100000).call();
+      const call1 = await contract.functions.mint_coins(100000).call();
+      const res1 = await call1.waitForResult();
 
-      const { assetId } = mintedAssets[0];
+      const { assetId } = res1.transactionResult.mintedAssets[0];
+
+      const call2 = await contract.functions
+        .transfer_to_address({ bits: recipient.address.toB256() }, { bits: assetId }, amount)
+        .call();
 
       const {
         transactionResult: { operations },
-      } = await contract.functions
-        .transfer_to_address({ bits: recipient.address.toB256() }, { bits: assetId }, amount)
-        .call();
+      } = await call2.waitForResult();
 
       validateTransferOperation({
         operations,
@@ -312,9 +313,7 @@ describe('TransactionSummary', () => {
         ],
       };
 
-      const {
-        transactionResult: { operations },
-      } = await senderContract.functions
+      const { waitForResult } = await senderContract.functions
         .multi_address_transfer([
           // 3 Transfers for recipient contract 1
           ...transferData1.quantities.map(({ amount, assetId }) => ({
@@ -330,6 +329,10 @@ describe('TransactionSummary', () => {
           })),
         ])
         .call();
+
+      const {
+        transactionResult: { operations },
+      } = await waitForResult();
 
       validateTransferOperation({
         operations,
@@ -348,21 +351,25 @@ describe('TransactionSummary', () => {
 
       const contractRecipient = await setupContract({ cache: false });
 
+      const call1 = await contractSender.functions.mint_coins(100000).call();
+
       const {
         transactionResult: { mintedAssets },
-      } = await contractSender.functions.mint_coins(100000).call();
+      } = await call1.waitForResult();
 
       const amount = 2345;
       const { assetId } = mintedAssets[0];
-      const {
-        transactionResult: { operations },
-      } = await contractSender.functions
+      const call2 = await contractSender.functions
         .transfer_to_contract(
           { bits: contractRecipient.id.toB256() },
           { bits: mintedAssets[0].assetId },
           amount
         )
         .call();
+
+      const {
+        transactionResult: { operations },
+      } = await call2.waitForResult();
 
       validateTransferOperation({
         operations,
@@ -409,9 +416,7 @@ describe('TransactionSummary', () => {
         ],
       };
 
-      const {
-        transactionResult: { operations },
-      } = await senderContract.functions
+      const { waitForResult } = await senderContract.functions
         .multi_contract_transfer([
           // 2 Transfers for recipient contract 1
           ...transferData1.quantities.map(({ amount, assetId }) => ({
@@ -427,6 +432,10 @@ describe('TransactionSummary', () => {
           })),
         ])
         .call();
+
+      const {
+        transactionResult: { operations },
+      } = await waitForResult();
 
       validateTransferOperation({
         operations,

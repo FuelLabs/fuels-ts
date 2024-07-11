@@ -21,12 +21,14 @@ describe(__filename, () => {
     // #region call-params-1
     const amountToForward = 10;
 
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [amountToForward, baseAssetId],
       })
       .call();
+
+    const { value } = await waitForResult();
 
     expect(new BN(value).toNumber()).toBe(amountToForward);
     // #endregion call-params-1
@@ -35,15 +37,17 @@ describe(__filename, () => {
   it('should throw error due not enough gas', async () => {
     // #region call-params-2
 
-    await expect(
-      contract.functions
+    await expect(async () => {
+      const call = await contract.functions
         .return_context_amount()
         .callParams({
           forward: [10, baseAssetId],
           gasLimit: 1,
         })
-        .call()
-    ).rejects.toThrow('The transaction reverted with reason: "OutOfGas"');
+        .call();
+
+      await call.waitForResult();
+    }).rejects.toThrow('The transaction reverted with reason: "OutOfGas"');
     // #endregion call-params-2
   });
 
@@ -53,7 +57,7 @@ describe(__filename, () => {
     const contractCallGasLimit = 4000;
     const transactionGasLimit = 100_000;
 
-    const result = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [amountToForward, baseAssetId],
@@ -64,6 +68,7 @@ describe(__filename, () => {
       })
       .call();
 
+    const result = await waitForResult();
     const { value } = result;
     const expectedValue = 10;
 

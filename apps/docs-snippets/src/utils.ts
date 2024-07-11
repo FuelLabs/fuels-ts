@@ -56,9 +56,12 @@ export const createAndDeployContractFromProject = async (
 
   const contractFactory = new ContractFactory(binHexlified, abiContents, wallet);
 
-  return contractFactory.deployContract({
+  const { waitForResult } = await contractFactory.deployContract({
     storageSlots,
   });
+
+  const { contract } = await waitForResult();
+  return contract;
 };
 
 export const defaultTxParams = {

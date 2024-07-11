@@ -39,5 +39,5 @@ src/sway-api/predicates
 src/sway-api/scripts
 src/sway-api/index.ts
 
-sway-contracts/out
+sway-programs/**/out
 .turbo

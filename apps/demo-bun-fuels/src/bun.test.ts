@@ -6,7 +6,7 @@
  */
 
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet , safeExec } from 'fuels/test-utils';
+import { generateTestWallet, safeExec } from 'fuels/test-utils';
 
 import { SampleAbi__factory } from './sway-programs-api';
 import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
@@ -28,17 +28,24 @@ describe('ExampleContract', () => {
 
     // Deploy
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, wallet);
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const call1 = await contract.functions.return_input(1337).call();
+
+    // Wait for result
+    const { value } = await call1.waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
 
     // You can also make a call using the factory
     const contractInstance = SampleAbi__factory.connect(contract.id, wallet);
-    const { value: v2 } = await contractInstance.functions.return_input(1337).call();
+    const call2 = await contractInstance.functions.return_input(1337).call();
+
+    // Wait for result
+    const { value: v2 } = await call2.waitForResult();
     expect(v2.toHex()).toBe(toHex(1337));
   });
 
@@ -47,10 +54,14 @@ describe('ExampleContract', () => {
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     // Deploy
-    const contract = await SampleAbi__factory.deployContract(bytecode, wallet);
+    const deploy = await SampleAbi__factory.deployContract(bytecode, wallet);
+    const { contract } = await deploy.waitForResult();
 
     // Call
-    const { value } = await contract.functions.return_input(1337).call();
+    const { waitForResult } = await contract.functions.return_input(1337).call();
+
+    // Wait for result
+    const { value } = await waitForResult();
 
     // Assert
     expect(value.toHex()).toEqual(toHex(1337));
@@ -62,7 +73,8 @@ describe('ExampleContract', () => {
     const unfundedWallet = Wallet.generate({ provider });
 
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, fundedWallet);
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
     const contractInstance = SampleAbi__factory.connect(contract.id, unfundedWallet);
 
     const { error } = await safeExec(() =>
@@ -78,7 +90,8 @@ describe('ExampleContract', () => {
     const unfundedWallet = Wallet.generate({ provider });
 
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, fundedWallet);
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
     const contractInstance = SampleAbi__factory.connect(contract.id, unfundedWallet);
 
     await expect(contractInstance.functions.return_input(1337).dryRun()).resolves.not.toThrow();
@@ -87,7 +100,8 @@ describe('ExampleContract', () => {
   it('should demo how to use generated files just fine', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-    const depoloyed = await SampleAbi__factory.deployContract(bytecode, wallet);
+    const { waitForResult } = await SampleAbi__factory.deployContract(bytecode, wallet);
+    const { contract: depoloyed } = await waitForResult();
     const contractsIds = {
       sample: depoloyed.id,
     };

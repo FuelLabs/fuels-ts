@@ -19,9 +19,10 @@ const setup = async () => {
   // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
 
   const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({
+  const { waitForResult } = await factory.deployContract({
     storageSlots,
   });
+  const { contract } = await waitForResult();
   // #endregion contract-deployment-storage-slots
 
   return contract;
@@ -40,9 +41,16 @@ describe('StorageTestContract', () => {
     const contract = await setup();
 
     // Call contract
-    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
+    const call1 = await contract.functions.initialize_counter(1300).call();
+
+    // Wait for result
+    const { value: initializeResult } = await call1.waitForResult();
+
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
+
+    const call2 = await contract.functions.increment_counter(37).call();
+    const { value: incrementResult } = await call2.waitForResult();
+
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().simulate();
@@ -54,7 +62,7 @@ describe('StorageTestContract', () => {
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const factory = new ContractFactory(bytecode, abi, wallet);
     // #region contract-deployment-storage-slots-inline
-    const contract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       storageSlots: [
         {
           key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',
@@ -78,10 +86,14 @@ describe('StorageTestContract', () => {
         },
       ],
     });
+    const { contract } = await waitForResult();
     // #endregion contract-deployment-storage-slots-inline
-    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
+    const call1 = await contract.functions.initialize_counter(1300).call();
+    const { value: initializeResult } = await call1.waitForResult();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
+
+    const call2 = await contract.functions.increment_counter(37).call();
+    const { value: incrementResult } = await call2.waitForResult();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().simulate();

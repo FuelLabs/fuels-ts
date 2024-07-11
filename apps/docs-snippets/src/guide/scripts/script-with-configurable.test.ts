@@ -32,7 +32,8 @@ describe(__filename, () => {
 
     const inputtedValue = 10;
 
-    const { value } = await script.functions.main(inputtedValue).call();
+    const { waitForResult } = await script.functions.main(inputtedValue).call();
+    const { value } = await waitForResult();
 
     const expectedTotal = inputtedValue + configurableConstants.AMOUNT;
 
@@ -59,7 +60,8 @@ describe(__filename, () => {
     const txId = await tx.getTransactionId();
 
     // Retrieve the value of the call and the actual gas used
-    const { value, gasUsed } = await tx.call();
+    const { waitForResult } = await tx.call();
+    const { value, gasUsed } = await waitForResult();
     // #endregion preparing-scripts
     expect(txRequest).toBeDefined();
     expect(txId).toBeDefined();
