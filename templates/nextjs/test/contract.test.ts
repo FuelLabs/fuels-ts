@@ -29,7 +29,7 @@ describe('Contract', () => {
       ],
     });
 
-    // We can now destructure the contract, provider, and wallets from the launched object.
+    // We can now destructure the contract from the launched object.
     const {
       contracts: [contract],
     } = launched;
