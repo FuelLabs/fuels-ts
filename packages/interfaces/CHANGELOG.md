@@ -1,5 +1,7 @@
 # Change Log
 
+## 0.92.0
+
 ## 0.91.0
 
 ### Patch Changes
