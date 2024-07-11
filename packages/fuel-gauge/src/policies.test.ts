@@ -212,9 +212,11 @@ describe('Policies', () => {
 
     const txRequest = await callScope.getTransactionRequest();
 
+    const { waitForResult } = await callScope.call();
+
     const {
       transactionResult: { transaction },
-    } = await callScope.call();
+    } = await waitForResult();
 
     validatePolicies({
       transaction,
@@ -242,9 +244,11 @@ describe('Policies', () => {
 
     const txRequest = await callScope.getTransactionRequest();
 
+    const { waitForResult } = await callScope.call();
+
     const {
       transactionResult: { transaction },
-    } = await callScope.call();
+    } = await waitForResult();
 
     validatePolicies({
       transaction,

@@ -42,7 +42,7 @@ describe('Getting started', () => {
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
     // Perform a balance check.
-    const balances = await wallet.getBalances();
+    const { balances } = await wallet.getBalances();
     // [{ assetId: '0x..', amount: bn(..) }, ..]
     // #endregion connecting-to-the-testnet
 
