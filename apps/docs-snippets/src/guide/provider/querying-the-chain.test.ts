@@ -168,11 +168,7 @@ describe('querying the chain', () => {
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
     // Launches a test node with two wallets
-    using launched = await launchTestNode({
-      walletsConfig: {
-        count: 2,
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       wallets: [sender, recipient],
@@ -180,18 +176,26 @@ describe('querying the chain', () => {
     } = launched;
 
     // Performs a withdrawal transaction from sender to recipient
-    const tx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
-    const result = await tx.waitForResult();
+    const withdrawTx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
+    const result = await withdrawTx.waitForResult();
 
-    // Awaiting the transaction processing and the data being recorded on the blockchain
-    const res = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
-    const { blockId } = await res.waitForResult();
+    // Emulate the next block creation by performing another tx
+    const transferTx = await sender.transfer(
+      recipient.address.toB256(),
+      100,
+      provider.getBaseAssetId()
+    );
+    const nextBlock = await transferTx.waitForResult();
 
-    // Retrieves the `nonce` via message out receipt from the transaction result
+    // Retrieves the `nonce` via message out receipt from the initial transaction result
     const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
 
-    // Retrieves the message proof for the transaction ID and nonce using blockId
-    const messageProof = await provider.getMessageProof(result.gqlTransaction.id, nonce, blockId);
+    // Retrieves the message proof for the transaction ID and nonce using the next block Id
+    const messageProof = await provider.getMessageProof(
+      result.gqlTransaction.id,
+      nonce,
+      nextBlock.blockId
+    );
     // #endregion Message-getMessageProof-blockId
 
     expect(messageProof?.amount.toNumber()).toEqual(100);
@@ -202,35 +206,28 @@ describe('querying the chain', () => {
     // #region Message-getMessageProof-blockHeight
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
-    // Launches a test node with two wallets established
-    using launched = await launchTestNode({
-      walletsConfig: {
-        count: 2,
-      },
-    });
+    // Launches a test node
+    using launched = await launchTestNode();
 
     const {
       wallets: [sender, recipient],
       provider,
     } = launched;
 
-    // Defines the recipient address
-    const recipientAddress = recipient.address.toB256();
-
     // Performs a withdrawal transaction from sender to recipient
-    const tx = await sender.withdrawToBaseLayer(recipientAddress, 100);
-    const result = await tx.waitForResult();
+    const withdrawTx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
+    const result = await withdrawTx.waitForResult();
 
-    // Wait for the next block to be minter on out case we are using a local provider
-    await sender.withdrawToBaseLayer(recipientAddress, 100);
+    // Emulate the next block creation by performing another tx
+    await sender.transfer(recipient.address.toB256(), 100, provider.getBaseAssetId());
 
-    // Retrieves the `nonce` via message out receipt from the transaction result
+    // Retrieves the `nonce` via message out receipt from the initial transaction result
     const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
 
     // Retrives the latest block
     const latestBlock = await provider.getBlock('latest');
 
-    // Retrieves the message proof for the transaction ID and nonce using blockHeight
+    // Retrieves the message proof for the transaction ID and nonce using the block height
     const messageProof = await provider.getMessageProof(
       result.gqlTransaction.id,
       nonce,
