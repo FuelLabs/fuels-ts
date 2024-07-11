@@ -13,7 +13,7 @@ import { launchTestContract } from './utils';
  * @group browser
  */
 describe('bytecode computations', () => {
-  test('compute_bytecode_root', async () => {
+  it('compute_bytecode_root', async () => {
     using contract = await launchTestContract({
       deployer: BytecodeSwayLibAbi__factory,
       bytecode: BytecodeSwayLibAbiHex,
@@ -31,7 +31,7 @@ describe('bytecode computations', () => {
     expect(bytecodeRoot.length).toBe(66);
   });
 
-  test('verify_contract_bytecode', async () => {
+  it('verify_contract_bytecode', async () => {
     using contract = await launchTestContract({
       deployer: BytecodeSwayLibAbi__factory,
       bytecode: BytecodeSwayLibAbiHex,
@@ -51,10 +51,20 @@ describe('bytecode computations', () => {
     expect(value).toBeTruthy();
   });
 
-  test('compute_predicate_address', async () => {
-    using launched = await launchTestNode();
+  it('compute_predicate_address', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: BytecodeSwayLibAbi__factory,
+          bytecode: BytecodeSwayLibAbiHex,
+        },
+      ],
+    });
 
-    const { provider } = launched;
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
 
     const predicate = new Predicate({
       bytecode: defaultPredicateBytecode,
@@ -63,11 +73,6 @@ describe('bytecode computations', () => {
     });
 
     const address = predicate.address;
-
-    const contract = await launchTestContract({
-      deployer: BytecodeSwayLibAbi__factory,
-      bytecode: BytecodeSwayLibAbiHex,
-    });
 
     const { waitForResult } = await contract.functions
       .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))

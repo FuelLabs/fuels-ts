@@ -80,10 +80,13 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on simple transfer transactions', async () => {
+    using launched = await launchTestNode();
+
     const {
       provider,
       wallets: [wallet],
-    } = await launchTestNode();
+    } = launched;
+
     const destination = Wallet.generate({ provider });
 
     const amountToTransfer = 120;
@@ -110,14 +113,16 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on multi transfer transactions', async () => {
-    const {
-      provider,
-      wallets: [wallet, destination1, destination2, destination3],
-    } = await launchTestNode({
+    using launched = await launchTestNode({
       walletsConfig: {
         count: 4,
       },
     });
+
+    const {
+      provider,
+      wallets: [wallet, destination1, destination2, destination3],
+    } = launched;
 
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();

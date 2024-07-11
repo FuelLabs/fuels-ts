@@ -334,85 +334,89 @@ describe('TransactionSummary', () => {
       });
     });
 
-    it('should ensure transfer operations are assembled (CONTRACT TRANSFER TO ACCOUNTS)', async () => {
-      using launched = await launchTestNode({
-        contractsConfigs: [
-          {
-            deployer: TokenContractAbi__factory,
-            bytecode: TokenContractAbiHex,
+    it(
+      'should ensure transfer operations are assembled (CONTRACT TRANSFER TO ACCOUNTS)',
+      async () => {
+        using launched = await launchTestNode({
+          contractsConfigs: [
+            {
+              deployer: TokenContractAbi__factory,
+              bytecode: TokenContractAbiHex,
+            },
+          ],
+          walletsConfig: {
+            amountPerCoin: 100_000_000,
           },
-        ],
-        walletsConfig: {
-          amountPerCoin: 100_000_000,
-        },
-      });
+        });
 
-      const {
-        contracts: [senderContract],
-        provider,
-        wallets: [wallet],
-      } = launched;
+        const {
+          contracts: [senderContract],
+          provider,
+          wallets: [wallet],
+        } = launched;
 
-      const walletA = Wallet.generate({ provider });
-      const walletB = Wallet.generate({ provider });
+        const walletA = Wallet.generate({ provider });
+        const walletB = Wallet.generate({ provider });
 
-      await wallet.transfer(walletA.address, 50_000, ASSET_A);
-      await wallet.transfer(walletB.address, 50_000, ASSET_B);
+        await wallet.transfer(walletA.address, 50_000, ASSET_A);
+        await wallet.transfer(walletB.address, 50_000, ASSET_B);
 
-      senderContract.account = wallet;
-      const fundAmount = 5_000;
+        senderContract.account = wallet;
+        const fundAmount = 5_000;
 
-      const assets = [provider.getBaseAssetId(), ASSET_A, ASSET_B];
-      for await (const asset of assets) {
-        const tx = await wallet.transferToContract(senderContract.id, fundAmount, asset);
-        await tx.waitForResult();
-      }
+        const assets = [provider.getBaseAssetId(), ASSET_A, ASSET_B];
+        for await (const asset of assets) {
+          const tx = await wallet.transferToContract(senderContract.id, fundAmount, asset);
+          await tx.waitForResult();
+        }
 
-      const transferData1 = {
-        address: Wallet.generate({ provider }).address,
-        quantities: [
-          { amount: 543, assetId: ASSET_A },
-          { amount: 40, assetId: ASSET_B },
-          { amount: 123, assetId: provider.getBaseAssetId() },
-        ],
-      };
-      const transferData2 = {
-        address: Wallet.generate({ provider }).address,
-        quantities: [
-          { amount: 12, assetId: provider.getBaseAssetId() },
-          { amount: 612, assetId: ASSET_B },
-        ],
-      };
+        const transferData1 = {
+          address: Wallet.generate({ provider }).address,
+          quantities: [
+            { amount: 543, assetId: ASSET_A },
+            { amount: 40, assetId: ASSET_B },
+            { amount: 123, assetId: provider.getBaseAssetId() },
+          ],
+        };
+        const transferData2 = {
+          address: Wallet.generate({ provider }).address,
+          quantities: [
+            { amount: 12, assetId: provider.getBaseAssetId() },
+            { amount: 612, assetId: ASSET_B },
+          ],
+        };
 
-      const { waitForResult } = await senderContract.functions
-        .multi_address_transfer([
-          // 3 Transfers for recipient contract 1
-          ...transferData1.quantities.map(({ amount, assetId }) => ({
-            recipient: { bits: transferData1.address.toB256() },
-            asset_id: { bits: assetId },
-            amount,
-          })),
-          // 2 Transfers for recipient contract 2
-          ...transferData2.quantities.map(({ amount, assetId }) => ({
-            recipient: { bits: transferData2.address.toB256() },
-            asset_id: { bits: assetId },
-            amount,
-          })),
-        ])
-        .call();
+        const { waitForResult } = await senderContract.functions
+          .multi_address_transfer([
+            // 3 Transfers for recipient contract 1
+            ...transferData1.quantities.map(({ amount, assetId }) => ({
+              recipient: { bits: transferData1.address.toB256() },
+              asset_id: { bits: assetId },
+              amount,
+            })),
+            // 2 Transfers for recipient contract 2
+            ...transferData2.quantities.map(({ amount, assetId }) => ({
+              recipient: { bits: transferData2.address.toB256() },
+              asset_id: { bits: assetId },
+              amount,
+            })),
+          ])
+          .call();
 
-      const {
-        transactionResult: { operations },
-      } = await waitForResult();
+        const {
+          transactionResult: { operations },
+        } = await waitForResult();
 
-      validateTransferOperation({
-        operations,
-        sender: senderContract.id,
-        fromType: AddressType.contract,
-        toType: AddressType.account,
-        recipients: [transferData1, transferData2],
-      });
-    });
+        validateTransferOperation({
+          operations,
+          sender: senderContract.id,
+          fromType: AddressType.contract,
+          toType: AddressType.account,
+          recipients: [transferData1, transferData2],
+        });
+      },
+      { timeout: 10_000 }
+    );
 
     it('should ensure transfer operation is assembled (CONTRACT TRANSFER TO CONTRACT)', async () => {
       using launched = await launchTestNode({

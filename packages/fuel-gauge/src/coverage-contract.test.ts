@@ -401,6 +401,7 @@ describe('Coverage Contract', () => {
 
   it('should test u8 empty vector input', async () => {
     using contractInstance = await setupContract();
+
     const { waitForResult } = await contractInstance.functions.check_u8_vector([]).call();
     const { value } = await waitForResult();
     expect(value).toBeFalsy();
@@ -593,7 +594,9 @@ describe('Coverage Contract', () => {
   });
 
   it('should test spending input messages', async () => {
-    const { provider } = await setupContract();
+    using contractInstance = await setupContract();
+
+    const { provider } = contractInstance;
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
     const recipient = Wallet.generate({

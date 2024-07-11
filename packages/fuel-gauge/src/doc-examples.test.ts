@@ -128,7 +128,9 @@ describe('Doc Examples', () => {
   });
 
   test('it can work with wallets', async () => {
-    const { provider } = await launchTestNode();
+    using node = await launchTestNode();
+
+    const { provider } = node;
     // use the `generate` helper to make an Unlocked Wallet
     const myWallet: WalletUnlocked = Wallet.generate({
       provider,

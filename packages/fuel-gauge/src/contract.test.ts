@@ -229,7 +229,7 @@ describe('Contract', () => {
   });
 
   it('should executes a contract call just nice', async () => {
-    const contract = await setupTestContract();
+    using contract = await setupTestContract();
 
     const numberToSend = 1336;
 
