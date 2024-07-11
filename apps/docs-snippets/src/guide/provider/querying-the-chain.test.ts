@@ -167,7 +167,7 @@ describe('querying the chain', () => {
     // #region Message-getMessageProof-blockId
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
-    // Launches a test node with two wallets
+    // Launches a test node
     using launched = await launchTestNode();
 
     const {
