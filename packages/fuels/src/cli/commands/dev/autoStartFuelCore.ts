@@ -1,5 +1,4 @@
 import { defaultConsensusKey } from '@fuel-ts/utils';
-import type { ChildProcessWithoutNullStreams } from 'child_process';
 import { getPortPromise } from 'portfinder';
 
 import { launchNode } from '../../../test-utils';
@@ -13,14 +12,6 @@ export type FuelCoreNode = {
   providerUrl: string;
   snapshotDir: string;
   killChildProcess: () => void;
-};
-
-export type KillNodeParams = {
-  core: ChildProcessWithoutNullStreams;
-  killFn: (pid: number) => void;
-  state: {
-    isDead: boolean;
-  };
 };
 
 export const autoStartFuelCore = async (config: FuelsConfig) => {
