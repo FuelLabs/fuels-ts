@@ -242,15 +242,20 @@ export class TransactionResponse {
   }
 
   /**
-   * Waits for transaction to complete and returns the result.
+   * Assembles the result of a transaction by retrieving the transaction summary,
+   * decoding logs (if available), and handling transaction failure.
    *
-   * @returns The completed transaction result
+   * This method can be used to obtain the result of a transaction that has just
+   * been submitted or one that has already been processed.
+   *
+   * @template TTransactionType - The type of the transaction.
+   * @param contractsAbiMap - The map of contract ABIs.
+   * @returns - The assembled transaction result.
+   * @throws If the transaction status is a failure.
    */
-  async waitForResult<TTransactionType = void>(
+  async assembleResult<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
-    await this.waitForStatusChange();
-
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
     const transactionResult: TransactionResult<TTransactionType> = {
@@ -274,7 +279,6 @@ export class TransactionResponse {
 
     if (gqlTransaction.status?.type === 'FailureStatus') {
       const { reason } = gqlTransaction.status;
-
       throw extractTxError({
         receipts,
         statusReason: reason,
@@ -283,6 +287,18 @@ export class TransactionResponse {
     }
 
     return transactionResult;
+  }
+
+  /**
+   * Waits for transaction to complete and returns the result.
+   *
+   * @returns The completed transaction result
+   */
+  async waitForResult<TTransactionType = void>(
+    contractsAbiMap?: AbiMap
+  ): Promise<TransactionResult<TTransactionType>> {
+    await this.waitForStatusChange();
+    return this.assembleResult<TTransactionType>(contractsAbiMap);
   }
 
   /**

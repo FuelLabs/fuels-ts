@@ -102,7 +102,7 @@ describe('Vector Types Validation', () => {
     const setupContract = getSetupContract('vector-types-contract');
     const contractInstance = await setupContract();
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .test_all(
         U32_VEC,
         VEC_IN_VEC,
@@ -117,6 +117,9 @@ describe('Vector Types Validation', () => {
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value).toBe(true);
   });
 
@@ -124,7 +127,7 @@ describe('Vector Types Validation', () => {
     const wallet = await setup();
     const scriptInstance = getScript<MainArgs, BigNumberish>('vector-types-script', wallet);
 
-    const { value } = await scriptInstance.functions
+    const { waitForResult } = await scriptInstance.functions
       .main(
         U32_VEC,
         VEC_IN_VEC,
@@ -139,6 +142,8 @@ describe('Vector Types Validation', () => {
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBe(true);
   });
