@@ -130,12 +130,14 @@ function getWalletForDeployment(config: DeployContractConfig, wallets: WalletUnl
   return wallets[config.walletIndex];
 }
 
-export async function launchTestNode<TFactories extends DeployContractConfig[]>({
-  providerOptions = {},
-  walletsConfig = {},
-  nodeOptions = {},
-  contractsConfigs,
-}: Partial<LaunchTestNodeOptions<TFactories>> = {}): Promise<LaunchTestNodeReturn<TFactories>> {
+export async function launchTestNode<const TFactories extends DeployContractConfig[]>(
+  {
+    providerOptions = {},
+    walletsConfig = {},
+    nodeOptions = {},
+    contractsConfigs,
+  }: Partial<LaunchTestNodeOptions<TFactories>> = {} as const
+): Promise<LaunchTestNodeReturn<TFactories>> {
   const snapshotConfig = getChainSnapshot(nodeOptions);
   const args = getFuelCoreArgs(nodeOptions);
   const { provider, wallets, cleanup } = await setupTestProviderAndWallets({
