@@ -127,18 +127,18 @@ jobs:
 
       - name: Configure GitHub Pages
         if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v5
 
       - name: Upload Docs Artifact
         if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: apps/docs/dist
 
       - name: Deploy Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
         id: deployment
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v4
 
       - name: Checkout API Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
@@ -198,7 +198,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       # Upload assets to S3
-      - uses: unfor19/install-aws-cli-action@v1.0.3
+      - uses: unfor19/install-aws-cli-action@v1.0.7
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           version: 2

@@ -1,7 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
 import type { ArrayType } from '../abi/types/ArrayType';
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { makeType } from './makeType';
 
@@ -10,7 +10,7 @@ import { makeType } from './makeType';
  */
 describe('makeType.ts', () => {
   test('should create a new Type instance just fine', () => {
-    const rawAbiType: IRawAbiTypeRoot = {
+    const rawAbiType: JsonAbiType = {
       typeId: 1,
       type: 'u64',
       components: null,
@@ -21,7 +21,7 @@ describe('makeType.ts', () => {
   });
 
   test('should throw for unsupported types', async () => {
-    const rawAbiType: IRawAbiTypeRoot = {
+    const rawAbiType: JsonAbiType = {
       typeId: 1,
       type: 'non existent',
       components: null,
