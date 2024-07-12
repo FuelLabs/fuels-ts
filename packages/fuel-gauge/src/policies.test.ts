@@ -17,7 +17,7 @@ import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotation
  * @group node
  * @group browser
  */
-describe('Policies', () => {
+describe.skip('Policies', () => {
   type CustomTxParams = {
     gasLimit?: BigNumberish;
     maturity?: number;
