@@ -1130,6 +1130,14 @@ Supported fuel-core version: ${supportedVersion}.`
     const updateMaxFee = txRequestClone.maxFee.eq(0);
     const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
 
+    /**
+     * Estimate predicates gasUsed
+     */
+    // Remove gasLimit to avoid gasLimit when estimating predicates
+    if (isScriptTransaction) {
+      txRequestClone.gasLimit = bn(0);
+    }
+
     let addedSignatures = 0;
     if (signatureCallback && isScriptTransaction) {
       const lengthBefore = signedRequest.witnesses.length;

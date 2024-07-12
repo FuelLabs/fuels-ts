@@ -507,7 +507,6 @@ export class Account extends AbstractAccount {
     { signatureCallback, quantitiesToContract = [] }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const baseAssetId = this.provider.getBaseAssetId();
 
     // Fund with fake UTXOs to avoid not enough funds error
@@ -521,14 +520,6 @@ export class Account extends AbstractAccount {
       mergeQuantities(requiredQuantities, transactionFeeForDryRun)
     );
     txRequestClone.addResources(resources);
-
-    /**
-     * Estimate predicates gasUsed
-     */
-    // Remove gasLimit to avoid gasLimit when estimating predicates
-    if (isScriptTransaction) {
-      txRequestClone.gasLimit = bn(0);
-    }
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
