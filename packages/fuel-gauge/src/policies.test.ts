@@ -1,4 +1,4 @@
-import type { BaseTransactionRequest, BigNumberish, Transaction, Provider } from 'fuels';
+import type { BaseTransactionRequest, BigNumberish, Transaction } from 'fuels';
 import {
   ContractFactory,
   CreateTransactionRequest,
@@ -225,7 +225,6 @@ describe('Policies', () => {
     using launched = await launchTestNode();
 
     const {
-      provider,
       wallets: [wallet],
     } = launched;
 
