@@ -199,7 +199,7 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 - If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./deploying-a-dapp-to-testnet.md) guide.
 
-- If you want to further validate the functionality of your dApp and program types, check out the `test` directory in your `create fuels` project. Couple this with our [testing guide](https://docs.fuel.network/docs/fuels-ts/testing/) to get a better understanding of how to test your dApp.
+- If you want to further validate the functionality of your dApp and program types, check out the `test` directory in your `create fuels` project. Couple this with our [testing guide](https://docs.fuel.network/docs/fuels-ts/testing/) to get a better understanding of how to test your dApp. This would be a good opportunity to add a test for your newly implemented `decrement_counter` function.
 
 - If you have any questions or need help, feel free to reach out to us on the [Official Fuel Forum](https://forum.fuel.network/).
 
