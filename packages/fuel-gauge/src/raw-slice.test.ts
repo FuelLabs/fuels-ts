@@ -2,11 +2,12 @@ import { bn, Predicate, Wallet, Address } from 'fuels';
 import type { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
+import { ScriptRawSliceAbi__factory } from '../test/typegen';
 import { RawSliceAbi__factory } from '../test/typegen/contracts';
 import RawSliceAbiHex from '../test/typegen/contracts/RawSliceAbi.hex';
 import { PredicateRawSliceAbi__factory } from '../test/typegen/predicates';
 
-import { getScript, launchTestContract } from './utils';
+import { launchTestContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -136,8 +137,7 @@ describe('Raw Slice Tests', () => {
       wallets: [wallet],
     } = launched;
 
-    type MainArgs = [number, Wrapper];
-    const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
+    const scriptInstance = ScriptRawSliceAbi__factory.createInstance(wallet);
 
     const bytes = [40, 41, 42];
     const INPUT: Wrapper = {

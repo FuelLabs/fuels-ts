@@ -1,7 +1,11 @@
-import type { BigNumberish } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { getScript } from './utils';
+import {
+  ScriptWithArrayAbi__factory,
+  ScriptWithVectorAbi__factory,
+  ScriptWithVectorAdvancedAbi__factory,
+  ScriptWithVectorMixedAbi__factory,
+} from '../test/typegen';
 
 /**
  * @group node
@@ -20,7 +24,7 @@ describe('Script With Vectors', () => {
     } = launched;
 
     const someArray = [1, 100];
-    const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
+    const scriptInstance = ScriptWithArrayAbi__factory.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(someArray).call();
     const { logs } = await waitForResult();
@@ -40,7 +44,7 @@ describe('Script With Vectors', () => {
     } = launched;
 
     const someVec = [7, 2, 1, 5];
-    const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
+    const scriptInstance = ScriptWithVectorAbi__factory.createInstance(wallet);
 
     const scriptInvocationScope = scriptInstance.functions.main(someVec);
 
@@ -103,8 +107,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const scriptInstance = getScript<[any], void>('script-with-vector-mixed', wallet);
+    const scriptInstance = ScriptWithVectorMixedAbi__factory.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(importantDates).call();
     const { value } = await waitForResult();
@@ -179,8 +182,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const scriptInstance = getScript<[any[]], void>('script-with-vector-advanced', wallet);
+    const scriptInstance = ScriptWithVectorAdvancedAbi__factory.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(vectorOfStructs).call();
     const { value } = await waitForResult();

@@ -8,7 +8,7 @@ import { AssetId, launchTestNode } from 'fuels/test-utils';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Funding Transactions', () => {
   const assetA = '0x0101010101010101010101010101010101010101010101010101010101010101';
   const assetB = '0x0202020202020202020202020202020202020202020202020202020202020202';
 

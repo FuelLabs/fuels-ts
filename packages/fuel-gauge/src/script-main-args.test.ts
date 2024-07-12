@@ -2,9 +2,11 @@ import type { BigNumberish } from 'fuels';
 import { bn, Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptMainArgsAbi__factory } from '../test/typegen';
-
-import { getScript } from './utils';
+import {
+  ScriptMainArgsAbi__factory,
+  ScriptMainReturnStructAbi__factory,
+  ScriptMainTwoArgsAbi__factory,
+} from '../test/typegen';
 
 type Baz = {
   x: number;
@@ -44,7 +46,7 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-two-args', wallet);
+    const scriptInstance = ScriptMainTwoArgsAbi__factory.createInstance(wallet);
     const foo = 33;
     const bar: Baz = {
       x: 12,
@@ -63,7 +65,7 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = getScript<[BigNumberish, Baz], Baz>('script-main-return-struct', wallet);
+    const scriptInstance = ScriptMainReturnStructAbi__factory.createInstance(wallet);
     const foo = 1;
     const bar: Baz = {
       x: 2,

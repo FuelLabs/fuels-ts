@@ -2,11 +2,11 @@ import { bn, Predicate, Wallet, Address } from 'fuels';
 import type { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { PredicateBytesAbi__factory, ScriptBytesAbi__factory } from '../test/typegen';
 import { BytesAbi__factory } from '../test/typegen/contracts';
 import BytesAbiHex from '../test/typegen/contracts/BytesAbi.hex';
 
-import { getScript, launchTestContract } from './utils';
+import { launchTestContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -106,10 +106,6 @@ describe('Bytes Tests', () => {
     const amountToReceiver = 50;
     type MainArgs = [Wrapper];
 
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.PREDICATE_BYTES
-    );
-
     const bytes = [40, 41, 42];
     const INPUT: Wrapper = {
       inner: [bytes, bytes],
@@ -117,8 +113,8 @@ describe('Bytes Tests', () => {
     };
 
     const predicate = new Predicate<MainArgs>({
-      bytecode: binHexlified,
-      abi: abiContents,
+      bytecode: PredicateBytesAbi__factory.bin,
+      abi: PredicateBytesAbi__factory.abi,
       provider: wallet.provider,
       inputData: [INPUT],
     });
@@ -167,14 +163,13 @@ describe('Bytes Tests', () => {
       wallets: [wallet],
     } = launched;
 
-    type MainArgs = [number, Wrapper];
-    const scriptInstance = getScript<MainArgs, void>('script-bytes', wallet);
-
     const bytes = [40, 41, 42];
     const INPUT: Wrapper = {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
     };
+
+    const scriptInstance = ScriptBytesAbi__factory.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(1, INPUT).call<BN>();
     const { value } = await waitForResult();

@@ -1,12 +1,12 @@
-import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
+import { VectorTypesScriptAbi__factory } from '../test/typegen';
 import { VectorTypesContractAbi__factory } from '../test/typegen/contracts';
 import VectorTypesContractAbiHex from '../test/typegen/contracts/VectorTypesContractAbi.hex';
 import { PredicateVectorTypesAbi__factory } from '../test/typegen/predicates';
 
-import { getScript, launchTestContract } from './utils';
+import { launchTestContract } from './utils';
 
 const U32_VEC = [0, 1, 2];
 const VEC_IN_VEC = [
@@ -114,7 +114,8 @@ describe('Vector Types Validation', () => {
     const {
       wallets: [wallet],
     } = launched;
-    const scriptInstance = getScript<MainArgs, BigNumberish>('vector-types-script', wallet);
+
+    const scriptInstance = VectorTypesScriptAbi__factory.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions
       .main(

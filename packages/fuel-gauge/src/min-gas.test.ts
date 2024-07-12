@@ -22,7 +22,7 @@ import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAb
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Minimum gas tests', () => {
   it('sets gas requirements (contract)', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
