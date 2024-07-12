@@ -7,14 +7,16 @@ import { launchTestNode } from 'fuels/test-utils';
  */
 describe('await-execution', () => {
   test('awaiting execution of a transaction on the provider works', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '400ms'],
+      },
+    });
 
-    const { provider } = launched;
-
-    const genesisWallet = new WalletUnlocked(
-      process.env.GENESIS_SECRET || randomBytes(32),
-      provider
-    );
+    const {
+      provider,
+      wallets: [genesisWallet],
+    } = launched;
 
     const destination = Wallet.generate({ provider });
 
