@@ -30,9 +30,14 @@ body:
       placeholder: e.g. Node.js v22.0.0
   - type: input
     attributes:
+      label: Browser
+      description: Specify the browser and version you are using.
+      placeholder: e.g. Chrome v5
+  - type: input
+    attributes:
       label: Operating System
       description: Specify your operating system and version.
-      placeholder: e.g., macOS 11.2, Windows 10
+      placeholder: e.g. macOS 11.2, Windows 10
   - type: textarea
     attributes:
       label: Describe the Problem
