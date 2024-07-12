@@ -183,13 +183,21 @@ Second, we will add a new button to the UI that will call the `onDecrementPresse
 </Button>
 ```
 
-Congratulations! That's all. You should now be able to see the counter dApp running at `http://localhost:3000` with our newly added decrement functionality.
+Congratulations! You should now be able to see the counter dApp running at `http://localhost:3000` with our newly added decrement functionality.
 
 You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 
 ![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
 Whenever you want to add a new feature to your dApp and quickly prototype things, you can follow the same steps we followed in this guide.
+
+### 3. Extending the Test Suite (Optional)
+
+Testing the integration with your smart contract isn't essential, but it's good practice to ensure that your application is working as expected. It also gives you the ability to test your application in a controlled environment against a local node.
+
+We've provided some examples for each program type in the `./test` directory of your project. But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
+
+<<< @/../../docs-snippets/src/guide/create-fuels/decrement_counter.test.ts#decrement-counter{ts:line-numbers}
 
 ## Next Steps
 
@@ -199,7 +207,7 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 - If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./deploying-a-dapp-to-testnet.md) guide.
 
-- If you want to further validate the functionality of your dApp and program types, check out the `test` directory in your `create fuels` project. Couple this with our [testing guide](https://docs.fuel.network/docs/fuels-ts/testing/) to get a better understanding of how to test your dApp. This would be a good opportunity to add a test for your newly implemented `decrement_counter` function.
+- If you want to further validate the functionality of your dApp and program types, check out the `test` directory in your `create fuels` project. Couple this with our [testing guide](https://docs.fuel.network/docs/fuels-ts/testing/) to get a better understanding of how to test your dApp.
 
 - If you have any questions or need help, feel free to reach out to us on the [Official Fuel Forum](https://forum.fuel.network/).
 
