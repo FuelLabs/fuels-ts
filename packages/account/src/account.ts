@@ -515,11 +515,10 @@ export class Account extends AbstractAccount {
     const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
     // Combining coin quantities from amounts being transferred and forwarding to contracts
     const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
+    // An arbitrary amount of the base asset is added to cover the transaction fee during dry runs
+    const transactionFeeForDryRun = [{ assetId: baseAssetId, amount: bn('100000000000000000') }];
     const resources = this.generateFakeResources(
-      mergeQuantities(
-        [...requiredQuantities],
-        [{ assetId: baseAssetId, amount: bn('100000000000000000') }]
-      )
+      mergeQuantities(requiredQuantities, transactionFeeForDryRun)
     );
     txRequestClone.addResources(resources);
 
