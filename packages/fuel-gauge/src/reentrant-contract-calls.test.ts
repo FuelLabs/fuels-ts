@@ -1,7 +1,6 @@
 import { ContractFactory, ReceiptType, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import type { ReentrantBarAbi, ReentrantFooAbi } from '../test/typegen/contracts';
 import {
   ReentrantBarAbi__factory,
   ReentrantFooAbi__factory,
