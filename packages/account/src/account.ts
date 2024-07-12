@@ -36,7 +36,6 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
-  TransactionType,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
