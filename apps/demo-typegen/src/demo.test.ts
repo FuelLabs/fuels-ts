@@ -1,5 +1,5 @@
 // #region Testing-in-ts-ts
-import { ContractFactory, toHex, Address } from 'fuels';
+import { ContractFactory, toHex, Address, Wallet } from 'fuels';
 import { launchTestNode, safeExec } from 'fuels/test-utils';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
