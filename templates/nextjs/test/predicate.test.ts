@@ -11,6 +11,7 @@ import { TestPredicateAbi__factory, TestPredicateAbiInputs } from '../src/sway-a
 
 /**
  * @group node
+ * @group browser
  *
  * Tests for the predicate program type within the TS SDK. Here we will test the use of our predicate
  * in a transaction.

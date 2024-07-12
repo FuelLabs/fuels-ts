@@ -12,6 +12,7 @@ import bytecode from '../src/sway-api/contracts/TestContractAbi.hex';
 
 /**
  * @group node
+ * @group browser
  *
  * Tests for the contract program type within the TS SDK. Here we will test the deployment of
  * our contract, and the result of call it's functions.

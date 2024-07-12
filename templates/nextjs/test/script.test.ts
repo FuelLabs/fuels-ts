@@ -11,6 +11,7 @@ import { TestScriptAbi__factory } from '../src/sway-api';
 
 /**
  * @group node
+ * @group browser
  *
  * Tests for the script program type within the TS SDK. Here we will test the use of our script
  * function call.

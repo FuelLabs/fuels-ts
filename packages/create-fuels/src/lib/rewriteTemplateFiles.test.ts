@@ -58,4 +58,33 @@ describe('rewriteTemplateFiles', () => {
     expect(fuelsConfig).not.toContain(/\n\W+forcPath: 'fuels-forc',/g);
     expect(fuelsConfig).not.toContain(/\n\W+fuelCorePath: 'fuels-core',/g);
   });
+
+  it('should rewrite the test files', () => {
+    const testDir = join(paths.template, 'test');
+    const programs = [
+      {
+        program: 'contract',
+        capitalised: 'Contract',
+      },
+      {
+        program: 'predicate',
+        capitalised: 'Predicate',
+      },
+      {
+        program: 'script',
+        capitalised: 'Script',
+      },
+    ];
+
+    rewriteTemplateFiles(paths.template);
+
+    programs.forEach(({ program, capitalised }) => {
+      const testFilePath = join(testDir, `${program}.test.ts`);
+      const testFileContents = readFileSync(testFilePath, 'utf-8');
+
+      expect(testFileContents).not.toContain('@group node');
+      expect(testFileContents).not.toContain('@group browser');
+      expect(testFileContents).toContain(`${capitalised} Testing`);
+    });
+  });
 });
