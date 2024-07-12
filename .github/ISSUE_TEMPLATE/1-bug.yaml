@@ -7,9 +7,7 @@ body:
       value: |
         Thank you for helping to improve our Typescript SDK!
 
-        Before submitting an issue, please ensure you are using the latest version of the SDK, as well as `forc` and `fuel-core`. Additionally, search through
-        the [documentation](https://docs.fuel.network/docs/fuels-ts/) or on our [forum](https://forum.fuel.network/c/typescript-sdk) as it's possible your problem
-        has already been solved there.
+        Before submitting an issue, please ensure you are using the latest version of the SDK, as well as `forc` and `fuel-core`. Additionally, search through the [documentation](https://docs.fuel.network/docs/fuels-ts/) or on our [forum](https://forum.fuel.network/c/typescript-sdk) as it's possible your problem has already been solved there.
 
         Failing that, please submit an issue using the form below.
   - type: input
