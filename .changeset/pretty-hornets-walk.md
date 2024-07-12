@@ -1,5 +1,4 @@
 ---
-"create-fuels": patch
 "@fuel-ts/contract": patch
 ---
 
