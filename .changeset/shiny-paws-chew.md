@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-chore: add minified `fuels` distribution
+feat: add minified `fuels` distribution
