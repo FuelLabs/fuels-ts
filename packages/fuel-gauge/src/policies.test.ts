@@ -17,7 +17,7 @@ import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotation
  * @group node
  * @group browser
  */
-describe.skip('Policies', () => {
+describe('Policies', () => {
   type CustomTxParams = {
     gasLimit?: BigNumberish;
     maturity?: number;
@@ -31,11 +31,6 @@ describe.skip('Policies', () => {
     return randomValue;
   };
 
-  const randomMaturity = async (provider: Provider) => {
-    const { latestBlock } = await provider.fetchChain();
-    return randomNumber(1, latestBlock.height.toNumber());
-  };
-
   const validatePolicies = ({
     transaction,
     params,
@@ -47,10 +42,8 @@ describe.skip('Policies', () => {
     expect(bn(transaction.policies?.[0].data).eq(bn(params.tip))).toBeTruthy();
     expect(transaction.policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(transaction.policies?.[1].data).eq(bn(params.witnessLimit))).toBeTruthy();
-    expect(transaction.policies?.[2].type).toBe(PolicyType.Maturity);
-    expect(transaction.policies?.[2]?.data).toBe(params.maturity);
-    expect(transaction.policies?.[3].type).toBe(PolicyType.MaxFee);
-    expect(bn(transaction.policies?.[3]?.data).lte(bn(params.maxFee))).toBeTruthy();
+    expect(transaction.policies?.[2].type).toBe(PolicyType.MaxFee);
+    expect(bn(transaction.policies?.[2]?.data).lte(bn(params.maxFee))).toBeTruthy();
   };
 
   it('should ensure optional TX policies are not set when not informed', () => {
@@ -116,11 +109,7 @@ describe.skip('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (ScriptTransactionRequest)', async () => {
-    using launched = await launchTestNode({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -131,7 +120,6 @@ describe.skip('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 10,
-      maturity: await randomMaturity(provider),
       witnessLimit: randomNumber(800, 900),
       maxFee: 1000,
     };
@@ -151,8 +139,8 @@ describe.skip('Policies', () => {
 
     const { transaction } = await tx.waitForResult();
 
-    expect(transaction.policyTypes).toBe(15);
-    expect(transaction.policies?.length).toBe(4);
+    expect(transaction.policyTypes).toBe(11);
+    expect(transaction.policies?.length).toBe(3);
 
     validatePolicies({
       transaction,
@@ -161,11 +149,7 @@ describe.skip('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (CreateTransactionRequest)', async () => {
-    using launched = await launchTestNode({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -181,7 +165,6 @@ describe.skip('Policies', () => {
     const txParams: CustomTxParams = {
       tip: 11,
       witnessLimit: 2000,
-      maturity: await randomMaturity(provider),
       maxFee: 70_000,
     };
 
@@ -214,13 +197,12 @@ describe.skip('Policies', () => {
     });
 
     const {
-      provider,
       contracts: [contract],
     } = launched;
 
     const callScope = contract.functions.payable().txParams({
       tip: 5,
-      maturity: await randomMaturity(provider),
+
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     });
@@ -240,11 +222,7 @@ describe.skip('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (ScriptInvocationScope)', async () => {
-    using launched = await launchTestNode({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -259,7 +237,7 @@ describe.skip('Policies', () => {
 
     const callScope = scriptInstance.functions.main(33).txParams({
       tip: 2,
-      maturity: await randomMaturity(provider),
+
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     });
@@ -279,11 +257,7 @@ describe.skip('Policies', () => {
   });
 
   it('should ensure TX policies are properly set (Account Transfer)', async () => {
-    using launched = await launchTestNode({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -294,7 +268,7 @@ describe.skip('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 4,
-      maturity: await randomMaturity(provider),
+
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     };
@@ -322,9 +296,6 @@ describe.skip('Policies', () => {
           bytecode: PayableAnnotationAbiHex,
         },
       ],
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-      },
     });
 
     const {
@@ -335,7 +306,7 @@ describe.skip('Policies', () => {
 
     const txParams: CustomTxParams = {
       tip: 1,
-      maturity: await randomMaturity(provider),
+
       witnessLimit: randomNumber(800, 900),
       maxFee: 70_000,
     };
@@ -356,11 +327,7 @@ describe.skip('Policies', () => {
   });
 
   it('should ensure TX witnessLimit policy limits tx execution as expected', async () => {
-    using launched = await launchTestNode({
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -370,7 +337,6 @@ describe.skip('Policies', () => {
     const receiver = Wallet.generate({ provider });
 
     const txParams: CustomTxParams = {
-      maturity: await randomMaturity(provider),
       witnessLimit: 0,
     };
 
@@ -388,11 +354,7 @@ describe.skip('Policies', () => {
 
   describe('should ensure TX maxFee policy limits TX execution as expected', () => {
     it('on account transfer', async () => {
-      using launched = await launchTestNode({
-        nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-        },
-      });
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -404,7 +366,6 @@ describe.skip('Policies', () => {
       const maxFee = 1;
 
       const txParams: CustomTxParams = {
-        maturity: await randomMaturity(provider),
         witnessLimit: 800,
         maxFee,
       };
@@ -439,7 +400,6 @@ describe.skip('Policies', () => {
       const maxFee = 1;
 
       const txParams: CustomTxParams = {
-        maturity: await randomMaturity(provider),
         witnessLimit: 800,
         maxFee,
       };
@@ -467,7 +427,6 @@ describe.skip('Policies', () => {
       const receiver = Wallet.generate({ provider });
 
       const txParams: CustomTxParams = {
-        maturity: await randomMaturity(provider),
         witnessLimit: 800,
         maxFee,
       };
@@ -479,14 +438,9 @@ describe.skip('Policies', () => {
     });
 
     it('on ContractFactory when deploying contracts', async () => {
-      using launched = await launchTestNode({
-        nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
-        },
-      });
+      using launched = await launchTestNode();
 
       const {
-        provider,
         wallets: [wallet],
       } = launched;
 
@@ -499,7 +453,6 @@ describe.skip('Policies', () => {
       );
 
       const txParams: CustomTxParams = {
-        maturity: await randomMaturity(provider),
         witnessLimit: 800,
         maxFee,
       };
@@ -522,12 +475,10 @@ describe.skip('Policies', () => {
       });
 
       const {
-        provider,
         contracts: [contract],
       } = launched;
 
       const txParams: CustomTxParams = {
-        maturity: await randomMaturity(provider),
         witnessLimit: 800,
         maxFee,
       };
