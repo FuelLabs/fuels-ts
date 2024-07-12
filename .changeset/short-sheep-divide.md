@@ -1,8 +1,8 @@
 ---
 "@fuel-ts/account": minor
-"@fuel-ts/interfaces": patch
-"@fuel-ts/contract": patch
-"@fuel-ts/program": patch
+"@fuel-ts/interfaces": minor
+"@fuel-ts/contract": minor
+"@fuel-ts/program": minor
 ---
 
 chore!: refactored the `getTransactionCost` method
