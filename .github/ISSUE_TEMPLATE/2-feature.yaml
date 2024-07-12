@@ -7,8 +7,7 @@ body:
       value: |
         Thank you for helping to improve our Typescript SDK!
 
-        The best place to submit a feature request is in a [discussion](https://github.com/FuelLabs/fuels-ts/discussions/new?category=ideas).
-        This gives you the opportunity to present the idea to the community, discuss potential solutions and their impacts before submitting the proposed solution as a feature request.
+        The best place to submit a feature request is in a [discussion](https://github.com/FuelLabs/fuels-ts/discussions/new?category=ideas). This gives you the opportunity to present the idea to the community, discuss potential solutions and their impacts before submitting the proposed solution as a feature request.
 
         Failing that, please submit a feature request using the form below.
   - type: textarea
