@@ -19,6 +19,8 @@ describe('Predicate', () => {
   test('Transaction', async () => {
     // First, we'll launch a test node to use for our predicate transaction.
     using launched = await launchTestNode();
+    // The test node will be killed automatically once the `launched` variable goes out of scope,
+    // because we are instantiating it with the `using` keyword.
 
     // We can now destructure the provider and the sender and receiver wallet from the launched object.
     const {

@@ -21,6 +21,8 @@ describe('Contract', () => {
     // First, we'll launch a test node, passing the contract factory and bytecode. This will deploy the contract
     // to our test node so we can test against it.
     using launched = await launchTestNode({
+      // The test node will be killed automatically once the `launched` variable goes out of scope,
+      // because we are instantiating it with the `using` keyword.
       contractsConfigs: [
         {
           deployer: TestContractAbi__factory,
