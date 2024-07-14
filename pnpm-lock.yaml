@@ -272,8 +272,8 @@ importers:
   apps/demo-nextjs:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.54.0
-        version: 0.54.0
+        specifier: 0.55.0
+        version: 0.55.0
       '@types/node':
         specifier: 18.15.3
         version: 18.15.3
@@ -308,8 +308,8 @@ importers:
   apps/demo-react-cra:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.54.0
-        version: 0.54.0
+        specifier: 0.55.0
+        version: 0.55.0
       '@testing-library/react':
         specifier: ^16.0.0
         version: 16.0.0(@testing-library/dom@8.20.1)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -351,8 +351,8 @@ importers:
   apps/demo-react-vite:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.54.0
-        version: 0.54.0
+        specifier: 0.55.0
+        version: 0.55.0
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -702,8 +702,8 @@ importers:
         specifier: workspace:*
         version: link:../versions
       '@fuels/vm-asm':
-        specifier: 0.54.0
-        version: 0.54.0
+        specifier: 0.55.0
+        version: 0.55.0
       '@noble/curves':
         specifier: ^1.4.2
         version: 1.4.2
@@ -1076,8 +1076,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@fuels/vm-asm':
-        specifier: 0.54.0
-        version: 0.54.0
+        specifier: 0.55.0
+        version: 0.55.0
       ramda:
         specifier: ^0.29.0
         version: 0.29.0
@@ -3050,8 +3050,8 @@ packages:
       fuels: '>=0.86.0'
       react: ^18.2.0
 
-  '@fuels/vm-asm@0.54.0':
-    resolution: {integrity: sha512-9f7jM55qBLRHQdP2Dtipd5Ni90vIiGEC/9mmYye2W2/6iazaAoYfYavYGIMlXIZ6Ven3mWrfok2VZGT2pQ7i8w==}
+  '@fuels/vm-asm@0.55.0':
+    resolution: {integrity: sha512-k+n+ZF+s9ovPoURcRIUKxNHeniY3M8Fw6OBTdmc4jPtrNQnPb7BErGV7O6RnVGn/DEWp/zs6xHOmTjoZLR6UNg==}
 
   '@graphql-codegen/add@5.0.3':
     resolution: {integrity: sha512-SxXPmramkth8XtBlAHu4H4jYcYXM/o3p01+psU+0NADQowA8jtYkK6MW5rV6T+CxkEaNZItfSmZRPgIuypcqnA==}
@@ -6263,6 +6263,7 @@ packages:
 
   bun@1.1.18:
     resolution: {integrity: sha512-bv1wLYtmkn6GCqYFsVO9xZzPvNaDlA3xHbtePGHMtXMqq8N/vo+L6b19LB4+I5RKXFAsSmgzonyh2oMExaaWcQ==}
+    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -17109,7 +17110,7 @@ snapshots:
       - '@types/react-dom'
       - react-dom
 
-  '@fuels/vm-asm@0.54.0': {}
+  '@fuels/vm-asm@0.55.0': {}
 
   '@graphql-codegen/add@5.0.3(graphql@16.9.0)':
     dependencies:
@@ -18782,6 +18783,8 @@ snapshots:
       chalk: 4.1.2
       execa: 5.1.1
       fast-glob: 3.3.2
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-config@13.6.6':
     dependencies:
@@ -18791,6 +18794,8 @@ snapshots:
       deepmerge: 4.3.1
       fast-glob: 3.3.2
       joi: 17.13.1
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-debugger-ui@13.6.6':
     dependencies:
@@ -18817,6 +18822,8 @@ snapshots:
       strip-ansi: 5.2.0
       wcwidth: 1.0.1
       yaml: 2.4.5
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-hermes@13.6.6':
     dependencies:
@@ -18824,6 +18831,8 @@ snapshots:
       '@react-native-community/cli-tools': 13.6.6
       chalk: 4.1.2
       hermes-profile-transformer: 0.0.6
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-platform-android@13.6.6':
     dependencies:
@@ -18833,6 +18842,8 @@ snapshots:
       fast-glob: 3.3.2
       fast-xml-parser: 4.4.0
       logkitty: 0.7.1
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-platform-apple@13.6.6':
     dependencies:
@@ -18842,10 +18853,14 @@ snapshots:
       fast-glob: 3.3.2
       fast-xml-parser: 4.4.0
       ora: 5.4.1
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-platform-ios@13.6.6':
     dependencies:
       '@react-native-community/cli-platform-apple': 13.6.6
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-server-api@13.6.6(bufferutil@4.0.8)(utf-8-validate@6.0.4)':
     dependencies:
@@ -18860,6 +18875,7 @@ snapshots:
       ws: 6.2.2(bufferutil@4.0.8)(utf-8-validate@6.0.4)
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - supports-color
       - utf-8-validate
 
@@ -18870,12 +18886,14 @@ snapshots:
       execa: 5.1.1
       find-up: 5.0.0
       mime: 2.6.0
-      node-fetch: 3.3.2
+      node-fetch: 2.7.0
       open: 6.4.0
       ora: 5.4.1
       semver: 7.5.4
       shell-quote: 1.8.1
       sudo-prompt: 9.2.1
+    transitivePeerDependencies:
+      - encoding
 
   '@react-native-community/cli-types@13.6.6':
     dependencies:
@@ -18902,6 +18920,7 @@ snapshots:
       semver: 7.5.4
     transitivePeerDependencies:
       - bufferutil
+      - encoding
       - supports-color
       - utf-8-validate
 
