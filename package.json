@@ -71,7 +71,7 @@
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@playwright/test": "^1.45.1",
-    "@types/node": "18.15.3",
+    "@types/node": "20.14.10",
     "@types/node-fetch": "^2.6.11",
     "@types/web": "^0.0.151",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
