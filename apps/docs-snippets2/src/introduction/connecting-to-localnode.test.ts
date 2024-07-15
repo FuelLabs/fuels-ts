@@ -1,14 +1,9 @@
-import { mockProviderForLocalNetwork } from '../../test/mockProviderForLocalNetwork';
+import { main } from './connecting-to-localnode.wrapped';
 
 /**
  * @group node
  */
 test('it works', async () => {
-  const { provider } = await mockProviderForLocalNetwork();
-  const { main } = await import('./connecting-to-localnode.wrapped');
-  const { providerUrl, balances } = await main();
-
-  expect(providerUrl).toEqual(provider.url); // TODO: remove check after PoC
-  expect(balances).toBeTruthy();
+  const balances = await main();
   expect(balances).toBeInstanceOf(Array);
 });
