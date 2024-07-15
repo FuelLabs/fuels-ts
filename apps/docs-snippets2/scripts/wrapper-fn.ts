@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line @typescript-eslint/require-await
-export const main = async (): Promise<any | any[]> => {
+export const main = async (passLogsThrough: boolean = false): Promise<any | any[]> => {
   const logs: any[] = [];
   const bkpConsole = console;
 
@@ -9,6 +9,9 @@ export const main = async (): Promise<any | any[]> => {
   console = {
     ...console,
     log: (...args: any[]) => {
+      if (passLogsThrough) {
+        bkpConsole.log.apply(null, args);
+      }
       logs.push(args);
     },
   };
