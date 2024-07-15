@@ -19,7 +19,7 @@ describe('Predicate', () => {
     it('calls a predicate and uses proceeds for a script call', async () => {
       using launched = await launchTestNode({
         walletsConfig: {
-          amountPerCoin: 1_000_000_000_000,
+          amountPerCoin: 100_000_000,
         },
       });
       const {

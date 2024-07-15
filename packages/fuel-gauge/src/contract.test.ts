@@ -6,24 +6,16 @@ import {
   multiply,
   toHex,
   toNumber,
-  Provider,
   Contract,
   transactionRequestify,
   Wallet,
   ContractFactory,
-  FUEL_NETWORK_URL,
   Predicate,
   PolicyType,
   ZeroBytes32,
   buildFunctionResult,
 } from 'fuels';
-import type {
-  TransactionRequestLike,
-  TransactionResponse,
-  JsonAbi,
-  ScriptTransactionRequest,
-  TransferParams,
-} from 'fuels';
+import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -35,6 +27,17 @@ import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestCont
 import { PredicateTrueAbi__factory } from '../test/typegen/predicates/factories/PredicateTrueAbi__factory';
 
 import { launchTestContract } from './utils';
+
+const contractsConfigs = [
+  {
+    deployer: CallTestContractAbi__factory,
+    bytecode: CallTestContractAbiHex,
+  },
+  {
+    deployer: CallTestContractAbi__factory,
+    bytecode: CallTestContractAbiHex,
+  },
+];
 
 const jsonFragment: JsonAbi = {
   configurables: [],
@@ -261,16 +264,7 @@ describe('Contract', () => {
 
   it('adds multiple contracts on invocation', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
     });
 
     const {
@@ -286,16 +280,7 @@ describe('Contract', () => {
 
   it('adds multiple contracts on multicalls', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
     });
 
     const {
@@ -410,16 +395,7 @@ describe('Contract', () => {
 
   it('adds multiple contracts on multicalls', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
     });
 
     const {
@@ -806,83 +782,6 @@ describe('Contract', () => {
     expect(result.status).toBe('success');
   });
 
-  // #TODO: Discuss whether this test is still relevant
-  it.skip('Provide a custom provider and public wallet to the contract instance', async () => {
-    using contract = await setupTestContract();
-
-    const { provider } = contract;
-
-    const externalWallet = Wallet.generate({
-      provider,
-    });
-
-    // Create a custom provider to emulate a external signer
-    // like Wallet Extension or a Hardware wallet
-    let signedTransaction;
-    class ProviderCustom extends Provider {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      static async create(url: string) {
-        const newProvider = new ProviderCustom(url);
-        return newProvider;
-      }
-
-      async sendTransaction(
-        transactionRequestLike: TransactionRequestLike
-      ): Promise<TransactionResponse> {
-        const transactionRequest = transactionRequestify(transactionRequestLike);
-        // Simulate a external request of signature
-        signedTransaction = await externalWallet.signTransaction(transactionRequest);
-        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
-        return super.sendTransaction(transactionRequestLike);
-      }
-    }
-
-    // Set custom provider to contract instance
-    const customProvider = await ProviderCustom.create(FUEL_NETWORK_URL);
-    contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
-    contract.provider = customProvider;
-
-    const num = 1337;
-    const struct = { a: true, b: 1337 };
-    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
-    const multiCallScope = contract.multiCall(invocationScopes).txParams({ gasLimit: 20_000 });
-
-    const transactionRequest = await multiCallScope.getTransactionRequest();
-
-    const txRequest = JSON.stringify(transactionRequest);
-    const txRequestParsed = JSON.parse(txRequest);
-
-    const transactionRequestParsed = transactionRequestify(
-      txRequestParsed
-    ) as ScriptTransactionRequest;
-
-    const txCost = await contract.provider.getTransactionCost(transactionRequestParsed);
-
-    transactionRequestParsed.gasLimit = txCost.gasUsed;
-    transactionRequestParsed.maxFee = txCost.maxFee;
-
-    await contract.account.fund(transactionRequestParsed, txCost);
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const response = await contract.account!.sendTransaction(transactionRequestParsed);
-    const {
-      value: [resultA, resultB],
-      transactionResult,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await buildFunctionResult<any>({
-      funcScope: invocationScopes,
-      transactionResponse: response,
-      isMultiCall: true,
-      program: contract,
-    });
-
-    expect(transactionResult.transaction.witnesses.length).toEqual(1);
-    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
-    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
-    expect(resultB.a).toEqual(!struct.a);
-    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
-  });
-
   it('should ensure multicall allows multiple heap types', async () => {
     using contract = await setupTestContract();
 
@@ -915,12 +814,7 @@ describe('Contract', () => {
    */
   it('should transfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
       walletsConfig: {
         amountPerCoin: 1_000_000,
       },
@@ -951,12 +845,7 @@ describe('Contract', () => {
 
   it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
       walletsConfig: {
         amountPerCoin: 1_000_000,
       },
@@ -993,12 +882,7 @@ describe('Contract', () => {
 
   it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
       walletsConfig: {
         amountPerCoin: 1_000_000,
       },
@@ -1027,12 +911,7 @@ describe('Contract', () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
       walletsConfig: {
         amountPerCoin: 1_000_000,
       },
@@ -1057,12 +936,7 @@ describe('Contract', () => {
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
-        },
-      ],
+      contractsConfigs,
       walletsConfig: {
         amountPerCoin: 1_000_000,
       },

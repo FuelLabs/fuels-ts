@@ -133,7 +133,7 @@ describe('Predicate', () => {
     it('calls a predicate with invalid u32 data and returns false', async () => {
       using launched = await launchTestNode({
         walletsConfig: {
-          amountPerCoin: 1_000_000_000_000,
+          amountPerCoin: 100_000_000,
         },
       });
 
@@ -150,7 +150,7 @@ describe('Predicate', () => {
       });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, 900_000_000);
+      await fundPredicate(fundingWallet, predicate, 90_000_00);
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();

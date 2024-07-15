@@ -177,7 +177,7 @@ test('Example predicate', async () => {
   // In this exchange, we are first transferring some coins to the predicate
   using launched = await launchTestNode({
     walletsConfig: {
-      amountPerCoin: 10_000_000_000,
+      amountPerCoin: 500_000,
     },
   });
 
@@ -191,7 +191,7 @@ test('Example predicate', async () => {
   const predicateData: PredicateAbiInputs = [];
   const predicate = PredicateAbi__factory.createInstance(provider, predicateData);
 
-  const tx = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
+  const tx = await wallet.transfer(predicate.address, 200_000, provider.getBaseAssetId());
   const { isStatusSuccess } = await tx.wait();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)

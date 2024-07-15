@@ -156,54 +156,59 @@ describe('TransactionResponse', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
-  it.skip('should ensure waitForResult always waits for the transaction to be processed', async () => {
-    using launched = await launchTestNode({
-      /**
-       * This is set to so long in order to test keep-alive message handling as well.
-       * Keep-alive messages are sent every 15s.
-       * It is very important to test this because the keep-alive messages are not sent in the same format as the other messages
-       * and it is reasonable to expect subscriptions lasting more than 15 seconds.
-       * We need a proper integration test for this
-       * because if the keep-alive message changed in any way between fuel-core versions and we missed it,
-       * all our subscriptions would break.
-       * We need at least one long test to ensure that the keep-alive messages are handled correctly.
-       * */
-      nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
-      },
-    });
+  it.skip(
+    'should ensure waitForResult always waits for the transaction to be processed',
+    { timeout: 18_500 },
+    async () => {
+      using launched = await launchTestNode({
+        /**
+         * This is set to so long in order to test keep-alive message handling as well.
+         * Keep-alive messages are sent every 15s.
+         * It is very important to test this because the keep-alive messages are not sent in the same format as the other messages
+         * and it is reasonable to expect subscriptions lasting more than 15 seconds.
+         * We need a proper integration test for this
+         * because if the keep-alive message changed in any way between fuel-core versions and we missed it,
+         * all our subscriptions would break.
+         * We need at least one long test to ensure that the keep-alive messages are handled correctly.
+         * */
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
+        },
+      });
 
-    const {
-      provider,
-      wallets: [genesisWallet, destination],
-    } = launched;
+      const {
+        provider,
+        wallets: [genesisWallet, destination],
+      } = launched;
 
-    const { id: transactionId } = await genesisWallet.transfer(
-      destination.address,
-      100,
-      provider.getBaseAssetId(),
-      { gasLimit: 10_000 }
-    );
-    const response = await TransactionResponse.create(transactionId, provider);
+      const { id: transactionId } = await genesisWallet.transfer(
+        destination.address,
+        100,
+        provider.getBaseAssetId(),
+        { gasLimit: 10_000 }
+      );
+      const response = await TransactionResponse.create(transactionId, provider);
 
-    expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
+      expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
 
-    const subscriptionStreamHolder = {
-      stream: new ReadableStream<Uint8Array>(),
-    };
+      const subscriptionStreamHolder = {
+        stream: new ReadableStream<Uint8Array>(),
+      };
 
-    getSubscriptionStreamFromFetch(subscriptionStreamHolder);
+      getSubscriptionStreamFromFetch(subscriptionStreamHolder);
 
-    await response.waitForResult();
+      await response.waitForResult();
 
-    expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
-    expect(response.gqlTransaction?.id).toBe(transactionId);
+      expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
+      expect(response.gqlTransaction?.id).toBe(transactionId);
 
-    await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
-  });
+      await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
+    }
+  );
 
   it(
     'should throw error for a SqueezedOut status update [waitForResult]',
+    { timeout: 10_000 },
     async () => {
       /**
        * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
@@ -248,12 +253,12 @@ describe('TransactionResponse', () => {
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );
-    },
-    { timeout: 10_000 }
+    }
   );
 
   it(
     'should throw error for a SqueezedOut status update [submitAndAwait]',
+    { retry: 10 },
     async () => {
       using launched = await launchTestNode({
         walletsConfig: {
@@ -294,7 +299,6 @@ describe('TransactionResponse', () => {
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );
-    },
-    { retry: 10 }
+    }
   );
 });

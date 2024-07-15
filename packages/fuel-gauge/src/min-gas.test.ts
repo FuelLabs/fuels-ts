@@ -173,7 +173,7 @@ describe('Minimum gas tests', () => {
   it('sets gas requirements (account and predicate with script)', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
-        amountPerCoin: 1_000_000_000_000,
+        amountPerCoin: 100_000_000,
       },
     });
 

@@ -190,7 +190,7 @@ describe('Doc Examples', () => {
   it('can create wallets', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
-        amountPerCoin: 100_000_000_000_000,
+        amountPerCoin: 100_000_000,
         assets: [AssetId.A, AssetId.B],
       },
     });
@@ -262,7 +262,7 @@ describe('Doc Examples', () => {
   it('can create a predicate and use', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
-        amountPerCoin: 1_000_000_000_000_000,
+        amountPerCoin: 100_000_000,
       },
     });
     const {

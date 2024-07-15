@@ -1,4 +1,4 @@
-import { WalletUnlocked, randomBytes, Wallet } from 'fuels';
+import { Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -40,14 +40,17 @@ describe('await-execution', () => {
   });
 
   test.skip('transferring funds with awaitExecution works', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 1_000_000,
+      },
+    });
 
     const { provider } = launched;
 
-    const genesisWallet = new WalletUnlocked(
-      process.env.GENESIS_SECRET || randomBytes(32),
-      provider
-    );
+    const {
+      wallets: [genesisWallet],
+    } = launched;
 
     const sendTransactionSpy = vi.spyOn(provider, 'sendTransaction');
 
@@ -65,7 +68,7 @@ describe('await-execution', () => {
   test('withdrawToBaseLayer works with awaitExecution', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
-        amountPerCoin: 10_000_000_000,
+        amountPerCoin: 1_000_000,
       },
     });
 
@@ -79,7 +82,7 @@ describe('await-execution', () => {
     const destination = Wallet.generate({ provider });
 
     await genesisWallet.withdrawToBaseLayer(destination.address, 100, {
-      gasLimit: 100_000,
+      gasLimit: 44442,
     });
 
     expect(sendTransactionSpy).toHaveBeenCalledTimes(1);
