@@ -1128,16 +1128,13 @@ Supported fuel-core version: ${supportedVersion}.`
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const updateMaxFee = txRequestClone.maxFee.eq(0);
-    const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
 
-    /**
-     * Estimate predicates gasUsed
-     */
     // Remove gasLimit to avoid gasLimit when estimating predicates
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
 
+    const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
     let addedSignatures = 0;
     if (signatureCallback && isScriptTransaction) {
       const lengthBefore = signedRequest.witnesses.length;
