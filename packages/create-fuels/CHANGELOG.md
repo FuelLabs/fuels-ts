@@ -1,5 +1,13 @@
 # create-fuels
 
+## 0.92.0
+
+### Patch Changes
+
+- e9b70ee: chore: include all supported connectors in the create fuels template
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- 1e2d59f: feat: utilize the Next.js `Link` component
+
 ## 0.91.0
 
 ### Patch Changes

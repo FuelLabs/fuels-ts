@@ -18,9 +18,11 @@ describe('bytecode computations', () => {
     const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
     const contract = await setupContract();
 
-    const { logs } = await contract.functions
+    const { waitForResult } = await contract.functions
       .compute_bytecode_root(arrayify(bytecodeFromFile))
       .call();
+
+    const { logs } = await waitForResult();
 
     const bytecodeRoot: string = logs[0];
 
@@ -36,7 +38,7 @@ describe('bytecode computations', () => {
     const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
     const contract = await setupContract();
 
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .verify_contract_bytecode(
         {
           bits: contract.id.toB256(),
@@ -44,6 +46,8 @@ describe('bytecode computations', () => {
         Array.from(arrayify(bytecodeFromFile))
       )
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBeTruthy();
   });
@@ -62,9 +66,11 @@ describe('bytecode computations', () => {
     const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
     const contract = await setupContract();
 
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value.bits).toEqual(address.toB256());
   });

@@ -2,7 +2,6 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type {
   TransactionRequestLike,
   TransactionResponse,
-  TransactionType,
   JsonAbi,
   ScriptTransactionRequest,
   TransferParams,
@@ -17,13 +16,13 @@ import {
   Provider,
   Contract,
   transactionRequestify,
-  FunctionInvocationResult,
   Wallet,
   ContractFactory,
   ZeroBytes32,
   FUEL_NETWORK_URL,
   Predicate,
   PolicyType,
+  buildFunctionResult,
 } from 'fuels';
 import {
   generateTestWallet,
@@ -224,6 +223,19 @@ describe('Contract', () => {
     expect(contract.provider).toEqual(provider);
   });
 
+  it('should executes a contract call just nice', async () => {
+    const contract = await setupContract();
+
+    const numberToSend = 1336;
+
+    const { waitForResult } = await contract.functions.foo(numberToSend).call();
+
+    const { value, transactionResult } = await waitForResult();
+
+    expect(value.toNumber()).toEqual(numberToSend + 1);
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
+  });
+
   it('should fail to execute call if gasLimit is too low', async () => {
     const contract = await setupContract();
 
@@ -249,10 +261,10 @@ describe('Contract', () => {
     });
 
     const scope = contract.functions.call_external_foo(1336, otherContract.id.toB256());
+    const { waitForResult } = await scope.call();
+    const { value } = await waitForResult();
 
-    const { value: results } = await scope.call();
-
-    expect(results.toHex()).toEqual(toHex(1338));
+    expect(value.toHex()).toEqual(toHex(1338));
   });
 
   it('adds multiple contracts on multicalls', async () => {
@@ -279,22 +291,26 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
-    const { value: results } = await scope.call();
+    const { waitForResult } = await scope.call();
+    const { value: results } = await waitForResult();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1338)]));
   });
 
   it('submits multiple calls', async () => {
     const contract = await setupContract();
-    const { value: results } = await contract
+    const { waitForResult } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
+
+    const { value: results } = await waitForResult();
+
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
   it('submits multiple calls, six calls', async () => {
     const contract = await setupContract();
 
-    const { value: results } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.foo(1336),
         contract.functions.foo(1336),
@@ -305,6 +321,9 @@ describe('Contract', () => {
         contract.functions.foo(1336),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
+
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([bn(1337), bn(1337), bn(1337), bn(1337), bn(1337), bn(1337)])
     );
@@ -312,8 +331,7 @@ describe('Contract', () => {
 
   it('submits multiple calls, eight calls', async () => {
     const contract = await setupContract();
-
-    const { value: results } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.foo(1336),
         contract.functions.foo(1336),
@@ -325,6 +343,7 @@ describe('Contract', () => {
         contract.functions.foo(1336),
       ])
       .call();
+    const { value: results } = await waitForResult();
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([
         bn(1337),
@@ -375,7 +394,8 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
-    const { value: results } = await scope.call();
+    const { waitForResult } = await scope.call();
+    const { value: results } = await waitForResult();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337)]));
   });
 
@@ -402,16 +422,18 @@ describe('Contract', () => {
   it('Returns gasUsed and transactionId', async () => {
     const contract = await setupContract();
 
-    const { transactionId, gasUsed } = await contract
+    const { waitForResult } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
+
+    const { transactionId, gasUsed } = await waitForResult();
     expect(transactionId).toBeTruthy();
     expect(toNumber(gasUsed)).toBeGreaterThan(0);
   });
 
   it('Single call with forwarding a alt token', async () => {
     const contract = await setupContract();
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [200, AltToken],
@@ -421,13 +443,15 @@ describe('Contract', () => {
         gasLimit: 3000000,
       })
       .call<BN>();
+
+    const { value } = await waitForResult();
     expect(value.toHex()).toEqual(toHex(200));
   });
 
   it('MultiCall with multiple forwarding', async () => {
     const contract = await setupContract();
 
-    const { value } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
           forward: [100, baseAssetId],
@@ -443,6 +467,9 @@ describe('Contract', () => {
         gasLimit: 5000000,
       })
       .call<[BN, BN, BN]>();
+
+    const { value } = await waitForResult();
+
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
   });
 
@@ -473,7 +500,7 @@ describe('Contract', () => {
   it('can forward gas to multicall calls', async () => {
     const contract = await setupContract();
 
-    const { value } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_gas().callParams({
           // Forward only 500_000 gas
@@ -489,6 +516,7 @@ describe('Contract', () => {
       })
       .call<[BN, BN]>();
 
+    const { value } = await waitForResult();
     const minThreshold = 0.019;
 
     expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * minThreshold);
@@ -514,12 +542,13 @@ describe('Contract', () => {
     expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(0);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
-    const { value } = await invocationScope
+    const { waitForResult } = await invocationScope
       .txParams({
         gasLimit: transactionCost.gasUsed,
       })
       .call<[string, string]>();
 
+    const { value } = await waitForResult();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
 
@@ -544,31 +573,34 @@ describe('Contract', () => {
   it('calls array functions', async () => {
     const contract = await setupContract();
 
-    const { value: arrayBoolean } = await contract.functions
-      .take_array_boolean([true, false, false])
-      .call();
+    const call1 = await contract.functions.take_array_boolean([true, false, false]).call();
+    const { value: arrayBoolean } = await call1.waitForResult();
 
     expect(arrayBoolean).toEqual(true);
 
-    const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
+    const call2 = await contract.functions.take_array_number([1, 2, 3]).call();
+    const { value: arrayNumber } = await call2.waitForResult();
 
     expect(arrayNumber.toHex()).toEqual(toHex(1));
 
-    const { value: arrayReturnShuffle } = await contract.functions
-      .take_array_string_shuffle(['abc', 'efg', 'hij'])
-      .call();
+    const call3 = await contract.functions.take_array_string_shuffle(['abc', 'efg', 'hij']).call();
+    const { value: arrayReturnShuffle } = await call3.waitForResult();
 
     expect(arrayReturnShuffle).toEqual(['hij', 'abc', 'efg']);
 
-    const { value: arrayReturnSingle } = await contract.functions
+    const call4 = await contract.functions
       .take_array_string_return_single(['abc', 'efg', 'hij'])
       .call();
 
+    const { value: arrayReturnSingle } = await call4.waitForResult();
+
     expect(arrayReturnSingle).toEqual(['abc']);
 
-    const { value: arrayReturnSingleElement } = await contract.functions
+    const call5 = await contract.functions
       .take_array_string_return_single_element(['abc', 'efg', 'hij'])
       .call();
+
+    const { value: arrayReturnSingleElement } = await call5.waitForResult();
 
     expect(arrayReturnSingleElement).toEqual('abc');
   });
@@ -576,55 +608,67 @@ describe('Contract', () => {
   it('calls enum functions', async () => {
     const contract = await setupContract();
 
-    const { value: enumB256ReturnValue } = await contract.functions
+    const call1 = await contract.functions
       .take_b256_enum({
         Value: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
       })
       .call();
 
+    const { value: enumB256ReturnValue } = await call1.waitForResult();
+
     expect(enumB256ReturnValue).toEqual(
       '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const { value: enumB256ReturnData } = await contract.functions
+    const call2 = await contract.functions
       .take_b256_enum({
         Data: '0x1111111111111111111111111111111111111111111111111111111111111111',
       })
       .call();
 
+    const { value: enumB256ReturnData } = await call2.waitForResult();
+
     expect(enumB256ReturnData).toEqual(
       '0x1111111111111111111111111111111111111111111111111111111111111111'
     );
 
-    const { value: enumBoolReturnValue } = await contract.functions
+    const call3 = await contract.functions
       .take_bool_enum({
         Value: true,
       })
       .call();
 
+    const { value: enumBoolReturnValue } = await call3.waitForResult();
+
     expect(enumBoolReturnValue).toEqual(true);
 
-    const { value: enumBoolReturnData } = await contract.functions
+    const call4 = await contract.functions
       .take_bool_enum({
         Data: false,
       })
       .call();
 
+    const { value: enumBoolReturnData } = await call4.waitForResult();
+
     expect(enumBoolReturnData).toEqual(false);
 
-    const { value: enumStrReturnValue } = await contract.functions
+    const call5 = await contract.functions
       .take_string_enum({
         Value: 'abc',
       })
       .call();
 
+    const { value: enumStrReturnValue } = await call5.waitForResult();
+
     expect(enumStrReturnValue).toEqual('abc');
 
-    const { value: enumStrReturnData } = await contract.functions
+    const call6 = await contract.functions
       .take_string_enum({
         Data: 'efg',
       })
       .call();
+
+    const { value: enumStrReturnData } = await call6.waitForResult();
 
     expect(enumStrReturnData).toEqual('efg');
   });
@@ -664,7 +708,12 @@ describe('Contract', () => {
     const {
       value: [resultA, resultB],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+    } = await buildFunctionResult<any>({
+      funcScope: invocationScopes,
+      transactionResponse: response,
+      isMultiCall: true,
+      program: contract,
+    });
 
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
@@ -771,12 +820,12 @@ describe('Contract', () => {
       value: [resultA, resultB],
       transactionResult,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await FunctionInvocationResult.build<any, TransactionType.Script>(
-      invocationScopes,
-      response,
-      true,
-      contract
-    );
+    } = await buildFunctionResult<any>({
+      funcScope: invocationScopes,
+      transactionResponse: response,
+      isMultiCall: true,
+      program: contract,
+    });
 
     expect(transactionResult.transaction.witnesses.length).toEqual(1);
     expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
@@ -797,17 +846,20 @@ describe('Contract', () => {
     ]);
     const factory = new ContractFactory(contractBytecode, abi, wallet);
 
-    const contract = await factory.deployContract();
+    const deploy = await factory.deployContract();
+    const { contract } = await deploy.waitForResult();
 
     const vector = [5, 4, 3, 2, 1];
 
-    const { value } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_amount(),
         contract.functions.return_vector(vector), // returns heap type Vec
         contract.functions.return_bytes(),
       ])
       .call();
+
+    const { value } = await waitForResult();
 
     expect(JSON.stringify(value)).toBe(JSON.stringify([bn(0), vector, new Uint8Array()]));
   });
@@ -959,12 +1011,13 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     const receiver = Wallet.generate({ provider });
     const amountToTransfer = 300;
 
-    await contract.functions
+    const call = await contract.functions
       .sum(40, 50)
       .addTransfer({
         destination: receiver.address,
@@ -972,6 +1025,8 @@ describe('Contract', () => {
         assetId: baseAssetId,
       })
       .call();
+
+    await call.waitForResult();
 
     const finalBalance = await receiver.getBalance();
 
@@ -991,7 +1046,8 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     const receiver1 = Wallet.generate({ provider });
     const receiver2 = Wallet.generate({ provider });
@@ -1007,7 +1063,8 @@ describe('Contract', () => {
       { destination: receiver3.address, amount: amountToTransfer3, assetId: ASSET_B },
     ];
 
-    await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
+    const call = await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
+    await call.waitForResult();
 
     const finalBalance1 = await receiver1.getBalance(baseAssetId);
     const finalBalance2 = await receiver2.getBalance(ASSET_A);
@@ -1031,7 +1088,9 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+
+    const { contract } = await waitForResult();
 
     await expectToThrowFuelError(
       async () => {
@@ -1159,7 +1218,8 @@ describe('Contract', () => {
 
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const storageContract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    const { contract: storageContract } = await waitForResult();
 
     const initialCounterValue = 20;
 
@@ -1188,20 +1248,23 @@ describe('Contract', () => {
     const wallet = await generateTestWallet(provider, [[350_000, baseAssetId]]);
     const factory = new ContractFactory(binHexlified, abiContents, wallet);
 
-    const storageContract = await factory.deployContract();
+    const deploy = await factory.deployContract();
+    const { contract: storageContract } = await deploy.waitForResult();
 
     const gasLimit = 200_000;
     const maxFee = 100_000;
 
-    const {
-      transactionResult: { transaction },
-    } = await storageContract.functions
+    const { waitForResult } = await storageContract.functions
       .counter()
       .txParams({
         gasLimit,
         maxFee,
       })
       .call();
+
+    const {
+      transactionResult: { transaction },
+    } = await waitForResult();
 
     const maxFeePolicy = transaction.policies?.find((policy) => policy.type === PolicyType.MaxFee);
     const scriptGasLimit = transaction.scriptGasLimit;
@@ -1218,9 +1281,7 @@ describe('Contract', () => {
     const gasLimit = 500_000;
     const maxFee = 250_000;
 
-    const {
-      transactionResult: { transaction },
-    } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.foo(1336),
         contract.functions.foo(1336),
@@ -1233,6 +1294,10 @@ describe('Contract', () => {
       ])
       .txParams({ gasLimit, maxFee })
       .call();
+
+    const {
+      transactionResult: { transaction },
+    } = await waitForResult();
 
     const { scriptGasLimit, policies } = transaction;
 

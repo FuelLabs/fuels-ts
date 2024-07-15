@@ -23,20 +23,24 @@ describe('Reentrant Contract Calls', () => {
     wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     const factoryBar = new ContractFactory(bar.binHexlified, bar.abiContents, wallet);
-    barContract = await factoryBar.deployContract();
+    let { waitForResult } = await factoryBar.deployContract();
+    ({ contract: barContract } = await waitForResult());
 
     const factoryFoo = new ContractFactory(foo.binHexlified, foo.abiContents, wallet);
-    fooContract = await factoryFoo.deployContract();
+    ({ waitForResult } = await factoryFoo.deployContract());
+    ({ contract: fooContract } = await waitForResult());
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
-    const {
-      value,
-      transactionResult: { receipts },
-    } = await fooContract.functions
+    const { waitForResult } = await fooContract.functions
       .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
       .addContracts([barContract])
       .call();
+
+    const {
+      value,
+      transactionResult: { receipts },
+    } = await waitForResult();
 
     /**
      * First, the test will call:
@@ -64,20 +68,24 @@ describe('Reentrant Contract Calls', () => {
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call on multi-call', async () => {
-    const storageContract = await new ContractFactory(
+    const deploy = await new ContractFactory(
       storageTest.binHexlified,
       storageTest.abiContents,
       wallet
     ).deployContract({ storageSlots: storageTest.storageSlots });
+
+    const { contract: storageContract } = await deploy.waitForResult();
 
     const reentrantCall = fooContract.functions.foo(
       { bits: fooContract.id.toB256() },
       { bits: barContract.id.toB256() }
     );
 
-    const result = await fooContract
+    const { waitForResult } = await fooContract
       .multiCall([reentrantCall, storageContract.functions.return_var3(), reentrantCall])
       .call();
+
+    const result = await waitForResult();
 
     const expectedReentrantValue = 42;
 

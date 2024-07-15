@@ -132,6 +132,10 @@ export default defineConfig({
                 link: '/guide/provider/provider-options',
               },
               {
+                text: 'Pagination',
+                link: '/guide/provider/pagination',
+              },
+              {
                 text: 'Querying the Chain',
                 link: '/guide/provider/querying-the-chain',
               },
@@ -367,10 +371,6 @@ export default defineConfig({
             link: '/guide/cookbook/',
             collapsed: true,
             items: [
-              {
-                text: 'Transferring Assets',
-                link: '/guide/cookbook/transferring-assets',
-              },
               {
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',
