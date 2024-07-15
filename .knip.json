@@ -5,6 +5,7 @@
     "/apps/docs/*",
     "/packages/abi-typegen/test/**",
     "templates/**",
+    "/apps/docs-snippets2/**/*.test.ts",
     "apps/create-fuels-counter-guide/**"
   ],
   "ignoreDependencies": [
