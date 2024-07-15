@@ -17,6 +17,7 @@ import {
 import { NODE_URL } from "@/lib";
 import { ActiveWalletProvider } from "@/hooks/useActiveWallet";
 
+// react-query is a peer dependency of @fuels/react, so we set it up here. See https://docs.fuel.network/docs/wallet/dev/getting-started/#installation-1
 const queryClient = new QueryClient();
 
 interface RootLayoutProps {
@@ -25,12 +26,13 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const [isMounted, setIsMounted] = useState(false);
-  const providerToUse = useMemo(() => Provider.create(NODE_URL), [NODE_URL]);
+  const providerToUse = useMemo(() => Provider.create(NODE_URL), [NODE_URL]); // Create a Provider instance. We memoize it to avoid creating a new instance on every render.
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  // Only render the component if the page has been mounted, and `window` is defined.
   if (!isMounted) return null;
 
   return (
@@ -40,6 +42,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <QueryClientProvider client={queryClient}>
             <FuelProvider
               fuelConfig={{
+                // The list of wallet connectors. You can add or remove connectors from here based on your needs.
                 connectors: [
                   new FuelWalletConnector(),
                   new BurnerWalletConnector({
