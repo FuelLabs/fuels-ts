@@ -11,12 +11,26 @@ export const wrapSnippet = (filepath: string) => {
   const raw = readFileSync(filepath, 'utf8');
 
   // match
-  const imports = raw.match(importsReg)?.toString() ?? '';
+  let imports = raw.match(importsReg)?.toString() ?? '';
   const snippet = imports.length ? raw.split(imports)[1] : raw;
 
+  // creates node launcher injector and replaces `LOCAL_NETWORK_URL`
+  let nodeLauncher = '';
+  if (/LOCAL_NETWORK_URL/.test(imports)) {
+    imports = imports.replace(/LOCAL_NETWORK_URL/, 'TESTNET_NETWORK_URL');
+    imports += `\nimport { launchTestNode } from 'fuels/test-utils'`;
+    nodeLauncher = [
+      'using node = await launchTestNode();',
+      'const LOCAL_NETWORK_URL = node.provider.url;',
+    ].join('\n  ');
+  }
+
   // format
-  const indented = snippet.replace(/^/gm, '  ').trim();
-  const formatted = wrapperFnContents.replace('// %SNIPPET%', indented);
+  const indented = snippet.replace(/^/gm, '    ').trim();
+
+  const formatted = wrapperFnContents
+    .replace('// %SNIPPET%', indented)
+    .replace('// %NODE_LAUNCHER%', nodeLauncher);
 
   // write
   const wrappedPath = filepath.replace('.ts', '.wrapped.ts');
