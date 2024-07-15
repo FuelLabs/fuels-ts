@@ -168,7 +168,11 @@ describe('querying the chain', () => {
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
     // Launches a test node
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
 
     const {
       wallets: [sender, recipient],
@@ -179,13 +183,15 @@ describe('querying the chain', () => {
     const withdrawTx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
     const result = await withdrawTx.waitForResult();
 
-    // Emulate the next block creation by performing another tx
-    const transferTx = await sender.transfer(
-      recipient.address.toB256(),
-      100,
-      provider.getBaseAssetId()
-    );
-    const nextBlock = await transferTx.waitForResult();
+    // Waiting for a new block to be commited (1 confirmation block)
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
+
+    // Retrives the latest block
+    const latestBlock = await provider.getBlock('latest');
 
     // Retrieves the `nonce` via message out receipt from the initial transaction result
     const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
@@ -194,7 +200,7 @@ describe('querying the chain', () => {
     const messageProof = await provider.getMessageProof(
       result.gqlTransaction.id,
       nonce,
-      nextBlock.blockId
+      latestBlock?.id
     );
     // #endregion Message-getMessageProof-blockId
 
@@ -207,7 +213,11 @@ describe('querying the chain', () => {
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
 
     // Launches a test node
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
 
     const {
       wallets: [sender, recipient],
@@ -218,8 +228,12 @@ describe('querying the chain', () => {
     const withdrawTx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
     const result = await withdrawTx.waitForResult();
 
-    // Emulate the next block creation by performing another tx
-    await sender.transfer(recipient.address.toB256(), 100, provider.getBaseAssetId());
+    // Waiting for a new block to be commited (1 confirmation block)
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
 
     // Retrieves the `nonce` via message out receipt from the initial transaction result
     const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
