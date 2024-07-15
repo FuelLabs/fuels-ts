@@ -16,7 +16,7 @@
     "fuels": "workspace:*",
     "@tanstack/react-query": "^5.51.1",
     "dotenv": "^16.4.5",
-    "next": "14.2.4",
+    "next": "14.2.5",
     "react": "^18.3",
     "react-dom": "^18.3",
     "react-hot-toast": "^2.4.1",
