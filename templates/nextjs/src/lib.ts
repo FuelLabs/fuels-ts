@@ -7,7 +7,11 @@ export const Environments = {
 } as const;
 type Environment = (typeof Environments)[keyof typeof Environments];
 
-// The current environment is determined by the `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment variable. If it's not set, the default is `local`.
+/**
+ * The current environment is determined by the
+ * `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment variable.
+ * If it's not set, the default is `local`.
+ */
 export const CURRENT_ENVIRONMENT: Environment =
   (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as Environment) || Environments.LOCAL;
 

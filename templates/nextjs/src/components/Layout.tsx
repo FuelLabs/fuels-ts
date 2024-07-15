@@ -29,7 +29,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       return console.error("Unable to topup wallet because wallet is not set.");
     }
 
-    // If the current environment is local, transfer 5 ETH to the wallet from the local faucet wallet
+    /**
+     * If the current environment is local, transfer 5 ETH to the wallet
+     * from the local faucet wallet
+     */
     if (CURRENT_ENVIRONMENT === "local") {
       if (!faucetWallet) {
         return toast.error("Faucet wallet not found.");

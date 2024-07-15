@@ -9,7 +9,8 @@ abi Counter {
     fn increment_counter(amount: u64) -> u64;
 }
 
-// The storage variables for the contract. In this case, there is only one variable called `counter` which is initialized to 0.
+/// The storage variables for the contract.
+/// In this case, there is only one variable called `counter` which is initialized to 0.
 storage {
     counter: u64 = 0,
 }

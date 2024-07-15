@@ -10,7 +10,8 @@ interface BrowserWallet extends AppWallet {
 }
 
 /**
- * This hook returns an instance of the browser wallet connected via any of the supported connectors.
+ * This hook returns an instance of the browser wallet connected via
+ * any of the supported connectors.
  **/
 export const useBrowserWallet: () => BrowserWallet = () => {
   const { wallet } = useWallet();
