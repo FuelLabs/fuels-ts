@@ -56,7 +56,7 @@ export default function Home() {
     // Call the increment_counter function on the contract
     const { waitForResult } = await contract.functions.increment_counter(bn(1)).call();
 
-    // Wait for the transaction to be mined, and then read the value returned by the contract call
+    // Wait for the transaction to be mined, and then read the value returned
     const { value } = await waitForResult();
     setCounter(value.toNumber());
 
