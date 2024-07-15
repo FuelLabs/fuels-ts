@@ -206,7 +206,7 @@ jobs:
           arch: amd64
           rootdir: ""
           workdir: ""
-      - uses: aws-actions/configure-aws-credentials@v1
+      - uses: aws-actions/configure-aws-credentials@v4
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
