@@ -1,4 +1,8 @@
-import type { TransactionResultMessageOutReceipt } from 'fuels';
+import type {
+  TransactionResultMessageOutReceipt,
+  CoinQuantityLike,
+  ExcludeResourcesOption,
+} from 'fuels';
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest } from 'fuels';
 import { TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
 
@@ -45,7 +49,7 @@ describe('querying the chain', () => {
 
   it('get spendable resources', async () => {
     // #region get-spendable-resources-1
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet, ScriptTransactionRequest };
+    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet, ScriptTransactionRequest, CoinQuantityLike, ExcludeResourcesOption };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
