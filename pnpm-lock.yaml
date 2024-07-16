@@ -240,9 +240,6 @@ importers:
       typescript:
         specifier: ^5
         version: 5.2.2
-      vitest:
-        specifier: ^1.6.0
-        version: 1.6.0(@types/node@20.11.13)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.18.2)
 
   apps/demo-bun-fuels:
     dependencies:
