@@ -164,7 +164,7 @@ describe('TransactionResponse', () => {
        * all our subscriptions would break.
        * We need at least one long test to ensure that the keep-alive messages are handled correctly.
        */
-      args: ['--poa-instant', 'false', '--poa-interval-period', '2s'],
+      args: ['--poa-instant', 'false', '--poa-interval-period', '17s'],
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
