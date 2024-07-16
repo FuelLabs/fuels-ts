@@ -152,7 +152,7 @@ describe('TransactionResponse', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
-  it.skip('should ensure waitForResult always waits for the transaction to be processed', async () => {
+  it.only('should ensure waitForResult always waits for the transaction to be processed', async () => {
     const { cleanup, ip, port } = await launchNode({
       /**
        * This is set to so long in order to test keep-alive message handling as well.
@@ -163,8 +163,8 @@ describe('TransactionResponse', () => {
        * because if the keep-alive message changed in any way between fuel-core versions and we missed it,
        * all our subscriptions would break.
        * We need at least one long test to ensure that the keep-alive messages are handled correctly.
-       * */
-      args: ['--poa-instant', 'false', '--poa-interval-period', '17sec'],
+       */
+      args: ['--poa-instant', 'false', '--poa-interval-period', '2s'],
     });
     const nodeProvider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
 
@@ -191,10 +191,12 @@ describe('TransactionResponse', () => {
 
     getSubscriptionStreamFromFetch(subscriptionStreamHolder);
 
-    await response.waitForResult();
+    const { isStatusSuccess } = await response.waitForResult();
 
     expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
     expect(response.gqlTransaction?.id).toBe(transactionId);
+
+    expect(isStatusSuccess).toBeTruthy();
 
     await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
 
