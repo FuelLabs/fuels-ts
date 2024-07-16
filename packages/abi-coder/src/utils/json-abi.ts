@@ -3,7 +3,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
-import { ENCODING_V1, type EncodingVersion } from './constants';
+import { ENCODING_V1, VOID_TYPE, type EncodingVersion } from './constants';
 
 /**
  * Asserts that the encoding version is supported by the ABI coder.
@@ -73,7 +73,7 @@ export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
 export const findNonEmptyInputs = (
   abi: JsonAbi,
   inputs: readonly JsonAbiArgument[]
-): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== '()');
+): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== VOID_TYPE);
 
 /**
  * Find the vector buffer argument in a list of components.

@@ -17,7 +17,7 @@ import type {
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
-import { OPTION_CODER_TYPE } from './utils/constants';
+import { OPTION_CODER_TYPE, VOID_TYPE } from './utils/constants';
 import {
   findFunctionByName,
   findNonEmptyInputs,
@@ -96,7 +96,7 @@ export class FunctionFragment<
 
     const inputTypes = inputs.map((input) => findTypeById(abi, input.type));
     const optionalInputs = inputTypes.filter(
-      (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
+      (x) => x.type === OPTION_CODER_TYPE || x.type === VOID_TYPE
     );
     if (optionalInputs.length === inputTypes.length) {
       return;
@@ -159,7 +159,7 @@ export class FunctionFragment<
 
   decodeOutput(data: BytesLike): [DecodedValue | undefined, number] {
     const outputAbiType = findTypeById(this.jsonAbi, this.jsonFn.output.type);
-    if (outputAbiType.type === '()') {
+    if (outputAbiType.type === VOID_TYPE) {
       return [undefined, 0];
     }
 
