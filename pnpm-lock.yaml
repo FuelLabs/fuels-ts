@@ -978,6 +978,9 @@ importers:
       toml:
         specifier: ^3.0.0
         version: 3.0.0
+      uglify-js:
+        specifier: ^3.18.0
+        version: 3.18.0
       yup:
         specifier: ^1.4.0
         version: 1.4.0
@@ -13024,6 +13027,11 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
+  uglify-js@3.18.0:
+    resolution: {integrity: sha512-SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==}
+    engines: {node: '>=0.8.0'}
+    hasBin: true
+
   uint8arrays@3.1.0:
     resolution: {integrity: sha512-ei5rfKtoRO8OyOIor2Rz5fhzjThwIHJZ3uyDPnDHTXbP0aMQ1RN/6AI5B5d9dBxJOU+BvOAk7ZQ1xphsX8Lrog==}
 
@@ -19172,7 +19180,7 @@ snapshots:
       ejs: 3.1.9
       json5: 2.2.3
       magic-string: 0.25.9
-      string.prototype.matchall: 4.0.8
+      string.prototype.matchall: 4.0.11
 
   '@svgr/babel-plugin-add-jsx-attribute@5.4.0': {}
 
@@ -21103,7 +21111,7 @@ snapshots:
     dependencies:
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-abstract: 1.22.3
+      es-abstract: 1.23.3
       es-array-method-boxes-properly: 1.0.0
       is-string: 1.0.7
 
@@ -24437,7 +24445,7 @@ snapshots:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.17.4
+      uglify-js: 3.18.0
 
   handlebars@4.7.8:
     dependencies:
@@ -27088,7 +27096,7 @@ snapshots:
       array.prototype.reduce: 1.0.5
       call-bind: 1.0.7
       define-properties: 1.2.1
-      es-abstract: 1.22.3
+      es-abstract: 1.23.3
       safe-array-concat: 1.0.1
 
   object.groupby@1.0.1:
@@ -29682,7 +29690,7 @@ snapshots:
       csso: 4.2.0
       js-yaml: 3.14.1
       mkdirp: 0.5.6
-      object.values: 1.1.7
+      object.values: 1.2.0
       sax: 1.2.4
       stable: 0.1.8
       unquote: 1.1.1
@@ -30348,6 +30356,8 @@ snapshots:
   uglify-js@3.17.4:
     optional: true
 
+  uglify-js@3.18.0: {}
+
   uint8arrays@3.1.0:
     dependencies:
       multiformats: 9.9.0
@@ -30560,7 +30570,7 @@ snapshots:
   util.promisify@1.0.1:
     dependencies:
       define-properties: 1.2.1
-      es-abstract: 1.22.3
+      es-abstract: 1.23.3
       has-symbols: 1.0.3
       object.getownpropertydescriptors: 2.1.6
 
