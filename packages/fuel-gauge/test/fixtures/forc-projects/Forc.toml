@@ -66,4 +66,5 @@ members = [
   "vector-types-contract",
   "vector-types-script",
   "vectors",
+  "void",
 ]
