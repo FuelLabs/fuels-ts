@@ -102,11 +102,7 @@ describe('Contract Factory', () => {
   });
 
   it('should not override user input maxFee when calling deployContract', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 5_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       wallets: [wallet],
     } = launched;
@@ -137,24 +133,24 @@ describe('Contract Factory', () => {
       storageSlots: StorageTestContractAbi__factory.storageSlots,
     });
 
-    const { waitForResult } = await contract.functions.return_var1().call();
-    const { value: var1 } = await waitForResult();
+    const call1 = await contract.functions.return_var1().call();
+    const { value: var1 } = await call1.waitForResult();
     expect(var1.toHex()).toEqual(toHex(0));
 
-    const { waitForResult: waitForSecondResult } = await contract.functions.return_var2().call();
-    const { value: var2 } = await waitForSecondResult();
+    const call2 = await contract.functions.return_var2().call();
+    const { value: var2 } = await call2.waitForResult();
     expect(var2).toEqual(20);
 
-    const { waitForResult: waitForThirdResult } = await contract.functions.return_var3().call();
-    const { value: var3 } = await waitForThirdResult();
+    const call3 = await contract.functions.return_var3().call();
+    const { value: var3 } = await call3.waitForResult();
     expect(var3).toEqual(30);
 
-    const { waitForResult: waitForFourthResult } = await contract.functions.return_var4().call();
-    const { value: var4 } = await waitForFourthResult();
+    const call4 = await contract.functions.return_var4().call();
+    const { value: var4 } = await call4.waitForResult();
     expect(var4).toEqual(true);
 
-    const { waitForResult: waitForFifthResult } = await contract.functions.return_var5().call();
-    const { value: var5 } = await waitForFifthResult();
+    const call5 = await contract.functions.return_var5().call();
+    const { value: var5 } = await call5.waitForResult();
     expect(JSON.stringify(var5)).toEqual(
       JSON.stringify({
         v1: true,
@@ -164,11 +160,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 5_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       wallets: [wallet],
     } = launched;
@@ -192,11 +184,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 5_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       wallets: [wallet],
     } = launched;

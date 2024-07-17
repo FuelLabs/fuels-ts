@@ -17,6 +17,7 @@ import {
 } from 'fuels';
 import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
+import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
   CallTestContractAbi__factory,
@@ -28,7 +29,7 @@ import { PredicateTrueAbi__factory } from '../test/typegen/predicates/factories/
 
 import { launchTestContract } from './utils';
 
-const contractsConfigs = [
+const contractsConfigs: DeployContractConfig[] = [
   {
     deployer: CallTestContractAbi__factory,
     bytecode: CallTestContractAbiHex,
@@ -172,11 +173,7 @@ function setupTestContract() {
  */
 describe('Contract', () => {
   it('generates function methods on a simple contract', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       wallets: [wallet],
     } = launched;
@@ -219,11 +216,7 @@ describe('Contract', () => {
   });
 
   it('assigns a provider if passed', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const { provider } = launched;
 
     const contract = new Contract(getRandomB256(), jsonFragment, provider);
@@ -744,11 +737,7 @@ describe('Contract', () => {
   });
 
   it('Parse create TX to JSON and parse back to create TX', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       provider,
       wallets: [wallet],
@@ -815,9 +804,6 @@ describe('Contract', () => {
   it('should transfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
     const {
       provider,
@@ -846,9 +832,6 @@ describe('Contract', () => {
   it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
     const {
       provider,
@@ -883,9 +866,6 @@ describe('Contract', () => {
   it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
     const {
       wallets: [wallet],
@@ -912,9 +892,6 @@ describe('Contract', () => {
 
     using launched = await launchTestNode({
       contractsConfigs,
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
     const {
       wallets: [wallet],
@@ -937,9 +914,6 @@ describe('Contract', () => {
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
     using launched = await launchTestNode({
       contractsConfigs,
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
     const {
       provider,
@@ -1017,11 +991,7 @@ describe('Contract', () => {
   });
 
   it('should ensure assets can be transfered to wallets (MULTI TRANSFER)', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       provider,
       wallets: [wallet],
@@ -1067,11 +1037,7 @@ describe('Contract', () => {
   });
 
   it('should throw when trying to transfer a zero or negative amount to a contract', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       provider,
       wallets: [wallet],
@@ -1205,11 +1171,7 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" does not modify the blockchain state', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       wallets: [wallet],
     } = launched;

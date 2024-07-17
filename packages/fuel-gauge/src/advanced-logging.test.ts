@@ -225,9 +225,6 @@ describe('Advanced Logging', () => {
           { deployer: ConfigurableContractAbi__factory, bytecode: ConfigurableContractAbiHex },
           { deployer: CoverageContractAbi__factory, bytecode: CoverageContractAbiHex },
         ],
-        walletsConfig: {
-          amountPerCoin: 500_000,
-        },
       });
 
       const {
@@ -288,8 +285,6 @@ describe('Advanced Logging', () => {
       amount,
     ];
 
-    beforeAll(async () => {});
-
     it('when using InvocationScope', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
@@ -299,9 +294,6 @@ describe('Advanced Logging', () => {
             bytecode: AdvancedLoggingOtherContractAbiHex,
           },
         ],
-        walletsConfig: {
-          amountPerCoin: 300_000,
-        },
       });
 
       const {
@@ -334,9 +326,6 @@ describe('Advanced Logging', () => {
             bytecode: AdvancedLoggingOtherContractAbiHex,
           },
         ],
-        walletsConfig: {
-          amountPerCoin: 300_000,
-        },
       });
 
       const {

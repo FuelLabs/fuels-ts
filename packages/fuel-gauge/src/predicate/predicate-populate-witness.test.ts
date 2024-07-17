@@ -34,11 +34,7 @@ describe('Predicate', () => {
       );
 
     it('should properly populate predicate data and remove placeholder witness [CASE 1]', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 100_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
       const {
         provider,
         wallets: [wallet],
@@ -88,11 +84,7 @@ describe('Predicate', () => {
     });
 
     it('should properly populate predicate data and remove placeholder witness [CASE 2]', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 100_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
       const {
         provider,
         wallets: [fundingWallet, wallet1],
@@ -150,7 +142,6 @@ describe('Predicate', () => {
     it('should properly populate predicate data and remove placeholder witness [CASE 3]', async () => {
       using launched = await launchTestNode({
         walletsConfig: {
-          amountPerCoin: 100_000_000,
           count: 3,
         },
       });
@@ -223,7 +214,6 @@ describe('Predicate', () => {
     it('should properly populate predicate data and remove placeholder witness [CASE 4]', async () => {
       using launched = await launchTestNode({
         walletsConfig: {
-          amountPerCoin: 100_000_000,
           count: 4,
         },
       });
@@ -319,7 +309,6 @@ describe('Predicate', () => {
     it('should properly populate predicate data and remove placeholder witness [CASE 5]', async () => {
       using launched = await launchTestNode({
         walletsConfig: {
-          amountPerCoin: 100_000_000,
           count: 3,
         },
       });
@@ -402,7 +391,6 @@ describe('Predicate', () => {
     it('should properly populate predicate data and remove placeholder witness [CASE 6]', async () => {
       using launched = await launchTestNode({
         walletsConfig: {
-          amountPerCoin: 100_000_000,
           count: 4,
         },
       });

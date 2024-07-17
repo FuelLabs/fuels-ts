@@ -31,9 +31,6 @@ describe('dry-run-multiple-txs', () => {
           bytecode: RevertErrorAbiHex,
         },
       ],
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
 
     const {
@@ -144,9 +141,6 @@ describe('dry-run-multiple-txs', () => {
           bytecode: AdvancedLoggingOtherContractAbiHex,
         },
       ],
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
 
     const {

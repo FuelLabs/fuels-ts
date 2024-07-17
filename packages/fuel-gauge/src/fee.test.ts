@@ -312,11 +312,7 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000_000_000,
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,

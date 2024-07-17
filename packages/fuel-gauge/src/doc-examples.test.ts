@@ -188,12 +188,7 @@ describe('Doc Examples', () => {
   });
 
   it('can create wallets', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100_000_000,
-        assets: [AssetId.A, AssetId.B],
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -260,11 +255,7 @@ describe('Doc Examples', () => {
   });
 
   it('can create a predicate and use', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
     const {
       provider,
       wallets: [fundingWallet],

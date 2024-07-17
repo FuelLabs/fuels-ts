@@ -25,7 +25,7 @@ const defaultValues = {
   },
 };
 
-async function setupContract(configurableConstants?: { [name: string]: unknown }) {
+function setupContract(configurableConstants?: { [name: string]: unknown }) {
   return launchTestNode({
     contractsConfigs: [
       {

@@ -92,9 +92,6 @@ describe('Bytes Tests', () => {
           bytecode: BytesAbiHex,
         },
       ],
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
     });
 
     const {
@@ -153,11 +150,7 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [script-bytes]', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 500_000,
-      },
-    });
+    using launched = await launchTestNode({});
 
     const {
       wallets: [wallet],

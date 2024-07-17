@@ -12,7 +12,7 @@ enum SmallEnum {
   Empty = 'Empty',
 }
 
-async function setupContract() {
+function setupContract() {
   return launchTestContract({
     deployer: VectorsAbi__factory,
     bytecode: VectorsAbiHex,

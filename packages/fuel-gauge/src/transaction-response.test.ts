@@ -77,11 +77,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
  */
 describe('TransactionResponse', () => {
   it('should ensure create method waits till a transaction response is given', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 500_000,
-      },
-    });
+    using launched = await launchTestNode({});
 
     const {
       provider,
@@ -107,11 +103,7 @@ describe('TransactionResponse', () => {
   });
 
   it('should ensure getTransactionSummary fetchs a transaction and assembles transaction summary', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 500_000,
-      },
-    });
+    using launched = await launchTestNode({});
 
     const {
       provider,
@@ -261,9 +253,6 @@ describe('TransactionResponse', () => {
     { retry: 10 },
     async () => {
       using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 500_000,
-        },
         nodeOptions: {
           args: ['--poa-instant', 'false', '--poa-interval-period', '4s', '--tx-pool-ttl', '1s'],
           loggingEnabled: false,

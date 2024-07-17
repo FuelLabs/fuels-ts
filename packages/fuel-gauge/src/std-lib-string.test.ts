@@ -15,7 +15,7 @@ import { launchTestContract } from './utils';
  * @group browser
  */
 
-async function setupContract() {
+function setupContract() {
   return launchTestContract({
     deployer: StdLibStringAbi__factory,
     bytecode: StdLibStringAbiHex,
@@ -44,11 +44,7 @@ describe('std-lib-string Tests', () => {
   });
 
   it('should test String input [predicate-std-lib-string]', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
 
     const {
       provider,
@@ -99,11 +95,7 @@ describe('std-lib-string Tests', () => {
   });
 
   it('should test String input [script-std-lib-string]', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 1_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
 
     const {
       wallets: [wallet],

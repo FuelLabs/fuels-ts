@@ -9,11 +9,7 @@ import { PredicateConditionalInputsAbi__factory } from '../test/typegen/predicat
  */
 describe('PredicateConditionalInputs', () => {
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
 
     const {
       provider,
@@ -90,11 +86,7 @@ describe('PredicateConditionalInputs', () => {
   });
 
   it('should execute custom transaction where predicate transfer to Alice (PREDICATE PAYS FEES)', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100_000_000,
-      },
-    });
+    using launched = await launchTestNode({});
 
     const {
       provider,

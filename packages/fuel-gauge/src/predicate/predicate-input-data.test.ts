@@ -13,11 +13,7 @@ import { fundPredicate } from './utils/predicate';
 describe('Predicate', () => {
   describe('Input Data', () => {
     it('throws invalid transaction when input_predicate_data is required for predicate validation', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
       const {
         provider,
         wallets: [wallet],

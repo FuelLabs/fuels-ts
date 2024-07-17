@@ -35,7 +35,7 @@ enum MixedNativeEnum {
   NotNative = 12,
 }
 
-async function setupContract() {
+function setupContract() {
   return launchTestContract({
     deployer: CoverageContractAbi__factory,
     bytecode: CoverageContractAbiHex,

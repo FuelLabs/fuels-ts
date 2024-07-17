@@ -22,11 +22,7 @@ describe('Predicate', () => {
     };
 
     it('calls a predicate with configurables using default values', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -66,11 +62,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where first param is equal', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -115,11 +107,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where second param is equal', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -164,11 +152,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with configurables where both params are equal', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -215,11 +199,7 @@ describe('Predicate', () => {
     });
 
     it('throws when configurable data is not set', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,

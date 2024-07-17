@@ -2,7 +2,7 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { ScriptTransactionRequest, Wallet, bn } from 'fuels';
-import { AssetId, launchTestNode } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -98,12 +98,7 @@ describe('Funding Transactions', () => {
   });
 
   it('should not fund a transaction request when it is already funded', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        count: 1,
-        amountPerCoin: 200_000_000,
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -281,12 +276,7 @@ describe('Funding Transactions', () => {
   });
 
   it('should ensure a partially funded Transaction will require only missing funds', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100_000_000,
-        assets: [AssetId.A, AssetId.B],
-      },
-    });
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -363,12 +353,7 @@ describe('Funding Transactions', () => {
   });
 
   it('should ensure a funded Transaction will not require more funds from another user', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100_000_000,
-        assets: [AssetId.A, AssetId.B],
-      },
-    });
+    using launched = await launchTestNode();
     const {
       provider,
       wallets: [fundedWallet],

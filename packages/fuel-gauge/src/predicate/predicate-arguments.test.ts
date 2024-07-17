@@ -23,11 +23,7 @@ describe('Predicate', () => {
     const amountToPredicate = 900_000;
 
     it('calls a predicate with valid address data and returns true', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -42,7 +38,7 @@ describe('Predicate', () => {
       });
 
       // transfer funds to predicate
-      await fundPredicate(fundingWallet, predicate, amountToPredicate);
+      await fundPredicate(fundingWallet, predicate, amountToPredicate, 3);
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -61,12 +57,8 @@ describe('Predicate', () => {
       expect(isStatusSuccess).toBeTruthy();
     });
 
-    it('calls a predicate with invalid address data and returns false', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+    it('calls a predicate with invalid address data and throws error', async () => {
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -91,11 +83,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -131,11 +119,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 100_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -150,7 +134,7 @@ describe('Predicate', () => {
       });
 
       // fund predicate
-      await fundPredicate(fundingWallet, predicate, 90_000_00);
+      await fundPredicate(fundingWallet, predicate, 90_000_00, 3);
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -165,11 +149,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -247,11 +227,7 @@ describe('Predicate', () => {
     });
 
     it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -286,11 +262,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -327,11 +299,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true - using setData', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
@@ -366,11 +334,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid multiple arguments and throws error', async () => {
-      using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 1_000_000_000,
-        },
-      });
+      using launched = await launchTestNode({});
 
       const {
         provider,
