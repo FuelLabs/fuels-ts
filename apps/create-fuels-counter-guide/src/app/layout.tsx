@@ -53,6 +53,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                  /**
                  * The list of wallet connectors.
                  * You can add or remove connectors from here based on your needs.
+                 * See https://wallet.fuel.network/docs/dev/connectors/
                  */
                 connectors: [
                   new FuelWalletConnector(),
