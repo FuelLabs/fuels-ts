@@ -1,5 +1,6 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { InputCoin } from '@fuel-ts/transactions';
+import { bn } from '@fuel-ts/math';
+import type { InputCoin, InputMessage } from '@fuel-ts/transactions';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 
 import {
@@ -119,5 +120,19 @@ describe('transaction-summary/input', () => {
     expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], ZeroBytes32)).toStrictEqual(
       MOCK_INPUT_MESSAGE
     );
+  });
+
+  it('should ensure getInputFromAssetId returns input message if the coin input amount is 0', () => {
+    const inputMessage: InputMessage = {
+      ...MOCK_INPUT_MESSAGE,
+      amount: bn(100),
+    };
+
+    const coinInput: InputCoin = {
+      ...MOCK_INPUT_COIN,
+      amount: bn(0),
+    };
+
+    expect(getInputFromAssetId([inputMessage, coinInput], ASSET_A)).toEqual(inputMessage);
   });
 });

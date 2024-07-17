@@ -37,10 +37,7 @@ export function getInputFromAssetId(inputs: Input[], assetId: string) {
   const coinInputs = getInputsCoin(inputs);
   const messageInputs = getInputsMessage(inputs);
   const coinInput = coinInputs.find((i) => i.assetId === assetId);
-  // TODO: should include assetId in InputMessage as well. for now we're mocking ETH
-  const messageInput = messageInputs.find(
-    (_) => assetId === '0x0000000000000000000000000000000000000000000000000000000000000000'
-  );
+  const messageInput = messageInputs.find(({ amount }) => !!amount && amount.gt(0));
 
   return coinInput || messageInput;
 }
