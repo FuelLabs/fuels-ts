@@ -5,7 +5,7 @@ import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotation
 
 import { launchTestContract } from './utils';
 
-async function launchPayableContract() {
+function launchPayableContract() {
   return launchTestContract({
     bytecode: PayableAnnotationAbiHex,
     deployer: PayableAnnotationAbi__factory,

@@ -117,7 +117,7 @@ describe('Funding Transactions', () => {
       mainWallet,
     });
 
-    // sender has 2 UTXOs for 500_000 each, so it has enough resources to spend 1000 of baseAssetId
+    // sender has 2 UTXOs for 200_000 each, so it has enough resources to spend 1000 of baseAssetId
     const enoughtResources = await sender.getResourcesToSpend([[100, provider.getBaseAssetId()]]);
 
     // confirm we only fetched 1 UTXO from the expected amount

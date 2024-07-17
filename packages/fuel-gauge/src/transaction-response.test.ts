@@ -102,8 +102,12 @@ describe('TransactionResponse', () => {
     expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
-  it('should ensure getTransactionSummary fetchs a transaction and assembles transaction summary', async () => {
-    using launched = await launchTestNode({});
+  it('should ensure getTransactionSummary fetches a transaction and assembles transaction summary', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
 
     const {
       provider,
@@ -207,9 +211,6 @@ describe('TransactionResponse', () => {
        * before the waitForResult (provider.operations.statusChange) call is made
        *  */
       using launched = await launchTestNode({
-        walletsConfig: {
-          amountPerCoin: 500_000,
-        },
         nodeOptions: {
           args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
           loggingEnabled: false,

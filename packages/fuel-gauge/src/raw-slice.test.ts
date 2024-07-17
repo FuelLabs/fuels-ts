@@ -19,7 +19,7 @@ type Wrapper = {
   inner_enum: SomeEnum;
 };
 
-async function setupRawSliceContract() {
+function setupRawSliceContract() {
   return launchTestContract({
     deployer: RawSliceAbi__factory,
     bytecode: RawSliceAbiHex,

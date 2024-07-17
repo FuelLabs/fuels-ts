@@ -9,7 +9,7 @@ const U8_MAX = 255;
 const U16_MAX = 65535;
 const U32_MAX = 4294967295;
 
-async function launchOptionsContract() {
+function launchOptionsContract() {
   return launchTestContract({
     bytecode: OptionsAbiHex,
     deployer: OptionsAbi__factory,
@@ -228,10 +228,7 @@ describe('Options Tests', () => {
   });
 
   it('echoes option enum diff sizes', async () => {
-    using contractInstance = await launchTestContract({
-      bytecode: OptionsAbiHex,
-      deployer: OptionsAbi__factory,
-    });
+    using contractInstance = await launchOptionsContract();
 
     const call1 = await contractInstance.functions.echo_enum_diff_sizes(undefined).call();
     const { value } = await call1.waitForResult();

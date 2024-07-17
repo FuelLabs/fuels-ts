@@ -10,7 +10,7 @@ import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex'
 
 import { launchTestContract } from './utils';
 
-async function launchContract() {
+function launchContract() {
   return launchTestContract({
     deployer: RevertErrorAbi__factory,
     bytecode: RevertErrorAbiHex,

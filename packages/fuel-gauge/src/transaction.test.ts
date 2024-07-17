@@ -10,6 +10,7 @@ describe('Transaction', () => {
     using launched = await launchTestNode({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+        loggingEnabled: false,
       },
     });
     const { provider } = launched;

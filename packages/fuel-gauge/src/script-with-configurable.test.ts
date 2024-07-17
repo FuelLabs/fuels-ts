@@ -13,7 +13,7 @@ const defaultValues = {
  */
 describe('Script With Configurable', () => {
   it('should returns true when input value matches default configurable constant', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -34,7 +34,7 @@ describe('Script With Configurable', () => {
   });
 
   it('should returns false when input value differs from default configurable constant', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -59,7 +59,7 @@ describe('Script With Configurable', () => {
   });
 
   it('should returns true when input value matches manually set configurable constant', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -82,7 +82,7 @@ describe('Script With Configurable', () => {
   });
 
   it('should returns false when input value differs from manually set configurable constant', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
