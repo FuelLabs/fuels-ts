@@ -10,7 +10,7 @@ import type { Option } from '../test/typegen/contracts/common';
  * @group node
  */
 describe('Void Tests', () => {
-  const contractsConfigs: DeployContractConfig[] = [
+  const contractsConfigs = [
     {
       deployer: VoidAbi__factory,
       bytecode: VoidAbiHex,
