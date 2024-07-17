@@ -46,10 +46,10 @@ export class Fuel extends FuelConnector {
   static STORAGE_KEY = 'fuel-current-connector';
   static defaultConfig: FuelConfig = {};
   private _storage?: StorageAbstract | null = null;
-  private _connectors: Array<FuelConnector> = [];
+  private readonly _connectors: Array<FuelConnector> = [];
   private _targetObject: TargetObject | null = null;
   private _unsubscribes: Array<() => void> = [];
-  private _targetUnsubscribe: () => void;
+  private readonly _targetUnsubscribe: () => void;
   private _pingCache: CacheFor = {};
   private _currentConnector?: FuelConnector | null;
 
