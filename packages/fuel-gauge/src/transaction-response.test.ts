@@ -211,6 +211,9 @@ describe('TransactionResponse', () => {
        * before the waitForResult (provider.operations.statusChange) call is made
        *  */
       using launched = await launchTestNode({
+        walletsConfig: {
+          amountPerCoin: 500_000,
+        },
         nodeOptions: {
           args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
           loggingEnabled: false,
