@@ -31,7 +31,7 @@ export default function Home() {
    */
   useAsync(async () => {
     if (wallet) {
-      // Create a new instance of the contrac
+      // Create a new instance of the contract
       const testContract = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
 
