@@ -230,4 +230,18 @@ describe('Contract Factory', () => {
       )
     );
   });
+
+  it('should not deploy contracts greater than 100KB', async () => {
+    const factory = await createContractFactory();
+    const largeByteCode = `0x${'00'.repeat(102400)}`;
+    factory.bytecode = largeByteCode;
+
+    await expectToThrowFuelError(
+      async () => factory.deployContract(),
+      new FuelError(
+        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
+        'Contract bytecode is too large. Max contract size is 100KB'
+      )
+    );
+  });
 });
