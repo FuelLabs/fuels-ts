@@ -4,8 +4,7 @@ export const getAllFiles = async (pathToDir: string) => {
   const files = await glob(`${pathToDir}/**/*`, {
     ignore: ['**/node_modules/**', '**/.next/**', '**/sway-api/**'],
   });
-  const filesWithoutPrefix = files.map((file) => file.replace(pathToDir, ''));
-  return filesWithoutPrefix;
+  return files.map((file) => file.replace(pathToDir, ''));
 };
 
 export const filterOriginalTemplateFiles = (files: string[]) => {
@@ -15,10 +14,7 @@ export const filterOriginalTemplateFiles = (files: string[]) => {
     if (file.includes('CHANGELOG')) {
       return false;
     }
-    if (['/gitignore', '/env'].includes(file)) {
-      return false;
-    }
-    return true;
+    return !['/gitignore', '/env'].includes(file);
   });
 
   return newFiles;
