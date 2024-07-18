@@ -7,6 +7,9 @@ import bytecode from '../test/typegen/contracts/CallTestContractAbi.hex';
 
 import { launchTestContract } from './utils';
 
+function setupContract() {
+  return launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+}
 const U64_MAX = bn(2).pow(64).sub(1);
 
 /**
@@ -15,8 +18,7 @@ const U64_MAX = bn(2).pow(64).sub(1);
  */
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
-
+    using contract = await setupContract();
     const { waitForResult } = await contract.functions.foo(num).call();
     const { value } = await waitForResult();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
@@ -30,8 +32,7 @@ describe('CallTestContract', () => {
     [{ a: false, b: U64_MAX.sub(1) }],
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
-
+    using contract = await setupContract();
     const { waitForResult } = await contract.functions.boo(struct).call();
     const { value } = await waitForResult();
     expect(value.a).toEqual(!struct.a);
@@ -39,7 +40,7 @@ describe('CallTestContract', () => {
   });
 
   it('can call a function with empty arguments', async () => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+    using contract = await setupContract();
 
     const call1 = await contract.functions.empty().call();
     const { value: empty } = await call1.waitForResult();
@@ -60,7 +61,7 @@ describe('CallTestContract', () => {
   });
 
   it('function with empty return should resolve undefined', async () => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+    using contract = await setupContract();
 
     // Call method with no params but with no result and no value on config
     const { waitForResult } = await contract.functions.return_void().call();
@@ -138,10 +139,7 @@ describe('CallTestContract', () => {
     async (method, { values, expected }) => {
       // Type cast to Contract because of the dynamic nature of the test
       // But the function names are type-constrained to correct Contract's type
-      using contract = await launchTestContract({
-        deployer: CallTestContractAbi__factory,
-        bytecode,
-      });
+      using contract = await setupContract();
 
       const { waitForResult } = await (contract as Contract).functions[method](...values).call();
       const { value } = await waitForResult();
@@ -155,7 +153,7 @@ describe('CallTestContract', () => {
   );
 
   it('Forward amount value on contract call', async () => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+    using contract = await setupContract();
     const baseAssetId = contract.provider.getBaseAssetId();
     const { waitForResult } = await contract.functions
       .return_context_amount()
@@ -170,7 +168,7 @@ describe('CallTestContract', () => {
   });
 
   it('Forward asset_id on contract call', async () => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+    using contract = await setupContract();
 
     const assetId = ASSET_A;
     const { waitForResult } = await contract.functions
@@ -186,7 +184,7 @@ describe('CallTestContract', () => {
   });
 
   it('Forward asset_id on contract simulate call', async () => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+    using contract = await setupContract();
 
     const assetId = ASSET_A;
     const { waitForResult } = await contract.functions
@@ -202,7 +200,7 @@ describe('CallTestContract', () => {
   });
 
   it('can make multiple calls', async () => {
-    using contract = await launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+    using contract = await setupContract();
 
     const num = 1337;
     const numC = 10;
@@ -240,20 +238,14 @@ describe('CallTestContract', () => {
   });
 
   it('Calling a simple contract function does only one dry run', async () => {
-    using contract = await launchTestContract({
-      deployer: CallTestContractAbi__factory,
-      bytecode,
-    });
+    using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
     await contract.functions.no_params().call();
     expect(dryRunSpy).toHaveBeenCalledOnce();
   });
 
   it('Simulating a simple contract function does two dry runs', async () => {
-    using contract = await launchTestContract({
-      deployer: CallTestContractAbi__factory,
-      bytecode,
-    });
+    using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
 
     await contract.functions.no_params().simulate();

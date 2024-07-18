@@ -49,7 +49,6 @@ describe('Funding Transactions', () => {
     const initialAmount = 500_000;
     using launched = await launchTestNode({
       walletsConfig: {
-        count: 2,
         amountPerCoin: initialAmount,
       },
     });
@@ -163,7 +162,6 @@ describe('Funding Transactions', () => {
     const initialAmount = 500_000;
     using launched = await launchTestNode({
       walletsConfig: {
-        count: 2,
         amountPerCoin: initialAmount,
       },
     });
@@ -216,7 +214,6 @@ describe('Funding Transactions', () => {
     const initialAmount = 100_000;
     using launched = await launchTestNode({
       walletsConfig: {
-        count: 2,
         amountPerCoin: initialAmount,
       },
     });

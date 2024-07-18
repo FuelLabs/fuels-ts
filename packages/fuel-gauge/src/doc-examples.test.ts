@@ -1,4 +1,4 @@
-import type { Bech32Address, BigNumberish, Bytes, JsonAbi, WalletLocked } from 'fuels';
+import type { Bech32Address, BigNumberish, Bytes, WalletLocked } from 'fuels';
 import {
   Predicate,
   bn,
@@ -277,67 +277,14 @@ describe('Doc Examples', () => {
 
     const receiver = Wallet.generate({ provider });
 
-    const AbiInputs: JsonAbi = {
-      types: [
-        {
-          typeId: 0,
-          type: 'bool',
-          components: null,
-          typeParameters: null,
-        },
-        {
-          typeId: 1,
-          type: 'struct B512',
-          components: null,
-          typeParameters: null,
-        },
-        {
-          typeId: 2,
-          type: '[_; 3]',
-          components: [
-            {
-              name: '__array_element',
-              type: 1,
-              typeArguments: null,
-            },
-          ],
-
-          typeParameters: null,
-        },
-      ],
-      functions: [
-        {
-          inputs: [
-            {
-              name: 'data',
-              type: 2,
-              typeArguments: null,
-            },
-          ],
-          name: 'main',
-          output: {
-            name: '',
-            type: 0,
-            typeArguments: null,
-          },
-          attributes: null,
-        },
-      ],
-      loggedTypes: [],
-      configurables: [],
-      messagesTypes: [],
-    };
     const dataToSign = '0x0000000000000000000000000000000000000000000000000000000000000000';
     const signature1 = await wallet1.signMessage(dataToSign);
     const signature2 = await wallet2.signMessage(dataToSign);
     const signature3 = await wallet3.signMessage(dataToSign);
-    const signatures = [signature1, signature2, signature3];
-    const predicate = new Predicate({
-      bytecode: PredicateTripleSigAbi__factory.bin,
-      provider,
-      abi: AbiInputs,
-      inputData: [signatures],
-    });
+    const predicate = PredicateTripleSigAbi__factory.createInstance(provider, [
+      [signature1, signature2, signature3],
+    ]);
+
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;
 

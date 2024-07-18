@@ -1,4 +1,4 @@
-import { ContractFactory, Predicate, ScriptTransactionRequest, Wallet, getRandomB256 } from 'fuels';
+import { ContractFactory, ScriptTransactionRequest, Wallet, getRandomB256 } from 'fuels';
 import type { BN } from 'fuels';
 import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
@@ -193,20 +193,19 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract call', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: CallTestContractAbi__factory,
+          bytecode: CallTestContractAbiHex,
+        },
+      ],
+    });
 
     const {
+      contracts: [contract],
       wallets: [wallet],
     } = launched;
-
-    const factory = new ContractFactory(
-      CallTestContractAbiHex,
-      CallTestContractAbi__factory.abi,
-      wallet
-    );
-
-    const deploy = await factory.deployContract();
-    const { contract } = await deploy.waitForResult();
 
     const balanceBefore = await wallet.getBalance();
 
@@ -319,12 +318,7 @@ describe('Fee', () => {
       wallets: [wallet],
     } = launched;
 
-    const predicate = new Predicate({
-      bytecode: PredicateU32Abi__factory.bin,
-      abi: PredicateU32Abi__factory.abi,
-      provider,
-      inputData: [1078],
-    });
+    const predicate = PredicateU32Abi__factory.createInstance(provider, [1078]);
 
     const tx1 = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
     await tx1.wait();

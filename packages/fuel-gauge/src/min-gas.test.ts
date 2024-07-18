@@ -3,7 +3,6 @@ import {
   TransactionStatus,
   ScriptTransactionRequest,
   Address,
-  Predicate,
   hexlify,
   getGasUsedFromReceipts,
   BigNumberCoder,
@@ -118,12 +117,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = new Predicate({
-      bytecode: ComplexPredicateAbi__factory.bin,
-      abi: ComplexPredicateAbi__factory.abi,
-      provider,
-      inputData: [bn(1000)],
-    });
+    const predicate = ComplexPredicateAbi__factory.createInstance(provider, [bn(1000)]);
 
     /**
      * Fund the predicate
@@ -171,12 +165,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = new Predicate({
-      bytecode: ComplexPredicateAbi__factory.bin,
-      abi: ComplexPredicateAbi__factory.abi,
-      provider,
-      inputData: [bn(1000)],
-    });
+    const predicate = ComplexPredicateAbi__factory.createInstance(provider, [bn(1000)]);
 
     /**
      * Fund the predicate
