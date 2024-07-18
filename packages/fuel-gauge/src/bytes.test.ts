@@ -1,5 +1,4 @@
-import { bn, Predicate, Wallet, Address } from 'fuels';
-import type { BN } from 'fuels';
+import { bn, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateBytesAbi__factory, ScriptBytesAbi__factory } from '../test/typegen';
@@ -8,15 +7,6 @@ import BytesAbiHex from '../test/typegen/contracts/BytesAbi.hex';
 
 import { launchTestContract } from './utils';
 
-type SomeEnum = {
-  First?: boolean;
-  Second?: number[];
-};
-
-type Wrapper = {
-  inner: number[][];
-  inner_enum: SomeEnum;
-};
 /**
  * @group node
  * @group browser
@@ -27,9 +17,8 @@ describe('Bytes Tests', () => {
       deployer: BytesAbi__factory,
       bytecode: BytesAbiHex,
     });
-    const INPUT = 10;
 
-    const { waitForResult } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
+    const { waitForResult } = await contractInstance.functions.return_bytes(10).call();
     const { value } = await waitForResult();
 
     expect(value).toStrictEqual(new Uint8Array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]));
@@ -41,9 +30,7 @@ describe('Bytes Tests', () => {
       bytecode: BytesAbiHex,
     });
 
-    const INPUT = 100;
-
-    const { waitForResult } = await contractInstance.functions.return_bytes(INPUT).call<number[]>();
+    const { waitForResult } = await contractInstance.functions.return_bytes(100).call();
     const { value } = await waitForResult();
 
     expect(value).toStrictEqual(new Uint8Array(Array.from({ length: 100 }, (e, i) => i)));
@@ -57,7 +44,7 @@ describe('Bytes Tests', () => {
 
     const INPUT = [40, 41, 42];
 
-    const { waitForResult } = await contractInstance.functions.accept_bytes(INPUT).call<number[]>();
+    const { waitForResult } = await contractInstance.functions.accept_bytes(INPUT).call();
     const { value } = await waitForResult();
 
     expect(value).toBeUndefined();
@@ -70,14 +57,12 @@ describe('Bytes Tests', () => {
     });
     const bytes = [40, 41, 42];
 
-    const INPUT: Wrapper = {
-      inner: [bytes, bytes],
-      inner_enum: { Second: bytes },
-    };
-
     const { waitForResult } = await contractInstance.functions
-      .accept_nested_bytes(INPUT)
-      .call<number[]>();
+      .accept_nested_bytes({
+        inner: [bytes, bytes],
+        inner_enum: { Second: bytes },
+      })
+      .call();
 
     const { value } = await waitForResult();
 
@@ -101,20 +86,15 @@ describe('Bytes Tests', () => {
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 500_000;
     const amountToReceiver = 50;
-    type MainArgs = [Wrapper];
 
     const bytes = [40, 41, 42];
-    const INPUT: Wrapper = {
-      inner: [bytes, bytes],
-      inner_enum: { Second: bytes },
-    };
 
-    const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateBytesAbi__factory.bin,
-      abi: PredicateBytesAbi__factory.abi,
-      provider: wallet.provider,
-      inputData: [INPUT],
-    });
+    const predicate = PredicateBytesAbi__factory.createInstance(wallet.provider, [
+      {
+        inner: [bytes, bytes],
+        inner_enum: { Second: bytes },
+      },
+    ]);
 
     // setup predicate
     const setupTx = await wallet.transfer(
@@ -157,14 +137,15 @@ describe('Bytes Tests', () => {
     } = launched;
 
     const bytes = [40, 41, 42];
-    const INPUT: Wrapper = {
-      inner: [bytes, bytes],
-      inner_enum: { Second: bytes },
-    };
 
     const scriptInstance = ScriptBytesAbi__factory.createInstance(wallet);
 
-    const { waitForResult } = await scriptInstance.functions.main(1, INPUT).call<BN>();
+    const { waitForResult } = await scriptInstance.functions
+      .main(1, {
+        inner: [bytes, bytes],
+        inner_enum: { Second: bytes },
+      })
+      .call();
     const { value } = await waitForResult();
 
     expect(value).toBe(true);
