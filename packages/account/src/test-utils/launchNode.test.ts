@@ -54,9 +54,9 @@ describe('launchNode', () => {
    * ensures that the node will be killed.
    */
   it('spawns the fuel-core node in a detached state and kills the process group on cleanup', async () => {
+    const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
     const killSpy = vi.spyOn(process, 'kill');
 
-    const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
     const { cleanup, pid } = await launchNode();
 
     const spawnOptions = spawnSpy.mock.calls[0][2];
