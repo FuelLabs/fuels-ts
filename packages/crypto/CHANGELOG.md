@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/utils@0.92.1
+
 ## 0.92.0
 
 ### Patch Changes
