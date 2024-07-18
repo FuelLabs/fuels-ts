@@ -1,4 +1,4 @@
-import { Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
+import { Wallet, ScriptTransactionRequest, bn } from 'fuels';
 import { launchTestNode, ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import { PredicateConditionalInputsAbi__factory } from '../test/typegen/predicates';
@@ -22,11 +22,8 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const predicate = new Predicate({
-      bytecode: PredicateConditionalInputsAbi__factory.bin,
-      abi: PredicateConditionalInputsAbi__factory.abi,
-      provider,
-      configurableConstants: { MAKER: aliceWallet.address.toB256() },
+    const predicate = PredicateConditionalInputsAbi__factory.createInstance(provider, undefined, {
+      MAKER: aliceWallet.address.toB256(),
     });
 
     // transfer asset A to predicate so it can transfer to alice
@@ -99,11 +96,8 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const predicate = new Predicate({
-      bytecode: PredicateConditionalInputsAbi__factory.bin,
-      abi: PredicateConditionalInputsAbi__factory.abi,
-      provider,
-      configurableConstants: { MAKER: aliceWallet.address.toB256() },
+    const predicate = PredicateConditionalInputsAbi__factory.createInstance(provider, undefined, {
+      MAKER: aliceWallet.address.toB256(),
     });
 
     // transfer asset A to predicate so it can transfer to alice
