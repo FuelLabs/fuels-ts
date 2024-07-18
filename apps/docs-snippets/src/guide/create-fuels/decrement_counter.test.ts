@@ -4,6 +4,10 @@ import { describe, test, expect } from 'vitest';
 import { CounterAbi__factory } from '../../../test/typegen';
 import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Counter Contract', () => {
   // #region decrement-counter
   // #context import { CounterAbi__factory } from './sway-programs-api';
@@ -40,7 +44,7 @@ describe('Counter Contract', () => {
 
     // Next we'll increment the counter, so that we can decrement it.
     const { waitForResult: incWaitForResult } = await contract.functions
-      .increment_counterer(5)
+      .increment_counter(5)
       .call();
     const { value: incValue } = await incWaitForResult();
     expect(incValue.toNumber()).toBe(incrementedValue);
