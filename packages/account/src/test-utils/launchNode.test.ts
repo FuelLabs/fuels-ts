@@ -46,6 +46,29 @@ describe('launchNode', () => {
     await waitUntilUnreachable(url);
   });
 
+  /**
+   * Spawning the child process in a detached state
+   * Results in the OS assigning a process group to the child.
+   * Combining that with `process.kill(-pid)`,
+   * which sends a "kill process group" signal to the OS,
+   * ensures that the node will be killed.
+   */
+  it('spawns the fuel-core node in a detached state and kills the process group on cleanup', async () => {
+    const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
+    const killSpy = vi.spyOn(process, 'kill');
+
+    const { cleanup, pid } = await launchNode();
+
+    const spawnOptions = spawnSpy.mock.calls[0][2];
+    expect(spawnOptions.detached).toBeTruthy();
+
+    cleanup();
+
+    expect(killSpy).toHaveBeenCalledTimes(1);
+    // adding a minus prefix kills the process group
+    expect(killSpy).toHaveBeenCalledWith(-pid);
+  });
+
   test('should start `fuel-core` node using system binary', async () => {
     const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
 
