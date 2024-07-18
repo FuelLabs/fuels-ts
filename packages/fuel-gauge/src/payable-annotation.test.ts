@@ -39,7 +39,21 @@ test("don't allow sending coins to non-payable functions", async () => {
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should fail because the function is not payable
-  await expect(() =>
+expect(async () => {
+    const tx = await contract.functions
+      .non_payable()
+      .callParams({
+        forward: {
+          amount: bn(100),
+          assetId: baseAssetId,
+        },
+      })
+      .call();
+
+    await tx.waitForResult();
+  }).rejects.toThrowError(
+    `The target function non_payable cannot accept forwarded funds as it's not marked as 'payable'.`
+  );
     contract.functions
       .non_payable()
       .callParams({
