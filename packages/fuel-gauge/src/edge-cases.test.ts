@@ -24,7 +24,7 @@ describe('Edge Cases', () => {
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,

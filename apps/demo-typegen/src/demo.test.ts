@@ -16,7 +16,7 @@ import { ScriptAbi__factory } from './script-types';
  */
 describe('ExampleContract', () => {
   it('with imported storage slots', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -34,7 +34,7 @@ describe('ExampleContract', () => {
     expect(contract.id).toBeTruthy();
   });
   it('should return the input', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -65,7 +65,7 @@ describe('ExampleContract', () => {
   });
 
   it('deployContract method', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -92,7 +92,7 @@ describe('ExampleContract', () => {
 // #endregion Testing-in-ts-ts
 
 it('should throw when simulating via contract factory with wallet with no resources', async () => {
-  using launched = await launchTestNode({});
+  using launched = await launchTestNode();
 
   const {
     provider,
@@ -112,7 +112,7 @@ it('should throw when simulating via contract factory with wallet with no resour
 });
 
 it('should not throw when dry running via contract factory with wallet with no resources', async () => {
-  using launched = await launchTestNode({});
+  using launched = await launchTestNode();
 
   const {
     provider,
@@ -129,7 +129,7 @@ it('should not throw when dry running via contract factory with wallet with no r
 });
 
 test('Example script', async () => {
-  using launched = await launchTestNode({});
+  using launched = await launchTestNode();
 
   const {
     wallets: [wallet],
@@ -151,7 +151,7 @@ test('Example predicate', async () => {
   // #context import { PredicateAbi__factory } from './types';
 
   // In this exchange, we are first transferring some coins to the predicate
-  using launched = await launchTestNode({});
+  using launched = await launchTestNode();
 
   const {
     provider,

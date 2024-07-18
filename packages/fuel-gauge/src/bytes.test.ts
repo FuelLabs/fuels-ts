@@ -150,7 +150,7 @@ describe('Bytes Tests', () => {
   });
 
   it('should test bytes input [script-bytes]', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],

@@ -33,7 +33,7 @@ describe('Predicate', () => {
     const fundingAmount = 10_000;
 
     it('estimatePredicates should assign gas to the correct input', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         wallets: [wallet],
@@ -130,7 +130,7 @@ describe('Predicate', () => {
     });
 
     test('predicate does not get estimated again if it has already been estimated', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         wallets: [wallet],
@@ -158,7 +158,7 @@ describe('Predicate', () => {
     });
 
     test('Predicates get estimated if one of them is not estimated', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         wallets: [wallet],
@@ -203,7 +203,7 @@ describe('Predicate', () => {
     });
 
     test('transferring funds from a predicate estimates the predicate and does only one dry run', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         wallets: [wallet],
@@ -248,7 +248,7 @@ describe('Predicate', () => {
 
     describe('predicate resource fetching and predicateData population', () => {
       test('getting predicate resources via the predicate automatically populates predicateData', async () => {
-        using launched = await launchTestNode({});
+        using launched = await launchTestNode();
 
         const {
           wallets: [wallet],
@@ -282,7 +282,7 @@ describe('Predicate', () => {
       });
 
       test('getting predicate resources via the provider requires manual predicateData population', async () => {
-        using launched = await launchTestNode({});
+        using launched = await launchTestNode();
 
         const {
           wallets: [wallet],

@@ -13,7 +13,7 @@ import {
  */
 describe('Script With Vectors', () => {
   it('can call script and use main argument [array]', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -29,7 +29,7 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [vec]', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -59,7 +59,7 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
@@ -103,7 +103,7 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],

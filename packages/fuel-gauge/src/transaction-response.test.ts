@@ -77,7 +77,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
  */
 describe('TransactionResponse', () => {
   it('should ensure create method waits till a transaction response is given', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,

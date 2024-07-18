@@ -54,7 +54,7 @@ describe('TransactionSummary', () => {
   };
 
   it('should ensure getTransactionSummary executes just fine', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -98,7 +98,7 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -151,7 +151,7 @@ describe('TransactionSummary', () => {
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -209,7 +209,7 @@ describe('TransactionSummary', () => {
     };
 
     it('should ensure transfer operation is assembled (ACCOUNT TRANSFER)', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -522,7 +522,7 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure transfer operations are assembled (CUSTOM SCRIPT TRANSFER)', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,

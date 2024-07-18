@@ -255,7 +255,7 @@ describe('Doc Examples', () => {
   });
 
   it('can create a predicate and use', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
     const {
       provider,
       wallets: [fundingWallet],

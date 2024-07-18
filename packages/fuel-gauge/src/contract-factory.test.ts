@@ -102,7 +102,7 @@ describe('Contract Factory', () => {
   });
 
   it('should not override user input maxFee when calling deployContract', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
     const {
       wallets: [wallet],
     } = launched;
@@ -160,7 +160,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage (dynamic key)', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
     const {
       wallets: [wallet],
     } = launched;
@@ -184,7 +184,7 @@ describe('Contract Factory', () => {
   });
 
   it('Creates a contract with initial storage. Both dynamic key and fixed vars', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
     const {
       wallets: [wallet],
     } = launched;

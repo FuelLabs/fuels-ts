@@ -40,7 +40,7 @@ describe('await-execution', () => {
   });
 
   test.skip('transferring funds with awaitExecution works', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const { provider } = launched;
 
@@ -62,7 +62,7 @@ describe('await-execution', () => {
   });
 
   test('withdrawToBaseLayer works with awaitExecution', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,

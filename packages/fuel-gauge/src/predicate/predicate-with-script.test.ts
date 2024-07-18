@@ -17,7 +17,7 @@ import { fundPredicate } from './utils/predicate';
 describe('Predicate', () => {
   describe('With script', () => {
     it('calls a predicate and uses proceeds for a script call', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
       const {
         provider,
         wallets: [wallet],

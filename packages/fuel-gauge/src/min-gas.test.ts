@@ -24,7 +24,7 @@ import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAb
  */
 describe('Minimum gas tests', () => {
   it('sets gas requirements (contract)', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -70,7 +70,7 @@ describe('Minimum gas tests', () => {
   });
 
   it('sets gas requirements (script)', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -108,7 +108,7 @@ describe('Minimum gas tests', () => {
   });
 
   it('sets gas requirements (predicate)', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -159,7 +159,7 @@ describe('Minimum gas tests', () => {
   });
 
   it('sets gas requirements (account and predicate with script)', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,

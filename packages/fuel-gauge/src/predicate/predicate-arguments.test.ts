@@ -23,7 +23,7 @@ describe('Predicate', () => {
     const amountToPredicate = 900_000;
 
     it('calls a predicate with valid address data and returns true', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -58,7 +58,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid address data and throws error', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -83,7 +83,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid u32 data and returns true', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -119,7 +119,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid u32 data and returns false', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -149,7 +149,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with a valid struct argument and returns true', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -227,7 +227,7 @@ describe('Predicate', () => {
     });
 
     it('can call a Coin predicate which returns true with valid predicate data [main args vector]', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -262,7 +262,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -299,7 +299,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with valid multiple arguments and returns true - using setData', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,
@@ -334,7 +334,7 @@ describe('Predicate', () => {
     });
 
     it('calls a predicate with invalid multiple arguments and throws error', async () => {
-      using launched = await launchTestNode({});
+      using launched = await launchTestNode();
 
       const {
         provider,

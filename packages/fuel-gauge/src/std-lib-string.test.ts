@@ -44,7 +44,7 @@ describe('std-lib-string Tests', () => {
   });
 
   it('should test String input [predicate-std-lib-string]', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       provider,
@@ -95,7 +95,7 @@ describe('std-lib-string Tests', () => {
   });
 
   it('should test String input [script-std-lib-string]', async () => {
-    using launched = await launchTestNode({});
+    using launched = await launchTestNode();
 
     const {
       wallets: [wallet],
