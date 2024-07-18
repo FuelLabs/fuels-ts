@@ -1,16 +1,10 @@
 /* eslint-disable max-classes-per-file */
-import {
-  Fuel,
-  LocalStorage,
-  MemoryStorage,
-  FuelConnector,
-  FuelConnectorEventType,
-  FuelConnectorEventTypes,
-} from 'fuels';
+import { Fuel, LocalStorage, MemoryStorage, FuelConnector } from 'fuels';
 import type { TargetObject, Network, Asset } from 'fuels';
 
 // prettier-ignore
 // #region fuel-connector-extends
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class MyWalletConnector extends FuelConnector
 // #endregion fuel-connector-extends
 {}
