@@ -10,7 +10,7 @@ export interface ProgramOptions {
   npm?: boolean;
   bun?: boolean;
   verbose?: boolean;
-  'no-install'?: boolean;
+  install?: boolean;
 }
 
 export const setupProgram = () => {
@@ -21,7 +21,7 @@ export const setupProgram = () => {
     .option('--npm', 'Use npm to install dependencies')
     .option('--bun', 'Use bun to install dependencies')
     .option('--verbose', 'Enable verbose logging')
-    .option('--no-install', `Do not install dependencies after scaffolding`, false)
+    .option('--no-install', 'Do not install dependencies')
     .addHelpCommand()
     .showHelpAfterError(true);
   return program;
