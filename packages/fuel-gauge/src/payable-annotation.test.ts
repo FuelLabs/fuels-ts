@@ -39,7 +39,7 @@ test("don't allow sending coins to non-payable functions", async () => {
   const baseAssetId = contract.provider.getBaseAssetId();
 
   // This should fail because the function is not payable
-  expect(async () => {
+  await expect(async () => {
     const tx = await contract.functions
       .non_payable()
       .callParams({
