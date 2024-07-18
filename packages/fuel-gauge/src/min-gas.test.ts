@@ -3,7 +3,6 @@ import {
   TransactionStatus,
   ScriptTransactionRequest,
   Address,
-  Predicate,
   hexlify,
   getGasUsedFromReceipts,
   BigNumberCoder,
