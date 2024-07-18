@@ -67,7 +67,7 @@ export enum ErrorCode {
   INVALID_TRANSACTION_INPUT = 'invalid-transaction-input',
   INVALID_TRANSACTION_OUTPUT = 'invalid-transaction-output',
   INVALID_TRANSACTION_STATUS = 'invalid-transaction-status',
-  INVALID_TRANSACTION_TYPE = 'invalid-transaction-type',
+  UNSUPPORTED_TRANSACTION_TYPE = 'unsupported-transaction-type',
   TRANSACTION_ERROR = 'transaction-error',
   INVALID_POLICY_TYPE = 'invalid-policy-type',
   DUPLICATED_POLICY = 'duplicated-policy',

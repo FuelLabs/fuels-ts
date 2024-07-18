@@ -174,9 +174,9 @@ When the transaction status received from the node is unexpected.
 
 Check the status received is within `TransactionStatus`.
 
-### `INVALID_TRANSACTION_TYPE`
+### `UNSUPPORTED_TRANSACTION_TYPE`
 
-When the transaction type from the Fuel Node is _not_ valid.
+When the transaction type from the Fuel Node is _not_ supported.
 
 The type is within [`TransactionType`](../../api/Account/TransactionType.md).
 
