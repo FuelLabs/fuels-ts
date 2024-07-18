@@ -21,6 +21,4 @@ describe('Transaction', () => {
 
     cleanup();
   });
-
-  
 });
