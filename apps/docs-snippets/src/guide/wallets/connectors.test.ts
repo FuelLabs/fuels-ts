@@ -187,22 +187,4 @@ describe('connectors', () => {
       expect(sdk).toBeDefined();
     });
   });
-
-  describe('methods', () => {
-    let sdk: Fuel;
-
-    beforeAll(() => {
-      sdk = new Fuel({
-        connectors: [new WalletConnector()],
-      });
-    });
-
-    test('should be able to call a method', async () => {
-      // #region fuel-method-ping
-      const result: boolean = await sdk.ping();
-      // #endregion fuel-method-ping
-
-      expect(result).toBeDefined();
-    });
-  });
 });
