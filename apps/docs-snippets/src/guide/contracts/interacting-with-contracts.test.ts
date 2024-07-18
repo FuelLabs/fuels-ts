@@ -59,9 +59,7 @@ describe(__filename, () => {
     const contract = counterContract;
 
     // #region interacting-with-contracts-4
-    const { transactionId, waitForResult } = await contract.functions
-      .increment_counter(10)
-      .call();
+    const { transactionId, waitForResult } = await contract.functions.increment_counter(10).call();
 
     const { value } = await waitForResult();
     // #endregion interacting-with-contracts-4
