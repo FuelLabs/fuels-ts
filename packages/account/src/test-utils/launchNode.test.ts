@@ -38,16 +38,10 @@ describe('launchNode', () => {
   });
 
   it('cleanup kills the started node', async () => {
-    const killSpy = vi.spyOn(process, 'kill');
-
-    const { cleanup, url, pid } = await launchNode();
+    const { cleanup, url } = await launchNode();
     expect(await fetch(url)).toBeTruthy();
 
     cleanup();
-
-    expect(killSpy).toHaveBeenCalledTimes(1);
-    // adding a minus prefix kills the process group
-    expect(killSpy).toHaveBeenCalledWith(-pid);
 
     await waitUntilUnreachable(url);
   });
@@ -59,13 +53,20 @@ describe('launchNode', () => {
    * which sends a "kill process group" signal to the OS,
    * ensures that the node will be killed.
    */
-  it('spawns the fuel-core node in a detached state', async () => {
+  it('spawns the fuel-core node in a detached state and kills the process group on cleanup', async () => {
+    const killSpy = vi.spyOn(process, 'kill');
+
     const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
-    const { cleanup } = await launchNode();
-    cleanup();
+    const { cleanup, pid } = await launchNode();
 
     const spawnOptions = spawnSpy.mock.calls[0][2];
     expect(spawnOptions.detached).toBeTruthy();
+
+    cleanup();
+
+    expect(killSpy).toHaveBeenCalledTimes(1);
+    // adding a minus prefix kills the process group
+    expect(killSpy).toHaveBeenCalledWith(-pid);
   });
 
   test('should start `fuel-core` node using system binary', async () => {
