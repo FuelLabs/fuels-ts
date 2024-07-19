@@ -30,6 +30,12 @@ When converting a big number into an incompatible format.
 
 Ensure that the value you've supplied to the big number is compatible with the value you are converting to.
 
+### `CONTRACT_SIZE_EXCEEDS_LIMIT`
+
+When the contract size exceeds the maximum contract size limit.
+
+Ensure that the contract size is less than the maximum contract size limit, of 100 KB. This can be validated by checking the bytecode length of the contract.
+
 ### `DUPLICATED_POLICY`
 
 When there are more than policies with the same type, for a transaction.
