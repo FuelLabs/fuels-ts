@@ -67,7 +67,7 @@ async function getChangelogInfo(
   const releaseNotes = releaseNotesRegex.exec(body ?? "")?.[1].trim() ?? "";
 
   const prLink = formattedPrLink?.replace(/.*\((.*)\)/, "$1"); // [#2637](https://github.com/FuelLabs/fuels-ts/pull/2637) -> https://github.com/FuelLabs/fuels-ts/pull/2637
-  const migrationNote = `### [#${prNo} - ${capitalize(titleDescription)}](${prLink})
+  const migrationNote = `### ${capitalize(titleDescription)} - [#${prNo}](${prLink})
 
   ${breakingChanges}`;
 
@@ -173,7 +173,7 @@ function listMigrationNotes(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `## ${groupTitle}
-${c.map((changelog) => changelog.views.migrationNote).join("\n")}`,
+${c.map((changelog) => changelog.views.migrationNote).join("\n\n")}`,
     )
     .join("\n\n")
     .trim();
