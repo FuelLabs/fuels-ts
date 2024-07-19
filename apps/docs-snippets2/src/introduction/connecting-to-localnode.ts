@@ -8,5 +8,5 @@ const wallet = Wallet.fromAddress(ADDRESS, provider);
 
 const { balances } = await wallet.getBalances();
 
-console.log(balances);
+console.log({ balances });
 // #endregion main

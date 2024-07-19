@@ -32,6 +32,5 @@ export const main = async (passLogsThrough: boolean = false): Promise<any | any[
   // eslint-disable-next-line no-global-assign
   console = bkpConsole;
 
-  const singleCall = logs.length === 1 && logs[0].length === 1;
-  return singleCall ? logs[0][0] : logs;
+  return logs;
 };
