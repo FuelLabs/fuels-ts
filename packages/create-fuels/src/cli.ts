@@ -38,10 +38,12 @@ function writeEnvFile(envFilePath: string) {
 
 export const runScaffoldCli = async ({
   program,
+  templateName = 'nextjs',
   args = process.argv,
 }: {
   program: Command;
   args: string[];
+  templateName: string;
 }) => {
   program.parse(args);
 
@@ -84,7 +86,8 @@ export const runScaffoldCli = async ({
 
   await mkdir(projectPath);
 
-  await cp(join(__dirname, '../templates/nextjs'), projectPath, {
+  const templateDir = join(__dirname, '..', 'templates', templateName);
+  await cp(templateDir, projectPath, {
     recursive: true,
     filter: (filename) => !filename.includes('CHANGELOG.md'),
   });
