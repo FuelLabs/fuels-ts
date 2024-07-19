@@ -118,7 +118,7 @@ export const runScaffoldCli = async ({
 
   fileCopySpinner.succeed('Copied template files!');
 
-  if (opts['no-install'] === false) {
+  if (opts.install) {
     const installDepsSpinner = ora({
       text: 'Installing dependencies..',
       color: 'green',
