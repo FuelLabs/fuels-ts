@@ -62,6 +62,18 @@ The `accounts` event is emitted every time the accounts of a connector change. T
 
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-accounts{ts:line-numbers}
 
+#### `connectors`
+
+The `connectors` event is emitted on initialization of the connectors. The event data will be an array of [`FuelConnector`](../../api/Account/FuelConnector.md) objects that are available on the network.
+
+<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-connectors{ts:line-numbers}
+
+#### `currentConnector`
+
+The `currentConnector` event is emitted every time the current connector changes. The event data will be a [`FuelConnector`](../../api/Account/FuelConnector.md) object that is currently connected.
+
+<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-currentConnector{ts:line-numbers}
+
 #### `currentAccount`
 
 The `currentAccount` event is emitted every time the current account changes. The event data will be a `string` that will contain the current account address.
@@ -89,6 +101,12 @@ The `currentNetwork` event is emitted every time the current network changes. Th
 #### `assets`
 
 The `assets` event is emitted every time the assets change. The event data will be an array of [`Asset`](../../api/Account/index.md#asset) objects that are available on the network.
+
+<<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-assets{ts:line-numbers}
+
+#### `abis`
+
+The `abis` event is emitted every time an ABI is added to a connector. The event data will be an array of [`FuelABI`](../../api/Account/index.md#fuelabi) object.
 
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-events-assets{ts:line-numbers}
 

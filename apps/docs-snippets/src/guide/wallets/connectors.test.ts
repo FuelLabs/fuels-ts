@@ -1,10 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { Fuel, LocalStorage, MemoryStorage, FuelConnector } from 'fuels';
-import type { TargetObject, Network, Asset } from 'fuels';
+import type { TargetObject, Network, Asset, FuelABI } from 'fuels';
 
 // prettier-ignore
 // #region fuel-connector-extends
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class MyWalletConnector extends FuelConnector
 // #endregion fuel-connector-extends
 {}
@@ -58,6 +57,18 @@ class WalletConnector extends FuelConnector {
     this.emit(this.events.connection, connection);
     // #endregion fuel-connector-events-connection
 
+    // #region fuel-connector-events-connectors
+    const connectors: Array<FuelConnector> = [new MyWalletConnector()];
+
+    this.emit(this.events.connectors, connectors);
+    // #endregion fuel-connector-events-connectors
+
+    // #region fuel-connector-events-currentConnector
+    const currentConnector: FuelConnector = new MyWalletConnector();
+
+    this.emit(this.events.currentConnector, currentConnector);
+    // #endregion fuel-connector-events-currentConnector
+
     // #region fuel-connector-events-currentAccount
     const currentAccount: string = '0x1234567890abcdef';
 
@@ -106,6 +117,21 @@ class WalletConnector extends FuelConnector {
 
     this.emit(this.events.assets, assets);
     // #endregion fuel-connector-events-assets
+
+    // #region fuel-connector-events-abis
+    const abis: Array<FuelABI> = [
+      {
+        encoding: '1',
+        types: [],
+        loggedTypes: [],
+        functions: [],
+        messagesTypes: [],
+        configurables: [],
+      },
+    ];
+
+    this.emit(this.events.abis, abis);
+    // #endregion fuel-connector-events-abis
   }
 }
 
@@ -122,7 +148,9 @@ describe('connectors', () => {
     });
 
     test('should be able to instantiate with connectors', () => {
-      const defaultConnectors = (_opts: { devMode: boolean }): Array<FuelConnector> => [];
+      const defaultConnectors = (_opts: { devMode: boolean }): Array<FuelConnector> => [
+        new WalletConnector(),
+      ];
 
       // #region fuel-options-connectors
       // #import { Fuel };
