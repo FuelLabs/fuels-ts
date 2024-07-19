@@ -115,7 +115,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param baseTransactionRequest - Optional object containing properties to initialize the transaction request.
    */
-  constructor({
+  protected constructor({
     tip,
     maturity,
     maxFee,

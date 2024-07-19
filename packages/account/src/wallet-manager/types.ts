@@ -34,7 +34,7 @@ export interface WalletManagerState {
 export abstract class Vault<TOptions = { secret?: string }> {
   static readonly type: string;
 
-  constructor(_options: TOptions) {
+  protected constructor(_options: TOptions) {
     throw new FuelError(ErrorCode.NOT_IMPLEMENTED, 'Not implemented.');
   }
 

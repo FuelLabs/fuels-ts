@@ -34,7 +34,7 @@ export abstract class Coder<TInput = unknown, TDecoded = unknown> {
   readonly type: string;
   readonly encodedLength: number;
 
-  constructor(name: string, type: string, encodedLength: number) {
+  protected constructor(name: string, type: string, encodedLength: number) {
     this.name = name;
     this.type = type;
     this.encodedLength = encodedLength;
