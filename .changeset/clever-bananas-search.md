@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-chore: handle `create fuels` example dapp scenarios for insufficient funds
+chore: handle `create fuels` template scenarios for insufficient funds
