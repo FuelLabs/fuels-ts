@@ -9,7 +9,7 @@
 
 This guide walks you through deploying a contract using the SDK, covering loading contract artifacts, initializing a contract factory, and deploying the contract.
 
-> **Note:** The maximum contract deployment size supported by the SDK is 100 KB. The SDK will `throw` an [error](../errors/index.md#contract_size_exceeds_limit) for contracts larger than this size.
+> **Note:** The maximum contract deployment size supported by the SDK is 100 KB. The SDK will `throw` an [error](../errors/index.md#contract-size-exceeds-limit) for contracts larger than this size.
 
 ## 1. Obtaining Contract Artifacts
 
