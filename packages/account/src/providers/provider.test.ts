@@ -8,7 +8,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -17,13 +17,7 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
-import {
-  setupTestProviderAndWallets,
-  launchNode,
-  seedTestWallet,
-  TestMessage,
-} from '../test-utils';
-import { Wallet } from '../wallet';
+import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, { BLOCKS_PAGE_SIZE_LIMIT, RESOURCES_PAGE_SIZE_LIMIT } from './provider';
@@ -57,11 +51,9 @@ const getCustomFetch =
     return fetch(url, options);
   };
 
-// TODO: Figure out a way to import this constant from `@fuel-ts/account/configs`
-const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
-
 /**
  * @group node
+ * @group browser
  */
 describe('Provider', () => {
   it('can getVersion()', async () => {
@@ -226,14 +218,18 @@ describe('Provider', () => {
   });
 
   it('gets the chain ID', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const chainId = provider.getChainId();
 
     expect(chainId).toBe(0);
   });
 
   it('gets the base asset ID', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
 
     expect(baseAssetId).toBeDefined();
@@ -743,7 +739,10 @@ describe('Provider', () => {
   it('can getMessageProof with all data', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
+    const provider = await Provider.create(nodeProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageProof', { messageProof: MESSAGE_PROOF_RAW_RESPONSE })(
           url,
@@ -763,7 +762,10 @@ describe('Provider', () => {
   it('can getMessageStatus', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
+    const provider = await Provider.create(nodeProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
     });
@@ -893,8 +895,6 @@ describe('Provider', () => {
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-    await Provider.create(FUEL_NETWORK_URL);
-
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
@@ -925,7 +925,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-    await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -1114,7 +1115,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when stream contains more than one "data:"', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = {
@@ -1149,7 +1151,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('subscriptions: ignores keep-alive messages', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
@@ -1181,7 +1184,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when stream has two events in the same chunk', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
@@ -1233,7 +1237,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(numberOfEvents).toEqual(2);
   });
   it('subscriptions: does not throw when an event is streamed in multiple chunks', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = JSON.stringify({
@@ -1272,7 +1277,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when chunk has a full and partial event in it', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
@@ -1328,7 +1334,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when multiple chunks contain multiple events with a keep-alive message in-between', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = JSON.stringify({
@@ -1386,7 +1393,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: throws if the stream data string parsing fails for some reason', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const badResponse = 'data: {f: {}\n\n';
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
@@ -1420,8 +1428,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const fetchSpy = vi.spyOn(global, 'fetch');
-    await Provider.create(FUEL_NETWORK_URL, {
+    await Provider.create(provider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
@@ -1437,8 +1448,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('requestMiddleware modifies the request before being sent to the node [async]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const fetchSpy = vi.spyOn(global, 'fetch');
-    await Provider.create(FUEL_NETWORK_URL, {
+    await Provider.create(provider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
@@ -1454,8 +1468,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('requestMiddleware works for subscriptions', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
     const fetchSpy = vi.spyOn(global, 'fetch');
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    const provider = await Provider.create(nodeProvider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
@@ -1482,8 +1499,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('custom fetch works with requestMiddleware', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     let requestHeaders: HeadersInit | undefined;
-    await Provider.create(FUEL_NETWORK_URL, {
+    await Provider.create(provider.url, {
       fetch: async (url, requestInit) => {
         requestHeaders = requestInit?.headers;
         return fetch(url, requestInit);
@@ -1501,8 +1521,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('custom fetch works with timeout', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
     const timeout = 500;
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    const provider = await Provider.create(nodeProvider.url, {
       fetch: async (url, requestInit) => fetch(url, requestInit),
       timeout,
     });
@@ -1524,7 +1547,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('getMessageByNonce', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
     const message = await provider.getMessageByNonce(nonce);
@@ -1782,23 +1806,27 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('can properly use getBalances', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
-    const wallet = Wallet.generate({ provider });
-
     const fundAmount = 10_000;
 
-    await seedTestWallet(wallet, [
-      [fundAmount, baseAssetId],
-      [fundAmount, ASSET_A],
-    ]);
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: fundAmount,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
 
     const { balances } = await provider.getBalances(wallet.address);
 
-    expect(balances.length).toBe(2);
+    expect(balances.length).toBe(3);
+
     balances.forEach((balance) => {
       expect(balance.amount.toNumber()).toBe(fundAmount);
-      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+      expect([baseAssetId, ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
   });
 });

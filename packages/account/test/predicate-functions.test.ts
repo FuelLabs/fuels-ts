@@ -1,6 +1,5 @@
-import { FUEL_NETWORK_URL } from '../src/configs';
 import { Predicate } from '../src/predicate';
-import { Provider } from '../src/providers';
+import { setupTestProviderAndWallets } from '../src/test-utils';
 
 import { predicateAbi } from './fixtures/predicate-abi';
 import { predicateBytecode } from './fixtures/predicate-bytecode';
@@ -12,13 +11,11 @@ import { predicateBytecode } from './fixtures/predicate-bytecode';
 describe('Predicate', () => {
   describe('Functions', () => {
     const predicateAddress = '0x6b6ef590390f0a7de75f8275ab5d7877c17236caba2514039c6565ec15f79111';
-    let provider: Provider;
 
-    beforeAll(async () => {
-      provider = await Provider.create(FUEL_NETWORK_URL);
-    });
+    it('sets predicate address for given byte code', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
 
-    it('sets predicate address for given byte code', () => {
       const predicate = new Predicate({
         bytecode: predicateBytecode,
         provider,
@@ -26,7 +23,10 @@ describe('Predicate', () => {
       expect(predicate.address.toB256()).toEqual(predicateAddress);
     });
 
-    it('sets predicate data for given ABI', () => {
+    it('sets predicate data for given ABI', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
+
       const b256 = '0x0101010101010101010101010101010101010101010101010101010101010101';
       const predicate = new Predicate({
         bytecode: predicateBytecode,
@@ -38,7 +38,10 @@ describe('Predicate', () => {
       expect(predicate.predicateData).not.toBeUndefined();
     });
 
-    it('throws when predicate ABI has no main function', () => {
+    it('throws when predicate ABI has no main function', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
+
       const abiWithNoMain = {
         ...predicateAbi,
         functions: [

@@ -8,10 +8,10 @@ import { bn } from '@fuel-ts/math';
 import { EventEmitter } from 'events';
 
 import type { ProviderOptions } from '../src';
-import { FUEL_NETWORK_URL } from '../src/configs';
 import { Fuel } from '../src/connectors/fuel';
 import { FuelConnectorEventType } from '../src/connectors/types';
 import { Provider, TransactionStatus } from '../src/providers';
+import { setupTestProviderAndWallets } from '../src/test-utils';
 import { Wallet } from '../src/wallet';
 
 import { MockConnector } from './fixtures/mocked-connector';
@@ -323,8 +323,8 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure getWallet return an wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const wallets = [
       Wallet.fromPrivateKey(
@@ -352,7 +352,7 @@ describe('Fuel Connector', () => {
     const wallet = await fuel.getWallet(account);
     expect(wallet.provider.url).toEqual(network.url);
     const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
-    const response = await wallet.transfer(receiver.address, bn(1000), baseAssetId, {
+    const response = await wallet.transfer(receiver.address, bn(1000), provider.getBaseAssetId(), {
       tip: bn(1),
       gasLimit: bn(100_000),
     });
@@ -508,10 +508,11 @@ describe('Fuel Connector', () => {
   });
 
   it('should be able to getWallet with custom provider', async () => {
-    const defaultProvider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
 
     const defaultWallet = Wallet.generate({
-      provider: defaultProvider,
+      provider: nodeProvider,
     });
     const connector = new MockConnector({
       wallets: [defaultWallet],
@@ -522,7 +523,7 @@ describe('Fuel Connector', () => {
 
     class CustomProvider extends Provider {
       static async create(_url: string, opts?: ProviderOptions) {
-        const provider = new CustomProvider(FUEL_NETWORK_URL, opts);
+        const provider = new CustomProvider(nodeProvider.url, opts);
         await provider.fetchChainAndNodeInfo();
         return provider;
       }
@@ -538,17 +539,18 @@ describe('Fuel Connector', () => {
       throw new Error('Account not found');
     }
 
-    const provider = await CustomProvider.create(FUEL_NETWORK_URL);
+    const provider = await CustomProvider.create(nodeProvider.url);
     const wallet = await fuel.getWallet(currentAccount, provider);
     expect(wallet.provider).toBeInstanceOf(CustomProvider);
     expect(await wallet.getBalance()).toEqual(bn(1234));
   });
 
   it('should ensure hasWallet works just fine', async () => {
-    const defaultProvider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const defaultWallet = Wallet.generate({
-      provider: defaultProvider,
+      provider,
     });
 
     const connector = new MockConnector({
@@ -567,7 +569,8 @@ describe('Fuel Connector', () => {
   });
 
   it('should ensure getProvider works just fine', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const defaultWallet = Wallet.generate({
       provider,
