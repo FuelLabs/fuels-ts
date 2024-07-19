@@ -41,6 +41,6 @@ export const wrapSnippet = (filepath: string) => {
 
 const dir = 'src/**';
 const src = `${dir}/*.ts`;
-const ignore = [`src/typegend`, `${dir}/*.test.ts`, `${dir}/*.wrapped.ts`];
+const ignore = [`src/typegend/**`, `${dir}/*.test.ts`, `${dir}/*.wrapped.ts`];
 
 globSync(src, { ignore }).forEach(wrapSnippet);
