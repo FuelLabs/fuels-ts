@@ -236,8 +236,7 @@ describe('Contract Factory', () => {
   it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
     const factory = new ContractFactory(
       StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
-      process
+      StorageTestContractAbi__factory.abi
     );
 
     await expectToThrowFuelError(
