@@ -236,7 +236,8 @@ describe('Contract Factory', () => {
   it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
     const factory = new ContractFactory(
       StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi
+      StorageTestContractAbi__factory.abi,
+      process
     );
 
     await expectToThrowFuelError(
@@ -249,9 +250,13 @@ describe('Contract Factory', () => {
   });
 
   it('should not deploy contracts greater than 100KB', async () => {
-    const factory = await createContractFactory();
-    const largeByteCode = `0x${'00'.repeat(102400)}`;
-    factory.bytecode = largeByteCode;
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const largeByteCode = `0x${'00'.repeat(112400)}`;
+    const factory = new ContractFactory(largeByteCode, StorageTestContractAbi__factory.abi, wallet);
 
     await expectToThrowFuelError(
       async () => factory.deployContract(),
