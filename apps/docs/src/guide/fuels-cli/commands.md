@@ -109,6 +109,9 @@ The `fuels deploy` command does two things:
 }
 ```
 
+> [!NOTE] Note
+> The maximum contract deployment size supported by the SDK is 100 KB. The SDK will `throw` an [error](../errors/index.md#contract-size-exceeds-limit) for contracts larger than this size.
+
 Use it when instantiating your contracts:
 
 <<< @../../../demo-fuels/src/index.test.ts#using-generated-files{ts:line-numbers}
