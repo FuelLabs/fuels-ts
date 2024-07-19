@@ -26,6 +26,7 @@ export default function PredicateExample() {
   useAsync(async () => {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
+      // Initialize a new predicate instance
       const predicate = TestPredicateAbi__factory.createInstance(
         wallet.provider,
       );
@@ -63,6 +64,7 @@ export default function PredicateExample() {
         return toast.error("Wallet not loaded");
       }
 
+      // Initialize a new predicate instance with the entered pin
       const reInitializePredicate = TestPredicateAbi__factory.createInstance(
         wallet.provider,
         [bn(pin)],
@@ -72,6 +74,11 @@ export default function PredicateExample() {
         return toast.error("Failed to initialize predicate");
       }
 
+      /*
+        Try to 'unlock' the predicate and transfer the funds back to the wallet.
+        If the pin is correct, this transfer transaction will succeed.
+        If the pin is incorrect, this transaction will fail.
+       */
       const tx = await reInitializePredicate.transfer(
         wallet.address,
         amount,
