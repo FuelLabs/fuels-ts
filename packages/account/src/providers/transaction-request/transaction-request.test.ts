@@ -190,6 +190,8 @@ describe('transactionRequestify', () => {
       type: 1234,
     };
 
-    expect(() => transactionRequestify(txRequestLike)).toThrow('Unsupported transaction type: 1234');
+    expect(() => transactionRequestify(txRequestLike)).toThrow(
+      'Unsupported transaction type: 1234'
+    );
   });
 });

@@ -15,7 +15,12 @@ import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined } from '@fuel-ts/utils';
 
-import { MAX_CONTRACT_SIZE, getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
+import {
+  MAX_CONTRACT_SIZE,
+  getContractId,
+  getContractStorageRoot,
+  hexlifyWithPrefix,
+} from './util';
 
 /**
  * Options for deploying a contract.
