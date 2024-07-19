@@ -5,4 +5,4 @@
 "@fuel-ts/errors": minor
 ---
 
-feat: deploy contract validation
+feat!: deploy contract validation
