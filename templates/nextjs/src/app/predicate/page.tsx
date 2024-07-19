@@ -40,21 +40,29 @@ export default function PredicateExample() {
   };
 
   const transferFundsToPredicate = async (amount: BN) => {
-    if (!predicate) {
-      return toast.error("Predicate not loaded");
+    try {
+      if (!predicate) {
+        return toast.error("Predicate not loaded");
+      }
+
+      if (!wallet) {
+        return toast.error("Wallet not loaded");
+      }
+
+      await wallet.transfer(predicate.address, amount, baseAssetId, {
+        gasLimit: 10_000,
+      });
+
+      await refreshBalances();
+
+      return toast.success("Funds transferred to predicate.");
+    } catch (e) {
+      console.error(e);
+      toast.error(
+        `Failed to transfer funds. Please make sure your wallet has enough funds.
+        Please click the 'Top-up Wallet' button in the top right corner, or use the faucet in the top left.`,
+      );
     }
-
-    if (!wallet) {
-      return toast.error("Wallet not loaded");
-    }
-
-    await wallet.transfer(predicate.address, amount, baseAssetId, {
-      gasLimit: 10_000,
-    });
-
-    await refreshBalances();
-
-    return toast.success("Funds transferred to predicate.");
   };
 
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {
