@@ -39,16 +39,20 @@ export const wrapSnippet = (filepath: string) => {
       Removes `LOCAL_NETWORK_URL` from `fuels` import members
     */
     imports = imports.replace(localNetworkReg, '$1');
+
+    /*
+     Adds launchNode import
+   */
     imports += `\nimport { launchTestNode } from 'fuels/test-utils'`;
 
     /*
       Injects launched node and env constants
     */
     nodeLauncher = readFileSync(join(__dirname, 'launcher.ts'), 'utf-8')
-      .replace(/import.*$/gm, '')
-      .replace(/export /g, '')
-      .trim()
-      .replace(/\n/g, '\n  ');
+      .replace(/import.*$/gm, '') // ignore file imports
+      .replace(/export /g, '') // remove export keywords
+      .trim() // zip
+      .replace(/\n/g, '\n  '); // indent chunk
   }
 
   /*
