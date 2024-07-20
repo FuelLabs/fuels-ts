@@ -1,4 +1,5 @@
 /*
+// #region full
 import type { TxParams } from 'fuels';
 import {
   LOCAL_NETWORK_URL,
@@ -39,4 +40,5 @@ const {
 } = await waitForResult();
 
 console.log({ value, isStatusSuccess, transactionRequest });
+// #endregion full
 */
