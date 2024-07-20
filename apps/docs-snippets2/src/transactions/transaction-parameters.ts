@@ -47,7 +47,7 @@ const transactionRequest = new ScriptTransactionRequest({
 
 // #region transaction-parameters-8
 const { waitForResult } = await contract.functions
-  .increment_count(15) // contract fn
+  .increment_count(15) //
   .txParams(txParams)
   .call();
 
