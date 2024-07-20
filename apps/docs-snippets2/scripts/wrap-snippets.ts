@@ -20,7 +20,7 @@ export const wrapSnippet = (filepath: string) => {
   const snippetsNoImports = imports.length ? snippetContents.split(imports)[1] : snippetContents;
 
   /*
-    Remove .env import
+    Removes .env file import
   */
   const envImportReg = /import.+\{.+([\s\S]+).+\}.+from.+'\.\.\/env';/gm;
   if (envImportReg.test(imports)) {
@@ -33,12 +33,12 @@ export const wrapSnippet = (filepath: string) => {
     Inject node launcher & friends
   */
   let nodeLauncher = '';
-  const localNetworkReg = /LOCAL_NETWORK_URL/;
+  const localNetworkReg = /,?\s+LOCAL_NETWORK_URL(\s*,)?/;
   if (localNetworkReg.test(imports)) {
     /*
-      Replaces `LOCAL_NETWORK_URL`
+      Removes `LOCAL_NETWORK_URL` from `fuels` import members
     */
-    imports = imports.replace(localNetworkReg, 'TESTNET_NETWORK_URL');
+    imports = imports.replace(localNetworkReg, '$1');
     imports += `\nimport { launchTestNode } from 'fuels/test-utils'`;
 
     /*
