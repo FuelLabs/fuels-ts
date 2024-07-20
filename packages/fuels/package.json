@@ -76,6 +76,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuel-ts/troubleshoot": "workspace:*",
     "bundle-require": "^5.0.0",
     "chalk": "4",
     "chokidar": "^3.5.3",
