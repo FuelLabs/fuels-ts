@@ -8,4 +8,5 @@ export const snapshot = {
   nodeVersion: process.version,
   browserVersion: detectBrowser(),
   osType: os.type(),
+  osArch: os.arch(),
 };
