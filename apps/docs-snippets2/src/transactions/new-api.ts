@@ -7,9 +7,9 @@ import { WALLET_PVT_KEY } from '../env';
 import { Sum, Counter, counterBytecode } from '../typegend';
 
 const client = await fuels(LOCAL_NETWORK_URL);
-const wallet = client.wallet(WALLET_PVT_KEY, client);
-const deploy = await Counter.deploy(wallet);
+const wallet = client.wallet(WALLET_PVT_KEY);
 
+const deployment = await Counter.deploy(wallet);
 const { contract } = await deploy.waitForResult();
 
 const txParams: TxParams = {
