@@ -12,6 +12,7 @@ apps/demo-nextjs
 apps/demo-react-cra
 apps/demo-react-vite
 apps/create-fuels-counter-guide
+apps/docs-snippets2/src/typegend
 
 packages/fuels/test/fixtures/project
 packages/account/src/providers/__generated__
