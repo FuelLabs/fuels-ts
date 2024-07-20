@@ -46,7 +46,7 @@ export const wrapSnippet = (filepath: string) => {
     */
     nodeLauncher = readFileSync(join(__dirname, 'launcher.ts'), 'utf-8')
       .replace(/import.*$/gm, '')
-      .replace(/export/g, '')
+      .replace(/export /g, '')
       .trim()
       .replace(/\n/g, '\n  ');
   }
