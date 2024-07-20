@@ -1,3 +1,8 @@
 import { indexBinAndCliConfig } from '@internal/tsup';
 
-export default indexBinAndCliConfig;
+export default {
+  entry: {
+    ...indexBinAndCliConfig.entry,
+    'cli-utils': 'src/cli-utils.ts',
+  },
+};

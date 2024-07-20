@@ -22,12 +22,20 @@
       "require": "./dist/cli.js",
       "import": "./dist/cli.mjs",
       "types": "./dist/cli.d.ts"
+    },
+    "./cli-utils": {
+      "require": "./dist/cli-utils.js",
+      "import": "./dist/cli-utils.mjs",
+      "types": "./dist/cli-utils.d.ts"
     }
   },
   "typesVersions": {
     "*": {
       "cli": [
         "./dist/cli.d.ts"
+      ],
+      "cli-utils": [
+        "./dist/cli-utils.d.ts"
       ]
     }
   },
