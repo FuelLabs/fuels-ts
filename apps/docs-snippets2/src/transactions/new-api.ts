@@ -4,12 +4,12 @@ import type { TxParams } from 'fuels';
 import { LOCAL_NETWORK_URL, fuels, bn } from 'fuels';
 
 import { WALLET_PVT_KEY } from '../env';
-import { Sum, Counter, counterBytecode } from '../typegend';
+import { Counter, counterBytecode } from '../typegend';
 
 const client = await fuels(LOCAL_NETWORK_URL);
 const wallet = client.wallet(WALLET_PVT_KEY);
 
-const deployment = await Counter.deploy(wallet);
+const deploy = await Counter.deploy(counterBytecode, wallet);
 const { contract } = await deploy.waitForResult();
 
 const txParams: TxParams = {
@@ -30,11 +30,6 @@ const {
   transactionResult: { isStatusSuccess },
 } = await waitForResult();
 
-const transactionRequest = new fuels.ScriptTransactionRequest({
-  script: Sum.bin,
-  gasLimit: 100,
-});
-
-console.log({ value, isStatusSuccess, transactionRequest });
+console.log({ value, isStatusSuccess });
 // #endregion full
 */
