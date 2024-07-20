@@ -25,15 +25,15 @@ const { waitForResult } = await contract.functions
   .txParams(txParams)
   .call();
 
-const transactionRequest = new fuels.ScriptTransactionRequest({
-  script: Sum.bin,
-  gasLimit: 100,
-});
-
 const {
   value,
   transactionResult: { isStatusSuccess },
 } = await waitForResult();
+
+const transactionRequest = new fuels.ScriptTransactionRequest({
+  script: Sum.bin,
+  gasLimit: 100,
+});
 
 console.log({ value, isStatusSuccess, transactionRequest });
 // #endregion full
