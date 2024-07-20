@@ -1,9 +1,16 @@
+// #region full
 import type { TxParams } from 'fuels';
-import { bn, LOCAL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+import {
+  bn,
+  LOCAL_NETWORK_URL,
+  Provider,
+  ScriptTransactionRequest,
+  Wallet,
+} from 'fuels';
 
 import { WALLET_PVT_KEY } from '../env';
 import { CounterAbi__factory } from '../typegend';
-import bytecode from '../typegend/contracts/CounterAbi.hex';
+import counterBytecode from '../typegend/contracts/CounterAbi.hex';
 import { ScriptSumAbi__factory } from '../typegend/scripts';
 
 const { storageSlots } = CounterAbi__factory;
@@ -11,26 +18,30 @@ const { storageSlots } = CounterAbi__factory;
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-const deploy = await CounterAbi__factory.deployContract(bytecode, wallet, {
-  storageSlots,
-});
+const deploy = await CounterAbi__factory.deployContract(
+  counterBytecode,
+  wallet,
+  {
+    storageSlots,
+  }
+);
 
 // #region transaction-parameters-6
 const txParams: TxParams = {
   // #region transaction-parameters-1
-  gasLimit: bn(69242),
+  gasLimit: bn(69242), // BigNumberish or undefined
   // #endregion transaction-parameters-1
   // #region transaction-parameters-2
-  maxFee: bn(69242),
+  maxFee: bn(69242), // BigNumberish or undefined
   // #endregion transaction-parameters-2
   // #region transaction-parameters-3
-  tip: bn(100),
+  tip: bn(100), // BigNumberish or undefined
   // #endregion transaction-parameters-3
   // #region transaction-parameters-4
-  maturity: 1,
+  maturity: 1, // BigNumberish or undefined
   // #endregion transaction-parameters-4
   // #region transaction-parameters-5
-  witnessLimit: bn(5000),
+  witnessLimit: bn(5000), // BigNumberish or undefined
   // #endregion transaction-parameters-5
 };
 // #endregion transaction-parameters-6
@@ -45,9 +56,9 @@ const transactionRequest = new ScriptTransactionRequest({
 // #endregion transaction-parameters-7
 
 // #region transaction-parameters-8
-const { waitForResult } = await contract.functions // contract methods
-  .increment_count(15) // contract method params
-  .txParams(txParams) // custom params
+const { waitForResult } = await contract.functions
+  .increment_count(15) // contract method
+  .txParams(txParams)
   .call();
 
 const {
@@ -57,3 +68,4 @@ const {
 
 console.log({ value, isStatusSuccess, transactionRequest });
 // #endregion transaction-parameters-8
+// #endregion full
