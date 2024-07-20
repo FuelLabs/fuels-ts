@@ -60,6 +60,6 @@ The same method is also accessible within a function invocation scope, so it can
 
 <<< @/../../docs-snippets2/src/transactions/transaction-parameters.ts#full{ts:line-numbers}
 
-## Full Example w/ new API
+## Full Example using Sugar API
 
 <<< @/../../docs-snippets2/src/transactions/new-api.ts#full{ts:line-numbers}
