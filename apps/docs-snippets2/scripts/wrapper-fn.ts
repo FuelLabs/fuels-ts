@@ -16,9 +16,9 @@ export const main = async (passLogsThrough: boolean = false): Promise<any | any[
     },
   };
 
-  // NODE_LAUNCHER ———>>>
+  // TEST NODE LAUNCHER ———>>>
   // %NODE_LAUNCHER%
-  // <<<——— NODE_LAUNCHER
+  // <<<——— TEST NODE LAUNCHER
 
   try {
     // SNIPPET ———>>>
