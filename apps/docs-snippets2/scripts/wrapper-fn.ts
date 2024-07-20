@@ -16,14 +16,14 @@ export const main = async (passLogsThrough: boolean = false): Promise<any | any[
     },
   };
 
-  // ———>>>
+  // NODE_LAUNCHER ———>>>
   // %NODE_LAUNCHER%
-  // <<<———
+  // <<<——— NODE_LAUNCHER
 
   try {
-    // ———>>>
+    // SNIPPET ———>>>
     // %SNIPPET%
-    // <<<———
+    // <<<——— SNIPPET
   } catch (error) {
     console.error(error);
     return { error };
