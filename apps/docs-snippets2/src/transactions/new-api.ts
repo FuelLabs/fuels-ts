@@ -4,12 +4,12 @@ import type { TxParams } from 'fuels';
 import { LOCAL_NETWORK_URL, fuels, bn } from 'fuels';
 
 import { WALLET_PVT_KEY } from '../env';
-import { Counter, counterBytecode } from '../typegend';
+import { deployCounter } from '../typegend';
 
 const client = await fuels(LOCAL_NETWORK_URL);
 const wallet = client.wallet(WALLET_PVT_KEY);
 
-const deploy = await Counter.deploy(counterBytecode, wallet);
+const deploy = await deployCounter(wallet);
 const { contract } = await deploy.waitForResult();
 
 const txParams: TxParams = {
