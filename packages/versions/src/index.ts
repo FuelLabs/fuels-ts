@@ -40,4 +40,3 @@ import { getBuiltinVersions } from './lib/getBuiltinVersions';
 export const versions = getBuiltinVersions();
 
 export * from './lib/checkFuelCoreVersionCompatibility';
-export * from './lib/getSystemVersions';
