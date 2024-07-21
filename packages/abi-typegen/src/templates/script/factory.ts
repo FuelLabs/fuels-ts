@@ -16,7 +16,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 
   const {
     rawContents,
-    name: capitalizedName,
+    capitalizedName,
     hexlifiedBinContents: hexlifiedBinString,
     commonTypesInUse,
   } = params.abi;
