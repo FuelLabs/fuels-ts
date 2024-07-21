@@ -14,11 +14,7 @@ import { mergeDeepRight } from 'ramda';
 import type { DeployContractOptions, DeployContractResult } from '../contract-factory';
 
 export interface ContractDeployer {
-  deployContract(
-    bytecode: BytesLike,
-    wallet: Account,
-    options?: DeployContractOptions
-  ): Promise<DeployContractResult>;
+  deploy(wallet: Account, options?: DeployContractOptions): Promise<DeployContractResult>;
 }
 
 export interface DeployContractConfig {
@@ -49,7 +45,7 @@ export interface LaunchTestNodeOptions<TContractConfigs extends DeployContractCo
 }
 export type TContracts<T extends DeployContractConfig[]> = {
   [K in keyof T]: Awaited<
-    ReturnType<Awaited<ReturnType<T[K]['deployer']['deployContract']>>['waitForResult']>
+    ReturnType<Awaited<ReturnType<T[K]['deployer']['deploy']>>['waitForResult']>
   >['contract'];
 };
 export interface LaunchTestNodeReturn<TFactories extends DeployContractConfig[]>
