@@ -1,8 +1,7 @@
 import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
-import * as renderBytecodeTemplateMod from '../templates/contract/bytecode';
-import * as renderFactoryTemplateMod from '../templates/contract/factory';
+import * as renderMainTemplateMod from '../templates/contract/main';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleContracts } from './assembleContracts';
@@ -19,22 +18,17 @@ describe('assembleContracts.ts', () => {
       .mockReturnValue('');
 
     const renderFactoryTemplate = vi
-      .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
+      .spyOn(renderMainTemplateMod, 'renderMainTemplate')
       .mockReturnValue('');
 
     const renderIndexTemplate = vi
       .spyOn(renderIndexTemplateMod, 'renderIndexTemplate')
       .mockReturnValue('');
 
-    const renderBytecodeTemplate = vi
-      .spyOn(renderBytecodeTemplateMod, 'renderBytecodeTemplate')
-      .mockReturnValue('');
-
     return {
       renderCommonTemplate,
       renderFactoryTemplate,
       renderIndexTemplate,
-      renderBytecodeTemplate,
     };
   }
 
@@ -46,12 +40,7 @@ describe('assembleContracts.ts', () => {
       includeOptionType: false, // will prevent `common` template from being included
     });
 
-    const {
-      renderCommonTemplate,
-      renderFactoryTemplate,
-      renderIndexTemplate,
-      renderBytecodeTemplate,
-    } = mockAllDeps();
+    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
     const files = assembleContracts({ abis, outputDir });
 
@@ -60,7 +49,6 @@ describe('assembleContracts.ts', () => {
     expect(renderCommonTemplate).toHaveBeenCalledTimes(0);
     expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);
     expect(renderIndexTemplate).toHaveBeenCalledTimes(1);
-    expect(renderBytecodeTemplate).toHaveBeenCalledTimes(2);
   });
 
   test('should assemble all files from Contract ABI, including `common` file', () => {
@@ -71,12 +59,7 @@ describe('assembleContracts.ts', () => {
       includeOptionType: true, // will cause `common` template to be included
     });
 
-    const {
-      renderCommonTemplate,
-      renderFactoryTemplate,
-      renderIndexTemplate,
-      renderBytecodeTemplate,
-    } = mockAllDeps();
+    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
     const files = assembleContracts({ abis, outputDir });
 
@@ -85,6 +68,5 @@ describe('assembleContracts.ts', () => {
     expect(renderCommonTemplate).toHaveBeenCalledTimes(1); // must have been called
     expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);
     expect(renderIndexTemplate).toHaveBeenCalledTimes(1);
-    expect(renderBytecodeTemplate).toHaveBeenCalledTimes(2);
   });
 });
