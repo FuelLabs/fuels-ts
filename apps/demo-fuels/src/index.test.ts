@@ -43,7 +43,7 @@ describe('ExampleContract', () => {
     expect(v2.toHex()).toBe(toHex(1337));
   });
 
-  it('deployContract method', async () => {
+  it('should deploy contract', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
