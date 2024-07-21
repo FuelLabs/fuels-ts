@@ -1,5 +1,4 @@
 import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
-import { runTroubleshoot } from '@fuel-ts/troubleshoot/cli';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
@@ -7,6 +6,7 @@ import { Command, Option } from 'commander';
 import { build } from './cli/commands/build';
 import { deploy } from './cli/commands/deploy';
 import { dev } from './cli/commands/dev';
+import { runInfo } from './cli/commands/info';
 import { init } from './cli/commands/init';
 import { node } from './cli/commands/node';
 import { withBinaryPaths } from './cli/commands/withBinaryPaths';
@@ -98,15 +98,15 @@ export const configureCli = () => {
 
   // Versions
   (command = program.command('versions'))
-    .description('Check for version incompatibilities')
+    .description('Checks for version incompatibilities')
     .addOption(pathOption)
     .action(withBinaryPaths(command, Commands.versions, runVersions));
 
-  // Troubleshoot
-  (command = program.command('troubleshoot'))
-    .description('Check for version incompatibilities')
+  // Info
+  (command = program.command('info'))
+    .description('Prints versions information')
     .addOption(pathOption)
-    .action(withBinaryPaths(command, Commands.troubleshoot, runTroubleshoot));
+    .action(withProgram(command, Commands.init, runInfo));
 
   return program;
 };

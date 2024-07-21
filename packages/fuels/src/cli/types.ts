@@ -7,7 +7,7 @@ export enum Commands {
   init = 'init',
   node = 'node',
   versions = 'versions',
-  troubleshoot = 'troubleshoot',
+  info = 'info',
 }
 
 export type CommandEvent =
@@ -36,7 +36,7 @@ export type CommandEvent =
       data: void;
     }
   | {
-      type: Commands.troubleshoot;
+      type: Commands.info;
       data: void;
     };
 
