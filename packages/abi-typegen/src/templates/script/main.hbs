@@ -51,24 +51,23 @@ export type {{capitalizedName}}Configurables = {
 };
 {{/if}}
 
-const _abi = {{abiJsonString}}
+const abi = {{abiJsonString}};
 
-const _bin = '{{hexlifiedBinString}}'
+const bin = '{{hexlifiedBinString}}';
 
-export const {{capitalizedName}} = {
+export class {{capitalizedName}} extends Script {
 
-  abi: _abi,
-  bin: _bin,
+  public static abi = abi;
+  public static bin = bin;
 
-  createInstance(wallet: Account) {
+  consrtuctor(wallet: Account) {
 
-    const script = new Script<
+    super<
       {{capitalizedName}}Inputs,
       {{capitalizedName}}Output
-    >(_bin, _abi, wallet);
+    >(bin, abi, wallet);
 
     return script;
-
   }
 
 }

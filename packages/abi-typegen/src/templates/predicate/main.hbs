@@ -48,27 +48,25 @@ export type {{capitalizedName}}Configurables = {
 
 export type {{capitalizedName}}Inputs = [{{inputs}}];
 
-const _abi = {{abiJsonString}}
+const abi = {{abiJsonString}};
 
-const _bin = '{{hexlifiedBinString}}'
+const bin = '{{hexlifiedBinString}}';
 
-export const {{capitalizedName}} = {
+export class {{capitalizedName}} extends Predicate {
 
-  abi: _abi,
-  bin: _bin,
+  public static abi = abi;
+  public static bin = bin;
 
-  createInstance(provider: Provider, predicateData?: {{capitalizedName}}Inputs, configurables?: {{capitalizedName}}Configurables) {
+  create(provider: Provider, predicateData?: {{capitalizedName}}Inputs, configurables?: {{capitalizedName}}Configurables) {
 
-    const predicate = new Predicate<{{capitalizedName}}Inputs>({
-      bytecode: _bin,
-      abi: _abi,
+    super({
+      abi: abi,
+      bytecode: bin,
       provider,
       inputData: predicateData,
       configurableConstants: configurables,
     })
 
     return predicate;
-
   }
-
 }

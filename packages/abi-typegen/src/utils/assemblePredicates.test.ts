@@ -1,7 +1,7 @@
 import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
-import * as renderFactoryTemplateMod from '../templates/predicate/factory';
+import * as renderFactoryTemplateMod from '../templates/predicate/main';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assemblePredicates } from './assemblePredicates';

@@ -7,9 +7,9 @@ import { formatEnums } from '../utils/formatEnums';
 import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
 
-import factoryTemplate from './factory.hbs';
+import mainTemplate from './main.hbs';
 
-export function renderFactoryTemplate(params: { abi: Abi }) {
+export function renderMainTemplate(params: { abi: Abi }) {
   const { abi } = params;
 
   const { types, configurables } = abi;
@@ -37,7 +37,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
   const { prefixedInputs: inputs, output } = func.attributes;
 
   const text = renderHbsTemplate({
-    template: factoryTemplate,
+    template: mainTemplate,
     data: {
       inputs,
       output,

@@ -4,7 +4,7 @@ import type { Abi } from '../abi/Abi';
 import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
 import { renderIndexTemplate } from '../templates/common/index';
-import { renderFactoryTemplate } from '../templates/predicate/factory';
+import { renderMainTemplate } from '../templates/predicate/main';
 
 /**
  * Render all Predicate-related templates and returns
@@ -24,7 +24,7 @@ export function assemblePredicates(params: { abis: Abi[]; outputDir: string }) {
 
     const factory: IFile = {
       path: factoryFilepath,
-      contents: renderFactoryTemplate({ abi }),
+      contents: renderMainTemplate({ abi }),
     };
 
     files.push(factory);

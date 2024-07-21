@@ -4,13 +4,13 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
-import factoryTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/factory.hbs';
+import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
+import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
-import { renderFactoryTemplate } from './factory';
+import { renderMainTemplate } from './main';
 
 /**
  * @group node
@@ -19,68 +19,72 @@ describe('factory.ts', () => {
   test('should render factory template', () => {
     const { restore } = mockVersions();
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
+
     const rawContents = project.abiContents;
 
     const abi = new Abi({
-      filepath: './my-script-abi.json',
+      filepath: './my-predicate-abi.json',
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
-      programType: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.PREDICATE,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    const rendered = renderMainTemplate({ abi });
 
     restore();
 
     expect(rendered).toEqual(factoryTemplate);
   });
 
-  test('should render factory template with configurables', () => {
+  test('should render factory template with configurable', () => {
     const { restore } = mockVersions();
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+
     const rawContents = project.abiContents;
 
     const abi = new Abi({
-      filepath: './my-script-abi.json',
+      filepath: './my-predicate-abi.json',
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
-      programType: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.PREDICATE,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    const rendered = renderMainTemplate({ abi });
 
     restore();
 
-    expect(rendered).toEqual(factoryTemplateWithConfigurables);
+    expect(rendered).toEqual(factoryWithConfigurablesTemplate);
   });
 
-  test('should throw for invalid Script ABI', async () => {
+  test('should throw for invalid Predicate ABI', async () => {
     const { restore } = mockVersions();
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
     const rawContents = project.abiContents;
 
-    // friction here (deletes 'main' function by emptying the functions array)
+    // ALERT: friction here (emptying functions array)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     rawContents.functions = [];
 
     const abi = new Abi({
-      filepath: './my-script-abi.json',
+      filepath: './my-predicate-abi.json',
       hexlifiedBinContents: '0x000',
       outputDir: 'stdout',
       rawContents,
-      programType: ProgramTypeEnum.SCRIPT,
+      programType: ProgramTypeEnum.PREDICATE,
     });
 
     const { error } = await safeExec(() => {
-      renderFactoryTemplate({ abi });
+      renderMainTemplate({ abi });
     });
 
-    restore();
-
     expect(error?.message).toMatch(/ABI doesn't have a 'main\(\)' method/);
+
+    restore();
   });
 });
