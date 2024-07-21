@@ -53,21 +53,17 @@ export type {{capitalizedName}}Configurables = {
 
 const abi = {{abiJsonString}};
 
-const bin = '{{hexlifiedBinString}}';
+const bytecode = '{{hexlifiedBinString}}';
 
 export class {{capitalizedName}} extends Script {
 
-  public static abi = abi;
-  public static bin = bin;
+  static readonly abi = abi;
+  static readonly bytecode = bytecode;
 
-  consrtuctor(wallet: Account) {
-
+  constructor(wallet: Account) {
     super<
       {{capitalizedName}}Inputs,
       {{capitalizedName}}Output
-    >(bin, abi, wallet);
-
-    return script;
+    >(bytecode, abi, wallet);
   }
-
 }

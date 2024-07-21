@@ -20,7 +20,7 @@ export function assemblePredicates(params: { abis: Abi[]; outputDir: string }) {
   abis.forEach((abi) => {
     const { capitalizedName: name } = abi;
 
-    const factoryFilepath = `${outputDir}/factories/${name}.ts`;
+    const factoryFilepath = `${outputDir}/${name}.ts`;
 
     const factory: IFile = {
       path: factoryFilepath,

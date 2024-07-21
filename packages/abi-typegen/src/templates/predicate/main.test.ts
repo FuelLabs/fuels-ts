@@ -4,8 +4,8 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
-import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/factory.hbs';
+import mainTemplate from '../../../test/fixtures/templates/predicate/main.hbs';
+import mainWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/main.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
@@ -15,8 +15,8 @@ import { renderMainTemplate } from './main';
 /**
  * @group node
  */
-describe('factory.ts', () => {
-  test('should render factory template', () => {
+describe('main.ts', () => {
+  test('should render main template', () => {
     const { restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
@@ -35,10 +35,10 @@ describe('factory.ts', () => {
 
     restore();
 
-    expect(rendered).toEqual(factoryTemplate);
+    expect(rendered).toEqual(mainTemplate);
   });
 
-  test('should render factory template with configurable', () => {
+  test('should render main template with configurable', () => {
     const { restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
@@ -57,7 +57,7 @@ describe('factory.ts', () => {
 
     restore();
 
-    expect(rendered).toEqual(factoryWithConfigurablesTemplate);
+    expect(rendered).toEqual(mainWithConfigurablesTemplate);
   });
 
   test('should throw for invalid Predicate ABI', async () => {

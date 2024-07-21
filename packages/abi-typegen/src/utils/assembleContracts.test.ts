@@ -44,7 +44,7 @@ describe('assembleContracts.ts', () => {
 
     const files = assembleContracts({ abis, outputDir });
 
-    expect(files.length).toEqual(7); // 2x dts, 2x factories, 1x index, 2x hex.ts (no `common`)
+    expect(files.length).toEqual(5); // 2x main, 2x factory, 1x index
 
     expect(renderCommonTemplate).toHaveBeenCalledTimes(0);
     expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);
@@ -63,7 +63,7 @@ describe('assembleContracts.ts', () => {
 
     const files = assembleContracts({ abis, outputDir });
 
-    expect(files.length).toEqual(8); // 2x dts, 2x factories, 1x index, 1x common, 2x hex.ts
+    expect(files.length).toEqual(6); // 2x main, 2x factory, 1x index, 1x common
 
     expect(renderCommonTemplate).toHaveBeenCalledTimes(1); // must have been called
     expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);

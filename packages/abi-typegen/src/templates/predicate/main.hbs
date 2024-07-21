@@ -50,23 +50,20 @@ export type {{capitalizedName}}Inputs = [{{inputs}}];
 
 const abi = {{abiJsonString}};
 
-const bin = '{{hexlifiedBinString}}';
+const bytecode = '{{hexlifiedBinString}}';
 
 export class {{capitalizedName}} extends Predicate {
 
-  public static abi = abi;
-  public static bin = bin;
+  static readonly abi = abi;
+  static readonly bytecode = bytecode;
 
-  create(provider: Provider, predicateData?: {{capitalizedName}}Inputs, configurables?: {{capitalizedName}}Configurables) {
-
+  constructor(provider: Provider, predicateData?: {{capitalizedName}}Inputs, configurables?: {{capitalizedName}}Configurables) {
     super({
-      abi: abi,
-      bytecode: bin,
+      abi,
+      bytecode,
       provider,
       inputData: predicateData,
       configurableConstants: configurables,
-    })
-
-    return predicate;
+    });
   }
 }

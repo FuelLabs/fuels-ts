@@ -20,7 +20,7 @@ export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
   abis.forEach((abi) => {
     const { capitalizedName } = abi;
 
-    const factoryFilepath = `${outputDir}/factories/${capitalizedName}.ts`;
+    const factoryFilepath = `${outputDir}/${capitalizedName}.ts`;
 
     const factory: IFile = {
       path: factoryFilepath,

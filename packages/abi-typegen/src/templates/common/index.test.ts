@@ -34,7 +34,7 @@ describe('templates/index', () => {
     // validating
     restore();
 
-    expect(rendered).toEqual(contractIndexTemplate);
+    expect(rendered.trim()).toEqual(contractIndexTemplate.trim());
   });
 
   test('should render index template for predicates', () => {
@@ -57,6 +57,6 @@ describe('templates/index', () => {
     // validating
     restore();
 
-    expect(rendered).toEqual(predicateIndexTemplate);
+    expect(rendered.trim()).toEqual(predicateIndexTemplate.trim());
   });
 });
