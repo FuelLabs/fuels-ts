@@ -1,5 +1,8 @@
 {{header}}
 
+import { Interface, Contract } from "fuels";
+import type { Provider, Account, StorageSlot, AbstractAddress } from "fuels";
+
 {{#if imports}}
 import type {
 {{#each imports}}
@@ -48,7 +51,15 @@ export type {{capitalizedName}}Configurables = {
 };
 {{/if}}
 
-interface {{capitalizedName}}Interface extends Interface {
+const abi = {{abiJsonString}};
+
+const storageSlots: StorageSlot[] = {{storageSlotsJsonString}};
+
+export class {{capitalizedName}}Interface extends Interface {
+  constructor() {
+    super(abi);
+  }
+
   functions: {
     {{#each functionsFragments}}
     {{this}}: FunctionFragment;
@@ -56,12 +67,21 @@ interface {{capitalizedName}}Interface extends Interface {
   };
 }
 
-
 export class {{capitalizedName}} extends Contract {
+  static readonly abi = abi;
+  static readonly storageSlots = storageSlots;
+
   interface: {{capitalizedName}}Interface;
   functions: {
     {{#each functionsTypedefs}}
     {{this}};
     {{/each}}
   };
+
+  constructor(
+    id: string | AbstractAddress,
+    accountOrProvider: Account | Provider,
+  ) {
+    super(id, abi, accountOrProvider);
+  }
 }

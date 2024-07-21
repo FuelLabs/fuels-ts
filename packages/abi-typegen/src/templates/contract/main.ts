@@ -5,10 +5,18 @@ import { formatEnums } from '../utils/formatEnums';
 import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
 
-import dtsTemplate from './dts.hbs';
+import mainTemplate from './main.hbs';
 
-export function renderDtsTemplate(params: { abi: Abi }) {
-  const { name: capitalizedName, types, functions, commonTypesInUse, configurables } = params.abi;
+export function renderMainTemplate(params: { abi: Abi }) {
+  const {
+    camelizedName,
+    capitalizedName,
+    types,
+    functions,
+    commonTypesInUse,
+    configurables,
+    hexlifiedBinContents,
+  } = params.abi;
 
   /*
     First we format all attributes
@@ -39,14 +47,21 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       'InvokeFunction',
     ],
   });
+
   const { formattedConfigurables } = formatConfigurables({ configurables });
+
+  const { rawContents, storageSlotsContents } = params.abi;
+  const abiJsonString = JSON.stringify(rawContents, null, 2);
+  const storageSlotsJsonString = storageSlotsContents ?? '[]';
 
   /*
     And finally render template
   */
   const text = renderHbsTemplate({
-    template: dtsTemplate,
+    template: mainTemplate,
     data: {
+      camelizedName,
+      binHexlified: hexlifiedBinContents,
       capitalizedName,
       commonTypesInUse: commonTypesInUse.join(', '),
       functionsTypedefs,
@@ -57,6 +72,8 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       enums,
       imports,
       formattedConfigurables,
+      abiJsonString,
+      storageSlotsJsonString,
     },
   });
 
