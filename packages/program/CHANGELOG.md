@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.92.1
+
+### Patch Changes
+
+- c62ae85: build(deps): bump @fuels/vm-asm from 0.54.0 to 0.55.0
+- Updated dependencies [c62ae85]
+  - @fuel-ts/account@0.92.1
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/address@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/math@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+
 ## 0.92.0
 
 ### Minor Changes

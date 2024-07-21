@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.92.1
+
+### Patch Changes
+
+- 9c20eb9: feat: add minified `fuels` distribution
+- Updated dependencies [c62ae85]
+- Updated dependencies [7579259]
+  - @fuel-ts/account@0.92.1
+  - @fuel-ts/program@0.92.1
+  - @fuel-ts/contract@0.92.1
+  - @fuel-ts/script@0.92.1
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/abi-typegen@0.92.1
+  - @fuel-ts/address@0.92.1
+  - @fuel-ts/crypto@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/hasher@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/math@0.92.1
+  - @fuel-ts/merkle@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+  - @fuel-ts/versions@0.92.1
+
 ## 0.92.0
 
 ### Minor Changes

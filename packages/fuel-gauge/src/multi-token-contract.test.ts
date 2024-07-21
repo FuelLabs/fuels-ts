@@ -14,6 +14,7 @@ const subIds = [
 
 /**
  * @group node
+ * @group browser
  */
 describe('MultiTokenContract', () => {
   it('can mint and transfer coins', async () => {

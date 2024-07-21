@@ -31,8 +31,11 @@ export default function Home() {
    */
   useAsync(async () => {
     if (wallet) {
+      // Create a new instance of the contract
       const testContract = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
+
+      // Read the current value of the counter
       const { value } = await testContract.functions.get_count().get();
       setCounter(value.toNumber());
     }
@@ -50,7 +53,10 @@ export default function Home() {
       );
     }
 
+    // Call the increment_counter function on the contract
     const { waitForResult } = await contract.functions.increment_counter(bn(1)).call();
+
+    // Wait for the transaction to be mined, and then read the value returned
     const { value } = await waitForResult();
     setCounter(value.toNumber());
 
