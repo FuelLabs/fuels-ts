@@ -60,7 +60,7 @@ export class {{capitalizedName}}Interface extends Interface {
     super(abi);
   }
 
-  functions: {
+  declare functions: {
     {{#each functionsFragments}}
     {{this}}: FunctionFragment;
     {{/each}}
@@ -71,8 +71,8 @@ export class {{capitalizedName}} extends Contract {
   static readonly abi = abi;
   static readonly storageSlots = storageSlots;
 
-  interface: {{capitalizedName}}Interface;
-  functions: {
+  declare interface: {{capitalizedName}}Interface;
+  declare functions: {
     {{#each functionsTypedefs}}
     {{this}};
     {{/each}}
