@@ -1,6 +1,6 @@
 import { toHex } from 'fuels';
 
-import { GenericTypesContractAbi__factory } from '../test/typegen/contracts';
+import { GenericTypesContractAbi } from '../test/typegen/contracts';
 import GenericTypesContractAbiHex from '../test/typegen/contracts/GenericTypesContractAbi.hex';
 
 import { launchTestContract } from './utils';
@@ -11,7 +11,7 @@ import { launchTestContract } from './utils';
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
     using contract = await launchTestContract({
-      deployer: GenericTypesContractAbi__factory,
+      deployer: GenericTypesContractAbi,
       bytecode: GenericTypesContractAbiHex,
     });
 

@@ -10,11 +10,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  ComplexPredicateAbi__factory,
-  ComplexScriptAbi__factory,
-  CoverageContractAbi__factory,
-} from '../test/typegen';
+import { ComplexPredicateAbi, ComplexScriptAbi, CoverageContractAbi } from '../test/typegen';
 import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAbi.hex';
 
 /**
@@ -36,12 +32,12 @@ describe('Minimum gas tests', () => {
 
     const contractFactory = new ContractFactory(
       CoverageContractAbiHex,
-      CoverageContractAbi__factory.abi,
+      CoverageContractAbi.abi,
       wallet
     );
 
     const { transactionRequest: request } = contractFactory.createTransactionRequest({
-      storageSlots: CoverageContractAbi__factory.storageSlots,
+      storageSlots: CoverageContractAbi.storageSlots,
     });
 
     const resources = await provider.getResourcesToSpend(wallet.address, [
@@ -81,7 +77,7 @@ describe('Minimum gas tests', () => {
      */
 
     const request = new ScriptTransactionRequest({
-      script: ComplexScriptAbi__factory.bin,
+      script: ComplexScript.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
@@ -117,7 +113,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicateAbi__factory.createInstance(provider, [bn(1000)]);
+    const predicate = ComplexPredicateAbi.createInstance(provider, [bn(1000)]);
 
     /**
      * Fund the predicate
@@ -165,7 +161,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicateAbi__factory.createInstance(provider, [bn(1000)]);
+    const predicate = ComplexPredicateAbi.createInstance(provider, [bn(1000)]);
 
     /**
      * Fund the predicate
@@ -177,7 +173,7 @@ describe('Minimum gas tests', () => {
      * Create a script transaction
      */
     const request = new ScriptTransactionRequest({
-      script: ComplexScriptAbi__factory.bin,
+      script: ComplexScript.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
 

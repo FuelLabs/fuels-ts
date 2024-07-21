@@ -10,7 +10,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PayableAnnotationAbi__factory, ScriptMainArgsAbi__factory } from '../test/typegen';
+import { PayableAnnotationAbi, ScriptMainArgsAbi } from '../test/typegen';
 import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
 /**
@@ -156,11 +156,7 @@ describe('Policies', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(
-      ScriptMainArgsAbi__factory.bin,
-      ScriptMainArgsAbi__factory.abi,
-      wallet
-    );
+    const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgsAbi.abi, wallet);
 
     const txParams: CustomTxParams = {
       tip: 11,
@@ -190,7 +186,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbi__factory,
+          deployer: PayableAnnotationAbi,
           bytecode: PayableAnnotationAbiHex,
         },
       ],
@@ -229,8 +225,8 @@ describe('Policies', () => {
     } = launched;
 
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgsAbi__factory.bin,
-      ScriptMainArgsAbi__factory.abi,
+      ScriptMainArgs.bytecode,
+      ScriptMainArgsAbi.abi,
       wallet
     );
 
@@ -291,7 +287,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbi__factory,
+          deployer: PayableAnnotationAbi,
           bytecode: PayableAnnotationAbiHex,
         },
       ],
@@ -384,7 +380,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbi__factory,
+            deployer: PayableAnnotationAbi,
             bytecode: PayableAnnotationAbiHex,
           },
         ],
@@ -445,11 +441,7 @@ describe('Policies', () => {
 
       const maxFee = 1;
 
-      const factory = new ContractFactory(
-        ScriptMainArgsAbi__factory.bin,
-        ScriptMainArgsAbi__factory.abi,
-        wallet
-      );
+      const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgsAbi.abi, wallet);
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
@@ -467,7 +459,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbi__factory,
+            deployer: PayableAnnotationAbi,
             bytecode: PayableAnnotationAbiHex,
           },
         ],

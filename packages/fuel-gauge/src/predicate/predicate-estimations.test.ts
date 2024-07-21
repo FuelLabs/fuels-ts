@@ -16,9 +16,9 @@ import {
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  PredicateMainArgsStructAbi__factory,
-  PredicateTrueAbi__factory,
-  PredicateValidateTransferAbi__factory,
+  PredicateMainArgsStructAbi,
+  PredicateTrueAbi,
+  PredicateValidateTransferAbi,
 } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
@@ -41,13 +41,13 @@ describe('Predicate', () => {
       } = launched;
 
       const predicateTrue = new Predicate({
-        bytecode: PredicateTrueAbi__factory.bin,
+        bytecode: PredicateTrue.bytecode,
         provider,
       });
 
       const predicateStruct = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStructAbi__factory.bin,
-        abi: PredicateMainArgsStructAbi__factory.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
+        abi: PredicateMainArgsStructAbi.abi,
         provider,
       });
 
@@ -140,7 +140,7 @@ describe('Predicate', () => {
       const tx = new ScriptTransactionRequest();
 
       const predicateTrue = new Predicate({
-        bytecode: PredicateTrueAbi__factory.bin,
+        bytecode: PredicateTrue.bytecode,
         provider,
       });
 
@@ -166,13 +166,13 @@ describe('Predicate', () => {
       } = launched;
 
       const predicateTrue = new Predicate({
-        bytecode: PredicateTrueAbi__factory.bin,
+        bytecode: PredicateTrue.bytecode,
         provider,
       });
 
       const predicateStruct = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStructAbi__factory.bin,
-        abi: PredicateMainArgsStructAbi__factory.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
+        abi: PredicateMainArgsStructAbi.abi,
         provider,
       });
 
@@ -213,8 +213,8 @@ describe('Predicate', () => {
       const amountToPredicate = 200_000;
 
       const predicateValidateTransfer = new Predicate<[BN]>({
-        bytecode: PredicateValidateTransferAbi__factory.bin,
-        abi: PredicateValidateTransferAbi__factory.abi,
+        bytecode: PredicateValidateTransfer.bytecode,
+        abi: PredicateValidateTransferAbi.abi,
         provider,
         inputData: [bn(amountToPredicate)],
       });
@@ -256,8 +256,8 @@ describe('Predicate', () => {
         } = launched;
 
         const predicateStruct = new Predicate<[Validation]>({
-          bytecode: PredicateMainArgsStructAbi__factory.bin,
-          abi: PredicateMainArgsStructAbi__factory.abi,
+          bytecode: PredicateMainArgsStruct.bytecode,
+          abi: PredicateMainArgsStructAbi.abi,
           provider,
         });
 
@@ -290,8 +290,8 @@ describe('Predicate', () => {
         } = launched;
 
         const predicateStruct = new Predicate<[Validation]>({
-          bytecode: PredicateMainArgsStructAbi__factory.bin,
-          abi: PredicateMainArgsStructAbi__factory.abi,
+          bytecode: PredicateMainArgsStruct.bytecode,
+          abi: PredicateMainArgsStructAbi.abi,
           provider,
         });
 

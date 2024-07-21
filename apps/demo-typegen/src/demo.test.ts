@@ -1,14 +1,13 @@
 // #region Testing-in-ts-ts
-import { ContractFactory, toHex, Address, Wallet } from 'fuels';
+import { toHex, Address, Wallet } from 'fuels';
 import { launchTestNode, safeExec } from 'fuels/test-utils';
 
 import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
 
-import { DemoContractAbi__factory } from './contract-types';
-import bytecode from './contract-types/DemoContractAbi.hex';
-import type { PredicateAbiInputs } from './predicate-types';
-import { PredicateAbi__factory } from './predicate-types';
-import { ScriptAbi__factory } from './script-types';
+import { DemoContract, DemoContractFactory } from './contract-types';
+import type { PredicateInputs } from './predicate-types';
+import { Predicate } from './predicate-types';
+import { Script } from './script-types';
 
 /**
  * @group node
@@ -25,9 +24,10 @@ describe('ExampleContract', () => {
     // #region typegen-demo-contract-storage-slots
     // #context import storageSlots from './contract/out/debug/demo-contract-storage_slots.json';
 
-    const { waitForResult } = await DemoContractAbi__factory.deployContract(bytecode, wallet, {
+    const { waitForResult } = await DemoContractFactory.deploy(wallet, {
       storageSlots,
     });
+
     const { contract } = await waitForResult();
     // #endregion typegen-demo-contract-storage-slots
 
@@ -41,7 +41,7 @@ describe('ExampleContract', () => {
     } = launched;
 
     // Deploy
-    const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, wallet);
+    const factory = new DemoContractFactory(wallet);
     const deploy = await factory.deployContract();
     const { contract } = await deploy.waitForResult();
     const contractId = contract.id;
@@ -55,9 +55,9 @@ describe('ExampleContract', () => {
 
     // You can also make a call using the factory
     // #region typegen-demo-contract-factory-connect
-    // #context import { DemoContractAbi__factory } from './types';
+    // #context import { DemoContractAbi } from './types';
 
-    const contractInstance = DemoContractAbi__factory.connect(contractId, wallet);
+    const contractInstance = new DemoContract(contractId, wallet);
     const call2 = await contractInstance.functions.return_input(1337).call();
     const { value: v2 } = await call2.waitForResult();
     // #endregion typegen-demo-contract-factory-connect
@@ -72,11 +72,11 @@ describe('ExampleContract', () => {
     } = launched;
 
     // #region typegen-demo-contract-factory-deploy
-    // #context import { DemoContractAbi__factory } from './types';
+    // #context import { DemoContractAbi } from './types';
     // #context import bytecode from './types/DemoContractAbi.hex';
 
     // Deploy
-    const deploy = await DemoContractAbi__factory.deployContract(bytecode, wallet);
+    const deploy = await DemoContractFactory.deploy(wallet);
     const { contract } = await deploy.waitForResult();
 
     // #endregion typegen-demo-contract-factory-deploy
@@ -101,10 +101,10 @@ it('should throw when simulating via contract factory with wallet with no resour
 
   const unfundedWallet = Wallet.generate({ provider });
 
-  const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
+  const factory = new DemoContractFactory(fundedWallet);
   const { waitForResult } = await factory.deployContract();
   const { contract } = await waitForResult();
-  const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
+  const contractInstance = new DemoContract(contract.id, unfundedWallet);
 
   const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
 
@@ -120,10 +120,10 @@ it('should not throw when dry running via contract factory with wallet with no r
   } = launched;
   const unfundedWallet = Wallet.generate({ provider });
 
-  const factory = new ContractFactory(bytecode, DemoContractAbi__factory.abi, fundedWallet);
+  const factory = new DemoContractFactory(fundedWallet);
   const { waitForResult } = await factory.deployContract();
   const { contract } = await waitForResult();
-  const contractInstance = DemoContractAbi__factory.connect(contract.id, unfundedWallet);
+  const contractInstance = new DemoContract(contract.id, unfundedWallet);
 
   await expect(contractInstance.functions.return_input(1337).dryRun()).resolves.not.toThrow();
 });
@@ -136,9 +136,9 @@ test('Example script', async () => {
   } = launched;
 
   // #region typegen-demo-script
-  // #context import { ScriptAbi__factory } from './types';
+  // #context import { ScriptAbi } from './types';
 
-  const script = ScriptAbi__factory.createInstance(wallet);
+  const script = new Script(wallet);
   const { waitForResult } = await script.functions.main().call();
   const { value } = await waitForResult();
   // #endregion typegen-demo-script
@@ -148,7 +148,7 @@ test('Example script', async () => {
 test('Example predicate', async () => {
   // #region typegen-demo-predicate
   // #context import type { PredicateAbiInputs } from './types';
-  // #context import { PredicateAbi__factory } from './types';
+  // #context import { PredicateAbi } from './types';
 
   // In this exchange, we are first transferring some coins to the predicate
   using launched = await launchTestNode();
@@ -160,10 +160,10 @@ test('Example predicate', async () => {
 
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-  const predicateData: PredicateAbiInputs = [];
-  const predicate = PredicateAbi__factory.createInstance(provider, predicateData);
+  const predicateData: PredicateInputs = [];
+  const predicate = new Predicate(provider, predicateData);
 
-  const tx = await wallet.transfer(predicate.address, 200_000, provider.getBaseAssetId());
+  const tx = await wallet.transfer(predicate., 200_000, provider.getBaseAssetId());
   const { isStatusSuccess } = await tx.wait();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)

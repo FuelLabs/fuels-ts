@@ -1,7 +1,7 @@
 import { toHex, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { StorageTestContractAbi__factory } from '../test/typegen';
+import { StorageTestContractAbi } from '../test/typegen';
 import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 /**
@@ -16,14 +16,14 @@ describe('StorageTestContract', () => {
       wallets: [wallet],
     } = launched;
 
-    const { storageSlots } = StorageTestContractAbi__factory;
+    const { storageSlots } = StorageTestContractAbi;
 
     // #region contract-deployment-storage-slots
     // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
 
     const factory = new ContractFactory(
       StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractAbi.abi,
       wallet
     );
     const deploy = await factory.deployContract({
@@ -59,7 +59,7 @@ describe('StorageTestContract', () => {
 
     const factory = new ContractFactory(
       StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractAbi.abi,
       wallet
     );
     // #region contract-deployment-storage-slots-inline

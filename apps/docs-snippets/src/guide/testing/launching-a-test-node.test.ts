@@ -3,7 +3,7 @@ import { WalletUnlocked } from 'fuels';
 import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-import { CounterAbi__factory as TestContract__factory } from '../../../test/typegen/contracts';
+import { CounterAbi as TestContract } from '../../../test/typegen/contracts';
 import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
 
 /**
@@ -51,13 +51,13 @@ describe('launching a test node', () => {
     // #region basic-example
     // #import { launchTestNode };
 
-    // #context import { TestContract__factory } from 'path/to/typegen/output';
+    // #context import { TestContract } from 'path/to/typegen/output';
     // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
 
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TestContract__factory,
+          deployer: TestContract,
           bytecode,
         },
       ],
@@ -81,7 +81,7 @@ describe('launching a test node', () => {
     // #region advanced-example
     // #import { launchTestNode, AssetId, TestMessage };
 
-    // #context import { TestContract__factory } from 'path/to/typegen/output';
+    // #context import { TestContract } from 'path/to/typegen/output';
     // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
 
     const assets = AssetId.random(2);
@@ -97,7 +97,7 @@ describe('launching a test node', () => {
       },
       contractsConfigs: [
         {
-          deployer: TestContract__factory,
+          deployer: TestContract,
           bytecode,
           walletIndex: 3,
           options: { storageSlots: [] },

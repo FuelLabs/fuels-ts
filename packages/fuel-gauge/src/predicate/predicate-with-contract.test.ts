@@ -1,16 +1,10 @@
 import { Contract, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  CallTestContractAbi__factory,
-  TokenContractAbi__factory,
-} from '../../test/typegen/contracts';
+import { CallTestContractAbi, TokenContractAbi } from '../../test/typegen/contracts';
 import contractBytes from '../../test/typegen/contracts/CallTestContractAbi.hex';
 import tokenPoolBytes from '../../test/typegen/contracts/TokenContractAbi.hex';
-import {
-  PredicateMainArgsStructAbi__factory,
-  PredicateTrueAbi__factory,
-} from '../../test/typegen/predicates';
+import { PredicateMainArgsStructAbi, PredicateTrueAbi } from '../../test/typegen/predicates';
 
 import { fundPredicate } from './utils/predicate';
 
@@ -22,7 +16,7 @@ describe('Predicate', () => {
   describe('With Contract', () => {
     it('calls a predicate from a contract function', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: CallTestContractAbi__factory, bytecode: contractBytes }],
+        contractsConfigs: [{ deployer: CallTestContractAbi, bytecode: contractBytes }],
       });
 
       const {
@@ -32,7 +26,7 @@ describe('Predicate', () => {
       } = launched;
 
       const amountToPredicate = 300_000;
-      const predicate = PredicateTrueAbi__factory.createInstance(provider);
+      const predicate = PredicateTrueAbi.createInstance(provider);
 
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
@@ -53,7 +47,7 @@ describe('Predicate', () => {
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: TokenContractAbi__factory, bytecode: tokenPoolBytes }],
+        contractsConfigs: [{ deployer: TokenContractAbi, bytecode: tokenPoolBytes }],
       });
 
       const {
@@ -74,7 +68,7 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 1_000_000;
       const amountToReceiver = 200_000;
-      const predicate = PredicateMainArgsStructAbi__factory.createInstance(provider, [
+      const predicate = PredicateMainArgsStructAbi.createInstance(provider, [
         {
           has_account: true,
           total_complete: 100,

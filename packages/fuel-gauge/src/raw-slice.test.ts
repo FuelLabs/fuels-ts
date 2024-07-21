@@ -2,10 +2,10 @@ import { bn, Predicate, Wallet, Address } from 'fuels';
 import type { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptRawSliceAbi__factory } from '../test/typegen';
-import { RawSliceAbi__factory } from '../test/typegen/contracts';
+import { ScriptRawSliceAbi } from '../test/typegen';
+import { RawSliceAbi } from '../test/typegen/contracts';
 import RawSliceAbiHex from '../test/typegen/contracts/RawSliceAbi.hex';
-import { PredicateRawSliceAbi__factory } from '../test/typegen/predicates';
+import { PredicateRawSliceAbi } from '../test/typegen/predicates';
 
 import { launchTestContract } from './utils';
 
@@ -21,7 +21,7 @@ type Wrapper = {
 
 function setupRawSliceContract() {
   return launchTestContract({
-    deployer: RawSliceAbi__factory,
+    deployer: RawSliceAbi,
     bytecode: RawSliceAbiHex,
   });
 }
@@ -93,8 +93,8 @@ describe('Raw Slice Tests', () => {
     };
 
     const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateRawSliceAbi__factory.bin,
-      abi: PredicateRawSliceAbi__factory.abi,
+      bytecode: PredicateRawSlice.bytecode,
+      abi: PredicateRawSliceAbi.abi,
       provider: wallet.provider,
       inputData: [INPUT],
     });
@@ -137,7 +137,7 @@ describe('Raw Slice Tests', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = ScriptRawSliceAbi__factory.createInstance(wallet);
+    const scriptInstance = ScriptRawSliceAbi.createInstance(wallet);
 
     const bytes = [40, 41, 42];
     const INPUT: Wrapper = {

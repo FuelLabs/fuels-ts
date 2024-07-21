@@ -5,7 +5,7 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
+import { TestPredicateAbi } from "@/sway-api/predicates/index";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
@@ -27,9 +27,7 @@ export default function PredicateExample() {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
       // Initialize a new predicate instance
-      const predicate = TestPredicateAbi__factory.createInstance(
-        wallet.provider,
-      );
+      const predicate = TestPredicateAbi.createInstance(wallet.provider);
       setPredicate(predicate);
       setPredicateBalance(await predicate.getBalance());
     }
@@ -65,7 +63,7 @@ export default function PredicateExample() {
       }
 
       // Initialize a new predicate instance with the entered pin
-      const reInitializePredicate = TestPredicateAbi__factory.createInstance(
+      const reInitializePredicate = TestPredicateAbi.createInstance(
         wallet.provider,
         [bn(pin)],
       );

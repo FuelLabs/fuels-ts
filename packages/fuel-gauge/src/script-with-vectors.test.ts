@@ -1,10 +1,10 @@
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  ScriptWithArrayAbi__factory,
-  ScriptWithVectorAbi__factory,
-  ScriptWithVectorAdvancedAbi__factory,
-  ScriptWithVectorMixedAbi__factory,
+  ScriptWithArrayAbi,
+  ScriptWithVectorAbi,
+  ScriptWithVectorAdvancedAbi,
+  ScriptWithVectorMixedAbi,
 } from '../test/typegen';
 
 /**
@@ -20,7 +20,7 @@ describe('Script With Vectors', () => {
     } = launched;
 
     const someArray = [1, 100];
-    const scriptInstance = ScriptWithArrayAbi__factory.createInstance(wallet);
+    const scriptInstance = ScriptWithArrayAbi.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(someArray).call();
     const { logs } = await waitForResult();
@@ -36,7 +36,7 @@ describe('Script With Vectors', () => {
     } = launched;
 
     const someVec = [7, 2, 1, 5];
-    const scriptInstance = ScriptWithVectorAbi__factory.createInstance(wallet);
+    const scriptInstance = ScriptWithVectorAbi.createInstance(wallet);
 
     const scriptInvocationScope = scriptInstance.functions.main(someVec);
 
@@ -95,7 +95,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    const scriptInstance = ScriptWithVectorMixedAbi__factory.createInstance(wallet);
+    const scriptInstance = ScriptWithVectorMixedAbi.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(importantDates).call();
     const { value } = await waitForResult();
@@ -166,7 +166,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    const scriptInstance = ScriptWithVectorAdvancedAbi__factory.createInstance(wallet);
+    const scriptInstance = ScriptWithVectorAdvancedAbi.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(vectorOfStructs).call();
     const { value } = await waitForResult();

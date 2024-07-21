@@ -1,7 +1,7 @@
 import { launchTestNode } from 'fuels/test-utils';
 import { describe, test, expect } from 'vitest';
 
-import { CounterAbi__factory } from '../../../test/typegen';
+import { CounterAbi } from '../../../test/typegen';
 import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
 
 /**
@@ -10,7 +10,7 @@ import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
  */
 describe('Counter Contract', () => {
   // #region decrement-counter
-  // #context import { CounterAbi__factory } from './sway-programs-api';
+  // #context import { CounterAbi } from './sway-programs-api';
   // #context import bytecode from './sway-programs-api/contracts/CounterAbi.hex';
 
   test('calls the decrement_counter function', async () => {
@@ -21,7 +21,7 @@ describe('Counter Contract', () => {
       // because we are instantiating it with the `using` keyword.
       contractsConfigs: [
         {
-          deployer: CounterAbi__factory,
+          deployer: CounterAbi,
           bytecode,
         },
       ],

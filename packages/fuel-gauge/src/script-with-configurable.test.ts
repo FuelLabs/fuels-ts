@@ -1,7 +1,7 @@
 import { Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptWithConfigurableAbi__factory } from '../test/typegen';
+import { ScriptWithConfigurableAbi } from '../test/typegen';
 
 const defaultValues = {
   FEE: 5,
@@ -20,8 +20,8 @@ describe('Script With Configurable', () => {
     } = launched;
 
     const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
+      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableAbi.abi,
       wallet
     );
 
@@ -45,8 +45,8 @@ describe('Script With Configurable', () => {
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
 
     const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
+      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableAbi.abi,
       wallet
     );
 
@@ -68,8 +68,8 @@ describe('Script With Configurable', () => {
     const configurableConstants = { FEE: 35 };
 
     const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
+      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableAbi.abi,
       wallet
     );
 
@@ -95,8 +95,8 @@ describe('Script With Configurable', () => {
     expect(configurableConstants.FEE).not.toEqual(input.FEE);
 
     const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
+      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableAbi.abi,
       wallet
     );
 

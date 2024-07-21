@@ -2,11 +2,7 @@ import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import type { PredicateStrSliceAbiInputs } from '../test/typegen';
-import {
-  PredicateStrSliceAbi__factory,
-  ScriptStrSliceAbi__factory,
-  StrSliceAbi__factory,
-} from '../test/typegen';
+import { PredicateStrSliceAbi, ScriptStrSliceAbi, StrSliceAbi } from '../test/typegen';
 import contractBytes from '../test/typegen/contracts/StrSliceAbi.hex';
 
 /**
@@ -18,7 +14,7 @@ describe('str slice', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: StrSliceAbi__factory,
+          deployer: StrSliceAbi,
           bytecode: contractBytes,
         },
       ],
@@ -44,7 +40,7 @@ describe('str slice', () => {
     } = launched;
 
     const predicateData: PredicateStrSliceAbiInputs = ['predicate-input'];
-    const predicate = PredicateStrSliceAbi__factory.createInstance(provider, predicateData);
+    const predicate = PredicateStrSliceAbi.createInstance(provider, predicateData);
     const baseAssetId = provider.getBaseAssetId();
 
     const amountToPredicate = 250_000;
@@ -71,7 +67,7 @@ describe('str slice', () => {
       wallets: [sender],
     } = launched;
 
-    const script = await ScriptStrSliceAbi__factory.createInstance(sender);
+    const script = await ScriptStrSliceAbi.createInstance(sender);
     const input = 'script-input';
     const output = 'script-return';
     const { waitForResult } = await script.functions.main(input).call();

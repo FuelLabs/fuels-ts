@@ -7,7 +7,7 @@ import { describe, test, expect } from 'vitest';
  *
  * Can't find these imports? Make sure you've run `fuels build` to generate these with typegen.
  */
-import { TestPredicateAbi__factory, TestPredicateAbiInputs } from '../src/sway-api';
+import { TestPredicateAbi, TestPredicateAbiInputs } from '../src/sway-api';
 
 /**
  * @group node
@@ -33,7 +33,7 @@ describe('Predicate', () => {
     const predicateData: TestPredicateAbiInputs = [1337];
 
     // Now, we can instantiate our predicate.
-    const predicate = TestPredicateAbi__factory.createInstance(provider, predicateData);
+    const predicate = TestPredicateAbi.createInstance(provider, predicateData);
 
     // Lets also setup some transfer values to assert against.
     const amountToPredicate = 250_000;

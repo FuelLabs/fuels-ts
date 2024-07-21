@@ -18,7 +18,7 @@ import {
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import { MultiTokenContractAbi__factory, TokenContractAbi__factory } from '../test/typegen';
+import { MultiTokenContractAbi, TokenContractAbi } from '../test/typegen';
 import MultiTokenContractAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
 import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
 
@@ -244,7 +244,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: MultiTokenContractAbi__factory,
+            deployer: MultiTokenContractAbi,
             bytecode: MultiTokenContractAbiHex,
           },
         ],
@@ -276,7 +276,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi__factory,
+            deployer: TokenContractAbi,
             bytecode: TokenContractAbiHex,
           },
         ],
@@ -318,7 +318,7 @@ describe('TransactionSummary', () => {
         using launched = await launchTestNode({
           contractsConfigs: [
             {
-              deployer: TokenContractAbi__factory,
+              deployer: TokenContractAbi,
               bytecode: TokenContractAbiHex,
             },
           ],
@@ -397,11 +397,11 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi__factory,
+            deployer: TokenContractAbi,
             bytecode: TokenContractAbiHex,
           },
           {
-            deployer: TokenContractAbi__factory,
+            deployer: TokenContractAbi,
             bytecode: TokenContractAbiHex,
           },
         ],
@@ -446,15 +446,15 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi__factory,
+            deployer: TokenContractAbi,
             bytecode: TokenContractAbiHex,
           },
           {
-            deployer: TokenContractAbi__factory,
+            deployer: TokenContractAbi,
             bytecode: TokenContractAbiHex,
           },
           {
-            deployer: TokenContractAbi__factory,
+            deployer: TokenContractAbi,
             bytecode: TokenContractAbiHex,
           },
         ],

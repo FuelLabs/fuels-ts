@@ -8,10 +8,10 @@ import { ContractFactory, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  AdvancedLoggingAbi__factory,
-  AdvancedLoggingOtherContractAbi__factory,
-  MultiTokenContractAbi__factory,
-  RevertErrorAbi__factory,
+  AdvancedLoggingAbi,
+  AdvancedLoggingOtherContractAbi,
+  MultiTokenContractAbi,
+  RevertErrorAbi,
 } from '../test/typegen/contracts';
 import AdvancedLoggingAbiHex from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
 import AdvancedLoggingOtherContractAbiHex from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
@@ -27,7 +27,7 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbi__factory,
+          deployer: RevertErrorAbi,
           bytecode: RevertErrorAbiHex,
         },
       ],
@@ -125,19 +125,19 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbi__factory,
+          deployer: RevertErrorAbi,
           bytecode: RevertErrorAbiHex,
         },
         {
-          deployer: MultiTokenContractAbi__factory,
+          deployer: MultiTokenContractAbi,
           bytecode: MultiTokenAbiHex,
         },
         {
-          deployer: AdvancedLoggingAbi__factory,
+          deployer: AdvancedLoggingAbi,
           bytecode: AdvancedLoggingAbiHex,
         },
         {
-          deployer: AdvancedLoggingOtherContractAbi__factory,
+          deployer: AdvancedLoggingOtherContractAbi,
           bytecode: AdvancedLoggingOtherContractAbiHex,
         },
       ],
@@ -161,11 +161,7 @@ describe('dry-run-multiple-txs', () => {
     ];
 
     // request 1
-    const factory = new ContractFactory(
-      MultiTokenAbiHex,
-      MultiTokenContractAbi__factory.abi,
-      wallet
-    );
+    const factory = new ContractFactory(MultiTokenAbiHex, MultiTokenContractAbi.abi, wallet);
     const { transactionRequest: request1 } = factory.createTransactionRequest({
       maxFee: 15000,
     });

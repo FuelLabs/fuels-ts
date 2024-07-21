@@ -3,7 +3,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
 import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
-import { BytecodeSwayLibAbi__factory } from '../test/typegen/contracts';
+import { BytecodeSwayLibAbi } from '../test/typegen/contracts';
 import BytecodeSwayLibAbiHex from '../test/typegen/contracts/BytecodeSwayLibAbi.hex';
 
 import { launchTestContract } from './utils';
@@ -15,7 +15,7 @@ import { launchTestContract } from './utils';
 describe('bytecode computations', () => {
   it('compute_bytecode_root', async () => {
     using contract = await launchTestContract({
-      deployer: BytecodeSwayLibAbi__factory,
+      deployer: BytecodeSwayLibAbi,
       bytecode: BytecodeSwayLibAbiHex,
     });
 
@@ -33,7 +33,7 @@ describe('bytecode computations', () => {
 
   it('verify_contract_bytecode', async () => {
     using contract = await launchTestContract({
-      deployer: BytecodeSwayLibAbi__factory,
+      deployer: BytecodeSwayLibAbi,
       bytecode: BytecodeSwayLibAbiHex,
     });
 
@@ -55,7 +55,7 @@ describe('bytecode computations', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: BytecodeSwayLibAbi__factory,
+          deployer: BytecodeSwayLibAbi,
           bytecode: BytecodeSwayLibAbiHex,
         },
       ],

@@ -2,9 +2,9 @@ import { ContractFactory, ReceiptType, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  ReentrantBarAbi__factory,
-  ReentrantFooAbi__factory,
-  StorageTestContractAbi__factory,
+  ReentrantBarAbi,
+  ReentrantFooAbi,
+  StorageTestContractAbi,
 } from '../test/typegen/contracts';
 import ReentrantBarAbiHex from '../test/typegen/contracts/ReentrantBarAbi.hex';
 import ReentrantFooAbiHex from '../test/typegen/contracts/ReentrantFooAbi.hex';
@@ -19,11 +19,11 @@ describe('Reentrant Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReentrantFooAbi__factory,
+          deployer: ReentrantFooAbi,
           bytecode: ReentrantFooAbiHex,
         },
         {
-          deployer: ReentrantBarAbi__factory,
+          deployer: ReentrantBarAbi,
           bytecode: ReentrantBarAbiHex,
         },
       ],
@@ -72,11 +72,11 @@ describe('Reentrant Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReentrantFooAbi__factory,
+          deployer: ReentrantFooAbi,
           bytecode: ReentrantFooAbiHex,
         },
         {
-          deployer: ReentrantBarAbi__factory,
+          deployer: ReentrantBarAbi,
           bytecode: ReentrantBarAbiHex,
         },
       ],
@@ -89,9 +89,9 @@ describe('Reentrant Contract Calls', () => {
 
     const deploy = await new ContractFactory(
       StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractAbi.abi,
       wallet
-    ).deployContract({ storageSlots: StorageTestContractAbi__factory.storageSlots });
+    ).deployContract({ storageSlots: StorageTestContractAbi.storageSlots });
 
     const { contract: storageContract } = await deploy.waitForResult();
 

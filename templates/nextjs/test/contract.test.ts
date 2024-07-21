@@ -7,7 +7,7 @@ import { describe, test, expect } from 'vitest';
  *
  * Can't find these imports? Make sure you've run `fuels build` to generate these with typegen.
  */
-import { TestContractAbi__factory } from '../src/sway-api';
+import { TestContractAbi } from '../src/sway-api';
 import bytecode from '../src/sway-api/contracts/TestContractAbi.hex';
 
 /**
@@ -26,7 +26,7 @@ describe('Contract', () => {
       // because we are instantiating it with the `using` keyword.
       contractsConfigs: [
         {
-          deployer: TestContractAbi__factory,
+          deployer: TestContractAbi,
           bytecode,
         },
       ],

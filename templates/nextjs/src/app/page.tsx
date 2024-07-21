@@ -1,7 +1,7 @@
 "use client";
 
 import type { TestContractAbi } from "@/sway-api";
-import { TestContractAbi__factory } from "@/sway-api";
+import { TestContractAbi } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
@@ -30,7 +30,7 @@ export default function Home() {
   useAsync(async () => {
     if (wallet) {
       // Create a new instance of the contract
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
+      const testContract = TestContractAbi.connect(contractId, wallet);
       setContract(testContract);
 
       // Read the current value of the counter

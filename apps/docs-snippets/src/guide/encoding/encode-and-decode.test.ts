@@ -11,7 +11,7 @@ import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataRece
 import { generateTestWallet } from 'fuels/test-utils';
 
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
-import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';
+import { SumScriptAbi as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi';
 
 /**
  * @group node
