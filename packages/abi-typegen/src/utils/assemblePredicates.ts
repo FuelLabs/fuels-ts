@@ -18,9 +18,9 @@ export function assemblePredicates(params: { abis: Abi[]; outputDir: string }) {
   const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
 
   abis.forEach((abi) => {
-    const { name } = abi;
+    const { capitalizedName: name } = abi;
 
-    const factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
+    const factoryFilepath = `${outputDir}/factories/${name}.ts`;
 
     const factory: IFile = {
       path: factoryFilepath,

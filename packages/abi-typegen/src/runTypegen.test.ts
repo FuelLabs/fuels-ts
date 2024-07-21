@@ -60,7 +60,7 @@ describe('runTypegen.js', () => {
       join(output, 'common.d.ts'),
       join(output, `${normalizedName}Abi.d.ts`),
       join(output, `${normalizedName}2Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+      join(output, 'factories', `${normalizedName}Abi.ts`),
       join(output, `${normalizedName}Abi.hex.ts`),
       join(output, `${normalizedName}2Abi.hex.ts`),
     ];
@@ -106,7 +106,7 @@ describe('runTypegen.js', () => {
       join(output, 'index.ts'),
       join(output, 'common.d.ts'),
       join(output, `${normalizedName}Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+      join(output, 'factories', `${normalizedName}Abi.ts`),
       join(output, `${normalizedName}Abi.hex.ts`),
     ];
 
@@ -147,10 +147,7 @@ describe('runTypegen.js', () => {
     expect(error).toBeFalsy();
 
     // check if all files were created
-    const files = [
-      join(output, 'index.ts'),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-    ];
+    const files = [join(output, 'index.ts'), join(output, 'factories', `${normalizedName}Abi.ts`)];
 
     expect(files.length).toEqual(2);
 
@@ -302,7 +299,7 @@ describe('runTypegen.js', () => {
       join(output, 'common.d.ts'),
       join(output, `${normalizedName}Abi.d.ts`),
       join(output, `${normalizedName}2Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
+      join(output, 'factories', `${normalizedName}Abi.ts`),
       join(output, `${normalizedName}Abi.hex.ts`),
       join(output, `${normalizedName}2Abi.hex.ts`),
     ];
