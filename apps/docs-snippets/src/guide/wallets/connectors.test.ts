@@ -135,6 +135,9 @@ class WalletConnector extends FuelConnector {
   }
 }
 
+/**
+ * @group node
+ */
 describe('connectors', () => {
   describe('instantiation', () => {
     test('should be able to instantiate a Fuel SDK', () => {
