@@ -26,6 +26,9 @@
   // Markdown Config
   // ********************** //
   "hideBreadcrumbs": true,
+  "membersWithOwnFile": ["Class", "Enum", "Interface"],
+  "typeDeclarationFormat": "table",
+  "excludeScopesInPaths": true,
   "entryFileName": "index.md",
   // ******************** //
   // Merge Modules Config
