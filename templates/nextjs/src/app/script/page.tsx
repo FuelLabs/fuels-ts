@@ -5,6 +5,7 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { FAUCET_LINK } from "@/lib";
 import { TestScriptAbi__factory } from "@/sway-api";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
@@ -43,7 +44,10 @@ export default function ScriptExample() {
         <span>
           Error running script. Please make sure your wallet has enough funds.
           Please click the 'Top-up Wallet' button in the top right corner, or
-          use the <Link href="/faucet">faucet.</Link>
+          use the{" "}
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
         </span>,
       );
     }

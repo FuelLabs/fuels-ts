@@ -5,6 +5,7 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { FAUCET_LINK } from "@/lib";
 import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
@@ -63,7 +64,10 @@ export default function PredicateExample() {
         <span>
           Failed to transfer funds. Please make sure your wallet has enough
           funds. Please click the 'Top-up Wallet' button in the top right
-          corner, or use the <Link href="/faucet">faucet.</Link>
+          corner, or use the{" "}
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
         </span>,
       );
     }
