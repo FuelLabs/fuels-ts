@@ -185,11 +185,13 @@ describe('transactionRequestify', () => {
     expect(txRequest.witnesses).toEqual(txRequestLike.witnesses);
   });
 
-  it('should throw error if invalid transaction type', () => {
+  it('should throw error if unsupported transaction type', () => {
     const txRequestLike = {
-      type: 5,
+      type: 1234,
     };
 
-    expect(() => transactionRequestify(txRequestLike)).toThrow('Invalid transaction type: 5');
+    expect(() => transactionRequestify(txRequestLike)).toThrow(
+      'Unsupported transaction type: 1234'
+    );
   });
 });

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.2.2",
+    "@fuels/connectors": "^0.8.1",
     "@fuels/react": "^0.20.0",
     "@tanstack/react-query": "^5.51.1",
     "fuels": "workspace:*",
