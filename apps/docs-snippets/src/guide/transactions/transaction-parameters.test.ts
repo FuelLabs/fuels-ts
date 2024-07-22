@@ -93,7 +93,7 @@ describe(__filename, () => {
   it('executes contract call with txParams', async () => {
     // #region transaction-parameters-8
     const { waitForResult } = await contract.functions
-      .increment_count(15)
+      .increment_counter(15)
       .txParams({
         variableOutputs: 1,
       })

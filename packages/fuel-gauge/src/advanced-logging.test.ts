@@ -1,36 +1,34 @@
 import type { FuelError } from '@fuel-ts/errors';
-import type { Contract, Provider, WalletUnlocked } from 'fuels';
 import { Script, bn } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { ScriptCallContractAbi__factory } from '../test/typegen';
+import {
+  AdvancedLoggingAbi__factory,
+  AdvancedLoggingOtherContractAbi__factory,
+  CallTestContractAbi__factory,
+  ConfigurableContractAbi__factory,
+  CoverageContractAbi__factory,
+} from '../test/typegen/contracts';
+import AdvancedLoggingAbiHex from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
+import AdvancedLoggingOtherContractAbiHex from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
+import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
+import ConfigurableContractAbiHex from '../test/typegen/contracts/ConfigurableContractAbi.hex';
+import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAbi.hex';
 
-import { getSetupContract } from './utils';
-
-const setupContract = getSetupContract('advanced-logging');
-const setupOtherContract = getSetupContract('advanced-logging-other-contract');
-
-let provider: Provider;
-let advancedLogContract: Contract;
-let otherAdvancedLogContract: Contract;
-let advancedLogId: string;
-let otherLogId: string;
-let baseAssetId: string;
-
-beforeAll(async () => {
-  advancedLogContract = await setupContract();
-  otherAdvancedLogContract = await setupOtherContract({ cache: false });
-  provider = advancedLogContract.provider;
-  advancedLogId = advancedLogContract.id.toB256();
-  otherLogId = otherAdvancedLogContract.id.toB256();
-  baseAssetId = provider.getBaseAssetId();
-});
+import { launchTestContract } from './utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
+    using advancedLogContract = await launchTestContract({
+      deployer: AdvancedLoggingAbi__factory,
+      bytecode: AdvancedLoggingAbiHex,
+    });
+
     const { waitForResult } = await advancedLogContract.functions.test_function().call();
     const { value, logs } = await waitForResult();
 
@@ -76,6 +74,11 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=true]', async () => {
+    using advancedLogContract = await launchTestContract({
+      deployer: AdvancedLoggingAbi__factory,
+      bytecode: AdvancedLoggingAbiHex,
+    });
+
     const { waitForResult } = await advancedLogContract.functions
       .test_function_with_require(1, 1)
       .call();
@@ -87,6 +90,11 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from require [condition=false]', async () => {
+    using advancedLogContract = await launchTestContract({
+      deployer: AdvancedLoggingAbi__factory,
+      bytecode: AdvancedLoggingAbiHex,
+    });
+
     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
     try {
       await invocation.call();
@@ -116,6 +124,20 @@ describe('Advanced Logging', () => {
   });
 
   it('can get log data from a downstream Contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        { deployer: AdvancedLoggingAbi__factory, bytecode: AdvancedLoggingAbiHex },
+        {
+          deployer: AdvancedLoggingOtherContractAbi__factory,
+          bytecode: AdvancedLoggingOtherContractAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [advancedLogContract, otherAdvancedLogContract],
+    } = launched;
+
     const INPUT = 3;
     const { waitForResult } = await advancedLogContract.functions
       .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
@@ -134,11 +156,6 @@ describe('Advanced Logging', () => {
   });
 
   describe('should properly decode all logs in a multicall with inter-contract calls', () => {
-    const setupCallTest = getSetupContract(FuelGaugeProjectsEnum.CALL_TEST_CONTRACT);
-    const setupConfigurable = getSetupContract(FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT);
-    const setupCoverage = getSetupContract(FuelGaugeProjectsEnum.COVERAGE_CONTRACT);
-
-    let wallet: WalletUnlocked;
     const testStruct = {
       a: true,
       b: 100000,
@@ -154,19 +171,34 @@ describe('Advanced Logging', () => {
       'fuelfuel',
     ];
 
-    beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-    });
-
     it('when using InvacationScope', async () => {
-      const callTest = await setupCallTest({ cache: false });
-      const configurable = await setupConfigurable({ cache: false });
-      const coverage = await setupCoverage({ cache: false });
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          { deployer: AdvancedLoggingAbi__factory, bytecode: AdvancedLoggingAbiHex },
+          {
+            deployer: AdvancedLoggingOtherContractAbi__factory,
+            bytecode: AdvancedLoggingOtherContractAbiHex,
+          },
+          { deployer: CallTestContractAbi__factory, bytecode: CallTestContractAbiHex },
+          { deployer: ConfigurableContractAbi__factory, bytecode: ConfigurableContractAbiHex },
+          { deployer: CoverageContractAbi__factory, bytecode: CoverageContractAbiHex },
+        ],
+      });
+
+      const {
+        contracts: [
+          advancedLogContract,
+          otherAdvancedLogContract,
+          callTest,
+          configurable,
+          coverage,
+        ],
+      } = launched;
 
       const { waitForResult } = await callTest
         .multiCall([
           advancedLogContract.functions
-            .test_log_from_other_contract(10, otherLogId)
+            .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
             .addContracts([otherAdvancedLogContract]),
           callTest.functions.boo(testStruct),
           configurable.functions.echo_struct(),
@@ -182,14 +214,34 @@ describe('Advanced Logging', () => {
     });
 
     it('when using ScriptTransactionRequest', async () => {
-      const callTest = await setupCallTest({ cache: false });
-      const configurable = await setupConfigurable({ cache: false });
-      const coverage = await setupCoverage({ cache: false });
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          { deployer: AdvancedLoggingAbi__factory, bytecode: AdvancedLoggingAbiHex },
+          {
+            deployer: AdvancedLoggingOtherContractAbi__factory,
+            bytecode: AdvancedLoggingOtherContractAbiHex,
+          },
+          { deployer: CallTestContractAbi__factory, bytecode: CallTestContractAbiHex },
+          { deployer: ConfigurableContractAbi__factory, bytecode: ConfigurableContractAbiHex },
+          { deployer: CoverageContractAbi__factory, bytecode: CoverageContractAbiHex },
+        ],
+      });
+
+      const {
+        contracts: [
+          advancedLogContract,
+          otherAdvancedLogContract,
+          callTest,
+          configurable,
+          coverage,
+        ],
+        wallets: [wallet],
+      } = launched;
 
       const request = await callTest
         .multiCall([
           advancedLogContract.functions
-            .test_log_from_other_contract(10, otherLogId)
+            .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
             .addContracts([otherAdvancedLogContract]),
           callTest.functions.boo(testStruct),
           configurable.functions.echo_struct(),
@@ -197,7 +249,7 @@ describe('Advanced Logging', () => {
         ])
         .getTransactionRequest();
 
-      const txCost = await provider.getTransactionCost(request, {
+      const txCost = await launched.provider.getTransactionCost(request, {
         resourcesOwner: wallet,
       });
 
@@ -223,13 +275,7 @@ describe('Advanced Logging', () => {
   });
 
   describe('decode logs from a script set to manually call other contracts', () => {
-    const { abiContents, binHexlified } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.SCRIPT_CALL_CONTRACT
-    );
-
     const amount = Math.floor(Math.random() * 10) + 1;
-
-    let wallet: WalletUnlocked;
 
     const expectedLogs = [
       'Hello from script',
@@ -239,14 +285,30 @@ describe('Advanced Logging', () => {
       amount,
     ];
 
-    beforeAll(async () => {
-      wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
-    });
-
     it('when using InvocationScope', async () => {
-      const script = new Script(binHexlified, abiContents, wallet);
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          { deployer: AdvancedLoggingAbi__factory, bytecode: AdvancedLoggingAbiHex },
+          {
+            deployer: AdvancedLoggingOtherContractAbi__factory,
+            bytecode: AdvancedLoggingOtherContractAbiHex,
+          },
+        ],
+      });
+
+      const {
+        contracts: [advancedLogContract, otherAdvancedLogContract],
+        wallets: [wallet],
+      } = launched;
+
+      const script = new Script(
+        ScriptCallContractAbi__factory.bin,
+        ScriptCallContractAbi__factory.abi,
+        wallet
+      );
+
       const { waitForResult } = await script.functions
-        .main(advancedLogId, otherLogId, amount)
+        .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .call();
 
@@ -256,14 +318,33 @@ describe('Advanced Logging', () => {
     });
 
     it('when using ScriptTransactionRequest', async () => {
-      const script = new Script(binHexlified, abiContents, wallet);
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          { deployer: AdvancedLoggingAbi__factory, bytecode: AdvancedLoggingAbiHex },
+          {
+            deployer: AdvancedLoggingOtherContractAbi__factory,
+            bytecode: AdvancedLoggingOtherContractAbiHex,
+          },
+        ],
+      });
+
+      const {
+        contracts: [advancedLogContract, otherAdvancedLogContract],
+        wallets: [wallet],
+      } = launched;
+
+      const script = new Script(
+        ScriptCallContractAbi__factory.bin,
+        ScriptCallContractAbi__factory.abi,
+        wallet
+      );
 
       const request = await script.functions
-        .main(advancedLogId, otherLogId, amount)
+        .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
         .addContracts([advancedLogContract, otherAdvancedLogContract])
         .getTransactionRequest();
 
-      const txCost = await provider.getTransactionCost(request, {
+      const txCost = await launched.provider.getTransactionCost(request, {
         resourcesOwner: wallet,
       });
 

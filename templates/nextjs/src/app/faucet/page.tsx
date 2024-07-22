@@ -9,7 +9,9 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function Faucet() {
+  // Get the faucet wallet instance from the useFaucet hook
   const { faucetWallet } = useFaucet();
+
   const { wallet, refreshWalletBalance } = useActiveWallet();
 
   const [receiverAddress, setReceiverAddress] = useState<string>("");
@@ -34,6 +36,7 @@ export default function Faucet() {
       return toast.error("Amount cannot be empty");
     }
 
+    // Transfer the specified amount of ETH to the receiver address
     const tx = await faucetWallet.transfer(
       receiverAddress,
       bn.parseUnits(amountToSend.toString()),
