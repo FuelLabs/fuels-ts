@@ -12,7 +12,6 @@
     "@fuel-ts/errors": "workspace:^",
     "fuels": "workspace:*"
   },
-  "version": null,
   "devDependencies": {
     "bun": "^1.1.20"
   }
