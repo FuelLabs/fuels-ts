@@ -20,7 +20,6 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStructFactory.bytecode,
         abi: PredicateMainArgsStructAbi.abi,
         provider,
       });
@@ -49,7 +48,6 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStructFactory.bytecode,
         abi: PredicateMainArgsStructAbi.abi,
         provider,
       });

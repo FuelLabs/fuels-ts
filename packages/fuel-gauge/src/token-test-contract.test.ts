@@ -17,7 +17,6 @@ describe('TokenTestContract', () => {
       contractsConfigs: [
         {
           deployer: TokenContractFactory,
-          bytecode: TokenContractFactory.bytecode,
         },
       ],
     });
@@ -67,7 +66,6 @@ describe('TokenTestContract', () => {
       contractsConfigs: [
         {
           deployer: TokenContractFactory,
-          bytecode: TokenContractFactory.bytecode,
         },
       ],
       walletsConfig: {
@@ -142,7 +140,6 @@ describe('TokenTestContract', () => {
       contractsConfigs: [
         {
           deployer: TokenContractFactory,
-          bytecode: TokenContractFactory.bytecode,
         },
       ],
     });
@@ -182,7 +179,6 @@ describe('TokenTestContract', () => {
       contractsConfigs: [
         {
           deployer: TokenContractFactory,
-          bytecode: TokenContractFactory.bytecode,
         },
       ],
     });

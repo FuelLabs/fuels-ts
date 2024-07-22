@@ -3,7 +3,6 @@ import type { BN } from 'fuels';
 import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
 import { CallTestContractAbi, MultiTokenContractAbi } from '../test/typegen/contracts';
-
 import { PredicateU32Abi } from '../test/typegen/predicates/factories/PredicateU32Abi';
 
 /**
@@ -33,7 +32,6 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: MultiTokenContractAbiFactory,
-          bytecode: MultiTokenContractAbiFactory.bytecode,
         },
       ],
     });
@@ -193,7 +191,6 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: CallTestContractAbiFactory,
-          bytecode: CallTestContractAbiFactory.bytecode,
         },
       ],
     });
@@ -226,7 +223,6 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: CallTestContractAbiFactory,
-          bytecode: CallTestContractAbiFactory.bytecode,
         },
       ],
     });
@@ -266,7 +262,6 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: MultiTokenContractAbiFactory,
-          bytecode: MultiTokenContractAbiFactory.bytecode,
         },
       ],
     });

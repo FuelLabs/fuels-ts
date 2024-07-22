@@ -190,7 +190,6 @@ describe('Policies', () => {
       contractsConfigs: [
         {
           deployer: PayableAnnotationAbiFactory,
-          bytecode: PayableAnnotationAbiFactory.bytecode,
         },
       ],
     });
@@ -291,7 +290,6 @@ describe('Policies', () => {
       contractsConfigs: [
         {
           deployer: PayableAnnotationAbiFactory,
-          bytecode: PayableAnnotationAbiFactory.bytecode,
         },
       ],
     });
@@ -384,7 +382,6 @@ describe('Policies', () => {
         contractsConfigs: [
           {
             deployer: PayableAnnotationAbiFactory,
-            bytecode: PayableAnnotationAbiFactory.bytecode,
           },
         ],
       });
@@ -467,7 +464,6 @@ describe('Policies', () => {
         contractsConfigs: [
           {
             deployer: PayableAnnotationAbiFactory,
-            bytecode: PayableAnnotationAbiFactory.bytecode,
           },
         ],
       });

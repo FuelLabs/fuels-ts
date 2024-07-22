@@ -21,7 +21,6 @@ describe('Counter Contract', () => {
       contractsConfigs: [
         {
           deployer: CounterFactory,
-          bytecode: CounterFactory.bytecode,
         },
       ],
     });

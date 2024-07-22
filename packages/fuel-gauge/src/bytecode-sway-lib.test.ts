@@ -15,7 +15,6 @@ describe('bytecode computations', () => {
   it('compute_bytecode_root', async () => {
     using contract = await launchTestContract({
       deployer: BytecodeSwayLibAbiFactory,
-      bytecode: BytecodeSwayLibAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contract.functions
@@ -33,7 +32,6 @@ describe('bytecode computations', () => {
   it('verify_contract_bytecode', async () => {
     using contract = await launchTestContract({
       deployer: BytecodeSwayLibAbiFactory,
-      bytecode: BytecodeSwayLibAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contract.functions
@@ -55,7 +53,6 @@ describe('bytecode computations', () => {
       contractsConfigs: [
         {
           deployer: BytecodeSwayLibAbiFactory,
-          bytecode: BytecodeSwayLibAbiFactory.bytecode,
         },
       ],
     });

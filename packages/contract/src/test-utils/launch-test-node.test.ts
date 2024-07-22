@@ -92,12 +92,11 @@ describe('launchTestNode', () => {
       launchTestNode({
         contractsConfigs: [
           {
-            deployer: {
+            factory: {
               deploy: () => {
                 throw new Error('Test error');
               },
             },
-            bytecode: binHexlified,
           },
         ],
       })
@@ -118,13 +117,12 @@ describe('launchTestNode', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: {
+          factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
-          bytecode: binHexlified,
         },
       ],
     });
@@ -142,22 +140,20 @@ describe('launchTestNode', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: {
+          factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
-          bytecode: binHexlified,
         },
         {
-          deployer: {
+          factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
-          bytecode: binHexlified,
         },
       ],
     });
@@ -183,22 +179,20 @@ describe('launchTestNode', () => {
       },
       contractsConfigs: [
         {
-          deployer: {
+          factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
-          bytecode: binHexlified,
         },
         {
-          deployer: {
+          factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
-          bytecode: binHexlified,
           walletIndex: 1,
         },
       ],
@@ -228,13 +222,12 @@ describe('launchTestNode', () => {
         await launchTestNode({
           contractsConfigs: [
             {
-              deployer: {
+              factory: {
                 deploy: async (wallet, options) => {
                   const factory = new ContractFactory(binHexlified, abiContents, wallet);
                   return factory.deployContract(options);
                 },
               },
-              bytecode: binHexlified,
               walletIndex: 2,
             },
           ],

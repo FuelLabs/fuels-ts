@@ -22,7 +22,7 @@ describe('Advanced Logging', () => {
   it('can get log data', async () => {
     using advancedLogContract = await launchTestContract({
       deployer: AdvancedLoggingFactoryFactory,
-      bytecode: AdvancedLoggingFactory.bytecode,
+
     });
     ``;
     const { waitForResult } = await advancedLogContract.functions.test_function().call();
@@ -72,7 +72,7 @@ describe('Advanced Logging', () => {
   it('can get log data from require [condition=true]', async () => {
     using advancedLogContract = await launchTestContract({
       deployer: AdvancedLoggingFactory,
-      bytecode: AdvancedLoggingFactory.bytecode,
+
     });
 
     const { waitForResult } = await advancedLogContract.functions
@@ -88,7 +88,7 @@ describe('Advanced Logging', () => {
   it('can get log data from require [condition=false]', async () => {
     using advancedLogContract = await launchTestContract({
       deployer: AdvancedLoggingFactory,
-      bytecode: AdvancedLoggingFactory.bytecode,
+
     });
 
     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
@@ -125,7 +125,7 @@ describe('Advanced Logging', () => {
         { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
         {
           deployer: AdvancedLoggingOtherContractFactory,
-          bytecode: AdvancedLoggingOtherContractFactory.bytecode,
+
         },
       ],
     });
@@ -173,7 +173,7 @@ describe('Advanced Logging', () => {
           { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
             deployer: AdvancedLoggingOtherContractFactory,
-            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
+
           },
           { deployer: CallTestContract, bytecode: CallTestContract.bytecode }Factory,
           { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode }Factory,
@@ -215,7 +215,7 @@ describe('Advanced Logging', () => {
           { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
             deployer: AdvancedLoggingOtherContractFactory,
-            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
+
           },
           { deployer: CallTestContract, bytecode: CallTestContract.bytecode }Factory,
           { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode }Factory,
@@ -287,7 +287,7 @@ describe('Advanced Logging', () => {
           { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
             deployer: AdvancedLoggingOtherContractFactory,
-            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
+
           },
         ],
       });
@@ -315,7 +315,7 @@ describe('Advanced Logging', () => {
           { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
             deployer: AdvancedLoggingOtherContractFactory,
-            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
+
           },
         ],
       });

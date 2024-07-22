@@ -4,7 +4,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { BN, bn, toHex, Interface, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { StorageTestContractAbi } from '../test/typegen/contracts';
+import { StorageTestContract, StorageTestContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
@@ -15,8 +15,7 @@ import { launchTestContract } from './utils';
 describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbiFactory,
-      bytecode: StorageTestContractAbiFactory.bytecode,
+      factory: StorageTestContractFactory,
     });
     expect(contract.interface).toBeInstanceOf(Interface);
 
@@ -36,8 +35,7 @@ describe('Contract Factory', () => {
 
   it('Creates a factory from inputs that can return transaction results', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbiFactory,
-      bytecode: StorageTestContractAbiFactory.bytecode,
+      factory: StorageTestContractFactory,
     });
 
     expect(contract.interface).toBeInstanceOf(Interface);
@@ -84,8 +82,7 @@ describe('Contract Factory', () => {
 
   it('Creates a factory from inputs that can prepare call data', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbiFactory,
-      bytecode: StorageTestContractAbiFactory.bytecode,
+      factory: StorageTestContractFactory,
     });
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
@@ -108,8 +105,8 @@ describe('Contract Factory', () => {
 
     const setFee = bn(120_000);
     const factory = new ContractFactory(
-      StorageTestContractAbiFactory.bytecode,
-      StorageTestContractAbi.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const spy = vi.spyOn(factory.account as Account, 'sendTransaction');
@@ -127,9 +124,9 @@ describe('Contract Factory', () => {
 
   it('Creates a contract with initial storage fixed var names', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbiFactory,
-      bytecode: StorageTestContractAbiFactory.bytecode,
-      storageSlots: StorageTestContractAbi.storageSlots,
+      factory: StorageTestContractFactory,
+
+      storageSlots: StorageTestContract.storageSlots,
     });
 
     const call1 = await contract.functions.return_var1().call();
@@ -165,8 +162,8 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiFactory.bytecode,
-      StorageTestContractAbi.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
@@ -189,15 +186,15 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiFactory.bytecode,
-      StorageTestContractAbi.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
     const { waitForResult } = await factory.deployContract({
       storageSlots: [
-        ...StorageTestContractAbi.storageSlots, // initializing from storage_slots.json
+        ...StorageTestContract.storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });
@@ -234,8 +231,8 @@ describe('Contract Factory', () => {
 
   it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
     const factory = new ContractFactory(
-      StorageTestContractAbiFactory.bytecode,
-      StorageTestContractAbi.abi
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi
     );
 
     await expectToThrowFuelError(

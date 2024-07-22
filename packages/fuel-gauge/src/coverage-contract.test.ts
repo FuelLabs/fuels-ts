@@ -37,7 +37,6 @@ enum MixedNativeEnum {
 function setupContract() {
   return launchTestContract({
     deployer: CoverageContractAbiFactory,
-    bytecode: CoverageContractAbiFactory.bytecode,
   });
 }
 

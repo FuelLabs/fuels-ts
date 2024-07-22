@@ -13,7 +13,6 @@ import { launchTestContract } from './utils';
 function setupContract() {
   return launchTestContract({
     deployer: StdLibStringFactory,
-    bytecode: StdLibStringFactory.bytecode,
   });
 }
 
@@ -52,7 +51,6 @@ describe('std-lib-string Tests', () => {
     const amountToReceiver = 50;
     type MainArgs = [number, number, string];
     const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateStdLibStringFactory.bytecode,
       abi: PredicateStdLibString.abi,
       provider,
       inputData: [1, 2, 'Hello World'],

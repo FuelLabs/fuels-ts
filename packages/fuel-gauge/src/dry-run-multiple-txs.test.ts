@@ -24,7 +24,6 @@ describe('dry-run-multiple-txs', () => {
       contractsConfigs: [
         {
           deployer: RevertErrorAbiFactory,
-          bytecode: RevertErrorAbiFactory.bytecode,
         },
       ],
     });
@@ -122,19 +121,15 @@ describe('dry-run-multiple-txs', () => {
       contractsConfigs: [
         {
           deployer: RevertErrorAbiFactory,
-          bytecode: RevertErrorAbiFactory.bytecode,
         },
         {
           deployer: MultiTokenContractAbiFactory,
-          bytecode: MultiTokenAbiFactory.bytecode,
         },
         {
           deployer: AdvancedLoggingAbiFactory,
-          bytecode: AdvancedLoggingAbiFactory.bytecode,
         },
         {
           deployer: AdvancedLoggingOtherContractAbiFactory,
-          bytecode: AdvancedLoggingOtherContractAbiFactory.bytecode,
         },
       ],
     });

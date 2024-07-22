@@ -242,7 +242,6 @@ describe('Doc Examples', () => {
     using launched = await launchTestNode();
     const { provider } = launched;
     const predicate = new Predicate({
-      bytecode: PredicateFactory.bytecode,
       provider,
     });
 

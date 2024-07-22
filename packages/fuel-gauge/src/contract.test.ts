@@ -20,7 +20,6 @@ import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import { CallTestContractAbi, StorageTestContractAbi } from '../test/typegen/contracts';
-
 import { Predicate } from '../test/typegen/predicates/factories/Predicate';
 
 import { launchTestContract } from './utils';
@@ -28,11 +27,9 @@ import { launchTestContract } from './utils';
 const contractsConfigs: DeployContractConfig[] = [
   {
     deployer: CallTestContractAbiFactory,
-    bytecode: CallTestContractAbiFactory.bytecode,
   },
   {
     deployer: CallTestContractAbiFactory,
-    bytecode: CallTestContractAbiFactory.bytecode,
   },
 ];
 
@@ -159,7 +156,6 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 function setupTestContract() {
   return launchTestContract({
     deployer: CallTestContractAbiFactory,
-    bytecode: CallTestContractAbiFactory.bytecode,
   });
 }
 
@@ -925,7 +921,6 @@ describe('Contract', () => {
     const amountToPredicate = 500_000;
 
     const predicate = new Predicate({
-      bytecode: PredicateFactory.bytecode,
       provider,
     });
 
@@ -1205,7 +1200,6 @@ describe('Contract', () => {
       contractsConfigs: [
         {
           deployer: StorageTestContractAbiFactory,
-          bytecode: StorageTestContractAbiFactory.bytecode,
         },
       ],
     });

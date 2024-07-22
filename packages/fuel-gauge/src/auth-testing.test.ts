@@ -13,7 +13,6 @@ describe('Auth Testing', () => {
   it('can get is_caller_external', async () => {
     using contractInstance = await launchTestContract({
       deployer: AuthTestingContractFactory,
-      bytecode: AuthTestingContractFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.is_caller_external().call();
@@ -46,7 +45,6 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with incorrect id]', async () => {
     using contractInstance = await launchTestContract({
       deployer: AuthTestingContractFactory,
-      bytecode: AuthTestingContractFactory.bytecode,
     });
 
     await expect(

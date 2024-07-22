@@ -14,7 +14,6 @@ describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbiFactory,
-      bytecode: BytesAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.return_bytes(10).call();
@@ -26,7 +25,6 @@ describe('Bytes Tests', () => {
   it('should test bytes output [100 items]', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbiFactory,
-      bytecode: BytesAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.return_bytes(100).call();
@@ -38,7 +36,6 @@ describe('Bytes Tests', () => {
   it('should test bytes input', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbiFactory,
-      bytecode: BytesAbiFactory.bytecode,
     });
 
     const INPUT = [40, 41, 42];
@@ -52,7 +49,6 @@ describe('Bytes Tests', () => {
   it('should test bytes input [nested]', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbiFactory,
-      bytecode: BytesAbiFactory.bytecode,
     });
     const bytes = [40, 41, 42];
 
@@ -73,7 +69,6 @@ describe('Bytes Tests', () => {
       contractsConfigs: [
         {
           deployer: BytesAbiFactory,
-          bytecode: BytesAbiFactory.bytecode,
         },
       ],
     });

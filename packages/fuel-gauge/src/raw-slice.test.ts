@@ -4,7 +4,6 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { ScriptRawSliceAbi } from '../test/typegen';
 import { RawSliceAbi } from '../test/typegen/contracts';
-
 import { PredicateRawSliceAbi } from '../test/typegen/predicates';
 
 import { launchTestContract } from './utils';
@@ -22,7 +21,6 @@ type Wrapper = {
 function setupRawSliceContract() {
   return launchTestContract({
     deployer: RawSliceAbiFactory,
-    bytecode: RawSliceAbiFactory.bytecode,
   });
 }
 /**
@@ -93,7 +91,6 @@ describe('Raw Slice Tests', () => {
     };
 
     const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateRawSliceFactory.bytecode,
       abi: PredicateRawSliceAbi.abi,
       provider: wallet.provider,
       inputData: [INPUT],

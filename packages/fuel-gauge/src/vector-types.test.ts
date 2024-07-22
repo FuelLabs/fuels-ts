@@ -83,7 +83,6 @@ describe('Vector Types Validation', () => {
   it('can use supported vector types [vector-types-contract]', async () => {
     using contractInstance = await launchTestContract({
       deployer: VectorTypesContractFactory,
-      bytecode: VectorTypesContractFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions
@@ -148,7 +147,6 @@ describe('Vector Types Validation', () => {
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateVectorTypesFactory.bytecode,
       provider: wallet.provider,
       abi: PredicateVectorTypes.abi,
       inputData: [

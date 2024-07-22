@@ -29,7 +29,7 @@ function setupContract(configurableConstants?: { [name: string]: unknown }) {
     contractsConfigs: [
       {
         deployer: ConfigurableContractAbiFactory,
-        bytecode: ConfigurableContractAbiFactory.bytecode,
+
         options: { configurableConstants },
       },
     ],

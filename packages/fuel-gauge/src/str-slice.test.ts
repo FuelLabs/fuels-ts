@@ -14,7 +14,6 @@ describe('str slice', () => {
       contractsConfigs: [
         {
           deployer: StrSliceFactory,
-          bytecode: StrSliceFactory.bytecode,
         },
       ],
     });

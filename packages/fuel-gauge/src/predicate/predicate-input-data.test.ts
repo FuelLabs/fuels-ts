@@ -23,7 +23,6 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
 
       const predicate = new Predicate({
-        bytecode: PredicateInputDataFactory.bytecode,
         abi: PredicateInputDataAbi.abi,
         provider,
         inputData: [true],

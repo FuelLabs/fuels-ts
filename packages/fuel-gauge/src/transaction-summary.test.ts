@@ -248,7 +248,6 @@ describe('TransactionSummary', () => {
         contractsConfigs: [
           {
             deployer: MultiTokenContractFactory,
-            bytecode: MultiTokenContractFactory.bytecode,
           },
         ],
       });
@@ -280,7 +279,6 @@ describe('TransactionSummary', () => {
         contractsConfigs: [
           {
             deployer: TokenContractFactory,
-            bytecode: TokenContractFactory.bytecode,
           },
         ],
       });
@@ -322,7 +320,6 @@ describe('TransactionSummary', () => {
           contractsConfigs: [
             {
               deployer: TokenContractFactory,
-              bytecode: TokenContractFactory.bytecode,
             },
           ],
         });
@@ -401,11 +398,9 @@ describe('TransactionSummary', () => {
         contractsConfigs: [
           {
             deployer: TokenContractFactory,
-            bytecode: TokenContractFactory.bytecode,
           },
           {
             deployer: TokenContractFactory,
-            bytecode: TokenContractFactory.bytecode,
           },
         ],
       });
@@ -450,15 +445,12 @@ describe('TransactionSummary', () => {
         contractsConfigs: [
           {
             deployer: TokenContractFactory,
-            bytecode: TokenContractFactory.bytecode,
           },
           {
             deployer: TokenContractFactory,
-            bytecode: TokenContractFactory.bytecode,
           },
           {
             deployer: TokenContractFactory,
-            bytecode: TokenContractFactory.bytecode,
           },
         ],
       });

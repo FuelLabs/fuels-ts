@@ -14,7 +14,6 @@ enum SmallEnum {
 function setupContract() {
   return launchTestContract({
     deployer: VectorsFactory,
-    bytecode: VectorsFactory.bytecode,
   });
 }
 

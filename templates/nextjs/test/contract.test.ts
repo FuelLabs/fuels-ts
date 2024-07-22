@@ -25,8 +25,7 @@ describe('Contract', () => {
       // because we are instantiating it with the `using` keyword.
       contractsConfigs: [
         {
-          deployer: TestContractFactory,
-          bytecode: TestContractFactory.bytecode,
+          factory: TestContractFactory,
         },
       ],
     });

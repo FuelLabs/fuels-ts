@@ -5,7 +5,6 @@ import { launchTestContract } from './utils';
 function setupContract() {
   return launchTestContract({
     deployer: StorageTestContractAbiFactory,
-    bytecode: StorageTestContractAbiFactory.bytecode,
   });
 }
 /**

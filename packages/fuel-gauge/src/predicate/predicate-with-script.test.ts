@@ -41,7 +41,6 @@ describe('Predicate', () => {
       const amountToPredicate = 900_000;
       const amountToReceiver = 100_000;
       const predicate = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStructFactory.bytecode,
         provider,
         abi: PredicateMainArgsStructAbi.abi,
         inputData: [

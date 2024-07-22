@@ -17,11 +17,9 @@ describe('Reentrant Contract Calls', () => {
       contractsConfigs: [
         {
           deployer: ReentrantFooAbiFactory,
-          bytecode: ReentrantFooAbiFactory.bytecode,
         },
         {
           deployer: ReentrantBarAbiFactory,
-          bytecode: ReentrantBarAbiFactory.bytecode,
         },
       ],
     });
@@ -70,11 +68,9 @@ describe('Reentrant Contract Calls', () => {
       contractsConfigs: [
         {
           deployer: ReentrantFooAbiFactory,
-          bytecode: ReentrantFooAbiFactory.bytecode,
         },
         {
           deployer: ReentrantBarAbiFactory,
-          bytecode: ReentrantBarAbiFactory.bytecode,
         },
       ],
     });

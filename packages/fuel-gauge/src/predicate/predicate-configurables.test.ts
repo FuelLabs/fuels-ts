@@ -27,7 +27,6 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider: wallet.provider,
         inputData: [defaultValues.FEE, defaultValues.ADDRESS], // set predicate input data to be the same as default configurable value
@@ -70,7 +69,6 @@ describe('Predicate', () => {
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
         inputData: [configurableConstants.FEE, defaultValues.ADDRESS],
@@ -115,7 +113,6 @@ describe('Predicate', () => {
 
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
         inputData: [defaultValues.FEE, configurableConstants.ADDRESS],
@@ -164,7 +161,6 @@ describe('Predicate', () => {
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
         inputData: [configurableConstants.FEE, configurableConstants.ADDRESS],
@@ -204,7 +200,6 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
       });
@@ -228,7 +223,6 @@ describe('Predicate', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate({
-          bytecode: PredicateFactory.bytecode,
           abi: Predicate.abi,
           provider,
           inputData: ['NADA'],
@@ -249,7 +243,6 @@ describe('Predicate', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate({
-          bytecode: PredicateWithConfigurableFactory.bytecode,
           abi: PredicateWithConfigurableAbi.abi,
           provider,
           inputData: ['NADA'],
@@ -269,7 +262,6 @@ describe('Predicate', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate({
-          bytecode: PredicateWithConfigurableFactory.bytecode,
           provider,
           inputData: ['NADA'],
           configurableConstants: {

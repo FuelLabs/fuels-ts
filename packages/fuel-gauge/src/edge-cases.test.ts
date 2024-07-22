@@ -13,7 +13,6 @@ describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
     using contractInstance = await launchTestContract({
       deployer: CollisionInFnNamesAbiFactory,
-      bytecode: CollisionInFnNamesAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.new().call();
