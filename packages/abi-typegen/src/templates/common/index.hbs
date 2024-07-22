@@ -5,9 +5,7 @@
 export * from './{{capitalizedName}}';
 export * from './{{capitalizedName}}Factory';
 {{/each}}
-{{/if}}
-
-{{#if isGeneratingPredicates}}
+{{else}}
 {{#each abis}}
 export * from './{{capitalizedName}}';
 {{/each}}

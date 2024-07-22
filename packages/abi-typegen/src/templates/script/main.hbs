@@ -40,8 +40,8 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
-type {{capitalizedName}}Inputs = [{{inputs}}];
-type {{capitalizedName}}Output = {{output}};
+export type {{capitalizedName}}Inputs = [{{inputs}}];
+export type {{capitalizedName}}Output = {{output}};
 
 {{#if formattedConfigurables}}
 export type {{capitalizedName}}Configurables = {
@@ -55,15 +55,12 @@ const abi = {{abiJsonString}};
 
 const bytecode = '{{hexlifiedBinString}}';
 
-export class {{capitalizedName}} extends Script {
+export class {{capitalizedName}} extends Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
   constructor(wallet: Account) {
-    super<
-      {{capitalizedName}}Inputs,
-      {{capitalizedName}}Output
-    >(bytecode, abi, wallet);
+    super(bytecode, abi, wallet);
   }
 }

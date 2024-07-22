@@ -61,7 +61,6 @@ export function renderMainTemplate(params: { abi: Abi }) {
     template: mainTemplate,
     data: {
       camelizedName,
-      binHexlified: hexlifiedBinContents,
       capitalizedName,
       commonTypesInUse: commonTypesInUse.join(', '),
       functionsTypedefs,
