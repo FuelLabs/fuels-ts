@@ -1112,6 +1112,8 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * @hidden
+   *
    * Returns a transaction cost to enable user
    * to set gasLimit and also reserve balance amounts
    * on the transaction.
