@@ -42,19 +42,19 @@ describe('CallTestContract', () => {
   it('can call a function with empty arguments', async () => {
     using contract = await setupContract();
 
-    const call1 = await contract.functions.empty().call();
+    const call1 = await contract.functions.empty(undefined).call();
     const { value: empty } = await call1.waitForResult();
     expect(empty.toHex()).toEqual(toHex(63));
 
-    const call2 = await contract.functions.empty_then_value(35).call();
+    const call2 = await contract.functions.empty_then_value(undefined, 35).call();
     const { value: emptyThenValue } = await call2.waitForResult();
     expect(emptyThenValue.toHex()).toEqual(toHex(63));
 
-    const call3 = await contract.functions.value_then_empty(35).call();
+    const call3 = await contract.functions.value_then_empty(35, undefined).call();
     const { value: valueThenEmpty } = await call3.waitForResult();
     expect(valueThenEmpty.toHex()).toEqual(toHex(63));
 
-    const call4 = await contract.functions.value_then_empty_then_value(35, 35).call();
+    const call4 = await contract.functions.value_then_empty_then_value(35, undefined, 35).call();
 
     const { value: valueThenEmptyThenValue } = await call4.waitForResult();
     expect(valueThenEmptyThenValue.toHex()).toEqual(toHex(63));

@@ -245,7 +245,7 @@ describe('Fee', () => {
     const scope = contract.multiCall([
       contract.functions.sum_multparams(1, 2, 3, 4, 5),
       contract.functions.return_void(),
-      contract.functions.empty(),
+      contract.functions.empty(undefined),
       contract.functions.return_bytes(),
     ]);
 
