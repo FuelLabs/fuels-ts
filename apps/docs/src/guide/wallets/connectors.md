@@ -398,7 +398,7 @@ The `currentConnector` method will return the current connector that is connecte
 
 The `getWallet` method accepts an address (string or instance) as the first parameter and a provider or network as the second parameter. It will return an `Account` instance for the given address (providing it is valid).
 
-The provider or network will default to the current network if not provided. When a provider cannot be resolved, it will throw an error of code `INVALID_PROVIDER`.
+The provider or network will default to the current network if not provided. When a provider cannot be resolved, it will throw an error of code [`INVALID_PROVIDER`](../errors/index.md).
 
 <<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-getWallet{ts:line-numbers}
 
