@@ -196,7 +196,6 @@ describe('Revert Error Testing', () => {
 
     const {
       wallets: [wallet],
-      provider,
     } = launched;
 
     const factory = new ContractFactory(TokenContractAbiHex, TokenContractAbi__factory.abi, wallet);

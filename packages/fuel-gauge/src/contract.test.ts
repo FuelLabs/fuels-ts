@@ -739,7 +739,6 @@ describe('Contract', () => {
   it('Parse create TX to JSON and parse back to create TX', async () => {
     using launched = await launchTestNode();
     const {
-      provider,
       wallets: [wallet],
     } = launched;
 

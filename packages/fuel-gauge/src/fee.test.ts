@@ -159,7 +159,6 @@ describe('Fee', () => {
     using launched = await launchTestNode();
 
     const {
-      provider,
       wallets: [wallet],
     } = launched;
 
