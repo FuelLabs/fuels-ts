@@ -157,8 +157,8 @@ describe('Policies', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      ScriptMainArgsAbi__factory.bin,
-      ScriptMainArgsAbi__factory.abi,
+      PayableAnnotationAbiHex,
+      PayableAnnotationAbi__factory.abi,
       wallet
     );
 
@@ -446,8 +446,8 @@ describe('Policies', () => {
       const maxFee = 1;
 
       const factory = new ContractFactory(
-        ScriptMainArgsAbi__factory.bin,
-        ScriptMainArgsAbi__factory.abi,
+        PayableAnnotationAbiHex,
+        PayableAnnotationAbi__factory.abi,
         wallet
       );
 
