@@ -57,8 +57,8 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
       return TransactionTypeName.Script;
     default:
       throw new FuelError(
-        ErrorCode.INVALID_TRANSACTION_TYPE,
-        `Invalid transaction type: ${transactionType}.`
+        ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
+        `Unsupported transaction type: ${transactionType}.`
       );
   }
 }
