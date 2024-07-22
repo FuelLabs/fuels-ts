@@ -212,13 +212,11 @@ describe('Predicate', () => {
 
       const amountToTransfer = 300;
 
-      const predicate = new Predicate({
-        bytecode: PredicateWithConfigurableAbi__factory.bin,
-        abi: PredicateWithConfigurableAbi__factory.abi,
+      const predicate = PredicateWithConfigurableAbi__factory.createInstance(
         provider,
-        inputData: [defaultValues.FEE, configurableConstants.ADDRESS],
-        configurableConstants,
-      });
+        [defaultValues.FEE, configurableConstants.ADDRESS],
+        configurableConstants
+      );
 
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,
