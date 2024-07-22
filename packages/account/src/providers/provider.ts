@@ -336,7 +336,7 @@ export type TransactionCostParams = EstimateTransactionParams & {
   /**
    * The quantities to forward to the contract.
    */
-  quantitiesToContract?: CoinQuantity[];
+  quantities?: CoinQuantity[];
 
   /**
    * A callback to sign the transaction.

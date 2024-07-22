@@ -239,7 +239,7 @@ export class BaseInvocationScope<TReturn = any> {
     const account: AbstractAccount =
       this.program.account ?? Wallet.generate({ provider: this.getProvider() });
     return account.getTransactionCost(request, {
-      quantitiesToContract: this.getRequiredCoins(),
+      quantities: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
   }
