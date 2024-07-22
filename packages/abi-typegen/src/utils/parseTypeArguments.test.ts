@@ -114,6 +114,6 @@ describe('parseTypeArguments.ts', () => {
     // should fallback to void because `typeArguments.type` will be 0, and non-existent
     const asOutput = parseTypeArguments({ types, target: TargetEnum.OUTPUT, typeArguments });
 
-    expect(asOutput).toEqual('void');
+    expect(asOutput).toEqual('undefined');
   });
 });

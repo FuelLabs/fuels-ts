@@ -10,15 +10,13 @@ export class EmptyType extends AType implements IType {
 
   static MATCH_REGEX: RegExp = /^\(\)$/m;
 
+  static TYPE_LABEL: string = 'undefined';
+
   constructor(params: { rawAbiType: JsonAbiType }) {
     super(params);
     this.attributes = {
-      /**
-       * The empty type is always ignored in function inputs. If it makes
-       * its way into a function's inputs list, it's a bug in the typegen.
-       */
-      inputLabel: `never`,
-      outputLabel: `void`,
+      inputLabel: EmptyType.TYPE_LABEL,
+      outputLabel: EmptyType.TYPE_LABEL,
     };
   }
 

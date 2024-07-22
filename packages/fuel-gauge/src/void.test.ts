@@ -1,4 +1,3 @@
-import type { DeployContractConfig } from 'fuels/test-utils';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { VoidAbi__factory } from '../test/typegen';
