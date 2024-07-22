@@ -11,7 +11,6 @@ import {
 import { launchTestNode } from 'fuels/test-utils';
 
 import { PayableAnnotationAbi, ScriptMainArgsAbi } from '../test/typegen';
-import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
 /**
  * @group node
@@ -156,7 +155,11 @@ describe('Policies', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgsAbi.abi, wallet);
+    const factory = new ContractFactory(
+      ScriptMainArgsFactory.bytecode,
+      ScriptMainArgsAbi.abi,
+      wallet
+    );
 
     const txParams: CustomTxParams = {
       tip: 11,
@@ -187,7 +190,7 @@ describe('Policies', () => {
       contractsConfigs: [
         {
           deployer: PayableAnnotationAbi,
-          bytecode: PayableAnnotationAbiHex,
+          bytecode: PayableAnnotationAbiFactory.bytecode,
         },
       ],
     });
@@ -225,7 +228,7 @@ describe('Policies', () => {
     } = launched;
 
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgs.bytecode,
+      ScriptMainArgsFactory.bytecode,
       ScriptMainArgsAbi.abi,
       wallet
     );
@@ -288,7 +291,7 @@ describe('Policies', () => {
       contractsConfigs: [
         {
           deployer: PayableAnnotationAbi,
-          bytecode: PayableAnnotationAbiHex,
+          bytecode: PayableAnnotationAbiFactory.bytecode,
         },
       ],
     });
@@ -381,7 +384,7 @@ describe('Policies', () => {
         contractsConfigs: [
           {
             deployer: PayableAnnotationAbi,
-            bytecode: PayableAnnotationAbiHex,
+            bytecode: PayableAnnotationAbiFactory.bytecode,
           },
         ],
       });
@@ -441,7 +444,11 @@ describe('Policies', () => {
 
       const maxFee = 1;
 
-      const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgsAbi.abi, wallet);
+      const factory = new ContractFactory(
+        ScriptMainArgsFactory.bytecode,
+        ScriptMainArgsAbi.abi,
+        wallet
+      );
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
@@ -460,7 +467,7 @@ describe('Policies', () => {
         contractsConfigs: [
           {
             deployer: PayableAnnotationAbi,
-            bytecode: PayableAnnotationAbiHex,
+            bytecode: PayableAnnotationAbiFactory.bytecode,
           },
         ],
       });

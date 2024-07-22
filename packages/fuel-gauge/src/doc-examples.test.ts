@@ -18,7 +18,7 @@ import {
 import { AssetId, launchTestNode } from 'fuels/test-utils';
 
 import { CallTestContractAbi } from '../test/typegen/contracts';
-import { PredicateTrueAbi } from '../test/typegen/predicates';
+import { Predicate } from '../test/typegen/predicates';
 import { PredicateTripleSigAbi } from '../test/typegen/predicates/factories/PredicateTripleSigAbi';
 
 const PUBLIC_KEY =
@@ -242,12 +242,12 @@ describe('Doc Examples', () => {
     using launched = await launchTestNode();
     const { provider } = launched;
     const predicate = new Predicate({
-      bytecode: PredicateTrue.bytecode,
+      bytecode: PredicateFactory.bytecode,
       provider,
     });
 
     expect(predicate.address).toBeTruthy();
-    expect(predicate.bytes).toEqual(arrayify(PredicateTrue.bytecode));
+    expect(predicate.bytes).toEqual(arrayify(Predicate.bytecode));
   });
 
   it('can create a predicate and use', async () => {

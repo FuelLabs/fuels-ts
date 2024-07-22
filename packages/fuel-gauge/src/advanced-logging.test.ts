@@ -2,19 +2,15 @@ import type { FuelError } from '@fuel-ts/errors';
 import { Script, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptCallContractAbi } from '../test/typegen';
+import { ScriptCallContract } from '../test/typegen';
 import {
-  AdvancedLoggingAbi,
-  AdvancedLoggingOtherContractAbi,
-  CallTestContractAbi,
-  ConfigurableContractAbi,
-  CoverageContractAbi,
+  AdvancedLogging,
+  AdvancedLoggingOtherContract,
+  CallTestContract,
+  ConfigurableContract,
+  CoverageContract,
+  AdvancedLoggingFactory,
 } from '../test/typegen/contracts';
-import AdvancedLoggingAbiHex from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
-import AdvancedLoggingOtherContractAbiHex from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
-import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
-import ConfigurableContractAbiHex from '../test/typegen/contracts/ConfigurableContractAbi.hex';
-import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -25,10 +21,10 @@ import { launchTestContract } from './utils';
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     using advancedLogContract = await launchTestContract({
-      deployer: AdvancedLoggingAbi,
-      bytecode: AdvancedLoggingAbiHex,
+      deployer: AdvancedLoggingFactory,
+      bytecode: AdvancedLoggingFactory.bytecode,
     });
-
+    ``;
     const { waitForResult } = await advancedLogContract.functions.test_function().call();
     const { value, logs } = await waitForResult();
 
@@ -75,8 +71,8 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=true]', async () => {
     using advancedLogContract = await launchTestContract({
-      deployer: AdvancedLoggingAbi,
-      bytecode: AdvancedLoggingAbiHex,
+      deployer: AdvancedLogging,
+      bytecode: AdvancedLoggingFactory.bytecode,
     });
 
     const { waitForResult } = await advancedLogContract.functions
@@ -91,8 +87,8 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=false]', async () => {
     using advancedLogContract = await launchTestContract({
-      deployer: AdvancedLoggingAbi,
-      bytecode: AdvancedLoggingAbiHex,
+      deployer: AdvancedLogging,
+      bytecode: AdvancedLoggingFactory.bytecode,
     });
 
     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
@@ -126,10 +122,10 @@ describe('Advanced Logging', () => {
   it('can get log data from a downstream Contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
-        { deployer: AdvancedLoggingAbi, bytecode: AdvancedLoggingAbiHex },
+        { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
         {
-          deployer: AdvancedLoggingOtherContractAbi,
-          bytecode: AdvancedLoggingOtherContractAbiHex,
+          deployer: AdvancedLoggingOtherContract,
+          bytecode: AdvancedLoggingOtherContractFactory.bytecode,
         },
       ],
     });
@@ -174,14 +170,14 @@ describe('Advanced Logging', () => {
     it('when using InvacationScope', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLoggingAbi, bytecode: AdvancedLoggingAbiHex },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
           {
-            deployer: AdvancedLoggingOtherContractAbi,
-            bytecode: AdvancedLoggingOtherContractAbiHex,
+            deployer: AdvancedLoggingOtherContract,
+            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
-          { deployer: CallTestContractAbi, bytecode: CallTestContractAbiHex },
-          { deployer: ConfigurableContractAbi, bytecode: ConfigurableContractAbiHex },
-          { deployer: CoverageContractAbi, bytecode: CoverageContractAbiHex },
+          { deployer: CallTestContract, bytecode: CallTestContract.bytecode },
+          { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode },
+          { deployer: CoverageContract, bytecode: CoverageContract.bytecode },
         ],
       });
 
@@ -216,14 +212,14 @@ describe('Advanced Logging', () => {
     it('when using ScriptTransactionRequest', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLoggingAbi, bytecode: AdvancedLoggingAbiHex },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
           {
-            deployer: AdvancedLoggingOtherContractAbi,
-            bytecode: AdvancedLoggingOtherContractAbiHex,
+            deployer: AdvancedLoggingOtherContract,
+            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
-          { deployer: CallTestContractAbi, bytecode: CallTestContractAbiHex },
-          { deployer: ConfigurableContractAbi, bytecode: ConfigurableContractAbiHex },
-          { deployer: CoverageContractAbi, bytecode: CoverageContractAbiHex },
+          { deployer: CallTestContract, bytecode: CallTestContract.bytecode },
+          { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode },
+          { deployer: CoverageContract, bytecode: CoverageContract.bytecode },
         ],
       });
 
@@ -288,10 +284,10 @@ describe('Advanced Logging', () => {
     it('when using InvocationScope', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLoggingAbi, bytecode: AdvancedLoggingAbiHex },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
           {
-            deployer: AdvancedLoggingOtherContractAbi,
-            bytecode: AdvancedLoggingOtherContractAbiHex,
+            deployer: AdvancedLoggingOtherContract,
+            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
         ],
       });
@@ -301,7 +297,7 @@ describe('Advanced Logging', () => {
         wallets: [wallet],
       } = launched;
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContractAbi.abi, wallet);
+      const script = new Script(ScriptCallContractFactory.bytecode, ScriptCallContract.abi, wallet);
 
       const { waitForResult } = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
@@ -316,10 +312,10 @@ describe('Advanced Logging', () => {
     it('when using ScriptTransactionRequest', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLoggingAbi, bytecode: AdvancedLoggingAbiHex },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
           {
-            deployer: AdvancedLoggingOtherContractAbi,
-            bytecode: AdvancedLoggingOtherContractAbiHex,
+            deployer: AdvancedLoggingOtherContract,
+            bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
         ],
       });
@@ -329,7 +325,7 @@ describe('Advanced Logging', () => {
         wallets: [wallet],
       } = launched;
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContractAbi.abi, wallet);
+      const script = new Script(ScriptCallContractFactory.bytecode, ScriptCallContract.abi, wallet);
 
       const request = await script.functions
         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)

@@ -3,8 +3,7 @@ import type { BN } from 'fuels';
 import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
 import { CallTestContractAbi, MultiTokenContractAbi } from '../test/typegen/contracts';
-import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
-import MultiTokenContractAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
+
 import { PredicateU32Abi } from '../test/typegen/predicates/factories/PredicateU32Abi';
 
 /**
@@ -34,7 +33,7 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: MultiTokenContractAbi,
-          bytecode: MultiTokenContractAbiHex,
+          bytecode: MultiTokenContractAbiFactory.bytecode,
         },
       ],
     });
@@ -165,7 +164,7 @@ describe('Fee', () => {
     const balanceBefore = await wallet.getBalance();
 
     const factory = new ContractFactory(
-      MultiTokenContractAbiHex,
+      MultiTokenContractAbiFactory.bytecode,
       MultiTokenContractAbi.abi,
       wallet
     );
@@ -194,7 +193,7 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: CallTestContractAbi,
-          bytecode: CallTestContractAbiHex,
+          bytecode: CallTestContractAbiFactory.bytecode,
         },
       ],
     });
@@ -227,7 +226,7 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: CallTestContractAbi,
-          bytecode: CallTestContractAbiHex,
+          bytecode: CallTestContractAbiFactory.bytecode,
         },
       ],
     });
@@ -267,7 +266,7 @@ describe('Fee', () => {
       contractsConfigs: [
         {
           deployer: MultiTokenContractAbi,
-          bytecode: MultiTokenContractAbiHex,
+          bytecode: MultiTokenContractAbiFactory.bytecode,
         },
       ],
     });

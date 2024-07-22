@@ -2,7 +2,6 @@ import { getRandomB256 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { AuthTestingContractAbi } from '../test/typegen/contracts';
-import AuthTestingAbiHex from '../test/typegen/contracts/AuthTestingContractAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -14,7 +13,7 @@ describe('Auth Testing', () => {
   it('can get is_caller_external', async () => {
     using contractInstance = await launchTestContract({
       deployer: AuthTestingContractAbi,
-      bytecode: AuthTestingAbiHex,
+      bytecode: AuthTestingAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.is_caller_external().call();
@@ -25,7 +24,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ deployer: AuthTestingContractAbi, bytecode: AuthTestingAbiHex }],
+      contractsConfigs: [{ deployer: AuthTestingContractAbi, bytecode: AuthTestingAbi.bytecode }],
     });
 
     const {
@@ -45,7 +44,7 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with incorrect id]', async () => {
     using contractInstance = await launchTestContract({
       deployer: AuthTestingContractAbi,
-      bytecode: AuthTestingAbiHex,
+      bytecode: AuthTestingAbiFactory.bytecode,
     });
 
     await expect(

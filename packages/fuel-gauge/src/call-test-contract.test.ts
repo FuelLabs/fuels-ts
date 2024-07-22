@@ -3,7 +3,6 @@ import { BN, bn, toHex } from 'fuels';
 import { ASSET_A } from 'fuels/test-utils';
 
 import { CallTestContractAbi } from '../test/typegen/contracts';
-import bytecode from '../test/typegen/contracts/CallTestContractAbi.hex';
 
 import { launchTestContract } from './utils';
 

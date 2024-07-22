@@ -2,9 +2,8 @@ import { Contract, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { CallTestContractAbi, TokenContractAbi } from '../../test/typegen/contracts';
-import contractBytes from '../../test/typegen/contracts/CallTestContractAbi.hex';
-import tokenPoolBytes from '../../test/typegen/contracts/TokenContractAbi.hex';
-import { PredicateMainArgsStructAbi, PredicateTrueAbi } from '../../test/typegen/predicates';
+
+import { PredicateMainArgsStructAbi, Predicate } from '../../test/typegen/predicates';
 
 import { fundPredicate } from './utils/predicate';
 
@@ -26,7 +25,7 @@ describe('Predicate', () => {
       } = launched;
 
       const amountToPredicate = 300_000;
-      const predicate = PredicateTrueAbi.createInstance(provider);
+      const predicate = Predicate.createInstance(provider);
 
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);

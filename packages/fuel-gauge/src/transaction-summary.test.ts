@@ -18,9 +18,12 @@ import {
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import { MultiTokenContractAbi, TokenContractAbi } from '../test/typegen';
-import MultiTokenContractAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
-import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
+import {
+  MultiTokenContract,
+  TokenContract,
+  MultiTokenContractFactory,
+  TokenContractFactory,
+} from '../test/typegen';
 
 /**
  * @group node
@@ -244,8 +247,8 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: MultiTokenContractAbi,
-            bytecode: MultiTokenContractAbiHex,
+            deployer: MultiTokenContract,
+            bytecode: MultiTokenContractFactory.bytecode,
           },
         ],
       });
@@ -276,8 +279,8 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi,
-            bytecode: TokenContractAbiHex,
+            deployer: TokenContract,
+            bytecode: TokenContractFactory.bytecode,
           },
         ],
       });
@@ -318,8 +321,8 @@ describe('TransactionSummary', () => {
         using launched = await launchTestNode({
           contractsConfigs: [
             {
-              deployer: TokenContractAbi,
-              bytecode: TokenContractAbiHex,
+              deployer: TokenContract,
+              bytecode: TokenContractFactory.bytecode,
             },
           ],
         });
@@ -397,12 +400,12 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi,
-            bytecode: TokenContractAbiHex,
+            deployer: TokenContract,
+            bytecode: TokenContractFactory.bytecode,
           },
           {
-            deployer: TokenContractAbi,
-            bytecode: TokenContractAbiHex,
+            deployer: TokenContract,
+            bytecode: TokenContractFactory.bytecode,
           },
         ],
       });
@@ -446,16 +449,16 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi,
-            bytecode: TokenContractAbiHex,
+            deployer: TokenContract,
+            bytecode: TokenContractFactory.bytecode,
           },
           {
-            deployer: TokenContractAbi,
-            bytecode: TokenContractAbiHex,
+            deployer: TokenContract,
+            bytecode: TokenContractFactory.bytecode,
           },
           {
-            deployer: TokenContractAbi,
-            bytecode: TokenContractAbiHex,
+            deployer: TokenContract,
+            bytecode: TokenContractFactory.bytecode,
           },
         ],
       });

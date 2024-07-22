@@ -1,12 +1,11 @@
 import { StorageTestContractAbi } from '../test/typegen/contracts';
-import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 import { launchTestContract } from './utils';
 
 function setupContract() {
   return launchTestContract({
     deployer: StorageTestContractAbi,
-    bytecode: StorageTestContractAbiHex,
+    bytecode: StorageTestContractAbiFactory.bytecode,
   });
 }
 /**

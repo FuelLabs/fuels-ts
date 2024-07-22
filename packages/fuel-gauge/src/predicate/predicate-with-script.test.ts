@@ -24,7 +24,7 @@ describe('Predicate', () => {
 
       const initialReceiverBalance = toNumber(await receiver.getBalance());
       const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-        ScriptMainArgs.bytecode,
+        ScriptMainArgsFactory.bytecode,
         ScriptMainArgsAbi.abi,
         wallet
       );
@@ -41,7 +41,7 @@ describe('Predicate', () => {
       const amountToPredicate = 900_000;
       const amountToReceiver = 100_000;
       const predicate = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStruct.bytecode,
+        bytecode: PredicateMainArgsStructFactory.bytecode,
         provider,
         abi: PredicateMainArgsStructAbi.abi,
         inputData: [

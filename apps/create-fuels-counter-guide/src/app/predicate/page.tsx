@@ -5,7 +5,7 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { TestPredicateAbi } from "@/sway-api/predicates/index";
+import { TestPredicate } from "@/sway-api/predicates/index";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
@@ -27,9 +27,7 @@ export default function PredicateExample() {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
       // Initialize a new predicate instance
-      const predicate = TestPredicateAbi.createInstance(
-        wallet.provider,
-      );
+      const predicate = new TestPredicate(wallet.provider);
       setPredicate(predicate);
       setPredicateBalance(await predicate.getBalance());
     }
@@ -65,10 +63,7 @@ export default function PredicateExample() {
       }
 
       // Initialize a new predicate instance with the entered pin
-      const reInitializePredicate = TestPredicateAbi.createInstance(
-        wallet.provider,
-        [bn(pin)],
-      );
+      const reInitializePredicate = new TestPredicate(wallet.provider, [bn(pin)]);
 
       if (!reInitializePredicate) {
         return toast.error("Failed to initialize predicate");
@@ -124,7 +119,7 @@ export default function PredicateExample() {
 
     const configurable = { PIN: bn(pin) };
     // instantiate predicate with configurable constants
-    const reInitializePredicate = TestPredicateAbi.createInstance(wallet.provider, [bn(configurable.PIN)], configurable);
+    const reInitializePredicate = new TestPredicate(wallet.provider, [bn(configurable.PIN)], configurable);
 
     if (!reInitializePredicate) {
       return toast.error("Failed to initialize predicate");

@@ -26,7 +26,7 @@ describe('Script Coverage', () => {
     // #region script-call-factory
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgs.bytecode,
+      ScriptMainArgsFactory.bytecode,
       ScriptMainArgsAbi.abi,
       wallet
     );
@@ -86,7 +86,7 @@ describe('Script Coverage', () => {
     } = launched;
 
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgs.bytecode,
+      ScriptMainArgsFactory.bytecode,
       ScriptMainArgsAbi.abi,
       wallet
     );

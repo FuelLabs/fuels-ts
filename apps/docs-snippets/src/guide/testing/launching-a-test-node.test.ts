@@ -4,7 +4,6 @@ import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
 import { CounterAbi as TestContract } from '../../../test/typegen/contracts';
-import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
 
 /**
  * @group node

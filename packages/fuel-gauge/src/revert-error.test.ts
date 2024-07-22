@@ -5,15 +5,13 @@ import { bn, getRandomB256, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { RevertErrorAbi, TokenContractAbi } from '../test/typegen/contracts';
-import RevertErrorAbiHex from '../test/typegen/contracts/RevertErrorAbi.hex';
-import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
 
 import { launchTestContract } from './utils';
 
 function launchContract() {
   return launchTestContract({
     deployer: RevertErrorAbi,
-    bytecode: RevertErrorAbiHex,
+    bytecode: RevertErrorAbiFactory.bytecode,
   });
 }
 
@@ -199,7 +197,11 @@ describe('Revert Error Testing', () => {
       provider,
     } = launched;
 
-    const factory = new ContractFactory(TokenContractAbiHex, TokenContractAbi.abi, wallet);
+    const factory = new ContractFactory(
+      TokenContractAbiFactory.bytecode,
+      TokenContractAbi.abi,
+      wallet
+    );
     const { waitForResult } = await factory.deployContract();
     const { contract: tokenContract } = await waitForResult();
 

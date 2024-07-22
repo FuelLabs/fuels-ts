@@ -11,7 +11,6 @@ import {
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ComplexPredicateAbi, ComplexScriptAbi, CoverageContractAbi } from '../test/typegen';
-import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAbi.hex';
 
 /**
  * @group node
@@ -31,7 +30,7 @@ describe('Minimum gas tests', () => {
      */
 
     const contractFactory = new ContractFactory(
-      CoverageContractAbiHex,
+      CoverageContractAbiFactory.bytecode,
       CoverageContractAbi.abi,
       wallet
     );
@@ -77,7 +76,7 @@ describe('Minimum gas tests', () => {
      */
 
     const request = new ScriptTransactionRequest({
-      script: ComplexScript.bytecode,
+      script: ComplexScriptFactory.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
@@ -173,7 +172,7 @@ describe('Minimum gas tests', () => {
      * Create a script transaction
      */
     const request = new ScriptTransactionRequest({
-      script: ComplexScript.bytecode,
+      script: ComplexScriptFactory.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
 

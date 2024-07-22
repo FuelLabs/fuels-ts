@@ -1,8 +1,7 @@
 import { bn, Predicate, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PredicateStdLibStringAbi, ScriptStdLibStringAbi, StdLibStringAbi } from '../test/typegen';
-import StdLibStringAbiHex from '../test/typegen/contracts/StdLibStringAbi.hex';
+import { PredicateStdLibString, ScriptStdLibString, StdLibString } from '../test/typegen';
 
 import { launchTestContract } from './utils';
 
@@ -13,8 +12,8 @@ import { launchTestContract } from './utils';
 
 function setupContract() {
   return launchTestContract({
-    deployer: StdLibStringAbi,
-    bytecode: StdLibStringAbiHex,
+    deployer: StdLibString,
+    bytecode: StdLibStringFactory.bytecode,
   });
 }
 
@@ -53,8 +52,8 @@ describe('std-lib-string Tests', () => {
     const amountToReceiver = 50;
     type MainArgs = [number, number, string];
     const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateStdLibString.bytecode,
-      abi: PredicateStdLibStringAbi.abi,
+      bytecode: PredicateStdLibStringFactory.bytecode,
+      abi: PredicateStdLibString.abi,
       provider,
       inputData: [1, 2, 'Hello World'],
     });
@@ -98,7 +97,7 @@ describe('std-lib-string Tests', () => {
     } = launched;
 
     const INPUT = 'Hello World';
-    const scriptInstance = ScriptStdLibStringAbi.createInstance(wallet);
+    const scriptInstance = ScriptStdLibString.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(INPUT).call();
     const { value } = await waitForResult();

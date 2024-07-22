@@ -6,9 +6,6 @@ import {
   ReentrantFooAbi,
   StorageTestContractAbi,
 } from '../test/typegen/contracts';
-import ReentrantBarAbiHex from '../test/typegen/contracts/ReentrantBarAbi.hex';
-import ReentrantFooAbiHex from '../test/typegen/contracts/ReentrantFooAbi.hex';
-import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 /**
  * @group node
@@ -20,11 +17,11 @@ describe('Reentrant Contract Calls', () => {
       contractsConfigs: [
         {
           deployer: ReentrantFooAbi,
-          bytecode: ReentrantFooAbiHex,
+          bytecode: ReentrantFooAbiFactory.bytecode,
         },
         {
           deployer: ReentrantBarAbi,
-          bytecode: ReentrantBarAbiHex,
+          bytecode: ReentrantBarAbiFactory.bytecode,
         },
       ],
     });
@@ -73,11 +70,11 @@ describe('Reentrant Contract Calls', () => {
       contractsConfigs: [
         {
           deployer: ReentrantFooAbi,
-          bytecode: ReentrantFooAbiHex,
+          bytecode: ReentrantFooAbiFactory.bytecode,
         },
         {
           deployer: ReentrantBarAbi,
-          bytecode: ReentrantBarAbiHex,
+          bytecode: ReentrantBarAbiFactory.bytecode,
         },
       ],
     });
@@ -88,7 +85,7 @@ describe('Reentrant Contract Calls', () => {
     } = launched;
 
     const deploy = await new ContractFactory(
-      StorageTestContractAbiHex,
+      StorageTestContractAbiFactory.bytecode,
       StorageTestContractAbi.abi,
       wallet
     ).deployContract({ storageSlots: StorageTestContractAbi.storageSlots });

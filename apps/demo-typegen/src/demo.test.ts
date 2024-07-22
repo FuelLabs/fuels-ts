@@ -73,7 +73,7 @@ describe('ExampleContract', () => {
 
     // #region typegen-demo-contract-factory-deploy
     // #context import { DemoContractAbi } from './types';
-    // #context import bytecode from './types/DemoContractAbi.hex';
+    // #context
 
     // Deploy
     const deploy = await DemoContractFactory.deploy(wallet);

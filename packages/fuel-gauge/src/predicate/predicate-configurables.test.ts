@@ -1,7 +1,7 @@
 import { getRandomB256, WalletUnlocked, Predicate } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PredicateTrueAbi, PredicateWithConfigurableAbi } from '../../test/typegen';
+import { Predicate, PredicateWithConfigurableAbi } from '../../test/typegen';
 
 import { fundPredicate, assertBalance } from './utils/predicate';
 
@@ -27,7 +27,7 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurable.bytecode,
+        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider: wallet.provider,
         inputData: [defaultValues.FEE, defaultValues.ADDRESS], // set predicate input data to be the same as default configurable value
@@ -70,7 +70,7 @@ describe('Predicate', () => {
 
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurable.bytecode,
+        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
         inputData: [configurableConstants.FEE, defaultValues.ADDRESS],
@@ -115,7 +115,7 @@ describe('Predicate', () => {
 
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurable.bytecode,
+        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
         inputData: [defaultValues.FEE, configurableConstants.ADDRESS],
@@ -164,7 +164,7 @@ describe('Predicate', () => {
       expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
       expect(configurableConstants.ADDRESS).not.toEqual(defaultValues.ADDRESS);
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurable.bytecode,
+        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
         inputData: [configurableConstants.FEE, configurableConstants.ADDRESS],
@@ -204,7 +204,7 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate({
-        bytecode: PredicateWithConfigurable.bytecode,
+        bytecode: PredicateWithConfigurableFactory.bytecode,
         abi: PredicateWithConfigurableAbi.abi,
         provider,
       });
@@ -228,8 +228,8 @@ describe('Predicate', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate({
-          bytecode: PredicateTrue.bytecode,
-          abi: PredicateTrueAbi.abi,
+          bytecode: PredicateFactory.bytecode,
+          abi: Predicate.abi,
           provider,
           inputData: ['NADA'],
           configurableConstants: {
@@ -249,7 +249,7 @@ describe('Predicate', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate({
-          bytecode: PredicateWithConfigurable.bytecode,
+          bytecode: PredicateWithConfigurableFactory.bytecode,
           abi: PredicateWithConfigurableAbi.abi,
           provider,
           inputData: ['NADA'],
@@ -269,7 +269,7 @@ describe('Predicate', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate({
-          bytecode: PredicateWithConfigurable.bytecode,
+          bytecode: PredicateWithConfigurableFactory.bytecode,
           provider,
           inputData: ['NADA'],
           configurableConstants: {

@@ -1,10 +1,9 @@
 import { bn, Predicate, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { VectorTypesScriptAbi } from '../test/typegen';
-import { VectorTypesContractAbi } from '../test/typegen/contracts';
-import VectorTypesContractAbiHex from '../test/typegen/contracts/VectorTypesContractAbi.hex';
-import { PredicateVectorTypesAbi } from '../test/typegen/predicates';
+import { VectorTypesScript } from '../test/typegen';
+import { VectorTypesContract, VectorTypesContractFactory } from '../test/typegen/contracts';
+import { PredicateVectorTypes } from '../test/typegen/predicates';
 
 import { launchTestContract } from './utils';
 
@@ -84,8 +83,8 @@ type MainArgs = [
 describe('Vector Types Validation', () => {
   it('can use supported vector types [vector-types-contract]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: VectorTypesContractAbi,
-      bytecode: VectorTypesContractAbiHex,
+      deployer: VectorTypesContract,
+      bytecode: VectorTypesContractFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions
@@ -115,7 +114,7 @@ describe('Vector Types Validation', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = VectorTypesScriptAbi.createInstance(wallet);
+    const scriptInstance = VectorTypesScript.createInstance(wallet);
 
     const { waitForResult } = await scriptInstance.functions
       .main(
@@ -150,9 +149,9 @@ describe('Vector Types Validation', () => {
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateVectorTypes.bytecode,
+      bytecode: PredicateVectorTypesFactory.bytecode,
       provider: wallet.provider,
-      abi: PredicateVectorTypesAbi.abi,
+      abi: PredicateVectorTypes.abi,
       inputData: [
         U32_VEC,
         VEC_IN_VEC,

@@ -1,13 +1,12 @@
 import { bn } from 'fuels';
 
 import { PayableAnnotationAbi } from '../test/typegen/contracts';
-import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
 import { launchTestContract } from './utils';
 
 function launchPayableContract() {
   return launchTestContract({
-    bytecode: PayableAnnotationAbiHex,
+    bytecode: PayableAnnotationAbiFactory.bytecode,
     deployer: PayableAnnotationAbi,
   });
 }

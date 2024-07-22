@@ -13,10 +13,6 @@ import {
   MultiTokenContractAbi,
   RevertErrorAbi,
 } from '../test/typegen/contracts';
-import AdvancedLoggingAbiHex from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
-import AdvancedLoggingOtherContractAbiHex from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
-import MultiTokenAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
-import RevertErrorAbiHex from '../test/typegen/contracts/RevertErrorAbi.hex';
 
 /**
  * @group node
@@ -28,7 +24,7 @@ describe('dry-run-multiple-txs', () => {
       contractsConfigs: [
         {
           deployer: RevertErrorAbi,
-          bytecode: RevertErrorAbiHex,
+          bytecode: RevertErrorAbiFactory.bytecode,
         },
       ],
     });
@@ -126,19 +122,19 @@ describe('dry-run-multiple-txs', () => {
       contractsConfigs: [
         {
           deployer: RevertErrorAbi,
-          bytecode: RevertErrorAbiHex,
+          bytecode: RevertErrorAbiFactory.bytecode,
         },
         {
           deployer: MultiTokenContractAbi,
-          bytecode: MultiTokenAbiHex,
+          bytecode: MultiTokenAbiFactory.bytecode,
         },
         {
           deployer: AdvancedLoggingAbi,
-          bytecode: AdvancedLoggingAbiHex,
+          bytecode: AdvancedLoggingAbiFactory.bytecode,
         },
         {
           deployer: AdvancedLoggingOtherContractAbi,
-          bytecode: AdvancedLoggingOtherContractAbiHex,
+          bytecode: AdvancedLoggingOtherContractAbiFactory.bytecode,
         },
       ],
     });
@@ -161,7 +157,11 @@ describe('dry-run-multiple-txs', () => {
     ];
 
     // request 1
-    const factory = new ContractFactory(MultiTokenAbiHex, MultiTokenContractAbi.abi, wallet);
+    const factory = new ContractFactory(
+      MultiTokenAbiFactory.bytecode,
+      MultiTokenContractAbi.abi,
+      wallet
+    );
     const { transactionRequest: request1 } = factory.createTransactionRequest({
       maxFee: 15000,
     });

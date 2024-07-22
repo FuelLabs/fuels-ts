@@ -40,7 +40,7 @@ describe('Predicate', () => {
       const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
 
       const predicateAssertNumber = new Predicate<[number]>({
-        bytecode: PredicateAssertNumber.bytecode,
+        bytecode: PredicateAssertNumberFactory.bytecode,
         abi: PredicateAssertNumberAbi.abi,
         provider,
         inputData: [11],
@@ -95,7 +95,7 @@ describe('Predicate', () => {
       transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
 
       const predicateAssertNumber = new Predicate<[number]>({
-        bytecode: PredicateAssertNumber.bytecode,
+        bytecode: PredicateAssertNumberFactory.bytecode,
         abi: PredicateAssertNumberAbi.abi,
         provider,
         inputData: [11],
@@ -150,7 +150,7 @@ describe('Predicate', () => {
       const quantity: CoinQuantityLike[] = [[500, provider.getBaseAssetId()]];
 
       const predicateAssertNumber = new Predicate<[number]>({
-        bytecode: PredicateAssertNumber.bytecode,
+        bytecode: PredicateAssertNumberFactory.bytecode,
         abi: PredicateAssertNumberAbi.abi,
         provider,
         inputData: [11],
@@ -228,7 +228,7 @@ describe('Predicate', () => {
       const resources3 = await wallet3.getResourcesToSpend(quantity);
 
       const predicateAssertNumber = new Predicate<[number]>({
-        bytecode: PredicateAssertNumber.bytecode,
+        bytecode: PredicateAssertNumberFactory.bytecode,
         abi: PredicateAssertNumberAbi.abi,
         provider,
         inputData: [11],
@@ -237,7 +237,7 @@ describe('Predicate', () => {
       await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValue = new Predicate<[boolean]>({
-        bytecode: PredicateAssertValue.bytecode,
+        bytecode: PredicateAssertValueFactory.bytecode,
         abi: PredicateAssertValueAbi.abi,
         provider,
         inputData: [true],
@@ -319,7 +319,7 @@ describe('Predicate', () => {
       let transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
 
       const predicateAssertNumber = new Predicate<[number]>({
-        bytecode: PredicateAssertNumber.bytecode,
+        bytecode: PredicateAssertNumberFactory.bytecode,
         abi: PredicateAssertNumberAbi.abi,
         provider,
         inputData: [11],
@@ -328,7 +328,7 @@ describe('Predicate', () => {
       await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
 
       const predicateAssertValue = new Predicate<[boolean]>({
-        bytecode: PredicateAssertValue.bytecode,
+        bytecode: PredicateAssertValueFactory.bytecode,
         abi: PredicateAssertValueAbi.abi,
         provider,
         inputData: [true],
@@ -405,7 +405,7 @@ describe('Predicate', () => {
       const resources3 = await wallet3.getResourcesToSpend(quantity);
 
       const predicateAssertNumber = new Predicate<[number]>({
-        bytecode: PredicateAssertNumber.bytecode,
+        bytecode: PredicateAssertNumberFactory.bytecode,
         abi: PredicateAssertNumberAbi.abi,
         provider,
         inputData: [11],
@@ -423,7 +423,7 @@ describe('Predicate', () => {
       );
 
       const predicateAssertValue = new Predicate<[boolean]>({
-        bytecode: PredicateAssertValue.bytecode,
+        bytecode: PredicateAssertValueFactory.bytecode,
         abi: PredicateAssertValueAbi.abi,
         provider,
         inputData: [true],

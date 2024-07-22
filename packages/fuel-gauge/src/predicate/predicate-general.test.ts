@@ -29,7 +29,7 @@ describe('Predicate', () => {
     const value1 = bn(100);
 
     const predicate = new Predicate<[BN, BN]>({
-      bytecode: PredicateSum.bytecode,
+      bytecode: PredicateSumFactory.bytecode,
       abi: PredicateSumAbi.abi,
       provider,
       inputData: [value1, value2],

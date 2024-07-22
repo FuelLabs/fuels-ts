@@ -20,20 +20,19 @@ import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import { CallTestContractAbi, StorageTestContractAbi } from '../test/typegen/contracts';
-import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
-import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
-import { PredicateTrueAbi } from '../test/typegen/predicates/factories/PredicateTrueAbi';
+
+import { Predicate } from '../test/typegen/predicates/factories/Predicate';
 
 import { launchTestContract } from './utils';
 
 const contractsConfigs: DeployContractConfig[] = [
   {
     deployer: CallTestContractAbi,
-    bytecode: CallTestContractAbiHex,
+    bytecode: CallTestContractAbiFactory.bytecode,
   },
   {
     deployer: CallTestContractAbi,
-    bytecode: CallTestContractAbiHex,
+    bytecode: CallTestContractAbiFactory.bytecode,
   },
 ];
 
@@ -160,7 +159,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 function setupTestContract() {
   return launchTestContract({
     deployer: CallTestContractAbi,
-    bytecode: CallTestContractAbiHex,
+    bytecode: CallTestContractAbiFactory.bytecode,
   });
 }
 
@@ -741,7 +740,7 @@ describe('Contract', () => {
     } = launched;
 
     const contract = new ContractFactory(
-      StorageTestContractAbiHex,
+      StorageTestContractAbiFactory.bytecode,
       StorageTestContractAbi.abi,
       wallet
     );
@@ -926,7 +925,7 @@ describe('Contract', () => {
     const amountToPredicate = 500_000;
 
     const predicate = new Predicate({
-      bytecode: PredicateTrue.bytecode,
+      bytecode: PredicateFactory.bytecode,
       provider,
     });
 
@@ -994,7 +993,11 @@ describe('Contract', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(CallTestContractAbiHex, CallTestContractAbi.abi, wallet);
+    const factory = new ContractFactory(
+      CallTestContractAbiFactory.bytecode,
+      CallTestContractAbi.abi,
+      wallet
+    );
 
     const { waitForResult } = await factory.deployContract();
     const { contract } = await waitForResult();
@@ -1036,7 +1039,11 @@ describe('Contract', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(CallTestContractAbiHex, CallTestContractAbi.abi, wallet);
+    const factory = new ContractFactory(
+      CallTestContractAbiFactory.bytecode,
+      CallTestContractAbi.abi,
+      wallet
+    );
 
     const { waitForResult } = await factory.deployContract();
 
@@ -1166,7 +1173,7 @@ describe('Contract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
+      StorageTestContractAbiFactory.bytecode,
       StorageTestContractAbi.abi,
       wallet
     );
@@ -1198,7 +1205,7 @@ describe('Contract', () => {
       contractsConfigs: [
         {
           deployer: StorageTestContractAbi,
-          bytecode: StorageTestContractAbiHex,
+          bytecode: StorageTestContractAbiFactory.bytecode,
         },
       ],
     });

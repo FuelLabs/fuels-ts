@@ -3,7 +3,6 @@ import { Wallet, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { MultiTokenContractAbi } from '../test/typegen/contracts';
-import binHexlified from '../test/typegen/contracts/MultiTokenContractAbi.hex';
 
 // hardcoded subIds on MultiTokenContract
 const subIds = [

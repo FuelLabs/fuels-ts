@@ -2,7 +2,6 @@ import { TransactionResponse, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { CollisionInFnNamesAbi } from '../test/typegen/contracts';
-import CollisionInFnNamesAbiHex from '../test/typegen/contracts/CollisionInFnNamesAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -14,7 +13,7 @@ describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
     using contractInstance = await launchTestContract({
       deployer: CollisionInFnNamesAbi,
-      bytecode: CollisionInFnNamesAbiHex,
+      bytecode: CollisionInFnNamesAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.new().call();

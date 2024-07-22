@@ -93,7 +93,7 @@ describe('launchTestNode', () => {
         contractsConfigs: [
           {
             deployer: {
-              deployContract: () => {
+              deploy: () => {
                 throw new Error('Test error');
               },
             },
@@ -119,8 +119,8 @@ describe('launchTestNode', () => {
       contractsConfigs: [
         {
           deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
@@ -143,8 +143,8 @@ describe('launchTestNode', () => {
       contractsConfigs: [
         {
           deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
@@ -152,8 +152,8 @@ describe('launchTestNode', () => {
         },
         {
           deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
@@ -184,8 +184,8 @@ describe('launchTestNode', () => {
       contractsConfigs: [
         {
           deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
@@ -193,8 +193,8 @@ describe('launchTestNode', () => {
         },
         {
           deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
               return factory.deployContract(options);
             },
           },
@@ -229,8 +229,8 @@ describe('launchTestNode', () => {
           contractsConfigs: [
             {
               deployer: {
-                deployContract: async (bytecode, wallet, options) => {
-                  const factory = new ContractFactory(bytecode, abiContents, wallet);
+                deploy: async (wallet, options) => {
+                  const factory = new ContractFactory(binHexlified, abiContents, wallet);
                   return factory.deployContract(options);
                 },
               },

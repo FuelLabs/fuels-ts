@@ -4,7 +4,6 @@ import { launchTestNode } from 'fuels/test-utils';
 import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
 import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
 import { BytecodeSwayLibAbi } from '../test/typegen/contracts';
-import BytecodeSwayLibAbiHex from '../test/typegen/contracts/BytecodeSwayLibAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -16,11 +15,11 @@ describe('bytecode computations', () => {
   it('compute_bytecode_root', async () => {
     using contract = await launchTestContract({
       deployer: BytecodeSwayLibAbi,
-      bytecode: BytecodeSwayLibAbiHex,
+      bytecode: BytecodeSwayLibAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contract.functions
-      .compute_bytecode_root(Array.from(arrayify(BytecodeSwayLibAbiHex)))
+      .compute_bytecode_root(Array.from(arrayify(BytecodeSwayLibAbi.bytecode)))
       .call();
 
     const { logs } = await waitForResult();
@@ -34,7 +33,7 @@ describe('bytecode computations', () => {
   it('verify_contract_bytecode', async () => {
     using contract = await launchTestContract({
       deployer: BytecodeSwayLibAbi,
-      bytecode: BytecodeSwayLibAbiHex,
+      bytecode: BytecodeSwayLibAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contract.functions
@@ -42,7 +41,7 @@ describe('bytecode computations', () => {
         {
           bits: contract.id.toB256(),
         },
-        Array.from(arrayify(BytecodeSwayLibAbiHex))
+        Array.from(arrayify(BytecodeSwayLibAbi.bytecode))
       )
       .call();
 
@@ -56,7 +55,7 @@ describe('bytecode computations', () => {
       contractsConfigs: [
         {
           deployer: BytecodeSwayLibAbi,
-          bytecode: BytecodeSwayLibAbiHex,
+          bytecode: BytecodeSwayLibAbiFactory.bytecode,
         },
       ],
     });

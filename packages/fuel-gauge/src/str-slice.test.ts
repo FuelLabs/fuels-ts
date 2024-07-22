@@ -1,9 +1,8 @@
 import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import type { PredicateStrSliceAbiInputs } from '../test/typegen';
-import { PredicateStrSliceAbi, ScriptStrSliceAbi, StrSliceAbi } from '../test/typegen';
-import contractBytes from '../test/typegen/contracts/StrSliceAbi.hex';
+import type { PredicateStrSliceInputs } from '../test/typegen';
+import { PredicateStrSlice, ScriptStrSlice, StrSlice, StrSliceFactory } from '../test/typegen';
 
 /**
  * @group node
@@ -14,8 +13,8 @@ describe('str slice', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: StrSliceAbi,
-          bytecode: contractBytes,
+          deployer: StrSlice,
+          bytecode: StrSliceFactory.bytecode,
         },
       ],
     });
@@ -39,8 +38,8 @@ describe('str slice', () => {
       provider,
     } = launched;
 
-    const predicateData: PredicateStrSliceAbiInputs = ['predicate-input'];
-    const predicate = PredicateStrSliceAbi.createInstance(provider, predicateData);
+    const predicateData: PredicateStrSliceInputs = ['predicate-input'];
+    const predicate = new PredicateStrSlice(provider, predicateData);
     const baseAssetId = provider.getBaseAssetId();
 
     const amountToPredicate = 250_000;
@@ -67,7 +66,7 @@ describe('str slice', () => {
       wallets: [sender],
     } = launched;
 
-    const script = await ScriptStrSliceAbi.createInstance(sender);
+    const script = await ScriptStrSlice.createInstance(sender);
     const input = 'script-input';
     const output = 'script-return';
     const { waitForResult } = await script.functions.main(input).call();

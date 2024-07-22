@@ -2,7 +2,6 @@ import { BN, getRandomB256 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ConfigurableContractAbi } from '../test/typegen/contracts';
-import ConfigurableContractAbiHex from '../test/typegen/contracts/ConfigurableContractAbi.hex';
 
 const defaultValues = {
   U8: 10,
@@ -30,7 +29,7 @@ function setupContract(configurableConstants?: { [name: string]: unknown }) {
     contractsConfigs: [
       {
         deployer: ConfigurableContractAbi,
-        bytecode: ConfigurableContractAbiHex,
+        bytecode: ConfigurableContractAbiFactory.bytecode,
         options: { configurableConstants },
       },
     ],

@@ -3,7 +3,6 @@ import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateBytesAbi, ScriptBytesAbi } from '../test/typegen';
 import { BytesAbi } from '../test/typegen/contracts';
-import BytesAbiHex from '../test/typegen/contracts/BytesAbi.hex';
 
 import { launchTestContract } from './utils';
 
@@ -15,7 +14,7 @@ describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbi,
-      bytecode: BytesAbiHex,
+      bytecode: BytesAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.return_bytes(10).call();
@@ -27,7 +26,7 @@ describe('Bytes Tests', () => {
   it('should test bytes output [100 items]', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbi,
-      bytecode: BytesAbiHex,
+      bytecode: BytesAbiFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.return_bytes(100).call();
@@ -39,7 +38,7 @@ describe('Bytes Tests', () => {
   it('should test bytes input', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbi,
-      bytecode: BytesAbiHex,
+      bytecode: BytesAbiFactory.bytecode,
     });
 
     const INPUT = [40, 41, 42];
@@ -53,7 +52,7 @@ describe('Bytes Tests', () => {
   it('should test bytes input [nested]', async () => {
     using contractInstance = await launchTestContract({
       deployer: BytesAbi,
-      bytecode: BytesAbiHex,
+      bytecode: BytesAbiFactory.bytecode,
     });
     const bytes = [40, 41, 42];
 
@@ -74,7 +73,7 @@ describe('Bytes Tests', () => {
       contractsConfigs: [
         {
           deployer: BytesAbi,
-          bytecode: BytesAbiHex,
+          bytecode: BytesAbiFactory.bytecode,
         },
       ],
     });

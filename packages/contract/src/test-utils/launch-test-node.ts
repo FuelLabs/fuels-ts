@@ -149,8 +149,7 @@ export async function launchTestNode<const TFactories extends DeployContractConf
   try {
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
-      const { waitForResult } = await config.deployer.deployContract(
-        config.bytecode,
+      const { waitForResult } = await config.deployer.deploy(
         getWalletForDeployment(config, wallets),
         config.options ?? {}
       );

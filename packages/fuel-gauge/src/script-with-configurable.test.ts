@@ -20,7 +20,7 @@ describe('Script With Configurable', () => {
     } = launched;
 
     const script = new Script(
-      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableFactory.bytecode,
       ScriptWithConfigurableAbi.abi,
       wallet
     );
@@ -45,7 +45,7 @@ describe('Script With Configurable', () => {
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
 
     const script = new Script(
-      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableFactory.bytecode,
       ScriptWithConfigurableAbi.abi,
       wallet
     );
@@ -68,7 +68,7 @@ describe('Script With Configurable', () => {
     const configurableConstants = { FEE: 35 };
 
     const script = new Script(
-      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableFactory.bytecode,
       ScriptWithConfigurableAbi.abi,
       wallet
     );
@@ -95,7 +95,7 @@ describe('Script With Configurable', () => {
     expect(configurableConstants.FEE).not.toEqual(input.FEE);
 
     const script = new Script(
-      ScriptWithConfigurable.bytecode,
+      ScriptWithConfigurableFactory.bytecode,
       ScriptWithConfigurableAbi.abi,
       wallet
     );
