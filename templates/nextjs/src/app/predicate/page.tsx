@@ -60,8 +60,11 @@ export default function PredicateExample() {
     } catch (e) {
       console.error(e);
       toast.error(
-        `Failed to transfer funds. Please make sure your wallet has enough funds.
-        Please click the 'Top-up Wallet' button in the top right corner, or use the faucet in the top left.`,
+        <span>
+          Failed to transfer funds. Please make sure your wallet has enough
+          funds. Please click the 'Top-up Wallet' button in the top right
+          corner, or use the <Link href="/faucet">faucet.</Link>
+        </span>,
       );
     }
   };

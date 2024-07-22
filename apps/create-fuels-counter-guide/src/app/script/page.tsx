@@ -40,8 +40,11 @@ export default function ScriptExample() {
     } catch (error) {
       console.error(error);
       toast.error(
-        `Error running script. Please make sure your wallet has enough funds.
-        Please click the 'Top-up Wallet' button in the top right corner, or use the faucet in the top left.`,
+        <span>
+          Error running script. Please make sure your wallet has enough funds.
+          Please click the 'Top-up Wallet' button in the top right corner, or
+          use the <Link href="/faucet">faucet.</Link>
+        </span>,
       );
     }
   };
