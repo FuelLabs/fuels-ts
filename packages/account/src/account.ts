@@ -501,6 +501,16 @@ export class Account extends AbstractAccount {
     return this.sendTransaction(request);
   }
 
+  /**
+   * Returns a transaction cost to enable user
+   * to set gasLimit and also reserve balance amounts
+   * on the transaction.
+   *
+   * @param transactionRequestLike - The transaction request object.
+   * @param transactionCostParams - The transaction cost parameters (optional).
+   *
+   * @returns A promise that resolves to the transaction cost object.
+   */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
     { signatureCallback, quantitiesToContract = [] }: TransactionCostParams = {}
