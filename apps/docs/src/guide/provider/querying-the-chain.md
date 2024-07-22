@@ -57,13 +57,13 @@ You can use the `getMessageByNonce` method to retrieve a message by its nonce.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-message-by-nonce-1{ts:line-numbers}
 
-## getMessages
+## `getMessages`
 
 You can use the `getMessages` method to retrieve a list of messages from the blockchain.
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessages{ts:line-numbers}
 
-## getMessageProof
+## `getMessageProof`
 
 A message proof is a cryptographic proof that a message was included in a block. You can use the `getMessageProof` method to retrieve a message proof for a given transaction ID and message ID.
 
