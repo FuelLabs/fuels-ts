@@ -1,7 +1,7 @@
 import { getRandomB256 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { AuthTestingContractAbi } from '../test/typegen/contracts';
+import { AuthTestingContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
@@ -12,8 +12,8 @@ import { launchTestContract } from './utils';
 describe('Auth Testing', () => {
   it('can get is_caller_external', async () => {
     using contractInstance = await launchTestContract({
-      deployer: AuthTestingContractAbi,
-      bytecode: AuthTestingAbiFactory.bytecode,
+      deployer: AuthTestingContractFactory,
+      bytecode: AuthTestingContractFactory.bytecode,
     });
 
     const { waitForResult } = await contractInstance.functions.is_caller_external().call();
@@ -24,7 +24,9 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ deployer: AuthTestingContractAbi, bytecode: AuthTestingAbi.bytecode }],
+      contractsConfigs: [
+        { deployer: AuthTestingContractFactory, bytecode: AuthTestingContractFactory.bytecode },
+      ],
     });
 
     const {
@@ -43,8 +45,8 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: AuthTestingContractAbi,
-      bytecode: AuthTestingAbiFactory.bytecode,
+      deployer: AuthTestingContractFactory,
+      bytecode: AuthTestingContractFactory.bytecode,
     });
 
     await expect(

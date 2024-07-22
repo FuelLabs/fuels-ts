@@ -13,7 +13,7 @@ import { launchTestContract } from './utils';
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi,
+      deployer: BytesAbiFactory,
       bytecode: BytesAbiFactory.bytecode,
     });
 
@@ -25,7 +25,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes output [100 items]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi,
+      deployer: BytesAbiFactory,
       bytecode: BytesAbiFactory.bytecode,
     });
 
@@ -37,7 +37,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi,
+      deployer: BytesAbiFactory,
       bytecode: BytesAbiFactory.bytecode,
     });
 
@@ -51,7 +51,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [nested]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi,
+      deployer: BytesAbiFactory,
       bytecode: BytesAbiFactory.bytecode,
     });
     const bytes = [40, 41, 42];
@@ -72,7 +72,7 @@ describe('Bytes Tests', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: BytesAbi,
+          deployer: BytesAbiFactory,
           bytecode: BytesAbiFactory.bytecode,
         },
       ],

@@ -16,7 +16,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContract,
+          deployer: TokenContractFactory,
           bytecode: TokenContractFactory.bytecode,
         },
       ],
@@ -66,7 +66,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContract,
+          deployer: TokenContractFactory,
           bytecode: TokenContractFactory.bytecode,
         },
       ],
@@ -141,7 +141,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContract,
+          deployer: TokenContractFactory,
           bytecode: TokenContractFactory.bytecode,
         },
       ],
@@ -181,7 +181,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContract,
+          deployer: TokenContractFactory,
           bytecode: TokenContractFactory.bytecode,
         },
       ],

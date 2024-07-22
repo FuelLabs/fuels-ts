@@ -13,7 +13,7 @@ describe('str slice', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: StrSlice,
+          deployer: StrSliceFactory,
           bytecode: StrSliceFactory.bytecode,
         },
       ],

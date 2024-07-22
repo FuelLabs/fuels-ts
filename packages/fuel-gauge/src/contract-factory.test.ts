@@ -15,7 +15,7 @@ import { launchTestContract } from './utils';
 describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi,
+      deployer: StorageTestContractAbiFactory,
       bytecode: StorageTestContractAbiFactory.bytecode,
     });
     expect(contract.interface).toBeInstanceOf(Interface);
@@ -36,7 +36,7 @@ describe('Contract Factory', () => {
 
   it('Creates a factory from inputs that can return transaction results', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi,
+      deployer: StorageTestContractAbiFactory,
       bytecode: StorageTestContractAbiFactory.bytecode,
     });
 
@@ -84,7 +84,7 @@ describe('Contract Factory', () => {
 
   it('Creates a factory from inputs that can prepare call data', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi,
+      deployer: StorageTestContractAbiFactory,
       bytecode: StorageTestContractAbiFactory.bytecode,
     });
 
@@ -127,7 +127,7 @@ describe('Contract Factory', () => {
 
   it('Creates a contract with initial storage fixed var names', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi,
+      deployer: StorageTestContractAbiFactory,
       bytecode: StorageTestContractAbiFactory.bytecode,
       storageSlots: StorageTestContractAbi.storageSlots,
     });

@@ -14,7 +14,7 @@ import { launchTestContract } from './utils';
 describe('bytecode computations', () => {
   it('compute_bytecode_root', async () => {
     using contract = await launchTestContract({
-      deployer: BytecodeSwayLibAbi,
+      deployer: BytecodeSwayLibAbiFactory,
       bytecode: BytecodeSwayLibAbiFactory.bytecode,
     });
 
@@ -32,7 +32,7 @@ describe('bytecode computations', () => {
 
   it('verify_contract_bytecode', async () => {
     using contract = await launchTestContract({
-      deployer: BytecodeSwayLibAbi,
+      deployer: BytecodeSwayLibAbiFactory,
       bytecode: BytecodeSwayLibAbiFactory.bytecode,
     });
 
@@ -54,7 +54,7 @@ describe('bytecode computations', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: BytecodeSwayLibAbi,
+          deployer: BytecodeSwayLibAbiFactory,
           bytecode: BytecodeSwayLibAbiFactory.bytecode,
         },
       ],

@@ -15,7 +15,7 @@ describe('Predicate', () => {
   describe('With Contract', () => {
     it('calls a predicate from a contract function', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: CallTestContractAbi, bytecode: contractBytes }],
+        contractsConfigs: [{ deployer: CallTestContractAbi, bytecode: contractBytes }]Factory,
       });
 
       const {
@@ -46,7 +46,7 @@ describe('Predicate', () => {
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: TokenContractAbi, bytecode: tokenPoolBytes }],
+        contractsConfigs: [{ deployer: TokenContractAbi, bytecode: tokenPoolBytes }]Factory,
       });
 
       const {

@@ -27,11 +27,11 @@ import { launchTestContract } from './utils';
 
 const contractsConfigs: DeployContractConfig[] = [
   {
-    deployer: CallTestContractAbi,
+    deployer: CallTestContractAbiFactory,
     bytecode: CallTestContractAbiFactory.bytecode,
   },
   {
-    deployer: CallTestContractAbi,
+    deployer: CallTestContractAbiFactory,
     bytecode: CallTestContractAbiFactory.bytecode,
   },
 ];
@@ -158,7 +158,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 
 function setupTestContract() {
   return launchTestContract({
-    deployer: CallTestContractAbi,
+    deployer: CallTestContractAbiFactory,
     bytecode: CallTestContractAbiFactory.bytecode,
   });
 }
@@ -1204,7 +1204,7 @@ describe('Contract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: StorageTestContractAbi,
+          deployer: StorageTestContractAbiFactory,
           bytecode: StorageTestContractAbiFactory.bytecode,
         },
       ],

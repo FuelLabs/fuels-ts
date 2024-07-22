@@ -28,7 +28,7 @@ function setupContract(configurableConstants?: { [name: string]: unknown }) {
   return launchTestNode({
     contractsConfigs: [
       {
-        deployer: ConfigurableContractAbi,
+        deployer: ConfigurableContractAbiFactory,
         bytecode: ConfigurableContractAbiFactory.bytecode,
         options: { configurableConstants },
       },

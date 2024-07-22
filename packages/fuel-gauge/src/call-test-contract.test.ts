@@ -7,7 +7,7 @@ import { CallTestContractAbi } from '../test/typegen/contracts';
 import { launchTestContract } from './utils';
 
 function setupContract() {
-  return launchTestContract({ deployer: CallTestContractAbi, bytecode });
+  return launchTestContract({ deployer: CallTestContractAbiFactory, bytecode });
 }
 const U64_MAX = bn(2).pow(64).sub(1);
 

@@ -16,11 +16,11 @@ describe('Reentrant Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReentrantFooAbi,
+          deployer: ReentrantFooAbiFactory,
           bytecode: ReentrantFooAbiFactory.bytecode,
         },
         {
-          deployer: ReentrantBarAbi,
+          deployer: ReentrantBarAbiFactory,
           bytecode: ReentrantBarAbiFactory.bytecode,
         },
       ],
@@ -69,11 +69,11 @@ describe('Reentrant Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReentrantFooAbi,
+          deployer: ReentrantFooAbiFactory,
           bytecode: ReentrantFooAbiFactory.bytecode,
         },
         {
-          deployer: ReentrantBarAbi,
+          deployer: ReentrantBarAbiFactory,
           bytecode: ReentrantBarAbiFactory.bytecode,
         },
       ],

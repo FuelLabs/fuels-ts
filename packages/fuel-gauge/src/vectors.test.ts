@@ -1,7 +1,7 @@
 import { bn, randomBytes, hexlify } from 'fuels';
 import type { BN } from 'fuels';
 
-import { Vectors, VectorsFactory } from '../test/typegen/contracts';
+import { VectorsFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
@@ -13,7 +13,7 @@ enum SmallEnum {
 
 function setupContract() {
   return launchTestContract({
-    deployer: Vectors,
+    deployer: VectorsFactory,
     bytecode: VectorsFactory.bytecode,
   });
 }

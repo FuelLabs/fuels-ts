@@ -7,7 +7,7 @@ import { launchTestContract } from './utils';
 function launchPayableContract() {
   return launchTestContract({
     bytecode: PayableAnnotationAbiFactory.bytecode,
-    deployer: PayableAnnotationAbi,
+    deployer: PayableAnnotationAbiFactory,
   });
 }
 

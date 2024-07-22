@@ -1,7 +1,7 @@
 import { launchTestNode } from 'fuels/test-utils';
 import { describe, test, expect } from 'vitest';
 
-import { CounterAbi } from '../../../test/typegen';
+import { CounterFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -20,8 +20,8 @@ describe('Counter Contract', () => {
       // because we are instantiating it with the `using` keyword.
       contractsConfigs: [
         {
-          deployer: CounterAbi,
-          bytecode,
+          deployer: CounterFactory,
+          bytecode: CounterFactory.bytecode,
         },
       ],
     });

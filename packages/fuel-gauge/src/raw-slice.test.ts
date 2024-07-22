@@ -21,7 +21,7 @@ type Wrapper = {
 
 function setupRawSliceContract() {
   return launchTestContract({
-    deployer: RawSliceAbi,
+    deployer: RawSliceAbiFactory,
     bytecode: RawSliceAbiFactory.bytecode,
   });
 }

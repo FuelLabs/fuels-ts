@@ -12,7 +12,7 @@ import { launchTestContract } from './utils';
 
 function setupContract() {
   return launchTestContract({
-    deployer: StdLibString,
+    deployer: StdLibStringFactory,
     bytecode: StdLibStringFactory.bytecode,
   });
 }

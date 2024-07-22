@@ -20,7 +20,7 @@ describe('MultiTokenContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi,
+          deployer: MultiTokenContractAbiFactory,
           bytecode: binHexlified,
         },
       ],
@@ -113,7 +113,7 @@ describe('MultiTokenContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi,
+          deployer: MultiTokenContractAbiFactory,
           bytecode: binHexlified,
         },
       ],

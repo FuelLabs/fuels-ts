@@ -11,7 +11,7 @@ const U32_MAX = 4294967295;
 function launchOptionsContract() {
   return launchTestContract({
     bytecode: OptionsAbiFactory.bytecode,
-    deployer: OptionsAbi,
+    deployer: OptionsAbiFactory,
   });
 }
 
@@ -204,7 +204,7 @@ describe('Options Tests', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: OptionsAbi,
+          deployer: OptionsAbiFactory,
           bytecode: OptionsAbiFactory.bytecode,
         },
       ],

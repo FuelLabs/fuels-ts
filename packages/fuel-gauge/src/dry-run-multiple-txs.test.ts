@@ -23,7 +23,7 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbi,
+          deployer: RevertErrorAbiFactory,
           bytecode: RevertErrorAbiFactory.bytecode,
         },
       ],
@@ -121,19 +121,19 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbi,
+          deployer: RevertErrorAbiFactory,
           bytecode: RevertErrorAbiFactory.bytecode,
         },
         {
-          deployer: MultiTokenContractAbi,
+          deployer: MultiTokenContractAbiFactory,
           bytecode: MultiTokenAbiFactory.bytecode,
         },
         {
-          deployer: AdvancedLoggingAbi,
+          deployer: AdvancedLoggingAbiFactory,
           bytecode: AdvancedLoggingAbiFactory.bytecode,
         },
         {
-          deployer: AdvancedLoggingOtherContractAbi,
+          deployer: AdvancedLoggingOtherContractAbiFactory,
           bytecode: AdvancedLoggingOtherContractAbiFactory.bytecode,
         },
       ],

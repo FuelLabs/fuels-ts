@@ -7,7 +7,7 @@ import { describe, test, expect } from 'vitest';
  *
  * Can't find these imports? Make sure you've run `fuels build` to generate these with typegen.
  */
-import { TestContract, TestContractFactory } from '../src/sway-api';
+import { TestContractFactory } from '../src/sway-api';
 
 /**
  * @group node
@@ -25,7 +25,7 @@ describe('Contract', () => {
       // because we are instantiating it with the `using` keyword.
       contractsConfigs: [
         {
-          deployer: TestContract,
+          deployer: TestContractFactory,
           bytecode: TestContractFactory.bytecode,
         },
       ],

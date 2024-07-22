@@ -32,7 +32,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi,
+          deployer: MultiTokenContractAbiFactory,
           bytecode: MultiTokenContractAbiFactory.bytecode,
         },
       ],
@@ -192,7 +192,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CallTestContractAbi,
+          deployer: CallTestContractAbiFactory,
           bytecode: CallTestContractAbiFactory.bytecode,
         },
       ],
@@ -225,7 +225,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CallTestContractAbi,
+          deployer: CallTestContractAbiFactory,
           bytecode: CallTestContractAbiFactory.bytecode,
         },
       ],
@@ -265,7 +265,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi,
+          deployer: MultiTokenContractAbiFactory,
           bytecode: MultiTokenContractAbiFactory.bytecode,
         },
       ],

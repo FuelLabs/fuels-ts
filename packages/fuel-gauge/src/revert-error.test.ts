@@ -10,7 +10,7 @@ import { launchTestContract } from './utils';
 
 function launchContract() {
   return launchTestContract({
-    deployer: RevertErrorAbi,
+    deployer: RevertErrorAbiFactory,
     bytecode: RevertErrorAbiFactory.bytecode,
   });
 }

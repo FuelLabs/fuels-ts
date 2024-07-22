@@ -247,7 +247,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: MultiTokenContract,
+            deployer: MultiTokenContractFactory,
             bytecode: MultiTokenContractFactory.bytecode,
           },
         ],
@@ -279,7 +279,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContract,
+            deployer: TokenContractFactory,
             bytecode: TokenContractFactory.bytecode,
           },
         ],
@@ -321,7 +321,7 @@ describe('TransactionSummary', () => {
         using launched = await launchTestNode({
           contractsConfigs: [
             {
-              deployer: TokenContract,
+              deployer: TokenContractFactory,
               bytecode: TokenContractFactory.bytecode,
             },
           ],
@@ -400,11 +400,11 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContract,
+            deployer: TokenContractFactory,
             bytecode: TokenContractFactory.bytecode,
           },
           {
-            deployer: TokenContract,
+            deployer: TokenContractFactory,
             bytecode: TokenContractFactory.bytecode,
           },
         ],
@@ -449,15 +449,15 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContract,
+            deployer: TokenContractFactory,
             bytecode: TokenContractFactory.bytecode,
           },
           {
-            deployer: TokenContract,
+            deployer: TokenContractFactory,
             bytecode: TokenContractFactory.bytecode,
           },
           {
-            deployer: TokenContract,
+            deployer: TokenContractFactory,
             bytecode: TokenContractFactory.bytecode,
           },
         ],

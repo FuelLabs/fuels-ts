@@ -10,7 +10,7 @@ import { launchTestContract } from './utils';
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
     using contract = await launchTestContract({
-      deployer: GenericTypesContractAbi,
+      deployer: GenericTypesContractAbiFactory,
       bytecode: GenericTypesContractAbiFactory.bytecode,
     });
 

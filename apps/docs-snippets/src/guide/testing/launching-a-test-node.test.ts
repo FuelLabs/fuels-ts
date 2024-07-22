@@ -56,7 +56,7 @@ describe('launching a test node', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TestContract,
+          deployer: TestContractFactory,
           bytecode,
         },
       ],
@@ -96,7 +96,7 @@ describe('launching a test node', () => {
       },
       contractsConfigs: [
         {
-          deployer: TestContract,
+          deployer: TestContractFactory,
           bytecode,
           walletIndex: 3,
           options: { storageSlots: [] },

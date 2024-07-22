@@ -189,7 +189,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbi,
+          deployer: PayableAnnotationAbiFactory,
           bytecode: PayableAnnotationAbiFactory.bytecode,
         },
       ],
@@ -290,7 +290,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbi,
+          deployer: PayableAnnotationAbiFactory,
           bytecode: PayableAnnotationAbiFactory.bytecode,
         },
       ],
@@ -383,7 +383,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbi,
+            deployer: PayableAnnotationAbiFactory,
             bytecode: PayableAnnotationAbiFactory.bytecode,
           },
         ],
@@ -466,7 +466,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbi,
+            deployer: PayableAnnotationAbiFactory,
             bytecode: PayableAnnotationAbiFactory.bytecode,
           },
         ],

@@ -21,7 +21,7 @@ import { launchTestContract } from './utils';
 describe('Advanced Logging', () => {
   it('can get log data', async () => {
     using advancedLogContract = await launchTestContract({
-      deployer: AdvancedLoggingFactory,
+      deployer: AdvancedLoggingFactoryFactory,
       bytecode: AdvancedLoggingFactory.bytecode,
     });
     ``;
@@ -71,7 +71,7 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=true]', async () => {
     using advancedLogContract = await launchTestContract({
-      deployer: AdvancedLogging,
+      deployer: AdvancedLoggingFactory,
       bytecode: AdvancedLoggingFactory.bytecode,
     });
 
@@ -87,7 +87,7 @@ describe('Advanced Logging', () => {
 
   it('can get log data from require [condition=false]', async () => {
     using advancedLogContract = await launchTestContract({
-      deployer: AdvancedLogging,
+      deployer: AdvancedLoggingFactory,
       bytecode: AdvancedLoggingFactory.bytecode,
     });
 
@@ -122,9 +122,9 @@ describe('Advanced Logging', () => {
   it('can get log data from a downstream Contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
-        { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
+        { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
         {
-          deployer: AdvancedLoggingOtherContract,
+          deployer: AdvancedLoggingOtherContractFactory,
           bytecode: AdvancedLoggingOtherContractFactory.bytecode,
         },
       ],
@@ -170,14 +170,14 @@ describe('Advanced Logging', () => {
     it('when using InvacationScope', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
-            deployer: AdvancedLoggingOtherContract,
+            deployer: AdvancedLoggingOtherContractFactory,
             bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
-          { deployer: CallTestContract, bytecode: CallTestContract.bytecode },
-          { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode },
-          { deployer: CoverageContract, bytecode: CoverageContract.bytecode },
+          { deployer: CallTestContract, bytecode: CallTestContract.bytecode }Factory,
+          { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode }Factory,
+          { deployer: CoverageContract, bytecode: CoverageContract.bytecode }Factory,
         ],
       });
 
@@ -212,14 +212,14 @@ describe('Advanced Logging', () => {
     it('when using ScriptTransactionRequest', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
-            deployer: AdvancedLoggingOtherContract,
+            deployer: AdvancedLoggingOtherContractFactory,
             bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
-          { deployer: CallTestContract, bytecode: CallTestContract.bytecode },
-          { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode },
-          { deployer: CoverageContract, bytecode: CoverageContract.bytecode },
+          { deployer: CallTestContract, bytecode: CallTestContract.bytecode }Factory,
+          { deployer: ConfigurableContract, bytecode: ConfigurableContract.bytecode }Factory,
+          { deployer: CoverageContract, bytecode: CoverageContract.bytecode }Factory,
         ],
       });
 
@@ -284,9 +284,9 @@ describe('Advanced Logging', () => {
     it('when using InvocationScope', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
-            deployer: AdvancedLoggingOtherContract,
+            deployer: AdvancedLoggingOtherContractFactory,
             bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
         ],
@@ -312,9 +312,9 @@ describe('Advanced Logging', () => {
     it('when using ScriptTransactionRequest', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
-          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode },
+          { deployer: AdvancedLogging, bytecode: AdvancedLogging.bytecode }Factory,
           {
-            deployer: AdvancedLoggingOtherContract,
+            deployer: AdvancedLoggingOtherContractFactory,
             bytecode: AdvancedLoggingOtherContractFactory.bytecode,
           },
         ],
