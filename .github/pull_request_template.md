@@ -7,9 +7,9 @@ List the issues this PR closes (if any) in a bullet list format, e.g.:
 # Release notes
 
 <!--
-Use this only if this PR requires a mention in the Release Notes Summary.
-Valuable features and critical fixes are good examples.
-For everything else, please delete the whole section.
+Use this only if this PR requires a mention in the Release
+Notes Summary. Valuable features and critical fixes are good
+examples. For everything else, please delete the whole section.
 -->
 
 In this release, we:
@@ -20,13 +20,16 @@ In this release, we:
 
 <!--
 Please write a summary of your changes and why you made them.
-Not all PRs will be complex or substantial enough to require this section, so you can remove it if you think it's unnecessary.
+Not all PRs will be complex or substantial enough to require this
+section, so you can remove it if you think it's unnecessary.
 -->
 
 # Breaking Changes
 
 <!--
-If the PR has breaking changes, please detail them in this section and remove this comment.
+If the PR has breaking changes, please detail them in this section
+and remove this comment.
+
 Remove this section if there are no breaking changes.
 -->
 
