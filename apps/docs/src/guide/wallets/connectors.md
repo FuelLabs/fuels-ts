@@ -327,7 +327,7 @@ There are several options that can be passed to the `Fuel` manager:
 
 - [`connectors`](#connectors)
 - [`storage`](#storage)
-- [`targetObject`](#targetObject)
+- [`targetObject`](#targetobject)
 
 #### `connectors`
 
