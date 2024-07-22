@@ -129,6 +129,8 @@ export const launchNode = async ({
       '--consensus-key',
       '--db-type',
       '--poa-instant',
+      '--min-gas-price',
+      '--native-executor-version',
     ]);
 
     const snapshotDir = getFlagValueFromArgs(args, '--snapshot');
