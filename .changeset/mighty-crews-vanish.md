@@ -1,4 +1,4 @@
 ---
 ---
 
-fix: support minimum gas price in args
+fix: allow setting min gas price in `launchNode` args
