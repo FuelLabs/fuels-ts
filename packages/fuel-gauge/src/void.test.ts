@@ -45,4 +45,36 @@ describe('Void Tests', () => {
 
     expect(value).toEqual(enumValue);
   });
+
+  it('should handle input arguments of type [42, void]', async () => {
+    using launched = await launchTestNode({ contractsConfigs });
+
+    const {
+      contracts: [voidContract],
+    } = launched;
+
+    const voidTypeValue: undefined = undefined;
+
+    const { waitForResult } = await voidContract.functions.type_then_void(42, voidTypeValue).call();
+    const { value } = await waitForResult();
+
+    expect(value).toEqual(voidTypeValue);
+  });
+
+  it('should handle input arguments of type [42, void, 43]', async () => {
+    using launched = await launchTestNode({ contractsConfigs });
+
+    const {
+      contracts: [voidContract],
+    } = launched;
+
+    const voidTypeValue: undefined = undefined;
+
+    const { waitForResult } = await voidContract.functions
+      .type_then_void_then_type(42, voidTypeValue, 43)
+      .call();
+    const { value } = await waitForResult();
+
+    expect(value).toEqual(voidTypeValue);
+  });
 });

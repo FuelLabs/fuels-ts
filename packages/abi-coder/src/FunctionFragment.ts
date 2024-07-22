@@ -68,20 +68,13 @@ export class FunctionFragment<
   encodeArguments(values: InputValue[]): Uint8Array {
     FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
 
-    const shallowCopyValues = values.slice();
-    const nonEmptyInputs = findNonEmptyInputs(this.jsonAbi, this.jsonFn.inputs);
-
-    if (Array.isArray(values) && nonEmptyInputs.length !== values.length) {
-      shallowCopyValues.length = this.jsonFn.inputs.length;
-      shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
-    }
-
-    const coders = nonEmptyInputs.map((t) =>
+    const coders = this.jsonFn.inputs.map((t) =>
       AbiCoder.getCoder(this.jsonAbi, t, {
         encoding: this.encoding,
       })
     );
 
+    const shallowCopyValues = values.slice();
     return new TupleCoder(coders).encode(shallowCopyValues);
   }
 
