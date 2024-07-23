@@ -30,6 +30,7 @@
   "typeDeclarationFormat": "table",
   "excludeScopesInPaths": true,
   "entryFileName": "index.md",
+  "modulesFileName": "index",
   // ******************** //
   // Merge Modules Config
   // ******************** //
