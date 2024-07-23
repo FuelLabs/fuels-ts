@@ -10,7 +10,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PayableAnnotationFactory, ScriptMainArgs } from '../test/typegen';
+import { PayableAnnotation, PayableAnnotationFactory, ScriptMainArgs } from '../test/typegen';
 
 /**
  * @group node
@@ -127,7 +127,7 @@ describe('Policies', () => {
 
     txRequest.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
 
-    const txCost = await provider.getTransactionCost(txRequest);
+    const txCost = await wallet.getTransactionCost(txRequest);
 
     txRequest.gasLimit = txCost.gasUsed;
     txRequest.maxFee = txCost.maxFee;
@@ -151,9 +151,9 @@ describe('Policies', () => {
     using launched = await launchTestNode();
 
     const {
-      provider,
       wallets: [wallet],
     } = launched;
+
 
     const txParams: CustomTxParams = {
       tip: 11,
@@ -161,12 +161,15 @@ describe('Policies', () => {
       maxFee: 70_000,
     };
 
-    // QUESTION: why use script stuff in a contract factorty?
-    const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgs.abi, wallet);
+    const factory = new ContractFactory(
+      PayableAnnotationFactory.bytecode,
+      PayableAnnotation.abi,
+      wallet
+    );
 
     const { transactionRequest: txRequest } = factory.createTransactionRequest(txParams);
 
-    const txCost = await provider.getTransactionCost(txRequest);
+    const txCost = await wallet.getTransactionCost(txRequest);
 
     txRequest.maxFee = txCost.maxFee;
 
@@ -438,7 +441,7 @@ describe('Policies', () => {
 
       const maxFee = 1;
 
-      const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgs.abi, wallet);
+      const factory = new ContractFactory(PayableAnnotationFactory.bytecode, PayableAnnotation.abi, wallet);
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,

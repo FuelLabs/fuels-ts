@@ -71,7 +71,7 @@ describe('TransactionSummary', () => {
 
     request.addCoinOutput(destination.address, amountToTransfer, provider.getBaseAssetId());
 
-    const txCost = await adminWallet.provider.getTransactionCost(request);
+    const txCost = await adminWallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -160,7 +160,7 @@ describe('TransactionSummary', () => {
       gasLimit: 10000,
     });
 
-    const txCost = await adminWallet.provider.getTransactionCost(request);
+    const txCost = await adminWallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -556,7 +556,7 @@ describe('TransactionSummary', () => {
         });
       });
 
-      const txCost = await provider.getTransactionCost(request);
+      const txCost = await wallet.getTransactionCost(request);
 
       request.gasLimit = txCost.gasUsed;
       request.maxFee = txCost.maxFee;

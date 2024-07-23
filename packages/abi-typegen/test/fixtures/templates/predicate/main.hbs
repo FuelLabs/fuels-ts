@@ -25,8 +25,8 @@ export type MyGenericStructOutput<T> = MyGenericStructInput<T>;
 export type ValidationInput = { has_account: boolean, total_complete: BigNumberish };
 export type ValidationOutput = { has_account: boolean, total_complete: BN };
 
-export type MyPredicateConfigurables = {
-};
+export type MyPredicateConfigurables = Partial<{
+}>;
 
 export type MyPredicateInputs = [vec: Vec<ValidationInput>, enm: MyGenericEnumInput<BigNumberish>, opt: Option<BigNumberish>, res: Result<MyGenericStructInput<string>, BigNumberish>];
 

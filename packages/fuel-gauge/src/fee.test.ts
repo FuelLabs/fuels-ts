@@ -133,9 +133,7 @@ describe('Fee', () => {
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: wallet,
-    });
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -159,7 +157,6 @@ describe('Fee', () => {
     using launched = await launchTestNode();
 
     const {
-      provider,
       wallets: [wallet],
     } = launched;
 
@@ -171,7 +168,7 @@ describe('Fee', () => {
       wallet
     );
     const { transactionRequest } = factory.createTransactionRequest();
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
 

@@ -14,10 +14,10 @@ import {
   Provider,
 } from 'fuels';
 
-export type MyPredicateConfigurables = {
+export type MyPredicateConfigurables = Partial<{
   FEE: BigNumberish;
   ADDRESS: string;
-};
+}>;
 
 export type MyPredicateInputs = [fee: BigNumberish, address: string];
 
