@@ -154,7 +154,6 @@ describe('Policies', () => {
       wallets: [wallet],
     } = launched;
 
-
     const txParams: CustomTxParams = {
       tip: 11,
       witnessLimit: 2000,

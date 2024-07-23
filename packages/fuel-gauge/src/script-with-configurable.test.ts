@@ -1,9 +1,9 @@
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ScriptWithConfigurable } from '../test/typegen';
-import type { ScriptWithConfigurableAbiConfigurables } from '../test/typegen/scripts/ScriptWithConfigurableConfigurables';
+import type { ScriptWithConfigurableConfigurables } from '../test/typegen/scripts/ScriptWithConfigurable';
 
-const defaultValues: ScriptWithConfigurableAbiConfigurables = {
+const defaultValues: ScriptWithConfigurableConfigurables = {
   FEE: 5,
 };
 
@@ -36,7 +36,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: ScriptWithConfigurableAbiConfigurables = { FEE: 71 };
+    const configurableConstants: ScriptWithConfigurableConfigurables = { FEE: 71 };
 
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
 
@@ -57,7 +57,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: ScriptWithConfigurableAbiConfigurables = { FEE: 35 };
+    const configurableConstants: ScriptWithConfigurableConfigurables = { FEE: 35 };
 
     const script = new ScriptWithConfigurable(wallet);
 
@@ -76,7 +76,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: ScriptWithConfigurableAbiConfigurables = { FEE: 10 };
+    const configurableConstants: ScriptWithConfigurableConfigurables = { FEE: 10 };
 
     const input = { FEE: 15 };
 
