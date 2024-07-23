@@ -198,6 +198,48 @@ describe('Predicate', () => {
       await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
     });
 
+    it('calls a predicate with partial configurables being set', async () => {
+      using launched = await launchTestNode();
+
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const configurableConstants = {
+        ADDRESS: getRandomB256(),
+      };
+
+      const amountToTransfer = 300;
+
+      const predicate = PredicateWithConfigurableAbi__factory.createInstance(
+        provider,
+        [defaultValues.FEE, configurableConstants.ADDRESS],
+        configurableConstants
+      );
+
+      const destination = WalletUnlocked.generate({
+        provider: wallet.provider,
+      });
+
+      await assertBalance(destination, 0, provider.getBaseAssetId());
+
+      await fundPredicate(wallet, predicate, amountToPredicate);
+
+      const tx = await predicate.transfer(
+        destination.address,
+        amountToTransfer,
+        provider.getBaseAssetId(),
+        {
+          gasLimit: 1000,
+        }
+      );
+
+      await tx.waitForResult();
+
+      await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+    });
+
     it('throws when configurable data is not set', async () => {
       using launched = await launchTestNode();
 
