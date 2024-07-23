@@ -1,12 +1,5 @@
 {{header}}
 
-{{#if isGeneratingContracts}}
-{{#each abis}}
-export * from './{{capitalizedName}}';
-export * from './{{capitalizedName}}Factory';
+{{#each members}}
+export { {{this}} } from './{{this}}';
 {{/each}}
-{{else}}
-{{#each abis}}
-export * from './{{capitalizedName}}';
-{{/each}}
-{{/if}}

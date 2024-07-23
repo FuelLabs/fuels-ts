@@ -33,7 +33,7 @@ export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
   // Includes index file
   const indexFile: IFile = {
     path: `${outputDir}/index.ts`,
-    contents: renderIndexTemplate({ abis }),
+    contents: renderIndexTemplate({ files }),
   };
 
   files.push(indexFile);
