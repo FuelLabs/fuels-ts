@@ -321,7 +321,7 @@ It can be instantiated as follows:
 
 ### Options
 
-There are several options that can be passed to the `Fuel` connector manager:
+Several options can be passed to the `Fuel` connector manager:
 
 - [`connectors`](#connectors)
 - [`storage`](#storage)
@@ -329,7 +329,9 @@ There are several options that can be passed to the `Fuel` connector manager:
 
 #### `connectors`
 
-The `connectors` option provides a list of connectors with which the `Fuel` connector manager can interact. The manager interacts with the connectors, which in turn handle communication with the respective wallet. You can find a list of all the connectors in our [`FuelLabs/fuel-connectors`](https://github.com/FuelLabs/fuel-connectors). Below, you will find a snippet of using the current default connectors provided by the `fuel-connectors` package.
+The `connectors` option provides a list of connectors with which the `Fuel` connector manager can interact. The manager interacts with the connectors, which in turn handle communication with the respective wallet. You can find a list of all the connectors in our [`FuelLabs/fuel-connectors`](https://github.com/FuelLabs/fuel-connectors).
+
+Below, we initialize the manager using the `defaultConnectors` method which provides an array of all the default connectors available in the `fuel-connectors` package. Supplying the `devMode` flag as `true` will enable the development wallet for the connectors (to install visit our [wallet documentation](https://docs.fuel.network/docs/wallet/install/)).
 
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-options-connectors{ts:line-numbers}
 
