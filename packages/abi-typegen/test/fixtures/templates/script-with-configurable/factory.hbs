@@ -21,9 +21,9 @@ export type ScoreOutput = { user: number, points: number };
 type MyScriptAbiInputs = [score: ScoreInput];
 type MyScriptAbiOutput = boolean;
 
-export type MyScriptAbiConfigurables = {
+export type MyScriptAbiConfigurables = Partial<{
   SHOULD_RETURN: boolean;
-};
+}>;
 
 const _abi = {
   "encoding": "1",
