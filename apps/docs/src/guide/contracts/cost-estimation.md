@@ -1,10 +1,10 @@
 # Estimating Contract Call Cost
 
-The `getTransactionCost` function provided by the [Provider](../../api/Account/Provider.md) allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
+The `getTransactionCost` function provided by the [Account](../../api/Account/Account.md) allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
 
 <<< @/../../../packages/account/src/providers/provider.ts#cost-estimation-1{ts:line-numbers}
 
-The following example demonstrate how to get the estimated transaction cost for:
+The following example demonstrates how to get the estimated transaction cost for:
 
 ## 1. Single contract call transaction:
 
