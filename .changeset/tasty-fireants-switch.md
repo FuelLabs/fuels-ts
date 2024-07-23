@@ -2,4 +2,4 @@
 "@fuel-ts/abi-typegen": patch
 ---
 
-fix: make Predicate configurables option in typegen
+fix: make properties of configurables optional in typegen
