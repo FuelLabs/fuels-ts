@@ -2,12 +2,12 @@
 import { toHex, Address, Wallet } from 'fuels';
 import { launchTestNode, safeExec } from 'fuels/test-utils';
 
-import storageSlots from '../contract/out/release/demo-contract-storage_slots.json';
+import storageSlots from '../demo-contract/out/release/demo-contract-storage_slots.json';
 
 import { DemoContract, DemoContractFactory } from './contract-types';
-import type { PredicateInputs } from './predicate-types';
-import { Predicate } from './predicate-types';
-import { Script } from './script-types';
+import { DemoPredicate } from './predicate-types';
+import type { DemoPredicateInputs } from './predicate-types/DemoPredicate';
+import { DemoScript } from './script-types';
 
 /**
  * @group node
@@ -138,7 +138,7 @@ test('Example script', async () => {
   // #region typegen-demo-script
   // #context import { ScriptAbi } from './types';
 
-  const script = new Script(wallet);
+  const script = new DemoScript(wallet);
   const { waitForResult } = await script.functions.main().call();
   const { value } = await waitForResult();
   // #endregion typegen-demo-script
@@ -160,10 +160,10 @@ test('Example predicate', async () => {
 
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-  const predicateData: PredicateInputs = [];
-  const predicate = new Predicate(provider, predicateData);
+  const predicateData: DemoPredicateInputs = [];
+  const predicate = new DemoPredicate(provider, predicateData);
 
-  const tx = await wallet.transfer(predicate., 200_000, provider.getBaseAssetId());
+  const tx = await wallet.transfer(predicate.address, 200_000, provider.getBaseAssetId());
   const { isStatusSuccess } = await tx.wait();
 
   // Then we are transferring some coins from the predicate to a random address (receiver)
