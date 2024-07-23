@@ -4,4 +4,4 @@
 "@fuel-ts/program": minor
 ---
 
-chore!: remove awaitExecution functionality
+chore!: remove `awaitExecution` functionality
