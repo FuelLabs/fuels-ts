@@ -269,8 +269,9 @@ describe('Predicate', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const predicate = new Predicate({
-          abi: PredicateTrue.abi,
-          bytecode: PredicateTrue.bytecode,
+          // Question: Should `abi` be optional for Predicates?
+          // abi: PredicateWithConfigurable.abi,
+          bytecode: PredicateWithConfigurable.bytecode,
           provider,
           inputData: ['NADA'],
           configurableConstants: {

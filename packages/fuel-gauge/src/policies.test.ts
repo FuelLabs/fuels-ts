@@ -155,13 +155,14 @@ describe('Policies', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ScriptMainArgs(wallet);
-
     const txParams: CustomTxParams = {
       tip: 11,
       witnessLimit: 2000,
       maxFee: 70_000,
     };
+
+    // QUESTION: why use script stuff in a contract factorty?
+    const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgs.abi, wallet);
 
     const { transactionRequest: txRequest } = factory.createTransactionRequest(txParams);
 
