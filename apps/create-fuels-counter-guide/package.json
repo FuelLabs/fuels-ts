@@ -15,13 +15,13 @@
     "@fuels/connectors": "^0.8.1",
     "@fuels/react": "^0.20.0",
     "fuels": "workspace:*",
-    "@tanstack/react-query": "^5.51.1",
+    "@tanstack/react-query": "^5.51.11",
     "dotenv": "^16.4.5",
     "next": "14.2.5",
     "react": "^18.3",
     "react-dom": "^18.3",
     "react-hot-toast": "^2.4.1",
-    "react-use": "^17.5.0"
+    "react-use": "^17.5.1"
   },
   "devDependencies": {
     "@types/node": "^20",
