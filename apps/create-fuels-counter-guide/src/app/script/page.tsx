@@ -42,8 +42,7 @@ export default function ScriptExample() {
       toast.error(
         <span>
           Error running script. Please make sure your wallet has enough funds.
-          Please click the 'Top-up Wallet' button in the top right corner, or
-          use the <Link href="/faucet">faucet.</Link>
+          You can top it up using the <Link href="/faucet">faucet.</Link>
         </span>,
       );
     }

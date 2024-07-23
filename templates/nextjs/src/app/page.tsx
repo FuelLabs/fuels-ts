@@ -53,8 +53,7 @@ export default function Home() {
     if (walletBalance?.eq(0)) {
       return toast.error(
         <span>
-          Your wallet does not have enough funds. Please click the 'Top-up
-          Wallet' button in the top right corner, or use the{" "}
+          Your wallet does not have enough funds. Please top it up using the{" "}
           <Link href={FAUCET_LINK} target="_blank">
             faucet.
           </Link>

@@ -63,8 +63,7 @@ export default function PredicateExample() {
       toast.error(
         <span>
           Failed to transfer funds. Please make sure your wallet has enough
-          funds. Please click the 'Top-up Wallet' button in the top right
-          corner, or use the{" "}
+          funds. You can top it up using the{" "}
           <Link href={FAUCET_LINK} target="_blank">
             faucet.
           </Link>

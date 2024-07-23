@@ -63,8 +63,7 @@ export default function PredicateExample() {
       toast.error(
         <span>
           Failed to transfer funds. Please make sure your wallet has enough
-          funds. Please click the 'Top-up Wallet' button in the top right
-          corner, or use the <Link href={FAUCET_LINK} target="_blank">faucet.</Link>
+          funds. You can top it up using the <Link href={FAUCET_LINK} target="_blank">faucet.</Link>
         </span>,
       );
     }
@@ -126,7 +125,7 @@ export default function PredicateExample() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet."
+        <span>Your wallet does not have enough funds. Please top it up using the <Link href={FAUCET_LINK} target="_blank">faucet.</Link></span>
       );
     }
 
