@@ -5,7 +5,7 @@
  * It ensures that built code is fully working.
  */
 
-import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
+import { Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
 import { generateTestWallet, safeExec } from 'fuels/test-utils';
 
 import { Sample, SampleFactory } from './sway-programs-api';
@@ -71,7 +71,7 @@ describe('ExampleContract', () => {
     const fundedWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
     const unfundedWallet = Wallet.generate({ provider });
 
-    const deploy = await SampleFactory.deploy(wallet);
+    const deploy = await SampleFactory.deploy(fundedWallet);
     const { contract } = await deploy.waitForResult();
 
     const contractInstance = new Sample(contract.id, unfundedWallet);
@@ -105,7 +105,7 @@ describe('ExampleContract', () => {
       sample: depoloyed.id,
     };
 
-    const contract = SampleAbi.connect(contractsIds.sample, wallet);
+    const contract = new Sample(contractsIds.sample, wallet);
 
     const { value } = await contract.functions.return_input(1337).dryRun();
 

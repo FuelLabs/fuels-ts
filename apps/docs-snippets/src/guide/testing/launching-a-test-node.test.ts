@@ -3,7 +3,7 @@ import { WalletUnlocked } from 'fuels';
 import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-import { CounterAbi as TestContract } from '../../../test/typegen/contracts';
+import { Counter, CounterFactory } from '../../../test/typegen/contracts';
 
 /**
  * @group node
@@ -54,12 +54,7 @@ describe('launching a test node', () => {
     // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
 
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: TestContractFactory,
-          bytecode,
-        },
-      ],
+      contractsConfigs: [{ factory: CounterFactory }],
     });
 
     const {
@@ -96,8 +91,7 @@ describe('launching a test node', () => {
       },
       contractsConfigs: [
         {
-          deployer: TestContractFactory,
-          bytecode,
+          factory: CounterFactory,
           walletIndex: 3,
           options: { storageSlots: [] },
         },
