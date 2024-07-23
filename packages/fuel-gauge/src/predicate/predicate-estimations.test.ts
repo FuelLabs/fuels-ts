@@ -136,9 +136,7 @@ describe('Predicate', () => {
 
       const tx = new ScriptTransactionRequest();
 
-      const predicateTrue = new Predicate({
-        provider,
-      });
+      const predicateTrue = new PredicateTrue(provider);
 
       await fundPredicate(wallet, predicateTrue, fundingAmount);
 
@@ -161,12 +159,11 @@ describe('Predicate', () => {
         provider,
       } = launched;
 
-      const predicateTrue = new Predicate({
-        provider,
-      });
+      const predicateTrue = new PredicateTrue(provider);
 
       const predicateStruct = new Predicate<[Validation]>({
         abi: PredicateMainArgsStruct.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
         provider,
       });
 
@@ -208,6 +205,7 @@ describe('Predicate', () => {
 
       const predicateValidateTransfer = new Predicate<[BN]>({
         abi: PredicateValidateTransfer.abi,
+        bytecode: PredicateValidateTransfer.bytecode,
         provider,
         inputData: [bn(amountToPredicate)],
       });
@@ -250,6 +248,7 @@ describe('Predicate', () => {
 
         const predicateStruct = new Predicate<[Validation]>({
           abi: PredicateMainArgsStruct.abi,
+          bytecode: PredicateMainArgsStruct.bytecode,
           provider,
         });
 
@@ -283,6 +282,7 @@ describe('Predicate', () => {
 
         const predicateStruct = new Predicate<[Validation]>({
           abi: PredicateMainArgsStruct.abi,
+          bytecode: PredicateMainArgsStruct.bytecode,
           provider,
         });
 

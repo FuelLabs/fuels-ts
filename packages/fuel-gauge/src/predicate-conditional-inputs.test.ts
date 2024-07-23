@@ -1,7 +1,7 @@
 import { Wallet, ScriptTransactionRequest, bn } from 'fuels';
 import { launchTestNode, ASSET_A, ASSET_B } from 'fuels/test-utils';
 
-import { PredicateConditionalInputsAbi } from '../test/typegen/predicates';
+import { PredicateConditionalInputs } from '../test/typegen/predicates';
 
 /**
  * @group node
@@ -22,7 +22,7 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const predicate = PredicateConditionalInputsAbi.createInstance(provider, undefined, {
+    const predicate = new PredicateConditionalInputs(provider, undefined, {
       MAKER: aliceWallet.address.toB256(),
     });
 
@@ -96,7 +96,7 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const predicate = PredicateConditionalInputsAbi.createInstance(provider, undefined, {
+    const predicate = new PredicateConditionalInputs(provider, undefined, {
       MAKER: aliceWallet.address.toB256(),
     });
 

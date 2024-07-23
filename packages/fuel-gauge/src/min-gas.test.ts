@@ -10,7 +10,12 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ComplexPredicate, CoverageContract, CoverageContractFactory } from '../test/typegen';
+import {
+  ComplexPredicate,
+  ComplexScript,
+  CoverageContract,
+  CoverageContractFactory,
+} from '../test/typegen';
 
 /**
  * @group node
@@ -76,7 +81,7 @@ describe('Minimum gas tests', () => {
      */
 
     const request = new ScriptTransactionRequest({
-      script: ComplexScriptFactory.bytecode,
+      script: ComplexScript.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
@@ -112,7 +117,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicate.createInstance(provider, [bn(1000)]);
+    const predicate = new ComplexPredicate(provider, [bn(1000)]);
 
     /**
      * Fund the predicate
@@ -160,7 +165,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicate.createInstance(provider, [bn(1000)]);
+    const predicate = new ComplexPredicate(provider, [bn(1000)]);
 
     /**
      * Fund the predicate
@@ -172,7 +177,7 @@ describe('Minimum gas tests', () => {
      * Create a script transaction
      */
     const request = new ScriptTransactionRequest({
-      script: ComplexScriptFactory.bytecode,
+      script: ComplexScript.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
 

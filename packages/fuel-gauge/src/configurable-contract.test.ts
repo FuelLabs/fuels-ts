@@ -1,7 +1,7 @@
 import { BN, getRandomB256 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ConfigurableContractAbi, ConfigurableContractFactory } from '../test/typegen/contracts';
+import { ConfigurableContractFactory } from '../test/typegen/contracts';
 
 const defaultValues = {
   U8: 10,

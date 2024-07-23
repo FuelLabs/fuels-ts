@@ -286,11 +286,11 @@ describe('Vector Tests', () => {
     using contractInstance = await setupContract();
 
     const INPUT = [
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
     ];
 
     const { waitForResult } = await contractInstance.functions
