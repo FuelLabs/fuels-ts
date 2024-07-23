@@ -81,7 +81,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       return;
     }
 
-    const scriptInstance = ScriptMainArgBool.createInstance(wallet);
+    const scriptInstance = new ScriptMainArgBool(wallet);
 
     let output: boolean = false;
     try {
