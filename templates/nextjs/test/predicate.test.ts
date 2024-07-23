@@ -7,7 +7,7 @@ import { describe, test, expect } from 'vitest';
  *
  * Can't find these imports? Make sure you've run `fuels build` to generate these with typegen.
  */
-import { TestPredicate, TestPredicateInputs } from '../src/sway-api';
+import { TestPredicate, TestPredicateInputs } from '@/sway-api/predicates/TestPredicate';
 
 /**
  * @group node
