@@ -251,7 +251,7 @@ describe('Contract Factory', () => {
     } = launched;
 
     const largeByteCode = `0x${'00'.repeat(112400)}`;
-    const factory = new ContractFactory(largeByteCode, StorageTestContractAbi__factory.abi, wallet);
+    const factory = new ContractFactory(largeByteCode, StorageTestContract.abi, wallet);
 
     await expectToThrowFuelError(
       async () => factory.deployContract(),

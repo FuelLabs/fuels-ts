@@ -209,7 +209,7 @@ describe('Predicate', () => {
 
       const amountToTransfer = 300;
 
-      const predicate = PredicateWithConfigurableAbi__factory.createInstance(
+      const predicate = new PredicateWithConfigurable(
         provider,
         [defaultValues.FEE, configurableConstants.ADDRESS],
         configurableConstants
