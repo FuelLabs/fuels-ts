@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -16,8 +16,6 @@ import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
 import { clone } from 'ramda';
-
-import type { Predicate } from '../predicate';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
@@ -62,7 +60,6 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
-import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
 
@@ -337,14 +334,9 @@ export type EstimateTransactionParams = {
 
 export type TransactionCostParams = EstimateTransactionParams & {
   /**
-   * The account that will provide the resources for the transaction.
-   */
-  resourcesOwner?: AbstractAccount;
-
-  /**
    * The quantities to forward to the contract.
    */
-  quantitiesToContract?: CoinQuantity[];
+  quantities?: CoinQuantity[];
 
   /**
    * A callback to sign the transaction.
@@ -1120,6 +1112,8 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * @hidden
+   *
    * Returns a transaction cost to enable user
    * to set gasLimit and also reserve balance amounts
    * on the transaction.
@@ -1131,40 +1125,18 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { resourcesOwner, signatureCallback, quantitiesToContract = [] }: TransactionCostParams = {}
-  ): Promise<TransactionCost> {
+    { signatureCallback }: TransactionCostParams = {}
+  ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
-    const baseAssetId = this.getBaseAssetId();
     const updateMaxFee = txRequestClone.maxFee.eq(0);
-    // Fund with fake UTXOs to avoid not enough funds error
-    // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
-    // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
-    // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, resourcesOwner?.address);
 
-    /**
-     * Estimate predicates gasUsed
-     */
     // Remove gasLimit to avoid gasLimit when estimating predicates
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
 
-    /**
-     * The fake utxos added above can be from a predicate
-     * If the resources owner is a predicate,
-     * we need to populate the resources with the predicate's data
-     * so that predicate estimation can happen.
-     */
-    if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
-      (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
-    }
-
     const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
-
     let addedSignatures = 0;
     if (signatureCallback && isScriptTransaction) {
       const lengthBefore = signedRequest.witnesses.length;
@@ -1213,7 +1185,6 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return {
-      requiredQuantities: allQuantities,
       receipts,
       gasUsed,
       gasPrice,
@@ -1227,48 +1198,6 @@ Supported fuel-core version: ${supportedVersion}.`
       estimatedPredicates: txRequestClone.inputs,
       dryRunStatus,
       updateMaxFee,
-    };
-  }
-
-  /**
-   * Get the required quantities and associated resources for a transaction.
-   *
-   * @param owner - address to add resources from.
-   * @param transactionRequestLike - transaction request to populate resources for.
-   * @param quantitiesToContract - quantities for the contract (optional).
-   *
-   * @returns a promise resolving to the required quantities for the transaction.
-   */
-  async getResourcesForTransaction(
-    owner: string | AbstractAddress,
-    transactionRequestLike: TransactionRequestLike,
-    quantitiesToContract: CoinQuantity[] = []
-  ) {
-    const ownerAddress = Address.fromAddressOrString(owner);
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
-    const transactionCost = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-
-    // Add the required resources to the transaction from the owner
-    transactionRequest.addResources(
-      await this.getResourcesToSpend(ownerAddress, transactionCost.requiredQuantities)
-    );
-    // Refetch transaction costs with the new resources
-    // TODO: we could find a way to avoid fetch estimatePredicates again, by returning the transaction or
-    // returning a specific gasUsed by the predicate.
-    // Also for the dryRun we could have the same issue as we are going to run twice the dryRun and the
-    // estimateTxDependencies as we don't have access to the transaction, maybe returning the transaction would
-    // be better.
-    const { requiredQuantities, ...txCost } = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-    const resources = await this.getResourcesToSpend(ownerAddress, requiredQuantities);
-
-    return {
-      resources,
-      requiredQuantities,
-      ...txCost,
     };
   }
 
