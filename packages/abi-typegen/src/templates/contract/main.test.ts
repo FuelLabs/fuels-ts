@@ -1,6 +1,3 @@
-import { writeFileSync } from 'fs';
-import { join } from 'path';
-
 import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,

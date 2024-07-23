@@ -1,10 +1,12 @@
 {{header}}
 
 import { Contract, Interface } from "fuels";
-import type { Provider, Account, StorageSlot, AbstractAddress } from "fuels";
-
 {{#if imports}}
 import type {
+  Provider,
+  Account,
+  StorageSlot,
+  AbstractAddress,
 {{#each imports}}
   {{this}},
 {{/each}}
