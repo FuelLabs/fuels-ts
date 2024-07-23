@@ -63,8 +63,6 @@ export type EstimatedTxParams = Pick<
 >;
 const MAX_FUNDING_ATTEMPTS = 2;
 
-const MAX_TRANSACTION_INPUTS = 255;
-
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
 
 /**
@@ -203,9 +201,15 @@ export class Account extends AbstractAccount {
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
 
-    if (request.inputs.length > MAX_TRANSACTION_INPUTS) {
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs },
+      },
+    } = this.provider.getChain();
+
+    if (bn(request.inputs.length) > maxInputs) {
       throw new FuelError(
-        ErrorCode.EXCEEDING_MAX_INPUTS_WHEN_FUNDING,
+        ErrorCode.MAX_INPUTS_EXCEEDED,
         'The transaction exceeds the maximum allowed number of inputs for funding.'
       );
     }
