@@ -52,7 +52,7 @@ describe('Custom Transactions from Contract Calls', () => {
     // Add coin output for the recipient
     transactionRequest.addCoinOutput(receiverWallet.address, amountToRecipient, baseAssetId);
 
-    const txCost = await senderWallet.provider.getTransactionCost(transactionRequest);
+    const txCost = await senderWallet.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
