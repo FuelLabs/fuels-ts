@@ -15,7 +15,12 @@ import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined } from '@fuel-ts/utils';
 
-import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
+import {
+  MAX_CONTRACT_SIZE,
+  getContractId,
+  getContractStorageRoot,
+  hexlifyWithPrefix,
+} from './util';
 
 /**
  * Options for deploying a contract.
@@ -149,7 +154,15 @@ export default class ContractFactory {
   async deployContract<TContract extends Contract = Contract>(
     deployContractOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
+    if (this.bytecode.length > MAX_CONTRACT_SIZE) {
+      throw new FuelError(
+        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
+        'Contract bytecode is too large. Max contract size is 100KB'
+      );
+    }
+
     const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
+
     const account = this.getAccount();
 
     const transactionResponse = await account.sendTransaction(transactionRequest, {
@@ -220,7 +233,7 @@ export default class ContractFactory {
 
     const account = this.getAccount();
 
-    const txCost = await account.provider.getTransactionCost(transactionRequest);
+    const txCost = await account.getTransactionCost(transactionRequest);
 
     const { maxFee: setMaxFee } = deployContractOptions;
 
