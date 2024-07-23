@@ -2,9 +2,10 @@ import { ContractFactory, ReceiptType, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  ReentrantBarAbi,
-  ReentrantFooAbi,
-  StorageTestContractAbi,
+  ReentrantBarFactory,
+  ReentrantFooFactory,
+  StorageTestContract,
+  StorageTestContractFactory,
 } from '../test/typegen/contracts';
 
 /**
@@ -14,14 +15,7 @@ import {
 describe('Reentrant Contract Calls', () => {
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: ReentrantFooAbiFactory,
-        },
-        {
-          deployer: ReentrantBarAbiFactory,
-        },
-      ],
+      contractsConfigs: [{ factory: ReentrantFooFactory }, { factory: ReentrantBarFactory }],
     });
 
     const {
@@ -65,14 +59,7 @@ describe('Reentrant Contract Calls', () => {
 
   it('should ensure the SDK returns the proper value for a reentrant call on multi-call', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: ReentrantFooAbiFactory,
-        },
-        {
-          deployer: ReentrantBarAbiFactory,
-        },
-      ],
+      contractsConfigs: [{ factory: ReentrantFooFactory }, { factory: ReentrantBarFactory }],
     });
 
     const {
@@ -81,10 +68,10 @@ describe('Reentrant Contract Calls', () => {
     } = launched;
 
     const deploy = await new ContractFactory(
-      StorageTestContractAbiFactory.bytecode,
-      StorageTestContractAbi.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
-    ).deployContract({ storageSlots: StorageTestContractAbi.storageSlots });
+    ).deployContract({ storageSlots: StorageTestContract.storageSlots });
 
     const { contract: storageContract } = await deploy.waitForResult();
 

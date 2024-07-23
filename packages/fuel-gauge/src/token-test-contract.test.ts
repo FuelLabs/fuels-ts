@@ -3,7 +3,7 @@ import type { AssetId, BN } from 'fuels';
 import { toHex, Wallet, bn } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { TokenContract, TokenContractFactory } from '../test/typegen';
+import { TokenContractFactory } from '../test/typegen';
 
 /**
  * @group node
@@ -16,7 +16,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractFactory,
+          factory: TokenContractFactory,
         },
       ],
     });
@@ -65,7 +65,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractFactory,
+          factory: TokenContractFactory,
         },
       ],
       walletsConfig: {
@@ -139,7 +139,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractFactory,
+          factory: TokenContractFactory,
         },
       ],
     });
@@ -178,7 +178,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractFactory,
+          factory: TokenContractFactory,
         },
       ],
     });

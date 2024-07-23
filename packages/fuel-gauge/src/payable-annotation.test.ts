@@ -1,12 +1,12 @@
 import { bn } from 'fuels';
 
-import { PayableAnnotationAbi } from '../test/typegen/contracts';
+import { PayableAnnotationFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
 function launchPayableContract() {
   return launchTestContract({
-    deployer: PayableAnnotationAbiFactory,
+    factory: PayableAnnotationFactory,
   });
 }
 

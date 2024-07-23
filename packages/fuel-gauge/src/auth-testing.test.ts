@@ -12,7 +12,7 @@ import { launchTestContract } from './utils';
 describe('Auth Testing', () => {
   it('can get is_caller_external', async () => {
     using contractInstance = await launchTestContract({
-      deployer: AuthTestingContractFactory,
+      factory: AuthTestingContractFactory,
     });
 
     const { waitForResult } = await contractInstance.functions.is_caller_external().call();
@@ -24,7 +24,7 @@ describe('Auth Testing', () => {
   it('can check_msg_sender [with correct id]', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
-        { deployer: AuthTestingContractFactory, bytecode: AuthTestingContractFactory.bytecode },
+        { factory: AuthTestingContractFactory, bytecode: AuthTestingContractFactory.bytecode },
       ],
     });
 
@@ -44,7 +44,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with incorrect id]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: AuthTestingContractFactory,
+      factory: AuthTestingContractFactory,
     });
 
     await expect(

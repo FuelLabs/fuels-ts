@@ -1,9 +1,8 @@
 import { Contract, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { CallTestContractAbi, TokenContractAbi } from '../../test/typegen/contracts';
-
-import { PredicateMainArgsStructAbi, Predicate } from '../../test/typegen/predicates';
+import { CallTestContractFactory, TokenContractFactory } from '../../test/typegen/contracts';
+import { PredicateMainArgsStruct } from '../../test/typegen/predicates';
 
 import { fundPredicate } from './utils/predicate';
 
@@ -15,7 +14,7 @@ describe('Predicate', () => {
   describe('With Contract', () => {
     it('calls a predicate from a contract function', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: CallTestContractAbi, bytecode: contractBytes }]Factory,
+        contractsConfigs: [{ factory: CallTestContractFactory }],
       });
 
       const {
@@ -25,7 +24,7 @@ describe('Predicate', () => {
       } = launched;
 
       const amountToPredicate = 300_000;
-      const predicate = Predicate.createInstance(provider);
+      const predicate = new PredicateMainArgsStruct(provider);
 
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
@@ -46,7 +45,7 @@ describe('Predicate', () => {
 
     it('calls a predicate and uses proceeds for a contract call', async () => {
       using launched = await launchTestNode({
-        contractsConfigs: [{ deployer: TokenContractAbi, bytecode: tokenPoolBytes }]Factory,
+        contractsConfigs: [{ factory: TokenContractFactory }],
       });
 
       const {
@@ -67,7 +66,7 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 1_000_000;
       const amountToReceiver = 200_000;
-      const predicate = PredicateMainArgsStructAbi.createInstance(provider, [
+      const predicate = new PredicateMainArgsStruct(provider, [
         {
           has_account: true,
           total_complete: 100,

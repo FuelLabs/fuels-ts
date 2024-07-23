@@ -1,7 +1,7 @@
 import type { BN, Message } from 'fuels';
 import { arrayify, bn, toHex, Wallet, ScriptTransactionRequest, randomBytes, hexlify } from 'fuels';
 
-import { CoverageContractAbi } from '../test/typegen/contracts';
+import { CoverageContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
@@ -36,7 +36,7 @@ enum MixedNativeEnum {
 
 function setupContract() {
   return launchTestContract({
-    deployer: CoverageContractAbiFactory,
+    factory: CoverageContractFactory,
   });
 }
 

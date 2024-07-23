@@ -18,12 +18,7 @@ import {
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import {
-  MultiTokenContract,
-  TokenContract,
-  MultiTokenContractFactory,
-  TokenContractFactory,
-} from '../test/typegen';
+import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
 
 /**
  * @group node
@@ -247,7 +242,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: MultiTokenContractFactory,
+            factory: MultiTokenContractFactory,
           },
         ],
       });
@@ -278,7 +273,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractFactory,
+            factory: TokenContractFactory,
           },
         ],
       });
@@ -319,7 +314,7 @@ describe('TransactionSummary', () => {
         using launched = await launchTestNode({
           contractsConfigs: [
             {
-              deployer: TokenContractFactory,
+              factory: TokenContractFactory,
             },
           ],
         });
@@ -397,10 +392,10 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractFactory,
+            factory: TokenContractFactory,
           },
           {
-            deployer: TokenContractFactory,
+            factory: TokenContractFactory,
           },
         ],
       });
@@ -444,13 +439,13 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractFactory,
+            factory: TokenContractFactory,
           },
           {
-            deployer: TokenContractFactory,
+            factory: TokenContractFactory,
           },
           {
-            deployer: TokenContractFactory,
+            factory: TokenContractFactory,
           },
         ],
       });

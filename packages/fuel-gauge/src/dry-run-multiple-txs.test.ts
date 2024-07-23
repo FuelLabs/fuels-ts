@@ -8,10 +8,11 @@ import { ContractFactory, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  AdvancedLoggingAbi,
-  AdvancedLoggingOtherContractAbi,
-  MultiTokenContractAbi,
-  RevertErrorAbi,
+  AdvancedLoggingFactory,
+  AdvancedLoggingOtherContractFactory,
+  MultiTokenContract,
+  MultiTokenContractFactory,
+  RevertErrorFactory,
 } from '../test/typegen/contracts';
 
 /**
@@ -23,7 +24,7 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbiFactory,
+          factory: RevertErrorFactory,
         },
       ],
     });
@@ -120,16 +121,16 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbiFactory,
+          factory: RevertErrorFactory,
         },
         {
-          deployer: MultiTokenContractAbiFactory,
+          factory: MultiTokenContractFactory,
         },
         {
-          deployer: AdvancedLoggingAbiFactory,
+          factory: AdvancedLoggingFactory,
         },
         {
-          deployer: AdvancedLoggingOtherContractAbiFactory,
+          factory: AdvancedLoggingOtherContractFactory,
         },
       ],
     });
@@ -153,8 +154,8 @@ describe('dry-run-multiple-txs', () => {
 
     // request 1
     const factory = new ContractFactory(
-      MultiTokenAbiFactory.bytecode,
-      MultiTokenContractAbi.abi,
+      MultiTokenContractFactory.bytecode,
+      MultiTokenContract.abi,
       wallet
     );
     const { transactionRequest: request1 } = factory.createTransactionRequest({

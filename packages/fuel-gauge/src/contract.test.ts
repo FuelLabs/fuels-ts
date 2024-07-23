@@ -19,17 +19,22 @@ import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
-import { CallTestContractAbi, StorageTestContractAbi } from '../test/typegen/contracts';
-import { Predicate } from '../test/typegen/predicates/factories/Predicate';
+import {
+  CallTestContract,
+  CallTestContractFactory,
+  StorageTestContract,
+  StorageTestContractFactory,
+} from '../test/typegen/contracts';
+import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
 import { launchTestContract } from './utils';
 
 const contractsConfigs: DeployContractConfig[] = [
   {
-    deployer: CallTestContractAbiFactory,
+    factory: CallTestContractFactory,
   },
   {
-    deployer: CallTestContractAbiFactory,
+    factory: CallTestContractFactory,
   },
 ];
 
@@ -155,7 +160,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 
 function setupTestContract() {
   return launchTestContract({
-    deployer: CallTestContractAbiFactory,
+    factory: CallTestContractFactory,
   });
 }
 
@@ -736,8 +741,8 @@ describe('Contract', () => {
     } = launched;
 
     const contract = new ContractFactory(
-      StorageTestContractAbiFactory.bytecode,
-      StorageTestContractAbi.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const { transactionRequest } = contract.createTransactionRequest();
@@ -921,6 +926,7 @@ describe('Contract', () => {
     const amountToPredicate = 500_000;
 
     const predicate = new Predicate({
+      bytecode: PredicateTrue.bytecode,
       provider,
     });
 
@@ -989,8 +995,8 @@ describe('Contract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      CallTestContractAbiFactory.bytecode,
-      CallTestContractAbi.abi,
+      CallTestContractFactory.bytecode,
+      CallTestContract.abi,
       wallet
     );
 
@@ -1035,8 +1041,8 @@ describe('Contract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      CallTestContractAbiFactory.bytecode,
-      CallTestContractAbi.abi,
+      CallTestContractFactory.bytecode,
+      CallTestContract.abi,
       wallet
     );
 
@@ -1168,8 +1174,8 @@ describe('Contract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiFactory.bytecode,
-      StorageTestContractAbi.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
 
@@ -1199,7 +1205,7 @@ describe('Contract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: StorageTestContractAbiFactory,
+          factory: StorageTestContractFactory,
         },
       ],
     });

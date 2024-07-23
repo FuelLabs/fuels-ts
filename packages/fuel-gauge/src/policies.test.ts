@@ -10,7 +10,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PayableAnnotationAbi, ScriptMainArgsAbi } from '../test/typegen';
+import { PayableAnnotationFactory, ScriptMainArgs } from '../test/typegen';
 
 /**
  * @group node
@@ -155,11 +155,7 @@ describe('Policies', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(
-      ScriptMainArgsFactory.bytecode,
-      ScriptMainArgsAbi.abi,
-      wallet
-    );
+    const factory = new ScriptMainArgs(wallet);
 
     const txParams: CustomTxParams = {
       tip: 11,
@@ -189,7 +185,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbiFactory,
+          factory: PayableAnnotationFactory,
         },
       ],
     });
@@ -227,8 +223,8 @@ describe('Policies', () => {
     } = launched;
 
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgsFactory.bytecode,
-      ScriptMainArgsAbi.abi,
+      ScriptMainArgs.bytecode,
+      ScriptMainArgs.abi,
       wallet
     );
 
@@ -289,7 +285,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbiFactory,
+          factory: PayableAnnotationFactory,
         },
       ],
     });
@@ -381,7 +377,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbiFactory,
+            factory: PayableAnnotationFactory,
           },
         ],
       });
@@ -441,11 +437,7 @@ describe('Policies', () => {
 
       const maxFee = 1;
 
-      const factory = new ContractFactory(
-        ScriptMainArgsFactory.bytecode,
-        ScriptMainArgsAbi.abi,
-        wallet
-      );
+      const factory = new ContractFactory(ScriptMainArgs.bytecode, ScriptMainArgs.abi, wallet);
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
@@ -463,7 +455,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbiFactory,
+            factory: PayableAnnotationFactory,
           },
         ],
       });

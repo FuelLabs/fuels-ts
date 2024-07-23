@@ -1,6 +1,6 @@
 import { launchTestNode } from 'fuels/test-utils';
 
-import { OptionsAbi } from '../test/typegen/contracts';
+import { OptionsFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
@@ -10,7 +10,7 @@ const U32_MAX = 4294967295;
 
 function launchOptionsContract() {
   return launchTestContract({
-    deployer: OptionsAbiFactory,
+    factory: OptionsFactory,
   });
 }
 
@@ -203,7 +203,7 @@ describe('Options Tests', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: OptionsAbiFactory,
+          factory: OptionsFactory,
         },
       ],
     });

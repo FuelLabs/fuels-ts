@@ -13,7 +13,7 @@ enum SmallEnum {
 
 function setupContract() {
   return launchTestContract({
-    deployer: VectorsFactory,
+    factory: VectorsFactory,
   });
 }
 

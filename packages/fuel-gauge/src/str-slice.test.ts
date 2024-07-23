@@ -1,8 +1,11 @@
 import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import type { PredicateStrSliceInputs } from '../test/typegen';
-import { PredicateStrSlice, ScriptStrSlice, StrSlice, StrSliceFactory } from '../test/typegen';
+import { StrSliceFactory, ScriptStrSlice } from '../test/typegen';
+import {
+  PredicateStrSlice,
+  type PredicateStrSliceInputs,
+} from '../test/typegen/predicates/PredicateStrSlice';
 
 /**
  * @group node
@@ -11,12 +14,9 @@ import { PredicateStrSlice, ScriptStrSlice, StrSlice, StrSliceFactory } from '..
 describe('str slice', () => {
   it('echoes a str slice [CONTRACT]', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: StrSliceFactory,
-        },
-      ],
+      contractsConfigs: [{ factory: StrSliceFactory }],
     });
+
     const {
       contracts: [strSliceContract],
     } = launched;
@@ -65,7 +65,7 @@ describe('str slice', () => {
       wallets: [sender],
     } = launched;
 
-    const script = await ScriptStrSlice.createInstance(sender);
+    const script = new ScriptStrSlice(sender);
     const input = 'script-input';
     const output = 'script-return';
     const { waitForResult } = await script.functions.main(input).call();

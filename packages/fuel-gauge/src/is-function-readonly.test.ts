@@ -1,10 +1,10 @@
-import { StorageTestContractAbi } from '../test/typegen/contracts';
+import { StorageTestContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
 function setupContract() {
   return launchTestContract({
-    deployer: StorageTestContractAbiFactory,
+    factory: StorageTestContractFactory,
   });
 }
 /**
