@@ -2,14 +2,11 @@ import { bn, randomBytes, hexlify } from 'fuels';
 import type { BN } from 'fuels';
 
 import { VectorsFactory } from '../test/typegen/contracts';
+import { SmallEnumInput } from '../test/typegen/contracts/CoverageContract';
 
 import { launchTestContract } from './utils';
 
 const toNumbers = (nums: BN[]) => nums.map((num: BN) => bn(num).toNumber());
-
-enum SmallEnum {
-  Empty = 'Empty',
-}
 
 function setupContract() {
   return launchTestContract({
