@@ -43,39 +43,39 @@ export type Status = {
 };
 
 interface FuelSdk {
-  // #region fuel-sdk-method-connectors
+  // #region connector-manager-method-connectors
   connectors: () => Promise<Array<FuelConnector>>;
-  // #endregion fuel-sdk-method-connectors
-  // #region fuel-sdk-method-getConnector
+  // #endregion connector-manager-method-connectors
+  // #region connector-manager-method-getConnector
   getConnector: (connector: FuelConnector | string) => FuelConnector | null;
-  // #endregion fuel-sdk-method-getConnector
-  // #region fuel-sdk-method-hasConnector
+  // #endregion connector-manager-method-getConnector
+  // #region connector-manager-method-hasConnector
   hasConnector(): Promise<boolean>;
-  // #endregion fuel-sdk-method-hasConnector
-  // #region fuel-sdk-method-selectConnector
+  // #endregion connector-manager-method-hasConnector
+  // #region connector-manager-method-selectConnector
   selectConnector(connectorName: string, options: FuelConnectorSelectOptions): Promise<boolean>;
-  // #endregion fuel-sdk-method-selectConnector
-  // #region fuel-sdk-method-currentConnector
+  // #endregion connector-manager-method-selectConnector
+  // #region connector-manager-method-currentConnector
   currentConnector(): FuelConnector | null | undefined;
-  // #endregion fuel-sdk-method-currentConnector
-  // #region fuel-sdk-method-hasWallet
+  // #endregion connector-manager-method-currentConnector
+  // #region connector-manager-method-hasWallet
   hasWallet(): Promise<boolean>;
-  // #endregion fuel-sdk-method-hasWallet
-  // #region fuel-sdk-method-getWallet
+  // #endregion connector-manager-method-hasWallet
+  // #region connector-manager-method-getWallet
   getWallet(
     address: string | AbstractAddress,
     providerOrNetwork?: Provider | Network
   ): Promise<Account>;
-  // #endregion fuel-sdk-method-getWallet
-  // #region fuel-sdk-method-unsubscribe
+  // #endregion connector-manager-method-getWallet
+  // #region connector-manager-method-unsubscribe
   unsubscribe(): void;
-  // #endregion fuel-sdk-method-unsubscribe
-  // #region fuel-sdk-method-clean
+  // #endregion connector-manager-method-unsubscribe
+  // #region connector-manager-method-clean
   clean(): Promise<void>;
-  // #endregion fuel-sdk-method-clean
-  // #region fuel-sdk-method-destroy
+  // #endregion connector-manager-method-clean
+  // #region connector-manager-method-destroy
   destroy(): Promise<void>;
-  // #endregion fuel-sdk-method-destroy
+  // #endregion connector-manager-method-destroy
 }
 
 export class Fuel extends FuelConnector implements FuelSdk {

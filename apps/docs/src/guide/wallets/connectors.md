@@ -311,9 +311,9 @@ Returns a promise that resolves to `true` if the ABI information is available; o
 
 <<< @/../../../packages/account/src/connectors/fuel-connector.ts#fuel-connector-method-hasABI{ts:line-numbers}
 
-## Fuel SDK
+## Connectors Manager
 
-The `Fuel` manager provides the interface for interaction with the TS SDK and the broader Fuel ecosystem.
+The TS SDK exports the `Fuel` class, which serves as the connectors manager. This class provides the interface for interacting with the TS SDK and the broader Fuel ecosystem.
 
 It can be instantiated as follows:
 
@@ -321,7 +321,7 @@ It can be instantiated as follows:
 
 ### Options
 
-There are several options that can be passed to the `Fuel` manager:
+There are several options that can be passed to the `Fuel` connector manager:
 
 - [`connectors`](#connectors)
 - [`storage`](#storage)
@@ -329,7 +329,7 @@ There are several options that can be passed to the `Fuel` manager:
 
 #### `connectors`
 
-The `connectors` option provides a list of connectors with which the `Fuel` manager can interact. The manager interacts with the connectors, which in turn handle communication with the respective wallet. You can find a list of all the connectors in our [`FuelLabs/fuel-connectors`](https://github.com/FuelLabs/fuel-connectors). Below, you will find a snippet of using the current default connectors provided by the `fuel-connectors` package.
+The `connectors` option provides a list of connectors with which the `Fuel` connector manager can interact. The manager interacts with the connectors, which in turn handle communication with the respective wallet. You can find a list of all the connectors in our [`FuelLabs/fuel-connectors`](https://github.com/FuelLabs/fuel-connectors). Below, you will find a snippet of using the current default connectors provided by the `fuel-connectors` package.
 
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-options-connectors{ts:line-numbers}
 
@@ -351,7 +351,7 @@ The `targetObject` provides a target with which the `Fuel` manager can interact.
 
 ### Methods
 
-The `Fuel` manager provides several methods to interact with the SDK:
+The `Fuel` manager provides several methods to interact with the Manager:
 
 #### All methods from connectors
 
@@ -363,13 +363,13 @@ If no current connector is available or connected, it will throw an error.
 
 The `connectors` method gets the current list of _installed_ and _connected_ connectors.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-connectors{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-connectors{ts:line-numbers}
 
 #### `getConnector`
 
 The `getConnector` method resolves a connector by its name. This is useful for finding a specific connector with which to interact. If the connector is not found, it will return `null`.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-getConnector{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-getConnector{ts:line-numbers}
 
 #### `hasConnector`
 
@@ -378,19 +378,19 @@ The `hasConnector` method will return `true` under the following conditions:
 - There is a current connector that is connected.
 - A connector is connected within two seconds of calling the method.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-hasConnector{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-hasConnector{ts:line-numbers}
 
 #### `selectConnector`
 
 The `selectConnector` method accepts a connector name and will return `true` when it is _available_ and _connected_. Otherwise, if not found or unavailable, it will return `false`.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-selectConnector{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-selectConnector{ts:line-numbers}
 
 #### `currentConnector`
 
 The `currentConnector` method will return the current connector that is connected or if one is available and connected, otherwise it'll return `null` or `undefined`.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-currentConnector{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-currentConnector{ts:line-numbers}
 
 #### `getWallet`
 
@@ -398,25 +398,25 @@ The `getWallet` method accepts an address (string or instance) as the first para
 
 The provider or network will default to the current network if not provided. When a provider cannot be resolved, it will throw an [`INVALID_PROVIDER`](../errors/index.md) error.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-getWallet{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-getWallet{ts:line-numbers}
 
 #### `clean`
 
 The `clean` method removes all the data currently stored in the [`storage`](#storage) instance.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-clean{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-clean{ts:line-numbers}
 
 #### `unsubscribe`
 
 The `unsubscribe` method removes all currently registered event listeners.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-unsubscribe{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-unsubscribe{ts:line-numbers}
 
 #### `destroy`
 
 The `destroy` method unsubscribes from all the event listeners and clears the storage.
 
-<<< @/../../../packages/account/src/connectors/fuel.ts#fuel-sdk-method-destroy{ts:line-numbers}
+<<< @/../../../packages/account/src/connectors/fuel.ts#connector-manager-method-destroy{ts:line-numbers}
 
 ## Learning Resources
 
