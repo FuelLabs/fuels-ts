@@ -10,7 +10,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ComplexPredicateAbi, ComplexScriptAbi, CoverageContractAbi } from '../test/typegen';
+import { ComplexPredicate, CoverageContract, CoverageContractFactory } from '../test/typegen';
 
 /**
  * @group node
@@ -30,13 +30,13 @@ describe('Minimum gas tests', () => {
      */
 
     const contractFactory = new ContractFactory(
-      CoverageContractAbiFactory.bytecode,
-      CoverageContractAbi.abi,
+      CoverageContractFactory.bytecode,
+      CoverageContract.abi,
       wallet
     );
 
     const { transactionRequest: request } = contractFactory.createTransactionRequest({
-      storageSlots: CoverageContractAbi.storageSlots,
+      storageSlots: CoverageContract.storageSlots,
     });
 
     const resources = await provider.getResourcesToSpend(wallet.address, [
@@ -112,7 +112,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicateAbi.createInstance(provider, [bn(1000)]);
+    const predicate = ComplexPredicate.createInstance(provider, [bn(1000)]);
 
     /**
      * Fund the predicate
@@ -160,7 +160,7 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicateAbi.createInstance(provider, [bn(1000)]);
+    const predicate = ComplexPredicate.createInstance(provider, [bn(1000)]);
 
     /**
      * Fund the predicate

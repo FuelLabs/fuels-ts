@@ -2,7 +2,7 @@ import type { BigNumberish } from 'fuels';
 import { toNumber, Script, Predicate, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PredicateMainArgsStructAbi, ScriptMainArgsAbi } from '../../test/typegen';
+import { PredicateMainArgsStruct, ScriptMainArgs } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
@@ -24,8 +24,8 @@ describe('Predicate', () => {
 
       const initialReceiverBalance = toNumber(await receiver.getBalance());
       const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-        ScriptMainArgsFactory.bytecode,
-        ScriptMainArgsAbi.abi,
+        ScriptMainArgs.bytecode,
+        ScriptMainArgs.abi,
         wallet
       );
 
@@ -42,7 +42,8 @@ describe('Predicate', () => {
       const amountToReceiver = 100_000;
       const predicate = new Predicate<[Validation]>({
         provider,
-        abi: PredicateMainArgsStructAbi.abi,
+        abi: PredicateMainArgsStruct.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
         inputData: [
           {
             has_account: true,

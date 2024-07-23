@@ -1,7 +1,6 @@
-import { Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptWithConfigurableAbi } from '../test/typegen';
+import { ScriptWithConfigurable } from '../test/typegen';
 
 const defaultValues = {
   FEE: 5,
@@ -19,11 +18,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const script = new Script(
-      ScriptWithConfigurableFactory.bytecode,
-      ScriptWithConfigurableAbi.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(defaultValues);
 
@@ -44,11 +39,7 @@ describe('Script With Configurable', () => {
 
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
 
-    const script = new Script(
-      ScriptWithConfigurableFactory.bytecode,
-      ScriptWithConfigurableAbi.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(defaultValues);
 
@@ -67,11 +58,7 @@ describe('Script With Configurable', () => {
 
     const configurableConstants = { FEE: 35 };
 
-    const script = new Script(
-      ScriptWithConfigurableFactory.bytecode,
-      ScriptWithConfigurableAbi.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(configurableConstants);
 
@@ -94,11 +81,7 @@ describe('Script With Configurable', () => {
 
     expect(configurableConstants.FEE).not.toEqual(input.FEE);
 
-    const script = new Script(
-      ScriptWithConfigurableFactory.bytecode,
-      ScriptWithConfigurableAbi.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(configurableConstants);
 

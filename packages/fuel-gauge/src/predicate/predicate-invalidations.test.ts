@@ -1,7 +1,7 @@
 import { Predicate, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PredicateMainArgsStructAbi } from '../../test/typegen';
+import { PredicateMainArgsStruct } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
 import { fundPredicate } from './utils/predicate';
@@ -20,7 +20,8 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate<[Validation]>({
-        abi: PredicateMainArgsStructAbi.abi,
+        abi: PredicateMainArgsStruct.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
         provider,
       });
 
@@ -48,7 +49,8 @@ describe('Predicate', () => {
       } = launched;
 
       const predicate = new Predicate<[Validation]>({
-        abi: PredicateMainArgsStructAbi.abi,
+        abi: PredicateMainArgsStruct.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
         provider,
       });
 

@@ -1,7 +1,7 @@
 import { Predicate, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PredicateInputDataAbi } from '../../test/typegen';
+import { PredicateInputData } from '../../test/typegen';
 
 import { fundPredicate } from './utils/predicate';
 
@@ -23,7 +23,8 @@ describe('Predicate', () => {
       const amountToReceiver = 50;
 
       const predicate = new Predicate({
-        abi: PredicateInputDataAbi.abi,
+        abi: PredicateInputData.abi,
+        bytecode: PredicateInputData.bytecode,
         provider,
         inputData: [true],
       });
