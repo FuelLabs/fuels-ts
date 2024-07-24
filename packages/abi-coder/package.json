@@ -33,6 +33,10 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
+    "ramda": "^0.29.0",
     "type-fest": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/ramda": "^0.29.3"
   }
 }
