@@ -228,25 +228,25 @@ describe('Options Tests', () => {
   it('echoes option enum diff sizes', async () => {
     using contract = await launchOptionsContract();
 
-    const call1 = await contract.functions.echo_enum_diff_sizes(undefined).call();
-    const { value } = await call1.waitForResult();
+    const call1 = await contract.functions.echo_enum_diff_sizes().call();
+    const { value: value1 } = await call1.waitForResult();
+    expect(value1).toStrictEqual(undefined);
 
-    expect(value).toStrictEqual(undefined);
-
-    const call2 = await contract.functions.echo_enum_diff_sizes({ a: U8_MAX }).call();
+    const call2 = await contract.functions.echo_enum_diff_sizes(undefined).call();
     const { value: value2 } = await call2.waitForResult();
+    expect(value2).toStrictEqual(undefined);
 
-    expect(value2).toStrictEqual({ a: U8_MAX });
+    const call3 = await contract.functions.echo_enum_diff_sizes({ a: U8_MAX }).call();
+    const { value: value3 } = await call3.waitForResult();
+    expect(value3).toStrictEqual({ a: U8_MAX });
 
-    const call3 = await contract.functions
+    const call4 = await contract.functions
       .echo_enum_diff_sizes({
         b: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',
       })
       .call();
-
-    const { value: value3 } = await call3.waitForResult();
-
-    expect(value3).toStrictEqual({
+    const { value: value4 } = await call4.waitForResult();
+    expect(value4).toStrictEqual({
       b: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',
     });
   });

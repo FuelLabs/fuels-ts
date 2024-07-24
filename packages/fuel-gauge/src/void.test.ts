@@ -18,13 +18,11 @@ describe('Void Tests', () => {
 
   it('should handle Option::None', async () => {
     using launched = await launchTestNode({ contractsConfigs });
-
     const {
       contracts: [voidContract],
     } = launched;
 
     const optionNone: Option<number> = undefined;
-
     const { waitForResult } = await voidContract.functions.echo_void(optionNone).call();
     const { value } = await waitForResult();
 
@@ -55,10 +53,15 @@ describe('Void Tests', () => {
 
     const voidTypeValue: undefined = undefined;
 
-    const { waitForResult } = await voidContract.functions.type_then_void(42, voidTypeValue).call();
-    const { value } = await waitForResult();
+    const { waitForResult: call1 } = await voidContract.functions.type_then_void(42).call();
+    const { value: value1 } = await call1();
+    expect(value1).toEqual(undefined);
 
-    expect(value).toEqual(voidTypeValue);
+    const { waitForResult: call2 } = await voidContract.functions
+      .type_then_void(42, undefined)
+      .call();
+    const { value: value2 } = await call2();
+    expect(value2).toEqual(voidTypeValue);
   });
 
   it('should handle input arguments of type [42, void, 43]', async () => {
