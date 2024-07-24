@@ -49,9 +49,10 @@ export default function PredicateExample() {
       return toast.error("Wallet not loaded");
     }
 
-    await wallet.transfer(predicate.address, amount, baseAssetId, {
+    const submitted = await wallet.transfer(predicate.address, amount, baseAssetId, {
       gasLimit: 10_000,
     });
+    await submitted.waitForResult();
 
     await refreshBalances();
 
