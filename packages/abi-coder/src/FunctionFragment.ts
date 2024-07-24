@@ -18,6 +18,7 @@ import type {
 } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
 import { OPTION_CODER_TYPE, VOID_TYPE } from './utils/constants';
+import { getMandatoryInputs } from './utils/getMandatoryInputs';
 import {
   findFunctionByName,
   findNonEmptyInputs,
@@ -66,7 +67,21 @@ export class FunctionFragment<
   }
 
   encodeArguments(values: InputValue[]): Uint8Array {
-    FunctionFragment.verifyArgsAndInputsAlign(values, this.jsonFn.inputs, this.jsonAbi);
+    const inputs = getMandatoryInputs({ jsonAbi: this.jsonAbi, inputs: this.jsonFn.inputs });
+    const mandatoryInputLength = inputs.filter((i) => !i.isOptional).length;
+
+    if (values.length < mandatoryInputLength) {
+      throw new FuelError(
+        ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH,
+        `Invalid number of arguments. Expected a minimum of ${mandatoryInputLength} arguments, received ${values.length}`
+      );
+    }
+
+    const shallowCopyValues = values.slice();
+    if (Array.isArray(values) && this.jsonFn.inputs.length > values.length) {
+      shallowCopyValues.length = this.jsonFn.inputs.length;
+      shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
+    }
 
     const coders = this.jsonFn.inputs.map((t) =>
       AbiCoder.getCoder(this.jsonAbi, t, {
@@ -74,37 +89,7 @@ export class FunctionFragment<
       })
     );
 
-    const shallowCopyValues = values.slice();
     return new TupleCoder(coders).encode(shallowCopyValues);
-  }
-
-  private static verifyArgsAndInputsAlign(
-    args: InputValue[],
-    inputs: readonly JsonAbiArgument[],
-    abi: JsonAbi
-  ) {
-    if (args.length === inputs.length) {
-      return;
-    }
-
-    const inputTypes = inputs.map((input) => findTypeById(abi, input.type));
-    const optionalInputs = inputTypes.filter(
-      (x) => x.type === OPTION_CODER_TYPE || x.type === VOID_TYPE
-    );
-    if (optionalInputs.length === inputTypes.length) {
-      return;
-    }
-    if (inputTypes.length - optionalInputs.length === args.length) {
-      return;
-    }
-
-    const errorMsg = `Mismatch between provided arguments and expected ABI inputs. Provided ${
-      args.length
-    } arguments, but expected ${inputs.length - optionalInputs.length} (excluding ${
-      optionalInputs.length
-    } optional inputs).`;
-
-    throw new FuelError(ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH, errorMsg);
   }
 
   decodeArguments(data: BytesLike) {
