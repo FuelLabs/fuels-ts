@@ -198,7 +198,12 @@ export function getWithdrawFromFuelOperations({
 
   const withdrawFromFuelOperations = messageOutReceipts.reduce(
     (prevWithdrawFromFuelOps, receipt) => {
-      const input = getRelevantInputs(inputs);
+      let input;
+      if (baseAssetId !== ZeroBytes32) {
+        input = getRelevantInputs(inputs, baseAssetId);
+      } else {
+        input = getRelevantInputs(inputs);
+      }
       if (input) {
         const inputAddress = getInputAccountAddress(input);
         const newWithdrawFromFuelOps = addOperation(prevWithdrawFromFuelOps, {
@@ -252,7 +257,12 @@ export function getContractCallOperations({
     if (contractInput) {
       const newCallOps = contractCallReceipts.reduce((prevContractCallOps, receipt) => {
         if (receipt.to === contractInput.contractID) {
-          const input = getRelevantInputs(inputs);
+          let input;
+          if (receipt.assetId !== ZeroBytes32) {
+            input = getRelevantInputs(inputs, receipt.assetId);
+          } else {
+            input = getRelevantInputs(inputs);
+          }
           if (input) {
             const inputAddress = getInputAccountAddress(input);
             const calls = [];

@@ -1,3 +1,4 @@
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
@@ -33,13 +34,23 @@ export function getInputsContract(inputs: Input[]) {
 }
 
 /** @hidden */
-export function getRelevantInputs(inputs: Input[]) {
+export function getRelevantInputs(inputs: Input[], assetId: string = ZeroBytes32) {
   const coinInputs = getInputsCoin(inputs);
   const messageInputs = getInputsMessage(inputs);
-  const coinInput = coinInputs.find((i) => i.amount.gt(0));
+  let coinInput = coinInputs.find((i) => i.assetId === assetId);
+  // #TODO: There are times when the ReceiptCall's baseAssetId doesn't match the CoinInput's assetId
+  // In this case, we should return the last input in the CoinInput array
+  if (!coinInput && coinInputs.length > 0) {
+    coinInput = coinInputs[coinInputs.length - 1];
+  }
+
   const messageInput = messageInputs.find(({ amount }) => !!amount && amount.gt(0));
 
-  return coinInput || messageInput;
+  if (coinInput) {
+    return coinInput;
+  }
+
+  return messageInput;
 }
 
 /** @hidden */

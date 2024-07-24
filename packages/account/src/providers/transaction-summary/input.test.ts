@@ -1,7 +1,7 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { bn } from '@fuel-ts/math';
 import type { InputCoin, InputMessage } from '@fuel-ts/transactions';
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import {
   MOCK_INPUT_COIN,
@@ -13,7 +13,7 @@ import {
 import {
   getInputAccountAddress,
   getInputContractFromIndex,
-  getInputFromAssetId,
+  getRelevantInputs,
   getInputsCoin,
   getInputsContract,
   getInputsMessage,
@@ -114,25 +114,34 @@ describe('transaction-summary/input', () => {
       assetId: ASSET_A,
     };
 
-    expect(getInputFromAssetId([inputCoin1, inputCoin2], ZeroBytes32)).toStrictEqual(inputCoin1);
-    expect(getInputFromAssetId([inputCoin1, inputCoin2], ASSET_A)).toStrictEqual(inputCoin2);
+    expect(getRelevantInputs([inputCoin1, inputCoin2], ZeroBytes32)).toStrictEqual(inputCoin1);
+    expect(getRelevantInputs([inputCoin1, inputCoin2], ASSET_A)).toStrictEqual(inputCoin2);
 
-    expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], ZeroBytes32)).toStrictEqual(
-      MOCK_INPUT_MESSAGE
-    );
+    expect(getRelevantInputs([MOCK_INPUT_MESSAGE], ZeroBytes32)).toStrictEqual(MOCK_INPUT_MESSAGE);
   });
 
-  it('should ensure getInputFromAssetId returns input message if the coin input amount is 0', () => {
+  it('should ensure getRelevantInputs returns the correct coinInput thats greater than 0 for default assetId', () => {
+    const coinInput1: InputCoin = {
+      ...MOCK_INPUT_COIN,
+      amount: bn(100),
+      assetId: ZeroBytes32,
+    };
+
+    const coinInput2: InputCoin = {
+      ...MOCK_INPUT_COIN,
+      amount: bn(0),
+      assetId: ZeroBytes32,
+    };
+
+    expect(getRelevantInputs([coinInput1, coinInput2])).toEqual(coinInput1);
+  });
+
+  it('Should return the correct input message for withdrawals', () => {
     const inputMessage: InputMessage = {
       ...MOCK_INPUT_MESSAGE,
       amount: bn(100),
     };
 
-    const coinInput: InputCoin = {
-      ...MOCK_INPUT_COIN,
-      amount: bn(0),
-    };
-
-    expect(getInputFromAssetId([inputMessage, coinInput], ASSET_A)).toEqual(inputMessage);
+    expect(getRelevantInputs([inputMessage])).toEqual(inputMessage);
   });
 });
