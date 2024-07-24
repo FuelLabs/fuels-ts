@@ -215,11 +215,12 @@ export default class ContractFactory {
 
         const response = await account.sendTransaction(blobTxRequest, { awaitExecution: true });
 
-        const { id } = await response.waitForResult<TransactionType.Blob>();
-        if (!id) {
-          throw new Error('Blob ID not returned');
-        }
-        blobIds.push(id);
+        const {
+          transaction: { blobId },
+        } = await response.waitForResult<TransactionType.Blob>();
+
+        // Todo: check status
+        blobIds.push(blobId);
       }
 
       // Deploy contract via loader contract

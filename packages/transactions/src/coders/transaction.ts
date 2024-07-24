@@ -199,7 +199,7 @@ export type TransactionCreate = {
 export class TransactionCreateCoder extends Coder<TransactionCreate, TransactionCreate> {
   constructor() {
     super('TransactionCreate', 'struct TransactionCreate', 0);
-}
+  }
 
   encode(value: TransactionCreate): Uint8Array {
     const parts: Uint8Array[] = [];
@@ -573,7 +573,7 @@ export type TransactionBlob = {
   type: TransactionType.Blob;
 
   /** Hash of the bytecode. (b256) */
-  id: string;
+  blobId: string;
 
   /** Witness index of contract bytecode (u16) */
   witnessIndex: number;
@@ -611,7 +611,7 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
   encode(value: TransactionBlob): Uint8Array {
     const parts: Uint8Array[] = [];
 
-    parts.push(new B256Coder().encode(value.id));
+    parts.push(new B256Coder().encode(value.blobId));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
     parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(value.policyTypes));
     parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.inputsCount));
@@ -630,7 +630,7 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
     let o = offset;
 
     [decoded, o] = new B256Coder().decode(data, o);
-    const id = decoded;
+    const blobId = decoded;
     [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
     const witnessIndex = decoded;
     [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
@@ -653,7 +653,7 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
     return [
       {
         type: TransactionType.Blob,
-        id,
+        blobId,
         witnessIndex,
         policyTypes,
         inputsCount,

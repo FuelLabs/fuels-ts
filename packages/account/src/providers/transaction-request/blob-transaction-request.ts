@@ -48,7 +48,7 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
     return {
       type: TransactionType.Blob,
       ...baseTransaction,
-      id: hash(this.witnesses[witnessIndex]),
+      blobId: hash(this.witnesses[witnessIndex]),
       witnessIndex,
     };
   }

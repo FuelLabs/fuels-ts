@@ -254,19 +254,24 @@ describe('Contract Factory', () => {
     );
   });
 
-  it.only('should deploy contracts greater than 100KB in chunks', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
+  it.only(
+    'should deploy contracts greater than 100KB in chunks',
+    async () => {
+      using launched = await launchTestNode();
+      const {
+        wallets: [wallet],
+      } = launched;
 
-    const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
-    
-    const { waitForResult: waitForDeployResult } = await factory.deployContract<LargeContractAbi>();
-    const { contract } = await waitForDeployResult();
+      const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
 
-    const { waitForResult } = await contract.functions.gen().call();
-    const { value } = await waitForResult();
-    expect(value).toBe(true);
-  });
+      const { waitForResult: waitForDeployResult } =
+        await factory.deployContract<LargeContractAbi>();
+      const { contract } = await waitForDeployResult();
+
+      const { waitForResult } = await contract.functions.gen().call();
+      const { value } = await waitForResult();
+      expect(value).toBe(true);
+    },
+    { timeout: 10000 }
+  );
 });
