@@ -182,7 +182,8 @@ export default class ContractFactory {
 
       // Chunk the bytecode
       const chunks: ContractChunk[] = [];
-      const chunkSize = maxContractSize;
+      // Subtract 10,000 because max tx size === max contract size, come up with something better
+      const chunkSize = maxContractSize - 10_000;
       for (let offset = 0, index = 0; offset < this.bytecode.length; offset += chunkSize, index++) {
         const chunk = this.bytecode.slice(offset, offset + chunkSize);
         chunks.push({ id: index, size: chunk.length, bytecode: chunk });
@@ -193,7 +194,7 @@ export default class ContractFactory {
       const { maxFee: setMaxFee } = deployContractOptions;
       for (const { bytecode } of chunks) {
         const blobTxRequest = new BlobTransactionRequest({
-          bytecodeWitnessIndex: 0,
+          witnessIndex: 0,
           witnesses: [bytecode],
         });
 
@@ -213,6 +214,7 @@ export default class ContractFactory {
         await account.fund(blobTxRequest, txCost);
 
         const response = await account.sendTransaction(blobTxRequest, { awaitExecution: true });
+
         const { id } = await response.waitForResult<TransactionType.Blob>();
         if (!id) {
           throw new Error('Blob ID not returned');

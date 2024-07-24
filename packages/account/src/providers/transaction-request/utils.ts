@@ -1,6 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { TransactionType } from '@fuel-ts/transactions';
 
+import { BlobTransactionRequest } from './blob-transaction-request';
 import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './types';
@@ -19,6 +20,9 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
     }
     case TransactionType.Create: {
       return CreateTransactionRequest.from(obj);
+    }
+    case TransactionType.Blob: {
+      return BlobTransactionRequest.from(obj);
     }
     default: {
       throw new FuelError(

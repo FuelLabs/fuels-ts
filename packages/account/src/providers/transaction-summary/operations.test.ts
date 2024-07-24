@@ -940,6 +940,7 @@ describe('operations', () => {
     expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeName.Create);
     expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeName.Mint);
     expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeName.Script);
+    expect(getTransactionTypeName(TransactionType.Blob)).toBe(TransactionTypeName.Blob);
 
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
       'Unsupported transaction type: '

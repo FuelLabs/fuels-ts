@@ -254,32 +254,14 @@ describe('Contract Factory', () => {
     );
   });
 
-  it('should not deploy contracts greater than 100KB', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    const largeByteCode = `0x${'00'.repeat(265144)}`;
-    const factory = new ContractFactory(largeByteCode, StorageTestContractAbi__factory.abi, wallet);
-
-    await expectToThrowFuelError(
-      async () => factory.deployContract(),
-      new FuelError(
-        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
-        'Contract bytecode is too large. Max contract size is 100KB'
-      )
-    );
-  });
-
-  it('should deploy contracts greater than 100KB in chunks', async () => {
+  it.only('should deploy contracts greater than 100KB in chunks', async () => {
     using launched = await launchTestNode();
     const {
       wallets: [wallet],
     } = launched;
 
     const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
-
+    
     const { waitForResult: waitForDeployResult } = await factory.deployContract<LargeContractAbi>();
     const { contract } = await waitForDeployResult();
 

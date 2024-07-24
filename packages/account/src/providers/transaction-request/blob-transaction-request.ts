@@ -1,5 +1,9 @@
 import { hash } from '@fuel-ts/hasher';
+import type { BN } from '@fuel-ts/math';
 import type { TransactionBlob } from '@fuel-ts/transactions';
+
+import type { GasCosts } from '../provider';
+import { calculateMetadataGasForTxBlob } from '../utils';
 
 import { hashTransaction } from './hash-transaction';
 import type { BaseTransactionRequestLike } from './transaction-request';
@@ -7,7 +11,7 @@ import { BaseTransactionRequest, TransactionType } from './transaction-request';
 
 export interface BlobTransactionRequestLike extends BaseTransactionRequestLike {
   /** Witness index of contract bytecode to create */
-  bytecodeWitnessIndex?: number;
+  witnessIndex?: number;
 }
 
 export class BlobTransactionRequest extends BaseTransactionRequest {
@@ -21,16 +25,16 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
   /** Type of the transaction */
   type = TransactionType.Blob as const;
   /** Witness index of contract bytecode to create */
-  bytecodeWitnessIndex: number;
+  witnessIndex: number;
 
   /**
    * Creates an instance `CreateTransactionRequest`.
    *
    * @param createTransactionRequestLike - The initial values for the instance
    */
-  constructor({ bytecodeWitnessIndex, ...rest }: BlobTransactionRequestLike) {
+  constructor({ witnessIndex, ...rest }: BlobTransactionRequestLike) {
     super(rest);
-    this.bytecodeWitnessIndex = bytecodeWitnessIndex ?? 0;
+    this.witnessIndex = witnessIndex ?? 0;
   }
 
   /**
@@ -40,12 +44,12 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
    */
   toTransaction(): TransactionBlob {
     const baseTransaction = this.getBaseTransaction();
-    const bytecodeWitnessIndex = this.bytecodeWitnessIndex;
+    const witnessIndex = this.witnessIndex;
     return {
       type: TransactionType.Blob,
       ...baseTransaction,
-      blobId: hash(this.witnesses[bytecodeWitnessIndex]),
-      bytecodeWitnessIndex,
+      id: hash(this.witnesses[witnessIndex]),
+      witnessIndex,
     };
   }
 
@@ -58,5 +62,12 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
    */
   getTransactionId(chainId: number): string {
     return hashTransaction(this, chainId);
+  }
+
+  metadataGas(gasCosts: GasCosts): BN {
+    return calculateMetadataGasForTxBlob({
+      gasCosts,
+      txBytesSize: this.byteSize(),
+    });
   }
 }

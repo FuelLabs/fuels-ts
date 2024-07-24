@@ -158,6 +158,16 @@ export function calculateMetadataGasForTxScript({
   return resolveGasDependentCosts(txBytesSize, gasCosts.s256);
 }
 
+export function calculateMetadataGasForTxBlob({
+  gasCosts,
+  txBytesSize,
+}: {
+  gasCosts: GasCosts;
+  txBytesSize: number;
+}) {
+  return resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+}
+
 export interface CalculateGasFeeParams {
   tip?: BN;
   gas: BN;
