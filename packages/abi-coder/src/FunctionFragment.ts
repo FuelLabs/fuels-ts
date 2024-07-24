@@ -114,7 +114,7 @@ export class FunctionFragment<
       );
     }
 
-    const result = nonEmptyInputs.reduce(
+    const result = this.jsonFn.inputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input) => {
         const coder = AbiCoder.getCoder(this.jsonAbi, input, { encoding: this.encoding });
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
