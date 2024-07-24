@@ -10,13 +10,11 @@ export class EmptyType extends AType implements IType {
 
   static MATCH_REGEX: RegExp = /^\(\)$/m;
 
-  static TYPE_LABEL: string = 'undefined';
-
   constructor(params: { rawAbiType: JsonAbiType }) {
     super(params);
     this.attributes = {
-      inputLabel: EmptyType.TYPE_LABEL,
-      outputLabel: EmptyType.TYPE_LABEL,
+      inputLabel: 'undefined',
+      outputLabel: 'void',
     };
   }
 
