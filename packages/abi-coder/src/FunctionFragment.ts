@@ -131,11 +131,6 @@ export class FunctionFragment<
   }
 
   decodeOutput(data: BytesLike): [DecodedValue | undefined, number] {
-    const outputAbiType = findTypeById(this.jsonAbi, this.jsonFn.output.type);
-    if (outputAbiType.type === VOID_TYPE) {
-      return [undefined, 0];
-    }
-
     const bytes = arrayify(data);
     const coder = AbiCoder.getCoder(this.jsonAbi, this.jsonFn.output, {
       encoding: this.encoding,
