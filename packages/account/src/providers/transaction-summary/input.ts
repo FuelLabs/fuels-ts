@@ -33,10 +33,10 @@ export function getInputsContract(inputs: Input[]) {
 }
 
 /** @hidden */
-export function getInputFromAssetId(inputs: Input[], assetId: string) {
+export function getRelevantInputs(inputs: Input[]) {
   const coinInputs = getInputsCoin(inputs);
   const messageInputs = getInputsMessage(inputs);
-  const coinInput = coinInputs.find((i) => i.assetId === assetId);
+  const coinInput = coinInputs.find((i) => i.amount.gt(0));
   const messageInput = messageInputs.find(({ amount }) => !!amount && amount.gt(0));
 
   return coinInput || messageInput;

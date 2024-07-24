@@ -14,7 +14,7 @@ import type {
 
 import { getFunctionCall } from './call';
 import {
-  getInputFromAssetId,
+  getRelevantInputs,
   getInputAccountAddress,
   getInputContractFromIndex,
   getInputsContract,
@@ -198,7 +198,7 @@ export function getWithdrawFromFuelOperations({
 
   const withdrawFromFuelOperations = messageOutReceipts.reduce(
     (prevWithdrawFromFuelOps, receipt) => {
-      const input = getInputFromAssetId(inputs, baseAssetId);
+      const input = getRelevantInputs(inputs);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
         const newWithdrawFromFuelOps = addOperation(prevWithdrawFromFuelOps, {
@@ -252,7 +252,7 @@ export function getContractCallOperations({
     if (contractInput) {
       const newCallOps = contractCallReceipts.reduce((prevContractCallOps, receipt) => {
         if (receipt.to === contractInput.contractID) {
-          const input = getInputFromAssetId(inputs, receipt.assetId);
+          const input = getRelevantInputs(inputs);
           if (input) {
             const inputAddress = getInputAccountAddress(input);
             const calls = [];
