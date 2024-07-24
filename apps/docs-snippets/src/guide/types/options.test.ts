@@ -42,7 +42,7 @@ describe(__filename, () => {
     // #region options-4
     const input: number | undefined = 5;
 
-    const { value } = await contract.functions.sum_optional_u8(input, undefined).simulate();
+    const { value } = await contract.functions.sum_optional_u8(input).simulate();
 
     expect(value).toEqual(input);
     // #endregion options-4

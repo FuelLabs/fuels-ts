@@ -355,16 +355,13 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT_NONE = undefined;
+
     const call1 = await contractInstance.functions.echo_option_extract_u32(INPUT_NONE).call();
-
     const { value: None } = await call1.waitForResult();
-
     expect(None).toStrictEqual(500);
 
-    const call2 = await contractInstance.functions.echo_option_extract_u32(undefined).call();
-
+    const call2 = await contractInstance.functions.echo_option_extract_u32().call();
     const { value: NoneVoid } = await call2.waitForResult();
-
     expect(NoneVoid).toStrictEqual(500);
   });
 
@@ -392,9 +389,7 @@ describe('Coverage Contract', () => {
     const INPUT = 1;
 
     // adds the three values together, but only first param value is supplied
-    const { waitForResult } = await contractInstance.functions
-      .echo_option_three_u8(INPUT, undefined, undefined)
-      .call();
+    const { waitForResult } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
     const { value: Some } = await waitForResult();
 
     // we receive the result of adding whatever was passed
