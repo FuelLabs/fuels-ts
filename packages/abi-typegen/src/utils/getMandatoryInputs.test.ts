@@ -31,54 +31,78 @@ describe('getMandatoryInputs.ts', () => {
     expect(result).toEqual([]);
   });
 
-  it('should handle all empty types', () => {
-    const inputs: Array<JsonAbiArgument> = [
-      { type: emptyAbiType.typeId, name: 'a', typeArguments: null },
-      { type: emptyAbiType.typeId, name: 'b', typeArguments: null },
-      { type: emptyAbiType.typeId, name: 'c', typeArguments: null },
-    ];
-
-    const result = getMandatoryInputs({ types, inputs });
-
-    expect(result).toEqual([]);
-  });
-
-  it('should handle all non-empty types', () => {
-    const inputs: Array<JsonAbiArgument> = [
-      { type: nonEmptyType.typeId, name: 'a', typeArguments: null },
-      { type: nonEmptyType.typeId, name: 'b', typeArguments: null },
-      { type: nonEmptyType.typeId, name: 'c', typeArguments: null },
-    ];
-
-    const result = getMandatoryInputs({ types, inputs });
-
-    expect(result).toEqual(inputs);
-  });
-
-  it('should handle a mix [non-empty, non-empty, empty]', () => {
-    const inputs: Array<JsonAbiArgument> = [
-      { type: nonEmptyType.typeId, name: 'a', typeArguments: null },
-      { type: nonEmptyType.typeId, name: 'b', typeArguments: null },
-      { type: emptyAbiType.typeId, name: 'c', typeArguments: null },
-    ];
+  it('should handle all empty types [empty, empty, empty]', () => {
+    const A = { type: emptyAbiType.typeId, name: 'a', typeArguments: null };
+    const B = { type: emptyAbiType.typeId, name: 'b', typeArguments: null };
+    const C = { type: emptyAbiType.typeId, name: 'c', typeArguments: null };
+    const inputs: Array<JsonAbiArgument> = [A, B, C];
 
     const result = getMandatoryInputs({ types, inputs });
 
     expect(result).toEqual([
-      { type: nonEmptyType.typeId, name: 'a', typeArguments: null },
-      { type: nonEmptyType.typeId, name: 'b', typeArguments: null },
+      { ...A, isOptional: true },
+      { ...B, isOptional: true },
+      { ...C, isOptional: true },
+    ]);
+  });
+
+  it('should handle all non-empty types', () => {
+    const A = { type: nonEmptyType.typeId, name: 'a', typeArguments: null };
+    const B = { type: nonEmptyType.typeId, name: 'b', typeArguments: null };
+    const C = { type: nonEmptyType.typeId, name: 'c', typeArguments: null };
+    const inputs: Array<JsonAbiArgument> = [A, B, C];
+
+    const result = getMandatoryInputs({ types, inputs });
+
+    expect(result).toEqual([
+      { ...A, isOptional: false },
+      { ...B, isOptional: false },
+      { ...C, isOptional: false },
+    ]);
+  });
+
+  it('should handle a mix [non-empty, non-empty, empty]', () => {
+    const A = { type: nonEmptyType.typeId, name: 'a', typeArguments: null };
+    const B = { type: nonEmptyType.typeId, name: 'b', typeArguments: null };
+    const C = { type: emptyAbiType.typeId, name: 'c', typeArguments: null };
+    const inputs: Array<JsonAbiArgument> = [A, B, C];
+
+    const result = getMandatoryInputs({ types, inputs });
+
+    expect(result).toEqual([
+      { ...A, isOptional: false },
+      { ...B, isOptional: false },
+      { ...C, isOptional: true },
+    ]);
+  });
+
+  it('should handle a mix [empty, non-empty, non-empty]', () => {
+    const A = { type: emptyAbiType.typeId, name: 'a', typeArguments: null };
+    const B = { type: nonEmptyType.typeId, name: 'b', typeArguments: null };
+    const C = { type: nonEmptyType.typeId, name: 'c', typeArguments: null };
+    const inputs: Array<JsonAbiArgument> = [A, B, C];
+
+    const result = getMandatoryInputs({ types, inputs });
+
+    expect(result).toEqual([
+      { ...A, isOptional: false },
+      { ...B, isOptional: false },
+      { ...C, isOptional: false },
     ]);
   });
 
   it('should handle a mix [non-empty, empty, non-empty]', () => {
-    const inputs: Array<JsonAbiArgument> = [
-      { type: nonEmptyType.typeId, name: 'a', typeArguments: null },
-      { type: emptyAbiType.typeId, name: 'b', typeArguments: null },
-      { type: nonEmptyType.typeId, name: 'c', typeArguments: null },
-    ];
+    const A = { type: nonEmptyType.typeId, name: 'a', typeArguments: null };
+    const B = { type: emptyAbiType.typeId, name: 'b', typeArguments: null };
+    const C = { type: nonEmptyType.typeId, name: 'c', typeArguments: null };
+    const inputs: Array<JsonAbiArgument> = [A, B, C];
 
     const result = getMandatoryInputs({ types, inputs });
 
-    expect(result).toEqual(inputs);
+    expect(result).toEqual([
+      { ...A, isOptional: false },
+      { ...B, isOptional: false },
+      { ...C, isOptional: false },
+    ]);
   });
 });

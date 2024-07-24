@@ -1,22 +1,39 @@
 import { EmptyType } from '../abi/types/EmptyType';
+import { OptionType } from '../abi/types/OptionType';
 import type { IType } from '../types/interfaces/IType';
 import type { JsonAbiArgument } from '../types/interfaces/JsonAbi';
 
 import { findType } from './findType';
+
+const OPTIONAL_INPUT_TYPES = [EmptyType.swayType, OptionType.swayType];
+
+export type ArgumentWithMetadata<TArg extends JsonAbiArgument = JsonAbiArgument> = TArg & {
+  isOptional: boolean;
+};
 
 export const getMandatoryInputs = ({
   types,
   inputs,
 }: {
   types: IType[];
-  inputs: readonly JsonAbiArgument[];
-}) => {
-  let i = inputs.length - 1;
-  for (; i >= 0; i--) {
-    const type = findType({ types, typeId: inputs[i].type });
-    if (type.rawAbiType.type !== EmptyType.swayType) {
-      break;
-    }
-  }
-  return inputs.slice(0, i + 1);
+  inputs: JsonAbiArgument[];
+}): Array<ArgumentWithMetadata> => {
+  let inMandatoryRegion = false;
+
+  return inputs
+    .reverse()
+    .map((input) => {
+      if (inMandatoryRegion) {
+        return { ...input, isOptional: false };
+      }
+
+      const type = findType({ types, typeId: input.type });
+      if (OPTIONAL_INPUT_TYPES.includes(type.rawAbiType.type)) {
+        return { ...input, isOptional: true };
+      }
+
+      inMandatoryRegion = true;
+      return { ...input, isOptional: false };
+    })
+    .reverse();
 };
