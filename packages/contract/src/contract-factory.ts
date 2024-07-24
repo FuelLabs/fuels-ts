@@ -7,12 +7,10 @@ import type {
   TransactionResult,
   TransactionType,
 } from '@fuel-ts/account';
-import { CreateTransactionRequest } from '@fuel-ts/account';
-import { BlobTransactionRequest } from '@fuel-ts/account/dist/providers/transaction-request/blob-transaction-request';
+import { CreateTransactionRequest, BlobTransactionRequest } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { SparseMerkleTree } from '@fuel-ts/merkle';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined } from '@fuel-ts/utils';
