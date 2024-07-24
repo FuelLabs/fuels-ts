@@ -35,5 +35,6 @@ export const seedTestWallet = async (
 
   await genesisWallet.fund(request, txCost);
 
-  await genesisWallet.sendTransaction(request, { awaitExecution: true });
+  const submit = await genesisWallet.sendTransaction(request);
+  await submit.waitForResult();
 };

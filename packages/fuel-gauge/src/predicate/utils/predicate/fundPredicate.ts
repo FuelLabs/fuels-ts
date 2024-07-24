@@ -23,7 +23,8 @@ export const fundPredicate = async <T extends InputValue[]>(
   request.maxFee = txCost.maxFee;
   await wallet.fund(request, txCost);
 
-  await wallet.sendTransaction(request, { awaitExecution: true });
+  const submit = await wallet.sendTransaction(request);
+  await submit.waitForResult();
 
   return predicate.getBalance();
 };
