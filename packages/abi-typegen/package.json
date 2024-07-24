@@ -44,7 +44,7 @@
   ],
   "scripts": {
     "pretest": "run-s build:forc-callpaths build:forc",
-    "test": "cd ../.. && pnpm test:filter packages/abi-typegen",
+    "test": "cd ../.. && pnpm run test:filter packages/abi-typegen",
     "build": "tsup",
     "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
     "build:forc-callpaths": "pnpm fuels-forc build -p test/fixtures/forc-projects --json-abi-with-callpaths",

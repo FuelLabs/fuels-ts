@@ -6,7 +6,7 @@
   "scripts": {
     "build": "pnpm fuels build",
     "pretest": "pnpm build",
-    "test": "cd ../.. && pnpm test:filter apps/demo-fuels"
+    "test": "cd ../.. && pnpm run test:filter apps/demo-fuels"
   },
   "license": "Apache-2.0",
   "dependencies": {
