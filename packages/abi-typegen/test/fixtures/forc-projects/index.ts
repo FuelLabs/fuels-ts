@@ -32,7 +32,7 @@ export enum AbiTypegenProjectsEnum {
 
 export const getTypegenForcProject = (
   project: AbiTypegenProjectsEnum,
-  build: 'release' | 'debug' = 'release'
+  build: 'release' | 'debug' = 'debug'
 ) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, project),

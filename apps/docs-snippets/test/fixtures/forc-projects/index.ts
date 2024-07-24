@@ -40,5 +40,5 @@ export const getDocsSnippetsForcProject = (project: DocSnippetProjectsEnum) =>
   getForcProject<JsonAbi>({
     projectDir: join(__dirname, project),
     projectName: project,
-    build: 'release',
+    build: 'debug',
   });

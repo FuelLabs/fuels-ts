@@ -18,7 +18,7 @@ import { launchTestNode } from './launch-test-node';
 const { binHexlified, abiContents } = getForcProject<JsonAbi>({
   projectDir: join(__dirname, '../../test/fixtures/forc-projects/simple-contract'),
   projectName: 'simple-contract',
-  build: 'release',
+  build: 'debug',
 });
 async function generateChainConfigFile(chainName: string): Promise<[string, () => void]> {
   const configsFolder = join(__dirname, '../../../../', '.fuel-core', 'configs');
