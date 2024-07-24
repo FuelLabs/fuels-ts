@@ -4,7 +4,12 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { BN, bn, toHex, Interface, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { StorageTestContractAbi__factory } from '../test/typegen/contracts';
+import type { LargeContractAbi } from '../test/typegen/contracts';
+import {
+  StorageTestContractAbi__factory,
+  LargeContractAbi__factory,
+} from '../test/typegen/contracts';
+import largeContractHex from '../test/typegen/contracts/LargeContractAbi.hex';
 import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 import { launchTestContract } from './utils';
@@ -62,6 +67,7 @@ describe('Contract Factory', () => {
       isTypeUpgrade: expect.any(Boolean),
       isTypeUpload: expect.any(Boolean),
       isTypeScript: expect.any(Boolean),
+      isTypeBlob: expect.any(Boolean),
       logs: expect.any(Array),
       date: expect.any(Date),
       mintedAssets: expect.any(Array),
@@ -254,7 +260,7 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
 
-    const largeByteCode = `0x${'00'.repeat(112400)}`;
+    const largeByteCode = `0x${'00'.repeat(265144)}`;
     const factory = new ContractFactory(largeByteCode, StorageTestContractAbi__factory.abi, wallet);
 
     await expectToThrowFuelError(
@@ -264,5 +270,21 @@ describe('Contract Factory', () => {
         'Contract bytecode is too large. Max contract size is 100KB'
       )
     );
+  });
+
+  it('should deploy contracts greater than 100KB in chunks', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
+
+    const { waitForResult: waitForDeployResult } = await factory.deployContract<LargeContractAbi>();
+    const { contract } = await waitForDeployResult();
+
+    const { waitForResult } = await contract.functions.gen().call();
+    const { value } = await waitForResult();
+    expect(value).toBe(true);
   });
 });

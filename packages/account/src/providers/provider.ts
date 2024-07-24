@@ -45,10 +45,9 @@ import type {
   TransactionRequest,
   TransactionRequestInput,
   CoinTransactionRequestInput,
-  ScriptTransactionRequest,
   JsonAbisFromAllCalls,
 } from './transaction-request';
-import { transactionRequestify } from './transaction-request';
+import { ScriptTransactionRequest, transactionRequestify } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
@@ -865,7 +864,7 @@ Supported fuel-core version: ${supportedVersion}.`
       const hasMissingOutputs =
         missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
 
-      if (hasMissingOutputs) {
+      if (hasMissingOutputs && transactionRequest instanceof ScriptTransactionRequest) {
         outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
@@ -951,7 +950,7 @@ Supported fuel-core version: ${supportedVersion}.`
         const hasMissingOutputs =
           missingOutputVariables.length > 0 || missingOutputContractIds.length > 0;
         const request = allRequests[requestIdx];
-        if (hasMissingOutputs && request?.type === TransactionType.Script) {
+        if (hasMissingOutputs && request instanceof ScriptTransactionRequest) {
           result.outputVariables += missingOutputVariables.length;
           request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
@@ -1031,7 +1030,7 @@ Supported fuel-core version: ${supportedVersion}.`
     let gasLimit = bn(0);
 
     // Only Script transactions consume gas
-    if (transactionRequest.type === TransactionType.Script) {
+    if (transactionRequest instanceof ScriptTransactionRequest) {
       // If the gasLimit is set to 0, it means we need to estimate it.
       gasLimit = transactionRequest.gasLimit;
       if (transactionRequest.gasLimit.eq(0)) {
@@ -1128,7 +1127,7 @@ Supported fuel-core version: ${supportedVersion}.`
     { signatureCallback }: TransactionCostParams = {}
   ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const isScriptTransaction = txRequestClone.type === TransactionType.Script;
+    const isScriptTransaction = txRequestClone instanceof ScriptTransactionRequest;
     const updateMaxFee = txRequestClone.maxFee.eq(0);
 
     // Remove gasLimit to avoid gasLimit when estimating predicates

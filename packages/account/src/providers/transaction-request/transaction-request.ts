@@ -5,7 +5,12 @@ import { randomBytes } from '@fuel-ts/crypto';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
+import type {
+  TransactionScript,
+  Policy,
+  TransactionCreate,
+  TransactionBlob,
+} from '@fuel-ts/transactions';
 import {
   PolicyType,
   TransactionCoder,
@@ -186,7 +191,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     };
   }
 
-  abstract toTransaction(): TransactionCreate | TransactionScript;
+  abstract toTransaction(): TransactionCreate | TransactionScript | TransactionBlob;
 
   /**
    * Converts the transaction request to a byte array.

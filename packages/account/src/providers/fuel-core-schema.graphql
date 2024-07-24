@@ -63,6 +63,8 @@ input BalanceFilterInput {
   owner: Address!
 }
 
+scalar BlobId
+
 type Block {
   version: BlockVersion!
   id: BlockId!
@@ -975,6 +977,11 @@ type Query {
   estimatePredicates(tx: HexString!): Transaction!
 
   """
+  Returns all possible receipts for test purposes.
+  """
+  allReceipts: [Receipt!]!
+
+  """
   Returns true when the GraphQL API is serving requests.
   """
   health: Boolean!
@@ -1268,6 +1275,7 @@ type Transaction {
   isMint: Boolean!
   isUpgrade: Boolean!
   isUpload: Boolean!
+  isBlob: Boolean!
   inputs: [Input!]
   outputs: [Output!]!
   outputContract: ContractOutput
@@ -1277,6 +1285,7 @@ type Transaction {
   script: HexString
   scriptData: HexString
   bytecodeWitnessIndex: U16
+  blobId: BlobId
   salt: Salt
   storageSlots: [HexString!]
   bytecodeRoot: Bytes32
