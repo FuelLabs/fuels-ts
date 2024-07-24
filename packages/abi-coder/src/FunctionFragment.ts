@@ -12,14 +12,8 @@ import { StdStringCoder } from './encoding/coders/StdStringCoder';
 import { TupleCoder } from './encoding/coders/TupleCoder';
 import type { JsonAbi, JsonAbiFunction, JsonAbiFunctionAttribute } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
-import { VOID_TYPE } from './utils/constants';
 import { getMandatoryInputs } from './utils/getMandatoryInputs';
-import {
-  findFunctionByName,
-  findNonVoidInputs,
-  findTypeById,
-  getEncodingVersion,
-} from './utils/json-abi';
+import { findFunctionByName, findNonVoidInputs, getEncodingVersion } from './utils/json-abi';
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
