@@ -10,14 +10,9 @@ import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import { StdStringCoder } from './encoding/coders/StdStringCoder';
 import { TupleCoder } from './encoding/coders/TupleCoder';
-import type {
-  JsonAbi,
-  JsonAbiArgument,
-  JsonAbiFunction,
-  JsonAbiFunctionAttribute,
-} from './types/JsonAbi';
+import type { JsonAbi, JsonAbiFunction, JsonAbiFunctionAttribute } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
-import { OPTION_CODER_TYPE, VOID_TYPE } from './utils/constants';
+import { VOID_TYPE } from './utils/constants';
 import { getMandatoryInputs } from './utils/getMandatoryInputs';
 import {
   findFunctionByName,
