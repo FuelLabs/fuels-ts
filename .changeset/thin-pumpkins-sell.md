@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: return correct operations from `coinInput` and `InputMessage`  inputs
+fix: return correct operations from coin and message inputs
