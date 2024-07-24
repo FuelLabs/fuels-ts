@@ -165,9 +165,7 @@ export default class ContractFactory {
 
     const account = this.getAccount();
 
-    const transactionResponse = await account.sendTransaction(transactionRequest, {
-      awaitExecution: false,
-    });
+    const transactionResponse = await account.sendTransaction(transactionRequest);
 
     const waitForResult = async () => {
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();

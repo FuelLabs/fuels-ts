@@ -580,7 +580,7 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
@@ -592,7 +592,6 @@ export class Account extends AbstractAccount {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.sendTransaction(transactionRequest, {
-      awaitExecution,
       estimateTxDependencies: false,
     });
   }
