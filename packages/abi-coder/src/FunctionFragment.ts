@@ -16,7 +16,7 @@ import { VOID_TYPE } from './utils/constants';
 import { getMandatoryInputs } from './utils/getMandatoryInputs';
 import {
   findFunctionByName,
-  findNonEmptyInputs,
+  findNonVoidInputs,
   findTypeById,
   getEncodingVersion,
 } from './utils/json-abi';
@@ -89,9 +89,9 @@ export class FunctionFragment<
 
   decodeArguments(data: BytesLike) {
     const bytes = arrayify(data);
-    const nonEmptyInputs = findNonEmptyInputs(this.jsonAbi, this.jsonFn.inputs);
+    const nonVoidInputs = findNonVoidInputs(this.jsonAbi, this.jsonFn.inputs);
 
-    if (nonEmptyInputs.length === 0) {
+    if (nonVoidInputs.length === 0) {
       // The VM is current return 0x0000000000000000, but we should treat it as undefined / void
       if (bytes.length === 0) {
         return undefined;
@@ -102,12 +102,12 @@ export class FunctionFragment<
         `Types/values length mismatch during decode. ${JSON.stringify({
           count: {
             types: this.jsonFn.inputs.length,
-            nonEmptyInputs: nonEmptyInputs.length,
+            nonVoidInputs: nonVoidInputs.length,
             values: bytes.length,
           },
           value: {
             args: this.jsonFn.inputs,
-            nonEmptyInputs,
+            nonVoidInputs,
             values: bytes,
           },
         })}`
