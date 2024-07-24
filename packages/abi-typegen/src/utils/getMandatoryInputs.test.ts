@@ -25,13 +25,21 @@ const optionAbiType: JsonAbiType = {
   typeParameters: null,
 };
 
+const debugOptionAbiType: JsonAbiType = {
+  type: 'enum std::option::Option',
+  typeId: 4,
+  components: null,
+  typeParameters: null,
+};
+
 const EMPTY_ABI_TYPES: [string, JsonAbiType][] = [
   ['void', voidAbiType],
-  ['option', optionAbiType],
+  ['option (release)', optionAbiType],
+  ['option (debug)', debugOptionAbiType],
 ];
 
-const types: Array<IType> = [nonEmptyType, voidAbiType, optionAbiType].map((rawAbiType) =>
-  makeType({ rawAbiType })
+const types: Array<IType> = [nonEmptyType, voidAbiType, optionAbiType, debugOptionAbiType].map(
+  (rawAbiType) => makeType({ rawAbiType })
 );
 
 describe.each(EMPTY_ABI_TYPES)(

@@ -28,12 +28,13 @@ export class Function implements IFunction {
 
     // loop through all mandatory inputs
     const inputs = getMandatoryInputs({ types, inputs: this.rawAbiFunction.inputs }).map(
-      (input) => {
+      ({ isOptional, ...input }) => {
         const { name, type: typeId, typeArguments } = input;
 
         const type = findType({ types, typeId });
 
         let typeDecl: string;
+        const optionalSuffix = isOptional ? '?' : '';
 
         if (typeArguments) {
           // recursively process child `typeArguments`
@@ -50,7 +51,7 @@ export class Function implements IFunction {
 
         // assemble it in `[key: string]: <Type>` fashion
         if (shouldPrefixParams) {
-          return `${name}: ${typeDecl}`;
+          return `${name}${optionalSuffix}: ${typeDecl}`;
         }
 
         return typeDecl;

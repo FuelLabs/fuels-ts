@@ -1,3 +1,5 @@
+import { clone } from 'ramda';
+
 import { EmptyType } from '../abi/types/EmptyType';
 import { OptionType } from '../abi/types/OptionType';
 import type { IType } from '../types/interfaces/IType';
@@ -5,30 +7,29 @@ import type { JsonAbiArgument } from '../types/interfaces/JsonAbi';
 
 import { findType } from './findType';
 
-const OPTIONAL_INPUT_TYPES = [EmptyType.swayType, OptionType.swayType];
-
 export type ArgumentWithMetadata<TArg extends JsonAbiArgument = JsonAbiArgument> = TArg & {
   isOptional: boolean;
 };
 
-export const getMandatoryInputs = ({
-  types,
-  inputs,
-}: {
+export const getMandatoryInputs = (params: {
   types: IType[];
-  inputs: JsonAbiArgument[];
+  inputs: readonly JsonAbiArgument[];
 }): Array<ArgumentWithMetadata> => {
   let inMandatoryRegion = false;
+  const inputs = clone(params.inputs);
 
-  return inputs
+  return (inputs as Array<JsonAbiArgument>)
     .reverse()
     .map((input) => {
       if (inMandatoryRegion) {
         return { ...input, isOptional: false };
       }
 
-      const type = findType({ types, typeId: input.type });
-      if (OPTIONAL_INPUT_TYPES.includes(type.rawAbiType.type)) {
+      const type = findType({ types: params.types, typeId: input.type });
+      if (
+        EmptyType.isSuitableFor({ type: type.rawAbiType.type }) ||
+        OptionType.isSuitableFor({ type: type.rawAbiType.type })
+      ) {
         return { ...input, isOptional: true };
       }
 
