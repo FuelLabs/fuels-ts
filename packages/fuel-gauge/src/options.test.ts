@@ -217,4 +217,28 @@ describe('Options Tests', () => {
       b: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',
     });
   });
+
+  it('should handle Option::None', async () => {
+    using contract = await launchOptionsContract();
+
+    const optionNone: Option<number> = undefined;
+    const call1 = await contract.functions.type_then_option_then_type(42, optionNone, 43).call();
+    const { value: value1 } = await call1.waitForResult();
+    expect(value1).toStrictEqual(optionNone);
+  });
+
+  it('should handle optional options', async () => {
+    using contract = await launchOptionsContract();
+
+    const optionNone: Option<number> = undefined;
+    const call1 = await contract.functions.option_then_type_then_option(optionNone, 42).call();
+    const { value: value1 } = await call1.waitForResult();
+    expect(value1).toStrictEqual(optionNone);
+
+    const call2 = await contract.functions
+      .option_then_type_then_option(optionNone, 42, optionNone)
+      .call();
+    const { value: value2 } = await call2.waitForResult();
+    expect(value2).toStrictEqual(optionNone);
+  });
 });
