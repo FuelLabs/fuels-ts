@@ -42,7 +42,8 @@ export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
   // funding the transaction with the required quantities
   await genesisWallet.fund(request, txCost);
 
-  await genesisWallet.sendTransaction(request, { awaitExecution: true });
+  const submit = await genesisWallet.sendTransaction(request);
+  await submit.waitForResult();
 
   // return the test wallet
   return testWallet;

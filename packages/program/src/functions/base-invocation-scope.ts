@@ -383,7 +383,6 @@ export class BaseInvocationScope<TReturn = any> {
     const transactionRequest = await this.fundWithRequiredCoins();
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: false,
       estimateTxDependencies: false,
     })) as TransactionResponse;
 
