@@ -42,6 +42,9 @@ const types: Array<IType> = [nonEmptyType, voidAbiType, optionAbiType, debugOpti
   (rawAbiType) => makeType({ rawAbiType })
 );
 
+/**
+ * @group node
+ */
 describe.each(EMPTY_ABI_TYPES)(
   'getMandatoryInputs.ts [empty=%s]',
   (_: string, emptyAbiType: JsonAbiType) => {
