@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: ensure `getInputFromAssetId` returns correct `InputMessage`
+fix: return correct operations from `coinInput` and `InputMessage`  inputs

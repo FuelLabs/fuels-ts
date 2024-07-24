@@ -143,5 +143,6 @@ describe('transaction-summary/input', () => {
     };
 
     expect(getRelevantInputs([inputMessage])).toEqual(inputMessage);
+    expect(getRelevantInputs([inputMessage])?.amount).toEqual(bn(100));
   });
 });
