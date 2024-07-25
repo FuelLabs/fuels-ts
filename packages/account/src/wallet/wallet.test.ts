@@ -1,10 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { bn } from '@fuel-ts/math';
 
-import { transactionRequestify, Provider } from '../providers';
-import type { TransactionRequestLike, TransactionResponse } from '../providers';
+import { Provider } from '../providers';
 import { setupTestProviderAndWallets } from '../test-utils';
-import { generateTestWallet } from '../test-utils/generateTestWallet';
 
 import { Wallet } from './wallet';
 import { WalletLocked, WalletUnlocked } from './wallets';

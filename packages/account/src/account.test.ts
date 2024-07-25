@@ -359,7 +359,11 @@ describe('Account', () => {
   });
 
   it('can transfer to multiple destinations', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
     const {
       wallets: [sender],
       provider,
@@ -655,14 +659,15 @@ describe('Account', () => {
       request.addCoinOutput(sender.address, amount.div(3), provider.getBaseAssetId());
     }
 
-    const txCost = await fundingWallet.provider.getTransactionCost(request);
+    const txCost = await fundingWallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
 
     await fundingWallet.fund(request, txCost);
 
-    await fundingWallet.sendTransaction(request, { awaitExecution: true });
+    const tx1 = await fundingWallet.sendTransaction(request);
+    await tx1.waitForResult();
 
     const transfer = await sender.transfer(receiver.address, 110, provider.getBaseAssetId(), {
       gasLimit: 10_000,
@@ -731,14 +736,15 @@ describe('Account', () => {
       request.addCoinOutput(sender.address, fundingAmount.div(3), provider.getBaseAssetId());
     }
 
-    const txCost = await fundingWallet.provider.getTransactionCost(request);
+    const txCost = await fundingWallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
 
     await fundingWallet.fund(request, txCost);
 
-    await fundingWallet.sendTransaction(request, { awaitExecution: true });
+    const tx1 = await fundingWallet.sendTransaction(request);
+    await tx1.waitForResult();
 
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
@@ -783,7 +789,11 @@ describe('Account', () => {
   });
 
   it('should ensure gas price and gas limit are validated when transferring amounts', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
     const {
       wallets: [sender, receiver],
       provider,
@@ -798,7 +808,11 @@ describe('Account', () => {
   });
 
   it('should ensure gas limit and price are validated when withdraw an amount of base asset', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
     const {
       wallets: [sender],
     } = launched;

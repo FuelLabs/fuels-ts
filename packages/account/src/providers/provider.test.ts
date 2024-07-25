@@ -17,6 +17,7 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
+import { FUEL_NETWORK_URL } from '../configs';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
@@ -29,10 +30,6 @@ import { ScriptTransactionRequest, CreateTransactionRequest } from './transactio
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -895,6 +892,8 @@ describe('Provider', () => {
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
+    await Provider.create(FUEL_NETWORK_URL);
+
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
       `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
@@ -925,8 +924,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    await Provider.create(FUEL_NETWORK_URL);
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(

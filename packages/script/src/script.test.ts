@@ -9,12 +9,17 @@ import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
-import { ScriptCallContractAbi__factory } from 'fuel-gauge/test/typegen/scripts/factories/ScriptCallContractAbi__factory';
 import { launchTestNode } from 'fuels/test-utils';
 
+import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
 
 import { Script } from './index';
+
+// #TODO: we should refactor this to use Script Instance, need to do typegen here
+const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcProject(
+  ScriptProjectsEnum.CALL_TEST_SCRIPT
+);
 
 const callScript = async <TData, TResult>(
   account: Account,
@@ -46,38 +51,43 @@ const callScript = async <TData, TResult>(
 
 // #region script-init
 // #import { ScriptRequest, arrayify };
+// #context const scriptBin = readFileSync(join(__dirname, './path/to/script-binary.bin'));
 
 type MyStruct = {
   arg_one: boolean;
   arg_two: BigNumberish;
 };
 
-const abiInterface = new Interface(ScriptCallContractAbi__factory.abi);
-const scriptRequest = new ScriptRequest(
-  ScriptCallContractAbi__factory.bin,
-  (myStruct: MyStruct) => {
-    const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
-
-    return arrayify(encoded);
-  },
-  (scriptResult) => {
-    if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
-      throw new Error('Reverted');
-    }
-    if (scriptResult.returnReceipt.type !== ReceiptType.ReturnData) {
-      throw new Error('fail');
-    }
-
-    const decoded = abiInterface.functions.main.decodeOutput(scriptResult.returnReceipt.data);
-    return (decoded as any)[0];
-  }
-);
-
 /**
  * @group node
  * @group browser
  */
 describe('Script', () => {
+  let scriptRequest: ScriptRequest<MyStruct, MyStruct>;
+  beforeAll(() => {
+    const abiInterface = new Interface(scriptJsonAbi);
+    scriptRequest = new ScriptRequest(
+      scriptBin,
+      (myStruct: MyStruct) => {
+        const encoded = abiInterface.functions.main.encodeArguments([myStruct]);
+
+        return arrayify(encoded);
+      },
+      (scriptResult) => {
+        if (scriptResult.returnReceipt.type === ReceiptType.Revert) {
+          throw new Error('Reverted');
+        }
+        if (scriptResult.returnReceipt.type !== ReceiptType.ReturnData) {
+          throw new Error('fail');
+        }
+
+        const decoded = abiInterface.functions.main.decodeOutput(scriptResult.returnReceipt.data);
+        return (decoded as any)[0];
+      }
+    );
+  });
+  // #endregion script-init
+
   it('can call a script', async () => {
     using launched = await launchTestNode();
 
@@ -122,7 +132,7 @@ describe('Script', () => {
       wallets: [wallet],
     } = launched;
 
-    const newScript = new Script(ScriptCallContractAbi__factory.bin, jsonAbiFragmentMock, wallet);
+    const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
     const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
@@ -153,11 +163,7 @@ describe('Script', () => {
       ],
     };
 
-    const script = new Script(
-      ScriptCallContractAbi__factory.bin,
-      jsonAbiWithConfigurablesMock,
-      wallet
-    );
+    const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 
     const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
 
