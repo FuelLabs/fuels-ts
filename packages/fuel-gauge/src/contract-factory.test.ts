@@ -43,7 +43,8 @@ describe('Contract Factory', () => {
 
     expect(contract.interface).toBeInstanceOf(Interface);
 
-    await contract.functions.initialize_counter(100).call();
+    const call1 = await contract.functions.initialize_counter(100).call();
+    await call1.waitForResult();
 
     const { waitForResult } = await contract.functions.increment_counter(1).call();
     const { transactionResult } = await waitForResult();
@@ -244,6 +245,24 @@ describe('Contract Factory', () => {
       new FuelError(
         ErrorCode.MISSING_PROVIDER,
         'Cannot create transaction request without provider'
+      )
+    );
+  });
+
+  it('should not deploy contracts greater than 100KB', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const largeByteCode = `0x${'00'.repeat(112400)}`;
+    const factory = new ContractFactory(largeByteCode, StorageTestContractAbi__factory.abi, wallet);
+
+    await expectToThrowFuelError(
+      async () => factory.deployContract(),
+      new FuelError(
+        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
+        'Contract bytecode is too large. Max contract size is 100KB'
       )
     );
   });

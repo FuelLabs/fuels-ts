@@ -28,12 +28,13 @@ export const seedTestWallet = async (
     })
   );
 
-  const txCost = await genesisWallet.provider.getTransactionCost(request);
+  const txCost = await genesisWallet.getTransactionCost(request);
 
   request.gasLimit = txCost.gasUsed;
   request.maxFee = txCost.maxFee;
 
   await genesisWallet.fund(request, txCost);
 
-  await genesisWallet.sendTransaction(request, { awaitExecution: true });
+  const submit = await genesisWallet.sendTransaction(request);
+  await submit.waitForResult();
 };
