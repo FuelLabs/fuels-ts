@@ -62,6 +62,8 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ custom common types', () => {
+    const { restore } = mockVersions();
+
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -73,10 +75,12 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
+    restore();
     expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
   });
 
   test('should render dts cross-referencing for identical structs', () => {
+    const { restore } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -88,10 +92,12 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
+    restore();
     expect(rendered).toMatch(/export type StructBOutput<T> = StructBInput<T>;$/m);
   });
 
   test('should render dts cross-referencing for identical enums', () => {
+    const { restore } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -103,10 +109,12 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
+    restore();
     expect(rendered).toMatch(/export type MyEnumOutput = MyEnumInput;$/m);
   });
 
   test('should not render same value for native identical enums', () => {
+    const { restore } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE);
     const { abiContents: rawContents } = project;
 
@@ -118,6 +126,7 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderDtsTemplate({ abi });
+    restore();
     expect(rendered).toMatch(
       /export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };$/m
     );
