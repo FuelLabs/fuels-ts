@@ -1,22 +1,26 @@
-import { BYTES_32, Interface } from '@fuel-ts/abi-coder';
+import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type {
   Account,
   CreateTransactionRequestLike,
   Provider,
+  TransactionRequest,
   TransactionResult,
   TransactionType,
 } from '@fuel-ts/account';
-import { CreateTransactionRequest, BlobTransactionRequest } from '@fuel-ts/account';
+import {
+  CreateTransactionRequest,
+  BlobTransactionRequest,
+  TransactionStatus,
+} from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { Contract, InstructionSet } from '@fuel-ts/program';
+import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify, concat, isDefined } from '@fuel-ts/utils';
-import * as asm from '@fuels/vm-asm';
-import { blob } from 'stream/consumers';
+import { arrayify, isDefined } from '@fuel-ts/utils';
 
+import { getLoaderInstructions } from './loader-script';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /**
@@ -113,7 +117,9 @@ export default class ContractFactory {
    * @param deployContractOptions - Options for deploying the contract.
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
-  createTransactionRequest(deployContractOptions?: DeployContractOptions) {
+  createTransactionRequest(
+    deployContractOptions?: DeployContractOptions & { bytecode?: Uint8Array }
+  ) {
     const storageSlots = deployContractOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
@@ -134,11 +140,12 @@ export default class ContractFactory {
       );
     }
 
+    const bytecode = deployContractOptions?.bytecode || this.bytecode;
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
-    const contractId = getContractId(this.bytecode, options.salt, stateRoot);
+    const contractId = getContractId(bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
       bytecodeWitnessIndex: 0,
-      witnesses: [this.bytecode],
+      witnesses: [bytecode],
       ...options,
     });
     transactionRequest.addContractCreatedOutput(contractId, stateRoot);
@@ -147,6 +154,37 @@ export default class ContractFactory {
       contractId,
       transactionRequest,
     };
+  }
+
+  blobTransactionRequest(options: { blobBytecode: Uint8Array } & DeployContractOptions) {
+    const { blobBytecode } = options;
+    return new BlobTransactionRequest({
+      witnessIndex: 0,
+      witnesses: [blobBytecode],
+      ...options,
+    });
+  }
+
+  async fundTransactionRequest(request: TransactionRequest, options: DeployContractOptions = {}) {
+    const account = this.getAccount();
+    const { maxFee: setMaxFee } = options;
+
+    const txCost = await account.getTransactionCost(request);
+
+    if (isDefined(setMaxFee)) {
+      if (txCost.maxFee.gt(setMaxFee)) {
+        throw new FuelError(
+          ErrorCode.MAX_FEE_TOO_LOW,
+          `Max fee '${options.maxFee}' is lower than the required: '${txCost.maxFee}'.`
+        );
+      }
+    } else {
+      request.maxFee = txCost.maxFee;
+    }
+
+    await account.fund(request, txCost);
+
+    return request;
   }
 
   /**
@@ -159,199 +197,101 @@ export default class ContractFactory {
     deployContractOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
-
     const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
-    let contractId: string;
-    let transactionRequest: CreateTransactionRequest;
-
-    // Checker whether the contract needs to be chunked
     if (this.bytecode.length > maxContractSize) {
-      // Ensure the max contract size is byte aligned (VM requirement)
-      if (maxContractSize % 8 !== 0) {
-        throw new FuelError(
-          ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT, // Todo: change error
-          `Max contract size of ${maxContractSize} bytes is not byte aligned.`
-        );
-      }
-
-      // Set configurables
-      const { configurableConstants } = deployContractOptions;
-      const hasConfigurable = Object.keys(this.interface.configurables).length;
-      if (hasConfigurable && configurableConstants) {
-        this.setConfigurableConstants(configurableConstants);
-      }
-
-      // Chunk the bytecode
-      const chunks: ContractChunk[] = [];
-      // Subtract 10,000 because max tx size === max contract size, come up with something better
-      const chunkSize = maxContractSize - 10_000;
-      for (let offset = 0, index = 0; offset < this.bytecode.length; offset += chunkSize, index++) {
-        const chunk = this.bytecode.slice(offset, offset + chunkSize);
-        chunks.push({ id: index, size: chunk.length, bytecode: chunk });
-      }
-
-      // Deploy chunk as blob tx
-      const { maxFee: setMaxFee } = deployContractOptions;
-      for (const { id, bytecode } of chunks) {
-        const blobTxRequest = new BlobTransactionRequest({
-          witnessIndex: 0,
-          witnesses: [bytecode],
-        });
-
-        const txCost = await account.getTransactionCost(blobTxRequest);
-
-        if (isDefined(setMaxFee)) {
-          if (txCost.maxFee.gt(setMaxFee)) {
-            throw new FuelError(
-              ErrorCode.MAX_FEE_TOO_LOW,
-              `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
-            );
-          }
-        } else {
-          blobTxRequest.maxFee = txCost.maxFee;
-        }
-
-        await account.fund(blobTxRequest, txCost);
-        const response = await account.sendTransaction(blobTxRequest, { awaitExecution: true });
-
-        const {
-          transaction: { blobId },
-        } = await response.waitForResult<TransactionType.Blob>();
-
-        // Todo: check status
-        chunks[id].blobId = blobId as string;
-      }
-
-      const { RegId, Instruction } = asm;
-
-      const instructionsPerBlob = 26;
-      const numberOfBlobs = chunks.length;
-      const numberOfInstructions = numberOfBlobs * instructionsPerBlob;
-      const blobIdSize = BYTES_32;
-
-      // Bytes for the Blob Ids
-      const blobIdBytes = () => concat(chunks.map(({ blobId }) => arrayify(blobId as string)));
-      // Btyes for the BSIZ opcode
-      const bsizBytes = () => new Uint8Array([186, 69, 0, 0]);
-      // Bytes for the BLDD opcode
-      const blddBytes = () => new Uint8Array([187, 81, 0, 17]);
-
-      const instructionsBytes = concat([
-        new InstructionSet(
-          // 0x12 is going to hold the total size of the contract
-          asm.move_(0x12, RegId.zero().to_u8()),
-          // find the start of the hardcoded blob ids, which are located after the code ends
-          asm.move_(0x10, RegId.is().to_u8()),
-          // 0x10 to hold the address of the current blob id
-          asm.addi(0x10, 0x10, numberOfInstructions * Instruction.size()),
-          // loop counter
-          asm.addi(0x13, RegId.zero().to_u8(), numberOfBlobs)
-        ).toBytes(),
-        // LOOP starts here
-        // 0x11 to hold the size of the current blob
-        bsizBytes(),
-        new InstructionSet(
-          // update the total size of the contract
-          asm.add(0x12, 0x12, 0x11),
-          // move on to the next blob
-          asm.addi(0x10, 0x10, blobIdSize),
-          // decrement the loop counter
-          asm.subi(0x13, 0x13, 1),
-          // Jump backwards 3 instructions if the counter has not reached 0
-          asm.jneb(0x13, RegId.zero().to_u8(), RegId.zero().to_u8(), 3),
-          // move the stack pointer by the contract size since we need to write the contract on the stack since only that memory can be executed
-          asm.cfe(0x12),
-          // find the start of the hardcoded blob ids, which are located after the code ends
-          asm.move_(0x10, RegId.is().to_u8()),
-          // 0x10 to hold the address of the current blob id
-          asm.addi(0x10, 0x10, numberOfInstructions * Instruction.size()),
-          // 0x12 is going to hold the total bytes loaded of the contract
-          asm.move_(0x12, RegId.zero().to_u8()),
-          // loop counter
-          asm.addi(0x13, RegId.zero().to_u8(), numberOfBlobs)
-        ).toBytes(),
-        // LOOP starts here
-        // 0x11 to hold the size of the current blob
-        bsizBytes(),
-        new InstructionSet(
-          // the location where to load the current blob (start of stack)
-          asm.move_(0x14, RegId.spp().to_u8()),
-          // move to where this blob should be loaded by adding the total bytes loaded
-          asm.add(0x14, 0x14, 0x12)
-        ).toBytes(),
-        blddBytes(),
-        new InstructionSet(
-          // update the total bytes loaded
-          asm.add(0x12, 0x12, 0x11),
-          // move on to the next blob
-          asm.addi(0x10, 0x10, blobIdSize),
-          // decrement the loop counter
-          asm.subi(0x13, 0x13, 1),
-          // Jump backwards 6 instructions if the counter has not reached 0
-          asm.jneb(0x13, RegId.zero().to_u8(), RegId.zero().to_u8(), 6),
-          // what follows is called _jmp_mem by the sway compiler
-          // move to the start of the stack (also the start of the contract we loaded)
-          asm.move_(0x16, RegId.spp().to_u8()),
-          // subtract the address contained in IS because jmp will add it back
-          asm.sub(0x16, 0x16, RegId.is().to_u8()),
-          // jmp will multiply by 4 so we need to divide to cancel that out
-          asm.divi(0x16, 0x16, 4),
-          // jump to the start of the contract we loaded
-          asm.jmp(0x16)
-        ).toBytes(),
-        blobIdBytes(),
-      ]);
-
-      const storageSlots = deployContractOptions?.storageSlots
-        ?.map(({ key, value }) => ({
-          key: hexlifyWithPrefix(key),
-          value: hexlifyWithPrefix(value),
-        }))
-        .sort(({ key: keyA }, { key: keyB }) => keyA.localeCompare(keyB));
-
-      const options = {
-        salt: randomBytes(32),
-        ...deployContractOptions,
-        storageSlots: storageSlots || [],
-      };
-
-      const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
-
-      contractId = getContractId(instructionsBytes, options.salt, stateRoot);
-      const createTxRequest = new CreateTransactionRequest({
-        bytecodeWitnessIndex: 0,
-        witnesses: [instructionsBytes],
-        ...deployContractOptions,
-      });
-      createTxRequest.addContractCreatedOutput(contractId, stateRoot);
-
-      transactionRequest = createTxRequest;
-
-      const txCost = await account.getTransactionCost(transactionRequest);
-
-      if (isDefined(setMaxFee)) {
-        if (txCost.maxFee.gt(setMaxFee)) {
-          throw new FuelError(
-            ErrorCode.MAX_FEE_TOO_LOW,
-            `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
-          );
-        }
-      } else {
-        transactionRequest.maxFee = txCost.maxFee;
-      }
-
-      await account.fund(transactionRequest, txCost);
-    } else {
-      const { contractId: id, transactionRequest: req } =
-        await this.prepareDeploy(deployContractOptions);
-      contractId = id;
-      transactionRequest = req;
+      throw new FuelError(
+        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
+        'Contract bytecode is too large. Max contract size is 100KB' // change error
+      );
     }
 
-    const transactionResponse = await account.sendTransaction(transactionRequest, {
-      awaitExecution: false,
+    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
+
+    const transactionResponse = await account.sendTransaction(transactionRequest);
+
+    const waitForResult = async () => {
+      const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
+      const contract = new Contract(contractId, this.interface, account) as TContract;
+
+      return { contract, transactionResult };
+    };
+
+    return { waitForResult, contractId, transactionId: transactionResponse.id };
+  }
+
+  /**
+   * Deploy a contract with the specified options.
+   *
+   * @param deployContractOptions - Options for deploying the contract.
+   * @returns A promise that resolves to the deployed contract instance.
+   */
+  async deployContractLoader<TContract extends Contract = Contract>(
+    deployContractOptions: DeployContractOptions = {}
+  ): Promise<DeployContractResult<TContract>> {
+    const account = this.getAccount();
+    const { consensusParameters } = account.provider.getChain();
+    const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
+
+    // Ensure the max contract size is byte aligned (VM requirement)
+    if (maxContractSize % 8 !== 0) {
+      throw new FuelError(
+        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT, // Todo: change error
+        `Max contract size of ${maxContractSize} bytes is not byte aligned.`
+      );
+    }
+
+    const { configurableConstants } = deployContractOptions;
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
+    }
+
+    // Chunk the bytecode
+    const chunks: ContractChunk[] = [];
+    const chunkSize = maxContractSize - 10_000; // Come up with better max size calculation
+    for (let offset = 0, index = 0; offset < this.bytecode.length; offset += chunkSize, index++) {
+      const chunk = this.bytecode.slice(offset, offset + chunkSize);
+      chunks.push({ id: index, size: chunk.length, bytecode: chunk });
+    }
+
+    // Deploy the chunks as blobs
+    for (const { id, bytecode } of chunks) {
+      const blobRequest = new BlobTransactionRequest({
+        witnessIndex: 0,
+        witnesses: [bytecode],
+      });
+
+      const fundedBlobRequest = await this.fundTransactionRequest(
+        blobRequest,
+        deployContractOptions
+      );
+      const response = await account.sendTransaction(fundedBlobRequest, { awaitExecution: true });
+      const result = await response.waitForResult<TransactionType.Blob>();
+
+      if (!result.status || result.status !== TransactionStatus.success) {
+        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+      }
+
+      chunks[id].blobId = result.transaction.blobId;
+    }
+
+    // Get the loader bytecode
+    const blobIds = chunks.map((c) => c.blobId as string);
+    const loaderBytecode = getLoaderInstructions(blobIds);
+
+    // Deploy the loader contract
+    const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
+      bytecode: loaderBytecode,
+      ...deployContractOptions,
+    });
+    const fundedCreateRequest = await this.fundTransactionRequest(
+      createRequest,
+      deployContractOptions
+    );
+
+    const transactionResponse = await account.sendTransaction(fundedCreateRequest, {
+      awaitExecution: true,
     });
 
     const waitForResult = async () => {
@@ -416,24 +356,7 @@ export default class ContractFactory {
 
     const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
 
-    const account = this.getAccount();
-
-    const txCost = await account.getTransactionCost(transactionRequest);
-
-    const { maxFee: setMaxFee } = deployContractOptions;
-
-    if (isDefined(setMaxFee)) {
-      if (txCost.maxFee.gt(setMaxFee)) {
-        throw new FuelError(
-          ErrorCode.MAX_FEE_TOO_LOW,
-          `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
-        );
-      }
-    } else {
-      transactionRequest.maxFee = txCost.maxFee;
-    }
-
-    await account.fund(transactionRequest, txCost);
+    await this.fundTransactionRequest(transactionRequest, deployContractOptions);
 
     return {
       contractId,

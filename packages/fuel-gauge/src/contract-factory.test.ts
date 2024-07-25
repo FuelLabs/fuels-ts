@@ -1,6 +1,7 @@
 import type { Account, TransactionResult } from '@fuel-ts/account';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import type { DeployContractOptions } from 'fuels';
 import { BN, bn, toHex, Interface, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -262,15 +263,23 @@ describe('Contract Factory', () => {
         wallets: [wallet],
       } = launched;
 
+      const salt = new Uint8Array([
+        166, 23, 175, 50, 185, 247, 229, 160, 32, 86, 191, 57, 44, 165, 193, 78, 134, 144, 54, 219,
+        234, 246, 163, 190, 132, 237, 251, 228, 12, 13, 127, 193,
+      ]);
+      const options: DeployContractOptions = { salt };
+
       const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
 
       const { waitForResult: waitForDeployResult } =
-        await factory.deployContract<LargeContractAbi>();
-      const { contract } = await waitForDeployResult();
+        await factory.deployContractLoader<LargeContractAbi>(options);
 
-      const { waitForResult } = await contract.functions.gen().call();
-      const { value } = await waitForResult();
-      expect(value).toBe(true);
+      const { contract } = await waitForDeployResult();
+      expect(contract.id).toBeDefined();
+
+      const { waitForResult: waitForCallResult } = await contract.functions.something().call();
+      const { value } = await waitForCallResult();
+      expect(value).toBe(1001);
     },
     { timeout: 10000 }
   );
