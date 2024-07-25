@@ -114,10 +114,8 @@ describe('transaction-summary/input', () => {
       assetId: ASSET_A,
     };
 
-    expect(getInputFromAssetId([inputCoin1, inputCoin2], ZeroBytes32, false)).toStrictEqual(
-      inputCoin1
-    );
-    expect(getInputFromAssetId([inputCoin1, inputCoin2], ASSET_A, false)).toStrictEqual(inputCoin2);
+    expect(getInputFromAssetId([inputCoin1, inputCoin2], ZeroBytes32)).toStrictEqual(inputCoin1);
+    expect(getInputFromAssetId([inputCoin1, inputCoin2], ASSET_A)).toStrictEqual(inputCoin2);
 
     expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], ZeroBytes32, true)).toStrictEqual(
       MOCK_INPUT_MESSAGE
