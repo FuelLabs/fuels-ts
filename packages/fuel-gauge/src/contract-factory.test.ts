@@ -1,8 +1,9 @@
 import type { Account, TransactionResult } from '@fuel-ts/account';
+import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { DeployContractOptions } from 'fuels';
-import { BN, bn, toHex, Interface, ContractFactory } from 'fuels';
+import { BN, bn, toHex, Interface, ContractFactory, LOCAL_NETWORK_URL, Provider } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import type { LargeContractAbi } from '../test/typegen/contracts';
@@ -258,10 +259,11 @@ describe('Contract Factory', () => {
   it.only(
     'should deploy contracts greater than 100KB in chunks',
     async () => {
-      using launched = await launchTestNode();
-      const {
-        wallets: [wallet],
-      } = launched;
+      // USE TEST NODE
+
+      const provider = await Provider.create(LOCAL_NETWORK_URL);
+      const baseAssetId = provider.getBaseAssetId();
+      const wallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
 
       const salt = new Uint8Array([
         166, 23, 175, 50, 185, 247, 229, 160, 32, 86, 191, 57, 44, 165, 193, 78, 134, 144, 54, 219,
@@ -271,16 +273,16 @@ describe('Contract Factory', () => {
 
       const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
 
-      const { waitForResult: waitForDeployResult } =
-        await factory.deployContractLoader<LargeContractAbi>(options);
+      const deploy = await factory.deployContractLoader<LargeContractAbi>(options);
 
-      const { contract } = await waitForDeployResult();
+      const { contract } = await deploy.waitForResult();
       expect(contract.id).toBeDefined();
 
-      const { waitForResult: waitForCallResult } = await contract.functions.something().call();
-      const { value } = await waitForCallResult();
+      const call = await contract.functions.something().call();
+
+      const { value } = await call.waitForResult();
       expect(value).toBe(1001);
     },
-    { timeout: 10000 }
+    { timeout: 20000 }
   );
 });

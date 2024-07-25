@@ -1,14 +1,14 @@
 contract;
 
-abi LargeContract {
-    fn gen() -> bool;
+abi MyContract {
+    fn something() -> u64;
 }
 
-impl LargeContract for Contract {
-    fn gen() -> bool {
+impl MyContract for Contract {
+    fn something() -> u64 {
         asm() {
             blob i450000;
         }
-        true
+        1001
     }
 }
