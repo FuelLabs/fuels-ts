@@ -55,6 +55,7 @@ members = [
   "script-with-array",
   "script-with-configurable",
   "script-with-vector",
+  "script-with-options",
   "script-with-vector-advanced",
   "script-with-vector-mixed",
   "small-bytes",
