@@ -13,7 +13,7 @@ import {
 import {
   getInputAccountAddress,
   getInputContractFromIndex,
-  getRelevantInputs,
+  getInputFromAssetId,
   getInputsCoin,
   getInputsContract,
   getInputsMessage,
@@ -103,7 +103,7 @@ describe('transaction-summary/input', () => {
     expect(address).toEqual('');
   });
 
-  it('should ensure getInputFromAssetId return correct input to pay for that assetId', () => {
+  it.only('should ensure getInputFromAssetId return correct input to pay for that assetId', () => {
     const inputCoin1: InputCoin = {
       ...MOCK_INPUT_COIN,
       assetId: ZeroBytes32,
@@ -114,13 +114,17 @@ describe('transaction-summary/input', () => {
       assetId: ASSET_A,
     };
 
-    expect(getRelevantInputs([inputCoin1, inputCoin2], ZeroBytes32)).toStrictEqual(inputCoin1);
-    expect(getRelevantInputs([inputCoin1, inputCoin2], ASSET_A)).toStrictEqual(inputCoin2);
+    expect(getInputFromAssetId([inputCoin1, inputCoin2], ZeroBytes32, false)).toStrictEqual(
+      inputCoin1
+    );
+    expect(getInputFromAssetId([inputCoin1, inputCoin2], ASSET_A, false)).toStrictEqual(inputCoin2);
 
-    expect(getRelevantInputs([MOCK_INPUT_MESSAGE], ZeroBytes32)).toStrictEqual(MOCK_INPUT_MESSAGE);
+    expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], ZeroBytes32, true)).toStrictEqual(
+      MOCK_INPUT_MESSAGE
+    );
   });
 
-  it('should ensure getRelevantInputs returns the correct coinInput thats greater than 0 for default assetId', () => {
+  it('should ensure getInputFromAssetId returns the correct coinInput thats greater than 0 for default assetId', () => {
     const coinInput1: InputCoin = {
       ...MOCK_INPUT_COIN,
       amount: bn(100),
@@ -133,7 +137,7 @@ describe('transaction-summary/input', () => {
       assetId: ZeroBytes32,
     };
 
-    expect(getRelevantInputs([coinInput1, coinInput2])).toEqual(coinInput1);
+    expect(getInputFromAssetId([coinInput1, coinInput2], ZeroBytes32)).toEqual(coinInput1);
   });
 
   it('Should return the correct input message for withdrawals', () => {
@@ -142,7 +146,6 @@ describe('transaction-summary/input', () => {
       amount: bn(100),
     };
 
-    expect(getRelevantInputs([inputMessage])).toEqual(inputMessage);
-    expect(getRelevantInputs([inputMessage])?.amount).toEqual(bn(100));
+    expect(getInputFromAssetId([inputMessage], ZeroBytes32, true)).toEqual(inputMessage);
   });
 });

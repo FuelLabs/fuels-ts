@@ -1,4 +1,3 @@
-import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
@@ -14,7 +13,7 @@ export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
 }
 
 /** @hidden */
-export function getInputsCoin(inputs: Input[]) {
+export function getInputsCoin(inputs: Input[]): InputCoin[] {
   return getInputsByType<InputCoin>(inputs, InputType.Coin);
 }
 
@@ -34,23 +33,32 @@ export function getInputsContract(inputs: Input[]) {
 }
 
 /** @hidden */
-export function getRelevantInputs(inputs: Input[], assetId: string = ZeroBytes32) {
+function findCoinInput(inputs: Input[], assetId: string): InputCoin | undefined {
   const coinInputs = getInputsCoin(inputs);
-  const messageInputs = getInputsMessage(inputs);
-  let coinInput = coinInputs.find((i) => i.assetId === assetId);
-  // #TODO: There are times when the ReceiptCall's baseAssetId doesn't match the CoinInput's assetId
-  // In this case, we should return the last input in the CoinInput array
-  if (!coinInput && coinInputs.length > 0) {
-    coinInput = coinInputs[coinInputs.length - 1];
-  }
+  return coinInputs.find((i) => i.assetId === assetId);
+}
 
-  const messageInput = messageInputs.find(({ amount }) => !!amount && amount.gt(0));
-
+/** @hidden */
+function findMessageInput(inputs: Input[]): InputMessage | undefined {
+  return getInputsMessage(inputs)?.[0];
+}
+/** @hidden */
+export function getInputFromAssetId(
+  inputs: Input[],
+  assetId: string,
+  isBaseAsset = false
+): InputCoin | InputMessage | undefined {
+  const coinInput = findCoinInput(inputs, assetId);
   if (coinInput) {
     return coinInput;
   }
 
-  return messageInput;
+  if (isBaseAsset) {
+    return findMessageInput(inputs);
+  }
+
+  // #TODO: we should throw an error here if we are unable to return a valid input
+  return undefined;
 }
 
 /** @hidden */
