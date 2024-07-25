@@ -8,12 +8,13 @@ export function formatConfigurables(params: { configurables: AbiConfigurable[] }
       name,
       type: {
         attributes: { inputLabel },
+        typeDeclarations,
       },
     } = c;
 
     return {
       configurableName: name,
-      configurableType: inputLabel,
+      configurableType: `${inputLabel}${typeDeclarations.input}`,
     };
   });
 

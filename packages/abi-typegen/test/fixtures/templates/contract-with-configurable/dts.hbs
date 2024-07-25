@@ -10,6 +10,8 @@
 */
 
 import type {
+  BigNumberish,
+  BN,
   BytesLike,
   Contract,
   DecodedValue,
@@ -18,8 +20,19 @@ import type {
   InvokeFunction,
 } from 'fuels';
 
+import type { Option, Enum } from "./common";
+
+export type GenericEnumInput<V> = Enum<{ Foo: BigNumberish, Bar: V }>;
+export type GenericEnumOutput<V> = Enum<{ Foo: BN, Bar: V }>;
+
+export type GenericStructInput<T> = { Boo: T };
+export type GenericStructOutput<T> = GenericStructInput<T>;
+
 export type MyContractAbiConfigurables = Partial<{
   SHOULD_RETURN: boolean;
+  AN_OPTION: Option<BigNumberish>;
+  GENERIC_ENUM: GenericEnumInput<BigNumberish>;
+  GENERIC_STRUCT: GenericStructInput<GenericEnumInput<string>>;
 }>;
 
 interface MyContractAbiInterface extends Interface {
