@@ -266,8 +266,9 @@ export default class ContractFactory {
         blobRequest,
         deployContractOptions
       );
-      const { waitForResult } = await account.sendTransaction(fundedBlobRequest);
-      const result = await waitForResult<TransactionType.Blob>();
+
+      const check = await account.sendTransaction(fundedBlobRequest);
+      const result = await check.waitForResult();
 
       if (!result.status || result.status !== TransactionStatus.success) {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
