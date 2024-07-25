@@ -289,7 +289,8 @@ describe('TransactionResponse', () => {
 
       await expectToThrowFuelError(
         async () => {
-          await provider.sendTransaction(request, { awaitExecution: true });
+          const submit = await provider.sendTransaction(request);
+          await submit.waitForResult();
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );

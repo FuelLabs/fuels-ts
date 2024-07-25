@@ -355,15 +355,7 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams & {
-  /**
-   * By default, the promise will resolve immediately after the transaction is submitted.
-   *
-   * If set to true, the promise will resolve only when the transaction changes status
-   * from `SubmittedStatus` to one of `SuccessStatus`, `FailureStatus` or `SqueezedOutStatus`.
-   */
-  awaitExecution?: boolean;
-};
+export type ProviderSendTxParams = EstimateTransactionParams;
 
 /**
  * URL - Consensus Params mapping.
@@ -706,7 +698,7 @@ Supported fuel-core version: ${supportedVersion}.`
   // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, awaitExecution = false }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     this.#cacheInputs(transactionRequest.inputs);
@@ -721,27 +713,6 @@ Supported fuel-core version: ${supportedVersion}.`
 
     if (transactionRequest.type === TransactionType.Script) {
       abis = transactionRequest.abis;
-    }
-
-    if (awaitExecution) {
-      const subscription = this.operations.submitAndAwait({ encodedTransaction });
-      for await (const { submitAndAwait } of subscription) {
-        if (submitAndAwait.type === 'SqueezedOutStatus') {
-          throw new FuelError(
-            ErrorCode.TRANSACTION_SQUEEZED_OUT,
-            `Transaction Squeezed Out with reason: ${submitAndAwait.reason}`
-          );
-        }
-
-        if (submitAndAwait.type !== 'SubmittedStatus') {
-          break;
-        }
-      }
-
-      const transactionId = transactionRequest.getTransactionId(this.getChainId());
-      const response = new TransactionResponse(transactionId, this, abis);
-      await response.fetch();
-      return response;
     }
 
     const {
