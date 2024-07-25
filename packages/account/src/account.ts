@@ -207,13 +207,6 @@ export class Account extends AbstractAccount {
       },
     } = this.provider.getChain();
 
-    if (bn(request.inputs.length) > maxInputs) {
-      throw new FuelError(
-        ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs for funding.'
-      );
-    }
-
     const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
     const requiredInBaseAsset =
@@ -297,6 +290,13 @@ export class Account extends AbstractAccount {
       }
 
       fundingAttempts += 1;
+    }
+
+    if (bn(request.inputs.length).gt(maxInputs)) {
+      throw new FuelError(
+        ErrorCode.MAX_INPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of inputs for funding.'
+      );
     }
 
     request.updatePredicateGasUsed(estimatedPredicates);
