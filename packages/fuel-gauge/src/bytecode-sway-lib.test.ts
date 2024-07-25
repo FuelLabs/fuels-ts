@@ -1,8 +1,7 @@
-import { Predicate, arrayify } from 'fuels';
+import { arrayify, Predicate } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
-import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
+import { PredicateTrueAbi__factory } from '../test/typegen';
 import { BytecodeSwayLibAbi__factory } from '../test/typegen/contracts';
 import BytecodeSwayLibAbiHex from '../test/typegen/contracts/BytecodeSwayLibAbi.hex';
 
@@ -51,6 +50,13 @@ describe('bytecode computations', () => {
     expect(value).toBeTruthy();
   });
 
+  /**
+   * TODO: At first glance, this test doesn't do much.
+   * The `compute_predicate_address` function just returns a constant address
+   * which matches the predicate's address.
+   * As it is currently, it does no "smart" predicate address computation with the passed-in vector
+   * and its usefuleness is questionable.
+   */
   it('compute_predicate_address', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
@@ -60,6 +66,8 @@ describe('bytecode computations', () => {
         },
       ],
     });
+    const defaultPredicateBytecode =
+      '0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8';
 
     const {
       contracts: [contract],
@@ -67,9 +75,9 @@ describe('bytecode computations', () => {
     } = launched;
 
     const predicate = new Predicate({
-      bytecode: defaultPredicateBytecode,
-      abi: defaultPredicateAbi,
       provider,
+      bytecode: defaultPredicateBytecode,
+      abi: PredicateTrueAbi__factory.abi,
     });
 
     const address = predicate.address;

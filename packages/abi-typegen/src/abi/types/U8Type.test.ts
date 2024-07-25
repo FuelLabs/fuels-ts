@@ -7,15 +7,11 @@ import { U8Type } from './U8Type';
 describe('U8Type.ts', () => {
   test('should properly parse type attributes', () => {
     const u8 = new U8Type({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: U8Type.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: undefined,
+      type: U8Type.swayType,
     });
-
-    u8.parseComponentsAttributes({ types: [] });
 
     const suitableForU8 = U8Type.isSuitableFor({ type: U8Type.swayType });
     const suitableForU16 = U8Type.isSuitableFor({ type: U16Type.swayType });

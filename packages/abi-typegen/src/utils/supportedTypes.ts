@@ -1,3 +1,5 @@
+import type { ResolvableMetadataType } from '../abi/ResolvableMetadataType';
+import type { ResolvedType } from '../abi/ResolvedType';
 import { ArrayType } from '../abi/types/ArrayType';
 import { B256Type } from '../abi/types/B256Type';
 import { B512Type } from '../abi/types/B512Type';
@@ -22,6 +24,7 @@ import { U32Type } from '../abi/types/U32Type';
 import { U64Type } from '../abi/types/U64Type';
 import { U8Type } from '../abi/types/U8Type';
 import { VectorType } from '../abi/types/VectorType';
+import type { IType } from '../types/interfaces/IType';
 
 export const supportedTypes = [
   EmptyType,
@@ -48,4 +51,10 @@ export const supportedTypes = [
   VectorType,
   EvmAddressType,
   ResultType,
-];
+] as unknown as Array<SupportedTypeClass>;
+
+export interface SupportedTypeClass {
+  new (type: ResolvedType | ResolvableMetadataType): IType;
+  swayType: string;
+  isSuitableFor(params: { type: string }): boolean;
+}

@@ -6,12 +6,10 @@ import { EmptyType } from './EmptyType';
 describe('EmptyType.ts', () => {
   test('should properly parse type attributes', () => {
     const emptyType = new EmptyType({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 0,
-        type: EmptyType.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: undefined,
+      type: EmptyType.swayType,
     });
 
     expect(emptyType.attributes.inputLabel).toEqual('never');

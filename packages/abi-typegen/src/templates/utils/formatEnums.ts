@@ -1,6 +1,6 @@
 import type { EnumType } from '../../abi/types/EnumType';
-import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
+import { supportedTypes } from '../../utils/supportedTypes';
 
 export function formatEnums(params: { types: IType[] }) {
   const { types } = params;
@@ -10,11 +10,14 @@ export function formatEnums(params: { types: IType[] }) {
     .map((t) => {
       const et = t as EnumType; // only enums here
       const structName = et.getStructName();
-      const inputValues = et.getStructContents({ types, target: TargetEnum.INPUT });
-      const outputValues = et.getStructContents({ types, target: TargetEnum.OUTPUT });
-      const inputNativeValues = et.getNativeEnum({ types });
-      const outputNativeValues = et.getNativeEnum({ types });
-      const typeAnnotations = et.getStructDeclaration({ types });
+      const inputNativeValues = et.getNativeEnum();
+      const outputNativeValues = inputNativeValues;
+
+      const { input, output } = et.getStructContents(supportedTypes);
+      const inputValues = inputNativeValues ? undefined : input;
+      const outputValues = outputNativeValues ? undefined : output;
+
+      const typeAnnotations = et.typeDeclarations.input;
 
       return {
         structName,

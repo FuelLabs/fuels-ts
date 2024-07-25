@@ -1,8 +1,10 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import { getNewAbiTypegen } from '../test/utils/getNewAbiTypegen';
+import { AbiTypegenProjectsEnum, getTypegenForcProject } from '../test/fixtures/forc-projects';
 
+import { AbiTypeGen } from './AbiTypeGen';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
+import type { IFile } from './types/interfaces/IFile';
 import * as assembleContractsMod from './utils/assembleContracts';
 import * as assemblePredicatesMod from './utils/assemblePredicates';
 import * as assembleScriptsMod from './utils/assembleScripts';
@@ -40,13 +42,34 @@ describe('AbiTypegen.ts', () => {
     vi.resetAllMocks();
   });
 
+  function createAbiTypeGen(programType: ProgramTypeEnum, projects: AbiTypegenProjectsEnum[]) {
+    const abiFiles: IFile[] = [];
+    const binFiles: IFile[] = [];
+    const outputDir = './directory';
+
+    projects.forEach((project) => {
+      const { abiPath, abiContents, binPath, binHexlified } = getTypegenForcProject(project);
+      abiFiles.push({ path: abiPath, contents: JSON.stringify(abiContents) });
+      binFiles.push({ path: binPath, contents: binHexlified });
+    });
+
+    return new AbiTypeGen({
+      abiFiles,
+      binFiles,
+      outputDir,
+      programType,
+      storageSlotsFiles: [],
+    });
+  }
+
   test('should create multiple ABI instances for: contracts', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const programType = ProgramTypeEnum.CONTRACT;
-    const { typegen } = getNewAbiTypegen({ programType });
+    const typegen = createAbiTypeGen(ProgramTypeEnum.CONTRACT, [
+      AbiTypegenProjectsEnum.FN_VOID,
+      AbiTypegenProjectsEnum.MINIMAL,
+    ]);
 
-    expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
 
     expect(assembleContracts).toHaveBeenCalledTimes(1);
@@ -57,8 +80,10 @@ describe('AbiTypegen.ts', () => {
   test('should create multiple ABI instances for: scripts', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const programType = ProgramTypeEnum.SCRIPT;
-    const { typegen } = getNewAbiTypegen({ programType, includeBinFiles: true });
+    const typegen = createAbiTypeGen(ProgramTypeEnum.SCRIPT, [
+      AbiTypegenProjectsEnum.SCRIPT,
+      AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE,
+    ]);
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
@@ -71,8 +96,10 @@ describe('AbiTypegen.ts', () => {
   test('should create multiple ABI instances for: predicates', () => {
     const { assembleContracts, assembleScripts, assemblePredicates } = mockAllDeps();
 
-    const programType = ProgramTypeEnum.PREDICATE;
-    const { typegen } = getNewAbiTypegen({ programType, includeBinFiles: true });
+    const typegen = createAbiTypeGen(ProgramTypeEnum.PREDICATE, [
+      AbiTypegenProjectsEnum.PREDICATE,
+      AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
+    ]);
 
     expect(typegen).toBeTruthy();
     expect(typegen.abis.length).toEqual(2);
@@ -88,7 +115,10 @@ describe('AbiTypegen.ts', () => {
     const programType = 'nope' as ProgramTypeEnum;
 
     const { error } = await safeExec(() => {
-      getNewAbiTypegen({ programType, includeBinFiles: true });
+      createAbiTypeGen(programType, [
+        AbiTypegenProjectsEnum.FN_VOID,
+        AbiTypegenProjectsEnum.MINIMAL,
+      ]);
     });
 
     expect(error?.message).toMatch(/Invalid Typegen programType: nope/);

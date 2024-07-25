@@ -82,6 +82,7 @@ interface MyContractAbiInterface extends Interface {
     types_str_slice: FunctionFragment;
     types_struct: FunctionFragment;
     types_tuple: FunctionFragment;
+    types_tuple_in_vec: FunctionFragment;
     types_u16: FunctionFragment;
     types_u256: FunctionFragment;
     types_u32: FunctionFragment;
@@ -125,6 +126,7 @@ export class MyContractAbi extends Contract {
     types_str_slice: InvokeFunction<[x: StrSlice], StrSlice>;
     types_struct: InvokeFunction<[x: MyStructInput], MyStructOutput>;
     types_tuple: InvokeFunction<[x: [BigNumberish, BigNumberish, BigNumberish]], [number, number, number]>;
+    types_tuple_in_vec: InvokeFunction<[x: Vec<[BigNumberish, BigNumberish]>], Vec<[number, number]>>;
     types_u16: InvokeFunction<[x: BigNumberish], number>;
     types_u256: InvokeFunction<[x: BigNumberish], BN>;
     types_u32: InvokeFunction<[x: BigNumberish], number>;

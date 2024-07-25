@@ -1,60 +1,26 @@
-import {
-  AbiTypegenProjectsEnum,
-  getTypegenForcProject,
-} from '../../../test/fixtures/forc-projects/index';
-import type { IType } from '../../types/interfaces/IType';
-import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
-import * as findTypeMod from '../../utils/findType';
-
-import { Configurable } from './Configurable';
+import { AbiTypegenProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import { createAbisForTests } from '../../../test/utils/createAbiForTests';
+import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 /**
  * @group node
  */
 describe('Configurable.ts', () => {
-  function mockAllDeps() {
-    const rawAbiType: JsonAbiType = {
-      typeId: 1,
-      type: 'mockType',
-      components: null,
-      typeParameters: null,
-    };
-
-    const type: IType = {
-      name: 'mockType',
-      attributes: {
-        inputLabel: 'mockType',
-        outputLabel: 'mockType',
-      },
-      rawAbiType,
-      requiredFuelsMembersImports: [],
-      parseComponentsAttributes: vi.fn(),
-    };
-
-    const findType = vi
-      .spyOn(findTypeMod, 'findType')
-      .mockImplementation(vi.fn().mockReturnValue(type));
-
-    return {
-      type,
-      findType,
-    };
-  }
-
   it('should get configurable declaration with type', () => {
-    const { type, findType } = mockAllDeps();
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+    const {
+      abis: [abi],
+    } = createAbisForTests(ProgramTypeEnum.PREDICATE, [
+      AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
+    ]);
 
-    const { configurables } = project.abiContents;
+    const { configurables } = abi;
 
-    const types: IType[] = [type];
-    const rawAbiConfigurable = configurables[0];
+    expect(configurables.length).toEqual(2);
+    const [FEE, ADDRESS] = configurables;
 
-    const configurable = new Configurable({ types, rawAbiConfigurable });
-
-    expect(findType).toHaveBeenCalledTimes(1);
-    expect(configurable.name).toEqual('FEE');
-    expect(configurable.type).toEqual(type);
-    expect(configurable.rawAbiConfigurable).toEqual(rawAbiConfigurable);
+    expect(FEE.name).toEqual('FEE');
+    expect(FEE.type.attributes.inputLabel).toEqual('BigNumberish');
+    expect(ADDRESS.name).toEqual('ADDRESS');
+    expect(ADDRESS.type.attributes.inputLabel).toEqual('string');
   });
 });

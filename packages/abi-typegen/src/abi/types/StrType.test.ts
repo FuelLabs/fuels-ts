@@ -7,15 +7,11 @@ import { StrType } from './StrType';
 describe('StrType.ts', () => {
   test('should properly parse type attributes', () => {
     const str = new StrType({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: StrType.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: undefined,
+      type: StrType.swayType,
     });
-
-    str.parseComponentsAttributes({ types: [] });
 
     const suitableForStr = StrType.isSuitableFor({ type: StrType.swayType });
     const suitableForU16 = StrType.isSuitableFor({ type: BoolType.swayType });

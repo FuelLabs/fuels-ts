@@ -13,7 +13,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
 import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
-import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
+import { jsonAbiMock } from '../test/mocks';
 
 import { Script } from './index';
 
@@ -127,7 +127,7 @@ describe('Script', () => {
   it('should throw if script has no configurable to be set', async () => {
     const wallet = await setup();
 
-    const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
+    const newScript = new Script(scriptBin, jsonAbiMock, wallet);
 
     const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
@@ -144,11 +144,7 @@ describe('Script', () => {
       configurables: [
         {
           name: 'FEE',
-          configurableType: {
-            name: '',
-            type: 1,
-            typeArguments: null,
-          },
+          concreteTypeId: 'randomhash',
           offset: 44,
         },
       ],

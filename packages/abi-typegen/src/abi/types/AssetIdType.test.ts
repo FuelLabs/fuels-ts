@@ -7,15 +7,11 @@ import { BoolType } from './BoolType';
 describe('AssetIdType.ts', () => {
   test('should properly parse type attributes', () => {
     const b512 = new AssetIdType({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: AssetIdType.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: 1,
+      type: AssetIdType.swayType,
     });
-
-    b512.parseComponentsAttributes({ types: [] });
 
     const suitableForAssetId = AssetIdType.isSuitableFor({ type: AssetIdType.swayType });
     const suitableForBool = AssetIdType.isSuitableFor({ type: BoolType.swayType });

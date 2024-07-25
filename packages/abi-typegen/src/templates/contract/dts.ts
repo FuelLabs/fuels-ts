@@ -8,7 +8,14 @@ import { formatStructs } from '../utils/formatStructs';
 import dtsTemplate from './dts.hbs';
 
 export function renderDtsTemplate(params: { abi: Abi }) {
-  const { name: capitalizedName, types, functions, commonTypesInUse, configurables } = params.abi;
+  const {
+    name: capitalizedName,
+    metadataTypes,
+    functions,
+    commonTypesInUse,
+    configurables,
+    concreteTypes,
+  } = params.abi;
 
   /*
     First we format all attributes
@@ -26,10 +33,10 @@ export function renderDtsTemplate(params: { abi: Abi }) {
     functionName: f.name,
   }));
 
-  const { enums } = formatEnums({ types });
-  const { structs } = formatStructs({ types });
+  const { enums } = formatEnums({ types: metadataTypes });
+  const { structs } = formatStructs({ types: metadataTypes });
   const { imports } = formatImports({
-    types,
+    types: metadataTypes.concat(concreteTypes),
     baseMembers: [
       'Interface',
       'FunctionFragment',

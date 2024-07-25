@@ -9,15 +9,11 @@ import { StrType } from './StrType';
 describe('StrSlicesType.ts', () => {
   test('should properly parse type attributes', () => {
     const strSlices = new StrSliceType({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: StrSliceType.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: undefined,
+      type: StrSliceType.swayType,
     });
-
-    strSlices.parseComponentsAttributes({ types: [] });
 
     const suitableForStrSlices = StrSliceType.isSuitableFor({ type: StrSliceType.swayType });
     const suitableForU16 = StrSliceType.isSuitableFor({ type: BoolType.swayType });

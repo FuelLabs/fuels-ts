@@ -6,37 +6,23 @@ import Contract from './contract';
 
 const CONTRACT_ID = '0x0101010101010101010101010101010101010101010101010101010101010101';
 const ABI: JsonAbi = {
-  types: [
-    {
-      typeId: 0,
-      type: 'u64',
-      typeParameters: null,
-      components: null,
-    },
-  ],
-  functions: [
-    {
-      inputs: [
-        {
-          name: 'input',
-          type: 0,
-          typeArguments: null,
-        },
-      ],
-      name: 'foo',
-      output: {
-        type: 0,
-        typeArguments: null,
-        name: '',
-      },
-      attributes: null,
-    },
-  ],
+  specVersion: '1',
+  programType: 'contract',
+  encodingVersion: '1',
+  concreteTypes: [{ type: '()', concreteTypeId: 'randomhash' }],
+  configurables: [],
   loggedTypes: [],
   messagesTypes: [],
-  configurables: [],
+  metadataTypes: [],
+  functions: [
+    {
+      name: 'main',
+      inputs: [],
+      output: 'randomhash',
+      attributes: [],
+    },
+  ],
 };
-
 /**
  * @group node
  */

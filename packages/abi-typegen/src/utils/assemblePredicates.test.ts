@@ -1,4 +1,5 @@
-import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
+import { AbiTypegenProjectsEnum } from '../../test/fixtures/forc-projects';
+import { createAbisForTests } from '../../test/utils/createAbiForTests';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderFactoryTemplateMod from '../templates/predicate/factory';
@@ -41,41 +42,28 @@ describe('assemblePredicates.ts', () => {
   test('should assemble all files from Predicate ABI ', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const {
-      typegen: { abis, outputDir },
-    } = getNewAbiTypegen({
-      programType: ProgramTypeEnum.PREDICATE,
-      includeOptionType: false, // will prevent common template from being included
-      includeMainFunction: true,
-      includeBinFiles: true,
-    });
+    const files = assemblePredicates(
+      createAbisForTests(ProgramTypeEnum.PREDICATE, [
+        AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
+      ])
+    );
 
-    vi.resetAllMocks();
-
-    const files = assemblePredicates({ abis, outputDir });
-
-    expect(files.length).toEqual(3); // 2x factories, 1x index
+    expect(files.length).toEqual(2); // 1x factories, 1x index
 
     expect(renderCommonTemplate).toHaveBeenCalledTimes(0); // never called
-    expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);
+    expect(renderFactoryTemplate).toHaveBeenCalledTimes(1);
     expect(renderIndexTemplate).toHaveBeenCalledTimes(1);
   });
 
   test('should assemble all files from Predicate ABI, including `common` file', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const {
-      typegen: { abis, outputDir },
-    } = getNewAbiTypegen({
-      programType: ProgramTypeEnum.PREDICATE,
-      includeOptionType: true, // will cause common template to be included
-      includeMainFunction: true,
-      includeBinFiles: true,
-    });
-
-    vi.resetAllMocks();
-
-    const files = assemblePredicates({ abis, outputDir });
+    const files = assemblePredicates(
+      createAbisForTests(ProgramTypeEnum.PREDICATE, [
+        AbiTypegenProjectsEnum.PREDICATE, // uses Option
+        AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
+      ])
+    );
 
     expect(files.length).toEqual(4); // 2x factories, 1x index, 1x common
 

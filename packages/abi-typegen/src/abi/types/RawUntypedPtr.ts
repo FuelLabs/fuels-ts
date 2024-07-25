@@ -1,8 +1,6 @@
-import type { IType } from '../../types/interfaces/IType';
-
 import { U64Type } from './U64Type';
 
-export class RawUntypedPtr extends U64Type implements IType {
+export class RawUntypedPtr extends U64Type {
   public static swayType = 'raw untyped ptr';
 
   public name = 'rawUntypedPtr';

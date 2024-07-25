@@ -1,6 +1,6 @@
-import type { IConfigurable } from '../../types/interfaces/IConfigurable';
+import type { AbiConfigurable } from '../../abi/configurable/AbiConfigurable';
 
-export function formatConfigurables(params: { configurables: IConfigurable[] }) {
+export function formatConfigurables(params: { configurables: AbiConfigurable[] }) {
   const { configurables } = params;
 
   const formattedConfigurables = configurables.map((c) => {

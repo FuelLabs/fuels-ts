@@ -7,15 +7,11 @@ import { U64Type } from './U64Type';
 describe('U64Type.ts', () => {
   test('should properly parse type attributes', () => {
     const u64 = new U64Type({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: U64Type.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: undefined,
+      type: U64Type.swayType,
     });
-
-    u64.parseComponentsAttributes({ types: [] });
 
     const suitableForU32 = U64Type.isSuitableFor({ type: U32Type.swayType });
     const suitableForU64 = U64Type.isSuitableFor({ type: U64Type.swayType });

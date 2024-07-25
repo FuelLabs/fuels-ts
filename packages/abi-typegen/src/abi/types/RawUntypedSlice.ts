@@ -1,9 +1,16 @@
-import type { IType } from '../../types/interfaces/IType';
-
 import { ArrayType } from './ArrayType';
 
 export class RawUntypedSlice extends ArrayType {
   public static swayType = 'raw untyped slice';
+
+  private capitalizedName = 'RawSlice';
+
+  public attributes = {
+    inputLabel: this.capitalizedName,
+    outputLabel: this.capitalizedName,
+  };
+
+  public requiredFuelsMembersImports = [this.capitalizedName];
 
   public name = 'rawUntypedSlice';
 
@@ -13,16 +20,7 @@ export class RawUntypedSlice extends ArrayType {
     return RawUntypedSlice.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
-    const capitalizedName = 'RawSlice';
-
-    this.attributes = {
-      inputLabel: capitalizedName,
-      outputLabel: capitalizedName,
-    };
-
-    this.requiredFuelsMembersImports = [capitalizedName];
-
+  public parseComponentsAttributes() {
     return this.attributes;
   }
 }

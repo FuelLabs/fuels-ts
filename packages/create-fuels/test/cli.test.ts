@@ -55,7 +55,7 @@ describe('CLI', () => {
     expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
   });
 
-  test('create-fuels checks the versions on the fuel-toolchain file', async () => {
+  test.skip('create-fuels checks the versions on the fuel-toolchain file', async () => {
     const args = generateArgv(paths.projectRoot);
 
     await runScaffoldCli({

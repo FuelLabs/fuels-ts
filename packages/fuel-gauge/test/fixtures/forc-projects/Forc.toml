@@ -67,3 +67,6 @@ members = [
   "vectors",
   "options",
 ]
+
+[patch.'https://github.com/fuellabs/sway']
+std = { git = "https://github.com/fuellabs/sway", branch = "esdrubal/abi_changes" }

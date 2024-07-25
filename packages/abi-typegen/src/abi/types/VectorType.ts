@@ -1,11 +1,13 @@
-import type { IType } from '../../types/interfaces/IType';
-
 import { ArrayType } from './ArrayType';
 
 export class VectorType extends ArrayType {
   public static swayType = 'struct Vec';
 
   public name = 'vector';
+  public attributes = {
+    inputLabel: `Vec`,
+    outputLabel: `Vec`,
+  };
 
   static MATCH_REGEX: RegExp = /^struct (std::vec::)?Vec/m;
   static IGNORE_REGEX: RegExp = /^struct (std::vec::)?RawVec$/m;
@@ -16,11 +18,7 @@ export class VectorType extends ArrayType {
     return isAMatch && !shouldBeIgnored;
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
-    this.attributes = {
-      inputLabel: `Vec`,
-      outputLabel: `Vec`,
-    };
+  public parseComponentsAttributes() {
     return this.attributes;
   }
 }

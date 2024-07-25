@@ -4,6 +4,10 @@ import { AType } from './AType';
 
 export class BoolType extends AType implements IType {
   public static swayType = 'bool';
+  public attributes = {
+    inputLabel: 'boolean',
+    outputLabel: 'boolean',
+  };
 
   public name = 'bool';
 
@@ -13,11 +17,7 @@ export class BoolType extends AType implements IType {
     return BoolType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
-    this.attributes = {
-      inputLabel: 'boolean',
-      outputLabel: 'boolean',
-    };
+  public parseComponentsAttributes() {
     return this.attributes;
   }
 }

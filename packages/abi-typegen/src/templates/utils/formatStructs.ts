@@ -1,6 +1,6 @@
 import type { StructType } from '../../abi/types/StructType';
-import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
+import { supportedTypes } from '../../utils/supportedTypes';
 
 export function formatStructs(params: { types: IType[] }) {
   const { types } = params;
@@ -10,9 +10,8 @@ export function formatStructs(params: { types: IType[] }) {
     .map((t) => {
       const st = t as StructType; // only structs here
       const structName = st.getStructName();
-      const inputValues = st.getStructContents({ types, target: TargetEnum.INPUT });
-      const outputValues = st.getStructContents({ types, target: TargetEnum.OUTPUT });
-      const typeAnnotations = st.getStructDeclaration({ types });
+      const { input: inputValues, output: outputValues } = st.getStructContents(supportedTypes);
+      const typeAnnotations = st.typeDeclarations.input;
       return {
         structName,
         typeAnnotations,

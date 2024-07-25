@@ -12,7 +12,7 @@ import factoryTemplate from './factory.hbs';
 export function renderFactoryTemplate(params: { abi: Abi }) {
   const { abi } = params;
 
-  const { types, configurables } = abi;
+  const { metadataTypes: types, configurables } = abi;
 
   const {
     rawContents,
@@ -31,7 +31,10 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 
   const { enums } = formatEnums({ types });
   const { structs } = formatStructs({ types });
-  const { imports } = formatImports({ types, baseMembers: ['Script', 'Account'] });
+  const { imports } = formatImports({
+    types: abi.metadataTypes.concat(abi.concreteTypes),
+    baseMembers: ['type JsonAbi', 'Script', 'Account'],
+  });
   const { formattedConfigurables } = formatConfigurables({ configurables });
 
   const { prefixedInputs: inputs, output } = func.attributes;

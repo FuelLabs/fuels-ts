@@ -1,37 +1,37 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import type { ArrayType } from '../abi/types/ArrayType';
-import type { JsonAbiType } from '../types/interfaces/JsonAbi';
+import type { ResolvedType } from '../abi/ResolvedType';
+import type { IType } from '../types/interfaces/IType';
 
 import { makeType } from './makeType';
+import { supportedTypes } from './supportedTypes';
 
 /**
  * @group node
  */
 describe('makeType.ts', () => {
   test('should create a new Type instance just fine', () => {
-    const rawAbiType: JsonAbiType = {
-      typeId: 1,
-      type: 'u64',
-      components: null,
-      typeParameters: null,
+    const type: ResolvedType = {
+      type: 'u8',
+      metadataTypeId: undefined,
+      components: undefined,
+      typeParamsArgsMap: undefined,
     };
 
-    expect(makeType({ rawAbiType })).toBeTruthy();
+    expect(makeType(supportedTypes, type)).toBeTruthy();
   });
 
   test('should throw for unsupported types', async () => {
-    const rawAbiType: JsonAbiType = {
-      typeId: 1,
-      type: 'non existent',
-      components: null,
-      typeParameters: null,
+    const type: ResolvedType = {
+      type: 'non-existent',
+      metadataTypeId: undefined,
+      components: undefined,
+      typeParamsArgsMap: undefined,
     };
+    const expectedErrorMsg = `Type not supported: ${type.type}`;
 
-    const expectedErrorMsg = `Type not supported: ${rawAbiType.type}`;
-
-    const fn = () => makeType({ rawAbiType });
-    const { error, result } = await safeExec<ArrayType, Error>(fn);
+    const fn = () => makeType(supportedTypes, type);
+    const { error, result } = await safeExec<IType, Error>(fn);
 
     expect(result).toBeFalsy();
     expect(error?.message).toEqual(expectedErrorMsg);

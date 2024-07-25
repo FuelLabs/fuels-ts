@@ -1,7 +1,7 @@
+import type { ResolvedType } from '../abi/ResolvedType';
 import { EnumType } from '../abi/types/EnumType';
 import { GenericType } from '../abi/types/GenericType';
 import { StructType } from '../abi/types/StructType';
-import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { extractStructName } from './extractStructName';
 
@@ -12,12 +12,12 @@ describe('extractStructName.ts', () => {
   /*
     Test helpers
   */
-  function makeType(typeId: number, type: string): JsonAbiType {
+  function makeType(type: string): ResolvedType {
     return {
-      typeId,
       type,
-      components: null,
-      typeParameters: null,
+      metadataTypeId: undefined,
+      components: undefined,
+      typeParamsArgsMap: undefined,
     };
   }
 
@@ -25,44 +25,43 @@ describe('extractStructName.ts', () => {
     Tests
   */
   test('should extract names from Enum', () => {
-    const enumRawAbiType = makeType(1, 'enum MyEnumName');
+    const enumType = makeType('enum MyEnumName');
 
     expect(
       extractStructName({
-        rawAbiType: enumRawAbiType,
+        type: enumType,
         regex: EnumType.MATCH_REGEX,
       })
     ).toEqual('MyEnumName');
   });
 
   test('should extract names from Structs', () => {
-    const structRawAbiType = makeType(2, 'struct MyStructName');
+    const struct = makeType('struct MyStructName');
 
     expect(
       extractStructName({
-        rawAbiType: structRawAbiType,
+        type: struct,
         regex: StructType.MATCH_REGEX,
       })
     ).toEqual('MyStructName');
   });
 
   test('should extract names from Generics', () => {
-    const genericRawAbiType = makeType(3, 'generic MyGenericName');
+    const generic = makeType('generic MyGenericName');
 
     expect(
       extractStructName({
-        rawAbiType: genericRawAbiType,
+        type: generic,
         regex: GenericType.MATCH_REGEX,
       })
     ).toEqual('MyGenericName');
   });
 
   test('should throw when trying to extract type', () => {
-    const rawAbiType = makeType(3, 'struct');
+    const badType = makeType('struct');
 
-    const regex = /^struct (.+)$/m;
     expect(() => {
-      extractStructName({ rawAbiType, regex });
+      extractStructName({ type: badType, regex: StructType.MATCH_REGEX });
     }).toThrow(/Couldn't extract struct name with:/);
   });
 });

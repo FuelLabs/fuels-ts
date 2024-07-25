@@ -1,4 +1,5 @@
 import { BoolType } from '../../abi/types/BoolType';
+import { U16Type } from '../../abi/types/U16Type';
 import { U8Type } from '../../abi/types/U8Type';
 
 import { formatImports } from './formatImports';
@@ -10,30 +11,24 @@ describe('formatImports.ts', () => {
   const baseMembers = ['Contract'];
 
   const u8 = new U8Type({
-    rawAbiType: {
-      typeId: 1,
-      type: 'u8',
-      components: null,
-      typeParameters: null,
-    },
+    type: 'u8',
+    components: undefined,
+    metadataTypeId: undefined,
+    typeParamsArgsMap: undefined,
   });
 
-  const u16 = new U8Type({
-    rawAbiType: {
-      typeId: 2,
-      type: 'u16',
-      components: null,
-      typeParameters: null,
-    },
+  const u16 = new U16Type({
+    type: 'u16',
+    components: undefined,
+    metadataTypeId: undefined,
+    typeParamsArgsMap: undefined,
   });
 
   const bool = new BoolType({
-    rawAbiType: {
-      typeId: 3,
-      type: 'bool',
-      components: null,
-      typeParameters: null,
-    },
+    type: 'bool',
+    components: undefined,
+    metadataTypeId: undefined,
+    typeParamsArgsMap: undefined,
   });
 
   test('should format imports just fine', () => {

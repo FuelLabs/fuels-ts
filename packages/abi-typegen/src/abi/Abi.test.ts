@@ -1,125 +1,53 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import {
-  AbiTypegenProjectsEnum,
-  getTypegenForcProject,
-} from '../../test/fixtures/forc-projects/index';
+import { AbiTypegenProjectsEnum } from '../../test/fixtures/forc-projects/index';
+import { createAbisForTests } from '../../test/utils/createAbiForTests';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
-import type { JsonAbiType } from '../types/interfaces/JsonAbi';
-import * as parseConfigurablesMod from '../utils/parseConfigurables';
-import * as parseFunctionsMod from '../utils/parseFunctions';
-import * as parseTypesMod from '../utils/parseTypes';
+import type { JsonAbi } from '../types/interfaces/JsonAbi';
 
 import { Abi } from './Abi';
-import { EnumType } from './types/EnumType';
-import { OptionType } from './types/OptionType';
-import { VectorType } from './types/VectorType';
 
 /**
  * @group node
  */
 describe('Abi.ts', () => {
   /*
-    Test helpers
-  */
-  function mockAllDeps() {
-    const parseTypes = vi.spyOn(parseTypesMod, 'parseTypes').mockImplementation(() => []);
-
-    const parseFunctions = vi
-      .spyOn(parseFunctionsMod, 'parseFunctions')
-      .mockImplementation(() => []);
-
-    const parseConfigurables = vi
-      .spyOn(parseConfigurablesMod, 'parseConfigurables')
-      .mockImplementation(() => []);
-
-    return {
-      parseTypes,
-      parseFunctions,
-      parseConfigurables,
-    };
-  }
-
-  function getMockedAbi(params: { inputPath: string } = { inputPath: '*-abi.json' }) {
-    const mocks = mockAllDeps();
-
-    const inputPath = params.inputPath;
-    const outputDir = './out';
-
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
-    const rawContents = project.abiContents;
-
-    const abi = new Abi({
-      filepath: inputPath,
-      outputDir,
-      rawContents,
-      programType: ProgramTypeEnum.CONTRACT,
-    });
-
-    return {
-      abi,
-      mocks,
-    };
-  }
-
-  function getRawTypeFor(params: { type: string }) {
-    const rawAbiType: JsonAbiType = {
-      typeId: 1,
-      type: params.type,
-      components: null,
-      typeParameters: null,
-    };
-    return { rawAbiType };
-  }
-
-  /*
     Tests
   */
   test('should create a new abi instance and parse root nodes', () => {
     const {
-      abi,
-      mocks: { parseTypes, parseFunctions, parseConfigurables },
-    } = getMockedAbi();
+      abis: [abi],
+    } = createAbisForTests(ProgramTypeEnum.PREDICATE, [AbiTypegenProjectsEnum.PREDICATE]);
 
-    expect(abi).toBeTruthy();
-    expect(parseTypes).toHaveBeenCalledTimes(1);
-    expect(parseFunctions).toHaveBeenCalledTimes(1);
-    expect(parseConfigurables).toHaveBeenCalledTimes(1);
+    expect(abi.metadataTypes.length).toBeGreaterThan(0);
+    expect(abi.concreteTypes.length).toBeGreaterThan(0);
+    expect(abi.functions.length).toBeGreaterThan(0);
+
+    const {
+      abis: [abiWithConfigurable],
+    } = createAbisForTests(ProgramTypeEnum.PREDICATE, [
+      AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
+    ]);
+
+    expect(abiWithConfigurable.configurables.length).toBeGreaterThan(0);
   });
 
   test('should compute array of custom types in use', () => {
-    const { abi } = getMockedAbi();
+    const {
+      abis: [abi],
+    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.FULL]);
 
-    // First: nothing (no types yet)
-    abi.computeCommonTypesInUse();
-
-    expect(abi).toBeTruthy();
-    expect(abi.commonTypesInUse).toStrictEqual([]);
-
-    // Second: Option
-    abi.types = [new OptionType(getRawTypeFor({ type: 'option' }))];
-    abi.computeCommonTypesInUse();
-
-    expect(abi).toBeTruthy();
-    expect(abi.commonTypesInUse).toStrictEqual(['Option']);
-
-    // Second: Enum
-    abi.types = [new EnumType(getRawTypeFor({ type: 'enum' }))];
-    abi.computeCommonTypesInUse();
-
-    expect(abi).toBeTruthy();
-    expect(abi.commonTypesInUse).toStrictEqual(['Enum']);
-
-    // Third: Vectors
-    abi.types = [new VectorType(getRawTypeFor({ type: 'vector' }))];
-    abi.computeCommonTypesInUse();
-
-    expect(abi).toBeTruthy();
-    expect(abi.commonTypesInUse).toStrictEqual(['Vec']);
+    expect(abi.commonTypesInUse).toEqual(['Option', 'Enum', 'Vec', 'Result']);
   });
 
   test('should throw if contract name can not be obtained', async () => {
-    const fn = () => getMockedAbi({ inputPath: '' });
+    const fn = () =>
+      new Abi({
+        filepath: '',
+        programType: ProgramTypeEnum.CONTRACT,
+        rawContents: {} as JsonAbi,
+        outputDir: './dir',
+      });
 
     const { error, result } = await safeExec(fn);
 

@@ -21,16 +21,16 @@ describe('formatEnums.ts', () => {
     });
 
     // executing
-    const { enums } = formatEnums({ types: abi.types });
+    const { enums } = formatEnums({ types: abi.metadataTypes });
 
     // validating
     expect(enums).toStrictEqual([
       {
         structName: 'LetterEnum',
         inputNativeValues: "a = 'a', b = 'b', c = 'c'",
-        inputValues: 'a: [], b: [], c: []',
+        inputValues: undefined,
         outputNativeValues: "a = 'a', b = 'b', c = 'c'",
-        outputValues: 'a: [], b: [], c: []',
+        outputValues: undefined,
         recycleRef: true,
         typeAnnotations: '',
       },

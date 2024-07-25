@@ -1,24 +1,47 @@
-import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
+import type { AbiFunctionInput, JsonAbi } from '../types/JsonAbi';
 
 import { ENCODING_V1 } from './constants';
 import {
   findFunctionByName,
   findNonEmptyInputs,
   findTypeById,
-  findVectorBufferArgument,
   getEncodingVersion,
 } from './json-abi';
 
 const MOCK_ABI: JsonAbi = {
-  types: [
-    { typeId: 1, type: '()', components: [], typeParameters: [] },
-    { typeId: 2, type: 'u256', components: [], typeParameters: [] },
+  programType: 'contract',
+  specVersion: '1',
+  encodingVersion: '1',
+  concreteTypes: [
+    {
+      type: '()',
+      concreteTypeId: 'a260f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+    },
+    {
+      type: 'str[10]',
+      concreteTypeId: '338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50',
+    },
   ],
+  metadataTypes: [],
   functions: [
-    { name: 'foo', attributes: [], inputs: [], output: { name: '', type: 1, typeArguments: [] } },
+    {
+      inputs: [
+        {
+          name: 'x',
+          concreteTypeId: 'a260f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+        },
+        {
+          name: 'y',
+          concreteTypeId: '338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50',
+        },
+      ],
+      name: 'main',
+      output: 'b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
+      attributes: null,
+    },
   ],
   loggedTypes: [],
+  messagesTypes: [],
   configurables: [],
 };
 
@@ -34,7 +57,7 @@ describe('json-abi', () => {
       const encodingVersion = undefined;
       const expected = DEFAULT_ENCODING_VERSION;
 
-      const actual = getEncodingVersion(encodingVersion);
+      const actual = getEncodingVersion(encodingVersion as unknown as string);
 
       expect(actual).toBe(expected);
     });
@@ -58,14 +81,9 @@ describe('json-abi', () => {
 
   describe('findFunctionByName', () => {
     it('should find a function by name', () => {
-      const expected = {
-        name: 'foo',
-        attributes: [],
-        inputs: [],
-        output: { name: '', type: 1, typeArguments: [] },
-      };
+      const expected = MOCK_ABI.functions[0];
 
-      const actual = findFunctionByName(MOCK_ABI, 'foo');
+      const actual = findFunctionByName(MOCK_ABI, 'main');
 
       expect(actual).toEqual(expected);
     });
@@ -79,81 +97,35 @@ describe('json-abi', () => {
 
   describe('findTypeById', () => {
     it('should find a type by id', () => {
-      const expected = {
-        typeId: 1,
-        type: '()',
-        components: [],
-        typeParameters: [],
-      };
+      const expected = MOCK_ABI.concreteTypes[0];
 
-      const actual = findTypeById(MOCK_ABI, 1);
+      const actual = findTypeById(MOCK_ABI, expected.concreteTypeId);
 
       expect(actual).toEqual(expected);
     });
 
     it('should throw an error if the type is not found', () => {
-      expect(() => findTypeById(MOCK_ABI, -1)).toThrowError(
-        `Type with typeId '-1' doesn't exist in the ABI.`
+      expect(() => findTypeById(MOCK_ABI, 'not today')).toThrowError(
+        `Type with typeId 'not today' doesn't exist in the ABI.`
       );
     });
   });
 
   describe('findNonEmptyInputs', () => {
     it('should find non-empty inputs', () => {
-      const inputs: JsonAbiArgument[] = [
-        { name: 'a', type: 1, typeArguments: [] },
-        { name: 'b', type: 2, typeArguments: [] },
-      ];
-      const expected = [{ name: 'b', type: 2, typeArguments: [] }];
+      const expected = [MOCK_ABI.functions[0].inputs[1]];
 
-      const actual = findNonEmptyInputs(MOCK_ABI, inputs);
+      const actual = findNonEmptyInputs(MOCK_ABI, MOCK_ABI.functions[0].inputs);
 
       expect(actual).toEqual(expected);
     });
 
     it('should throw an error if the type is not found', () => {
-      const inputs: JsonAbiArgument[] = [{ name: 'a', type: -1, typeArguments: [] }];
+      const inputs: AbiFunctionInput[] = [{ name: 'a', concreteTypeId: 'not today' }];
 
       expect(() => findNonEmptyInputs(MOCK_ABI, inputs)).toThrowError(
-        `Type with typeId '-1' doesn't exist in the ABI.`
+        `Type with typeId 'not today' doesn't exist in the ABI.`
       );
-    });
-  });
-
-  describe('findVectorBufferArgument', () => {
-    it('should throw, when there are no components with the name of `buf', () => {
-      const components: ResolvedAbiType[] = [];
-
-      expect(() => findVectorBufferArgument(components)).toThrowError(
-        `The Vec type provided is missing or has a malformed 'buf' component.`
-      );
-    });
-
-    it('should throw, when the buffer component is missing type arguments', () => {
-      const components: ResolvedAbiType[] = [
-        {
-          name: 'buf',
-          originalTypeArguments: [],
-        } as unknown as ResolvedAbiType,
-      ];
-
-      expect(() => findVectorBufferArgument(components)).toThrowError(
-        `The Vec type provided is missing or has a malformed 'buf' component.`
-      );
-    });
-
-    it('should return the buffer argument', () => {
-      const components: ResolvedAbiType[] = [
-        {
-          name: 'buf',
-          originalTypeArguments: [{ name: 'u256', components: [], typeParameters: [] }],
-        } as unknown as ResolvedAbiType,
-      ];
-
-      const expected = { name: 'u256', components: [], typeParameters: [] };
-      const actual = findVectorBufferArgument(components);
-
-      expect(actual).toEqual(expected);
     });
   });
 });

@@ -1,9 +1,13 @@
-import type { IType } from '../../types/interfaces/IType';
+import type { IType, ITypeAttributes } from '../../types/interfaces/IType';
 
 import { AType } from './AType';
 
 export class ResultType extends AType implements IType {
   public static swayType = 'enum Result';
+  public attributes: ITypeAttributes = {
+    inputLabel: 'Result',
+    outputLabel: 'Result',
+  };
 
   public name = 'result';
 
@@ -13,11 +17,7 @@ export class ResultType extends AType implements IType {
     return ResultType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
-    this.attributes = {
-      inputLabel: `Result`,
-      outputLabel: `Result`,
-    };
+  public parseComponentsAttributes() {
     return this.attributes;
   }
 }

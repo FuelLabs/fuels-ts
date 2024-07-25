@@ -27,7 +27,7 @@ export class StructCoder<TCoders extends Record<string, Coder>> extends Coder<
       (acc, coder) => acc + coder.encodedLength,
       0
     );
-    super('struct', `struct ${name}`, encodedLength);
+    super('struct', name, encodedLength);
     this.name = name;
     this.coders = coders;
     this.#hasNestedOption = hasNestedOption(coders);

@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import { ResolvedAbiType } from '../../ResolvedAbiType';
+import type { ResolvedType } from '../../ResolvedType';
 import type { EncodingOptions } from '../../types/EncodingOptions';
 import type { GetCoderFn } from '../../types/GetCoder';
 import {
@@ -9,7 +9,7 @@ import {
   BOOL_CODER_TYPE,
   BYTES_CODER_TYPE,
   ENCODING_V1,
-  OPTION_CODER_TYPE,
+  optionRegEx,
   RAW_PTR_CODER_TYPE,
   RAW_SLICE_CODER_TYPE,
   STD_STRING_CODER_TYPE,
@@ -19,14 +19,13 @@ import {
   U32_CODER_TYPE,
   U64_CODER_TYPE,
   U8_CODER_TYPE,
-  VEC_CODER_TYPE,
   arrayRegEx,
   enumRegEx,
+  isVector,
   stringRegEx,
   structRegEx,
   tupleRegEx,
 } from '../../utils/constants';
-import { findVectorBufferArgument } from '../../utils/json-abi';
 import type { Coder } from '../coders/AbstractCoder';
 import { ArrayCoder } from '../coders/ArrayCoder';
 import { B256Coder } from '../coders/B256Coder';
@@ -55,7 +54,7 @@ import { getCoders } from './getCoders';
  * @returns the coder for a given type.
  */
 export const getCoder: GetCoderFn = (
-  resolvedAbiType: ResolvedAbiType,
+  resolvedAbiType: ResolvedType,
   _options?: EncodingOptions
 ): Coder => {
   switch (resolvedAbiType.type) {
@@ -110,38 +109,35 @@ export const getCoder: GetCoderFn = (
       );
     }
 
-    const arrayElementCoder = getCoder(arg);
+    const arrayElementCoder = getCoder(arg.type);
     return new ArrayCoder(arrayElementCoder as Coder, length);
   }
 
-  if (resolvedAbiType.type === VEC_CODER_TYPE) {
-    const arg = findVectorBufferArgument(components);
-    const argType = new ResolvedAbiType(resolvedAbiType.abi, arg);
+  if (isVector(resolvedAbiType.type)) {
+    const arg = resolvedAbiType.components?.[0].type as ResolvedType;
 
-    const itemCoder = getCoder(argType, { encoding: ENCODING_V1 });
+    const itemCoder = getCoder(arg, { encoding: ENCODING_V1 });
     return new VecCoder(itemCoder as Coder);
   }
 
-  const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
-  if (structMatch) {
+  if (structRegEx.exec(resolvedAbiType.type)) {
     const coders = getCoders(components, { getCoder });
-    return new StructCoder(structMatch.name, coders);
+    return new StructCoder(resolvedAbiType.type, coders);
   }
 
-  const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
-  if (enumMatch) {
+  if (enumRegEx.test(resolvedAbiType.type)) {
     const coders = getCoders(components, { getCoder });
 
-    const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
-    if (isOptionEnum) {
-      return new OptionCoder(enumMatch.name, coders);
+    if (optionRegEx.test(resolvedAbiType.type)) {
+      return new OptionCoder(resolvedAbiType.type, coders);
     }
-    return new EnumCoder(enumMatch.name, coders);
+    return new EnumCoder(resolvedAbiType.type, coders);
   }
 
-  const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
-  if (tupleMatch) {
-    const coders = components.map((component) => getCoder(component, { encoding: ENCODING_V1 }));
+  if (tupleRegEx.test(resolvedAbiType.type)) {
+    const coders = (components ?? []).map((component) =>
+      getCoder(component.type, { encoding: ENCODING_V1 })
+    );
     return new TupleCoder(coders as Coder[]);
   }
 

@@ -7,15 +7,11 @@ import { VectorType } from './VectorType';
 describe('VectorType.ts', () => {
   test('should properly parse type attributes', () => {
     const vector = new VectorType({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: VectorType.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: 1,
+      type: VectorType.swayType,
     });
-
-    vector.parseComponentsAttributes({ types: [] });
 
     const suitableForVector = VectorType.isSuitableFor({ type: VectorType.swayType });
     const suitableForRawVector = VectorType.isSuitableFor({ type: 'struct RawVec' });

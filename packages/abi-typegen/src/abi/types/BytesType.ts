@@ -1,5 +1,3 @@
-import type { IType } from '../../types/interfaces/IType';
-
 import { ArrayType } from './ArrayType';
 
 export class BytesType extends ArrayType {
@@ -13,7 +11,7 @@ export class BytesType extends ArrayType {
     return BytesType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
+  public parseComponentsAttributes() {
     const capitalizedName = 'Bytes';
 
     this.attributes = {

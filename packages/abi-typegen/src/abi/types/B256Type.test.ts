@@ -7,15 +7,11 @@ import { BoolType } from './BoolType';
 describe('B256Type.ts', () => {
   test('should properly parse type attributes', () => {
     const b256 = new B256Type({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: B256Type.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: undefined,
+      type: B256Type.swayType,
     });
-
-    b256.parseComponentsAttributes({ types: [] });
 
     const suitableForB26 = B256Type.isSuitableFor({ type: B256Type.swayType });
     const suitableForBool = B256Type.isSuitableFor({ type: BoolType.swayType });

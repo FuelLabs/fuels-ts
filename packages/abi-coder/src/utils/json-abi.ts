@@ -1,7 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
+import type { AbiFunction, JsonAbi } from '../types/JsonAbi';
 
 import { ENCODING_V1, type EncodingVersion } from './constants';
 
@@ -12,12 +11,11 @@ import { ENCODING_V1, type EncodingVersion } from './constants';
  * @returns the encoding version
  * @throws FuelError if the encoding version is not supported
  */
-export const getEncodingVersion = (encoding?: string): EncodingVersion => {
+export const getEncodingVersion = (encoding: string): EncodingVersion => {
   switch (encoding) {
     case undefined:
     case ENCODING_V1:
       return ENCODING_V1;
-
     default:
       throw new FuelError(
         ErrorCode.UNSUPPORTED_ENCODING_VERSION,
@@ -33,7 +31,7 @@ export const getEncodingVersion = (encoding?: string): EncodingVersion => {
  * @param name - the name of the function to find
  * @returns the JsonAbi function object
  */
-export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction => {
+export const findFunctionByName = (abi: JsonAbi, name: string) => {
   const fn = abi.functions.find((f) => f.name === name);
   if (!fn) {
     throw new FuelError(
@@ -48,15 +46,15 @@ export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction 
  * Find a type by its typeId in the ABI.
  *
  * @param abi - the JsonAbi object
- * @param typeId - the typeId of the type to find
+ * @param concreteTypeId - the typeId of the type to find
  * @returns the JsonAbi type object
  */
-export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
-  const type = abi.types.find((t) => t.typeId === typeId);
+export const findTypeById = (abi: JsonAbi, concreteTypeId: string) => {
+  const type = abi.concreteTypes.find((t) => t.concreteTypeId === concreteTypeId);
   if (!type) {
     throw new FuelError(
       ErrorCode.TYPE_NOT_FOUND,
-      `Type with typeId '${typeId}' doesn't exist in the ABI.`
+      `Type with typeId '${concreteTypeId}' doesn't exist in the ABI.`
     );
   }
   return type;
@@ -70,27 +68,5 @@ export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
  * @param inputs - the list of inputs to filter
  * @returns the list of non-empty inputs
  */
-export const findNonEmptyInputs = (
-  abi: JsonAbi,
-  inputs: readonly JsonAbiArgument[]
-): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== '()');
-
-/**
- * Find the vector buffer argument in a list of components.
- *
- * @param components - the list of components to search
- * @returns the vector buffer argument
- */
-export const findVectorBufferArgument = (
-  components: readonly ResolvedAbiType[]
-): JsonAbiArgument => {
-  const bufferComponent = components.find((c) => c.name === 'buf');
-  const bufferTypeArgument = bufferComponent?.originalTypeArguments?.[0];
-  if (!bufferComponent || !bufferTypeArgument) {
-    throw new FuelError(
-      ErrorCode.INVALID_COMPONENT,
-      `The Vec type provided is missing or has a malformed 'buf' component.`
-    );
-  }
-  return bufferTypeArgument;
-};
+export const findNonEmptyInputs = (abi: JsonAbi, inputs: AbiFunction['inputs']) =>
+  inputs.filter((input) => findTypeById(abi, input.concreteTypeId).type !== '()');

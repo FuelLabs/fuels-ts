@@ -1,4 +1,4 @@
-import type { ResolvedAbiType } from '../../ResolvedAbiType';
+import type { ResolvedType } from '../../ResolvedType';
 import type { EncodingOptions } from '../../types/EncodingOptions';
 import type { GetCoderFn } from '../../types/GetCoder';
 import type { Coder } from '../coders/AbstractCoder';
@@ -9,14 +9,13 @@ import type { Coder } from '../coders/AbstractCoder';
  * @returns an object containing types and an appropriate coder.
  */
 export function getCoders(
-  components: readonly ResolvedAbiType[],
+  components: readonly { name: string; type: ResolvedType }[],
   options: EncodingOptions & { getCoder: GetCoderFn }
 ) {
   const { getCoder } = options;
   return components.reduce((obj, component) => {
     const o: Record<string, Coder> = obj;
-
-    o[component.name] = getCoder(component, options);
+    o[component.name as string] = getCoder(component.type, options);
     return o;
   }, {});
 }

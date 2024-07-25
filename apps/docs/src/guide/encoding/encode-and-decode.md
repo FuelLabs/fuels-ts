@@ -26,7 +26,7 @@ It will produce the following ABI:
 
 <<< @/../../docs-snippets/test/fixtures/abi/encode-and-decode.jsonc#encode-and-decode-2{json:line-numbers}
 
-Now, let's prepare some data to pass to the `main` function to retrieve the combined integer. The function expects and returns a `u32` integer. So here, we will encode the `u32` to pass it to the function and receive the same `u32` back, as bytes, that we'll use for decoding. We can do both of these with the `AbiCoder`.
+Now, let's prepare some data to pass to the `main` function to retrieve the combined integer. The function expects and returns a `u32` integer. So here, we will encode the `u32` to pass it to the function and receive the same `u32` back, as bytes, that we'll use for decoding. We can do both of these with the `Interface` instance present on the `Script` instance's `interface property.
 
 First, let's prepare the transaction:
 

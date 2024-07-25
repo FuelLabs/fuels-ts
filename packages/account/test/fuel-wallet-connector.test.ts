@@ -283,11 +283,15 @@ describe('Fuel Connector', () => {
       connectors: [new MockConnector()],
     });
     const isAdded = await fuel.addABI('0x001123', {
-      types: [],
+      concreteTypes: [],
       loggedTypes: [],
       functions: [],
+      specVersion: '1',
+      encodingVersion: '1',
+      metadataTypes: [],
       messagesTypes: [],
       configurables: [],
+      programType: 'contract',
     });
     expect(isAdded).toEqual(true);
   });

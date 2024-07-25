@@ -10,16 +10,22 @@ export const RAW_PTR_CODER_TYPE = 'raw untyped ptr';
 export const RAW_SLICE_CODER_TYPE = 'raw untyped slice';
 export const BOOL_CODER_TYPE = 'bool';
 export const B256_CODER_TYPE = 'b256';
-export const B512_CODER_TYPE = 'struct B512';
-export const OPTION_CODER_TYPE = 'enum Option';
-export const VEC_CODER_TYPE = 'struct Vec';
-export const BYTES_CODER_TYPE = 'struct Bytes';
-export const STD_STRING_CODER_TYPE = 'struct String';
+export const B512_CODER_TYPE = 'struct std::b512::B512';
+export const optionRegEx = /^enum (std::option::)?Option$/m;
+export function isVector(type: string) {
+  const MATCH_REGEX: RegExp = /^struct (std::vec::)?Vec/m;
+  const IGNORE_REGEX: RegExp = /^struct (std::vec::)?RawVec$/m;
+
+  return MATCH_REGEX.test(type) && !IGNORE_REGEX.test(type);
+}
+
+export const BYTES_CODER_TYPE = 'struct std::bytes::Bytes';
+export const STD_STRING_CODER_TYPE = 'struct std::string::String';
 export const STR_SLICE_CODER_TYPE = 'str';
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
 export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
-export const structRegEx = /^struct (?<name>\w+)$/;
-export const enumRegEx = /^enum (?<name>\w+)$/;
+export const structRegEx = /^struct (.+::)?(.+)$/;
+export const enumRegEx = /^enum (.+::)?(.+)$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
 export const genericRegEx = /^generic (?<name>\w+)$/;
 /**

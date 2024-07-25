@@ -2,8 +2,10 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { JsonAbiType } from '../../index';
-import { parseTypes } from '../../utils/parseTypes';
+import { makeType } from '../../utils/makeType';
+import { shouldSkipAbiType } from '../../utils/shouldSkipAbiType';
+import { supportedTypes } from '../../utils/supportedTypes';
+import { ResolvableMetadataType } from '../ResolvableMetadataType';
 
 import { EnumType } from './EnumType';
 import { ResultType } from './ResultType';
@@ -16,10 +18,17 @@ describe('ResultType.ts', () => {
     Test helpers
   */
   function getResultType() {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
-    const rawTypes = project.abiContents.types as JsonAbiType[];
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return parseTypes({ rawAbiTypes: [rawTypes.find((t) => t.type === 'enum Result')!] })[0];
+    const { abiContents } = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
+
+    const resolvableMetadataTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    );
+
+    const types = resolvableMetadataTypes
+      .filter((t) => !shouldSkipAbiType(t))
+      .map((t) => makeType(supportedTypes, t));
+
+    return types.find((t) => t instanceof ResultType) as ResultType;
   }
 
   test('should properly evaluate type suitability', () => {

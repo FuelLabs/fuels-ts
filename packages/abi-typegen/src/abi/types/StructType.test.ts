@@ -2,11 +2,10 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { JsonAbiType } from '../../index';
-import { TargetEnum } from '../../types/enums/TargetEnum';
-import { findType } from '../../utils/findType';
+import type { IType } from '../../types/interfaces/IType';
 import { makeType } from '../../utils/makeType';
-import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
+import { supportedTypes } from '../../utils/supportedTypes';
+import { ResolvableMetadataType } from '../ResolvableMetadataType';
 
 import { BytesType } from './BytesType';
 import { EvmAddressType } from './EvmAddressType';
@@ -18,13 +17,20 @@ import { U16Type } from './U16Type';
  * @group node
  */
 describe('StructType.ts', () => {
+  function getType(project: AbiTypegenProjectsEnum, structName: string) {
+    const { abiContents } = getTypegenForcProject(project);
+
+    const resolvableMetadataTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    );
+
+    const types = resolvableMetadataTypes.map((t) => makeType(supportedTypes, t));
+
+    return types.find((t) => t.attributes.structName === structName) as IType;
+  }
+
   test('should properly parse type attributes', () => {
-    const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
-
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
-
-    const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
+    const c = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructC') as StructType;
 
     const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayType });
     const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayType });
@@ -38,43 +44,32 @@ describe('StructType.ts', () => {
     expect(suitableForBytes).toEqual(false);
     expect(suitableForStdString).toEqual(false);
 
-    // validating `struct C`, with nested `typeArguments`
-    parseTypeArguments.mockClear();
-    const c = findType({ types, typeId: 4 }) as StructType;
-
     expect(c.getStructName()).toEqual('StructC');
-    expect(c.getStructDeclaration({ types })).toEqual('');
+    expect(c.typeDeclarations.input).toEqual('');
     expect(c.attributes.structName).toEqual('StructC');
     expect(c.attributes.inputLabel).toEqual('StructCInput');
     expect(c.attributes.outputLabel).toEqual('StructCOutput');
     expect(c.requiredFuelsMembersImports).toStrictEqual([]);
 
     // inputs and outputs with nested `typeArguments`
-    let inputs = c.getStructContents({ types, target: TargetEnum.INPUT });
-    expect(inputs).toEqual('propC1: StructAInput<StructBInput<BigNumberish>, BigNumberish>');
+    const { input: CInput, output: COutput } = c.getStructContents(supportedTypes);
 
-    let outputs = c.getStructContents({ types, target: TargetEnum.OUTPUT });
-    expect(outputs).toEqual('propC1: StructAOutput<StructBOutput<number>, number>');
-
-    expect(parseTypeArguments).toHaveBeenCalledTimes(2); // called twice
+    expect(CInput).toEqual('propC1: StructAInput<StructBInput<BigNumberish>, BigNumberish>');
+    expect(COutput).toEqual('propC1: StructAOutput<StructBOutput<number>, number>');
 
     // validating `struct A`, with multiple `typeParameters` (generics)
-    const a = findType({ types, typeId: 2 }) as StructType;
-    parseTypeArguments.mockClear();
+    const a = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructA') as StructType;
 
     expect(a.getStructName()).toEqual('StructA');
-    expect(a.getStructDeclaration({ types })).toEqual('<T, U>'); // <— `typeParameters`
+    expect(a.typeDeclarations.input).toEqual('<T, U>'); // <— `typeParameters`
     expect(a.attributes.structName).toEqual('StructA');
     expect(a.attributes.inputLabel).toEqual('StructAInput');
     expect(a.attributes.outputLabel).toEqual('StructAOutput');
     expect(a.requiredFuelsMembersImports).toStrictEqual([]);
 
-    inputs = a.getStructContents({ types, target: TargetEnum.INPUT });
-    expect(inputs).toEqual('propA1: T, propA2: U');
+    const { input: AInput, output: AOutput } = a.getStructContents(supportedTypes);
 
-    outputs = a.getStructContents({ types, target: TargetEnum.OUTPUT });
-    expect(outputs).toEqual('propA1: T, propA2: U');
-
-    expect(parseTypeArguments).toHaveBeenCalledTimes(0); // never called
+    expect(AInput).toEqual('propA1: T, propA2: U');
+    expect(AOutput).toEqual('propA1: T, propA2: U');
   });
 });

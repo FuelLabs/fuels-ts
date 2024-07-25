@@ -1,18 +1,23 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { JsonAbiType } from '../types/interfaces/JsonAbi';
+import type { ResolvableMetadataType } from '../abi/ResolvableMetadataType';
+import type { ResolvedType } from '../abi/ResolvedType';
 
-import { supportedTypes } from './supportedTypes';
+import type { SupportedTypeClass } from './supportedTypes';
 
-export function makeType(params: { rawAbiType: JsonAbiType }) {
-  const { rawAbiType } = params;
-  const { type } = rawAbiType;
-
-  const TypeClass = supportedTypes.find((tc) => tc.isSuitableFor({ type }));
+export function makeType(
+  supportedTypes: SupportedTypeClass[],
+  type: ResolvableMetadataType | ResolvedType
+) {
+  const TypeClass = supportedTypes.find((st) => st.isSuitableFor(type)) as SupportedTypeClass;
 
   if (!TypeClass) {
-    throw new FuelError(ErrorCode.TYPE_NOT_SUPPORTED, `Type not supported: ${type}`);
+    throw new FuelError(ErrorCode.TYPE_NOT_SUPPORTED, `Type not supported: ${type.type}`);
   }
 
-  return new TypeClass(params);
+  const res = new TypeClass(type);
+
+  res.parseComponentsAttributes(supportedTypes);
+  res.parseTypeDeclarations(supportedTypes);
+  return res;
 }

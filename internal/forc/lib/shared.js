@@ -56,7 +56,10 @@ export const buildFromGitBranch = (branchName) => {
   const stdioOpts = { stdio: 'inherit' };
 
   if (existsSync(swayRepoDir)) {
-    execSync(`cd ${swayRepoDir} && git fetch origin && git checkout ${branchName}`, stdioOpts);
+    execSync(
+      `cd ${swayRepoDir} && git fetch origin && git checkout ${branchName} && git reset --hard origin/${branchName}`,
+      stdioOpts
+    );
     execSync(`cd ${swayRepoDir} && cargo build`, stdioOpts);
   } else {
     execSync(`git clone --branch ${branchName} ${swayRepoUrl} ${swayRepoDir}`, stdioOpts);

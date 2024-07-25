@@ -90,6 +90,7 @@ abi MyContract {
     fn type_external_enum(x: ExternalEnum) -> ExternalEnum;
     fn types_generic_enum(x: GenericEnum<u8, u16>) -> GenericEnum<u8, u16>;
     fn types_generic_struct(x: GenericStructWithEnum<u8, u16>) -> GenericStructWithEnum<u8, u16>;
+    fn types_tuple_in_vec(x: Vec<(u32, u32)>) -> Vec<(u32, u32)>;
 }
 
 impl MyContract for Contract {
@@ -212,6 +213,9 @@ impl MyContract for Contract {
         x
     }
     fn types_generic_struct(x: GenericStructWithEnum<u8, u16>) -> GenericStructWithEnum<u8, u16> {
+        x
+    }
+    fn types_tuple_in_vec(x: Vec<(u32, u32)>) -> Vec<(u32, u32)> {
         x
     }
 }

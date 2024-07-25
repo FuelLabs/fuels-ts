@@ -16,13 +16,13 @@ export class GenericType extends AType implements IType {
 
   public getStructName() {
     const name = extractStructName({
-      rawAbiType: this.rawAbiType,
+      type: this.type,
       regex: GenericType.MATCH_REGEX,
     });
     return name;
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
+  public parseComponentsAttributes() {
     const label = this.getStructName();
 
     this.attributes = {

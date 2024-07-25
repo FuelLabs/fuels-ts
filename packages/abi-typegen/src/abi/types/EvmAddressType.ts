@@ -13,7 +13,7 @@ export class EvmAddressType extends AType implements IType {
     return EvmAddressType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
+  public parseComponentsAttributes() {
     const capitalizedName = 'EvmAddress';
 
     this.attributes = {

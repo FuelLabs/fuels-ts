@@ -1,4 +1,4 @@
-import type { JsonAbiType } from './JsonAbi';
+import type { SupportedTypeClass } from '../../utils/supportedTypes';
 
 export interface ITypeAttributes {
   inputLabel: string;
@@ -12,14 +12,15 @@ export interface ITypeAttributes {
 export interface IType {
   name: string;
   attributes: ITypeAttributes;
-  rawAbiType: JsonAbiType;
   requiredFuelsMembersImports: string[];
+  typeDeclarations: { input: string; output: string };
 
-  parseComponentsAttributes(params: { types: IType[] }): ITypeAttributes;
+  parseComponentsAttributes(types: SupportedTypeClass[]): void;
 
   // Methods only present in `EnumType` and `StructType` classes
   getStructName?(): string;
-  getStructContents?(params: { types: IType[] }): string;
+  getStructContents?(types: SupportedTypeClass[]): { input: string; output: string };
+  parseTypeDeclarations(types: SupportedTypeClass[]): void;
 
   /*
     Have in mind, all types also need the following static members:

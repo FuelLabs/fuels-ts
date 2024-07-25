@@ -1,6 +1,6 @@
 import type { Coder } from '../encoding/coders/AbstractCoder';
 
-import { OPTION_CODER_TYPE, WORD_SIZE } from './constants';
+import { optionRegEx, WORD_SIZE } from './constants';
 
 /**
  * Turns:
@@ -49,11 +49,11 @@ export const hasNestedOption = (coders: Record<string, Coder> | Coder[]): boolea
   const array = Array.isArray(coders) ? coders : Object.values(coders);
 
   for (const node of array) {
-    if (node.type === OPTION_CODER_TYPE) {
+    if (optionRegEx.test(node.type)) {
       return true;
     }
 
-    if ('coder' in node && (node.coder as Coder).type === OPTION_CODER_TYPE) {
+    if ('coder' in node && optionRegEx.test((node.coder as Coder).type)) {
       return true;
     }
 

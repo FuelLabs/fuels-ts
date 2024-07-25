@@ -1,9 +1,7 @@
-import type { JsonAbiArgument } from '../../index';
-import type { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 import { extractStructName } from '../../utils/extractStructName';
-import { findType } from '../../utils/findType';
-import { parseTypeArguments } from '../../utils/parseTypeArguments';
+import { getStructContents } from '../../utils/getStructContents';
+import type { SupportedTypeClass } from '../../utils/supportedTypes';
 
 import { AType } from './AType';
 
@@ -21,7 +19,7 @@ export class StructType extends AType implements IType {
     return isAMatch && !shouldBeIgnored;
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
+  public parseComponentsAttributes() {
     const structName = this.getStructName();
 
     this.attributes = {
@@ -35,60 +33,13 @@ export class StructType extends AType implements IType {
 
   public getStructName() {
     const name = extractStructName({
-      rawAbiType: this.rawAbiType,
+      type: this.type,
       regex: StructType.MATCH_REGEX,
     });
     return name;
   }
 
-  public getStructContents(params: { types: IType[]; target: TargetEnum }) {
-    const { types, target } = params;
-    const { components } = this.rawAbiType;
-
-    // `components` array guaranteed to always exist for structs/enums
-    const structComponents = components as JsonAbiArgument[];
-
-    // loop through all components
-    const members = structComponents.map((component) => {
-      const { name, type: typeId, typeArguments } = component;
-
-      const type = findType({ types, typeId });
-
-      let typeDecl: string;
-
-      if (typeArguments) {
-        // recursively process child `typeArguments`
-        typeDecl = parseTypeArguments({
-          types,
-          target,
-          parentTypeId: typeId,
-          typeArguments,
-        });
-      } else {
-        // or just collect type declaration
-        const attributeKey: 'inputLabel' | 'outputLabel' = `${target}Label`;
-        typeDecl = type.attributes[attributeKey];
-      }
-
-      // assemble it in `[key: string]: <Type>` fashion
-      return `${name}: ${typeDecl}`;
-    });
-
-    return members.join(', ');
-  }
-
-  public getStructDeclaration(params: { types: IType[] }) {
-    const { types } = params;
-    const { typeParameters } = this.rawAbiType;
-
-    if (typeParameters) {
-      const structs = typeParameters.map((typeId) => findType({ types, typeId }));
-
-      const labels = structs.map(({ attributes: { inputLabel } }) => inputLabel);
-
-      return `<${labels.join(', ')}>`;
-    }
-
-    return '';
+  public getStructContents(supportedTypes: SupportedTypeClass[]) {
+    return getStructContents(supportedTypes, this.type, true);
   }
 }

@@ -2,13 +2,16 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { normalizeString } from '@fuel-ts/utils';
 
 import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
-import type { IConfigurable } from '../types/interfaces/IConfigurable';
-import type { IFunction } from '../types/interfaces/IFunction';
 import type { IType } from '../types/interfaces/IType';
 import type { JsonAbi } from '../types/interfaces/JsonAbi';
-import { parseConfigurables } from '../utils/parseConfigurables';
-import { parseFunctions } from '../utils/parseFunctions';
-import { parseTypes } from '../utils/parseTypes';
+import { makeType } from '../utils/makeType';
+import { shouldSkipAbiType } from '../utils/shouldSkipAbiType';
+import { supportedTypes } from '../utils/supportedTypes';
+
+import { ResolvableMetadataType } from './ResolvableMetadataType';
+import { AbiConfigurable } from './configurable/AbiConfigurable';
+import { AbiFunction } from './functions/AbiFunction';
+import { makeResolvedType } from './makeResolvedType';
 
 /*
   Manages many instances of Types and Functions
@@ -26,9 +29,10 @@ export class Abi {
   public hexlifiedBinContents?: string;
   public storageSlotsContents?: string;
 
-  public types: IType[];
-  public functions: IFunction[];
-  public configurables: IConfigurable[];
+  public metadataTypes: IType[];
+  public concreteTypes: IType[];
+  public functions: AbiFunction[];
+  public configurables: AbiConfigurable[];
 
   constructor(params: {
     filepath: string;
@@ -70,9 +74,10 @@ export class Abi {
     this.storageSlotsContents = storageSlotsContents;
     this.outputDir = outputDir;
 
-    const { types, functions, configurables } = this.parse();
+    const { metadataTypes, concreteTypes, functions, configurables } = this.parse();
 
-    this.types = types;
+    this.metadataTypes = metadataTypes;
+    this.concreteTypes = concreteTypes;
     this.functions = functions;
     this.configurables = configurables;
 
@@ -80,18 +85,44 @@ export class Abi {
   }
 
   parse() {
-    const {
-      types: rawAbiTypes,
-      functions: rawAbiFunctions,
-      configurables: rawAbiConfigurables,
-    } = this.rawContents;
+    const resolvableMetadataTypes = this.rawContents.metadataTypes.map((tm) => ({
+      typeId: tm.metadataTypeId,
+      type: new ResolvableMetadataType(this.rawContents, tm.metadataTypeId, undefined),
+    }));
 
-    const types = parseTypes({ rawAbiTypes });
-    const functions = parseFunctions({ rawAbiFunctions, types });
-    const configurables = parseConfigurables({ rawAbiConfigurables, types });
+    const resolvedConcreteTypes = this.rawContents.concreteTypes.map((ct) => ({
+      typeId: ct.concreteTypeId,
+      type: makeResolvedType(
+        this.rawContents,
+        resolvableMetadataTypes.map((t) => t.type),
+        ct.concreteTypeId
+      ),
+    }));
 
+    const types = [...resolvableMetadataTypes, ...resolvedConcreteTypes]
+      .filter((t) => !shouldSkipAbiType(t.type))
+      .map(({ typeId, type }) => ({
+        typeId,
+        type: makeType(supportedTypes, type),
+      }))
+      .reduce(
+        (obj, { typeId, type }) => ({ ...obj, [typeId]: type }),
+        {} satisfies Record<string | number, IType>
+      );
+
+    const functions = this.rawContents.functions.map((fn) => new AbiFunction(types, fn));
+    const configurables = this.rawContents.configurables.map((c) => new AbiConfigurable(types, c));
+
+    const metadataTypes = Object.entries(types)
+      .filter(([typeId]) => !Number.isNaN(+typeId))
+      .map(([, type]) => type) as IType[];
+
+    const concreteTypes = Object.entries(types)
+      .filter(([typeId]) => Number.isNaN(+typeId))
+      .map(([, type]) => type) as IType[];
     return {
-      types,
+      metadataTypes,
+      concreteTypes,
       functions,
       configurables,
     };
@@ -108,7 +139,7 @@ export class Abi {
     this.commonTypesInUse = [];
 
     Object.keys(customTypesTable).forEach((typeName) => {
-      const isInUse = !!this.types.find((t) => t.name === typeName);
+      const isInUse = !!this.metadataTypes.find((t) => t.name === typeName);
 
       if (isInUse) {
         const commonTypeLabel: string = customTypesTable[typeName];

@@ -1,39 +1,20 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 
 export const predicateAbi: JsonAbi = {
-  types: [
-    {
-      typeId: 0,
-      type: 'bool',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 1,
-      type: 'b256',
-      components: null,
-      typeParameters: null,
-    },
-  ],
-  functions: [
-    {
-      inputs: [
-        {
-          name: 'data',
-          type: 1,
-          typeArguments: null,
-        },
-      ],
-      name: 'main',
-      output: {
-        name: '',
-        type: 0,
-        typeArguments: null,
-      },
-      attributes: null,
-    },
-  ],
+  specVersion: '1',
+  programType: 'predicate',
+  encodingVersion: '1',
+  concreteTypes: [{ type: 'bool', concreteTypeId: 'randomhash' }],
+  configurables: [],
   loggedTypes: [],
   messagesTypes: [],
-  configurables: [],
+  metadataTypes: [],
+  functions: [
+    {
+      name: 'main',
+      inputs: [],
+      output: 'randomhash',
+      attributes: [],
+    },
+  ],
 };

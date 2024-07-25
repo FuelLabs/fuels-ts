@@ -5,23 +5,32 @@ import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
+import { ResolvableMetadataType } from './ResolvableMetadataType';
 import type { InputValue } from './encoding/coders/AbstractCoder';
-import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
+import type { Configurable, JsonAbi } from './types/JsonAbi';
 import { type EncodingVersion } from './utils/constants';
-import { findTypeById, getEncodingVersion } from './utils/json-abi';
+import { getEncodingVersion } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
-  readonly configurables: Record<string, JsonAbiConfigurable>;
+  readonly configurables: Record<string, Configurable>;
   readonly jsonAbi: TAbi;
   readonly encoding: EncodingVersion;
+  readonly resolvableMetadataTypes: ResolvableMetadataType[] = [];
 
   constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
-    this.encoding = getEncodingVersion(jsonAbi.encoding);
+    this.encoding = getEncodingVersion(jsonAbi.encodingVersion);
+
+    this.resolvableMetadataTypes = jsonAbi.metadataTypes.map(
+      (mt) => new ResolvableMetadataType(jsonAbi, mt.metadataTypeId, undefined)
+    );
 
     this.functions = Object.fromEntries(
-      this.jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
+      this.jsonAbi.functions.map((x) => [
+        x.name,
+        new FunctionFragment(this.jsonAbi, this.resolvableMetadataTypes, x.name),
+      ])
     );
 
     this.configurables = Object.fromEntries(this.jsonAbi.configurables.map((x) => [x.name, x]));
@@ -66,9 +75,16 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       );
     }
 
-    return AbiCoder.decode(this.jsonAbi, loggedType.loggedType, arrayify(data), 0, {
-      encoding: this.encoding,
-    });
+    return AbiCoder.decode(
+      this.jsonAbi,
+      this.resolvableMetadataTypes,
+      loggedType.concreteTypeId,
+      arrayify(data),
+      0,
+      {
+        encoding: this.encoding,
+      }
+    );
   }
 
   encodeConfigurable(name: string, value: InputValue) {
@@ -80,12 +96,14 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       );
     }
 
-    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
-      encoding: this.encoding,
-    });
-  }
-
-  getTypeById(typeId: number) {
-    return findTypeById(this.jsonAbi, typeId);
+    return AbiCoder.encode(
+      this.jsonAbi,
+      this.resolvableMetadataTypes,
+      configurable.concreteTypeId,
+      value,
+      {
+        encoding: this.encoding,
+      }
+    );
   }
 }

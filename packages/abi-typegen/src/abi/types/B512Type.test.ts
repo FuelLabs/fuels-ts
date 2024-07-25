@@ -7,15 +7,11 @@ import { BoolType } from './BoolType';
 describe('B512Type.ts', () => {
   test('should properly parse type attributes', () => {
     const b512 = new B512Type({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: B512Type.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: 1,
+      type: B512Type.swayType,
     });
-
-    b512.parseComponentsAttributes({ types: [] });
 
     const suitableForB512 = B512Type.isSuitableFor({ type: B512Type.swayType });
     const suitableForBool = B512Type.isSuitableFor({ type: BoolType.swayType });

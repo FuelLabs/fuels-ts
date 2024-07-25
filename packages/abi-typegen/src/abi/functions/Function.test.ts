@@ -1,10 +1,8 @@
-import {
-  AbiTypegenProjectsEnum,
-  getTypegenForcProject,
-} from '../../../test/fixtures/forc-projects/index';
-import { parseTypes } from '../../utils/parseTypes';
+import { AbiTypegenProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import { createAbisForTests } from '../../../test/utils/createAbiForTests';
+import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
-import { Function } from './Function';
+import type { AbiFunction } from './AbiFunction';
 
 /**
  * @group node
@@ -14,14 +12,11 @@ describe('Function.ts', () => {
     Method: `getDeclaration`
   */
   test('should properly get function declaration', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
+    const {
+      abis: [abi],
+    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.MINIMAL]);
 
-    const { types: rawAbiTypes, functions } = project.abiContents;
-
-    const [rawAbiFunction] = functions;
-    const types = parseTypes({ rawAbiTypes });
-
-    const func = new Function({ rawAbiFunction, types });
+    const func = abi.functions.find((fn) => fn.name === 'main') as AbiFunction;
 
     const expectedDecl = 'main: InvokeFunction<[x: string, y: string], boolean>';
 
@@ -35,32 +30,24 @@ describe('Function.ts', () => {
     Inputs / Output
   */
   test('should compute i/o types for Vector', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
+    const {
+      abis: [abi],
+    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.VECTOR_SIMPLE]);
 
-    const { types: rawAbiTypes, functions } = project.abiContents;
+    const func = abi.functions.find((fn) => fn.name === 'main') as AbiFunction;
 
-    const [rawAbiFunction] = functions;
-    const types = parseTypes({ rawAbiTypes });
-
-    const func = new Function({ rawAbiFunction, types });
-
-    expect(func.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Vec<BigNumberish>');
     expect(func.attributes.output).toEqual('Vec<number>');
     expect(func.attributes.prefixedInputs).toEqual('x: Vec<BigNumberish>');
   });
 
   test('should build i/o types for Option', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
+    const {
+      abis: [abi],
+    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.OPTION_SIMPLE]);
 
-    const { types: rawAbiTypes, functions } = project.abiContents;
+    const func = abi.functions.find((fn) => fn.name === 'main') as AbiFunction;
 
-    const [rawAbiFunction] = functions;
-    const types = parseTypes({ rawAbiTypes });
-
-    const func = new Function({ rawAbiFunction, types });
-
-    expect(func.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Option<BigNumberish>');
     expect(func.attributes.output).toEqual('Option<number>');
     expect(func.attributes.prefixedInputs).toEqual('x: Option<BigNumberish>');

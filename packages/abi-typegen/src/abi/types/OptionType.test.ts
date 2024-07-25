@@ -2,9 +2,9 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { JsonAbiType } from '../../index';
-import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
+import { supportedTypes } from '../../utils/supportedTypes';
+import { ResolvableMetadataType } from '../ResolvableMetadataType';
 
 import { EnumType } from './EnumType';
 import { OptionType } from './OptionType';
@@ -16,13 +16,16 @@ describe('OptionType.ts', () => {
   /*
     Test helpers
   */
-  function getTypesForContract() {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
-    const rawTypes = project.abiContents.types;
+  function getOptionType() {
+    const { abiContents } = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
 
-    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
+    const resolvableMetadataTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    );
 
-    return { types };
+    const types = resolvableMetadataTypes.map((t) => makeType(supportedTypes, t));
+
+    return types.find((t) => t instanceof OptionType) as OptionType;
   }
 
   test('should properly evaluate type suitability', () => {
@@ -34,10 +37,7 @@ describe('OptionType.ts', () => {
   });
 
   test('should properly parse type attributes: simple', () => {
-    const { types } = getTypesForContract();
-
-    // validating option
-    const b = findType({ types, typeId: 1 }) as OptionType;
+    const b = getOptionType();
 
     expect(b.attributes.inputLabel).toEqual('Option');
     expect(b.attributes.outputLabel).toEqual('Option');

@@ -5,6 +5,10 @@ import { AType } from './AType';
 export class StrType extends AType implements IType {
   // Note: the str length expressed in '[3]' could be any length
   public static swayType = 'str[3]';
+  public attributes = {
+    inputLabel: 'string',
+    outputLabel: 'string',
+  };
 
   public name = 'str';
 
@@ -14,11 +18,7 @@ export class StrType extends AType implements IType {
     return StrType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
-    this.attributes = {
-      inputLabel: 'string',
-      outputLabel: 'string',
-    };
+  public parseComponentsAttributes() {
     return this.attributes;
   }
 }

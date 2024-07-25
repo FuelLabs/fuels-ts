@@ -7,15 +7,11 @@ import { U16Type } from './U16Type';
 describe('BoolType.ts', () => {
   test('should properly parse type attributes', () => {
     const bool = new BoolType({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: BoolType.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: undefined,
+      type: BoolType.swayType,
     });
-
-    bool.parseComponentsAttributes({ types: [] });
 
     const suitableForBool = BoolType.isSuitableFor({ type: BoolType.swayType });
     const suitableForU16 = BoolType.isSuitableFor({ type: U16Type.swayType });

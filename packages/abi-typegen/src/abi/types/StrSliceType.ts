@@ -7,22 +7,22 @@ export class StrSliceType extends AType implements IType {
 
   public name = 'strSlice';
 
+  private capitalizedName = 'StrSlice';
+
+  public attributes = {
+    inputLabel: this.capitalizedName,
+    outputLabel: this.capitalizedName,
+  };
+
+  public requiredFuelsMembersImports = [this.capitalizedName];
+
   static MATCH_REGEX: RegExp = /^str$/m;
 
   static isSuitableFor(params: { type: string }) {
     return StrSliceType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
-    const capitalizedName = 'StrSlice';
-
-    this.attributes = {
-      inputLabel: capitalizedName,
-      outputLabel: capitalizedName,
-    };
-
-    this.requiredFuelsMembersImports = [capitalizedName];
-
+  public parseComponentsAttributes() {
     return this.attributes;
   }
 }

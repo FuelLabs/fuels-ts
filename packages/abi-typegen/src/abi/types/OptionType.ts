@@ -13,7 +13,7 @@ export class OptionType extends AType implements IType {
     return OptionType.MATCH_REGEX.test(params.type);
   }
 
-  public parseComponentsAttributes(_params: { types: IType[] }) {
+  public parseComponentsAttributes() {
     this.attributes = {
       inputLabel: `Option`,
       outputLabel: `Option`,

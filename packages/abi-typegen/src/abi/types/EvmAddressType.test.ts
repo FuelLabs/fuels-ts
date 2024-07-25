@@ -2,10 +2,9 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { JsonAbiType } from '../../index';
-import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
-import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
+import { supportedTypes } from '../../utils/supportedTypes';
+import { ResolvableMetadataType } from '../ResolvableMetadataType';
 
 import { EvmAddressType } from './EvmAddressType';
 import { StructType } from './StructType';
@@ -16,12 +15,13 @@ import { VectorType } from './VectorType';
  */
 describe('EvmAddressType.ts', () => {
   test('should properly parse type attributes', () => {
-    const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
+    const { abiContents } = getTypegenForcProject(AbiTypegenProjectsEnum.EVM_ADDRESS);
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.EVM_ADDRESS);
+    const resolvableMetadataTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    );
 
-    const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
+    const types = resolvableMetadataTypes.map((t) => makeType(supportedTypes, t));
 
     const suitableForEvmAddress = EvmAddressType.isSuitableFor({ type: EvmAddressType.swayType });
     const suitableForStruct = EvmAddressType.isSuitableFor({ type: StructType.swayType });
@@ -31,9 +31,7 @@ describe('EvmAddressType.ts', () => {
     expect(suitableForStruct).toEqual(false);
     expect(suitableForVector).toEqual(false);
 
-    parseTypeArguments.mockClear();
-
-    const evmAddress = findType({ types, typeId: 1 }) as EvmAddressType;
+    const evmAddress = types.find((t) => t instanceof EvmAddressType) as EvmAddressType;
 
     expect(evmAddress.attributes.inputLabel).toEqual('EvmAddress');
     expect(evmAddress.attributes.outputLabel).toEqual('EvmAddress');

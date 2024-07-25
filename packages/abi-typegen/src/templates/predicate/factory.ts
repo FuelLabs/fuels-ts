@@ -12,7 +12,7 @@ import factoryTemplate from './factory.hbs';
 export function renderFactoryTemplate(params: { abi: Abi }) {
   const { abi } = params;
 
-  const { types, configurables } = abi;
+  const { metadataTypes, concreteTypes, configurables } = abi;
 
   const {
     rawContents,
@@ -29,11 +29,11 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
     throw new FuelError(ErrorCode.ABI_MAIN_METHOD_MISSING, `ABI doesn't have a 'main()' method.`);
   }
 
-  const { enums } = formatEnums({ types });
-  const { structs } = formatStructs({ types });
+  const { enums } = formatEnums({ types: metadataTypes });
+  const { structs } = formatStructs({ types: metadataTypes });
   const { imports } = formatImports({
-    types,
-    baseMembers: ['Predicate', 'Provider', 'InputValue'],
+    types: metadataTypes.concat(concreteTypes),
+    baseMembers: ['type JsonAbi', 'Predicate', 'Provider', 'InputValue'],
   });
   const { formattedConfigurables } = formatConfigurables({ configurables });
 

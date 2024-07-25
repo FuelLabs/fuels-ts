@@ -21,7 +21,7 @@ describe('formatStructs.ts', () => {
     });
 
     // executing
-    const { structs } = formatStructs({ types: abi.types });
+    const { structs } = formatStructs({ types: abi.metadataTypes });
 
     // validating
     expect(structs).toStrictEqual([

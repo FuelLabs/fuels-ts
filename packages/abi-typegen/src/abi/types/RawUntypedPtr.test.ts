@@ -7,15 +7,11 @@ import { U8Type } from './U8Type';
 describe('RawUntypedPtrType.ts', () => {
   test('should properly parse type attributes', () => {
     const rawUntypedPtr = new RawUntypedPtr({
-      rawAbiType: {
-        components: null,
-        typeParameters: null,
-        typeId: 1,
-        type: RawUntypedPtr.swayType,
-      },
+      components: undefined,
+      typeParamsArgsMap: undefined,
+      metadataTypeId: 1,
+      type: RawUntypedPtr.swayType,
     });
-
-    rawUntypedPtr.parseComponentsAttributes({ types: [] });
 
     const suitableForU8 = RawUntypedPtr.isSuitableFor({ type: U8Type.swayType });
     const suitableForRawUntypedPtr = RawUntypedPtr.isSuitableFor({

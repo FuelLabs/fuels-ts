@@ -1,4 +1,5 @@
-import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
+import { AbiTypegenProjectsEnum } from '../../test/fixtures/forc-projects';
+import { createAbisForTests } from '../../test/utils/createAbiForTests';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderBytecodeTemplateMod from '../templates/contract/bytecode';
@@ -37,15 +38,15 @@ describe('assembleContracts.ts', () => {
       renderBytecodeTemplate,
     };
   }
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   test('should assemble all files from Contract ABI ', () => {
-    const {
-      typegen: { abis, outputDir },
-    } = getNewAbiTypegen({
-      programType: ProgramTypeEnum.CONTRACT,
-      includeOptionType: false, // will prevent `common` template from being included
-    });
-
     const {
       renderCommonTemplate,
       renderFactoryTemplate,
@@ -53,7 +54,12 @@ describe('assembleContracts.ts', () => {
       renderBytecodeTemplate,
     } = mockAllDeps();
 
-    const files = assembleContracts({ abis, outputDir });
+    const files = assembleContracts(
+      createAbisForTests(ProgramTypeEnum.CONTRACT, [
+        AbiTypegenProjectsEnum.FN_VOID,
+        AbiTypegenProjectsEnum.MINIMAL,
+      ])
+    );
 
     expect(files.length).toEqual(7); // 2x dts, 2x factories, 1x index, 2x hex.ts (no `common`)
 
@@ -65,20 +71,18 @@ describe('assembleContracts.ts', () => {
 
   test('should assemble all files from Contract ABI, including `common` file', () => {
     const {
-      typegen: { abis, outputDir },
-    } = getNewAbiTypegen({
-      programType: ProgramTypeEnum.CONTRACT,
-      includeOptionType: true, // will cause `common` template to be included
-    });
-
-    const {
       renderCommonTemplate,
       renderFactoryTemplate,
       renderIndexTemplate,
       renderBytecodeTemplate,
     } = mockAllDeps();
 
-    const files = assembleContracts({ abis, outputDir });
+    const files = assembleContracts(
+      createAbisForTests(ProgramTypeEnum.CONTRACT, [
+        AbiTypegenProjectsEnum.OPTION_SIMPLE,
+        AbiTypegenProjectsEnum.MINIMAL,
+      ])
+    );
 
     expect(files.length).toEqual(8); // 2x dts, 2x factories, 1x index, 1x common, 2x hex.ts
 

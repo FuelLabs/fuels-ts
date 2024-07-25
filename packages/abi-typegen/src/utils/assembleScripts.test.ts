@@ -1,4 +1,5 @@
-import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
+import { AbiTypegenProjectsEnum } from '../../test/fixtures/forc-projects';
+import { createAbisForTests } from '../../test/utils/createAbiForTests';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderFactoryTemplateMod from '../templates/script/factory';
@@ -41,41 +42,26 @@ describe('assembleScripts.ts', () => {
   test('should assemble all files from Script ABI ', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const {
-      typegen: { abis, outputDir },
-    } = getNewAbiTypegen({
-      programType: ProgramTypeEnum.SCRIPT,
-      includeOptionType: false, // will prevent common template from being included
-      includeMainFunction: true,
-      includeBinFiles: true,
-    });
+    const files = assembleScripts(
+      createAbisForTests(ProgramTypeEnum.SCRIPT, [AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE])
+    );
 
-    vi.resetAllMocks();
-
-    const files = assembleScripts({ abis, outputDir });
-
-    expect(files.length).toEqual(3); // 2x factories, 1x index
+    expect(files.length).toEqual(2); // 1x factories, 1x index
 
     expect(renderCommonTemplate).toHaveBeenCalledTimes(0); // never called
-    expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);
+    expect(renderFactoryTemplate).toHaveBeenCalledTimes(1);
     expect(renderIndexTemplate).toHaveBeenCalledTimes(1);
   });
 
   test('should assemble all files from Script ABI, including `common` file', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const {
-      typegen: { abis, outputDir },
-    } = getNewAbiTypegen({
-      programType: ProgramTypeEnum.SCRIPT,
-      includeOptionType: true, // will cause common template to be included
-      includeMainFunction: true,
-      includeBinFiles: true,
-    });
-
-    vi.resetAllMocks();
-
-    const files = assembleScripts({ abis, outputDir });
+    const files = assembleScripts(
+      createAbisForTests(ProgramTypeEnum.SCRIPT, [
+        AbiTypegenProjectsEnum.SCRIPT, // uses Option
+        AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE,
+      ])
+    );
 
     expect(files.length).toEqual(4); // 2x factories, 1x index, 1x common
 
