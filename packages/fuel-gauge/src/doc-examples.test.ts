@@ -195,13 +195,19 @@ describe('Doc Examples', () => {
       wallets: [fundingWallet],
     } = launched;
 
-    const walletA = Wallet.generate({ provider });
-    await fundingWallet.transfer(walletA.address, 100, provider.getBaseAssetId());
+    const baseAssetId = provider.getBaseAssetId();
 
+    const walletA = Wallet.generate({ provider });
     const walletB = Wallet.generate({ provider });
-    await fundingWallet.transfer(walletB.address, 100, AssetId.A.value);
-    await fundingWallet.transfer(walletB.address, 100, AssetId.B.value);
-    await fundingWallet.transfer(walletB.address, 100, provider.getBaseAssetId());
+
+    const submitted = await fundingWallet.batchTransfer([
+      { amount: 100, destination: walletA.address, assetId: baseAssetId },
+      { amount: 100, destination: walletB.address, assetId: baseAssetId },
+      { amount: 100, destination: walletB.address, assetId: AssetId.B.value },
+      { amount: 100, destination: walletB.address, assetId: AssetId.A.value },
+    ]);
+
+    await submitted.waitForResult();
 
     // this wallet has no assets
     const walletC = Wallet.generate({ provider });
@@ -271,9 +277,22 @@ describe('Doc Examples', () => {
     const wallet2: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_2, provider);
     const wallet3: WalletUnlocked = Wallet.fromPrivateKey(PRIVATE_KEY_3, provider);
 
-    await fundingWallet.transfer(wallet1.address, 1_000_000, provider.getBaseAssetId());
-    await fundingWallet.transfer(wallet2.address, 2_000_000, provider.getBaseAssetId());
-    await fundingWallet.transfer(wallet3.address, 300_000, provider.getBaseAssetId());
+    const submitted = await fundingWallet.batchTransfer([
+      {
+        amount: 1_000_000,
+        destination: wallet1.address,
+      },
+      {
+        amount: 2_000_000,
+        destination: wallet2.address,
+      },
+      {
+        amount: 300_000,
+        destination: wallet3.address,
+      },
+    ]);
+
+    await submitted.waitForResult();
 
     const receiver = Wallet.generate({ provider });
 
