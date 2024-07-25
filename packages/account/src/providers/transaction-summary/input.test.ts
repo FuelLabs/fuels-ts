@@ -103,7 +103,7 @@ describe('transaction-summary/input', () => {
     expect(address).toEqual('');
   });
 
-  it.only('should ensure getInputFromAssetId return correct input to pay for that assetId', () => {
+  it('should ensure getInputFromAssetId return correct input to pay for that assetId', () => {
     const inputCoin1: InputCoin = {
       ...MOCK_INPUT_COIN,
       assetId: ZeroBytes32,
