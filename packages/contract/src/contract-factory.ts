@@ -214,7 +214,6 @@ export default class ContractFactory {
         }
 
         await account.fund(blobTxRequest, txCost);
-
         const response = await account.sendTransaction(blobTxRequest, { awaitExecution: true });
 
         const {
@@ -222,14 +221,9 @@ export default class ContractFactory {
         } = await response.waitForResult<TransactionType.Blob>();
 
         // Todo: check status
-        chunks[id].blobId = blobId;
+        chunks[id].blobId = blobId as string;
       }
 
-      // Deploy contract via loader contract
-      // 1. Get bytes for loader contract
-      // 2. Encode byteIds as function arguments
-
-      // Destructure constants
       const { RegId, Instruction } = asm;
 
       const instructionsPerBlob = 26;
@@ -237,6 +231,8 @@ export default class ContractFactory {
       const numberOfInstructions = numberOfBlobs * instructionsPerBlob;
       const blobIdSize = BYTES_32;
 
+      // Bytes for the Blob Ids
+      const blobIdBytes = () => concat(chunks.map(({ blobId }) => arrayify(blobId as string)));
       // Btyes for the BSIZ opcode
       const bsizBytes = () => new Uint8Array([186, 69, 0, 0]);
       // Bytes for the BLDD opcode
@@ -305,6 +301,7 @@ export default class ContractFactory {
           // jump to the start of the contract we loaded
           asm.jmp(0x16)
         ).toBytes(),
+        blobIdBytes(),
       ]);
 
       const storageSlots = deployContractOptions?.storageSlots

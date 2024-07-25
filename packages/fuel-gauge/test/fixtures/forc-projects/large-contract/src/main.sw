@@ -7,7 +7,7 @@ abi LargeContract {
 impl LargeContract for Contract {
     fn gen() -> bool {
         asm() {
-            blob i500000;
+            blob i450000;
         }
         true
     }

@@ -28,9 +28,9 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
   witnessIndex: number;
 
   /**
-   * Creates an instance `CreateTransactionRequest`.
+   * Creates an instance `BlobTransactionRequest`.
    *
-   * @param createTransactionRequestLike - The initial values for the instance
+   * @param blobTransactionRequestLike - The initial values for the instance
    */
   constructor({ witnessIndex, ...rest }: BlobTransactionRequestLike) {
     super(rest);
@@ -43,6 +43,11 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
    * @returns The transaction create object.
    */
   toTransaction(): TransactionBlob {
+    const blobBytecode = this.witnesses[this.witnessIndex];
+    if (!blobBytecode) {
+      throw new Error('NO BLOB BYTECODE');
+    }
+
     const baseTransaction = this.getBaseTransaction();
     const witnessIndex = this.witnessIndex;
     return {
