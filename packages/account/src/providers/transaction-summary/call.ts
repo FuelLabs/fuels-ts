@@ -9,7 +9,15 @@ type GetFunctionCallProps = {
   maxInputs: BN;
 };
 
-export const getFunctionCall = ({ abi, receipt }: GetFunctionCallProps) => {
+export interface FunctionCall {
+  amount?: BN | undefined;
+  assetId?: string | undefined;
+  functionSignature: string;
+  functionName: string;
+  argumentsProvided: Record<string, unknown> | undefined;
+}
+
+export const getFunctionCall = ({ abi, receipt }: GetFunctionCallProps): FunctionCall => {
   const abiInterface = new Interface(abi);
   const callFunctionSelector = receipt.param1.toHex(8);
   const functionFragment = abiInterface.getFunction(callFunctionSelector);
