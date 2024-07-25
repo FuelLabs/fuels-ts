@@ -58,7 +58,7 @@ export default function PredicateExample() {
       },
     );
 
-    submitted.waitForResult();
+    await submitted.waitForResult();
 
     await refreshBalances();
 
