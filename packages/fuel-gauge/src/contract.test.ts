@@ -1195,7 +1195,8 @@ describe('Contract', () => {
     expect(value.toNumber()).toBe(0);
 
     // Actually changing the contract state
-    await storageContract.functions.initialize_counter(initialCounterValue).call();
+    const call = await storageContract.functions.initialize_counter(initialCounterValue).call();
+    await call.waitForResult();
 
     // Validating that the contract state was modified
     ({ value } = await storageContract.functions.counter().get());
