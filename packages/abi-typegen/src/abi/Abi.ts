@@ -85,46 +85,37 @@ export class Abi {
   }
 
   parse() {
-    const resolvableTypes = this.rawContents.metadataTypes.map((tm) => ({
-      typeId: tm.metadataTypeId,
-      type: new ResolvableType(this.rawContents, tm.metadataTypeId, undefined),
-    }));
+    const resolvableTypes = this.rawContents.metadataTypes.map(
+      (tm) => new ResolvableType(this.rawContents, tm.metadataTypeId, undefined)
+    );
 
-    const resolvedConcreteTypes = this.rawContents.concreteTypes.map((ct) => ({
+    const resolvedTypes = this.rawContents.concreteTypes.map((ct) => ({
       typeId: ct.concreteTypeId,
-      type: makeResolvedType(
-        this.rawContents,
-        resolvableTypes.map((t) => t.type),
-        ct.concreteTypeId
-      ),
+      type: makeResolvedType(this.rawContents, resolvableTypes, ct.concreteTypeId),
     }));
 
-    const types = [...resolvableTypes, ...resolvedConcreteTypes]
+    const concreteTypes = resolvedTypes
       .filter((t) => !shouldSkipAbiType(t.type))
       .map(({ typeId, type }) => ({
         typeId,
         type: makeType(supportedTypes, type),
       }))
-      .reduce(
-        (obj, { typeId, type }) => ({ ...obj, [typeId]: type }),
-        {} satisfies Record<string | number, IType>
-      );
+      .reduce((obj, { typeId, type }) => ({ ...obj, [typeId]: type }), {} as Record<string, IType>);
 
-    const functions = this.rawContents.functions.map((fn) => new AbiFunction(types, fn));
-    const configurables = this.rawContents.configurables.map((c) => new AbiConfigurable(types, c));
+    const functions = this.rawContents.functions.map((fn) => new AbiFunction(concreteTypes, fn));
+    const configurables = this.rawContents.configurables.map(
+      (c) => new AbiConfigurable(concreteTypes, c)
+    );
 
-    const metadataTypes = Object.entries(types)
-      .filter(([typeId]) => !Number.isNaN(+typeId))
-      .map(([, type]) => type) as IType[];
+    const metadataTypes = resolvableTypes
+      .filter((t) => !shouldSkipAbiType(t))
+      .map((t) => makeType(supportedTypes, t));
 
-    const concreteTypes = Object.entries(types)
-      .filter(([typeId]) => Number.isNaN(+typeId))
-      .map(([, type]) => type) as IType[];
     return {
-      metadataTypes,
-      concreteTypes,
+      concreteTypes: Object.entries(concreteTypes).map(([, type]) => type) as IType[],
       functions,
       configurables,
+      metadataTypes,
     };
   }
 

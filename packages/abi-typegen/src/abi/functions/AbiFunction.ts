@@ -11,7 +11,7 @@ export class AbiFunction {
   public name: string;
   public attributes: AbiFunctionAttributes;
   constructor(
-    private types: Record<number | string, IType>,
+    private types: Record<string, IType>,
     private rawAbiFunction: JsonAbiFunction
   ) {
     this.name = rawAbiFunction.name;

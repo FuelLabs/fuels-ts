@@ -5,7 +5,7 @@ export class AbiConfigurable {
   public name: string;
   public type: IType;
 
-  constructor(types: Record<string | number, IType>, configurable: Configurable) {
+  constructor(types: Record<string, IType>, configurable: Configurable) {
     this.name = configurable.name;
     this.type = types[configurable.concreteTypeId];
   }
