@@ -187,16 +187,16 @@ export class ResolvableType {
   private resolveTypeArgs(
     typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
   ): [number, ResolvedType][] | undefined {
-    return this.typeParamsArgsMap
-      ? this.typeParamsArgsMap.map(([typeParameter, value]) => {
+    return this.typeParamsArgsMap === undefined
+      ? typeParamsArgsMap
+      : this.typeParamsArgsMap.map(([typeParameter, value]) => {
           if (value instanceof ResolvedType) {
             return [+typeParameter, value];
           }
 
           const resolved = typeParamsArgsMap?.find(([tp]) => tp === value.metadataTypeId)?.[1];
           return [+typeParameter, resolved as ResolvedType];
-        })
-      : typeParamsArgsMap;
+        });
   }
 
   public resolve(abi: JsonAbi, concreteType: ConcreteType) {
