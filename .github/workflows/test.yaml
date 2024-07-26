@@ -58,11 +58,13 @@ jobs:
           fetch-depth: 0
 
       - name: Test Setup
+        # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         uses: ./.github/actions/test-setup
         with:
           should-install-bun: true
 
       - name: Run UI tests (on template)
+        # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
@@ -81,7 +83,7 @@ jobs:
           PUBLISHED_NPM_TAG: next
 
       - name: Run UI tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+        # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: next
