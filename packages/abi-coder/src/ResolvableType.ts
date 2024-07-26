@@ -148,37 +148,6 @@ export class ResolvableType {
     return resolvable;
   }
 
-  public resolve(abi: JsonAbi, concreteType: ConcreteType) {
-    const concreteTypeArgs = concreteType.typeArguments?.map((ta) => {
-      const concreteTypeArg = abi.concreteTypes.find(
-        (ct) => ct.concreteTypeId === ta
-      ) as ConcreteType;
-      return ResolvableType.resolveConcreteType(abi, concreteTypeArg);
-    });
-
-    return this.resolveInternal(
-      concreteType.concreteTypeId,
-      ResolvableType.mapTypeParametersAndArgs(abi, this.metadataType, concreteTypeArgs) as Array<
-        [number, ResolvedType]
-      >
-    );
-  }
-
-  private resolveTypeArgs(
-    typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
-  ): [number, ResolvedType][] | undefined {
-    return this.typeParamsArgsMap
-      ? this.typeParamsArgsMap.map(([typeParameter, value]) => {
-          if (value instanceof ResolvedType) {
-            return [+typeParameter, value];
-          }
-
-          const resolved = typeParamsArgsMap?.find(([tp]) => tp === value.metadataTypeId)?.[1];
-          return [+typeParameter, resolved as ResolvedType];
-        })
-      : typeParamsArgsMap;
-  }
-
   private resolveInternal(
     typeId: string | number,
     typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
@@ -203,5 +172,36 @@ export class ResolvableType {
       return { name: c.name, type: c.type.resolveInternal(c.type.metadataTypeId, typeArgs) };
     });
     return new ResolvedType(this.metadataType.type, typeId, components, typeArgs);
+  }
+
+  private resolveTypeArgs(
+    typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
+  ): [number, ResolvedType][] | undefined {
+    return this.typeParamsArgsMap
+      ? this.typeParamsArgsMap.map(([typeParameter, value]) => {
+          if (value instanceof ResolvedType) {
+            return [+typeParameter, value];
+          }
+
+          const resolved = typeParamsArgsMap?.find(([tp]) => tp === value.metadataTypeId)?.[1];
+          return [+typeParameter, resolved as ResolvedType];
+        })
+      : typeParamsArgsMap;
+  }
+
+  public resolve(abi: JsonAbi, concreteType: ConcreteType) {
+    const concreteTypeArgs = concreteType.typeArguments?.map((ta) => {
+      const concreteTypeArg = abi.concreteTypes.find(
+        (ct) => ct.concreteTypeId === ta
+      ) as ConcreteType;
+      return ResolvableType.resolveConcreteType(abi, concreteTypeArg);
+    });
+
+    return this.resolveInternal(
+      concreteType.concreteTypeId,
+      ResolvableType.mapTypeParametersAndArgs(abi, this.metadataType, concreteTypeArgs) as Array<
+        [number, ResolvedType]
+      >
+    );
   }
 }
