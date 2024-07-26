@@ -7,9 +7,7 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
  */
 describe('Configurable.ts', () => {
   it('should get configurable declaration with type', () => {
-    const {
-      abis: [abi],
-    } = createAbisForTests(ProgramTypeEnum.PREDICATE, [
+    const [abi] = createAbisForTests(ProgramTypeEnum.PREDICATE, [
       AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
     ]);
 

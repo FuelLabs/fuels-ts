@@ -6,18 +6,15 @@ import { getTypegenForcProject } from '../fixtures/forc-projects';
 export function createAbisForTests(
   programType: ProgramTypeEnum,
   projects: AbiTypegenProjectsEnum[]
-): { abis: Abi[]; outputDir: string } {
+): Abi[] {
   const outputDir = './directory';
-  return {
-    abis: projects.map((project) => {
-      const { abiPath, abiContents } = getTypegenForcProject(project);
-      return new Abi({
-        filepath: abiPath,
-        programType,
-        rawContents: abiContents,
-        outputDir,
-      });
-    }),
-    outputDir,
-  };
+  return projects.map((project) => {
+    const { abiPath, abiContents } = getTypegenForcProject(project);
+    return new Abi({
+      filepath: abiPath,
+      programType,
+      rawContents: abiContents,
+      outputDir,
+    });
+  });
 }

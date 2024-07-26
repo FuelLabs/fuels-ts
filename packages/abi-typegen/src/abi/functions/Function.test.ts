@@ -12,9 +12,7 @@ describe('Function.ts', () => {
     Method: `getDeclaration`
   */
   test('should properly get function declaration', () => {
-    const {
-      abis: [abi],
-    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.MINIMAL]);
+    const [abi] = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.MINIMAL]);
 
     const func = abi.functions.find((fn) => fn.name === 'main') as AbiFunction;
 
@@ -30,9 +28,9 @@ describe('Function.ts', () => {
     Inputs / Output
   */
   test('should compute i/o types for Vector', () => {
-    const {
-      abis: [abi],
-    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.VECTOR_SIMPLE]);
+    const [abi] = createAbisForTests(ProgramTypeEnum.CONTRACT, [
+      AbiTypegenProjectsEnum.VECTOR_SIMPLE,
+    ]);
 
     const func = abi.functions.find((fn) => fn.name === 'main') as AbiFunction;
 
@@ -42,9 +40,9 @@ describe('Function.ts', () => {
   });
 
   test('should build i/o types for Option', () => {
-    const {
-      abis: [abi],
-    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.OPTION_SIMPLE]);
+    const [abi] = createAbisForTests(ProgramTypeEnum.CONTRACT, [
+      AbiTypegenProjectsEnum.OPTION_SIMPLE,
+    ]);
 
     const func = abi.functions.find((fn) => fn.name === 'main') as AbiFunction;
 

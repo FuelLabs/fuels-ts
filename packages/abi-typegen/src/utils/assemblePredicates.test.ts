@@ -39,14 +39,17 @@ describe('assemblePredicates.ts', () => {
     vi.restoreAllMocks();
   });
 
+  const outputDir = './directory';
+
   test('should assemble all files from Predicate ABI ', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const files = assemblePredicates(
-      createAbisForTests(ProgramTypeEnum.PREDICATE, [
+    const files = assemblePredicates({
+      outputDir,
+      abis: createAbisForTests(ProgramTypeEnum.PREDICATE, [
         AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
-      ])
-    );
+      ]),
+    });
 
     expect(files.length).toEqual(2); // 1x factories, 1x index
 
@@ -58,12 +61,13 @@ describe('assemblePredicates.ts', () => {
   test('should assemble all files from Predicate ABI, including `common` file', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const files = assemblePredicates(
-      createAbisForTests(ProgramTypeEnum.PREDICATE, [
+    const files = assemblePredicates({
+      outputDir,
+      abis: createAbisForTests(ProgramTypeEnum.PREDICATE, [
         AbiTypegenProjectsEnum.PREDICATE, // uses Option
         AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
-      ])
-    );
+      ]),
+    });
 
     expect(files.length).toEqual(4); // 2x factories, 1x index, 1x common
 

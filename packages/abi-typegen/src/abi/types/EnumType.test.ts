@@ -1,11 +1,6 @@
-import {
-  AbiTypegenProjectsEnum,
-  getTypegenForcProject,
-} from '../../../test/fixtures/forc-projects/index';
+import { AbiTypegenProjectsEnum } from '../../../test/fixtures/forc-projects/index';
+import { getType } from '../../../test/utils/getType';
 import type { IType } from '../../types/interfaces/IType';
-import { makeType } from '../../utils/makeType';
-import { supportedTypes } from '../../utils/supportedTypes';
-import { ResolvableType } from '../ResolvableType';
 
 import type { EnumType } from './EnumType';
 import { StructType } from './StructType';
@@ -15,18 +10,6 @@ import { U16Type } from './U16Type';
  * @group node
  */
 describe('EnumType.ts', () => {
-  function getType(project: AbiTypegenProjectsEnum, inputLabel: string) {
-    const { abiContents } = getTypegenForcProject(project);
-
-    const resolvableTypes = abiContents.metadataTypes.map(
-      (tm) => new ResolvableType(abiContents, tm.metadataTypeId, undefined)
-    );
-
-    const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
-
-    return types.find((t) => t.attributes.inputLabel === inputLabel) as IType;
-  }
-
   function validateCommonEnumAttributes(params: { enum: IType }) {
     expect(params.enum.attributes.inputLabel).toEqual('MyEnumInput');
     expect(params.enum.attributes.outputLabel).toEqual('MyEnumOutput');

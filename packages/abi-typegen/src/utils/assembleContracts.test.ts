@@ -46,6 +46,8 @@ describe('assembleContracts.ts', () => {
     vi.restoreAllMocks();
   });
 
+  const outputDir = './directory';
+
   test('should assemble all files from Contract ABI ', () => {
     const {
       renderCommonTemplate,
@@ -54,12 +56,13 @@ describe('assembleContracts.ts', () => {
       renderBytecodeTemplate,
     } = mockAllDeps();
 
-    const files = assembleContracts(
-      createAbisForTests(ProgramTypeEnum.CONTRACT, [
+    const files = assembleContracts({
+      outputDir,
+      abis: createAbisForTests(ProgramTypeEnum.CONTRACT, [
         AbiTypegenProjectsEnum.FN_VOID,
         AbiTypegenProjectsEnum.MINIMAL,
-      ])
-    );
+      ]),
+    });
 
     expect(files.length).toEqual(7); // 2x dts, 2x factories, 1x index, 2x hex.ts (no `common`)
 
@@ -77,12 +80,13 @@ describe('assembleContracts.ts', () => {
       renderBytecodeTemplate,
     } = mockAllDeps();
 
-    const files = assembleContracts(
-      createAbisForTests(ProgramTypeEnum.CONTRACT, [
+    const files = assembleContracts({
+      outputDir,
+      abis: createAbisForTests(ProgramTypeEnum.CONTRACT, [
         AbiTypegenProjectsEnum.OPTION_SIMPLE,
         AbiTypegenProjectsEnum.MINIMAL,
-      ])
-    );
+      ]),
+    });
 
     expect(files.length).toEqual(8); // 2x dts, 2x factories, 1x index, 1x common, 2x hex.ts
 

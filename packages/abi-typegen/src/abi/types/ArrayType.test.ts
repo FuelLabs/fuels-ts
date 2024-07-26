@@ -33,7 +33,6 @@ describe('ArrayType.ts', () => {
     );
     const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
-    // validating `struct B`, with simple tuples on property `x`
     const b = types.find((t) => t instanceof ArrayType) as ArrayType;
 
     expect(b.attributes.inputLabel).toEqual('[BigNumberish, BigNumberish]');
@@ -49,7 +48,6 @@ describe('ArrayType.ts', () => {
     );
     const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
-    // validating `struct B`, with simple tuples on property `x`
     const a = types.find((t) => t instanceof ArrayType) as ArrayType;
 
     expect(a.attributes.inputLabel).toEqual(

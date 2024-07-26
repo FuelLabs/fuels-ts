@@ -39,12 +39,16 @@ describe('assembleScripts.ts', () => {
     vi.restoreAllMocks();
   });
 
+  const outputDir = './directory';
   test('should assemble all files from Script ABI ', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const files = assembleScripts(
-      createAbisForTests(ProgramTypeEnum.SCRIPT, [AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE])
-    );
+    const files = assembleScripts({
+      outputDir,
+      abis: createAbisForTests(ProgramTypeEnum.SCRIPT, [
+        AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE,
+      ]),
+    });
 
     expect(files.length).toEqual(2); // 1x factories, 1x index
 
@@ -56,12 +60,13 @@ describe('assembleScripts.ts', () => {
   test('should assemble all files from Script ABI, including `common` file', () => {
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const files = assembleScripts(
-      createAbisForTests(ProgramTypeEnum.SCRIPT, [
+    const files = assembleScripts({
+      outputDir,
+      abis: createAbisForTests(ProgramTypeEnum.SCRIPT, [
         AbiTypegenProjectsEnum.SCRIPT, // uses Option
         AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE,
-      ])
-    );
+      ]),
+    });
 
     expect(files.length).toEqual(4); // 2x factories, 1x index, 1x common
 

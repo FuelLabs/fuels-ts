@@ -15,17 +15,13 @@ describe('Abi.ts', () => {
     Tests
   */
   test('should create a new abi instance and parse root nodes', () => {
-    const {
-      abis: [abi],
-    } = createAbisForTests(ProgramTypeEnum.PREDICATE, [AbiTypegenProjectsEnum.PREDICATE]);
+    const [abi] = createAbisForTests(ProgramTypeEnum.PREDICATE, [AbiTypegenProjectsEnum.PREDICATE]);
 
     expect(abi.metadataTypes.length).toBeGreaterThan(0);
     expect(abi.concreteTypes.length).toBeGreaterThan(0);
     expect(abi.functions.length).toBeGreaterThan(0);
 
-    const {
-      abis: [abiWithConfigurable],
-    } = createAbisForTests(ProgramTypeEnum.PREDICATE, [
+    const [abiWithConfigurable] = createAbisForTests(ProgramTypeEnum.PREDICATE, [
       AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE,
     ]);
 
@@ -33,9 +29,7 @@ describe('Abi.ts', () => {
   });
 
   test('should compute array of custom types in use', () => {
-    const {
-      abis: [abi],
-    } = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.FULL]);
+    const [abi] = createAbisForTests(ProgramTypeEnum.CONTRACT, [AbiTypegenProjectsEnum.FULL]);
 
     expect(abi.commonTypesInUse).toEqual(['Option', 'Enum', 'Vec', 'Result']);
   });
