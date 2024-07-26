@@ -16,7 +16,7 @@ export function formatEnums(params: { types: IType[] }) {
       const inputValues = inputNativeValues ? undefined : input;
       const outputValues = outputNativeValues ? undefined : output;
 
-      const typeAnnotations = et.typeDeclarations.input;
+      const typeAnnotations = et.typeDeclarations.inputDecl;
 
       return {
         structName,

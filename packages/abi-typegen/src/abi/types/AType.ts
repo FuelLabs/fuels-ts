@@ -18,8 +18,8 @@ export class AType {
   };
 
   public typeDeclarations: IType['typeDeclarations'] = {
-    input: '',
-    output: '',
+    inputDecl: '',
+    outputDecl: '',
   };
 
   constructor(protected type: ResolvedType | ResolvableMetadataType) {}
@@ -31,7 +31,7 @@ export class AType {
       const args = typeParamsArgsMap.map(([, v]) => {
         const {
           attributes: { inputLabel, outputLabel },
-          typeDeclarations: { input: inputDecl, output: outputDecl },
+          typeDeclarations: { inputDecl, outputDecl },
         } = makeType(supportedTypes, v);
 
         return {
@@ -41,8 +41,8 @@ export class AType {
       });
 
       this.typeDeclarations = {
-        input: `<${args.map((arg) => arg.inputLabel).join(', ')}>`,
-        output: `<${args.map((arg) => arg.outputLabel).join(', ')}>`,
+        inputDecl: `<${args.map((arg) => arg.inputLabel).join(', ')}>`,
+        outputDecl: `<${args.map((arg) => arg.outputLabel).join(', ')}>`,
       };
     }
   }

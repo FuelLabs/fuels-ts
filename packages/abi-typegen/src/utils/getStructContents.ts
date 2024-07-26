@@ -11,7 +11,7 @@ function getComponentLabels(
 ): { input: string; output: string } {
   const {
     attributes: { inputLabel, outputLabel },
-    typeDeclarations: { input: inputDecl, output: outputDecl },
+    typeDeclarations: { inputDecl, outputDecl },
   } = makeType(supportedTypes, component.type);
 
   const name = includeName ? `${component.name}: ` : '';

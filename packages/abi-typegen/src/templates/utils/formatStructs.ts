@@ -10,7 +10,7 @@ export function formatStructs(params: { types: IType[] }) {
       const st = t as StructType; // only structs here
       const structName = st.attributes.structName as string;
       const { input: inputValues, output: outputValues } = st.structContents;
-      const typeAnnotations = st.typeDeclarations.input;
+      const typeAnnotations = st.typeDeclarations.inputDecl;
       return {
         structName,
         typeAnnotations,

@@ -44,7 +44,7 @@ describe('StructType.ts', () => {
     expect(suitableForBytes).toEqual(false);
     expect(suitableForStdString).toEqual(false);
 
-    expect(c.typeDeclarations.input).toEqual('');
+    expect(c.typeDeclarations.inputDecl).toEqual('');
     expect(c.attributes.structName).toEqual('StructC');
     expect(c.attributes.inputLabel).toEqual('StructCInput');
     expect(c.attributes.outputLabel).toEqual('StructCOutput');
@@ -59,7 +59,7 @@ describe('StructType.ts', () => {
     // validating `struct A`, with multiple `typeParameters` (generics)
     const a = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructA') as StructType;
 
-    expect(a.typeDeclarations.input).toEqual('<T, U>'); // <— `typeParameters`
+    expect(a.typeDeclarations.inputDecl).toEqual('<T, U>'); // <— `typeParameters`
     expect(a.attributes.structName).toEqual('StructA');
     expect(a.attributes.inputLabel).toEqual('StructAInput');
     expect(a.attributes.outputLabel).toEqual('StructAOutput');

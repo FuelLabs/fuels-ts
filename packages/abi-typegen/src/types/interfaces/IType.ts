@@ -13,7 +13,7 @@ export interface IType {
   name: string;
   attributes: ITypeAttributes;
   requiredFuelsMembersImports: string[];
-  typeDeclarations: { input: string; output: string };
+  typeDeclarations: { inputDecl: string; outputDecl: string };
   structContents: { input: string; output: string };
 
   parseComponentsAttributes(types: SupportedTypeClass[]): void;
