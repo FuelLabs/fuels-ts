@@ -1,8 +1,10 @@
 /**
  * This file is a copy of the one in abi-coder and will be deleted once the packages merge.
  */
-import type { ResolvedComponent } from './ResolvableType';
-
+export interface ResolvedComponent {
+  name: string;
+  type: ResolvedType;
+}
 export class ResolvedType {
   constructor(
     public type: string,

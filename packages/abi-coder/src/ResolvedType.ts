@@ -1,4 +1,7 @@
-import type { ResolvedComponent } from './ResolvableType';
+export interface ResolvedComponent {
+  name: string;
+  type: ResolvedType;
+}
 
 export class ResolvedType {
   constructor(

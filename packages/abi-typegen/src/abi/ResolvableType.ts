@@ -12,21 +12,16 @@ import { isVector, genericRegEx } from '../utils/constants';
 
 import { ResolvedType } from './ResolvedType';
 
-export interface ResolvableComponent {
+interface ResolvableComponent {
   name: string;
-  type: ResolvableType;
-}
-
-export interface ResolvedComponent {
-  name: string;
-  type: ResolvedType;
+  type: ResolvableType | ResolvedType;
 }
 
 export class ResolvableType {
   private metadataType: MetadataType;
   type: string;
 
-  components: (ResolvableComponent | ResolvedComponent)[] | undefined;
+  components: ResolvableComponent[] | undefined;
   constructor(
     abi: JsonAbi,
     public metadataTypeId: number,
@@ -71,66 +66,24 @@ export class ResolvableType {
     return metadataType.typeParameters?.map((typeParameter, idx) => [typeParameter, args[idx]]);
   }
 
-  private static handleComponent(
-    abi: JsonAbi,
-    c: Component | TypeArgument
-  ): ResolvableComponent | ResolvedComponent {
+  private static handleComponent(abi: JsonAbi, c: Component | TypeArgument): ResolvableComponent {
+    const name = (c as Component).name;
+
     if (typeof c.typeId === 'string') {
       const concreteType = abi.concreteTypes.find(
         (ct) => ct.concreteTypeId === c.typeId
       ) as ConcreteType;
       return {
-        name: (c as Component).name,
+        name,
         type: ResolvableType.resolveConcreteType(abi, concreteType),
       };
     }
 
     const mt = abi.metadataTypes.find((tm) => tm.metadataTypeId === c.typeId) as MetadataType;
 
-    if (genericRegEx.test(mt.type)) {
-      return {
-        name: (c as Component).name,
-        type: new ResolvableType(abi, c.typeId, undefined),
-      };
-    }
-
-    if (!mt.components) {
-      return {
-        name: (c as Component).name,
-        /**
-         * types like u8, u16 can make their way into metadata types
-         * if they aren't used _directly_ in a function-input/function-output/log/configurable/messageType
-         * These types are characterized by not having components and we can resolve then as-is
-         */
-        type: new ResolvableType(abi, c.typeId, undefined).resolveInternal(c.typeId, undefined),
-      };
-    }
-
-    const typeArgs = c.typeArguments?.map((ta) => this.handleComponent(abi, ta).type);
-
-    const resolvable = new ResolvableType(
-      abi,
-      c.typeId,
-      this.mapTypeParametersAndArgs(abi, mt, typeArgs)
-    );
-
-    if (typeArgs?.every((ta) => ta instanceof ResolvedType)) {
-      return {
-        name: (c as Component).name,
-        type: resolvable.resolveInternal(c.typeId, undefined),
-      };
-    }
-
-    if (resolvable.components?.every((comp) => comp.type instanceof ResolvedType)) {
-      return {
-        name: (c as Component).name,
-        type: resolvable.resolveInternal(c.typeId, undefined),
-      };
-    }
-
     return {
-      name: (c as Component).name,
-      type: resolvable,
+      name,
+      type: ResolvableType.handleMetadataType(abi, mt, c.typeArguments),
     };
   }
 
@@ -163,6 +116,46 @@ export class ResolvableType {
       concreteType.metadataTypeId,
       ResolvableType.mapTypeParametersAndArgs(abi, metadataType, concreteTypeArgs)
     ).resolveInternal(concreteType.concreteTypeId, undefined);
+  }
+
+  private static handleMetadataType(
+    abi: JsonAbi,
+    mt: MetadataType,
+    typeArguments: Component['typeArguments']
+  ): ResolvableType | ResolvedType {
+    if (genericRegEx.test(mt.type)) {
+      return new ResolvableType(abi, mt.metadataTypeId, undefined);
+    }
+
+    if (!mt.components) {
+      /**
+       * types like u8, u16 can make their way into metadata types
+       * if they aren't used _directly_ in a function-input/function-output/log/configurable/messageType
+       * These types are characterized by not having components and we can resolve then as-is
+       */
+      return new ResolvableType(abi, mt.metadataTypeId, undefined).resolveInternal(
+        mt.metadataTypeId,
+        undefined
+      );
+    }
+
+    const typeArgs = typeArguments?.map((ta) => this.handleComponent(abi, ta).type);
+
+    const resolvable = new ResolvableType(
+      abi,
+      mt.metadataTypeId,
+      this.mapTypeParametersAndArgs(abi, mt, typeArgs)
+    );
+
+    if (typeArgs?.every((ta) => ta instanceof ResolvedType)) {
+      return resolvable.resolveInternal(mt.metadataTypeId, undefined);
+    }
+
+    if (resolvable.components?.every((comp) => comp.type instanceof ResolvedType)) {
+      return resolvable.resolveInternal(mt.metadataTypeId, undefined);
+    }
+
+    return resolvable;
   }
 
   public resolve(abi: JsonAbi, concreteType: ConcreteType) {
@@ -202,7 +195,7 @@ export class ResolvableType {
   ): ResolvedType {
     const typeArgs = this.resolveTypeArgs(typeParamsArgsMap);
 
-    const components: ResolvedComponent[] | undefined = this.components?.map((c) => {
+    const components: ResolvedType['components'] = this.components?.map((c) => {
       if (c.type instanceof ResolvedType) {
         return c as { name: string; type: ResolvedType };
       }
