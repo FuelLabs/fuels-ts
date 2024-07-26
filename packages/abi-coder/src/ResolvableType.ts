@@ -197,11 +197,12 @@ export class ResolvableType {
       return ResolvableType.resolveConcreteType(abi, concreteTypeArg);
     });
 
-    return this.resolveInternal(
-      concreteType.concreteTypeId,
-      ResolvableType.mapTypeParametersAndArgs(abi, this.metadataType, concreteTypeArgs) as Array<
-        [number, ResolvedType]
-      >
-    );
+    const typeParamsArgsMap = ResolvableType.mapTypeParametersAndArgs(
+      abi,
+      this.metadataType,
+      concreteTypeArgs
+    ) as Array<[number, ResolvedType]>;
+
+    return this.resolveInternal(concreteType.concreteTypeId, typeParamsArgsMap);
   }
 }
