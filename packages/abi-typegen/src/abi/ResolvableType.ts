@@ -20,8 +20,8 @@ interface ResolvableComponent {
 export class ResolvableType {
   private metadataType: MetadataType;
   type: string;
-
   components: ResolvableComponent[] | undefined;
+
   constructor(
     abi: JsonAbi,
     public metadataTypeId: number,
@@ -30,6 +30,7 @@ export class ResolvableType {
     const metadataType = abi.metadataTypes.find(
       (tm) => tm.metadataTypeId === metadataTypeId
     ) as MetadataType;
+
     this.metadataType = metadataType;
     this.type = metadataType.type;
 
@@ -40,6 +41,7 @@ export class ResolvableType {
     );
 
     let components = metadataType.components;
+
     if (isVector(metadataType.type)) {
       components = components?.map((c) => {
         if (c.name === 'buf') {
@@ -48,6 +50,7 @@ export class ResolvableType {
         return c;
       }) as Component[];
     }
+
     this.components = components?.map((c) => ResolvableType.handleComponent(abi, c));
   }
 
