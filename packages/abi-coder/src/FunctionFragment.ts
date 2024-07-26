@@ -1,8 +1,5 @@
-import { bufferFromString } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
@@ -10,10 +7,10 @@ import type { ResolvedType } from './ResolvedType';
 import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import { StdStringCoder } from './encoding/coders/StdStringCoder';
 import { TupleCoder } from './encoding/coders/TupleCoder';
-import { getFunctionSignature } from './getFunctionSignature';
 import type { AbiFunction, JsonAbi, StorageAttr } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
 import { optionRegEx } from './utils/constants';
+import { getFunctionSelector, getFunctionSignature } from './utils/functionSignatureUtils';
 import {
   findFunctionByName,
   findNonEmptyInputs,
@@ -46,17 +43,11 @@ export class FunctionFragment<
     this.name = name;
     this.signature = getFunctionSignature(this.jsonFn, resolvedTypes);
 
-    this.selector = FunctionFragment.getFunctionSelector(this.signature);
+    this.selector = getFunctionSelector(this.signature);
     this.selectorBytes = new StdStringCoder().encode(name);
     this.encoding = getEncodingVersion(jsonAbi.encodingVersion);
 
     this.attributes = this.jsonFn.attributes ?? [];
-  }
-
-  private static getFunctionSelector(functionSignature: string) {
-    const hashedFunctionSignature = sha256(bufferFromString(functionSignature, 'utf-8'));
-    // get first 4 bytes of signature + 0x prefix. then left-pad it to 8 bytes using toHex(8)
-    return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
   }
 
   encodeArguments(values: InputValue[]): Uint8Array {

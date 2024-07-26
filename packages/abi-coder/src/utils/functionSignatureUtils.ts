@@ -1,6 +1,11 @@
-import type { ResolvedType } from './ResolvedType';
-import type { AbiFunction } from './types/JsonAbi';
-import { structRegEx, arrayRegEx, enumRegEx, stringRegEx, isVector } from './utils/constants';
+import { bufferFromString } from '@fuel-ts/crypto';
+import { sha256 } from '@fuel-ts/hasher';
+import { bn } from '@fuel-ts/math';
+
+import type { ResolvedType } from '../ResolvedType';
+import type { AbiFunction } from '../types/JsonAbi';
+
+import { structRegEx, arrayRegEx, enumRegEx, stringRegEx, isVector } from './constants';
 
 function getArgSignaturePrefix({ type }: ResolvedType): string {
   const structMatch = structRegEx.test(type);
@@ -72,4 +77,10 @@ export function getFunctionSignature(fn: AbiFunction, resolvedTypes: ResolvedTyp
   );
 
   return `${fn.name}(${inputsSignatures.join(',')})`;
+}
+
+export function getFunctionSelector(functionSignature: string) {
+  const hashedFunctionSignature = sha256(bufferFromString(functionSignature, 'utf-8'));
+  // get first 4 bytes of signature + 0x prefix. then left-pad it to 8 bytes using toHex(8)
+  return bn(hashedFunctionSignature.slice(0, 10)).toHex(8);
 }
