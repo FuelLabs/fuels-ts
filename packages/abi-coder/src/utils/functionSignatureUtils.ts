@@ -5,10 +5,10 @@ import { bn } from '@fuel-ts/math';
 import type { ResolvedType } from '../ResolvedType';
 import type { AbiFunction } from '../types/JsonAbi';
 
-import { structRegEx, arrayRegEx, enumRegEx, stringRegEx, isVector } from './constants';
+import { arrayRegEx, enumRegEx, stringRegEx, isVector } from './constants';
 
 function getArgSignaturePrefix({ type }: ResolvedType): string {
-  const structMatch = structRegEx.test(type);
+  const structMatch = type.startsWith('struct ');
   if (structMatch) {
     return 's';
   }

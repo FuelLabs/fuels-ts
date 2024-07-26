@@ -24,7 +24,6 @@ export const STD_STRING_CODER_TYPE = 'struct std::string::String';
 export const STR_SLICE_CODER_TYPE = 'str';
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
 export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
-export const structRegEx = /^struct (.+::)?(.+)$/;
 export const enumRegEx = /^enum (.+::)?(.+)$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
 export const genericRegEx = /^generic (?<name>\w+)$/;

@@ -23,7 +23,6 @@ import {
   enumRegEx,
   isVector,
   stringRegEx,
-  structRegEx,
   tupleRegEx,
 } from '../../utils/constants';
 import type { Coder } from '../coders/AbstractCoder';
@@ -120,7 +119,7 @@ export const getCoder: GetCoderFn = (
     return new VecCoder(itemCoder as Coder);
   }
 
-  if (structRegEx.exec(resolvedAbiType.type)) {
+  if (resolvedAbiType.type.startsWith('struct ')) {
     const coders = getCoders(components, { getCoder });
     return new StructCoder(resolvedAbiType.type, coders);
   }
