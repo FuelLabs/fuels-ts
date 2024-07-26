@@ -75,7 +75,7 @@ jobs:
           wait-interval: 30
 
       - name: Run tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+        # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         run: pnpm test:integration
         env:
           PUBLISHED_NPM_TAG: next
