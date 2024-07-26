@@ -5,7 +5,7 @@ import { bn } from '@fuel-ts/math';
 import type { ResolvedType } from '../ResolvedType';
 import type { AbiFunction } from '../types/JsonAbi';
 
-import { arrayRegEx, stringRegEx, isVector } from './constants';
+import { stringRegEx, isVector, isArray, getArrayLength } from './constants';
 
 function getArgSignaturePrefix({ type }: ResolvedType): string {
   const structMatch = type.startsWith('struct ');
@@ -13,8 +13,7 @@ function getArgSignaturePrefix({ type }: ResolvedType): string {
     return 's';
   }
 
-  const arrayMatch = arrayRegEx.test(type);
-  if (arrayMatch) {
+  if (isArray(type)) {
     return 'a';
   }
 
@@ -44,11 +43,10 @@ function getArgSignatureContent(resolved: ResolvedType): string {
     return resolved.type;
   }
 
-  const arrayMatch = arrayRegEx.exec(resolved.type)?.groups;
-
-  if (arrayMatch) {
+  if (isArray(resolved.type)) {
+    const length = getArrayLength(resolved.type);
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return `[${getSignature(resolved.components[0].type)};${arrayMatch.length}]`;
+    return `[${getSignature(resolved.components[0].type)};${length}]`;
   }
 
   const typeArgumentsSignature =

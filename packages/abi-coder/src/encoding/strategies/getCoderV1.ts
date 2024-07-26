@@ -19,10 +19,11 @@ import {
   U32_CODER_TYPE,
   U64_CODER_TYPE,
   U8_CODER_TYPE,
-  arrayRegEx,
   isVector,
   stringRegEx,
   tupleRegEx,
+  isArray,
+  getArrayLength,
 } from '../../utils/constants';
 import type { Coder } from '../coders/AbstractCoder';
 import { ArrayCoder } from '../coders/ArrayCoder';
@@ -95,10 +96,8 @@ export const getCoder: GetCoderFn = (
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const components = resolvedAbiType.components!;
 
-  const arrayMatch = arrayRegEx.exec(resolvedAbiType.type)?.groups;
-
-  if (arrayMatch) {
-    const length = parseInt(arrayMatch.length, 10);
+  if (isArray(resolvedAbiType.type)) {
+    const length = getArrayLength(resolvedAbiType.type);
     const arg = components[0];
     if (!arg) {
       throw new FuelError(

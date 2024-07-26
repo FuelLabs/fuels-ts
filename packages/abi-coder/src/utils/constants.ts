@@ -12,6 +12,7 @@ export const BOOL_CODER_TYPE = 'bool';
 export const B256_CODER_TYPE = 'b256';
 export const B512_CODER_TYPE = 'struct std::b512::B512';
 export const optionRegEx = /^enum (std::option::)?Option$/m;
+
 export function isVector(type: string) {
   const MATCH_REGEX: RegExp = /^struct (std::vec::)?Vec/m;
   const IGNORE_REGEX: RegExp = /^struct (std::vec::)?RawVec$/m;
@@ -23,7 +24,15 @@ export const BYTES_CODER_TYPE = 'struct std::bytes::Bytes';
 export const STD_STRING_CODER_TYPE = 'struct std::string::String';
 export const STR_SLICE_CODER_TYPE = 'str';
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
-export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
+
+export function isArray(type: string) {
+  return type.startsWith('[') && type.endsWith(']') && type.split(';').length === 2;
+}
+export function getArrayLength(type: string): number {
+  const [, length] = type.slice(1, type.length - 1).split(';');
+  return +length;
+}
+
 export const tupleRegEx = /^\((?<items>.*)\)$/;
 export const genericRegEx = /^generic (?<name>\w+)$/;
 /**
