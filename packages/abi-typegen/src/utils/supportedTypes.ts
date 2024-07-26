@@ -1,4 +1,4 @@
-import type { ResolvableMetadataType } from '../abi/ResolvableMetadataType';
+import type { ResolvableType } from '../abi/ResolvableType';
 import type { ResolvedType } from '../abi/ResolvedType';
 import { ArrayType } from '../abi/types/ArrayType';
 import { B256Type } from '../abi/types/B256Type';
@@ -54,7 +54,7 @@ export const supportedTypes = [
 ] as unknown as Array<SupportedTypeClass>;
 
 export interface SupportedTypeClass {
-  new (type: ResolvedType | ResolvableMetadataType): IType;
+  new (type: ResolvedType | ResolvableType): IType;
   swayType: string;
   isSuitableFor(params: { type: string }): boolean;
 }

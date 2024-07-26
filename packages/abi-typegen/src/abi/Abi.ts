@@ -8,7 +8,7 @@ import { makeType } from '../utils/makeType';
 import { shouldSkipAbiType } from '../utils/shouldSkipAbiType';
 import { supportedTypes } from '../utils/supportedTypes';
 
-import { ResolvableMetadataType } from './ResolvableMetadataType';
+import { ResolvableType } from './ResolvableType';
 import { AbiConfigurable } from './configurable/AbiConfigurable';
 import { AbiFunction } from './functions/AbiFunction';
 import { makeResolvedType } from './makeResolvedType';
@@ -85,21 +85,21 @@ export class Abi {
   }
 
   parse() {
-    const resolvableMetadataTypes = this.rawContents.metadataTypes.map((tm) => ({
+    const resolvableTypes = this.rawContents.metadataTypes.map((tm) => ({
       typeId: tm.metadataTypeId,
-      type: new ResolvableMetadataType(this.rawContents, tm.metadataTypeId, undefined),
+      type: new ResolvableType(this.rawContents, tm.metadataTypeId, undefined),
     }));
 
     const resolvedConcreteTypes = this.rawContents.concreteTypes.map((ct) => ({
       typeId: ct.concreteTypeId,
       type: makeResolvedType(
         this.rawContents,
-        resolvableMetadataTypes.map((t) => t.type),
+        resolvableTypes.map((t) => t.type),
         ct.concreteTypeId
       ),
     }));
 
-    const types = [...resolvableMetadataTypes, ...resolvedConcreteTypes]
+    const types = [...resolvableTypes, ...resolvedConcreteTypes]
       .filter((t) => !shouldSkipAbiType(t.type))
       .map(({ typeId, type }) => ({
         typeId,

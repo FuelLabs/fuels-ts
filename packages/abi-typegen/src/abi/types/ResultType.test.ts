@@ -5,7 +5,7 @@ import {
 import { makeType } from '../../utils/makeType';
 import { shouldSkipAbiType } from '../../utils/shouldSkipAbiType';
 import { supportedTypes } from '../../utils/supportedTypes';
-import { ResolvableMetadataType } from '../ResolvableMetadataType';
+import { ResolvableType } from '../ResolvableType';
 
 import { EnumType } from './EnumType';
 import { ResultType } from './ResultType';
@@ -20,11 +20,11 @@ describe('ResultType.ts', () => {
   function getResultType() {
     const { abiContents } = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
 
-    const resolvableMetadataTypes = abiContents.metadataTypes.map(
-      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    const resolvableTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableType(abiContents, tm.metadataTypeId, undefined)
     );
 
-    const types = resolvableMetadataTypes
+    const types = resolvableTypes
       .filter((t) => !shouldSkipAbiType(t))
       .map((t) => makeType(supportedTypes, t));
 

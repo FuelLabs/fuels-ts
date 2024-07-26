@@ -4,7 +4,7 @@ import {
 } from '../../../test/fixtures/forc-projects/index';
 import { makeType } from '../../utils/makeType';
 import { supportedTypes } from '../../utils/supportedTypes';
-import { ResolvableMetadataType } from '../ResolvableMetadataType';
+import { ResolvableType } from '../ResolvableType';
 
 import { EvmAddressType } from './EvmAddressType';
 import { StructType } from './StructType';
@@ -17,11 +17,11 @@ describe('EvmAddressType.ts', () => {
   test('should properly parse type attributes', () => {
     const { abiContents } = getTypegenForcProject(AbiTypegenProjectsEnum.EVM_ADDRESS);
 
-    const resolvableMetadataTypes = abiContents.metadataTypes.map(
-      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    const resolvableTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableType(abiContents, tm.metadataTypeId, undefined)
     );
 
-    const types = resolvableMetadataTypes.map((t) => makeType(supportedTypes, t));
+    const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
     const suitableForEvmAddress = EvmAddressType.isSuitableFor({ type: EvmAddressType.swayType });
     const suitableForStruct = EvmAddressType.isSuitableFor({ type: StructType.swayType });

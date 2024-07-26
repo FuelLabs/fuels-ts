@@ -1,12 +1,9 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { ResolvableMetadataType } from '../abi/ResolvableMetadataType';
+import type { ResolvableType } from '../abi/ResolvableType';
 import type { ResolvedType } from '../abi/ResolvedType';
 
-export function extractStructName(params: {
-  type: ResolvedType | ResolvableMetadataType;
-  regex: RegExp;
-}) {
+export function extractStructName(params: { type: ResolvedType | ResolvableType; regex: RegExp }) {
   const { type, regex } = params;
 
   const matches = type.type.match(regex);

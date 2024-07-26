@@ -5,7 +5,7 @@ import {
 import type { IType } from '../../types/interfaces/IType';
 import { makeType } from '../../utils/makeType';
 import { supportedTypes } from '../../utils/supportedTypes';
-import { ResolvableMetadataType } from '../ResolvableMetadataType';
+import { ResolvableType } from '../ResolvableType';
 
 import { BytesType } from './BytesType';
 import { EvmAddressType } from './EvmAddressType';
@@ -20,11 +20,11 @@ describe('StructType.ts', () => {
   function getType(project: AbiTypegenProjectsEnum, structName: string) {
     const { abiContents } = getTypegenForcProject(project);
 
-    const resolvableMetadataTypes = abiContents.metadataTypes.map(
-      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    const resolvableTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableType(abiContents, tm.metadataTypeId, undefined)
     );
 
-    const types = resolvableMetadataTypes.map((t) => makeType(supportedTypes, t));
+    const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
     return types.find((t) => t.attributes.structName === structName) as IType;
   }

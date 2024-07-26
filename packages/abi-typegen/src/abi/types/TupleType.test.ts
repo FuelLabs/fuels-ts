@@ -5,7 +5,7 @@ import {
 import type { IType } from '../../types/interfaces/IType';
 import { makeType } from '../../utils/makeType';
 import { supportedTypes } from '../../utils/supportedTypes';
-import { ResolvableMetadataType } from '../ResolvableMetadataType';
+import { ResolvableType } from '../ResolvableType';
 
 import { ArrayType } from './ArrayType';
 import { TupleType } from './TupleType';
@@ -17,11 +17,11 @@ describe('TupleType.ts', () => {
   function getType(project: AbiTypegenProjectsEnum, metadataTypeId: number) {
     const { abiContents } = getTypegenForcProject(project);
 
-    const resolvableMetadataTypes = abiContents.metadataTypes.map(
-      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    const resolvableTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableType(abiContents, tm.metadataTypeId, undefined)
     );
 
-    const types = resolvableMetadataTypes.reduce(
+    const types = resolvableTypes.reduce(
       (obj, val) => ({
         ...obj,
         [val.metadataTypeId]: makeType(supportedTypes, val),

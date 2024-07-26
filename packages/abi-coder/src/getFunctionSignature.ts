@@ -1,4 +1,4 @@
-import type { ResolvableMetadataType } from './ResolvableMetadataType';
+import type { ResolvableType } from './ResolvableType';
 import type { ResolvedType } from './ResolvedType';
 import { makeResolvedType } from './makeResolvedType';
 import type { JsonAbi, AbiFunction } from './types/JsonAbi';
@@ -70,11 +70,11 @@ function getSignature(abi: JsonAbi, type: ResolvedType) {
 
 export function getFunctionSignature(
   abi: JsonAbi,
-  resolvableMetadataTypes: ResolvableMetadataType[],
+  resolvableTypes: ResolvableType[],
   fn: AbiFunction
 ): string {
   const inputsSignatures = fn.inputs.map((input) =>
-    getSignature(abi, makeResolvedType(abi, resolvableMetadataTypes, input.concreteTypeId))
+    getSignature(abi, makeResolvedType(abi, resolvableTypes, input.concreteTypeId))
   );
 
   return `${fn.name}(${inputsSignatures.join(',')})`;

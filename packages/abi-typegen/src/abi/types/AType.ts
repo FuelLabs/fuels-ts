@@ -1,7 +1,7 @@
 import type { IType, ITypeAttributes } from '../../types/interfaces/IType';
 import { makeType } from '../../utils/makeType';
 import type { SupportedTypeClass } from '../../utils/supportedTypes';
-import type { ResolvableMetadataType } from '../ResolvableMetadataType';
+import type { ResolvableType } from '../ResolvableType';
 import type { ResolvedType } from '../ResolvedType';
 
 export class AType {
@@ -22,7 +22,7 @@ export class AType {
     outputDecl: '',
   };
 
-  constructor(protected type: ResolvedType | ResolvableMetadataType) {}
+  constructor(protected type: ResolvedType | ResolvableType) {}
 
   public parseTypeDeclarations(supportedTypes: SupportedTypeClass[]) {
     const { typeParamsArgsMap } = this.type;

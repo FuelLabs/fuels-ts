@@ -1,4 +1,4 @@
-import type { ResolvableMetadataType } from '../abi/ResolvableMetadataType';
+import type { ResolvableType } from '../abi/ResolvableType';
 import type { ResolvedType } from '../abi/ResolvedType';
 
 import { makeType } from './makeType';
@@ -6,7 +6,7 @@ import type { SupportedTypeClass } from './supportedTypes';
 
 function getComponentLabels(
   supportedTypes: SupportedTypeClass[],
-  component: { name: string; type: ResolvedType | ResolvableMetadataType },
+  component: { name: string; type: ResolvedType | ResolvableType },
   includeName: boolean
 ): { input: string; output: string } {
   const {
@@ -24,7 +24,7 @@ function getComponentLabels(
 
 export function getStructContents(
   supportedTypes: SupportedTypeClass[],
-  type: ResolvedType | ResolvableMetadataType,
+  type: ResolvedType | ResolvableType,
   includeComponentNames: boolean
 ) {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

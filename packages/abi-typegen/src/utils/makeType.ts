@@ -1,13 +1,13 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { ResolvableMetadataType } from '../abi/ResolvableMetadataType';
+import type { ResolvableType } from '../abi/ResolvableType';
 import type { ResolvedType } from '../abi/ResolvedType';
 
 import type { SupportedTypeClass } from './supportedTypes';
 
 export function makeType(
   supportedTypes: SupportedTypeClass[],
-  type: ResolvableMetadataType | ResolvedType
+  type: ResolvableType | ResolvedType
 ) {
   const TypeClass = supportedTypes.find((st) => st.isSuitableFor(type)) as SupportedTypeClass;
 

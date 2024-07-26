@@ -4,7 +4,7 @@ import {
 } from '../../../test/fixtures/forc-projects';
 import { makeType } from '../../utils/makeType';
 import { supportedTypes } from '../../utils/supportedTypes';
-import { ResolvableMetadataType } from '../ResolvableMetadataType';
+import { ResolvableType } from '../ResolvableType';
 
 import { ArrayType } from './ArrayType';
 import { TupleType } from './TupleType';
@@ -28,10 +28,10 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const { abiContents } = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY);
 
-    const resolvableMetadataTypes = abiContents.metadataTypes.map(
-      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    const resolvableTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableType(abiContents, tm.metadataTypeId, undefined)
     );
-    const types = resolvableMetadataTypes.map((t) => makeType(supportedTypes, t));
+    const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
     // validating `struct B`, with simple tuples on property `x`
     const b = types.find((t) => t instanceof ArrayType) as ArrayType;
@@ -44,10 +44,10 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: nested', () => {
     const { abiContents } = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS);
 
-    const resolvableMetadataTypes = abiContents.metadataTypes.map(
-      (tm) => new ResolvableMetadataType(abiContents, tm.metadataTypeId, undefined)
+    const resolvableTypes = abiContents.metadataTypes.map(
+      (tm) => new ResolvableType(abiContents, tm.metadataTypeId, undefined)
     );
-    const types = resolvableMetadataTypes.map((t) => makeType(supportedTypes, t));
+    const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
     // validating `struct B`, with simple tuples on property `x`
     const a = types.find((t) => t instanceof ArrayType) as ArrayType;

@@ -5,7 +5,7 @@ import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
-import { ResolvableMetadataType } from './ResolvableMetadataType';
+import { ResolvableType } from './ResolvableType';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { Configurable, JsonAbi } from './types/JsonAbi';
 import { type EncodingVersion } from './utils/constants';
@@ -16,20 +16,20 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly configurables: Record<string, Configurable>;
   readonly jsonAbi: TAbi;
   readonly encoding: EncodingVersion;
-  readonly resolvableMetadataTypes: ResolvableMetadataType[] = [];
+  private readonly resolvableTypes: ResolvableType[] = [];
 
   constructor(jsonAbi: TAbi) {
     this.jsonAbi = jsonAbi;
     this.encoding = getEncodingVersion(jsonAbi.encodingVersion);
 
-    this.resolvableMetadataTypes = jsonAbi.metadataTypes.map(
-      (mt) => new ResolvableMetadataType(jsonAbi, mt.metadataTypeId, undefined)
+    this.resolvableTypes = jsonAbi.metadataTypes.map(
+      (mt) => new ResolvableType(jsonAbi, mt.metadataTypeId, undefined)
     );
 
     this.functions = Object.fromEntries(
       this.jsonAbi.functions.map((x) => [
         x.name,
-        new FunctionFragment(this.jsonAbi, this.resolvableMetadataTypes, x.name),
+        new FunctionFragment(this.jsonAbi, this.resolvableTypes, x.name),
       ])
     );
 
@@ -77,7 +77,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
 
     return AbiCoder.decode(
       this.jsonAbi,
-      this.resolvableMetadataTypes,
+      this.resolvableTypes,
       loggedType.concreteTypeId,
       arrayify(data),
       0,
@@ -96,14 +96,8 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       );
     }
 
-    return AbiCoder.encode(
-      this.jsonAbi,
-      this.resolvableMetadataTypes,
-      configurable.concreteTypeId,
-      value,
-      {
-        encoding: this.encoding,
-      }
-    );
+    return AbiCoder.encode(this.jsonAbi, this.resolvableTypes, configurable.concreteTypeId, value, {
+      encoding: this.encoding,
+    });
   }
 }
