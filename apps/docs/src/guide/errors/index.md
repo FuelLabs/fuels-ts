@@ -138,6 +138,12 @@ When the supplied policy type is invalid for the given Script.
 
 Check the policy type is defined in `PolicyType`.
 
+### `INVALID_PROVIDER`
+
+When unable to connect to the `Provider` or `Network` supplied to a method on the [`Fuel`](../wallets/connectors.md) class.
+
+Check that the `Provider` or `Network` is supplied correctly.
+
 ### `INVALID_PUBLIC_KEY`
 
 When the provided public key is invalid.
