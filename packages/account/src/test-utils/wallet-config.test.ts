@@ -84,15 +84,7 @@ describe('WalletsConfig', () => {
       () => new WalletsConfig(hexlify(randomBytes(32)), { ...configOptions, amountPerCoin: -1 }),
       new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
-        'Amount per coin must be greater than zero.'
-      )
-    );
-
-    await expectToThrowFuelError(
-      () => new WalletsConfig(hexlify(randomBytes(32)), { ...configOptions, amountPerCoin: 0 }),
-      new FuelError(
-        FuelError.CODES.INVALID_INPUT_PARAMETERS,
-        'Amount per coin must be greater than zero.'
+        'Amount per coin must be greater than or equal to zero.'
       )
     );
   });
