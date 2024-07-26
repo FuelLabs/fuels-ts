@@ -3,7 +3,7 @@ import type { MetadataType, JsonAbi, Component, TypeArgument, ConcreteType } fro
 import { isVector, genericRegEx } from './utils/constants';
 
 export class ResolvableType {
-  metadataType: MetadataType;
+  private metadataType: MetadataType;
   type: string;
 
   components: { name: string; type: ResolvableType | ResolvedType }[] | undefined;

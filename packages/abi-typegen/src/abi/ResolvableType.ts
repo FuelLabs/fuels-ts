@@ -13,7 +13,7 @@ import { ResolvedType } from './ResolvedType';
  * This file is a copy of the one in abi-coder and will be deleted once the packages merge.
  */
 export class ResolvableType {
-  metadataType: MetadataType;
+  private metadataType: MetadataType;
   type: string;
 
   components: { name: string; type: ResolvableType | ResolvedType }[] | undefined;
