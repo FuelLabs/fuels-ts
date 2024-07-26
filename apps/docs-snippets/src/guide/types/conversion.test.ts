@@ -128,6 +128,6 @@ describe(__filename, () => {
     const assetId: AssetId = address.toAssetId();
     // #endregion conversion-4
 
-    expect(assetId.value);
+    expect(assetId.bits).toBeTruthy();
   });
 });

@@ -37,7 +37,7 @@ describe(__filename, () => {
     // #region checking-balances-2
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
-    const balances: CoinQuantity[] = await myWallet.getBalances();
+    const { balances } = await myWallet.getBalances();
     // #endregion checking-balances-2
 
     expect(balances).toBeDefined();

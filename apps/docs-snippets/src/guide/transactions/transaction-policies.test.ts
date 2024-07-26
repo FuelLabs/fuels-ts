@@ -39,7 +39,7 @@ describe('Transaction Policies', () => {
 
     expect(policyTypes).toBe(15);
     expect(policies?.[0].type).toBe(PolicyType.Tip);
-    expect(bn(policies?.[0].data).eq(transactionRequest.tip)).toBeTruthy();
+    expect(bn(policies?.[0].data).eq(bn(transactionRequest.tip))).toBeTruthy();
     expect(policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(policies?.[1].data).eq(bn(transactionRequest.witnessLimit))).toBeTruthy();
     expect(policies?.[2].type).toBe(PolicyType.Maturity);
@@ -84,7 +84,7 @@ describe('Transaction Policies', () => {
     }
 
     expect(policies?.[0].type).toBe(PolicyType.Tip);
-    expect(bn(policies?.[0].data).eq(transactionRequest.tip)).toBeTruthy();
+    expect(bn(policies?.[0].data).eq(bn(transactionRequest.tip))).toBeTruthy();
     expect(policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(policies?.[1].data).eq(bn(transactionRequest.witnessLimit))).toBeTruthy();
     expect(policies?.[2].type).toBe(PolicyType.Maturity);
