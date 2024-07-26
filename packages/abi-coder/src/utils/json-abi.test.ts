@@ -20,6 +20,7 @@ const MOCK_ABI: JsonAbi = {
   ],
   loggedTypes: [],
   configurables: [],
+  messagesTypes: [],
 };
 
 const DEFAULT_ENCODING_VERSION = ENCODING_V1;

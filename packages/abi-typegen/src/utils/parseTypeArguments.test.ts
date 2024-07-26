@@ -70,7 +70,7 @@ describe('parseTypeArguments.ts', () => {
   /*
     Test helpers
   */
-  function bundleTypes(rawTypes = defautRawTypes) {
+  function bundleTypes(rawTypes: readonly JsonAbiType[] = defautRawTypes) {
     const types = rawTypes.map((rawAbiType) => makeType({ rawAbiType }));
     return types;
   }

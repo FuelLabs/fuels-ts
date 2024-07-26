@@ -23,8 +23,10 @@ describe('cli.js', () => {
   function mockAllDeps(params: {
     systemForcIsGt: boolean;
     systemForcIsEq: boolean;
+    systemForcIsLt: boolean;
     systemFuelCoreIsGt: boolean;
     systemFuelCoreIsEq: boolean;
+    systemFuelCoreIsLt: boolean;
     systemForcVersion: string;
     systemFuelCoreVersion: string;
     systemVersionsError: Error | null;
@@ -34,8 +36,10 @@ describe('cli.js', () => {
       systemFuelCoreVersion,
       systemFuelCoreIsGt,
       systemFuelCoreIsEq,
+      systemFuelCoreIsLt,
       systemForcIsGt,
       systemForcIsEq,
+      systemForcIsLt,
       systemVersionsError,
     } = params;
 
@@ -52,6 +56,8 @@ describe('cli.js', () => {
       systemFuelCoreIsGt,
       systemForcIsEq,
       systemFuelCoreIsEq,
+      systemForcIsLt,
+      systemFuelCoreIsLt,
     }));
 
     vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockImplementation(() => ({
@@ -85,8 +91,10 @@ describe('cli.js', () => {
       systemFuelCoreVersion: '1.1.1',
       systemFuelCoreIsGt: true,
       systemFuelCoreIsEq: false,
+      systemFuelCoreIsLt: false,
       systemForcIsGt: true,
       systemForcIsEq: false,
+      systemForcIsLt: false,
       systemVersionsError: null,
     });
 
@@ -106,8 +114,10 @@ describe('cli.js', () => {
       systemFuelCoreVersion: '1.0.0',
       systemFuelCoreIsGt: false,
       systemFuelCoreIsEq: true,
+      systemFuelCoreIsLt: false,
       systemForcIsGt: false,
       systemForcIsEq: true,
+      systemForcIsLt: false,
       systemVersionsError: null,
     });
 
@@ -127,8 +137,10 @@ describe('cli.js', () => {
       systemFuelCoreVersion: '0.0.1',
       systemFuelCoreIsGt: false,
       systemFuelCoreIsEq: false,
+      systemFuelCoreIsLt: true,
       systemForcIsGt: false,
       systemForcIsEq: false,
+      systemForcIsLt: true,
       systemVersionsError: null,
     });
 
@@ -150,8 +162,10 @@ describe('cli.js', () => {
       systemFuelCoreVersion: '0.0.1',
       systemFuelCoreIsGt: false,
       systemFuelCoreIsEq: false,
+      systemFuelCoreIsLt: false,
       systemForcIsGt: false,
       systemForcIsEq: false,
+      systemForcIsLt: false,
       systemVersionsError,
     });
 

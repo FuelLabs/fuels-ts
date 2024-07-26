@@ -67,6 +67,7 @@ describe('factory.ts', () => {
     const rawContents = project.abiContents;
 
     // friction here (deletes 'main' function by emptying the functions array)
+    // @ts-expect-error we are able to update the ABI
     rawContents.functions = [];
 
     const abi = new Abi({

@@ -16,6 +16,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "tsup",
+    "postbuild": "tsc --noEmit",
     "prepublishOnly": "tsx ./scripts/prepublish.ts"
   },
   "dependencies": {
