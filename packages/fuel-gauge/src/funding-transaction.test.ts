@@ -293,14 +293,26 @@ describe('Funding Transactions', () => {
      * Funding wallet1 with only half of the required amount in Asset A and with enough amount
      * in the Base Asset to pay the fee
      */
-    await wallet.transfer(wallet1.address, totalInBaseAsset, provider.getBaseAssetId());
-    await wallet.transfer(wallet1.address, partiallyInAssetA, assetA);
+    const submitted1 = await wallet.transfer(
+      wallet1.address,
+      totalInBaseAsset,
+      provider.getBaseAssetId()
+    );
+    await submitted1.waitForResult();
+
+    const submitted2 = await wallet.transfer(wallet1.address, partiallyInAssetA, assetA);
+    await submitted2.waitForResult();
 
     /**
      * Funding wallet2 with the remaining amount needed in Asset A.
      * Note: This wallet does not have any additional funds to pay for the transaction fee.
      */
-    await wallet.transfer(wallet2.address, totalInAssetA - partiallyInAssetA, assetA);
+    const submitted3 = await wallet.transfer(
+      wallet2.address,
+      totalInAssetA - partiallyInAssetA,
+      assetA
+    );
+    await submitted3.waitForResult();
 
     let transactionRequest = new ScriptTransactionRequest();
 
