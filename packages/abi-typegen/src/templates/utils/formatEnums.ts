@@ -8,7 +8,6 @@ export function formatEnums(params: { types: IType[] }) {
     .filter((t) => t.name === 'enum')
     .map((t) => {
       const et = t as EnumType; // only enums here
-      const structName = et.attributes.structName as string;
       const inputNativeValues = et.getNativeEnum();
       const outputNativeValues = inputNativeValues;
 
@@ -16,19 +15,17 @@ export function formatEnums(params: { types: IType[] }) {
       const inputValues = inputNativeValues ? undefined : input;
       const outputValues = outputNativeValues ? undefined : output;
 
-      const typeAnnotations = et.typeDeclarations.inputDecl;
-
       return {
-        structName,
+        inputLabel: et.attributes.inputLabel,
+        outputLabel: et.attributes.outputLabel,
         inputValues,
         outputValues,
         recycleRef: inputValues === outputValues, // reduces duplication
         inputNativeValues,
         outputNativeValues,
-        typeAnnotations,
       };
     })
-    .sort((a, b) => (a.structName < b.structName ? -1 : 1));
+    .sort((a, b) => (a.inputLabel < b.inputLabel ? -1 : 1));
 
   return { enums };
 }

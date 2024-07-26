@@ -42,8 +42,8 @@ describe('ResultType.ts', () => {
   test('should properly parse type attributes', () => {
     const type = getResultType();
 
-    expect(type.attributes.inputLabel).toEqual('Result');
-    expect(type.attributes.outputLabel).toEqual('Result');
+    expect(type.attributes.inputLabel).toEqual('Result<T, E>');
+    expect(type.attributes.outputLabel).toEqual('Result<T, E>');
     expect(type.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });

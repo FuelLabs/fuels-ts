@@ -39,8 +39,8 @@ describe('OptionType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const b = getOptionType();
 
-    expect(b.attributes.inputLabel).toEqual('Option');
-    expect(b.attributes.outputLabel).toEqual('Option');
+    expect(b.attributes.inputLabel).toEqual('Option<T>');
+    expect(b.attributes.outputLabel).toEqual('Option<T>');
     expect(b.requiredFuelsMembersImports).toStrictEqual([]);
   });
 });

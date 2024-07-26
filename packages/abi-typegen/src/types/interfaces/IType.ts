@@ -3,17 +3,12 @@ import type { SupportedTypeClass } from '../../utils/supportedTypes';
 export interface ITypeAttributes {
   inputLabel: string;
   outputLabel: string;
-  structName?: string;
-  /*
-    If `structName` is set, input/output labels will mirror it.
-  */
 }
 
 export interface IType {
   name: string;
   attributes: ITypeAttributes;
   requiredFuelsMembersImports: string[];
-  typeDeclarations: { inputDecl: string; outputDecl: string };
   structContents: { input: string; output: string };
 
   parseComponentsAttributes(types: SupportedTypeClass[]): void;

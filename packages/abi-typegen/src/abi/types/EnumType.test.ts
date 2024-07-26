@@ -15,7 +15,7 @@ import { U16Type } from './U16Type';
  * @group node
  */
 describe('EnumType.ts', () => {
-  function getType(project: AbiTypegenProjectsEnum, structName: string) {
+  function getType(project: AbiTypegenProjectsEnum, inputLabel: string) {
     const { abiContents } = getTypegenForcProject(project);
 
     const resolvableTypes = abiContents.metadataTypes.map(
@@ -24,11 +24,10 @@ describe('EnumType.ts', () => {
 
     const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
-    return types.find((t) => t.attributes.structName === structName) as IType;
+    return types.find((t) => t.attributes.inputLabel === inputLabel) as IType;
   }
 
   function validateCommonEnumAttributes(params: { enum: IType }) {
-    expect(params.enum.attributes.structName).toEqual('MyEnum');
     expect(params.enum.attributes.inputLabel).toEqual('MyEnumInput');
     expect(params.enum.attributes.outputLabel).toEqual('MyEnumOutput');
     expect(params.enum.requiredFuelsMembersImports).toStrictEqual([]);
@@ -46,7 +45,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: simple enums', () => {
-    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_SIMPLE, 'MyEnum') as EnumType;
+    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_SIMPLE, 'MyEnumInput') as EnumType;
     validateCommonEnumAttributes({ enum: myEnum });
 
     const { input, output } = myEnum.structContents;
@@ -59,7 +58,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: use native TS enum on a simple enum', () => {
-    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE, 'MyEnum') as EnumType;
+    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE, 'MyEnumInput') as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -69,7 +68,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: enums of enums', () => {
-    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_OF_ENUMS, 'MyEnum') as EnumType;
+    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_OF_ENUMS, 'MyEnumInput') as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -80,7 +79,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: enums of structs', () => {
-    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_OF_STRUCTS, 'MyEnum') as EnumType;
+    const myEnum = getType(AbiTypegenProjectsEnum.ENUM_OF_STRUCTS, 'MyEnumInput') as EnumType;
 
     validateCommonEnumAttributes({ enum: myEnum });
 
@@ -91,7 +90,7 @@ describe('EnumType.ts', () => {
   });
 
   test('should properly parse type attributes for: array of enums', () => {
-    const myType = getType(AbiTypegenProjectsEnum.ARRAY_OF_ENUMS, 'MyStruct') as StructType;
+    const myType = getType(AbiTypegenProjectsEnum.ARRAY_OF_ENUMS, 'MyStructInput') as StructType;
 
     const { input, output } = myType.structContents;
 

@@ -11,14 +11,13 @@ function getComponentLabels(
 ): { input: string; output: string } {
   const {
     attributes: { inputLabel, outputLabel },
-    typeDeclarations: { inputDecl, outputDecl },
   } = makeType(supportedTypes, component.type);
 
   const name = includeName ? `${component.name}: ` : '';
 
   return {
-    input: `${name}${inputLabel}${inputDecl}`,
-    output: `${name}${outputLabel}${outputDecl}`,
+    input: `${name}${inputLabel}`,
+    output: `${name}${outputLabel}`,
   };
 }
 

@@ -26,22 +26,22 @@ describe('formatStructs.ts', () => {
     // validating
     expect(structs).toStrictEqual([
       {
-        structName: 'StructA',
-        typeAnnotations: '<T, U>',
+        inputLabel: 'StructAInput<T, U>',
+        outputLabel: 'StructAOutput<T, U>',
         inputValues: 'propA1: T, propA2: U',
         outputValues: 'propA1: T, propA2: U',
         recycleRef: true,
       },
       {
-        structName: 'StructB',
-        typeAnnotations: '<T>',
+        inputLabel: 'StructBInput<T>',
+        outputLabel: 'StructBOutput<T>',
         inputValues: 'propB1: T',
         outputValues: 'propB1: T',
         recycleRef: true,
       },
       {
-        structName: 'StructC',
-        typeAnnotations: '',
+        inputLabel: 'StructCInput',
+        outputLabel: 'StructCOutput',
         inputValues: 'propC1: StructAInput<StructBInput<BigNumberish>, BigNumberish>',
         outputValues: 'propC1: StructAOutput<StructBOutput<number>, number>',
         recycleRef: false,

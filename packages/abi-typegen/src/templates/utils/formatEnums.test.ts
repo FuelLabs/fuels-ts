@@ -26,22 +26,22 @@ describe('formatEnums.ts', () => {
     // validating
     expect(enums).toStrictEqual([
       {
-        structName: 'LetterEnum',
+        inputLabel: 'LetterEnumInput',
+        outputLabel: 'LetterEnumOutput',
         inputNativeValues: "a = 'a', b = 'b', c = 'c'",
         inputValues: undefined,
         outputNativeValues: "a = 'a', b = 'b', c = 'c'",
         outputValues: undefined,
         recycleRef: true,
-        typeAnnotations: '',
       },
       {
-        structName: 'MyEnum',
+        inputLabel: 'MyEnumInput',
+        outputLabel: 'MyEnumOutput',
         inputNativeValues: undefined,
         inputValues: 'letter: LetterEnumInput',
         outputNativeValues: undefined,
         outputValues: 'letter: LetterEnumOutput',
         recycleRef: false,
-        typeAnnotations: '',
       },
     ]);
   });

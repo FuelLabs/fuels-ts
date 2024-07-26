@@ -15,28 +15,28 @@ import type { {{commonTypesInUse}} } from "../common";
 
 {{#each enums}}
 {{#if inputNativeValues}}
-export enum {{structName}}Input { {{inputNativeValues}} };
+export enum {{inputLabel}} { {{inputNativeValues}} };
 {{else}}
-export type {{structName}}Input{{typeAnnotations}} = Enum<{ {{inputValues}} }>;
+export type {{inputLabel}} = Enum<{ {{inputValues}} }>;
 {{/if}}
 {{#if outputNativeValues}}
-export enum {{structName}}Output { {{outputNativeValues}} };
+export enum {{outputLabel}} { {{outputNativeValues}} };
 {{else}}
   {{#if recycleRef}}
-export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
+export type {{outputLabel}} = {{inputLabel}};
   {{else}}
-export type {{structName}}Output{{typeAnnotations}} = Enum<{ {{outputValues}} }>;
+export type {{outputLabel}} = Enum<{ {{outputValues}} }>;
   {{/if}}
 {{/if}}
 {{/each}}
 
 
 {{#each structs}}
-export type {{structName}}Input{{typeAnnotations}} = { {{inputValues}} };
+export type {{inputLabel}} = { {{inputValues}} };
 {{#if recycleRef}}
-export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
+export type {{outputLabel}} = {{inputLabel}};
 {{else}}
-export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
+export type {{outputLabel}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 

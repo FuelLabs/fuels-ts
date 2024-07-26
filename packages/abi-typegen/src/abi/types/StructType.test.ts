@@ -17,7 +17,7 @@ import { U16Type } from './U16Type';
  * @group node
  */
 describe('StructType.ts', () => {
-  function getType(project: AbiTypegenProjectsEnum, structName: string) {
+  function getType(project: AbiTypegenProjectsEnum, inputLabel: string) {
     const { abiContents } = getTypegenForcProject(project);
 
     const resolvableTypes = abiContents.metadataTypes.map(
@@ -26,11 +26,11 @@ describe('StructType.ts', () => {
 
     const types = resolvableTypes.map((t) => makeType(supportedTypes, t));
 
-    return types.find((t) => t.attributes.structName === structName) as IType;
+    return types.find((t) => t.attributes.inputLabel === inputLabel) as IType;
   }
 
   test('should properly parse type attributes', () => {
-    const c = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructC') as StructType;
+    const c = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructCInput') as StructType;
 
     const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayType });
     const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayType });
@@ -44,8 +44,6 @@ describe('StructType.ts', () => {
     expect(suitableForBytes).toEqual(false);
     expect(suitableForStdString).toEqual(false);
 
-    expect(c.typeDeclarations.inputDecl).toEqual('');
-    expect(c.attributes.structName).toEqual('StructC');
     expect(c.attributes.inputLabel).toEqual('StructCInput');
     expect(c.attributes.outputLabel).toEqual('StructCOutput');
     expect(c.requiredFuelsMembersImports).toStrictEqual([]);
@@ -57,12 +55,10 @@ describe('StructType.ts', () => {
     expect(COutput).toEqual('propC1: StructAOutput<StructBOutput<number>, number>');
 
     // validating `struct A`, with multiple `typeParameters` (generics)
-    const a = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructA') as StructType;
+    const a = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructAInput<T, U>') as StructType;
 
-    expect(a.typeDeclarations.inputDecl).toEqual('<T, U>'); // <— `typeParameters`
-    expect(a.attributes.structName).toEqual('StructA');
-    expect(a.attributes.inputLabel).toEqual('StructAInput');
-    expect(a.attributes.outputLabel).toEqual('StructAOutput');
+    expect(a.attributes.inputLabel).toEqual('StructAInput<T, U>');
+    expect(a.attributes.outputLabel).toEqual('StructAOutput<T, U>');
     expect(a.requiredFuelsMembersImports).toStrictEqual([]);
 
     const { input: AInput, output: AOutput } = a.structContents;

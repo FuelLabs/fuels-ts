@@ -8,18 +8,16 @@ export function formatStructs(params: { types: IType[] }) {
     .filter((t) => t.name === 'struct')
     .map((t) => {
       const st = t as StructType; // only structs here
-      const structName = st.attributes.structName as string;
       const { input: inputValues, output: outputValues } = st.structContents;
-      const typeAnnotations = st.typeDeclarations.inputDecl;
       return {
-        structName,
-        typeAnnotations,
+        inputLabel: st.attributes.inputLabel,
+        outputLabel: st.attributes.outputLabel,
         inputValues,
         outputValues,
         recycleRef: inputValues === outputValues, // reduces duplication
       };
     })
-    .sort((a, b) => (a.structName < b.structName ? -1 : 1));
+    .sort((a, b) => (a.inputLabel < b.inputLabel ? -1 : 1));
 
   return { structs };
 }

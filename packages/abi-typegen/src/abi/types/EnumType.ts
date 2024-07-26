@@ -28,7 +28,6 @@ export class EnumType extends AType implements IType {
     });
 
     this.attributes = {
-      structName,
       inputLabel: `${structName}Input`,
       outputLabel: `${structName}Output`,
     };

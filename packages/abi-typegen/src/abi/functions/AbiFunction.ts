@@ -33,15 +33,13 @@ export class AbiFunction {
       .filter(({ type }) => !(type instanceof EmptyType))
       .map(({ name, type }) => {
         const inputLabel = type.attributes.inputLabel;
-        const typeDeclaration = type.typeDeclarations.inputDecl;
-        const typeDecl = `${inputLabel}${typeDeclaration}`;
 
         // assemble it in `[key: string]: <Type>` fashion
         if (shouldPrefixParams) {
-          return `${name}: ${typeDecl}`;
+          return `${name}: ${inputLabel}`;
         }
 
-        return typeDecl;
+        return inputLabel;
       });
 
     return inputs.join(', ');
@@ -50,8 +48,7 @@ export class AbiFunction {
   bundleOutputTypes() {
     const type = this.types[this.rawAbiFunction.output];
     const outputLabel = type.attributes.outputLabel;
-    const typeDeclaration = type.typeDeclarations.outputDecl;
-    return `${outputLabel}${typeDeclaration}`;
+    return outputLabel;
   }
 
   getDeclaration() {
