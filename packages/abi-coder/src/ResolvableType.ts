@@ -82,7 +82,7 @@ export class ResolvableType {
          * if they aren't used _directly_ in a function-input/function-output/log/configurable/messageData
          * These types are characterized by not having components and we can resolve then as-is
          */
-        type: new ResolvableType(abi, c.typeId, undefined).resolveInternal(undefined),
+        type: new ResolvableType(abi, c.typeId, undefined).resolveInternal(c.typeId, undefined),
       };
     }
 
@@ -97,14 +97,14 @@ export class ResolvableType {
     if (typeArgs?.every((ta) => ta instanceof ResolvedType)) {
       return {
         name: (c as Component).name,
-        type: resolvable.resolveInternal(undefined),
+        type: resolvable.resolveInternal(c.typeId, undefined),
       };
     }
 
     if (resolvable.components?.every((comp) => comp.type instanceof ResolvedType)) {
       return {
         name: (c as Component).name,
-        type: resolvable.resolveInternal(undefined),
+        type: resolvable.resolveInternal(c.typeId, undefined),
       };
     }
 
@@ -117,11 +117,12 @@ export class ResolvableType {
   private static resolveConcreteType(abi: JsonAbi, type: ConcreteType): ResolvedType {
     const concreteType = type;
     if (concreteType.metadataTypeId === undefined) {
-      return new ResolvedType(concreteType.type, undefined, undefined, undefined);
+      return new ResolvedType(concreteType.type, concreteType.concreteTypeId, undefined, undefined);
     }
 
     if (!concreteType.typeArguments) {
       return new ResolvableType(abi, concreteType.metadataTypeId, undefined).resolveInternal(
+        concreteType.concreteTypeId,
         undefined
       );
     }
@@ -141,7 +142,7 @@ export class ResolvableType {
       abi,
       concreteType.metadataTypeId,
       ResolvableType.mapTypeParametersAndArgs(abi, metadataType, concreteTypeArgs)
-    ).resolveInternal(undefined);
+    ).resolveInternal(concreteType.concreteTypeId, undefined);
   }
 
   public resolve(abi: JsonAbi, concreteType: ConcreteType) {
@@ -153,6 +154,7 @@ export class ResolvableType {
     });
 
     return this.resolveInternal(
+      concreteType.concreteTypeId,
       ResolvableType.mapTypeParametersAndArgs(abi, this.metadataType, concreteTypeArgs) as Array<
         [number, ResolvedType]
       >
@@ -175,6 +177,7 @@ export class ResolvableType {
   }
 
   private resolveInternal(
+    typeId: string | number,
     typeParamsArgsMap: Array<[number, ResolvedType]> | undefined
   ): ResolvedType {
     const typeArgs = this.resolveTypeArgs(typeParamsArgsMap);
@@ -185,7 +188,9 @@ export class ResolvableType {
           return c as { name: string; type: ResolvedType };
         }
 
-        const resolvedGenericType = typeArgs?.find(([tp]) => c.type.metadataTypeId === tp)?.[1];
+        const resolvedGenericType = typeArgs?.find(
+          ([tp]) => (c.type as ResolvableType).metadataTypeId === tp
+        )?.[1];
         if (resolvedGenericType) {
           return {
             name: c.name,
@@ -193,9 +198,9 @@ export class ResolvableType {
           };
         }
 
-        return { name: c.name, type: c.type.resolveInternal(typeArgs) };
+        return { name: c.name, type: c.type.resolveInternal(c.type.metadataTypeId, typeArgs) };
       }
     );
-    return new ResolvedType(this.metadataType.type, this.metadataTypeId, components, typeArgs);
+    return new ResolvedType(this.metadataType.type, typeId, components, typeArgs);
   }
 }

@@ -1,6 +1,4 @@
-import type { ResolvableType } from './ResolvableType';
 import type { ResolvedType } from './ResolvedType';
-import { makeResolvedType } from './makeResolvedType';
 import type { JsonAbi, AbiFunction } from './types/JsonAbi';
 import { structRegEx, arrayRegEx, enumRegEx, stringRegEx, isVector } from './utils/constants';
 
@@ -70,11 +68,14 @@ function getSignature(abi: JsonAbi, type: ResolvedType) {
 
 export function getFunctionSignature(
   abi: JsonAbi,
-  resolvableTypes: ResolvableType[],
+  resolvedTypes: ResolvedType[],
   fn: AbiFunction
 ): string {
   const inputsSignatures = fn.inputs.map((input) =>
-    getSignature(abi, makeResolvedType(abi, resolvableTypes, input.concreteTypeId))
+    getSignature(
+      abi,
+      resolvedTypes.find((rt) => rt.typeId === input.concreteTypeId) as ResolvedType
+    )
   );
 
   return `${fn.name}(${inputsSignatures.join(',')})`;

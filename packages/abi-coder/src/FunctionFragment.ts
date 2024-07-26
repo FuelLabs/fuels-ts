@@ -6,7 +6,7 @@ import { bn } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
-import type { ResolvableType } from './ResolvableType';
+import type { ResolvedType } from './ResolvedType';
 import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import { StdStringCoder } from './encoding/coders/StdStringCoder';
 import { TupleCoder } from './encoding/coders/TupleCoder';
@@ -37,14 +37,14 @@ export class FunctionFragment<
 
   constructor(
     jsonAbi: TAbi,
-    private resolvableTypes: ResolvableType[],
+    private resolvedTypes: ResolvedType[],
     name: FnName
   ) {
     this.jsonAbi = jsonAbi;
     this.jsonFn = findFunctionByName(this.jsonAbi, name);
 
     this.name = name;
-    this.signature = getFunctionSignature(jsonAbi, resolvableTypes, this.jsonFn);
+    this.signature = getFunctionSignature(jsonAbi, resolvedTypes, this.jsonFn);
 
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
     this.selectorBytes = new StdStringCoder().encode(name);
@@ -71,9 +71,12 @@ export class FunctionFragment<
     }
 
     const coders = nonEmptyInputs.map((t) =>
-      AbiCoder.getCoder(this.jsonAbi, this.resolvableTypes, t.concreteTypeId, {
-        encoding: this.encoding,
-      })
+      AbiCoder.getCoder(
+        this.resolvedTypes.find((rt) => rt.typeId === t.concreteTypeId) as ResolvedType,
+        {
+          encoding: this.encoding,
+        }
+      )
     );
 
     return new TupleCoder(coders).encode(shallowCopyValues);
@@ -142,9 +145,12 @@ export class FunctionFragment<
 
     const result = nonEmptyInputs.reduce(
       (obj: { decoded: unknown[]; offset: number }, input) => {
-        const coder = AbiCoder.getCoder(this.jsonAbi, this.resolvableTypes, input.concreteTypeId, {
-          encoding: this.encoding,
-        });
+        const coder = AbiCoder.getCoder(
+          this.resolvedTypes.find((rt) => rt.typeId === input.concreteTypeId) as ResolvedType,
+          {
+            encoding: this.encoding,
+          }
+        );
         const [decodedValue, decodedValueByteSize] = coder.decode(bytes, obj.offset);
 
         return {
@@ -165,9 +171,12 @@ export class FunctionFragment<
     }
 
     const bytes = arrayify(data);
-    const coder = AbiCoder.getCoder(this.jsonAbi, this.resolvableTypes, this.jsonFn.output, {
-      encoding: this.encoding,
-    });
+    const coder = AbiCoder.getCoder(
+      this.resolvedTypes.find((rt) => rt.typeId === this.jsonFn.output) as ResolvedType,
+      {
+        encoding: this.encoding,
+      }
+    );
 
     return coder.decode(bytes, 0) as [DecodedValue | undefined, number];
   }
