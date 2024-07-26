@@ -20,7 +20,6 @@ import {
   U64_CODER_TYPE,
   U8_CODER_TYPE,
   arrayRegEx,
-  enumRegEx,
   isVector,
   stringRegEx,
   tupleRegEx,
@@ -124,7 +123,7 @@ export const getCoder: GetCoderFn = (
     return new StructCoder(resolvedAbiType.type, coders);
   }
 
-  if (enumRegEx.test(resolvedAbiType.type)) {
+  if (resolvedAbiType.type.startsWith('enum ')) {
     const coders = getCoders(components, { getCoder });
 
     if (optionRegEx.test(resolvedAbiType.type)) {

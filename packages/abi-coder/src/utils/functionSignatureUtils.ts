@@ -5,7 +5,7 @@ import { bn } from '@fuel-ts/math';
 import type { ResolvedType } from '../ResolvedType';
 import type { AbiFunction } from '../types/JsonAbi';
 
-import { arrayRegEx, enumRegEx, stringRegEx, isVector } from './constants';
+import { arrayRegEx, stringRegEx, isVector } from './constants';
 
 function getArgSignaturePrefix({ type }: ResolvedType): string {
   const structMatch = type.startsWith('struct ');
@@ -18,7 +18,7 @@ function getArgSignaturePrefix({ type }: ResolvedType): string {
     return 'a';
   }
 
-  const enumMatch = enumRegEx.test(type);
+  const enumMatch = type.startsWith('enum ');
   if (enumMatch) {
     return 'e';
   }
