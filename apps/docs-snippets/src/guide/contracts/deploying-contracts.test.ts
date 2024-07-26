@@ -1,31 +1,29 @@
 import { readFileSync } from 'fs';
-import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
+import { Wallet, ContractFactory } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { EchoValuesAbi__factory } from '../../../test/typegen';
+import EchoValuesHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let PRIVATE_KEY: string;
-  let projectsPath: string;
-  let contractName: string;
-
-  beforeAll(async () => {
-    const wallet = await getTestWallet();
-    PRIVATE_KEY = wallet.privateKey;
-    projectsPath = join(__dirname, '../../../test/fixtures/forc-projects');
-
-    contractName = DocSnippetProjectsEnum.ECHO_VALUES;
-  });
-
+describe('Deploying contracts', () => {
   it('should successfully deploy and execute contract function', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: EchoValuesAbi__factory,
+          bytecode: EchoValuesHex,
+        },
+      ],
+    });
+    const { provider } = launched;
+
     // #region contract-setup-1
     // #context const PRIVATE_KEY = "..."
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     // #endregion contract-setup-1

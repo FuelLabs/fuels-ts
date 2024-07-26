@@ -1,22 +1,29 @@
-import type { Contract, AssetId } from 'fuels';
-import { Wallet, BN, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { AssetId } from 'fuels';
+import { Wallet, BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { TransferToAddressAbi__factory } from '../../../test/typegen';
+import TransferToAddressHex from '../../../test/typegen/contracts/TransferToAddressAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TRANSFER_TO_ADDRESS);
-  });
-
   it('should successfully get a contract balance', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: TransferToAddressAbi__factory,
+          bytecode: TransferToAddressHex,
+        },
+      ],
+    });
+    const {
+      provider,
+      contracts: [contract],
+    } = launched;
+
     // #region contract-balance-3
     // #import { AssetId, Wallet, BN };
 

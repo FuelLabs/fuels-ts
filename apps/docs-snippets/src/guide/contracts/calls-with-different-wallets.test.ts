@@ -1,5 +1,6 @@
 import type { Contract } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, WalletUnlocked } from 'fuels';
+import { WalletUnlocked } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 import { createAndDeployContractFromProject } from '../../utils';
@@ -17,7 +18,8 @@ describe(__filename, () => {
   });
 
   it('should successfully update contract instance wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
     const newWallet = WalletUnlocked.generate({
       provider,
     });
@@ -30,20 +32,4 @@ describe(__filename, () => {
 
     expect(deployedContract.account.address).toBe(newWallet.address);
   });
-
-  // TODO: We are skipping and commenting out this test because the constructor for `Provider` is private now.
-  /*
-  it('should successfully update contract instance provider', () => {
-    // use the `chainInfo` from the deployed contract's provider to create a new dummy provider
-    const newProvider = new Provider('http://provider:9999');
-
-    expect(deployedContract.provider?.url).not.toBe(newProvider.url);
-
-    // #region calls-with-different-wallets-2
-    deployedContract.provider = newProvider;
-    // #endregion calls-with-different-wallets-2
-
-    expect(deployedContract.provider.url).toBe(newProvider.url);
-  });
-  */
 });

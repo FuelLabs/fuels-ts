@@ -6,25 +6,20 @@
  */
 
 import { ContractFactory, Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet, safeExec } from 'fuels/test-utils';
+import { generateTestWallet, safeExec, launchTestNode } from 'fuels/test-utils';
 
 import { SampleAbi__factory } from './sway-programs-api';
 import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
-
-let baseAssetId: string;
 
 /**
  * @group node
  */
 describe('ExampleContract', () => {
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('should return the input', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
 
     // Deploy
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, wallet);
@@ -46,8 +41,10 @@ describe('ExampleContract', () => {
   });
 
   it('deployContract method', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
 
     // Deploy
     const deploy = await SampleAbi__factory.deployContract(bytecode, wallet);
@@ -62,8 +59,12 @@ describe('ExampleContract', () => {
   });
 
   it('should throw when simulating via contract factory with wallet with no resources', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const fundedWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
     const unfundedWallet = Wallet.generate({ provider });
 
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, fundedWallet);
@@ -79,8 +80,12 @@ describe('ExampleContract', () => {
   });
 
   it('should not throw when dry running via contract factory with wallet with no resources', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const fundedWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
     const unfundedWallet = Wallet.generate({ provider });
 
     const factory = new ContractFactory(bytecode, SampleAbi__factory.abi, fundedWallet);
@@ -92,8 +97,11 @@ describe('ExampleContract', () => {
   });
 
   it('should demo how to use generated files just fine', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const { waitForResult } = await SampleAbi__factory.deployContract(bytecode, wallet);
     const { contract: depoloyed } = await waitForResult();
     const contractsIds = {
