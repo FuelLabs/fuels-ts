@@ -5,7 +5,7 @@
 export interface JsonAbi {
   readonly specVersion: string;
   readonly encodingVersion: string;
-  readonly programType: string | 'script' | 'contract' | 'predicate' | 'library';
+  readonly programType: 'script' | 'contract' | 'predicate' | 'library';
   readonly concreteTypes: readonly ConcreteType[];
   readonly metadataTypes: readonly MetadataType[];
   readonly functions: readonly JsonAbiFunction[];

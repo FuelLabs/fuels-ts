@@ -15,7 +15,7 @@ describe('extractStructName.ts', () => {
   function makeType(type: string): ResolvedType {
     return {
       type,
-      metadataTypeId: undefined,
+      typeId: 'hash',
       components: undefined,
       typeParamsArgsMap: undefined,
     };
