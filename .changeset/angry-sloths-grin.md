@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-chore: refactor code related to transaction operations
+chore: refactor helpers related to transaction operations
