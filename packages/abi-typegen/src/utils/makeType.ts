@@ -17,6 +17,7 @@ export function makeType(
 
   const res = new TypeClass(type);
 
+  res.parseStructContents?.(supportedTypes);
   res.parseComponentsAttributes(supportedTypes);
   res.parseTypeDeclarations(supportedTypes);
   return res;

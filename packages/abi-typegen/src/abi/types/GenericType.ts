@@ -14,16 +14,11 @@ export class GenericType extends AType implements IType {
     return GenericType.MATCH_REGEX.test(params.type);
   }
 
-  public getStructName() {
-    const name = extractStructName({
+  public parseComponentsAttributes() {
+    const label = extractStructName({
       type: this.type,
       regex: GenericType.MATCH_REGEX,
     });
-    return name;
-  }
-
-  public parseComponentsAttributes() {
-    const label = this.getStructName();
 
     this.attributes = {
       inputLabel: label,

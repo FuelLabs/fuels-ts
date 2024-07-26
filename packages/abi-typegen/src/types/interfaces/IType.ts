@@ -14,12 +14,11 @@ export interface IType {
   attributes: ITypeAttributes;
   requiredFuelsMembersImports: string[];
   typeDeclarations: { input: string; output: string };
+  structContents: { input: string; output: string };
 
   parseComponentsAttributes(types: SupportedTypeClass[]): void;
 
-  // Methods only present in `EnumType` and `StructType` classes
-  getStructName?(): string;
-  getStructContents?(types: SupportedTypeClass[]): { input: string; output: string };
+  parseStructContents?(types: SupportedTypeClass[]): void;
   parseTypeDeclarations(types: SupportedTypeClass[]): void;
 
   /*

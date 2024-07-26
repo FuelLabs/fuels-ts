@@ -22,7 +22,10 @@ export class EnumType extends AType implements IType {
   }
 
   public parseComponentsAttributes() {
-    const structName = this.getStructName();
+    const structName = extractStructName({
+      type: this.type,
+      regex: EnumType.MATCH_REGEX,
+    });
 
     this.attributes = {
       structName,
@@ -31,14 +34,6 @@ export class EnumType extends AType implements IType {
     };
 
     return this.attributes;
-  }
-
-  public getStructName() {
-    const name = extractStructName({
-      type: this.type,
-      regex: EnumType.MATCH_REGEX,
-    });
-    return name;
   }
 
   public getNativeEnum() {
@@ -51,7 +46,7 @@ export class EnumType extends AType implements IType {
     return components.map(({ name }) => `${name} = '${name}'`).join(', ');
   }
 
-  public getStructContents(supportedTypes: SupportedTypeClass[]) {
-    return getStructContents(supportedTypes, this.type, true);
+  public parseStructContents(supportedTypes: SupportedTypeClass[]) {
+    this.structContents = getStructContents(supportedTypes, this.type, true);
   }
 }

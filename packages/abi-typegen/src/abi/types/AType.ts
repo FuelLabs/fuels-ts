@@ -5,21 +5,24 @@ import type { ResolvableMetadataType } from '../ResolvableMetadataType';
 import type { ResolvedType } from '../ResolvedType';
 
 export class AType {
-  public attributes: ITypeAttributes;
-  public requiredFuelsMembersImports: string[];
+  public attributes: ITypeAttributes = {
+    inputLabel: 'unknown',
+    outputLabel: 'unknown',
+  };
+
+  public requiredFuelsMembersImports: string[] = [];
+
+  public structContents: IType['structContents'] = {
+    input: '',
+    output: '',
+  };
 
   public typeDeclarations: IType['typeDeclarations'] = {
     input: '',
     output: '',
   };
 
-  constructor(protected type: ResolvedType | ResolvableMetadataType) {
-    this.attributes = {
-      inputLabel: 'unknown',
-      outputLabel: 'unknown',
-    };
-    this.requiredFuelsMembersImports = [];
-  }
+  constructor(protected type: ResolvedType | ResolvableMetadataType) {}
 
   public parseTypeDeclarations(supportedTypes: SupportedTypeClass[]) {
     const { typeParamsArgsMap } = this.type;

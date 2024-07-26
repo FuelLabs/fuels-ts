@@ -1,6 +1,5 @@
 import type { StructType } from '../../abi/types/StructType';
 import type { IType } from '../../types/interfaces/IType';
-import { supportedTypes } from '../../utils/supportedTypes';
 
 export function formatStructs(params: { types: IType[] }) {
   const { types } = params;
@@ -9,8 +8,8 @@ export function formatStructs(params: { types: IType[] }) {
     .filter((t) => t.name === 'struct')
     .map((t) => {
       const st = t as StructType; // only structs here
-      const structName = st.getStructName();
-      const { input: inputValues, output: outputValues } = st.getStructContents(supportedTypes);
+      const structName = st.attributes.structName as string;
+      const { input: inputValues, output: outputValues } = st.structContents;
       const typeAnnotations = st.typeDeclarations.input;
       return {
         structName,

@@ -31,7 +31,6 @@ describe('EnumType.ts', () => {
     expect(params.enum.attributes.structName).toEqual('MyEnum');
     expect(params.enum.attributes.inputLabel).toEqual('MyEnumInput');
     expect(params.enum.attributes.outputLabel).toEqual('MyEnumOutput');
-    expect(params.enum.getStructName?.()).toEqual('MyEnum');
     expect(params.enum.requiredFuelsMembersImports).toStrictEqual([]);
   }
 
@@ -50,7 +49,7 @@ describe('EnumType.ts', () => {
     const myEnum = getType(AbiTypegenProjectsEnum.ENUM_SIMPLE, 'MyEnum') as EnumType;
     validateCommonEnumAttributes({ enum: myEnum });
 
-    const { input, output } = myEnum.getStructContents(supportedTypes);
+    const { input, output } = myEnum.structContents;
 
     expect(input).toEqual('Checked: string, Pending: string');
     expect(output).toEqual('Checked: string, Pending: string');
@@ -74,7 +73,7 @@ describe('EnumType.ts', () => {
 
     validateCommonEnumAttributes({ enum: myEnum });
 
-    const { input, output } = myEnum.getStructContents(supportedTypes);
+    const { input, output } = myEnum.structContents;
 
     expect(input).toEqual('letter: LetterEnumInput');
     expect(output).toEqual('letter: LetterEnumOutput');
@@ -85,7 +84,7 @@ describe('EnumType.ts', () => {
 
     validateCommonEnumAttributes({ enum: myEnum });
 
-    const { input, output } = myEnum.getStructContents(supportedTypes);
+    const { input, output } = myEnum.structContents;
 
     expect(input).toEqual('rgb: ColorStructInput');
     expect(output).toEqual('rgb: ColorStructOutput');
@@ -94,7 +93,7 @@ describe('EnumType.ts', () => {
   test('should properly parse type attributes for: array of enums', () => {
     const myType = getType(AbiTypegenProjectsEnum.ARRAY_OF_ENUMS, 'MyStruct') as StructType;
 
-    const { input, output } = myType.getStructContents(supportedTypes);
+    const { input, output } = myType.structContents;
 
     expect(input).toEqual('letters: [LettersEnumInput, LettersEnumInput]');
     expect(output).toEqual('letters: [LettersEnumOutput, LettersEnumOutput]');

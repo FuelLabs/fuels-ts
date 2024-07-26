@@ -20,7 +20,10 @@ export class StructType extends AType implements IType {
   }
 
   public parseComponentsAttributes() {
-    const structName = this.getStructName();
+    const structName = extractStructName({
+      type: this.type,
+      regex: StructType.MATCH_REGEX,
+    });
 
     this.attributes = {
       structName,
@@ -31,15 +34,7 @@ export class StructType extends AType implements IType {
     return this.attributes;
   }
 
-  public getStructName() {
-    const name = extractStructName({
-      type: this.type,
-      regex: StructType.MATCH_REGEX,
-    });
-    return name;
-  }
-
-  public getStructContents(supportedTypes: SupportedTypeClass[]) {
-    return getStructContents(supportedTypes, this.type, true);
+  public parseStructContents(supportedTypes: SupportedTypeClass[]) {
+    this.structContents = getStructContents(supportedTypes, this.type, true);
   }
 }

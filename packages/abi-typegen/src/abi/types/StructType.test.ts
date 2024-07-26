@@ -44,7 +44,6 @@ describe('StructType.ts', () => {
     expect(suitableForBytes).toEqual(false);
     expect(suitableForStdString).toEqual(false);
 
-    expect(c.getStructName()).toEqual('StructC');
     expect(c.typeDeclarations.input).toEqual('');
     expect(c.attributes.structName).toEqual('StructC');
     expect(c.attributes.inputLabel).toEqual('StructCInput');
@@ -52,7 +51,7 @@ describe('StructType.ts', () => {
     expect(c.requiredFuelsMembersImports).toStrictEqual([]);
 
     // inputs and outputs with nested `typeArguments`
-    const { input: CInput, output: COutput } = c.getStructContents(supportedTypes);
+    const { input: CInput, output: COutput } = c.structContents;
 
     expect(CInput).toEqual('propC1: StructAInput<StructBInput<BigNumberish>, BigNumberish>');
     expect(COutput).toEqual('propC1: StructAOutput<StructBOutput<number>, number>');
@@ -60,14 +59,13 @@ describe('StructType.ts', () => {
     // validating `struct A`, with multiple `typeParameters` (generics)
     const a = getType(AbiTypegenProjectsEnum.STRUCT_SIMPLE, 'StructA') as StructType;
 
-    expect(a.getStructName()).toEqual('StructA');
     expect(a.typeDeclarations.input).toEqual('<T, U>'); // <— `typeParameters`
     expect(a.attributes.structName).toEqual('StructA');
     expect(a.attributes.inputLabel).toEqual('StructAInput');
     expect(a.attributes.outputLabel).toEqual('StructAOutput');
     expect(a.requiredFuelsMembersImports).toStrictEqual([]);
 
-    const { input: AInput, output: AOutput } = a.getStructContents(supportedTypes);
+    const { input: AInput, output: AOutput } = a.structContents;
 
     expect(AInput).toEqual('propA1: T, propA2: U');
     expect(AOutput).toEqual('propA1: T, propA2: U');
