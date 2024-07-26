@@ -1,3 +1,6 @@
+/**
+ * This file is a copy of the one in abi-coder and will be deleted once the packages merge.
+ */
 import type {
   MetadataType,
   JsonAbi,
@@ -9,14 +12,21 @@ import { isVector, genericRegEx } from '../utils/constants';
 
 import { ResolvedType } from './ResolvedType';
 
-/**
- * This file is a copy of the one in abi-coder and will be deleted once the packages merge.
- */
+export interface ResolvableComponent {
+  name: string;
+  type: ResolvableType;
+}
+
+export interface ResolvedComponent {
+  name: string;
+  type: ResolvedType;
+}
+
 export class ResolvableType {
   private metadataType: MetadataType;
   type: string;
 
-  components: { name: string; type: ResolvableType | ResolvedType }[] | undefined;
+  components: (ResolvableComponent | ResolvedComponent)[] | undefined;
   constructor(
     abi: JsonAbi,
     public metadataTypeId: number,
@@ -64,7 +74,7 @@ export class ResolvableType {
   private static handleComponent(
     abi: JsonAbi,
     c: Component | TypeArgument
-  ): { name: string; type: ResolvableType | ResolvedType } {
+  ): ResolvableComponent | ResolvedComponent {
     if (typeof c.typeId === 'string') {
       const concreteType = abi.concreteTypes.find(
         (ct) => ct.concreteTypeId === c.typeId
@@ -192,25 +202,23 @@ export class ResolvableType {
   ): ResolvedType {
     const typeArgs = this.resolveTypeArgs(typeParamsArgsMap);
 
-    const components: { name: string; type: ResolvedType }[] | undefined = this.components?.map(
-      (c) => {
-        if (c.type instanceof ResolvedType) {
-          return c as { name: string; type: ResolvedType };
-        }
-
-        const resolvedGenericType = typeArgs?.find(
-          ([tp]) => (c.type as ResolvableType).metadataTypeId === tp
-        )?.[1];
-        if (resolvedGenericType) {
-          return {
-            name: c.name,
-            type: resolvedGenericType,
-          };
-        }
-
-        return { name: c.name, type: c.type.resolveInternal(c.type.metadataTypeId, typeArgs) };
+    const components: ResolvedComponent[] | undefined = this.components?.map((c) => {
+      if (c.type instanceof ResolvedType) {
+        return c as { name: string; type: ResolvedType };
       }
-    );
+
+      const resolvedGenericType = typeArgs?.find(
+        ([tp]) => (c.type as ResolvableType).metadataTypeId === tp
+      )?.[1];
+      if (resolvedGenericType) {
+        return {
+          name: c.name,
+          type: resolvedGenericType,
+        };
+      }
+
+      return { name: c.name, type: c.type.resolveInternal(c.type.metadataTypeId, typeArgs) };
+    });
     return new ResolvedType(this.metadataType.type, typeId, components, typeArgs);
   }
 }
