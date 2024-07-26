@@ -1,20 +1,22 @@
-import type { Contract } from 'fuels';
 import { bn, getMintedAssetId } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { TokenAbi__factory } from '../../../test/typegen';
+import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
 
 /**
  * @group node
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TOKEN);
-  });
-
   it('should successfully execute contract call with forwarded amount', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ deployer: TokenAbi__factory, bytecode: TokenAbiHex }],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region minted-token-asset-id-2
     // #import { bn, getMintedAssetId };
 
