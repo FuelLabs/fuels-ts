@@ -83,7 +83,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     }
 
     return AbiCoder.decode(
-      this.resolvedTypes.find((rt) => rt.typeId === logId) as ResolvedType,
+      this.resolvedTypes.find((rt) => rt.typeId === loggedType.concreteTypeId) as ResolvedType,
       arrayify(data),
       0,
       {
