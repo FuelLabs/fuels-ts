@@ -334,8 +334,11 @@ describe('TransactionSummary', () => {
         const walletA = Wallet.generate({ provider });
         const walletB = Wallet.generate({ provider });
 
-        await wallet.transfer(walletA.address, 50_000, ASSET_A);
-        await wallet.transfer(walletB.address, 50_000, ASSET_B);
+        const submitted1 = await wallet.transfer(walletA.address, 50_000, ASSET_A);
+        await submitted1.waitForResult();
+
+        const submitted2 = await wallet.transfer(walletB.address, 50_000, ASSET_B);
+        await submitted2.waitForResult();
 
         senderContract.account = wallet;
         const fundAmount = 5_000;
@@ -533,8 +536,11 @@ describe('TransactionSummary', () => {
       const walletA = Wallet.generate({ provider });
       const walletB = Wallet.generate({ provider });
 
-      await wallet.transfer(walletA.address, 10_000, ASSET_A);
-      await wallet.transfer(walletB.address, 10_000, ASSET_B);
+      const submitted1 = await wallet.transfer(walletA.address, 10_000, ASSET_A);
+      await submitted1.waitForResult();
+
+      const submitted2 = await wallet.transfer(walletB.address, 10_000, ASSET_B);
+      await submitted2.waitForResult();
 
       const recipient1Data = {
         address: Wallet.generate({ provider }).address,
