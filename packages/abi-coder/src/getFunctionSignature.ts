@@ -1,5 +1,5 @@
 import type { ResolvedType } from './ResolvedType';
-import type { JsonAbi, AbiFunction } from './types/JsonAbi';
+import type { AbiFunction } from './types/JsonAbi';
 import { structRegEx, arrayRegEx, enumRegEx, stringRegEx, isVector } from './utils/constants';
 
 function getArgSignaturePrefix({ type }: ResolvedType): string {
@@ -21,7 +21,7 @@ function getArgSignaturePrefix({ type }: ResolvedType): string {
   return '';
 }
 
-function getArgSignatureContent(abi: JsonAbi, resolved: ResolvedType): string {
+function getArgSignatureContent(resolved: ResolvedType): string {
   if (resolved.type === 'raw untyped ptr') {
     return 'rawptr';
   }
@@ -43,39 +43,32 @@ function getArgSignatureContent(abi: JsonAbi, resolved: ResolvedType): string {
 
   if (arrayMatch) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    return `[${getSignature(abi, resolved.components[0].type)};${arrayMatch.length}]`;
+    return `[${getSignature(resolved.components[0].type)};${arrayMatch.length}]`;
   }
 
   const typeArgumentsSignature =
     resolved.typeParamsArgsMap && Object.values(resolved.typeParamsArgsMap).length > 0
       ? // eslint-disable-next-line @typescript-eslint/no-use-before-define
-        `<${Object.values(resolved.typeParamsArgsMap).map(([, rmt]) => getSignature(abi, rmt))}>`
+        `<${Object.values(resolved.typeParamsArgsMap).map(([, mt]) => getSignature(mt))}>`
       : '';
 
   const componentsSignature = isVector(resolved.type)
     ? `(s${typeArgumentsSignature}(rawptr,u64),u64)`
     : // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      `(${resolved.components.map((c) => getSignature(abi, c.type)).join(',')})`;
+      `(${resolved.components.map((c) => getSignature(c.type)).join(',')})`;
   return `${typeArgumentsSignature}${componentsSignature}`;
 }
 
-function getSignature(abi: JsonAbi, type: ResolvedType) {
+function getSignature(type: ResolvedType) {
   const prefix = getArgSignaturePrefix(type);
-  const content = getArgSignatureContent(abi, type);
+  const content = getArgSignatureContent(type);
 
   return `${prefix}${content}`;
 }
 
-export function getFunctionSignature(
-  abi: JsonAbi,
-  resolvedTypes: ResolvedType[],
-  fn: AbiFunction
-): string {
+export function getFunctionSignature(fn: AbiFunction, resolvedTypes: ResolvedType[]): string {
   const inputsSignatures = fn.inputs.map((input) =>
-    getSignature(
-      abi,
-      resolvedTypes.find((rt) => rt.typeId === input.concreteTypeId) as ResolvedType
-    )
+    getSignature(resolvedTypes.find((rt) => rt.typeId === input.concreteTypeId) as ResolvedType)
   );
 
   return `${fn.name}(${inputsSignatures.join(',')})`;

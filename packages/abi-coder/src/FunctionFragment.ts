@@ -44,7 +44,7 @@ export class FunctionFragment<
     this.jsonFn = findFunctionByName(this.jsonAbi, name);
 
     this.name = name;
-    this.signature = getFunctionSignature(jsonAbi, resolvedTypes, this.jsonFn);
+    this.signature = getFunctionSignature(this.jsonFn, resolvedTypes);
 
     this.selector = FunctionFragment.getFunctionSelector(this.signature);
     this.selectorBytes = new StdStringCoder().encode(name);
