@@ -15,11 +15,11 @@ export function makeResolvedType(
     (ct) => ct.concreteTypeId === concreteTypeId
   ) as ConcreteType;
 
-  const resolvableMetadataType = resolvableTypes.find(
+  const resolvableType = resolvableTypes.find(
     (rmt) => rmt.metadataTypeId === concreteType.metadataTypeId
   );
 
-  return resolvableMetadataType
-    ? resolvableMetadataType.resolve(abi, concreteType)
+  return resolvableType
+    ? resolvableType.resolve(abi, concreteType)
     : new ResolvedType(concreteType.type, concreteType.concreteTypeId, undefined, undefined);
 }
