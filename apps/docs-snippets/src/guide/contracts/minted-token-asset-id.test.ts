@@ -25,7 +25,7 @@ describe(__filename, () => {
     const { waitForResult } = await contract.functions.mint_coins(subID, mintAmount).call();
     const txResult = await waitForResult();
 
-    const mintedAssetId = getMintedAssetId(subID, contract.id.toB256());
+    const mintedAssetId = getMintedAssetId(contract.id.toB256(), subID);
     // #endregion minted-token-asset-id-2
 
     expect(mintedAssetId).toBeDefined();
