@@ -79,7 +79,7 @@ export class ResolvableType {
         name: (c as Component).name,
         /**
          * types like u8, u16 can make their way into metadata types
-         * if they aren't used _directly_ in a function-input/function-output/log/configurable/messageData
+         * if they aren't used _directly_ in a function-input/function-output/log/configurable/messageType
          * These types are characterized by not having components and we can resolve then as-is
          */
         type: new ResolvableType(abi, c.typeId, undefined).resolveInternal(c.typeId, undefined),
