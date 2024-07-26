@@ -24,6 +24,18 @@ export const getEncodingVersion = (encoding: string): EncodingVersion => {
   }
 };
 
+export function validateSpecVersion(specVersion: string) {
+  switch (specVersion) {
+    case '1':
+      return;
+    default:
+      throw new FuelError(
+        ErrorCode.UNSUPPORTED_SPEC_VERSION,
+        `The 'specVersion' ${specVersion} of the provided ABI is not supported.`
+      );
+  }
+}
+
 /**
  * Find a function by name in the ABI.
  *

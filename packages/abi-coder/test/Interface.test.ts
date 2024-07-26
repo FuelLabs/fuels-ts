@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
@@ -41,6 +43,16 @@ const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
  * @group node
  */
 describe('Abi interface', () => {
+  it('throws on unsupported specVersion', async () => {
+    await expectToThrowFuelError(
+      () => new Interface({ ...exhaustiveExamplesAbi, specVersion: '55' }),
+      new FuelError(
+        ErrorCode.UNSUPPORTED_SPEC_VERSION,
+        "The 'specVersion' 55 of the provided ABI is not supported."
+      )
+    );
+  });
+
   it('can retrieve a function fragment', () => {
     const fn = exhaustiveExamplesInterface.functions.entry_one;
 

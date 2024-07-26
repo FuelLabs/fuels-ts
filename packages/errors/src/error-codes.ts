@@ -19,6 +19,7 @@ export enum ErrorCode {
   INVALID_DATA = 'invalid-data',
   FUNCTION_NOT_FOUND = 'function-not-found',
   UNSUPPORTED_ENCODING_VERSION = 'unsupported-encoding-version',
+  UNSUPPORTED_SPEC_VERSION = 'unsupported-spec-version',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',

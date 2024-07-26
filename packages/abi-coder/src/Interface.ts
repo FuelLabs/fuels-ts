@@ -9,7 +9,7 @@ import { ResolvableType } from './ResolvableType';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { Configurable, JsonAbi } from './types/JsonAbi';
 import { type EncodingVersion } from './utils/constants';
-import { getEncodingVersion } from './utils/json-abi';
+import { getEncodingVersion, validateSpecVersion } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
@@ -19,6 +19,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   private readonly resolvableTypes: ResolvableType[] = [];
 
   constructor(jsonAbi: TAbi) {
+    validateSpecVersion(jsonAbi.specVersion);
     this.jsonAbi = jsonAbi;
     this.encoding = getEncodingVersion(jsonAbi.encodingVersion);
 
