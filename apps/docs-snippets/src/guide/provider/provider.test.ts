@@ -1,11 +1,5 @@
-import {
-  FUEL_NETWORK_URL,
-  Provider,
-  ScriptTransactionRequest,
-  sleep,
-  WalletUnlocked,
-  Address,
-} from 'fuels';
+import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, sleep, Address } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');
@@ -22,16 +16,15 @@ function decorateResponseWithCustomLogic(response: Response) {
 describe('Provider', () => {
   it('base examples', async () => {
     // #region provider-definition
-    // #import { Provider, FUEL_NETWORK_URL, WalletUnlocked };
-
-    // Create the provider
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    // Create a provider and wallet using launchTestNode utility
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     // Querying the blockchain
     const { consensusParameters } = provider.getChain();
-
-    // Create a new wallet
-    const wallet = WalletUnlocked.generate({ provider });
 
     // Get the balances of the wallet (this will be empty until we have assets)
     const { balances } = await wallet.getBalances();

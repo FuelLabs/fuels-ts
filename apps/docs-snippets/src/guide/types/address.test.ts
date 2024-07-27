@@ -1,4 +1,5 @@
-import { Address, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { Address, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -16,7 +17,8 @@ describe(__filename, () => {
   });
 
   it('should successfully generate new address instance from public key', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
     // #region address-3
     const wallet = Wallet.generate({
       provider,

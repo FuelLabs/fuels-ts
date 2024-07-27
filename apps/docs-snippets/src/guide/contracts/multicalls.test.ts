@@ -1,61 +1,33 @@
-import type { Contract, Provider } from 'fuels';
-import { BN, ContractFactory } from 'fuels';
+import { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+  CounterAbi__factory,
+  EchoValuesAbi__factory,
+  ReturnContextAbi__factory,
+} from '../../../test/typegen';
+import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
+import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
+import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let echoContract: Contract;
-  let counterContract: Contract;
-  let contextContract: Contract;
-  let provider: Provider;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    const wallet = await getTestWallet();
-    provider = wallet.provider;
-    baseAssetId = provider.getBaseAssetId();
-
-    const counterArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.COUNTER);
-    const echoArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
-    const contextArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
-
-    const factory1 = new ContractFactory(
-      echoArtifacts.binHexlified,
-      echoArtifacts.abiContents,
-      wallet
-    );
-    const factory2 = new ContractFactory(
-      counterArtifacts.binHexlified,
-      counterArtifacts.abiContents,
-      wallet
-    );
-    const factory3 = new ContractFactory(
-      contextArtifacts.binHexlified,
-      contextArtifacts.abiContents,
-      wallet
-    );
-
-    let { waitForResult } = await factory1.deployContract();
-    ({ contract: echoContract } = await waitForResult());
-
-    ({ waitForResult } = await factory2.deployContract({
-      storageSlots: counterArtifacts.storageSlots,
-    }));
-
-    ({ contract: counterContract } = await waitForResult());
-
-    ({ waitForResult } = await factory3.deployContract());
-    ({ contract: contextContract } = await waitForResult());
-  });
-
   it('should successfully submit multiple calls from the same contract function', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: CounterAbi__factory,
+          bytecode: CounterAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [counterContract],
+    } = launched;
     // #region multicall-1
 
     const { waitForResult } = await counterContract
@@ -78,6 +50,22 @@ describe(__filename, () => {
   });
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: EchoValuesAbi__factory,
+          bytecode: EchoValuesAbiHex,
+        },
+        {
+          deployer: CounterAbi__factory,
+          bytecode: CounterAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [echoContract, counterContract],
+    } = launched;
     // #region multicall-2
 
     const chain = echoContract.multiCall([
@@ -99,13 +87,30 @@ describe(__filename, () => {
   });
 
   it('should successfully submit multiple calls from different contracts functions', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: ReturnContextAbi__factory,
+          bytecode: ReturnContextAbiHex,
+        },
+        {
+          deployer: EchoValuesAbi__factory,
+          bytecode: EchoValuesAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contextContract, echoContract],
+      provider,
+    } = launched;
     // #region multicall-3
 
     const { waitForResult } = await contextContract
       .multiCall([
         echoContract.functions.echo_u8(10),
         contextContract.functions.return_context_amount().callParams({
-          forward: [100, baseAssetId],
+          forward: [100, provider.getBaseAssetId()],
         }),
       ])
       .call();

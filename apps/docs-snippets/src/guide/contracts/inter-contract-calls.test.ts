@@ -1,44 +1,34 @@
-import type { Contract, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory } from 'fuels';
+import { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { SimpleTokenAbi__factory, TokenDepositorAbi__factory } from '../../../test/typegen';
+import SimpleTokenAbiHex from '../../../test/typegen/contracts/SimpleTokenAbi.hex';
+import TokenDepositorAbiHex from '../../../test/typegen/contracts/TokenDepositorAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let simpleToken: Contract;
-  let tokenDepositor: Contract;
-
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-
-    const tokenArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_TOKEN);
-    const depositorArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.TOKEN_DEPOSITOR);
-
-    const { waitForResult } = await new ContractFactory(
-      tokenArtifacts.binHexlified,
-      tokenArtifacts.abiContents,
-      wallet
-    ).deployContract();
-
-    ({ contract: simpleToken } = await waitForResult());
-
-    const { waitForResult: waitForResult2 } = await new ContractFactory(
-      depositorArtifacts.binHexlified,
-      depositorArtifacts.abiContents,
-      wallet
-    ).deployContract();
-
-    ({ contract: tokenDepositor } = await waitForResult2());
-  });
-
   it('should successfully make call to another contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: SimpleTokenAbi__factory,
+          bytecode: SimpleTokenAbiHex,
+        },
+        {
+          deployer: TokenDepositorAbi__factory,
+          bytecode: TokenDepositorAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [simpleToken, tokenDepositor],
+      wallets: [wallet],
+    } = launched;
+
     // #region inter-contract-calls-3
     const amountToDeposit = 70;
     const call1 = await simpleToken.functions.get_balance(wallet.address.toB256()).call();

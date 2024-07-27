@@ -2,20 +2,25 @@ import type { TransactionResultReturnDataReceipt } from 'fuels';
 import { ReceiptType, ScriptTransactionRequest, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
+import { ReturnScriptAbi__factory } from '../../../test/typegen';
+
 /**
  * @group node
  * @group browser
  */
 describe('Generate fake resources', () => {
   it('should generate fake resources just fine', async () => {
-    const { provider, wallet } = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = await launchTestNode();
     const baseAssetId = provider.getBaseAssetId();
 
     // #region generate-fake-resources-2
     const transactionRequest = new ScriptTransactionRequest({
       gasLimit: bn(62_000),
       maxFee: bn(60_000),
-      script: scriptHexBytes,
+      script: ReturnScriptAbi__factory.bin,
     });
 
     const resources = wallet.generateFakeResources([

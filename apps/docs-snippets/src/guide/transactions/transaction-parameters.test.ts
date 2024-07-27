@@ -1,27 +1,16 @@
-import type { BN, Contract, TxParams } from 'fuels';
+import type { BN, TxParams } from 'fuels';
 import { ScriptTransactionRequest, bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 import { expectTypeOf } from 'vitest';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { CounterAbi__factory, SumScriptAbi__factory } from '../../../test/typegen';
+import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  const { binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
-  });
-
   it('validates all parameters types', () => {
     // #region transaction-parameters-1
     // #import { BN, bn };
@@ -82,7 +71,7 @@ describe(__filename, () => {
     // Instantiate the transaction request using a ScriptTransactionRequest
     // We can set txParams in the request constructor
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScriptAbi__factory.bin,
       gasLimit: 100,
     });
     // #endregion transaction-parameters-7
@@ -91,6 +80,18 @@ describe(__filename, () => {
   });
 
   it('executes contract call with txParams', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: CounterAbi__factory,
+          bytecode: CounterAbiHex,
+        },
+      ],
+    });
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region transaction-parameters-8
     const { waitForResult } = await contract.functions
       .increment_counter(15)

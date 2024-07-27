@@ -8,6 +8,7 @@ import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe('launching a test node', () => {
   test(`instantiating test nodes - automatic cleanup`, async () => {

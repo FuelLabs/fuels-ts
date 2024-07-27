@@ -3,37 +3,42 @@ import type {
   CoinQuantityLike,
   ExcludeResourcesOption,
 } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest } from 'fuels';
-import { TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
+import { ScriptTransactionRequest } from 'fuels';
+import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('querying the chain', () => {
   it('query coins', async () => {
     // #region get-coins-1
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
+    // #import { launchTestNode, AssetId };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100,
+        assets: [AssetId.A],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
-
-    const wallet = await generateTestWallet(provider, [
-      [42, baseAssetId],
-      [100, assetIdA],
-    ]);
 
     // fetches up to 100 coins from baseAssetId
     const { coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId);
     // [
-    //   { amount: bn(42), assetId: baseAssetId },
+    //   { amount: bn(100), assetId: baseAssetId },
     //   ...
     // ]
 
     // fetches up to 100 coins from all assets
     await provider.getCoins(wallet.address);
     // [
-    //   { amount: bn(42), assetId: baseAssetId }
+    //   { amount: bn(100), assetId: baseAssetId }
     //   { amount: bn(100), assetId: assetIdA }
     //   ...
     // ]
@@ -49,20 +54,24 @@ describe('querying the chain', () => {
 
   it('get spendable resources', async () => {
     // #region get-spendable-resources-1
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet, ScriptTransactionRequest, CoinQuantityLike, ExcludeResourcesOption };
+    // #import { launchTestNode, AssetId };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100,
+        assets: [AssetId.A],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
-
-    const wallet = await generateTestWallet(provider, [
-      [42, baseAssetId],
-      [100, assetIdA],
-    ]);
 
     const quantities: CoinQuantityLike[] = [
       { amount: 32, assetId: baseAssetId, max: 42 },
-      { amount: 50, assetId: assetIdA },
+      { amount: 50, assetId: AssetId.A.value },
     ];
 
     const utxoId = '0x00000000000000000000000000000000000000000000000000000000000000010001';
@@ -91,16 +100,18 @@ describe('querying the chain', () => {
 
   it('get balances', async () => {
     // #region get-balances-1
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
+    // #import { launchTestNode, AssetId };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const baseAssetId = provider.getBaseAssetId();
-
-    const wallet = await generateTestWallet(provider, [
-      [42, baseAssetId],
-      [100, assetIdA],
-    ]);
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100,
+        assets: [AssetId.A],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     const { balances } = await provider.getBalances(wallet.address);
     // [
@@ -118,9 +129,11 @@ describe('querying the chain', () => {
 
   it('can getBlocks', async () => {
     // #region Provider-get-blocks
-    // #import { Provider, FUEL_NETWORK_URL };
+    // #import { launchTestNode };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     const blockToProduce = 3;
 
     // Force-producing some blocks to make sure that 10 blocks exist
@@ -135,9 +148,10 @@ describe('querying the chain', () => {
 
   it('can getMessageByNonce', async () => {
     // #region get-message-by-nonce-1
-    // #import { FUEL_NETWORK_URL, Provider };
+    // #import { launchTestNode };
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
     const message = await provider.getMessageByNonce(nonce);

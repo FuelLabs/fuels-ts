@@ -1,39 +1,39 @@
 import type { CoinQuantity, BN } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
-import { generateTestWallet, ASSET_A } from 'fuels/test-utils';
+import { Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let provider: Provider;
-  let privateKey: string;
-  let baseAssetId: string;
-  let assetId: string;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    assetId = baseAssetId;
-    const wallet = await generateTestWallet(provider, [
-      [1000, baseAssetId],
-      [1000, ASSET_A],
-    ]);
-    privateKey = wallet.privateKey;
-  });
-
+describe('Checking balances', () => {
   it('should fetch specific balance just fine', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [testWallet],
+    } = launched;
+
+    const privateKey = testWallet.privateKey;
+
     // #region checking-balances-1
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
     // The returned amount is a BigNumber
-    const balance: BN = await myWallet.getBalance(assetId);
+    const balance: BN = await myWallet.getBalance(provider.getBaseAssetId());
     // #endregion checking-balances-1
 
     expect(balance).toBeDefined();
   });
 
   it('should fetch all balances just fine', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [testWallet],
+    } = launched;
+
+    const privateKey = testWallet.privateKey;
     // #region checking-balances-2
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 

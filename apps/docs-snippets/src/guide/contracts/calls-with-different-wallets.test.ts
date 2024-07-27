@@ -1,25 +1,27 @@
-import type { Contract } from 'fuels';
 import { WalletUnlocked } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { ReturnContextAbi__factory } from '../../../test/typegen';
+import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let deployedContract: Contract;
-
-  beforeAll(async () => {
-    deployedContract = await createAndDeployContractFromProject(
-      DocSnippetProjectsEnum.RETURN_CONTEXT
-    );
-  });
-
+describe('Calls with different wallets', () => {
   it('should successfully update contract instance wallet', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: ReturnContextAbi__factory,
+          bytecode: ReturnContextAbiHex,
+        },
+      ],
+    });
+    const {
+      provider,
+      contracts: [deployedContract],
+    } = launched;
     const newWallet = WalletUnlocked.generate({
       provider,
     });

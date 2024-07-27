@@ -1,20 +1,28 @@
-import type { Contract } from 'fuels';
 import { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { LogValuesAbi__factory } from '../../../test/typegen';
+import LogValuesAbiHex from '../../../test/typegen/contracts/LogValuesAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.LOG_VALUES);
-  });
-
   it('should successfully execute contract call with forwarded amount', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: LogValuesAbi__factory,
+          bytecode: LogValuesAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region log-2
     const value1 = 500;
     const value2 = '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';

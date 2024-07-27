@@ -6,6 +6,7 @@ import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   it('should successfully execute contract call with forwarded amount', async () => {

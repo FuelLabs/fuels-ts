@@ -1,30 +1,36 @@
-import type { Contract, Provider } from 'fuels';
 import { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { ReturnContextAbi__factory } from '../../../test/typegen';
+import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-  let baseAssetId: string;
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
-    provider = contract.provider;
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('should successfully execute contract call with forwarded amount', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: ReturnContextAbi__factory,
+          bytecode: ReturnContextAbiHex,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      contracts: [contract],
+    } = launched;
+
     // #region call-params-1
     const amountToForward = 10;
 
     const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, baseAssetId],
+        forward: [amountToForward, provider.getBaseAssetId()],
       })
       .call();
 
@@ -35,13 +41,25 @@ describe(__filename, () => {
   });
 
   it('should throw error due not enough gas', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: ReturnContextAbi__factory,
+          bytecode: ReturnContextAbiHex,
+        },
+      ],
+    });
+    const {
+      provider,
+      contracts: [contract],
+    } = launched;
     // #region call-params-2
 
     await expect(async () => {
       const call = await contract.functions
         .return_context_amount()
         .callParams({
-          forward: [10, baseAssetId],
+          forward: [10, provider.getBaseAssetId()],
           gasLimit: 1,
         })
         .call();
@@ -52,6 +70,18 @@ describe(__filename, () => {
   });
 
   it('should successfully execute transaction with `txParams` and `callParams`', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: ReturnContextAbi__factory,
+          bytecode: ReturnContextAbiHex,
+        },
+      ],
+    });
+    const {
+      provider,
+      contracts: [contract],
+    } = launched;
     // #region call-params-3
     const amountToForward = 10;
     const contractCallGasLimit = 4000;
@@ -60,7 +90,7 @@ describe(__filename, () => {
     const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [amountToForward, baseAssetId],
+        forward: [amountToForward, provider.getBaseAssetId()],
         gasLimit: contractCallGasLimit,
       })
       .txParams({

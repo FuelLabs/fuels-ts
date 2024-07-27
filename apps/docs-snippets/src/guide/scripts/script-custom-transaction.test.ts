@@ -1,52 +1,27 @@
-import {
-  BN,
-  ContractFactory,
-  FUEL_NETWORK_URL,
-  ScriptTransactionRequest,
-  coinQuantityfy,
-  Provider,
-} from 'fuels';
-import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
-import { ASSET_A, ASSET_B } from 'fuels/test-utils';
+import { BN, ScriptTransactionRequest, coinQuantityfy } from 'fuels';
+import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
 import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { defaultTxParams, getTestWallet } from '../../utils';
+  EchoValuesAbi__factory,
+  ScriptTransferToContractAbi__factory,
+} from '../../../test/typegen';
+import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
+import { defaultTxParams } from '../../utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let provider: Provider;
-  let contract: Contract;
-  let baseAssetId: string;
-
-  const { binHexlified: scriptBin, abiContents } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SCRIPT_TRANSFER_TO_CONTRACT
-  );
-
-  const { abiContents: contractAbi, binHexlified: contractBin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.ECHO_VALUES
-  );
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    const seedQuantities: CoinQuantityLike[] = [
-      [1000, ASSET_A],
-      [500, ASSET_B],
-      [300_000, baseAssetId],
-    ];
-    wallet = await getTestWallet(seedQuantities);
-    const factory = new ContractFactory(contractBin, contractAbi, wallet);
-    const { waitForResult } = await factory.deployContract();
-    ({ contract } = await waitForResult());
-  });
-
   it('transfer multiple assets to a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ deployer: EchoValuesAbi__factory, bytecode: EchoValuesAbiHex }],
+    });
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
+
     const contractInitialBalanceAssetA = await contract.getBalance(ASSET_A);
     const contractInitialBalanceAssetB = await contract.getBalance(ASSET_B);
 
@@ -60,7 +35,7 @@ describe(__filename, () => {
     const request = new ScriptTransactionRequest({
       ...defaultTxParams,
       gasLimit: 3_000_000,
-      script: scriptBin,
+      script: ScriptTransferToContractAbi__factory.bin,
     });
 
     // 2. Instantiate the script main arguments
@@ -73,7 +48,9 @@ describe(__filename, () => {
     ];
 
     // 3. Populate the script data and add the contract input and output
-    request.setData(abiContents, scriptArguments).addContractInputAndOutput(contract.id);
+    request
+      .setData(ScriptTransferToContractAbi__factory.abi, scriptArguments)
+      .addContractInputAndOutput(contract.id);
 
     // 4. Get the transaction resources
     const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];

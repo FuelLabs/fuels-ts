@@ -1,5 +1,6 @@
 import type { PredicateParams } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
+import { Predicate } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
@@ -8,6 +9,7 @@ import {
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   const { abiContents: jsonAbi, binHexlified: binary } = getDocsSnippetsForcProject(
@@ -15,10 +17,11 @@ describe(__filename, () => {
   );
 
   it('should successfully instantiate a predicate', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     // #region predicate-index-2
     // #import { Predicate, Provider, FUEL_NETWORK_URL };
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
     const predicateParams: PredicateParams = {
       bytecode: binary,
       provider,

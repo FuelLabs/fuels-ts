@@ -1,29 +1,15 @@
-import type { WalletUnlocked, TransactionResponse, Policy } from 'fuels';
+import type { TransactionResponse, Policy } from 'fuels';
 import { ScriptTransactionRequest, bn, PolicyType } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { SumScriptAbi__factory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Transaction Policies', () => {
-  let wallet: WalletUnlocked;
-  let baseAssetId: string;
-
-  const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
-
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    baseAssetId = wallet.provider.getBaseAssetId();
-  });
-
-  it('sets policies', () => {
+  it('sets policies', async () => {
     // #region transaction-policies-1
     // #import { ScriptTransactionRequest };
 
@@ -49,8 +35,19 @@ describe('Transaction Policies', () => {
   });
 
   it('gets transaction response from tx id', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { provider } = launched;
     const scriptMainFunctionArguments = [1];
-    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: baseAssetId }]);
+    const resources = await wallet.getResourcesToSpend([
+      { amount: 1000, assetId: provider.getBaseAssetId() },
+    ]);
 
     // #region transaction-policies-2
     // #import { ScriptTransactionRequest, TransactionResponse, Policy };
@@ -58,7 +55,7 @@ describe('Transaction Policies', () => {
     // Instantiate the transaction request with transaction parameters that would
     // set the respective policies.
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScriptAbi__factory.bin,
       gasLimit: bn(2000),
       maturity: 2,
       tip: bn(3),
@@ -67,7 +64,7 @@ describe('Transaction Policies', () => {
     });
 
     // Set the script main function arguments
-    transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScriptAbi__factory.abi, scriptMainFunctionArguments);
 
     // Fund the transaction
     transactionRequest.addResources(resources);
