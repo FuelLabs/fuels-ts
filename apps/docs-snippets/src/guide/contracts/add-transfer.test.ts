@@ -31,7 +31,7 @@ describe(__filename, () => {
     // #region add-transfer-1
     const recipient = Wallet.generate({ provider });
 
-    await contract.functions
+    const { waitForResult } = await contract.functions
       .echo_u64(100)
       .addTransfer({
         destination: recipient.address,
@@ -39,6 +39,8 @@ describe(__filename, () => {
         assetId: baseAssetId,
       })
       .call();
+
+    await waitForResult();
     // #endregion add-transfer-1
 
     const recipientBalance = await recipient.getBalance(baseAssetId);
@@ -57,7 +59,12 @@ describe(__filename, () => {
       { destination: recipient2.address, amount: 300, assetId: ASSET_B },
     ];
 
-    await contract.functions.echo_u64(100).addBatchTransfer(transferParams).call();
+    const { waitForResult } = await contract.functions
+      .echo_u64(100)
+      .addBatchTransfer(transferParams)
+      .call();
+
+    await waitForResult();
     // #endregion add-transfer-2
 
     const recipient1BalanceBaseAsset = await recipient1.getBalance(baseAssetId);

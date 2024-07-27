@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { IRawAbiTypeRoot } from '../../index';
+import type { JsonAbiType } from '../../index';
 import { parseTypes } from '../../utils/parseTypes';
 
 import { EnumType } from './EnumType';
@@ -17,7 +17,7 @@ describe('ResultType.ts', () => {
   */
   function getResultType() {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
-    const rawTypes = project.abiContents.types as IRawAbiTypeRoot[];
+    const rawTypes = project.abiContents.types as JsonAbiType[];
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return parseTypes({ rawAbiTypes: [rawTypes.find((t) => t.type === 'enum Result')!] })[0];
   }

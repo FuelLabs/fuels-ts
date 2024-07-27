@@ -27,13 +27,11 @@ describe('Transaction Response', () => {
 
   it('gets transaction response from contract call', async () => {
     // #region transaction-response-1
-    // #import { TransactionResponse };
-
     // Call a contract function
-    const call = await contract.functions.increment_count(15).call();
+    const call = await contract.functions.increment_counter(15).call();
 
-    // Pick off the transaction response
-    const transactionResponse: TransactionResponse = call.transactionResponse;
+    // Wait for the result
+    const { transactionResponse } = await call.waitForResult();
 
     // Retrieve the full transaction summary
     const transactionSummary = await transactionResponse.getTransactionSummary();
@@ -56,7 +54,7 @@ describe('Transaction Response', () => {
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
 
     // Fund the transaction
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
     transactionRequest.gasLimit = txCost.gasUsed;
@@ -81,7 +79,7 @@ describe('Transaction Response', () => {
     });
     transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
 
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
     transactionRequest.gasLimit = txCost.gasUsed;
@@ -94,8 +92,6 @@ describe('Transaction Response', () => {
     );
 
     // #region transaction-response-3
-    // #import { TransactionResponse };
-
     // Take a transaction ID from a previous transaction
     const transactionId = previouslySubmittedTransactionId;
     // 0x...

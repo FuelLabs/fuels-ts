@@ -1,4 +1,4 @@
-import type { IRawAbiTypeComponent } from '../../index';
+import type { JsonAbiArgument } from '../../index';
 import type { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 import { extractStructName } from '../../utils/extractStructName';
@@ -58,7 +58,7 @@ export class EnumType extends AType implements IType {
     const { components } = this.rawAbiType;
 
     // `components` array guaranteed to always exist for structs/enums
-    const enumComponents = components as IRawAbiTypeComponent[];
+    const enumComponents = components as JsonAbiArgument[];
 
     if (!enumComponents.every(({ type }) => typeHash[type] === EmptyType.swayType)) {
       return undefined;
@@ -73,7 +73,7 @@ export class EnumType extends AType implements IType {
     const { components } = this.rawAbiType;
 
     // `components` array guaranteed to always exist for structs/enums
-    const enumComponents = components as IRawAbiTypeComponent[];
+    const enumComponents = components as JsonAbiArgument[];
 
     const attributeKey: 'inputLabel' | 'outputLabel' = `${target}Label`;
 

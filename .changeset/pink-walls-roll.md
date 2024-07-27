@@ -1,0 +1,4 @@
+---
+---
+
+docs: fix `getMintedAssetId` example

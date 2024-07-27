@@ -1,5 +1,45 @@
 # Change Log
 
+## 0.92.1
+
+### Patch Changes
+
+- c62ae85: build(deps): bump @fuels/vm-asm from 0.54.0 to 0.55.0
+- Updated dependencies [c62ae85]
+  - @fuel-ts/account@0.92.1
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/address@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/math@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 74a00be: chore!: remove `InvocationResult` from `program` package
+- 661b153: feat!: implement non-blocking contract call
+
+### Patch Changes
+
+- Updated dependencies [98dbfbb]
+- Updated dependencies [d0b5446]
+- Updated dependencies [369feef]
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [17bd929]
+- Updated dependencies [aa7e656]
+  - @fuel-ts/account@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/abi-coder@0.92.0
+  - @fuel-ts/address@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/transactions@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

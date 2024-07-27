@@ -1,31 +1,25 @@
-import type { Contract } from 'fuels';
 import { bn } from 'fuels';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { PayableAnnotationAbi__factory } from '../test/typegen/contracts';
+import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
 
-import { createSetupConfig } from './utils';
+import { launchTestContract } from './utils';
 
-const { binHexlified: contractBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.PAYABLE_ANNOTATION
-);
-
-const setupContract = createSetupConfig({
-  contractBytecode,
-  abi: abiJSON,
-});
-
-let contract: Contract;
-let baseAssetId: string;
-
-beforeAll(async () => {
-  contract = await setupContract();
-  baseAssetId = contract.provider.getBaseAssetId();
-});
+function launchPayableContract() {
+  return launchTestContract({
+    bytecode: PayableAnnotationAbiHex,
+    deployer: PayableAnnotationAbi__factory,
+  });
+}
 
 /**
  * @group node
+ * @group browser
  */
 test('allow sending coins to payable functions', async () => {
+  using contract = await launchPayableContract();
+  const baseAssetId = contract.provider.getBaseAssetId();
+
   // This should not fail because the function is payable
   await expect(
     contract.functions
@@ -41,9 +35,12 @@ test('allow sending coins to payable functions', async () => {
 });
 
 test("don't allow sending coins to non-payable functions", async () => {
+  using contract = await launchPayableContract();
+  const baseAssetId = contract.provider.getBaseAssetId();
+
   // This should fail because the function is not payable
-  await expect(async () =>
-    contract.functions
+  await expect(async () => {
+    const tx = await contract.functions
       .non_payable()
       .callParams({
         forward: {
@@ -51,8 +48,10 @@ test("don't allow sending coins to non-payable functions", async () => {
           assetId: baseAssetId,
         },
       })
-      .call()
-  ).rejects.toThrowError(
+      .call();
+
+    await tx.waitForResult();
+  }).rejects.toThrowError(
     `The target function non_payable cannot accept forwarded funds as it's not marked as 'payable'.`
   );
 });

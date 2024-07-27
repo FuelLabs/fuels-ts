@@ -1,5 +1,22 @@
 # create-fuels
 
+## 0.92.1
+
+### Patch Changes
+
+- e4452f9: build(deps): bump next from 14.2.4 to 14.2.5 in the deps group
+- 1b4b033: chore: replace `create-fuels` hardcoded values with constants
+- ce5b6b8: build(deps-dev): bump the dev-deps group with 9 updates
+- 766faed: build(deps): bump @tanstack/react-query from 5.29.2 to 5.51.1
+
+## 0.92.0
+
+### Patch Changes
+
+- e9b70ee: chore: include all supported connectors in the create fuels template
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- 1e2d59f: feat: utilize the Next.js `Link` component
+
 ## 0.91.0
 
 ### Patch Changes

@@ -1,10 +1,10 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { supportedTypes } from './supportedTypes';
 
-export function makeType(params: { rawAbiType: IRawAbiTypeRoot }) {
+export function makeType(params: { rawAbiType: JsonAbiType }) {
   const { rawAbiType } = params;
   const { type } = rawAbiType;
 

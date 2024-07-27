@@ -1,5 +1,15 @@
 # @fuel-ts/versions
 
+## 0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- 44d51ee: chore: upgrading `forc` to `0.61.2`
+
 ## 0.91.0
 
 ### Patch Changes

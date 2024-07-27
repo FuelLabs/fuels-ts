@@ -52,7 +52,7 @@ pnpm fuels typegen -i ./abis/*-abi.json -o ./types
 
 The path after the input flag `-i` should point to the file ending in `-abi.json` produced when the contract was built.
 
-The path after the output flag `-o` will be the the output directory for the generated types.
+The path after the output flag `-o` will be the output directory for the generated types.
 
 You can omit the `--contract` option here since it's the default.
 

@@ -53,7 +53,7 @@ export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
 export type StructWithMultiOptionInput = { multiple: [Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>] };
 export type StructWithMultiOptionOutput = { multiple: [Option<number>, Option<number>, Option<number>, Option<number>, Option<number>] };
 
-interface MyContractAbiInterface extends Interface {
+export interface MyContractAbiInterface extends Interface {
   functions: {
     type_address: FunctionFragment;
     type_contract_id: FunctionFragment;

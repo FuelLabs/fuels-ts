@@ -8,6 +8,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
+import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -16,10 +17,16 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
-import { setupTestProviderAndWallets, launchNode } from '../test-utils';
+import {
+  setupTestProviderAndWallets,
+  launchNode,
+  seedTestWallet,
+  TestMessage,
+} from '../test-utils';
+import { Wallet } from '../wallet';
 
-import type { ChainInfo, NodeInfo } from './provider';
-import Provider from './provider';
+import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
+import Provider, { BLOCKS_PAGE_SIZE_LIMIT, RESOURCES_PAGE_SIZE_LIMIT } from './provider';
 import type {
   CoinTransactionRequestInput,
   MessageTransactionRequestInput,
@@ -63,7 +70,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.30.0');
+    expect(version).toEqual('0.31.0');
   });
 
   it('can call()', async () => {
@@ -713,13 +720,14 @@ describe('Provider', () => {
 
   it('can getBlocks', async () => {
     using launched = await setupTestProviderAndWallets();
+    const blocksLenght = 5;
     const { provider } = launched;
-    // Force-producing some blocks to make sure that 10 blocks exist
-    await provider.produceBlocks(10);
-    const blocks = await provider.getBlocks({
-      last: 10,
+    // Force-producing some blocks to make sure that blocksLenght blocks exist
+    await provider.produceBlocks(blocksLenght);
+    const { blocks } = await provider.getBlocks({
+      last: 5,
     });
-    expect(blocks.length).toBe(10);
+    expect(blocks.length).toBe(blocksLenght);
     blocks.forEach((block) => {
       expect(block).toEqual(
         expect.objectContaining({
@@ -1064,19 +1072,19 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     });
   });
 
-  // TODO: validate if this test still makes sense
-  it.skip('should ensure estimated fee values on getTransactionCost are never 0', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+  it('should ensure estimated fee values on getTransactionCost are never 0', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: { args: ['--min-gas-price', '0'] },
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const request = new ScriptTransactionRequest();
 
-    // forcing calculatePriceWithFactor to return 0
-    const calculateGasFeeMock = vi.spyOn(gasMod, 'calculateGasFee').mockReturnValue(bn(0));
+    const { minFee, maxFee, gasPrice } = await wallet.getTransactionCost(request);
 
-    const { minFee, maxFee } = await provider.getTransactionCost(request);
-
-    expect(calculateGasFeeMock).toHaveBeenCalled();
-
+    expect(gasPrice.eq(0)).toBeTruthy();
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
   });
@@ -1091,7 +1099,6 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const methodCalls = [
       () => provider.getBalance(b256Str, baseAssetId),
       () => provider.getCoins(b256Str),
-      () => provider.getResourcesForTransaction(b256Str, new ScriptTransactionRequest()),
       () => provider.getResourcesToSpend(b256Str, []),
       () => provider.getContractBalance(b256Str, baseAssetId),
       () => provider.getBalances(b256Str),
@@ -1523,5 +1530,274 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     expect(message).toBeDefined();
     expect(message?.nonce).toEqual(nonce);
+  });
+
+  describe('paginated methods', () => {
+    test('can properly use getCoins', async () => {
+      const totalCoins = RESOURCES_PAGE_SIZE_LIMIT + 1;
+
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: totalCoins,
+          amountPerCoin: totalCoins,
+        },
+      });
+
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+
+      // can fetch 1000 coins
+      let { coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
+        first: totalCoins - 1,
+      });
+
+      expect(coins.length).toBe(totalCoins - 1);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can list next page with 1 coin
+      ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
+        after: pageInfo.endCursor,
+        first: 100,
+      }));
+
+      expect(coins.length).toBe(1);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can show previous page with less coins
+      const last = 50;
+      ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId, {
+        before: pageInfo.startCursor,
+        last,
+      }));
+
+      expect(coins.length).toBe(last);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can fetch default 1000 items
+      ({ coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId));
+
+      expect(coins.length).toBe(RESOURCES_PAGE_SIZE_LIMIT);
+    });
+
+    test('can properly use getMessages', async () => {
+      const totalMessages = RESOURCES_PAGE_SIZE_LIMIT + 1;
+      const fakeMessages = Array.from({ length: totalMessages }, (_) => new TestMessage());
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          messages: fakeMessages,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+
+      let { messages, pageInfo } = await provider.getMessages(wallet.address, {
+        first: totalMessages - 1,
+      });
+
+      expect(messages.length).toBe(totalMessages - 1);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ messages, pageInfo } = await provider.getMessages(wallet.address, {
+        after: pageInfo.endCursor,
+      }));
+
+      expect(messages.length).toBe(1);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can show previous page with less messages
+      const last = 50;
+      ({ messages, pageInfo } = await provider.getMessages(wallet.address, {
+        before: pageInfo.startCursor,
+        last,
+      }));
+
+      expect(messages.length).toBe(last);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ messages, pageInfo } = await provider.getMessages(wallet.address));
+
+      // can fetch default 100 items
+      expect(messages.length).toBe(RESOURCES_PAGE_SIZE_LIMIT);
+    });
+
+    test('can properly use getBlocks', async () => {
+      const blocksToProduce = 5;
+      // one is produced when the node starts
+      const totalBlocksProduced = blocksToProduce + 1;
+
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
+
+      await provider.produceBlocks(blocksToProduce);
+
+      let { blocks, pageInfo } = await provider.getBlocks({
+        first: totalBlocksProduced - 1,
+      });
+
+      expect(blocks.length).toBe(totalBlocksProduced - 1);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ blocks, pageInfo } = await provider.getBlocks({
+        after: pageInfo.endCursor,
+      }));
+
+      expect(blocks.length).toBe(1);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      // can show previous page with less blocks
+      const last = 2;
+      ({ blocks, pageInfo } = await provider.getBlocks({
+        before: pageInfo.startCursor,
+        last,
+      }));
+
+      expect(blocks.length).toBe(last);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+    });
+
+    describe('pagination arguments', async () => {
+      using launched = await setupTestProviderAndWallets({
+        walletsConfig: {
+          coinsPerAsset: 100,
+        },
+      });
+      const { provider } = launched;
+      const baseAssetId = provider.getBaseAssetId();
+      const address = Address.fromRandom();
+      const exceededLimit = RESOURCES_PAGE_SIZE_LIMIT + 1;
+      const safeLimit = BLOCKS_PAGE_SIZE_LIMIT;
+
+      function getInvocations(args: CursorPaginationArgs) {
+        return [
+          {
+            name: 'getCoins',
+            invocation: () => provider.getCoins(address, baseAssetId, args),
+            limit: RESOURCES_PAGE_SIZE_LIMIT,
+          },
+          {
+            name: 'getMessages',
+            invocation: () => provider.getMessages(address, args),
+            limit: RESOURCES_PAGE_SIZE_LIMIT,
+          },
+          {
+            name: 'getBlocks',
+            invocation: () => provider.getBlocks(args),
+            limit: BLOCKS_PAGE_SIZE_LIMIT,
+          },
+        ];
+      }
+
+      const args1: CursorPaginationArgs = { first: exceededLimit };
+      const invocations1 = getInvocations(args1);
+      it.each(invocations1)('validate max items on $name', async ({ invocation, limit }) => {
+        await expectToThrowFuelError(
+          () => invocation(),
+          new FuelError(
+            ErrorCode.INVALID_INPUT_PARAMETERS,
+            `Pagination limit for this query cannot exceed ${limit} items`
+          )
+        );
+      });
+
+      const args2: CursorPaginationArgs = { after: 'after', before: 'before' };
+      const invocations2 = getInvocations(args2);
+      it.each(invocations2)(
+        "validate use of 'after' with 'before' on $name",
+        async ({ invocation }) => {
+          await expectToThrowFuelError(
+            () => invocation(),
+            new FuelError(
+              ErrorCode.INVALID_INPUT_PARAMETERS,
+              'Pagination arguments "after" and "before" cannot be used together'
+            )
+          );
+        }
+      );
+
+      const args3: CursorPaginationArgs = { before: 'before', first: safeLimit };
+      const invocations3 = getInvocations(args3);
+      it.each(invocations3)(
+        "validate use of 'after' with 'last' on $name",
+        async ({ invocation }) => {
+          await expectToThrowFuelError(
+            () => invocation(),
+            new FuelError(
+              ErrorCode.INVALID_INPUT_PARAMETERS,
+              'The use of pagination argument "first" with "before" is not supported'
+            )
+          );
+        }
+      );
+
+      const args4: CursorPaginationArgs = { after: 'after', last: safeLimit };
+      const invocations4 = getInvocations(args4);
+      it.each(invocations4)(
+        "validate use of 'before' with 'first' on $name",
+        async ({ invocation }) => {
+          await expectToThrowFuelError(
+            () => invocation(),
+            new FuelError(
+              ErrorCode.INVALID_INPUT_PARAMETERS,
+              'The use of pagination argument "last" with "after" is not supported'
+            )
+          );
+        }
+      );
+    });
+  });
+
+  test('can properly use getBalances', async () => {
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const baseAssetId = provider.getBaseAssetId();
+    const wallet = Wallet.generate({ provider });
+
+    const fundAmount = 10_000;
+
+    await seedTestWallet(wallet, [
+      [fundAmount, baseAssetId],
+      [fundAmount, ASSET_A],
+    ]);
+
+    const { balances } = await provider.getBalances(wallet.address);
+
+    expect(balances.length).toBe(2);
+    balances.forEach((balance) => {
+      expect(balance.amount.toNumber()).toBe(fundAmount);
+      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+    });
   });
 });

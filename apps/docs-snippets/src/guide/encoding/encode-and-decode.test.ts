@@ -2,10 +2,10 @@ import {
   FUEL_NETWORK_URL,
   Provider,
   AbiCoder,
-  FunctionInvocationResult,
   Script,
   ReceiptType,
   arrayify,
+  buildFunctionResult,
 } from 'fuels';
 import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
 import { generateTestWallet } from 'fuels/test-utils';
@@ -71,7 +71,7 @@ describe('encode and decode', () => {
     request.scriptData = encodedArguments;
 
     // Now we can build out the rest of the transaction and then fund it
-    const txCost = await wallet.provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
     await wallet.fund(request, txCost);
@@ -82,16 +82,16 @@ describe('encode and decode', () => {
     // #endregion encode-and-decode-4
 
     // #region encode-and-decode-5
-    // #import { FunctionInvocationResult, AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify};
+    // #import { AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify, buildFunctionResult };
 
     // Get result of the transaction, including the contract call result. For this we'll need
     // the previously created invocation scope, the transaction response and the script
-    const invocationResult = await FunctionInvocationResult.build(
-      [invocationScope],
-      response,
-      false,
-      script
-    );
+    const invocationResult = await buildFunctionResult({
+      funcScope: invocationScope,
+      isMultiCall: false,
+      program: script,
+      transactionResponse: response,
+    });
 
     // The decoded value can be destructured from the `FunctionInvocationResult`
     const { value } = invocationResult;

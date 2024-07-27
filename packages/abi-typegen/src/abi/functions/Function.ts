@@ -1,4 +1,4 @@
-import type { IFunction, IRawAbiFunction, IFunctionAttributes } from '../../index';
+import type { IFunction, JsonAbiFunction, IFunctionAttributes } from '../../index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 import { findType } from '../../utils/findType';
@@ -8,10 +8,10 @@ import { EmptyType } from '../types/EmptyType';
 export class Function implements IFunction {
   public name: string;
   public types: IType[];
-  public rawAbiFunction: IRawAbiFunction;
+  public rawAbiFunction: JsonAbiFunction;
   public attributes: IFunctionAttributes;
 
-  constructor(params: { types: IType[]; rawAbiFunction: IRawAbiFunction }) {
+  constructor(params: { types: IType[]; rawAbiFunction: JsonAbiFunction }) {
     this.rawAbiFunction = params.rawAbiFunction;
     this.types = params.types;
     this.name = params.rawAbiFunction.name;

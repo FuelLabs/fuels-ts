@@ -95,6 +95,8 @@ npx fuels@{{fuels}} deploy
 > [!NOTE] Note
 > We recommend using the `fuels deploy` command only when you are deploying contracts to a local node.
 > If you are deploying contracts to a live network like the Testnet, we recommend using the [`forc deploy`](https://docs.fuel.network/docs/intro/quickstart-contract/#deploy-to-testnet) command instead.
+>
+> Additionally, the maximum contract deployment size supported by the SDK is 100 KB. The SDK will `throw` an [error](../errors/index.md) for contracts larger than this size.
 
 The `fuels deploy` command does two things:
 

@@ -1,26 +1,29 @@
-import { FUEL_NETWORK_URL, Predicate, Provider, arrayify } from 'fuels';
+import { Predicate, arrayify } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
 import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
 import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
+import { BytecodeSwayLibAbi__factory } from '../test/typegen/contracts';
+import BytecodeSwayLibAbiHex from '../test/typegen/contracts/BytecodeSwayLibAbi.hex';
 
-import { getSetupContract } from './utils';
+import { launchTestContract } from './utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('bytecode computations', () => {
-  test('compute_bytecode_root', async () => {
-    const { binHexlified: bytecodeFromFile } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-    );
+  it('compute_bytecode_root', async () => {
+    using contract = await launchTestContract({
+      deployer: BytecodeSwayLibAbi__factory,
+      bytecode: BytecodeSwayLibAbiHex,
+    });
 
-    const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
-    const contract = await setupContract();
-
-    const { logs } = await contract.functions
-      .compute_bytecode_root(arrayify(bytecodeFromFile))
+    const { waitForResult } = await contract.functions
+      .compute_bytecode_root(Array.from(arrayify(BytecodeSwayLibAbiHex)))
       .call();
+
+    const { logs } = await waitForResult();
 
     const bytecodeRoot: string = logs[0];
 
@@ -28,28 +31,40 @@ describe('bytecode computations', () => {
     expect(bytecodeRoot.length).toBe(66);
   });
 
-  test('verify_contract_bytecode', async () => {
-    const { binHexlified: bytecodeFromFile } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB
-    );
+  it('verify_contract_bytecode', async () => {
+    using contract = await launchTestContract({
+      deployer: BytecodeSwayLibAbi__factory,
+      bytecode: BytecodeSwayLibAbiHex,
+    });
 
-    const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
-    const contract = await setupContract();
-
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .verify_contract_bytecode(
         {
           bits: contract.id.toB256(),
         },
-        Array.from(arrayify(bytecodeFromFile))
+        Array.from(arrayify(BytecodeSwayLibAbiHex))
       )
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value).toBeTruthy();
   });
 
-  test('compute_predicate_address', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+  it('compute_predicate_address', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: BytecodeSwayLibAbi__factory,
+          bytecode: BytecodeSwayLibAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
 
     const predicate = new Predicate({
       bytecode: defaultPredicateBytecode,
@@ -59,12 +74,11 @@ describe('bytecode computations', () => {
 
     const address = predicate.address;
 
-    const setupContract = getSetupContract(FuelGaugeProjectsEnum.BYTECODE_SWAY_LIB);
-    const contract = await setupContract();
-
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))
       .call();
+
+    const { value } = await waitForResult();
 
     expect(value.bits).toEqual(address.toB256());
   });

@@ -21,8 +21,8 @@ describe(__filename, () => {
   beforeAll(async () => {
     wallet = await getTestWallet();
     const factory = new ContractFactory(bin, abi, wallet);
-    contract = await factory.deployContract();
-
+    const { waitForResult } = await factory.deployContract();
+    ({ contract } = await waitForResult());
     contractId = contract.id;
   });
 

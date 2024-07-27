@@ -1,3 +1,19 @@
+"""
+Indicates that an Input Object is a OneOf Input Object (and thus requires
+                        exactly one of its field be provided)
+"""
+directive @oneOf on INPUT_OBJECT
+
+"""
+Provides a scalar specification URL for specifying the behavior of custom scalar types.
+"""
+directive @specifiedBy(
+  """
+  URL that specifies the behavior of this scalar.
+  """
+  url: String!
+) on SCALAR
+
 scalar Address
 
 scalar AssetId
@@ -30,14 +46,14 @@ An edge in a connection.
 """
 type BalanceEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Balance!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 input BalanceFilterInput {
@@ -53,6 +69,7 @@ type Block {
   height: U32!
   header: Header!
   consensus: Consensus!
+  transactionIds: [TransactionId!]!
   transactions: [Transaction!]!
 }
 
@@ -78,14 +95,14 @@ An edge in a connection.
 """
 type BlockEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Block!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 scalar BlockId
@@ -157,14 +174,14 @@ An edge in a connection.
 """
 type CoinEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Coin!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 input CoinFilterInput {
@@ -249,14 +266,14 @@ An edge in a connection.
 """
 type ContractBalanceEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: ContractBalance!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 input ContractBalanceFilterInput {
@@ -332,6 +349,7 @@ input ExcludeInput {
 
 type FailureStatus {
   transactionId: TransactionId!
+  blockHeight: U32!
   block: Block!
   time: Tai64Timestamp!
   reason: String!
@@ -672,14 +690,14 @@ An edge in a connection.
 """
 type MessageEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Message!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 type MessageProof {
@@ -1222,6 +1240,7 @@ type Subscription {
 
 type SuccessStatus {
   transactionId: TransactionId!
+  blockHeight: U32!
   block: Block!
   time: Tai64Timestamp!
   programState: ProgramState
@@ -1294,14 +1313,14 @@ An edge in a connection.
 """
 type TransactionEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Transaction!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 scalar TransactionId

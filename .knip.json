@@ -4,9 +4,11 @@
     "**/*/.vitepress/*",
     "/apps/docs/*",
     "/packages/abi-typegen/test/**",
-    "templates/**"
+    "templates/**",
+    "apps/create-fuels-counter-guide/**"
   ],
   "ignoreDependencies": [
+    "bun",
     "@/sway-api/*",
     "@fuel-ts/*",
     "@internal/fuel-core",
@@ -27,7 +29,6 @@
     "textlint",
     "textlint-rule-no-dead-link",
     "@elasticpath/textlint-rule-no-dead-relative-link",
-    "tree-kill",
     "ts-generator",
     "webdriverio"
   ]

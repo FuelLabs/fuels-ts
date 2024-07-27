@@ -63,6 +63,7 @@ export abstract class AbstractAccount {
   abstract getResourcesToSpend(quantities: any[], options?: any): any;
   abstract sendTransaction(transactionRequest: any, options?: any): any;
   abstract simulateTransaction(transactionRequest: any, options?: any): any;
+  abstract getTransactionCost(transactionRequest: any, options?: any): Promise<any>;
   abstract fund(transactionRequest: any, txCost: any): Promise<any>;
 }
 /**
@@ -76,6 +77,7 @@ export abstract class AbstractProgram {
 
   abstract provider: {
     sendTransaction(transactionRequest: any, options?: any): any;
+    getTransactionCost(transactionRequest: any, options?: any): Promise<any>;
   } | null;
 }
 

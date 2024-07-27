@@ -44,11 +44,11 @@ type {{capitalizedName}}Inputs = [{{inputs}}];
 type {{capitalizedName}}Output = {{output}};
 
 {{#if formattedConfigurables}}
-export type {{capitalizedName}}Configurables = {
+export type {{capitalizedName}}Configurables = Partial<{
 {{#each formattedConfigurables}}
   {{configurableName}}: {{configurableType}};
 {{/each}}
-};
+}>;
 {{/if}}
 
 const _abi = {{abiJsonString}}

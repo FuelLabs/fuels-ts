@@ -5,6 +5,9 @@ import useAsync from "react-use/lib/useAsync";
 
 const BURNER_WALLET_LOCAL_STORAGE_KEY = "create-fuels-burner-wallet-pk";
 
+/**
+ * This hook returns an instance of a burner wallet that lives in local storage.
+ */
 export const useBurnerWallet: () => AppWallet = () => {
   const [burnerWallet, setBurnerWallet] = useState<WalletUnlocked>();
   const [burnerWalletBalance, setBurnerWalletBalance] = useState<BN>();

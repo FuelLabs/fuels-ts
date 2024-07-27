@@ -5,7 +5,7 @@ import {
   getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 import * as parseConfigurablesMod from '../utils/parseConfigurables';
 import * as parseFunctionsMod from '../utils/parseFunctions';
 import * as parseTypesMod from '../utils/parseTypes';
@@ -63,7 +63,7 @@ describe('Abi.ts', () => {
   }
 
   function getRawTypeFor(params: { type: string }) {
-    const rawAbiType: IRawAbiTypeRoot = {
+    const rawAbiType: JsonAbiType = {
       typeId: 1,
       type: params.type,
       components: null,

@@ -13,9 +13,6 @@ jobs:
     name: "Release"
     runs-on: ubuntu-latest
     permissions: write-all
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     # Ensure that the workflow runs only after a commit is pushed into the branch
     # and not when the branch is created.
     # This is to avoid running the workflow when a release/* branch is created.
@@ -125,21 +122,6 @@ jobs:
         if: startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
-      - name: Configure GitHub Pages
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/configure-pages@v2
-
-      - name: Upload Docs Artifact
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: apps/docs/dist
-
-      - name: Deploy Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        id: deployment
-        uses: actions/deploy-pages@v1
-
       - name: Checkout API Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
         uses: actions/checkout@v4
@@ -198,7 +180,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
       # Upload assets to S3
-      - uses: unfor19/install-aws-cli-action@v1.0.3
+      - uses: unfor19/install-aws-cli-action@v1.0.7
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           version: 2
@@ -206,12 +188,14 @@ jobs:
           arch: amd64
           rootdir: ""
           workdir: ""
-      - uses: aws-actions/configure-aws-credentials@v1
+
+      - uses: aws-actions/configure-aws-credentials@v4
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
           aws-region: us-east-1
+
       - name: Upload assets to s3
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |

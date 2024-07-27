@@ -1,8 +1,8 @@
-import type { CoinQuantityLike, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory, Provider, getRandomB256, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { BN, getRandomB256 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { ConfigurableContractAbi__factory } from '../test/typegen/contracts';
+import ConfigurableContractAbiHex from '../test/typegen/contracts/ConfigurableContractAbi.hex';
 
 const defaultValues = {
   U8: 10,
@@ -25,34 +25,29 @@ const defaultValues = {
   },
 };
 
+function setupContract(configurableConstants?: { [name: string]: unknown }) {
+  return launchTestNode({
+    contractsConfigs: [
+      {
+        deployer: ConfigurableContractAbi__factory,
+        bytecode: ConfigurableContractAbiHex,
+        options: { configurableConstants },
+      },
+    ],
+  });
+}
+
 /**
  * @group node
+ * @group browser
  */
 describe('Configurable Contract', () => {
-  let wallet: WalletUnlocked;
-  let factory: ContractFactory;
-  let baseAssetId: string;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    const quantities: CoinQuantityLike[] = [
-      {
-        amount: 1_000_000,
-        assetId: baseAssetId,
-      },
-    ];
-
-    wallet = await generateTestWallet(provider, quantities);
-
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.CONFIGURABLE_CONTRACT
-    );
-
-    factory = new ContractFactory(binHexlified, abiContents, wallet);
-  });
-
   it('should assert default values', async () => {
-    const contract = await factory.deployContract();
+    using contractInstance = await setupContract();
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_configurables().simulate();
 
@@ -76,7 +71,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.U8).not.toBe(configurableConstants.U8);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_u8().simulate();
 
@@ -90,7 +89,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.U16).not.toBe(configurableConstants.U16);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_u16().simulate();
 
@@ -104,7 +107,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.U32).not.toBe(configurableConstants.U32);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_u32().simulate();
 
@@ -118,7 +125,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.U64).not.toBe(configurableConstants.U64);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_u64().simulate();
 
@@ -132,7 +143,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.BOOL).not.toBe(configurableConstants.BOOL);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_bool().simulate();
 
@@ -146,7 +161,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.B256).not.toBe(configurableConstants.B256);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_b256().simulate();
 
@@ -160,7 +179,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.ENUM).not.toBe(configurableConstants.ENUM);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_enum().simulate();
 
@@ -177,7 +200,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.ARRAY).not.toStrictEqual(configurableConstants.ARRAY);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_array().simulate();
 
@@ -191,7 +218,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.STR_4).not.toBe(configurableConstants.STR_4);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_str4().simulate();
 
@@ -205,7 +236,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.TUPLE).not.toStrictEqual(configurableConstants.TUPLE);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_tuple().simulate();
 
@@ -223,7 +258,11 @@ describe('Configurable Contract', () => {
 
     expect(defaultValues.STRUCT_1).not.toStrictEqual(configurableConstants.STRUCT_1);
 
-    const contract = await factory.deployContract({ configurableConstants });
+    using contractInstance = await setupContract(configurableConstants);
+
+    const {
+      contracts: [contract],
+    } = contractInstance;
 
     const { value } = await contract.functions.echo_struct().simulate();
 

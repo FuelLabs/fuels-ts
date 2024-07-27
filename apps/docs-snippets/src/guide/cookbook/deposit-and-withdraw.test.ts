@@ -25,9 +25,10 @@ describe(__filename, () => {
     provider = sender.provider;
     baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    liquidityPoolContract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       configurableConstants: { TOKEN: { bits: baseAssetId } },
     });
+    ({ contract: liquidityPoolContract } = await waitForResult());
   });
 
   it('deposit and withdraw cookbook guide', async () => {
@@ -41,11 +42,13 @@ describe(__filename, () => {
 
     const assetId = getMintedAssetId(contractId, subId);
 
-    await liquidityPoolContract.functions
+    const call1 = await liquidityPoolContract.functions
       .deposit({ bits: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, baseAssetId] })
       .txParams({ variableOutputs: 1 })
       .call();
+
+    await call1.waitForResult();
 
     const liquidityAmount = await liquidityOwner.getBalance(assetId);
 
@@ -53,11 +56,13 @@ describe(__filename, () => {
     // #endregion deposit-and-withdraw-cookbook-2
 
     // #region deposit-and-withdraw-cookbook-3
-    await liquidityPoolContract.functions
+    const call2 = await liquidityPoolContract.functions
       .withdraw({ bits: liquidityOwner.address.toB256() })
       .callParams({ forward: [depositAmount, baseAssetId] })
       .txParams({ variableOutputs: 1 })
       .call();
+
+    await call2.waitForResult();
 
     const baseAssetAfterWithdraw = await liquidityOwner.getBalance(baseAssetId);
 

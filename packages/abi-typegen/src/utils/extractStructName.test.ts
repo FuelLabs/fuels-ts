@@ -1,7 +1,7 @@
 import { EnumType } from '../abi/types/EnumType';
 import { GenericType } from '../abi/types/GenericType';
 import { StructType } from '../abi/types/StructType';
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { extractStructName } from './extractStructName';
 
@@ -12,7 +12,7 @@ describe('extractStructName.ts', () => {
   /*
     Test helpers
   */
-  function makeType(typeId: number, type: string): IRawAbiTypeRoot {
+  function makeType(typeId: number, type: string): JsonAbiType {
     return {
       typeId,
       type,

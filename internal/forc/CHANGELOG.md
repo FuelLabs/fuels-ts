@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.88.4
+
+### Patch Changes
+
+- 44d51ee: chore: upgrading `forc` to `0.61.2`
+
 ## 0.88.3
 
 ### Patch Changes

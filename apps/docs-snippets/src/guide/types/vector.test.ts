@@ -72,9 +72,11 @@ describe(__filename, () => {
       const bytecode = await readFile(bytecodePath);
       const bytecodeAsVecU8 = arrayify(bytecode);
 
-      const { value: bytecodeRoot } = await bytecodeContract.functions
+      const { waitForResult } = await bytecodeContract.functions
         .compute_bytecode_root(bytecodeAsVecU8)
         .call();
+
+      const { value: bytecodeRoot } = await waitForResult();
       // #endregion vector-bytecode-input-ts
 
       expect(bytecodeRoot).toBeDefined();

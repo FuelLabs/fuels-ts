@@ -14,13 +14,76 @@ import type {
   Version,
 } from './types';
 
+interface Connector {
+  // #region fuel-connector-method-ping
+  ping(): Promise<boolean>;
+  // #endregion fuel-connector-method-ping
+  // #region fuel-connector-method-version
+  version(): Promise<Version>;
+  // #endregion fuel-connector-method-version
+  // #region fuel-connector-method-isConnected
+  isConnected(): Promise<boolean>;
+  // #endregion fuel-connector-method-isConnected
+  // #region fuel-connector-method-accounts
+  accounts(): Promise<Array<string>>;
+  // #endregion fuel-connector-method-accounts
+  // #region fuel-connector-method-connect
+  connect(): Promise<boolean>;
+  // #endregion fuel-connector-method-connect
+  // #region fuel-connector-method-disconnect
+  disconnect(): Promise<boolean>;
+  // #endregion fuel-connector-method-disconnect
+  // #region fuel-connector-method-signMessage
+  signMessage(address: string, message: string): Promise<string>;
+  // #endregion fuel-connector-method-signMessage
+  // #region fuel-connector-method-signTransaction
+  signTransaction(address: string, transaction: TransactionRequestLike): Promise<string>;
+  // #endregion fuel-connector-method-signTransaction
+  // #region fuel-connector-method-sendTransaction
+  sendTransaction(address: string, transaction: TransactionRequestLike): Promise<string>;
+  // #endregion fuel-connector-method-sendTransaction
+  // #region fuel-connector-method-currentAccount
+  currentAccount(): Promise<string | null>;
+  // #endregion fuel-connector-method-currentAccount
+  // #region fuel-connector-method-addAssets
+  addAssets(assets: Array<Asset>): Promise<boolean>;
+  // #endregion fuel-connector-method-addAssets
+  // #region fuel-connector-method-addAsset
+  addAsset(asset: Asset): Promise<boolean>;
+  // #endregion fuel-connector-method-addAsset
+  // #region fuel-connector-method-assets
+  assets(): Promise<Array<Asset>>;
+  // #endregion fuel-connector-method-assets
+  // #region fuel-connector-method-addNetwork
+  addNetwork(networkUrl: string): Promise<boolean>;
+  // #endregion fuel-connector-method-addNetwork
+  // #region fuel-connector-method-selectNetwork
+  selectNetwork(network: Network): Promise<boolean>;
+  // #endregion fuel-connector-method-selectNetwork
+  // #region fuel-connector-method-networks
+  networks(): Promise<Array<Network>>;
+  // #endregion fuel-connector-method-networks
+  // #region fuel-connector-method-currentNetwork
+  currentNetwork(): Promise<Network>;
+  // #endregion fuel-connector-method-currentNetwork
+  // #region fuel-connector-method-addABI
+  addABI(contractId: string, abi: FuelABI): Promise<boolean>;
+  // #endregion fuel-connector-method-addABI
+  // #region fuel-connector-method-getABI
+  getABI(contractId: string): Promise<FuelABI | null>;
+  // #endregion fuel-connector-method-getABI
+  // #region fuel-connector-method-hasABI
+  hasABI(contractId: string): Promise<boolean>;
+  // #endregion fuel-connector-method-hasABI
+}
+
 /**
  * @name FuelConnector
  *
  * Wallet Connector is a interface that represents a Wallet Connector and all the methods
  * that should be implemented to be compatible with the Fuel SDK.
  */
-export abstract class FuelConnector extends EventEmitter {
+export abstract class FuelConnector extends EventEmitter implements Connector {
   name: string = '';
   metadata: ConnectorMetadata = {} as ConnectorMetadata;
   connected: boolean = false;
@@ -147,7 +210,7 @@ export abstract class FuelConnector extends EventEmitter {
   }
 
   /**
-   * Should add the the assets metadata to the connector and return true if the asset
+   * Should add the assets metadata to the connector and return true if the asset
    * was added successfully.
    *
    * If the asset already exists it should throw an error.
@@ -162,7 +225,7 @@ export abstract class FuelConnector extends EventEmitter {
   }
 
   /**
-   * Should add the the asset metadata to the connector and return true if the asset
+   * Should add the asset metadata to the connector and return true if the asset
    * was added successfully.
    *
    * If the asset already exists it should throw an error.

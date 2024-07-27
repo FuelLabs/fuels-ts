@@ -1,5 +1,68 @@
 # Change Log
 
+## 0.92.1
+
+### Patch Changes
+
+- 9c20eb9: feat: add minified `fuels` distribution
+- Updated dependencies [c62ae85]
+- Updated dependencies [7579259]
+  - @fuel-ts/account@0.92.1
+  - @fuel-ts/program@0.92.1
+  - @fuel-ts/contract@0.92.1
+  - @fuel-ts/script@0.92.1
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/abi-typegen@0.92.1
+  - @fuel-ts/address@0.92.1
+  - @fuel-ts/crypto@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/hasher@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/math@0.92.1
+  - @fuel-ts/merkle@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+  - @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 98dbfbb: fix!: `launchNode.cleanup` not killing node in last test of test group
+- 17bd929: feat!: made `deployContract` a non-blocking call
+
+### Patch Changes
+
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+- Updated dependencies [98dbfbb]
+- Updated dependencies [f18a570]
+- Updated dependencies [d0b5446]
+- Updated dependencies [369feef]
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [74a00be]
+- Updated dependencies [661b153]
+- Updated dependencies [968ad03]
+- Updated dependencies [44d51ee]
+- Updated dependencies [17bd929]
+- Updated dependencies [aa7e656]
+  - @fuel-ts/account@0.92.0
+  - @fuel-ts/contract@0.92.0
+  - @fuel-ts/abi-typegen@0.92.0
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/crypto@0.92.0
+  - @fuel-ts/program@0.92.0
+  - @fuel-ts/script@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/abi-coder@0.92.0
+  - @fuel-ts/address@0.92.0
+  - @fuel-ts/hasher@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/transactions@0.92.0
+  - @fuel-ts/merkle@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
 ## 0.91.0
 
 ### Minor Changes

@@ -44,13 +44,22 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const contract = await factory.deployContract();
+    const { contractId, transactionId, waitForResult } = await factory.deployContract();
     // #endregion contract-setup-3
 
     // #region contract-setup-4
-    const { value } = await contract.functions.echo_u8(15).simulate();
-
-    expect(value).toBe(15);
+    const { contract, transactionResult } = await waitForResult();
     // #endregion contract-setup-4
+
+    // #region contract-setup-5
+    const call = await contract.functions.echo_u8(15).call();
+
+    const { value } = await call.waitForResult();
+    // #endregion contract-setup-5
+
+    expect(transactionId).toBeDefined();
+    expect(contractId).toBeDefined();
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
+    expect(value).toBe(15);
   });
 });

@@ -108,12 +108,11 @@ export class BaseWalletUnlocked extends Account {
    *
    * @param transactionRequestLike - The transaction request to send.
    * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
-   * @param awaitExecution - Whether to wait for the transaction to be executed.
    * @returns A promise that resolves to the TransactionResponse object.
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = false, awaitExecution }: ProviderSendTxParams = {}
+    { estimateTxDependencies = false }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
@@ -121,7 +120,7 @@ export class BaseWalletUnlocked extends Account {
     }
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { awaitExecution, estimateTxDependencies: false }
+      { estimateTxDependencies: false }
     );
   }
 

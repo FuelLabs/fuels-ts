@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { AbstractAccount, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
+import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import {
@@ -17,8 +17,6 @@ import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
 import { clone } from 'ramda';
 
-import type { Predicate } from '../predicate';
-
 import { getSdk as getOperationsSdk } from './__generated__/operations';
 import type {
   GqlChainInfoFragment,
@@ -28,13 +26,12 @@ import type {
   GqlDryRunSuccessStatusFragment,
   GqlFeeParameters as FeeParameters,
   GqlGasCosts as GasCosts,
-  GqlGetBlocksQueryVariables,
-  GqlMessage,
   GqlPredicateParameters as PredicateParameters,
-  GqlRelayedTransactionFailed,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
   GqlPageInfo,
+  GqlRelayedTransactionFailed,
+  GqlMessage,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -63,9 +60,11 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
-import { mergeQuantities } from './utils/merge-quantities';
 
 const MAX_RETRIES = 10;
+
+export const RESOURCES_PAGE_SIZE_LIMIT = 512;
+export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -92,8 +91,27 @@ export type Block = {
   transactionIds: string[];
 };
 
+export type GetCoinsResponse = {
+  coins: Coin[];
+  pageInfo: GqlPageInfo;
+};
+
+export type GetMessagesResponse = {
+  messages: Message[];
+  pageInfo: GqlPageInfo;
+};
+
+export type GetBalancesResponse = {
+  balances: CoinQuantity[];
+};
+
 export type GetTransactionsResponse = {
   transactions: Transaction[];
+  pageInfo: GqlPageInfo;
+};
+
+export type GetBlocksResponse = {
+  blocks: Block[];
   pageInfo: GqlPageInfo;
 };
 
@@ -316,14 +334,9 @@ export type EstimateTransactionParams = {
 
 export type TransactionCostParams = EstimateTransactionParams & {
   /**
-   * The account that will provide the resources for the transaction.
-   */
-  resourcesOwner?: AbstractAccount;
-
-  /**
    * The quantities to forward to the contract.
    */
-  quantitiesToContract?: CoinQuantity[];
+  quantities?: CoinQuantity[];
 
   /**
    * A callback to sign the transaction.
@@ -342,15 +355,7 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams & {
-  /**
-   * By default, the promise will resolve immediately after the transaction is submitted.
-   *
-   * If set to true, the promise will resolve only when the transaction changes status
-   * from `SubmittedStatus` to one of `SuccessStatus`, `FailureStatus` or `SqueezedOutStatus`.
-   */
-  awaitExecution?: boolean;
-};
+export type ProviderSendTxParams = EstimateTransactionParams;
 
 /**
  * URL - Consensus Params mapping.
@@ -693,7 +698,7 @@ Supported fuel-core version: ${supportedVersion}.`
   // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, awaitExecution = false }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     this.#cacheInputs(transactionRequest.inputs);
@@ -708,27 +713,6 @@ Supported fuel-core version: ${supportedVersion}.`
 
     if (transactionRequest.type === TransactionType.Script) {
       abis = transactionRequest.abis;
-    }
-
-    if (awaitExecution) {
-      const subscription = this.operations.submitAndAwait({ encodedTransaction });
-      for await (const { submitAndAwait } of subscription) {
-        if (submitAndAwait.type === 'SqueezedOutStatus') {
-          throw new FuelError(
-            ErrorCode.TRANSACTION_SQUEEZED_OUT,
-            `Transaction Squeezed Out with reason: ${submitAndAwait.reason}`
-          );
-        }
-
-        if (submitAndAwait.type !== 'SubmittedStatus') {
-          break;
-        }
-      }
-
-      const transactionId = transactionRequest.getTransactionId(this.getChainId());
-      const response = new TransactionResponse(transactionId, this, abis);
-      await response.fetch();
-      return response;
     }
 
     const {
@@ -1099,9 +1083,11 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * @hidden
+   *
    * Returns a transaction cost to enable user
    * to set gasLimit and also reserve balance amounts
-   * on the the transaction.
+   * on the transaction.
    *
    * @param transactionRequestLike - The transaction request object.
    * @param transactionCostParams - The transaction cost parameters (optional).
@@ -1110,40 +1096,18 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   async getTransactionCost(
     transactionRequestLike: TransactionRequestLike,
-    { resourcesOwner, signatureCallback, quantitiesToContract = [] }: TransactionCostParams = {}
-  ): Promise<TransactionCost> {
+    { signatureCallback }: TransactionCostParams = {}
+  ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const isScriptTransaction = txRequestClone.type === TransactionType.Script;
-    const baseAssetId = this.getBaseAssetId();
     const updateMaxFee = txRequestClone.maxFee.eq(0);
-    // Fund with fake UTXOs to avoid not enough funds error
-    // Getting coin quantities from amounts being transferred
-    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
-    // Combining coin quantities from amounts being transferred and forwarding to contracts
-    const allQuantities = mergeQuantities(coinOutputsQuantities, quantitiesToContract);
-    // Funding transaction with fake utxos
-    txRequestClone.fundWithFakeUtxos(allQuantities, baseAssetId, resourcesOwner?.address);
 
-    /**
-     * Estimate predicates gasUsed
-     */
     // Remove gasLimit to avoid gasLimit when estimating predicates
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
 
-    /**
-     * The fake utxos added above can be from a predicate
-     * If the resources owner is a predicate,
-     * we need to populate the resources with the predicate's data
-     * so that predicate estimation can happen.
-     */
-    if (resourcesOwner && 'populateTransactionPredicateData' in resourcesOwner) {
-      (resourcesOwner as Predicate<[]>).populateTransactionPredicateData(txRequestClone);
-    }
-
     const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
-
     let addedSignatures = 0;
     if (signatureCallback && isScriptTransaction) {
       const lengthBefore = signedRequest.witnesses.length;
@@ -1192,7 +1156,6 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return {
-      requiredQuantities: allQuantities,
       receipts,
       gasUsed,
       gasPrice,
@@ -1210,48 +1173,6 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Get the required quantities and associated resources for a transaction.
-   *
-   * @param owner - address to add resources from.
-   * @param transactionRequestLike - transaction request to populate resources for.
-   * @param quantitiesToContract - quantities for the contract (optional).
-   *
-   * @returns a promise resolving to the required quantities for the transaction.
-   */
-  async getResourcesForTransaction(
-    owner: string | AbstractAddress,
-    transactionRequestLike: TransactionRequestLike,
-    quantitiesToContract: CoinQuantity[] = []
-  ) {
-    const ownerAddress = Address.fromAddressOrString(owner);
-    const transactionRequest = transactionRequestify(clone(transactionRequestLike));
-    const transactionCost = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-
-    // Add the required resources to the transaction from the owner
-    transactionRequest.addResources(
-      await this.getResourcesToSpend(ownerAddress, transactionCost.requiredQuantities)
-    );
-    // Refetch transaction costs with the new resources
-    // TODO: we could find a way to avoid fetch estimatePredicates again, by returning the transaction or
-    // returning a specific gasUsed by the predicate.
-    // Also for the dryRun we could have the same issue as we are going to run twice the dryRun and the
-    // estimateTxDependencies as we don't have access to the transaction, maybe returning the transaction would
-    // be better.
-    const { requiredQuantities, ...txCost } = await this.getTransactionCost(transactionRequest, {
-      quantitiesToContract,
-    });
-    const resources = await this.getResourcesToSpend(ownerAddress, requiredQuantities);
-
-    return {
-      resources,
-      requiredQuantities,
-      ...txCost,
-    };
-  }
-
-  /**
    * Returns coins for the given owner.
    *
    * @param owner - The address to get coins for.
@@ -1264,24 +1185,31 @@ Supported fuel-core version: ${supportedVersion}.`
     owner: string | AbstractAddress,
     assetId?: BytesLike,
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Coin[]> {
+  ): Promise<GetCoinsResponse> {
     const ownerAddress = Address.fromAddressOrString(owner);
-    const result = await this.operations.getCoins({
-      first: 10,
-      ...paginationArgs,
+    const {
+      coins: { edges, pageInfo },
+    } = await this.operations.getCoins({
+      ...this.validatePaginationArgs({
+        paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
+        inputArgs: paginationArgs,
+      }),
       filter: { owner: ownerAddress.toB256(), assetId: assetId && hexlify(assetId) },
     });
 
-    const coins = result.coins.edges.map((edge) => edge.node);
-
-    return coins.map((coin) => ({
-      id: coin.utxoId,
-      assetId: coin.assetId,
-      amount: bn(coin.amount),
-      owner: Address.fromAddressOrString(coin.owner),
-      blockCreated: bn(coin.blockCreated),
-      txCreatedIdx: bn(coin.txCreatedIdx),
+    const coins = edges.map(({ node }) => ({
+      id: node.utxoId,
+      assetId: node.assetId,
+      amount: bn(node.amount),
+      owner: Address.fromAddressOrString(node.owner),
+      blockCreated: bn(node.blockCreated),
+      txCreatedIdx: bn(node.txCreatedIdx),
     }));
+
+    return {
+      coins,
+      pageInfo,
+    };
   }
 
   /**
@@ -1392,17 +1320,24 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param params - The parameters to query blocks.
    * @returns A promise that resolves to the blocks.
    */
-  async getBlocks(params: GqlGetBlocksQueryVariables): Promise<Block[]> {
-    const { blocks: fetchedData } = await this.operations.getBlocks(params);
+  async getBlocks(params?: CursorPaginationArgs): Promise<GetBlocksResponse> {
+    const {
+      blocks: { edges, pageInfo },
+    } = await this.operations.getBlocks({
+      ...this.validatePaginationArgs({
+        paginationLimit: BLOCKS_PAGE_SIZE_LIMIT,
+        inputArgs: params,
+      }),
+    });
 
-    const blocks: Block[] = fetchedData.edges.map(({ node: block }) => ({
+    const blocks: Block[] = edges.map(({ node: block }) => ({
       id: block.id,
       height: bn(block.height),
       time: block.header.time,
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
 
-    return blocks;
+    return { blocks, pageInfo };
   }
 
   /**
@@ -1539,22 +1474,24 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param paginationArgs - Pagination arguments (optional).
    * @returns A promise that resolves to the balances.
    */
-  async getBalances(
-    owner: string | AbstractAddress,
-    paginationArgs?: CursorPaginationArgs
-  ): Promise<CoinQuantity[]> {
-    const result = await this.operations.getBalances({
-      first: 10,
-      ...paginationArgs,
+  async getBalances(owner: string | AbstractAddress): Promise<GetBalancesResponse> {
+    const {
+      balances: { edges },
+    } = await this.operations.getBalances({
+      /**
+       * The query parameters for this method were designed to support pagination,
+       * but the current Fuel-Core implementation does not support pagination yet.
+       */
+      first: 10000,
       filter: { owner: Address.fromAddressOrString(owner).toB256() },
     });
 
-    const balances = result.balances.edges.map((edge) => edge.node);
-
-    return balances.map((balance) => ({
-      assetId: balance.assetId,
-      amount: bn(balance.amount),
+    const balances = edges.map(({ node }) => ({
+      assetId: node.assetId,
+      amount: bn(node.amount),
     }));
+
+    return { balances };
   }
 
   /**
@@ -1567,30 +1504,37 @@ Supported fuel-core version: ${supportedVersion}.`
   async getMessages(
     address: string | AbstractAddress,
     paginationArgs?: CursorPaginationArgs
-  ): Promise<Message[]> {
-    const result = await this.operations.getMessages({
-      first: 10,
-      ...paginationArgs,
+  ): Promise<GetMessagesResponse> {
+    const {
+      messages: { edges, pageInfo },
+    } = await this.operations.getMessages({
+      ...this.validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: RESOURCES_PAGE_SIZE_LIMIT,
+      }),
       owner: Address.fromAddressOrString(address).toB256(),
     });
 
-    const messages = result.messages.edges.map((edge) => edge.node);
-
-    return messages.map((message) => ({
+    const messages = edges.map(({ node }) => ({
       messageId: InputMessageCoder.getMessageId({
-        sender: message.sender,
-        recipient: message.recipient,
-        nonce: message.nonce,
-        amount: bn(message.amount),
-        data: message.data,
+        sender: node.sender,
+        recipient: node.recipient,
+        nonce: node.nonce,
+        amount: bn(node.amount),
+        data: node.data,
       }),
-      sender: Address.fromAddressOrString(message.sender),
-      recipient: Address.fromAddressOrString(message.recipient),
-      nonce: message.nonce,
-      amount: bn(message.amount),
-      data: InputMessageCoder.decodeData(message.data),
-      daHeight: bn(message.daHeight),
+      sender: Address.fromAddressOrString(node.sender),
+      recipient: Address.fromAddressOrString(node.recipient),
+      nonce: node.nonce,
+      amount: bn(node.amount),
+      data: InputMessageCoder.decodeData(node.data),
+      daHeight: bn(node.daHeight),
     }));
+
+    return {
+      messages,
+      pageInfo,
+    };
   }
 
   /**
@@ -1804,6 +1748,52 @@ Supported fuel-core version: ${supportedVersion}.`
     }
 
     return relayedTransactionStatus;
+  }
+
+  /**
+   * @hidden
+   */
+  private validatePaginationArgs(params: {
+    inputArgs?: CursorPaginationArgs;
+    paginationLimit: number;
+  }): CursorPaginationArgs {
+    const { paginationLimit, inputArgs = {} } = params;
+    const { first, last, after, before } = inputArgs;
+
+    if (after && before) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'Pagination arguments "after" and "before" cannot be used together'
+      );
+    }
+
+    if ((first || 0) > paginationLimit || (last || 0) > paginationLimit) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        `Pagination limit for this query cannot exceed ${paginationLimit} items`
+      );
+    }
+
+    if (first && before) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'The use of pagination argument "first" with "before" is not supported'
+      );
+    }
+
+    if (last && after) {
+      throw new FuelError(
+        ErrorCode.INVALID_INPUT_PARAMETERS,
+        'The use of pagination argument "last" with "after" is not supported'
+      );
+    }
+
+    // If neither first nor last is provided, set a default first value
+    if (!first && !last) {
+      inputArgs.first = paginationLimit;
+    }
+
+    return inputArgs;
   }
 
   /**

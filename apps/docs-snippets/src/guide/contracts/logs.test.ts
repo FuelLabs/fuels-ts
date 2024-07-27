@@ -21,7 +21,11 @@ describe(__filename, () => {
     const value3 = 'Fuel';
     const value4 = [1, 2, 3];
 
-    const { logs } = await contract.functions.log_values(value1, value2, value3, value4).call();
+    const { waitForResult } = await contract.functions
+      .log_values(value1, value2, value3, value4)
+      .call();
+
+    const { logs } = await waitForResult();
 
     expect(new BN(logs[0]).toNumber()).toBe(value1);
     expect(logs[1]).toBe(value2);

@@ -45,7 +45,7 @@ const callScript = async <TData, TResult>(
 
   // Keep a list of coins we need to input to this transaction
 
-  const txCost = await account.provider.getTransactionCost(request);
+  const txCost = await account.getTransactionCost(request);
 
   request.gasLimit = txCost.gasUsed;
   request.maxFee = txCost.maxFee;

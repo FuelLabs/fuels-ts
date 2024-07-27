@@ -10,9 +10,16 @@ type Octokit = ReturnType<typeof github.getOctokit>;
 interface ChangelogInfo {
   isBreaking: boolean;
   prType: string;
-  markdown: string;
+  views: {
+    bulletPoint: string;
+    migrationNote: string;
+    releaseNotes: string;
+  };
 }
 
+function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 const prTypes = ["feat", "fix", "refactor", "chore", "docs"];
 
 async function getChangelogInfo(
@@ -28,7 +35,7 @@ async function getChangelogInfo(
   ).toString(); // e.g. d603eecd1e453c60fe8cadfd1bfe530050ff0cfe
 
   const {
-    links: { pull: prLink, user },
+    links: { pull: formattedPrLink, user },
     pull: prNo,
   } = await getInfo({
     repo: process.env.GITHUB_REPOSITORY ?? "This should be set by GitHub",
@@ -36,7 +43,7 @@ async function getChangelogInfo(
   });
 
   const {
-    data: { title },
+    data: { title, body },
   } = await octokit.rest.pulls.get({
     ...github.context.repo,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -47,14 +54,31 @@ async function getChangelogInfo(
   const isBreaking = title.includes(`${prType}!`);
 
   const titleDescription = title.replace(/\w+!?:(.*)/, "$1").trim(); // chore!: add something -> add something
-  const summary =
-    titleDescription.charAt(0).toUpperCase() + titleDescription.slice(1);
 
-  const markdown = `- ${prLink} - ${summary}, by ${user}`;
+  const bulletPoint = `- ${formattedPrLink} - ${capitalize(titleDescription)}, by ${user}`;
+
+  const breakingChangesRegex =
+    /[\s\S]+# Breaking Changes([\s\S]+)# Checklist[\s\S]+/m;
+
+  const breakingChanges =
+    breakingChangesRegex.exec(body ?? "")?.[1].trim() ?? "";
+
+  const releaseNotesRegex = /[\s\S]*In this release, we:([\s\S]+?)# [\s\S]*/m;
+  const releaseNotes = releaseNotesRegex.exec(body ?? "")?.[1].trim() ?? "";
+
+  const prLink = formattedPrLink?.replace(/.*\((.*)\)/, "$1"); // [#2637](https://github.com/FuelLabs/fuels-ts/pull/2637) -> https://github.com/FuelLabs/fuels-ts/pull/2637
+  const migrationNote = `### [#${prNo} - ${capitalize(titleDescription)}](${prLink})
+
+  ${breakingChanges}`;
+
   return {
     prType,
     isBreaking,
-    markdown,
+    views: {
+      bulletPoint,
+      migrationNote,
+      releaseNotes,
+    },
   };
 }
 
@@ -106,17 +130,25 @@ function mapPrTypeToTitle(prType: string) {
 function groupChangelogsForListing(changelogs: ChangelogInfo[]) {
   const prTypeWithChangelogs = prTypes.reduce(
     (acc, prType) => {
-      acc[prType] = changelogs
-        .filter((c) => c.prType === prType)
-        .map((c) => c.markdown);
+      acc[prType] = changelogs.filter((c) => c.prType === prType);
       return acc;
     },
-    {} as Record<string, string[]>,
+    {} as Record<string, ChangelogInfo[]>,
   );
 
   return Object.entries(prTypeWithChangelogs)
     .filter(([, c]) => c.length > 0)
-    .map(([prType, c]) => [mapPrTypeToTitle(prType), c] as [string, string[]]);
+    .map(
+      ([prType, c]) =>
+        [mapPrTypeToTitle(prType), c] as [string, ChangelogInfo[]],
+    );
+}
+
+function listReleaseNotes(changelogs: ChangelogInfo[]) {
+  return changelogs
+    .map((c) => c.views.releaseNotes)
+    .filter((releaseNote) => releaseNote !== "")
+    .join("\n");
 }
 
 function listBreakingMd(changelogs: ChangelogInfo[]) {
@@ -127,9 +159,23 @@ function listBreakingMd(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `- ${groupTitle}
-${c.map((x) => `    ${x}`).join("\n")}`,
+${c.map((changelog) => `    ${changelog.views.bulletPoint}`).join("\n")}`,
     )
     .join("\n")
+    .trim();
+}
+
+function listMigrationNotes(changelogs: ChangelogInfo[]) {
+  const changelogGroups = groupChangelogsForListing(
+    changelogs.filter((x) => x.isBreaking),
+  );
+
+  return changelogGroups
+    .map(
+      ([groupTitle, c]) => `## ${groupTitle}
+${c.map((changelog) => changelog.views.migrationNote).join("\n")}`,
+    )
+    .join("\n\n")
     .trim();
 }
 
@@ -141,7 +187,7 @@ function listNonBreakingMd(changelogs: ChangelogInfo[]) {
   return changelogGroups
     .map(
       ([groupTitle, c]) => `# ${groupTitle}
-${c.join("\n")}`,
+${c.map((changelog) => changelog.views.bulletPoint).join("\n")}`,
     )
     .join("\n\n")
     .trim();
@@ -152,14 +198,22 @@ export async function getFullChangelog(octokit: Octokit) {
 
   const changelogs = await getChangelogs(octokit, changesets);
 
+  const releaseNotes = listReleaseNotes(changelogs);
   const breaking = listBreakingMd(changelogs);
   const nonBreaking = listNonBreakingMd(changelogs);
+  const migrationNotes = listMigrationNotes(changelogs);
 
-  let content = ``;
+  let content = "";
 
+  content += releaseNotes
+    ? `# Summary\n\nIn this release, we:\n${releaseNotes}\n\n`
+    : "";
   content += breaking ? `# Breaking\n\n${breaking}` : "";
   content += breaking && nonBreaking && "\n\n---\n\n";
   content += nonBreaking;
+  content += migrationNotes
+    ? `\n\n---\n\n# Migration Notes\n\n${migrationNotes}`
+    : "";
 
   return content.trim();
 }

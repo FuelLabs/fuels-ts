@@ -1,0 +1,23 @@
+name: Feature Request
+description: Suggest a new feature for `fuels`.
+labels: ["triage"]
+body:
+- type: markdown
+    attributes:
+      value: |
+        Thank you for helping to improve our Typescript SDK!
+
+        The best place to submit a feature request is in a [discussion](https://github.com/FuelLabs/fuels-ts/discussions/new?category=ideas). This gives you the opportunity to present the idea to the community, discuss potential solutions and their impacts before submitting the proposed solution as a feature request.
+
+        Failing that, please submit a feature request using the form below.
+  - type: textarea
+    attributes:
+      label: Describe the Feature
+      description: Please describe the feature and the problem it is solving. As well as your proposed solution and if possible, other alternatives.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Code Example
+      description: Optionally, provide an example of how the feature would be used in code.
+      render: shell

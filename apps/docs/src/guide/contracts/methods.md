@@ -24,7 +24,7 @@ A funded wallet it's required:
 
 ## `call`
 
-The `call` method should be used to submit a real contract call transaction to the node.
+The `call` method submits a real contract call transaction to the node, resolving immediately upon submission and returning a `transactionId` along with a `waitForResult` callback to wait for transaction execution. This behavior aligns with the natural behaviour of blockchains, where transactions may take a few seconds before being recorded on the chain.
 
 Real resources are consumed, and any operations executed by the contract function will be processed on the blockchain.
 

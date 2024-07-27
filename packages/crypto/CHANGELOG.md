@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

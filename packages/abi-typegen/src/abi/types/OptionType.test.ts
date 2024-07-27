@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { IRawAbiTypeRoot } from '../../index';
+import type { JsonAbiType } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 
@@ -20,7 +20,7 @@ describe('OptionType.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
     const rawTypes = project.abiContents.types;
 
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     return { types };
   }

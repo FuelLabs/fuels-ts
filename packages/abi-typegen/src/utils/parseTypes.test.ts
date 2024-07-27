@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { parseTypes } from './parseTypes';
 
@@ -7,21 +7,21 @@ import { parseTypes } from './parseTypes';
  */
 describe('types.ts', () => {
   test('should parse an array of raw abi types', () => {
-    const rawU8: IRawAbiTypeRoot = {
+    const rawU8: JsonAbiType = {
       typeId: 1,
       type: 'u8',
       components: null,
       typeParameters: null,
     };
 
-    const rawStr: IRawAbiTypeRoot = {
+    const rawStr: JsonAbiType = {
       typeId: 2,
       type: 'str[2]',
       components: null,
       typeParameters: null,
     };
 
-    const rawVec: IRawAbiTypeRoot = {
+    const rawVec: JsonAbiType = {
       typeId: 3,
       type: 'struct RawVec',
       components: null,

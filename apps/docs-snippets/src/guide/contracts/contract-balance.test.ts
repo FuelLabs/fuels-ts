@@ -32,12 +32,14 @@ describe(__filename, () => {
       bits: baseAssetId,
     };
 
-    await contract.functions
+    const { waitForResult } = await contract.functions
       .transfer(amountToTransfer, asset, recipient.address.toB256())
       .callParams({
         forward: [amountToForward, baseAssetId],
       })
       .call();
+
+    await waitForResult();
 
     const contractBalance = await contract.getBalance(baseAssetId);
 

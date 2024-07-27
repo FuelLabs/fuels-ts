@@ -1,5 +1,3 @@
-import NextLink from 'next/link';
-
 export const Link = ({
   href,
   children,
@@ -12,12 +10,12 @@ export const Link = ({
   target?: string;
 }) => {
   return (
-    <NextLink
+    <a
       href={href}
       className={`text-fuel-green hover:underline ${className}`}
       target={target}
     >
       {children}
-    </NextLink>
+    </a>
   );
 };

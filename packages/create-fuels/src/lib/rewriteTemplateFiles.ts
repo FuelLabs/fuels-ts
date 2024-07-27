@@ -17,4 +17,16 @@ export const rewriteTemplateFiles = (templateDir: string) => {
   contents = contents.replace(/\n\W+forcPath: 'fuels-forc',/g, '');
   contents = contents.replace(/\n\W+fuelCorePath: 'fuels-core',/g, '');
   writeFileSync(fuelsConfigFilePath, contents);
+
+  // tests
+  const testDir = join(templateDir, 'test');
+  const programs = ['contract', 'predicate', 'script'];
+  programs.forEach((program) => {
+    const testFilePath = join(testDir, `${program}.test.ts`);
+    contents = readFileSync(testFilePath, 'utf-8');
+    const capitalisedProgram = program.charAt(0).toUpperCase() + program.slice(1);
+    contents = contents.replace(/@group node/g, `${capitalisedProgram} Testing`);
+    contents = contents.replace(/@group browser/g, '');
+    writeFileSync(testFilePath, contents);
+  });
 };
