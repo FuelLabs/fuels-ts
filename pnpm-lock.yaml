@@ -468,8 +468,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
       typedoc-plugin-markdown:
-        specifier: ^4.1.0
-        version: 4.1.2(typedoc@0.26.3(typescript@5.4.5))
+        specifier: ^4.2.0
+        version: 4.2.2(typedoc@0.26.3(typescript@5.4.5))
     devDependencies:
       '@types/markdown-it':
         specifier: ^14.1.1
@@ -493,8 +493,8 @@ importers:
         specifier: ^0.26.3
         version: 0.26.3(typescript@5.4.5)
       typedoc-plugin-merge-modules:
-        specifier: ^5.1.0
-        version: 5.1.0(typedoc@0.26.3(typescript@5.4.5))
+        specifier: ^6.0.0
+        version: 6.0.0(typedoc@0.26.3(typescript@5.4.5))
       vitepress:
         specifier: 1.2.3
         version: 1.2.3(@algolia/client-search@4.22.1)(@types/node@20.14.9)(@types/react@18.3.3)(change-case@4.1.2)(idb-keyval@6.2.1)(postcss@8.4.38)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.1)(typescript@5.4.5)
@@ -13949,16 +13949,16 @@ packages:
   typedarray-to-buffer@3.1.5:
     resolution: {integrity: sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==}
 
-  typedoc-plugin-markdown@4.1.2:
-    resolution: {integrity: sha512-jZt8jmQLbmg9jmFQyfJrjLf6ljRwJ5fKMeqmFr0oPXmeX5ZRYYtCe6y/058vDESE/R+TwEvNua6SuG43UBbszw==}
+  typedoc-plugin-markdown@4.2.2:
+    resolution: {integrity: sha512-4Amnhjiw4L9aN5yBn6Ryh5WZr+uW41e6IU3EuQCNcVWgHQC+tlNIbbQMKVYAb33ES7yaM01dAXGS4BdJtQi7mA==}
     engines: {node: '>= 18'}
     peerDependencies:
       typedoc: 0.26.x
 
-  typedoc-plugin-merge-modules@5.1.0:
-    resolution: {integrity: sha512-jXH27L/wlxFjErgBXleh3opVgjVTXFEuBo68Yfl18S9Oh/IqxK6NV94jlEJ9hl4TXc9Zm2l7Rfk41CEkcCyvFQ==}
+  typedoc-plugin-merge-modules@6.0.0:
+    resolution: {integrity: sha512-SzxoA45hUHtI4Het+ggjrauRL+4qgRNZ+2NVh4hXeLbZx/Tzb2qhaxcLero7pwGNMcsXc2IzFKokF09ZAlluRw==}
     peerDependencies:
-      typedoc: 0.24.x || 0.25.x
+      typedoc: 0.26.x
 
   typedoc@0.26.3:
     resolution: {integrity: sha512-6d2Sw9disvvpdk4K7VNjKr5/3hzijtfQVHRthhDqJgnhMHy1wQz4yPMJVKXElvnZhFr0nkzo+GzjXDTRV5yLpg==}
@@ -31982,11 +31982,11 @@ snapshots:
     dependencies:
       is-typedarray: 1.0.0
 
-  typedoc-plugin-markdown@4.1.2(typedoc@0.26.3(typescript@5.4.5)):
+  typedoc-plugin-markdown@4.2.2(typedoc@0.26.3(typescript@5.4.5)):
     dependencies:
       typedoc: 0.26.3(typescript@5.4.5)
 
-  typedoc-plugin-merge-modules@5.1.0(typedoc@0.26.3(typescript@5.4.5)):
+  typedoc-plugin-merge-modules@6.0.0(typedoc@0.26.3(typescript@5.4.5)):
     dependencies:
       typedoc: 0.26.3(typescript@5.4.5)
 
