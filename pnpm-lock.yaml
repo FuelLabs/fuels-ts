@@ -647,8 +647,8 @@ importers:
         specifier: ^1.0.4
         version: 1.0.4
       ramda:
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.1
+        version: 0.30.1
       rimraf:
         specifier: ^5.0.8
         version: 5.0.9
@@ -660,8 +660,8 @@ importers:
         specifier: ^1.0.2
         version: 1.0.2
       '@types/ramda':
-        specifier: ^0.29.3
-        version: 0.29.3
+        specifier: ^0.30.1
+        version: 0.30.1
       '@types/rimraf':
         specifier: ^3.0.2
         version: 3.0.2
@@ -723,8 +723,8 @@ importers:
         specifier: ^1.0.32
         version: 1.0.32
       ramda:
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.1
+        version: 0.30.1
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -742,8 +742,8 @@ importers:
         specifier: ^4.2.3
         version: 4.2.3(graphql@16.9.0)
       '@types/ramda':
-        specifier: ^0.29.3
-        version: 0.29.3
+        specifier: ^0.30.1
+        version: 0.30.1
       '@types/uuid':
         specifier: ^9.0.1
         version: 9.0.1
@@ -811,15 +811,15 @@ importers:
         specifier: workspace:*
         version: link:../versions
       ramda:
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.1
+        version: 0.30.1
     devDependencies:
       '@internal/forc':
         specifier: workspace:*
         version: link:../../internal/forc
       '@types/ramda':
-        specifier: ^0.29.3
-        version: 0.29.3
+        specifier: ^0.30.1
+        version: 0.30.1
 
   packages/create-fuels:
     dependencies:
@@ -1082,12 +1082,12 @@ importers:
         specifier: 0.55.0
         version: 0.55.0
       ramda:
-        specifier: ^0.29.0
-        version: 0.29.0
+        specifier: ^0.30.1
+        version: 0.30.1
     devDependencies:
       '@types/ramda':
-        specifier: ^0.29.3
-        version: 0.29.3
+        specifier: ^0.30.1
+        version: 0.30.1
 
   packages/script:
     dependencies:
@@ -5208,8 +5208,8 @@ packages:
   '@types/qs@6.9.7':
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
 
-  '@types/ramda@0.29.3':
-    resolution: {integrity: sha512-Yh/RHkjN0ru6LVhSQtTkCRo6HXkfL9trot/2elzM/yXLJmbLm2v6kJc8yftTnwv1zvUob6TEtqI2cYjdqG3U0Q==}
+  '@types/ramda@0.30.1':
+    resolution: {integrity: sha512-aoyF/ADPL6N+/NXXfhPWF+Qj6w1Cql59m9wX0Gi15uyF+bpzXeLd63HPdiTDE2bmLXfNcVufsDPKmbfOrOzTBA==}
 
   '@types/range-parser@1.2.4':
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
@@ -11726,8 +11726,8 @@ packages:
   raf@3.4.1:
     resolution: {integrity: sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==}
 
-  ramda@0.29.0:
-    resolution: {integrity: sha512-BBea6L67bYLtdbOqfp8f58fPMqEwx0doL+pAi8TZyp2YWz8R9G8z9x75CZI8W+ftqhFHCpEX2cRnUUXK130iKA==}
+  ramda@0.30.1:
+    resolution: {integrity: sha512-tEF5I22zJnuclswcZMc8bDIrwRHRzf+NqVEmqg50ShAZMP7MWeR/RGDthfM/p+BlqvF2fXAzpn8i+SJcYD3alw==}
 
   randombytes@2.1.0:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
@@ -13322,8 +13322,8 @@ packages:
     peerDependencies:
       typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x
 
-  types-ramda@0.29.4:
-    resolution: {integrity: sha512-XO/820iRsCDwqLjE8XE+b57cVGPyk1h+U9lBGpDWvbEky+NQChvHVwaKM05WnW1c5z3EVQh8NhXFmh2E/1YazQ==}
+  types-ramda@0.30.1:
+    resolution: {integrity: sha512-1HTsf5/QVRmLzcGfldPFvkVsAdi1db1BBKzi7iW3KBUlOICg/nKnFS+jGqDJS3YD8VsWbAh7JiHeBvbsw8RPxA==}
 
   typescript@5.2.2:
     resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
@@ -20421,9 +20421,9 @@ snapshots:
 
   '@types/qs@6.9.7': {}
 
-  '@types/ramda@0.29.3':
+  '@types/ramda@0.30.1':
     dependencies:
-      types-ramda: 0.29.4
+      types-ramda: 0.30.1
 
   '@types/range-parser@1.2.4': {}
 
@@ -29315,7 +29315,7 @@ snapshots:
     dependencies:
       performance-now: 2.1.0
 
-  ramda@0.29.0: {}
+  ramda@0.30.1: {}
 
   randombytes@2.1.0:
     dependencies:
@@ -31371,7 +31371,7 @@ snapshots:
       shiki: 0.14.7
       typescript: 5.4.5
 
-  types-ramda@0.29.4:
+  types-ramda@0.30.1:
     dependencies:
       ts-toolbelt: 9.6.0
 
