@@ -1,5 +1,3 @@
-import { clone } from 'ramda';
-
 import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
 
 import { OPTION_REGEX, VOID_TYPE } from './constants';
@@ -14,7 +12,7 @@ export const getFunctionInputs = (params: {
   inputs: readonly JsonAbiArgument[];
 }): Array<ArgumentWithMetadata> => {
   let inMandatoryRegion = false;
-  const inputs = clone(params.inputs);
+  const inputs = structuredClone(params.inputs);
 
   return (inputs as Array<JsonAbiArgument>)
     .reverse()

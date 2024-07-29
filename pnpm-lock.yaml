@@ -616,16 +616,9 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      ramda:
-        specifier: ^0.30.1
-        version: 0.30.1
       type-fest:
         specifier: ^3.1.0
         version: 3.1.0
-    devDependencies:
-      '@types/ramda':
-        specifier: ^0.30.1
-        version: 0.30.1
 
   packages/abi-typegen:
     dependencies:
@@ -6557,6 +6550,7 @@ packages:
 
   bun@1.1.21:
     resolution: {integrity: sha512-mvqYEvafGskIVTjlftbKvsXtyR6z/SQnhJsVw0xCU46pc56oX1sAGvaemWKOy/sy/gGMHcgLE0KUidDQQzqXWQ==}
+    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 

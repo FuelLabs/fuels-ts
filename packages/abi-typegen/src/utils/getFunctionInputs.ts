@@ -1,5 +1,3 @@
-import { clone } from 'ramda';
-
 import { EmptyType } from '../abi/types/EmptyType';
 import { OptionType } from '../abi/types/OptionType';
 import type { IType } from '../types/interfaces/IType';
@@ -16,7 +14,7 @@ export const getFunctionInputs = (params: {
   inputs: readonly JsonAbiArgument[];
 }): Array<ArgumentWithMetadata> => {
   let inMandatoryRegion = false;
-  const inputs = clone(params.inputs);
+  const inputs = structuredClone(params.inputs);
 
   return (inputs as Array<JsonAbiArgument>)
     .reverse()
