@@ -1,6 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Account } from '@fuel-ts/account';
-import { launchTestNode } from 'fuels/test-utils';
+import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 
 import Contract from './contract';
 
@@ -43,7 +43,7 @@ const ABI: JsonAbi = {
  */
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
-    using launched = await launchTestNode();
+    using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     const contract = new Contract(CONTRACT_ID, ABI, provider);
@@ -52,7 +52,7 @@ describe('Contract', () => {
   });
 
   test('Create contract instance with wallet', async () => {
-    using launched = await launchTestNode();
+    using launched = await setupTestProviderAndWallets();
     const {
       wallets: [wallet],
     } = launched;
@@ -63,7 +63,7 @@ describe('Contract', () => {
   });
 
   test('Create contract instance with custom wallet', async () => {
-    using launched = await launchTestNode();
+    using launched = await setupTestProviderAndWallets();
     const {
       wallets: [generatedWallet],
     } = launched;

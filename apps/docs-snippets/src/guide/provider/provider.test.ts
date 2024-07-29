@@ -1,5 +1,11 @@
-import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest, sleep, Address } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import {
+  FUEL_NETWORK_URL,
+  Provider,
+  ScriptTransactionRequest,
+  sleep,
+  WalletUnlocked,
+  Address,
+} from 'fuels';
 
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');
@@ -13,18 +19,21 @@ function decorateResponseWithCustomLogic(response: Response) {
  * @group node
  * @group browser
  */
+
+// #TODO: Do we want these to use launchTestNode ?
 describe('Provider', () => {
   it('base examples', async () => {
     // #region provider-definition
-    // Create a provider and wallet using launchTestNode utility
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [wallet],
-    } = launched;
+    // #import { Provider, FUEL_NETWORK_URL, WalletUnlocked };
+
+    // Create the provider
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     // Querying the blockchain
     const { consensusParameters } = provider.getChain();
+
+    // Create a new wallet
+    const wallet = WalletUnlocked.generate({ provider });
 
     // Get the balances of the wallet (this will be empty until we have assets)
     const { balances } = await wallet.getBalances();

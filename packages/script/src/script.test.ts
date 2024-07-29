@@ -3,13 +3,13 @@ import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/account';
 import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
 import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
-import { launchTestNode } from 'fuels/test-utils';
 
 import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
 import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
@@ -89,7 +89,7 @@ describe('Script', () => {
   // #endregion script-init
 
   it('can call a script', async () => {
-    using launched = await launchTestNode();
+    using launched = await setupTestProviderAndWallets();
 
     const {
       wallets: [wallet],
@@ -109,7 +109,7 @@ describe('Script', () => {
   });
 
   it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
-    using launched = await launchTestNode();
+    using launched = await setupTestProviderAndWallets();
 
     const {
       wallets: [wallet],
@@ -126,7 +126,7 @@ describe('Script', () => {
   });
 
   it('should throw if script has no configurable to be set', async () => {
-    using launched = await launchTestNode();
+    using launched = await setupTestProviderAndWallets();
 
     const {
       wallets: [wallet],
@@ -142,7 +142,7 @@ describe('Script', () => {
   });
 
   it('should throw when setting configurable with wrong name', async () => {
-    using launched = await launchTestNode();
+    using launched = await setupTestProviderAndWallets();
 
     const {
       wallets: [wallet],
