@@ -618,14 +618,14 @@ importers:
         version: link:../utils
       ramda:
         specifier: ^0.29.0
-        version: 0.29.0
+        version: 0.29.1
       type-fest:
         specifier: ^3.1.0
         version: 3.1.0
     devDependencies:
       '@types/ramda':
         specifier: ^0.29.3
-        version: 0.29.3
+        version: 0.29.12
 
   packages/abi-typegen:
     dependencies:
@@ -5214,6 +5214,9 @@ packages:
 
   '@types/qs@6.9.7':
     resolution: {integrity: sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==}
+
+  '@types/ramda@0.29.12':
+    resolution: {integrity: sha512-sgIEjpJhdQPB52gDF4aphs9nl0xe54CR22DPdWqT8gQHjZYmVApgA0R3/CpMbl0Y8az2TEZrPNL2zy0EvjbkLA==}
 
   '@types/ramda@0.30.1':
     resolution: {integrity: sha512-aoyF/ADPL6N+/NXXfhPWF+Qj6w1Cql59m9wX0Gi15uyF+bpzXeLd63HPdiTDE2bmLXfNcVufsDPKmbfOrOzTBA==}
@@ -11732,6 +11735,9 @@ packages:
   raf@3.4.1:
     resolution: {integrity: sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==}
 
+  ramda@0.29.1:
+    resolution: {integrity: sha512-OfxIeWzd4xdUNxlWhgFazxsA/nl3mS4/jGZI5n00uWOoSSFRhC1b6gl6xvmzUamgmqELraWp0J/qqVlXYPDPyA==}
+
   ramda@0.30.1:
     resolution: {integrity: sha512-tEF5I22zJnuclswcZMc8bDIrwRHRzf+NqVEmqg50ShAZMP7MWeR/RGDthfM/p+BlqvF2fXAzpn8i+SJcYD3alw==}
 
@@ -13327,6 +13333,9 @@ packages:
     hasBin: true
     peerDependencies:
       typescript: 4.6.x || 4.7.x || 4.8.x || 4.9.x || 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x
+
+  types-ramda@0.29.10:
+    resolution: {integrity: sha512-5PJiW/eiTPyXXBYGZOYGezMl6qj7keBiZheRwfjJZY26QPHsNrjfJnz0mru6oeqqoTHOni893Jfd6zyUXfQRWg==}
 
   types-ramda@0.30.1:
     resolution: {integrity: sha512-1HTsf5/QVRmLzcGfldPFvkVsAdi1db1BBKzi7iW3KBUlOICg/nKnFS+jGqDJS3YD8VsWbAh7JiHeBvbsw8RPxA==}
@@ -20426,6 +20435,10 @@ snapshots:
   '@types/q@1.5.5': {}
 
   '@types/qs@6.9.7': {}
+
+  '@types/ramda@0.29.12':
+    dependencies:
+      types-ramda: 0.29.10
 
   '@types/ramda@0.30.1':
     dependencies:
@@ -29321,6 +29334,8 @@ snapshots:
     dependencies:
       performance-now: 2.1.0
 
+  ramda@0.29.1: {}
+
   ramda@0.30.1: {}
 
   randombytes@2.1.0:
@@ -31376,6 +31391,10 @@ snapshots:
       minimatch: 9.0.5
       shiki: 0.14.7
       typescript: 5.4.5
+
+  types-ramda@0.29.10:
+    dependencies:
+      ts-toolbelt: 9.6.0
 
   types-ramda@0.30.1:
     dependencies:
