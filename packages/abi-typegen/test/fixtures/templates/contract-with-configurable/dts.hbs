@@ -35,7 +35,7 @@ export type MyContractAbiConfigurables = Partial<{
   GENERIC_STRUCT: GenericStructInput<GenericEnumInput<string>>;
 }>;
 
-interface MyContractAbiInterface extends Interface {
+export interface MyContractAbiInterface extends Interface {
   functions: {
     main: FunctionFragment;
   };

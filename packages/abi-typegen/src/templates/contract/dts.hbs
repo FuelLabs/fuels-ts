@@ -48,7 +48,7 @@ export type {{capitalizedName}}Configurables = Partial<{
 }>;
 {{/if}}
 
-interface {{capitalizedName}}Interface extends Interface {
+export interface {{capitalizedName}}Interface extends Interface {
   functions: {
     {{#each functionsFragments}}
     {{this}}: FunctionFragment;
