@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { transpileAbi } from '@fuel-ts/utils';
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import mkdirp from 'mkdirp';
@@ -52,10 +53,13 @@ export function runTypegen(params: IGenerateFilesParams) {
     Assembling file paths x contents
   */
   const abiFiles = filepaths.map((filepath) => {
+    const raw = readFileSync(filepath, 'utf-8');
+    const transpiled = JSON.stringify(transpileAbi(JSON.parse(raw)), null, 2);
     const abi: IFile = {
       path: filepath,
-      contents: readFileSync(filepath, 'utf-8'),
+      contents: transpiled,
     };
+
     return abi;
   });
 
