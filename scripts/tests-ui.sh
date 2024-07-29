@@ -11,7 +11,7 @@ cd $PROJECT_DIR && pnpm run dev &
 sleep 5
 
 cd $PLAYWRIGHT_DIR
-pnpm exec playwright install --with-deps
+pnpm exec playwright install --with-deps  > /dev/null 2>&1
 pnpm exec playwright test
 
 pkill next-server
