@@ -1,5 +1,6 @@
 ---
 "@fuel-ts/abi-coder": patch
+"@fuel-ts/abi-typegen": patch
 ---
 
-feat: implement `VoidCoder`
+feat!: improve `()` and `Option<T>` type handling
