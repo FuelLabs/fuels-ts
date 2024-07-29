@@ -17,7 +17,7 @@ import type {
   JsonAbiFunctionAttribute,
 } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
-import { OPTION_CODER_TYPE } from './utils/constants';
+import { optionCoderRegex } from './utils/constants';
 import {
   findFunctionByName,
   findNonEmptyInputs,
@@ -96,7 +96,7 @@ export class FunctionFragment<
 
     const inputTypes = inputs.map((input) => findTypeById(abi, input.type));
     const optionalInputs = inputTypes.filter(
-      (x) => x.type === OPTION_CODER_TYPE || x.type === '()'
+      (x) => optionCoderRegex.test(x.type) || x.type === '()'
     );
     if (optionalInputs.length === inputTypes.length) {
       return;

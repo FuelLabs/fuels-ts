@@ -22,6 +22,7 @@ import {
   VEC_CODER_TYPE,
   arrayRegEx,
   enumRegEx,
+  lastNameRegExMatch,
   stringRegEx,
   structRegEx,
   tupleRegEx,
@@ -122,21 +123,26 @@ export const getCoder: GetCoderFn = (
     return new VecCoder(itemCoder as Coder);
   }
 
-  const structMatch = structRegEx.exec(resolvedAbiType.type)?.groups;
+  const structMatch = structRegEx.test(resolvedAbiType.type);
   if (structMatch) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const [name] = resolvedAbiType.type.match(lastNameRegExMatch)!;
     const coders = getCoders(components, { getCoder });
-    return new StructCoder(structMatch.name, coders);
+    return new StructCoder(name, coders);
   }
 
-  const enumMatch = enumRegEx.exec(resolvedAbiType.type)?.groups;
+  const enumMatch = enumRegEx.test(resolvedAbiType.type);
   if (enumMatch) {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const [name] = resolvedAbiType.type.match(lastNameRegExMatch)!;
+
     const coders = getCoders(components, { getCoder });
 
     const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
     if (isOptionEnum) {
-      return new OptionCoder(enumMatch.name, coders);
+      return new OptionCoder(name, coders);
     }
-    return new EnumCoder(enumMatch.name, coders);
+    return new EnumCoder(name, coders);
   }
 
   const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;

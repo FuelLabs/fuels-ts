@@ -3,7 +3,7 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { OPTION_CODER_TYPE } from '../../utils/constants';
+import { optionCoderRegex } from '../../utils/constants';
 import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
@@ -39,13 +39,13 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
     this.#encodedValueSize = encodedValueSize;
-    this.#shouldValidateLength = !(this.type === OPTION_CODER_TYPE || hasNestedOption(coders));
+    this.#shouldValidateLength = !(optionCoderRegex.test(this.type) || hasNestedOption(coders));
   }
 
   // We parse a native enum as an empty tuple, so we are looking for a tuple with no child coders.
   // The '()' is enough but the child coders is a stricter check.
   #isNativeEnum(coder: Coder): boolean {
-    if (this.type !== OPTION_CODER_TYPE && coder.type === '()') {
+    if (!optionCoderRegex.test(this.type) && coder.type === '()') {
       const tupleCoder = coder as TupleCoder<[]>;
       return tupleCoder.coders.length === 0;
     }
