@@ -12,7 +12,7 @@ import { StdStringCoder } from './encoding/coders/StdStringCoder';
 import { TupleCoder } from './encoding/coders/TupleCoder';
 import type { JsonAbi, JsonAbiFunction, JsonAbiFunctionAttribute } from './types/JsonAbi';
 import type { EncodingVersion } from './utils/constants';
-import { getMandatoryInputs } from './utils/getMandatoryInputs';
+import { getFunctionInputs } from './utils/getFunctionInputs';
 import { findFunctionByName, findNonVoidInputs, getEncodingVersion } from './utils/json-abi';
 
 export class FunctionFragment<
@@ -56,7 +56,7 @@ export class FunctionFragment<
   }
 
   encodeArguments(values: InputValue[]): Uint8Array {
-    const inputs = getMandatoryInputs({ jsonAbi: this.jsonAbi, inputs: this.jsonFn.inputs });
+    const inputs = getFunctionInputs({ jsonAbi: this.jsonAbi, inputs: this.jsonFn.inputs });
     const mandatoryInputLength = inputs.filter((i) => !i.isOptional).length;
 
     if (values.length < mandatoryInputLength) {

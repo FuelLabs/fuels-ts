@@ -1,6 +1,8 @@
-import type { JsonAbi, JsonAbiArgument, JsonAbiType } from '../types/JsonAbi';
+import type { IType } from '../types/interfaces/IType';
+import type { JsonAbiArgument, JsonAbiType } from '../types/interfaces/JsonAbi';
 
-import { getMandatoryInputs } from './getMandatoryInputs';
+import { getFunctionInputs } from './getFunctionInputs';
+import { makeType } from './makeType';
 
 const nonEmptyType: JsonAbiType = {
   type: 'u8',
@@ -36,25 +38,20 @@ const EMPTY_ABI_TYPES: [string, JsonAbiType][] = [
   ['option (debug)', debugOptionAbiType],
 ];
 
-const jsonAbi: JsonAbi = {
-  encoding: '1',
-  types: [nonEmptyType, voidAbiType, optionAbiType, debugOptionAbiType],
-  functions: [],
-  loggedTypes: [],
-  messagesTypes: [],
-  configurables: [],
-};
+const types: Array<IType> = [nonEmptyType, voidAbiType, optionAbiType, debugOptionAbiType].map(
+  (rawAbiType) => makeType({ rawAbiType })
+);
 
 /**
  * @group node
  */
 describe.each(EMPTY_ABI_TYPES)(
-  'getMandatoryInputs.ts [empty=%s]',
+  'getFunctionInputs.ts [empty=%s]',
   (_: string, emptyAbiType: JsonAbiType) => {
     it('should handle no inputs', () => {
       const inputs: Array<JsonAbiArgument> = [];
 
-      const result = getMandatoryInputs({ jsonAbi, inputs });
+      const result = getFunctionInputs({ types, inputs });
 
       expect(result).toEqual([]);
     });
@@ -65,7 +62,7 @@ describe.each(EMPTY_ABI_TYPES)(
       const C = { type: emptyAbiType.typeId, name: 'c', typeArguments: null };
       const inputs: Array<JsonAbiArgument> = [A, B, C];
 
-      const result = getMandatoryInputs({ jsonAbi, inputs });
+      const result = getFunctionInputs({ types, inputs });
 
       expect(result).toEqual([
         { ...A, isOptional: true },
@@ -80,7 +77,7 @@ describe.each(EMPTY_ABI_TYPES)(
       const C = { type: nonEmptyType.typeId, name: 'c', typeArguments: null };
       const inputs: Array<JsonAbiArgument> = [A, B, C];
 
-      const result = getMandatoryInputs({ jsonAbi, inputs });
+      const result = getFunctionInputs({ types, inputs });
 
       expect(result).toEqual([
         { ...A, isOptional: false },
@@ -95,7 +92,7 @@ describe.each(EMPTY_ABI_TYPES)(
       const C = { type: emptyAbiType.typeId, name: 'c', typeArguments: null };
       const inputs: Array<JsonAbiArgument> = [A, B, C];
 
-      const result = getMandatoryInputs({ jsonAbi, inputs });
+      const result = getFunctionInputs({ types, inputs });
 
       expect(result).toEqual([
         { ...A, isOptional: false },
@@ -110,7 +107,7 @@ describe.each(EMPTY_ABI_TYPES)(
       const C = { type: nonEmptyType.typeId, name: 'c', typeArguments: null };
       const inputs: Array<JsonAbiArgument> = [A, B, C];
 
-      const result = getMandatoryInputs({ jsonAbi, inputs });
+      const result = getFunctionInputs({ types, inputs });
 
       expect(result).toEqual([
         { ...A, isOptional: false },
@@ -125,7 +122,7 @@ describe.each(EMPTY_ABI_TYPES)(
       const C = { type: nonEmptyType.typeId, name: 'c', typeArguments: null };
       const inputs: Array<JsonAbiArgument> = [A, B, C];
 
-      const result = getMandatoryInputs({ jsonAbi, inputs });
+      const result = getFunctionInputs({ types, inputs });
 
       expect(result).toEqual([
         { ...A, isOptional: false },

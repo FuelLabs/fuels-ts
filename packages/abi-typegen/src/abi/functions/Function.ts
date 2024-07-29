@@ -2,7 +2,7 @@ import type { IFunction, JsonAbiFunction, IFunctionAttributes } from '../../inde
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
 import { findType } from '../../utils/findType';
-import { getMandatoryInputs } from '../../utils/getMandatoryInputs';
+import { getFunctionInputs } from '../../utils/getFunctionInputs';
 import { parseTypeArguments } from '../../utils/parseTypeArguments';
 
 export class Function implements IFunction {
@@ -27,7 +27,7 @@ export class Function implements IFunction {
     const { types } = this;
 
     // loop through all mandatory inputs
-    const inputs = getMandatoryInputs({ types, inputs: this.rawAbiFunction.inputs }).map(
+    const inputs = getFunctionInputs({ types, inputs: this.rawAbiFunction.inputs }).map(
       ({ isOptional, ...input }) => {
         const { name, type: typeId, typeArguments } = input;
 
