@@ -26,7 +26,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "ramda": "^0.30.1",
-    "fuels": "workspace:*",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/address": "workspace:*",

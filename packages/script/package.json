@@ -35,8 +35,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
-    "@fuel-ts/utils": "workspace:*",
-    "fuels": "workspace:*"
+    "@fuel-ts/utils": "workspace:*"
   },
   "devDependencies": {
     "@internal/forc": "workspace:*"
