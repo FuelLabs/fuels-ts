@@ -39,23 +39,24 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuels/vm-asm": "0.55.0",
     "@fuel-ts/abi-coder": "workspace:*",
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/crypto": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/math": "workspace:^",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuels/vm-asm": "0.56.0",
     "ramda": "^0.29.0"
   },
   "devDependencies": {
+    "@fuel-ts/utils": "workspace:*",
     "@internal/forc": "workspace:*",
-    "@types/ramda": "^0.29.3",
-    "@fuel-ts/utils": "workspace:*"
+    "@types/ramda": "^0.29.3"
   }
 }

@@ -27,12 +27,10 @@ export const getLoaderInstructions = (blobIds: string[]): Uint8Array => {
       // 0x10 to hold the address of the current blob id
       asm.addi(0x10, 0x10, numberOfInstructions * Instruction.size()),
       // loop counter
-      asm.addi(0x13, RegId.zero().to_u8(), numberOfBlobs)
-    ).toBytes(),
-    // LOOP starts here
-    // 0x11 to hold the size of the current blob
-    bsizBytes(),
-    new InstructionSet(
+      asm.addi(0x13, RegId.zero().to_u8(), numberOfBlobs),
+      // LOOP starts here
+      // 0x11 to hold the size of the current blob
+      asm.bsiz(0x11, 0x10),
       // update the total size of the contract
       asm.add(0x12, 0x12, 0x11),
       // move on to the next blob
@@ -50,19 +48,16 @@ export const getLoaderInstructions = (blobIds: string[]): Uint8Array => {
       // 0x12 is going to hold the total bytes loaded of the contract
       asm.move_(0x12, RegId.zero().to_u8()),
       // loop counter
-      asm.addi(0x13, RegId.zero().to_u8(), numberOfBlobs)
-    ).toBytes(),
-    // LOOP starts here
-    // 0x11 to hold the size of the current blob
-    bsizBytes(),
-    new InstructionSet(
+      asm.addi(0x13, RegId.zero().to_u8(), numberOfBlobs),
+      // LOOP starts here
+      // 0x11 to hold the size of the current blob
+      asm.bsiz(0x11, 0x10),
       // the location where to load the current blob (start of stack)
       asm.move_(0x14, RegId.spp().to_u8()),
       // move to where this blob should be loaded by adding the total bytes loaded
-      asm.add(0x14, 0x14, 0x12)
-    ).toBytes(),
-    blddBytes(),
-    new InstructionSet(
+      asm.add(0x14, 0x14, 0x12),
+      // load the current blob
+      asm.bldd(0x14, 0x10, RegId.zero().to_u8(), 0x11),
       // update the total bytes loaded
       asm.add(0x12, 0x12, 0x11),
       // move on to the next blob
