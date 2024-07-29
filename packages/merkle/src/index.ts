@@ -1,2 +1,2 @@
 export * from './binary';
-export * from './sparse';
+export * from './common';
