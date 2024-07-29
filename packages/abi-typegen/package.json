@@ -43,10 +43,10 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "run-s build:forc-callpaths build:forc",
+    "pretest": "run-s build:forc:debug build:forc:release",
     "build": "tsup",
-    "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
-    "build:forc-callpaths": "pnpm fuels-forc build -p test/fixtures/forc-projects --json-abi-with-callpaths",
+    "build:forc:debug": "pnpm fuels-forc build -p test/fixtures/forc-projects",
+    "build:forc:release": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",
