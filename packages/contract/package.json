@@ -50,11 +50,11 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "ramda": "^0.29.0"
+    "ramda": "^0.30.1"
   },
   "devDependencies": {
     "@internal/forc": "workspace:*",
-    "@types/ramda": "^0.29.3",
+    "@types/ramda": "^0.30.1",
     "@fuel-ts/utils": "workspace:*"
   }
 }

@@ -22,7 +22,7 @@ export type MyContractAbiConfigurables = Partial<{
   SHOULD_RETURN: boolean;
 }>;
 
-interface MyContractAbiInterface extends Interface {
+export interface MyContractAbiInterface extends Interface {
   functions: {
     main: FunctionFragment;
   };
