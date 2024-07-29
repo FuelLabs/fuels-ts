@@ -20,7 +20,7 @@ import { encrypt, decrypt } from '@fuel-ts/crypto';
 import { hashMessage } from '@fuel-ts/hasher';
 import { BN } from '@fuel-ts/math';
 import { DEFAULT_PRECISION, DEFAULT_MIN_PRECISION } from '@fuel-ts/math/configs';
-import { SparseMerkleTree, constructTree } from '@fuel-ts/merkle';
+import { constructTree } from '@fuel-ts/merkle';
 import { FunctionInvocationScope } from '@fuel-ts/program';
 import { Script } from '@fuel-ts/script';
 import { InputCoinCoder } from '@fuel-ts/transactions';
@@ -105,7 +105,7 @@ log(DEFAULT_MIN_PRECISION);
 /**
  * merkle
  */
-log(SparseMerkleTree, constructTree);
+log(constructTree);
 
 /**
  * mnemonic
