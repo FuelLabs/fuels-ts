@@ -18,6 +18,7 @@ import { Wallet } from './wallet';
  * @group browser
  */
 
+// #TODO: These tests are failing when run as a suite
 describe.skip('Account', () => {
   it('should create account using an address, with a provider', async () => {
     using launched = await setupTestProviderAndWallets();
