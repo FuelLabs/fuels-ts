@@ -59,13 +59,13 @@
     "glob": "^10.2.6",
     "handlebars": "^4.7.8",
     "mkdirp": "^1.0.4",
-    "ramda": "^0.29.0",
+    "ramda": "^0.30.1",
     "rimraf": "^5.0.8"
   },
   "devDependencies": {
     "@internal/forc": "workspace:*",
     "@types/mkdirp": "^1.0.2",
-    "@types/ramda": "^0.29.3",
+    "@types/ramda": "^0.30.1",
     "@types/rimraf": "^3.0.2"
   }
 }

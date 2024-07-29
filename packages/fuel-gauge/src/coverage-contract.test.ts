@@ -752,10 +752,15 @@ describe('Coverage Contract', () => {
       [0, 1, 2],
       [0, 1, 2],
     ];
-    await contractInstance.functions.vec_in_vec(INPUT).call();
+
+    const { waitForResult } = await contractInstance.functions.vec_in_vec(INPUT).call();
 
     // asserted in Sway file
-    expect(1).toEqual(1);
+    const {
+      transactionResult: { isStatusSuccess },
+    } = await waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
   });
 
   it('should support array in vec', async () => {
@@ -765,10 +770,14 @@ describe('Coverage Contract', () => {
       [0, 1, 2],
       [0, 1, 2],
     ];
-    await contractInstance.functions.vec_in_array(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.vec_in_array(INPUT).call();
 
     // asserted in Sway file
-    expect(1).toEqual(1);
+    // asserted in Sway file
+    const {
+      transactionResult: { isStatusSuccess },
+    } = await waitForResult();
+    expect(isStatusSuccess).toBeTruthy();
   });
 
   it('should test b256 multiple params vector input/output', async () => {
