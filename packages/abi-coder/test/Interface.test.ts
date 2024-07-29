@@ -5,7 +5,7 @@ import { concat } from '@fuel-ts/utils';
 import { Interface } from '../src/Interface';
 import type { JsonAbiConfigurable } from '../src/types/JsonAbi';
 
-import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';
+import { AbiCoderProjectsEnum, getCoderForcProject } from './fixtures/forc-projects';
 import {
   B256_DECODED,
   B256_ENCODED,
@@ -33,6 +33,10 @@ import {
   U8_MAX_ENCODED,
   U8_MIN_ENCODED,
 } from './utils/constants';
+
+const exhaustiveExamplesAbi = getCoderForcProject(
+  AbiCoderProjectsEnum.EXHAUSTIVE_EXAMPLES
+).abiContents;
 
 const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
 
@@ -734,7 +738,7 @@ describe('Abi interface', () => {
 
   describe('abi types', () => {
     it('should return the correct type when it exists', () => {
-      const abiType = exhaustiveExamplesInterface.getTypeById(0);
+      const abiType = exhaustiveExamplesInterface.getTypeById(72);
       expect(abiType.type).toEqual('()');
       expect(abiType.components).toBeDefined();
       expect(abiType.typeParameters).toBeNull();
