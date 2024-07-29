@@ -52,7 +52,7 @@ const swayRepoUrl = 'https://github.com/fuellabs/sway.git';
 
 export const buildFromGitBranch = (branchName) => {
   const swayRepoDir = join(__dirname, '..', 'sway-repo');
-  const swayRepoDebugDir = join(swayRepoDir, 'target', 'debug');
+  const swayRepoReleaseDir = join(swayRepoDir, 'target', 'release');
   const stdioOpts = { stdio: 'inherit' };
 
   if (existsSync(swayRepoDir)) {
@@ -72,7 +72,7 @@ export const buildFromGitBranch = (branchName) => {
     execSync(`cd ${swayRepoDir} && cargo build --release`, stdioOpts);
   }
 
-  const [from, to] = [swayRepoDebugDir, forcBinDirPath];
+  const [from, to] = [swayRepoReleaseDir, forcBinDirPath];
 
   rmSync(to, { recursive: true, force: true });
   mkdirSync(to, { recursive: true });

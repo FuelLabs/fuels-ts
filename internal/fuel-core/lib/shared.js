@@ -51,7 +51,7 @@ const fuelCoreRepoUrl = 'https://github.com/fuellabs/fuel-core.git';
 
 export const buildFromGitBranch = (branchName) => {
   const fuelCoreRepoDir = join(__dirname, '..', 'fuel-core-repo');
-  const fuelCoreRepoDebugDir = join(fuelCoreRepoDir, 'target', 'debug');
+  const fuelCoreRepoReleaseDir = join(fuelCoreRepoDir, 'target', 'release');
   const stdioOpts = { stdio: 'inherit' };
 
   if (existsSync(fuelCoreRepoDir)) {
@@ -67,7 +67,7 @@ export const buildFromGitBranch = (branchName) => {
     spawnSync('cargo', ['build', '--release'], { cwd: fuelCoreRepoDir, ...stdioOpts });
   }
 
-  const [from, to] = [fuelCoreRepoDebugDir, fuelCoreBinDirPath];
+  const [from, to] = [fuelCoreRepoReleaseDir, fuelCoreBinDirPath];
 
   rmSync(to, { recursive: true, force: true });
   mkdirSync(to, { recursive: true });
