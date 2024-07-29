@@ -6,4 +6,4 @@
 "@internal/forc": patch
 ---
 
-feat: adding abi transpiler
+feat: adding `abi` transpiler
