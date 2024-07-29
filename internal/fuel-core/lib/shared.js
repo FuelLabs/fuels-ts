@@ -55,8 +55,8 @@ export const buildFromGitBranch = (branchName) => {
   const stdioOpts = { stdio: 'inherit' };
 
   if (existsSync(fuelCoreRepoDir)) {
-    spawnSync('git', ['pull'], { cwd: fuelCoreRepoDir, ...stdioOpts });
     spawnSync('git', ['checkout', branchName], { cwd: fuelCoreRepoDir, ...stdioOpts });
+    spawnSync('git', ['pull'], { cwd: fuelCoreRepoDir, ...stdioOpts });
     spawnSync('cargo', ['build'], { cwd: fuelCoreRepoDir, ...stdioOpts });
   } else {
     spawnSync(
