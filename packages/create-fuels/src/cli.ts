@@ -51,12 +51,8 @@ export const runScaffoldCli = async ({
   checkIfTemplateExists?: boolean;
 }) => {
   program.parse(args);
-
-  let projectPath = program.args[0] ?? (await promptForProjectPath());
-
   const opts = program.opts<ProgramOptions>();
-  const verboseEnabled = opts.verbose ?? false;
-  const packageManager = getPackageManager(opts);
+
   const templateOfChoice = (explicitTemplateName ?? opts.template ?? 'nextjs') as Template;
 
   if (!doesTemplateExist(templateOfChoice) && checkIfTemplateExists) {
@@ -68,6 +64,11 @@ export const runScaffoldCli = async ({
     }
     process.exit(1);
   }
+
+  let projectPath = program.args[0] ?? (await promptForProjectPath());
+
+  const verboseEnabled = opts.verbose ?? false;
+  const packageManager = getPackageManager(opts);
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
