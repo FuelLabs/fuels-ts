@@ -1,3 +1,8 @@
 {{header}}
 
-export default '{{hexlifiedBytecode}}'
+import { decompressBytecode } from 'fuels';
+
+const compresssedBytecode = '{{hexlifiedBytecode}}';
+const decompressedBytecode = decompressBytecode(compresssedBytecode);
+
+export default decompressedBytecode;

@@ -1,4 +1,5 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
+import { compressBytecode } from '@fuel-ts/utils';
 
 import { renderHbsTemplate } from '../renderHbsTemplate';
 
@@ -8,7 +9,7 @@ export function renderBytecodeTemplate(params: { hexlifiedBytecode: BytesLike })
   const text = renderHbsTemplate({
     template: bytecodeTemplate,
     data: {
-      hexlifiedBytecode: params.hexlifiedBytecode,
+      hexlifiedBytecode: compressBytecode(params.hexlifiedBytecode),
     },
   });
 
