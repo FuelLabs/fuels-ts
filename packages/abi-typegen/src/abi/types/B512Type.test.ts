@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { B512Type } from './B512Type';
 import { BoolType } from './BoolType';
 
@@ -6,12 +8,7 @@ import { BoolType } from './BoolType';
  */
 describe('B512Type.ts', () => {
   test('should properly parse type attributes', () => {
-    const b512 = new B512Type({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: 1,
-      type: B512Type.swayType,
-    });
+    const b512 = makeTestType(B512Type.swayType);
 
     const suitableForB512 = B512Type.isSuitableFor({ type: B512Type.swayType });
     const suitableForBool = B512Type.isSuitableFor({ type: BoolType.swayType });

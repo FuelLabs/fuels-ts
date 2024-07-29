@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { RawUntypedPtr } from './RawUntypedPtr';
 import { U8Type } from './U8Type';
 
@@ -6,12 +8,7 @@ import { U8Type } from './U8Type';
  */
 describe('RawUntypedPtrType.ts', () => {
   test('should properly parse type attributes', () => {
-    const rawUntypedPtr = new RawUntypedPtr({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: 1,
-      type: RawUntypedPtr.swayType,
-    });
+    const rawUntypedPtr = makeTestType(RawUntypedPtr.swayType);
 
     const suitableForU8 = RawUntypedPtr.isSuitableFor({ type: U8Type.swayType });
     const suitableForRawUntypedPtr = RawUntypedPtr.isSuitableFor({

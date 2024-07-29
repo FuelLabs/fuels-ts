@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { GenericType } from './GenericType';
 import { StructType } from './StructType';
 
@@ -6,14 +8,7 @@ import { StructType } from './StructType';
  */
 describe('GenericType.ts', () => {
   test('should properly parse type attributes', () => {
-    const generic = new GenericType({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: 1,
-      type: GenericType.swayType,
-    });
-
-    generic.parseComponentsAttributes();
+    const generic = makeTestType(GenericType.swayType);
 
     const suitableForGeneric = GenericType.isSuitableFor({ type: GenericType.swayType });
     const suitableForEnum = GenericType.isSuitableFor({ type: StructType.swayType });

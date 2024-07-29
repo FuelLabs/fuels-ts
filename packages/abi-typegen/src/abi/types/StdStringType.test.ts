@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { StdStringType } from './StdStringType';
 import { StructType } from './StructType';
 
@@ -6,12 +8,7 @@ import { StructType } from './StructType';
  */
 describe('StdStringType.ts', () => {
   test('should properly parse type attributes', () => {
-    const stdString = new StdStringType({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: undefined,
-      type: StdStringType.swayType,
-    });
+    const stdString = makeTestType(StdStringType.swayType);
 
     const suitableForStdString = StdStringType.isSuitableFor({ type: StdStringType.swayType });
     const suitableForStruct = StdStringType.isSuitableFor({ type: StructType.swayType });

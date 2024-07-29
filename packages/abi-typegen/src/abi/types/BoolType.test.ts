@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { BoolType } from './BoolType';
 import { U16Type } from './U16Type';
 
@@ -6,12 +8,7 @@ import { U16Type } from './U16Type';
  */
 describe('BoolType.ts', () => {
   test('should properly parse type attributes', () => {
-    const bool = new BoolType({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: undefined,
-      type: BoolType.swayType,
-    });
+    const bool = makeTestType(BoolType.swayType);
 
     const suitableForBool = BoolType.isSuitableFor({ type: BoolType.swayType });
     const suitableForU16 = BoolType.isSuitableFor({ type: U16Type.swayType });

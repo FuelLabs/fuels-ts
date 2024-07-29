@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { U32Type } from './U32Type';
 import { U64Type } from './U64Type';
 
@@ -6,12 +8,7 @@ import { U64Type } from './U64Type';
  */
 describe('U32Type.ts', () => {
   test('should properly parse type attributes', () => {
-    const u32 = new U32Type({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: undefined,
-      type: U32Type.swayType,
-    });
+    const u32 = makeTestType(U32Type.swayType);
 
     const suitableForU32 = U32Type.isSuitableFor({ type: U32Type.swayType });
     const suitableForU64 = U32Type.isSuitableFor({ type: U64Type.swayType });

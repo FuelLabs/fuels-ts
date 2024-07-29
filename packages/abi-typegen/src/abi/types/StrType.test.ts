@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { BoolType } from './BoolType';
 import { StrType } from './StrType';
 
@@ -6,12 +8,7 @@ import { StrType } from './StrType';
  */
 describe('StrType.ts', () => {
   test('should properly parse type attributes', () => {
-    const str = new StrType({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: undefined,
-      type: StrType.swayType,
-    });
+    const str = makeTestType(StrType.swayType);
 
     const suitableForStr = StrType.isSuitableFor({ type: StrType.swayType });
     const suitableForU16 = StrType.isSuitableFor({ type: BoolType.swayType });

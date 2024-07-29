@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { BoolType } from './BoolType';
 import { StdStringType } from './StdStringType';
 import { StrSliceType } from './StrSliceType';
@@ -8,12 +10,7 @@ import { StrType } from './StrType';
  */
 describe('StrSlicesType.ts', () => {
   test('should properly parse type attributes', () => {
-    const strSlices = new StrSliceType({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: undefined,
-      type: StrSliceType.swayType,
-    });
+    const strSlices = makeTestType(StrSliceType.swayType);
 
     const suitableForStrSlices = StrSliceType.isSuitableFor({ type: StrSliceType.swayType });
     const suitableForU16 = StrSliceType.isSuitableFor({ type: BoolType.swayType });

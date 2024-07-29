@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { RawUntypedSlice } from './RawUntypedSlice';
 import { StructType } from './StructType';
 
@@ -6,12 +8,7 @@ import { StructType } from './StructType';
  */
 describe('RawUntypedSlice.ts', () => {
   test('should properly parse type attributes', () => {
-    const rawSlice = new RawUntypedSlice({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: 1,
-      type: RawUntypedSlice.swayType,
-    });
+    const rawSlice = makeTestType(RawUntypedSlice.swayType);
 
     const suitableForRawUntyped = RawUntypedSlice.isSuitableFor({ type: RawUntypedSlice.swayType });
     const suitableForStruct = RawUntypedSlice.isSuitableFor({ type: StructType.swayType });

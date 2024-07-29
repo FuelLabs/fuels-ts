@@ -1,3 +1,5 @@
+import { makeTestType } from '../../../test/utils/makeTestType';
+
 import { B256Type } from './B256Type';
 import { BoolType } from './BoolType';
 
@@ -6,12 +8,7 @@ import { BoolType } from './BoolType';
  */
 describe('B256Type.ts', () => {
   test('should properly parse type attributes', () => {
-    const b256 = new B256Type({
-      components: undefined,
-      typeParamsArgsMap: undefined,
-      metadataTypeId: undefined,
-      type: B256Type.swayType,
-    });
+    const b256 = makeTestType(B256Type.swayType);
 
     const suitableForB26 = B256Type.isSuitableFor({ type: B256Type.swayType });
     const suitableForBool = B256Type.isSuitableFor({ type: BoolType.swayType });
