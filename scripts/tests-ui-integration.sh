@@ -37,7 +37,7 @@ pnpm create fuels@$PUBLISHED_NPM_TAG $PROJECT_DIR --pnpm --no-install
 echo "3. Intialise the project"
 cd $PROJECT_DIR
 pnpm add fuels@$PUBLISHED_NPM_TAG > /dev/null 2>&1
-pnpm  --ignore-workspace install
+pnpm  --ignore-workspace install > /dev/null 2>&1
 cp .env.example .env.local
 
 echo "4. Running UI tests"
