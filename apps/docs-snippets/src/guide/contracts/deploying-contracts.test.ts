@@ -1,8 +1,11 @@
-import { readFileSync } from 'fs';
+import { readFileSync as originalReadFileSync } from 'fs';
 import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
 import { join } from 'path';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
+import {
+  DocSnippetProjectsEnum,
+  getDocsSnippetsForcProject,
+} from '../../../test/fixtures/forc-projects';
 import { getTestWallet } from '../../utils';
 
 /**
@@ -12,6 +15,15 @@ describe(__filename, () => {
   let PRIVATE_KEY: string;
   let projectsPath: string;
   let contractName: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function readFileSync(path: string | Buffer, encoding?: BufferEncoding): any {
+    if (/-abi\.json/.test(path.toString())) {
+      const abi = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
+      return JSON.stringify(abi.abiContents, null, 2).toString();
+    }
+    return originalReadFileSync(path, encoding);
+  }
 
   beforeAll(async () => {
     const wallet = await getTestWallet();
