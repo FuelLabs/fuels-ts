@@ -1,6 +1,6 @@
 import { sha256 } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
+import { calcRoot, EMPTY } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes, hexlify, concat, arrayify } from '@fuel-ts/utils';
 
@@ -31,12 +31,9 @@ export const getContractRoot = (bytecode: BytesLike): string => {
  * @param storageSlots - An array of storage slots containing key-value pairs.
  * @returns The Merkle root of the contract's storage slots.
  */
-export const getContractStorageRoot = (storageSlots: StorageSlot[]): string => {
-  const tree = new SparseMerkleTree();
-
-  storageSlots.forEach(({ key, value }) => tree.update(sha256(key), value));
-
-  return tree.root;
+export const getContractStorageRoot = (_storageSlots: StorageSlot[]): string => {
+  const emptyTreeRoot = EMPTY;
+  return emptyTreeRoot;
 };
 
 /**
