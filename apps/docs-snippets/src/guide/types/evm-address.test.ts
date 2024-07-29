@@ -1,20 +1,17 @@
-import type { Contract, EvmAddress, B256AddressEvm } from 'fuels';
+import type { EvmAddress, B256AddressEvm } from 'fuels';
 import { Address } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoEvmAddressAbi__factory } from '../../../test/typegen';
+import EchoEvmAddressAbiHex from '../../../test/typegen/contracts/EchoEvmAddressAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe('EvMAddress', () => {
-  let contract: Contract;
   const Bits256: B256AddressEvm =
     '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6';
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_EVM_ADDRESS);
-  });
 
   it('should demonstrate typed evm address example', () => {
     // #region evm-address-1
@@ -38,6 +35,19 @@ describe('EvMAddress', () => {
   });
 
   it('should create an Evm Address from a B256Address', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: EchoEvmAddressAbi__factory,
+          bytecode: EchoEvmAddressAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region evm-address-2
     // #import { EvmAddress, Address };
 
@@ -54,6 +64,19 @@ describe('EvMAddress', () => {
   });
 
   it('should pass an evm address to a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: EchoEvmAddressAbi__factory,
+          bytecode: EchoEvmAddressAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region evm-address-3
     // #import { EvmAddress };
 
@@ -68,6 +91,19 @@ describe('EvMAddress', () => {
   });
 
   it('should retrieve an evm address from a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: EchoEvmAddressAbi__factory,
+          bytecode: EchoEvmAddressAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region evm-address-4
     // #import { EvmAddress };
 

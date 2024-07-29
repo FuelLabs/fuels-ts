@@ -1,20 +1,28 @@
-import type { Contract } from 'fuels';
 import { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoValuesAbi__factory } from '../../../test/typegen';
+import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
-  });
-
   it('should successfully echo tuple in a contract call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: EchoValuesAbi__factory,
+          bytecode: EchoValuesAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region tuples-1
     // Sway let tuple2: (u8, bool, u64) = (100, false, 10000);
     // #region tuples-3

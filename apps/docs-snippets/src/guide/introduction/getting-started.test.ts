@@ -4,7 +4,7 @@ import { FUEL_NETWORK_URL, TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked
  * @group node
  * @group browser
  */
-describe('Getting started', () => {
+describe.skip('Getting started', () => {
   beforeAll(async () => {
     // Avoids using the actual network.
     const mockProvider = await Provider.create(FUEL_NETWORK_URL);

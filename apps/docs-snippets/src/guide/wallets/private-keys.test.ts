@@ -31,7 +31,6 @@ describe('Private keys', () => {
   it('signer-address', async () => {
     using launched = await launchTestNode();
     const {
-      provider,
       wallets: [testWallet],
     } = launched;
     const privateKey = testWallet.privateKey;

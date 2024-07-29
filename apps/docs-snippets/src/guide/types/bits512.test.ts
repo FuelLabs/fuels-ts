@@ -1,20 +1,28 @@
-import type { Contract } from 'fuels';
 import { Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoValuesAbi__factory } from '../../../test/typegen';
+import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
-  });
-
   it('should successfully call contract function and validate b512', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: EchoValuesAbi__factory,
+          bytecode: EchoValuesAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region bits512-1
     // #context pub struct B512 {
     // #context   bytes: [b256; 2],

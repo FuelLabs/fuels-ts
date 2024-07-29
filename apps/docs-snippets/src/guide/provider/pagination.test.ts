@@ -1,6 +1,5 @@
 import type { GqlPageInfo } from '@fuel-ts/account/dist/providers/__generated__/operations';
 import type { CursorPaginationArgs } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**

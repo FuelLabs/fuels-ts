@@ -1,5 +1,4 @@
-import { ContractFactory } from 'ethers';
-import { Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
+import { ContractFactory, Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { LiquidityPoolAbi__factory } from '../../../test/typegen';
@@ -18,17 +17,15 @@ describe(__filename, () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(
-      LiquidityPoolAbiHex,
-      LiquidityPoolAbi__factory.abi,
-      provider
-    );
+    const factory = new ContractFactory(LiquidityPoolAbiHex, LiquidityPoolAbi__factory.abi, wallet);
 
-    const liquidityPoolContract = await factory.deployContract({
+    const { waitForResult } = await factory.deployContract({
       configurableConstants: {
         TOKEN: { bits: provider.getBaseAssetId() },
       },
     });
+
+    const { contract: liquidityPoolContract } = await waitForResult();
 
     // #region deposit-and-withdraw-cookbook-2
     const depositAmount = 100_000;

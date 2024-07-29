@@ -21,7 +21,7 @@ describe(__filename, () => {
     const { provider } = launched;
 
     // #region predicate-index-2
-    // #import { Predicate, Provider, FUEL_NETWORK_URL };
+    // #import { Predicate, PredicateParams };
     const predicateParams: PredicateParams = {
       bytecode: binary,
       provider,

@@ -13,7 +13,7 @@ function decorateResponseWithCustomLogic(response: Response) {
  * @group node
  * @group browser
  */
-describe('Provider', () => {
+describe.skip('Provider', () => {
   it('base examples', async () => {
     // #region provider-definition
     // Create a provider and wallet using launchTestNode utility

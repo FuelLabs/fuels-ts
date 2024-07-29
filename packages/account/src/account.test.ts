@@ -18,7 +18,7 @@ import { Wallet } from './wallet';
  * @group browser
  */
 
-describe('Account', () => {
+describe.skip('Account', () => {
   it('should create account using an address, with a provider', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;

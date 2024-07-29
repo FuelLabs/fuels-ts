@@ -1,10 +1,12 @@
 import { BN, DECIMAL_GWEI, DECIMAL_KWEI, bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoValuesAbi__factory } from '../../../test/typegen';
+import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe('unit-conversion', () => {
   describe('instantiation', () => {
@@ -37,7 +39,18 @@ describe('unit-conversion', () => {
 
   describe('Contract', () => {
     it('should use BN in a contract', async () => {
-      const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            deployer: EchoValuesAbi__factory,
+            bytecode: EchoValuesAbiHex,
+          },
+        ],
+      });
+
+      const {
+        contracts: [contract],
+      } = launched;
 
       // #region contract-calls-1
       const MAX_U64 = bn('18446744073709551615');

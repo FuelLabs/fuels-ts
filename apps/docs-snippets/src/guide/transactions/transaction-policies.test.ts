@@ -9,7 +9,7 @@ import { SumScriptAbi__factory } from '../../../test/typegen';
  * @group browser
  */
 describe('Transaction Policies', () => {
-  it('sets policies', async () => {
+  it('sets policies', () => {
     // #region transaction-policies-1
     // #import { ScriptTransactionRequest };
 

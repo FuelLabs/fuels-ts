@@ -2,6 +2,9 @@ import type { TransferParams } from 'fuels';
 import { Wallet } from 'fuels';
 import { ASSET_A, launchTestNode } from 'fuels/test-utils';
 
+import { CounterAbi__factory } from '../../../test/typegen';
+import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
+
 /**
  * @group node
  */
@@ -110,10 +113,10 @@ describe('Wallet transferring', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: enum,
-          bytecode:
-        }
-      ]
+          deployer: CounterAbi__factory,
+          bytecode: CounterAbiHex,
+        },
+      ],
     });
     const {
       contracts: [contract],
@@ -125,7 +128,11 @@ describe('Wallet transferring', () => {
     // #region wallet-transferring-4
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
-    const txResponse = await myWallet.transferToContract(contract.id, 100, provider.getBaseAssetId());
+    const txResponse = await myWallet.transferToContract(
+      contract.id,
+      100,
+      provider.getBaseAssetId()
+    );
 
     await txResponse.waitForResult();
     // #endregion wallet-transferring-4
@@ -135,8 +142,15 @@ describe('Wallet transferring', () => {
     expect(newBalance.toNumber()).toBeGreaterThan(0);
   });
 
-  it('should transfer assets to a deployed contract string addess just fine', async () => {
-    using launched = await launchTestNode();
+  it('should transfer assets to a deployed contract string address just fine', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: CounterAbi__factory,
+          bytecode: CounterAbiHex,
+        },
+      ],
+    });
     const {
       contracts: [contract],
       provider,
@@ -149,7 +163,11 @@ describe('Wallet transferring', () => {
 
     const contractAddress = contract.id.toString();
 
-    const txResponse = await myWallet.transferToContract(contractAddress, 100, provider.getBaseAssetId());
+    const txResponse = await myWallet.transferToContract(
+      contractAddress,
+      100,
+      provider.getBaseAssetId()
+    );
 
     await txResponse.waitForResult();
     // #endregion wallet-transferring-5
