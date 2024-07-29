@@ -4,6 +4,7 @@ import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 import { runScaffoldCli, setupProgram } from '../src/cli';
+import { templates } from '../src/lib/setupProgram';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
 import {
@@ -20,7 +21,7 @@ import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles'
  * @group node
  */
 describe('CLI', () => {
-  const { error } = mockLogger();
+  const { error, log } = mockLogger();
   let paths: ProjectPaths;
 
   beforeEach(() => {
@@ -43,8 +44,9 @@ describe('CLI', () => {
 
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
+      explicitTemplateName: paths.templateName,
       args,
+      checkIfTemplateExists: false,
     });
 
     let originalTemplateFiles = await getAllFiles(paths.templateSource);
@@ -60,8 +62,9 @@ describe('CLI', () => {
 
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
+      explicitTemplateName: paths.templateName,
       args,
+      checkIfTemplateExists: false,
     });
 
     const fuelToolchainPath = join(paths.projectRoot, 'sway-programs', 'fuel-toolchain.toml');
@@ -79,8 +82,9 @@ describe('CLI', () => {
 
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
+      explicitTemplateName: paths.templateName,
       args,
+      checkIfTemplateExists: false,
     });
 
     const packageJsonPath = join(paths.projectRoot, 'package.json');
@@ -102,8 +106,9 @@ describe('CLI', () => {
     // Generate the project again
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
+      explicitTemplateName: paths.templateName,
       args,
+      checkIfTemplateExists: false,
     }).catch((e) => {
       expect(e).toBeInstanceOf(Error);
     });
@@ -111,5 +116,25 @@ describe('CLI', () => {
     expect(error).toHaveBeenCalledWith(
       expect.stringContaining(`A folder already exists at ${paths.projectRoot}`)
     );
+  });
+
+  test('create-fuels reports an error if the template does not exist', async () => {
+    const args = generateArgv(paths.projectRoot, 'pnpm', 'non-existent-template');
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    }).catch((e) => {
+      expect(e).toBeInstanceOf(Error);
+    });
+
+    expect(error).toHaveBeenCalledWith(
+      expect.stringContaining(`Template 'non-existent-template' does not exist.`)
+    );
+    expect(log).toHaveBeenCalledWith();
+    expect(log).toHaveBeenCalledWith('Available templates:');
+    for (const template of templates) {
+      expect(log).toHaveBeenCalledWith(`  - ${template}`);
+    }
   });
 });

@@ -5,7 +5,7 @@ import { runScaffoldCli, setupProgram } from './cli';
 
 runScaffoldCli({
   program: setupProgram(),
-  templateName: 'nextjs',
+  explicitTemplateName: 'nextjs',
   args: process.argv,
 })
   .then(() => process.exit(0))

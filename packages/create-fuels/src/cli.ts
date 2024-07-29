@@ -11,7 +11,8 @@ import { join } from 'path';
 import { tryInstallFuelUp } from './lib';
 import { getPackageManager } from './lib/getPackageManager';
 import { getPackageVersion } from './lib/getPackageVersion';
-import type { ProgramOptions } from './lib/setupProgram';
+import { templates } from './lib/setupProgram';
+import type { Template, ProgramOptions } from './lib/setupProgram';
 import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
 
@@ -36,14 +37,18 @@ function writeEnvFile(envFilePath: string) {
   writeFileSync(envFilePath, newFileContents);
 }
 
+const doesTemplateExist = (templateName: Template): boolean => templates.has(templateName);
+
 export const runScaffoldCli = async ({
   program,
-  templateName = 'nextjs',
+  explicitTemplateName, // Only to be used for testing. The actual template name is passed in as a CLI arg.
   args = process.argv,
+  checkIfTemplateExists = true,
 }: {
   program: Command;
   args: string[];
-  templateName: string;
+  explicitTemplateName?: string;
+  checkIfTemplateExists?: boolean;
 }) => {
   program.parse(args);
 
@@ -52,6 +57,17 @@ export const runScaffoldCli = async ({
   const opts = program.opts<ProgramOptions>();
   const verboseEnabled = opts.verbose ?? false;
   const packageManager = getPackageManager(opts);
+  const templateOfChoice = (explicitTemplateName ?? opts.template ?? 'nextjs') as Template;
+
+  if (!doesTemplateExist(templateOfChoice) && checkIfTemplateExists) {
+    error(`Template '${templateOfChoice}' does not exist.`);
+    log();
+    log('Available templates:');
+    for (const template of templates) {
+      log(`  - ${template}`);
+    }
+    process.exit(1);
+  }
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
@@ -86,7 +102,7 @@ export const runScaffoldCli = async ({
 
   await mkdir(projectPath);
 
-  const templateDir = join(__dirname, '..', 'templates', templateName);
+  const templateDir = join(__dirname, '..', 'templates', templateOfChoice);
   await cp(templateDir, projectPath, {
     recursive: true,
     filter: (filename) => !filename.includes('CHANGELOG.md'),
