@@ -2,9 +2,8 @@
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
-import { Interface } from '../src';
-/** @knipignore */
-import type { JsonAbiConfigurable } from '../src/json-abi';
+import { Interface } from '../src/Interface';
+import type { JsonAbiConfigurable } from '../src/types/JsonAbi';
 
 import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';
 import {
