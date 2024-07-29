@@ -5,9 +5,7 @@ import { arrayify } from './arrayify';
 
 export const compressBytecode = (bytecode: BytesLike) => {
   const bytecodeBytes = arrayify(bytecode);
-
   const bytecodeGzipped = gzipSync(bytecodeBytes);
-
   const bytecodeEncoded = Buffer.from(bytecodeGzipped).toString('base64');
 
   return bytecodeEncoded;
@@ -15,9 +13,7 @@ export const compressBytecode = (bytecode: BytesLike) => {
 
 export const decompressBytecode = (bytecode: string) => {
   const bytecodeDecoded = Buffer.from(bytecode, 'base64').toString('binary');
-
   const bytecodeGzipped = Buffer.from(bytecodeDecoded, 'binary');
-
   const bytecodeBytes = gunzipSync(bytecodeGzipped);
 
   return bytecodeBytes;
