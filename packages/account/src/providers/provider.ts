@@ -558,10 +558,14 @@ Supported fuel-core version: ${supportedVersion}.`
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
           if (Array.isArray(graphQlResponse?.errors)) {
-            throw new FuelError(
-              FuelError.CODES.INVALID_REQUEST,
-              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
-            );
+            const errorMessages = graphQlResponse.errors.map((err: Error) => err.message);
+            if (errorMessages.some((msg) => msg.includes('historical view is not implemented'))) {
+              console.warn(
+                'Historical view is not implemented for this storage. Some features may not work as expected.'
+              );
+              return; // Don't throw an error, just log a warning
+            }
+            throw new FuelError(FuelError.CODES.INVALID_REQUEST, errorMessages.join('\n\n'));
           }
         }
       },
