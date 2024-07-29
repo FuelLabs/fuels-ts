@@ -19,7 +19,8 @@ describe('ResultType.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const rawTypes = project.abiContents.types as JsonAbiType[];
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return parseTypes({ rawAbiTypes: [rawTypes.find((t) => t.type === 'enum Result')!] })[0];
+    const rawAbiTypes = [rawTypes.find((t) => t.type === 'enum std::result::Result')!];
+    return parseTypes({ rawAbiTypes })[0];
   }
 
   test('should properly evaluate type suitability', () => {

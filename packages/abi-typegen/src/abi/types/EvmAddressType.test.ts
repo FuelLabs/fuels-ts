@@ -33,7 +33,7 @@ describe('EvmAddressType.ts', () => {
 
     parseTypeArguments.mockClear();
 
-    const evmAddress = findType({ types, typeId: 1 }) as EvmAddressType;
+    const evmAddress = findType({ types, typeId: 0 }) as EvmAddressType;
 
     expect(evmAddress.attributes.inputLabel).toEqual('EvmAddress');
     expect(evmAddress.attributes.outputLabel).toEqual('EvmAddress');

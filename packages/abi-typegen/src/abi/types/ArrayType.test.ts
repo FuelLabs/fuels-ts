@@ -52,7 +52,7 @@ describe('ArrayType.ts', () => {
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
-    const a = findType({ types, typeId: 1 }) as ArrayType;
+    const a = findType({ types, typeId: 0 }) as ArrayType;
 
     expect(a.attributes.inputLabel).toEqual(
       '[Generic1Input<Generic2Input<BigNumberish>, string>, Generic1Input<Generic2Input<BigNumberish>, string>]'
