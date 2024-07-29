@@ -201,12 +201,6 @@ export class Account extends AbstractAccount {
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
     const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
 
-    const {
-      consensusParameters: {
-        txParameters: { maxInputs },
-      },
-    } = this.provider.getChain();
-
     const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
     const requiredInBaseAsset =
@@ -290,13 +284,6 @@ export class Account extends AbstractAccount {
       }
 
       fundingAttempts += 1;
-    }
-
-    if (bn(request.inputs.length).gt(maxInputs)) {
-      throw new FuelError(
-        ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs for funding.'
-      );
     }
 
     request.updatePredicateGasUsed(estimatedPredicates);
