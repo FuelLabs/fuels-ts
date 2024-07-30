@@ -13,6 +13,10 @@ that should be implemented to be compatible with the Fuel SDK.
 
   ↳ **`Fuel`**
 
+## Implements
+
+- `FuelSdk`
+
 ## Constructors
 
 ### constructor
@@ -35,7 +39,7 @@ that should be implemented to be compatible with the Fuel SDK.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:56](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L56)
+[packages/account/src/connectors/fuel.ts:92](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L92)
 
 ## Properties
 
@@ -45,7 +49,7 @@ that should be implemented to be compatible with the Fuel SDK.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:49](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L49)
+[packages/account/src/connectors/fuel.ts:85](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L85)
 
 ___
 
@@ -55,7 +59,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:54](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L54)
+[packages/account/src/connectors/fuel.ts:90](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L90)
 
 ___
 
@@ -65,7 +69,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:53](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L53)
+[packages/account/src/connectors/fuel.ts:89](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L89)
 
 ___
 
@@ -75,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:48](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L48)
+[packages/account/src/connectors/fuel.ts:84](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L84)
 
 ___
 
@@ -85,7 +89,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:50](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L50)
+[packages/account/src/connectors/fuel.ts:86](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L86)
 
 ___
 
@@ -103,7 +107,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:52](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L52)
+[packages/account/src/connectors/fuel.ts:88](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L88)
 
 ___
 
@@ -113,7 +117,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:51](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L51)
+[packages/account/src/connectors/fuel.ts:87](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L87)
 
 ___
 
@@ -127,7 +131,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:26](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L26)
+[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L89)
 
 ___
 
@@ -141,7 +145,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:28](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L28)
+[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L91)
 
 ___
 
@@ -155,7 +159,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:27](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L27)
+[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L90)
 
 ___
 
@@ -169,7 +173,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:25](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L25)
+[packages/account/src/connectors/fuel-connector.ts:88](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L88)
 
 ___
 
@@ -183,7 +187,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:24](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L24)
+[packages/account/src/connectors/fuel-connector.ts:87](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L87)
 
 ___
 
@@ -193,7 +197,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:46](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L46)
+[packages/account/src/connectors/fuel.ts:82](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L82)
 
 ___
 
@@ -201,13 +205,21 @@ ___
 
 ▪ `Static` `Readonly` **captureRejectionSymbol**: typeof [`captureRejectionSymbol`](/api/Account/WalletManager.md#capturerejectionsymbol)
 
+Value: `Symbol.for('nodejs.rejection')`
+
+See how to write a custom `rejection handler`.
+
+**`Since`**
+
+v13.4.0, v12.16.0
+
 #### Inherited from
 
 [FuelConnector](/api/Account/FuelConnector.md).[captureRejectionSymbol](/api/Account/FuelConnector.md#capturerejectionsymbol)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:328
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:452
 
 ___
 
@@ -215,7 +227,13 @@ ___
 
 ▪ `Static` **captureRejections**: `boolean`
 
-Sets or gets the default captureRejection value for all emitters.
+Value: [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)
+
+Change the default `captureRejections` option on all new `EventEmitter` objects.
+
+**`Since`**
+
+v13.4.0, v12.16.0
 
 #### Inherited from
 
@@ -223,7 +241,7 @@ Sets or gets the default captureRejection value for all emitters.
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:333
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:459
 
 ___
 
@@ -233,7 +251,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:47](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L47)
+[packages/account/src/connectors/fuel.ts:83](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L83)
 
 ___
 
@@ -241,13 +259,53 @@ ___
 
 ▪ `Static` **defaultMaxListeners**: `number`
 
+By default, a maximum of `10` listeners can be registered for any single
+event. This limit can be changed for individual `EventEmitter` instances
+using the `emitter.setMaxListeners(n)` method. To change the default
+for _all_`EventEmitter` instances, the `events.defaultMaxListeners` property
+can be used. If this value is not a positive number, a `RangeError` is thrown.
+
+Take caution when setting the `events.defaultMaxListeners` because the
+change affects _all_ `EventEmitter` instances, including those created before
+the change is made. However, calling `emitter.setMaxListeners(n)` still has
+precedence over `events.defaultMaxListeners`.
+
+This is not a hard limit. The `EventEmitter` instance will allow
+more listeners to be added but will output a trace warning to stderr indicating
+that a "possible EventEmitter memory leak" has been detected. For any single
+`EventEmitter`, the `emitter.getMaxListeners()` and `emitter.setMaxListeners()` methods can be used to
+temporarily avoid this warning:
+
+```js
+import { EventEmitter } from 'node:events';
+const emitter = new EventEmitter();
+emitter.setMaxListeners(emitter.getMaxListeners() + 1);
+emitter.once('event', () => {
+  // do stuff
+  emitter.setMaxListeners(Math.max(emitter.getMaxListeners() - 1, 0));
+});
+```
+
+The `--trace-warnings` command-line flag can be used to display the
+stack trace for such warnings.
+
+The emitted warning can be inspected with `process.on('warning')` and will
+have the additional `emitter`, `type`, and `count` properties, referring to
+the event emitter instance, the event's name and the number of attached
+listeners, respectively.
+Its `name` property is set to `'MaxListenersExceededWarning'`.
+
+**`Since`**
+
+v0.11.2
+
 #### Inherited from
 
 [FuelConnector](/api/Account/FuelConnector.md).[defaultMaxListeners](/api/Account/FuelConnector.md#defaultmaxlisteners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:334
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:498
 
 ___
 
@@ -255,13 +313,14 @@ ___
 
 ▪ `Static` `Readonly` **errorMonitor**: typeof [`errorMonitor`](/api/Account/WalletManager.md#errormonitor)
 
-This symbol shall be used to install a listener for only monitoring `'error'`
-events. Listeners installed using this symbol are called before the regular
-`'error'` listeners are called.
+This symbol shall be used to install a listener for only monitoring `'error'` events. Listeners installed using this symbol are called before the regular `'error'` listeners are called.
 
-Installing a listener using this symbol does not change the behavior once an
-`'error'` event is emitted, therefore the process will still crash if no
+Installing a listener using this symbol does not change the behavior once an `'error'` event is emitted. Therefore, the process will still crash if no
 regular `'error'` listener is installed.
+
+**`Since`**
+
+v13.6.0, v12.17.0
 
 #### Inherited from
 
@@ -269,9 +328,41 @@ regular `'error'` listener is installed.
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:327
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:445
 
 ## Methods
+
+### [captureRejectionSymbol]
+
+▸ **[captureRejectionSymbol]**&lt;`K`\>(`error`, `event`, `...args`): `void`
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `error` | `Error` |
+| `event` | `string` \| `symbol` |
+| `...args` | `AnyRest` |
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[FuelConnector](/api/Account/FuelConnector.md).[[captureRejectionSymbol]](/api/Account/FuelConnector.md#[capturerejectionsymbol])
+
+#### Defined in
+
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:136
+
+___
 
 ### \_getProvider
 
@@ -292,7 +383,7 @@ connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:393](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L393)
+[packages/account/src/connectors/fuel.ts:429](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L429)
 
 ___
 
@@ -315,7 +406,7 @@ The accounts addresses strings
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:66](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L66)
+[packages/account/src/connectors/fuel-connector.ts:129](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L129)
 
 ___
 
@@ -344,7 +435,7 @@ Return true if the ABI was added successfully.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:237](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L237)
+[packages/account/src/connectors/fuel-connector.ts:300](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L300)
 
 ___
 
@@ -381,7 +472,7 @@ True if the asset was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:175](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L175)
+[packages/account/src/connectors/fuel-connector.ts:238](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L238)
 
 ___
 
@@ -418,7 +509,7 @@ True if the asset was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:160](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L160)
+[packages/account/src/connectors/fuel-connector.ts:223](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L223)
 
 ___
 
@@ -440,19 +531,25 @@ Add a new connector to the list of connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:255](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L255)
+[packages/account/src/connectors/fuel.ts:291](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L291)
 
 ___
 
 ### addListener
 
-▸ **addListener**(`eventName`, `listener`): `this`
+▸ **addListener**&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.on(eventName, listener)`.
 
 **`Since`**
 
 v0.1.26
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
 
 #### Parameters
 
@@ -471,7 +568,7 @@ v0.1.26
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:354
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:597
 
 ___
 
@@ -505,7 +602,7 @@ Return true if the network was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:196](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L196)
+[packages/account/src/connectors/fuel-connector.ts:259](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L259)
 
 ___
 
@@ -527,7 +624,7 @@ Array of assets metadata from the connector vinculated to the all accounts from 
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:184](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L184)
+[packages/account/src/connectors/fuel-connector.ts:247](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L247)
 
 ___
 
@@ -550,7 +647,7 @@ Call method from the current connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:137](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L137)
+[packages/account/src/connectors/fuel.ts:173](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L173)
 
 ___
 
@@ -564,9 +661,13 @@ Clean all the data from the storage.
 
 `Promise`&lt;`void`\>
 
+#### Implementation of
+
+FuelSdk.clean
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:441](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L441)
+[packages/account/src/connectors/fuel.ts:477](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L477)
 
 ___
 
@@ -593,7 +694,7 @@ boolean - connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:79](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L79)
+[packages/account/src/connectors/fuel-connector.ts:142](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L142)
 
 ___
 
@@ -607,9 +708,13 @@ Return the list of connectors with the status of installed and connected.
 
 `Promise`&lt;[`FuelConnector`](/api/Account/FuelConnector.md)[]\>
 
+#### Implementation of
+
+FuelSdk.connectors
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:303](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L303)
+[packages/account/src/connectors/fuel.ts:339](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L339)
 
 ___
 
@@ -634,7 +739,7 @@ The current account selected otherwise null.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:145](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L145)
+[packages/account/src/connectors/fuel-connector.ts:208](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L208)
 
 ___
 
@@ -648,9 +753,13 @@ Return the current selected connector.
 
 `undefined` \| ``null`` \| [`FuelConnector`](/api/Account/FuelConnector.md)
 
+#### Implementation of
+
+FuelSdk.currentConnector
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:345](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L345)
+[packages/account/src/connectors/fuel.ts:381](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L381)
 
 ___
 
@@ -672,7 +781,7 @@ Return the current network selected inside the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:226](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L226)
+[packages/account/src/connectors/fuel-connector.ts:289](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L289)
 
 ___
 
@@ -686,9 +795,13 @@ Removes all listeners and cleans the storage.
 
 `Promise`&lt;`void`\>
 
+#### Implementation of
+
+FuelSdk.destroy
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:448](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L448)
+[packages/account/src/connectors/fuel.ts:484](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L484)
 
 ___
 
@@ -713,21 +826,21 @@ The connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L90)
+[packages/account/src/connectors/fuel-connector.ts:153](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L153)
 
 ___
 
 ### emit
 
-▸ **emit**(`eventName`, `...args`): `boolean`
+▸ **emit**&lt;`K`\>(`eventName`, `...args`): `boolean`
 
-Synchronously calls each of the listeners registered for the event named`eventName`, in the order they were registered, passing the supplied arguments
+Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
 
 Returns `true` if the event had listeners, `false` otherwise.
 
 ```js
-const EventEmitter = require('events');
+import { EventEmitter } from 'node:events';
 const myEmitter = new EventEmitter();
 
 // First listener
@@ -763,12 +876,18 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 
 v0.1.26
 
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
+
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
 | `eventName` | `string` \| `symbol` |
-| `...args` | `any`[] |
+| `...args` | `AnyRest` |
 
 #### Returns
 
@@ -780,7 +899,7 @@ v0.1.26
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:610
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:859
 
 ___
 
@@ -792,7 +911,8 @@ Returns an array listing the events for which the emitter has registered
 listeners. The values in the array are strings or `Symbol`s.
 
 ```js
-const EventEmitter = require('events');
+import { EventEmitter } from 'node:events';
+
 const myEE = new EventEmitter();
 myEE.on('foo', () => {});
 myEE.on('bar', () => {});
@@ -818,7 +938,7 @@ v6.0.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:669
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:922
 
 ___
 
@@ -841,7 +961,7 @@ status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:166](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L166)
+[packages/account/src/connectors/fuel.ts:202](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L202)
 
 ___
 
@@ -858,7 +978,7 @@ status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:198](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L198)
+[packages/account/src/connectors/fuel.ts:234](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L234)
 
 ___
 
@@ -886,7 +1006,7 @@ The ABI if it exists, otherwise return null.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:247](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L247)
+[packages/account/src/connectors/fuel-connector.ts:310](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L310)
 
 ___
 
@@ -906,9 +1026,13 @@ Get a connector from the list of connectors.
 
 ``null`` \| [`FuelConnector`](/api/Account/FuelConnector.md)
 
+#### Implementation of
+
+FuelSdk.getConnector
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:294](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L294)
+[packages/account/src/connectors/fuel.ts:330](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L330)
 
 ___
 
@@ -933,7 +1057,7 @@ v1.0.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:526
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:774
 
 ___
 
@@ -960,7 +1084,7 @@ getProvider is deprecated and is going to be removed in the future, use getWalle
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:382](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L382)
+[packages/account/src/connectors/fuel.ts:418](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L418)
 
 ___
 
@@ -976,7 +1100,7 @@ Return the storage used.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:94](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L94)
+[packages/account/src/connectors/fuel.ts:130](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L130)
 
 ___
 
@@ -998,7 +1122,7 @@ Return the target object to listen for global events.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:78](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L78)
+[packages/account/src/connectors/fuel.ts:114](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L114)
 
 ___
 
@@ -1020,9 +1144,13 @@ connectors.
 
 `Promise`&lt;[`Account`](/api/Account/Account.md)\>
 
+#### Implementation of
+
+FuelSdk.getWallet
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:418](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L418)
+[packages/account/src/connectors/fuel.ts:454](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L454)
 
 ___
 
@@ -1050,7 +1178,7 @@ Returns true if the abi exists or false if not.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:257](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L257)
+[packages/account/src/connectors/fuel-connector.ts:320](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L320)
 
 ___
 
@@ -1064,9 +1192,13 @@ Return true if any connector is available.
 
 `Promise`&lt;`boolean`\>
 
+#### Implementation of
+
+FuelSdk.hasConnector
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:352](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L352)
+[packages/account/src/connectors/fuel.ts:388](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L388)
 
 ___
 
@@ -1078,9 +1210,13 @@ ___
 
 `Promise`&lt;`boolean`\>
 
+#### Implementation of
+
+FuelSdk.hasWallet
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:372](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L372)
+[packages/account/src/connectors/fuel.ts:408](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L408)
 
 ___
 
@@ -1103,25 +1239,34 @@ The connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:56](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L56)
+[packages/account/src/connectors/fuel-connector.ts:119](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L119)
 
 ___
 
 ### listenerCount
 
-▸ **listenerCount**(`eventName`): `number`
+▸ **listenerCount**&lt;`K`\>(`eventName`, `listener?`): `number`
 
-Returns the number of listeners listening to the event named `eventName`.
+Returns the number of listeners listening for the event named `eventName`.
+If `listener` is provided, it will return how many times the listener is found
+in the list of the listeners of the event.
 
 **`Since`**
 
 v3.2.0
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
 
 #### Parameters
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `eventName` | `string` \| `symbol` | The name of the event being listened for |
+| `listener?` | `Function` | The event handler function |
 
 #### Returns
 
@@ -1133,13 +1278,13 @@ v3.2.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:616
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:868
 
 ___
 
 ### listeners
 
-▸ **listeners**(`eventName`): `Function`[]
+▸ **listeners**&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`.
 
@@ -1154,6 +1299,12 @@ console.log(util.inspect(server.listeners('connection')));
 **`Since`**
 
 v0.1.26
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
 
 #### Parameters
 
@@ -1171,7 +1322,7 @@ v0.1.26
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:539
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:787
 
 ___
 
@@ -1193,19 +1344,25 @@ Return all the networks added to the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:217](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L217)
+[packages/account/src/connectors/fuel-connector.ts:280](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L280)
 
 ___
 
 ### off
 
-▸ **off**(`eventName`, `listener`): `this`
+▸ **off**&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.removeListener()`.
 
 **`Since`**
 
 v10.0.0
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
 
 #### Parameters
 
@@ -1224,7 +1381,7 @@ v10.0.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:499
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:747
 
 ___
 
@@ -1258,15 +1415,15 @@ Event listener for the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:267](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L267)
+[packages/account/src/connectors/fuel-connector.ts:330](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L330)
 
 ___
 
 ### once
 
-▸ **once**(`eventName`, `listener`): `this`
+▸ **once**&lt;`K`\>(`eventName`, `listener`): `this`
 
-Adds a **one-time**`listener` function for the event named `eventName`. The
+Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
 
 ```js
@@ -1277,10 +1434,11 @@ server.once('connection', (stream) => {
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-By default, event listeners are invoked in the order they are added. The`emitter.prependOnceListener()` method can be used as an alternative to add the
+By default, event listeners are invoked in the order they are added. The `emitter.prependOnceListener()` method can be used as an alternative to add the
 event listener to the beginning of the listeners array.
 
 ```js
+import { EventEmitter } from 'node:events';
 const myEE = new EventEmitter();
 myEE.once('foo', () => console.log('a'));
 myEE.prependOnceListener('foo', () => console.log('b'));
@@ -1293,6 +1451,12 @@ myEE.emit('foo');
 **`Since`**
 
 v0.3.0
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
 
 #### Parameters
 
@@ -1311,7 +1475,7 @@ v0.3.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:414
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:659
 
 ___
 
@@ -1334,7 +1498,7 @@ Always true.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:36](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L36)
+[packages/account/src/connectors/fuel-connector.ts:99](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L99)
 
 ___
 
@@ -1357,18 +1521,18 @@ status. If no connector is provided it will ping the current connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:208](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L208)
+[packages/account/src/connectors/fuel.ts:244](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L244)
 
 ___
 
 ### prependListener
 
-▸ **prependListener**(`eventName`, `listener`): `this`
+▸ **prependListener**&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds the `listener` function to the _beginning_ of the listeners array for the
 event named `eventName`. No checks are made to see if the `listener` has
-already been added. Multiple calls passing the same combination of `eventName`and `listener` will result in the `listener` being added, and called, multiple
-times.
+already been added. Multiple calls passing the same combination of `eventName`
+and `listener` will result in the `listener` being added, and called, multiple times.
 
 ```js
 server.prependListener('connection', (stream) => {
@@ -1381,6 +1545,12 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 **`Since`**
 
 v6.0.0
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
 
 #### Parameters
 
@@ -1399,13 +1569,13 @@ v6.0.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:634
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:886
 
 ___
 
 ### prependOnceListener
 
-▸ **prependOnceListener**(`eventName`, `listener`): `this`
+▸ **prependOnceListener**&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds a **one-time**`listener` function for the event named `eventName` to the _beginning_ of the listeners array. The next time `eventName` is triggered, this
 listener is removed, and then invoked.
@@ -1421,6 +1591,12 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 **`Since`**
 
 v6.0.0
+
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
 
 #### Parameters
 
@@ -1439,18 +1615,19 @@ v6.0.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:650
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:902
 
 ___
 
 ### rawListeners
 
-▸ **rawListeners**(`eventName`): `Function`[]
+▸ **rawListeners**&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`,
 including any wrappers (such as those created by `.once()`).
 
 ```js
+import { EventEmitter } from 'node:events';
 const emitter = new EventEmitter();
 emitter.once('log', () => console.log('log once'));
 
@@ -1478,6 +1655,12 @@ emitter.emit('log');
 
 v9.4.0
 
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
+
 #### Parameters
 
 | Name | Type |
@@ -1494,13 +1677,13 @@ v9.4.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:569
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:818
 
 ___
 
 ### removeAllListeners
 
-▸ **removeAllListeners**(`event?`): `this`
+▸ **removeAllListeners**(`eventName?`): `this`
 
 Removes all listeners, or those of the specified `eventName`.
 
@@ -1518,7 +1701,7 @@ v0.1.26
 
 | Name | Type |
 | :------ | :------ |
-| `event?` | `string` \| `symbol` |
+| `eventName?` | `string` \| `symbol` |
 
 #### Returns
 
@@ -1530,15 +1713,15 @@ v0.1.26
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:510
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:758
 
 ___
 
 ### removeListener
 
-▸ **removeListener**(`eventName`, `listener`): `this`
+▸ **removeListener**&lt;`K`\>(`eventName`, `listener`): `this`
 
-Removes the specified `listener` from the listener array for the event named`eventName`.
+Removes the specified `listener` from the listener array for the event named `eventName`.
 
 ```js
 const callback = (stream) => {
@@ -1555,10 +1738,12 @@ listener array for the specified `eventName`, then `removeListener()` must be
 called multiple times to remove each instance.
 
 Once an event is emitted, all listeners attached to it at the
-time of emitting are called in order. This implies that any`removeListener()` or `removeAllListeners()` calls _after_ emitting and _before_ the last listener finishes execution
+time of emitting are called in order. This implies that any `removeListener()` or `removeAllListeners()` calls _after_ emitting and _before_ the last listener finishes execution
 will not remove them from`emit()` in progress. Subsequent events behave as expected.
 
 ```js
+import { EventEmitter } from 'node:events';
+class MyEmitter extends EventEmitter {}
 const myEmitter = new MyEmitter();
 
 const callbackA = () => {
@@ -1596,9 +1781,10 @@ the `emitter.listeners()` method will need to be recreated.
 
 When a single function has been added as a handler multiple times for a single
 event (as in the example below), `removeListener()` will remove the most
-recently added instance. In the example the `once('ping')`listener is removed:
+recently added instance. In the example the `once('ping')` listener is removed:
 
 ```js
+import { EventEmitter } from 'node:events';
 const ee = new EventEmitter();
 
 function pong() {
@@ -1619,6 +1805,12 @@ Returns a reference to the `EventEmitter`, so that calls can be chained.
 
 v0.1.26
 
+#### Type parameters
+
+| Name |
+| :------ |
+| `K` |
+
 #### Parameters
 
 | Name | Type |
@@ -1636,7 +1828,7 @@ v0.1.26
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:494
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:742
 
 ___
 
@@ -1657,9 +1849,13 @@ Set the current connector to be used.
 
 `Promise`&lt;`boolean`\>
 
+#### Implementation of
+
+FuelSdk.selectConnector
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:311](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L311)
+[packages/account/src/connectors/fuel.ts:347](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L347)
 
 ___
 
@@ -1693,7 +1889,7 @@ Return true if the network was added successfully
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:208](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L208)
+[packages/account/src/connectors/fuel-connector.ts:271](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L271)
 
 ___
 
@@ -1727,7 +1923,7 @@ The transaction id
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:133](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L133)
+[packages/account/src/connectors/fuel-connector.ts:196](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L196)
 
 ___
 
@@ -1743,7 +1939,7 @@ Setup the default connector from the storage.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:104](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L104)
+[packages/account/src/connectors/fuel.ts:140](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L140)
 
 ___
 
@@ -1754,7 +1950,7 @@ ___
 By default `EventEmitter`s will print a warning if more than `10` listeners are
 added for a particular event. This is a useful default that helps finding
 memory leaks. The `emitter.setMaxListeners()` method allows the limit to be
-modified for this specific `EventEmitter` instance. The value can be set to`Infinity` (or `0`) to indicate an unlimited number of listeners.
+modified for this specific `EventEmitter` instance. The value can be set to `Infinity` (or `0`) to indicate an unlimited number of listeners.
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
@@ -1778,7 +1974,7 @@ v0.3.5
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:520
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:768
 
 ___
 
@@ -1801,7 +1997,7 @@ connector and emit them to the Fuel instance
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:121](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L121)
+[packages/account/src/connectors/fuel.ts:157](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L157)
 
 ___
 
@@ -1824,7 +2020,7 @@ to the list of new connectors.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:230](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L230)
+[packages/account/src/connectors/fuel.ts:266](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L266)
 
 ___
 
@@ -1841,7 +2037,7 @@ and call the method from the current connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:156](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L156)
+[packages/account/src/connectors/fuel.ts:192](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L192)
 
 ___
 
@@ -1871,7 +2067,7 @@ Message signature
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:103](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L103)
+[packages/account/src/connectors/fuel-connector.ts:166](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L166)
 
 ___
 
@@ -1901,7 +2097,7 @@ Transaction signature
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:116](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L116)
+[packages/account/src/connectors/fuel-connector.ts:179](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L179)
 
 ___
 
@@ -1915,7 +2111,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:272](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L272)
+[packages/account/src/connectors/fuel.ts:308](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L308)
 
 ___
 
@@ -1930,9 +2126,13 @@ remove the Fuel instance and avoid memory leaks.
 
 `void`
 
+#### Implementation of
+
+FuelSdk.unsubscribe
+
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:430](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel.ts#L430)
+[packages/account/src/connectors/fuel.ts:466](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel.ts#L466)
 
 ___
 
@@ -1955,7 +2155,68 @@ boolean - connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:46](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/connectors/fuel-connector.ts#L46)
+[packages/account/src/connectors/fuel-connector.ts:109](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L109)
+
+___
+
+### addAbortListener
+
+▸ **addAbortListener**(`signal`, `resource`): `Disposable`
+
+Listens once to the `abort` event on the provided `signal`.
+
+Listening to the `abort` event on abort signals is unsafe and may
+lead to resource leaks since another third party with the signal can
+call `e.stopImmediatePropagation()`. Unfortunately Node.js cannot change
+this since it would violate the web standard. Additionally, the original
+API makes it easy to forget to remove listeners.
+
+This API allows safely using `AbortSignal`s in Node.js APIs by solving these
+two issues by listening to the event such that `stopImmediatePropagation` does
+not prevent the listener from running.
+
+Returns a disposable so that it may be unsubscribed from more easily.
+
+```js
+import { addAbortListener } from 'node:events';
+
+function example(signal) {
+  let disposable;
+  try {
+    signal.addEventListener('abort', (e) => e.stopImmediatePropagation());
+    disposable = addAbortListener(signal, (e) => {
+      // Do something when signal is aborted.
+    });
+  } finally {
+    disposable?.[Symbol.dispose]();
+  }
+}
+```
+
+**`Since`**
+
+v20.5.0
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `signal` | `AbortSignal` |
+| `resource` | (`event`: `Event`) => `void` |
+
+#### Returns
+
+`Disposable`
+
+Disposable that removes the `abort` listener.
+
+#### Inherited from
+
+[FuelConnector](/api/Account/FuelConnector.md).[addAbortListener](/api/Account/FuelConnector.md#addabortlistener)
+
+#### Defined in
+
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:437
 
 ___
 
@@ -1972,19 +2233,19 @@ For `EventTarget`s this is the only way to get the event listeners for the
 event target. This is useful for debugging and diagnostic purposes.
 
 ```js
-const { getEventListeners, EventEmitter } = require('events');
+import { getEventListeners, EventEmitter } from 'node:events';
 
 {
   const ee = new EventEmitter();
   const listener = () => console.log('Events are fun');
   ee.on('foo', listener);
-  getEventListeners(ee, 'foo'); // [listener]
+  console.log(getEventListeners(ee, 'foo')); // [ [Function: listener] ]
 }
 {
   const et = new EventTarget();
   const listener = () => console.log('Events are fun');
   et.addEventListener('foo', listener);
-  getEventListeners(et, 'foo'); // [listener]
+  console.log(getEventListeners(et, 'foo')); // [ [Function: listener] ]
 }
 ```
 
@@ -1996,7 +2257,7 @@ v15.2.0, v14.17.0
 
 | Name | Type |
 | :------ | :------ |
-| `emitter` | `EventEmitter` \| `_DOMEventTarget` |
+| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
 | `name` | `string` \| `symbol` |
 
 #### Returns
@@ -2009,7 +2270,61 @@ v15.2.0, v14.17.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:299
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:358
+
+___
+
+### getMaxListeners
+
+▸ **getMaxListeners**(`emitter`): `number`
+
+Returns the currently set max amount of listeners.
+
+For `EventEmitter`s this behaves exactly the same as calling `.getMaxListeners` on
+the emitter.
+
+For `EventTarget`s this is the only way to get the max event listeners for the
+event target. If the number of event handlers on a single EventTarget exceeds
+the max set, the EventTarget will print a warning.
+
+```js
+import { getMaxListeners, setMaxListeners, EventEmitter } from 'node:events';
+
+{
+  const ee = new EventEmitter();
+  console.log(getMaxListeners(ee)); // 10
+  setMaxListeners(11, ee);
+  console.log(getMaxListeners(ee)); // 11
+}
+{
+  const et = new EventTarget();
+  console.log(getMaxListeners(et)); // 10
+  setMaxListeners(11, et);
+  console.log(getMaxListeners(et)); // 11
+}
+```
+
+**`Since`**
+
+v19.9.0
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
+
+#### Returns
+
+`number`
+
+#### Inherited from
+
+[FuelConnector](/api/Account/FuelConnector.md).[getMaxListeners](/api/Account/FuelConnector.md#getmaxlisteners-1)
+
+#### Defined in
+
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:387
 
 ___
 
@@ -2017,10 +2332,11 @@ ___
 
 ▸ **listenerCount**(`emitter`, `eventName`): `number`
 
-A class method that returns the number of listeners for the given `eventName`registered on the given `emitter`.
+A class method that returns the number of listeners for the given `eventName` registered on the given `emitter`.
 
 ```js
-const { EventEmitter, listenerCount } = require('events');
+import { EventEmitter, listenerCount } from 'node:events';
+
 const myEmitter = new EventEmitter();
 myEmitter.on('event', () => {});
 myEmitter.on('event', () => {});
@@ -2040,7 +2356,7 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `emitter` | `EventEmitter` | The emitter to query |
+| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> | The emitter to query |
 | `eventName` | `string` \| `symbol` | The event name |
 
 #### Returns
@@ -2053,34 +2369,33 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:271
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:330
 
 ___
 
 ### on
 
-▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`\>
+▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
 
 ```js
-const { on, EventEmitter } = require('events');
+import { on, EventEmitter } from 'node:events';
+import process from 'node:process';
 
-(async () => {
-  const ee = new EventEmitter();
+const ee = new EventEmitter();
 
-  // Emit later on
-  process.nextTick(() => {
-    ee.emit('foo', 'bar');
-    ee.emit('foo', 42);
-  });
+// Emit later on
+process.nextTick(() => {
+  ee.emit('foo', 'bar');
+  ee.emit('foo', 42);
+});
 
-  for await (const event of on(ee, 'foo')) {
-    // The execution of this inner block is synchronous and it
-    // processes one event at a time (even with await). Do not use
-    // if concurrent execution is required.
-    console.log(event); // prints ['bar'] [42]
-  }
-  // Unreachable here
-})();
+for await (const event of on(ee, 'foo')) {
+  // The execution of this inner block is synchronous and it
+  // processes one event at a time (even with await). Do not use
+  // if concurrent execution is required.
+  console.log(event); // prints ['bar'] [42]
+}
+// Unreachable here
 ```
 
 Returns an `AsyncIterator` that iterates `eventName` events. It will throw
@@ -2091,7 +2406,9 @@ composed of the emitted event arguments.
 An `AbortSignal` can be used to cancel waiting on events:
 
 ```js
-const { on, EventEmitter } = require('events');
+import { on, EventEmitter } from 'node:events';
+import process from 'node:process';
+
 const ac = new AbortController();
 
 (async () => {
@@ -2115,23 +2432,45 @@ const ac = new AbortController();
 process.nextTick(() => ac.abort());
 ```
 
+Use the `close` option to specify an array of event names that will end the iteration:
+
+```js
+import { on, EventEmitter } from 'node:events';
+import process from 'node:process';
+
+const ee = new EventEmitter();
+
+// Emit later on
+process.nextTick(() => {
+  ee.emit('foo', 'bar');
+  ee.emit('foo', 42);
+  ee.emit('close');
+});
+
+for await (const event of on(ee, 'foo', { close: ['close'] })) {
+  console.log(event); // prints ['bar'] [42]
+}
+// the loop will exit after 'close' is emitted
+console.log('done'); // prints 'done'
+```
+
 **`Since`**
 
 v13.6.0, v12.16.0
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `emitter` | `EventEmitter` | - |
-| `eventName` | `string` | The name of the event being listened for |
-| `options?` | `StaticEventEmitterOptions` | - |
+| Name | Type |
+| :------ | :------ |
+| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
+| `eventName` | `string` \| `symbol` |
+| `options?` | `StaticEventEmitterIteratorOptions` |
 
 #### Returns
 
-`AsyncIterableIterator`&lt;`any`\>
+`AsyncIterableIterator`&lt;`any`[]\>
 
-that iterates `eventName` events emitted by the `emitter`
+An `AsyncIterator` that iterates `eventName` events emitted by the `emitter`
 
 #### Inherited from
 
@@ -2139,7 +2478,29 @@ that iterates `eventName` events emitted by the `emitter`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:254
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:303
+
+▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `emitter` | `EventTarget` |
+| `eventName` | `string` |
+| `options?` | `StaticEventEmitterIteratorOptions` |
+
+#### Returns
+
+`AsyncIterableIterator`&lt;`any`[]\>
+
+#### Inherited from
+
+[FuelConnector](/api/Account/FuelConnector.md).[on](/api/Account/FuelConnector.md#on-1)
+
+#### Defined in
+
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:308
 
 ___
 
@@ -2156,45 +2517,42 @@ This method is intentionally generic and works with the web platform [EventTarge
 semantics and does not listen to the `'error'` event.
 
 ```js
-const { once, EventEmitter } = require('events');
+import { once, EventEmitter } from 'node:events';
+import process from 'node:process';
 
-async function run() {
-  const ee = new EventEmitter();
+const ee = new EventEmitter();
 
-  process.nextTick(() => {
-    ee.emit('myevent', 42);
-  });
+process.nextTick(() => {
+  ee.emit('myevent', 42);
+});
 
-  const [value] = await once(ee, 'myevent');
-  console.log(value);
+const [value] = await once(ee, 'myevent');
+console.log(value);
 
-  const err = new Error('kaboom');
-  process.nextTick(() => {
-    ee.emit('error', err);
-  });
+const err = new Error('kaboom');
+process.nextTick(() => {
+  ee.emit('error', err);
+});
 
-  try {
-    await once(ee, 'myevent');
-  } catch (err) {
-    console.log('error happened', err);
-  }
+try {
+  await once(ee, 'myevent');
+} catch (err) {
+  console.error('error happened', err);
 }
-
-run();
 ```
 
-The special handling of the `'error'` event is only used when `events.once()`is used to wait for another event. If `events.once()` is used to wait for the
+The special handling of the `'error'` event is only used when `events.once()` is used to wait for another event. If `events.once()` is used to wait for the
 '`error'` event itself, then it is treated as any other kind of event without
 special handling:
 
 ```js
-const { EventEmitter, once } = require('events');
+import { EventEmitter, once } from 'node:events';
 
 const ee = new EventEmitter();
 
 once(ee, 'error')
   .then(([err]) => console.log('ok', err.message))
-  .catch((err) => console.log('error', err.message));
+  .catch((err) => console.error('error', err.message));
 
 ee.emit('error', new Error('boom'));
 
@@ -2204,7 +2562,7 @@ ee.emit('error', new Error('boom'));
 An `AbortSignal` can be used to cancel waiting for the event:
 
 ```js
-const { EventEmitter, once } = require('events');
+import { EventEmitter, once } from 'node:events';
 
 const ee = new EventEmitter();
 const ac = new AbortController();
@@ -2235,7 +2593,7 @@ v11.13.0, v10.16.0
 
 | Name | Type |
 | :------ | :------ |
-| `emitter` | `_NodeEventTarget` |
+| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
 | `eventName` | `string` \| `symbol` |
 | `options?` | `StaticEventEmitterOptions` |
 
@@ -2249,7 +2607,7 @@ v11.13.0, v10.16.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:194
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:217
 
 ▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
 
@@ -2257,7 +2615,7 @@ node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:194
 
 | Name | Type |
 | :------ | :------ |
-| `emitter` | `_DOMEventTarget` |
+| `emitter` | `EventTarget` |
 | `eventName` | `string` |
 | `options?` | `StaticEventEmitterOptions` |
 
@@ -2271,7 +2629,7 @@ node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:194
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:195
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:222
 
 ___
 
@@ -2280,10 +2638,7 @@ ___
 ▸ **setMaxListeners**(`n?`, `...eventTargets`): `void`
 
 ```js
-const {
-  setMaxListeners,
-  EventEmitter
-} = require('events');
+import { setMaxListeners, EventEmitter } from 'node:events';
 
 const target = new EventTarget();
 const emitter = new EventEmitter();
@@ -2300,7 +2655,7 @@ v15.4.0
 | Name | Type | Description |
 | :------ | :------ | :------ |
 | `n?` | `number` | A non-negative number. The maximum number of listeners per `EventTarget` event. |
-| `...eventTargets` | (`EventEmitter` \| `_DOMEventTarget`)[] | - |
+| `...eventTargets` | (`EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\>)[] | - |
 
 #### Returns
 
@@ -2312,4 +2667,4 @@ v15.4.0
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@18.15.3/node_modules/@types/node/events.d.ts:317
+node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:402

@@ -34,7 +34,7 @@ AbstractProgram.account
 
 #### Defined in
 
-[index.ts:72](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packag/api/src/index.ts#L72)
+[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L73)
 
 ___
 
@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[index.ts:83](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packag/api/src/index.ts#L83)
+[index.ts:85](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L85)
 
 ___
 
@@ -64,13 +64,13 @@ AbstractProgram.interface
 
 #### Defined in
 
-[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packag/api/src/index.ts#L73)
+[index.ts:74](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L74)
 
 ___
 
 ### provider
 
-• `Abstract` **provider**: ``null`` \| { `sendTransaction`: (`transactionRequest`: `any`, `options?`: `any`) => `any`  }
+• `Abstract` **provider**: ``null`` \| { `getTransactionCost`: (`transactionRequest`: `any`, `options?`: `any`) => `Promise`&lt;`any`\> ; `sendTransaction`: (`transactionRequest`: `any`, `options?`: `any`) => `any`  }
 
 #### Inherited from
 
@@ -78,4 +78,4 @@ AbstractProgram.provider
 
 #### Defined in
 
-[index.ts:77](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packag/api/src/index.ts#L77)
+[index.ts:78](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L78)

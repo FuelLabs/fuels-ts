@@ -10,7 +10,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L11)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L11)
 
 ___
 
@@ -20,4 +20,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:10](https://github.com/FuelLabs/fuels-ts/blob/45c62a98f2272774585dbb6dc3037ebe3e275042/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L10)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:10](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L10)
