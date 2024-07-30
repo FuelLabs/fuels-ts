@@ -7,7 +7,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
+import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
@@ -25,12 +25,14 @@ import {
 } from '../test-utils';
 import { Wallet } from '../wallet';
 
+import type { Coin } from './coin';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
-import Provider, { BLOCKS_PAGE_SIZE_LIMIT, RESOURCES_PAGE_SIZE_LIMIT } from './provider';
-import type {
-  CoinTransactionRequestInput,
-  MessageTransactionRequestInput,
-} from './transaction-request';
+import Provider, {
+  BLOCKS_PAGE_SIZE_LIMIT,
+  DEFAULT_UTXOS_CACHE_TTL,
+  RESOURCES_PAGE_SIZE_LIMIT,
+} from './provider';
+import type { CoinTransactionRequestInput } from './transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
@@ -373,349 +375,170 @@ describe('Provider', () => {
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
-  it('can cacheUtxo [undefined]', async () => {
+  it('can cacheUtxo', async () => {
+    const ttl = 10000;
+    using launched = await setupTestProviderAndWallets({
+      providerOptions: {
+        cacheUtxo: ttl,
+      },
+    });
+    const { provider } = launched;
+
+    expect(provider.cache?.ttl).toEqual(ttl);
+  });
+
+  it('should use utxos cache by default', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(provider.cache).toEqual(undefined);
+    expect(provider.cache?.ttl).toEqual(DEFAULT_UTXOS_CACHE_TTL);
   });
 
-  it('can cacheUtxo [numerical]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 2500 } });
-    const { provider } = launched;
-
-    expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.ttl).toEqual(2_500);
-  });
-
-  it('can cacheUtxo [invalid numerical]', async () => {
+  it('should validate cacheUtxo value [invalid numerical]', async () => {
     const { error } = await safeExec(async () => {
       await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
     });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
-  it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-    const transactionRequest = new ScriptTransactionRequest();
-
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
-
-    expect(error).toBeTruthy();
-    expect(provider.cache).toEqual(undefined);
-  });
-
-  it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
+  it('should be possible to disable the cache by using -1', async () => {
     using launched = await setupTestProviderAndWallets({
       providerOptions: {
-        cacheUtxo: 1,
+        cacheUtxo: -1,
       },
     });
     const { provider } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput],
-    });
-
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
-
-    expect(error).toBeTruthy();
-    expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.getActiveData()).toStrictEqual([]);
+    expect(provider.cache).toBeUndefined();
   });
 
-  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
+  it('should cache UTXOs only when TX is successfully submitted', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 3,
+        amountPerCoin: 50_000,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
 
     const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
-    });
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const EXPECTED: BytesLike[] = coins.map((coin) => coin.id);
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    await wallet.transfer(receiver.address, 10_000);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    const cachedCoins = provider.cache?.getActiveData() || [];
+    expect(new Set(cachedCoins)).toEqual(new Set(EXPECTED));
 
     // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
+    const activeData = provider.cache?.getActiveData() || [];
+    activeData.forEach((coin) => {
+      provider.cache?.del(coin);
+    });
   });
 
-  it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
+  it('should NOT cache UTXOs when TX submission fails', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 2,
+        amountPerCoin: 20_000,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
 
     const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    const maxFee = 100_000;
+    const transferAmount = 10_000;
+
+    // No enough funds to pay for the TX fee
+    const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
+
+    const request = new ScriptTransactionRequest({
+      maxFee,
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
+    request.addResources(resources);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    await expectToThrowFuelError(
+      () => wallet.sendTransaction(request, { estimateTxDependencies: false }),
+      { code: ErrorCode.INVALID_REQUEST }
+    );
 
-    const owner = Address.fromRandom();
-    const resourcesToSpendMock = vi.fn(() =>
-      Promise.resolve({ coinsToSpend: [] })
-    ) as unknown as typeof provider.operations.getCoinsToSpend;
-    provider.operations.getCoinsToSpend = resourcesToSpendMock;
-    await provider.getResourcesToSpend(owner, []);
+    // No UTXOs were cached since the TX submission failed
+    const cachedCoins = provider.cache?.getActiveData() || [];
+    expect(cachedCoins).lengthOf(0);
+  });
 
-    expect(resourcesToSpendMock).toHaveBeenCalledWith({
-      owner: owner.toB256(),
-      queryPerAsset: [],
-      excludedIds: {
-        messages: [],
-        utxos: EXPECTED,
+  it('should ensure cached UTXOs are not being queried', async () => {
+    // Fund the wallet with 2 UTXOs
+    const totalUtxos = 2;
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: totalUtxos,
+        amountPerCoin: 100_000_000_000,
       },
     });
 
-    // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
-  });
-
-  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
-
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
     const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
-    });
+    const transferAmount = 10_000;
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const { coins } = await wallet.getCoins(baseAssetId);
+    expect(coins.length).toBe(totalUtxos);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    // One of the UTXOs will be cached as the TX submission was successful
+    await wallet.transfer(receiver.address, transferAmount);
 
-    // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
-  });
+    const cachedUtxos = provider.cache?.getActiveData() || [];
 
-  it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
+    // Ensure the cached UTXO is the only one in the cache
+    expect(cachedUtxos.length).toBe(1);
 
-    const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
-    });
+    // Determine the used UTXO and the unused UTXO
+    const usedUtxo = cachedUtxos[0];
+    const unusedUtxos = coins.filter((coin) => coin.id !== usedUtxo);
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    // Spy on the getCoinsToSpend method to ensure the cached UTXO is not being queried
+    const resourcesToSpendSpy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+    const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    // Ensure the returned UTXO is the unused UTXO
+    expect((<Coin>resources[0]).id).toEqual(unusedUtxos[0].id);
 
-    const owner = Address.fromRandom();
-    const resourcesToSpendMock = vi.fn(() =>
-      Promise.resolve({ coinsToSpend: [] })
-    ) as unknown as typeof provider.operations.getCoinsToSpend;
-    provider.operations.getCoinsToSpend = resourcesToSpendMock;
-    await provider.getResourcesToSpend(owner, [], {
-      utxos: [
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+    // Ensure the getCoinsToSpend query was called excluding the cached UTXO
+    expect(resourcesToSpendSpy).toHaveBeenCalledWith({
+      owner: wallet.address.toB256(),
+      queryPerAsset: [
+        {
+          assetId: baseAssetId,
+          amount: String(transferAmount),
+          max: undefined,
+        },
       ],
-    });
-
-    expect(resourcesToSpendMock).toHaveBeenCalledWith({
-      owner: owner.toB256(),
-      queryPerAsset: [],
       excludedIds: {
         messages: [],
-        utxos: [
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
-          EXPECTED[1],
-          EXPECTED[2],
-        ],
+        utxos: [usedUtxo],
       },
     });
-
-    // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
   });
 
   it('can getBlocks', async () => {
