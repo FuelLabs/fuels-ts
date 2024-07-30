@@ -8,7 +8,6 @@ import { WalletLocked, WalletUnlocked } from './wallets';
 
 /**
  * @group node
- * @group browser
  */
 describe('Wallet', () => {
   describe('WalletLocked.constructor', () => {
