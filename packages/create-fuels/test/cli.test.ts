@@ -40,11 +40,10 @@ describe('CLI', () => {
   });
 
   test('create-fuels extracts the template to the specified directory', async () => {
-    const args = generateArgv(paths.projectRoot);
+    const args = generateArgv(paths.projectRoot, undefined, paths.templateName);
 
     await runScaffoldCli({
       program: setupProgram(),
-      explicitTemplateName: paths.templateName,
       args,
       checkIfTemplateExists: false,
     });
@@ -58,11 +57,10 @@ describe('CLI', () => {
   });
 
   test('create-fuels checks the versions on the fuel-toolchain file', async () => {
-    const args = generateArgv(paths.projectRoot);
+    const args = generateArgv(paths.projectRoot, undefined, paths.templateName);
 
     await runScaffoldCli({
       program: setupProgram(),
-      explicitTemplateName: paths.templateName,
       args,
       checkIfTemplateExists: false,
     });
@@ -78,11 +76,10 @@ describe('CLI', () => {
   });
 
   test('should rewrite for the appropriate package manager', async () => {
-    const args = generateArgv(paths.projectRoot, 'bun');
+    const args = generateArgv(paths.projectRoot, 'bun', paths.templateName);
 
     await runScaffoldCli({
       program: setupProgram(),
-      explicitTemplateName: paths.templateName,
       args,
       checkIfTemplateExists: false,
     });
@@ -98,7 +95,7 @@ describe('CLI', () => {
   });
 
   test('create-fuels reports an error if the project directory already exists', async () => {
-    const args = generateArgv(paths.projectRoot);
+    const args = generateArgv(paths.projectRoot, undefined, paths.templateName);
 
     // Generate the project once
     mkdirSync(paths.projectRoot, { recursive: true });
@@ -106,7 +103,6 @@ describe('CLI', () => {
     // Generate the project again
     await runScaffoldCli({
       program: setupProgram(),
-      explicitTemplateName: paths.templateName,
       args,
       checkIfTemplateExists: false,
     }).catch((e) => {

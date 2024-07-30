@@ -41,19 +41,17 @@ const doesTemplateExist = (templateName: Template): boolean => templates.has(tem
 
 export const runScaffoldCli = async ({
   program,
-  explicitTemplateName, // Only to be used for testing. The actual template name is passed in as a CLI arg.
   args = process.argv,
   checkIfTemplateExists = true,
 }: {
   program: Command;
   args: string[];
-  explicitTemplateName?: string;
   checkIfTemplateExists?: boolean;
 }) => {
   program.parse(args);
   const opts = program.opts<ProgramOptions>();
 
-  const templateOfChoice = (explicitTemplateName ?? opts.template ?? defaultTemplate) as Template;
+  const templateOfChoice = (opts.template ?? defaultTemplate) as Template;
 
   if (!doesTemplateExist(templateOfChoice) && checkIfTemplateExists) {
     error(`Template '${templateOfChoice}' does not exist.`);
