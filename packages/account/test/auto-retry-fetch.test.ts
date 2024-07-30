@@ -4,7 +4,6 @@ import { setupTestProviderAndWallets } from '../src/test-utils';
 
 /**
  * @group node
- * @group browser
  */
 describe('Provider correctly', () => {
   afterEach(() => {

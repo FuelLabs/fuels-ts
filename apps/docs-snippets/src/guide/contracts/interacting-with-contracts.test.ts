@@ -8,7 +8,7 @@ import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Interacting with Contracts', () => {
   it('should successfully use "get" to read from the blockchain', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

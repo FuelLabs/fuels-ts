@@ -24,7 +24,6 @@ import type { GraphqlTransactionStatus, Operation } from './types';
 
 /**
  * @group node
- * @group browser
  */
 describe('TransactionSummary', () => {
   let gasCosts: GasCosts;

@@ -14,7 +14,7 @@ import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAb
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Multicalls', () => {
   it('should successfully submit multiple calls from the same contract function', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

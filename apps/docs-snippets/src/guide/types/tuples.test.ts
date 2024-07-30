@@ -8,7 +8,7 @@ import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex'
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Tuples Types', () => {
   it('should successfully echo tuple in a contract call', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

@@ -9,7 +9,7 @@ import InputOutputTypesAbiHex from '../../../test/typegen/contracts/InputOutputT
  * @group browser
  */
 
-describe(__filename, () => {
+describe('Contract Types', () => {
   it('should successfully call a function with an Address type input and output parameters', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

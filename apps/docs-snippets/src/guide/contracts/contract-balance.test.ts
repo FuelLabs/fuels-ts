@@ -9,7 +9,7 @@ import TransferToAddressHex from '../../../test/typegen/contracts/TransferToAddr
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Contract Balance', () => {
   it('should successfully get a contract balance', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

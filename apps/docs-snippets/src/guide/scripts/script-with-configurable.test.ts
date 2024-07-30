@@ -7,7 +7,7 @@ import { SumScriptAbi__factory } from '../../../test/typegen';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Script With Configurable', () => {
   it('should successfully sum set configurable constants with inputted value', async () => {
     using launched = await launchTestNode();
     const {

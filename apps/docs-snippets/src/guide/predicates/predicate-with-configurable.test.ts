@@ -8,8 +8,8 @@ import { WhitelistedAddressPredicateAbi__factory } from '../../../test/typegen';
  * @group browser
  */
 
-describe(__filename, () => {
-  it('should successfully tranfer to setted whitelisted address', async () => {
+describe('Predicate With Configurables', () => {
+  it('should successfully transfer to setted whitelisted address', async () => {
     using launched = await launchTestNode();
     const {
       provider,

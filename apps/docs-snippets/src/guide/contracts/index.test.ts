@@ -7,7 +7,7 @@ import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex'
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Contract echo values', () => {
   it('should successfully call contract and echo values', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

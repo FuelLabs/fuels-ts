@@ -12,7 +12,7 @@ import { defaultTxParams } from '../../utils';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Script Custom Transaction', () => {
   it('transfer multiple assets to a contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [{ deployer: EchoValuesAbi__factory, bytecode: EchoValuesAbiHex }],

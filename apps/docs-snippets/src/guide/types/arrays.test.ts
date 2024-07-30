@@ -8,7 +8,7 @@ import EchoU64ArrayAbiHex from '../../../test/typegen/contracts/EchoU64ArrayAbi.
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Arrays Types', () => {
   it('should successfully demonstrate typed arrays examples', () => {
     // #region arrays-1
     const numberArray: number[] = [1, 2, 3, 4, 5]; // in Sway: [u8; 5]

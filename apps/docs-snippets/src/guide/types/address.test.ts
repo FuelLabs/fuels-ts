@@ -5,7 +5,7 @@ import { launchTestNode } from 'fuels/test-utils';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Address Types', () => {
   it('should successfully create new address from bech32 string', () => {
     // #region address-2
     const ADDRESS_BECH32 = 'fuel1elnmzsav56dqnp95sx4e2pckq36cvae9ser44m5zlvgtwxw49fmqd7e42e';

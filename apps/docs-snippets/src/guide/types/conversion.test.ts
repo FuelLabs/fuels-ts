@@ -9,9 +9,8 @@ import {
 
 /**
  * @group node
- * @group browser
  */
-describe(__filename, () => {
+describe('Conversion Types', () => {
   const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
 
   it('converts between bech32 and b256 using address', () => {

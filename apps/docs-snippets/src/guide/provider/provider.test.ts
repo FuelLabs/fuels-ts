@@ -17,7 +17,6 @@ function decorateResponseWithCustomLogic(response: Response) {
 
 /**
  * @group node
- * @group browser
  */
 
 // #TODO: Do we want these to use launchTestNode ?

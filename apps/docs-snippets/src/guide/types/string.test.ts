@@ -7,7 +7,7 @@ import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex'
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('String Types', () => {
   it('should validate string', () => {
     // #region string-1
     // Sway str[2]

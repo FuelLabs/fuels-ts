@@ -9,7 +9,6 @@ import {
 
 /**
  * @group node
- * @group browser
  */
 describe(__filename, () => {
   const { abiContents: jsonAbi, binHexlified: binary } = getDocsSnippetsForcProject(

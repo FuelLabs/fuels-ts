@@ -8,7 +8,7 @@ import EchoEnumAbiHex from '../../../test/typegen/contracts/EchoEnumAbi.hex';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Enums Types', () => {
   it('should successfully echo a simple enum in a contract call', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

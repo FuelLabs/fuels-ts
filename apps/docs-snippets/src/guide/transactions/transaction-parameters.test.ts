@@ -10,7 +10,7 @@ import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Transaction Parameters', () => {
   it('validates all parameters types', () => {
     // #region transaction-parameters-1
     // #import { BN, bn };

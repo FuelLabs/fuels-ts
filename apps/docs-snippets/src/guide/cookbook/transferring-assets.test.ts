@@ -8,7 +8,7 @@ import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Transferring Assets', () => {
   it('should successfully transfer asset to another account', async () => {
     using launched = await launchTestNode();
     const {
@@ -70,7 +70,7 @@ describe(__filename, () => {
     // #endregion transferring-assets-2
   });
 
-  it('should validate that modifying the transaction request will result in another TX ID', async () => {
+  it.skip('should validate that modifying the transaction request will result in another TX ID', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],

@@ -8,7 +8,7 @@ import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Variable Outputs', () => {
   it('should successfully execute contract call with variable outputs', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

@@ -9,7 +9,7 @@ import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex'
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Add Transfer', () => {
   it('should successfully execute addTransfer for one recipient', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

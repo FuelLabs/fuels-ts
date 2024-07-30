@@ -60,7 +60,6 @@ type MyStruct = {
 
 /**
  * @group node
- * @group browser
  */
 describe('Script', () => {
   let scriptRequest: ScriptRequest<MyStruct, MyStruct>;

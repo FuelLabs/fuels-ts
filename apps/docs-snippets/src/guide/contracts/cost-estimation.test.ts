@@ -7,7 +7,7 @@ import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAb
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Cost Estimation', () => {
   it('should successfully get transaction cost estimate for a single contract call', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

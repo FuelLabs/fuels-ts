@@ -12,7 +12,7 @@ import EchoEmployeeDataVectorAbiHex from '../../../test/typegen/contracts/EchoEm
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Vector Types', () => {
   it('should successfully execute and validate contract call', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

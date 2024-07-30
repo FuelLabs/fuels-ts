@@ -7,7 +7,6 @@ import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 
 /**
  * @group node
- * @group browser
  */
 describe('Deploying contracts', () => {
   it('should successfully deploy and execute contract function', async () => {

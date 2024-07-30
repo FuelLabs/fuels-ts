@@ -8,7 +8,7 @@ import LiquidityPoolAbiHex from '../../../test/typegen/contracts/LiquidityPoolAb
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Deposit and Withdraw with Liquidity Pool', () => {
   it('deposit and withdraw cookbook guide', async () => {
     using launched = await launchTestNode();
 

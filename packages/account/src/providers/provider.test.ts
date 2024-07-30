@@ -52,7 +52,6 @@ const getCustomFetch =
 
 /**
  * @group node
- * @group browser
  */
 describe('Provider', () => {
   it('can getVersion()', async () => {

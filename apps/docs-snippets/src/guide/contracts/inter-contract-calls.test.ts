@@ -9,7 +9,7 @@ import TokenDepositorAbiHex from '../../../test/typegen/contracts/TokenDepositor
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Inter-Contract Calls', () => {
   it('should successfully make call to another contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

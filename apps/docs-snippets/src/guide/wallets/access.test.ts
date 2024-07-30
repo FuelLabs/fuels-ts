@@ -6,7 +6,7 @@ import { launchTestNode } from 'fuels/test-utils';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Wallet Access', () => {
   it('wallets', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;

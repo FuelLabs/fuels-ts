@@ -8,7 +8,7 @@ import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex'
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Bits512 Types', () => {
   it('should successfully call contract function and validate b512', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

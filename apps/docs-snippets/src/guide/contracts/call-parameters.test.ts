@@ -8,7 +8,7 @@ import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAb
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Call Parameters', () => {
   it('should successfully execute contract call with forwarded amount', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

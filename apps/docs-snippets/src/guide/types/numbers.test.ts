@@ -9,7 +9,7 @@ import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex'
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Numbers Types', () => {
   test('should successfully create new Sway-compatible BigNumber from a JavaScript number', () => {
     // #region numbers-docs-1
     // #context import { bn } from 'fuels';

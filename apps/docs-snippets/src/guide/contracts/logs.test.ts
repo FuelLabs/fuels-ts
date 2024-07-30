@@ -8,7 +8,7 @@ import LogValuesAbiHex from '../../../test/typegen/contracts/LogValuesAbi.hex';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Contract Logs', () => {
   it('should successfully execute contract call with forwarded amount', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [

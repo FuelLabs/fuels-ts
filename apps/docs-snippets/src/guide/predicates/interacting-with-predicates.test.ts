@@ -8,7 +8,7 @@ import { SimplePredicateAbi__factory } from '../../../test/typegen';
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('Interacting with Predicates', () => {
   const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
 
   async function createAndFundPredicate(
