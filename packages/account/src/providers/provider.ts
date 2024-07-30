@@ -568,10 +568,22 @@ Supported fuel-core version: ${supportedVersion}.`
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
           if (Array.isArray(graphQlResponse?.errors)) {
-            throw new FuelError(
-              FuelError.CODES.INVALID_REQUEST,
-              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
-            );
+            const filteredErrors = graphQlResponse.errors.filter((err: Error) => {
+              if (err.message.includes('historical view is not implemented for `MemoryStore`')) {
+                console.warn(
+                  'Historical view is not implemented for MemoryStore. Some features may not work as expected.'
+                );
+                return false; // Remove this error from the list
+              }
+              return true; // Keep all other errors
+            });
+
+            if (filteredErrors.length > 0) {
+              throw new FuelError(
+                FuelError.CODES.INVALID_REQUEST,
+                filteredErrors.map((err: Error) => err.message).join('\n\n')
+              );
+            }
           }
         }
       },
