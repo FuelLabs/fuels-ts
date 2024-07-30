@@ -33,8 +33,8 @@ export const getProjectNormalizedName = (params: IGetForcProjectParams) =>
 
 export const getProjectAbi = (params: IGetForcProjectParams) => {
   const projectPath = getProjectAbiPath(params);
-  const raw = JSON.parse(readFileSync(projectPath, 'utf-8'));
-  return raw;
+  const abiContents = JSON.parse(readFileSync(projectPath, 'utf-8'));
+  return abiContents;
 };
 
 export const getProjectStorageSlots = (params: IGetForcProjectParams) => {
