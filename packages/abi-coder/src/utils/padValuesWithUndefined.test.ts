@@ -9,6 +9,10 @@ const MOCK_INPUT: JsonAbiArgument = {
   typeArguments: [],
 };
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('padValuesWithUndefined', () => {
   it('should not pad values if they are already the same length as inputs', () => {
     const values: InputValue[] = [1, 2, 3];
