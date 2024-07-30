@@ -9,6 +9,7 @@ import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
 
+import type { ProviderOptions } from '../providers';
 import { Provider } from '../providers';
 import { Signer } from '../signer';
 import type { WalletUnlocked } from '../wallet';
@@ -327,14 +328,16 @@ export type LaunchNodeAndGetWalletsResult = Promise<{
  * */
 export const launchNodeAndGetWallets = async ({
   launchNodeOptions,
+  providerOptions,
   walletCount = 10,
 }: {
   launchNodeOptions?: Partial<LaunchNodeOptions>;
+  providerOptions?: Partial<ProviderOptions>;
   walletCount?: number;
 } = {}): LaunchNodeAndGetWalletsResult => {
   const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
 
-  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`, providerOptions);
   const wallets = await generateWallets(walletCount, provider);
 
   const cleanup = () => {

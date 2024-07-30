@@ -41,8 +41,8 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/each}}
 
 export type {{capitalizedName}}Configurables = Partial<{
-{{#each formattedConfigurables}}
-  {{configurableName}}: {{configurableType}};
+{{#each configurables}}
+  {{name}}: {{inputLabel}};
 {{/each}}
 }>;
 

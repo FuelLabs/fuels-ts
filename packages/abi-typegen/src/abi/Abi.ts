@@ -6,9 +6,10 @@ import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IType } from '../types/interfaces/IType';
 import type { JsonAbi } from '../types/interfaces/JsonAbi';
-import { parseConfigurables } from '../utils/parseConfigurables';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';
+
+import { Configurable } from './configurable/Configurable';
 
 /*
   Manages many instances of Types and Functions
@@ -88,7 +89,9 @@ export class Abi {
 
     const types = parseTypes({ rawAbiTypes });
     const functions = parseFunctions({ rawAbiFunctions, types });
-    const configurables = parseConfigurables({ rawAbiConfigurables, types });
+    const configurables = rawAbiConfigurables.map(
+      (rawAbiConfigurable) => new Configurable({ types, rawAbiConfigurable })
+    );
 
     return {
       types,

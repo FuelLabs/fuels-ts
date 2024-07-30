@@ -10,15 +10,15 @@ The `npm create fuels` command has several command-line options that you can use
 ::: code-group
 
 ```sh-vue [pnpm]
-pnpm create fuels@{{fuels}} [project-name] [options]
+pnpm create fuels@{{fuels}} --pnpm [project-name] [options]
 ```
 
 ```sh-vue [npm]
-npm create fuels@{{fuels}} -- [project-name] [options]
+npm create fuels@{{fuels}} -- --npm [project-name] [options]
 ```
 
 ```sh-vue [bun]
-bunx --bun create-fuels@{{fuels}} [project-name] [options]
+bunx --bun create-fuels@{{fuels}} --bun [project-name] [options]
 ```
 
 :::
