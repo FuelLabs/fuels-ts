@@ -52,7 +52,7 @@ async function getChangelogInfo(
 
   /**
    * There are special cases that follow a different flow.
-   * e.g. https://github.com/FuelLabs/fuels-ts/commit/16ee1bfe66733551d00f0a76c21e8a09ea33006f,
+   * e.g. https://github.com/FuelLabs/fuels-ts/commit/16ee1bfe66733551d00f0a76c21e8a09ea33006f.
    * They should be ignored in the changelogs.
    */
   if (title === undefined) {
