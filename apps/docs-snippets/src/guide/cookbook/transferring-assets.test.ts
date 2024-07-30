@@ -73,7 +73,7 @@ describe(__filename, () => {
   it('should validate that modifying the transaction request will result in another TX ID', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+        args: ['--poa-instant', 'false', '--poa-interval-period', '10ms'],
       },
     });
     const {
