@@ -10,7 +10,6 @@ import type { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
 import type { IFile } from './types/interfaces/IFile';
 import { collectBinFilepaths } from './utils/collectBinFilePaths';
 import { collectStorageSlotsFilepaths } from './utils/collectStorageSlotsFilePaths';
-import { transpileAbi } from './utils/transpile-abi';
 
 export interface IGenerateFilesParams {
   cwd: string;
@@ -53,10 +52,10 @@ export function runTypegen(params: IGenerateFilesParams) {
     Assembling file paths x contents
   */
   const abiFiles = filepaths.map((filepath) => {
-    const raw = readFileSync(filepath, 'utf-8');
+    const contents = readFileSync(filepath, 'utf-8');
     const abi: IFile = {
       path: filepath,
-      contents: raw,
+      contents,
     };
 
     return abi;
