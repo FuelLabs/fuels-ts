@@ -7,36 +7,65 @@ import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assembleContracts } from './assembleContracts';
 
+function mockAllDeps() {
+  vi.mock('../templates/common/common', async () => {
+    const mod = await vi.importActual('../templates/common/common');
+    return {
+      __esModule: true,
+      ...mod,
+      renderCommonTemplate: vi.fn(),
+    };
+  });
+
+  vi.mock('../templates/common/index', async () => {
+    const mod = await vi.importActual('../templates/common/index');
+    return {
+      __esModule: true,
+      ...mod,
+      renderIndexTemplate: vi.fn(),
+    };
+  });
+
+  vi.mock('../templates/contract/bytecode', async () => {
+    const mod = await vi.importActual('../templates/contract/bytecode');
+    return {
+      __esModule: true,
+      ...mod,
+      renderBytecodeTemplate: vi.fn(),
+    };
+  });
+
+  vi.mock('../templates/contract/factory', async () => {
+    const mod = await vi.importActual('../templates/contract/factory');
+    return {
+      __esModule: true,
+      ...mod,
+      renderFactoryTemplate: vi.fn(),
+    };
+  });
+
+  const renderCommonTemplate = vi.spyOn(renderCommonTemplateMod, 'renderCommonTemplate');
+  const renderFactoryTemplate = vi.spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate');
+  const renderIndexTemplate = vi.spyOn(renderIndexTemplateMod, 'renderIndexTemplate');
+  const renderBytecodeTemplate = vi.spyOn(renderBytecodeTemplateMod, 'renderBytecodeTemplate');
+
+  return {
+    renderCommonTemplate,
+    renderFactoryTemplate,
+    renderIndexTemplate,
+    renderBytecodeTemplate,
+  };
+}
+
+mockAllDeps();
+
 /**
  * @group node
  */
 describe('assembleContracts.ts', () => {
-  function mockAllDeps() {
+  beforeEach(() => {
     vi.resetAllMocks();
-
-    const renderCommonTemplate = vi
-      .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
-      .mockReturnValue('');
-
-    const renderFactoryTemplate = vi
-      .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
-      .mockReturnValue('');
-
-    const renderIndexTemplate = vi
-      .spyOn(renderIndexTemplateMod, 'renderIndexTemplate')
-      .mockReturnValue('');
-
-    const renderBytecodeTemplate = vi
-      .spyOn(renderBytecodeTemplateMod, 'renderBytecodeTemplate')
-      .mockReturnValue('');
-
-    return {
-      renderCommonTemplate,
-      renderFactoryTemplate,
-      renderIndexTemplate,
-      renderBytecodeTemplate,
-    };
-  }
+  });
 
   test('should assemble all files from Contract ABI ', () => {
     const {
