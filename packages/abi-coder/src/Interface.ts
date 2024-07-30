@@ -8,7 +8,7 @@ import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
 import { type EncodingVersion } from './utils/constants';
-import { findTypeById, getEncodingVersion } from './utils/json-abi';
+import { getEncodingVersion } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
@@ -57,7 +57,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
     return fragment.decodeOutput(data);
   }
 
-  decodeLog(data: BytesLike, logId: string): any {
+  decodeLog(logId: string, data: BytesLike): any {
     const loggedType = this.jsonAbi.loggedTypes.find((type) => type.logId === logId);
     if (!loggedType) {
       throw new FuelError(
