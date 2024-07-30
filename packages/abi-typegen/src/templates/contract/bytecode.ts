@@ -9,7 +9,7 @@ export function renderBytecodeTemplate(params: { hexlifiedBytecode: BytesLike })
   const text = renderHbsTemplate({
     template: bytecodeTemplate,
     data: {
-      hexlifiedBytecode: compressBytecode(params.hexlifiedBytecode),
+      compressedBytecode: compressBytecode(params.hexlifiedBytecode),
     },
   });
 
