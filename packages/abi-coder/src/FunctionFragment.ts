@@ -14,6 +14,7 @@ import type { JsonAbi, JsonAbiFunction, JsonAbiFunctionAttribute } from './types
 import type { EncodingVersion } from './utils/constants';
 import { getFunctionInputs } from './utils/getFunctionInputs';
 import { findFunctionByName, findNonVoidInputs, getEncodingVersion } from './utils/json-abi';
+import { padValuesWithUndefined } from './utils/padValuesWithUndefined';
 
 export class FunctionFragment<
   TAbi extends JsonAbi = JsonAbi,
@@ -58,18 +59,11 @@ export class FunctionFragment<
   encodeArguments(values: InputValue[]): Uint8Array {
     const inputs = getFunctionInputs({ jsonAbi: this.jsonAbi, inputs: this.jsonFn.inputs });
     const mandatoryInputLength = inputs.filter((i) => !i.isOptional).length;
-
     if (values.length < mandatoryInputLength) {
       throw new FuelError(
         ErrorCode.ABI_TYPES_AND_VALUES_MISMATCH,
         `Invalid number of arguments. Expected a minimum of ${mandatoryInputLength} arguments, received ${values.length}`
       );
-    }
-
-    const shallowCopyValues = values.slice();
-    if (Array.isArray(values) && this.jsonFn.inputs.length > values.length) {
-      shallowCopyValues.length = this.jsonFn.inputs.length;
-      shallowCopyValues.fill(undefined as unknown as InputValue, values.length);
     }
 
     const coders = this.jsonFn.inputs.map((t) =>
@@ -78,7 +72,8 @@ export class FunctionFragment<
       })
     );
 
-    return new TupleCoder(coders).encode(shallowCopyValues);
+    const argumentValues = padValuesWithUndefined(values, this.jsonFn.inputs);
+    return new TupleCoder(coders).encode(argumentValues);
   }
 
   decodeArguments(data: BytesLike) {
