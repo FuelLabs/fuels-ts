@@ -5,7 +5,7 @@
 export interface JsonAbi {
   readonly specVersion: string;
   readonly encodingVersion: string;
-  readonly programType: 'script' | 'contract' | 'predicate' | 'library';
+  readonly programType: string;
   readonly concreteTypes: readonly ConcreteType[];
   readonly metadataTypes: readonly MetadataType[];
   readonly functions: readonly AbiFunction[];
@@ -49,7 +49,12 @@ export interface AbiFunctionInput {
   readonly concreteTypeId: string;
 }
 
-export type AbiFunctionAttribute =
+export type AbiFunctionAttribute = {
+  readonly name: string;
+  readonly arguments?: string[];
+};
+
+type AbiFunctionAttributeTodo =
   | StorageAttr
   | PayableAttr
   | TestAttr

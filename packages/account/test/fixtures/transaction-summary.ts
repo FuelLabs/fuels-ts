@@ -1,3 +1,4 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { bn } from '@fuel-ts/math';
 import type {
   InputCoin,
@@ -258,7 +259,7 @@ export const MOCK_ABI_MAP: AbiMap = {
     loggedTypes: [],
     messagesTypes: [],
     configurables: [],
-  },
+  } as unknown as JsonAbi,
 };
 
 export const CONTRACT_CALL_ABI =

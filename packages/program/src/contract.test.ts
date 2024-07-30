@@ -35,7 +35,7 @@ const ABI: JsonAbi = {
   loggedTypes: [],
   messagesTypes: [],
   configurables: [],
-};
+} as unknown as JsonAbi;
 
 /**
  * @group node

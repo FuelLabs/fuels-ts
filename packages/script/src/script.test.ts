@@ -152,7 +152,7 @@ describe('Script', () => {
           offset: 44,
         },
       ],
-    };
+    } as unknown as JsonAbi;
 
     const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 

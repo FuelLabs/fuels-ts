@@ -36,4 +36,4 @@ export const predicateAbi: JsonAbi = {
   loggedTypes: [],
   messagesTypes: [],
   configurables: [],
-};
+} as unknown as JsonAbi;
