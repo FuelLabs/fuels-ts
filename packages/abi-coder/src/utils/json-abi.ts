@@ -3,7 +3,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { ResolvedAbiType } from '../ResolvedAbiType';
 import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
-import { ENCODING_V1, type EncodingVersion } from './constants';
+import { ENCODING_V1, VOID_TYPE, type EncodingVersion } from './constants';
 
 /**
  * Asserts that the encoding version is supported by the ABI coder.
@@ -63,17 +63,17 @@ export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
 };
 
 /**
- * Find all non-empty inputs in a list of inputs.
+ * Find all non-void inputs in a list of inputs.
  * i.e. all inputs that are not of the type '()'.
  *
  * @param abi - the JsonAbi object
  * @param inputs - the list of inputs to filter
- * @returns the list of non-empty inputs
+ * @returns the list of non-void inputs
  */
-export const findNonEmptyInputs = (
+export const findNonVoidInputs = (
   abi: JsonAbi,
   inputs: readonly JsonAbiArgument[]
-): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== '()');
+): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== VOID_TYPE);
 
 /**
  * Find the vector buffer argument in a list of components.

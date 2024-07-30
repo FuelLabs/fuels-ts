@@ -3,13 +3,12 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { OPTION_CODER_TYPE } from '../../utils/constants';
+import { OPTION_CODER_TYPE, VOID_TYPE } from '../../utils/constants';
 import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
 import { Coder } from './AbstractCoder';
 import { BigNumberCoder } from './BigNumberCoder';
-import type { TupleCoder } from './TupleCoder';
 
 export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
@@ -42,14 +41,9 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.#shouldValidateLength = !(this.type === OPTION_CODER_TYPE || hasNestedOption(coders));
   }
 
-  // We parse a native enum as an empty tuple, so we are looking for a tuple with no child coders.
-  // The '()' is enough but the child coders is a stricter check.
+  // Checks that we're handling a native enum that is of type void.
   #isNativeEnum(coder: Coder): boolean {
-    if (this.type !== OPTION_CODER_TYPE && coder.type === '()') {
-      const tupleCoder = coder as TupleCoder<[]>;
-      return tupleCoder.coders.length === 0;
-    }
-    return false;
+    return this.type !== OPTION_CODER_TYPE && coder.type === VOID_TYPE;
   }
 
   #encodeNativeEnum(value: string): Uint8Array {
