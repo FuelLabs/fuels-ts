@@ -3,7 +3,6 @@ import { join } from 'path';
 
 import { hexlify } from '../index';
 import { normalizeString } from '../utils/normalizeString';
-import { transpileAbi } from '../utils/transpileAbi';
 
 interface IGetForcProjectParams {
   projectDir: string;
@@ -35,8 +34,7 @@ export const getProjectNormalizedName = (params: IGetForcProjectParams) =>
 export const getProjectAbi = (params: IGetForcProjectParams) => {
   const projectPath = getProjectAbiPath(params);
   const raw = JSON.parse(readFileSync(projectPath, 'utf-8'));
-  const transpiled = transpileAbi(raw);
-  return transpiled;
+  return raw;
 };
 
 export const getProjectStorageSlots = (params: IGetForcProjectParams) => {

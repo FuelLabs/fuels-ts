@@ -2,7 +2,8 @@ export { Coder, InputValue, DecodedValue } from './encoding/coders/AbstractCoder
 export type { FunctionFragment } from './FunctionFragment';
 export * from './encoding/coders';
 export { Interface } from './Interface';
-export { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
+export type { JsonAbiArgument } from './types/JsonAbi';
+export type { JsonAbiNew as JsonAbi } from './types/JsonAbiNew';
 export {
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,
