@@ -1,9 +1,11 @@
+import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { VectorTypesScriptAbi__factory } from '../test/typegen';
 import { VectorTypesContractAbi__factory } from '../test/typegen/contracts';
 import VectorTypesContractAbiHex from '../test/typegen/contracts/VectorTypesContractAbi.hex';
+import type { Vec } from '../test/typegen/contracts/common';
 import { PredicateVectorTypesAbi__factory } from '../test/typegen/predicates';
 
 import { launchTestContract } from './utils';
@@ -15,7 +17,7 @@ const VEC_IN_VEC = [
 ];
 const STRUCT_IN_VEC = [{ a: 0 }, { a: 1 }];
 const VEC_IN_STRUCT = { a: [0, 1, 2] };
-const ARRAY_IN_VEC = [
+const ARRAY_IN_VEC: Vec<[BigNumberish, BigNumberish]> = [
   [0, 1],
   [0, 1],
 ];

@@ -35,4 +35,5 @@ export const defaultPredicateAbi: JsonAbi = {
   ],
   loggedTypes: [],
   configurables: [],
+  messagesTypes: [],
 };

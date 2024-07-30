@@ -1,8 +1,10 @@
-import type { BN, Message } from 'fuels';
+import type { BigNumberish, BN, Message } from 'fuels';
 import { arrayify, bn, toHex, Wallet, ScriptTransactionRequest, randomBytes, hexlify } from 'fuels';
 
 import { CoverageContractAbi__factory } from '../test/typegen/contracts';
+import { SmallEnumInput } from '../test/typegen/contracts/CoverageContractAbi';
 import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAbi.hex';
+import type { Option } from '../test/typegen/contracts/common';
 
 import { launchTestContract } from './utils';
 
@@ -245,7 +247,7 @@ describe('Coverage Contract', () => {
   it('should test tuple > 8 bytes variable type', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = [bn(RUST_U32_MAX).add(1), bn(RUST_U32_MAX).add(2)];
+    const INPUT: [BigNumberish, BigNumberish] = [bn(RUST_U32_MAX).add(1), bn(RUST_U32_MAX).add(2)];
     const { waitForResult } = await contractInstance.functions.echo_tuple_u64(INPUT).call();
     const { value } = await waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
@@ -254,7 +256,7 @@ describe('Coverage Contract', () => {
   it('should test tuple mixed variable type', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = [true, bn(RUST_U32_MAX).add(1)];
+    const INPUT: [boolean, BigNumberish] = [true, bn(RUST_U32_MAX).add(1)];
     const { waitForResult } = await contractInstance.functions.echo_tuple_mixed(INPUT).call();
     const { value } = await waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
@@ -314,7 +316,7 @@ describe('Coverage Contract', () => {
   it('should test enum < 8 byte variable type', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = SmallEnum.Empty;
+    const INPUT: SmallEnumInput = SmallEnumInput.Empty;
     const { waitForResult } = await contractInstance.functions.echo_enum_small(INPUT).call();
     const { value } = await waitForResult();
     expect(value).toStrictEqual(INPUT);
@@ -392,7 +394,9 @@ describe('Coverage Contract', () => {
     const INPUT = 1;
 
     // adds the three values together, but only first param value is supplied
-    const { waitForResult } = await contractInstance.functions.echo_option_three_u8(INPUT).call();
+    const { waitForResult } = await contractInstance.functions
+      .echo_option_three_u8(INPUT, undefined, undefined)
+      .call();
     const { value: Some } = await waitForResult();
 
     // we receive the result of adding whatever was passed
@@ -523,12 +527,12 @@ describe('Coverage Contract', () => {
       .echo_struct_vector_last([
         {
           foo: 1,
-          bar: 11337n,
+          bar: bn(11337),
           baz: '123456789',
         },
         {
           foo: 2,
-          bar: 21337n,
+          bar: bn(21337),
           baz: 'alphabet!',
         },
         last,
@@ -740,7 +744,7 @@ describe('Coverage Contract', () => {
 
     const { value } = await waitForResult();
 
-    expect(value.map((v: BN) => v.toHex())).toStrictEqual([
+    expect(value.map((v: BN | Option<BN>) => v?.toHex())).toStrictEqual([
       bn(3).toHex(),
       bn(450).toHex(),
       bn(202).toHex(),
@@ -813,7 +817,7 @@ describe('Coverage Contract', () => {
         contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
         contractInstance.functions.echo_u8(13),
         contractInstance.functions.echo_u8(23),
-        contractInstance.functions.echo_enum_small(SmallEnum.Empty),
+        contractInstance.functions.echo_enum_small(SmallEnumInput.Empty),
         contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
       .call();
