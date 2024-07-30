@@ -63,6 +63,6 @@ describe('Function.ts', () => {
     expect(func.name).toEqual(rawAbiFunction.name);
     expect(func.attributes.inputs).toEqual('Option<BigNumberish>');
     expect(func.attributes.output).toEqual('Option<number>');
-    expect(func.attributes.prefixedInputs).toEqual('x: Option<BigNumberish>');
+    expect(func.attributes.prefixedInputs).toEqual('x?: Option<BigNumberish>');
   });
 });
