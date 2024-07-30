@@ -11,7 +11,7 @@ import { join } from 'path';
 import { tryInstallFuelUp } from './lib';
 import { getPackageManager } from './lib/getPackageManager';
 import { getPackageVersion } from './lib/getPackageVersion';
-import { templates } from './lib/setupProgram';
+import { defaultTemplate, templates } from './lib/setupProgram';
 import type { Template, ProgramOptions } from './lib/setupProgram';
 import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
@@ -53,7 +53,7 @@ export const runScaffoldCli = async ({
   program.parse(args);
   const opts = program.opts<ProgramOptions>();
 
-  const templateOfChoice = (explicitTemplateName ?? opts.template ?? 'nextjs') as Template;
+  const templateOfChoice = (explicitTemplateName ?? opts.template ?? defaultTemplate) as Template;
 
   if (!doesTemplateExist(templateOfChoice) && checkIfTemplateExists) {
     error(`Template '${templateOfChoice}' does not exist.`);
