@@ -1,5 +1,37 @@
 # Change Log
 
+## 0.93.0
+
+### Patch Changes
+
+- c99f56b: docs: added connector documentation
+- Updated dependencies [6b3df9d]
+- Updated dependencies [ad0a081]
+- Updated dependencies [538d8b6]
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [c99f56b]
+- Updated dependencies [f3453b9]
+- Updated dependencies [5b670a5]
+- Updated dependencies [ad9adcd]
+- Updated dependencies [16ee1bf]
+  - @fuel-ts/abi-typegen@0.93.0
+  - @fuel-ts/account@0.93.0
+  - @fuel-ts/program@0.93.0
+  - @fuel-ts/contract@0.93.0
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/transactions@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/script@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/crypto@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/math@0.93.0
+  - @fuel-ts/merkle@0.93.0
+
 ## 0.92.1
 
 ### Patch Changes
