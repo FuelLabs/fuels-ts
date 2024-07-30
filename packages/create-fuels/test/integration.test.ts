@@ -41,7 +41,7 @@ describe('`create fuels` package integrity', () => {
   });
 
   afterEach(() => {
-    resetFilesystem(paths.root);
+    resetFilesystem(paths.projectRoot);
   });
 
   it.each(packageManagerCreateCommands)(
@@ -54,8 +54,8 @@ describe('`create fuels` package integrity', () => {
         `"fuels": "[0-9]+.[0-9]+.[0-9]+-${PUBLISHED_NPM_TAG}-[0-9]+"`
       );
 
-      const args = generateArgs(paths.root, packageManager).join(' ');
-      const expectedTemplateFiles = await getAllFiles(paths.sourceTemplate).then((files) =>
+      const args = generateArgs(paths.projectRoot, packageManager).join(' ');
+      const expectedTemplateFiles = await getAllFiles(paths.templateSource).then((files) =>
         filterOriginalTemplateFiles(files).filter(filterForcBuildFiles)
       );
 
@@ -66,9 +66,9 @@ describe('`create fuels` package integrity', () => {
       );
 
       expect(createFuelsError).toBeUndefined();
-      const actualTemplateFiles = await getAllFiles(paths.root);
+      const actualTemplateFiles = await getAllFiles(paths.projectRoot);
       expect(actualTemplateFiles.sort()).toEqual(expectedTemplateFiles.sort());
-      const packageJson = readFileSync(paths.packageJson, 'utf-8');
+      const packageJson = readFileSync(paths.projectPackageJson, 'utf-8');
       expect(packageJson).toEqual(expect.stringMatching(expectedPackageJsonInstall));
     },
     { timeout: 30000 }
