@@ -11,8 +11,9 @@ function setupContract() {
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('options', () => {
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
     using launched = await setupContract();
     const {

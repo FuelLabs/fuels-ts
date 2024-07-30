@@ -7,6 +7,7 @@ import type { Option } from '../test/typegen/contracts/common';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Void Tests', () => {
   const contractsConfigs = [

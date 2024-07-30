@@ -47,6 +47,7 @@ const jsonAbi: JsonAbi = {
 
 /**
  * @group node
+ * @group browser
  */
 describe.each(EMPTY_ABI_TYPES)(
   'getFunctionInputs.ts [empty=%s]',

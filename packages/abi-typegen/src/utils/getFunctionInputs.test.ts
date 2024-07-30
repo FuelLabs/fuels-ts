@@ -44,6 +44,7 @@ const types: Array<IType> = [nonEmptyType, voidAbiType, optionAbiType, debugOpti
 
 /**
  * @group node
+ * @group browser
  */
 describe.each(EMPTY_ABI_TYPES)(
   'getFunctionInputs.ts [empty=%s]',

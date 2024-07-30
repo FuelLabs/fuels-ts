@@ -2,6 +2,7 @@ import { VoidCoder } from './VoidCoder';
 
 /**
  * @group node
+ * @group browser
  */
 describe('VoidCoder', () => {
   it('should have properties', () => {
