@@ -1,5 +1,16 @@
 # @fuel-ts/errors
 
+## 0.93.0
+
+### Minor Changes
+
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- Updated dependencies [99794e4]
+  - @fuel-ts/versions@0.93.0
+
 ## 0.92.1
 
 ### Patch Changes
