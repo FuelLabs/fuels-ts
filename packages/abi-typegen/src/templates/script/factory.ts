@@ -31,7 +31,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 
   const { enums } = formatEnums({ types });
   const { structs } = formatStructs({ types });
-  const { imports } = formatImports({ types, baseMembers: ['type JsonAbi', 'Script', 'Account'] });
+  const { imports } = formatImports({ types, baseMembers: ['Script', 'Account'] });
   const { formattedConfigurables } = formatConfigurables({ configurables });
 
   const { prefixedInputs: inputs, output } = func.attributes;

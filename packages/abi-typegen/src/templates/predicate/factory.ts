@@ -33,7 +33,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: ['type JsonAbi', 'Predicate', 'Provider', 'InputValue'],
+    baseMembers: ['Predicate', 'Provider', 'InputValue'],
   });
   const { formattedConfigurables } = formatConfigurables({ configurables });
 
