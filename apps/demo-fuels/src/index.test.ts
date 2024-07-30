@@ -13,6 +13,7 @@ import bytecode from './sway-programs-api/contracts/SampleAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe('ExampleContract', () => {
   it('should return the input', async () => {
