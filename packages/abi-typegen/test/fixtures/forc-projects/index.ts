@@ -1,7 +1,9 @@
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { join } from 'path';
 
+import type { JsonAbi } from '../../../src';
 import type { JsonAbiNew } from '../../../src/types/interfaces/JsonAbiNew';
+import { transpileAbi } from '../../../src/utils/transpile-abi';
 
 export enum AbiTypegenProjectsEnum {
   ARRAY_OF_ENUMS = 'array-of-enums',
@@ -30,12 +32,20 @@ export enum AbiTypegenProjectsEnum {
   VECTOR_SIMPLE = 'vector-simple',
 }
 
-export const getTypegenForcProject = (
+export const getTypegenForcProject = <T extends boolean = false>(
   project: AbiTypegenProjectsEnum,
-  build: 'release' | 'debug' = 'release'
-) =>
-  getForcProject<JsonAbiNew>({
+  transpile: T = false as T
+) => {
+  const result = getForcProject<T extends true ? JsonAbi : JsonAbiNew>({
     projectDir: join(__dirname, project),
     projectName: project,
-    build,
+    build: 'release',
   });
+
+  if (transpile) {
+    // @ts-expect-error I now it's an error, this is just for tests
+    result.abiContents = transpileAbi(result.abiContents);
+  }
+
+  return result;
+};

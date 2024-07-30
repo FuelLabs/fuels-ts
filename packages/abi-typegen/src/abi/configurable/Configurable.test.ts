@@ -43,7 +43,7 @@ describe('Configurable.ts', () => {
 
   it('should get configurable declaration with type', () => {
     const { type, findType } = mockAllDeps();
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE, true);
 
     const { configurables } = project.abiContents;
 
