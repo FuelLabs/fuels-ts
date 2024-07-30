@@ -1,23 +1,21 @@
 import { launchTestNode } from 'fuels/test-utils';
 
 import { SumOptionU8Abi__factory } from '../../../test/typegen';
-import SumOptionU8AbiHex from '../../../test/typegen/contracts/SumOptionU8Abi.hex';
+import bytecode from '../../../test/typegen/contracts/SumOptionU8Abi.hex';
+
+function setupContract() {
+  return launchTestNode({
+    contractsConfigs: [{ deployer: SumOptionU8Abi__factory, bytecode }],
+  });
+}
 
 /**
  * @group node
  * @group browser
  */
-describe(__filename, () => {
+describe('options', () => {
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
-    using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: SumOptionU8Abi__factory,
-          bytecode: SumOptionU8AbiHex,
-        },
-      ],
-    });
-
+    using launched = await setupContract();
     const {
       contracts: [contract],
     } = launched;
@@ -37,15 +35,7 @@ describe(__filename, () => {
   });
 
   it('should successfully execute contract call to sum 2 option inputs (1 INPUT)', async () => {
-    using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: SumOptionU8Abi__factory,
-          bytecode: SumOptionU8AbiHex,
-        },
-      ],
-    });
-
+    using launched = await setupContract();
     const {
       contracts: [contract],
     } = launched;

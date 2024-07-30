@@ -54,7 +54,6 @@ describe('Configurable.ts', () => {
 
     expect(findType).toHaveBeenCalledTimes(1);
     expect(configurable.name).toEqual('FEE');
-    expect(configurable.type).toEqual(type);
-    expect(configurable.rawAbiConfigurable).toEqual(rawAbiConfigurable);
+    expect(configurable.inputLabel).toEqual('mockType');
   });
 });
