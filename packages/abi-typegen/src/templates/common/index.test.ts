@@ -16,7 +16,7 @@ import { renderIndexTemplate } from './index';
 describe('templates/index', () => {
   test('should render index template for contracts', () => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     // executing
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
@@ -29,7 +29,7 @@ describe('templates/index', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderIndexTemplate({ abis: [abi] });
+    const rendered = renderIndexTemplate({ abis: [abi], versions });
 
     // validating
     restore();
@@ -39,7 +39,7 @@ describe('templates/index', () => {
 
   test('should render index template for predicates', () => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     // executing
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
@@ -52,7 +52,7 @@ describe('templates/index', () => {
       programType: ProgramTypeEnum.PREDICATE,
     });
 
-    const rendered = renderIndexTemplate({ abis: [abi] });
+    const rendered = renderIndexTemplate({ abis: [abi], versions });
 
     // validating
     restore();

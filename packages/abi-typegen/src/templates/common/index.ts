@@ -1,17 +1,20 @@
+import type { BinaryVersions } from '@fuel-ts/versions';
+
 import type { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 import { renderHbsTemplate } from '../renderHbsTemplate';
 
 import indexTemplate from './index.hbs';
 
-export function renderIndexTemplate(params: { abis: Abi[] }) {
-  const { abis } = params;
+export function renderIndexTemplate(params: { abis: Abi[]; versions: BinaryVersions }) {
+  const { abis, versions } = params;
 
   const isGeneratingContracts = abis[0].programType === ProgramTypeEnum.CONTRACT;
   const isGeneratingPredicates = abis[0].programType === ProgramTypeEnum.PREDICATE;
 
   const text = renderHbsTemplate({
     template: indexTemplate,
+    versions,
     data: { abis, isGeneratingContracts, isGeneratingPredicates },
   });
 

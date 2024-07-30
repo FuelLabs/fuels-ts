@@ -13,13 +13,14 @@ import { renderBytecodeTemplate } from './bytecode';
 describe('templates/contract/bytecode', () => {
   test('should render bytecode template', () => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     // executing
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
 
     const rendered = renderBytecodeTemplate({
       hexlifiedBytecode: project.binHexlified,
+      versions,
     });
 
     // validating

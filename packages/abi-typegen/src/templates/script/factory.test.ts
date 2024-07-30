@@ -17,7 +17,7 @@ import { renderFactoryTemplate } from './factory';
  */
 describe('factory.ts', () => {
   test('should render factory template', () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const rawContents = project.abiContents;
@@ -30,7 +30,7 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    const rendered = renderFactoryTemplate({ abi, versions });
 
     restore();
 
@@ -38,7 +38,7 @@ describe('factory.ts', () => {
   });
 
   test('should render factory template with configurables', () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE);
     const rawContents = project.abiContents;
@@ -51,7 +51,7 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    const rendered = renderFactoryTemplate({ abi, versions });
 
     restore();
 
@@ -59,7 +59,7 @@ describe('factory.ts', () => {
   });
 
   test('should throw for invalid Script ABI', async () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const rawContents = project.abiContents;
@@ -76,7 +76,7 @@ describe('factory.ts', () => {
     });
 
     const { error } = await safeExec(() => {
-      renderFactoryTemplate({ abi });
+      renderFactoryTemplate({ abi, versions });
     });
 
     restore();

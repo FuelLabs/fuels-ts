@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BinaryVersions } from '@fuel-ts/versions';
 
 import { Abi } from './abi/Abi';
 import { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
@@ -17,8 +18,8 @@ export class AbiTypeGen {
   public readonly binFiles: IFile[];
   public readonly storageSlotsFiles: IFile[];
   public readonly outputDir: string;
-
   public readonly files: IFile[];
+  public readonly versions: BinaryVersions;
 
   constructor(params: {
     abiFiles: IFile[];
@@ -26,14 +27,16 @@ export class AbiTypeGen {
     storageSlotsFiles: IFile[];
     outputDir: string;
     programType: ProgramTypeEnum;
+    versions: BinaryVersions;
   }) {
-    const { abiFiles, binFiles, outputDir, programType, storageSlotsFiles } = params;
+    const { abiFiles, binFiles, outputDir, programType, storageSlotsFiles, versions } = params;
 
     this.outputDir = outputDir;
 
     this.abiFiles = abiFiles;
     this.binFiles = binFiles;
     this.storageSlotsFiles = storageSlotsFiles;
+    this.versions = versions;
 
     // Creates a `Abi` for each abi file
     this.abis = this.abiFiles.map((abiFile) => {
@@ -71,16 +74,16 @@ export class AbiTypeGen {
   }
 
   private getAssembledFiles(params: { programType: ProgramTypeEnum }): IFile[] {
-    const { abis, outputDir } = this;
+    const { abis, outputDir, versions } = this;
     const { programType } = params;
 
     switch (programType) {
       case ProgramTypeEnum.CONTRACT:
-        return assembleContracts({ abis, outputDir });
+        return assembleContracts({ abis, outputDir, versions });
       case ProgramTypeEnum.SCRIPT:
-        return assembleScripts({ abis, outputDir });
+        return assembleScripts({ abis, outputDir, versions });
       case ProgramTypeEnum.PREDICATE:
-        return assemblePredicates({ abis, outputDir });
+        return assemblePredicates({ abis, outputDir, versions });
       default:
         throw new FuelError(
           ErrorCode.INVALID_INPUT_PARAMETERS,

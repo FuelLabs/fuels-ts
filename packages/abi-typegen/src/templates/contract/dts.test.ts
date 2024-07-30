@@ -16,7 +16,7 @@ import { renderDtsTemplate } from './dts';
 describe('templates/dts', () => {
   test.each(['debug', 'release'])('should render dts template', (build) => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     // executing
     const project = getTypegenForcProject(
@@ -32,7 +32,7 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderDtsTemplate({ abi, versions });
 
     // validating
     restore();
@@ -41,7 +41,7 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template with configurable', () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL_WITH_CONFIGURABLE);
 
@@ -54,7 +54,7 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderDtsTemplate({ abi, versions });
 
     restore();
 
@@ -62,7 +62,7 @@ describe('templates/dts', () => {
   });
 
   test('should render dts template w/ custom common types', () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
     const { abiContents: rawContents } = project;
@@ -74,13 +74,13 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderDtsTemplate({ abi, versions });
     restore();
     expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
   });
 
   test('should render dts cross-referencing for identical structs', () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -91,13 +91,13 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderDtsTemplate({ abi, versions });
     restore();
     expect(rendered).toMatch(/export type StructBOutput<T> = StructBInput<T>;$/m);
   });
 
   test('should render dts cross-referencing for identical enums', () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -108,13 +108,13 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderDtsTemplate({ abi, versions });
     restore();
     expect(rendered).toMatch(/export type MyEnumOutput = MyEnumInput;$/m);
   });
 
   test('should not render same value for native identical enums', () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE);
     const { abiContents: rawContents } = project;
 
@@ -125,7 +125,7 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderDtsTemplate({ abi, versions });
     restore();
     expect(rendered).toMatch(
       /export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };$/m

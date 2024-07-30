@@ -1,3 +1,5 @@
+import type { BinaryVersions } from '@fuel-ts/versions';
+
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
 import { formatConfigurables } from '../utils/formatConfigurables';
@@ -7,8 +9,9 @@ import { formatStructs } from '../utils/formatStructs';
 
 import dtsTemplate from './dts.hbs';
 
-export function renderDtsTemplate(params: { abi: Abi }) {
-  const { name: capitalizedName, types, functions, commonTypesInUse, configurables } = params.abi;
+export function renderDtsTemplate(params: { abi: Abi; versions: BinaryVersions }) {
+  const { versions, abi } = params;
+  const { name: capitalizedName, types, functions, commonTypesInUse, configurables } = abi;
 
   /*
     First we format all attributes
@@ -46,6 +49,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
   */
   const text = renderHbsTemplate({
     template: dtsTemplate,
+    versions,
     data: {
       capitalizedName,
       commonTypesInUse: commonTypesInUse.join(', '),

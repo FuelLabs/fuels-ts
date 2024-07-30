@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BinaryVersions } from '@fuel-ts/versions';
 
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
@@ -9,8 +10,8 @@ import { formatStructs } from '../utils/formatStructs';
 
 import factoryTemplate from './factory.hbs';
 
-export function renderFactoryTemplate(params: { abi: Abi }) {
-  const { abi } = params;
+export function renderFactoryTemplate(params: { abi: Abi; versions: BinaryVersions }) {
+  const { abi, versions } = params;
 
   const { types, configurables } = abi;
 
@@ -41,6 +42,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
 
   const text = renderHbsTemplate({
     template: factoryTemplate,
+    versions,
     data: {
       inputs,
       output,

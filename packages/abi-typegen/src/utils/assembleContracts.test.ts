@@ -1,4 +1,5 @@
 import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
+import { mockVersions } from '../../test/utils/mockVersions';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderBytecodeTemplateMod from '../templates/contract/bytecode';
@@ -52,8 +53,9 @@ describe('assembleContracts.ts', () => {
       renderIndexTemplate,
       renderBytecodeTemplate,
     } = mockAllDeps();
+    const { versions } = mockVersions();
 
-    const files = assembleContracts({ abis, outputDir });
+    const files = assembleContracts({ abis, outputDir, versions });
 
     expect(files.length).toEqual(7); // 2x dts, 2x factories, 1x index, 2x hex.ts (no `common`)
 
@@ -77,8 +79,9 @@ describe('assembleContracts.ts', () => {
       renderIndexTemplate,
       renderBytecodeTemplate,
     } = mockAllDeps();
+    const { versions } = mockVersions();
 
-    const files = assembleContracts({ abis, outputDir });
+    const files = assembleContracts({ abis, outputDir, versions });
 
     expect(files.length).toEqual(8); // 2x dts, 2x factories, 1x index, 1x common, 2x hex.ts
 
