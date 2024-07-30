@@ -5,10 +5,11 @@ import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IType } from '../types/interfaces/IType';
-import type { JsonAbi } from '../types/interfaces/JsonAbi';
+import type { JsonAbiNew } from '../types/interfaces/JsonAbiNew';
 import { parseConfigurables } from '../utils/parseConfigurables';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';
+import { transpileAbi } from '../utils/transpile-abi';
 
 /*
   Manages many instances of Types and Functions
@@ -22,7 +23,7 @@ export class Abi {
 
   public commonTypesInUse: string[] = [];
 
-  public rawContents: JsonAbi;
+  public rawContents: JsonAbiNew;
   public hexlifiedBinContents?: string;
   public storageSlotsContents?: string;
 
@@ -33,7 +34,7 @@ export class Abi {
   constructor(params: {
     filepath: string;
     programType: ProgramTypeEnum;
-    rawContents: JsonAbi;
+    rawContents: JsonAbiNew;
     hexlifiedBinContents?: string;
     storageSlotsContents?: string;
     outputDir: string;
@@ -80,11 +81,12 @@ export class Abi {
   }
 
   parse() {
+    const transpiled = transpileAbi(this.rawContents);
     const {
       types: rawAbiTypes,
       functions: rawAbiFunctions,
       configurables: rawAbiConfigurables,
-    } = this.rawContents;
+    } = transpiled;
 
     const types = parseTypes({ rawAbiTypes });
     const functions = parseFunctions({ rawAbiFunctions, types });
