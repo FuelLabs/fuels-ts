@@ -121,7 +121,7 @@ const recreateInternalLinks = () => {
 
   const prefixReplacements: RegexReplacement[] = [
     // Prefix/Typedoc cleanups
-    { regex: 'classes', replacement: './' },
+    { regex: 'classes/', replacement: './' },
     { regex: 'interfaces/', replacement: './' },
     { regex: 'enumerations/', replacement: './' },
     { regex: '.././', replacement: './' },
