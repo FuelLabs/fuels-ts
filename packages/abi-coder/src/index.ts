@@ -3,7 +3,7 @@ export type { FunctionFragment } from './FunctionFragment';
 export * from './encoding/coders';
 export { Interface } from './Interface';
 export type { JsonAbiArgument } from './types/JsonAbi';
-export type { JsonAbiNew as JsonAbi } from './types/JsonAbiNew';
+export type { JsonAbi } from './types/JsonAbiNew';
 export {
   SCRIPT_FIXED_SIZE,
   INPUT_COIN_FIXED_SIZE,

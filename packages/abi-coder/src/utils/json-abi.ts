@@ -1,7 +1,7 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
 
 import { ENCODING_V1, type EncodingVersion } from './constants';
 
@@ -33,7 +33,7 @@ export const getEncodingVersion = (encoding?: string): EncodingVersion => {
  * @param name - the name of the function to find
  * @returns the JsonAbi function object
  */
-export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction => {
+export const findFunctionByName = (abi: JsonAbiOld, name: string): JsonAbiFunction => {
   const fn = abi.functions.find((f) => f.name === name);
   if (!fn) {
     throw new FuelError(
@@ -51,7 +51,7 @@ export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction 
  * @param typeId - the typeId of the type to find
  * @returns the JsonAbi type object
  */
-export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
+export const findTypeById = (abi: JsonAbiOld, typeId: number): JsonAbiType => {
   const type = abi.types.find((t) => t.typeId === typeId);
   if (!type) {
     throw new FuelError(
@@ -71,7 +71,7 @@ export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
  * @returns the list of non-empty inputs
  */
 export const findNonEmptyInputs = (
-  abi: JsonAbi,
+  abi: JsonAbiOld,
   inputs: readonly JsonAbiArgument[]
 ): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== '()');
 

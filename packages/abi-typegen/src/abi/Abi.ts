@@ -5,7 +5,7 @@ import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IType } from '../types/interfaces/IType';
-import type { JsonAbiNew } from '../types/interfaces/JsonAbiNew';
+import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
 import { parseConfigurables } from '../utils/parseConfigurables';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';
@@ -23,7 +23,7 @@ export class Abi {
 
   public commonTypesInUse: string[] = [];
 
-  public rawContents: JsonAbiNew;
+  public rawContents: JsonAbi;
   public hexlifiedBinContents?: string;
   public storageSlotsContents?: string;
 
@@ -34,7 +34,7 @@ export class Abi {
   constructor(params: {
     filepath: string;
     programType: ProgramTypeEnum;
-    rawContents: JsonAbiNew;
+    rawContents: JsonAbi;
     hexlifiedBinContents?: string;
     storageSlotsContents?: string;
     outputDir: string;

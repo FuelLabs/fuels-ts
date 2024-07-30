@@ -11,7 +11,7 @@ import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import { StdStringCoder } from './encoding/coders/StdStringCoder';
 import { TupleCoder } from './encoding/coders/TupleCoder';
 import type {
-  JsonAbi,
+  JsonAbiOld,
   JsonAbiArgument,
   JsonAbiFunction,
   JsonAbiFunctionAttribute,
@@ -26,7 +26,7 @@ import {
 } from './utils/json-abi';
 
 export class FunctionFragment<
-  TAbi extends JsonAbi = JsonAbi,
+  TAbi extends JsonAbiOld = JsonAbiOld,
   FnName extends TAbi['functions'][number]['name'] = string,
 > {
   readonly signature: string;
@@ -37,9 +37,9 @@ export class FunctionFragment<
   readonly jsonFn: JsonAbiFunction;
   readonly attributes: readonly JsonAbiFunctionAttribute[];
 
-  private readonly jsonAbi: JsonAbi;
+  private readonly jsonAbi: JsonAbiOld;
 
-  constructor(jsonAbi: JsonAbi, name: FnName) {
+  constructor(jsonAbi: JsonAbiOld, name: FnName) {
     this.jsonAbi = jsonAbi;
     this.jsonFn = findFunctionByName(this.jsonAbi, name);
 
@@ -52,7 +52,7 @@ export class FunctionFragment<
     this.attributes = this.jsonFn.attributes ?? [];
   }
 
-  private static getSignature(abi: JsonAbi, fn: JsonAbiFunction): string {
+  private static getSignature(abi: JsonAbiOld, fn: JsonAbiFunction): string {
     const inputsSignatures = fn.inputs.map((input) =>
       new ResolvedAbiType(abi, input).getSignature()
     );
@@ -88,7 +88,7 @@ export class FunctionFragment<
   private static verifyArgsAndInputsAlign(
     args: InputValue[],
     inputs: readonly JsonAbiArgument[],
-    abi: JsonAbi
+    abi: JsonAbiOld
   ) {
     if (args.length === inputs.length) {
       return;

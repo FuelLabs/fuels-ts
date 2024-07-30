@@ -6,8 +6,8 @@ import { arrayify } from '@fuel-ts/utils';
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
-import type { JsonAbi } from './types/JsonAbi';
-import type { Configurable, JsonAbiNew } from './types/JsonAbiNew';
+import type { JsonAbiOld } from './types/JsonAbi';
+import type { Configurable, JsonAbi } from './types/JsonAbiNew';
 import { type EncodingVersion } from './utils/constants';
 import { findTypeById, getEncodingVersion } from './utils/json-abi';
 import { transpileAbi } from './utils/transpile-abi';
@@ -15,11 +15,11 @@ import { transpileAbi } from './utils/transpile-abi';
 export class Interface {
   readonly functions!: Record<string, FunctionFragment>;
   readonly configurables: Record<string, Configurable>;
-  readonly jsonAbi: JsonAbiNew;
+  readonly jsonAbi: JsonAbi;
   readonly encoding: EncodingVersion;
-  private readonly jsonAbiOld: JsonAbi;
+  private readonly jsonAbiOld: JsonAbiOld;
 
-  constructor(jsonAbi: JsonAbiNew) {
+  constructor(jsonAbi: JsonAbi) {
     this.jsonAbi = jsonAbi;
     this.encoding = getEncodingVersion(jsonAbi.encodingVersion);
     this.jsonAbiOld = transpileAbi(jsonAbi);

@@ -4,8 +4,8 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import type { JsonAbi } from '../types/interfaces/JsonAbi';
-import type { JsonAbiNew } from '../types/interfaces/JsonAbiNew';
+import type { JsonAbiOld } from '../types/interfaces/JsonAbi';
+import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
 
 /**
  * This will transpile new ABIs to the old format.
@@ -18,7 +18,7 @@ import type { JsonAbiNew } from '../types/interfaces/JsonAbiNew';
  * The old format contains only:
  *    - `types`
  */
-export function transpileAbi(abi: JsonAbiNew): JsonAbi {
+export function transpileAbi(abi: JsonAbi): JsonAbiOld {
   // do not transpile older versions
   if (!abi.specVersion) {
     return abi;

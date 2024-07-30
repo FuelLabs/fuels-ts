@@ -2,7 +2,7 @@
  * Types for Fuel JSON ABI Format as defined on:
  * https://github.com/FuelLabs/fuel-specs/blob/master/src/abi/json-abi-format.md
  */
-export interface JsonAbiNew {
+export interface JsonAbi {
   readonly specVersion: string;
   readonly encodingVersion: string;
   readonly programType: 'script' | 'contract' | 'predicate' | 'library';
