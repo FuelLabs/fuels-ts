@@ -20,6 +20,7 @@ export default function ScriptExample() {
 
   useAsync(async () => {
     if (wallet) {
+      // Initialize script instance
       const script = TestScriptAbi__factory.createInstance(wallet);
       setScript(script);
     }
@@ -31,12 +32,19 @@ export default function ScriptExample() {
         return toast.error("Script not loaded");
       }
 
-      const { value } = await script.functions.main(bn(input)).call();
+      // Call the script with the input value
+      const { waitForResult } = await script.functions.main(bn(input)).call();
+      const { value } = await waitForResult();
 
       setResult(value.toString());
     } catch (error) {
       console.error(error);
-      toast.error("Error running script.");
+      toast.error(
+        <span>
+          Error running script. Please make sure your wallet has enough funds.
+          You can top it up using the <Link href="/faucet">faucet.</Link>
+        </span>,
+      );
     }
   };
 

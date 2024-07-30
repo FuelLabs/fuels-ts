@@ -11,7 +11,7 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT, DOCS_URL, Environments } from "@/lib";
+import { CURRENT_ENVIRONMENT, DOCS_URL, Environments, FAUCET_LINK } from "@/lib";
 
 // #region deploying-dapp-to-testnet-frontend-contract-id
 const contractId =
@@ -31,8 +31,11 @@ export default function Home() {
    */
   useAsync(async () => {
     if (wallet) {
+      // Create a new instance of the contract
       const testContract = TestContractAbi__factory.connect(contractId, wallet);
       setContract(testContract);
+
+      // Read the current value of the counter
       const { value } = await testContract.functions.get_count().get();
       setCounter(value.toNumber());
     }
@@ -46,11 +49,17 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        <span>
+          Your wallet does not have enough funds. Please top it up using the{" "}
+          <Link href={FAUCET_LINK} target='_blank'>faucet.</Link>
+        </span>,
       );
     }
 
+    // Call the increment_counter function on the contract
     const { waitForResult } = await contract.functions.increment_counter(bn(1)).call();
+
+    // Wait for the transaction to be mined, and then read the value returned
     const { value } = await waitForResult();
     setCounter(value.toNumber());
 
@@ -65,7 +74,10 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        <span>
+          Your wallet does not have enough funds. Please top it up using the{" "}
+          <Link href={FAUCET_LINK} target='_blank'>faucet.</Link>
+        </span>,
       );
     }
 

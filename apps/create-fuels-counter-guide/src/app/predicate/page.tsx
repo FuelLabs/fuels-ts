@@ -5,6 +5,7 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { FAUCET_LINK } from '@/lib';
 import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
@@ -26,6 +27,7 @@ export default function PredicateExample() {
   useAsync(async () => {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
+      // Initialize a new predicate instance
       const predicate = TestPredicateAbi__factory.createInstance(
         wallet.provider,
       );
@@ -40,21 +42,31 @@ export default function PredicateExample() {
   };
 
   const transferFundsToPredicate = async (amount: BN) => {
-    if (!predicate) {
-      return toast.error("Predicate not loaded");
+    try {
+      if (!predicate) {
+        return toast.error("Predicate not loaded");
+      }
+
+      if (!wallet) {
+        return toast.error("Wallet not loaded");
+      }
+
+      await wallet.transfer(predicate.address, amount, baseAssetId, {
+        gasLimit: 10_000,
+      });
+
+      await refreshBalances();
+
+      return toast.success("Funds transferred to predicate.");
+    } catch (e) {
+      console.error(e);
+      toast.error(
+        <span>
+          Failed to transfer funds. Please make sure your wallet has enough
+          funds. You can top it up using the <Link href={FAUCET_LINK} target="_blank">faucet.</Link>
+        </span>,
+      );
     }
-
-    if (!wallet) {
-      return toast.error("Wallet not loaded");
-    }
-
-    await wallet.transfer(predicate.address, amount, baseAssetId, {
-      gasLimit: 10_000,
-    });
-
-    await refreshBalances();
-
-    return toast.success("Funds transferred to predicate.");
   };
 
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {
@@ -63,6 +75,7 @@ export default function PredicateExample() {
         return toast.error("Wallet not loaded");
       }
 
+      // Initialize a new predicate instance with the entered pin
       const reInitializePredicate = TestPredicateAbi__factory.createInstance(
         wallet.provider,
         [bn(pin)],
@@ -72,6 +85,11 @@ export default function PredicateExample() {
         return toast.error("Failed to initialize predicate");
       }
 
+      /*
+        Try to 'unlock' the predicate and transfer the funds back to the wallet.
+        If the pin is correct, this transfer transaction will succeed.
+        If the pin is incorrect, this transaction will fail.
+       */
       const tx = await reInitializePredicate.transfer(
         wallet.address,
         amount,
@@ -107,7 +125,7 @@ export default function PredicateExample() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet."
+        <span>Your wallet does not have enough funds. Please top it up using the <Link href={FAUCET_LINK} target="_blank">faucet.</Link></span>
       );
     }
 
