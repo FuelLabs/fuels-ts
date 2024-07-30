@@ -1,5 +1,21 @@
 # @fuel-ts/abi-typegen
 
+## 0.93.0
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+- 5b670a5: fix: make properties of configurables optional in typegen
+- ad9adcd: fix: export interfaces in typegen
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+
 ## 0.92.1
 
 ### Patch Changes
