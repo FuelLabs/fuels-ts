@@ -26,7 +26,7 @@ export const setupProgram = () => {
     .option('--bun', 'Use bun to install dependencies')
     .option('--verbose', 'Enable verbose logging')
     .option('--no-install', 'Do not install dependencies')
-    .option('--template <template>', 'Specify a template to use')
+    .option('--template <template>', 'Specify a template to use', 'nextjs')
     .addHelpCommand()
     .showHelpAfterError(true);
   return program;
