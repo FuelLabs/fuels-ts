@@ -2,4 +2,4 @@
 "@fuel-ts/abi-typegen": patch
 ---
 
-fix: export interfaces in typegen
+fix: typegen generic configurables
