@@ -9,6 +9,7 @@ import {
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);

@@ -30,6 +30,7 @@ describe(__filename, () => {
     const value4 = [1, 2, 3];
 
     const { waitForResult } = await contract.functions
+      // #TODO: Argument of type 'number[]' is not assignable to parameter of type '[BigNumberish, BigNumberish, BigNumberish]'.
       .log_values(value1, value2, value3, value4)
       .call();
 

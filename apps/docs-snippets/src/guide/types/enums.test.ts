@@ -50,6 +50,7 @@ describe(__filename, () => {
     // #region enum-of-enums-3
     const enumParam = { UserError: 'InsufficientPermissions' };
 
+    // #TODO: Argument of type '{ StateError: string; }' is not assignable to parameter of type 'ErrorInput'.
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
@@ -73,6 +74,7 @@ describe(__filename, () => {
     // #region enum-of-enums-4
     const enumParam = { StateError: 'Completed' };
 
+    // #TODO: Argument of type '{ StateError: string; }' is not assignable to parameter of type 'ErrorInput'.
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
@@ -98,6 +100,7 @@ describe(__filename, () => {
     const emumValue: number = 1;
 
     await expectToThrowFuelError(
+      // #TODO: Argument of type 'number' is not assignable to parameter of type 'StateErrorInput'.
       () => contract.functions.echo_state_error_enum(emumValue).simulate(),
       new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
     );
@@ -148,6 +151,7 @@ describe(__filename, () => {
     const enumParam = { UnknownKey: 'Completed' };
 
     await expectToThrowFuelError(
+      // #TODO: Argument of type '{ UnknownKey: string; }' is not assignable to parameter of type 'ErrorInput'.
       () => contract.functions.echo_error_enum(enumParam).simulate(),
       new FuelError(
         FuelError.CODES.INVALID_DECODE_VALUE,

@@ -2,6 +2,7 @@ import { Address } from 'fuels';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   it('should successfully generate a bech32 address', () => {

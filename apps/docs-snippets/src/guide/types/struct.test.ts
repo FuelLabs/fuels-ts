@@ -1,5 +1,6 @@
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   it('should successfully validate struct representation', () => {

@@ -3,6 +3,7 @@ import { arrayify, hexlify, randomBytes } from 'fuels';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   it('should successfully generate and convert byte32 to hexlified string', () => {

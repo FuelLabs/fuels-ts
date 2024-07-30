@@ -3,6 +3,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe(__filename, () => {
   it('should successfully create new address from bech32 string', () => {
