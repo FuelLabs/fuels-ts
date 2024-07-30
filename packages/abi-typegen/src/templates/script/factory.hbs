@@ -51,7 +51,7 @@ export type {{capitalizedName}}Configurables = Partial<{
 }>;
 {{/if}}
 
-const _abi = {{abiJsonString}}
+const _abi = {{abiJsonString}} as JsonAbi;
 
 const _bin = '{{hexlifiedBinString}}'
 
