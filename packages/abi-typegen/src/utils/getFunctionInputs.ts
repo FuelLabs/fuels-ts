@@ -5,34 +5,24 @@ import type { JsonAbiArgument } from '../types/interfaces/JsonAbi';
 
 import { findType } from './findType';
 
-export type ArgumentWithMetadata<TArg extends JsonAbiArgument = JsonAbiArgument> = TArg & {
+export type FunctionInput<TArg extends JsonAbiArgument = JsonAbiArgument> = TArg & {
   isOptional: boolean;
 };
 
 export const getFunctionInputs = (params: {
   types: IType[];
   inputs: readonly JsonAbiArgument[];
-}): Array<ArgumentWithMetadata> => {
-  let inMandatoryRegion = false;
-  const inputs = structuredClone(params.inputs);
+}): Array<FunctionInput> => {
+  const { types, inputs } = params;
+  let isMandatory = false;
 
-  return (inputs as Array<JsonAbiArgument>)
-    .reverse()
-    .map((input) => {
-      if (inMandatoryRegion) {
-        return { ...input, isOptional: false };
-      }
+  return inputs.reduceRight((result, input) => {
+    const type = findType({ types, typeId: input.type });
+    const isTypeMandatory =
+      !EmptyType.isSuitableFor({ type: type.rawAbiType.type }) &&
+      !OptionType.isSuitableFor({ type: type.rawAbiType.type });
 
-      const type = findType({ types: params.types, typeId: input.type });
-      if (
-        EmptyType.isSuitableFor({ type: type.rawAbiType.type }) ||
-        OptionType.isSuitableFor({ type: type.rawAbiType.type })
-      ) {
-        return { ...input, isOptional: true };
-      }
-
-      inMandatoryRegion = true;
-      return { ...input, isOptional: false };
-    })
-    .reverse();
+    isMandatory = isMandatory || isTypeMandatory;
+    return [{ ...input, isOptional: !isMandatory }, ...result];
+  }, [] as FunctionInput[]);
 };
