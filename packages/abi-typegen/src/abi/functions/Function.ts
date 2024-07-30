@@ -1,8 +1,8 @@
 import type { IFunction, JsonAbiFunction, IFunctionAttributes } from '../../index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
-import { findType } from '../../utils/findType';
 import { getFunctionInputs } from '../../utils/getFunctionInputs';
+import { resolveInputLabel } from '../../utils/getTypeDeclaration';
 import { parseTypeArguments } from '../../utils/parseTypeArguments';
 
 export class Function implements IFunction {
@@ -31,26 +31,11 @@ export class Function implements IFunction {
       ({ isOptional, ...input }) => {
         const { name, type: typeId, typeArguments } = input;
 
-        const type = findType({ types, typeId });
-
-        let typeDecl: string;
-        const optionalSuffix = isOptional ? '?' : '';
-
-        if (typeArguments) {
-          // recursively process child `typeArguments`
-          typeDecl = parseTypeArguments({
-            types,
-            target: TargetEnum.INPUT,
-            parentTypeId: typeId,
-            typeArguments,
-          });
-        } else {
-          // or just collect type declaration
-          typeDecl = type.attributes.inputLabel;
-        }
+        const typeDecl = resolveInputLabel(types, typeId, typeArguments);
 
         // assemble it in `[key: string]: <Type>` fashion
         if (shouldPrefixParams) {
+          const optionalSuffix = isOptional ? '?' : '';
           return `${name}${optionalSuffix}: ${typeDecl}`;
         }
 
