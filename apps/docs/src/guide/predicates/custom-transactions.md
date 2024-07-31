@@ -4,7 +4,7 @@ Utilizing predicate logic unlocks a wide range of possibilities for your dApps a
 
 Custom transactions can be shaped via a `ScriptTransactionRequest` instance. For more information on crafting custom transactions and the methods available to them, please refer to the [Transaction Request](../transactions/transaction-request.md) guide.
 
-However this guide will demonstrate using a predicate in a custom transaction. Consider the following predicate, where a configurable pin must be used to validate the predicate and unlock the funds:
+However, this guide will demonstrate how to use a predicate in a custom transaction. Consider the following predicate, where a configurable pin must be used to validate the predicate and unlock the funds:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/configurable-pin/src/main.sw#predicate-with-configurable-pin-1{rust:line-numbers}
 
