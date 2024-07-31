@@ -735,20 +735,4 @@ describe('Abi interface', () => {
       });
     });
   });
-
-  describe('abi types', () => {
-    it('should return the correct type when it exists', () => {
-      const abiType = exhaustiveExamplesInterface.getTypeById(72);
-      expect(abiType.type).toEqual('()');
-      expect(abiType.components).toBeDefined();
-      expect(abiType.typeParameters).toBeNull();
-    });
-
-    it('should throw an error when type does not exist', () => {
-      const id = 999;
-      expect(() => exhaustiveExamplesInterface.getTypeById(id)).toThrowError(
-        `Type with typeId '${id}' doesn't exist in the ABI.`
-      );
-    });
-  });
 });

@@ -88,10 +88,6 @@ export class Interface {
     });
   }
 
-  getTypeById(typeId: number) {
-    return findTypeById(this.jsonAbiOld, typeId);
-  }
-
   private convertConcreteTypeIdToJsonArgument(concreteTypeId: string): JsonAbiArgument {
     const type = this.jsonAbiOld.types.find(
       (t) => t.concreteTypeId === concreteTypeId
