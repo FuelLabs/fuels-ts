@@ -1,9 +1,9 @@
 import type { IFunction, JsonAbiFunction, IFunctionAttributes } from '../../index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import type { IType } from '../../types/interfaces/IType';
-import { findType } from '../../utils/findType';
+import { getFunctionInputs } from '../../utils/getFunctionInputs';
+import { resolveInputLabel } from '../../utils/getTypeDeclaration';
 import { parseTypeArguments } from '../../utils/parseTypeArguments';
-import { EmptyType } from '../types/EmptyType';
 
 export class Function implements IFunction {
   public name: string;
@@ -26,39 +26,22 @@ export class Function implements IFunction {
   bundleInputTypes(shouldPrefixParams: boolean = false) {
     const { types } = this;
 
-    // loop through all inputs
-    const inputs = this.rawAbiFunction.inputs
-      .filter((input) => {
-        const type = findType({ types, typeId: input.type });
-        return type.rawAbiType.type !== EmptyType.swayType;
-      })
-      .map((input) => {
+    // loop through all mandatory inputs
+    const inputs = getFunctionInputs({ types, inputs: this.rawAbiFunction.inputs }).map(
+      ({ isOptional, ...input }) => {
         const { name, type: typeId, typeArguments } = input;
 
-        const type = findType({ types, typeId });
-
-        let typeDecl: string;
-
-        if (typeArguments) {
-          // recursively process child `typeArguments`
-          typeDecl = parseTypeArguments({
-            types,
-            target: TargetEnum.INPUT,
-            parentTypeId: typeId,
-            typeArguments,
-          });
-        } else {
-          // or just collect type declaration
-          typeDecl = type.attributes.inputLabel;
-        }
+        const typeDecl = resolveInputLabel(types, typeId, typeArguments);
 
         // assemble it in `[key: string]: <Type>` fashion
         if (shouldPrefixParams) {
-          return `${name}: ${typeDecl}`;
+          const optionalSuffix = isOptional ? '?' : '';
+          return `${name}${optionalSuffix}: ${typeDecl}`;
         }
 
         return typeDecl;
-      });
+      }
+    );
 
     return inputs.join(', ');
   }
