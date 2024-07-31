@@ -1,4 +1,3 @@
-import { hash } from '@fuel-ts/hasher';
 import type { BN } from '@fuel-ts/math';
 import type { TransactionBlob } from '@fuel-ts/transactions';
 
@@ -10,6 +9,8 @@ import type { BaseTransactionRequestLike } from './transaction-request';
 import { BaseTransactionRequest, TransactionType } from './transaction-request';
 
 export interface BlobTransactionRequestLike extends BaseTransactionRequestLike {
+  /** Blob ID */
+  blobId: string;
   /** Witness index of contract bytecode to create */
   witnessIndex?: number;
 }
@@ -24,6 +25,8 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
 
   /** Type of the transaction */
   type = TransactionType.Blob as const;
+  /** Blob ID */
+  blobId: string;
   /** Witness index of contract bytecode to create */
   witnessIndex: number;
 
@@ -32,8 +35,9 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
    *
    * @param blobTransactionRequestLike - The initial values for the instance
    */
-  constructor({ witnessIndex, ...rest }: BlobTransactionRequestLike) {
+  constructor({ witnessIndex, blobId, ...rest }: BlobTransactionRequestLike) {
     super(rest);
+    this.blobId = blobId;
     this.witnessIndex = witnessIndex ?? 0;
   }
 
@@ -49,11 +53,11 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
     }
 
     const baseTransaction = this.getBaseTransaction();
-    const witnessIndex = this.witnessIndex;
+    const { witnessIndex, blobId } = this;
     return {
       type: TransactionType.Blob,
       ...baseTransaction,
-      blobId: hash(this.witnesses[witnessIndex]),
+      blobId,
       witnessIndex,
     };
   }
@@ -73,6 +77,7 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
     return calculateMetadataGasForTxBlob({
       gasCosts,
       txBytesSize: this.byteSize(),
+      witnessBytesSize: this.witnesses[this.witnessIndex].length,
     });
   }
 }

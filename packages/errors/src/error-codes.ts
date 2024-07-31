@@ -73,6 +73,7 @@ export enum ErrorCode {
   DUPLICATED_POLICY = 'duplicated-policy',
   TRANSACTION_SQUEEZED_OUT = 'transaction-squeezed-out',
   CONTRACT_SIZE_EXCEEDS_LIMIT = 'contract-size-exceeds-limit',
+  BLOB_ID_ALREADY_UPLOADED = 'blob-id-already-uploaded',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',

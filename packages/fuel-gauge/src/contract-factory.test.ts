@@ -3,7 +3,16 @@ import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { DeployContractOptions } from 'fuels';
-import { BN, bn, toHex, Interface, ContractFactory, LOCAL_NETWORK_URL, Provider } from 'fuels';
+import {
+  BN,
+  bn,
+  toHex,
+  Interface,
+  ContractFactory,
+  LOCAL_NETWORK_URL,
+  Provider,
+  assets,
+} from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import type { LargeContractAbi } from '../test/typegen/contracts';
@@ -278,9 +287,24 @@ describe('Contract Factory', () => {
     'should deploy contracts greater than MAX_CONTRACT_SIZE via a loader contract',
     async () => {
       // USE TEST NODE
-      const provider = await Provider.create(LOCAL_NETWORK_URL);
-      const baseAssetId = provider.getBaseAssetId();
-      const wallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        },
+        providerOptions: {
+          cacheUtxo: -1,
+        },
+      });
+
+      const {
+        wallets: [wallet],
+        provider,
+      } = launched;
+
+      // USING NODE
+      // const provider = await Provider.create(LOCAL_NETWORK_URL, { cacheUtxo: -1 });
+      // const baseAssetId = provider.getBaseAssetId();
+      // const wallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
 
       const salt = new Uint8Array([
         166, 23, 175, 50, 185, 247, 229, 160, 32, 86, 191, 57, 44, 165, 193, 78, 134, 144, 54, 219,
@@ -300,6 +324,6 @@ describe('Contract Factory', () => {
       const { value } = await call.waitForResult();
       expect(value).toBe(1001);
     },
-    { timeout: 20000 }
+    { timeout: 60000 }
   );
 });

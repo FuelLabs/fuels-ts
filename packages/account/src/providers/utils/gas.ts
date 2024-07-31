@@ -2,6 +2,7 @@ import { bn } from '@fuel-ts/math';
 import type { BN, BNInput } from '@fuel-ts/math';
 import { ReceiptType, type Input } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
+import { blob } from 'stream/consumers';
 
 import type {
   GqlDependentCost,
@@ -103,6 +104,7 @@ export interface IGetMaxGasParams {
   gasPerByte: BN;
   minGas: BN;
   gasLimit?: BN;
+  blobSize?: BN;
   maxGasPerTx: BN;
 }
 
@@ -161,11 +163,15 @@ export function calculateMetadataGasForTxScript({
 export function calculateMetadataGasForTxBlob({
   gasCosts,
   txBytesSize,
+  witnessBytesSize,
 }: {
   gasCosts: GasCosts;
   txBytesSize: number;
+  witnessBytesSize: number;
 }) {
-  return resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+  const txId = resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+  const blobLen = resolveGasDependentCosts(witnessBytesSize, gasCosts.s256);
+  return txId.add(blobLen);
 }
 
 export interface CalculateGasFeeParams {

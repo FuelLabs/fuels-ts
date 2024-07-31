@@ -15,6 +15,7 @@ import {
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { hash } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
@@ -159,6 +160,7 @@ export default class ContractFactory {
   blobTransactionRequest(options: { blobBytecode: Uint8Array } & DeployContractOptions) {
     const { blobBytecode } = options;
     return new BlobTransactionRequest({
+      blobId: hash(blobBytecode),
       witnessIndex: 0,
       witnesses: [blobBytecode],
       ...options,
@@ -257,24 +259,35 @@ export default class ContractFactory {
 
     // Deploy the chunks as blobs
     for (const { id, bytecode } of chunks) {
-      const blobRequest = new BlobTransactionRequest({
-        witnessIndex: 0,
-        witnesses: [bytecode],
+      const blobRequest = this.blobTransactionRequest({
+        blobBytecode: bytecode,
+        ...deployContractOptions,
       });
+
+      chunks[id].blobId = blobRequest.blobId;
 
       const fundedBlobRequest = await this.fundTransactionRequest(
         blobRequest,
         deployContractOptions
       );
 
-      const check = await account.sendTransaction(fundedBlobRequest);
-      const result = await check.waitForResult();
+      let result: TransactionResult<TransactionType.Blob>;
+
+      try {
+        const blobTx = await account.sendTransaction(fundedBlobRequest);
+        result = await blobTx.waitForResult();
+      } catch (err: unknown) {
+        if ((<FuelError>err).code === ErrorCode.BLOB_ID_ALREADY_UPLOADED) {
+          // eslint-disable-next-line no-continue
+          continue;
+        }
+
+        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+      }
 
       if (!result.status || result.status !== TransactionStatus.success) {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
-
-      chunks[id].blobId = result.transaction.blobId;
     }
 
     // Get the loader bytecode

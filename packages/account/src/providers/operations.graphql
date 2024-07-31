@@ -323,7 +323,6 @@ fragment GasCostsFragment on GasCosts {
   divi
   ecr1
   eck1
-  ed19
   eq
   exp
   expi
@@ -398,6 +397,12 @@ fragment GasCostsFragment on GasCosts {
   alocDependentCost {
     ...DependentCostFragment
   }
+  bldd {
+    ...DependentCostFragment
+  }
+  bsiz {
+    ...DependentCostFragment
+  }
   cfe {
     ...DependentCostFragment
   }
@@ -414,6 +419,9 @@ fragment GasCostsFragment on GasCosts {
     ...DependentCostFragment
   }
   csiz {
+    ...DependentCostFragment
+  }
+  ed19 {
     ...DependentCostFragment
   }
   k256 {
