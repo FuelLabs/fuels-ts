@@ -89,7 +89,8 @@ describe('Advanced Logging', () => {
 
     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
     try {
-      await invocation.call();
+      const { waitForResult } = await invocation.call();
+      await waitForResult();
 
       throw new Error('it should have thrown');
     } catch (error) {

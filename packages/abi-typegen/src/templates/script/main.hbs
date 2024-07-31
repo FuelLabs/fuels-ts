@@ -43,10 +43,10 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 export type {{capitalizedName}}Inputs = [{{inputs}}];
 export type {{capitalizedName}}Output = {{output}};
 
-{{#if formattedConfigurables}}
+{{#if configurables}}
 export type {{capitalizedName}}Configurables = Partial<{
-{{#each formattedConfigurables}}
-  {{configurableName}}: {{configurableType}};
+{{#each configurables}}
+  {{name}}: {{inputLabel}};
 {{/each}}
 }>;
 {{/if}}

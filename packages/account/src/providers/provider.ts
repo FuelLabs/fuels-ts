@@ -9,7 +9,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
@@ -65,6 +65,7 @@ const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
+export const DEFAULT_UTXOS_CACHE_TTL = 20_000; // 20 seconds
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -355,15 +356,7 @@ export type ProviderCallParams = UTXOValidationParams & EstimateTransactionParam
 /**
  * Provider Send transaction params
  */
-export type ProviderSendTxParams = EstimateTransactionParams & {
-  /**
-   * By default, the promise will resolve immediately after the transaction is submitted.
-   *
-   * If set to true, the promise will resolve only when the transaction changes status
-   * from `SubmittedStatus` to one of `SuccessStatus`, `FailureStatus` or `SqueezedOutStatus`.
-   */
-  awaitExecution?: boolean;
-};
+export type ProviderSendTxParams = EstimateTransactionParams;
 
 /**
  * URL - Consensus Params mapping.
@@ -434,9 +427,18 @@ export default class Provider {
   ) {
     this.options = { ...this.options, ...options };
     this.url = url;
-
     this.operations = this.createOperations();
-    this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
+
+    const { cacheUtxo } = this.options;
+    if (isDefined(cacheUtxo)) {
+      if (cacheUtxo !== -1) {
+        this.cache = new MemoryCache(cacheUtxo);
+      } else {
+        this.cache = undefined;
+      }
+    } else {
+      this.cache = new MemoryCache(DEFAULT_UTXOS_CACHE_TTL);
+    }
   }
 
   /**
@@ -706,10 +708,9 @@ Supported fuel-core version: ${supportedVersion}.`
   // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, awaitExecution = false }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    this.#cacheInputs(transactionRequest.inputs);
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
@@ -723,30 +724,10 @@ Supported fuel-core version: ${supportedVersion}.`
       abis = transactionRequest.abis;
     }
 
-    if (awaitExecution) {
-      const subscription = this.operations.submitAndAwait({ encodedTransaction });
-      for await (const { submitAndAwait } of subscription) {
-        if (submitAndAwait.type === 'SqueezedOutStatus') {
-          throw new FuelError(
-            ErrorCode.TRANSACTION_SQUEEZED_OUT,
-            `Transaction Squeezed Out with reason: ${submitAndAwait.reason}`
-          );
-        }
-
-        if (submitAndAwait.type !== 'SubmittedStatus') {
-          break;
-        }
-      }
-
-      const transactionId = transactionRequest.getTransactionId(this.getChainId());
-      const response = new TransactionResponse(transactionId, this, abis);
-      await response.fetch();
-      return response;
-    }
-
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
+    this.#cacheInputs(transactionRequest.inputs);
 
     return new TransactionResponse(transactionId, this, abis);
   }

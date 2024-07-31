@@ -16,7 +16,7 @@ import {
   AddressType,
   OperationName,
 } from 'fuels';
-import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
+import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
 
 import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
 
@@ -328,8 +328,11 @@ describe('TransactionSummary', () => {
         const walletA = Wallet.generate({ provider });
         const walletB = Wallet.generate({ provider });
 
-        await wallet.transfer(walletA.address, 50_000, ASSET_A);
-        await wallet.transfer(walletB.address, 50_000, ASSET_B);
+        const submitted1 = await wallet.transfer(walletA.address, 50_000, ASSET_A);
+        await submitted1.waitForResult();
+
+        const submitted2 = await wallet.transfer(walletB.address, 50_000, ASSET_B);
+        await submitted2.waitForResult();
 
         senderContract.account = wallet;
         const fundAmount = 5_000;
@@ -522,8 +525,11 @@ describe('TransactionSummary', () => {
       const walletA = Wallet.generate({ provider });
       const walletB = Wallet.generate({ provider });
 
-      await wallet.transfer(walletA.address, 10_000, ASSET_A);
-      await wallet.transfer(walletB.address, 10_000, ASSET_B);
+      const submitted1 = await wallet.transfer(walletA.address, 10_000, ASSET_A);
+      await submitted1.waitForResult();
+
+      const submitted2 = await wallet.transfer(walletB.address, 10_000, ASSET_B);
+      await submitted2.waitForResult();
 
       const recipient1Data = {
         address: Wallet.generate({ provider }).address,
@@ -573,6 +579,46 @@ describe('TransactionSummary', () => {
         fromType: AddressType.account,
         toType: AddressType.account,
         recipients: allRecipients,
+      });
+    });
+
+    it('should ensure that transfer operations are assembled correctly if only seeded with a MessageInput (SPENDABLE MESSAGE)', async () => {
+      const testMessage = new TestMessage({ amount: 1000000, data: '' });
+
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            deployer: MultiTokenContractAbi__factory,
+            bytecode: MultiTokenContractAbiHex,
+          },
+        ],
+        walletsConfig: {
+          amountPerCoin: 0,
+          messages: [testMessage],
+        },
+      });
+      const {
+        contracts: [contract],
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const amount = 100;
+
+      const tx1 = await wallet.transferToContract(contract.id, amount);
+
+      const { operations } = await tx1.waitForResult();
+
+      expect(operations).toHaveLength(1);
+
+      validateTransferOperation({
+        operations,
+        sender: wallet.address,
+        fromType: AddressType.account,
+        toType: AddressType.contract,
+        recipients: [
+          { address: contract.id, quantities: [{ amount, assetId: provider.getBaseAssetId() }] },
+        ],
       });
     });
   });

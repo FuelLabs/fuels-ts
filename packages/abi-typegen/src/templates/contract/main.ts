@@ -1,6 +1,5 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
-import { formatConfigurables } from '../utils/formatConfigurables';
 import { formatEnums } from '../utils/formatEnums';
 import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
@@ -48,8 +47,6 @@ export function renderMainTemplate(params: { abi: Abi }) {
     ],
   });
 
-  const { formattedConfigurables } = formatConfigurables({ configurables });
-
   const { rawContents, storageSlotsContents } = params.abi;
   const abiJsonString = JSON.stringify(rawContents, null, 2);
   const storageSlotsJsonString = storageSlotsContents ?? '[]';
@@ -70,9 +67,9 @@ export function renderMainTemplate(params: { abi: Abi }) {
       structs,
       enums,
       imports,
-      formattedConfigurables,
       abiJsonString,
       storageSlotsJsonString,
+      configurables,
     },
   });
 

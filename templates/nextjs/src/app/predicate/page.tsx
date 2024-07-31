@@ -6,6 +6,7 @@ import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { TestPredicate } from "@/sway-api/predicates/index";
+import { FAUCET_LINK } from "@/lib";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
@@ -39,21 +40,34 @@ export default function PredicateExample() {
   };
 
   const transferFundsToPredicate = async (amount: BN) => {
-    if (!predicate) {
-      return toast.error("Predicate not loaded");
+    try {
+      if (!predicate) {
+        return toast.error("Predicate not loaded");
+      }
+
+      if (!wallet) {
+        return toast.error("Wallet not loaded");
+      }
+
+      await wallet.transfer(predicate.address, amount, baseAssetId, {
+        gasLimit: 10_000,
+      });
+
+      await refreshBalances();
+
+      return toast.success("Funds transferred to predicate.");
+    } catch (e) {
+      console.error(e);
+      toast.error(
+        <span>
+          Failed to transfer funds. Please make sure your wallet has enough
+          funds. You can top it up using the{" "}
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
+        </span>,
+      );
     }
-
-    if (!wallet) {
-      return toast.error("Wallet not loaded");
-    }
-
-    await wallet.transfer(predicate.address, amount, baseAssetId, {
-      gasLimit: 10_000,
-    });
-
-    await refreshBalances();
-
-    return toast.success("Funds transferred to predicate.");
   };
 
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {

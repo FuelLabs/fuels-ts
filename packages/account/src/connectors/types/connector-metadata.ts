@@ -1,3 +1,4 @@
+// #region fuel-connector-metadata
 export type ConnectorMetadata = {
   image?:
     | string
@@ -11,3 +12,4 @@ export type ConnectorMetadata = {
     description: string;
   };
 };
+// #endregion fuel-connector-metadata
