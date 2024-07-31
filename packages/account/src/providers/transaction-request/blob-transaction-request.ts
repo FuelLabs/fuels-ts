@@ -1,3 +1,5 @@
+import { randomBytes } from '@fuel-ts/crypto';
+import { hash } from '@fuel-ts/hasher';
 import type { BN } from '@fuel-ts/math';
 import type { TransactionBlob } from '@fuel-ts/transactions';
 
@@ -47,11 +49,6 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
    * @returns The transaction create object.
    */
   toTransaction(): TransactionBlob {
-    const blobBytecode = this.witnesses[this.witnessIndex];
-    if (!blobBytecode) {
-      throw new Error('NO BLOB BYTECODE');
-    }
-
     const baseTransaction = this.getBaseTransaction();
     const { witnessIndex, blobId } = this;
     return {

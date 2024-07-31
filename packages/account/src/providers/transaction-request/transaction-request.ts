@@ -689,4 +689,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       }
     });
   }
+
+  byteLength(): number {
+    return this.toTransactionBytes().byteLength;
+  }
 }

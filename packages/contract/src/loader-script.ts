@@ -11,10 +11,6 @@ export const getLoaderInstructions = (blobIds: string[]): Uint8Array => {
   const numberOfInstructions = numberOfBlobs * instructionsPerBlob;
   const blobIdSize = BYTES_32;
 
-  // Btyes for the BSIZ opcode
-  const bsizBytes = () => new Uint8Array([186, 69, 0, 0]);
-  // Bytes for the BLDD opcode
-  const blddBytes = () => new Uint8Array([187, 81, 0, 17]);
   // Bytes for the Blob Ids
   const blobIdBytes = () => concat(blobIds.map((b) => arrayify(b)));
 

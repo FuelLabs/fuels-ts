@@ -1,4 +1,4 @@
-import { Interface } from '@fuel-ts/abi-coder';
+import { Interface, WORD_SIZE } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
 import type {
   Account,
@@ -7,6 +7,7 @@ import type {
   TransactionRequest,
   TransactionResult,
   TransactionType,
+  CoinQuantity,
 } from '@fuel-ts/account';
 import {
   CreateTransactionRequest,
@@ -17,9 +18,10 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
+import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify, isDefined } from '@fuel-ts/utils';
+import { arrayify, isDefined, concat } from '@fuel-ts/utils';
 
 import { getLoaderInstructions } from './loader-script';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
@@ -236,8 +238,8 @@ export default class ContractFactory {
     const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
-    // Ensure the max contract size is byte aligned (VM requirement)
-    if (maxContractSize % 8 !== 0) {
+    // Ensure the max contract size is byte aligned before chunking
+    if (maxContractSize % WORD_SIZE !== 0) {
       throw new FuelError(
         ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT, // Todo: change error
         `Max contract size of ${maxContractSize} bytes is not byte aligned.`
@@ -249,21 +251,39 @@ export default class ContractFactory {
       this.setConfigurableConstants(configurableConstants);
     }
 
+    // Find the max chunk size (again, ensure is word aligned)
+    const baseAssetId = account.provider.getBaseAssetId();
+    const fakeFunding: CoinQuantity[] = [{ assetId: baseAssetId, amount: bn(100_000) }];
+    const baseBlobRequest = this.blobTransactionRequest({ blobBytecode: randomBytes(32) });
+    baseBlobRequest.fundWithFakeUtxos(fakeFunding, baseAssetId);
+    const maxChunkSize = maxContractSize - baseBlobRequest.byteLength() - WORD_SIZE;
+    const padding = maxChunkSize % WORD_SIZE;
+    const chunkSize = padding + ((WORD_SIZE - (padding % WORD_SIZE)) % WORD_SIZE) + maxChunkSize;
+
     // Chunk the bytecode
     const chunks: ContractChunk[] = [];
-    const chunkSize = maxContractSize - 10_000; // Come up with better max size calculation
     for (let offset = 0, index = 0; offset < this.bytecode.length; offset += chunkSize, index++) {
       const chunk = this.bytecode.slice(offset, offset + chunkSize);
+
+      // Chunks must be byte aligned
+      if (chunk.length % WORD_SIZE !== 0) {
+        const paddingLength = chunk.length % WORD_SIZE;
+        const paddedChunk = concat([chunk, new Uint8Array(paddingLength)]);
+        chunks.push({ id: index, size: paddedChunk.length, bytecode: paddedChunk });
+        // eslint-disable-next-line no-continue
+        continue;
+      }
       chunks.push({ id: index, size: chunk.length, bytecode: chunk });
     }
 
-    // Deploy the chunks as blobs
+    // Deploy the chunks as blob txs
     for (const { id, bytecode } of chunks) {
       const blobRequest = this.blobTransactionRequest({
         blobBytecode: bytecode,
         ...deployContractOptions,
       });
 
+      // Store the blobIds for the loader contract
       chunks[id].blobId = blobRequest.blobId;
 
       const fundedBlobRequest = await this.fundTransactionRequest(
@@ -277,7 +297,11 @@ export default class ContractFactory {
         const blobTx = await account.sendTransaction(fundedBlobRequest);
         result = await blobTx.waitForResult();
       } catch (err: unknown) {
+        // Core will throw for blobs that have already been uploaded, but the blobId
+        // is still valid so we can use this for the loader contract
         if ((<FuelError>err).code === ErrorCode.BLOB_ID_ALREADY_UPLOADED) {
+          // TODO: We need to unset the cached utxo as it can be reused
+          // this.account?.provider.cache?.del(UTXO_ID);
           // eslint-disable-next-line no-continue
           continue;
         }
@@ -294,7 +318,7 @@ export default class ContractFactory {
     const blobIds = chunks.map((c) => c.blobId as string);
     const loaderBytecode = getLoaderInstructions(blobIds);
 
-    // Deploy the loader contract
+    // Deploy the loader contract via create tx
     const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
       bytecode: loaderBytecode,
       ...deployContractOptions,
