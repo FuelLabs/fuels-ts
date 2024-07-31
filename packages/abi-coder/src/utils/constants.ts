@@ -16,11 +16,9 @@ export const VEC_CODER_TYPE = 'struct std::vec::Vec';
 export const BYTES_CODER_TYPE = 'struct std::bytes::Bytes';
 export const STD_STRING_CODER_TYPE = 'struct std::string::String';
 export const STR_SLICE_CODER_TYPE = 'str';
-
-export const optionCoderRegex = /^enum.+Option$/m;
-
 export const VOID_TYPE = '()';
-export const OPTION_REGEX: RegExp = /^enum (std::option::)?Option$/m;
+
+export const optionRegEx: RegExp = /^enum (std::option::)?Option$/m;
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
 export const arrayRegEx = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 export const structRegEx = /struct.+/;
