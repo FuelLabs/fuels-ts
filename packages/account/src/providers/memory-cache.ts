@@ -77,4 +77,12 @@ export class MemoryCache {
     const key = hexlify(value);
     delete cache[key];
   }
+
+  delByTxID(txID: string) {
+    Object.keys(cache).forEach((key) => {
+      if (cache[key].txID === txID) {
+        delete cache[key];
+      }
+    });
+  }
 }
