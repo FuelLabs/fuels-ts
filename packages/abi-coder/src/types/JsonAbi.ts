@@ -12,6 +12,12 @@ export interface JsonAbiOld {
 }
 
 export interface JsonAbiType {
+  /**
+   * concreteTypeId is a property from the new abi spec
+   * that we are adding to the old abi spec
+   * so that we can allow users to encode/decode concrete types on the `Interface`.
+   */
+  readonly concreteTypeId: string;
   readonly typeId: number;
   readonly type: string;
   readonly components: readonly JsonAbiArgument[] | null;

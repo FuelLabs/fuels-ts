@@ -1,4 +1,4 @@
-import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument } from '../types/JsonAbi';
 
 import { optionRegEx, VOID_TYPE } from './constants';
 import { findTypeById } from './json-abi';
@@ -8,7 +8,7 @@ export type FunctionInput<TArg extends JsonAbiArgument = JsonAbiArgument> = TArg
 };
 
 export const getFunctionInputs = (params: {
-  jsonAbi: JsonAbi;
+  jsonAbi: JsonAbiOld;
   inputs: readonly JsonAbiArgument[];
 }): Array<FunctionInput> => {
   const { jsonAbi, inputs } = params;

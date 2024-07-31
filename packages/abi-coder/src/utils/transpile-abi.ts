@@ -140,11 +140,11 @@ export function transpileAbi(abi: JsonAbi): JsonAbiOld {
     loggedType: parseFunctioIO(log.concreteTypeId),
   }));
 
-  // 6. removes concreteTypeId
-  types.forEach((t) => {
-    t.concreteTypeId = undefined;
-    delete t.concreteTypeId;
-  });
+  // // 6. removes concreteTypeId
+  // types.forEach((t) => {
+  //   t.concreteTypeId = undefined;
+  //   delete t.concreteTypeId;
+  // });
 
   // transpiled ABI
   const transpiled = {

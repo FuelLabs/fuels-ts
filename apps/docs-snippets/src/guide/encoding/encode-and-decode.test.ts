@@ -1,13 +1,13 @@
 import {
   FUEL_NETWORK_URL,
   Provider,
-  AbiCoder,
   Script,
   ReceiptType,
   arrayify,
   buildFunctionResult,
+  Interface,
 } from 'fuels';
-import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
+import type { Account, JsonAbi, TransactionResultReturnDataReceipt } from 'fuels';
 import { generateTestWallet } from 'fuels/test-utils';
 
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
@@ -25,13 +25,11 @@ describe('encode and decode', () => {
     wallet = await generateTestWallet(provider, [{ assetId, amount: 500_000 }]);
   });
 
-  it.skip('generates valid ABI', () => {
+  it('generates valid ABI', () => {
     expect(abiSnippet).toEqual(factory.abi);
   });
 
   it('encodes and decodes', async () => {
-    // TODO: stop setting this once `AbiCoder` isn't exported
-    factory.abi = abiSnippet;
     // #region encode-and-decode-3
     // #import { JsonAbi, Script };
     // #context import { factory } from './sway-programs-api';
@@ -54,18 +52,23 @@ describe('encode and decode', () => {
     // #endregion encode-and-decode-3
 
     // #region encode-and-decode-4
-    // #import { JsonAbiArgument, AbiCoder};
+    // #import { Interface };
 
     // Now we can encode the argument we want to pass to the function. The argument is required
-    // as a function parameter for all `AbiCoder` functions and we can extract it from the ABI itself
-    const argument: JsonAbiArgument = abi.functions
+    // as a function parameter for all abi functions and we can extract it from the ABI itself
+    const argument = abi.functions
       .find((f) => f.name === 'main')
-      ?.inputs.find((i) => i.name === 'inputted_amount') as JsonAbiArgument;
+      ?.inputs.find((i) => i.name === 'inputted_amount');
 
-    // Using the `AbiCoder`'s `encode` method,  we can now create the encoding required for
-    // a u32 which takes 4 bytes up of property space
+    // The `Interface` class is the entry point for encoding and decoding all things abi-related.
+    // We will use its `encodeType` method and create the encoding required for
+    // a u32 which takes 4 bytes up of property space.
+
+    const abiInterface = new Interface(abi);
     const argumentToAdd = 10;
-    const encodedArguments = AbiCoder.encode(abi, argument, [argumentToAdd]);
+    const encodedArguments = abiInterface.encodeType(argument?.concreteTypeId as string, [
+      argumentToAdd,
+    ]);
     // Therefore the value of 10 will be encoded to:
     // Uint8Array([0, 0, 0, 10]
 
@@ -84,7 +87,7 @@ describe('encode and decode', () => {
     // #endregion encode-and-decode-4
 
     // #region encode-and-decode-5
-    // #import { AbiCoder, ReceiptType, TransactionResultReturnDataReceipt, arrayify, buildFunctionResult };
+    // #import { ReceiptType, TransactionResultReturnDataReceipt, arrayify, buildFunctionResult };
 
     // Get result of the transaction, including the contract call result. For this we'll need
     // the previously created invocation scope, the transaction response and the script
@@ -111,8 +114,11 @@ describe('encode and decode', () => {
     // returnData = new Uint8Array([0, 0, 0, 20]
 
     // And now we can decode the returned bytes in a similar fashion to how they were
-    // encoded, via the `AbiCoder`
-    const [decodedReturnData] = AbiCoder.decode(abi, argument, returnData, 0);
+    // encoded, via the `Interface`
+    const [decodedReturnData] = abiInterface.decodeType(
+      argument?.concreteTypeId as string,
+      returnData
+    );
     // 20
     // #endregion encode-and-decode-5
 
