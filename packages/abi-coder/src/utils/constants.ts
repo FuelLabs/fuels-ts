@@ -26,7 +26,7 @@ export const enumRegEx = /^enum.+$/;
 export const tupleRegEx = /^\((?<items>.*)\)$/;
 export const genericRegEx = /^generic.+$/;
 
-export const lastNameRegExMatch = /([^:\s]+)$/m;
+export const fullNameRegExMatch = /([^\s]+)$/m;
 
 /**
  * Encoding versions
