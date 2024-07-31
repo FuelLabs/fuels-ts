@@ -1,5 +1,3 @@
-import { randomBytes } from '@fuel-ts/crypto';
-import { hash } from '@fuel-ts/hasher';
 import type { BN } from '@fuel-ts/math';
 import type { TransactionBlob } from '@fuel-ts/transactions';
 
