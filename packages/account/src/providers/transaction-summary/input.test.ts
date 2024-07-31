@@ -1,5 +1,6 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import type { InputCoin } from '@fuel-ts/transactions';
+import { bn } from '@fuel-ts/math';
+import type { InputCoin, InputMessage } from '@fuel-ts/transactions';
 import { ASSET_A } from '@fuel-ts/utils/test-utils';
 
 import {
@@ -116,8 +117,33 @@ describe('transaction-summary/input', () => {
     expect(getInputFromAssetId([inputCoin1, inputCoin2], ZeroBytes32)).toStrictEqual(inputCoin1);
     expect(getInputFromAssetId([inputCoin1, inputCoin2], ASSET_A)).toStrictEqual(inputCoin2);
 
-    expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], ZeroBytes32)).toStrictEqual(
+    expect(getInputFromAssetId([MOCK_INPUT_MESSAGE], ZeroBytes32, true)).toStrictEqual(
       MOCK_INPUT_MESSAGE
     );
+  });
+
+  it('should ensure getInputFromAssetId returns the correct coinInput thats greater than 0 for default assetId', () => {
+    const coinInput1: InputCoin = {
+      ...MOCK_INPUT_COIN,
+      amount: bn(100),
+      assetId: ZeroBytes32,
+    };
+
+    const coinInput2: InputCoin = {
+      ...MOCK_INPUT_COIN,
+      amount: bn(0),
+      assetId: ZeroBytes32,
+    };
+
+    expect(getInputFromAssetId([coinInput1, coinInput2], ZeroBytes32)).toEqual(coinInput1);
+  });
+
+  it('Should return the correct input message for withdrawals', () => {
+    const inputMessage: InputMessage = {
+      ...MOCK_INPUT_MESSAGE,
+      amount: bn(100),
+    };
+
+    expect(getInputFromAssetId([inputMessage], ZeroBytes32, true)).toEqual(inputMessage);
   });
 });
