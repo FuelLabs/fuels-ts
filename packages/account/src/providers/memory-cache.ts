@@ -6,6 +6,7 @@ type Cache = {
   [key: string]: {
     expires: number;
     value: BytesLike;
+    txID: string;
   };
 };
 const cache: Cache = {}; // it's a cache hash ~~> cash?
@@ -38,12 +39,13 @@ export class MemoryCache {
     return undefined;
   }
 
-  set(value: BytesLike): number {
+  set(value: BytesLike, txID: string): number {
     const expiresAt = Date.now() + this.ttl;
     const key = hexlify(value);
     cache[key] = {
       expires: expiresAt,
       value,
+      txID,
     };
 
     return expiresAt;
