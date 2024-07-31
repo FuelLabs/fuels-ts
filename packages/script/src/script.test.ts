@@ -13,7 +13,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
 import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
-import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
+import { jsonAbiMock } from '../test/mocks';
 
 import { Script } from './index';
 
