@@ -683,14 +683,14 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  #cacheInputs(inputs: TransactionRequestInput[]): void {
+  #cacheInputs(inputs: TransactionRequestInput[], transactionId: string): void {
     if (!this.cache) {
       return;
     }
 
     inputs.forEach((input) => {
       if (input.type === InputType.Coin) {
-        this.cache?.set(input.id);
+        this.cache?.set(input.id, transactionId);
       }
     });
   }
@@ -727,7 +727,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
-    this.#cacheInputs(transactionRequest.inputs);
+    this.#cacheInputs(transactionRequest.inputs, transactionId);
 
     return new TransactionResponse(transactionId, this, abis);
   }
