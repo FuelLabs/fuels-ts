@@ -58,7 +58,7 @@ describe('encode and decode', () => {
     // as a function parameter for all abi functions and we can extract it from the ABI itself
     const argument = abi.functions
       .find((f) => f.name === 'main')
-      ?.inputs.find((i) => i.name === 'inputted_amount');
+      ?.inputs.find((i) => i.name === 'inputted_amount')?.concreteTypeId as string;
 
     // The `Interface` class is the entry point for encoding and decoding all things abi-related.
     // We will use its `encodeType` method and create the encoding required for
@@ -66,9 +66,7 @@ describe('encode and decode', () => {
 
     const abiInterface = new Interface(abi);
     const argumentToAdd = 10;
-    const encodedArguments = abiInterface.encodeType(argument?.concreteTypeId as string, [
-      argumentToAdd,
-    ]);
+    const encodedArguments = abiInterface.encodeType(argument, [argumentToAdd]);
     // Therefore the value of 10 will be encoded to:
     // Uint8Array([0, 0, 0, 10]
 
@@ -115,10 +113,7 @@ describe('encode and decode', () => {
 
     // And now we can decode the returned bytes in a similar fashion to how they were
     // encoded, via the `Interface`
-    const [decodedReturnData] = abiInterface.decodeType(
-      argument?.concreteTypeId as string,
-      returnData
-    );
+    const [decodedReturnData] = abiInterface.decodeType(argument, returnData);
     // 20
     // #endregion encode-and-decode-5
 
