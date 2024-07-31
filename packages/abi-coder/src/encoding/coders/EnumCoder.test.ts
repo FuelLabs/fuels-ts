@@ -98,7 +98,7 @@ describe('EnumCoder', () => {
       const nativeCoder = new EnumCoder('TestEnum', {
         a: new BooleanCoder(),
         b: new BigNumberCoder('u64'),
-        c: new TupleCoder([]),
+        c: new VoidCoder(),
       });
 
       const expectedValue = 'c';
