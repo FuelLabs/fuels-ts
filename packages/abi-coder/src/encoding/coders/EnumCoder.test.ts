@@ -8,6 +8,7 @@ import { BigNumberCoder } from './BigNumberCoder';
 import { BooleanCoder } from './BooleanCoder';
 import { EnumCoder } from './EnumCoder';
 import { TupleCoder } from './TupleCoder';
+import { VoidCoder } from './VoidCoder';
 
 /**
  * @group node
@@ -37,7 +38,7 @@ describe('EnumCoder', () => {
       const nativeCoder = new EnumCoder('Native', {
         One: new BooleanCoder(),
         Two: new BigNumberCoder('u64'),
-        Three: new TupleCoder([]),
+        Three: new VoidCoder(),
       });
 
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 2]);
