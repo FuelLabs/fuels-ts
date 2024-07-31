@@ -25,7 +25,7 @@ export class OptionCoder<TCoders extends Record<string, Coder>> extends EnumCode
   }
 
   private toOption(output?: DecodedValueOf<TCoders>): Option<unknown> {
-    if (output && Object.hasOwn(output, 'Some')) {
+    if (output && 'Some' in output) {
       return output.Some;
     }
 
