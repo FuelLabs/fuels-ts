@@ -1,9 +1,9 @@
 ---
-"@fuel-ts/abi-typegen": patch
-"@fuel-ts/abi-coder": patch
-"@fuel-ts/versions": patch
-"@fuel-ts/utils": patch
-"@internal/forc": patch
+"@fuel-ts/abi-typegen": minor
+"@fuel-ts/abi-coder": minor
+"@fuel-ts/versions": minor
+"@fuel-ts/utils": minor
+"@internal/forc": minor
 ---
 
 feat!: adding `abi` transpiler
