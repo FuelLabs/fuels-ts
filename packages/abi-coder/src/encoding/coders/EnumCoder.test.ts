@@ -7,7 +7,6 @@ import { U64_MAX } from '../../../test/utils/constants';
 import { BigNumberCoder } from './BigNumberCoder';
 import { BooleanCoder } from './BooleanCoder';
 import { EnumCoder } from './EnumCoder';
-import { TupleCoder } from './TupleCoder';
 import { VoidCoder } from './VoidCoder';
 
 /**
