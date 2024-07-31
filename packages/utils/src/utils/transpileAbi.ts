@@ -47,7 +47,7 @@ export function transpileAbi(abi) {
       typeId: types.length,
       type: concreteType.type,
       components: concreteType.type === '()' ? [] : parseComponents(concreteType.components),
-      concreteTypeId: id, // will be deleted at the end
+      concreteTypeId: id,
       typeParameters: concreteType.typeParameters ?? null,
     });
 
@@ -136,12 +136,6 @@ export function transpileAbi(abi) {
     logId: log.logId,
     loggedType: parseFunctioIO(log.concreteTypeId),
   }));
-
-  // 6. removes concreteTypeId
-  types.forEach((t) => {
-    t.concreteTypeId = undefined;
-    delete t.concreteTypeId;
-  });
 
   // transpiled ABI
   const transpiled = {
