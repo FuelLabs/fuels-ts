@@ -2,6 +2,10 @@ import { NumberCoder } from './NumberCoder';
 import { OptionCoder } from './OptionCoder';
 import { VoidCoder } from './VoidCoder';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('OptionCoder', () => {
   const coder = new OptionCoder('std::option::Option', {
     Some: new NumberCoder('u8'),
