@@ -3,7 +3,7 @@ import { OptionCoder } from './OptionCoder';
 import { VoidCoder } from './VoidCoder';
 
 describe('OptionCoder', () => {
-  const coder = new OptionCoder('Option', {
+  const coder = new OptionCoder('std::option::Option', {
     Some: new NumberCoder('u8'),
     None: new VoidCoder(),
   });

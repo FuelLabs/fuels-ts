@@ -23,7 +23,7 @@ import {
   VOID_TYPE,
   arrayRegEx,
   enumRegEx,
-  lastNameRegExMatch,
+  fullNameRegExMatch,
   stringRegEx,
   structRegEx,
   tupleRegEx,
@@ -130,7 +130,7 @@ export const getCoder: GetCoderFn = (
   const structMatch = structRegEx.test(resolvedAbiType.type);
   if (structMatch) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [name] = resolvedAbiType.type.match(lastNameRegExMatch)!;
+    const [name] = resolvedAbiType.type.match(fullNameRegExMatch)!;
     const coders = getCoders(components, { getCoder });
     return new StructCoder(name, coders);
   }
@@ -138,7 +138,7 @@ export const getCoder: GetCoderFn = (
   const enumMatch = enumRegEx.test(resolvedAbiType.type);
   if (enumMatch) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [name] = resolvedAbiType.type.match(lastNameRegExMatch)!;
+    const [name] = resolvedAbiType.type.match(fullNameRegExMatch)!;
 
     const coders = getCoders(components, { getCoder });
 

@@ -13,8 +13,7 @@ import { StructCoder } from './StructCoder';
  * @group browser
  */
 describe('StructCoder', () => {
-  const STRUCT_NAME = 'TestStruct';
-  const coder = new StructCoder(STRUCT_NAME, {
+  const coder = new StructCoder('std::vec::Vec', {
     a: new BooleanCoder(),
     b: new BigNumberCoder('u64'),
   });
