@@ -127,7 +127,7 @@ describe('Script', () => {
   it('should throw if script has no configurable to be set', async () => {
     const wallet = await setup();
 
-    const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
+    const newScript = new Script(scriptBin, jsonAbiMock, wallet);
 
     const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
 
@@ -144,15 +144,11 @@ describe('Script', () => {
       configurables: [
         {
           name: 'FEE',
-          configurableType: {
-            name: '',
-            type: 1,
-            typeArguments: null,
-          },
+          concreteTypeId: 'a760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
           offset: 44,
         },
       ],
-    } as unknown as JsonAbi;
+    };
 
     const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 
