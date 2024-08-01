@@ -47,7 +47,7 @@ export type {{capitalizedName}}Configurables = Partial<{
   {{/each}}
 }>;
 {{else}}
-export type {{capitalizedName}}Configurables = {};
+export type {{capitalizedName}}Configurables = undefined;
 {{/if}}
 
 export type {{capitalizedName}}Inputs = [{{inputs}}];

@@ -27,7 +27,7 @@ import { getPredicateRoot } from './utils';
 
 export type PredicateParams<
   TData extends InputValue[] = InputValue[],
-  TConfigurables extends { [name: string]: unknown } = { [name: string]: unknown },
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
 > = {
   bytecode: BytesLike;
   provider: Provider;
@@ -41,7 +41,7 @@ export type PredicateParams<
  */
 export class Predicate<
   TData extends InputValue[] = InputValue[],
-  TConfigurables extends { [name: string]: unknown } = { [name: string]: unknown },
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
 > extends Account {
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
