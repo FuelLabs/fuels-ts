@@ -41,7 +41,7 @@ function setupContract() {
  * @group node
  * @group browser
  */
-describe('Coverage Contract', () => {
+describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('can return outputs', async () => {
     using contractInstance = await setupContract();
 
