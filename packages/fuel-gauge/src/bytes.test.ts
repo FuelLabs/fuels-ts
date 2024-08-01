@@ -83,12 +83,15 @@ describe('Bytes Tests', () => {
 
     const bytes = [40, 41, 42];
 
-    const predicate = new PredicateBytes(wallet.provider, [
-      {
-        inner: [bytes, bytes],
-        inner_enum: { Second: bytes },
-      },
-    ]);
+    const predicate = new PredicateBytes({
+      provider: wallet.provider,
+      data: [
+        {
+          inner: [bytes, bytes],
+          inner_enum: { Second: bytes },
+        },
+      ],
+    });
 
     // setup predicate
     const setupTx = await wallet.transfer(

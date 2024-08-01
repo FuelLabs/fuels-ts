@@ -44,7 +44,7 @@ describe('Predicate', () => {
         provider,
         abi: PredicateMainArgsStruct.abi,
         bytecode: PredicateMainArgsStruct.bytecode,
-        inputData: [
+        data: [
           {
             has_account: true,
             total_complete: 100,

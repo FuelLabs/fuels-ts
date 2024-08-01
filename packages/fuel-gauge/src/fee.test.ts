@@ -310,7 +310,7 @@ describe('Fee', () => {
       wallets: [wallet],
     } = launched;
 
-    const predicate = new PredicateU32(provider, [1078]);
+    const predicate = new PredicateU32({ provider, data: [1078] });
 
     const tx1 = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
     await tx1.wait();

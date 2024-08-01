@@ -161,7 +161,10 @@ test('Example predicate', async () => {
   const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
   const predicateData: DemoPredicateInputs = [];
-  const predicate = new DemoPredicate(provider, predicateData);
+  const predicate = new DemoPredicate({
+    provider,
+    data: predicateData,
+  });
 
   const tx = await wallet.transfer(predicate.address, 200_000, provider.getBaseAssetId());
   const { isStatusSuccess } = await tx.wait();

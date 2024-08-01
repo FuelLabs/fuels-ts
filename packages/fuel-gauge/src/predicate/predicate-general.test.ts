@@ -32,7 +32,7 @@ describe('Predicate', () => {
       abi: PredicateSum.abi,
       bytecode: PredicateSum.bytecode,
       provider,
-      inputData: [value1, value2],
+      data: [value1, value2],
     });
 
     const fakeCoins = predicate.generateFakeResources(fakeCoinsConfig);

@@ -15,6 +15,7 @@ import {
   BN,
   InputValue,
   Predicate,
+  PredicateParams,
   Provider,
 } from 'fuels';
 
@@ -31,6 +32,11 @@ export type ValidationOutput = { has_account: boolean, total_complete: BN };
 export type MyPredicateConfigurables = undefined;
 
 export type MyPredicateInputs = [vec: Vec<ValidationInput>, enm: MyGenericEnumInput<BigNumberish>, opt: Option<BigNumberish>, res: Result<MyGenericStructInput<string>, BigNumberish>];
+
+export type MyPredicateParameters = Pick<
+  PredicateParams<MyPredicateInputs, MyPredicateConfigurables>,
+  'provider' | 'data' | 'configurableConstants'
+>;
 
 const abi = {
   "encoding": "1",
@@ -293,17 +299,18 @@ const abi = {
 
 const bytecode = '0x000';
 
-export class MyPredicate extends Predicate<MyPredicateInputs> {
+export class MyPredicate extends Predicate<MyPredicateInputs, MyPredicateConfigurables> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
-  constructor(provider: Provider, predicateData?: MyPredicateInputs) {
+  constructor(params: MyPredicateParameters) {
     super({
       abi,
       bytecode,
-      provider,
-      inputData: predicateData,
+      provider: params.provider,
+      data: params.data,
+      configurableConstants: params.configurableConstants,
     });
   }
 }

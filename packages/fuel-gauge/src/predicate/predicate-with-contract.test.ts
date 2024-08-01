@@ -24,7 +24,7 @@ describe('Predicate', () => {
       } = launched;
 
       const amountToPredicate = 300_000;
-      const predicate = new PredicateTrue(provider);
+      const predicate = new PredicateTrue({ provider });
 
       // Create a instance of the contract with the predicate as the caller Account
       const contractPredicate = new Contract(contract.id, contract.interface, predicate);
@@ -66,12 +66,15 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 1_000_000;
       const amountToReceiver = 200_000;
-      const predicate = new PredicateMainArgsStruct(provider, [
-        {
-          has_account: true,
-          total_complete: 100,
-        },
-      ]);
+      const predicate = new PredicateMainArgsStruct({
+        provider,
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
+      });
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

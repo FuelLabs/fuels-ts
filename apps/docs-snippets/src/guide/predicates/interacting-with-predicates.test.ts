@@ -33,7 +33,7 @@ describe(__filename, () => {
       bytecode: bin,
       provider: wallet.provider,
       abi,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
     await seedTestWallet(predicate, [[100_000_000, baseAssetId]]);
   });

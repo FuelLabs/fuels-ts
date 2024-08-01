@@ -94,7 +94,7 @@ describe('Raw Slice Tests', () => {
       abi: PredicateRawSlice.abi,
       bytecode: PredicateRawSlice.bytecode,
       provider: wallet.provider,
-      inputData: [INPUT],
+      data: [INPUT],
     });
 
     // setup predicate

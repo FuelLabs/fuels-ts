@@ -296,7 +296,10 @@ describe('Doc Examples', () => {
     const signature1 = await wallet1.signMessage(dataToSign);
     const signature2 = await wallet2.signMessage(dataToSign);
     const signature3 = await wallet3.signMessage(dataToSign);
-    const predicate = new PredicateTripleSig(provider, [[signature1, signature2, signature3]]);
+    const predicate = new PredicateTripleSig({
+      provider,
+      data: [[signature1, signature2, signature3]],
+    });
 
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;

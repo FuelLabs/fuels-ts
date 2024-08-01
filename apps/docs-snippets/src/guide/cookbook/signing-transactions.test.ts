@@ -80,7 +80,7 @@ describe('Signing transactions', () => {
       bytecode,
       abi,
       provider,
-      inputData: [signer.address.toB256()],
+      data: [signer.address.toB256()],
     });
     const tx1 = await sender.transfer(predicate.address, 200_000, baseAssetId);
     await tx1.waitForResult();

@@ -28,7 +28,9 @@ export default function PredicateExample() {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
       // Initialize a new predicate instance
-      const predicate = new TestPredicate(wallet.provider);
+      const predicate = new TestPredicate({
+        provider: wallet.provider,
+      });
       setPredicate(predicate);
       setPredicateBalance(await predicate.getBalance());
     }
@@ -77,9 +79,10 @@ export default function PredicateExample() {
       }
 
       // Initialize a new predicate instance with the entered pin
-      const reInitializePredicate = new TestPredicate(wallet.provider, [
-        bn(pin),
-      ]);
+      const reInitializePredicate = new TestPredicate({
+        provider: wallet.provider,
+        data: [bn(pin)],
+      });
 
       if (!reInitializePredicate) {
         return toast.error("Failed to initialize predicate");

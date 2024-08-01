@@ -33,7 +33,10 @@ describe('Predicate', () => {
     const predicateData: TestPredicateInputs = [1337];
 
     // Now, we can instantiate our predicate.
-    const predicate = new TestPredicate(provider, predicateData);
+    const predicate = new TestPredicate({
+      provider,
+      data: predicateData,
+    });
 
     // Lets also setup some transfer values to assert against.
     const amountToPredicate = 250_000;

@@ -117,7 +117,10 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = new ComplexPredicate(provider, [bn(1000)]);
+    const predicate = new ComplexPredicate({
+      provider,
+      data: [bn(1000)],
+    });
 
     /**
      * Fund the predicate
@@ -165,7 +168,10 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = new ComplexPredicate(provider, [bn(1000)]);
+    const predicate = new ComplexPredicate({
+      provider,
+      data: [bn(1000)],
+    });
 
     /**
      * Fund the predicate
