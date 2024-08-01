@@ -588,7 +588,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: MultiTokenContractAbi__factory,
+            deployer: MultiTokenContractFactory,
             bytecode: MultiTokenContractAbiHex,
           },
         ],

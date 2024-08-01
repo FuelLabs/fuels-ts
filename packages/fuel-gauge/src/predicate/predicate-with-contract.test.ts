@@ -2,7 +2,7 @@ import { Contract, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { CallTestContractFactory, TokenContractFactory } from '../../test/typegen/contracts';
-import { PredicateTrue } from '../../test/typegen/predicates';
+import { PredicateMainArgsStruct, PredicateTrue } from '../../test/typegen/predicates';
 
 import { fundPredicate } from './utils/predicate';
 
@@ -66,7 +66,7 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 1_000_000;
       const amountToReceiver = 200_000;
-      const predicate = new PredicateTrue(provider, [
+      const predicate = new PredicateMainArgsStruct(provider, [
         {
           has_account: true,
           total_complete: 100,

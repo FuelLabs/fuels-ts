@@ -1,11 +1,10 @@
 import { launchTestNode } from 'fuels/test-utils';
 
-import { SumOptionU8Abi__factory } from '../../../test/typegen';
-import bytecode from '../../../test/typegen/contracts/SumOptionU8Abi.hex';
+import { SumOptionU8Factory } from '../../../test/typegen';
 
 function setupContract() {
   return launchTestNode({
-    contractsConfigs: [{ deployer: SumOptionU8Abi__factory, bytecode }],
+    contractsConfigs: [{ factory: SumOptionU8Factory }],
   });
 }
 

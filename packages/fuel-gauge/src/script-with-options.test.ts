@@ -2,7 +2,7 @@ import type { BigNumberish } from 'fuels';
 import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptWithOptionsAbi__factory } from '../test/typegen';
+import { ScriptWithOptions } from '../test/typegen';
 import type { Option } from '../test/typegen/contracts/common';
 
 /**
@@ -17,7 +17,7 @@ describe('Script With Options', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptWithOptions = ScriptWithOptionsAbi__factory.createInstance(wallet);
+    const scriptWithOptions = new ScriptWithOptions(wallet);
     const expectedValue = true;
     const OPTION_SOME: Option<BigNumberish> = bn(1);
     const OPTION_NONE: Option<BigNumberish> = undefined;

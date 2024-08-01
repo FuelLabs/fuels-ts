@@ -50,8 +50,7 @@ describe('launching a test node', () => {
     // #region basic-example
     // #import { launchTestNode };
 
-    // #context import { TestContract } from 'path/to/typegen/output';
-    // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
+    // #context import { CounterFactory } from 'path/to/typegen/output';
 
     using launched = await launchTestNode({
       contractsConfigs: [{ factory: CounterFactory }],
@@ -75,8 +74,7 @@ describe('launching a test node', () => {
     // #region advanced-example
     // #import { launchTestNode, AssetId, TestMessage };
 
-    // #context import { TestContract } from 'path/to/typegen/output';
-    // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
+    // #context import { CounterFactory } from 'path/to/typegen/output';
 
     const assets = AssetId.random(2);
     const message = new TestMessage({ amount: 1000 });
