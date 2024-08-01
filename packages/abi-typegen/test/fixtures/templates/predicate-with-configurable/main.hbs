@@ -11,6 +11,7 @@ import {
   BigNumberish,
   InputValue,
   Predicate,
+  PredicateParams,
   Provider,
 } from 'fuels';
 
@@ -20,6 +21,11 @@ export type MyPredicateConfigurables = Partial<{
 }>;
 
 export type MyPredicateInputs = [fee: BigNumberish, address: string];
+
+export type MyPredicateParameters = Pick<
+  PredicateParams<MyPredicateInputs>,
+  'data' | 'configurableConstants'
+>;
 
 const abi = {
   "encoding": "1",
@@ -97,13 +103,13 @@ export class MyPredicate extends Predicate<MyPredicateInputs> {
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
-  constructor(provider: Provider, predicateData?: MyPredicateInputs, configurables?: MyPredicateConfigurables) {
+  constructor(provider: Provider, params?: MyPredicateParameters) {
     super({
       abi,
       bytecode,
       provider,
-      data: predicateData,
-      configurableConstants: configurables,
+      data: params?.data,
+      configurableConstants: params?.configurableConstants,
     });
   }
 }

@@ -48,6 +48,11 @@ export type {{capitalizedName}}Configurables = Partial<{
 
 export type {{capitalizedName}}Inputs = [{{inputs}}];
 
+export type {{capitalizedName}}Parameters = Pick<
+  PredicateParams<{{capitalizedName}}Inputs>,
+  'data' | 'configurableConstants'
+>;
+
 const abi = {{abiJsonString}};
 
 const bytecode = '{{hexlifiedBinString}}';
@@ -57,13 +62,13 @@ export class {{capitalizedName}} extends Predicate<{{capitalizedName}}Inputs> {
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
-  constructor(provider: Provider, predicateData?: {{capitalizedName}}Inputs, configurables?: {{capitalizedName}}Configurables) {
+  constructor(provider: Provider, params?: {{capitalizedName}}Parameters) {
     super({
       abi,
       bytecode,
       provider,
-      data: predicateData,
-      configurableConstants: configurables,
+      data: params?.data,
+      configurableConstants: params?.configurableConstants,
     });
   }
 }

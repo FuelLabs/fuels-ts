@@ -66,12 +66,14 @@ describe('Predicate', () => {
       // setup predicate
       const amountToPredicate = 1_000_000;
       const amountToReceiver = 200_000;
-      const predicate = new PredicateMainArgsStruct(provider, [
-        {
-          has_account: true,
-          total_complete: 100,
-        },
-      ]);
+      const predicate = new PredicateMainArgsStruct(provider, {
+        data: [
+          {
+            has_account: true,
+            total_complete: 100,
+          },
+        ],
+      });
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

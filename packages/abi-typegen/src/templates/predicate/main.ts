@@ -32,7 +32,7 @@ export function renderMainTemplate(params: { abi: Abi }) {
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: ['Predicate', 'Provider', 'InputValue'],
+    baseMembers: ['Predicate', 'Provider', 'InputValue', 'PredicateParams'],
   });
 
   const { prefixedInputs: inputs, output } = func.attributes;

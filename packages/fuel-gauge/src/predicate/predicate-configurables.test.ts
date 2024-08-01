@@ -209,11 +209,10 @@ describe('Predicate', () => {
 
       const amountToTransfer = 300;
 
-      const predicate = new PredicateWithConfigurable(
-        provider,
-        [defaultValues.FEE, configurableConstants.ADDRESS],
-        configurableConstants
-      );
+      const predicate = new PredicateWithConfigurable(provider, {
+        data: [defaultValues.FEE, configurableConstants.ADDRESS],
+        configurableConstants,
+      });
 
       const destination = WalletUnlocked.generate({
         provider: wallet.provider,

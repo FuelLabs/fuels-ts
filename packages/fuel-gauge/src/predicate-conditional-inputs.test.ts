@@ -22,8 +22,10 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const predicate = new PredicateConditionalInputs(provider, undefined, {
-      MAKER: aliceWallet.address.toB256(),
+    const predicate = new PredicateConditionalInputs(provider, {
+      configurableConstants: {
+        MAKER: aliceWallet.address.toB256(),
+      },
     });
 
     // transfer asset A to predicate so it can transfer to alice
@@ -96,8 +98,10 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const predicate = new PredicateConditionalInputs(provider, undefined, {
-      MAKER: aliceWallet.address.toB256(),
+    const predicate = new PredicateConditionalInputs(provider, {
+      configurableConstants: {
+        MAKER: aliceWallet.address.toB256(),
+      },
     });
 
     // transfer asset A to predicate so it can transfer to alice
