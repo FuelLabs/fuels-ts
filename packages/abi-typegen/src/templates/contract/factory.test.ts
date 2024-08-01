@@ -1,9 +1,12 @@
+import { join } from 'path';
+
 import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import factoryTemplate from '../../../test/fixtures/templates/contract/factory.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
+import { autoUpdateFixture } from '../../../test/utils/updateFixture';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -30,7 +33,12 @@ describe('templates/factory', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    let rendered = renderFactoryTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/contract/factory.hbs'),
+      rendered
+    );
 
     // validating
     restore();
