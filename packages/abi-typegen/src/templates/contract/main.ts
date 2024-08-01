@@ -30,10 +30,7 @@ export function renderMainTemplate(params: { abi: Abi }) {
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: [
-      'FunctionFragment',
-      'InvokeFunction',
-    ],
+    baseMembers: ['FunctionFragment', 'InvokeFunction'],
   });
 
   const { rawContents, storageSlotsContents } = params.abi;
