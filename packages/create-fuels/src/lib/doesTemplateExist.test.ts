@@ -1,5 +1,8 @@
 import { doesTemplateExist } from './doesTemplateExist';
 
+/**
+ * @group node
+ */
 test('doesTemplateExist should return true if the template exists', () => {
   expect(doesTemplateExist('nextjs')).toBeTruthy();
 });
