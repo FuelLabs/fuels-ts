@@ -695,7 +695,7 @@ Supported fuel-core version: ${supportedVersion}.`
     });
   }
 
-  #validateTransaction(tx: TransactionRequest, consensusParameters: ConsensusParameters) {
+  private validateTransaction(tx: TransactionRequest, consensusParameters: ConsensusParameters) {
     if (bn(tx.inputs.length).gt(consensusParameters.txParameters.maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
@@ -727,7 +727,9 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const { consensusParameters } = this.getChain();
 
-    this.#validateTransaction(transactionRequest, consensusParameters);
+    this.validateTransaction(transactionRequest, consensusParameters);
+
+    console.log('teste');
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 

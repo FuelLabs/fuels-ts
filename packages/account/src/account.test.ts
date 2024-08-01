@@ -221,8 +221,6 @@ describe('Account', () => {
     expect(addResourcesSpy).toHaveBeenCalledWith(resourcesToSpend);
   });
 
-  it('should throws if max of inputs was exceeded', async () => {});
-
   it('should execute sendTransaction just fine', async () => {
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
