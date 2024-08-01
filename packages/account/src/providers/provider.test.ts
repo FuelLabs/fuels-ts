@@ -542,7 +542,7 @@ describe('Provider', () => {
     });
   });
 
-  it.only('should throws if max of inputs was exceeded', async () => {
+  it('should throws if max of inputs was exceeded', async () => {
     const maxInputs = 2;
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
