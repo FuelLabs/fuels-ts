@@ -3,12 +3,11 @@ import { BN, bn, toHex } from 'fuels';
 import { ASSET_A } from 'fuels/test-utils';
 
 import { CallTestContractFactory } from '../test/typegen/contracts';
-import { bytecode } from '../test/typegen/contracts/AdvancedLoggingOtherContractFactory';
 
 import { launchTestContract } from './utils';
 
 function setupContract() {
-  return launchTestContract({ factory: CallTestContractFactory, bytecode });
+  return launchTestContract({ factory: CallTestContractFactory });
 }
 const U64_MAX = bn(2).pow(64).sub(1);
 
