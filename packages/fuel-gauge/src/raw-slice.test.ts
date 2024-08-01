@@ -3,7 +3,7 @@ import type { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ScriptRawSlice } from '../test/typegen';
-import { RawSliceFactory } from '../test/typegen/contracts';
+import { RawSliceContractFactory } from '../test/typegen/contracts';
 import { PredicateRawSlice } from '../test/typegen/predicates';
 
 import { launchTestContract } from './utils';
@@ -20,7 +20,7 @@ type Wrapper = {
 
 function setupRawSliceContract() {
   return launchTestContract({
-    factory: RawSliceFactory,
+    factory: RawSliceContractFactory,
   });
 }
 /**

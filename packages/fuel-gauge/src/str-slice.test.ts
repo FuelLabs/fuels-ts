@@ -1,7 +1,7 @@
 import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { StrSliceFactory, ScriptStrSlice } from '../test/typegen';
+import { StrSliceContractFactory, ScriptStrSlice } from '../test/typegen';
 import {
   PredicateStrSlice,
   type PredicateStrSliceInputs,
@@ -14,7 +14,7 @@ import {
 describe('str slice', () => {
   it('echoes a str slice [CONTRACT]', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ factory: StrSliceFactory }],
+      contractsConfigs: [{ factory: StrSliceContractFactory }],
     });
 
     const {
