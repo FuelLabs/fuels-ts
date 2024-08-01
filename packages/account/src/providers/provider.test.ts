@@ -482,6 +482,53 @@ describe('Provider', () => {
     expect(cachedCoins).lengthOf(0);
   });
 
+  it('should unset cached UTXOs when TX execution fails', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '2s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 100_000_000,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+    const maxFee = 100_000;
+    const transferAmount = 10_000;
+
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const uniqueUtxoId = coins[0].id;
+
+    const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
+
+    const request = new ScriptTransactionRequest({
+      maxFee,
+      // No enough gas to execute the TX
+      gasLimit: 0
+    });
+
+    request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
+    request.addResources(resources);
+
+    const submitted = await wallet.sendTransaction(request, { estimateTxDependencies: false });
+
+    expect(provider.cache?.getActiveData()).toContain(uniqueUtxoId);
+
+    await expectToThrowFuelError(
+      () => submitted.waitForResult(),
+      { code: ErrorCode.SCRIPT_REVERTED }
+    );
+
+    // The caches was cleared
+    const cachedCoins = provider.cache?.getActiveData();
+    expect(cachedCoins).lengthOf(0);
+  });
+
   it('should ensure cached UTXOs are not being queried', async () => {
     // Fund the wallet with 2 UTXOs
     const totalUtxos = 2;
