@@ -77,9 +77,9 @@ export default function PredicateExample() {
       }
 
       // Initialize a new predicate instance with the entered pin
-      const reInitializePredicate = new TestPredicate(wallet.provider, [
-        bn(pin),
-      ]);
+      const reInitializePredicate = new TestPredicate(wallet.provider, {
+        data: [bn(pin)],
+      });
 
       if (!reInitializePredicate) {
         return toast.error("Failed to initialize predicate");
