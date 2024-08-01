@@ -426,7 +426,6 @@ describe('Abi interface', () => {
           encodedValue: Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]),
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
           title: '[vector] some arg then u8 vector',
           value: [{ a: true, b: U32_MAX }, [U8_MAX, 0, U8_MAX, U8_MAX]],
@@ -437,7 +436,6 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
@@ -447,7 +445,6 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.two_u8_vectors,
           title: '[vector] two u8 vectors',
           value: [
@@ -460,10 +457,13 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: [33, [450, 202, 340], [12, 13, 14], [11, 9]],
+          decodedTransformer: (decoded: Array<any>) =>
+            decoded.map((v) =>
+              Array.isArray(v) ? v.map((bignumber: BN) => bignumber.toNumber()) : v
+            ),
           encodedValue: [
             Uint8Array.from([0, 0, 0, 33]),
             Uint8Array.from([
@@ -480,7 +480,6 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_vector,
           title: '[vector] vector inside vector [with offset]',
           value: [
@@ -538,7 +537,6 @@ describe('Abi interface', () => {
           offset: 40,
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_enum,
           title: '[vector] vector inside enum',
           value: [
@@ -558,7 +556,6 @@ describe('Abi interface', () => {
           offset: 0,
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_struct,
           title: '[vector] vector inside struct [with offset]',
           value: [
@@ -582,7 +579,7 @@ describe('Abi interface', () => {
         },
       ])(
         '$title: $value',
-        ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
+        ({ fn, title: _title, value, encodedValue, decodedTransformer, offset }) => {
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value)
             : fn.encodeArguments([value]);
@@ -593,10 +590,6 @@ describe('Abi interface', () => {
             encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
           expect(encoded).toEqual(expectedEncoded);
-
-          if (skipDecoding) {
-            return;
-          }
 
           let decoded = fn.decodeOutput(expectedEncoded)[0];
 
