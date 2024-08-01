@@ -729,8 +729,6 @@ Supported fuel-core version: ${supportedVersion}.`
 
     this.validateTransaction(transactionRequest, consensusParameters);
 
-    console.log('teste');
-
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
     let abis: JsonAbisFromAllCalls | undefined;
