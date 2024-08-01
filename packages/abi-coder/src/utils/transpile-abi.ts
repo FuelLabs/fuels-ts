@@ -4,9 +4,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import type { JsonAbiOld } from '../types/JsonAbi';
-import type { JsonAbi } from '../types/JsonAbiNew';
-
 const findTypeByConcreteId = (types, id) => types.find((x) => x.concreteTypeId === id);
 
 const findConcreteTypeById = (abi, id) => abi.concreteTypes.find((x) => x.concreteTypeId === id);
@@ -87,7 +84,7 @@ function parseComponents(abi, types, components) {
  * The old format contains only:
  *    - `types`
  */
-export function transpileAbi(abi: JsonAbi): JsonAbiOld {
+export function transpileAbi(abi) {
   // do not transpile older versions
   if (!abi.specVersion) {
     return abi;

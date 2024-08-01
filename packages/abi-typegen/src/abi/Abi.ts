@@ -5,6 +5,7 @@ import type { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 import type { IConfigurable } from '../types/interfaces/IConfigurable';
 import type { IFunction } from '../types/interfaces/IFunction';
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbiOld } from '../types/interfaces/JsonAbi';
 import type { JsonAbi } from '../types/interfaces/JsonAbiNew';
 import { parseFunctions } from '../utils/parseFunctions';
 import { parseTypes } from '../utils/parseTypes';
@@ -82,7 +83,7 @@ export class Abi {
   }
 
   parse() {
-    const transpiled = transpileAbi(this.rawContents);
+    const transpiled = transpileAbi(this.rawContents) as JsonAbiOld;
     const {
       types: rawAbiTypes,
       functions: rawAbiFunctions,
