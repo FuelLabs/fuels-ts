@@ -14,6 +14,8 @@ import { globSync } from 'glob';
       'templates/**',
       'apps/demo-wallet-sdk-react/**',
       'apps/create-fuels-counter-guide/**',
+      'apps/internal/forc/sway-repo/**',
+      'apps/internal/fuel-core/fuel-core-repo/**',
     ],
   });
 
