@@ -77,7 +77,7 @@ function parseComponents(abi, types, components) {
 }
 
 /**
- * This will transpile new ABIs to the old format.
+ * This will transpile new ABIs (spec: "1") to the old format.
  *
  * The new format got these new props:
  *    - `specVersion`,
