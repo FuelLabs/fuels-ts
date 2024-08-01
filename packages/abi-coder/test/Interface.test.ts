@@ -4,6 +4,7 @@ import { concat } from '@fuel-ts/utils';
 
 import { Interface } from '../src/Interface';
 import type { JsonAbiConfigurable } from '../src/types/JsonAbi';
+import type { AbiFunction } from '../src/types/JsonAbiNew';
 
 import { AbiCoderProjectsEnum, getCoderForcProject } from './fixtures/forc-projects';
 import {
@@ -583,16 +584,30 @@ describe('Abi interface', () => {
       ])(
         '$title: $value',
         ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
-          const encoded = Array.isArray(value)
-            ? fn.encodeArguments(value)
-            : fn.encodeArguments([value]);
+          const fnArguments = Array.isArray(value) ? value : [value];
+          const encodedArguments = fn.encodeArguments(fnArguments);
 
           const encodedVal =
             encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
           const expectedEncoded =
             encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
-          expect(encoded).toEqual(expectedEncoded);
+          expect(encodedArguments).toEqual(expectedEncoded);
+
+          const jsonFn = exhaustiveExamplesInterface.jsonAbi.functions.find(
+            (f) => f.name === fn.name
+          ) as AbiFunction;
+
+          // test Interface.encodeType
+          const argsEncodedAsSingleTypes = jsonFn.inputs
+            .map((i) => i.concreteTypeId)
+            .map((arg, idx) => exhaustiveExamplesInterface.encodeType(arg, fnArguments[idx]));
+
+          argsEncodedAsSingleTypes?.forEach((arg, idx, arr) => {
+            const argOffset = arr.slice(0, idx).reduce((result, val) => result + val.length, 0);
+
+            expect(arg).toEqual(expectedEncoded.slice(argOffset, argOffset + arg.length));
+          });
 
           if (skipDecoding) {
             return;
@@ -607,6 +622,18 @@ describe('Abi interface', () => {
           const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
 
           expect(decoded).toStrictEqual(expectedDecoded);
+
+          // test Interface.decodeType
+          let decodedType = exhaustiveExamplesInterface.decodeType(
+            jsonFn.output,
+            expectedEncoded
+          )[0];
+
+          if (decodedTransformer) {
+            decodedType = decodedTransformer(decodedType);
+          }
+
+          expect(decodedType).toEqual(expectedDecoded);
         }
       );
     });

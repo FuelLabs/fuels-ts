@@ -1,7 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbiOld, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument, JsonAbiType } from '../types/JsonAbi';
+import type { AbiFunction, JsonAbi } from '../types/JsonAbiNew';
 
 import { ENCODING_V1, VOID_TYPE, type EncodingVersion } from './constants';
 
@@ -33,7 +34,7 @@ export const getEncodingVersion = (encoding?: string): EncodingVersion => {
  * @param name - the name of the function to find
  * @returns the JsonAbi function object
  */
-export const findFunctionByName = (abi: JsonAbiOld, name: string): JsonAbiFunction => {
+export const findFunctionByName = (abi: JsonAbi, name: string): AbiFunction => {
   const fn = abi.functions.find((f) => f.name === name);
   if (!fn) {
     throw new FuelError(

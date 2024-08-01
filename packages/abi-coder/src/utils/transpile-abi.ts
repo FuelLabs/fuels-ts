@@ -7,6 +7,75 @@
 import type { JsonAbiOld } from '../types/JsonAbi';
 import type { JsonAbi } from '../types/JsonAbiNew';
 
+const findTypeByConcreteId = (types, id) => types.find((x) => x.concreteTypeId === id);
+
+const findConcreteTypeById = (abi, id) => abi.concreteTypes.find((x) => x.concreteTypeId === id);
+
+function finsertTypeIdByConcreteTypeId(abi, types, id) {
+  const concreteType = findConcreteTypeById(abi, id);
+
+  if (concreteType.metadataTypeId !== undefined) {
+    return concreteType.metadataTypeId;
+  }
+
+  const type = findTypeByConcreteId(types, id);
+  if (type) {
+    return type.typeId;
+  }
+
+  types.push({
+    typeId: types.length,
+    type: concreteType.type,
+    components: parseComponents(concreteType.components),
+    concreteTypeId: id,
+    typeParameters: concreteType.typeParameters ?? null,
+    originalConcreteTypeId: concreteType?.concreteTypeId,
+  });
+
+  return types.length - 1;
+}
+
+function parseFunctionTypeArguments(abi, types, concreteType) {
+  return (
+    concreteType.typeArguments?.map((cTypeId) => {
+      const self = findConcreteTypeById(abi, cTypeId);
+      const type = !isNaN(cTypeId) ? cTypeId : finsertTypeIdByConcreteTypeId(abi, types, cTypeId);
+      return {
+        name: '',
+        type,
+        // originalTypeId: cTypeId,
+        typeArguments: parseFunctionTypeArguments(abi, types, self),
+      };
+    }) ?? null
+  );
+}
+
+export function parseConcreteType(abi, types, concreteTypeId, name) {
+  const type = finsertTypeIdByConcreteTypeId(abi, types, concreteTypeId);
+  const concrete = findConcreteTypeById(abi, concreteTypeId);
+  return {
+    name: name ?? '',
+    type,
+    // concreteTypeId,
+    typeArguments: parseFunctionTypeArguments(abi, types, concrete),
+  };
+}
+
+function parseComponents(abi, types, components) {
+  return (
+    components?.map((component) => {
+      const { typeId, name, typeArguments } = component;
+      const type = !isNaN(typeId) ? typeId : finsertTypeIdByConcreteTypeId(abi, types, typeId);
+      return {
+        name,
+        type,
+        // originalTypeId: typeId,
+        typeArguments: parseComponents(abi, types, typeArguments),
+      };
+    }) ?? null
+  );
+}
+
 /**
  * This will transpile new ABIs to the old format.
  *
@@ -30,73 +99,6 @@ export function transpileAbi(abi: JsonAbi): JsonAbiOld {
   /**
    * Helpers
    */
-  const findTypeByConcreteId = (id) => types.find((x) => x.concreteTypeId === id);
-
-  const findConcreteTypeById = (id) => abi.concreteTypes.find((x) => x.concreteTypeId === id);
-
-  function finsertTypeIdByConcreteTypeId(id) {
-    const concreteType = findConcreteTypeById(id);
-
-    if (concreteType.metadataTypeId !== undefined) {
-      return concreteType.metadataTypeId;
-    }
-
-    const type = findTypeByConcreteId(id);
-    if (type) {
-      return type.typeId;
-    }
-
-    types.push({
-      typeId: types.length,
-      type: concreteType.type,
-      components: concreteType.type === '()' ? [] : parseComponents(concreteType.components),
-      concreteTypeId: id,
-      typeParameters: concreteType.typeParameters ?? null,
-    });
-
-    return types.length - 1;
-  }
-
-  function parseFunctionTypeArguments(concreteType) {
-    return (
-      concreteType.typeArguments?.map((cTypeId) => {
-        const self = findConcreteTypeById(cTypeId);
-        const type = !isNaN(cTypeId) ? cTypeId : finsertTypeIdByConcreteTypeId(cTypeId);
-        return {
-          name: '',
-          type,
-          // originalTypeId: cTypeId,
-          typeArguments: parseFunctionTypeArguments(self),
-        };
-      }) ?? null
-    );
-  }
-
-  function parseFunctioIO(concreteTypeId, name) {
-    const type = finsertTypeIdByConcreteTypeId(concreteTypeId);
-    const concrete = findConcreteTypeById(concreteTypeId);
-    return {
-      name: name ?? '',
-      type,
-      // concreteTypeId,
-      typeArguments: parseFunctionTypeArguments(concrete),
-    };
-  }
-
-  function parseComponents(components) {
-    return (
-      components?.map((component) => {
-        const { typeId, name, typeArguments } = component;
-        const type = !isNaN(typeId) ? typeId : finsertTypeIdByConcreteTypeId(typeId);
-        return {
-          name,
-          type,
-          // originalTypeId: typeId,
-          typeArguments: parseComponents(typeArguments),
-        };
-      }) ?? null
-    );
-  }
 
   /**
    * Transpiling
@@ -115,29 +117,29 @@ export function transpileAbi(abi: JsonAbi): JsonAbiOld {
 
   // 2. the metadata's components
   types.forEach((t) => {
-    t.components = parseComponents(t.components);
+    t.components = parseComponents(abi, types, t.components);
   });
 
   // 3. functions inputs/outputs
   const functions = abi.functions.map((fn) => {
     const inputs = fn.inputs.map(({ concreteTypeId, name }) =>
-      parseFunctioIO(concreteTypeId, name)
+      parseConcreteType(abi, types, concreteTypeId, name)
     );
-    const output = parseFunctioIO(fn.output, '');
+    const output = parseConcreteType(abi, types, fn.output, '');
     return { ...fn, inputs, output };
   });
 
   // 4. configurables
   const configurables = abi.configurables.map((conf) => ({
     name: conf.name,
-    configurableType: parseFunctioIO(conf.concreteTypeId),
+    configurableType: parseConcreteType(abi, types, conf.concreteTypeId),
     offset: conf.offset,
   }));
 
   // 5. loggedTypes
   const loggedTypes = abi.loggedTypes.map((log) => ({
     logId: log.logId,
-    loggedType: parseFunctioIO(log.concreteTypeId),
+    loggedType: parseConcreteType(abi, types, log.concreteTypeId),
   }));
 
   // transpiled ABI
