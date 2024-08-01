@@ -34,7 +34,7 @@ export enum AbiTypegenProjectsEnum {
 
 export const getTypegenForcProject = <T extends boolean = false>(
   project: AbiTypegenProjectsEnum,
-  transpile: T = false as T
+  { transpile }: { transpile: T } = { transpile: false as T }
 ) => {
   const result = getForcProject<T extends true ? JsonAbiOld : JsonAbi>({
     projectDir: join(__dirname, project),
@@ -43,7 +43,6 @@ export const getTypegenForcProject = <T extends boolean = false>(
   });
 
   if (transpile) {
-    // @ts-expect-error I now it's an error, this is just for tests
     result.abiContents = transpileAbi(result.abiContents);
   }
 

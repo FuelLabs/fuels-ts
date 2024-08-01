@@ -106,7 +106,7 @@ describe('parseTypeArguments.ts', () => {
   });
 
   test('should fallback to void for null outputs', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID, true);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID, { transpile: true });
 
     const types = bundleTypes(project.abiContents.types);
     const typeArguments = [project.abiContents.functions[0].output];

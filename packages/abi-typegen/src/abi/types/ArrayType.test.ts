@@ -29,7 +29,9 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: simple', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY, true);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY, {
+      transpile: true,
+    });
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
@@ -47,7 +49,9 @@ describe('ArrayType.ts', () => {
   test('should properly parse type attributes: nested', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS, true);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS, {
+      transpile: true,
+    });
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
