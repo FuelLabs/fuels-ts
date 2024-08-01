@@ -1,3 +1,5 @@
+import { join } from 'path';
+
 import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
@@ -5,6 +7,7 @@ import {
 import expectedMainFullTemplate from '../../../test/fixtures/templates/contract/main.hbs';
 import expectedMainMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/main.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
+import { autoUpdateFixture } from '../../../test/utils/updateFixture';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -29,7 +32,13 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/contract/main.hbs'),
+      rendered
+    );
+
     // validating
     restore();
 
@@ -50,7 +59,12 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/contract-with-configurable/main.hbs'),
+      rendered
+    );
 
     restore();
 
@@ -69,6 +83,7 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
   });
 
@@ -84,6 +99,7 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(/export type StructBOutput<T> = StructBInput<T>;$/m);
   });
 
@@ -99,6 +115,7 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(/export type MyEnumOutput = MyEnumInput;$/m);
   });
 
@@ -114,6 +131,7 @@ describe('templates/dts', () => {
     });
 
     const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(
       /export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };$/m
     );

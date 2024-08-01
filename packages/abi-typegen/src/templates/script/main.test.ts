@@ -1,4 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { join } from 'path';
 
 import {
   AbiTypegenProjectsEnum,
@@ -7,6 +8,7 @@ import {
 import mainTemplate from '../../../test/fixtures/templates/script/main.hbs';
 import mainTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/main.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
+import { autoUpdateFixture } from '../../../test/utils/updateFixture';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
@@ -30,7 +32,12 @@ describe('main.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/script/main.hbs'),
+      rendered
+    );
 
     restore();
 
@@ -51,7 +58,12 @@ describe('main.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/script-with-configurable/main.hbs'),
+      rendered
+    );
 
     restore();
 
