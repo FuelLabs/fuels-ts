@@ -9,6 +9,7 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
+import { doesTemplateExist } from './lib/doesTemplateExist';
 import { getPackageManager } from './lib/getPackageManager';
 import { getPackageVersion } from './lib/getPackageVersion';
 import { defaultTemplate, templates } from './lib/setupProgram';
@@ -37,12 +38,9 @@ function writeEnvFile(envFilePath: string) {
   writeFileSync(envFilePath, newFileContents);
 }
 
-const doesTemplateExist = (templateName: Template): boolean => templates.has(templateName);
-
 export const runScaffoldCli = async ({
   program,
   args = process.argv,
-  checkIfTemplateExists = true,
 }: {
   program: Command;
   args: string[];
@@ -53,7 +51,7 @@ export const runScaffoldCli = async ({
 
   const templateOfChoice = (opts.template ?? defaultTemplate) as Template;
 
-  if (!doesTemplateExist(templateOfChoice) && checkIfTemplateExists) {
+  if (!doesTemplateExist(templateOfChoice)) {
     error(`Template '${templateOfChoice}' does not exist.`);
     log();
     log('Available templates:');
