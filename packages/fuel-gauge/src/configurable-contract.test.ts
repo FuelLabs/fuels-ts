@@ -29,7 +29,6 @@ function setupContract(configurableConstants?: { [name: string]: unknown }) {
     contractsConfigs: [
       {
         factory: ConfigurableContractFactory,
-
         options: { configurableConstants },
       },
     ],
