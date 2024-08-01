@@ -1,4 +1,4 @@
-import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+import { Provider, ScriptTransactionRequest, Wallet, TESTNET_NETWORK_URL } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ConfigurablePinAbi__factory as PredicateFactory } from '../../../test/typegen';
@@ -18,6 +18,8 @@ describe('Predicate Custom Transactions', () => {
     const SENDER_PVT_KEY = testSender.privateKey;
     const RECEIVER_ADDRESS = testReceiver.address;
     const TESTNET_NETWORK_URL = testProvider.url;
+
+    await Provider.create(TESTNET_NETWORK_URL);
 
     const initialRecieverBalance = await testReceiver.getBalance(testProvider.getBaseAssetId());
 
