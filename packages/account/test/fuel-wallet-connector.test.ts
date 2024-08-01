@@ -1,4 +1,3 @@
-import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
