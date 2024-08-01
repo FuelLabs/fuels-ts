@@ -440,7 +440,11 @@ describe('Policies', () => {
 
       const maxFee = 1;
 
-      const factory = new ContractFactory(PayableAnnotationFactory.bytecode, PayableAnnotation.abi, wallet);
+      const factory = new ContractFactory(
+        PayableAnnotationFactory.bytecode,
+        PayableAnnotation.abi,
+        wallet
+      );
 
       const txParams: CustomTxParams = {
         witnessLimit: 800,
