@@ -25,20 +25,26 @@ import type {
 
 import { getPredicateRoot } from './utils';
 
-export type PredicateParams<T = InputValue[]> = {
+export type PredicateParams<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } = { [name: string]: unknown },
+> = {
   bytecode: BytesLike;
   provider: Provider;
   abi?: JsonAbi;
-  data?: T;
-  configurableConstants?: { [name: string]: unknown };
+  data?: TData;
+  configurableConstants?: TConfigurables;
 };
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<Tdata extends InputValue[]> extends Account {
+export class Predicate<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } = { [name: string]: unknown },
+> extends Account {
   bytes: Uint8Array;
-  predicateData: Tdata = [] as unknown as Tdata;
+  predicateData: TData = [] as unknown as TData;
   interface?: Interface;
 
   /**
@@ -50,7 +56,13 @@ export class Predicate<Tdata extends InputValue[]> extends Account {
    * @param data - The predicate input data (optional).
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
-  constructor({ bytecode, abi, provider, data, configurableConstants }: PredicateParams<Tdata>) {
+  constructor({
+    bytecode,
+    abi,
+    provider,
+    data,
+    configurableConstants,
+  }: PredicateParams<TData, TConfigurables>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,

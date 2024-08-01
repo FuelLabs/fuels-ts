@@ -49,7 +49,7 @@ export type {{capitalizedName}}Configurables = Partial<{
 export type {{capitalizedName}}Inputs = [{{inputs}}];
 
 export type {{capitalizedName}}Parameters = Pick<
-  PredicateParams<{{capitalizedName}}Inputs>,
+  PredicateParams<{{capitalizedName}}Inputs, {{capitalizedName}}Configurables>,
   'data' | 'configurableConstants'
 >;
 
@@ -57,7 +57,7 @@ const abi = {{abiJsonString}};
 
 const bytecode = '{{hexlifiedBinString}}';
 
-export class {{capitalizedName}} extends Predicate<{{capitalizedName}}Inputs> {
+export class {{capitalizedName}} extends Predicate<{{capitalizedName}}Inputs, {{capitalizedName}}Configurables> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;

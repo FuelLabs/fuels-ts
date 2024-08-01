@@ -23,7 +23,7 @@ export type MyPredicateConfigurables = Partial<{
 export type MyPredicateInputs = [fee: BigNumberish, address: string];
 
 export type MyPredicateParameters = Pick<
-  PredicateParams<MyPredicateInputs>,
+  PredicateParams<MyPredicateInputs, MyPredicateConfigurables>,
   'data' | 'configurableConstants'
 >;
 
@@ -98,7 +98,7 @@ const abi = {
 
 const bytecode = '0x000';
 
-export class MyPredicate extends Predicate<MyPredicateInputs> {
+export class MyPredicate extends Predicate<MyPredicateInputs, MyPredicateConfigurables> {
 
   static readonly abi = abi;
   static readonly bytecode = bytecode;
