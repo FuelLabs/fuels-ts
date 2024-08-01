@@ -54,7 +54,7 @@ describe('std-lib-string Tests', () => {
       abi: PredicateStdLibString.abi,
       bytecode: PredicateStdLibString.bytecode,
       provider,
-      inputData: [1, 2, 'Hello World'],
+      data: [1, 2, 'Hello World'],
     });
 
     // setup predicate

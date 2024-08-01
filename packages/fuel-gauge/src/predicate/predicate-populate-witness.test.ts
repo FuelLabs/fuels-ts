@@ -43,7 +43,7 @@ describe('Predicate', () => {
         abi: PredicateAssertNumber.abi,
         bytecode: PredicateAssertNumber.bytecode,
         provider,
-        inputData: [11],
+        data: [11],
       });
 
       await fundPredicate(wallet, predicateAssertNumber, 500_000);
@@ -98,7 +98,7 @@ describe('Predicate', () => {
         abi: PredicateAssertNumber.abi,
         bytecode: PredicateAssertNumber.bytecode,
         provider,
-        inputData: [11],
+        data: [11],
       });
 
       await fundPredicate(fundingWallet, predicateAssertNumber, 500_000);
@@ -153,7 +153,7 @@ describe('Predicate', () => {
         abi: PredicateAssertNumber.abi,
         bytecode: PredicateAssertNumber.bytecode,
         provider,
-        inputData: [11],
+        data: [11],
       });
 
       await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
@@ -231,7 +231,7 @@ describe('Predicate', () => {
         abi: PredicateAssertNumber.abi,
         bytecode: PredicateAssertNumber.bytecode,
         provider,
-        inputData: [11],
+        data: [11],
       });
 
       await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
@@ -240,7 +240,7 @@ describe('Predicate', () => {
         abi: PredicateAssertValue.abi,
         bytecode: PredicateAssertValue.bytecode,
         provider,
-        inputData: [true],
+        data: [true],
       });
 
       await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
@@ -322,7 +322,7 @@ describe('Predicate', () => {
         abi: PredicateAssertNumber.abi,
         bytecode: PredicateAssertNumber.bytecode,
         provider,
-        inputData: [11],
+        data: [11],
       });
 
       await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
@@ -331,7 +331,7 @@ describe('Predicate', () => {
         abi: PredicateAssertValue.abi,
         bytecode: PredicateAssertValue.bytecode,
         provider,
-        inputData: [true],
+        data: [true],
       });
 
       await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);
@@ -408,7 +408,7 @@ describe('Predicate', () => {
         abi: PredicateAssertNumber.abi,
         bytecode: PredicateAssertNumber.bytecode,
         provider,
-        inputData: [11],
+        data: [11],
       });
 
       await fundPredicate(fundingWallet, predicateAssertNumber, 500_000, UTXOS_AMOUNT);
@@ -426,7 +426,7 @@ describe('Predicate', () => {
         abi: PredicateAssertValue.abi,
         bytecode: PredicateAssertValue.bytecode,
         provider,
-        inputData: [true],
+        data: [true],
       });
 
       await fundPredicate(fundingWallet, predicateAssertValue, 500_000, UTXOS_AMOUNT);

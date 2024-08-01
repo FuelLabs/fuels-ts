@@ -30,7 +30,7 @@ describe('Predicate', () => {
         abi: PredicateWithConfigurable.abi,
         bytecode: PredicateWithConfigurable.bytecode,
         provider: wallet.provider,
-        inputData: [defaultValues.FEE, defaultValues.ADDRESS], // set predicate input data to be the same as default configurable value
+        data: [defaultValues.FEE, defaultValues.ADDRESS], // set predicate input data to be the same as default configurable value
       });
 
       const amountToTransfer = 200;
@@ -73,7 +73,7 @@ describe('Predicate', () => {
         abi: PredicateWithConfigurable.abi,
         bytecode: PredicateWithConfigurable.bytecode,
         provider,
-        inputData: [configurableConstants.FEE, defaultValues.ADDRESS],
+        data: [configurableConstants.FEE, defaultValues.ADDRESS],
         configurableConstants,
       });
 
@@ -118,7 +118,7 @@ describe('Predicate', () => {
         abi: PredicateWithConfigurable.abi,
         bytecode: PredicateWithConfigurable.bytecode,
         provider,
-        inputData: [defaultValues.FEE, configurableConstants.ADDRESS],
+        data: [defaultValues.FEE, configurableConstants.ADDRESS],
         configurableConstants,
       });
 
@@ -167,7 +167,7 @@ describe('Predicate', () => {
         abi: PredicateWithConfigurable.abi,
         bytecode: PredicateWithConfigurable.bytecode,
         provider,
-        inputData: [configurableConstants.FEE, configurableConstants.ADDRESS],
+        data: [configurableConstants.FEE, configurableConstants.ADDRESS],
         configurableConstants,
       });
 
@@ -273,7 +273,7 @@ describe('Predicate', () => {
           abi: PredicateTrue.abi,
           bytecode: PredicateTrue.bytecode,
           provider,
-          inputData: ['NADA'],
+          data: ['NADA'],
           configurableConstants: {
             constant: 'NADA',
           },
@@ -294,7 +294,7 @@ describe('Predicate', () => {
           abi: PredicateWithConfigurable.abi,
           bytecode: PredicateWithConfigurable.bytecode,
           provider,
-          inputData: ['NADA'],
+          data: ['NADA'],
           configurableConstants: {
             NOPE: 'NADA',
           },
@@ -315,7 +315,7 @@ describe('Predicate', () => {
           // abi: PredicateWithConfigurable.abi,
           bytecode: PredicateWithConfigurable.bytecode,
           provider,
-          inputData: ['NADA'],
+          data: ['NADA'],
           configurableConstants: {
             NOPE: 'NADA',
           },

@@ -207,7 +207,7 @@ describe('Predicate', () => {
         abi: PredicateValidateTransfer.abi,
         bytecode: PredicateValidateTransfer.bytecode,
         provider,
-        inputData: [bn(amountToPredicate)],
+        data: [bn(amountToPredicate)],
       });
 
       await fundPredicate(wallet, predicateValidateTransfer, amountToPredicate);

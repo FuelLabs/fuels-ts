@@ -151,7 +151,7 @@ describe('Vector Types Validation', () => {
       provider: wallet.provider,
       abi: PredicateVectorTypes.abi,
       bytecode: PredicateVectorTypes.bytecode,
-      inputData: [
+      data: [
         U32_VEC,
         VEC_IN_VEC,
         STRUCT_IN_VEC,

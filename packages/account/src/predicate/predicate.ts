@@ -29,16 +29,16 @@ export type PredicateParams<T = InputValue[]> = {
   bytecode: BytesLike;
   provider: Provider;
   abi?: JsonAbi;
-  inputData?: T;
+  data?: T;
   configurableConstants?: { [name: string]: unknown };
 };
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<TInputData extends InputValue[]> extends Account {
+export class Predicate<Tdata extends InputValue[]> extends Account {
   bytes: Uint8Array;
-  predicateData: TInputData = [] as unknown as TInputData;
+  predicateData: Tdata = [] as unknown as Tdata;
   interface?: Interface;
 
   /**
@@ -47,16 +47,10 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param bytecode - The bytecode of the predicate.
    * @param abi - The JSON ABI of the predicate.
    * @param provider - The provider used to interact with the blockchain.
-   * @param inputData - The predicate input data (optional).
+   * @param data - The predicate input data (optional).
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
-  constructor({
-    bytecode,
-    abi,
-    provider,
-    inputData,
-    configurableConstants,
-  }: PredicateParams<TInputData>) {
+  constructor({ bytecode, abi, provider, data, configurableConstants }: PredicateParams<Tdata>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,
@@ -67,8 +61,8 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
-    if (inputData !== undefined && inputData.length > 0) {
-      this.predicateData = inputData;
+    if (data !== undefined && data.length > 0) {
+      this.predicateData = data;
     }
   }
 
