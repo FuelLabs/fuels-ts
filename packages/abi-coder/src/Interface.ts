@@ -8,7 +8,7 @@ import { FunctionFragment } from './FunctionFragment';
 import type { InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
 import { type EncodingVersion } from './utils/constants';
-import { getEncodingVersion } from './utils/json-abi';
+import { findTypeById, getEncodingVersion } from './utils/json-abi';
 
 export class Interface<TAbi extends JsonAbi = JsonAbi> {
   readonly functions!: Record<string, FunctionFragment>;
