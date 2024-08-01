@@ -7,15 +7,8 @@ import { formatStructs } from '../utils/formatStructs';
 import mainTemplate from './main.hbs';
 
 export function renderMainTemplate(params: { abi: Abi }) {
-  const {
-    camelizedName,
-    capitalizedName,
-    types,
-    functions,
-    commonTypesInUse,
-    configurables,
-    hexlifiedBinContents,
-  } = params.abi;
+  const { camelizedName, capitalizedName, types, functions, commonTypesInUse, configurables } =
+    params.abi;
 
   /*
     First we format all attributes
