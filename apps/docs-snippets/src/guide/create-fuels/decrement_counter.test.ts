@@ -10,7 +10,6 @@ import { CounterFactory } from '../../../test/typegen';
 describe('Counter Contract', () => {
   // #region decrement-counter
   // #context import { CounterAbi } from './sway-programs-api';
-  // #context
 
   test('calls the decrement_counter function', async () => {
     // First, we'll launch a test node, passing the contract factory and bytecode. This will deploy the contract
