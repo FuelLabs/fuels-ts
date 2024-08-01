@@ -577,9 +577,6 @@ describe('Abi interface', () => {
       ])(
         '$title: $value',
         ({ fn, title: _title, value, encodedValue, decodedTransformer, offset }) => {
-          if (fn.name !== 'u32_then_three_vectors_u64') {
-            return;
-          }
           const encoded = Array.isArray(value)
             ? fn.encodeArguments(value)
             : fn.encodeArguments([value]);
