@@ -31,11 +31,7 @@ export function renderMainTemplate(params: { abi: Abi }) {
   const { imports } = formatImports({
     types,
     baseMembers: [
-      // 'Interface',
       'FunctionFragment',
-      // 'DecodedValue',
-      // 'Contract',
-      // 'BytesLike',
       'InvokeFunction',
     ],
   });
