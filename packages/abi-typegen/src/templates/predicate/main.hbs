@@ -40,11 +40,15 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
+{{#if configurables}}
 export type {{capitalizedName}}Configurables = Partial<{
-{{#each configurables}}
-  {{name}}: {{inputLabel}};
-{{/each}}
+  {{#each configurables}}
+    {{name}}: {{inputLabel}};
+  {{/each}}
 }>;
+{{else}}
+export type {{capitalizedName}}Configurables = undefined;
+{{/if}}
 
 export type {{capitalizedName}}Inputs = [{{inputs}}];
 
@@ -57,13 +61,13 @@ export class {{capitalizedName}} extends Predicate<{{capitalizedName}}Inputs> {
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
-  constructor(provider: Provider, predicateData?: {{capitalizedName}}Inputs, configurables?: {{capitalizedName}}Configurables) {
+  constructor(provider: Provider, predicateData?: {{capitalizedName}}Inputs{{#if configurables}}, configurables?: {{capitalizedName}}Configurables{{/if}}) {
     super({
       abi,
       bytecode,
       provider,
       inputData: predicateData,
-      configurableConstants: configurables,
+      {{#if configurables}}configurableConstants: configurables,{{/if}}
     });
   }
 }
