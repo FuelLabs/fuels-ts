@@ -23,9 +23,9 @@ describe('Predicate Custom Transactions', () => {
 
     // #region predicate-custom-transaction
     // #import { Provider, ScriptTransactionRequest, TESTNET_NETWORK_URL, Wallet } from 'fuels';
-    // #import { PredicateFactory } from 'path/to/typegen/outputs';
-    // #import type { PredicateInputs } from 'path/to/typegen/outputs';
-    // #import { SENDER_PVT_KEY, RECEIVER_ADDRESS } from 'path/to/my/env/file';
+    // #context import { PredicateFactory } from 'path/to/typegen/outputs';
+    // #context import type { PredicateInputs } from 'path/to/typegen/outputs';
+    // #context import { SENDER_PVT_KEY, RECEIVER_ADDRESS } from 'path/to/my/env/file';
     // Setup
     const provider = await Provider.create(TESTNET_NETWORK_URL);
     const sender = Wallet.fromPrivateKey(SENDER_PVT_KEY);
