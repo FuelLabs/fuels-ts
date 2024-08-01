@@ -83,7 +83,8 @@ describe('Bytes Tests', () => {
 
     const bytes = [40, 41, 42];
 
-    const predicate = new PredicateBytes(wallet.provider, {
+    const predicate = new PredicateBytes({
+      provider: wallet.provider,
       data: [
         {
           inner: [bytes, bytes],

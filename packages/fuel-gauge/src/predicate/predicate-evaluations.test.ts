@@ -22,7 +22,7 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
 
-      const predicate = new PredicateTrue(provider);
+      const predicate = new PredicateTrue({ provider });
 
       await fundPredicate(wallet, predicate, 200_000);
 
@@ -53,7 +53,7 @@ describe('Predicate', () => {
 
       const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-      const predicate = new PredicateFalse(provider);
+      const predicate = new PredicateFalse({ provider });
 
       await fundPredicate(wallet, predicate, 200_000);
 

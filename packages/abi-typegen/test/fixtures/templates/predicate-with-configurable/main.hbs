@@ -27,7 +27,7 @@ export type MyPredicateInputs = [fee: BigNumberish, address: string];
 
 export type MyPredicateParameters = Pick<
   PredicateParams<MyPredicateInputs, MyPredicateConfigurables>,
-  'data' | 'configurableConstants'
+  'provider' | 'data' | 'configurableConstants'
 >;
 
 const abi = {
@@ -106,11 +106,11 @@ export class MyPredicate extends Predicate<MyPredicateInputs, MyPredicateConfigu
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
-  constructor(provider: Provider, params?: MyPredicateParameters) {
+  constructor(params: MyPredicateParameters) {
     super({
       abi,
       bytecode,
-      provider,
+      provider: params.provider,
       data: params?.data,
       configurableConstants: params?.configurableConstants,
     });

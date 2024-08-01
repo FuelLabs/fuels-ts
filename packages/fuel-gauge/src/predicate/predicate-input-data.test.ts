@@ -22,7 +22,7 @@ describe('Predicate', () => {
       const amountToPredicate = 200_000;
       const amountToReceiver = 50;
 
-      const predicate = new PredicateInputData(provider);
+      const predicate = new PredicateInputData({ provider });
 
       await fundPredicate(wallet, predicate, amountToPredicate);
 

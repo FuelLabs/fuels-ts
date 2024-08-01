@@ -28,7 +28,8 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = new PredicateAddress(provider, {
+      const predicate = new PredicateAddress({
+        provider,
         data: ['0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a'],
       });
 
@@ -60,7 +61,8 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = new PredicateAddress(provider, {
+      const predicate = new PredicateAddress({
+        provider,
         data: ['0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada'],
       });
 
@@ -82,7 +84,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = new PredicateU32(provider, { data: [1078] });
+      const predicate = new PredicateU32({ provider, data: [1078] });
 
       const receiver = Wallet.generate({ provider });
 
@@ -113,7 +115,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = new PredicateU32(provider, { data: [100] });
+      const predicate = new PredicateU32({ provider, data: [100] });
 
       // fund predicate
       await fundPredicate(fundingWallet, predicate, 90_000_00, 3);
@@ -138,7 +140,8 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicateInstanceForBalance = new PredicateMainArgsStruct(provider, {
+      const predicateInstanceForBalance = new PredicateMainArgsStruct({
+        provider,
         data: [{ has_account: true, total_complete: 100 }],
       });
 
@@ -154,7 +157,8 @@ describe('Predicate', () => {
       await fundTx.waitForResult();
 
       // #region predicate-struct-arg
-      const predicate = new PredicateMainArgsStruct(provider, {
+      const predicate = new PredicateMainArgsStruct({
+        provider,
         data: [{ has_account: true, total_complete: 100 }],
       });
 
@@ -181,7 +185,8 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = new PredicateMainArgsStruct(provider, {
+      const predicate = new PredicateMainArgsStruct({
+        provider,
         data: [{ has_account: false, total_complete: 0 }],
       });
 
@@ -203,7 +208,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = new PredicateMainArgsVector(provider, { data: [[42]] });
+      const predicate = new PredicateMainArgsVector({ provider, data: [[42]] });
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -237,7 +242,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-multi-args
-      const predicate = new PredicateMultiArgs(provider, { data: [20, 30] });
+      const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund the predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate);
@@ -268,7 +273,7 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
 
-      const predicate = new PredicateMultiArgs(provider, { data: [20, 30] });
+      const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate);
@@ -295,7 +300,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = new PredicateMultiArgs(provider, { data: [20, 20] });
+      const predicate = new PredicateMultiArgs({ provider, data: [20, 20] });
 
       // fund predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate);

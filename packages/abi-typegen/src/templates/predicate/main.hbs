@@ -54,7 +54,7 @@ export type {{capitalizedName}}Inputs = [{{inputs}}];
 
 export type {{capitalizedName}}Parameters = Pick<
   PredicateParams<{{capitalizedName}}Inputs, {{capitalizedName}}Configurables>,
-  'data' | 'configurableConstants'
+  'provider' | 'data' | 'configurableConstants'
 >;
 
 const abi = {{abiJsonString}};
@@ -66,11 +66,11 @@ export class {{capitalizedName}} extends Predicate<{{capitalizedName}}Inputs, {{
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
-  constructor(provider: Provider, params?: {{capitalizedName}}Parameters) {
+  constructor(params: {{capitalizedName}}Parameters) {
     super({
       abi,
       bytecode,
-      provider,
+      provider: params.provider,
       data: params?.data,
       configurableConstants: params?.configurableConstants,
     });

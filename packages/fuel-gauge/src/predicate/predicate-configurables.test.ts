@@ -209,7 +209,8 @@ describe('Predicate', () => {
 
       const amountToTransfer = 300;
 
-      const predicate = new PredicateWithConfigurable(provider, {
+      const predicate = new PredicateWithConfigurable({
+        provider,
         data: [defaultValues.FEE, configurableConstants.ADDRESS],
         configurableConstants,
       });

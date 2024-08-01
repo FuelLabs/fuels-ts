@@ -38,7 +38,8 @@ describe('str slice', () => {
     } = launched;
 
     const predicateData: PredicateStrSliceInputs = ['predicate-input'];
-    const predicate = new PredicateStrSlice(provider, {
+    const predicate = new PredicateStrSlice({
+      provider,
       data: predicateData,
     });
     const baseAssetId = provider.getBaseAssetId();
