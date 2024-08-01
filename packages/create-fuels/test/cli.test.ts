@@ -53,7 +53,7 @@ describe('CLI', () => {
   test('create-fuels extracts the template to the specified directory', async () => {
     const args = generateArgv(paths.projectRoot, undefined, paths.templateName);
 
-    (doesTemplateExist as Mock).mockImplementation(() => true);
+    (doesTemplateExist as Mock).mockReturnValue(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -71,7 +71,7 @@ describe('CLI', () => {
   test('create-fuels checks the versions on the fuel-toolchain file', async () => {
     const args = generateArgv(paths.projectRoot, undefined, paths.templateName);
 
-    (doesTemplateExist as Mock).mockImplementation(() => true);
+    (doesTemplateExist as Mock).mockReturnValue(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -91,7 +91,7 @@ describe('CLI', () => {
   test('should rewrite for the appropriate package manager', async () => {
     const args = generateArgv(paths.projectRoot, 'bun', paths.templateName);
 
-    (doesTemplateExist as Mock).mockImplementation(() => true);
+    (doesTemplateExist as Mock).mockReturnValue(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -114,7 +114,7 @@ describe('CLI', () => {
     // Generate the project once
     mkdirSync(paths.projectRoot, { recursive: true });
 
-    (doesTemplateExist as Mock).mockImplementation(() => true);
+    (doesTemplateExist as Mock).mockReturnValue(true);
 
     // Generate the project again
     await runScaffoldCli({
@@ -132,7 +132,7 @@ describe('CLI', () => {
   test('create-fuels reports an error if the template does not exist', async () => {
     const args = generateArgv(paths.projectRoot, 'pnpm', 'non-existent-template');
 
-    (doesTemplateExist as Mock).mockImplementation(() => false);
+    (doesTemplateExist as Mock).mockReturnValue(false);
 
     await runScaffoldCli({
       program: setupProgram(),
