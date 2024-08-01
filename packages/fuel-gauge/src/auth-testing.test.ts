@@ -23,9 +23,7 @@ describe('Auth Testing', () => {
 
   it('can check_msg_sender [with correct id]', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        { factory: AuthTestingContractFactory },
-      ],
+      contractsConfigs: [{ factory: AuthTestingContractFactory }],
     });
 
     const {
