@@ -44,7 +44,6 @@ export const runScaffoldCli = async ({
 }: {
   program: Command;
   args: string[];
-  checkIfTemplateExists?: boolean;
 }) => {
   program.parse(args);
   const opts = program.opts<ProgramOptions>();
