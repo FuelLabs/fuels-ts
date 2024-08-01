@@ -1,3 +1,4 @@
+import { getRandomB256 } from '@fuel-ts/address';
 import { randomBytes } from '@fuel-ts/crypto';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { hexlify } from '@fuel-ts/utils';
@@ -9,6 +10,8 @@ import { MemoryCache } from './memory-cache';
  * @group browser
  */
 describe('Memory Cache', () => {
+  const txID = getRandomB256();
+
   it('can construct [valid numerical ttl]', () => {
     const memCache = new MemoryCache(1000);
 
@@ -53,14 +56,14 @@ describe('Memory Cache', () => {
     const memCache = new MemoryCache(ttl);
     const value = randomBytes(8);
 
-    expect(memCache.set(value)).toBeGreaterThanOrEqual(expiresAt);
+    expect(memCache.set(value, txID)).toBeGreaterThanOrEqual(expiresAt);
   });
 
   it('can get [valid key]', () => {
     const value = randomBytes(8);
     const memCache = new MemoryCache(100);
 
-    memCache.set(value);
+    memCache.set(value, txID);
 
     expect(memCache.get(value)).toEqual(value);
   });
@@ -69,7 +72,7 @@ describe('Memory Cache', () => {
     const value = randomBytes(8);
     const memCache = new MemoryCache(100);
 
-    memCache.set(value);
+    memCache.set(value, txID);
 
     expect(memCache.get(value)).toEqual(value);
   });
@@ -78,7 +81,7 @@ describe('Memory Cache', () => {
     const value = randomBytes(8);
     const memCache = new MemoryCache(1);
 
-    memCache.set(value);
+    memCache.set(value, txID);
 
     await new Promise((resolve) => {
       setTimeout(resolve, 10);
@@ -91,7 +94,7 @@ describe('Memory Cache', () => {
     const value = randomBytes(8);
     const memCache = new MemoryCache(1);
 
-    memCache.set(value);
+    memCache.set(value, txID);
 
     await new Promise((resolve) => {
       setTimeout(resolve, 10);
@@ -104,7 +107,7 @@ describe('Memory Cache', () => {
     const value = randomBytes(8);
     const memCache = new MemoryCache(100);
 
-    memCache.set(value);
+    memCache.set(value, txID);
     memCache.del(value);
 
     expect(memCache.get(value)).toEqual(undefined);
@@ -118,9 +121,9 @@ describe('Memory Cache', () => {
 
     const memCache = new MemoryCache(100);
 
-    memCache.set(value1);
-    memCache.set(value2);
-    memCache.set(value3);
+    memCache.set(value1, txID);
+    memCache.set(value2, txID);
+    memCache.set(value3, txID);
 
     expect(memCache.getActiveData()).containSubset(EXPECTED);
   });
@@ -132,11 +135,11 @@ describe('Memory Cache', () => {
     const EXPECTED: BytesLike[] = [value1, value2, oldValue];
 
     let memCache = new MemoryCache(500);
-    memCache.set(value1);
-    memCache.set(value2);
+    memCache.set(value1, txID);
+    memCache.set(value2, txID);
 
     memCache = new MemoryCache(1);
-    memCache.set(oldValue);
+    memCache.set(oldValue, txID);
 
     await new Promise((resolve) => {
       setTimeout(resolve, 10);
@@ -155,7 +158,7 @@ describe('Memory Cache', () => {
     const oldValue = randomBytes(8);
 
     const instance1 = new MemoryCache(1000);
-    instance1.set(oldValue);
+    instance1.set(oldValue, txID);
 
     await new Promise((resolve) => {
       setTimeout(resolve, 200);
@@ -164,7 +167,7 @@ describe('Memory Cache', () => {
     const newValue = randomBytes(8);
 
     const instance2 = new MemoryCache(100);
-    instance2.set(newValue);
+    instance2.set(newValue, txID);
 
     const activeData = instance2.getActiveData();
 
