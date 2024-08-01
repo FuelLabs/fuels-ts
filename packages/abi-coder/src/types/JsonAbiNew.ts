@@ -54,6 +54,7 @@ export type AbiFunctionAttribute = {
   readonly arguments?: string[];
 };
 
+// @eslint-ignore-next-line
 type AbiFunctionAttributeTodo =
   | StorageAttr
   | PayableAttr
