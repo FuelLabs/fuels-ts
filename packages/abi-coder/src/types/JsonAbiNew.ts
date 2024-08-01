@@ -54,7 +54,7 @@ export type AbiFunctionAttribute = {
   readonly arguments?: string[];
 };
 
-// @eslint-ignore-next-line
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type AbiFunctionAttributeTodo =
   | StorageAttr
   | PayableAttr
