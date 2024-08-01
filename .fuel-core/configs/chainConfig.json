@@ -183,6 +183,12 @@
               "units_per_gas": 237
             }
           },
+          "ed19DependentCost": {
+            "LightOperation": {
+              "base": 45,
+              "units_per_gas": 237
+            }
+          },
           "k256": {
             "LightOperation": {
               "base": 37,
