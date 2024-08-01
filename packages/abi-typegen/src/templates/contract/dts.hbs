@@ -40,15 +40,15 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
-{{#if formattedConfigurables}}
-export type {{capitalizedName}}Configurables = {
-{{#each formattedConfigurables}}
-  {{configurableName}}: {{configurableType}};
+{{#if configurables}}
+export type {{capitalizedName}}Configurables = Partial<{
+{{#each configurables}}
+  {{name}}: {{inputLabel}};
 {{/each}}
-};
+}>;
 {{/if}}
 
-interface {{capitalizedName}}Interface extends Interface {
+export interface {{capitalizedName}}Interface extends Interface {
   functions: {
     {{#each functionsFragments}}
     {{this}}: FunctionFragment;

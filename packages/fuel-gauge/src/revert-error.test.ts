@@ -196,7 +196,6 @@ describe('Revert Error Testing', () => {
 
     const {
       wallets: [wallet],
-      provider,
     } = launched;
 
     const factory = new ContractFactory(TokenContractAbiHex, TokenContractAbi__factory.abi, wallet);
@@ -216,7 +215,7 @@ describe('Revert Error Testing', () => {
       ])
       .getTransactionRequest();
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

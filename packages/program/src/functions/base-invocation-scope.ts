@@ -8,8 +8,9 @@ import type {
   Account,
   TransferParams,
   TransactionResponse,
+  TransactionCost,
 } from '@fuel-ts/account';
-import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
@@ -228,22 +229,19 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Gets the transaction cost ny dry running the transaction.
+   * Gets the transaction cost for dry running the transaction.
    *
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
-  async getTransactionCost() {
-    const provider = this.getProvider();
-
-    const request = await this.getTransactionRequest();
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: this.program.account as AbstractAccount,
-      quantitiesToContract: this.getRequiredCoins(),
+  async getTransactionCost(): Promise<TransactionCost> {
+    const request = clone(await this.getTransactionRequest());
+    const account: AbstractAccount =
+      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+    return account.getTransactionCost(request, {
+      quantities: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
-
-    return txCost;
   }
 
   /**
@@ -385,7 +383,6 @@ export class BaseInvocationScope<TReturn = any> {
     const transactionRequest = await this.fundWithRequiredCoins();
 
     const response = (await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: false,
       estimateTxDependencies: false,
     })) as TransactionResponse;
 

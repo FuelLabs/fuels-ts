@@ -3,6 +3,7 @@
   "name": "demo-bun-fuels",
   "description": "Simple demo using Bun with Fuels CLI",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "version": "0.0.0",
   "scripts": {
     "pretest": "bun fuels build"
   },
@@ -12,8 +13,7 @@
     "@fuel-ts/errors": "workspace:^",
     "fuels": "workspace:*"
   },
-  "version": null,
   "devDependencies": {
-    "bun": "^1.1.20"
+    "bun": "^1.1.21"
   }
 }

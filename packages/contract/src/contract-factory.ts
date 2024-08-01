@@ -165,9 +165,7 @@ export default class ContractFactory {
 
     const account = this.getAccount();
 
-    const transactionResponse = await account.sendTransaction(transactionRequest, {
-      awaitExecution: false,
-    });
+    const transactionResponse = await account.sendTransaction(transactionRequest);
 
     const waitForResult = async () => {
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
@@ -233,7 +231,7 @@ export default class ContractFactory {
 
     const account = this.getAccount();
 
-    const txCost = await account.provider.getTransactionCost(transactionRequest);
+    const txCost = await account.getTransactionCost(transactionRequest);
 
     const { maxFee: setMaxFee } = deployContractOptions;
 

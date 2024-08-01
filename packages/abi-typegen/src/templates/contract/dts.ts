@@ -1,6 +1,5 @@
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
-import { formatConfigurables } from '../utils/formatConfigurables';
 import { formatEnums } from '../utils/formatEnums';
 import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
@@ -39,7 +38,6 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       'InvokeFunction',
     ],
   });
-  const { formattedConfigurables } = formatConfigurables({ configurables });
 
   /*
     And finally render template
@@ -56,7 +54,7 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       structs,
       enums,
       imports,
-      formattedConfigurables,
+      configurables,
     },
   });
 

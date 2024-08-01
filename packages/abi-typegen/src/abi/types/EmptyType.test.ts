@@ -14,7 +14,7 @@ describe('EmptyType.ts', () => {
       },
     });
 
-    expect(emptyType.attributes.inputLabel).toEqual('never');
+    expect(emptyType.attributes.inputLabel).toEqual('undefined');
     expect(emptyType.attributes.outputLabel).toEqual('void');
   });
 });

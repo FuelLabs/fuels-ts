@@ -53,7 +53,7 @@ export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
 export type StructWithMultiOptionInput = { multiple: [Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>] };
 export type StructWithMultiOptionOutput = { multiple: [Option<number>, Option<number>, Option<number>, Option<number>, Option<number>] };
 
-interface MyContractAbiInterface extends Interface {
+export interface MyContractAbiInterface extends Interface {
   functions: {
     type_address: FunctionFragment;
     type_contract_id: FunctionFragment;
@@ -89,6 +89,7 @@ interface MyContractAbiInterface extends Interface {
     types_u8: FunctionFragment;
     types_value_then_empty: FunctionFragment;
     types_value_then_empty_then_value: FunctionFragment;
+    types_value_then_value_then_empty_then_empty: FunctionFragment;
     types_vector_geo: FunctionFragment;
     types_vector_option: FunctionFragment;
     types_vector_u8: FunctionFragment;
@@ -109,15 +110,15 @@ export class MyContractAbi extends Contract {
     types_b512: InvokeFunction<[x: string], string>;
     types_bool: InvokeFunction<[x: boolean], boolean>;
     types_bytes: InvokeFunction<[x: Bytes], Bytes>;
-    types_empty: InvokeFunction<[], void>;
-    types_empty_then_value: InvokeFunction<[y: BigNumberish], void>;
+    types_empty: InvokeFunction<[x?: undefined], void>;
+    types_empty_then_value: InvokeFunction<[x: undefined, y: BigNumberish], void>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
     types_enum_with_vector: InvokeFunction<[x: EnumWithVectorInput], EnumWithVectorOutput>;
     types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     types_generic_enum: InvokeFunction<[x: GenericEnumInput<BigNumberish, BigNumberish>], GenericEnumOutput<number, number>>;
     types_generic_struct: InvokeFunction<[x: GenericStructWithEnumInput<BigNumberish, BigNumberish>], GenericStructWithEnumOutput<number, number>>;
-    types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
-    types_option_geo: InvokeFunction<[x: Option<MyStructInput>], Option<MyStructOutput>>;
+    types_option: InvokeFunction<[x?: Option<BigNumberish>], Option<number>>;
+    types_option_geo: InvokeFunction<[x?: Option<MyStructInput>], Option<MyStructOutput>>;
     types_raw_slice: InvokeFunction<[x: RawSlice], RawSlice>;
     types_result: InvokeFunction<[x: Result<BigNumberish, BigNumberish>], Result<BN, string>>;
     types_std_string: InvokeFunction<[x: StdString], StdString>;
@@ -130,8 +131,9 @@ export class MyContractAbi extends Contract {
     types_u32: InvokeFunction<[x: BigNumberish], number>;
     types_u64: InvokeFunction<[x: BigNumberish], BN>;
     types_u8: InvokeFunction<[x: BigNumberish], number>;
-    types_value_then_empty: InvokeFunction<[x: BigNumberish], void>;
-    types_value_then_empty_then_value: InvokeFunction<[x: BigNumberish, z: BigNumberish], void>;
+    types_value_then_empty: InvokeFunction<[x: BigNumberish, y?: undefined], void>;
+    types_value_then_empty_then_value: InvokeFunction<[x: BigNumberish, y: undefined, z: BigNumberish], void>;
+    types_value_then_value_then_empty_then_empty: InvokeFunction<[x: BigNumberish, y: BigNumberish, z?: undefined, a?: undefined], void>;
     types_vector_geo: InvokeFunction<[x: Vec<MyStructInput>], Vec<MyStructOutput>>;
     types_vector_option: InvokeFunction<[x: Vec<StructWithMultiOptionInput>], Vec<StructWithMultiOptionOutput>>;
     types_vector_u8: InvokeFunction<[x: Vec<BigNumberish>], Vec<number>>;

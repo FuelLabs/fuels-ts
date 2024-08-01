@@ -8,5 +8,5 @@
     "build": "tsc --noEmit"
   },
   "license": "Apache-2.0",
-  "version": null
+  "version": "0.0.0"
 }
