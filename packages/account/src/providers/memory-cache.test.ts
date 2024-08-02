@@ -154,6 +154,38 @@ describe('Memory Cache', () => {
     expect(memCache.getAllData()).containSubset(EXPECTED);
   });
 
+  it('should delete cache by txID', () => {
+    const value1 = randomBytes(8);
+    const value2 = randomBytes(8);
+    const value3 = randomBytes(8);
+
+    const ttl =  1000;
+
+    const txId1 = 'tx-id-1';
+    const txId2 = 'tx-id-2';
+
+    const memCache1 = new MemoryCache(ttl);
+    const memCache2 = new MemoryCache(ttl);
+
+    memCache1.set(value1, txId1);
+    memCache1.set(value2, txId2);
+
+    memCache2.set(value3, txId1);
+
+    expect(memCache1.getActiveData()).toContain(value1);
+    expect(memCache1.getActiveData()).toContain(value2);
+
+    expect(memCache2.getActiveData()).toContain(value3);
+
+    memCache1.delByTxID(txId1);
+
+    // Value 2 is from TX ID 2, so it should not be deleted
+    expect(memCache1.getActiveData()).toContain(value2);
+
+    expect(memCache1.getActiveData()).not.toContain(value1);
+    expect(memCache2.getActiveData()).not.toContain(value3);
+  })
+
   it('should validate that MemoryCache uses a global cache', async () => {
     const oldValue = randomBytes(8);
 
