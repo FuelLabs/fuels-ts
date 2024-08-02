@@ -288,9 +288,6 @@ describe('Contract Factory', () => {
     async () => {
       // USE TEST NODE
       using launched = await launchTestNode({
-        nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
-        },
         providerOptions: {
           cacheUtxo: -1,
         },
@@ -306,24 +303,35 @@ describe('Contract Factory', () => {
       // const baseAssetId = provider.getBaseAssetId();
       // const wallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
 
-      const salt = new Uint8Array([
-        166, 23, 175, 50, 185, 247, 229, 160, 32, 86, 191, 57, 44, 165, 193, 78, 134, 144, 54, 219,
-        234, 246, 163, 190, 132, 237, 251, 228, 12, 13, 127, 193,
-      ]);
-      const options: DeployContractOptions = { salt };
+      // SMALL CONTRACT WITH LOADER
+      // const factory = new ContractFactory(
+      //   StorageTestContractAbiHex,
+      //   StorageTestContractAbi__factory.abi,
+      //   wallet
+      // );
 
+      // const deploy = await factory.deployContractLoader();
+      // const { contract } = await deploy.waitForResult();
+
+      // const call2 = await contract.functions.return_var2().call();
+      // const { value: var2 } = await call2.waitForResult();
+      // expect(var2).toEqual(20);
+
+      // lARGE CONTRACT WITH LOADER
       const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
 
-      const deploy = await factory.deployContractLoader<LargeContractAbi>(options);
+      const deploy = await factory.deployContractLoader<LargeContractAbi>();
 
       const { contract } = await deploy.waitForResult();
       expect(contract.id).toBeDefined();
+
+      console.log('contract', contract.id);
 
       const call = await contract.functions.something().call();
 
       const { value } = await call.waitForResult();
       expect(value).toBe(1001);
     },
-    { timeout: 60000 }
+    { timeout: 15000 }
   );
 });

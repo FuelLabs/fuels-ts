@@ -276,6 +276,8 @@ export default class ContractFactory {
       chunks.push({ id: index, size: chunk.length, bytecode: chunk });
     }
 
+    const uploadedBlobIds: string[] = [];
+
     // Deploy the chunks as blob txs
     for (const { id, bytecode } of chunks) {
       const blobRequest = this.blobTransactionRequest({
@@ -284,33 +286,39 @@ export default class ContractFactory {
       });
 
       // Store the blobIds for the loader contract
-      chunks[id].blobId = blobRequest.blobId;
+      const { blobId } = blobRequest;
+      chunks[id].blobId = blobId;
 
-      const fundedBlobRequest = await this.fundTransactionRequest(
-        blobRequest,
-        deployContractOptions
-      );
+      // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
+      if (!uploadedBlobIds.includes(blobId)) {
+        const fundedBlobRequest = await this.fundTransactionRequest(
+          blobRequest,
+          deployContractOptions
+        );
 
-      let result: TransactionResult<TransactionType.Blob>;
+        let result: TransactionResult<TransactionType.Blob>;
 
-      try {
-        const blobTx = await account.sendTransaction(fundedBlobRequest);
-        result = await blobTx.waitForResult();
-      } catch (err: unknown) {
-        // Core will throw for blobs that have already been uploaded, but the blobId
-        // is still valid so we can use this for the loader contract
-        if ((<FuelError>err).code === ErrorCode.BLOB_ID_ALREADY_UPLOADED) {
-          // TODO: We need to unset the cached utxo as it can be reused
-          // this.account?.provider.cache?.del(UTXO_ID);
-          // eslint-disable-next-line no-continue
-          continue;
+        try {
+          const blobTx = await account.sendTransaction(fundedBlobRequest);
+          result = await blobTx.waitForResult();
+        } catch (err: unknown) {
+          // Core will throw for blobs that have already been uploaded, but the blobId
+          // is still valid so we can use this for the loader contract
+          if ((<FuelError>err).code === ErrorCode.BLOB_ID_ALREADY_UPLOADED) {
+            // TODO: We need to unset the cached utxo as it can be reused
+            // this.account?.provider.cache?.del(UTXO_ID);
+            // eslint-disable-next-line no-continue
+            continue;
+          }
+
+          throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
         }
 
-        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
-      }
+        if (!result.status || result.status !== TransactionStatus.success) {
+          throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+        }
 
-      if (!result.status || result.status !== TransactionStatus.success) {
-        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+        uploadedBlobIds.push(blobId);
       }
     }
 
