@@ -33,9 +33,9 @@ export type MyPredicateConfigurables = undefined;
 
 export type MyPredicateInputs = [vec: Vec<ValidationInput>, enm: MyGenericEnumInput<BigNumberish>, opt: Option<BigNumberish>, res: Result<MyGenericStructInput<string>, BigNumberish>];
 
-export type MyPredicateParameters = Pick<
+export type MyPredicateParameters = Omit<
   PredicateParams<MyPredicateInputs, MyPredicateConfigurables>,
-  'provider' | 'data' | 'configurableConstants'
+  'abi' | 'bytecode'
 >;
 
 const abi = {
@@ -299,18 +299,14 @@ const abi = {
 
 const bytecode = '0x000';
 
-export class MyPredicate extends Predicate<MyPredicateInputs, MyPredicateConfigurables> {
-
+export class MyPredicate extends Predicate<
+  MyPredicateInputs,
+  MyPredicateConfigurables
+> {
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
   constructor(params: MyPredicateParameters) {
-    super({
-      abi,
-      bytecode,
-      provider: params.provider,
-      data: params.data,
-      configurableConstants: params.configurableConstants,
-    });
+    super({ abi, bytecode, ...params });
   }
 }

@@ -52,27 +52,23 @@ export type {{capitalizedName}}Configurables = undefined;
 
 export type {{capitalizedName}}Inputs = [{{inputs}}];
 
-export type {{capitalizedName}}Parameters = Pick<
+export type {{capitalizedName}}Parameters = Omit<
   PredicateParams<{{capitalizedName}}Inputs, {{capitalizedName}}Configurables>,
-  'provider' | 'data' | 'configurableConstants'
+  'abi' | 'bytecode'
 >;
 
 const abi = {{abiJsonString}};
 
 const bytecode = '{{hexlifiedBinString}}';
 
-export class {{capitalizedName}} extends Predicate<{{capitalizedName}}Inputs, {{capitalizedName}}Configurables> {
-
+export class {{capitalizedName}} extends Predicate<
+  {{capitalizedName}}Inputs,
+  {{capitalizedName}}Configurables
+> {
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
   constructor(params: {{capitalizedName}}Parameters) {
-    super({
-      abi,
-      bytecode,
-      provider: params.provider,
-      data: params.data,
-      configurableConstants: params.configurableConstants,
-    });
+    super({ abi, bytecode, ...params });
   }
 }

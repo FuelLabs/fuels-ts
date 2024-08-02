@@ -25,9 +25,9 @@ export type MyPredicateConfigurables = Partial<{
 
 export type MyPredicateInputs = [fee: BigNumberish, address: string];
 
-export type MyPredicateParameters = Pick<
+export type MyPredicateParameters = Omit<
   PredicateParams<MyPredicateInputs, MyPredicateConfigurables>,
-  'provider' | 'data' | 'configurableConstants'
+  'abi' | 'bytecode'
 >;
 
 const abi = {
@@ -101,18 +101,14 @@ const abi = {
 
 const bytecode = '0x000';
 
-export class MyPredicate extends Predicate<MyPredicateInputs, MyPredicateConfigurables> {
-
+export class MyPredicate extends Predicate<
+  MyPredicateInputs,
+  MyPredicateConfigurables
+> {
   static readonly abi = abi;
   static readonly bytecode = bytecode;
 
   constructor(params: MyPredicateParameters) {
-    super({
-      abi,
-      bytecode,
-      provider: params.provider,
-      data: params.data,
-      configurableConstants: params.configurableConstants,
-    });
+    super({ abi, bytecode, ...params });
   }
 }
