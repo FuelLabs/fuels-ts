@@ -276,7 +276,7 @@ function getAssetsSent(receipt: TransactionResultCallReceipt): Asset[] | undefin
 }
 
 /** @hidden */
-function processReceipt(
+function processCallReceipt(
   receipt: TransactionResultCallReceipt,
   contractInput: InputContract,
   inputs: Input[],
@@ -336,7 +336,7 @@ export function getContractCallOperations({
     return contractCallReceipts
       .filter((receipt) => receipt.to === contractInput.contractID)
       .flatMap((receipt) =>
-        processReceipt(
+        processCallReceipt(
           receipt,
           contractInput,
           inputs,
