@@ -2,7 +2,6 @@ import { bn } from '@fuel-ts/math';
 import type { BN, BNInput } from '@fuel-ts/math';
 import { ReceiptType, type Input } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
-import { blob } from 'stream/consumers';
 
 import type {
   GqlDependentCost,
