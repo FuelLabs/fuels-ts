@@ -252,10 +252,8 @@ export default class ContractFactory {
     }
 
     // Find the max chunk size (again, ensure is word aligned)
-    const baseAssetId = account.provider.getBaseAssetId();
-    const fakeFunding: CoinQuantity[] = [{ assetId: baseAssetId, amount: bn(100_000) }];
     const baseBlobRequest = this.blobTransactionRequest({ blobBytecode: randomBytes(32) });
-    baseBlobRequest.fundWithFakeUtxos(fakeFunding, baseAssetId);
+    baseBlobRequest.fundWithFakeUtxos([], account.provider.getBaseAssetId());
     const maxChunkSize = maxContractSize - baseBlobRequest.byteLength() - WORD_SIZE;
     const padding = maxChunkSize % WORD_SIZE;
     const chunkSize = padding + ((WORD_SIZE - (padding % WORD_SIZE)) % WORD_SIZE) + maxChunkSize;
