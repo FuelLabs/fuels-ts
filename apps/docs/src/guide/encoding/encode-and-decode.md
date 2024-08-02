@@ -7,7 +7,7 @@ The relevant methods on `Interface` are:
 - `encodeType`
 - `decodeType`
 
-The `Interface` class requires you to pass the [ABI](https://docs.fuel.network/docs/specs/abi/json-abi-format/) on initialization. Both methods then accept a `concreteTypeId` which must exist in the ABI's `concreteTypes` array, based on which a coder is created internally that is able to encode/decode that type.
+The `Interface` class requires you to pass the [ABI](https://docs.fuel.network/docs/specs/abi/json-abi-format/) on initialization. Both methods accept a `concreteTypeId`, which must exist in the ABI's `concreteTypes` array. After that, a suitable coder will be assigned to encode/decode that type.
 
 Imagine we are working with the following script that returns the sum of two `u32` integers:
 
