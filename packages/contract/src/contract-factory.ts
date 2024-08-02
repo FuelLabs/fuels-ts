@@ -7,7 +7,6 @@ import type {
   TransactionRequest,
   TransactionResult,
   TransactionType,
-  CoinQuantity,
 } from '@fuel-ts/account';
 import {
   CreateTransactionRequest,
@@ -18,7 +17,6 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined, concat } from '@fuel-ts/utils';

@@ -12,6 +12,9 @@ import {
   LOCAL_NETWORK_URL,
   Provider,
   assets,
+  arrayify,
+  chunkAndPadBytes,
+  hexlify,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -283,55 +286,26 @@ describe('Contract Factory', () => {
     );
   });
 
-  it.only(
-    'should deploy contracts greater than MAX_CONTRACT_SIZE via a loader contract',
-    async () => {
-      // USE TEST NODE
-      using launched = await launchTestNode({
-        providerOptions: {
-          cacheUtxo: -1,
-        },
-      });
+  it('should deploy contracts greater than MAX_CONTRACT_SIZE via a loader contract', async () => {
+    using launched = await launchTestNode({
+      providerOptions: {
+        cacheUtxo: -1,
+      },
+    });
 
-      const {
-        wallets: [wallet],
-        provider,
-      } = launched;
+    const {
+      wallets: [wallet],
+    } = launched;
+    const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
 
-      // USING NODE
-      // const provider = await Provider.create(LOCAL_NETWORK_URL, { cacheUtxo: -1 });
-      // const baseAssetId = provider.getBaseAssetId();
-      // const wallet = await generateTestWallet(provider, [[100_000_000, baseAssetId]]);
+    const deploy = await factory.deployContractLoader<LargeContractAbi>();
 
-      // SMALL CONTRACT WITH LOADER
-      // const factory = new ContractFactory(
-      //   StorageTestContractAbiHex,
-      //   StorageTestContractAbi__factory.abi,
-      //   wallet
-      // );
+    const { contract } = await deploy.waitForResult();
+    expect(contract.id).toBeDefined();
 
-      // const deploy = await factory.deployContractLoader();
-      // const { contract } = await deploy.waitForResult();
+    const call = await contract.functions.something().call();
 
-      // const call2 = await contract.functions.return_var2().call();
-      // const { value: var2 } = await call2.waitForResult();
-      // expect(var2).toEqual(20);
-
-      // lARGE CONTRACT WITH LOADER
-      const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
-
-      const deploy = await factory.deployContractLoader<LargeContractAbi>();
-
-      const { contract } = await deploy.waitForResult();
-      expect(contract.id).toBeDefined();
-
-      console.log('contract', contract.id);
-
-      const call = await contract.functions.something().call();
-
-      const { value } = await call.waitForResult();
-      expect(value).toBe(1001);
-    },
-    { timeout: 15000 }
-  );
+    const { value } = await call.waitForResult();
+    expect(value.toNumber()).toBe(1001);
+  });
 });
