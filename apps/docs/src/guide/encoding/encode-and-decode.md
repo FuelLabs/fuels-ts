@@ -2,7 +2,7 @@
 
 To interact with the FuelVM, types must be encoded and decoded per the [argument encoding specification](https://docs.fuel.network/docs/specs/abi/argument-encoding/). The SDK provides the `Interface` class to encode and decode data.
 
-The relevant methods on `Interface` are:
+The relevant methods of `Interface` are:
 
 - `encodeType`
 - `decodeType`
