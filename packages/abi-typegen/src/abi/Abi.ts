@@ -62,11 +62,8 @@ export class Abi {
     }
 
     this.programType = programType;
-
-    const normalizedName = `${normalizeString(abiName[1])}`;
-
-    this.capitalizedName = normalizedName;
-    this.camelizedName = normalizedName.replace(/^./m, (x) => x.toLowerCase());
+    this.capitalizedName = `${normalizeString(abiName[1])}`;;
+    this.camelizedName = this.capitalizedName.replace(/^./m, (x) => x.toLowerCase());
 
     this.filepath = filepath;
     this.rawContents = rawContents;
