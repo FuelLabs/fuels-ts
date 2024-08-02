@@ -62,7 +62,7 @@ export class Abi {
     }
 
     this.programType = programType;
-    this.capitalizedName = `${normalizeString(abiName[1])}`;;
+    this.capitalizedName = `${normalizeString(abiName[1])}`;
     this.camelizedName = this.capitalizedName.replace(/^./m, (x) => x.toLowerCase());
 
     this.filepath = filepath;
