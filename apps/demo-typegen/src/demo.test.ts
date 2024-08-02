@@ -42,7 +42,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const factory = new DemoContractFactory(wallet);
-    const deploy = await factory.deployContract();
+    const deploy = await factory.deploy();
     const { contract } = await deploy.waitForResult();
     const contractId = contract.id;
 
@@ -64,7 +64,7 @@ describe('ExampleContract', () => {
     expect(v2.toHex()).toBe(toHex(1337));
   });
 
-  it('deployContract method', async () => {
+  it('deploy method', async () => {
     using launched = await launchTestNode();
 
     const {
@@ -102,7 +102,7 @@ it('should throw when simulating via contract factory with wallet with no resour
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new DemoContractFactory(fundedWallet);
-  const { waitForResult } = await factory.deployContract();
+  const { waitForResult } = await factory.deploy();
   const { contract } = await waitForResult();
   const contractInstance = new DemoContract(contract.id, unfundedWallet);
 
@@ -121,7 +121,7 @@ it('should not throw when dry running via contract factory with wallet with no r
   const unfundedWallet = Wallet.generate({ provider });
 
   const factory = new DemoContractFactory(fundedWallet);
-  const { waitForResult } = await factory.deployContract();
+  const { waitForResult } = await factory.deploy();
   const { contract } = await waitForResult();
   const contractInstance = new DemoContract(contract.id, unfundedWallet);
 

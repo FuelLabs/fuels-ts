@@ -21,7 +21,7 @@ export class {{capitalizedName}}Factory extends ContractFactory {
   ): Promise<DeployContractResult<{{capitalizedName}}>> {
     const factory = new {{capitalizedName}}Factory(wallet);
 
-    return factory.deployContract({
+    return factory.deploy({
       storageSlots: {{capitalizedName}}.storageSlots,
       ...options,
     });

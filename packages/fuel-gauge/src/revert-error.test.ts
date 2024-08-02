@@ -196,7 +196,7 @@ describe('Revert Error Testing', () => {
     } = launched;
 
     const factory = new ContractFactory(TokenContractFactory.bytecode, TokenContract.abi, wallet);
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     const { contract: tokenContract } = await waitForResult();
 
     const addresses = [

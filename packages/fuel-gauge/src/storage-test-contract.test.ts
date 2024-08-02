@@ -25,7 +25,7 @@ describe('StorageTestContract', () => {
       StorageTestContract.abi,
       wallet
     );
-    const deploy = await factory.deployContract({
+    const deploy = await factory.deploy({
       storageSlots,
     });
 
@@ -62,7 +62,7 @@ describe('StorageTestContract', () => {
       wallet
     );
     // #region contract-deployment-storage-slots-inline
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       storageSlots: [
         {
           key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',

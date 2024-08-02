@@ -31,7 +31,7 @@ export class MyContractFactory extends ContractFactory {
   ): Promise<DeployContractResult<MyContract>> {
     const factory = new MyContractFactory(wallet);
 
-    return factory.deployContract({
+    return factory.deploy({
       storageSlots: MyContract.storageSlots,
       ...options,
     });

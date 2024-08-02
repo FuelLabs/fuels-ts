@@ -120,7 +120,7 @@ describe('launchTestNode', () => {
           factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
-              return factory.deployContract(options);
+              return factory.deploy(options);
             },
           },
         },
@@ -143,7 +143,7 @@ describe('launchTestNode', () => {
           factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
-              return factory.deployContract(options);
+              return factory.deploy(options);
             },
           },
         },
@@ -151,7 +151,7 @@ describe('launchTestNode', () => {
           factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
-              return factory.deployContract(options);
+              return factory.deploy(options);
             },
           },
         },
@@ -182,7 +182,7 @@ describe('launchTestNode', () => {
           factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
-              return factory.deployContract(options);
+              return factory.deploy(options);
             },
           },
         },
@@ -190,7 +190,7 @@ describe('launchTestNode', () => {
           factory: {
             deploy: async (wallet, options) => {
               const factory = new ContractFactory(binHexlified, abiContents, wallet);
-              return factory.deployContract(options);
+              return factory.deploy(options);
             },
           },
           walletIndex: 1,
@@ -225,7 +225,7 @@ describe('launchTestNode', () => {
               factory: {
                 deploy: async (wallet, options) => {
                   const factory = new ContractFactory(binHexlified, abiContents, wallet);
-                  return factory.deployContract(options);
+                  return factory.deploy(options);
                 },
               },
               walletIndex: 2,

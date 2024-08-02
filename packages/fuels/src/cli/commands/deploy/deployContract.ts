@@ -25,7 +25,7 @@ export async function deployContract(
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const contractFactory = new ContractFactory(bytecode, abi, wallet);
 
-  const { waitForResult } = await contractFactory.deployContract(deployConfig);
+  const { waitForResult } = await contractFactory.deploy(deployConfig);
   const { contract } = await waitForResult();
 
   return contract.id.toB256();

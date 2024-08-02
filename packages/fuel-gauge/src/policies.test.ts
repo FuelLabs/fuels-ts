@@ -452,7 +452,7 @@ describe('Policies', () => {
       };
 
       await expect(async () => {
-        await factory.deployContract(txParams);
+        await factory.deploy(txParams);
       }).rejects.toThrow(new RegExp(`Max fee '${maxFee}' is lower than the required`));
     });
 

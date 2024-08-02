@@ -27,7 +27,7 @@ describe('ExampleContract', () => {
 
     // Deploy
     const factory = new SampleFactory(wallet);
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     const { contract } = await waitForResult();
 
     // Call
@@ -48,7 +48,7 @@ describe('ExampleContract', () => {
     expect(v2.toHex()).toBe(toHex(1337));
   });
 
-  it('deployContract method', async () => {
+  it('deploy method', async () => {
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 

@@ -98,7 +98,7 @@ describe('Contract Factory', () => {
     });
   });
 
-  it('should not override user input maxFee when calling deployContract', async () => {
+  it('should not override user input maxFee when calling deploy', async () => {
     using launched = await launchTestNode();
     const {
       wallets: [wallet],
@@ -112,7 +112,7 @@ describe('Contract Factory', () => {
     );
     const spy = vi.spyOn(factory.account as Account, 'sendTransaction');
 
-    await factory.deployContract({
+    await factory.deploy({
       maxFee: setFee,
     });
 
@@ -169,7 +169,7 @@ describe('Contract Factory', () => {
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
@@ -193,7 +193,7 @@ describe('Contract Factory', () => {
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       storageSlots: [
         ...StorageTestContract.storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
@@ -255,7 +255,7 @@ describe('Contract Factory', () => {
     const factory = new ContractFactory(largeByteCode, StorageTestContract.abi, wallet);
 
     await expectToThrowFuelError(
-      async () => factory.deployContract(),
+      async () => factory.deploy(),
       new FuelError(
         ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
         'Contract bytecode is too large. Max contract size is 100KB'

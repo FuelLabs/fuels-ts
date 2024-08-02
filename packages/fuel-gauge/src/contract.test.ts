@@ -999,7 +999,7 @@ describe('Contract', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     const { contract } = await waitForResult();
 
     const receiver1 = Wallet.generate({ provider });
@@ -1045,7 +1045,7 @@ describe('Contract', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
 
     const { contract } = await waitForResult();
 
@@ -1178,7 +1178,7 @@ describe('Contract', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     const { contract: storageContract } = await waitForResult();
 
     const initialCounterValue = 20;

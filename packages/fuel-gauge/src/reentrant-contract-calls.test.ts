@@ -71,7 +71,7 @@ describe('Reentrant Contract Calls', () => {
       StorageTestContractFactory.bytecode,
       StorageTestContract.abi,
       wallet
-    ).deployContract({ storageSlots: StorageTestContract.storageSlots });
+    ).deploy({ storageSlots: StorageTestContract.storageSlots });
 
     const { contract: storageContract } = await deploy.waitForResult();
 
