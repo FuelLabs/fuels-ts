@@ -10,6 +10,8 @@ import {
 import type { Account, JsonAbi, TransactionResultReturnDataReceipt } from 'fuels';
 import { generateTestWallet } from 'fuels/test-utils';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore JSONC extension requires mapping but behaves fine
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
 import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';
 
