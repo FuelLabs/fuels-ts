@@ -22,7 +22,7 @@ describe('ExampleContract', () => {
     } = launched;
 
     // #region typegen-demo-contract-storage-slots
-    // #context import storageSlots from './contract/out/debug/demo-contract-storage_slots.json';
+    // #context import { DemoContractFactory } from './typegend';
 
     const { waitForResult } = await DemoContractFactory.deploy(wallet, {
       storageSlots,
@@ -55,7 +55,7 @@ describe('ExampleContract', () => {
 
     // You can also make a call using the factory
     // #region typegen-demo-contract-factory-connect
-    // #context import { DemoContractAbi } from './types';
+    // #context import { DemoContract } from './typegend';
 
     const contractInstance = new DemoContract(contractId, wallet);
     const call2 = await contractInstance.functions.return_input(1337).call();
@@ -72,7 +72,7 @@ describe('ExampleContract', () => {
     } = launched;
 
     // #region typegen-demo-contract-factory-deploy
-    // #context import { DemoContractAbi } from './types';
+    // #context import { DemoContract } from './typegend';
     // #context
 
     // Deploy
@@ -136,7 +136,7 @@ test('Example script', async () => {
   } = launched;
 
   // #region typegen-demo-script
-  // #context import { ScriptAbi } from './types';
+  // #context import { Script } from './typegend';
 
   const script = new DemoScript(wallet);
   const { waitForResult } = await script.functions.main().call();
@@ -147,8 +147,8 @@ test('Example script', async () => {
 
 test('Example predicate', async () => {
   // #region typegen-demo-predicate
-  // #context import type { PredicateAbiInputs } from './types';
-  // #context import { PredicateAbi } from './types';
+  // #context import type { PredicateInputs } from './typegend';
+  // #context import { Predicate } from './typegend';
 
   // In this exchange, we are first transferring some coins to the predicate
   using launched = await launchTestNode();
