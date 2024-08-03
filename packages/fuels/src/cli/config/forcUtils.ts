@@ -38,7 +38,7 @@ export function readForcToml(path: string) {
   if (!existsSync(forcPath)) {
     throw new FuelError(
       FuelError.CODES.CONFIG_FILE_NOT_FOUND,
-      `Toml file not found:\n  ${forcPath}`
+      `TOML file not found:\n  ${forcPath}`
     );
   }
 

@@ -26,7 +26,7 @@ It could be caused during the deployments of contracts when an account is requir
 
 ### `CONFIG_FILE_NOT_FOUND`
 
-When a configuration file is not found. This could either be a `fuels.config.[ts,js,mjs,cjs]` file or a Toml file.
+When a configuration file is not found. This could either be a `fuels.config.[ts,js,mjs,cjs]` file or a TOML file.
 
 Ensure that the configuration file is present in the root directory of your project.
 
