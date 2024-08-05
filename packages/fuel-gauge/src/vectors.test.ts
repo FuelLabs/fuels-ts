@@ -34,6 +34,19 @@ describe('Vector Tests', () => {
     expect(value).toStrictEqual(INPUT);
   });
 
+  it('should test u8 vector input/output as Uint8Array', async () => {
+    using contractInstance = await setupContract();
+    const INPUT = [8, 6, 7, 5, 3, 0, 9];
+    const INPUT_AS_UINT8_ARRAY = Uint8Array.from(INPUT);
+
+    const { waitForResult } = await contractInstance.functions
+      .echo_u8(INPUT_AS_UINT8_ARRAY)
+      .call<Uint8Array>();
+    const { value } = await waitForResult();
+
+    expect(Uint8Array.from(value)).toStrictEqual(INPUT_AS_UINT8_ARRAY);
+  });
+
   it('should test u16 vector input/output', async () => {
     using contractInstance = await setupContract();
     const INPUT = [8, 6, 7, 5, 3, 0, 9];
