@@ -273,7 +273,7 @@ describe('Predicate', () => {
             bytecode: PredicateTrue.bin,
             abi: PredicateTrue.abi,
             provider,
-            inputData: ['NADA'],
+            data: ['NADA'],
             configurableConstants: {
               constant: 'NADA',
             },
@@ -296,7 +296,7 @@ describe('Predicate', () => {
             bytecode: PredicateWithConfigurable.bin,
             abi: PredicateWithConfigurable.abi,
             provider,
-            inputData: ['NADA'],
+            data: ['NADA'],
             configurableConstants: {
               NOPE: 'NADA',
             },
@@ -318,7 +318,7 @@ describe('Predicate', () => {
           new Predicate({
             bytecode: PredicateWithConfigurableAbi__factory.bin,
             provider,
-            inputData: ['NADA'],
+            data: ['NADA'],
             configurableConstants: {
               NOPE: 'NADA',
             },
