@@ -119,7 +119,7 @@ jobs:
         run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
 
       - name: Decides if Docs should be deployed
-        if: startsWith(env.LAST_COMMIT_MSG, 'ci:') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        if: env.LAST_COMMIT_MSG == 'ci: versioning packages and changesets' && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
       - name: Checkout API Docs
