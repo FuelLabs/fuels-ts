@@ -18,7 +18,7 @@ export interface DeployableContractFactory {
 
 export interface DeployContractConfig {
   /**
-   * Contract factory instance outputted by `pnpm fuels typegen`.
+   * Contract factory class outputted by `pnpm fuels typegen`.
    */
   factory: DeployableContractFactory;
   /**
