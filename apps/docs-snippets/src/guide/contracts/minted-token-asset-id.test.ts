@@ -1,7 +1,9 @@
+import type { AssetId } from 'fuels';
 import { bn, getMintedAssetId, createAssetId } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { TokenAbi__factory } from '../../../test/typegen';
+import { EchoAssetIdAbi__factory, TokenAbi__factory } from '../../../test/typegen';
+import EchoAssetIdAbiHex from '../../../test/typegen/contracts/EchoAssetIdAbi.hex';
 import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
 
 /**
@@ -36,7 +38,7 @@ describe(__filename, () => {
 
   it('should create valid asset ID', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ deployer: TokenAbi__factory, bytecode: TokenAbiHex }],
+      contractsConfigs: [{ deployer: EchoAssetIdAbi__factory, bytecode: EchoAssetIdAbiHex }],
     });
 
     const {
@@ -44,13 +46,15 @@ describe(__filename, () => {
     } = launched;
 
     // #region create-asset-id-1
+    // #import { createAssetId, AssetId };
+
     const subID = '0xc7fd1d987ada439fc085cfa3c49416cf2b504ac50151e3c2335d60595cb90745';
 
-    const assetId = createAssetId(contract.id.toB256(), subID);
+    const assetId: AssetId = createAssetId(contract.id.toB256(), subID);
     // #endregion create-asset-id-1
-    const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
+    const { value } = await contract.functions.echo_asset_id_input(assetId).simulate();
 
     expect(assetId).toBeDefined();
-    expect(value).toBeTruthy();
+    expect(value).toEqual(assetId);
   });
 });
