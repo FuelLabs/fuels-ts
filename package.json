@@ -18,7 +18,7 @@
     "depcheck": "knip --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
     "depsync:lint": "syncpack list-mismatches",
-    "depsync:fix": "syncpack fix-mismatches && syncpack format",
+    "depsync:fix": "syncpack fix-mismatches",
     "test": "vitest --run --coverage --config vitest.node.config.mts $(scripts/tests-find.sh --node)",
     "test:filter": "vitest --run --coverage false --config vitest.node.config.mts",
     "test:coverage-merge": "tsx ./scripts/tests-coverage-merge.ts",
