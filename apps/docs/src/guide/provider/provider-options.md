@@ -46,10 +46,14 @@ When using the SDK, it may be necessary to submit multiple transactions from the
 
 However, if a second transaction is created before the first one is processed, there is a chance of using the same resources (UTXOs or Messages) for both transactions. This happens because the resources used in the first transaction are still unspent until the transaction is fully processed.
 
-If the second transaction attempts to use the same resources that the first transaction has already spent, it will result in the following error:
+If the second transaction attempts to use the same resources that the first transaction has already spent, it will result in one of the following error:
 
 ```console
-Transaction is not inserted. UTXO does not exist: 0xf5...
+Transaction is not inserted. Hash is already known
+
+Transaction is not inserted. UTXO does not exist: {{utxoID}}
+
+Transaction is not inserted. A higher priced tx {{txID}} is already spending this message: {{messageNonce}}
 ```
 
 This error indicates that the resources used by the second transaction no longer exist, as the first transaction already spent them.
