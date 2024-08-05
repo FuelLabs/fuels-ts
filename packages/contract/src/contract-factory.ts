@@ -157,7 +157,13 @@ export default class ContractFactory {
     };
   }
 
-  blobTransactionRequest(options: { blobBytecode: Uint8Array } & DeployContractOptions) {
+  /**
+   * Create a blob transaction request, used for deploying contract chunks.
+   *
+   * @param options - options for creating a blob transaction request.
+   * @returns a populated BlobTransactionRequest.
+   */
+  private blobTransactionRequest(options: { blobBytecode: Uint8Array } & DeployContractOptions) {
     const { blobBytecode } = options;
     return new BlobTransactionRequest({
       blobId: hash(blobBytecode),
@@ -167,7 +173,17 @@ export default class ContractFactory {
     });
   }
 
-  async fundTransactionRequest(request: TransactionRequest, options: DeployContractOptions = {}) {
+  /**
+   * Takes a transaction request, estimates it and funds it.
+   *
+   * @param request - the request to fund.
+   * @param options - options for funding the request.
+   * @returns a funded transaction request.
+   */
+  private async fundTransactionRequest(
+    request: TransactionRequest,
+    options: DeployContractOptions = {}
+  ) {
     const account = this.getAccount();
     const { maxFee: setMaxFee } = options;
 
@@ -224,7 +240,7 @@ export default class ContractFactory {
   }
 
   /**
-   * Deploy a contract with the specified options.
+   * Chunks and deploys a contract via a loader contract. Suitable for deploying contracts larger than the max contract size.
    *
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
