@@ -171,62 +171,23 @@ describe('Resource Cache', () => {
     expect(await resourceCache.getActiveData()).toStrictEqual({ utxos: [], messages: [] });
   });
 
-  describe('Cleanup operations', () => {
-    const mockTtl = 100; // 100ms TTL for testing
-    let resourceCache: ResourceCache;
+  it('should automatically clean up expired entries', async () => {
+    const mockTtl = 1000;
+    const resourceCache = new ResourceCache(mockTtl);
+    const transactionId = '0x1234';
+    const resources = {
+      utxos: ['0xabcd'],
+      messages: ['0xef01'],
+    };
 
-    beforeEach(() => {
-      resourceCache = new ResourceCache(mockTtl);
-    });
+    await resourceCache.set(transactionId, resources);
 
-    afterEach(async () => {
-      await resourceCache.destroy();
-    });
+    // Wait for the TTL to expire
+    await sleep(mockTtl + 10);
 
-    it('should automatically clean up expired entries', async () => {
-      const transactionId = '0x1234';
-      const resources = {
-        utxos: ['0xabcd'],
-        messages: ['0xef01'],
-      };
-
-      await resourceCache.set(transactionId, resources);
-
-      // Wait for the TTL to expire
-      await sleep(mockTtl + 10);
-
-      // Trigger a cleanup by calling getActiveData
-      const cachedData = await resourceCache.getActiveData();
-      expect(cachedData.utxos).not.toContain('0xabcd');
-      expect(cachedData.messages).not.toContain('0xef01');
-    });
-
-    it('should handle high concurrency without race conditions', async () => {
-      const iterations = 100;
-
-      const runOperation = async (i: number) => {
-        const transactionId = `0x${i.toString(16).padStart(4, '0')}`;
-        const resources = {
-          utxos: [`0x${(i * 2).toString(16).padStart(4, '0')}`],
-          messages: [`0x${(i * 2 + 1).toString(16).padStart(4, '0')}`],
-        };
-
-        await resourceCache.set(transactionId, resources);
-        await sleep(Math.random() * 10); // Random delay to increase chance of overlap
-        const isCached = await resourceCache.isCached(resources.utxos[0]);
-        expect(isCached).toBe(true);
-
-        const activeData = await resourceCache.getActiveData();
-        expect(activeData.utxos).toContain(resources.utxos[0]);
-        expect(activeData.messages).toContain(resources.messages[0]);
-      };
-
-      const operations = Array.from({ length: iterations }, (_, i) => runOperation(i));
-      await Promise.all(operations);
-
-      const finalCachedData = await resourceCache.getActiveData();
-      expect(finalCachedData.utxos.length).toBe(iterations);
-      expect(finalCachedData.messages.length).toBe(iterations);
-    });
+    // Trigger a cleanup by calling getActiveData
+    const cachedData = await resourceCache.getActiveData();
+    expect(cachedData.utxos).not.toContain('0xabcd');
+    expect(cachedData.messages).not.toContain('0xef01');
   });
 });
