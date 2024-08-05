@@ -1,5 +1,6 @@
 {
   "dependencyTypes": [
+    "dev",
     "prod"
   ],
   "versionGroups": [
@@ -10,5 +11,22 @@
       ],
       "isIgnored": true
     }
+  ],
+  "sortFirst": [
+    "private",
+    "name",
+    "description",
+    "version",
+    "author",
+    "license",
+    "main",
+    "module",
+    "types",
+    "engines",
+    "exports",
+    "files",
+    "scripts",
+    "dependencies",
+    "devDependencies"
   ]
 }
