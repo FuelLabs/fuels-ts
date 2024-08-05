@@ -270,8 +270,8 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () =>
           new Predicate({
-            bytecode: PredicateTrueAbi__factory.bin,
-            abi: PredicateTrueAbi__factory.abi,
+            bytecode: PredicateTrue.bin,
+            abi: PredicateTrue.abi,
             provider,
             inputData: ['NADA'],
             configurableConstants: {
@@ -283,7 +283,6 @@ describe('Predicate', () => {
           'Error setting configurable constants: Predicate has no configurable constants to be set.'
         )
       );
-
     });
 
     it('throws when setting invalid configurable', async () => {
@@ -294,8 +293,8 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () =>
           new Predicate({
-            bytecode: PredicateWithConfigurableAbi__factory.bin,
-            abi: PredicateWithConfigurableAbi__factory.abi,
+            bytecode: PredicateWithConfigurable.bin,
+            abi: PredicateWithConfigurable.abi,
             provider,
             inputData: ['NADA'],
             configurableConstants: {
@@ -307,7 +306,6 @@ describe('Predicate', () => {
           `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`
         )
       );
-
     });
 
     it('throws when setting a configurable with no ABI', async () => {
@@ -330,7 +328,6 @@ describe('Predicate', () => {
           `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`
         )
       );
-
     });
   });
 });
