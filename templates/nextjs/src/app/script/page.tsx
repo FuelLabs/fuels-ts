@@ -5,6 +5,7 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { FAUCET_LINK } from "@/lib";
 import { TestScriptAbi__factory } from "@/sway-api";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
@@ -39,7 +40,15 @@ export default function ScriptExample() {
       setResult(value.toString());
     } catch (error) {
       console.error(error);
-      toast.error("Error running script.");
+      toast.error(
+        <span>
+          Error running script. Please make sure your wallet has enough funds.
+          You can top it up using the{" "}
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
+        </span>,
+      );
     }
   };
 

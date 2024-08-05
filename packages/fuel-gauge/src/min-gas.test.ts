@@ -55,7 +55,7 @@ describe('Minimum gas tests', () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { maxFee } = await provider.getTransactionCost(request);
+    const { maxFee } = await wallet.getTransactionCost(request);
 
     request.maxFee = maxFee;
 
@@ -89,7 +89,7 @@ describe('Minimum gas tests', () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -134,7 +134,7 @@ describe('Minimum gas tests', () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request, { resourcesOwner: predicate });
+    const txCost = await predicate.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -193,9 +193,7 @@ describe('Minimum gas tests', () => {
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
 
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: predicate,
-    });
+    const txCost = await predicate.getTransactionCost(request);
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
 

@@ -10,6 +10,7 @@
 */
 
 import type {
+  BigNumberish,
   BytesLike,
   Contract,
   DecodedValue,
@@ -18,11 +19,18 @@ import type {
   InvokeFunction,
 } from 'fuels';
 
-export type MyContractAbiConfigurables = {
-  SHOULD_RETURN: boolean;
-};
+import type { Option } from "./common";
 
-interface MyContractAbiInterface extends Interface {
+export type GenericStructInput<T1, T2> = { p1: T1, p2: T2 };
+export type GenericStructOutput<T1, T2> = GenericStructInput<T1, T2>;
+
+export type MyContractAbiConfigurables = Partial<{
+  SHOULD_RETURN: boolean;
+  AN_OPTION: Option<BigNumberish>;
+  A_GENERIC_STRUCT: GenericStructInput<GenericStructInput<BigNumberish, BigNumberish>, BigNumberish>;
+}>;
+
+export interface MyContractAbiInterface extends Interface {
   functions: {
     main: FunctionFragment;
   };

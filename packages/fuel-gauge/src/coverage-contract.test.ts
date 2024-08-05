@@ -355,16 +355,13 @@ describe('Coverage Contract', () => {
     using contractInstance = await setupContract();
 
     const INPUT_NONE = undefined;
+
     const call1 = await contractInstance.functions.echo_option_extract_u32(INPUT_NONE).call();
-
     const { value: None } = await call1.waitForResult();
-
     expect(None).toStrictEqual(500);
 
     const call2 = await contractInstance.functions.echo_option_extract_u32().call();
-
     const { value: NoneVoid } = await call2.waitForResult();
-
     expect(NoneVoid).toStrictEqual(500);
   });
 
@@ -609,7 +606,7 @@ describe('Coverage Contract', () => {
 
     request.addCoinOutput(recipient.address, 10, provider.getBaseAssetId());
 
-    const txCost = await sender.provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -755,10 +752,15 @@ describe('Coverage Contract', () => {
       [0, 1, 2],
       [0, 1, 2],
     ];
-    await contractInstance.functions.vec_in_vec(INPUT).call();
+
+    const { waitForResult } = await contractInstance.functions.vec_in_vec(INPUT).call();
 
     // asserted in Sway file
-    expect(1).toEqual(1);
+    const {
+      transactionResult: { isStatusSuccess },
+    } = await waitForResult();
+
+    expect(isStatusSuccess).toBeTruthy();
   });
 
   it('should support array in vec', async () => {
@@ -768,10 +770,14 @@ describe('Coverage Contract', () => {
       [0, 1, 2],
       [0, 1, 2],
     ];
-    await contractInstance.functions.vec_in_array(INPUT).call();
+    const { waitForResult } = await contractInstance.functions.vec_in_array(INPUT).call();
 
     // asserted in Sway file
-    expect(1).toEqual(1);
+    // asserted in Sway file
+    const {
+      transactionResult: { isStatusSuccess },
+    } = await waitForResult();
+    expect(isStatusSuccess).toBeTruthy();
   });
 
   it('should test b256 multiple params vector input/output', async () => {

@@ -739,7 +739,6 @@ describe('Contract', () => {
   it('Parse create TX to JSON and parse back to create TX', async () => {
     using launched = await launchTestNode();
     const {
-      provider,
       wallets: [wallet],
     } = launched;
 
@@ -757,7 +756,7 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const txCost = await provider.getTransactionCost(transactionRequestParsed);
+    const txCost = await wallet.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = txCost.gasUsed;
     transactionRequestParsed.maxFee = txCost.maxFee;
@@ -1196,7 +1195,8 @@ describe('Contract', () => {
     expect(value.toNumber()).toBe(0);
 
     // Actually changing the contract state
-    await storageContract.functions.initialize_counter(initialCounterValue).call();
+    const call = await storageContract.functions.initialize_counter(initialCounterValue).call();
+    await call.waitForResult();
 
     // Validating that the contract state was modified
     ({ value } = await storageContract.functions.counter().get());

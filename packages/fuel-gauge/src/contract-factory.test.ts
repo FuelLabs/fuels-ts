@@ -43,7 +43,8 @@ describe('Contract Factory', () => {
 
     expect(contract.interface).toBeInstanceOf(Interface);
 
-    await contract.functions.initialize_counter(100).call();
+    const call1 = await contract.functions.initialize_counter(100).call();
+    await call1.waitForResult();
 
     const { waitForResult } = await contract.functions.increment_counter(1).call();
     const { transactionResult } = await waitForResult();

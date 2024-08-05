@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.93.0
+
+### Patch Changes
+
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+
 ## 0.92.1
 
 ## 0.92.0

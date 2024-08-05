@@ -29,6 +29,7 @@ import type {
   GetMessagesResponse,
   GetBalancesResponse,
   Coin,
+  TransactionCostParams,
 } from './providers';
 import {
   withdrawScript,
@@ -42,6 +43,7 @@ import {
   isRequestInputCoin,
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
+import { mergeQuantities } from './providers/utils/merge-quantities';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -436,9 +438,8 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractAddress);
 
-    const txCost = await this.provider.getTransactionCost(request, {
-      resourcesOwner: this,
-      quantitiesToContract: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
+    const txCost = await this.getTransactionCost(request, {
+      quantities: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
     });
 
     request = this.validateGasLimitAndMaxFee({
@@ -484,9 +485,9 @@ export class Account extends AbstractAccount {
 
     const baseAssetId = this.provider.getBaseAssetId();
     let request = new ScriptTransactionRequest(params);
-    const quantitiesToContract = [{ amount: bn(amount), assetId: baseAssetId }];
+    const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
+    const txCost = await this.getTransactionCost(request, { quantities });
 
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
@@ -498,6 +499,45 @@ export class Account extends AbstractAccount {
     await this.fund(request, txCost);
 
     return this.sendTransaction(request);
+  }
+
+  /**
+   * Returns a transaction cost to enable user
+   * to set gasLimit and also reserve balance amounts
+   * on the transaction.
+   *
+   * @param transactionRequestLike - The transaction request object.
+   * @param transactionCostParams - The transaction cost parameters (optional).
+   *
+   * @returns A promise that resolves to the transaction cost object.
+   */
+  async getTransactionCost(
+    transactionRequestLike: TransactionRequestLike,
+    { signatureCallback, quantities = [] }: TransactionCostParams = {}
+  ): Promise<TransactionCost> {
+    const txRequestClone = clone(transactionRequestify(transactionRequestLike));
+    const baseAssetId = this.provider.getBaseAssetId();
+
+    // Fund with fake UTXOs to avoid not enough funds error
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantities);
+    // An arbitrary amount of the base asset is added to cover the transaction fee during dry runs
+    const transactionFeeForDryRun = [{ assetId: baseAssetId, amount: bn('100000000000000000') }];
+    const resources = this.generateFakeResources(
+      mergeQuantities(requiredQuantities, transactionFeeForDryRun)
+    );
+    txRequestClone.addResources(resources);
+
+    const txCost = await this.provider.getTransactionCost(txRequestClone, {
+      signatureCallback,
+    });
+
+    return {
+      ...txCost,
+      requiredQuantities,
+    };
   }
 
   /**
@@ -540,7 +580,7 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
@@ -552,7 +592,6 @@ export class Account extends AbstractAccount {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.sendTransaction(transactionRequest, {
-      awaitExecution,
       estimateTxDependencies: false,
     });
   }
@@ -607,9 +646,7 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType
   ) {
     let request = transactionRequest;
-    const txCost = await this.provider.getTransactionCost(request, {
-      resourcesOwner: this,
-    });
+    const txCost = await this.getTransactionCost(request);
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
       gasUsed: txCost.gasUsed,

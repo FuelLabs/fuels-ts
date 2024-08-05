@@ -11,7 +11,7 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT, DOCS_URL, Environments } from "@/lib";
+import { CURRENT_ENVIRONMENT, DOCS_URL, Environments, FAUCET_LINK } from "@/lib";
 
 // #region deploying-dapp-to-testnet-frontend-contract-id
 const contractId =
@@ -49,7 +49,10 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        <span>
+          Your wallet does not have enough funds. Please top it up using the{" "}
+          <Link href={FAUCET_LINK} target='_blank'>faucet.</Link>
+        </span>,
       );
     }
 
@@ -71,7 +74,10 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        <span>
+          Your wallet does not have enough funds. Please top it up using the{" "}
+          <Link href={FAUCET_LINK} target='_blank'>faucet.</Link>
+        </span>,
       );
     }
 

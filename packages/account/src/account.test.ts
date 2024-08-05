@@ -483,7 +483,7 @@ describe('Account', () => {
       [amount, assetIdB],
     ]);
 
-    const txCost = await sender.provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

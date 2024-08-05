@@ -39,7 +39,12 @@ export default function ScriptExample() {
       setResult(value.toString());
     } catch (error) {
       console.error(error);
-      toast.error("Error running script.");
+      toast.error(
+        <span>
+          Error running script. Please make sure your wallet has enough funds.
+          You can top it up using the <Link href="/faucet">faucet.</Link>
+        </span>,
+      );
     }
   };
 

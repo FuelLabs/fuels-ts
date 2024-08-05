@@ -165,9 +165,7 @@ export default class ContractFactory {
 
     const account = this.getAccount();
 
-    const transactionResponse = await account.sendTransaction(transactionRequest, {
-      awaitExecution: false,
-    });
+    const transactionResponse = await account.sendTransaction(transactionRequest);
 
     const waitForResult = async () => {
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
@@ -189,12 +187,18 @@ export default class ContractFactory {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
 
       if (!hasConfigurable) {
-        throw new Error('Contract does not have configurables to be set');
+        throw new FuelError(
+          ErrorCode.CONFIGURABLE_NOT_FOUND,
+          'Contract does not have configurables to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`Contract does not have a configurable named: '${key}'`);
+          throw new FuelError(
+            ErrorCode.CONFIGURABLE_NOT_FOUND,
+            `Contract does not have a configurable named: '${key}'`
+          );
         }
 
         const { offset } = this.interface.configurables[key];
@@ -233,7 +237,7 @@ export default class ContractFactory {
 
     const account = this.getAccount();
 
-    const txCost = await account.provider.getTransactionCost(transactionRequest);
+    const txCost = await account.getTransactionCost(transactionRequest);
 
     const { maxFee: setMaxFee } = deployContractOptions;
 

@@ -23,5 +23,5 @@
     "@fuel-ts/errors": "workspace:*",
     "@internal/forc": "workspace:*"
   },
-  "version": null
+  "version": "0.0.0"
 }

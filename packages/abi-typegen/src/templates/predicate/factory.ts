@@ -2,7 +2,6 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
-import { formatConfigurables } from '../utils/formatConfigurables';
 import { formatEnums } from '../utils/formatEnums';
 import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
@@ -35,7 +34,6 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
     types,
     baseMembers: ['Predicate', 'Provider', 'InputValue'],
   });
-  const { formattedConfigurables } = formatConfigurables({ configurables });
 
   const { prefixedInputs: inputs, output } = func.attributes;
 
@@ -50,7 +48,7 @@ export function renderFactoryTemplate(params: { abi: Abi }) {
       hexlifiedBinString,
       capitalizedName,
       imports,
-      formattedConfigurables,
+      configurables,
       commonTypesInUse: commonTypesInUse.join(', '),
     },
   });

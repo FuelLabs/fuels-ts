@@ -16,10 +16,10 @@ import {
   Provider,
 } from 'fuels';
 
-export type MyPredicateAbiConfigurables = {
+export type MyPredicateAbiConfigurables = Partial<{
   FEE: BigNumberish;
   ADDRESS: string;
-};
+}>;
 
 export type MyPredicateAbiInputs = [fee: BigNumberish, address: string];
 

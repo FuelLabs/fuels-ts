@@ -34,7 +34,8 @@ describe('await-execution', () => {
       await genesisWallet.signTransaction(transfer)
     );
 
-    const response = await provider.sendTransaction(transfer, { awaitExecution: true });
+    const response = await provider.sendTransaction(transfer);
+    await response.waitForResult();
 
     expect(response.gqlTransaction?.status?.type).toBe('SuccessStatus');
   });

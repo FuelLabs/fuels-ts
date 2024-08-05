@@ -1,5 +1,5 @@
-import { getRandomB256, WalletUnlocked, Predicate } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { getRandomB256, WalletUnlocked, Predicate, FuelError } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import {
   PredicateTrueAbi__factory,
@@ -198,6 +198,48 @@ describe('Predicate', () => {
       await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
     });
 
+    it('calls a predicate with partial configurables being set', async () => {
+      using launched = await launchTestNode();
+
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
+      const configurableConstants = {
+        ADDRESS: getRandomB256(),
+      };
+
+      const amountToTransfer = 300;
+
+      const predicate = PredicateWithConfigurableAbi__factory.createInstance(
+        provider,
+        [defaultValues.FEE, configurableConstants.ADDRESS],
+        configurableConstants
+      );
+
+      const destination = WalletUnlocked.generate({
+        provider: wallet.provider,
+      });
+
+      await assertBalance(destination, 0, provider.getBaseAssetId());
+
+      await fundPredicate(wallet, predicate, amountToPredicate);
+
+      const tx = await predicate.transfer(
+        destination.address,
+        amountToTransfer,
+        provider.getBaseAssetId(),
+        {
+          gasLimit: 1000,
+        }
+      );
+
+      await tx.waitForResult();
+
+      await assertBalance(destination, amountToTransfer, provider.getBaseAssetId());
+    });
+
     it('throws when configurable data is not set', async () => {
       using launched = await launchTestNode();
 
@@ -228,18 +270,22 @@ describe('Predicate', () => {
 
       const { provider } = launched;
 
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: PredicateTrueAbi__factory.bin,
-          abi: PredicateTrueAbi__factory.abi,
-          provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            constant: 'NADA',
-          },
-        });
-      }).toThrow('Predicate has no configurable constants to be set');
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: PredicateTrueAbi__factory.bin,
+            abi: PredicateTrueAbi__factory.abi,
+            provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              constant: 'NADA',
+            },
+          }),
+        new FuelError(
+          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+          'Error setting configurable constants: Predicate has no configurable constants to be set.'
+        )
+      );
     });
 
     it('throws when setting invalid configurable', async () => {
@@ -247,39 +293,43 @@ describe('Predicate', () => {
 
       const { provider } = launched;
 
-      const errMsg = `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`;
-
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: PredicateWithConfigurableAbi__factory.bin,
-          abi: PredicateWithConfigurableAbi__factory.abi,
-          provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            NOPE: 'NADA',
-          },
-        });
-      }).toThrow(errMsg);
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: PredicateWithConfigurableAbi__factory.bin,
+            abi: PredicateWithConfigurableAbi__factory.abi,
+            provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              NOPE: 'NADA',
+            },
+          }),
+        new FuelError(
+          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+          `Error setting configurable constants: No configurable constant named 'NOPE' found in the Predicate.`
+        )
+      );
     });
 
     it('throws when setting a configurable with no ABI', async () => {
       using launched = await launchTestNode();
 
       const { provider } = launched;
-      const errMsg = `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`;
-
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const predicate = new Predicate({
-          bytecode: PredicateWithConfigurableAbi__factory.bin,
-          provider,
-          inputData: ['NADA'],
-          configurableConstants: {
-            NOPE: 'NADA',
-          },
-        });
-      }).toThrow(errMsg);
+      await expectToThrowFuelError(
+        () =>
+          new Predicate({
+            bytecode: PredicateWithConfigurableAbi__factory.bin,
+            provider,
+            inputData: ['NADA'],
+            configurableConstants: {
+              NOPE: 'NADA',
+            },
+          }),
+        new FuelError(
+          FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+          `Error setting configurable constants: Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI.`
+        )
+      );
     });
   });
 });

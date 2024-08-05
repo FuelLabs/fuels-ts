@@ -43,12 +43,12 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 type {{capitalizedName}}Inputs = [{{inputs}}];
 type {{capitalizedName}}Output = {{output}};
 
-{{#if formattedConfigurables}}
-export type {{capitalizedName}}Configurables = {
-{{#each formattedConfigurables}}
-  {{configurableName}}: {{configurableType}};
+{{#if configurables}}
+export type {{capitalizedName}}Configurables = Partial<{
+{{#each configurables}}
+  {{name}}: {{inputLabel}};
 {{/each}}
-};
+}>;
 {{/if}}
 
 const _abi = {{abiJsonString}}

@@ -71,7 +71,7 @@ describe('encode and decode', () => {
     request.scriptData = encodedArguments;
 
     // Now we can build out the rest of the transaction and then fund it
-    const txCost = await wallet.provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
     await wallet.fund(request, txCost);
