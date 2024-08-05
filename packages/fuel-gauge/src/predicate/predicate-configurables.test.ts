@@ -270,7 +270,7 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () =>
           new Predicate({
-            bytecode: PredicateTrue.bin,
+            bytecode: PredicateTrue.bytecode,
             abi: PredicateTrue.abi,
             provider,
             data: ['NADA'],
@@ -293,7 +293,7 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () =>
           new Predicate({
-            bytecode: PredicateWithConfigurable.bin,
+            bytecode: PredicateWithConfigurable.bytecode,
             abi: PredicateWithConfigurable.abi,
             provider,
             data: ['NADA'],
@@ -316,7 +316,7 @@ describe('Predicate', () => {
       await expectToThrowFuelError(
         () =>
           new Predicate({
-            bytecode: PredicateWithConfigurableAbi__factory.bin,
+            bytecode: PredicateWithConfigurable.bytecode,
             provider,
             data: ['NADA'],
             configurableConstants: {
