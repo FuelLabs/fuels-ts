@@ -6,12 +6,10 @@ import Contract from './contract';
 
 const CONTRACT_ID = '0x0101010101010101010101010101010101010101010101010101010101010101';
 const ABI: JsonAbi = {
-  types: [
+  concreteTypes: [
     {
-      typeId: 0,
+      concreteTypeId: 'asdf',
       type: 'u64',
-      typeParameters: null,
-      components: null,
     },
   ],
   functions: [
@@ -19,22 +17,21 @@ const ABI: JsonAbi = {
       inputs: [
         {
           name: 'input',
-          type: 0,
-          typeArguments: null,
+          concreteTypeId: 'asdf',
         },
       ],
       name: 'foo',
-      output: {
-        type: 0,
-        typeArguments: null,
-        name: '',
-      },
+      output: 'asdf',
       attributes: null,
     },
   ],
   loggedTypes: [],
   messagesTypes: [],
   configurables: [],
+  encodingVersion: '1',
+  metadataTypes: [],
+  programType: 'contract',
+  specVersion: '1',
 };
 
 /**

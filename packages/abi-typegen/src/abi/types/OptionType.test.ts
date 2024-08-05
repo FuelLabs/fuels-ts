@@ -17,7 +17,9 @@ describe('OptionType.ts', () => {
     Test helpers
   */
   function getTypesForContract() {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.OPTION_SIMPLE, {
+      transpile: true,
+    });
     const rawTypes = project.abiContents.types;
 
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));

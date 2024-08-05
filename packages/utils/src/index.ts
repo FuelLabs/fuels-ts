@@ -13,4 +13,3 @@ export * from './utils/base58';
 export * from './utils/dataSlice';
 export * from './utils/toUtf8Bytes';
 export * from './utils/toUtf8String';
-export * from './utils/transpileAbi';
