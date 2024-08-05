@@ -44,17 +44,17 @@ _Note: If defined, `requestMiddleware`, `timeout` and `retryOptions` are applied
 
 When using the SDK, it may be necessary to submit multiple transactions from the same account in a short period. In such cases, the SDK creates and funds these transactions, then submits them to the node.
 
-However, if a second transaction is created before the first one is processed, there is a chance of using the same UTXO(s) for both transactions. This happens because the UTXO(s) used in the first transaction are still unspent until the transaction is fully processed.
+However, if a second transaction is created before the first one is processed, there is a chance of using the same resources (UTXOs or Messages) for both transactions. This happens because the resources used in the first transaction are still unspent until the transaction is fully processed.
 
-If the second transaction attempts to use the same UTXO(s) that the first transaction has already spent, it will result in the following error:
+If the second transaction attempts to use the same resources that the first transaction has already spent, it will result in the following error:
 
 ```console
 Transaction is not inserted. UTXO does not exist: 0xf5...
 ```
 
-This error indicates that the UTXO(s) used by the second transaction no longer exist, as the first transaction already spent them.
+This error indicates that the resources used by the second transaction no longer exist, as the first transaction already spent them.
 
-To prevent this issue, the SDK sets a default cache for UTXO(s) to 20 seconds. This default caching mechanism ensures that UTXO(s) used in a submitted transaction are not reused in subsequent transactions within the specified time. You can control the duration of this cache using the `resourceCacheTTL` flag. If you would like to disable caching, you can pass a value of `-1` to the `resourceCacheTTL` parameter.
+To prevent this issue, the SDK sets a default cache for resources to 20 seconds. This default caching mechanism ensures that resources used in a submitted transaction are not reused in subsequent transactions within the specified time. You can control the duration of this cache using the `resourceCacheTTL` flag. If you would like to disable caching, you can pass a value of `-1` to the `resourceCacheTTL` parameter.
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-cache-utxo{ts:line-numbers}
 
