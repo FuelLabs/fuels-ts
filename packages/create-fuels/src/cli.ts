@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import chalk from 'chalk';
@@ -62,7 +63,10 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
@@ -73,7 +77,10 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
