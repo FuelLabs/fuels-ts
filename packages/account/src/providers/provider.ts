@@ -39,7 +39,7 @@ import { coinQuantityfy } from './coin-quantity';
 import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
-import { ResourceCache } from './resource-cache';
+import { ResourceCache, DEFAULT_RESOURCE_CACHE_TTL } from './resource-cache';
 import type {
   TransactionRequestLike,
   TransactionRequest,
@@ -65,8 +65,6 @@ const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
-export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
-
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
 
@@ -683,7 +681,7 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  #cacheInputs(inputs: TransactionRequestInput[], transactionId: string): void {
+  async #cacheInputs(inputs: TransactionRequestInput[], transactionId: string): Promise<void> {
     if (!this.cache) {
       return;
     }
@@ -700,7 +698,7 @@ Supported fuel-core version: ${supportedVersion}.`
       { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
     );
 
-    this.cache.set(transactionId, inputsToCache);
+    await this.cache.set(transactionId, inputsToCache);
   }
 
   /**
@@ -735,7 +733,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
-    this.#cacheInputs(transactionRequest.inputs, transactionId);
+    await this.#cacheInputs(transactionRequest.inputs, transactionId);
 
     return new TransactionResponse(transactionId, this, abis);
   }
@@ -1250,7 +1248,7 @@ Supported fuel-core version: ${supportedVersion}.`
     };
 
     if (this.cache) {
-      const cached = this.cache.getActiveData();
+      const cached = await this.cache.getActiveData();
       excludeInput.messages.push(...cached.messages);
       excludeInput.utxos.push(...cached.utxos);
     }

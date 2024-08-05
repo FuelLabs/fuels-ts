@@ -27,13 +27,10 @@ import { Wallet } from '../wallet';
 import type { Coin } from './coin';
 import type { Message } from './message';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
-import Provider, {
-  BLOCKS_PAGE_SIZE_LIMIT,
-  DEFAULT_RESOURCE_CACHE_TTL,
-  RESOURCES_PAGE_SIZE_LIMIT,
-} from './provider';
+import Provider, { BLOCKS_PAGE_SIZE_LIMIT, RESOURCES_PAGE_SIZE_LIMIT } from './provider';
 import type { ExcludeResourcesOption } from './resource';
 import { isCoin } from './resource';
+import { DEFAULT_RESOURCE_CACHE_TTL } from './resource-cache';
 import type { CoinTransactionRequestInput } from './transaction-request';
 import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
@@ -447,7 +444,7 @@ describe('Provider', () => {
 
     await wallet.transfer(receiver.address, 10_000);
 
-    const cachedResources = provider.cache?.getActiveData();
+    const cachedResources = await provider.cache?.getActiveData();
     expect(new Set(cachedResources?.utxos)).toEqual(new Set(EXPECTED.utxos));
     expect(new Set(cachedResources?.messages)).toEqual(new Set(EXPECTED.messages));
   });
@@ -494,8 +491,8 @@ describe('Provider', () => {
     );
 
     // No resources were cached since the TX submission failed
-    [...utxos, ...messages].forEach((key) => {
-      expect(provider.cache?.isCached(key)).toBeFalsy();
+    [...utxos, ...messages].forEach(async (key) => {
+      expect(await provider.cache?.isCached(key)).toBeFalsy();
     });
   });
 
@@ -551,8 +548,8 @@ describe('Provider', () => {
     });
 
     // Ensure user's resouces were unset from the cache
-    [...utxos, ...messages].forEach((key) => {
-      expect(provider.cache?.isCached(key)).toBeFalsy();
+    [...utxos, ...messages].forEach(async (key) => {
+      expect(await provider.cache?.isCached(key)).toBeFalsy();
     });
   });
 
@@ -589,8 +586,8 @@ describe('Provider', () => {
     await wallet.transfer(receiver.address, transferAmount);
 
     // Determine the used and unused resource
-    const cachedResource = provider.cache?.isCached(coin.id) ? coin : message;
-    const uncachedResource = provider.cache?.isCached(coin.id) ? message : coin;
+    const cachedResource = (await provider.cache?.isCached(coin.id)) ? coin : message;
+    const uncachedResource = (await provider.cache?.isCached(coin.id)) ? message : coin;
 
     expect(cachedResource).toBeDefined();
     expect(uncachedResource).toBeDefined();

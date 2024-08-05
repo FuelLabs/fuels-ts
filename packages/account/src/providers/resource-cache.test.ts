@@ -27,28 +27,28 @@ describe('Resource Cache', () => {
     );
   });
 
-  it('can validade if it is cached [UTXO]', () => {
+  it('can validade if it is cached [UTXO]', async () => {
     const resourceCache = new ResourceCache(1000);
     const utxoId = randomValue();
 
-    expect(resourceCache.isCached(utxoId)).toBeFalsy();
+    expect(await resourceCache.isCached(utxoId)).toBeFalsy();
 
     const txID = randomValue();
-    resourceCache.set(txID, { utxos: [utxoId], messages: [] });
+    await resourceCache.set(txID, { utxos: [utxoId], messages: [] });
 
-    expect(resourceCache.isCached(utxoId)).toBeTruthy();
+    expect(await resourceCache.isCached(utxoId)).toBeTruthy();
   });
 
-  it('can validade if it is cached [Message]', () => {
+  it('can validade if it is cached [Message]', async () => {
     const resourceCache = new ResourceCache(1000);
     const messageNonce = randomValue();
 
-    expect(resourceCache.isCached(messageNonce)).toBeFalsy();
+    expect(await resourceCache.isCached(messageNonce)).toBeFalsy();
 
     const txID = randomValue();
-    resourceCache.set(txID, { utxos: [], messages: [messageNonce] });
+    await resourceCache.set(txID, { utxos: [], messages: [messageNonce] });
 
-    expect(resourceCache.isCached(messageNonce)).toBeTruthy();
+    expect(await resourceCache.isCached(messageNonce)).toBeTruthy();
   });
 
   it('can get active [no data]', async () => {
@@ -57,10 +57,10 @@ describe('Resource Cache', () => {
 
     await sleep(1);
 
-    expect(resourceCache.getActiveData()).toStrictEqual(EXPECTED);
+    expect(await resourceCache.getActiveData()).toStrictEqual(EXPECTED);
   });
 
-  it('can get active', () => {
+  it('can get active', async () => {
     const EXPECTED = {
       utxos: [randomValue(), randomValue()],
       messages: [randomValue(), randomValue(), randomValue()],
@@ -68,9 +68,9 @@ describe('Resource Cache', () => {
     const resourceCache = new ResourceCache(1000);
 
     const txId = randomValue();
-    resourceCache.set(txId, EXPECTED);
+    await resourceCache.set(txId, EXPECTED);
 
-    const activeData = resourceCache.getActiveData();
+    const activeData = await resourceCache.getActiveData();
 
     expect(activeData.messages).containSubset(EXPECTED.messages);
     expect(activeData.utxos).containSubset(EXPECTED.utxos);
@@ -86,21 +86,21 @@ describe('Resource Cache', () => {
       messages: [randomValue()],
     };
 
-    resourceCache.set(txId1, txId1Resources);
-    let activeData = resourceCache.getActiveData();
+    await resourceCache.set(txId1, txId1Resources);
+    let activeData = await resourceCache.getActiveData();
 
     expect(activeData.utxos).containSubset(txId1Resources.utxos);
     expect(activeData.messages).containSubset(txId1Resources.messages);
 
     await sleep(ttl);
 
-    activeData = resourceCache.getActiveData();
+    activeData = await resourceCache.getActiveData();
 
     expect(activeData.utxos.length).toEqual(0);
     expect(activeData.messages.length).toEqual(0);
   });
 
-  it('should remove cached data based on transaction ID', () => {
+  it('should remove cached data based on transaction ID', async () => {
     const ttl = 1000;
     const resourceCache = new ResourceCache(ttl);
 
@@ -117,10 +117,10 @@ describe('Resource Cache', () => {
       messages: [randomValue()],
     };
 
-    resourceCache.set(txId1, txId1Resources);
-    resourceCache.set(txId2, txId2Resources);
+    await resourceCache.set(txId1, txId1Resources);
+    await resourceCache.set(txId2, txId2Resources);
 
-    let activeData = resourceCache.getActiveData();
+    let activeData = await resourceCache.getActiveData();
 
     expect(activeData.utxos).containSubset([...txId1Resources.utxos, ...txId2Resources.utxos]);
     expect(activeData.messages).containSubset([
@@ -128,9 +128,9 @@ describe('Resource Cache', () => {
       ...txId2Resources.messages,
     ]);
 
-    resourceCache.unset(txId1);
+    await resourceCache.unset(txId1);
 
-    activeData = resourceCache.getActiveData();
+    activeData = await resourceCache.getActiveData();
 
     expect(activeData.utxos).not.containSubset(txId1Resources.utxos);
     expect(activeData.messages).not.containSubset(txId1Resources.messages);
@@ -139,7 +139,7 @@ describe('Resource Cache', () => {
     expect(activeData.messages).containSubset(txId2Resources.messages);
   });
 
-  it('can clear cache', () => {
+  it('can clear cache', async () => {
     const resourceCache = new ResourceCache(1000);
 
     const txId1 = randomValue();
@@ -155,10 +155,10 @@ describe('Resource Cache', () => {
       messages: [randomValue()],
     };
 
-    resourceCache.set(txId1, txId1Resources);
-    resourceCache.set(txId2, txId2Resources);
+    await resourceCache.set(txId1, txId1Resources);
+    await resourceCache.set(txId2, txId2Resources);
 
-    const activeData = resourceCache.getActiveData();
+    const activeData = await resourceCache.getActiveData();
 
     expect(activeData.utxos).containSubset([...txId1Resources.utxos, ...txId2Resources.utxos]);
     expect(activeData.messages).containSubset([
@@ -166,33 +166,94 @@ describe('Resource Cache', () => {
       ...txId2Resources.messages,
     ]);
 
-    resourceCache.clear();
+    await resourceCache.clear();
 
-    expect(resourceCache.getActiveData()).toStrictEqual({ utxos: [], messages: [] });
+    expect(await resourceCache.getActiveData()).toStrictEqual({ utxos: [], messages: [] });
   });
 
-  it('should validate that ResourceCache uses a global cache', () => {
-    const oldTxId = randomValue();
-    const oldCache = {
-      utxos: [randomValue(), randomValue()],
-      messages: [randomValue()],
-    };
+  describe('Concurrent operations', () => {
+    const mockTtl = 100; // 100ms TTL for testing
+    let resourceCache: ResourceCache;
 
-    const oldInstance = new ResourceCache(800);
-    oldInstance.set(oldTxId, oldCache);
+    beforeEach(() => {
+      resourceCache = new ResourceCache(mockTtl);
+    });
 
-    const newTxId = randomValue();
-    const newCache = {
-      utxos: [randomValue()],
-      messages: [randomValue(), randomValue()],
-    };
+    afterEach(async () => {
+      await resourceCache.destroy();
+    });
 
-    const newInstance = new ResourceCache(300);
-    newInstance.set(newTxId, newCache);
+    it('should handle concurrent operations safely', async () => {
+      const transactionId1 = '0x1234';
+      const transactionId2 = '0x5678';
+      const resources1 = {
+        utxos: ['0xabcd'],
+        messages: ['0xef01'],
+      };
+      const resources2 = {
+        utxos: ['0x2345'],
+        messages: ['0x6789'],
+      };
 
-    const activeData = newInstance.getActiveData();
+      // Simulate concurrent operations
+      await Promise.all([
+        resourceCache.set(transactionId1, resources1),
+        resourceCache.set(transactionId2, resources2),
+        resourceCache.getActiveData(),
+        resourceCache.isCached('0xabcd'),
+      ]);
 
-    expect(activeData.utxos).containSubset([...oldCache.utxos, ...newCache.utxos]);
-    expect(activeData.messages).containSubset([...oldCache.messages, ...newCache.messages]);
+      const cachedData = await resourceCache.getActiveData();
+      expect(cachedData.utxos).toContain('0xabcd');
+      expect(cachedData.utxos).toContain('0x2345');
+      expect(cachedData.messages).toContain('0xef01');
+      expect(cachedData.messages).toContain('0x6789');
+    });
+
+    it('should automatically clean up expired entries', async () => {
+      const transactionId = '0x1234';
+      const resources = {
+        utxos: ['0xabcd'],
+        messages: ['0xef01'],
+      };
+
+      await resourceCache.set(transactionId, resources);
+
+      // Wait for the TTL to expire
+      await sleep(mockTtl + 10);
+
+      // Trigger a cleanup by calling getActiveData
+      const cachedData = await resourceCache.getActiveData();
+      expect(cachedData.utxos).not.toContain('0xabcd');
+      expect(cachedData.messages).not.toContain('0xef01');
+    });
+
+    it('should handle high concurrency without race conditions', async () => {
+      const iterations = 100;
+
+      const runOperation = async (i: number) => {
+        const transactionId = `0x${i.toString(16).padStart(4, '0')}`;
+        const resources = {
+          utxos: [`0x${(i * 2).toString(16).padStart(4, '0')}`],
+          messages: [`0x${(i * 2 + 1).toString(16).padStart(4, '0')}`],
+        };
+
+        await resourceCache.set(transactionId, resources);
+        await sleep(Math.random() * 10); // Random delay to increase chance of overlap
+        const isCached = await resourceCache.isCached(resources.utxos[0]);
+        expect(isCached).toBe(true);
+
+        const activeData = await resourceCache.getActiveData();
+        expect(activeData.utxos).toContain(resources.utxos[0]);
+        expect(activeData.messages).toContain(resources.messages[0]);
+      };
+
+      const operations = Array.from({ length: iterations }, (_, i) => runOperation(i));
+      await Promise.all(operations);
+
+      const finalCachedData = await resourceCache.getActiveData();
+      expect(finalCachedData.utxos.length).toBe(iterations);
+      expect(finalCachedData.messages.length).toBe(iterations);
+    });
   });
 });
