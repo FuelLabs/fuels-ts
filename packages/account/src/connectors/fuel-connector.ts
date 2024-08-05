@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
+import { FuelError } from '@fuel-ts/errors';
 import { EventEmitter } from 'events';
 
 import type { TransactionRequestLike } from '../providers';
@@ -97,7 +98,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Always true.
    */
   async ping(): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -107,7 +108,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns boolean - connection status.
    */
   async version(): Promise<Version> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -117,7 +118,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns The connection status.
    */
   async isConnected(): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -127,7 +128,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns The accounts addresses strings
    */
   async accounts(): Promise<Array<string>> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -140,7 +141,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns boolean - connection status.
    */
   async connect(): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -151,7 +152,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns The connection status.
    */
   async disconnect(): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -164,7 +165,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Message signature
    */
   async signMessage(_address: string, _message: string): Promise<string> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -177,7 +178,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Transaction signature
    */
   async signTransaction(_address: string, _transaction: TransactionRequestLike): Promise<string> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -194,7 +195,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns The transaction id
    */
   async sendTransaction(_address: string, _transaction: TransactionRequestLike): Promise<string> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -206,7 +207,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns The current account selected otherwise null.
    */
   async currentAccount(): Promise<string | null> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -221,7 +222,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns True if the asset was added successfully
    */
   async addAssets(_assets: Array<Asset>): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -236,7 +237,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns True if the asset was added successfully
    */
   async addAsset(_asset: Asset): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -245,7 +246,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Array of assets metadata from the connector vinculated to the all accounts from a specific Wallet.
    */
   async assets(): Promise<Array<Asset>> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -257,7 +258,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Return true if the network was added successfully
    */
   async addNetwork(_networkUrl: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -269,7 +270,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Return true if the network was added successfully
    */
   async selectNetwork(_network: Network): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -278,7 +279,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Return all the networks added to the connector.
    */
   async networks(): Promise<Array<Network>> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -287,7 +288,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Return the current network selected inside the connector.
    */
   async currentNetwork(): Promise<Network> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -298,7 +299,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Return true if the ABI was added successfully.
    */
   async addABI(_contractId: string, _abi: FuelABI): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -308,7 +309,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns The ABI if it exists, otherwise return null.
    */
   async getABI(_id: string): Promise<FuelABI | null> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
@@ -318,7 +319,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @returns Returns true if the abi exists or false if not.
    */
   async hasABI(_id: string): Promise<boolean> {
-    throw new Error('Method not implemented.');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 
   /**
