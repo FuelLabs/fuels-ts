@@ -381,7 +381,7 @@ describe('Provider', () => {
     const ttl = 10000;
     using launched = await setupTestProviderAndWallets({
       providerOptions: {
-        cacheUtxo: ttl,
+        resourceCacheTTL: ttl,
       },
     });
     const { provider } = launched;
@@ -398,7 +398,7 @@ describe('Provider', () => {
 
   it('should validate resource cache value [invalid numerical]', async () => {
     const { error } = await safeExec(async () => {
-      await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
+      await setupTestProviderAndWallets({ providerOptions: { resourceCacheTTL: -500 } });
     });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
@@ -406,7 +406,7 @@ describe('Provider', () => {
   it('should be possible to disable the cache by using -1', async () => {
     using launched = await setupTestProviderAndWallets({
       providerOptions: {
-        cacheUtxo: -1,
+        resourceCacheTTL: -1,
       },
     });
     const { provider } = launched;

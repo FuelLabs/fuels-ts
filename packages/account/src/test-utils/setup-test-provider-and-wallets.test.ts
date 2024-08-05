@@ -46,7 +46,7 @@ describe('setupTestProviderAndWallets', () => {
 
     await expectToThrowFuelError(
       async () => {
-        await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
+        await setupTestProviderAndWallets({ providerOptions: { resourceCacheTTL: -500 } });
       },
       { code: ErrorCode.INVALID_TTL }
     );

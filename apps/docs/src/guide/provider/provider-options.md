@@ -40,7 +40,7 @@ _Note: If defined, `requestMiddleware`, `timeout` and `retryOptions` are applied
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-fetch{ts:line-numbers}
 
-### `cacheUtxo`
+### `resourceCacheTTL`
 
 When using the SDK, it may be necessary to submit multiple transactions from the same account in a short period. In such cases, the SDK creates and funds these transactions, then submits them to the node.
 
@@ -54,7 +54,7 @@ Transaction is not inserted. UTXO does not exist: 0xf5...
 
 This error indicates that the UTXO(s) used by the second transaction no longer exist, as the first transaction already spent them.
 
-To prevent this issue, the SDK sets a default cache for UTXO(s) to 20 seconds. This default caching mechanism ensures that UTXO(s) used in a submitted transaction are not reused in subsequent transactions within the specified time. You can control the duration of this cache using the `cacheUtxo` flag. If you would like to disable caching, you can pass a value of `-1` to the `cacheUtxo` parameter.
+To prevent this issue, the SDK sets a default cache for UTXO(s) to 20 seconds. This default caching mechanism ensures that UTXO(s) used in a submitted transaction are not reused in subsequent transactions within the specified time. You can control the duration of this cache using the `resourceCacheTTL` flag. If you would like to disable caching, you can pass a value of `-1` to the `resourceCacheTTL` parameter.
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-cache-utxo{ts:line-numbers}
 
@@ -62,4 +62,4 @@ To prevent this issue, the SDK sets a default cache for UTXO(s) to 20 seconds. T
 
 If you would like to submit multiple transactions without waiting for each transaction to be completed, your account must have multiple UTXOs available. If you only have one UTXO, the first transaction will spend it, and any remaining amount will be converted into a new UTXO with a different ID.
 
-By ensuring your account has multiple UTXOs, you can effectively use the `cacheUtxo` flag to manage transactions without conflicts. For more information on UTXOs, refer to the [UTXOs guide](../the-utxo-model/index.md).
+By ensuring your account has multiple UTXOs, you can effectively use the `resourceCacheTTL` flag to manage transactions without conflicts. For more information on UTXOs, refer to the [UTXOs guide](../the-utxo-model/index.md).

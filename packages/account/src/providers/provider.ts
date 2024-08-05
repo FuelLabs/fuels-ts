@@ -302,9 +302,9 @@ export type ProviderOptions = {
    */
   timeout?: number;
   /**
-   * Cache UTXOs for the given time [ms].
+   * Resources cache for the given time [ms]. If set to -1, the cache will be disabled.
    */
-  cacheUtxo?: number;
+  resourceCacheTTL?: number;
   /**
    * Retry options to use when fetching data from the node.
    */
@@ -388,7 +388,7 @@ export default class Provider {
 
   options: ProviderOptions = {
     timeout: undefined,
-    cacheUtxo: undefined,
+    resourceCacheTTL: undefined,
     fetch: undefined,
     retryOptions: undefined,
   };
@@ -429,10 +429,10 @@ export default class Provider {
     this.url = url;
     this.operations = this.createOperations();
 
-    const { cacheUtxo } = this.options;
-    if (isDefined(cacheUtxo)) {
-      if (cacheUtxo !== -1) {
-        this.cache = new ResourceCache(cacheUtxo);
+    const { resourceCacheTTL } = this.options;
+    if (isDefined(resourceCacheTTL)) {
+      if (resourceCacheTTL !== -1) {
+        this.cache = new ResourceCache(resourceCacheTTL);
       } else {
         this.cache = undefined;
       }

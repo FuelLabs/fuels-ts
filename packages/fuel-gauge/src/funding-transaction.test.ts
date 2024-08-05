@@ -468,7 +468,7 @@ describe('Funding Transactions', () => {
       },
       providerOptions: {
         // Cache will last for 1 millisecond
-        cacheUtxo: 1,
+        resourceCacheTTL: 1,
       },
       walletsConfig: {
         coinsPerAsset: 1,
