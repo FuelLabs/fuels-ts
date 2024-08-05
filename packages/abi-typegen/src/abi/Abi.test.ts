@@ -5,8 +5,7 @@ import {
   getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
-import * as parseConfigurablesMod from '../utils/parseConfigurables';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 import * as parseFunctionsMod from '../utils/parseFunctions';
 import * as parseTypesMod from '../utils/parseTypes';
 
@@ -29,14 +28,9 @@ describe('Abi.ts', () => {
       .spyOn(parseFunctionsMod, 'parseFunctions')
       .mockImplementation(() => []);
 
-    const parseConfigurables = vi
-      .spyOn(parseConfigurablesMod, 'parseConfigurables')
-      .mockImplementation(() => []);
-
     return {
       parseTypes,
       parseFunctions,
-      parseConfigurables,
     };
   }
 
@@ -63,7 +57,7 @@ describe('Abi.ts', () => {
   }
 
   function getRawTypeFor(params: { type: string }) {
-    const rawAbiType: IRawAbiTypeRoot = {
+    const rawAbiType: JsonAbiType = {
       typeId: 1,
       type: params.type,
       components: null,
@@ -78,13 +72,12 @@ describe('Abi.ts', () => {
   test('should create a new abi instance and parse root nodes', () => {
     const {
       abi,
-      mocks: { parseTypes, parseFunctions, parseConfigurables },
+      mocks: { parseTypes, parseFunctions },
     } = getMockedAbi();
 
     expect(abi).toBeTruthy();
     expect(parseTypes).toHaveBeenCalledTimes(1);
     expect(parseFunctions).toHaveBeenCalledTimes(1);
-    expect(parseConfigurables).toHaveBeenCalledTimes(1);
   });
 
   test('should compute array of custom types in use', () => {

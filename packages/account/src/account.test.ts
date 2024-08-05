@@ -10,7 +10,7 @@ import { Account } from './account';
 import { FUEL_NETWORK_URL } from './configs';
 import { ScriptTransactionRequest, Provider } from './providers';
 import * as providersMod from './providers';
-import type { Coin, CoinQuantity, Message, Resource } from './providers';
+import type { CoinQuantity, Resource } from './providers';
 import { generateTestWallet, seedTestWallet } from './test-utils';
 import { Wallet } from './wallet';
 
@@ -64,40 +64,13 @@ describe('Account', () => {
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
-    const coins = await account.getCoins();
+    const { coins } = await account.getCoins();
     const assetA = coins.find((c) => c.assetId === assets[0]);
     expect(assetA?.amount.gt(1)).toBeTruthy();
     const assetB = coins.find((c) => c.assetId === assets[1]);
     expect(assetB?.amount.gt(1)).toBeTruthy();
     const assetC = coins.find((c) => c.assetId === assets[2]);
     expect(assetC?.amount.gt(1)).toBeTruthy();
-  });
-
-  it('should throw if coins length is higher than 9999', async () => {
-    const dummyCoins: Coin[] = new Array(10000);
-
-    vi.spyOn(Provider.prototype, 'getCoins').mockImplementation(async () =>
-      Promise.resolve(dummyCoins)
-    );
-
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
-
-    let result;
-    let error;
-
-    try {
-      result = await account.getCoins();
-    } catch (err) {
-      error = err;
-    }
-
-    expect(result).toBeUndefined();
-    expect((<Error>error).message).toEqual(
-      'Wallets containing more than 9999 coins exceed the current supported limit.'
-    );
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
@@ -135,35 +108,12 @@ describe('Account', () => {
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
       provider
     );
-    const messages = await account.getMessages();
+    const { messages, pageInfo } = await account.getMessages();
+
+    expect(pageInfo.hasNextPage).toBeFalsy();
+    expect(pageInfo.hasPreviousPage).toBeFalsy();
+
     expect(messages.length).toEqual(1);
-  });
-
-  it('should throw if messages length is higher than 9999', async () => {
-    const dummyMessages: Message[] = new Array(10000);
-
-    vi.spyOn(Provider.prototype, 'getMessages').mockImplementation(async () =>
-      Promise.resolve(dummyMessages)
-    );
-
-    const account = new Account(
-      '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
-      provider
-    );
-
-    let result;
-    let error;
-
-    try {
-      result = await account.getMessages();
-    } catch (err) {
-      error = err;
-    }
-
-    expect(result).toBeUndefined();
-    expect((<Error>error).message).toEqual(
-      'Wallets containing more than 9999 messages exceed the current supported limit.'
-    );
   });
 
   it('should get single asset balance just fine', async () => {
@@ -182,34 +132,8 @@ describe('Account', () => {
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
-    const balances = await account.getBalances();
+    const { balances } = await account.getBalances();
     expect(balances.length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('should throw if balances length is higher than 9999', async () => {
-    const dummyBalances: CoinQuantity[] = new Array(10000);
-
-    vi.spyOn(Provider.prototype, 'getBalances').mockImplementation(async () =>
-      Promise.resolve(dummyBalances)
-    );
-
-    const account = new Account(
-      '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
-      provider
-    );
-
-    let result;
-    let error;
-    try {
-      result = await account.getBalances();
-    } catch (err) {
-      error = err;
-    }
-
-    expect(result).toBeUndefined();
-    expect((<Error>error).message).toEqual(
-      'Wallets containing more than 9999 balances exceed the current supported limit.'
-    );
   });
 
   it('should connect with provider just fine [INSTANCE]', async () => {
@@ -385,8 +309,8 @@ describe('Account', () => {
     });
     await response.wait();
 
-    const senderBalances = await sender.getBalances();
-    const receiverBalances = await receiver.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
+    const { balances: receiverBalances } = await receiver.getBalances();
 
     const expectedRemaining = 442069;
     expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
@@ -475,8 +399,8 @@ describe('Account', () => {
     const response = await sender.sendTransaction(request);
     await response.wait();
 
-    const senderBalances = await sender.getBalances();
-    const receiverBalances = await receiver.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
+    const { balances: receiverBalances } = await receiver.getBalances();
 
     const expectedRemaining = 442069;
     expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
@@ -516,7 +440,7 @@ describe('Account', () => {
     });
 
     const response = await tx.wait();
-    const receiverBalances = await receiver.getBalances();
+    const { balances: receiverBalances } = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
     expect(response.isStatusSuccess).toBeTruthy();
   });
@@ -528,7 +452,7 @@ describe('Account', () => {
       [500_000, baseAssetId],
     ]);
 
-    const coins = await user.getCoins();
+    const { coins } = await user.getCoins();
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expect(
@@ -559,7 +483,7 @@ describe('Account', () => {
       [amount, assetIdB],
     ]);
 
-    const txCost = await sender.provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -570,7 +494,7 @@ describe('Account', () => {
 
     await response.wait();
 
-    const receiverACoins = await receiverA.getCoins();
+    const { coins: receiverACoins } = await receiverA.getCoins();
     expect(receiverACoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),
@@ -578,7 +502,7 @@ describe('Account', () => {
       ])
     );
 
-    const receiverBCoins = await receiverB.getCoins();
+    const { coins: receiverBCoins } = await receiverB.getCoins();
     expect(receiverBCoins).toEqual(
       expect.arrayContaining([
         expect.objectContaining({ assetId: assetIdA, amount: bn(amount) }),
@@ -605,7 +529,7 @@ describe('Account', () => {
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
-    const senderBalances = await sender.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
     const expectedRemaining = 441598;
     expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
   });
@@ -655,7 +579,7 @@ describe('Account', () => {
     });
     await transfer.wait();
 
-    const receiverBalances = await receiver.getBalances();
+    const { balances: receiverBalances } = await receiver.getBalances();
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(110) }]);
   });
 
@@ -712,7 +636,7 @@ describe('Account', () => {
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
 
-    const senderBalances = await sender.getBalances();
+    const { balances: senderBalances } = await sender.getBalances();
 
     const expectedRemaining = 1441498;
     expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
@@ -784,5 +708,60 @@ describe('Account', () => {
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
+  });
+
+  it('can properly use getCoins', async () => {
+    const account = Wallet.generate({ provider });
+    const spy = vi.spyOn(account.provider, 'getCoins');
+
+    const args: providersMod.CursorPaginationArgs = { first: 123 };
+
+    await account.getCoins();
+    expect(spy.mock.calls[0]).toStrictEqual([account.address, undefined, undefined]);
+
+    await account.getCoins(baseAssetId);
+    expect(spy.mock.calls[1]).toStrictEqual([account.address, baseAssetId, undefined]);
+
+    await account.getCoins(baseAssetId, args);
+    expect(spy.mock.calls[2]).toStrictEqual([account.address, baseAssetId, args]);
+
+    expect(spy).toHaveBeenCalled();
+    vi.restoreAllMocks();
+  });
+
+  it('can properly use getMessages', async () => {
+    const account = Wallet.generate({ provider });
+    const spy = vi.spyOn(account.provider, 'getMessages');
+
+    const args: providersMod.CursorPaginationArgs = { first: 234 };
+
+    await account.getMessages();
+    expect(spy.mock.calls[0]).toStrictEqual([account.address, undefined]);
+
+    await account.getMessages(args);
+    expect(spy.mock.calls[1]).toStrictEqual([account.address, args]);
+
+    expect(spy).toHaveBeenCalled();
+
+    vi.restoreAllMocks();
+  });
+
+  test('can properly use getBalances', async () => {
+    const wallet = Wallet.generate({ provider });
+
+    const fundAmount = 10_000;
+
+    await seedTestWallet(wallet, [
+      [fundAmount, baseAssetId],
+      [fundAmount, ASSET_A],
+    ]);
+
+    const { balances } = await wallet.getBalances();
+
+    expect(balances.length).toBe(2);
+    balances.forEach((balance) => {
+      expect(balance.amount.toNumber()).toBe(fundAmount);
+      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+    });
   });
 });

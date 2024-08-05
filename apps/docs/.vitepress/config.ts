@@ -6,7 +6,6 @@ import apiLinks from '../.typedoc/api-links.json';
 export default defineConfig({
   title: 'Fuels-ts',
   description: 'Fuel Typescript SDK',
-  base: '/fuels-ts/',
   srcDir: 'src',
   outDir: 'dist',
   lang: 'en-US',
@@ -130,6 +129,10 @@ export default defineConfig({
               {
                 text: 'Provider Options',
                 link: '/guide/provider/provider-options',
+              },
+              {
+                text: 'Pagination',
+                link: '/guide/provider/pagination',
               },
               {
                 text: 'Querying the Chain',

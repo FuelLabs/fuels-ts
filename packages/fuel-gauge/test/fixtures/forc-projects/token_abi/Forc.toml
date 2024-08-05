@@ -1,6 +1,0 @@
-[project]
-authors = ["Fuel Labs <contact@fuel.sh>"]
-license = "Apache-2.0"
-name = "token_abi"
-
-[dependencies]

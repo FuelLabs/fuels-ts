@@ -77,6 +77,8 @@ abi OptionContract {
     fn print_enum_option_array() -> GardenVector;
     fn echo_deeply_nested_option(arg: DeepStruct) -> DeepStruct;
     fn echo_enum_diff_sizes(arg: Option<DiffSizeEnum>) -> Option<DiffSizeEnum>;
+    fn type_then_option_then_type(x: u8, y: Option<u8>, z: u8) -> Option<u8>;
+    fn option_then_type_then_option(x: Option<u8>, y: u8, z: Option<u8>) -> Option<u8>;
 }
 
 impl OptionContract for Contract {
@@ -119,5 +121,21 @@ impl OptionContract for Contract {
 
     fn echo_enum_diff_sizes(arg: Option<DiffSizeEnum>) -> Option<DiffSizeEnum> {
         arg
+    }
+
+    fn type_then_option_then_type(x: u8, y: Option<u8>, z: u8) -> Option<u8> {
+        assert_eq(x, 42);
+        assert_eq(y, Option::None);
+        assert_eq(z, 43);
+
+        y
+    }
+
+    fn option_then_type_then_option(x: Option<u8>, y: u8, z: Option<u8>) -> Option<u8> {
+        assert_eq(x, Option::None);
+        assert_eq(y, 42);
+        assert_eq(z, Option::None);
+
+        z
     }
 }

@@ -1,8 +1,16 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
-import { ScriptTransactionRequest } from '@fuel-ts/account';
+import type {
+  Provider,
+  CoinQuantity,
+  CallResult,
+  Account,
+  TransferParams,
+  TransactionResponse,
+  TransactionCost,
+} from '@fuel-ts/account';
+import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
@@ -221,22 +229,19 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Gets the transaction cost ny dry running the transaction.
+   * Gets the transaction cost for dry running the transaction.
    *
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
-  async getTransactionCost() {
-    const provider = this.getProvider();
-
-    const request = await this.getTransactionRequest();
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: this.program.account as AbstractAccount,
-      quantitiesToContract: this.getRequiredCoins(),
+  async getTransactionCost(): Promise<TransactionCost> {
+    const request = clone(await this.getTransactionRequest());
+    const account: AbstractAccount =
+      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+    return account.getTransactionCost(request, {
+      quantities: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
-
-    return txCost;
   }
 
   /**
@@ -360,26 +365,39 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Submits a transaction.
+   * Submits the contract call transaction and returns a promise that resolves to an object
+   * containing the transaction ID and a function to wait for the result. The promise will resolve
+   * as soon as the transaction is submitted to the node.
    *
-   * @returns The result of the function invocation.
+   * @returns A promise that resolves to an object containing:
+   * - `transactionId`: The ID of the submitted transaction.
+   * - `waitForResult`: A function that waits for the transaction result.
+   * @template T - The type of the return value.
    */
-  async call<T = TReturn>(): Promise<FunctionResult<T>> {
+  async call<T = TReturn>(): Promise<{
+    transactionId: string;
+    waitForResult: () => Promise<FunctionResult<T>>;
+  }> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.fundWithRequiredCoins();
 
-    const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
+    const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
-    });
+    })) as TransactionResponse;
 
-    return buildFunctionResult<T>({
-      funcScope: this.functionInvocationScopes,
-      isMultiCall: this.isMultiCall,
-      program: this.program,
-      transactionResponse: response,
-    });
+    const transactionId = response.id;
+
+    return {
+      transactionId,
+      waitForResult: async () =>
+        buildFunctionResult<T>({
+          funcScope: this.functionInvocationScopes,
+          isMultiCall: this.isMultiCall,
+          program: this.program,
+          transactionResponse: response,
+        }),
+    };
   }
 
   /**

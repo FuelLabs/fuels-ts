@@ -3,82 +3,43 @@ import type {
   DryRunStatus,
   EstimateTxDependenciesReturns,
   TransactionResultReceipt,
-  WalletUnlocked,
 } from 'fuels';
-import { ContractFactory, FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { ContractFactory, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import {
+  AdvancedLoggingAbi__factory,
+  AdvancedLoggingOtherContractAbi__factory,
+  MultiTokenContractAbi__factory,
+  RevertErrorAbi__factory,
+} from '../test/typegen/contracts';
+import AdvancedLoggingAbiHex from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
+import AdvancedLoggingOtherContractAbiHex from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
+import MultiTokenAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
+import RevertErrorAbiHex from '../test/typegen/contracts/RevertErrorAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe('dry-run-multiple-txs', () => {
-  const { abiContents, binHexlified } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.TOKEN_CONTRACT
-  );
-  const { abiContents: abiRevert, binHexlified: binRevert } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.REVERT_ERROR
-  );
-  const { abiContents: abiMultiToken, binHexlified: binMultiToken } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
-  );
-  const { abiContents: abiLog, binHexlified: binLog } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.ADVANCED_LOGGING
-  );
-  const { abiContents: abiLogOther, binHexlified: binLogOther } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.ADVANCED_LOGGING_OTHER_CONTRACT
-  );
-
-  let provider: Provider;
-  let wallet: WalletUnlocked;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  const deployContracts = async () => {
-    const revertFactory = new ContractFactory(binRevert, abiRevert, wallet);
-
-    const revertContract = await revertFactory.deployContract({
-      maxFee: 70_000,
-    });
-
-    const multiTokenFactory = new ContractFactory(binMultiToken, abiMultiToken, wallet);
-
-    const multiTokenContract = await multiTokenFactory.deployContract({
-      maxFee: 70_000,
-    });
-
-    const logFactory = new ContractFactory(binLog, abiLog, wallet);
-
-    const logContract = await logFactory.deployContract({
-      maxFee: 70_000,
-    });
-    const logOtherFactory = new ContractFactory(binLogOther, abiLogOther, wallet);
-
-    const logOtherContract = await logOtherFactory.deployContract({
-      maxFee: 70_000,
-    });
-
-    return { revertContract, multiTokenContract, logContract, logOtherContract };
-  };
-
   it('should properly dry-run multiple TXs requests', async () => {
-    const revertFactory = new ContractFactory(binRevert, abiRevert, wallet);
-
-    const revertContract = await revertFactory.deployContract({
-      maxFee: 70_000,
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: RevertErrorAbi__factory,
+          bytecode: RevertErrorAbiHex,
+        },
+      ],
     });
 
-    const resources = await wallet.getResourcesToSpend([[500_000, baseAssetId]]);
+    const {
+      contracts: [revertContract],
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const resources = await wallet.getResourcesToSpend([[500_000, provider.getBaseAssetId()]]);
 
     const request1 = await revertContract.functions
       .validate_inputs(10, 0)
@@ -161,13 +122,36 @@ describe('dry-run-multiple-txs', () => {
   });
 
   it('should properly estimate multiple TXs requests', async () => {
-    // preparing test data
-    const { revertContract, multiTokenContract, logContract, logOtherContract } =
-      await deployContracts();
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: RevertErrorAbi__factory,
+          bytecode: RevertErrorAbiHex,
+        },
+        {
+          deployer: MultiTokenContractAbi__factory,
+          bytecode: MultiTokenAbiHex,
+        },
+        {
+          deployer: AdvancedLoggingAbi__factory,
+          bytecode: AdvancedLoggingAbiHex,
+        },
+        {
+          deployer: AdvancedLoggingOtherContractAbi__factory,
+          bytecode: AdvancedLoggingOtherContractAbiHex,
+        },
+      ],
+    });
+
+    const {
+      contracts: [revertContract, multiTokenContract, logContract, logOtherContract],
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     // subId defined on multi-token contract
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
-    const resources = await wallet.getResourcesToSpend([[500_000, baseAssetId]]);
+    const resources = await wallet.getResourcesToSpend([[500_000, provider.getBaseAssetId()]]);
 
     // creating receives to be used by the request 2 and 3
     const addresses = [
@@ -177,7 +161,11 @@ describe('dry-run-multiple-txs', () => {
     ];
 
     // request 1
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+    const factory = new ContractFactory(
+      MultiTokenAbiHex,
+      MultiTokenContractAbi__factory.abi,
+      wallet
+    );
     const { transactionRequest: request1 } = factory.createTransactionRequest({
       maxFee: 15000,
     });

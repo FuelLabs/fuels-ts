@@ -1,5 +1,47 @@
 # Change Log
 
+## 0.93.0
+
+### Minor Changes
+
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.92.1
+- @fuel-ts/address@0.92.1
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/hasher@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.0
+- @fuel-ts/utils@0.92.0
+- @fuel-ts/abi-coder@0.92.0
+- @fuel-ts/address@0.92.0
+- @fuel-ts/hasher@0.92.0
+- @fuel-ts/math@0.92.0
+- @fuel-ts/interfaces@0.92.0
+
 ## 0.91.0
 
 ### Patch Changes

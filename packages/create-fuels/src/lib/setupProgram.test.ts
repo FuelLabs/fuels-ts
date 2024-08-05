@@ -11,6 +11,7 @@ describe('setupProgram', () => {
     expect(program.opts().pnpm).toBe(true);
     expect(program.opts().npm).toBe(true);
     expect(program.opts().bun).toBe(true);
+    expect(program.opts().install).toBe(true);
   });
 
   test('setupProgram - no args', () => {
@@ -19,5 +20,12 @@ describe('setupProgram', () => {
     expect(program.opts().pnpm).toBe(undefined);
     expect(program.opts().npm).toBe(undefined);
     expect(program.opts().bun).toBe(undefined);
+    expect(program.opts().install).toBe(true);
+  });
+
+  test('setupProgram - `--no-install`', () => {
+    const program = setupProgram();
+    program.parse(['', '', 'test-project-name', '--no-install']);
+    expect(program.opts().install).toBe(false);
   });
 });

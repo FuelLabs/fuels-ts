@@ -1,42 +1,47 @@
-import type { Contract, WalletUnlocked } from 'fuels';
-import { ContractFactory, FUEL_NETWORK_URL, Provider, ReceiptType, bn } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { ContractFactory, ReceiptType, bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-const bar = getFuelGaugeForcProject(FuelGaugeProjectsEnum.REENTRANT_BAR);
-const foo = getFuelGaugeForcProject(FuelGaugeProjectsEnum.REENTRANT_FOO);
-const storageTest = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+import {
+  ReentrantBarAbi__factory,
+  ReentrantFooAbi__factory,
+  StorageTestContractAbi__factory,
+} from '../test/typegen/contracts';
+import ReentrantBarAbiHex from '../test/typegen/contracts/ReentrantBarAbi.hex';
+import ReentrantFooAbiHex from '../test/typegen/contracts/ReentrantFooAbi.hex';
+import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Reentrant Contract Calls', () => {
-  let barContract: Contract;
-  let fooContract: Contract;
-  let wallet: WalletUnlocked;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-
-    const factoryBar = new ContractFactory(bar.binHexlified, bar.abiContents, wallet);
-    barContract = await factoryBar.deployContract();
-
-    const factoryFoo = new ContractFactory(foo.binHexlified, foo.abiContents, wallet);
-    fooContract = await factoryFoo.deployContract();
-  });
-
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: ReentrantFooAbi__factory,
+          bytecode: ReentrantFooAbiHex,
+        },
+        {
+          deployer: ReentrantBarAbi__factory,
+          bytecode: ReentrantBarAbiHex,
+        },
+      ],
+    });
+
     const {
-      value,
-      transactionResult: { receipts },
-    } = await fooContract.functions
+      contracts: [fooContract, barContract],
+    } = launched;
+
+    const { waitForResult } = await fooContract.functions
       .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
       .addContracts([barContract])
       .call();
+
+    const {
+      value,
+      transactionResult: { receipts },
+    } = await waitForResult();
 
     /**
      * First, the test will call:
@@ -64,20 +69,42 @@ describe('Reentrant Contract Calls', () => {
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call on multi-call', async () => {
-    const storageContract = await new ContractFactory(
-      storageTest.binHexlified,
-      storageTest.abiContents,
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          deployer: ReentrantFooAbi__factory,
+          bytecode: ReentrantFooAbiHex,
+        },
+        {
+          deployer: ReentrantBarAbi__factory,
+          bytecode: ReentrantBarAbiHex,
+        },
+      ],
+    });
+
+    const {
+      wallets: [wallet],
+      contracts: [fooContract, barContract],
+    } = launched;
+
+    const deploy = await new ContractFactory(
+      StorageTestContractAbiHex,
+      StorageTestContractAbi__factory.abi,
       wallet
-    ).deployContract({ storageSlots: storageTest.storageSlots });
+    ).deployContract({ storageSlots: StorageTestContractAbi__factory.storageSlots });
+
+    const { contract: storageContract } = await deploy.waitForResult();
 
     const reentrantCall = fooContract.functions.foo(
       { bits: fooContract.id.toB256() },
       { bits: barContract.id.toB256() }
     );
 
-    const result = await fooContract
+    const { waitForResult } = await fooContract
       .multiCall([reentrantCall, storageContract.functions.return_var3(), reentrantCall])
       .call();
+
+    const result = await waitForResult();
 
     const expectedReentrantValue = 42;
 

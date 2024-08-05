@@ -11,21 +11,25 @@ import { clone } from 'ramda';
 
 import type { FuelConnector } from './connectors';
 import type {
-  TransactionRequestLike,
-  CallResult,
   TransactionRequest,
-  Coin,
   CoinQuantityLike,
   CoinQuantity,
-  Message,
   Resource,
   ExcludeResourcesOption,
   Provider,
   ScriptTransactionRequestLike,
-  ProviderSendTxParams,
   TransactionResponse,
-  EstimateTransactionParams,
   TransactionCost,
+  EstimateTransactionParams,
+  CursorPaginationArgs,
+  TransactionRequestLike,
+  ProviderSendTxParams,
+  CallResult,
+  GetCoinsResponse,
+  GetMessagesResponse,
+  GetBalancesResponse,
+  Coin,
+  TransactionCostParams,
 } from './providers';
 import {
   withdrawScript,
@@ -39,6 +43,7 @@ import {
   isRequestInputCoin,
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
+import { mergeQuantities } from './providers/utils/merge-quantities';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
 
 export type TxParamsType = Pick<
@@ -148,33 +153,11 @@ export class Account extends AbstractAccount {
    * @param assetId - The asset ID of the coins to retrieve (optional).
    * @returns A promise that resolves to an array of Coins.
    */
-  async getCoins(assetId?: BytesLike): Promise<Coin[]> {
-    const coins = [];
-
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageCoins = await this.provider.getCoins(this.address, assetId, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      coins.push(...pageCoins);
-
-      const hasNextPage = pageCoins.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} coins exceed the current supported limit.`
-      );
-    }
-
-    return coins;
+  async getCoins(
+    assetId?: BytesLike,
+    paginationArgs?: CursorPaginationArgs
+  ): Promise<GetCoinsResponse> {
+    return this.provider.getCoins(this.address, assetId, paginationArgs);
   }
 
   /**
@@ -182,33 +165,8 @@ export class Account extends AbstractAccount {
    *
    * @returns A promise that resolves to an array of Messages.
    */
-  async getMessages(): Promise<Message[]> {
-    const messages = [];
-
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageMessages = await this.provider.getMessages(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      messages.push(...pageMessages);
-
-      const hasNextPage = pageMessages.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} messages exceed the current supported limit.`
-      );
-    }
-
-    return messages;
+  async getMessages(paginationArgs?: CursorPaginationArgs): Promise<GetMessagesResponse> {
+    return this.provider.getMessages(this.address, paginationArgs);
   }
 
   /**
@@ -228,33 +186,8 @@ export class Account extends AbstractAccount {
    *
    * @returns A promise that resolves to an array of Coins and their quantities.
    */
-  async getBalances(): Promise<CoinQuantity[]> {
-    const balances = [];
-
-    const pageSize = 9999;
-    let cursor;
-    // eslint-disable-next-line no-unreachable-loop
-    for (;;) {
-      const pageBalances = await this.provider.getBalances(this.address, {
-        first: pageSize,
-        after: cursor,
-      });
-
-      balances.push(...pageBalances);
-
-      const hasNextPage = pageBalances.length >= pageSize;
-      if (!hasNextPage) {
-        break;
-      }
-
-      // TODO: implement pagination
-      throw new FuelError(
-        ErrorCode.NOT_SUPPORTED,
-        `Wallets containing more than ${pageSize} balances exceed the current supported limit.`
-      );
-    }
-
-    return balances;
+  async getBalances(): Promise<GetBalancesResponse> {
+    return this.provider.getBalances(this.address);
   }
 
   /**
@@ -505,9 +438,8 @@ export class Account extends AbstractAccount {
 
     request.addContractInputAndOutput(contractAddress);
 
-    const txCost = await this.provider.getTransactionCost(request, {
-      resourcesOwner: this,
-      quantitiesToContract: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
+    const txCost = await this.getTransactionCost(request, {
+      quantities: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
     });
 
     request = this.validateGasLimitAndMaxFee({
@@ -553,9 +485,9 @@ export class Account extends AbstractAccount {
 
     const baseAssetId = this.provider.getBaseAssetId();
     let request = new ScriptTransactionRequest(params);
-    const quantitiesToContract = [{ amount: bn(amount), assetId: baseAssetId }];
+    const quantities = [{ amount: bn(amount), assetId: baseAssetId }];
 
-    const txCost = await this.provider.getTransactionCost(request, { quantitiesToContract });
+    const txCost = await this.getTransactionCost(request, { quantities });
 
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
@@ -567,6 +499,45 @@ export class Account extends AbstractAccount {
     await this.fund(request, txCost);
 
     return this.sendTransaction(request);
+  }
+
+  /**
+   * Returns a transaction cost to enable user
+   * to set gasLimit and also reserve balance amounts
+   * on the transaction.
+   *
+   * @param transactionRequestLike - The transaction request object.
+   * @param transactionCostParams - The transaction cost parameters (optional).
+   *
+   * @returns A promise that resolves to the transaction cost object.
+   */
+  async getTransactionCost(
+    transactionRequestLike: TransactionRequestLike,
+    { signatureCallback, quantities = [] }: TransactionCostParams = {}
+  ): Promise<TransactionCost> {
+    const txRequestClone = clone(transactionRequestify(transactionRequestLike));
+    const baseAssetId = this.provider.getBaseAssetId();
+
+    // Fund with fake UTXOs to avoid not enough funds error
+    // Getting coin quantities from amounts being transferred
+    const coinOutputsQuantities = txRequestClone.getCoinOutputsQuantities();
+    // Combining coin quantities from amounts being transferred and forwarding to contracts
+    const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantities);
+    // An arbitrary amount of the base asset is added to cover the transaction fee during dry runs
+    const transactionFeeForDryRun = [{ assetId: baseAssetId, amount: bn('100000000000000000') }];
+    const resources = this.generateFakeResources(
+      mergeQuantities(requiredQuantities, transactionFeeForDryRun)
+    );
+    txRequestClone.addResources(resources);
+
+    const txCost = await this.provider.getTransactionCost(txRequestClone, {
+      signatureCallback,
+    });
+
+    return {
+      ...txCost,
+      requiredQuantities,
+    };
   }
 
   /**
@@ -609,7 +580,7 @@ export class Account extends AbstractAccount {
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = true, awaitExecution }: ProviderSendTxParams = {}
+    { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     if (this._connector) {
       return this.provider.getTransactionResponse(
@@ -621,7 +592,6 @@ export class Account extends AbstractAccount {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
     return this.provider.sendTransaction(transactionRequest, {
-      awaitExecution,
       estimateTxDependencies: false,
     });
   }
@@ -676,9 +646,7 @@ export class Account extends AbstractAccount {
     txParams: TxParamsType
   ) {
     let request = transactionRequest;
-    const txCost = await this.provider.getTransactionCost(request, {
-      resourcesOwner: this,
-    });
+    const txCost = await this.getTransactionCost(request);
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
       gasUsed: txCost.gasUsed,
