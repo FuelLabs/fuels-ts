@@ -1,4 +1,5 @@
-import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Provider, ScriptTransactionRequest, Wallet, TESTNET_NETWORK_URL } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ConfigurablePinAbi__factory as PredicateFactory } from '../../../test/typegen';
@@ -18,6 +19,7 @@ describe('Predicate Custom Transactions', () => {
 
     const SENDER_PVT_KEY = testSender.privateKey;
     const RECEIVER_ADDRESS = testReceiver.address;
+    // eslint-disable-next-line @typescript-eslint/no-shadow
     const TESTNET_NETWORK_URL = testProvider.url;
 
     await Provider.create(TESTNET_NETWORK_URL);
