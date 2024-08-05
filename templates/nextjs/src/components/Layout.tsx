@@ -8,13 +8,14 @@ import { useBrowserWallet } from "@/hooks/useBrowserWallet";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
 import Head from "next/head";
+import { bn } from "fuels";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { faucetWallet } = useFaucet();
 
   const {
     wallet: browserWallet,
-    walletBalance: isBrowserWalletConnected,
+    isConnected: isBrowserWalletConnected,
     network: browserWalletNetwork,
   } = useBrowserWallet();
 
@@ -28,12 +29,19 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       return console.error("Unable to topup wallet because wallet is not set.");
     }
 
+    /**
+     * If the current environment is local, transfer 5 ETH to the wallet
+     * from the local faucet wallet
+     */
     if (CURRENT_ENVIRONMENT === "local") {
       if (!faucetWallet) {
         return toast.error("Faucet wallet not found.");
       }
 
-      const tx = await faucetWallet?.transfer(wallet.address, 10_000);
+      const tx = await faucetWallet?.transfer(
+        wallet.address,
+        bn.parseUnits("5"),
+      );
       await tx?.waitForResult();
 
       toast.success("Wallet topped up!");
@@ -41,6 +49,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       return await refreshWalletBalance?.();
     }
 
+    // If the current environment is testnet, open the testnet faucet link in a new tab
     if (CURRENT_ENVIRONMENT === "testnet") {
       return window.open(
         `${TESTNET_FAUCET_LINK}?address=${wallet.address.toAddress()}`,
@@ -49,7 +58,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const showTopUpButton = walletBalance?.lt(10_000);
+  const showTopUpButton = walletBalance?.lt(bn.parseUnits("5"));
 
   const showAddNetworkButton =
     browserWallet &&

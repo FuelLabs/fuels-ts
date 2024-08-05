@@ -1,4 +1,3 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
 import {
   Address,
   FUEL_NETWORK_URL,
@@ -8,6 +7,7 @@ import {
   WalletUnlocked,
   hashMessage,
 } from 'fuels';
+import { seedTestWallet } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -54,7 +54,7 @@ describe(__filename, () => {
 
     request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -85,7 +85,7 @@ describe(__filename, () => {
 
     request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

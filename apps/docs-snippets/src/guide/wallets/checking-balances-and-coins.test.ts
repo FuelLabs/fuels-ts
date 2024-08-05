@@ -1,4 +1,4 @@
-import type { BigNumberish, CoinQuantity, WalletUnlocked } from 'fuels';
+import type { BigNumberish, WalletUnlocked } from 'fuels';
 import { Provider, Wallet, FUEL_NETWORK_URL } from 'fuels';
 
 /**
@@ -30,7 +30,7 @@ describe(__filename, () => {
     // #region wallet-check-balances
     // #context import { CoinQuantity } from 'fuels';
 
-    const balances: CoinQuantity[] = await myWallet.getBalances();
+    const { balances } = await myWallet.getBalances();
     // #endregion wallet-check-balances
 
     expect(balances).toEqual([]);

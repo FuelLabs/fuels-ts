@@ -67,11 +67,12 @@ export enum ErrorCode {
   INVALID_TRANSACTION_INPUT = 'invalid-transaction-input',
   INVALID_TRANSACTION_OUTPUT = 'invalid-transaction-output',
   INVALID_TRANSACTION_STATUS = 'invalid-transaction-status',
-  INVALID_TRANSACTION_TYPE = 'invalid-transaction-type',
+  UNSUPPORTED_TRANSACTION_TYPE = 'unsupported-transaction-type',
   TRANSACTION_ERROR = 'transaction-error',
   INVALID_POLICY_TYPE = 'invalid-policy-type',
   DUPLICATED_POLICY = 'duplicated-policy',
   TRANSACTION_SQUEEZED_OUT = 'transaction-squeezed-out',
+  CONTRACT_SIZE_EXCEEDS_LIMIT = 'contract-size-exceeds-limit',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
@@ -94,13 +95,16 @@ export enum ErrorCode {
   // docs
   VITEPRESS_PLUGIN_ERROR = 'vitepress-plugin-error',
 
-  // contract
-  INVALID_MULTICALL = 'invalid-multicall',
-
   // script
   SCRIPT_REVERTED = 'script-reverted',
   SCRIPT_RETURN_INVALID_TYPE = 'script-return-invalid-type',
 
   // graphql
   STREAM_PARSING_ERROR = 'stream-parsing-error',
+
+  // launchNode
+  NODE_LAUNCH_FAILED = 'node-launch-failed',
+
+  // Unknown
+  UNKNOWN = 'unknown',
 }

@@ -2,10 +2,16 @@ name: "Test Setup"
 inputs:
   node-version:
     description: "Node version"
-    default: 20.10.0
+    default: 20.14.0
   pnpm-version:
     description: "PNPM version"
-    default: 9.0.5
+    default: 9.4.0
+  should-install-bun:
+    description: "Should install Bun"
+    default: false
+  bun-version:
+    description: "Bun version"
+    default: 1.1.10
 runs:
   using: "composite"
   steps:
@@ -26,6 +32,12 @@ runs:
       with:
         version: ${{ inputs.pnpm-version }}
         run_install: true
+
+    - name: Setup Bun
+      if: ${{ inputs.should-install-bun == 'true' }}
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: ${{ inputs.bun-version }}
 
     - name: Build
       run: pnpm build

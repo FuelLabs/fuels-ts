@@ -34,7 +34,7 @@ describe('Provider', () => {
     const wallet = WalletUnlocked.generate({ provider });
 
     // Get the balances of the wallet (this will be empty until we have assets)
-    const balances = await wallet.getBalances();
+    const { balances } = await wallet.getBalances();
     // []
     // #endregion provider-definition
 
@@ -105,6 +105,16 @@ describe('Provider', () => {
       },
     });
     // #endregion options-fetch
+  });
+
+  it('options: cacheUtxo', async () => {
+    // #region options-cache-utxo
+    const provider = await Provider.create(FUEL_NETWORK_URL, {
+      cacheUtxo: 5000, // cache UTXO for 5 seconds
+    });
+    // #endregion options-cache-utxo
+
+    expect(provider).toBeDefined();
   });
 
   it('fetches the base asset ID', async () => {

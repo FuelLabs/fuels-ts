@@ -1,8 +1,9 @@
-import type { JsonAbisFromAllCalls } from '@fuel-ts/account';
+import { getDecodedLogs } from '@fuel-ts/account';
+import type { TransactionResultReceipt, JsonAbisFromAllCalls } from '@fuel-ts/account';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractContract } from '@fuel-ts/interfaces';
 
-import type { InvocationScopeLike } from './types';
+import type { CallConfig, InvocationScopeLike } from './types';
 
 /**
  * @hidden
@@ -38,3 +39,19 @@ export function getAbisFromAllCalls(
     return acc;
   }, {} as JsonAbisFromAllCalls);
 }
+
+/**
+ * @hidden
+ *
+ */
+export const getResultLogs = (
+  receipts: TransactionResultReceipt[],
+  mainCallConfig: CallConfig | undefined,
+  functionScopes: Array<InvocationScopeLike>
+) => {
+  if (!mainCallConfig) {
+    return [];
+  }
+  const { main, otherContractsAbis } = getAbisFromAllCalls(functionScopes);
+  return getDecodedLogs(receipts, main, otherContractsAbis);
+};

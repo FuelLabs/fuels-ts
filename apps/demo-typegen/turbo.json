@@ -1,9 +1,9 @@
 {
   "$schema": "https://turborepo.org/schema.json",
   "extends": ["//"],
-  "pipeline": {
+  "tasks": {
     "pretest": {
-      "outputMode": "errors-only",
+      "outputLogs": "errors-only",
       "inputs": ["contract/src/*.sw", "contract/Forc.toml"],
       "outputs": ["contract/out/release/**"]
     }

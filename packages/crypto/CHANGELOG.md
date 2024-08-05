@@ -1,5 +1,78 @@
 # Change Log
 
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
+## 0.90.0
+
+### Patch Changes
+
+- Updated dependencies [bb5a123]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/utils@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
 ## 0.89.0
 
 ### Patch Changes

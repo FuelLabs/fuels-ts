@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import chalk from 'chalk';
 import { log } from 'console';
 
@@ -6,8 +5,8 @@ import { runScaffoldCli, setupProgram } from './cli';
 
 runScaffoldCli({
   program: setupProgram(),
+  templateName: 'nextjs',
   args: process.argv,
-  shouldInstallDeps: true,
 })
   .then(() => process.exit(0))
   .catch((e) => {

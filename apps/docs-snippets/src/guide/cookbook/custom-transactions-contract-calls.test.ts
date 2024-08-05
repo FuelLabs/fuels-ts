@@ -1,5 +1,5 @@
 import type { BN, JsonAbi, WalletUnlocked } from 'fuels';
-import { ContractFactory, FunctionInvocationResult, Wallet, Contract, bn } from 'fuels';
+import { ContractFactory, Wallet, Contract, bn, buildFunctionResult } from 'fuels';
 
 import {
   DocSnippetProjectsEnum,
@@ -24,10 +24,10 @@ describe('Custom Transactions from Contract Calls', () => {
     senderWallet = await getTestWallet();
     receiverWallet = Wallet.generate({ provider: senderWallet.provider });
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
-    contract = await factory.deployContract({ storageSlots });
+    const { waitForResult } = await factory.deployContract({ storageSlots });
+    ({ contract } = await waitForResult());
     abi = abiContents;
     baseAssetId = senderWallet.provider.getBaseAssetId();
-    contract = await factory.deployContract({ storageSlots });
   });
 
   it('creates a custom transaction from a contract call', async () => {
@@ -35,13 +35,13 @@ describe('Custom Transactions from Contract Calls', () => {
     expect(initialBalance.toNumber()).toBe(0);
 
     // #region custom-transactions-contract-calls
-    // #import { bn, Contract, FunctionInvocationResult };
+    // #import { bn, Contract, buildFunctionResult };
 
     const amountToRecipient = bn(10_000); // 0x2710
     // Connect to the contract
     const contractInstance = new Contract(contract.id, abi, senderWallet);
     // Create an invocation scope for the contract function you'd like to call in the transaction
-    const scope = contractInstance.functions.increment_count(amountToRecipient).addTransfer({
+    const scope = contractInstance.functions.increment_counter(amountToRecipient).addTransfer({
       amount: amountToRecipient,
       destination: receiverWallet.address,
       assetId: baseAssetId,
@@ -52,7 +52,7 @@ describe('Custom Transactions from Contract Calls', () => {
     // Add coin output for the recipient
     transactionRequest.addCoinOutput(receiverWallet.address, amountToRecipient, baseAssetId);
 
-    const txCost = await senderWallet.provider.getTransactionCost(transactionRequest);
+    const txCost = await senderWallet.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
@@ -63,7 +63,12 @@ describe('Custom Transactions from Contract Calls', () => {
     const response = await senderWallet.sendTransaction(transactionRequest);
     await response.waitForResult();
     // Get result of contract call
-    const { value } = await FunctionInvocationResult.build([scope], response, false, contract);
+    const { value } = await buildFunctionResult({
+      funcScope: scope,
+      isMultiCall: false,
+      program: contract,
+      transactionResponse: response,
+    });
     // <BN: 0x2710>
     // #endregion custom-transactions-contract-calls
 

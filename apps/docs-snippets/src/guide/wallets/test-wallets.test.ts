@@ -1,6 +1,6 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import type { CoinQuantity, WalletUnlocked } from 'fuels';
+import type { WalletUnlocked } from 'fuels';
 import { FUEL_NETWORK_URL, Provider, bn } from 'fuels';
+import { generateTestWallet } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -9,7 +9,7 @@ describe(__filename, () => {
   it('wallet-setup', async () => {
     // #region wallet-setup
     // #import { FUEL_NETWORK_URL, Provider, WalletUnlocked, CoinQuantity, generateTestWallet };
-    // #context import { generateTestWallet } from '@fuel-ts/wallet/test-utils';
+    // #context import { generateTestWallet } from 'fuels/test-utils';
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
@@ -31,9 +31,9 @@ describe(__filename, () => {
     const walletC = await generateTestWallet(provider);
 
     // retrieve balances of wallets
-    const walletABalances: CoinQuantity[] = await walletA.getBalances();
-    const walletBBalances = await walletB.getBalances();
-    const walletCBalances = await walletC.getBalances();
+    const { balances: walletABalances } = await walletA.getBalances();
+    const { balances: walletBBalances } = await walletB.getBalances();
+    const { balances: walletCBalances } = await walletC.getBalances();
 
     expect(walletABalances).toEqual([{ assetId: baseAssetId, amount: bn(42) }]);
     expect(walletBBalances).toEqual([

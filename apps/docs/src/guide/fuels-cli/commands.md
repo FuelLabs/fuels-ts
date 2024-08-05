@@ -61,7 +61,7 @@ npx fuels@{{fuels}} help build
 
 ```console
 Options:
-  -p, --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts/apps/docs")
+  --path <path>  Path to project root (default: "/Users/anderson/Code/fuel/fuels-ts/apps/docs")
   -d, --deploy       Deploy contracts after build (auto-starts a `fuel-core` node if needed)
   -h, --help         Display help
 ```
@@ -95,6 +95,8 @@ npx fuels@{{fuels}} deploy
 > [!NOTE] Note
 > We recommend using the `fuels deploy` command only when you are deploying contracts to a local node.
 > If you are deploying contracts to a live network like the Testnet, we recommend using the [`forc deploy`](https://docs.fuel.network/docs/intro/quickstart-contract/#deploy-to-testnet) command instead.
+>
+> Additionally, the maximum contract deployment size supported by the SDK is 100 KB. The SDK will `throw` an [error](../errors/index.md) for contracts larger than this size.
 
 The `fuels deploy` command does two things:
 

@@ -1,5 +1,45 @@
 # @fuel-ts/versions
 
+## 0.93.0
+
+### Patch Changes
+
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+
+## 0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- 44d51ee: chore: upgrading `forc` to `0.61.2`
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- 8676a9e: chore: support `forc@0.61.1`
+
+## 0.90.0
+
+### Patch Changes
+
+- e165e37: chore!: upgrade fuel core to `0.28.0`
+- 81a77d3: chore: upgrading `fuel-core` to `0.29.0`
+- af3202c: feat: support for `bun`
+- 90e8cba: chore: upgrading `fuel-core` to `0.30.0`
+
+## 0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- eb6460b: chore: upgrade to fuel core `0.27.0`
+
 ## 0.89.0
 
 ### Patch Changes

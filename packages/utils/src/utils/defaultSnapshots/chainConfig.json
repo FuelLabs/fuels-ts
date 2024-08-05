@@ -129,6 +129,24 @@
           "wqmm": 10,
           "xor": 2,
           "xori": 2,
+          "alocDependentCost": {
+            "HeavyOperation": {
+              "base": 2,
+              "gasPerUnit": 0
+            }
+          },
+          "cfe": {
+            "HeavyOperation": {
+              "base": 2,
+              "gasPerUnit": 0
+            }
+          },
+          "cfeiDependentCost": {
+            "HeavyOperation": {
+              "base": 2,
+              "gasPerUnit": 0
+            }
+          },
           "call": {
             "LightOperation": {
               "base": 18190,

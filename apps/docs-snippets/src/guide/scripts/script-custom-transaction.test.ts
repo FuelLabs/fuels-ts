@@ -1,4 +1,3 @@
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import {
   BN,
   ContractFactory,
@@ -8,6 +7,7 @@ import {
   Provider,
 } from 'fuels';
 import type { CoinQuantityLike, Contract, WalletUnlocked } from 'fuels';
+import { ASSET_A, ASSET_B } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
@@ -42,7 +42,8 @@ describe(__filename, () => {
     ];
     wallet = await getTestWallet(seedQuantities);
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
-    contract = await factory.deployContract();
+    const { waitForResult } = await factory.deployContract();
+    ({ contract } = await waitForResult());
   });
 
   it('transfer multiple assets to a contract', async () => {
@@ -78,7 +79,7 @@ describe(__filename, () => {
     const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
 
     // 5. Calculate the transaction fee
-    const txCost = await provider.getTransactionCost(request, { quantitiesToContract: quantities });
+    const txCost = await wallet.getTransactionCost(request, { quantities });
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

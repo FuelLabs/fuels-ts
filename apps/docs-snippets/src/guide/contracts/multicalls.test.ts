@@ -42,23 +42,31 @@ describe(__filename, () => {
       wallet
     );
 
-    echoContract = await factory1.deployContract();
-    counterContract = await factory2.deployContract({
+    let { waitForResult } = await factory1.deployContract();
+    ({ contract: echoContract } = await waitForResult());
+
+    ({ waitForResult } = await factory2.deployContract({
       storageSlots: counterArtifacts.storageSlots,
-    });
-    contextContract = await factory3.deployContract();
+    }));
+
+    ({ contract: counterContract } = await waitForResult());
+
+    ({ waitForResult } = await factory3.deployContract());
+    ({ contract: contextContract } = await waitForResult());
   });
 
   it('should successfully submit multiple calls from the same contract function', async () => {
     // #region multicall-1
 
-    const { value: results } = await counterContract
+    const { waitForResult } = await counterContract
       .multiCall([
         counterContract.functions.get_count(),
-        counterContract.functions.increment_count(2),
-        counterContract.functions.increment_count(4),
+        counterContract.functions.increment_counter(2),
+        counterContract.functions.increment_counter(4),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
 
     const initialValue = new BN(results[0]).toNumber();
     const incrementedValue1 = new BN(results[1]).toNumber();
@@ -75,10 +83,11 @@ describe(__filename, () => {
     const chain = echoContract.multiCall([
       echoContract.functions.echo_u8(17),
       counterContract.functions.get_count(),
-      counterContract.functions.increment_count(5),
+      counterContract.functions.increment_counter(5),
     ]);
 
-    const { value: results } = await chain.call();
+    const { waitForResult } = await chain.call();
+    const { value: results } = await waitForResult();
 
     const echoedValue = results[0];
     const initialCounterValue = new BN(results[1]).toNumber();
@@ -92,7 +101,7 @@ describe(__filename, () => {
   it('should successfully submit multiple calls from different contracts functions', async () => {
     // #region multicall-3
 
-    const { value: results } = await contextContract
+    const { waitForResult } = await contextContract
       .multiCall([
         echoContract.functions.echo_u8(10),
         contextContract.functions.return_context_amount().callParams({
@@ -100,6 +109,8 @@ describe(__filename, () => {
         }),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
 
     const echoedValue = results[0];
     const fowardedValue = new BN(results[1]).toNumber();

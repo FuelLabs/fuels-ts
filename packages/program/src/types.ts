@@ -1,7 +1,14 @@
-import type { FunctionFragment, JsonAbi, EncodingVersion } from '@fuel-ts/abi-coder';
-import type { CoinQuantity, CoinQuantityLike } from '@fuel-ts/account';
+import type { FunctionFragment, JsonAbi } from '@fuel-ts/abi-coder';
+import type {
+  CallResult,
+  CoinQuantity,
+  CoinQuantityLike,
+  TransactionResponse,
+  TransactionResult,
+  TransactionType,
+} from '@fuel-ts/account';
 import type { AbstractProgram, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
-import type { BigNumberish } from '@fuel-ts/math';
+import type { BN, BigNumberish } from '@fuel-ts/math';
 
 import type { FunctionInvocationScope } from './functions/invocation-scope';
 
@@ -11,9 +18,7 @@ import type { FunctionInvocationScope } from './functions/invocation-scope';
 export type ContractCall = {
   contractId: AbstractAddress;
   data: BytesLike;
-  fnSelector: string;
   fnSelectorBytes: Uint8Array;
-  encoding?: EncodingVersion;
   amount?: BigNumberish;
   assetId?: BytesLike;
   gas?: BigNumberish;
@@ -64,6 +69,11 @@ export type CallConfig<T = unknown> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface InvokeFunction<TArgs extends Array<any> = Array<any>, TReturn = any> {
   (...args: TArgs): FunctionInvocationScope<TArgs, TReturn>;
+  /**
+   * Checks if the function is read-only i.e. it only reads from storage, does not write to it.
+   *
+   * @returns True if the function is read-only or pure, false otherwise.
+   */
   isReadOnly: () => boolean;
 }
 
@@ -92,3 +102,24 @@ export type InvocationScopeLike<T = unknown> = {
 export type TransactionCostOptions = Partial<{
   fundTransaction: boolean;
 }>;
+
+export type FunctionResult<TReturn> = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  readonly logs: Array<any>;
+  readonly value: TReturn;
+  readonly gasUsed: BN;
+  readonly program: AbstractProgram;
+  readonly isMultiCall: boolean;
+  readonly transactionId: string;
+  readonly functionScopes: Array<InvocationScopeLike>;
+  readonly transactionResponse: TransactionResponse;
+  readonly transactionResult: TransactionResult<TransactionType.Script>;
+};
+
+export type DryRunResult<TReturn> = {
+  readonly gasUsed: BN;
+  readonly value: TReturn;
+  readonly isMultiCall: boolean;
+  readonly callResult: CallResult;
+  readonly functionScopes: Array<InvocationScopeLike>;
+};

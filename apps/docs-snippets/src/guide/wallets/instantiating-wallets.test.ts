@@ -1,10 +1,16 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
+import { FUEL_NETWORK_URL, TESTNET_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
 
 /**
  * @group node
  */
 describe(__filename, () => {
+  beforeAll(async () => {
+    // Avoids using the actual network.
+    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
+    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
+  });
+
   it('should generate a new wallet just fine', () => {
     // #region instantiating-wallets-1
     const unlockedWallet: WalletUnlocked = Wallet.generate();
@@ -100,7 +106,7 @@ describe(__filename, () => {
     const myWallet = Wallet.fromAddress(address);
 
     // #region instantiating-wallets-9
-    const provider = await Provider.create('https://devnet.fuel.network/v1/graphql');
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
 
     myWallet.connect(provider);
     // #endregion instantiating-wallets-9

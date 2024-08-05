@@ -1,22 +1,27 @@
-import { Account, BN } from 'fuels';
+import { Account, BN, TESTNET_NETWORK_URL } from 'fuels';
 
 // #region deploying-dapp-to-testnet-lib-current-environment
-type DappEnvironment = 'local' | 'testnet';
-
-export const CURRENT_ENVIRONMENT: DappEnvironment =
-  (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as DappEnvironment) || 'local';
-// #endregion deploying-dapp-to-testnet-lib-current-environment
-
-export const NODE_URL =
-  CURRENT_ENVIRONMENT === 'local'
-    ? `http://127.0.0.1:${process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000}/v1/graphql`
-    : 'https://devnet.fuel.network/v1/graphql';
+// The two environments for the dapp are local and testnet.
+export const Environments = {
+  LOCAL: 'local',
+  TESTNET: 'testnet',
+} as const;
+type Environment = (typeof Environments)[keyof typeof Environments];
 
 /**
- * Enable the Fuel dev connector.
- * @see {@link https://docs.fuel.network/docs/wallet/dev/getting-started/#using-default-connectors}
+ * The current environment is determined by the
+ * `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment variable.
+ * If it's not set, the default is `local`.
  */
-export const ENABLE_FUEL_DEV_CONNECTOR = process.env.NEXT_PUBLIC_ENABLE_FUEL_DEV_CONNECTOR === 'true';
+export const CURRENT_ENVIRONMENT: Environment =
+  (process.env.NEXT_PUBLIC_DAPP_ENVIRONMENT as Environment) || Environments.LOCAL;
+// #endregion deploying-dapp-to-testnet-lib-current-environment
+
+// The node URL is determined by the current environment too.
+export const NODE_URL =
+  CURRENT_ENVIRONMENT === Environments.LOCAL
+    ? `http://127.0.0.1:${process.env.NEXT_PUBLIC_FUEL_NODE_PORT || 4000}/v1/graphql`
+    : TESTNET_NETWORK_URL;
 
 export interface AppWallet {
   wallet?: Account;
@@ -24,4 +29,11 @@ export interface AppWallet {
   refreshWalletBalance?: () => Promise<void>;
 }
 
-export const TESTNET_FAUCET_LINK = 'https://faucet-devnet.fuel.network/';
+export const TESTNET_FAUCET_LINK = 'https://faucet-testnet.fuel.network/';
+
+export const FAUCET_LINK =
+  CURRENT_ENVIRONMENT === Environments.LOCAL ? '/faucet' : TESTNET_FAUCET_LINK;
+
+export const FAUCET_PRIVATE_KEY = '0x01';
+
+export const DOCS_URL = 'https://docs.fuel.network';

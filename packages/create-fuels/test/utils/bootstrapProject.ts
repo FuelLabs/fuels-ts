@@ -1,10 +1,17 @@
 import { cpSync, existsSync, readdirSync, rmSync } from 'fs';
 import { basename, join } from 'path';
 
+import { rewriteTemplateFiles } from '../../src/lib/rewriteTemplateFiles';
+
 export type ProjectPaths = {
-  root: string;
-  template: string;
-  sourceTemplate: string;
+  // Project paths
+  projectRoot: string;
+  projectPackageJson: string;
+
+  // Template paths
+  templateName: string;
+  templateSource: string;
+  templateRoot: string;
 };
 
 /**
@@ -12,34 +19,44 @@ export type ProjectPaths = {
  */
 const testDir = join(__dirname, '..');
 const createFuelsDir = join(__dirname, '../..');
-const testTemplateDir = join(createFuelsDir, 'templates');
-const templatesDir = join(__dirname, '../../../../templates');
+const sourceTemplatesDir = join(__dirname, '../../../../templates');
 
 export const bootstrapProject = (
   testFilepath: string,
-  templateName: string = 'nextjs'
+  template: string = 'nextjs'
 ): ProjectPaths => {
-  // Template paths
-  const templateDir = join(templatesDir, templateName);
-  const localTemplateDir = join(testTemplateDir, templateName);
-
   // Unique name
   const testFilename = basename(testFilepath.replace(/\./g, '-'));
-  const projectName = `__temp__${testFilename}_${new Date().getTime()}`;
 
-  // Test paths
-  const root = join(testDir, projectName);
+  // Project paths
+  const projectName = `__temp__project_${testFilename}_${new Date().getTime()}`;
+  const projectRoot = join(testDir, projectName);
+  const projectPackageJson = join(projectRoot, 'package.json');
+
+  // Template paths
+  const templateName = `__temp__template_${template}_${testFilename}_${new Date().getTime()}`;
+  const templateSource = join(sourceTemplatesDir, template);
+  const templateRoot = join(createFuelsDir, 'templates', templateName);
 
   return {
-    root,
-    template: localTemplateDir,
-    sourceTemplate: templateDir,
+    // Project paths
+    projectRoot,
+    projectPackageJson,
+
+    // Template paths
+    templateName,
+    templateSource,
+    templateRoot,
   };
 };
 
-export const copyTemplate = (srcDir: string, destDir: string) => {
+export const copyTemplate = (srcDir: string, destDir: string, shouldRewrite: boolean = true) => {
   if (!existsSync(destDir)) {
     cpSync(srcDir, destDir, { recursive: true });
+  }
+
+  if (shouldRewrite) {
+    rewriteTemplateFiles(destDir);
   }
 };
 
@@ -49,11 +66,12 @@ export const resetFilesystem = (dirPath: string) => {
   }
 };
 
-export const cleanupFilesystem = (dirPath: string = testDir) => {
-  const dirs = readdirSync(dirPath).filter((dir) => dir.startsWith('__temp__'));
-  dirs.forEach((dir) => {
-    resetFilesystem(join(dirPath, dir));
-  });
-
-  resetFilesystem(testTemplateDir);
+export const cleanupFilesystem = (dirPaths: string[] = [testDir, createFuelsDir]) => {
+  dirPaths
+    .flatMap((dirPath) => {
+      const dirsInDir = readdirSync(dirPath);
+      return dirsInDir.map((dir) => join(dirPath, dir));
+    })
+    .filter((dir) => dir.startsWith('__temp__'))
+    .forEach(resetFilesystem);
 };

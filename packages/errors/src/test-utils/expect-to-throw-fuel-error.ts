@@ -37,10 +37,26 @@ export const expectToThrowFuelError = async (
     );
   }
 
+  if (expectedError.code !== thrownError.code) {
+    throw new Error(
+      `Expected error code '${expectedError.code}' doesn't match thrown error code '${thrownError.code}'. ${thrownErrorStr}`
+    );
+  }
+
   if (expectedError.metadata) {
     expect(thrownError.metadata).toEqual(expect.objectContaining(expectedError.metadata));
   }
 
+  if (expectedError.message) {
+    expect(thrownError.message).toEqual(expectedError.message);
+  }
+
+  if (expectedError.rawError) {
+    expect(thrownError.rawError).toEqual(expectedError.rawError);
+  }
+
   expect(thrownError.name).toEqual('FuelError');
   expect(thrownError).toMatchObject(expectedError);
+
+  return thrownError;
 };

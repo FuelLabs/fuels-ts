@@ -1,5 +1,101 @@
 # Change Log
 
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/crypto@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.92.1
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/hasher@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+  - @fuel-ts/crypto@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/hasher@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- 3be2251: build(deps-dev): bump prettier from 3.0.3 to 3.3.2
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
+## 0.90.0
+
+### Minor Changes
+
+- 1beab0e: feat!: remove redundant exports from `v1` encoding
+
+### Patch Changes
+
+- 1b9fb19: fix: validate empty `Vec` encoded length
+- 439d0dc: docs: document the SDKs approach to encoding
+- 436f040: feat: support mixed native and non-native enums
+- be92daf: chore: validate incorrect case key for `EnumCoder`
+- Updated dependencies [bb5a123]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.89.2
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/hasher@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/utils@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/crypto@0.89.1
+  - @fuel-ts/hasher@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
 ## 0.89.0
 
 ### Patch Changes

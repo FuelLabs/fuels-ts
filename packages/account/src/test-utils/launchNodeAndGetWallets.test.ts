@@ -12,6 +12,9 @@ import { launchNodeAndGetWallets } from './launchNode';
 describe('launchNode', () => {
   test('launchNodeAndGetWallets - empty config', async () => {
     const { stop, provider, wallets } = await launchNodeAndGetWallets({
+      providerOptions: {
+        cacheUtxo: 1,
+      },
       launchNodeOptions: {
         loggingEnabled: false,
       },
@@ -25,10 +28,12 @@ describe('launchNode', () => {
   }, 10000);
 
   test('launchNodeAndGetWallets - custom config', async () => {
-    // #region launchNode-custom-config
     const snapshotDir = path.join(cwd(), '.fuel-core/configs');
 
     const { stop, provider } = await launchNodeAndGetWallets({
+      providerOptions: {
+        cacheUtxo: 1,
+      },
       launchNodeOptions: {
         args: ['--snapshot', snapshotDir],
         loggingEnabled: false,
@@ -46,12 +51,14 @@ describe('launchNode', () => {
     expect(gasPerByte.toNumber()).toEqual(expectedGasPerByte);
 
     stop();
-    // #endregion launchNode-custom-config
   });
 
   test('launchNodeAndGetWallets - custom walletCount', async () => {
     const { stop, wallets } = await launchNodeAndGetWallets({
       walletCount: 5,
+      providerOptions: {
+        cacheUtxo: 1,
+      },
       launchNodeOptions: {
         loggingEnabled: false,
       },
@@ -77,6 +84,9 @@ describe('launchNode', () => {
 
     test('launchNodeAndGetWallets - empty config', async () => {
       const { stop, provider, wallets } = await launchNodeAndGetWallets({
+        providerOptions: {
+          cacheUtxo: 1,
+        },
         launchNodeOptions: {
           loggingEnabled: false,
         },

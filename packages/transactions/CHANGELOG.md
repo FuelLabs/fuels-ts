@@ -1,5 +1,108 @@
 # Change Log
 
+## 0.93.0
+
+### Minor Changes
+
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.92.1
+- @fuel-ts/address@0.92.1
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/hasher@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.0
+- @fuel-ts/utils@0.92.0
+- @fuel-ts/abi-coder@0.92.0
+- @fuel-ts/address@0.92.0
+- @fuel-ts/hasher@0.92.0
+- @fuel-ts/math@0.92.0
+- @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [3be2251]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/address@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
+## 0.90.0
+
+### Patch Changes
+
+- Updated dependencies [bb5a123]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [1beab0e]
+- Updated dependencies [439d0dc]
+- Updated dependencies [436f040]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.89.2
+- @fuel-ts/address@0.89.2
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/hasher@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/utils@0.89.2
+
+## 0.89.1
+
+### Patch Changes
+
+- Updated dependencies [eb6460b]
+  - @fuel-ts/utils@0.89.1
+  - @fuel-ts/errors@0.89.1
+  - @fuel-ts/abi-coder@0.89.1
+  - @fuel-ts/address@0.89.1
+  - @fuel-ts/hasher@0.89.1
+  - @fuel-ts/math@0.89.1
+  - @fuel-ts/interfaces@0.89.1
+
 ## 0.89.0
 
 ### Patch Changes

@@ -50,7 +50,7 @@ describe('Signing transactions', () => {
     // #import { Script };
 
     const script = new Script(bytecode, abi, sender);
-    const { value } = await script.functions
+    const { waitForResult } = await script.functions
       .main(signer.address.toB256())
       .addTransfer({
         destination: receiver.address,
@@ -59,6 +59,8 @@ describe('Signing transactions', () => {
       })
       .addSigners(signer)
       .call<BN>();
+
+    const { value } = await waitForResult();
     // #endregion multiple-signers-2
 
     expect(value).toBe(true);
@@ -100,9 +102,8 @@ describe('Signing transactions', () => {
 
     // Add witnesses including the signer
     // Estimate the predicate inputs
-    const txCost = await provider.getTransactionCost(request, {
+    const txCost = await predicate.getTransactionCost(request, {
       signatureCallback: (tx) => tx.addAccountWitnesses(signer),
-      resourcesOwner: predicate,
     });
 
     request.updatePredicateGasUsed(txCost.estimatedPredicates);

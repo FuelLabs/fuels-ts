@@ -212,6 +212,7 @@ fragment messageProofFragment on MessageProof {
     proofIndex
   }
   messageBlockHeader {
+    version
     id
     daHeight
     consensusParametersVersion
@@ -227,6 +228,7 @@ fragment messageProofFragment on MessageProof {
     applicationHash
   }
   commitBlockHeader {
+    version
     id
     daHeight
     consensusParametersVersion
@@ -393,6 +395,15 @@ fragment GasCostsFragment on GasCosts {
   wqmm
   xor
   xori
+  alocDependentCost {
+    ...DependentCostFragment
+  }
+  cfe {
+    ...DependentCostFragment
+  }
+  cfeiDependentCost {
+    ...DependentCostFragment
+  }
   call {
     ...DependentCostFragment
   }
@@ -565,6 +576,9 @@ query getTransactions(
         ...transactionFragment
       }
     }
+    pageInfo {
+      ...pageInfoFragment
+    }
   }
 }
 
@@ -616,6 +630,9 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
 
 query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   blocks(after: $after, before: $before, first: $first, last: $last) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...blockFragment
@@ -644,6 +661,9 @@ query getCoins(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...coinFragment
@@ -712,6 +732,9 @@ query getBalances(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...balanceFragment
@@ -734,6 +757,9 @@ query getMessages(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...messageFragment
@@ -772,8 +798,16 @@ query getRelayedTransactionStatus(
   }
 }
 
-mutation dryRun($encodedTransactions: [HexString!]!, $utxoValidation: Boolean) {
-  dryRun(txs: $encodedTransactions, utxoValidation: $utxoValidation) {
+mutation dryRun(
+  $encodedTransactions: [HexString!]!
+  $utxoValidation: Boolean
+  $gasPrice: U64
+) {
+  dryRun(
+    txs: $encodedTransactions
+    utxoValidation: $utxoValidation
+    gasPrice: $gasPrice
+  ) {
     ...dryRunTransactionExecutionStatusFragment
   }
 }

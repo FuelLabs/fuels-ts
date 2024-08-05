@@ -4,7 +4,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "ESNext.disposable"],
     "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,

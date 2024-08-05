@@ -34,7 +34,7 @@ You should see a message similar to this:
 ```md
 Contract deploy-to-testnet Deployed!
 
-Network: https://devnet.fuel.network
+Network: https://testnet.fuel.network
 Contract ID: 0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 Deployed in block 0x4ea52b6652836c499e44b7e42f7c22d1ed1f03cf90a1d94cd0113b9023dfa636
 ```
@@ -51,9 +51,9 @@ Go to your `.env.local` file and add a new variable named `NEXT_PUBLIC_TESTNET_C
 NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 ```
 
-If you are curious, this environment variable is used here in the `src/pages/index.tsx` file to set the contract ID:
+If you are curious, this environment variable is used here in the `src/app/page.tsx` file to set the contract ID:
 
-<<< @/../../create-fuels-counter-guide/src/pages/index.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/app/page.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
 
 You will notice that this piece of code is getting the contract ID depending on the current environment. If the environment is `local`, it will use the contract ID from the auto-generated `contract-ids.json` file. Otherwise, for a testnet deployment, it will use the contract ID provided by you.
 
@@ -69,7 +69,6 @@ If you run your frontend now, you should be able to interact with your contract 
 To deploy your frontend to the cloud, you can use any service like [Vercel](https://vercel.com/). Make sure that you setup your environment variables correctly and that your contract ID is correct. Your environment variables should look something like this:
 
 ```md
-NEXT_PUBLIC_HAS_CONTRACT=true
 NEXT_PUBLIC_DAPP_ENVIRONMENT=testnet
 NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 
@@ -83,5 +82,5 @@ Congratulations! You have successfully deployed your Fuel dApp to the testnet.
 To recap, to deploy your dApp to the testnet, you need to:
 
 1. Deploy your contract to the testnet using `forc deploy --testnet`.
-2. Specify this contract ID in your frontend code in `src/pages/index.tsx`.
+2. Specify this contract ID in your frontend code in `src/app/page.tsx`.
 3. Set the `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment variable to `testnet`.

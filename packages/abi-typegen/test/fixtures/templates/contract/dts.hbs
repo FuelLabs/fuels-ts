@@ -22,6 +22,7 @@ import type {
   InvokeFunction,
   RawSlice,
   StdString,
+  StrSlice,
 } from 'fuels';
 
 import type { Option, Enum, Vec, Result } from "./common";
@@ -52,7 +53,7 @@ export type MyStructOutput = { x: number, y: number, state: MyEnumOutput };
 export type StructWithMultiOptionInput = { multiple: [Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>, Option<BigNumberish>] };
 export type StructWithMultiOptionOutput = { multiple: [Option<number>, Option<number>, Option<number>, Option<number>, Option<number>] };
 
-interface MyContractAbiInterface extends Interface {
+export interface MyContractAbiInterface extends Interface {
   functions: {
     type_address: FunctionFragment;
     type_contract_id: FunctionFragment;
@@ -78,6 +79,7 @@ interface MyContractAbiInterface extends Interface {
     types_result: FunctionFragment;
     types_std_string: FunctionFragment;
     types_str: FunctionFragment;
+    types_str_slice: FunctionFragment;
     types_struct: FunctionFragment;
     types_tuple: FunctionFragment;
     types_u16: FunctionFragment;
@@ -87,84 +89,11 @@ interface MyContractAbiInterface extends Interface {
     types_u8: FunctionFragment;
     types_value_then_empty: FunctionFragment;
     types_value_then_empty_then_value: FunctionFragment;
+    types_value_then_value_then_empty_then_empty: FunctionFragment;
     types_vector_geo: FunctionFragment;
     types_vector_option: FunctionFragment;
     types_vector_u8: FunctionFragment;
   };
-
-  encodeFunctionData(functionFragment: 'type_address', values: [AddressInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'type_contract_id', values: [ContractIdInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'type_external_enum', values: [ExternalEnumInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'type_external_struct', values: [ExternalStructInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'type_identity', values: [IdentityInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_array', values: [[BigNumberish, BigNumberish, BigNumberish]]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_asset_id', values: [AssetIdInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_b256', values: [string]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_b512', values: [string]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_bool', values: [boolean]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_bytes', values: [Bytes]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_empty', values: []): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_empty_then_value', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_enum', values: [MyEnumInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_enum_with_vector', values: [EnumWithVectorInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_evm_address', values: [EvmAddress]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_generic_enum', values: [GenericEnumInput<BigNumberish, BigNumberish>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_generic_struct', values: [GenericStructWithEnumInput<BigNumberish, BigNumberish>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_option', values: [Option<BigNumberish>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_option_geo', values: [Option<MyStructInput>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_raw_slice', values: [RawSlice]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_result', values: [Result<BigNumberish, BigNumberish>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_std_string', values: [StdString]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_str', values: [string]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_struct', values: [MyStructInput]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_tuple', values: [[BigNumberish, BigNumberish, BigNumberish]]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_u16', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_u256', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_u32', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_u64', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_u8', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_value_then_empty', values: [BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_value_then_empty_then_value', values: [BigNumberish, BigNumberish]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_vector_geo', values: [Vec<MyStructInput>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_vector_option', values: [Vec<StructWithMultiOptionInput>]): Uint8Array;
-  encodeFunctionData(functionFragment: 'types_vector_u8', values: [Vec<BigNumberish>]): Uint8Array;
-
-  decodeFunctionData(functionFragment: 'type_address', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'type_contract_id', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'type_external_enum', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'type_external_struct', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'type_identity', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_array', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_asset_id', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_b256', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_b512', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_bool', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_bytes', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_empty', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_empty_then_value', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_enum', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_enum_with_vector', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_evm_address', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_generic_enum', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_generic_struct', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_option', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_option_geo', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_raw_slice', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_result', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_std_string', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_str', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_struct', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_tuple', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_u16', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_u256', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_u32', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_u64', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_u8', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_value_then_empty', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_value_then_empty_then_value', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_vector_geo', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_vector_option', data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: 'types_vector_u8', data: BytesLike): DecodedValue;
 }
 
 export class MyContractAbi extends Contract {
@@ -181,19 +110,20 @@ export class MyContractAbi extends Contract {
     types_b512: InvokeFunction<[x: string], string>;
     types_bool: InvokeFunction<[x: boolean], boolean>;
     types_bytes: InvokeFunction<[x: Bytes], Bytes>;
-    types_empty: InvokeFunction<[], void>;
-    types_empty_then_value: InvokeFunction<[y: BigNumberish], void>;
+    types_empty: InvokeFunction<[x?: undefined], void>;
+    types_empty_then_value: InvokeFunction<[x: undefined, y: BigNumberish], void>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
     types_enum_with_vector: InvokeFunction<[x: EnumWithVectorInput], EnumWithVectorOutput>;
     types_evm_address: InvokeFunction<[x: EvmAddress], EvmAddress>;
     types_generic_enum: InvokeFunction<[x: GenericEnumInput<BigNumberish, BigNumberish>], GenericEnumOutput<number, number>>;
     types_generic_struct: InvokeFunction<[x: GenericStructWithEnumInput<BigNumberish, BigNumberish>], GenericStructWithEnumOutput<number, number>>;
-    types_option: InvokeFunction<[x: Option<BigNumberish>], Option<number>>;
-    types_option_geo: InvokeFunction<[x: Option<MyStructInput>], Option<MyStructOutput>>;
+    types_option: InvokeFunction<[x?: Option<BigNumberish>], Option<number>>;
+    types_option_geo: InvokeFunction<[x?: Option<MyStructInput>], Option<MyStructOutput>>;
     types_raw_slice: InvokeFunction<[x: RawSlice], RawSlice>;
     types_result: InvokeFunction<[x: Result<BigNumberish, BigNumberish>], Result<BN, string>>;
     types_std_string: InvokeFunction<[x: StdString], StdString>;
     types_str: InvokeFunction<[x: string], string>;
+    types_str_slice: InvokeFunction<[x: StrSlice], StrSlice>;
     types_struct: InvokeFunction<[x: MyStructInput], MyStructOutput>;
     types_tuple: InvokeFunction<[x: [BigNumberish, BigNumberish, BigNumberish]], [number, number, number]>;
     types_u16: InvokeFunction<[x: BigNumberish], number>;
@@ -201,8 +131,9 @@ export class MyContractAbi extends Contract {
     types_u32: InvokeFunction<[x: BigNumberish], number>;
     types_u64: InvokeFunction<[x: BigNumberish], BN>;
     types_u8: InvokeFunction<[x: BigNumberish], number>;
-    types_value_then_empty: InvokeFunction<[x: BigNumberish], void>;
-    types_value_then_empty_then_value: InvokeFunction<[x: BigNumberish, z: BigNumberish], void>;
+    types_value_then_empty: InvokeFunction<[x: BigNumberish, y?: undefined], void>;
+    types_value_then_empty_then_value: InvokeFunction<[x: BigNumberish, y: undefined, z: BigNumberish], void>;
+    types_value_then_value_then_empty_then_empty: InvokeFunction<[x: BigNumberish, y: BigNumberish, z?: undefined, a?: undefined], void>;
     types_vector_geo: InvokeFunction<[x: Vec<MyStructInput>], Vec<MyStructOutput>>;
     types_vector_option: InvokeFunction<[x: Vec<StructWithMultiOptionInput>], Vec<StructWithMultiOptionOutput>>;
     types_vector_u8: InvokeFunction<[x: Vec<BigNumberish>], Vec<number>>;

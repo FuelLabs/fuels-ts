@@ -1,7 +1,6 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
-import { safeExec } from '@fuel-ts/errors/test-utils';
 import type { Provider } from 'fuels';
 import { WalletUnlocked, Predicate, getRandomB256 } from 'fuels';
+import { seedTestWallet, safeExec } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
@@ -179,8 +178,12 @@ describe(__filename, () => {
       }
     );
 
-    const chainId = provider.getChainId();
+    /*
+      You can retrieve the transaction ID before actually submitting it to the node
+      like this:
+     */
 
+    const chainId = provider.getChainId();
     const txId = transactionRequest.getTransactionId(chainId);
 
     const res = await predicate.sendTransaction(transactionRequest);
