@@ -37,9 +37,9 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
-import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
+import { ResourceCache } from './resource-cache';
 import type {
   TransactionRequestLike,
   TransactionRequest,
@@ -65,7 +65,7 @@ const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
-export const DEFAULT_UTXOS_CACHE_TTL = 20_000; // 20 seconds
+export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -373,7 +373,7 @@ type NodeInfoCache = Record<string, NodeInfo>;
  */
 export default class Provider {
   operations: ReturnType<typeof getOperationsSdk>;
-  cache?: MemoryCache;
+  cache?: ResourceCache;
 
   /** @hidden */
   static clearChainAndNodeCaches() {
@@ -432,12 +432,12 @@ export default class Provider {
     const { cacheUtxo } = this.options;
     if (isDefined(cacheUtxo)) {
       if (cacheUtxo !== -1) {
-        this.cache = new MemoryCache(cacheUtxo);
+        this.cache = new ResourceCache(cacheUtxo);
       } else {
         this.cache = undefined;
       }
     } else {
-      this.cache = new MemoryCache(DEFAULT_UTXOS_CACHE_TTL);
+      this.cache = new ResourceCache(DEFAULT_RESOURCE_CACHE_TTL);
     }
   }
 
@@ -688,11 +688,19 @@ Supported fuel-core version: ${supportedVersion}.`
       return;
     }
 
-    inputs.forEach((input) => {
-      if (input.type === InputType.Coin) {
-        this.cache?.set(input.id, transactionId);
-      }
-    });
+    const ExcludeResources = inputs.reduce(
+      (acc, input) => {
+        if (input.type === InputType.Coin) {
+          acc.utxos.push(input.id);
+        } else if (input.type === InputType.Message) {
+          acc.messages.push(input.nonce);
+        }
+        return acc;
+      },
+      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
+    );
+
+    this.cache.set(transactionId, ExcludeResources);
   }
 
   /**
@@ -1242,11 +1250,11 @@ Supported fuel-core version: ${supportedVersion}.`
     };
 
     if (this.cache) {
-      const uniqueUtxos = new Set(
-        excludeInput.utxos.concat(this.cache?.getActiveData().map((id) => hexlify(id)))
-      );
-      excludeInput.utxos = Array.from(uniqueUtxos);
+      const cached = this.cache.getActiveData();
+      excludeInput.messages.push(...cached.messages);
+      excludeInput.utxos.push(...cached.utxos);
     }
+
     const coinsQuery = {
       owner: ownerAddress.toB256(),
       queryPerAsset: quantities

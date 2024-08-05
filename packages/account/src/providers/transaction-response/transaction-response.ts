@@ -315,6 +315,6 @@ export class TransactionResponse {
   }
 
   private unsetResourceCache() {
-    this.provider.cache?.delByTxID(this.id);
+    this.provider.cache?.unset(this.id);
   }
 }
