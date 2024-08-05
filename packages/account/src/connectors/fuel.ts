@@ -174,7 +174,8 @@ export class Fuel extends FuelConnector implements FuelSdk {
     const hasConnector = await this.hasConnector();
     await this.pingConnector();
     if (!this._currentConnector || !hasConnector) {
-      throw new Error(
+      throw new FuelError(
+        ErrorCode.MISSING_CONNECTOR,
         `No connector selected for calling ${method}. Use hasConnector before executing other methods.`
       );
     }
@@ -255,7 +256,7 @@ export class Fuel extends FuelConnector implements FuelSdk {
         cacheTime: PING_CACHE_TIME,
       })();
     } catch {
-      throw new Error('Current connector is not available.');
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Current connector is not available.');
     }
   }
 
