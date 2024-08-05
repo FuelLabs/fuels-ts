@@ -116,7 +116,7 @@
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.6.0",
     "webdriverio": "^8.39.1",
-    "syncpack": "^12.3.2"
+    "syncpack": "12.3.3"
   },
   "pnpm": {
     "overrides": {
