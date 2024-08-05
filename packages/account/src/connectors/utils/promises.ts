@@ -1,6 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export type DeferPromise<R = unknown> = {
   promise: Promise<R>;
   resolve: (value: R) => void;
