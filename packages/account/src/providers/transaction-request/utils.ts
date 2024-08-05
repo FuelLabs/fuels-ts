@@ -8,7 +8,11 @@ import type { TransactionRequestLike, TransactionRequest } from './types';
 
 /** @hidden */
 export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {
-  if (obj instanceof ScriptTransactionRequest || obj instanceof CreateTransactionRequest) {
+  if (
+    obj instanceof ScriptTransactionRequest ||
+    obj instanceof CreateTransactionRequest ||
+    obj instanceof BlobTransactionRequest
+  ) {
     return obj;
   }
 
@@ -32,3 +36,13 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
     }
   }
 };
+
+/** @hidden */
+export const isTransactionTypeScript = (
+  request: TransactionRequestLike
+): request is ScriptTransactionRequest => request.type === TransactionType.Script;
+
+/** @hidden */
+export const isTransactionTypeCreate = (
+  request: TransactionRequestLike
+): request is CreateTransactionRequest => request.type === TransactionType.Create;

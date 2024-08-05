@@ -48,7 +48,11 @@ import type {
   JsonAbisFromAllCalls,
   ScriptTransactionRequest,
 } from './transaction-request';
-import { transactionRequestify } from './transaction-request';
+import {
+  isTransactionTypeCreate,
+  isTransactionTypeScript,
+  transactionRequestify,
+} from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
@@ -720,7 +724,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
     let abis: JsonAbisFromAllCalls | undefined;
 
-    if (transactionRequest.type === TransactionType.Script) {
+    if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
 
@@ -816,7 +820,7 @@ Supported fuel-core version: ${supportedVersion}.`
   async estimateTxDependencies(
     transactionRequest: TransactionRequest
   ): Promise<EstimateTxDependenciesReturns> {
-    if (transactionRequest.type === TransactionType.Create) {
+    if (isTransactionTypeCreate(transactionRequest)) {
       return {
         receipts: [],
         outputVariables: 0,
@@ -846,7 +850,7 @@ Supported fuel-core version: ${supportedVersion}.`
       const hasMissingOutputs =
         missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
 
-      if (hasMissingOutputs && transactionRequest.type === TransactionType.Script) {
+      if (hasMissingOutputs && isTransactionTypeScript(transactionRequest)) {
         outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
@@ -900,7 +904,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
     // Prepare ScriptTransactionRequests and their indices
     allRequests.forEach((req, index) => {
-      if (req.type === TransactionType.Script) {
+      if (isTransactionTypeScript(req)) {
         serializedTransactionsMap.set(index, hexlify(req.toTransactionBytes()));
       }
     });
@@ -932,7 +936,7 @@ Supported fuel-core version: ${supportedVersion}.`
         const hasMissingOutputs =
           missingOutputVariables.length > 0 || missingOutputContractIds.length > 0;
         const request = allRequests[requestIdx];
-        if (hasMissingOutputs && request.type === TransactionType.Script) {
+        if (hasMissingOutputs && isTransactionTypeScript(request)) {
           result.outputVariables += missingOutputVariables.length;
           request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
@@ -1012,7 +1016,7 @@ Supported fuel-core version: ${supportedVersion}.`
     let gasLimit = bn(0);
 
     // Only Script transactions consume gas
-    if (transactionRequest.type === TransactionType.Script) {
+    if (isTransactionTypeScript(transactionRequest)) {
       // If the gasLimit is set to 0, it means we need to estimate it.
       gasLimit = transactionRequest.gasLimit;
       if (transactionRequest.gasLimit.eq(0)) {
@@ -1109,17 +1113,16 @@ Supported fuel-core version: ${supportedVersion}.`
     { signatureCallback }: TransactionCostParams = {}
   ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const updateMaxFee = txRequestClone.maxFee.eq(0);
 
     // Remove gasLimit to avoid gasLimit when estimating predicates
-    if (isScriptTransaction) {
+    if (isTransactionTypeScript(txRequestClone)) {
       txRequestClone.gasLimit = bn(0);
     }
 
     const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
     let addedSignatures = 0;
-    if (signatureCallback && isScriptTransaction) {
+    if (signatureCallback && isTransactionTypeScript(signedRequest)) {
       const lengthBefore = signedRequest.witnesses.length;
       await signatureCallback(signedRequest);
       addedSignatures = signedRequest.witnesses.length - lengthBefore;
@@ -1143,7 +1146,7 @@ Supported fuel-core version: ${supportedVersion}.`
     let gasUsed = bn(0);
 
     txRequestClone.maxFee = maxFee;
-    if (isScriptTransaction) {
+    if (isTransactionTypeScript(txRequestClone)) {
       txRequestClone.gasLimit = gasLimit;
       if (signatureCallback) {
         await signatureCallback(txRequestClone);
