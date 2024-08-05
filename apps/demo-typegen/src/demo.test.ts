@@ -73,7 +73,6 @@ describe('ExampleContract', () => {
 
     // #region typegen-demo-contract-factory-deploy
     // #context import { DemoContract } from './typegend';
-    // #context
 
     // Deploy
     const deploy = await DemoContractFactory.deploy(wallet);
