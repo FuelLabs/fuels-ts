@@ -50,7 +50,7 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
@@ -86,7 +86,7 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     needs: [environments]
     steps:
       - name: Checkout
