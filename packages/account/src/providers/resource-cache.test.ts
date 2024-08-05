@@ -139,6 +139,38 @@ describe('Resource Cache', () => {
     expect(activeData.messages).containSubset(txId2Resources.messages);
   });
 
+  it('can clear cache', () => {
+    const resourceCache = new ResourceCache(1000);
+
+    const txId1 = randomValue();
+    const txId2 = randomValue();
+
+    const txId1Resources = {
+      utxos: [randomValue()],
+      messages: [randomValue(), randomValue()],
+    };
+
+    const txId2Resources = {
+      utxos: [randomValue(), randomValue()],
+      messages: [randomValue()],
+    };
+
+    resourceCache.set(txId1, txId1Resources);
+    resourceCache.set(txId2, txId2Resources);
+
+    const activeData = resourceCache.getActiveData();
+
+    expect(activeData.utxos).containSubset([...txId1Resources.utxos, ...txId2Resources.utxos]);
+    expect(activeData.messages).containSubset([
+      ...txId1Resources.messages,
+      ...txId2Resources.messages,
+    ]);
+
+    resourceCache.clear();
+
+    expect(resourceCache.getActiveData()).toStrictEqual({ utxos: [], messages: [] });
+  });
+
   it('should validate that ResourceCache uses a global cache', () => {
     const oldTxId = randomValue();
     const oldCache = {

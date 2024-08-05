@@ -72,4 +72,8 @@ export class ResourceCache {
     }
     return false;
   }
+
+  clear() {
+    cache.clear();
+  }
 }
