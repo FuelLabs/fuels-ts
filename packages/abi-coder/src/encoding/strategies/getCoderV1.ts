@@ -127,26 +127,23 @@ export const getCoder: GetCoderFn = (
     return new VecCoder(itemCoder as Coder);
   }
 
+  // component name
+  const coderName = resolvedAbiType.type.match(fullNameRegExMatch)?.[0];
+
   const structMatch = structRegEx.test(resolvedAbiType.type);
-  if (structMatch) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [name] = resolvedAbiType.type.match(fullNameRegExMatch)!;
+  if (structMatch && coderName) {
     const coders = getCoders(components, { getCoder });
-    return new StructCoder(name, coders);
+    return new StructCoder(coderName, coders);
   }
 
   const enumMatch = enumRegEx.test(resolvedAbiType.type);
-  if (enumMatch) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const [name] = resolvedAbiType.type.match(fullNameRegExMatch)!;
-
+  if (enumMatch && coderName) {
     const coders = getCoders(components, { getCoder });
-
     const isOptionEnum = resolvedAbiType.type === OPTION_CODER_TYPE;
     if (isOptionEnum) {
-      return new OptionCoder(name, coders);
+      return new OptionCoder(coderName, coders);
     }
-    return new EnumCoder(name, coders);
+    return new EnumCoder(coderName, coders);
   }
 
   const tupleMatch = tupleRegEx.exec(resolvedAbiType.type)?.groups;
