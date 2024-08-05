@@ -116,7 +116,7 @@ jobs:
 
       # ensure docs are always deployed after merge of changeset PR
       - name: Get the last commit message and set env vars
-        run: echo LAST_COMMIT_MSG >> $GITHUB_ENV
+        run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
 
       - name: Decides if Docs should be deployed
         if: env.LAST_COMMIT_MSG == 'ci: versioning packages and changesets' && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
