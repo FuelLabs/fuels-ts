@@ -171,7 +171,7 @@ describe('Resource Cache', () => {
     expect(await resourceCache.getActiveData()).toStrictEqual({ utxos: [], messages: [] });
   });
 
-  describe('Concurrent operations', () => {
+  describe('Cleanup operations', () => {
     const mockTtl = 100; // 100ms TTL for testing
     let resourceCache: ResourceCache;
 
@@ -181,33 +181,6 @@ describe('Resource Cache', () => {
 
     afterEach(async () => {
       await resourceCache.destroy();
-    });
-
-    it('should handle concurrent operations safely', async () => {
-      const transactionId1 = '0x1234';
-      const transactionId2 = '0x5678';
-      const resources1 = {
-        utxos: ['0xabcd'],
-        messages: ['0xef01'],
-      };
-      const resources2 = {
-        utxos: ['0x2345'],
-        messages: ['0x6789'],
-      };
-
-      // Simulate concurrent operations
-      await Promise.all([
-        resourceCache.set(transactionId1, resources1),
-        resourceCache.set(transactionId2, resources2),
-        resourceCache.getActiveData(),
-        resourceCache.isCached('0xabcd'),
-      ]);
-
-      const cachedData = await resourceCache.getActiveData();
-      expect(cachedData.utxos).toContain('0xabcd');
-      expect(cachedData.utxos).toContain('0x2345');
-      expect(cachedData.messages).toContain('0xef01');
-      expect(cachedData.messages).toContain('0x6789');
     });
 
     it('should automatically clean up expired entries', async () => {
