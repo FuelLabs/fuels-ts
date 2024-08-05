@@ -688,7 +688,7 @@ Supported fuel-core version: ${supportedVersion}.`
       return;
     }
 
-    const ExcludeResources = inputs.reduce(
+    const inputsToCache = inputs.reduce(
       (acc, input) => {
         if (input.type === InputType.Coin) {
           acc.utxos.push(input.id);
@@ -700,7 +700,7 @@ Supported fuel-core version: ${supportedVersion}.`
       { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
     );
 
-    this.cache.set(transactionId, ExcludeResources);
+    this.cache.set(transactionId, inputsToCache);
   }
 
   /**
