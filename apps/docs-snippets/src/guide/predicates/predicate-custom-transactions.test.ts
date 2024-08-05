@@ -29,6 +29,7 @@ describe('Predicate Custom Transactions', () => {
     // #context import { PredicateFactory } from 'path/to/typegen/outputs';
     // #context import type { PredicateInputs } from 'path/to/typegen/outputs';
     // #context import { SENDER_PVT_KEY, RECEIVER_ADDRESS } from 'path/to/my/env/file';
+
     // Setup
     const provider = await Provider.create(TESTNET_NETWORK_URL);
     const sender = Wallet.fromPrivateKey(SENDER_PVT_KEY, provider);
