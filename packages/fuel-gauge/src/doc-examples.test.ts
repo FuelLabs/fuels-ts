@@ -1,6 +1,5 @@
 import type { Bech32Address, BigNumberish, Bytes, WalletLocked } from 'fuels';
 import {
-  Predicate,
   bn,
   hashMessage,
   Address,
@@ -14,12 +13,13 @@ import {
   WalletUnlocked,
   Signer,
   ZeroBytes32,
+  Predicate,
 } from 'fuels';
 import { AssetId, launchTestNode } from 'fuels/test-utils';
 
-import { CallTestContractAbi__factory } from '../test/typegen/contracts';
-import { PredicateTrueAbi__factory } from '../test/typegen/predicates';
-import { PredicateTripleSigAbi__factory } from '../test/typegen/predicates/factories/PredicateTripleSigAbi__factory';
+import { PredicateTrue } from '../test/typegen';
+import { CallTestContract } from '../test/typegen/contracts';
+import { PredicateTripleSig } from '../test/typegen/predicates/PredicateTripleSig';
 
 const PUBLIC_KEY =
   '0x2f34bc0df4db0ec391792cedb05768832b49b1aa3a2dd8c30054d1af00f67d00b74b7acbbf3087c8e0b1a4c343db50aa471d21f278ff5ce09f07795d541fb47e';
@@ -112,11 +112,7 @@ describe('Doc Examples', () => {
     const address = Address.fromB256(hexedB256);
     const arrayB256: Uint8Array = arrayify(randomB256Bytes);
     const walletLike: WalletLocked = Wallet.fromAddress(address, provider);
-    const contractLike: Contract = new Contract(
-      address,
-      CallTestContractAbi__factory.abi,
-      provider
-    );
+    const contractLike: Contract = new Contract(address, CallTestContract.abi, provider);
 
     expect(address.equals(addressify(walletLike) as Address)).toBeTruthy();
     expect(address.equals(contractLike.id as Address)).toBeTruthy();
@@ -252,12 +248,12 @@ describe('Doc Examples', () => {
     using launched = await launchTestNode();
     const { provider } = launched;
     const predicate = new Predicate({
-      bytecode: PredicateTrueAbi__factory.bin,
+      bytecode: PredicateTrue.bytecode,
       provider,
     });
 
     expect(predicate.address).toBeTruthy();
-    expect(predicate.bytes).toEqual(arrayify(PredicateTrueAbi__factory.bin));
+    expect(predicate.bytes).toEqual(arrayify(PredicateTrue.bytecode));
   });
 
   it('can create a predicate and use', async () => {
@@ -300,9 +296,10 @@ describe('Doc Examples', () => {
     const signature1 = await wallet1.signMessage(dataToSign);
     const signature2 = await wallet2.signMessage(dataToSign);
     const signature3 = await wallet3.signMessage(dataToSign);
-    const predicate = PredicateTripleSigAbi__factory.createInstance(provider, [
-      [signature1, signature2, signature3],
-    ]);
+    const predicate = new PredicateTripleSig({
+      provider,
+      data: [[signature1, signature2, signature3]],
+    });
 
     const amountToPredicate = 600_000;
     const amountToReceiver = 100;
