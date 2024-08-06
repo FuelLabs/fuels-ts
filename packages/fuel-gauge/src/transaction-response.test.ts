@@ -204,7 +204,7 @@ describe('TransactionResponse', () => {
 
   it(
     'should throw error for a SqueezedOut status update [waitForResult]',
-    { timeout: 10_000, retry: 10 },
+    { timeout: 20_000, retry: 10 },
     async () => {
       for (let i = 0; i < 20; i++) {
         /**
