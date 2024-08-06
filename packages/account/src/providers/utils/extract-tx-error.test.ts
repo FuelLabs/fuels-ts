@@ -1,6 +1,10 @@
 import { PANIC_REASONS } from '@fuel-ts/transactions/configs';
 import * as asm from '@fuels/vm-asm';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('extractTxError', () => {
   it('should ensure all panic reasons are present within PANIC_REASONS constant', async () => {
     // @ts-expect-error method reference missing in DTS
