@@ -1,4 +1,3 @@
-import { ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { EchoConfigurablesFactory } from '../../../test/typegen';
