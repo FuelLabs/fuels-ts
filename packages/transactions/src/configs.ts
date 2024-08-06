@@ -97,9 +97,6 @@ export const PANIC_REASONS = [
   'OverridingStateTransactionBytecode',
   'BytecodeAlreadyUploaded',
   'ThePartIsNotSequentiallyConnected',
-  'BlobNotFound',
-  'BlobIdAlreadyUploaded',
-  'GasCostNotDefined',
 ];
 
 export const PANIC_DOC_URL = 'https://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html';
