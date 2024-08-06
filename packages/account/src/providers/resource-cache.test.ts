@@ -190,4 +190,41 @@ describe('Resource Cache', () => {
     expect(cachedData.utxos).not.toContain('0xabcd');
     expect(cachedData.messages).not.toContain('0xef01');
   });
+
+  it('should handle concurrent UTXO operations safely', async () => {
+    const resourceCache = new ResourceCache(1000);
+    const utxos = Array.from({ length: 100 }, (_, i) => `0x${i.toString(16).padStart(4, '0')}`);
+
+    // Function to simulate a concurrent operation
+    const simulateOperation = async (utxo: string, delayTime: number) => {
+      await sleep(delayTime); // Simulate random delay
+      await resourceCache.set(utxo, { utxos: [utxo], messages: [] });
+      const isCached = await resourceCache.isCached(utxo);
+      expect(isCached).toBe(true);
+    };
+
+    // Start all operations concurrently
+    const operations = utxos.map(
+      (utxo) => simulateOperation(utxo, Math.random() * 50) // Random delay up to 50ms
+    );
+
+    // Use a separate promise to check intermediate state
+    const intermediateCheck = (async () => {
+      await sleep(25); // Wait a bit to let some operations complete
+      const midPointData = await resourceCache.getActiveData();
+      // Some, but not all, UTXOs should be cached at this point
+      expect(midPointData.utxos.length).toBeGreaterThan(0);
+      expect(midPointData.utxos.length).toBeLessThan(utxos.length);
+    })();
+
+    // Wait for all operations and the intermediate check to complete
+    await Promise.all([...operations, intermediateCheck]);
+
+    // Final state check
+    const finalData = await resourceCache.getActiveData();
+    expect(finalData.utxos.length).toBe(utxos.length);
+    utxos.forEach((utxo) => {
+      expect(finalData.utxos).toContain(utxo);
+    });
+  });
 });
