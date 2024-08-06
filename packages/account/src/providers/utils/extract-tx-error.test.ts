@@ -9,8 +9,6 @@ describe('extractTxError', () => {
 
     const stringReasons = Object.keys(panicReasons).filter((key) => Number.isNaN(Number(key)));
 
-    stringReasons.forEach((reason) => {
-      expect(PANIC_REASONS).toContain(reason);
-    });
+    expect(new Set(PANIC_REASONS)).toStrictEqual(new Set(stringReasons));
   });
 });
