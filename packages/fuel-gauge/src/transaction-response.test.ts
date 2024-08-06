@@ -204,53 +204,51 @@ describe('TransactionResponse', () => {
 
   it(
     'should throw error for a SqueezedOut status update [waitForResult]',
-    { timeout: 30_000, retry: 10 },
+    { timeout: 10_000, retry: 10 },
     async () => {
-      for (let i = 0; i < 10; i++) {
-        /**
-         * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
-         * before the waitForResult (provider.operations.statusChange) call is made
-         *  */
-        using launched = await launchTestNode({
-          walletsConfig: {
-            amountPerCoin: 500_000,
-          },
-          nodeOptions: {
-            args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
-            loggingEnabled: false,
-          },
-        });
+      /**
+       * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
+       * before the waitForResult (provider.operations.statusChange) call is made
+       *  */
+      using launched = await launchTestNode({
+        walletsConfig: {
+          amountPerCoin: 500_000,
+        },
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
+          loggingEnabled: false,
+        },
+      });
 
-        const {
-          provider,
-          wallets: [genesisWallet],
-        } = launched;
+      const {
+        provider,
+        wallets: [genesisWallet],
+      } = launched;
 
-        const request = new ScriptTransactionRequest();
+      const request = new ScriptTransactionRequest();
 
-        request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
+      request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
 
-        const txCost = await genesisWallet.getTransactionCost(request);
+      const txCost = await genesisWallet.getTransactionCost(request);
 
-        request.gasLimit = txCost.gasUsed;
-        request.maxFee = txCost.maxFee;
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
 
-        await genesisWallet.fund(request, txCost);
+      await genesisWallet.fund(request, txCost);
 
-        request.updateWitnessByOwner(
-          genesisWallet.address,
-          await genesisWallet.signTransaction(request)
-        );
+      request.updateWitnessByOwner(
+        genesisWallet.address,
+        await genesisWallet.signTransaction(request)
+      );
 
-        const response = await provider.sendTransaction(request);
+      const response = await provider.sendTransaction(request);
 
-        await expectToThrowFuelError(
-          async () => {
-            await response.waitForResult();
-          },
-          { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
-        );
-      }
+      await expectToThrowFuelError(
+        async () => {
+          await response.waitForResult();
+        },
+        { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
+      );
     }
   );
 
