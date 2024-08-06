@@ -1,7 +1,12 @@
 {{header}}
 
+import { Contract, Interface } from "fuels";
 {{#if imports}}
 import type {
+  Provider,
+  Account,
+  StorageSlot,
+  AbstractAddress,
 {{#each imports}}
   {{this}},
 {{/each}}
@@ -48,20 +53,37 @@ export type {{capitalizedName}}Configurables = Partial<{
 }>;
 {{/if}}
 
-export interface {{capitalizedName}}Interface extends Interface {
-  functions: {
+const abi = {{abiJsonString}};
+
+const storageSlots: StorageSlot[] = {{storageSlotsJsonString}};
+
+export class {{capitalizedName}}Interface extends Interface {
+  constructor() {
+    super(abi);
+  }
+
+  declare functions: {
     {{#each functionsFragments}}
     {{this}}: FunctionFragment;
     {{/each}}
   };
 }
 
-
 export class {{capitalizedName}} extends Contract {
-  interface: {{capitalizedName}}Interface;
-  functions: {
+  static readonly abi = abi;
+  static readonly storageSlots = storageSlots;
+
+  declare interface: {{capitalizedName}}Interface;
+  declare functions: {
     {{#each functionsTypedefs}}
     {{this}};
     {{/each}}
   };
+
+  constructor(
+    id: string | AbstractAddress,
+    accountOrProvider: Account | Provider,
+  ) {
+    super(id, abi, accountOrProvider);
+  }
 }

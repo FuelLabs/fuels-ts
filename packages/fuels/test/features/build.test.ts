@@ -48,16 +48,14 @@ describe(
       await runBuild({ root: paths.root });
 
       const files = [
-        'predicates/factories/PredicateTrueAbi__factory.ts',
+        'predicates/PredicateTrue.ts',
         'predicates/index.ts',
-        'contracts/BarFooAbi.d.ts',
-        'contracts/BarFooAbi.hex.ts',
-        'contracts/FooBarAbi.hex.ts',
-        'contracts/FooBarAbi.d.ts',
-        'contracts/factories/FooBarAbi__factory.ts',
-        'contracts/factories/BarFooAbi__factory.ts',
+        'contracts/BarFoo.ts',
+        'contracts/FooBar.ts',
+        'contracts/FooBarFactory.ts',
+        'contracts/BarFooFactory.ts',
         'contracts/index.ts',
-        'scripts/factories/ScriptTrueAbi__factory.ts',
+        'scripts/ScriptTrue.ts',
         'scripts/index.ts',
         'index.ts',
       ].map((f) => join(paths.outputDir, f));
@@ -85,9 +83,8 @@ describe(
       await runBuild({ root: paths.root });
 
       const files = [
-        'contracts/FooBarAbi.hex.ts',
-        'contracts/FooBarAbi.d.ts',
-        'contracts/factories/FooBarAbi__factory.ts',
+        'contracts/FooBar.ts',
+        'contracts/FooBarFactory.ts',
         'contracts/index.ts',
         'index.ts',
       ].map((f) => join(paths.outputDir, f));
@@ -142,9 +139,8 @@ describe(
       await runBuild({ root: paths.root });
 
       const files = [
-        'contracts/FooBarAbi.hex.ts',
-        'contracts/FooBarAbi.d.ts',
-        'contracts/factories/FooBarAbi__factory.ts',
+        'contracts/FooBar.ts',
+        'contracts/FooBarFactory.ts',
         'contracts/index.ts',
         'index.ts',
       ].map((f) => join(paths.outputDir, f));
