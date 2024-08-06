@@ -174,6 +174,11 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
         base: '17',
         unitsPerGas: '790',
       },
+      ed19DependentCost: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
+      },
       k256: {
         type: 'LightOperation',
         base: '11',
