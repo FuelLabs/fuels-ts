@@ -9,7 +9,7 @@ import {
 {{/if}}
 
 {{#if commonTypesInUse}}
-import type { {{commonTypesInUse}} } from "../common";
+import type { {{commonTypesInUse}} } from "./common";
 {{/if}}
 
 
@@ -40,35 +40,35 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
-type {{capitalizedName}}Inputs = [{{inputs}}];
-type {{capitalizedName}}Output = {{output}};
-
 {{#if configurables}}
 export type {{capitalizedName}}Configurables = Partial<{
-{{#each configurables}}
-  {{name}}: {{inputLabel}};
-{{/each}}
+  {{#each configurables}}
+    {{name}}: {{inputLabel}};
+  {{/each}}
 }>;
+{{else}}
+export type {{capitalizedName}}Configurables = undefined;
 {{/if}}
 
-const _abi = {{abiJsonString}}
+export type {{capitalizedName}}Inputs = [{{inputs}}];
 
-const _bin = '{{hexlifiedBinString}}'
+export type {{capitalizedName}}Parameters = Omit<
+  PredicateParams<{{capitalizedName}}Inputs, {{capitalizedName}}Configurables>,
+  'abi' | 'bytecode'
+>;
 
-export const {{capitalizedName}}__factory = {
+const abi = {{abiJsonString}};
 
-  abi: _abi,
-  bin: _bin,
+const bytecode = '{{hexlifiedBinString}}';
 
-  createInstance(wallet: Account) {
+export class {{capitalizedName}} extends Predicate<
+  {{capitalizedName}}Inputs,
+  {{capitalizedName}}Configurables
+> {
+  static readonly abi = abi;
+  static readonly bytecode = bytecode;
 
-    const script = new Script<
-      {{capitalizedName}}Inputs,
-      {{capitalizedName}}Output
-    >(_bin, _abi, wallet);
-
-    return script;
-
+  constructor(params: {{capitalizedName}}Parameters) {
+    super({ abi, bytecode, ...params });
   }
-
 }

@@ -4,10 +4,11 @@ import { formatEnums } from '../utils/formatEnums';
 import { formatImports } from '../utils/formatImports';
 import { formatStructs } from '../utils/formatStructs';
 
-import dtsTemplate from './dts.hbs';
+import mainTemplate from './main.hbs';
 
-export function renderDtsTemplate(params: { abi: Abi }) {
-  const { name: capitalizedName, types, functions, commonTypesInUse, configurables } = params.abi;
+export function renderMainTemplate(params: { abi: Abi }) {
+  const { camelizedName, capitalizedName, types, functions, commonTypesInUse, configurables } =
+    params.abi;
 
   /*
     First we format all attributes
@@ -29,22 +30,20 @@ export function renderDtsTemplate(params: { abi: Abi }) {
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: [
-      'Interface',
-      'FunctionFragment',
-      'DecodedValue',
-      'Contract',
-      'BytesLike',
-      'InvokeFunction',
-    ],
+    baseMembers: ['FunctionFragment', 'InvokeFunction'],
   });
+
+  const { rawContents, storageSlotsContents } = params.abi;
+  const abiJsonString = JSON.stringify(rawContents, null, 2);
+  const storageSlotsJsonString = storageSlotsContents ?? '[]';
 
   /*
     And finally render template
   */
   const text = renderHbsTemplate({
-    template: dtsTemplate,
+    template: mainTemplate,
     data: {
+      camelizedName,
       capitalizedName,
       commonTypesInUse: commonTypesInUse.join(', '),
       functionsTypedefs,
@@ -54,6 +53,8 @@ export function renderDtsTemplate(params: { abi: Abi }) {
       structs,
       enums,
       imports,
+      abiJsonString,
+      storageSlotsJsonString,
       configurables,
     },
   });
