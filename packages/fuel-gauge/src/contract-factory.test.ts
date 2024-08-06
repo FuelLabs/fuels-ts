@@ -8,8 +8,11 @@ import type { LargeContractAbi } from '../test/typegen/contracts';
 import {
   StorageTestContractAbi__factory,
   LargeContractAbi__factory,
+  ConfigurableContractAbi__factory,
 } from '../test/typegen/contracts';
+import ConfigurableContractAbiHex from '../test/typegen/contracts/ConfigurableContractAbi.hex';
 import largeContractHex from '../test/typegen/contracts/LargeContractAbi.hex';
+import LargeContractAbiHex from '../test/typegen/contracts/LargeContractAbi.hex';
 import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 import { launchTestContract } from './utils';
@@ -288,7 +291,6 @@ describe('Contract Factory', () => {
     const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
 
     const { contract } = await deploy.waitForResult();
-    expect(contract.id).toBeDefined();
 
     const call = await contract.functions.something().call();
 
@@ -338,5 +340,64 @@ describe('Contract Factory', () => {
         'Chunk size tolerance must be between 0 and 1'
       )
     );
+  });
+
+  it('deploys a small contract via blobs', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      ConfigurableContractAbiHex,
+      ConfigurableContractAbi__factory.abi,
+      wallet
+    );
+
+    const deploy = await factory.deployContractAsBlobs();
+    const { contract } = await deploy.waitForResult();
+
+    const call = await contract.functions.echo_u8().call();
+    const { value } = await call.waitForResult();
+    expect(value).toBe(10);
+  });
+
+  it('deploys a small contract via deploy entrypoint', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      ConfigurableContractAbiHex,
+      ConfigurableContractAbi__factory.abi,
+      wallet
+    );
+
+    const deploy = await factory.deploy();
+    const { contract } = await deploy.waitForResult();
+
+    const call = await contract.functions.echo_u8().call();
+    const { value } = await call.waitForResult();
+    expect(value).toBe(10);
+  });
+
+  it('deploys a large contract via deploy entrypoint', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(LargeContractAbiHex, LargeContractAbi__factory.abi, wallet);
+
+    const deploy = await factory.deploy();
+    const { contract } = await deploy.waitForResult();
+
+    const call = await contract.functions.something().call();
+    const { value } = await call.waitForResult();
+    expect(value.toNumber()).toBe(1001);
   });
 });
