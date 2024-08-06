@@ -2,10 +2,9 @@ import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
-import type { Mock } from 'vitest';
 
 import { runScaffoldCli, setupProgram } from '../src/cli';
-import { doesTemplateExist } from '../src/lib/doesTemplateExist';
+import * as doesTemplateExistMod from '../src/lib/doesTemplateExist';
 import { templates } from '../src/lib/setupProgram';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
@@ -18,15 +17,6 @@ import {
 import { generateArgv } from './utils/generateArgs';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
-
-vi.mock('../src/lib/doesTemplateExist', async () => {
-  const original = await vi.importActual('../src/lib/doesTemplateExist');
-  return {
-    __esModule: true,
-    ...original,
-    doesTemplateExist: vi.fn(),
-  };
-});
 
 /**
  * @group node
@@ -53,7 +43,7 @@ describe('CLI', () => {
   test('create-fuels extracts the template to the specified directory', async () => {
     const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
 
-    (doesTemplateExist as Mock).mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -71,7 +61,7 @@ describe('CLI', () => {
   test('create-fuels checks the versions on the fuel-toolchain file', async () => {
     const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
 
-    (doesTemplateExist as Mock).mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -95,7 +85,7 @@ describe('CLI', () => {
       template: paths.templateName,
     });
 
-    (doesTemplateExist as Mock).mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -118,7 +108,7 @@ describe('CLI', () => {
     // Generate the project once
     mkdirSync(paths.projectRoot, { recursive: true });
 
-    (doesTemplateExist as Mock).mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
 
     // Generate the project again
     await runScaffoldCli({
@@ -139,7 +129,7 @@ describe('CLI', () => {
       template: 'non-existent-template',
     });
 
-    (doesTemplateExist as Mock).mockReturnValue(false);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(false);
 
     await runScaffoldCli({
       program: setupProgram(),
