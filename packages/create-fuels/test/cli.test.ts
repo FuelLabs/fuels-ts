@@ -43,7 +43,7 @@ describe('CLI', () => {
   test('create-fuels extracts the template to the specified directory', async () => {
     const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
 
-    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -61,7 +61,7 @@ describe('CLI', () => {
   test('create-fuels checks the versions on the fuel-toolchain file', async () => {
     const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
 
-    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -85,7 +85,7 @@ describe('CLI', () => {
       template: paths.templateName,
     });
 
-    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
 
     await runScaffoldCli({
       program: setupProgram(),
@@ -108,7 +108,7 @@ describe('CLI', () => {
     // Generate the project once
     mkdirSync(paths.projectRoot, { recursive: true });
 
-    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(true);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
 
     // Generate the project again
     await runScaffoldCli({
@@ -129,7 +129,7 @@ describe('CLI', () => {
       template: 'non-existent-template',
     });
 
-    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValue(false);
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(false);
 
     await runScaffoldCli({
       program: setupProgram(),
