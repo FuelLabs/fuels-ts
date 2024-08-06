@@ -24,6 +24,9 @@ import { arrayify, isDefined } from '@fuel-ts/utils';
 import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
+/** Amount of tolerance for chunk sizes in blob transactions */
+export const CHUNK_SIZE_TOLERANCE = 0.05;
+
 /**
  * Options for deploying a contract.
  */
@@ -32,6 +35,7 @@ export type DeployContractOptions = {
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
   configurableConstants?: { [name: string]: unknown };
+  chunkSizeTolerance?: number;
 } & CreateTransactionRequestLike;
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
@@ -183,6 +187,25 @@ export default class ContractFactory {
   }
 
   /**
+   * Deploy a contract of any length with the specified options.
+   *
+   * @param deployContractOptions - Options for deploying the contract.
+   * @returns A promise that resolves to the deployed contract instance.
+   */
+  async deploy<TContract extends Contract = Contract>(
+    deployContractOptions: DeployContractOptions = {}
+  ): Promise<DeployContractResult<TContract>> {
+    const account = this.getAccount();
+    const { consensusParameters } = account.provider.getChain();
+    const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
+
+    if (this.bytecode.length > maxContractSize) {
+      return this.deployContractAsBlobs(deployContractOptions);
+    }
+    return this.deployContract(deployContractOptions);
+  }
+
+  /**
    * Deploy a contract with the specified options.
    *
    * @param deployContractOptions - Options for deploying the contract.
@@ -223,15 +246,17 @@ export default class ContractFactory {
    * @returns A promise that resolves to the deployed contract instance.
    */
   async deployContractAsBlobs<TContract extends Contract = Contract>(
-    deployContractOptions: DeployContractOptions = {}
+    deployContractOptions: DeployContractOptions = {
+      chunkSizeTolerance: 0.05,
+    }
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
-    const { configurableConstants } = deployContractOptions;
+    const { configurableConstants, chunkSizeTolerance } = deployContractOptions;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    const chunkSize = this.getMaxChunkSize();
+    const chunkSize = this.getMaxChunkSize(chunkSizeTolerance);
     const chunks = getContractChunks(this.bytecode, chunkSize);
 
     // Deploy the chunks as blob txs
@@ -375,14 +400,25 @@ export default class ContractFactory {
   /**
    * Get the maximum chunk size for deploying a contract by chunks.
    */
-  private getMaxChunkSize() {
+  private getMaxChunkSize(chunkSizeTolerance: number = CHUNK_SIZE_TOLERANCE) {
+    if (chunkSizeTolerance < 0 || chunkSizeTolerance > 1) {
+      throw new FuelError(
+        ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
+        'Chunk size tolerance must be between 0 and 1'
+      );
+    }
+
     const { provider } = this.getAccount();
     const { consensusParameters } = provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
     // Get the base tx length
     const blobTx = this.blobTransactionRequest({ bytecode: randomBytes(32) });
     blobTx.fundWithFakeUtxos([], provider.getBaseAssetId());
-    const maxChunkSize = contractSizeLimit - blobTx.byteLength() - WORD_SIZE;
+    // Allow tolerance for fluctuating fees / inputs / outputs
+    const toleranceMultiplier = 1 - chunkSizeTolerance;
+    const maxChunkSize =
+      (contractSizeLimit - blobTx.byteLength() - WORD_SIZE) * toleranceMultiplier;
+
     // Ensure chunksize is byte aligned
     return Math.round(maxChunkSize / WORD_SIZE) * WORD_SIZE;
   }

@@ -1,21 +1,7 @@
 import type { Account, TransactionResult } from '@fuel-ts/account';
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import type { DeployContractOptions } from 'fuels';
-import {
-  BN,
-  bn,
-  toHex,
-  Interface,
-  ContractFactory,
-  LOCAL_NETWORK_URL,
-  Provider,
-  assets,
-  arrayify,
-  chunkAndPadBytes,
-  hexlify,
-} from 'fuels';
+import { BN, bn, toHex, Interface, ContractFactory, arrayify, concat } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import type { LargeContractAbi } from '../test/typegen/contracts';
@@ -269,7 +255,7 @@ describe('Contract Factory', () => {
     );
   });
 
-  it('should not deploy contracts greater than MAX_CONTRACT_SIZE via deploy contract', async () => {
+  it('should not deploy large contracts via create', async () => {
     using launched = await launchTestNode();
     const {
       wallets: [wallet],
@@ -286,7 +272,7 @@ describe('Contract Factory', () => {
     );
   });
 
-  it('should deploy contracts greater than MAX_CONTRACT_SIZE via a loader contract', async () => {
+  it('deploys large contracts via blobs [byte aligned]', async () => {
     using launched = await launchTestNode({
       providerOptions: {
         cacheUtxo: -1,
@@ -297,6 +283,7 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
     const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
+    expect(factory.bytecode.length % 8 === 0).toBe(true);
 
     const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
 
@@ -307,5 +294,49 @@ describe('Contract Factory', () => {
 
     const { value } = await call.waitForResult();
     expect(value.toNumber()).toBe(1001);
+  });
+
+  it('deploys large contracts via blobs [padded]', async () => {
+    using launched = await launchTestNode({
+      providerOptions: {
+        cacheUtxo: -1,
+      },
+    });
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const bytecode = concat([arrayify(largeContractHex), new Uint8Array(3)]);
+    const factory = new ContractFactory(bytecode, LargeContractAbi__factory.abi, wallet);
+    expect(bytecode.length % 8 === 0).toBe(false);
+    const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
+
+    const { contract } = await deploy.waitForResult();
+    expect(contract.id).toBeDefined();
+
+    const call = await contract.functions.something().call();
+
+    const { value } = await call.waitForResult();
+    expect(value.toNumber()).toBe(1001);
+  });
+
+  it('should not deploy large contracts via blobs [invalid chunk size tolerance]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
+    const chunkSizeTolerance = 2;
+
+    await expectToThrowFuelError(
+      () => factory.deployContractAsBlobs<LargeContractAbi>({ chunkSizeTolerance }),
+      new FuelError(
+        ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
+        'Chunk size tolerance must be between 0 and 1'
+      )
+    );
   });
 });
