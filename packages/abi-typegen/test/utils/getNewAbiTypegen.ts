@@ -1,5 +1,3 @@
-import type { BinaryVersions } from '@fuel-ts/versions';
-
 import type { IFile, JsonAbiType, JsonAbiConfigurable } from '../../src/index';
 import { AbiTypeGen } from '../../src/index';
 import { ProgramTypeEnum } from '../../src/types/enums/ProgramTypeEnum';

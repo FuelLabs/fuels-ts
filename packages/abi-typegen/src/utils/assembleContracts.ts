@@ -21,8 +21,6 @@ export function assembleContracts(params: {
 }) {
   const { abis, outputDir, versions } = params;
 
-  console.log('assembleContracts', versions);
-
   const files: IFile[] = [];
   const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
 
