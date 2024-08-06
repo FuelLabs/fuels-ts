@@ -1,6 +1,8 @@
 import { getBinaryVersions } from './getBinaryVersions';
+import * as getBuiltinVersionsMod from './getBuiltinVersions';
 import * as getSystemVersionsMod from './getSystemVersions';
 import type { getSystemVersions } from './getSystemVersions';
+import type { Versions } from './types';
 
 type SystemVersions = Pick<
   ReturnType<typeof getSystemVersions>,
@@ -8,14 +10,27 @@ type SystemVersions = Pick<
 >;
 
 const mockAll = (params: SystemVersions) => {
+  const { systemForcVersion, systemFuelCoreVersion } = params;
+
+  const expectedVersions = {
+    FUELS: '11.22.33',
+    FORC: systemForcVersion,
+    FUEL_CORE: systemFuelCoreVersion,
+  };
+
+  const buildInVersions = { FUELS: expectedVersions.FUELS } as Versions;
+  vi.spyOn(getBuiltinVersionsMod, 'getBuiltinVersions').mockReturnValue(buildInVersions);
+
   const getSystemVersions = vi.spyOn(getSystemVersionsMod, 'getSystemVersions').mockReturnValue({
-    ...params,
+    systemForcVersion,
+    systemFuelCoreVersion,
     error: null,
     systemForcPath: 'forc',
     systemFuelCorePath: 'fuel-core',
   });
 
   return {
+    expectedVersions,
     getSystemVersions,
   };
 };
@@ -25,7 +40,7 @@ const mockAll = (params: SystemVersions) => {
  */
 describe('getBinaryVersions', () => {
   it('should return the versions of the binaries', () => {
-    const { getSystemVersions } = mockAll({
+    const { expectedVersions, getSystemVersions } = mockAll({
       systemForcVersion: '1.1.1',
       systemFuelCoreVersion: '2.2.2',
     });
@@ -34,13 +49,14 @@ describe('getBinaryVersions', () => {
 
     expect(getSystemVersions).toHaveBeenCalledTimes(1);
     expect(versions).toEqual({
+      FUELS: expectedVersions.FUELS,
       FORC: '1.1.1',
       FUEL_CORE: '2.2.2',
     });
   });
 
   it('should return undefined when unable to get system versions', () => {
-    const { getSystemVersions } = mockAll({
+    const { expectedVersions, getSystemVersions } = mockAll({
       systemForcVersion: null,
       systemFuelCoreVersion: null,
     });
@@ -49,6 +65,7 @@ describe('getBinaryVersions', () => {
 
     expect(getSystemVersions).toHaveBeenCalledTimes(1);
     expect(versions).toEqual({
+      FUELS: expectedVersions.FUELS,
       FORC: undefined,
       FUEL_CORE: undefined,
     });
