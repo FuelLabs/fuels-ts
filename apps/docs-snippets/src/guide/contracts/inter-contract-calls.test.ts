@@ -25,7 +25,7 @@ describe(__filename, () => {
       tokenArtifacts.binHexlified,
       tokenArtifacts.abiContents,
       wallet
-    ).deployContract();
+    ).deploy();
 
     ({ contract: simpleToken } = await waitForResult());
 
@@ -33,7 +33,7 @@ describe(__filename, () => {
       depositorArtifacts.binHexlified,
       depositorArtifacts.abiContents,
       wallet
-    ).deployContract();
+    ).deploy();
 
     ({ contract: tokenDepositor } = await waitForResult2());
   });
