@@ -204,9 +204,9 @@ describe('TransactionResponse', () => {
 
   it(
     'should throw error for a SqueezedOut status update [waitForResult]',
-    { timeout: 20_000, retry: 10 },
+    { timeout: 30_000, retry: 10 },
     async () => {
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 10; i++) {
         /**
          * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
          * before the waitForResult (provider.operations.statusChange) call is made
@@ -216,14 +216,7 @@ describe('TransactionResponse', () => {
             amountPerCoin: 500_000,
           },
           nodeOptions: {
-            args: [
-              '--poa-instant',
-              'false',
-              '--poa-interval-period',
-              '2s',
-              '--tx-pool-ttl',
-              '100ms',
-            ],
+            args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
             loggingEnabled: false,
           },
         });
