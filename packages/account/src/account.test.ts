@@ -15,10 +15,8 @@ import { Wallet } from './wallet';
 
 /**
  * @group node
- * @group browser
  */
 
-// #TODO: These tests are failing when run as a suite
 describe('Account', () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -366,7 +364,7 @@ describe('Account', () => {
   it('can transfer to multiple destinations', async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
     });
     const {
@@ -826,7 +824,7 @@ describe('Account', () => {
   it('should ensure gas price and gas limit are validated when transferring amounts', async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
     });
     const {
@@ -845,7 +843,7 @@ describe('Account', () => {
   it('should ensure gas limit and price are validated when withdraw an amount of base asset', async () => {
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
-        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
     });
     const {
