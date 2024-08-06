@@ -1,6 +1,6 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BN, BNInput } from '@fuel-ts/math';
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import type { InputContract, Output, OutputChange, Input } from '@fuel-ts/transactions';
