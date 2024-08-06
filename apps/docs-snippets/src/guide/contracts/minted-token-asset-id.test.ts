@@ -1,8 +1,7 @@
 import { bn, getMintedAssetId } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { TokenAbi__factory } from '../../../test/typegen';
-import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
+import { TokenFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -11,7 +10,7 @@ import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
 describe('Minted Token Asset Id', () => {
   it('should successfully execute contract call with forwarded amount', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ deployer: TokenAbi__factory, bytecode: TokenAbiHex }],
+      contractsConfigs: [{ factory: TokenFactory }],
     });
 
     const {

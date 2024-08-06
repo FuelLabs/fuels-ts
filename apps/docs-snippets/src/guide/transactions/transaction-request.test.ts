@@ -144,7 +144,7 @@ describe('Transaction Request', () => {
     const predicate = new Predicate({
       bytecode: SimplePredicateAbi__factory.bin,
       abi: SimplePredicateAbi__factory.abi,
-      inputData: dataToValidatePredicate,
+      data: dataToValidatePredicate,
       provider,
     });
 

@@ -23,7 +23,7 @@ describe('Interacting with Predicates', () => {
       bytecode,
       provider,
       abi,
-      inputData,
+      data: [inputAddress],
       configurableConstants,
     });
 

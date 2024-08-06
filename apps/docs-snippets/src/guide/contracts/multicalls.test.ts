@@ -6,9 +6,6 @@ import {
   EchoValuesAbi__factory,
   ReturnContextAbi__factory,
 } from '../../../test/typegen';
-import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
-import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
-import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAbi.hex';
 
 /**
  * @group node
@@ -19,8 +16,7 @@ describe('Multicalls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CounterAbi__factory,
-          bytecode: CounterAbiHex,
+          factory: CounterAbi__factory,
         },
       ],
     });
@@ -53,12 +49,10 @@ describe('Multicalls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesAbi__factory,
         },
         {
-          deployer: CounterAbi__factory,
-          bytecode: CounterAbiHex,
+          factory: CounterAbi__factory,
         },
       ],
     });
@@ -90,12 +84,10 @@ describe('Multicalls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReturnContextAbi__factory,
-          bytecode: ReturnContextAbiHex,
+          factory: ReturnContextAbi__factory,
         },
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesAbi__factory,
         },
       ],
     });

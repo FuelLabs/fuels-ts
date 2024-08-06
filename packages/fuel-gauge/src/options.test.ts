@@ -1,9 +1,8 @@
 import type { BigNumberish } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { OptionsAbi__factory } from '../test/typegen/contracts';
-import type { DeepStructInput } from '../test/typegen/contracts/OptionsAbi';
-import OptionsAbiHex from '../test/typegen/contracts/OptionsAbi.hex';
+import type { DeepStructInput } from '../test/typegen/contracts/Options';
+import { OptionsFactory } from '../test/typegen/contracts/OptionsFactory';
 import type { Option } from '../test/typegen/contracts/common';
 
 import { launchTestContract } from './utils';
@@ -14,8 +13,7 @@ const U32_MAX = 4294967295;
 
 function launchOptionsContract() {
   return launchTestContract({
-    bytecode: OptionsAbiHex,
-    deployer: OptionsAbi__factory,
+    factory: OptionsFactory,
   });
 }
 
@@ -109,17 +107,17 @@ describe('Options Tests', () => {
   it('echos tuple option', async () => {
     using contract = await launchOptionsContract();
 
-    const someInput = [U8_MAX, U16_MAX] as DoubleTupleOptions;
+    const someInput: DoubleTupleOptions = [U8_MAX, U16_MAX];
     const call1 = await contract.functions.echo_tuple_option(someInput).call();
     const { value: someValue } = await call1.waitForResult();
     expect(someValue).toStrictEqual(someInput);
 
-    const noneInput = [undefined, undefined] as DoubleTupleOptions;
+    const noneInput: DoubleTupleOptions = [undefined, undefined];
     const call2 = await contract.functions.echo_tuple_option(noneInput).call();
     const { value: noneValue } = await call2.waitForResult();
     expect(noneValue).toStrictEqual(noneInput);
 
-    const mixedInput = [U8_MAX, undefined] as DoubleTupleOptions;
+    const mixedInput: DoubleTupleOptions = [U8_MAX, undefined];
     const call3 = await contract.functions.echo_tuple_option(mixedInput).call();
     const { value: mixedValue } = await call3.waitForResult();
     expect(mixedValue).toStrictEqual(mixedInput);
@@ -142,17 +140,17 @@ describe('Options Tests', () => {
   it('echos array option', async () => {
     using contract = await launchOptionsContract();
 
-    const someInput = [U8_MAX, U16_MAX, 123] as TripleTupleOptions;
+    const someInput: TripleTupleOptions = [U8_MAX, U16_MAX, 123];
     const call1 = await contract.functions.echo_array_option(someInput).call();
     const { value: someValue } = await call1.waitForResult();
     expect(someValue).toStrictEqual(someInput);
 
-    const noneInput = [undefined, undefined, undefined] as TripleTupleOptions;
+    const noneInput: TripleTupleOptions = [undefined, undefined, undefined];
     const call2 = await contract.functions.echo_array_option(noneInput).call();
     const { value: noneValue } = await call2.waitForResult();
     expect(noneValue).toStrictEqual(noneInput);
 
-    const mixedInput = [U8_MAX, undefined, 123] as TripleTupleOptions;
+    const mixedInput: TripleTupleOptions = [U8_MAX, undefined, 123];
     const call3 = await contract.functions.echo_array_option(mixedInput).call();
     const { value: mixedValue } = await call3.waitForResult();
     expect(mixedValue).toStrictEqual(mixedInput);
@@ -175,8 +173,7 @@ describe('Options Tests', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: OptionsAbi__factory,
-          bytecode: OptionsAbiHex,
+          factory: OptionsFactory,
         },
       ],
     });

@@ -3,7 +3,6 @@ import { Contract, bn, buildFunctionResult, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { CounterAbi__factory } from '../../../test/typegen';
-import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
 
 /**
  * @group node
@@ -14,8 +13,7 @@ describe('Custom Transactions from Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CounterAbi__factory,
-          bytecode: CounterAbiHex,
+          factory: CounterAbi__factory,
         },
       ],
     });

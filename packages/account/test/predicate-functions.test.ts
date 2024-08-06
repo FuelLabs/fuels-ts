@@ -32,7 +32,7 @@ describe('Predicate', () => {
         bytecode: predicateBytecode,
         abi: predicateAbi,
         provider,
-        inputData: [b256],
+        data: [b256],
       });
 
       expect(predicate.predicateData).not.toBeUndefined();
@@ -58,7 +58,7 @@ describe('Predicate', () => {
           bytecode: predicateBytecode,
           abi: abiWithNoMain,
           provider,
-          inputData: ['NADA'],
+          data: ['NADA'],
           configurableConstants: { value: 1 },
         });
       }).toThrow('Cannot use ABI without "main" function');

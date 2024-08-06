@@ -45,7 +45,7 @@ describe('configurable-constants', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       configurableConstants,
     });
 
@@ -78,7 +78,7 @@ describe('configurable-constants', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       configurableConstants,
     });
 
@@ -114,7 +114,7 @@ describe('configurable-constants', () => {
     );
 
     await expect(
-      factory.deployContract({
+      factory.deploy({
         configurableConstants,
       })
     ).rejects.toThrowError();

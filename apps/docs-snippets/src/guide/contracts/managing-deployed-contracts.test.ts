@@ -2,7 +2,6 @@ import { Contract } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { EchoValuesAbi__factory } from '../../../test/typegen';
-import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
 
 /**
  * @group node
@@ -13,8 +12,7 @@ describe('Managing deployed contracts', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesAbi__factory,
         },
       ],
     });
@@ -37,8 +35,7 @@ describe('Managing deployed contracts', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesAbi__factory,
         },
       ],
     });

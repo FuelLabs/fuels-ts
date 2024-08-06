@@ -25,7 +25,7 @@ describe('Predicate With Configurables', () => {
       bytecode: WhitelistedAddressPredicateAbi__factory.bin,
       provider: wallet.provider,
       abi: WhitelistedAddressPredicateAbi__factory.abi,
-      inputData: [configurable.WHITELISTED],
+      data: [configurable.WHITELISTED],
       configurableConstants: configurable,
     });
 
@@ -72,7 +72,7 @@ describe('Predicate With Configurables', () => {
       bytecode: WhitelistedAddressPredicateAbi__factory.bin,
       provider,
       abi: WhitelistedAddressPredicateAbi__factory.abi,
-      inputData: ['0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132'],
+      data: ['0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132'],
     });
 
     // transferring funds to the predicate

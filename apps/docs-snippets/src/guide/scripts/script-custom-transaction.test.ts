@@ -5,7 +5,6 @@ import {
   EchoValuesAbi__factory,
   ScriptTransferToContractAbi__factory,
 } from '../../../test/typegen';
-import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
 import { defaultTxParams } from '../../utils';
 
 /**
@@ -15,7 +14,7 @@ import { defaultTxParams } from '../../utils';
 describe('Script Custom Transaction', () => {
   it('transfer multiple assets to a contract', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ deployer: EchoValuesAbi__factory, bytecode: EchoValuesAbiHex }],
+      contractsConfigs: [{ factory: EchoValuesAbi__factory }],
     });
     const {
       contracts: [contract],

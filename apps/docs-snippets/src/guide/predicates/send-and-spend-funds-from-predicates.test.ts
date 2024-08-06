@@ -22,7 +22,7 @@ describe('Send and Spend Funds from Predicates', () => {
       bytecode: SimplePredicateAbi__factory.bin,
       provider,
       abi: SimplePredicateAbi__factory.abi,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
     // #endregion send-and-spend-funds-from-predicates-2
 
@@ -77,7 +77,7 @@ describe('Send and Spend Funds from Predicates', () => {
       bytecode: SimplePredicateAbi__factory.bin,
       provider,
       abi: SimplePredicateAbi__factory.abi,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
 
     const amountToPredicate = 100;
@@ -126,7 +126,7 @@ describe('Send and Spend Funds from Predicates', () => {
       bytecode: SimplePredicateAbi__factory.bin,
       abi: SimplePredicateAbi__factory.abi,
       provider: predicateOwner.provider,
-      inputData: [getRandomB256()],
+      data: [getRandomB256()],
     });
 
     const amountToPredicate = 10_000_000;
@@ -170,7 +170,7 @@ describe('Send and Spend Funds from Predicates', () => {
       bytecode: SimplePredicateAbi__factory.bin,
       abi: SimplePredicateAbi__factory.abi,
       provider,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
 
     const amountToPredicate = 10_000_000;
@@ -230,7 +230,7 @@ describe('Send and Spend Funds from Predicates', () => {
       bytecode: SimplePredicateAbi__factory.bin,
       abi: SimplePredicateAbi__factory.abi,
       provider,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
 
     const amountToPredicate = 300_000;

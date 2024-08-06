@@ -13,7 +13,7 @@ export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
 }
 
 /** @hidden */
-export function getInputsCoin(inputs: Input[]) {
+export function getInputsCoin(inputs: Input[]): InputCoin[] {
   return getInputsByType<InputCoin>(inputs, InputType.Coin);
 }
 
@@ -33,16 +33,32 @@ export function getInputsContract(inputs: Input[]) {
 }
 
 /** @hidden */
-export function getInputFromAssetId(inputs: Input[], assetId: string) {
+function findCoinInput(inputs: Input[], assetId: string): InputCoin | undefined {
   const coinInputs = getInputsCoin(inputs);
-  const messageInputs = getInputsMessage(inputs);
-  const coinInput = coinInputs.find((i) => i.assetId === assetId);
-  // TODO: should include assetId in InputMessage as well. for now we're mocking ETH
-  const messageInput = messageInputs.find(
-    (_) => assetId === '0x0000000000000000000000000000000000000000000000000000000000000000'
-  );
+  return coinInputs.find((i) => i.assetId === assetId);
+}
 
-  return coinInput || messageInput;
+/** @hidden */
+function findMessageInput(inputs: Input[]): InputMessage | undefined {
+  return getInputsMessage(inputs)?.[0];
+}
+/** @hidden */
+export function getInputFromAssetId(
+  inputs: Input[],
+  assetId: string,
+  isBaseAsset = false
+): InputCoin | InputMessage | undefined {
+  const coinInput = findCoinInput(inputs, assetId);
+  if (coinInput) {
+    return coinInput;
+  }
+
+  if (isBaseAsset) {
+    return findMessageInput(inputs);
+  }
+
+  // #TODO: we should throw an error here if we are unable to return a valid input
+  return undefined;
 }
 
 /** @hidden */

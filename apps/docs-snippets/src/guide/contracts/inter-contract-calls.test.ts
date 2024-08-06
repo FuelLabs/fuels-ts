@@ -2,8 +2,6 @@ import { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { SimpleTokenAbi__factory, TokenDepositorAbi__factory } from '../../../test/typegen';
-import SimpleTokenAbiHex from '../../../test/typegen/contracts/SimpleTokenAbi.hex';
-import TokenDepositorAbiHex from '../../../test/typegen/contracts/TokenDepositorAbi.hex';
 
 /**
  * @group node
@@ -14,12 +12,10 @@ describe('Inter-Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: SimpleTokenAbi__factory,
-          bytecode: SimpleTokenAbiHex,
+          factory: SimpleTokenAbi__factory,
         },
         {
-          deployer: TokenDepositorAbi__factory,
-          bytecode: TokenDepositorAbiHex,
+          factory: TokenDepositorAbi__factory,
         },
       ],
     });

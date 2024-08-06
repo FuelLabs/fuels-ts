@@ -19,7 +19,7 @@ describe('Deposit and Withdraw with Liquidity Pool', () => {
 
     const factory = new ContractFactory(LiquidityPoolAbiHex, LiquidityPoolAbi__factory.abi, wallet);
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       configurableConstants: {
         TOKEN: { bits: provider.getBaseAssetId() },
       },

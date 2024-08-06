@@ -2,13 +2,11 @@ import { ContractFactory, ReceiptType, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  ReentrantBarAbi__factory,
-  ReentrantFooAbi__factory,
-  StorageTestContractAbi__factory,
+  ReentrantBarFactory,
+  ReentrantFooFactory,
+  StorageTestContract,
+  StorageTestContractFactory,
 } from '../test/typegen/contracts';
-import ReentrantBarAbiHex from '../test/typegen/contracts/ReentrantBarAbi.hex';
-import ReentrantFooAbiHex from '../test/typegen/contracts/ReentrantFooAbi.hex';
-import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
 
 /**
  * @group node
@@ -17,16 +15,7 @@ import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestCont
 describe('Reentrant Contract Calls', () => {
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: ReentrantFooAbi__factory,
-          bytecode: ReentrantFooAbiHex,
-        },
-        {
-          deployer: ReentrantBarAbi__factory,
-          bytecode: ReentrantBarAbiHex,
-        },
-      ],
+      contractsConfigs: [{ factory: ReentrantFooFactory }, { factory: ReentrantBarFactory }],
     });
 
     const {
@@ -70,16 +59,7 @@ describe('Reentrant Contract Calls', () => {
 
   it('should ensure the SDK returns the proper value for a reentrant call on multi-call', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: ReentrantFooAbi__factory,
-          bytecode: ReentrantFooAbiHex,
-        },
-        {
-          deployer: ReentrantBarAbi__factory,
-          bytecode: ReentrantBarAbiHex,
-        },
-      ],
+      contractsConfigs: [{ factory: ReentrantFooFactory }, { factory: ReentrantBarFactory }],
     });
 
     const {
@@ -88,10 +68,10 @@ describe('Reentrant Contract Calls', () => {
     } = launched;
 
     const deploy = await new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
-    ).deployContract({ storageSlots: StorageTestContractAbi__factory.storageSlots });
+    ).deploy({ storageSlots: StorageTestContract.storageSlots });
 
     const { contract: storageContract } = await deploy.waitForResult();
 
