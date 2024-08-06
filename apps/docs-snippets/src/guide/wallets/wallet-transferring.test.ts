@@ -2,8 +2,7 @@ import type { TransferParams } from 'fuels';
 import { Wallet } from 'fuels';
 import { ASSET_A, launchTestNode } from 'fuels/test-utils';
 
-import { CounterAbi__factory } from '../../../test/typegen';
-import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
+import { CounterFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -113,8 +112,7 @@ describe('Wallet transferring', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CounterAbi__factory,
-          bytecode: CounterAbiHex,
+          factory: CounterFactory,
         },
       ],
     });
@@ -146,8 +144,7 @@ describe('Wallet transferring', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CounterAbi__factory,
-          bytecode: CounterAbiHex,
+          factory: CounterFactory,
         },
       ],
     });

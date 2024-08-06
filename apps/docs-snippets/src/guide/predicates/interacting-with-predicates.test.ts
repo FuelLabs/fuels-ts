@@ -2,7 +2,7 @@ import type { JsonAbi, Provider, WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, bn, Predicate, BN, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { SimplePredicateAbi__factory } from '../../../test/typegen';
+import { SimplePredicate } from '../../../test/typegen';
 
 /**
  * @group node
@@ -47,8 +47,8 @@ describe('Interacting with Predicates', () => {
       provider,
       fundedWallet,
       [inputAddress],
-      SimplePredicateAbi__factory.abi,
-      SimplePredicateAbi__factory.bin
+      SimplePredicate.abi,
+      SimplePredicate.bytecode
     );
 
     // #region interacting-with-predicates-1
@@ -82,8 +82,8 @@ describe('Interacting with Predicates', () => {
       provider,
       fundedWallet,
       [inputAddress],
-      SimplePredicateAbi__factory.abi,
-      SimplePredicateAbi__factory.bin
+      SimplePredicate.abi,
+      SimplePredicate.bytecode
     );
 
     const receiver = Wallet.generate({ provider });
@@ -121,8 +121,8 @@ describe('Interacting with Predicates', () => {
       provider,
       fundedWallet,
       [inputAddress],
-      SimplePredicateAbi__factory.abi,
-      SimplePredicateAbi__factory.bin
+      SimplePredicate.abi,
+      SimplePredicate.bytecode
     );
 
     const receiver = Wallet.generate({ provider });

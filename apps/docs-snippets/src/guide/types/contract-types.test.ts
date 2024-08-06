@@ -1,8 +1,7 @@
 import { Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { InputOutputTypesAbi__factory } from '../../../test/typegen';
-import InputOutputTypesAbiHex from '../../../test/typegen/contracts/InputOutputTypesAbi.hex';
+import { InputOutputTypesFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -14,8 +13,7 @@ describe('Contract Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: InputOutputTypesAbi__factory,
-          bytecode: InputOutputTypesAbiHex,
+          factory: InputOutputTypesFactory,
         },
       ],
     });
@@ -43,8 +41,7 @@ describe('Contract Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: InputOutputTypesAbi__factory,
-          bytecode: InputOutputTypesAbiHex,
+          factory: InputOutputTypesFactory,
         },
       ],
     });
@@ -71,8 +68,7 @@ describe('Contract Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: InputOutputTypesAbi__factory,
-          bytecode: InputOutputTypesAbiHex,
+          factory: InputOutputTypesFactory,
         },
       ],
     });
@@ -116,8 +112,7 @@ describe('Contract Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: InputOutputTypesAbi__factory,
-          bytecode: InputOutputTypesAbiHex,
+          factory: InputOutputTypesFactory,
         },
       ],
     });

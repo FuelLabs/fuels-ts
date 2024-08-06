@@ -1,8 +1,8 @@
-import type { TransactionResponse, Policy } from 'fuels';
+import type { TransactionResponse, Policy, BNInput } from 'fuels';
 import { ScriptTransactionRequest, bn, PolicyType } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { SumScriptAbi__factory } from '../../../test/typegen';
+import { SumScript } from '../../../test/typegen';
 
 /**
  * @group node
@@ -25,7 +25,7 @@ describe('Transaction Policies', () => {
 
     expect(policyTypes).toBe(15);
     expect(policies?.[0].type).toBe(PolicyType.Tip);
-    expect(bn(policies?.[0].data).eq(transactionRequest.tip)).toBeTruthy();
+    expect(bn(policies?.[0].data).eq(transactionRequest.tip as BNInput)).toBeTruthy();
     expect(policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(policies?.[1].data).eq(bn(transactionRequest.witnessLimit))).toBeTruthy();
     expect(policies?.[2].type).toBe(PolicyType.Maturity);
@@ -55,7 +55,7 @@ describe('Transaction Policies', () => {
     // Instantiate the transaction request with transaction parameters that would
     // set the respective policies.
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
       gasLimit: bn(2000),
       maturity: 2,
       tip: bn(3),
@@ -64,7 +64,7 @@ describe('Transaction Policies', () => {
     });
 
     // Set the script main function arguments
-    transactionRequest.setData(SumScriptAbi__factory.abi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
 
     // Fund the transaction
     transactionRequest.addResources(resources);
@@ -81,7 +81,7 @@ describe('Transaction Policies', () => {
     }
 
     expect(policies?.[0].type).toBe(PolicyType.Tip);
-    expect(bn(policies?.[0].data).eq(transactionRequest.tip)).toBeTruthy();
+    expect(bn(policies?.[0].data).eq(transactionRequest.tip as BNInput)).toBeTruthy();
     expect(policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(policies?.[1].data).eq(bn(transactionRequest.witnessLimit))).toBeTruthy();
     expect(policies?.[2].type).toBe(PolicyType.Maturity);

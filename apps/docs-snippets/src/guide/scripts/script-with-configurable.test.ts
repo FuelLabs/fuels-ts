@@ -1,7 +1,7 @@
 import { Script, BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { SumScriptAbi__factory } from '../../../test/typegen';
+import { SumScript } from '../../../test/typegen';
 
 /**
  * @group node
@@ -15,7 +15,7 @@ describe('Script With Configurable', () => {
     } = launched;
 
     // #region script-with-configurable-contants-2
-    const script = new Script(SumScriptAbi__factory.bin, SumScriptAbi__factory.abi, wallet);
+    const script = new Script(SumScript.bytecode, SumScript.abi, wallet);
 
     const configurableConstants = {
       AMOUNT: 81,
@@ -44,7 +44,7 @@ describe('Script With Configurable', () => {
     const expected = 20;
 
     // #region preparing-scripts
-    const script = new Script(SumScriptAbi__factory.bin, SumScriptAbi__factory.abi, wallet);
+    const script = new Script(SumScript.bytecode, SumScript.abi, wallet);
 
     const tx = script.functions.main(argument);
 

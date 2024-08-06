@@ -3,8 +3,7 @@ import { ScriptTransactionRequest, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 import { expectTypeOf } from 'vitest';
 
-import { CounterAbi__factory, SumScriptAbi__factory } from '../../../test/typegen';
-import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
+import { CounterFactory, SumScript } from '../../../test/typegen';
 
 /**
  * @group node
@@ -71,7 +70,7 @@ describe('Transaction Parameters', () => {
     // Instantiate the transaction request using a ScriptTransactionRequest
     // We can set txParams in the request constructor
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
       gasLimit: 100,
     });
     // #endregion transaction-parameters-7
@@ -83,8 +82,7 @@ describe('Transaction Parameters', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CounterAbi__factory,
-          bytecode: CounterAbiHex,
+          factory: CounterFactory,
         },
       ],
     });

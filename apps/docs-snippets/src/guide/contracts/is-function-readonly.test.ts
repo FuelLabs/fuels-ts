@@ -1,7 +1,6 @@
 import { launchTestNode } from 'fuels/test-utils';
 
-import { CounterAbi__factory } from '../../../test/typegen';
-import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
+import { CounterFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -11,8 +10,7 @@ test('isReadOnly returns true for read-only functions', async () => {
   using launched = await launchTestNode({
     contractsConfigs: [
       {
-        deployer: CounterAbi__factory,
-        bytecode: CounterAbiHex,
+        factory: CounterFactory,
       },
     ],
   });

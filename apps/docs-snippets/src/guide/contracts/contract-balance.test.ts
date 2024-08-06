@@ -2,8 +2,7 @@ import type { AssetId } from 'fuels';
 import { Wallet, BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { TransferToAddressAbi__factory } from '../../../test/typegen';
-import TransferToAddressHex from '../../../test/typegen/contracts/TransferToAddressAbi.hex';
+import { TransferToAddressFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -14,8 +13,7 @@ describe('Contract Balance', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TransferToAddressAbi__factory,
-          bytecode: TransferToAddressHex,
+          factory: TransferToAddressFactory,
         },
       ],
     });

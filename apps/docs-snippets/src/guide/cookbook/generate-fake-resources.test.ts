@@ -2,7 +2,7 @@ import type { TransactionResultReturnDataReceipt } from 'fuels';
 import { ReceiptType, ScriptTransactionRequest, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ReturnScriptAbi__factory } from '../../../test/typegen';
+import { ReturnScript } from '../../../test/typegen';
 
 /**
  * @group node
@@ -20,7 +20,7 @@ describe('Generate fake resources', () => {
     const transactionRequest = new ScriptTransactionRequest({
       gasLimit: bn(62_000),
       maxFee: bn(60_000),
-      script: ReturnScriptAbi__factory.bin,
+      script: ReturnScript.bytecode,
     });
 
     const resources = wallet.generateFakeResources([

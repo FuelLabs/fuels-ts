@@ -1,7 +1,7 @@
 import { WalletUnlocked, Predicate, getRandomB256 } from 'fuels';
 import { safeExec, launchTestNode } from 'fuels/test-utils';
 
-import { SimplePredicateAbi__factory } from '../../../test/typegen';
+import { SimplePredicate } from '../../../test/typegen';
 
 /**
  * @group node
@@ -19,9 +19,9 @@ describe('Send and Spend Funds from Predicates', () => {
 
     // #region send-and-spend-funds-from-predicates-2
     const predicate = new Predicate({
-      bytecode: SimplePredicateAbi__factory.bin,
+      bytecode: SimplePredicate.bytecode,
       provider,
-      abi: SimplePredicateAbi__factory.abi,
+      abi: SimplePredicate.abi,
       data: [inputAddress],
     });
     // #endregion send-and-spend-funds-from-predicates-2
@@ -74,9 +74,9 @@ describe('Send and Spend Funds from Predicates', () => {
     } = launched;
 
     const predicate = new Predicate({
-      bytecode: SimplePredicateAbi__factory.bin,
+      bytecode: SimplePredicate.bytecode,
       provider,
-      abi: SimplePredicateAbi__factory.abi,
+      abi: SimplePredicate.abi,
       data: [inputAddress],
     });
 
@@ -123,8 +123,8 @@ describe('Send and Spend Funds from Predicates', () => {
       provider,
     });
     const predicate = new Predicate({
-      bytecode: SimplePredicateAbi__factory.bin,
-      abi: SimplePredicateAbi__factory.abi,
+      bytecode: SimplePredicate.bytecode,
+      abi: SimplePredicate.abi,
       provider: predicateOwner.provider,
       data: [getRandomB256()],
     });
@@ -167,8 +167,8 @@ describe('Send and Spend Funds from Predicates', () => {
     } = launched;
 
     const predicate = new Predicate({
-      bytecode: SimplePredicateAbi__factory.bin,
-      abi: SimplePredicateAbi__factory.abi,
+      bytecode: SimplePredicate.bytecode,
+      abi: SimplePredicate.abi,
       provider,
       data: [inputAddress],
     });
@@ -227,8 +227,8 @@ describe('Send and Spend Funds from Predicates', () => {
     } = launched;
 
     const predicate = new Predicate({
-      bytecode: SimplePredicateAbi__factory.bin,
-      abi: SimplePredicateAbi__factory.abi,
+      bytecode: SimplePredicate.bytecode,
+      abi: SimplePredicate.abi,
       provider,
       data: [inputAddress],
     });

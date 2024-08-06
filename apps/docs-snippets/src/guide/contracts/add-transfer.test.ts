@@ -2,8 +2,7 @@ import type { TransferParams } from 'fuels';
 import { Wallet } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import { EchoValuesAbi__factory } from '../../../test/typegen';
-import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
+import { EchoValuesFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -14,8 +13,7 @@ describe('Add Transfer', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesFactory,
         },
       ],
     });
@@ -47,8 +45,7 @@ describe('Add Transfer', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesFactory,
         },
       ],
     });

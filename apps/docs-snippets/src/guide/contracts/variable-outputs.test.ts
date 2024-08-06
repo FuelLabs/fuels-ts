@@ -1,8 +1,7 @@
 import { getMintedAssetId, getRandomB256, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { TokenAbi__factory } from '../../../test/typegen';
-import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
+import { TokenFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -13,8 +12,7 @@ describe('Variable Outputs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenAbi__factory,
-          bytecode: TokenAbiHex,
+          factory: TokenFactory,
         },
       ],
     });

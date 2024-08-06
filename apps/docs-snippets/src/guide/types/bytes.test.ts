@@ -1,8 +1,7 @@
 import type { Bytes } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoBytesAbi__factory } from '../../../test/typegen';
-import EchoBytesAbiHex from '../../../test/typegen/contracts/EchoBytesAbi.hex';
+import { EchoBytesFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -13,8 +12,7 @@ describe('Bytes', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoBytesAbi__factory,
-          bytecode: EchoBytesAbiHex,
+          factory: EchoBytesFactory,
         },
       ],
     });
@@ -38,8 +36,7 @@ describe('Bytes', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoBytesAbi__factory,
-          bytecode: EchoBytesAbiHex,
+          factory: EchoBytesFactory,
         },
       ],
     });

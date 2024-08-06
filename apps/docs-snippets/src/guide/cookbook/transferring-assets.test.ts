@@ -1,7 +1,7 @@
 import { Address, BN, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { CounterAbi__factory } from '../../../test/typegen';
+import { CounterFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -115,7 +115,7 @@ describe('Transferring Assets', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: CounterAbi__factory,
+          factory: CounterFactory,
         },
       ],
     });

@@ -2,8 +2,7 @@ import { toBigInt } from 'ethers';
 import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoValuesAbi__factory } from '../../../test/typegen';
-import EchoValuesAbiHex from '../../../test/typegen/contracts/EchoValuesAbi.hex';
+import { EchoValuesFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -38,8 +37,7 @@ describe('Numbers Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesFactory,
         },
       ],
     });
@@ -62,8 +60,7 @@ describe('Numbers Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoValuesAbi__factory,
-          bytecode: EchoValuesAbiHex,
+          factory: EchoValuesFactory,
         },
       ],
     });

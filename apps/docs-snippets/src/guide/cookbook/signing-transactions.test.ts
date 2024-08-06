@@ -2,8 +2,8 @@ import type { BN } from 'fuels';
 import { Predicate, Script, ScriptTransactionRequest, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptSigningAbi__factory } from '../../../test/typegen';
-import { PredicateSigningAbi__factory } from '../../../test/typegen/predicates';
+import { ScriptSigning } from '../../../test/typegen';
+import { PredicateSigning } from '../../../test/typegen/predicates';
 
 /**
  * @group node
@@ -28,7 +28,7 @@ describe('Signing transactions', () => {
     // #region multiple-signers-2
     // #import { Script };
 
-    const script = new Script(ScriptSigningAbi__factory.bin, ScriptSigningAbi__factory.abi, sender);
+    const script = new Script(ScriptSigning.bytecode, ScriptSigning.abi, sender);
     const { waitForResult } = await script.functions
       .main(signer.address.toB256())
       .addTransfer({
@@ -67,8 +67,8 @@ describe('Signing transactions', () => {
 
     // Create and fund the predicate
     const predicate = new Predicate<[string]>({
-      bytecode: PredicateSigningAbi__factory.bin,
-      abi: PredicateSigningAbi__factory.abi,
+      bytecode: PredicateSigning.bytecode,
+      abi: PredicateSigning.abi,
       provider,
       data: [signer.address.toB256()],
     });

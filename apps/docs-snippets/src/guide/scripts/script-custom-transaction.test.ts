@@ -1,10 +1,7 @@
 import { BN, ScriptTransactionRequest, coinQuantityfy } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
-import {
-  EchoValuesAbi__factory,
-  ScriptTransferToContractAbi__factory,
-} from '../../../test/typegen';
+import { EchoValuesFactory, ScriptTransferToContract } from '../../../test/typegen';
 import { defaultTxParams } from '../../utils';
 
 /**
@@ -14,7 +11,7 @@ import { defaultTxParams } from '../../utils';
 describe('Script Custom Transaction', () => {
   it('transfer multiple assets to a contract', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ factory: EchoValuesAbi__factory }],
+      contractsConfigs: [{ factory: EchoValuesFactory }],
     });
     const {
       contracts: [contract],
@@ -34,7 +31,7 @@ describe('Script Custom Transaction', () => {
     const request = new ScriptTransactionRequest({
       ...defaultTxParams,
       gasLimit: 3_000_000,
-      script: ScriptTransferToContractAbi__factory.bin,
+      script: ScriptTransferToContract.bytecode,
     });
 
     // 2. Instantiate the script main arguments
@@ -48,7 +45,7 @@ describe('Script Custom Transaction', () => {
 
     // 3. Populate the script data and add the contract input and output
     request
-      .setData(ScriptTransferToContractAbi__factory.abi, scriptArguments)
+      .setData(ScriptTransferToContract.abi, scriptArguments)
       .addContractInputAndOutput(contract.id);
 
     // 4. Get the transaction resources

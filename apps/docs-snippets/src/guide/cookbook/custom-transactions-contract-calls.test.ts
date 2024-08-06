@@ -2,7 +2,7 @@ import type { BN } from 'fuels';
 import { Contract, bn, buildFunctionResult, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { CounterAbi__factory } from '../../../test/typegen';
+import { CounterFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -13,7 +13,7 @@ describe('Custom Transactions from Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: CounterAbi__factory,
+          factory: CounterFactory,
         },
       ],
     });
@@ -33,7 +33,7 @@ describe('Custom Transactions from Contract Calls', () => {
 
     const amountToRecipient = bn(10_000); // 0x2710
     // Connect to the contract
-    const contractInstance = new Contract(contract.id, CounterAbi__factory.abi, senderWallet);
+    const contractInstance = new Contract(contract.id, contract.interface, senderWallet);
     // Create an invocation scope for the contract function you'd like to call in the transaction
     const scope = contractInstance.functions.increment_counter(amountToRecipient).addTransfer({
       amount: amountToRecipient,

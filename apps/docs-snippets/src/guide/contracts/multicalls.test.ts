@@ -1,11 +1,7 @@
 import { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  CounterAbi__factory,
-  EchoValuesAbi__factory,
-  ReturnContextAbi__factory,
-} from '../../../test/typegen';
+import { CounterFactory, EchoValuesFactory, ReturnContextFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -16,7 +12,7 @@ describe('Multicalls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: CounterAbi__factory,
+          factory: CounterFactory,
         },
       ],
     });
@@ -49,10 +45,10 @@ describe('Multicalls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: EchoValuesAbi__factory,
+          factory: EchoValuesFactory,
         },
         {
-          factory: CounterAbi__factory,
+          factory: CounterFactory,
         },
       ],
     });
@@ -84,10 +80,10 @@ describe('Multicalls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: ReturnContextAbi__factory,
+          factory: ReturnContextFactory,
         },
         {
-          factory: EchoValuesAbi__factory,
+          factory: EchoValuesFactory,
         },
       ],
     });

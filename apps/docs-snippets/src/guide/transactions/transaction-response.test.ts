@@ -1,8 +1,7 @@
 import { ScriptTransactionRequest, TransactionResponse } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { CounterAbi__factory, SumScriptAbi__factory } from '../../../test/typegen';
-import CounterAbiHex from '../../../test/typegen/contracts/CounterAbi.hex';
+import { CounterFactory, SumScript } from '../../../test/typegen';
 
 /**
  * @group node
@@ -13,8 +12,7 @@ describe('Transaction Response', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CounterAbi__factory,
-          bytecode: CounterAbiHex,
+          factory: CounterFactory,
         },
       ],
     });
@@ -51,9 +49,9 @@ describe('Transaction Response', () => {
     // Instantiate the transaction request using a ScriptTransactionRequest and set
     // the script main function arguments
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
-    transactionRequest.setData(SumScriptAbi__factory.abi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
 
     // Fund the transaction
     const txCost = await wallet.getTransactionCost(transactionRequest);
@@ -83,9 +81,9 @@ describe('Transaction Response', () => {
     const scriptMainFunctionArguments = [1];
 
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
-    transactionRequest.setData(SumScriptAbi__factory.abi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
 
     const txCost = await wallet.getTransactionCost(transactionRequest);
 

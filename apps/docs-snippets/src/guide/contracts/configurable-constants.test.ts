@@ -1,8 +1,7 @@
 import { ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoConfigurablesAbi__factory } from '../../../test/typegen';
-import EchoConfigurablesAbiHex from '../../../test/typegen/contracts/EchoConfigurablesAbi.hex';
+import { EchoConfigurablesFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -39,13 +38,9 @@ describe('configurable-constants', () => {
       },
     };
 
-    const factory = new ContractFactory(
-      EchoConfigurablesAbiHex,
-      EchoConfigurablesAbi__factory.abi,
-      wallet
-    );
+    const echoFactory = new EchoConfigurablesFactory(wallet);
 
-    const { waitForResult } = await factory.deploy({
+    const { waitForResult } = await echoFactory.deploy({
       configurableConstants,
     });
 
@@ -72,13 +67,9 @@ describe('configurable-constants', () => {
       age: 10,
     };
 
-    const factory = new ContractFactory(
-      EchoConfigurablesAbiHex,
-      EchoConfigurablesAbi__factory.abi,
-      wallet
-    );
+    const echoFactory = new EchoConfigurablesFactory(wallet);
 
-    const { waitForResult } = await factory.deploy({
+    const { waitForResult } = await echoFactory.deploy({
       configurableConstants,
     });
 
@@ -107,14 +98,10 @@ describe('configurable-constants', () => {
       },
     };
 
-    const factory = new ContractFactory(
-      EchoConfigurablesAbiHex,
-      EchoConfigurablesAbi__factory.abi,
-      wallet
-    );
+    const echoFactory = new EchoConfigurablesFactory(wallet);
 
     await expect(
-      factory.deploy({
+      echoFactory.deploy({
         configurableConstants,
       })
     ).rejects.toThrowError();

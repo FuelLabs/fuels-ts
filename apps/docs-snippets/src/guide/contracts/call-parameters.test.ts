@@ -1,8 +1,7 @@
 import { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ReturnContextAbi__factory } from '../../../test/typegen';
-import ReturnContextAbiHex from '../../../test/typegen/contracts/ReturnContextAbi.hex';
+import { ReturnContextFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -13,8 +12,7 @@ describe('Call Parameters', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReturnContextAbi__factory,
-          bytecode: ReturnContextAbiHex,
+          factory: ReturnContextFactory,
         },
       ],
     });
@@ -44,8 +42,7 @@ describe('Call Parameters', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReturnContextAbi__factory,
-          bytecode: ReturnContextAbiHex,
+          factory: ReturnContextFactory,
         },
       ],
     });
@@ -73,8 +70,7 @@ describe('Call Parameters', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: ReturnContextAbi__factory,
-          bytecode: ReturnContextAbiHex,
+          factory: ReturnContextFactory,
         },
       ],
     });

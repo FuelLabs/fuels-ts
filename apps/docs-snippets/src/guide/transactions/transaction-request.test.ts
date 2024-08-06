@@ -11,7 +11,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { SimplePredicateAbi__factory, SumScriptAbi__factory } from '../../../test/typegen';
+import { SimplePredicate, SumScript } from '../../../test/typegen';
 
 /**
  * @group node
@@ -28,14 +28,14 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request using a ScriptTransactionRequest
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
 
     // Set the script main function arguments (can also be passed in the class constructor)
-    transactionRequest.setData(SumScriptAbi__factory.abi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
     // #endregion transaction-request-1
 
-    expect(transactionRequest.script).toEqual(arrayify(SumScriptAbi__factory.bin));
+    expect(transactionRequest.script).toEqual(arrayify(SumScript.bytecode));
   });
 
   it('creates a transaction request fromm a CreateTransactionRequest', () => {
@@ -82,7 +82,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
 
     // Adding resources (coins or messages)
@@ -97,7 +97,7 @@ describe('Transaction Request', () => {
     transactionRequest.addMessageInput(message);
     // #endregion transaction-request-3
 
-    expect(transactionRequest.script).toEqual(arrayify(SumScriptAbi__factory.bin));
+    expect(transactionRequest.script).toEqual(arrayify(SumScript.bytecode));
     expect(transactionRequest.inputs.length).toEqual(4);
     expect(transactionRequest.outputs.length).toEqual(2);
     expect(transactionRequest.witnesses.length).toEqual(1);
@@ -111,7 +111,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
 
     // Add the contract input and output using the contract ID
@@ -136,14 +136,14 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
 
     // Instantiate the predicate and pass valid input data to validate
     // the predicate and unlock the funds
     const predicate = new Predicate({
-      bytecode: SimplePredicateAbi__factory.bin,
-      abi: SimplePredicateAbi__factory.abi,
+      bytecode: SimplePredicate.bytecode,
+      abi: SimplePredicate.abi,
       data: dataToValidatePredicate,
       provider,
     });
@@ -175,7 +175,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
 
     // Add a witness directly
@@ -198,7 +198,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: SumScriptAbi__factory.bin,
+      script: SumScript.bytecode,
     });
 
     // Get the chain ID

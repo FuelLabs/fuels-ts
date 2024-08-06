@@ -1,7 +1,7 @@
 import { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { SimpleTokenAbi__factory, TokenDepositorAbi__factory } from '../../../test/typegen';
+import { SimpleTokenFactory, TokenDepositorFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -12,10 +12,10 @@ describe('Inter-Contract Calls', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: SimpleTokenAbi__factory,
+          factory: SimpleTokenFactory,
         },
         {
-          factory: TokenDepositorAbi__factory,
+          factory: TokenDepositorFactory,
         },
       ],
     });

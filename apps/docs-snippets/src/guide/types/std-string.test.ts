@@ -1,8 +1,7 @@
 import type { StdString } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoStdStringAbi__factory } from '../../../test/typegen';
-import EchoStdStringAbiHex from '../../../test/typegen/contracts/EchoStdStringAbi.hex';
+import { EchoStdStringFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -13,8 +12,7 @@ describe('StdString', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoStdStringAbi__factory,
-          bytecode: EchoStdStringAbiHex,
+          factory: EchoStdStringFactory,
         },
       ],
     });
@@ -38,8 +36,7 @@ describe('StdString', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoStdStringAbi__factory,
-          bytecode: EchoStdStringAbiHex,
+          factory: EchoStdStringFactory,
         },
       ],
     });

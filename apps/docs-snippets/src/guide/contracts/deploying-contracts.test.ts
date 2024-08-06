@@ -8,6 +8,8 @@ import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
 /**
  * @group node
  */
+
+// #TODO: This will need to be updated post-merge of https://github.com/FuelLabs/fuels-ts/pull/2827
 describe('Deploying contracts', () => {
   it('should successfully deploy and execute contract function', async () => {
     const projectsPath = join(__dirname, '../../../test/fixtures/forc-projects');

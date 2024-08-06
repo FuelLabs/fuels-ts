@@ -1,8 +1,7 @@
-import { ContractFactory, Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
+import { Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { LiquidityPoolAbi__factory } from '../../../test/typegen';
-import LiquidityPoolAbiHex from '../../../test/typegen/contracts/LiquidityPoolAbi.hex';
+import { LiquidityPoolFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -17,9 +16,9 @@ describe('Deposit and Withdraw with Liquidity Pool', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(LiquidityPoolAbiHex, LiquidityPoolAbi__factory.abi, wallet);
+    const liquidityPoolContractFactory = new LiquidityPoolFactory(wallet);
 
-    const { waitForResult } = await factory.deploy({
+    const { waitForResult } = await liquidityPoolContractFactory.deploy({
       configurableConstants: {
         TOKEN: { bits: provider.getBaseAssetId() },
       },

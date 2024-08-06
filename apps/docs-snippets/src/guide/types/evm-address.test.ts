@@ -2,8 +2,7 @@ import type { EvmAddress, B256AddressEvm } from 'fuels';
 import { Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoEvmAddressAbi__factory } from '../../../test/typegen';
-import EchoEvmAddressAbiHex from '../../../test/typegen/contracts/EchoEvmAddressAbi.hex';
+import { EchoEvmAddressFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -38,8 +37,7 @@ describe('EvMAddress', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEvmAddressAbi__factory,
-          bytecode: EchoEvmAddressAbiHex,
+          factory: EchoEvmAddressFactory,
         },
       ],
     });
@@ -67,8 +65,7 @@ describe('EvMAddress', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEvmAddressAbi__factory,
-          bytecode: EchoEvmAddressAbiHex,
+          factory: EchoEvmAddressFactory,
         },
       ],
     });
@@ -94,8 +91,7 @@ describe('EvMAddress', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEvmAddressAbi__factory,
-          bytecode: EchoEvmAddressAbiHex,
+          factory: EchoEvmAddressFactory,
         },
       ],
     });

@@ -2,8 +2,7 @@ import { Address } from 'fuels';
 import type { AssetId, B256Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoAssetIdAbi__factory } from '../../../test/typegen';
-import EchoAssetIdAbiHex from '../../../test/typegen/contracts/EchoAssetIdAbi.hex';
+import { EchoAssetIdFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -28,8 +27,7 @@ describe('AssetId', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoAssetIdAbi__factory,
-          bytecode: EchoAssetIdAbiHex,
+          factory: EchoAssetIdFactory,
         },
       ],
     });
@@ -57,8 +55,7 @@ describe('AssetId', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoAssetIdAbi__factory,
-          bytecode: EchoAssetIdAbiHex,
+          factory: EchoAssetIdFactory,
         },
       ],
     });
@@ -84,8 +81,7 @@ describe('AssetId', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoAssetIdAbi__factory,
-          bytecode: EchoAssetIdAbiHex,
+          factory: EchoAssetIdFactory,
         },
       ],
     });

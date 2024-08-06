@@ -1,7 +1,7 @@
 import { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoValuesAbi__factory } from '../../../test/typegen';
+import { EchoValuesFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -12,7 +12,7 @@ describe('Tuples Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          factory: EchoValuesAbi__factory,
+          factory: EchoValuesFactory,
         },
       ],
     });

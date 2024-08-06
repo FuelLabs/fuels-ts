@@ -1,8 +1,7 @@
 import type { RawSlice } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoRawSliceAbi__factory } from '../../../test/typegen';
-import EchoRawSliceAbiHex from '../../../test/typegen/contracts/EchoRawSliceAbi.hex';
+import { EchoRawSliceFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -13,8 +12,7 @@ describe('RawSlice', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoRawSliceAbi__factory,
-          bytecode: EchoRawSliceAbiHex,
+          factory: EchoRawSliceFactory,
         },
       ],
     });
@@ -38,8 +36,7 @@ describe('RawSlice', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoRawSliceAbi__factory,
-          bytecode: EchoRawSliceAbiHex,
+          factory: EchoRawSliceFactory,
         },
       ],
     });

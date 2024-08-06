@@ -1,8 +1,8 @@
+import type { BigNumberish } from 'fuels';
 import { BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoU64ArrayAbi__factory } from '../../../test/typegen';
-import EchoU64ArrayAbiHex from '../../../test/typegen/contracts/EchoU64ArrayAbi.hex';
+import { EchoU64ArrayFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -24,8 +24,7 @@ describe('Arrays Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoU64ArrayAbi__factory,
-          bytecode: EchoU64ArrayAbiHex,
+          factory: EchoU64ArrayFactory,
         },
       ],
     });
@@ -34,10 +33,9 @@ describe('Arrays Types', () => {
       contracts: [contract],
     } = launched;
     // #region arrays-2
-    const u64Array = [10000000, 20000000];
+    const u64Array: [BigNumberish, BigNumberish] = [10000000, 20000000];
 
     // This expects two arguments
-    // #TODO: Argument of type 'number[]' is not assignable to parameter of type '[BigNumberish, BigNumberish]'.
     const { value } = await contract.functions.echo_u64_array(u64Array).simulate();
 
     expect(new BN(value[0]).toNumber()).toEqual(u64Array[0]);
@@ -51,8 +49,7 @@ describe('Arrays Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoU64ArrayAbi__factory,
-          bytecode: EchoU64ArrayAbiHex,
+          factory: EchoU64ArrayFactory,
         },
       ],
     });
@@ -63,7 +60,6 @@ describe('Arrays Types', () => {
     try {
       // #region arrays-3
       // will throw error because the array length is not 2
-      // #TODO: Argument of type 'number[]' is not assignable to parameter of type '[BigNumberish, BigNumberish]'.
       await contract.functions.echo_u64_array([10000000]).simulate();
       // #endregion arrays-3
     } catch (e) {
@@ -78,8 +74,7 @@ describe('Arrays Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoU64ArrayAbi__factory,
-          bytecode: EchoU64ArrayAbiHex,
+          factory: EchoU64ArrayFactory,
         },
       ],
     });

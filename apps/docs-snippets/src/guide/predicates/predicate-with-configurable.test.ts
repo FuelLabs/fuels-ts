@@ -1,7 +1,7 @@
 import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { WhitelistedAddressPredicateAbi__factory } from '../../../test/typegen';
+import { WhitelistedAddressPredicate } from '../../../test/typegen';
 
 /**
  * @group node
@@ -22,9 +22,9 @@ describe('Predicate With Configurables', () => {
     const configurable = { WHITELISTED: newWhitelistedAddress };
     // instantiate predicate with configurable constants
     const predicate = new Predicate<[string]>({
-      bytecode: WhitelistedAddressPredicateAbi__factory.bin,
+      bytecode: WhitelistedAddressPredicate.bytecode,
       provider: wallet.provider,
-      abi: WhitelistedAddressPredicateAbi__factory.abi,
+      abi: WhitelistedAddressPredicate.abi,
       data: [configurable.WHITELISTED],
       configurableConstants: configurable,
     });
@@ -69,9 +69,9 @@ describe('Predicate With Configurables', () => {
 
     // #region predicate-with-configurable-constants-3
     const predicate = new Predicate({
-      bytecode: WhitelistedAddressPredicateAbi__factory.bin,
+      bytecode: WhitelistedAddressPredicate.bytecode,
       provider,
-      abi: WhitelistedAddressPredicateAbi__factory.abi,
+      abi: WhitelistedAddressPredicate.abi,
       data: ['0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132'],
     });
 

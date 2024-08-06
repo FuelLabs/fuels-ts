@@ -1,8 +1,8 @@
 import { FuelError } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { EchoEnumAbi__factory } from '../../../test/typegen';
-import EchoEnumAbiHex from '../../../test/typegen/contracts/EchoEnumAbi.hex';
+import { EchoEnumFactory } from '../../../test/typegen';
+import { StateErrorInput, UserErrorInput } from '../../../test/typegen/contracts/EchoEnum';
 
 /**
  * @group node
@@ -13,8 +13,7 @@ describe('Enums Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEnumAbi__factory,
-          bytecode: EchoEnumAbiHex,
+          factory: EchoEnumFactory,
         },
       ],
     });
@@ -24,9 +23,10 @@ describe('Enums Types', () => {
     } = launched;
 
     // #region simple-enum-3
-    const enumVariant = 'Completed';
+    // #context import { StateErrorInput } from '../path/to/typegen/contracts/EchoEnum';
 
-    // #TODO: Argument of type '"Completed"' is not assignable to parameter of type 'StateErrorInput
+    const enumVariant = StateErrorInput.Completed;
+
     const { value } = await contract.functions.echo_state_error_enum(enumVariant).simulate();
 
     expect(value).toEqual(enumVariant);
@@ -37,8 +37,7 @@ describe('Enums Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEnumAbi__factory,
-          bytecode: EchoEnumAbiHex,
+          factory: EchoEnumFactory,
         },
       ],
     });
@@ -48,9 +47,9 @@ describe('Enums Types', () => {
     } = launched;
 
     // #region enum-of-enums-3
-    const enumParam = { UserError: 'InsufficientPermissions' };
+    // #context import { UserErrorInput } from '../path/to/typegen/contracts/EchoEnum';
+    const enumParam = { UserError: UserErrorInput.InsufficientPermissions };
 
-    // #TODO: Argument of type '{ StateError: string; }' is not assignable to parameter of type 'ErrorInput'.
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
@@ -61,8 +60,7 @@ describe('Enums Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEnumAbi__factory,
-          bytecode: EchoEnumAbiHex,
+          factory: EchoEnumFactory,
         },
       ],
     });
@@ -72,9 +70,10 @@ describe('Enums Types', () => {
     } = launched;
 
     // #region enum-of-enums-4
-    const enumParam = { StateError: 'Completed' };
+    // #context import { StateErrorInput } from '../path/to/typegen/contracts/EchoEnum';
 
-    // #TODO: Argument of type '{ StateError: string; }' is not assignable to parameter of type 'ErrorInput'.
+    const enumParam = { StateError: StateErrorInput.Completed };
+
     const { value } = await contract.functions.echo_error_enum(enumParam).simulate();
 
     expect(value).toEqual(enumParam);
@@ -85,8 +84,7 @@ describe('Enums Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEnumAbi__factory,
-          bytecode: EchoEnumAbiHex,
+          factory: EchoEnumFactory,
         },
       ],
     });
@@ -100,7 +98,6 @@ describe('Enums Types', () => {
     const emumValue: number = 1;
 
     await expectToThrowFuelError(
-      // #TODO: Argument of type 'number' is not assignable to parameter of type 'StateErrorInput'.
       () => contract.functions.echo_state_error_enum(emumValue).simulate(),
       new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
     );
@@ -111,8 +108,7 @@ describe('Enums Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEnumAbi__factory,
-          bytecode: EchoEnumAbiHex,
+          factory: EchoEnumFactory,
         },
       ],
     });
@@ -136,8 +132,7 @@ describe('Enums Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEnumAbi__factory,
-          bytecode: EchoEnumAbiHex,
+          factory: EchoEnumFactory,
         },
       ],
     });
@@ -151,7 +146,6 @@ describe('Enums Types', () => {
     const enumParam = { UnknownKey: 'Completed' };
 
     await expectToThrowFuelError(
-      // #TODO: Argument of type '{ UnknownKey: string; }' is not assignable to parameter of type 'ErrorInput'.
       () => contract.functions.echo_error_enum(enumParam).simulate(),
       new FuelError(
         FuelError.CODES.INVALID_DECODE_VALUE,

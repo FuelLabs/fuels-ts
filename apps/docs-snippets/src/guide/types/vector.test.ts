@@ -1,12 +1,8 @@
 import { BN, arrayify, getRandomB256 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  BytecodeInputAbi__factory,
-  EchoEmployeeDataVectorAbi__factory,
-} from '../../../test/typegen';
-import BytecodeInputAbiHex from '../../../test/typegen/contracts/BytecodeInputAbi.hex';
-import EchoEmployeeDataVectorAbiHex from '../../../test/typegen/contracts/EchoEmployeeDataVectorAbi.hex';
+import { BytecodeInputFactory, EchoEmployeeDataVectorFactory } from '../../../test/typegen';
+import type { EmployeeDataInput } from '../../../test/typegen/contracts/EchoU64Array';
 
 /**
  * @group node
@@ -17,8 +13,7 @@ describe('Vector Types', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: EchoEmployeeDataVectorAbi__factory,
-          bytecode: EchoEmployeeDataVectorAbiHex,
+          factory: EchoEmployeeDataVectorFactory,
         },
       ],
     });
@@ -34,8 +29,9 @@ describe('Vector Types', () => {
 
     // #region vector-4
     // #import { getRandomB256 };
+    // #context import { EmployeeDataInput } from '../path/to/typegen/contracts/EchoU64Array';
 
-    const employees = [
+    const employees: EmployeeDataInput[] = [
       {
         name: 'John Doe',
         age: 30,
@@ -69,8 +65,7 @@ describe('Vector Types', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: BytecodeInputAbi__factory,
-            bytecode: BytecodeInputAbiHex,
+            factory: BytecodeInputFactory,
           },
         ],
       });
@@ -80,12 +75,11 @@ describe('Vector Types', () => {
       } = launched;
 
       // #region vector-bytecode-input-ts
-      // #import { BytecodeInputAbiHex };
+      // #import { BytecodeInputFactory };
 
-      const bytecodeAsVecU8 = arrayify(BytecodeInputAbiHex);
+      const bytecodeAsVecU8 = arrayify(BytecodeInputFactory.bytecode);
 
       const { waitForResult } = await bytecodeContract.functions
-        // #TODO: Not assignable to type BigNumberish
         .compute_bytecode_root(bytecodeAsVecU8)
         .call();
 
