@@ -14,6 +14,8 @@ interface TestMessageSpecs {
   da_height: number;
 }
 
+export type ChainMessage = SnapshotConfigs['stateConfig']['messages'][0];
+
 export class TestMessage {
   public readonly sender: AbstractAddress;
   public readonly recipient: AbstractAddress;
@@ -44,13 +46,15 @@ export class TestMessage {
     this.da_height = da_height;
   }
 
-  toChainMessage(recipient?: AbstractAddress): SnapshotConfigs['stateConfig']['messages'][0] {
+  toChainMessage(recipient?: AbstractAddress): ChainMessage {
+    // Fuel-core throwns error for message data prefixed with 0x within the stateConfig.json file
+    const data = /^0x/.test(this.data) ? this.data.replace(/^0x/, '') : this.data;
     return {
       sender: this.sender.toB256(),
       recipient: recipient?.toB256() ?? this.recipient.toB256(),
       nonce: this.nonce,
       amount: bn(this.amount).toNumber(),
-      data: this.data,
+      data,
       da_height: this.da_height,
     };
   }
