@@ -2,8 +2,8 @@
 import { Provider, ScriptTransactionRequest, Wallet, TESTNET_NETWORK_URL } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ConfigurablePinAbi__factory as PredicateFactory } from '../../../test/typegen';
-import type { ConfigurablePinAbiInputs as PredicateInputs } from '../../../test/typegen';
+import { ConfigurablePin as PredicateFactory } from '../../../test/typegen';
+import type { ConfigurablePinInputs as PredicateInputs } from '../../../test/typegen/predicates/ConfigurablePin';
 
 /**
  * @group node
@@ -21,8 +21,6 @@ describe('Predicate Custom Transactions', () => {
     const RECEIVER_ADDRESS = testReceiver.address;
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const TESTNET_NETWORK_URL = testProvider.url;
-
-    await Provider.create(TESTNET_NETWORK_URL);
 
     const initialRecieverBalance = await testReceiver.getBalance(testProvider.getBaseAssetId());
 
@@ -42,8 +40,8 @@ describe('Predicate Custom Transactions', () => {
 
     // Instantiate the predicate using valid predicate data, aka the pin we need
     // to send the funds to the receiver
-    const predicateData: PredicateInputs = [1337];
-    const predicate = PredicateFactory.createInstance(provider, predicateData);
+    const data: PredicateInputs = [1337];
+    const predicate = new PredicateFactory({ provider, data });
 
     // Fund the predicate, so that we can send these funds via predicate logic
     // to the receiver
