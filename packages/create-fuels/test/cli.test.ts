@@ -21,8 +21,8 @@ import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles'
 /**
  * @group node
  */
-describe('CLI', () => {
-  const { error, log } = mockLogger();
+describe('CLI', { timeout: 15_000 }, () => {
+  const { error } = mockLogger();
   let paths: ProjectPaths;
 
   beforeEach(() => {

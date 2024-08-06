@@ -1,22 +1,24 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { join } from 'path';
 
 import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import factoryTemplate from '../../../test/fixtures/templates/script/factory.hbs';
-import factoryTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/factory.hbs';
+import mainTemplate from '../../../test/fixtures/templates/script/main.hbs';
+import mainTemplateWithConfigurables from '../../../test/fixtures/templates/script-with-configurable/main.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
+import { autoUpdateFixture } from '../../../test/utils/updateFixture';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
-import { renderFactoryTemplate } from './factory';
+import { renderMainTemplate } from './main';
 
 /**
  * @group node
  */
-describe('factory.ts', () => {
-  test('should render factory template', () => {
+describe('main.ts', () => {
+  test('should render main template', () => {
     const { restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
@@ -30,14 +32,19 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/script/main.hbs'),
+      rendered
+    );
 
     restore();
 
-    expect(rendered).toEqual(factoryTemplate);
+    expect(rendered).toEqual(mainTemplate);
   });
 
-  test('should render factory template with configurables', () => {
+  test('should render main template with configurables', () => {
     const { restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE);
@@ -51,11 +58,16 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/script-with-configurable/main.hbs'),
+      rendered
+    );
 
     restore();
 
-    expect(rendered).toEqual(factoryTemplateWithConfigurables);
+    expect(rendered).toEqual(mainTemplateWithConfigurables);
   });
 
   test('should throw for invalid Script ABI', async () => {
@@ -64,7 +76,9 @@ describe('factory.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const rawContents = project.abiContents;
 
-    // friction here (deletes 'main' function by emptying the functions array)
+    // ALERT: friction here (emptying functions array)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     rawContents.functions = [];
 
     const abi = new Abi({
@@ -76,7 +90,7 @@ describe('factory.ts', () => {
     });
 
     const { error } = await safeExec(() => {
-      renderFactoryTemplate({ abi });
+      renderMainTemplate({ abi });
     });
 
     restore();

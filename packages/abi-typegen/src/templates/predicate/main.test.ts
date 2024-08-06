@@ -1,22 +1,24 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import { join } from 'path';
 
 import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import factoryTemplate from '../../../test/fixtures/templates/predicate/factory.hbs';
-import factoryWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/factory.hbs';
+import mainTemplate from '../../../test/fixtures/templates/predicate/main.hbs';
+import mainWithConfigurablesTemplate from '../../../test/fixtures/templates/predicate-with-configurable/main.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
+import { autoUpdateFixture } from '../../../test/utils/updateFixture';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
-import { renderFactoryTemplate } from './factory';
+import { renderMainTemplate } from './main';
 
 /**
  * @group node
  */
-describe('factory.ts', () => {
-  test('should render factory template', () => {
+describe('main.ts', () => {
+  test('should render main template', () => {
     const { restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
@@ -31,14 +33,19 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.PREDICATE,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/predicate/main.hbs'),
+      rendered
+    );
 
     restore();
 
-    expect(rendered).toEqual(factoryTemplate);
+    expect(rendered).toEqual(mainTemplate);
   });
 
-  test('should render factory template with configurable', () => {
+  test('should render main template with configurable', () => {
     const { restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
@@ -53,11 +60,16 @@ describe('factory.ts', () => {
       programType: ProgramTypeEnum.PREDICATE,
     });
 
-    const rendered = renderFactoryTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/predicate-with-configurable/main.hbs'),
+      rendered
+    );
 
     restore();
 
-    expect(rendered).toEqual(factoryWithConfigurablesTemplate);
+    expect(rendered).toEqual(mainWithConfigurablesTemplate);
   });
 
   test('should throw for invalid Predicate ABI', async () => {
@@ -66,7 +78,9 @@ describe('factory.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
     const rawContents = project.abiContents;
 
-    // friction here (deletes 'main' function by emptying the functions array)
+    // ALERT: friction here (emptying functions array)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     rawContents.functions = [];
 
     const abi = new Abi({
@@ -78,7 +92,7 @@ describe('factory.ts', () => {
     });
 
     const { error } = await safeExec(() => {
-      renderFactoryTemplate({ abi });
+      renderMainTemplate({ abi });
     });
 
     expect(error?.message).toMatch(/ABI doesn't have a 'main\(\)' method/);

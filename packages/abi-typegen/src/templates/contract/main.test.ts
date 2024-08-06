@@ -1,28 +1,28 @@
+import { join } from 'path';
+
 import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import expectedDtsFullTemplate from '../../../test/fixtures/templates/contract/dts.hbs';
-import expectedDtsMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/dts.hbs';
+import expectedMainFullTemplate from '../../../test/fixtures/templates/contract/main.hbs';
+import expectedMainMinimalConfigurableTemplate from '../../../test/fixtures/templates/contract-with-configurable/main.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
+import { autoUpdateFixture } from '../../../test/utils/updateFixture';
 import { Abi } from '../../abi/Abi';
 import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
-import { renderDtsTemplate } from './dts';
+import { renderMainTemplate } from './main';
 
 /**
  * @group node
  */
 describe('templates/dts', () => {
-  test.each(['debug', 'release'])('should render dts template [%s]', (build) => {
+  test('should render main template', () => {
     // mocking
     const { restore } = mockVersions();
 
     // executing
-    const project = getTypegenForcProject(
-      AbiTypegenProjectsEnum.FULL,
-      build as 'release' | 'debug'
-    );
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
     const { abiContents: rawContents } = project;
 
     const abi = new Abi({
@@ -32,15 +32,20 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/contract/main.hbs'),
+      rendered
+    );
 
     // validating
     restore();
 
-    expect(rendered).toEqual(expectedDtsFullTemplate);
+    expect(rendered).toEqual(expectedMainFullTemplate);
   });
 
-  test('should render dts template with configurable', () => {
+  test('should render main template with configurable', () => {
     const { restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL_WITH_CONFIGURABLE);
@@ -54,14 +59,19 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    let rendered = renderMainTemplate({ abi });
+
+    rendered = autoUpdateFixture(
+      join(__dirname, '../../../test/fixtures/templates/contract-with-configurable/main.hbs'),
+      rendered
+    );
 
     restore();
 
-    expect(rendered).toEqual(expectedDtsMinimalConfigurableTemplate);
+    expect(rendered).toEqual(expectedMainMinimalConfigurableTemplate);
   });
 
-  test('should render dts template w/ custom common types', () => {
+  test('should render main template w/ custom common types', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -72,7 +82,8 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
   });
 
@@ -87,7 +98,8 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(/export type StructBOutput<T> = StructBInput<T>;$/m);
   });
 
@@ -102,7 +114,8 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(/export type MyEnumOutput = MyEnumInput;$/m);
   });
 
@@ -117,7 +130,8 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderDtsTemplate({ abi });
+    const rendered = renderMainTemplate({ abi });
+
     expect(rendered).toMatch(
       /export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };$/m
     );

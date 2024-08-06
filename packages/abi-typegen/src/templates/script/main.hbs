@@ -9,7 +9,7 @@ import {
 {{/if}}
 
 {{#if commonTypesInUse}}
-import type { {{commonTypesInUse}} } from "../common";
+import type { {{commonTypesInUse}} } from "./common";
 {{/if}}
 
 
@@ -40,35 +40,27 @@ export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
 {{/if}}
 {{/each}}
 
+export type {{capitalizedName}}Inputs = [{{inputs}}];
+export type {{capitalizedName}}Output = {{output}};
+
+{{#if configurables}}
 export type {{capitalizedName}}Configurables = Partial<{
 {{#each configurables}}
   {{name}}: {{inputLabel}};
 {{/each}}
 }>;
+{{/if}}
 
-export type {{capitalizedName}}Inputs = [{{inputs}}];
+const abi = {{abiJsonString}};
 
-const _abi = {{abiJsonString}}
+const bytecode = '{{hexlifiedBinString}}';
 
-const _bin = '{{hexlifiedBinString}}'
+export class {{capitalizedName}} extends Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
 
-export const {{capitalizedName}}__factory = {
+  static readonly abi = abi;
+  static readonly bytecode = bytecode;
 
-  abi: _abi,
-  bin: _bin,
-
-  createInstance(provider: Provider, predicateData?: {{capitalizedName}}Inputs, configurables?: {{capitalizedName}}Configurables) {
-
-    const predicate = new Predicate<{{capitalizedName}}Inputs>({
-      bytecode: _bin,
-      abi: _abi,
-      provider,
-      inputData: predicateData,
-      configurableConstants: configurables,
-    })
-
-    return predicate;
-
+  constructor(wallet: Account) {
+    super(bytecode, abi, wallet);
   }
-
 }
