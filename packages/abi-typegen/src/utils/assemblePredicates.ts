@@ -1,7 +1,7 @@
 import type { BinaryVersions } from '@fuel-ts/versions';
 import { join } from 'path';
 
-import type { abi, versions } from '../abi/Abi';
+import type { Abi } from '../abi/Abi';
 import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
 import { renderIndexTemplate } from '../templates/common/index';
