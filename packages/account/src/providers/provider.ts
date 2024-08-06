@@ -9,7 +9,7 @@ import {
   InputMessageCoder,
   TransactionCoder,
 } from '@fuel-ts/transactions';
-import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
+import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
@@ -65,6 +65,7 @@ const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
+export const DEFAULT_UTXOS_CACHE_TTL = 20_000; // 20 seconds
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -426,9 +427,18 @@ export default class Provider {
   ) {
     this.options = { ...this.options, ...options };
     this.url = url;
-
     this.operations = this.createOperations();
-    this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
+
+    const { cacheUtxo } = this.options;
+    if (isDefined(cacheUtxo)) {
+      if (cacheUtxo !== -1) {
+        this.cache = new MemoryCache(cacheUtxo);
+      } else {
+        this.cache = undefined;
+      }
+    } else {
+      this.cache = new MemoryCache(DEFAULT_UTXOS_CACHE_TTL);
+    }
   }
 
   /**
@@ -701,7 +711,6 @@ Supported fuel-core version: ${supportedVersion}.`
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    this.#cacheInputs(transactionRequest.inputs);
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
@@ -718,6 +727,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
+    this.#cacheInputs(transactionRequest.inputs);
 
     return new TransactionResponse(transactionId, this, abis);
   }

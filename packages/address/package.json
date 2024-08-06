@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/address",
-  "version": "0.92.1",
+  "version": "0.93.0",
   "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",

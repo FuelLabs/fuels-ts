@@ -1,12 +1,4 @@
-import {
-  AbiTypegenProjectsEnum,
-  getTypegenForcProject,
-} from '../../../test/fixtures/forc-projects/index';
-import contractIndexTemplate from '../../../test/fixtures/templates/contract/index.hbs';
-import predicateIndexTemplate from '../../../test/fixtures/templates/predicate/index.hbs';
 import { mockVersions } from '../../../test/utils/mockVersions';
-import { Abi } from '../../abi/Abi';
-import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderIndexTemplate } from './index';
 
@@ -19,44 +11,14 @@ describe('templates/index', () => {
     const { versions, restore } = mockVersions();
 
     // executing
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
-    const rawContents = project.abiContents;
+    const files = [{ path: './Contract.ts' }, { path: './ContractFactory.ts' }];
 
-    const abi = new Abi({
-      filepath: './my-contract-abi.json',
-      outputDir: 'stdout',
-      rawContents,
-      programType: ProgramTypeEnum.CONTRACT,
-    });
-
-    const rendered = renderIndexTemplate({ abis: [abi], versions });
+    const rendered = renderIndexTemplate({ files, versions });
 
     // validating
     restore();
 
-    expect(rendered).toEqual(contractIndexTemplate);
-  });
-
-  test('should render index template for predicates', () => {
-    // mocking
-    const { versions, restore } = mockVersions();
-
-    // executing
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
-    const rawContents = project.abiContents;
-
-    const abi = new Abi({
-      filepath: './my-predicate-abi.json',
-      outputDir: 'stdout',
-      rawContents,
-      programType: ProgramTypeEnum.PREDICATE,
-    });
-
-    const rendered = renderIndexTemplate({ abis: [abi], versions });
-
-    // validating
-    restore();
-
-    expect(rendered).toEqual(predicateIndexTemplate);
+    expect(rendered).toContain(`export { Contract } from './Contract';`);
+    expect(rendered).toContain(`export { ContractFactory } from './ContractFactory';`);
   });
 });

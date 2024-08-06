@@ -167,10 +167,10 @@ export class WalletsConfig {
         'Number of coins per asset must be greater than zero.'
       );
     }
-    if (amountPerCoin <= 0) {
+    if (amountPerCoin < 0) {
       throw new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
-        'Amount per coin must be greater than zero.'
+        'Amount per coin must be greater than or equal to zero.'
       );
     }
   }

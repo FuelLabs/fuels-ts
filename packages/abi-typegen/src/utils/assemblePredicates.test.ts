@@ -2,7 +2,7 @@ import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
 import { mockVersions } from '../../test/utils/mockVersions';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
-import * as renderFactoryTemplateMod from '../templates/predicate/factory';
+import * as renderMainTemplateMod from '../templates/predicate/main';
 import { ProgramTypeEnum } from '../types/enums/ProgramTypeEnum';
 
 import { assemblePredicates } from './assemblePredicates';
@@ -16,8 +16,8 @@ describe('assemblePredicates.ts', () => {
       .spyOn(renderCommonTemplateMod, 'renderCommonTemplate')
       .mockImplementation(vi.fn().mockResolvedValue(''));
 
-    const renderFactoryTemplate = vi
-      .spyOn(renderFactoryTemplateMod, 'renderFactoryTemplate')
+    const renderMainTemplate = vi
+      .spyOn(renderMainTemplateMod, 'renderMainTemplate')
       .mockImplementation(vi.fn().mockResolvedValue(''));
 
     const renderIndexTemplate = vi
@@ -26,7 +26,7 @@ describe('assemblePredicates.ts', () => {
 
     return {
       renderCommonTemplate,
-      renderFactoryTemplate,
+      renderMainTemplate,
       renderIndexTemplate,
     };
   }
@@ -41,7 +41,7 @@ describe('assemblePredicates.ts', () => {
 
   test('should assemble all files from Predicate ABI ', () => {
     const { versions } = mockVersions();
-    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
+    const { renderCommonTemplate, renderMainTemplate, renderIndexTemplate } = mockAllDeps();
 
     const {
       typegen: { abis, outputDir },
@@ -59,13 +59,13 @@ describe('assemblePredicates.ts', () => {
     expect(files.length).toEqual(3); // 2x factories, 1x index
 
     expect(renderCommonTemplate).toHaveBeenCalledTimes(0); // never called
-    expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);
+    expect(renderMainTemplate).toHaveBeenCalledTimes(2);
     expect(renderIndexTemplate).toHaveBeenCalledTimes(1);
   });
 
   test('should assemble all files from Predicate ABI, including `common` file', () => {
     const { versions } = mockVersions();
-    const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
+    const { renderCommonTemplate, renderMainTemplate, renderIndexTemplate } = mockAllDeps();
 
     const {
       typegen: { abis, outputDir },
@@ -83,7 +83,7 @@ describe('assemblePredicates.ts', () => {
     expect(files.length).toEqual(4); // 2x factories, 1x index, 1x common
 
     expect(renderCommonTemplate).toHaveBeenCalledTimes(1); // called once
-    expect(renderFactoryTemplate).toHaveBeenCalledTimes(2);
+    expect(renderMainTemplate).toHaveBeenCalledTimes(2);
     expect(renderIndexTemplate).toHaveBeenCalledTimes(1);
   });
 });
