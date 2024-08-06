@@ -1114,13 +1114,14 @@ Supported fuel-core version: ${supportedVersion}.`
   ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const updateMaxFee = txRequestClone.maxFee.eq(0);
+    const isScriptTransaction = isTransactionTypeScript(txRequestClone);
 
     // Remove gasLimit to avoid gasLimit when estimating predicates
-    if (isTransactionTypeScript(txRequestClone)) {
+    if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
 
-    const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
+    const signedRequest = clone(txRequestClone);
     let addedSignatures = 0;
     if (signatureCallback && isTransactionTypeScript(signedRequest)) {
       const lengthBefore = signedRequest.witnesses.length;
@@ -1146,7 +1147,7 @@ Supported fuel-core version: ${supportedVersion}.`
     let gasUsed = bn(0);
 
     txRequestClone.maxFee = maxFee;
-    if (isTransactionTypeScript(txRequestClone)) {
+    if (isScriptTransaction) {
       txRequestClone.gasLimit = gasLimit;
       if (signatureCallback) {
         await signatureCallback(txRequestClone);
