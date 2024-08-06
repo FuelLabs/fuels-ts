@@ -33,7 +33,7 @@ export class TestMessage {
     recipient = Address.fromRandom(),
     nonce = hexlify(randomBytes(32)),
     amount = 1_000_000,
-    data = '02',
+    data = '', // Will default to empty data in order to be a spendable message
     da_height = 0,
   }: Partial<TestMessageSpecs> = {}) {
     this.sender = sender;
