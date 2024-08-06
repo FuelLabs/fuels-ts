@@ -25,20 +25,26 @@ import type {
 
 import { getPredicateRoot } from './utils';
 
-export type PredicateParams<T = InputValue[]> = {
+export type PredicateParams<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+> = {
   bytecode: BytesLike;
   provider: Provider;
   abi?: JsonAbi;
-  inputData?: T;
-  configurableConstants?: { [name: string]: unknown };
+  data?: TData;
+  configurableConstants?: TConfigurables;
 };
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<TInputData extends InputValue[]> extends Account {
+export class Predicate<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+> extends Account {
   bytes: Uint8Array;
-  predicateData: TInputData = [] as unknown as TInputData;
+  predicateData: TData = [] as unknown as TData;
   interface?: Interface;
 
   /**
@@ -47,16 +53,16 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param bytecode - The bytecode of the predicate.
    * @param abi - The JSON ABI of the predicate.
    * @param provider - The provider used to interact with the blockchain.
-   * @param inputData - The predicate input data (optional).
+   * @param data - The predicate input data (optional).
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
   constructor({
     bytecode,
     abi,
     provider,
-    inputData,
+    data,
     configurableConstants,
-  }: PredicateParams<TInputData>) {
+  }: PredicateParams<TData, TConfigurables>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,
@@ -67,8 +73,8 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
-    if (inputData !== undefined && inputData.length > 0) {
-      this.predicateData = inputData;
+    if (data !== undefined && data.length > 0) {
+      this.predicateData = data;
     }
   }
 

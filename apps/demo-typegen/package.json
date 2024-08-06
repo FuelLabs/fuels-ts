@@ -6,13 +6,13 @@
   "scripts": {
     "pretest": "run-s build:forc build:types",
     "build:forc": "run-p forc:*",
-    "forc:contract": "pnpm fuels-forc build -p contract --release",
-    "forc:script": "pnpm fuels-forc build -p script --release",
-    "forc:predicate": "pnpm fuels-forc build -p predicate --release",
+    "forc:contract": "pnpm fuels-forc build -p demo-contract --release",
+    "forc:script": "pnpm fuels-forc build -p demo-script --release",
+    "forc:predicate": "pnpm fuels-forc build -p demo-predicate --release",
     "build:types": "run-p types:*",
-    "types:contract": "pnpm fuels typegen -i contract/out/release/demo-contract-abi.json -o src/contract-types",
-    "types:script": "pnpm fuels typegen -i script/out/release/script-abi.json -o src/script-types --script",
-    "types:predicate": "pnpm fuels typegen -i predicate/out/release/predicate-abi.json -o src/predicate-types --predicate"
+    "types:contract": "pnpm fuels typegen -i demo-contract/out/release/demo-contract-abi.json -o src/contract-types",
+    "types:script": "pnpm fuels typegen -i demo-script/out/release/demo-script-abi.json -o src/script-types --script",
+    "types:predicate": "pnpm fuels typegen -i demo-predicate/out/release/demo-predicate-abi.json -o src/predicate-types --predicate"
   },
   "license": "Apache-2.0",
   "dependencies": {
@@ -22,6 +22,5 @@
     "@fuel-ts/account": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
     "@internal/forc": "workspace:*"
-  },
-  "version": "0.0.0"
+  }
 }
