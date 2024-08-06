@@ -3,7 +3,7 @@ import { ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { bn, toNumber } from '@fuel-ts/math';
-import { defaultSnapshotConfigs, hexlify } from '@fuel-ts/utils';
+import { arrayify, defaultSnapshotConfigs, hexlify } from '@fuel-ts/utils';
 import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 
 import { Provider } from '../providers';
@@ -13,6 +13,7 @@ import { WalletUnlocked } from '../wallet';
 import { AssetId } from './asset-id';
 import * as launchNodeMod from './launchNode';
 import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
+import type { ChainMessage } from './test-message';
 import { TestMessage } from './test-message';
 
 const BaseAssetId = defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.base_asset_id;
@@ -128,12 +129,16 @@ describe('setupTestProviderAndWallets', () => {
 
   it('can be given custom asset id and message', async () => {
     const [assetId] = AssetId.random();
-    const testMessage = new TestMessage();
+    const spendableMessage = new TestMessage();
+    const dataMessage = new TestMessage({
+      data: '0x2bca2aa612b304ece5b25988818dd7234e049913233eb918c11638af89d575be',
+    });
+    const testMessages = [spendableMessage, dataMessage];
     using providerAndWallets = await setupTestProviderAndWallets({
       walletsConfig: {
         count: 1,
         assets: [assetId],
-        messages: [testMessage],
+        messages: testMessages,
       },
     });
 
@@ -156,17 +161,19 @@ describe('setupTestProviderAndWallets', () => {
     expect(coin2.amount.toNumber()).toBe(10_000_000_000);
 
     const { messages } = await wallet.getMessages();
-    expect(messages.length).toBe(1);
+    expect(messages.length).toBe(2);
 
-    const [message] = messages;
-    const chainMessage = testMessage.toChainMessage(wallet.address);
+    messages.forEach((message) => {
+      const match = testMessages.find((tm) => tm.nonce === message.nonce);
+      const chainMessage = match?.toChainMessage(wallet.address) as ChainMessage;
 
-    expect(message.amount.toNumber()).toEqual(chainMessage.amount);
-    expect(message.recipient.toB256()).toEqual(chainMessage.recipient);
-    expect(message.sender.toB256()).toEqual(chainMessage.sender);
-    expect(toNumber(message.daHeight)).toEqual(toNumber(chainMessage.da_height));
-    expect(message.data.toString()).toEqual(toNumber(chainMessage.data).toString());
-    expect(message.nonce).toEqual(chainMessage.nonce);
+      expect(message.amount.toNumber()).toEqual(chainMessage.amount);
+      expect(message.recipient.toB256()).toEqual(chainMessage.recipient);
+      expect(message.sender.toB256()).toEqual(chainMessage.sender);
+      expect(toNumber(message.daHeight)).toEqual(toNumber(chainMessage.da_height));
+      expect(message.data).toStrictEqual(arrayify(`0x${chainMessage.data}`));
+      expect(message.nonce).toEqual(chainMessage?.nonce);
+    });
   });
 
   it('can return multiple wallets with multiple assets, coins and amounts', async () => {
@@ -260,7 +267,7 @@ describe('setupTestProviderAndWallets', () => {
     expect(customWalletMessage.recipient.toB256()).toEqual(message.recipient);
     expect(customWalletMessage.sender.toB256()).toEqual(message.sender);
     expect(toNumber(customWalletMessage.daHeight)).toEqual(toNumber(message.da_height));
-    expect(customWalletMessage.data.toString()).toEqual(toNumber(message.data).toString());
+    expect(customWalletMessage.data.toString()).toEqual(message.data.toString());
     expect(customWalletMessage.nonce).toEqual(message.nonce);
   });
 });
