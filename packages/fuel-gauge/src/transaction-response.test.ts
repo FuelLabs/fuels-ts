@@ -204,9 +204,9 @@ describe('TransactionResponse', () => {
 
   it(
     'should throw error for a SqueezedOut status update [waitForResult]',
-    { timeout: 1000_000, retry: 10 },
+    { timeout: 10_000, retry: 10 },
     async () => {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 20; i++) {
         /**
          * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
          * before the waitForResult (provider.operations.statusChange) call is made
