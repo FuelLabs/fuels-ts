@@ -119,7 +119,8 @@ type Asset = {
   amount: BNInput;
 };
 
-export function mergeAssets(op1: Operation, op2: Operation): Asset[] {
+/** @hidden */
+function mergeAssets(op1: Operation, op2: Operation): Asset[] {
   const assets1 = op1.assetsSent || [];
   const assets2 = op2.assetsSent || [];
 
