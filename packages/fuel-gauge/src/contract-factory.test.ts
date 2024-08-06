@@ -286,7 +286,7 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
     const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
-    expect(factory.bytecode.length % 8 === 0).toBe(true);
+    expect(factory.getBytecodeSize() % 8 === 0).toBe(true);
 
     const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
 
@@ -311,7 +311,7 @@ describe('Contract Factory', () => {
 
     const bytecode = concat([arrayify(largeContractHex), new Uint8Array(3)]);
     const factory = new ContractFactory(bytecode, LargeContractAbi__factory.abi, wallet);
-    expect(bytecode.length % 8 === 0).toBe(false);
+    expect(factory.getBytecodeSize() % 8 === 0).toBe(false);
     const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
 
     const { contract } = await deploy.waitForResult();

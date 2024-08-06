@@ -357,6 +357,16 @@ export default class ContractFactory {
     }
   }
 
+  /**
+   * Helper function to get the size of the contract's bytecode. Useful for informing
+   * which deployment method to use.
+   *
+   * @returns The size of the contract's bytecode.
+   */
+  getBytecodeSize(): number {
+    return this.bytecode.length;
+  }
+
   private getAccount(): Account {
     if (!this.account) {
       throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Account not assigned to contract.');
