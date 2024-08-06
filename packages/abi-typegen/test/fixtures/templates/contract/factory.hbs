@@ -13,42 +13,7 @@
 import { ContractFactory } from "fuels";
 import type { Provider, Account, DeployContractOptions, DeployContractResult } from "fuels";
 
-const _abi = {
-  "programType": "contract",
-  "specVersion": "1",
-  "encodingVersion": "1",
-  "concreteTypes": [
-    {
-      "type": "bool",
-      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
-    },
-    {
-      "type": "str[10]",
-      "concreteTypeId": "338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50"
-    }
-  ],
-  "metadataTypes": [],
-  "functions": [
-    {
-      "inputs": [
-        {
-          "name": "x",
-          "concreteTypeId": "338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50"
-        },
-        {
-          "name": "y",
-          "concreteTypeId": "338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50"
-        }
-      ],
-      "name": "main",
-      "output": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
-      "attributes": null
-    }
-  ],
-  "loggedTypes": [],
-  "messagesTypes": [],
-  "configurables": []
-};
+import { MyContract } from "./MyContract";
 
 const bytecode = "0x-bytecode-here";
 

@@ -25,7 +25,12 @@ export type MyPredicateConfigurables = Partial<{
 
 export type MyPredicateInputs = [fee: BigNumberish, address: string];
 
-const _abi = {
+export type MyPredicateParameters = Omit<
+  PredicateParams<MyPredicateInputs, MyPredicateConfigurables>,
+  'abi' | 'bytecode'
+>;
+
+const abi = {
   "programType": "predicate",
   "specVersion": "1",
   "encodingVersion": "1",
