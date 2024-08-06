@@ -56,7 +56,7 @@ describe(__filename, () => {
     // #region contract-setup-3
     const factory = new ContractFactory(byteCode, abi, wallet);
 
-    const { contractId, transactionId, waitForResult } = await factory.deployContract();
+    const { contractId, transactionId, waitForResult } = await factory.deploy();
     // #endregion contract-setup-3
 
     // #region contract-setup-4

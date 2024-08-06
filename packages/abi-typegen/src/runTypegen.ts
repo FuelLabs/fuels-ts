@@ -85,7 +85,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   */
   log('Generating files..\n');
 
-  mkdirp.sync(`${output}/factories`);
+  mkdirp.sync(`${output}`);
 
   abiTypeGen.files.forEach((file) => {
     rimrafSync(file.path);

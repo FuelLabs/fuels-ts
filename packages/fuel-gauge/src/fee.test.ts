@@ -3,12 +3,11 @@ import type { BN } from 'fuels';
 import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
 import {
-  CallTestContractAbi__factory,
-  MultiTokenContractAbi__factory,
+  CallTestContractFactory,
+  MultiTokenContract,
+  MultiTokenContractFactory,
 } from '../test/typegen/contracts';
-import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
-import MultiTokenContractAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
-import { PredicateU32Abi__factory } from '../test/typegen/predicates/factories/PredicateU32Abi__factory';
+import { PredicateU32 } from '../test/typegen/predicates/PredicateU32';
 
 /**
  * @group node
@@ -36,8 +35,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi__factory,
-          bytecode: MultiTokenContractAbiHex,
+          factory: MultiTokenContractFactory,
         },
       ],
     });
@@ -165,8 +163,8 @@ describe('Fee', () => {
     const balanceBefore = await wallet.getBalance();
 
     const factory = new ContractFactory(
-      MultiTokenContractAbiHex,
-      MultiTokenContractAbi__factory.abi,
+      MultiTokenContractFactory.bytecode,
+      MultiTokenContract.abi,
       wallet
     );
     const { transactionRequest } = factory.createTransactionRequest();
@@ -193,8 +191,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
+          factory: CallTestContractFactory,
         },
       ],
     });
@@ -226,8 +223,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: CallTestContractAbi__factory,
-          bytecode: CallTestContractAbiHex,
+          factory: CallTestContractFactory,
         },
       ],
     });
@@ -266,8 +262,7 @@ describe('Fee', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi__factory,
-          bytecode: MultiTokenContractAbiHex,
+          factory: MultiTokenContractFactory,
         },
       ],
     });
@@ -315,7 +310,7 @@ describe('Fee', () => {
       wallets: [wallet],
     } = launched;
 
-    const predicate = PredicateU32Abi__factory.createInstance(provider, [1078]);
+    const predicate = new PredicateU32({ provider, data: [1078] });
 
     const tx1 = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
     await tx1.wait();
