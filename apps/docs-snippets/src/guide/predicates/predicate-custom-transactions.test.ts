@@ -1,4 +1,5 @@
-import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Provider, ScriptTransactionRequest, Wallet, TESTNET_NETWORK_URL as _ } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ConfigurablePin as PredicateFactory } from '../../../test/typegen';
