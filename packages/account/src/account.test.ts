@@ -19,7 +19,11 @@ import { Wallet } from './wallet';
  */
 
 // #TODO: These tests are failing when run as a suite
-describe.skip('Account', () => {
+describe('Account', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should create account using an address, with a provider', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -435,11 +439,17 @@ describe.skip('Account', () => {
   });
 
   it('can create transfer request just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 500_000,
+      },
+    });
     const {
-      wallets: [sender, receiver],
+      wallets: [sender],
       provider,
     } = launched;
+
+    const receiver = Wallet.generate({ provider });
 
     const request = await sender.createTransfer(
       receiver.address.toB256(),
@@ -458,6 +468,8 @@ describe.skip('Account', () => {
 
     const expectedRemaining = 442069;
     expect(senderBalances).toEqual([
+      { assetId: ASSET_A, amount: bn(500_000) },
+      { assetId: ASSET_B, amount: bn(500_000) },
       { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
     ]);
     expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
@@ -493,9 +505,11 @@ describe.skip('Account', () => {
   it('can transfer with custom TX Params', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
-      wallets: [sender, receiver],
+      wallets: [sender],
       provider,
     } = launched;
+
+    const receiver = Wallet.generate({ provider });
 
     const tx = await sender.transfer(receiver.address, 1, provider.getBaseAssetId(), {
       gasLimit: 1000,
@@ -510,16 +524,29 @@ describe.skip('Account', () => {
   });
 
   it('can exclude IDs when getResourcesToSpend is called', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 500_000,
+      },
+    });
     const {
       wallets: [user],
     } = launched;
 
     const { coins } = await user.getCoins();
 
+    const assetAUTXO = coins.find((coin) => coin.assetId === ASSET_A);
+
+    if (!assetAUTXO) {
+      throw new Error('Asset A UTXO not found');
+    }
+
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expect(
-      user.getResourcesToSpend([[1, ASSET_A, 500_000]], { utxos: [coins[0].id] })
+      user.getResourcesToSpend([[1, ASSET_A, 500_000]], {
+        utxos: [assetAUTXO.id],
+      })
     ).rejects.toThrow(/not enough coins to fit the target/);
   });
 
@@ -577,7 +604,12 @@ describe.skip('Account', () => {
   });
 
   it('can withdraw an amount of base asset', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        count: 1,
+        amountPerCoin: 500_000,
+      },
+    });
     const {
       wallets: [sender],
       provider,
@@ -602,6 +634,8 @@ describe.skip('Account', () => {
     const { balances: senderBalances } = await sender.getBalances();
     const expectedRemaining = 441598;
     expect(senderBalances).toEqual([
+      { assetId: ASSET_A, amount: bn(500_000) },
+      { assetId: ASSET_B, amount: bn(500_000) },
       { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
     ]);
   });
