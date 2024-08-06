@@ -298,7 +298,7 @@ describe('Contract Factory', () => {
     } = launched;
     const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
 
-    const deploy = await factory.deployContractLoader<LargeContractAbi>();
+    const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
 
     const { contract } = await deploy.waitForResult();
     expect(contract.id).toBeDefined();

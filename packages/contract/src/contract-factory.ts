@@ -19,9 +19,9 @@ import { hash } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify, isDefined, concat } from '@fuel-ts/utils';
+import { arrayify, isDefined } from '@fuel-ts/utils';
 
-import { getLoaderInstructions } from './loader-script';
+import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /**
@@ -41,13 +41,6 @@ export type DeployContractResult<TContract extends Contract = Contract> = {
     contract: TContract;
     transactionResult: TransactionResult<TransactionType.Create>;
   }>;
-};
-
-export type ContractChunk = {
-  id: number;
-  size: number;
-  bytecode: Uint8Array;
-  blobId?: string;
 };
 
 /**
@@ -158,22 +151,6 @@ export default class ContractFactory {
   }
 
   /**
-   * Create a blob transaction request, used for deploying contract chunks.
-   *
-   * @param options - options for creating a blob transaction request.
-   * @returns a populated BlobTransactionRequest.
-   */
-  private blobTransactionRequest(options: { blobBytecode: Uint8Array } & DeployContractOptions) {
-    const { blobBytecode } = options;
-    return new BlobTransactionRequest({
-      blobId: hash(blobBytecode),
-      witnessIndex: 0,
-      witnesses: [blobBytecode],
-      ...options,
-    });
-  }
-
-  /**
    * Takes a transaction request, estimates it and funds it.
    *
    * @param request - the request to fund.
@@ -245,64 +222,31 @@ export default class ContractFactory {
    * @param deployContractOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContractLoader<TContract extends Contract = Contract>(
+  async deployContractAsBlobs<TContract extends Contract = Contract>(
     deployContractOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
-    const { consensusParameters } = account.provider.getChain();
-    const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
-
-    // Ensure the max contract size is byte aligned before chunking
-    if (maxContractSize % WORD_SIZE !== 0) {
-      throw new FuelError(
-        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT, // Todo: change error
-        `Max contract size of ${maxContractSize} bytes is not byte aligned.`
-      );
-    }
-
     const { configurableConstants } = deployContractOptions;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    // Find the max chunk size (again, ensure is word aligned)
-    const baseBlobRequest = this.blobTransactionRequest({ blobBytecode: randomBytes(32) });
-    baseBlobRequest.fundWithFakeUtxos([], account.provider.getBaseAssetId());
-    const maxChunkSize = maxContractSize - baseBlobRequest.byteLength() - WORD_SIZE;
-    const padding = maxChunkSize % WORD_SIZE;
-    const chunkSize = padding + ((WORD_SIZE - (padding % WORD_SIZE)) % WORD_SIZE) + maxChunkSize;
-
-    // Chunk the bytecode
-    const chunks: ContractChunk[] = [];
-    for (let offset = 0, index = 0; offset < this.bytecode.length; offset += chunkSize, index++) {
-      const chunk = this.bytecode.slice(offset, offset + chunkSize);
-
-      // Chunks must be byte aligned
-      if (chunk.length % WORD_SIZE !== 0) {
-        const paddingLength = chunk.length % WORD_SIZE;
-        const paddedChunk = concat([chunk, new Uint8Array(paddingLength)]);
-        chunks.push({ id: index, size: paddedChunk.length, bytecode: paddedChunk });
-        // eslint-disable-next-line no-continue
-        continue;
-      }
-      chunks.push({ id: index, size: chunk.length, bytecode: chunk });
-    }
-
-    const uploadedBlobIds: string[] = [];
+    const chunkSize = this.getMaxChunkSize();
+    const chunks = getContractChunks(this.bytecode, chunkSize);
 
     // Deploy the chunks as blob txs
     for (const { id, bytecode } of chunks) {
       const blobRequest = this.blobTransactionRequest({
-        blobBytecode: bytecode,
+        bytecode,
         ...deployContractOptions,
       });
-
-      // Store the blobIds for the loader contract
+      // Store the already uploaded blobs and blobIds for the loader contract
+      const uploadedBlobs = chunks.map((c) => c.blobId).filter((c) => c);
       const { blobId } = blobRequest;
       chunks[id].blobId = blobId;
 
       // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
-      if (!uploadedBlobIds.includes(blobId)) {
+      if (!uploadedBlobs.includes(blobId)) {
         const fundedBlobRequest = await this.fundTransactionRequest(
           blobRequest,
           deployContractOptions
@@ -317,8 +261,6 @@ export default class ContractFactory {
           // Core will throw for blobs that have already been uploaded, but the blobId
           // is still valid so we can use this for the loader contract
           if ((<FuelError>err).code === ErrorCode.BLOB_ID_ALREADY_UPLOADED) {
-            // TODO: We need to unset the cached utxo as it can be reused
-            // this.account?.provider.cache?.del(UTXO_ID);
             // eslint-disable-next-line no-continue
             continue;
           }
@@ -329,8 +271,6 @@ export default class ContractFactory {
         if (!result.status || result.status !== TransactionStatus.success) {
           throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
         }
-
-        uploadedBlobIds.push(blobId);
       }
     }
 
@@ -343,12 +283,8 @@ export default class ContractFactory {
       bytecode: loaderBytecode,
       ...deployContractOptions,
     });
-    const fundedCreateRequest = await this.fundTransactionRequest(
-      createRequest,
-      deployContractOptions
-    );
-
-    const transactionResponse = await account.sendTransaction(fundedCreateRequest);
+    await this.fundTransactionRequest(createRequest, deployContractOptions);
+    const transactionResponse = await account.sendTransaction(createRequest);
 
     const waitForResult = async () => {
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
@@ -418,5 +354,36 @@ export default class ContractFactory {
       contractId,
       transactionRequest,
     };
+  }
+
+  /**
+   * Create a blob transaction request, used for deploying contract chunks.
+   *
+   * @param options - options for creating a blob transaction request.
+   * @returns a populated BlobTransactionRequest.
+   */
+  private blobTransactionRequest(options: { bytecode: Uint8Array } & DeployContractOptions) {
+    const { bytecode } = options;
+    return new BlobTransactionRequest({
+      blobId: hash(bytecode),
+      witnessIndex: 0,
+      witnesses: [bytecode],
+      ...options,
+    });
+  }
+
+  /**
+   * Get the maximum chunk size for deploying a contract by chunks.
+   */
+  private getMaxChunkSize() {
+    const { provider } = this.getAccount();
+    const { consensusParameters } = provider.getChain();
+    const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
+    // Get the base tx length
+    const blobTx = this.blobTransactionRequest({ bytecode: randomBytes(32) });
+    blobTx.fundWithFakeUtxos([], provider.getBaseAssetId());
+    const maxChunkSize = contractSizeLimit - blobTx.byteLength() - WORD_SIZE;
+    // Ensure chunksize is byte aligned
+    return Math.round(maxChunkSize / WORD_SIZE) * WORD_SIZE;
   }
 }

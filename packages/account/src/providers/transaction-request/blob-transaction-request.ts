@@ -68,6 +68,12 @@ export class BlobTransactionRequest extends BaseTransactionRequest {
     return hashTransaction(this, chainId);
   }
 
+  /**
+   * Calculates the metadata gas cost for a blob transaction.
+   *
+   * @param gasCosts - gas costs passed from the chain.
+   * @returns metadata gas cost for the blob transaction.
+   */
   metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxBlob({
       gasCosts,
