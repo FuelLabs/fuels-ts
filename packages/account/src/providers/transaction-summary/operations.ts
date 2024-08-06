@@ -114,17 +114,11 @@ export function getReceiptsMessageOut(receipts: TransactionResultReceipt[]) {
 }
 
 /** @hidden */
-type Asset = {
-  assetId: string;
-  amount: BNInput;
-};
-
-/** @hidden */
-function mergeAssets(op1: Operation, op2: Operation): Asset[] {
+function mergeAssets(op1: Operation, op2: Operation): OperationCoin[] {
   const assets1 = op1.assetsSent || [];
   const assets2 = op2.assetsSent || [];
 
-  const assetMap = new Map<string, Asset>();
+  const assetMap = new Map<string, OperationCoin>();
 
   // Merge assets from op1
   assets1.forEach((asset) => {
@@ -265,7 +259,7 @@ function getContractCalls(
 }
 
 /** @hidden */
-function getAssetsSent(receipt: TransactionResultCallReceipt): Asset[] | undefined {
+function getAssetsSent(receipt: TransactionResultCallReceipt): OperationCoin[] | undefined {
   return receipt.amount?.isZero()
     ? undefined
     : [
