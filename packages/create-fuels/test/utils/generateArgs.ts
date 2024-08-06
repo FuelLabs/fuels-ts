@@ -1,8 +1,12 @@
-export const generateArgs = (
-  projectName?: string,
-  packageManager: string = 'pnpm',
-  template?: string
-): string[] => {
+export const generateArgs = ({
+  projectName,
+  packageManager = 'pnpm',
+  template,
+}: {
+  projectName?: string;
+  packageManager: string;
+  template?: string;
+}): string[] => {
   const args = [];
   if (packageManager === 'npm') {
     args.push('--');
@@ -19,8 +23,12 @@ export const generateArgs = (
   return args;
 };
 
-export const generateArgv = (
-  projectName?: string,
-  packageManager: string = 'pnpm',
-  template?: string
-): string[] => ['', '', ...generateArgs(projectName, packageManager, template)];
+export const generateArgv = ({
+  projectName,
+  packageManager = 'pnpm',
+  template,
+}: {
+  projectName?: string;
+  packageManager?: string;
+  template?: string;
+}): string[] => ['', '', ...generateArgs({ projectName, packageManager, template })];
