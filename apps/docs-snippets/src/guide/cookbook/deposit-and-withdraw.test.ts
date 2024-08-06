@@ -25,7 +25,7 @@ describe(__filename, () => {
     provider = sender.provider;
     baseAssetId = provider.getBaseAssetId();
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       configurableConstants: { TOKEN: { bits: baseAssetId } },
     });
     ({ contract: liquidityPoolContract } = await waitForResult());
