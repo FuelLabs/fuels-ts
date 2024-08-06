@@ -43,7 +43,7 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "run-s build:forc-callpaths build:forc",
+    "pretest": "run-s build build:forc",
     "test": "cd ../.. && pnpm run test:filter packages/abi-typegen",
     "test:update-fixtures": "UPDATE_FIXTURES=true pnpm run test",
     "build": "tsup",
