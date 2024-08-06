@@ -18,10 +18,7 @@ describe('Predicate Custom Transactions', () => {
 
     const SENDER_PVT_KEY = testSender.privateKey;
     const RECEIVER_ADDRESS = testReceiver.address;
-
     const TESTNET_NETWORK_URL = testProvider.url;
-
-    await Provider.create(TESTNET_NETWORK_URL);
 
     const initialRecieverBalance = await testReceiver.getBalance(testProvider.getBaseAssetId());
 
