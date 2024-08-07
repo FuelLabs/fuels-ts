@@ -3,12 +3,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import {
-  InputType,
-  TransactionType,
-  InputMessageCoder,
-  TransactionCoder,
-} from '@fuel-ts/transactions';
+import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
