@@ -132,7 +132,7 @@
           "alocDependentCost": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
             }
           },
           "bsiz": {
@@ -150,13 +150,13 @@
           "cfe": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
             }
           },
           "cfeiDependentCost": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
             }
           },
           "call": {
