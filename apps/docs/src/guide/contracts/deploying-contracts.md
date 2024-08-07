@@ -7,7 +7,7 @@
 
 # Deploying Contracts
 
-Deploying contracts using the SDK is handled by the `ContractFactory`. The process involves collecting the contract artifacts, initializing the contract factory, and deploying the contract.
+To deploy a contract using the SDK, you can use the `ContractFactory`. This process involves collecting the contract artifacts, initializing the contract factory, and deploying the contract.
 
 The SDK utilizes two different deployment processes. Either simply using a single create transaction to deploy the entire contract bytecode, or, by splitting the contract into multiple chunks, deploying them as blobs (on chain data accessible to the VM) and then generating a contract from the associated blob IDs. That generated contract is then deployed as a create transaction.
 
