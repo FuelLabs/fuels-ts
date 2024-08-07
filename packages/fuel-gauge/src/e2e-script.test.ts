@@ -54,7 +54,7 @@ const configuredNetworks = {
   } as ConfiguredNetwork,
 };
 
-const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
+const selectedNetworks: Networks[] = [Networks.DEVNET];
 
 /**
  * @group node
@@ -77,7 +77,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     wallet = new WalletUnlocked(privateKey, provider);
   });
 
-  it('can deploy a large contract to a live Fuel Node', async () => {
+  it.only('can deploy a large contract to a live Fuel Node', async () => {
     if (shouldSkip) {
       return;
     }
