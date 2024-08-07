@@ -1,10 +1,11 @@
 import { BlobTransactionRequest } from './blob-transaction-request';
 import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
-import { isTransactionTypeCreate, isTransactionTypeScript } from './utils';
+import { isTransactionTypeBlob, isTransactionTypeCreate, isTransactionTypeScript } from './utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('isTransactionTypeScript', () => {
   it('should return true if the request is a script transaction', () => {
@@ -33,7 +34,7 @@ describe('isTransactionTypeCreate', () => {
 describe('isTransactionTypeBlob', () => {
   it('should return true if the request is a blob transaction', () => {
     const request = new BlobTransactionRequest({ blobId: '0x' });
-    expect(isTransactionTypeCreate(request)).toBe(true);
+    expect(isTransactionTypeBlob(request)).toBe(true);
   });
 
   it('should return false if the request is not a blob transaction', () => {
