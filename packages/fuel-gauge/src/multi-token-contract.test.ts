@@ -2,8 +2,7 @@ import type { BN } from 'fuels';
 import { Wallet, bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { MultiTokenContractAbi__factory } from '../test/typegen/contracts';
-import binHexlified from '../test/typegen/contracts/MultiTokenContractAbi.hex';
+import { MultiTokenContractFactory } from '../test/typegen/contracts';
 
 // hardcoded subIds on MultiTokenContract
 const subIds = [
@@ -21,8 +20,7 @@ describe('MultiTokenContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi__factory,
-          bytecode: binHexlified,
+          factory: MultiTokenContractFactory,
         },
       ],
     });
@@ -114,8 +112,7 @@ describe('MultiTokenContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: MultiTokenContractAbi__factory,
-          bytecode: binHexlified,
+          factory: MultiTokenContractFactory,
         },
       ],
     });

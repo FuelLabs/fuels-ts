@@ -112,13 +112,11 @@ export default class ContractFactory {
   /**
    * Create a transaction request to deploy a contract with the specified options.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
-  createTransactionRequest(
-    deployContractOptions?: DeployContractOptions & { bytecode?: Uint8Array }
-  ) {
-    const storageSlots = deployContractOptions?.storageSlots
+  createTransactionRequest(deployOptions?: DeployContractOptions & { bytecode?: Uint8Array }) {
+    const storageSlots = deployOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
         value: hexlifyWithPrefix(value),
@@ -127,7 +125,7 @@ export default class ContractFactory {
 
     const options = {
       salt: randomBytes(32),
-      ...deployContractOptions,
+      ...deployOptions,
       storageSlots: storageSlots || [],
     };
 
@@ -138,7 +136,7 @@ export default class ContractFactory {
       );
     }
 
-    const bytecode = deployContractOptions?.bytecode || this.bytecode;
+    const bytecode = deployOptions?.bytecode || this.bytecode;
     const stateRoot = options.stateRoot || getContractStorageRoot(options.storageSlots);
     const contractId = getContractId(bytecode, options.salt, stateRoot);
     const transactionRequest = new CreateTransactionRequest({
@@ -208,11 +206,11 @@ export default class ContractFactory {
   /**
    * Deploy a contract with the specified options.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
   async deployContract<TContract extends Contract = Contract>(
-    deployContractOptions: DeployContractOptions = {}
+    deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
     const { consensusParameters } = account.provider.getChain();
@@ -225,7 +223,7 @@ export default class ContractFactory {
       );
     }
 
-    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
+    const { contractId, transactionRequest } = await this.prepareDeploy(deployOptions);
 
     const transactionResponse = await account.sendTransaction(transactionRequest);
 
@@ -331,12 +329,18 @@ export default class ContractFactory {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
 
       if (!hasConfigurable) {
-        throw new Error('Contract does not have configurables to be set');
+        throw new FuelError(
+          ErrorCode.CONFIGURABLE_NOT_FOUND,
+          'Contract does not have configurables to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`Contract does not have a configurable named: '${key}'`);
+          throw new FuelError(
+            ErrorCode.CONFIGURABLE_NOT_FOUND,
+            `Contract does not have a configurable named: '${key}'`
+          );
         }
 
         const { offset } = this.interface.configurables[key];
@@ -374,16 +378,16 @@ export default class ContractFactory {
     return this.account;
   }
 
-  private async prepareDeploy(deployContractOptions: DeployContractOptions) {
-    const { configurableConstants } = deployContractOptions;
+  private async prepareDeploy(deployOptions: DeployContractOptions) {
+    const { configurableConstants } = deployOptions;
 
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
+    const { contractId, transactionRequest } = this.createTransactionRequest(deployOptions);
 
-    await this.fundTransactionRequest(transactionRequest, deployContractOptions);
+    await this.fundTransactionRequest(transactionRequest, deployOptions);
 
     return {
       contractId,

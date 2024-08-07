@@ -2,11 +2,7 @@ import type { BigNumberish } from 'fuels';
 import { bn, Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  ScriptMainArgsAbi__factory,
-  ScriptMainReturnStructAbi__factory,
-  ScriptMainTwoArgsAbi__factory,
-} from '../test/typegen';
+import { ScriptMainArgs, ScriptMainReturnStruct, ScriptMainTwoArgs } from '../test/typegen';
 
 type Baz = {
   x: number;
@@ -26,8 +22,8 @@ describe('Script Coverage', () => {
     // #region script-call-factory
     const foo = 33;
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgsAbi__factory.bin,
-      ScriptMainArgsAbi__factory.abi,
+      ScriptMainArgs.bytecode,
+      ScriptMainArgs.abi,
       wallet
     );
 
@@ -46,7 +42,7 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = ScriptMainTwoArgsAbi__factory.createInstance(wallet);
+    const scriptInstance = new ScriptMainTwoArgs(wallet);
     const foo = 33;
     const bar: Baz = {
       x: 12,
@@ -65,7 +61,7 @@ describe('Script Coverage', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = ScriptMainReturnStructAbi__factory.createInstance(wallet);
+    const scriptInstance = new ScriptMainReturnStruct(wallet);
     const foo = 1;
     const bar: Baz = {
       x: 2,
@@ -86,8 +82,8 @@ describe('Script Coverage', () => {
     } = launched;
 
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgsAbi__factory.bin,
-      ScriptMainArgsAbi__factory.abi,
+      ScriptMainArgs.bytecode,
+      ScriptMainArgs.abi,
       wallet
     );
     const foo = 42;

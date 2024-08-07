@@ -2,8 +2,7 @@
 import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory, hexlify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoValuesAbi__factory } from '../../../test/typegen';
-import bytecode from '../../../test/typegen/contracts/EchoValuesAbi.hex';
+import { EchoValuesFactory, EchoValues } from '../../../test/typegen';
 
 /**
  * @group node
@@ -36,13 +35,13 @@ describe('Deploying Contracts', () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const TESTNET_NETWORK_URL = testProvider.url;
     const WALLET_PVT_KEY = testWallet.privateKey;
-    const abi = EchoValuesAbi__factory.abi;
+    const abi = EchoValues.abi;
+    const bytecode = EchoValuesFactory.bytecode;
 
     // #region setup
     // #import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory };
     // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
-    // #context import bytecode from 'path/to/typegen/hex/output';
-    // #context import { abi } from 'path/to/typegen/outputs';
+    // #context import { bytecode, abi } from 'path/to/typegen/outputs';
     const provider = await Provider.create(TESTNET_NETWORK_URL);
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
     const factory = new ContractFactory(bytecode, abi, wallet);

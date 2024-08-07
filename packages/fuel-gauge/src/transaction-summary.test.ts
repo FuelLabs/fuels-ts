@@ -18,9 +18,7 @@ import {
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
 
-import { MultiTokenContractAbi__factory, TokenContractAbi__factory } from '../test/typegen';
-import MultiTokenContractAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
-import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
+import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
 
 /**
  * @group node
@@ -245,8 +243,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: MultiTokenContractAbi__factory,
-            bytecode: MultiTokenContractAbiHex,
+            factory: MultiTokenContractFactory,
           },
         ],
       });
@@ -277,8 +274,7 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi__factory,
-            bytecode: TokenContractAbiHex,
+            factory: TokenContractFactory,
           },
         ],
       });
@@ -319,8 +315,7 @@ describe('TransactionSummary', () => {
         using launched = await launchTestNode({
           contractsConfigs: [
             {
-              deployer: TokenContractAbi__factory,
-              bytecode: TokenContractAbiHex,
+              factory: TokenContractFactory,
             },
           ],
         });
@@ -401,12 +396,10 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi__factory,
-            bytecode: TokenContractAbiHex,
+            factory: TokenContractFactory,
           },
           {
-            deployer: TokenContractAbi__factory,
-            bytecode: TokenContractAbiHex,
+            factory: TokenContractFactory,
           },
         ],
       });
@@ -450,16 +443,13 @@ describe('TransactionSummary', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: TokenContractAbi__factory,
-            bytecode: TokenContractAbiHex,
+            factory: TokenContractFactory,
           },
           {
-            deployer: TokenContractAbi__factory,
-            bytecode: TokenContractAbiHex,
+            factory: TokenContractFactory,
           },
           {
-            deployer: TokenContractAbi__factory,
-            bytecode: TokenContractAbiHex,
+            factory: TokenContractFactory,
           },
         ],
       });
@@ -594,13 +584,12 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure that transfer operations are assembled correctly if only seeded with a MessageInput (SPENDABLE MESSAGE)', async () => {
-      const testMessage = new TestMessage({ amount: 1000000, data: '' });
+      const testMessage = new TestMessage({ amount: 1000000 });
 
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: MultiTokenContractAbi__factory,
-            bytecode: MultiTokenContractAbiHex,
+            factory: MultiTokenContractFactory,
           },
         ],
         walletsConfig: {

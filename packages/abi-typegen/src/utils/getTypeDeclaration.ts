@@ -14,7 +14,7 @@ export function resolveInputLabel(
 
   let typeDecl: string;
 
-  if (typeArguments) {
+  if (typeArguments?.length) {
     // recursively process child `typeArguments`
     typeDecl = parseTypeArguments({
       types,

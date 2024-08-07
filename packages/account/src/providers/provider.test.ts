@@ -8,7 +8,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -26,6 +26,7 @@ import {
 import { Wallet } from '../wallet';
 
 import type { Coin } from './coin';
+import { coinQuantityfy } from './coin-quantity';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
@@ -33,7 +34,7 @@ import Provider, {
   RESOURCES_PAGE_SIZE_LIMIT,
 } from './provider';
 import type { CoinTransactionRequestInput } from './transaction-request';
-import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
+import { CreateTransactionRequest, ScriptTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
@@ -539,6 +540,59 @@ describe('Provider', () => {
         utxos: [usedUtxo],
       },
     });
+  });
+
+  it('should throws if max of inputs was exceeded', async () => {
+    const maxInputs = 2;
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: {
+            consensus_parameters: {
+              V1: {
+                tx_params: {
+                  V1: {
+                    max_inputs: maxInputs,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      walletsConfig: {
+        amountPerCoin: 500_000,
+      },
+    });
+
+    const {
+      wallets: [sender, receiver],
+      provider,
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+
+    const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
+    const resources = await sender.getResourcesToSpend(quantities);
+
+    request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
+
+    const txCost = await sender.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    request.addResources(resources);
+
+    await sender.fund(request, txCost);
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        ErrorCode.MAX_INPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of inputs for funding.'
+      )
+    );
   });
 
   it('can getBlocks', async () => {

@@ -4,16 +4,14 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { BN, bn, toHex, Interface, ContractFactory, arrayify, concat } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import type { LargeContractAbi } from '../test/typegen/contracts';
 import {
-  StorageTestContractAbi__factory,
-  LargeContractAbi__factory,
-  ConfigurableContractAbi__factory,
-} from '../test/typegen/contracts';
-import ConfigurableContractAbiHex from '../test/typegen/contracts/ConfigurableContractAbi.hex';
-import largeContractHex from '../test/typegen/contracts/LargeContractAbi.hex';
-import LargeContractAbiHex from '../test/typegen/contracts/LargeContractAbi.hex';
-import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
+  StorageTestContractFactory,
+  StorageTestContract,
+  LargeContractFactory,
+  ConfigurableContractFactory,
+  LargeContract,
+  ConfigurableContract,
+} from '../test/typegen';
 
 import { launchTestContract } from './utils';
 
@@ -24,8 +22,7 @@ import { launchTestContract } from './utils';
 describe('Contract Factory', () => {
   it('Creates a factory from inputs that can return call results', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi__factory,
-      bytecode: StorageTestContractAbiHex,
+      factory: StorageTestContractFactory,
     });
     expect(contract.interface).toBeInstanceOf(Interface);
 
@@ -45,8 +42,7 @@ describe('Contract Factory', () => {
 
   it('Creates a factory from inputs that can return transaction results', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi__factory,
-      bytecode: StorageTestContractAbiHex,
+      factory: StorageTestContractFactory,
     });
 
     expect(contract.interface).toBeInstanceOf(Interface);
@@ -95,8 +91,7 @@ describe('Contract Factory', () => {
 
   it('Creates a factory from inputs that can prepare call data', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi__factory,
-      bytecode: StorageTestContractAbiHex,
+      factory: StorageTestContractFactory,
     });
 
     const prepared = contract.functions.increment_counter(1).getCallConfig();
@@ -111,7 +106,7 @@ describe('Contract Factory', () => {
     });
   });
 
-  it('should not override user input maxFee when calling deployContract', async () => {
+  it('should not override user input maxFee when calling deploy', async () => {
     using launched = await launchTestNode();
     const {
       wallets: [wallet],
@@ -119,13 +114,13 @@ describe('Contract Factory', () => {
 
     const setFee = bn(120_000);
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const spy = vi.spyOn(factory.account as Account, 'sendTransaction');
 
-    await factory.deployContract({
+    await factory.deploy({
       maxFee: setFee,
     });
 
@@ -138,9 +133,9 @@ describe('Contract Factory', () => {
 
   it('Creates a contract with initial storage fixed var names', async () => {
     using contract = await launchTestContract({
-      deployer: StorageTestContractAbi__factory,
-      bytecode: StorageTestContractAbiHex,
-      storageSlots: StorageTestContractAbi__factory.storageSlots,
+      factory: StorageTestContractFactory,
+
+      storageSlots: StorageTestContract.storageSlots,
     });
 
     const call1 = await contract.functions.return_var1().call();
@@ -176,13 +171,13 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       storageSlots: [
         { key: '0x0000000000000000000000000000000000000000000000000000000000000001', value: b256 },
       ],
@@ -200,15 +195,15 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const b256 = '0x626f0c36909faecc316056fca8be684ab0cd06afc63247dc008bdf9e433f927a';
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       storageSlots: [
-        ...StorageTestContractAbi__factory.storageSlots, // initializing from storage_slots.json
+        ...StorageTestContract.storageSlots, // initializing from storage_slots.json
         { key: '0000000000000000000000000000000000000000000000000000000000000001', value: b256 }, // Initializing manual value
       ],
     });
@@ -245,8 +240,8 @@ describe('Contract Factory', () => {
 
   it('should throws if calls createTransactionRequest is called when provider is not set', async () => {
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi
     );
 
     await expectToThrowFuelError(
@@ -264,7 +259,7 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
+    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
 
     await expectToThrowFuelError(
       () => factory.deployContract(),
@@ -285,10 +280,10 @@ describe('Contract Factory', () => {
     const {
       wallets: [wallet],
     } = launched;
-    const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
+    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
     expect(factory.getBytecodeSize() % 8 === 0).toBe(true);
 
-    const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
+    const deploy = await factory.deployContractAsBlobs<LargeContract>();
 
     const { contract } = await deploy.waitForResult();
 
@@ -309,10 +304,10 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
 
-    const bytecode = concat([arrayify(largeContractHex), new Uint8Array(3)]);
-    const factory = new ContractFactory(bytecode, LargeContractAbi__factory.abi, wallet);
+    const bytecode = concat([arrayify(LargeContractFactory.bytecode), new Uint8Array(3)]);
+    const factory = new ContractFactory(bytecode, LargeContract.abi, wallet);
     expect(factory.getBytecodeSize() % 8 === 0).toBe(false);
-    const deploy = await factory.deployContractAsBlobs<LargeContractAbi>();
+    const deploy = await factory.deployContractAsBlobs<LargeContract>();
 
     const { contract } = await deploy.waitForResult();
     expect(contract.id).toBeDefined();
@@ -330,11 +325,11 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(largeContractHex, LargeContractAbi__factory.abi, wallet);
+    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
     const chunkSizeTolerance = 2;
 
     await expectToThrowFuelError(
-      () => factory.deployContractAsBlobs<LargeContractAbi>({ chunkSizeTolerance }),
+      () => factory.deployContractAsBlobs<LargeContract>({ chunkSizeTolerance }),
       new FuelError(
         ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
         'Chunk size tolerance must be between 0 and 1'
@@ -350,8 +345,8 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      ConfigurableContractAbiHex,
-      ConfigurableContractAbi__factory.abi,
+      ConfigurableContractFactory.bytecode,
+      ConfigurableContract.abi,
       wallet
     );
 
@@ -371,8 +366,8 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      ConfigurableContractAbiHex,
-      ConfigurableContractAbi__factory.abi,
+      ConfigurableContractFactory.bytecode,
+      ConfigurableContract.abi,
       wallet
     );
 
@@ -391,7 +386,7 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(LargeContractAbiHex, LargeContractAbi__factory.abi, wallet);
+    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
 
     const deploy = await factory.deploy();
     const { contract } = await deploy.waitForResult();

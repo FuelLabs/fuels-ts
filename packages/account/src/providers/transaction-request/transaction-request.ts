@@ -2,6 +2,7 @@ import { UTXO_ID_LEN } from '@fuel-ts/abi-coder';
 import { Address, addressify } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
+import { FuelError } from '@fuel-ts/errors';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -531,7 +532,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    * @hidden
    */
   metadataGas(_gasCosts: GasCosts): BN {
-    throw new Error('Not implemented');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Not implemented');
   }
 
   /**

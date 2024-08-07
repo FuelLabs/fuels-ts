@@ -19,6 +19,10 @@ export enum ErrorCode {
   INVALID_DATA = 'invalid-data',
   FUNCTION_NOT_FOUND = 'function-not-found',
   UNSUPPORTED_ENCODING_VERSION = 'unsupported-encoding-version',
+  TIMEOUT_EXCEEDED = 'timeout-exceeded',
+  CONFIG_FILE_NOT_FOUND = 'config-file-not-found',
+  CONFIG_FILE_ALREADY_EXISTS = 'config-file-already-exists',
+  WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
@@ -75,6 +79,7 @@ export enum ErrorCode {
   CONTRACT_SIZE_EXCEEDS_LIMIT = 'contract-size-exceeds-limit',
   BLOB_ID_ALREADY_UPLOADED = 'blob-id-already-uploaded',
   INVALID_CHUNK_SIZE_TOLERANCE = 'invalid-chunk-size-tolerance',
+  MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
