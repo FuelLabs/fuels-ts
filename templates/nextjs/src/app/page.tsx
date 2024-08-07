@@ -1,7 +1,6 @@
 "use client";
 
-import type { TestContractAbi } from "@/sway-api";
-import { TestContractAbi__factory } from "@/sway-api";
+import { TestContract } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
@@ -25,7 +24,7 @@ const contractId =
 
 export default function Home() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
-  const [contract, setContract] = useState<TestContractAbi>();
+  const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
 
   /**
@@ -35,7 +34,7 @@ export default function Home() {
   useAsync(async () => {
     if (wallet) {
       // Create a new instance of the contract
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
+      const testContract = new TestContract(contractId, wallet);
       setContract(testContract);
 
       // Read the current value of the counter

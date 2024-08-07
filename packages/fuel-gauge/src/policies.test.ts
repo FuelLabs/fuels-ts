@@ -10,8 +10,7 @@ import {
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PayableAnnotationAbi__factory, ScriptMainArgsAbi__factory } from '../test/typegen';
-import PayableAnnotationAbiHex from '../test/typegen/contracts/PayableAnnotationAbi.hex';
+import { PayableAnnotation, PayableAnnotationFactory, ScriptMainArgs } from '../test/typegen';
 
 /**
  * @group node
@@ -155,17 +154,17 @@ describe('Policies', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(
-      PayableAnnotationAbiHex,
-      PayableAnnotationAbi__factory.abi,
-      wallet
-    );
-
     const txParams: CustomTxParams = {
       tip: 11,
       witnessLimit: 2000,
       maxFee: 70_000,
     };
+
+    const factory = new ContractFactory(
+      PayableAnnotationFactory.bytecode,
+      PayableAnnotation.abi,
+      wallet
+    );
 
     const { transactionRequest: txRequest } = factory.createTransactionRequest(txParams);
 
@@ -189,8 +188,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbi__factory,
-          bytecode: PayableAnnotationAbiHex,
+          factory: PayableAnnotationFactory,
         },
       ],
     });
@@ -228,8 +226,8 @@ describe('Policies', () => {
     } = launched;
 
     const scriptInstance = new Script<BigNumberish[], BigNumberish>(
-      ScriptMainArgsAbi__factory.bin,
-      ScriptMainArgsAbi__factory.abi,
+      ScriptMainArgs.bytecode,
+      ScriptMainArgs.abi,
       wallet
     );
 
@@ -290,8 +288,7 @@ describe('Policies', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: PayableAnnotationAbi__factory,
-          bytecode: PayableAnnotationAbiHex,
+          factory: PayableAnnotationFactory,
         },
       ],
     });
@@ -383,8 +380,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbi__factory,
-            bytecode: PayableAnnotationAbiHex,
+            factory: PayableAnnotationFactory,
           },
         ],
       });
@@ -445,8 +441,8 @@ describe('Policies', () => {
       const maxFee = 1;
 
       const factory = new ContractFactory(
-        PayableAnnotationAbiHex,
-        PayableAnnotationAbi__factory.abi,
+        PayableAnnotationFactory.bytecode,
+        PayableAnnotation.abi,
         wallet
       );
 
@@ -456,7 +452,7 @@ describe('Policies', () => {
       };
 
       await expect(async () => {
-        await factory.deployContract(txParams);
+        await factory.deploy(txParams);
       }).rejects.toThrow(new RegExp(`Max fee '${maxFee}' is lower than the required`));
     });
 
@@ -466,8 +462,7 @@ describe('Policies', () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {
-            deployer: PayableAnnotationAbi__factory,
-            bytecode: PayableAnnotationAbiHex,
+            factory: PayableAnnotationFactory,
           },
         ],
       });

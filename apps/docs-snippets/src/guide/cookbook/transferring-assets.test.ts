@@ -23,7 +23,7 @@ describe(__filename, () => {
     );
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     ({ contract: deployedContract } = await waitForResult());
   });
 

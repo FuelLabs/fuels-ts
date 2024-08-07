@@ -58,14 +58,11 @@ describe('runTypegen.js', () => {
     const files = [
       join(output, 'index.ts'),
       join(output, 'common.d.ts'),
-      join(output, `${normalizedName}Abi.d.ts`),
-      join(output, `${normalizedName}2Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-      join(output, `${normalizedName}Abi.hex.ts`),
-      join(output, `${normalizedName}2Abi.hex.ts`),
+      join(output, `${normalizedName}.ts`),
+      join(output, `${normalizedName}Factory.ts`),
     ];
 
-    expect(files.length).toEqual(7);
+    expect(files.length).toEqual(4);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
@@ -105,12 +102,11 @@ describe('runTypegen.js', () => {
     const files = [
       join(output, 'index.ts'),
       join(output, 'common.d.ts'),
-      join(output, `${normalizedName}Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-      join(output, `${normalizedName}Abi.hex.ts`),
+      join(output, `${normalizedName}.ts`),
+      join(output, `${normalizedName}Factory.ts`),
     ];
 
-    expect(files.length).toEqual(5);
+    expect(files.length).toEqual(4);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);
@@ -147,10 +143,7 @@ describe('runTypegen.js', () => {
     expect(error).toBeFalsy();
 
     // check if all files were created
-    const files = [
-      join(output, 'index.ts'),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-    ];
+    const files = [join(output, 'index.ts'), join(output, `${normalizedName}.ts`)];
 
     expect(files.length).toEqual(2);
 
@@ -300,14 +293,11 @@ describe('runTypegen.js', () => {
     const files = [
       join(output, 'index.ts'),
       join(output, 'common.d.ts'),
-      join(output, `${normalizedName}Abi.d.ts`),
-      join(output, `${normalizedName}2Abi.d.ts`),
-      join(output, 'factories', `${normalizedName}Abi__factory.ts`),
-      join(output, `${normalizedName}Abi.hex.ts`),
-      join(output, `${normalizedName}2Abi.hex.ts`),
+      join(output, `${normalizedName}.ts`),
+      join(output, `${normalizedName}Factory.ts`),
     ];
 
-    expect(files.length).toEqual(7);
+    expect(files.length).toEqual(4);
 
     files.forEach((f) => {
       expect(existsSync(f)).toEqual(true);

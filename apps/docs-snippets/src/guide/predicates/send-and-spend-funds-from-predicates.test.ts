@@ -26,7 +26,7 @@ describe(__filename, () => {
       bytecode: bin,
       provider,
       abi,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
     baseAssetId = provider.getBaseAssetId();
     await seedTestWallet(predicate, [[500_000, baseAssetId]]);
@@ -39,7 +39,7 @@ describe(__filename, () => {
       bytecode: bin,
       provider,
       abi,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
     // #endregion send-and-spend-funds-from-predicates-2
 
@@ -83,7 +83,7 @@ describe(__filename, () => {
       bytecode: bin,
       provider,
       abi,
-      inputData: ['0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4'],
+      data: ['0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4'],
     });
 
     const amountToPredicate = 100;
@@ -117,7 +117,7 @@ describe(__filename, () => {
       bytecode: bin,
       abi,
       provider: predicateOwner.provider,
-      inputData: [getRandomB256()],
+      data: [getRandomB256()],
     });
 
     const amountToPredicate = 10000;
@@ -151,7 +151,7 @@ describe(__filename, () => {
       bytecode: bin,
       abi,
       provider,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
 
     const amountToPredicate = 10_000;
@@ -201,7 +201,7 @@ describe(__filename, () => {
       bytecode: bin,
       abi,
       provider,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
 
     const amountToPredicate = 300_000;

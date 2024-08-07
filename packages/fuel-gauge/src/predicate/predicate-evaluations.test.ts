@@ -1,10 +1,7 @@
 import { Address, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  PredicateTrueAbi__factory,
-  PredicateFalseAbi__factory,
-} from '../../test/typegen/predicates';
+import { PredicateTrue, PredicateFalse } from '../../test/typegen/predicates';
 
 import { assertBalances, fundPredicate } from './utils/predicate';
 
@@ -25,7 +22,7 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
 
-      const predicate = PredicateTrueAbi__factory.createInstance(provider);
+      const predicate = new PredicateTrue({ provider });
 
       await fundPredicate(wallet, predicate, 200_000);
 
@@ -56,7 +53,7 @@ describe('Predicate', () => {
 
       const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
 
-      const predicate = PredicateFalseAbi__factory.createInstance(provider);
+      const predicate = new PredicateFalse({ provider });
 
       await fundPredicate(wallet, predicate, 200_000);
 

@@ -2,11 +2,11 @@ import { toHex, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  PredicateAddressAbi__factory,
-  PredicateMainArgsStructAbi__factory,
-  PredicateMainArgsVectorAbi__factory,
-  PredicateMultiArgsAbi__factory,
-  PredicateU32Abi__factory,
+  PredicateAddress,
+  PredicateMainArgsStruct,
+  PredicateMainArgsVector,
+  PredicateMultiArgs,
+  PredicateU32,
 } from '../../test/typegen';
 
 import { fundPredicate, assertBalances } from './utils/predicate';
@@ -28,9 +28,10 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = PredicateAddressAbi__factory.createInstance(provider, [
-        '0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a',
-      ]);
+      const predicate = new PredicateAddress({
+        provider,
+        data: ['0xef86afa9696cf0dc6385e2c407a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a'],
+      });
 
       // transfer funds to predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate, 3);
@@ -60,9 +61,10 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = PredicateAddressAbi__factory.createInstance(provider, [
-        '0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada',
-      ]);
+      const predicate = new PredicateAddress({
+        provider,
+        data: ['0xbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbadbada'],
+      });
 
       // fund predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate);
@@ -82,7 +84,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = PredicateU32Abi__factory.createInstance(provider, [1078]);
+      const predicate = new PredicateU32({ provider, data: [1078] });
 
       const receiver = Wallet.generate({ provider });
 
@@ -113,7 +115,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = PredicateU32Abi__factory.createInstance(provider, [100]);
+      const predicate = new PredicateU32({ provider, data: [100] });
 
       // fund predicate
       await fundPredicate(fundingWallet, predicate, 90_000_00, 3);
@@ -138,10 +140,10 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicateInstanceForBalance = PredicateMainArgsStructAbi__factory.createInstance(
+      const predicateInstanceForBalance = new PredicateMainArgsStruct({
         provider,
-        [{ has_account: true, total_complete: 100 }]
-      );
+        data: [{ has_account: true, total_complete: 100 }],
+      });
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -155,9 +157,10 @@ describe('Predicate', () => {
       await fundTx.waitForResult();
 
       // #region predicate-struct-arg
-      const predicate = PredicateMainArgsStructAbi__factory.createInstance(provider, [
-        { has_account: true, total_complete: 100 },
-      ]);
+      const predicate = new PredicateMainArgsStruct({
+        provider,
+        data: [{ has_account: true, total_complete: 100 }],
+      });
 
       const tx = await predicate.transfer(
         receiver.address,
@@ -182,9 +185,10 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = PredicateMainArgsStructAbi__factory.createInstance(provider, [
-        { has_account: false, total_complete: 0 },
-      ]);
+      const predicate = new PredicateMainArgsStruct({
+        provider,
+        data: [{ has_account: false, total_complete: 0 }],
+      });
 
       const receiver = Wallet.generate({ provider });
 
@@ -204,7 +208,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = PredicateMainArgsVectorAbi__factory.createInstance(provider, [[42]]);
+      const predicate = new PredicateMainArgsVector({ provider, data: [[42]] });
 
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
@@ -238,7 +242,7 @@ describe('Predicate', () => {
       const initialReceiverBalance = await receiver.getBalance();
 
       // #region predicate-multi-args
-      const predicate = PredicateMultiArgsAbi__factory.createInstance(provider, [20, 30]);
+      const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund the predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate);
@@ -269,7 +273,7 @@ describe('Predicate', () => {
       const receiver = Wallet.generate({ provider });
       const initialReceiverBalance = await receiver.getBalance();
 
-      const predicate = PredicateMultiArgsAbi__factory.createInstance(provider, [20, 30]);
+      const predicate = new PredicateMultiArgs({ provider, data: [20, 30] });
 
       // fund predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate);
@@ -296,7 +300,7 @@ describe('Predicate', () => {
         wallets: [fundingWallet],
       } = launched;
 
-      const predicate = PredicateMultiArgsAbi__factory.createInstance(provider, [20, 20]);
+      const predicate = new PredicateMultiArgs({ provider, data: [20, 20] });
 
       // fund predicate
       await fundPredicate(fundingWallet, predicate, amountToPredicate);

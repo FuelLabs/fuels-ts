@@ -8,15 +8,12 @@ import { ContractFactory, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  AdvancedLoggingAbi__factory,
-  AdvancedLoggingOtherContractAbi__factory,
-  MultiTokenContractAbi__factory,
-  RevertErrorAbi__factory,
+  AdvancedLoggingFactory,
+  AdvancedLoggingOtherContractFactory,
+  MultiTokenContract,
+  MultiTokenContractFactory,
+  RevertErrorFactory,
 } from '../test/typegen/contracts';
-import AdvancedLoggingAbiHex from '../test/typegen/contracts/AdvancedLoggingAbi.hex';
-import AdvancedLoggingOtherContractAbiHex from '../test/typegen/contracts/AdvancedLoggingOtherContractAbi.hex';
-import MultiTokenAbiHex from '../test/typegen/contracts/MultiTokenContractAbi.hex';
-import RevertErrorAbiHex from '../test/typegen/contracts/RevertErrorAbi.hex';
 
 /**
  * @group node
@@ -27,8 +24,7 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbi__factory,
-          bytecode: RevertErrorAbiHex,
+          factory: RevertErrorFactory,
         },
       ],
     });
@@ -125,20 +121,16 @@ describe('dry-run-multiple-txs', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: RevertErrorAbi__factory,
-          bytecode: RevertErrorAbiHex,
+          factory: RevertErrorFactory,
         },
         {
-          deployer: MultiTokenContractAbi__factory,
-          bytecode: MultiTokenAbiHex,
+          factory: MultiTokenContractFactory,
         },
         {
-          deployer: AdvancedLoggingAbi__factory,
-          bytecode: AdvancedLoggingAbiHex,
+          factory: AdvancedLoggingFactory,
         },
         {
-          deployer: AdvancedLoggingOtherContractAbi__factory,
-          bytecode: AdvancedLoggingOtherContractAbiHex,
+          factory: AdvancedLoggingOtherContractFactory,
         },
       ],
     });
@@ -162,8 +154,8 @@ describe('dry-run-multiple-txs', () => {
 
     // request 1
     const factory = new ContractFactory(
-      MultiTokenAbiHex,
-      MultiTokenContractAbi__factory.abi,
+      MultiTokenContractFactory.bytecode,
+      MultiTokenContract.abi,
       wallet
     );
     const { transactionRequest: request1 } = factory.createTransactionRequest({

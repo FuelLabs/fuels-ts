@@ -106,11 +106,11 @@ export default class ContractFactory {
   /**
    * Create a transaction request to deploy a contract with the specified options.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
-  createTransactionRequest(deployContractOptions?: DeployContractOptions) {
-    const storageSlots = deployContractOptions?.storageSlots
+  createTransactionRequest(deployOptions?: DeployContractOptions) {
+    const storageSlots = deployOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
         value: hexlifyWithPrefix(value),
@@ -119,7 +119,7 @@ export default class ContractFactory {
 
     const options = {
       salt: randomBytes(32),
-      ...deployContractOptions,
+      ...deployOptions,
       storageSlots: storageSlots || [],
     };
 
@@ -148,11 +148,11 @@ export default class ContractFactory {
   /**
    * Deploy a contract with the specified options.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContract<TContract extends Contract = Contract>(
-    deployContractOptions: DeployContractOptions = {}
+  async deploy<TContract extends Contract = Contract>(
+    deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
     if (this.bytecode.length > MAX_CONTRACT_SIZE) {
       throw new FuelError(
@@ -161,7 +161,7 @@ export default class ContractFactory {
       );
     }
 
-    const { contractId, transactionRequest } = await this.prepareDeploy(deployContractOptions);
+    const { contractId, transactionRequest } = await this.prepareDeploy(deployOptions);
 
     const account = this.getAccount();
 
@@ -187,12 +187,18 @@ export default class ContractFactory {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
 
       if (!hasConfigurable) {
-        throw new Error('Contract does not have configurables to be set');
+        throw new FuelError(
+          ErrorCode.CONFIGURABLE_NOT_FOUND,
+          'Contract does not have configurables to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`Contract does not have a configurable named: '${key}'`);
+          throw new FuelError(
+            ErrorCode.CONFIGURABLE_NOT_FOUND,
+            `Contract does not have a configurable named: '${key}'`
+          );
         }
 
         const { offset } = this.interface.configurables[key];
@@ -220,26 +226,26 @@ export default class ContractFactory {
     return this.account;
   }
 
-  private async prepareDeploy(deployContractOptions: DeployContractOptions) {
-    const { configurableConstants } = deployContractOptions;
+  private async prepareDeploy(deployOptions: DeployContractOptions) {
+    const { configurableConstants } = deployOptions;
 
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
+    const { contractId, transactionRequest } = this.createTransactionRequest(deployOptions);
 
     const account = this.getAccount();
 
     const txCost = await account.getTransactionCost(transactionRequest);
 
-    const { maxFee: setMaxFee } = deployContractOptions;
+    const { maxFee: setMaxFee } = deployOptions;
 
     if (isDefined(setMaxFee)) {
       if (txCost.maxFee.gt(setMaxFee)) {
         throw new FuelError(
           ErrorCode.MAX_FEE_TOO_LOW,
-          `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
+          `Max fee '${deployOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
         );
       }
     } else {

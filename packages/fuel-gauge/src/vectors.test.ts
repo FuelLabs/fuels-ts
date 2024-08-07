@@ -1,21 +1,16 @@
 import { bn, randomBytes, hexlify } from 'fuels';
 import type { BN } from 'fuels';
 
-import { VectorsAbi__factory } from '../test/typegen/contracts';
-import VectorsAbiHex from '../test/typegen/contracts/VectorsAbi.hex';
+import { VectorsFactory } from '../test/typegen/contracts';
+import { SmallEnumInput } from '../test/typegen/contracts/CoverageContract';
 
 import { launchTestContract } from './utils';
 
 const toNumbers = (nums: BN[]) => nums.map((num: BN) => bn(num).toNumber());
 
-enum SmallEnum {
-  Empty = 'Empty',
-}
-
 function setupContract() {
   return launchTestContract({
-    deployer: VectorsAbi__factory,
-    bytecode: VectorsAbiHex,
+    factory: VectorsFactory,
   });
 }
 
@@ -288,11 +283,11 @@ describe('Vector Tests', () => {
     using contractInstance = await setupContract();
 
     const INPUT = [
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
     ];
 
     const { waitForResult } = await contractInstance.functions

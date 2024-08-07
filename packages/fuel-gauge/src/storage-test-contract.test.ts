@@ -1,8 +1,7 @@
 import { toHex, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { StorageTestContractAbi__factory } from '../test/typegen';
-import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
+import { StorageTestContract, StorageTestContractFactory } from '../test/typegen';
 
 /**
  * @group node
@@ -16,17 +15,17 @@ describe('StorageTestContract', () => {
       wallets: [wallet],
     } = launched;
 
-    const { storageSlots } = StorageTestContractAbi__factory;
+    const { storageSlots } = StorageTestContract;
 
     // #region contract-deployment-storage-slots
     // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
 
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
-    const deploy = await factory.deployContract({
+    const deploy = await factory.deploy({
       storageSlots,
     });
 
@@ -58,12 +57,12 @@ describe('StorageTestContract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     // #region contract-deployment-storage-slots-inline
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       storageSlots: [
         {
           key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',

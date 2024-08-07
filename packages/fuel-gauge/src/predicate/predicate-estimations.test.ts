@@ -16,9 +16,9 @@ import {
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  PredicateMainArgsStructAbi__factory,
-  PredicateTrueAbi__factory,
-  PredicateValidateTransferAbi__factory,
+  PredicateMainArgsStruct,
+  PredicateValidateTransfer,
+  PredicateTrue,
 } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
 
@@ -40,14 +40,11 @@ describe('Predicate', () => {
         provider,
       } = launched;
 
-      const predicateTrue = new Predicate({
-        bytecode: PredicateTrueAbi__factory.bin,
-        provider,
-      });
+      const predicateTrue = new PredicateTrue({ provider });
 
       const predicateStruct = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStructAbi__factory.bin,
-        abi: PredicateMainArgsStructAbi__factory.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
+        abi: PredicateMainArgsStruct.abi,
         provider,
       });
 
@@ -139,10 +136,7 @@ describe('Predicate', () => {
 
       const tx = new ScriptTransactionRequest();
 
-      const predicateTrue = new Predicate({
-        bytecode: PredicateTrueAbi__factory.bin,
-        provider,
-      });
+      const predicateTrue = new PredicateTrue({ provider });
 
       await fundPredicate(wallet, predicateTrue, fundingAmount);
 
@@ -165,14 +159,11 @@ describe('Predicate', () => {
         provider,
       } = launched;
 
-      const predicateTrue = new Predicate({
-        bytecode: PredicateTrueAbi__factory.bin,
-        provider,
-      });
+      const predicateTrue = new PredicateTrue({ provider });
 
       const predicateStruct = new Predicate<[Validation]>({
-        bytecode: PredicateMainArgsStructAbi__factory.bin,
-        abi: PredicateMainArgsStructAbi__factory.abi,
+        abi: PredicateMainArgsStruct.abi,
+        bytecode: PredicateMainArgsStruct.bytecode,
         provider,
       });
 
@@ -213,10 +204,10 @@ describe('Predicate', () => {
       const amountToPredicate = 200_000;
 
       const predicateValidateTransfer = new Predicate<[BN]>({
-        bytecode: PredicateValidateTransferAbi__factory.bin,
-        abi: PredicateValidateTransferAbi__factory.abi,
+        abi: PredicateValidateTransfer.abi,
+        bytecode: PredicateValidateTransfer.bytecode,
         provider,
-        inputData: [bn(amountToPredicate)],
+        data: [bn(amountToPredicate)],
       });
 
       await fundPredicate(wallet, predicateValidateTransfer, amountToPredicate);
@@ -256,8 +247,8 @@ describe('Predicate', () => {
         } = launched;
 
         const predicateStruct = new Predicate<[Validation]>({
-          bytecode: PredicateMainArgsStructAbi__factory.bin,
-          abi: PredicateMainArgsStructAbi__factory.abi,
+          abi: PredicateMainArgsStruct.abi,
+          bytecode: PredicateMainArgsStruct.bytecode,
           provider,
         });
 
@@ -290,8 +281,8 @@ describe('Predicate', () => {
         } = launched;
 
         const predicateStruct = new Predicate<[Validation]>({
-          bytecode: PredicateMainArgsStructAbi__factory.bin,
-          abi: PredicateMainArgsStructAbi__factory.abi,
+          abi: PredicateMainArgsStruct.abi,
+          bytecode: PredicateMainArgsStruct.bytecode,
           provider,
         });
 

@@ -1,8 +1,7 @@
 import { launchTestNode } from 'fuels/test-utils';
 
-import { VoidAbi__factory } from '../test/typegen';
+import { VoidFactory } from '../test/typegen';
 import type { NativeEnumInput } from '../test/typegen/contracts/VoidAbi';
-import VoidAbiHex from '../test/typegen/contracts/VoidAbi.hex';
 import type { Option } from '../test/typegen/contracts/common';
 
 /**
@@ -12,8 +11,7 @@ import type { Option } from '../test/typegen/contracts/common';
 describe('Void Tests', () => {
   const contractsConfigs = [
     {
-      deployer: VoidAbi__factory,
-      bytecode: VoidAbiHex,
+      factory: VoidFactory,
     },
   ];
 

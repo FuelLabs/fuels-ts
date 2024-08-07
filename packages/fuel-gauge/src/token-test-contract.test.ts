@@ -3,8 +3,8 @@ import type { AssetId, BN } from 'fuels';
 import { toHex, Wallet, bn } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
-import { TokenContractAbi__factory } from '../test/typegen';
-import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
+import { TokenContractFactory } from '../test/typegen';
+
 /**
  * @group node
  * @group browser
@@ -16,8 +16,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractAbi__factory,
-          bytecode: TokenContractAbiHex,
+          factory: TokenContractFactory,
         },
       ],
     });
@@ -66,8 +65,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractAbi__factory,
-          bytecode: TokenContractAbiHex,
+          factory: TokenContractFactory,
         },
       ],
       walletsConfig: {
@@ -141,8 +139,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractAbi__factory,
-          bytecode: TokenContractAbiHex,
+          factory: TokenContractFactory,
         },
       ],
     });
@@ -181,8 +178,7 @@ describe('TokenTestContract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: TokenContractAbi__factory,
-          bytecode: TokenContractAbiHex,
+          factory: TokenContractFactory,
         },
       ],
     });

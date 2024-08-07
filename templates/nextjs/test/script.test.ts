@@ -7,7 +7,7 @@ import { describe, test, expect } from 'vitest';
  *
  * Can't find these imports? Make sure you've run `fuels build` to generate these with typegen.
  */
-import { TestScriptAbi__factory } from '../src/sway-api';
+import { TestScript } from '../src/sway-api';
 
 /**
  * @group node
@@ -29,7 +29,7 @@ describe('Script', () => {
     } = launched;
 
     // Now, we can instantiate our script.
-    const script = TestScriptAbi__factory.createInstance(sender);
+    const script = new TestScript(sender);
 
     // Lets also setup a value to use in the test.
     const expectedValue = 1337;

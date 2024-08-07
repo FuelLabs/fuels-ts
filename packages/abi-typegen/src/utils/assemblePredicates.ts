@@ -4,7 +4,7 @@ import type { Abi } from '../abi/Abi';
 import type { IFile } from '../index';
 import { renderCommonTemplate } from '../templates/common/common';
 import { renderIndexTemplate } from '../templates/common/index';
-import { renderFactoryTemplate } from '../templates/predicate/factory';
+import { renderMainTemplate } from '../templates/predicate/main';
 
 /**
  * Render all Predicate-related templates and returns
@@ -18,13 +18,13 @@ export function assemblePredicates(params: { abis: Abi[]; outputDir: string }) {
   const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
 
   abis.forEach((abi) => {
-    const { name } = abi;
+    const { capitalizedName: name } = abi;
 
-    const factoryFilepath = `${outputDir}/factories/${name}__factory.ts`;
+    const factoryFilepath = `${outputDir}/${name}.ts`;
 
     const factory: IFile = {
       path: factoryFilepath,
-      contents: renderFactoryTemplate({ abi }),
+      contents: renderMainTemplate({ abi }),
     };
 
     files.push(factory);
@@ -33,7 +33,7 @@ export function assemblePredicates(params: { abis: Abi[]; outputDir: string }) {
   // Includes index file
   const indexFile: IFile = {
     path: `${outputDir}/index.ts`,
-    contents: renderIndexTemplate({ abis }),
+    contents: renderIndexTemplate({ files }),
   };
 
   files.push(indexFile);

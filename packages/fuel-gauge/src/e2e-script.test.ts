@@ -10,7 +10,7 @@ import {
   assets,
 } from 'fuels';
 
-import { ScriptMainArgBoolAbi__factory } from '../test/typegen';
+import { ScriptMainArgBool } from '../test/typegen';
 
 enum Networks {
   DEVNET = 'devnet',
@@ -81,7 +81,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       return;
     }
 
-    const scriptInstance = ScriptMainArgBoolAbi__factory.createInstance(wallet);
+    const scriptInstance = new ScriptMainArgBool(wallet);
 
     let output: boolean = false;
     try {

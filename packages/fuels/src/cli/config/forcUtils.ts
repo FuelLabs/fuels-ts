@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { readFileSync, existsSync } from 'fs';
 import camelCase from 'lodash.camelcase';
 import { join } from 'path';
@@ -35,7 +36,10 @@ export function readForcToml(path: string) {
   const forcPath = join(path, './Forc.toml');
 
   if (!existsSync(forcPath)) {
-    throw new Error(`Toml file not found:\n  ${forcPath}`);
+    throw new FuelError(
+      FuelError.CODES.CONFIG_FILE_NOT_FOUND,
+      `TOML file not found:\n  ${forcPath}`
+    );
   }
 
   if (!forcFiles.has(forcPath)) {

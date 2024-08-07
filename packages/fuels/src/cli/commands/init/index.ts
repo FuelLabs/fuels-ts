@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { type Command } from 'commander';
 import { existsSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
@@ -45,7 +46,10 @@ export function init(program: Command) {
     const fuelsConfigPath = join(path, 'fuels.config.ts');
 
     if (existsSync(fuelsConfigPath)) {
-      throw new Error(`Config file exists, aborting.\n  ${fuelsConfigPath}`);
+      throw new FuelError(
+        FuelError.CODES.CONFIG_FILE_ALREADY_EXISTS,
+        `Config file exists, aborting.\n  ${fuelsConfigPath}`
+      );
     }
 
     const renderedConfig = renderFuelsConfigTemplate({

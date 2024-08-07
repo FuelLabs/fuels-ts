@@ -5,7 +5,6 @@ import type {
   SetupTestProviderAndWalletsReturn,
 } from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import * as path from 'path';
@@ -13,23 +12,15 @@ import { mergeDeepRight } from 'ramda';
 
 import type { DeployContractOptions, DeployContractResult } from '../contract-factory';
 
-export interface ContractDeployer {
-  deployContract(
-    bytecode: BytesLike,
-    wallet: Account,
-    options?: DeployContractOptions
-  ): Promise<DeployContractResult>;
+export interface DeployableContractFactory {
+  deploy(wallet: Account, options?: DeployContractOptions): Promise<DeployContractResult>;
 }
 
 export interface DeployContractConfig {
   /**
-   * Contract deployer object compatible with factories outputted by `pnpm fuels typegen`.
+   * Contract factory class outputted by `pnpm fuels typegen`.
    */
-  deployer: ContractDeployer;
-  /**
-   * Contract bytecode. It can be generated via `pnpm fuels typegen`.
-   */
-  bytecode: BytesLike;
+  factory: DeployableContractFactory;
   /**
    * Options for contract deployment taken from `ContractFactory`.
    */
@@ -49,7 +40,7 @@ export interface LaunchTestNodeOptions<TContractConfigs extends DeployContractCo
 }
 export type TContracts<T extends DeployContractConfig[]> = {
   [K in keyof T]: Awaited<
-    ReturnType<Awaited<ReturnType<T[K]['deployer']['deployContract']>>['waitForResult']>
+    ReturnType<Awaited<ReturnType<T[K]['factory']['deploy']>>['waitForResult']>
   >['contract'];
 };
 export interface LaunchTestNodeReturn<TFactories extends DeployContractConfig[]>
@@ -153,8 +144,7 @@ export async function launchTestNode<const TFactories extends DeployContractConf
   try {
     for (let i = 0; i < configs.length; i++) {
       const config = configs[i];
-      const { waitForResult } = await config.deployer.deployContract(
-        config.bytecode,
+      const { waitForResult } = await config.factory.deploy(
         getWalletForDeployment(config, wallets),
         config.options ?? {}
       );
