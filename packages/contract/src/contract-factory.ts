@@ -247,7 +247,7 @@ export default class ContractFactory {
    */
   async deployContractAsBlobs<TContract extends Contract = Contract>(
     deployContractOptions: DeployContractOptions = {
-      chunkSizeTolerance: 0.05,
+      chunkSizeTolerance: CHUNK_SIZE_TOLERANCE,
     }
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
