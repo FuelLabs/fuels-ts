@@ -207,6 +207,6 @@ jobs:
         run: |
           curl -X POST \
             -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.TARGET_REPO_TOKEN }}" \
+            -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
             https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
             -d '{"event_type":"update_versions"}'
