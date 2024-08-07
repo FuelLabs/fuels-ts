@@ -187,20 +187,20 @@ export default class ContractFactory {
   /**
    * Deploy a contract of any length with the specified options.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
   async deploy<TContract extends Contract = Contract>(
-    deployContractOptions: DeployContractOptions = {}
+    deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
     const { consensusParameters } = account.provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     if (this.bytecode.length > maxContractSize) {
-      return this.deployContractAsBlobs(deployContractOptions);
+      return this.deployContractAsBlobs(deployOptions);
     }
-    return this.deployContract(deployContractOptions);
+    return this.deployContract(deployOptions);
   }
 
   /**
@@ -240,16 +240,16 @@ export default class ContractFactory {
   /**
    * Chunks and deploys a contract via a loader contract. Suitable for deploying contracts larger than the max contract size.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
   async deployContractAsBlobs<TContract extends Contract = Contract>(
-    deployContractOptions: DeployContractOptions = {
+    deployOptions: DeployContractOptions = {
       chunkSizeTolerance: CHUNK_SIZE_TOLERANCE,
     }
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
-    const { configurableConstants, chunkSizeTolerance } = deployContractOptions;
+    const { configurableConstants, chunkSizeTolerance } = deployOptions;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
@@ -261,7 +261,7 @@ export default class ContractFactory {
     for (const { id, bytecode } of chunks) {
       const blobRequest = this.blobTransactionRequest({
         bytecode,
-        ...deployContractOptions,
+        ...deployOptions,
       });
       // Store the already uploaded blobs and blobIds for the loader contract
       const uploadedBlobs = chunks.map((c) => c.blobId).filter((c) => c);
@@ -270,10 +270,7 @@ export default class ContractFactory {
 
       // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
       if (!uploadedBlobs.includes(blobId)) {
-        const fundedBlobRequest = await this.fundTransactionRequest(
-          blobRequest,
-          deployContractOptions
-        );
+        const fundedBlobRequest = await this.fundTransactionRequest(blobRequest, deployOptions);
 
         let result: TransactionResult<TransactionType.Blob>;
 
@@ -304,9 +301,9 @@ export default class ContractFactory {
     // Deploy the loader contract via create tx
     const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
       bytecode: loaderBytecode,
-      ...deployContractOptions,
+      ...deployOptions,
     });
-    await this.fundTransactionRequest(createRequest, deployContractOptions);
+    await this.fundTransactionRequest(createRequest, deployOptions);
     const transactionResponse = await account.sendTransaction(createRequest);
 
     const waitForResult = async () => {
