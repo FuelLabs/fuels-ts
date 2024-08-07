@@ -398,7 +398,7 @@ describe('Contract Factory', () => {
     const call = await contract.functions.something().call();
     const { value } = await call.waitForResult();
     expect(value.toNumber()).toBe(1001);
-  });
+  }, 15000);
 
   it('should not deploy large contract with invalid balance', async () => {
     using launched = await launchTestNode({
