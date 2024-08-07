@@ -558,7 +558,7 @@ describe('Provider', () => {
 
   it('should ensure cached resources are not being queried', async () => {
     // Fund the wallet with 2 resources
-    const testMessage = new TestMessage({ amount: 100_000_000_000, data: '' });
+    const testMessage = new TestMessage({ amount: 100_000_000_000 });
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
