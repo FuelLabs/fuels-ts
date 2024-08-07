@@ -55,6 +55,6 @@ Now that the contract is deployed, you can interact with it by submitting a cont
 
 In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the `deployContractAsBlobs` method, also available on the `ContractFactory` should you want to use that directly.
 
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#deploy-as-blobs{ts:line-numbers}
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#blobs{ts:line-numbers}
 
 In the above example, we also pass a `chunkSizeTolerance` option to the deployment method. The SDK will attempt to chunk the contract to the most optimal about, however due to fee fluctuations the transaction size can change. By default we set a tolerance of 5%, however you can adjust this to suit your needs and ensure the transaction passes. It must be set to a value between 0 and 1.

@@ -1,10 +1,8 @@
 import { WORD_SIZE } from '@fuel-ts/abi-coder';
 import { concat } from '@fuel-ts/utils';
 
-import type { ContractChunk } from './types';
-
-export const getContractChunks = (bytecode: Uint8Array, chunkSize: number): ContractChunk[] => {
-  const chunks: ContractChunk[] = [];
+export const getContractChunks = (bytecode: Uint8Array, chunkSize: number) => {
+  const chunks = [];
 
   for (let offset = 0, index = 0; offset < bytecode.length; offset += chunkSize, index++) {
     const chunk = bytecode.slice(offset, offset + chunkSize);

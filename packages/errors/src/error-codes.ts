@@ -80,6 +80,7 @@ export enum ErrorCode {
   BLOB_ID_ALREADY_UPLOADED = 'blob-id-already-uploaded',
   INVALID_CHUNK_SIZE_TOLERANCE = 'invalid-chunk-size-tolerance',
   MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
+  FUNDS_TOO_LOW = 'funds-too-low',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',

@@ -380,7 +380,11 @@ describe('Contract Factory', () => {
   });
 
   it('deploys a large contract via deploy entrypoint', async () => {
-    using launched = await launchTestNode();
+    using launched = await launchTestNode({
+      providerOptions: {
+        cacheUtxo: -1,
+      },
+    });
 
     const {
       wallets: [wallet],
@@ -394,5 +398,27 @@ describe('Contract Factory', () => {
     const call = await contract.functions.something().call();
     const { value } = await call.waitForResult();
     expect(value.toNumber()).toBe(1001);
+  });
+
+  it('should not deploy large contract with invalid balance', async () => {
+    using launched = await launchTestNode({
+      providerOptions: {
+        cacheUtxo: -1,
+      },
+      walletsConfig: {
+        amountPerCoin: 0,
+      },
+    });
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
+
+    await expectToThrowFuelError(
+      () => factory.deploy({ maxFee: 0 }),
+      new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.')
+    );
   });
 });

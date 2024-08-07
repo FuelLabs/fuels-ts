@@ -17,6 +17,7 @@ import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { hash } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
+import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined } from '@fuel-ts/utils';
@@ -254,23 +255,38 @@ export default class ContractFactory {
       this.setConfigurableConstants(configurableConstants);
     }
 
+    // Generate the chunks based on the maximum chunk size
     const chunkSize = this.getMaxChunkSize(chunkSizeTolerance);
-    const chunks = getContractChunks(this.bytecode, chunkSize);
+    const chunks = getContractChunks(this.bytecode, chunkSize).map((c) => {
+      const transactionRequest = this.blobTransactionRequest({ bytecode: c.bytecode });
+      return {
+        ...c,
+        transactionRequest,
+        blobId: transactionRequest.blobId,
+      };
+    });
+
+    // Check the account can afford to deploy all chunks
+    const costs = [];
+    for (const { transactionRequest } of chunks) {
+      const { minFee } = await account.getTransactionCost(transactionRequest);
+      costs.push(minFee);
+    }
+    const totalCost = costs.reduce((acc, cost) => acc.add(cost), bn(0));
+    if (totalCost.gt(await account.getBalance())) {
+      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
+    }
+
+    // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
+    const uploadedBlobs: string[] = [];
 
     // Deploy the chunks as blob txs
-    for (const { id, bytecode } of chunks) {
-      const blobRequest = this.blobTransactionRequest({
-        bytecode,
-        ...deployOptions,
-      });
-      // Store the already uploaded blobs and blobIds for the loader contract
-      const uploadedBlobs = chunks.map((c) => c.blobId).filter((c) => c);
-      const { blobId } = blobRequest;
-      chunks[id].blobId = blobId;
-
-      // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
+    for (const { blobId, transactionRequest } of chunks) {
       if (!uploadedBlobs.includes(blobId)) {
-        const fundedBlobRequest = await this.fundTransactionRequest(blobRequest, deployOptions);
+        const fundedBlobRequest = await this.fundTransactionRequest(
+          transactionRequest,
+          deployOptions
+        );
 
         let result: TransactionResult<TransactionType.Blob>;
 
@@ -291,6 +307,8 @@ export default class ContractFactory {
         if (!result.status || result.status !== TransactionStatus.success) {
           throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
         }
+
+        uploadedBlobs.push(blobId);
       }
     }
 
