@@ -25,8 +25,13 @@ import type Provider from '../provider';
 import type { JsonAbisFromAllCalls } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
-import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
-import { extractTxError } from '../utils';
+import type {
+  TransactionSummary,
+  GqlTransaction,
+  AbiMap,
+  GqlTransactionStatusesNames,
+} from '../transaction-summary/types';
+import { extractTxError, normalizeJSON } from '../utils';
 
 import { getDecodedLogs } from './getDecodedLogs';
 
@@ -127,7 +132,7 @@ export class TransactionResponse {
    *
    * @returns Transaction with receipts query result.
    */
-  async fetch(): Promise<GqlTransaction> {
+  async fetch(expectedStatusType?: GqlTransactionStatusesNames): Promise<GqlTransaction> {
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -137,13 +142,20 @@ export class TransactionResponse {
         transactionId: this.id,
       });
 
+      let expectedStatus: GqlTransactionStatusesNames | undefined;
+
       for await (const { statusChange } of subscription) {
         if (statusChange) {
+          expectedStatus = statusChange.type;
           break;
         }
       }
 
-      return this.fetch();
+      return this.fetch(expectedStatus);
+    }
+
+    if (expectedStatusType && response.transaction.status?.type !== expectedStatusType) {
+      return this.fetch(expectedStatusType);
     }
 
     this.gqlTransaction = response.transaction;
@@ -226,6 +238,8 @@ export class TransactionResponse {
       transactionId: this.id,
     });
 
+    let expectedStatus: GqlTransactionStatusesNames | undefined;
+
     for await (const { statusChange } of subscription) {
       if (statusChange.type === 'SqueezedOutStatus') {
         throw new FuelError(
@@ -234,11 +248,12 @@ export class TransactionResponse {
         );
       }
       if (statusChange.type !== 'SubmittedStatus') {
+        expectedStatus = statusChange.type;
         break;
       }
     }
 
-    await this.fetch();
+    await this.fetch(expectedStatus);
   }
 
   /**
