@@ -418,7 +418,7 @@ describe('Provider', () => {
     const resourceAmount = 50_000;
     const utxosAmount = 2;
 
-    const testMessage = new TestMessage({ amount: resourceAmount, data: '' });
+    const testMessage = new TestMessage({ amount: resourceAmount });
 
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
