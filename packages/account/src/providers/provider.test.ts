@@ -500,7 +500,7 @@ describe('Provider', () => {
   });
 
   it('should unset cached resources when TX execution fails', async () => {
-    const message = new TestMessage({ amount: 100_000, data: '' });
+    const message = new TestMessage({ amount: 100_000 });
 
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
