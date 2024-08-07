@@ -8,9 +8,10 @@ import {
   CHAIN_IDS,
   rawAssets,
   assets,
+  ContractFactory,
 } from 'fuels';
 
-import { ScriptMainArgBool } from '../test/typegen';
+import { ScriptMainArgBool, LargeContractFactory, LargeContract } from '../test/typegen';
 
 enum Networks {
   DEVNET = 'devnet',
@@ -75,6 +76,28 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     provider = await Provider.create(networkUrl);
     wallet = new WalletUnlocked(privateKey, provider);
   });
+
+  it('can deploy a large contract to a live Fuel Node', async () => {
+    if (shouldSkip) {
+      return;
+    }
+
+    let output: number = 0;
+    try {
+      const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
+      const { waitForResult } = await factory.deployContractAsBlobs({ tip: 0.0000001 });
+      const { contract } = await waitForResult();
+
+      const { waitForResult: waitForCallResult } = await contract.functions.something().call();
+      const { value } = await waitForCallResult();
+
+      output = value.toNumber();
+    } catch (e) {
+      console.error((e as Error).message);
+    }
+
+    expect(output).toBe(1001);
+  }, 120_000);
 
   it('can use script against live Fuel Node', async () => {
     if (shouldSkip) {
