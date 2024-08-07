@@ -46,3 +46,8 @@ export const isTransactionTypeScript = (
 export const isTransactionTypeCreate = (
   request: TransactionRequestLike
 ): request is CreateTransactionRequest => request.type === TransactionType.Create;
+
+/** @hidden */
+export const isTransactionTypeBlob = (
+  request: TransactionRequestLike
+): request is BlobTransactionRequest => request.type === TransactionType.Blob;
