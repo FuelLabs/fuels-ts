@@ -58,7 +58,7 @@ describe('Transaction Request', () => {
     const predicate = new Predicate({
       bytecode: predicateBytecode,
       abi: predicateAbi,
-      inputData: [ZeroBytes32],
+      data: [ZeroBytes32],
       provider,
     });
 
@@ -168,7 +168,7 @@ describe('Transaction Request', () => {
     const predicate = new Predicate({
       bytecode: predicateBytecode,
       abi: predicateAbi,
-      inputData: dataToValidatePredicate,
+      data: dataToValidatePredicate,
       provider,
     });
 

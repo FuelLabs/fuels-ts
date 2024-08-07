@@ -15,7 +15,8 @@ import { Configurable } from './configurable/Configurable';
   Manages many instances of Types and Functions
 */
 export class Abi {
-  public name: string;
+  public capitalizedName: string;
+  public camelizedName: string;
   public programType: ProgramTypeEnum;
 
   public filepath: string;
@@ -60,10 +61,9 @@ export class Abi {
       );
     }
 
-    const name = `${normalizeString(abiName[1])}Abi`;
-
-    this.name = name;
     this.programType = programType;
+    this.capitalizedName = `${normalizeString(abiName[1])}`;
+    this.camelizedName = this.capitalizedName.replace(/^./m, (x) => x.toLowerCase());
 
     this.filepath = filepath;
     this.rawContents = rawContents;

@@ -1,9 +1,8 @@
 import type { BigNumberish } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { OptionsAbi__factory } from '../test/typegen/contracts';
-import type { DeepStructInput } from '../test/typegen/contracts/OptionsAbi';
-import OptionsAbiHex from '../test/typegen/contracts/OptionsAbi.hex';
+import type { DeepStructInput } from '../test/typegen/contracts/Options';
+import { OptionsFactory } from '../test/typegen/contracts/OptionsFactory';
 import type { Option } from '../test/typegen/contracts/common';
 
 import { launchTestContract } from './utils';
@@ -14,8 +13,7 @@ const U32_MAX = 4294967295;
 
 function launchOptionsContract() {
   return launchTestContract({
-    bytecode: OptionsAbiHex,
-    deployer: OptionsAbi__factory,
+    factory: OptionsFactory,
   });
 }
 
@@ -175,8 +173,7 @@ describe('Options Tests', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: OptionsAbi__factory,
-          bytecode: OptionsAbiHex,
+          factory: OptionsFactory,
         },
       ],
     });
