@@ -3,6 +3,10 @@ import { arrayify } from '@fuel-ts/utils';
 
 import { getLoaderInstructions } from './loader-script';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Loader Script', () => {
   it('generates loader bytecode for a list of blob ids', () => {
     const blobIds = ['0x01', '0x02', '0x03'];
