@@ -2,9 +2,13 @@
 import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory, hexlify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { CounterAbi__factory } from '../../../test/typegen';
-import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
+import { EchoValuesAbi__factory } from '../../../test/typegen';
+import bytecode from '../../../test/typegen/contracts/EchoValuesAbi.hex';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Deploying Contracts', () => {
   it('gets the max contract size for the chain', async () => {
     using launched = await launchTestNode();
@@ -32,7 +36,7 @@ describe('Deploying Contracts', () => {
     // eslint-disable-next-line @typescript-eslint/no-shadow
     const TESTNET_NETWORK_URL = testProvider.url;
     const WALLET_PVT_KEY = testWallet.privateKey;
-    const abi = CounterAbi__factory.abi;
+    const abi = EchoValuesAbi__factory.abi;
 
     // #region setup
     // #import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory };
@@ -58,10 +62,10 @@ describe('Deploying Contracts', () => {
 
     // #region call
     // Call the contract
-    const { waitForResult: waitForCallResult } = await contract.functions.get_count().call();
+    const { waitForResult: waitForCallResult } = await contract.functions.echo_u8(10).call();
     // Await the result of the call
     const { value } = await waitForCallResult();
     // #endregion call
-    expect(value.toNumber()).toBe(0);
+    expect(value).toBe(10);
   });
 });
