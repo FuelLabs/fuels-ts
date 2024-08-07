@@ -311,7 +311,7 @@ describe('Account', () => {
 
     const { balances: receiverBalances } = await receiver.getBalances();
 
-    expect(isStatusSuccess).toBeTruthy()
+    expect(isStatusSuccess).toBeTruthy();
     expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
   });
 
@@ -525,7 +525,6 @@ describe('Account', () => {
     expect(result.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
-
   });
 
   it('can retrieve a valid MessageProof', async () => {
