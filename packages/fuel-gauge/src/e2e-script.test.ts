@@ -68,7 +68,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   beforeAll(async () => {
     const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
     if (!privateKey) {
-      console.log('Skipping live Fuel Node test');
+      console.log(`Skipping live Fuel Node test - ${networkUrl}`);
       shouldSkip = true;
       return;
     }
