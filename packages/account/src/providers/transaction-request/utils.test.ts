@@ -3,6 +3,9 @@ import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import { isTransactionTypeCreate, isTransactionTypeScript } from './utils';
 
+/**
+ * @group node
+ */
 describe('isTransactionTypeScript', () => {
   it('should return true if the request is a script transaction', () => {
     const request = new ScriptTransactionRequest();
