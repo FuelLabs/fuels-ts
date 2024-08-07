@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory, hexlify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
@@ -13,7 +14,6 @@ describe('Deploying Contracts', () => {
     using launched = await launchTestNode();
 
     const { provider: testProvider } = launched;
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     const TESTNET_NETWORK_URL = testProvider.url;
 
     // #region get-contract-max-size
@@ -32,7 +32,6 @@ describe('Deploying Contracts', () => {
       provider: testProvider,
       wallets: [testWallet],
     } = launched;
-    // eslint-disable-next-line @typescript-eslint/no-shadow
     const TESTNET_NETWORK_URL = testProvider.url;
     const WALLET_PVT_KEY = testWallet.privateKey;
     const abi = EchoValues.abi;
@@ -65,6 +64,45 @@ describe('Deploying Contracts', () => {
     // Await the result of the call
     const { value } = await waitForCallResult();
     // #endregion call
+    expect(value).toBe(10);
+  });
+
+  it('deploys a large contract as blobs', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider: testProvider,
+      wallets: [testWallet],
+    } = launched;
+    const TESTNET_NETWORK_URL = testProvider.url;
+    const WALLET_PVT_KEY = testWallet.privateKey;
+    const abi = EchoValues.abi;
+    const bytecode = EchoValuesFactory.bytecode;
+
+    // #region blobs
+    // #import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory };
+    // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
+    // #context import { bytecode, abi } from 'path/to/typegen/outputs';
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+    const factory = new ContractFactory(bytecode, abi, wallet);
+
+    // Deploy the contract as blobs
+    const { waitForResult, contractId, transactionId } = await factory.deployContractAsBlobs({
+      // Increasing chunk size tolerance to 10% incase of fee fluctuations
+      chunkSizeTolerance: 0.1,
+    });
+    // Await it's deployment
+    const { contract, transactionResult } = await waitForResult();
+    // #endregion blobs
+
+    expect(contract).toBeDefined();
+    expect(transactionId).toBeDefined();
+    expect(transactionResult.status).toBeTruthy();
+    expect(contractId).toBe(contract.id.toB256());
+
+    const { waitForResult: waitForCallResult } = await contract.functions.echo_u8(10).call();
+    const { value } = await waitForCallResult();
     expect(value).toBe(10);
   });
 });

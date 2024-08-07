@@ -1,4 +1,4 @@
- <script setup>
+<script setup>
   import { data } from '../../versions.data'
   const { forc } = data
   const indexUrl = `https://docs.fuel.network/docs/sway/introduction/`
@@ -23,9 +23,11 @@ The deployment process used by the `ContractFactory` is dependent on the size of
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#get-contract-max-size{ts:line-numbers}
 
+## Deploying a Contract Guide
+
 This guide will cover the process of deploying a contract using the `deploy` method, however all these methods can be used interchangeably dependent on the contract size.
 
-## 1. Setup
+### 1. Setup
 
 After writing a contract in Sway you can build the necessary deployment artifacts either by running `forc build` (<a :href="indexUrl" target="_blank" rel="noreferrer">read more</a> on how to work with Sway) or by using the [Fuels CLI](../fuels-cli/index.md) and running `fuels build` using your chosen package manager. We recommend using the Fuels CLI as it provides a more comprehensive usage including end to end type support.
 
@@ -33,7 +35,7 @@ Once you have the contract artifacts, it can be passed to the `ContractFactory` 
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#setup{ts:line-numbers}
 
-## 2. Contract Deployment
+### 2. Contract Deployment
 
 As mentioned earlier, there are two different processes for contract deployment handled by the `ContractFactory`. These can be used interchangeably, however, the `deploy` method is recommended as it will automatically choose the appropriate deployment process based on the contract size.
 
@@ -43,8 +45,16 @@ This call resolves as soon as the transaction to deploy the contract is submitte
 
 The `contract` instance will be returned only after calling `waitForResult` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed.
 
-## 3. Executing a Contract Call
+### 3. Executing a Contract Call
 
 Now that the contract is deployed, you can interact with it by submitting a contract call:
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#call{ts:line-numbers}
+
+## Deploying a Large Contract as Blobs
+
+In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the `deployContractAsBlobs` method, also available on the `ContractFactory` should you want to use that directly.
+
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#deploy-as-blobs{ts:line-numbers}
+
+In the above example, we also pass a `chunkSizeTolerance` option to the deployment method. The SDK will attempt to chunk the contract to the most optimal about, however due to fee fluctuations the transaction size can change. By default we set a tolerance of 5%, however you can adjust this to suit your needs and ensure the transaction passes.
