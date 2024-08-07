@@ -132,7 +132,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(170),
+        gasUsed: bn(107),
       },
     ];
 
@@ -419,7 +419,7 @@ describe('Provider', () => {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
       walletsConfig: {
-        coinsPerAsset: 3,
+        coinsPerAsset: 1,
         amountPerCoin: 50_000,
       },
     });
