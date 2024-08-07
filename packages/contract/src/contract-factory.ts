@@ -12,6 +12,7 @@ import {
   CreateTransactionRequest,
   BlobTransactionRequest,
   TransactionStatus,
+  calculateGasFee,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
