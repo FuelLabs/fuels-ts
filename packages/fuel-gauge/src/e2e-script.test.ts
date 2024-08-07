@@ -85,7 +85,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     let output: number = 0;
     try {
       const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-      const { waitForResult } = await factory.deployContractAsBlobs({ tip: 0.0000001 });
+      const { waitForResult } = await factory.deployContractAsBlobs({ tip: 0.0000002 });
       const { contract } = await waitForResult();
 
       const { waitForResult: waitForCallResult } = await contract.functions.something().call();
@@ -97,7 +97,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     }
 
     expect(output).toBe(1001);
-  }, 120_000);
+  }, 180_000);
 
   it('can use script against live Fuel Node', async () => {
     if (shouldSkip) {
