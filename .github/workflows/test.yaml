@@ -87,7 +87,8 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    needs: [environments]
+    # TODO: temp removing environments
+    # needs: [environments]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
