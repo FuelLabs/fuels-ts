@@ -267,12 +267,25 @@ export default class ContractFactory {
     });
 
     // Check the account can afford to deploy all chunks
-    const costs = [];
-    for (const { transactionRequest } of chunks) {
-      const { minFee } = await account.getTransactionCost(transactionRequest);
-      costs.push(minFee);
+    let totalCost = bn(0);
+    const chainInfo = account.provider.getChain();
+    const gasPrice = await account.provider.estimateGasPrice(10);
+    const estimatedBlobIds: string[] = [];
+
+    for (const { transactionRequest, blobId } of chunks) {
+      if (!estimatedBlobIds.includes(blobId)) {
+        const minGas = transactionRequest.calculateMinGas(chainInfo);
+        const minFee = calculateGasFee({
+          gasPrice,
+          gas: minGas,
+          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          tip: transactionRequest.tip,
+        }).add(1);
+
+        totalCost = totalCost.add(minFee);
+        estimatedBlobIds.push(blobId);
+      }
     }
-    const totalCost = costs.reduce((acc, cost) => acc.add(cost), bn(0));
     if (totalCost.gt(await account.getBalance())) {
       throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
     }
