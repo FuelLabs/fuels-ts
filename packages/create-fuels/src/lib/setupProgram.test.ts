@@ -6,12 +6,22 @@ import { setupProgram } from './setupProgram';
 describe('setupProgram', () => {
   test('setupProgram takes in args properly', () => {
     const program = setupProgram();
-    program.parse(['', '', 'test-project-name', '--pnpm', '--npm', '--bun']);
+    program.parse([
+      '',
+      '',
+      'test-project-name',
+      '--template',
+      'nextjs',
+      '--pnpm',
+      '--npm',
+      '--bun',
+    ]);
     expect(program.args[0]).toBe('test-project-name');
     expect(program.opts().pnpm).toBe(true);
     expect(program.opts().npm).toBe(true);
     expect(program.opts().bun).toBe(true);
     expect(program.opts().install).toBe(true);
+    expect(program.opts().template).toBe('nextjs');
   });
 
   test('setupProgram - no args', () => {
