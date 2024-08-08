@@ -69,6 +69,7 @@ describe('Transferring Assets', () => {
     // #endregion transferring-assets-2
   });
 
+  // #TODO: We should be able to unskip this test once `fuel-core` v0.33.0 is released.
   it.skip('should validate that modifying the transaction request will result in another TX ID', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
