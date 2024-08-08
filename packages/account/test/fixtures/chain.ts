@@ -152,7 +152,7 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
       bsiz: {
         type: 'LightOperation',
         base: '1',
-      unitsPerGas: '5000',
+        unitsPerGas: '5000',
       },
       cfe: {
         type: 'HeavyOperation',
