@@ -54,7 +54,7 @@ describe('`create fuels` package integrity', () => {
         `"fuels": "[0-9]+.[0-9]+.[0-9]+-${PUBLISHED_NPM_TAG}-[0-9]+"`
       );
 
-      const args = generateArgs(paths.projectRoot, packageManager).join(' ');
+      const args = generateArgs({ projectName: paths.projectRoot, packageManager }).join(' ');
       const expectedTemplateFiles = await getAllFiles(paths.templateSource).then((files) =>
         filterOriginalTemplateFiles(files).filter(filterForcBuildFiles)
       );

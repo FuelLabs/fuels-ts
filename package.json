@@ -17,6 +17,8 @@
     "pretest": "turbo run pretest",
     "depcheck": "knip --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
+    "depsync:lint": "syncpack list-mismatches",
+    "depsync:fix": "syncpack fix-mismatches",
     "test": "vitest --run --coverage --config vitest.node.config.mts $(scripts/tests-find.sh --node)",
     "test:filter": "vitest --run --coverage false --config vitest.node.config.mts",
     "test:coverage-merge": "tsx ./scripts/tests-coverage-merge.ts",
@@ -71,7 +73,7 @@
     "@internal/tsup": "workspace:*",
     "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@playwright/test": "^1.45.3",
-    "@types/node": "20.14.11",
+    "@types/node": "^20.14.11",
     "@types/node-fetch": "^2.6.11",
     "@types/web": "^0.0.153",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
@@ -113,7 +115,8 @@
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.6.0",
-    "webdriverio": "^8.39.1"
+    "webdriverio": "^8.39.1",
+    "syncpack": "12.3.3"
   },
   "pnpm": {
     "overrides": {
