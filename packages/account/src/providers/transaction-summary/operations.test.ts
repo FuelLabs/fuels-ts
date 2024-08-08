@@ -855,6 +855,9 @@ describe('operations', () => {
 
     it('should isTypeBlob return if is Blob', () => {
       expect(isTypeBlob(TransactionType.Blob)).toBeTruthy();
+      expect(isTypeBlob(TransactionType.Mint)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Create)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Script)).toBeFalsy();
     });
   });
 
