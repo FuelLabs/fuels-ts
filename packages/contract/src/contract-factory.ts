@@ -53,7 +53,7 @@ export type DeployContractResult<TContract extends Contract = Contract> = {
  * `ContractFactory` provides utilities for deploying and configuring contracts.
  */
 export default class ContractFactory {
-  bytecode: Uint8Array;
+  bytecode: BytesLike;
   interface: Interface;
   provider!: Provider | null;
   account!: Account | null;
