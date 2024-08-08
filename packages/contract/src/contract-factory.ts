@@ -256,7 +256,7 @@ export default class ContractFactory {
     }
 
     // Generate the chunks based on the maximum chunk size
-    const chunkSize = this.getMaxChunkSize(chunkSizeTolerance);
+    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeTolerance);
     const chunks = getContractChunks(this.bytecode, chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({ bytecode: c.bytecode });
       return {
@@ -419,7 +419,10 @@ export default class ContractFactory {
   /**
    * Get the maximum chunk size for deploying a contract by chunks.
    */
-  private getMaxChunkSize(chunkSizeTolerance: number = CHUNK_SIZE_TOLERANCE) {
+  private getMaxChunkSize(
+    deployOptions: DeployContractOptions,
+    chunkSizeTolerance: number = CHUNK_SIZE_TOLERANCE
+  ) {
     if (chunkSizeTolerance < 0 || chunkSizeTolerance > 1) {
       throw new FuelError(
         ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
@@ -431,9 +434,9 @@ export default class ContractFactory {
     const { consensusParameters } = provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
     // Get the base tx length
-    const blobTx = this.blobTransactionRequest({ bytecode: randomBytes(32) });
+    const blobTx = this.blobTransactionRequest({ ...deployOptions, bytecode: randomBytes(32) });
     blobTx.fundWithFakeUtxos([], provider.getBaseAssetId());
-    // Allow tolerance for fluctuating fees / inputs / outputs
+    // Allow tolerance for fluctuating transaction size and request limit
     const toleranceMultiplier = 1 - chunkSizeTolerance;
     const maxChunkSize =
       (contractSizeLimit - blobTx.byteLength() - WORD_SIZE) * toleranceMultiplier;
