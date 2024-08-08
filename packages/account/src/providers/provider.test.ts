@@ -454,7 +454,7 @@ describe('Provider', () => {
   });
 
   it('should NOT cache resources when TX submission fails', async () => {
-    const message = new TestMessage({ amount: 100_000});
+    const message = new TestMessage({ amount: 100_000 });
 
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
