@@ -5,16 +5,16 @@ export const getContractChunks = (bytecode: Uint8Array, chunkSize: number) => {
   const chunks = [];
 
   for (let offset = 0, index = 0; offset < bytecode.length; offset += chunkSize, index++) {
-    const chunk = bytecode.slice(offset, offset + chunkSize);
+    let chunk = bytecode.slice(offset, offset + chunkSize);
+    let length = chunk.length;
 
     // Align chunks by word size
-    if (chunk.length % WORD_SIZE !== 0) {
-      const paddedChunk = concat([chunk, new Uint8Array(chunkSize - chunk.length)]);
-      chunks.push({ id: index, size: paddedChunk.length, bytecode: paddedChunk });
-      // eslint-disable-next-line no-continue
-      continue;
+    if (length % WORD_SIZE !== 0) {
+      chunk = concat([chunk, new Uint8Array(chunkSize - chunk.length)]);
+      length = chunk.length;
     }
-    chunks.push({ id: index, size: chunk.length, bytecode: chunk });
+
+    chunks.push({ id: index, size: length, bytecode: chunk });
   }
 
   return chunks;
