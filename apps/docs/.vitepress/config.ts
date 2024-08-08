@@ -170,10 +170,6 @@ export default defineConfig({
                 link: '/guide/wallets/wallet-transferring',
               },
               {
-                text: 'Setting up test wallets',
-                link: '/guide/wallets/setting-up-test-wallets',
-              },
-              {
                 text: 'Signing',
                 link: '/guide/wallets/signing',
               },
@@ -436,6 +432,10 @@ export default defineConfig({
               {
                 text: 'Custom Blocks',
                 link: '/guide/testing/custom-blocks',
+              },
+              {
+                text: 'Setting up test wallets',
+                link: '/guide/testing/setting-up-test-wallets',
               },
             ],
           },
