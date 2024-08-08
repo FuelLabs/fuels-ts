@@ -7,12 +7,11 @@ import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import type { FakeResources, TransferParams } from './account';
 import { Account } from './account';
-import { ScriptTransactionRequest } from './providers';
-import * as providersMod from './providers';
 import type { CoinQuantity, Resource } from './providers';
+import { ScriptTransactionRequest, Provider } from './providers';
+import * as providersMod from './providers';
 import { AssetId, setupTestProviderAndWallets } from './test-utils';
 import { Wallet } from './wallet';
-
 /**
  * @group node
  */
@@ -176,8 +175,8 @@ describe('Account', () => {
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
-    using newProvider = await setupTestProviderAndWallets();
-    const { provider: newProviderInstance } = newProvider;
+
+    const newProviderInstance = await Provider.create(provider.url);
 
     expect(account.provider).not.toBe(newProviderInstance);
 

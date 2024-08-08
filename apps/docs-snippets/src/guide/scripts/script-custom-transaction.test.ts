@@ -2,7 +2,6 @@ import { BN, ScriptTransactionRequest, coinQuantityfy } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 
 import { EchoValuesFactory, ScriptTransferToContract } from '../../../test/typegen';
-import { defaultTxParams } from '../../utils';
 
 /**
  * @group node
@@ -23,6 +22,10 @@ describe('Script Custom Transaction', () => {
 
     expect(contractInitialBalanceAssetA).toStrictEqual(new BN(0));
     expect(contractInitialBalanceAssetB).toStrictEqual(new BN(0));
+
+    const defaultTxParams = {
+      gasLimit: 10000,
+    };
 
     // #region custom-transactions-2
     // #import { BN, ScriptTransactionRequest };
