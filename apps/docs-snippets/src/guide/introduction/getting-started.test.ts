@@ -7,17 +7,16 @@ import { launchTestNode } from 'fuels/test-utils';
  */
 describe('Getting started', () => {
   it('can connect to a local network', async () => {
-    const { cleanup } = await launchTestNode({
-      nodeOptions: {
-        port: '4000',
-      },
-    });
+    using launched = await launchTestNode();
+
+    // get all the numbers after the last colon up to the slash
+    const port = launched.provider.url.split(':')[2].split('/')[0];
 
     // #region connecting-to-the-local-node
     // #import { Provider, Wallet };
 
     // Create a provider.
-    const LOCAL_FUEL_NETWORK = 'http://127.0.0.1:4000/v1/graphql';
+    const LOCAL_FUEL_NETWORK = `http://127.0.0.1:${port}/v1/graphql`;
     const provider = await Provider.create(LOCAL_FUEL_NETWORK);
 
     // Create our wallet (with a private key).
@@ -29,8 +28,6 @@ describe('Getting started', () => {
     expect(provider).toBeInstanceOf(Provider);
     expect(wallet).toBeTruthy();
     expect(wallet).toBeInstanceOf(WalletUnlocked);
-
-    cleanup();
   });
 
   it('can connect to testnet', async () => {

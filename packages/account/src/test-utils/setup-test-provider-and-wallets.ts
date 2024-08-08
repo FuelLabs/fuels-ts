@@ -73,7 +73,7 @@ export async function setupTestProviderAndWallets({
       defaultSnapshotConfigs,
       walletsConfig.apply(nodeOptions?.snapshotConfig)
     ),
-    port: nodeOptions.port || '0',
+    port: '0',
   };
 
   let cleanup: () => void;
