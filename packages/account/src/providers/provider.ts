@@ -700,7 +700,7 @@ Supported fuel-core version: ${supportedVersion}.`
     if (bn(tx.inputs.length).gt(maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs for funding.'
+        'The transaction exceeds the maximum allowed number of inputs.'
       );
     }
 
