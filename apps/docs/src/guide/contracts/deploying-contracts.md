@@ -9,7 +9,11 @@
 
 To deploy a contract using the SDK, you can use the `ContractFactory`. This process involves collecting the contract artifacts, initializing the contract factory, and deploying the contract.
 
-The SDK utilizes two different deployment processes. Either simply using a single create transaction to deploy the entire contract bytecode, or, by splitting the contract into multiple chunks, deploying them as blobs (on chain data accessible to the VM) and then generating a contract from the associated blob IDs. That generated contract is then deployed as a create transaction.
+The SDK utilizes two different deployment processes, depending on the contract's size. The threshold for the contract size is dictated by the chain and can be queried:
+
+<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#get-contract-max-size{ts:line-numbers}
+
+It either uses a single create transaction to deploy the entire contract bytecode, or it splits the contract bytecode into multiple chunks, deploys them as blobs (on chain data accessible to the VM), and then generates a contract from the associated blob IDs. That generated contract is then deployed as a create transaction.
 
 The `ContractFactory` offers the following methods for the different processes:
 
@@ -17,11 +21,7 @@ The `ContractFactory` offers the following methods for the different processes:
 - `deployContract` for deploying the entire contract bytecode in a single create transaction.
 - `deployContractAsBlobs` for deploying the contract in chunks as blobs, and then deploying the contract as a create transaction.
 
-> **Note:** Due to the nature of blob deployments, both `deploy` and `deployContractAsBlobs` may require multiple transactions to deploy the contract.
-
-The deployment process used by the `ContractFactory` is dependent on the size of the contract you are attempting to deploy. The threshold for the contract size is dictated by the chain. You can find the maximum contract size supported by the chain by querying the chains consensus parameters.
-
-<<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#get-contract-max-size{ts:line-numbers}
+> **Note:** If the contract is deployed via blob deployments, multiple transactions will be required to deploy the contract.
 
 ## Deploying a Contract Guide
 
