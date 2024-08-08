@@ -54,7 +54,7 @@ Transaction is not inserted. UTXO does not exist: 0xf5...
 
 This error indicates that the UTXO(s) used by the second transaction no longer exist, as the first transaction already spent them.
 
-To prevent this issue, you can use the `cacheUtxo` flag. This flag sets a TTL (Time-To-Live) for caching UTXO(s) used in a transaction, preventing them from being reused in subsequent transactions within the specified time.
+To prevent this issue, the SDK sets a default cache for UTXO(s) to 20 seconds. This default caching mechanism ensures that UTXO(s) used in a submitted transaction are not reused in subsequent transactions within the specified time. You can control the duration of this cache using the `cacheUtxo` flag. If you would like to disable caching, you can pass a value of `-1` to the `cacheUtxo` parameter.
 
 <<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-cache-utxo{ts:line-numbers}
 

@@ -306,6 +306,10 @@ export default defineConfig({
                 text: 'Methods',
                 link: '/guide/predicates/methods',
               },
+              {
+                text: 'Custom Transactions',
+                link: '/guide/predicates/custom-transactions',
+              },
             ],
           },
           {
