@@ -59,7 +59,7 @@ export type {{capitalizedName}}Parameters = Omit<
 
 const abi = {{abiJsonString}};
 
-const bytecode = '{{hexlifiedBinString}}';
+const bytecode = decompressBytecode('{{compressedBytecode}}');
 
 export class {{capitalizedName}} extends Predicate<
   {{capitalizedName}}Inputs,
