@@ -51,6 +51,8 @@ interface GasCosts {
   bhei: number;
   bhsh: number;
   burn: number;
+  bldd: Operation;
+  bsiz: Operation;
   cb: number;
   cfei: number;
   cfsi: number;

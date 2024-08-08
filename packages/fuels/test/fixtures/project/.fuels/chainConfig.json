@@ -135,6 +135,18 @@
               "gasPerUnit": 0
             }
           },
+          "bsiz": {
+            "LightOperation": {
+              "base": 17,
+              "units_per_gas": 790
+            }
+          },
+          "bldd": {
+            "LightOperation": {
+              "base": 15,
+              "units_per_gas": 272
+            }
+          },
           "cfe": {
             "HeavyOperation": {
               "base": 2,
