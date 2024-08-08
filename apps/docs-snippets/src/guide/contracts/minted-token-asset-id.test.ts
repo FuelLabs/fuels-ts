@@ -2,9 +2,7 @@ import type { AssetId } from 'fuels';
 import { bn, getMintedAssetId, createAssetId } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoAssetIdAbi__factory, TokenAbi__factory } from '../../../test/typegen';
-import EchoAssetIdAbiHex from '../../../test/typegen/contracts/EchoAssetIdAbi.hex';
-import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
+import { EchoAssetIdFactory, TokenFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -12,7 +10,7 @@ import TokenAbiHex from '../../../test/typegen/contracts/TokenAbi.hex';
 describe(__filename, () => {
   it('should successfully execute contract call with forwarded amount', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ deployer: TokenAbi__factory, bytecode: TokenAbiHex }],
+      contractsConfigs: [{ factory: TokenFactory }],
     });
 
     const {
@@ -38,7 +36,7 @@ describe(__filename, () => {
 
   it('should create valid asset ID', async () => {
     using launched = await launchTestNode({
-      contractsConfigs: [{ deployer: EchoAssetIdAbi__factory, bytecode: EchoAssetIdAbiHex }],
+      contractsConfigs: [{ factory: EchoAssetIdFactory }],
     });
 
     const {

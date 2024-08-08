@@ -46,7 +46,7 @@ export function bootstrapProject(testFilepath: string) {
 
   const outputDir = join(root, 'output');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
-  const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi__factory.ts');
+  const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi.ts');
 
   const forcPath = 'fuels-forc';
   const fuelCorePath = 'fuels-core';
