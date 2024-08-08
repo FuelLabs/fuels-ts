@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { randomBytes } from 'crypto';
 import {
   DEVNET_NETWORK_URL,
   TESTNET_NETWORK_URL,
@@ -9,6 +10,9 @@ import {
   rawAssets,
   assets,
   ContractFactory,
+  hexlify,
+  Address,
+  sleep,
 } from 'fuels';
 
 import { ScriptMainArgBool, LargeContractFactory, LargeContract } from '../test/typegen';
@@ -77,6 +81,17 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     wallet = new WalletUnlocked(privateKey, provider);
   });
 
+  it('calls a loader contract function on a live Fuel Node', async () => {
+    const CONTRACT_ID = new Address(
+      'fuel16h4j2rl69xur49zlx88khh3syjtpv84fv0nph94npr3t6v3qm7vsr3wq82'
+    ).toB256();
+    const contract = new LargeContract(CONTRACT_ID, wallet);
+
+    const { waitForResult } = await contract.functions.something().call();
+    const { value } = await waitForResult();
+    expect(value.toNumber()).toBe(1001);
+  }, 30_000);
+
   it('can deploy a large contract to a live Fuel Node', async () => {
     if (shouldSkip) {
       return;
@@ -85,8 +100,14 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     let output: number = 0;
     try {
       const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-      const { waitForResult } = await factory.deployContractAsBlobs({ tip: 0.0000002 });
+      const { waitForResult } = await factory.deployContractAsBlobs({
+        salt: hexlify(randomBytes(32)),
+        chunkSizeTolerance: 0.5,
+      });
+
       const { contract } = await waitForResult();
+
+      await sleep(10_000);
 
       const { waitForResult: waitForCallResult } = await contract.functions.something().call();
       const { value } = await waitForCallResult();

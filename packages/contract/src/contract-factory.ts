@@ -258,7 +258,10 @@ export default class ContractFactory {
     // Generate the chunks based on the maximum chunk size
     const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeTolerance);
     const chunks = getContractChunks(this.bytecode, chunkSize).map((c) => {
-      const transactionRequest = this.blobTransactionRequest({ bytecode: c.bytecode });
+      const transactionRequest = this.blobTransactionRequest({
+        ...deployOptions,
+        bytecode: c.bytecode,
+      });
       return {
         ...c,
         transactionRequest,
