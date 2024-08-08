@@ -1,5 +1,51 @@
 # create-fuels
 
+## 0.93.0
+
+### Patch Changes
+
+- 40a3510: chore: handle `create fuels` template scenarios for insufficient funds
+- 950abf9: build(deps): bump the deps group with 2 updates
+- 4bc0387: fix: add back `create fuels` template metadata
+- 8b7d148: build(deps): bump the deps group with 2 updates
+- 740f1ae: feat: add testing to `create-fuels`
+- f3e89d2: docs: add more comments around the `create-fuels` template app
+
+## 0.92.1
+
+### Patch Changes
+
+- e4452f9: build(deps): bump next from 14.2.4 to 14.2.5 in the deps group
+- 1b4b033: chore: replace `create-fuels` hardcoded values with constants
+- ce5b6b8: build(deps-dev): bump the dev-deps group with 9 updates
+- 766faed: build(deps): bump @tanstack/react-query from 5.29.2 to 5.51.1
+
+## 0.92.0
+
+### Patch Changes
+
+- e9b70ee: chore: include all supported connectors in the create fuels template
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- 1e2d59f: feat: utilize the Next.js `Link` component
+
+## 0.91.0
+
+### Patch Changes
+
+- c835e53: feat: add `fuel-toolchain.toml` to `create fuels` template
+- 41647a8: build(deps-dev): bump tailwindcss from 3.3.2 to 3.4.4
+- a0e7420: feat: add next link component to `create-fuels`
+- 7befc6a: fix!: stop piping into `process.stdout/stderr` and use `console.log`
+- a9ece17: build: add support for latest node versions
+- 2290935: chore: add integration test for `create fuels`
+- 95d351b: fix: passing arguments with NPM
+- 681a787: chore: remove some choices from `create-fuels` CLI
+- 399a0d6: build(deps-dev): bump eslint-config-next from 14.0.1 to 14.2.4
+- 4a9b67d: build(deps): bump react and @types/react
+- a6c45fd: chore!: upgrade `commander` to`12.1.0`
+- c846bfb: feat: migrate to NextJS app router
+- a0f178b: build(deps): bump react-dom and @types/react-dom
+
 ## 0.90.0
 
 ### Patch Changes

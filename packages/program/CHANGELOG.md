@@ -1,5 +1,93 @@
 # Change Log
 
+## 0.93.0
+
+### Minor Changes
+
+- ad0a081: chore!: remove `awaitExecution` functionality
+- d4c4e55: chore!: refactored the `getTransactionCost` method
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- Updated dependencies [6b3df9d]
+- Updated dependencies [ad0a081]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [c99f56b]
+- Updated dependencies [f3453b9]
+- Updated dependencies [16ee1bf]
+  - @fuel-ts/account@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/transactions@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- c62ae85: build(deps): bump @fuels/vm-asm from 0.54.0 to 0.55.0
+- Updated dependencies [c62ae85]
+  - @fuel-ts/account@0.92.1
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/address@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/math@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 74a00be: chore!: remove `InvocationResult` from `program` package
+- 661b153: feat!: implement non-blocking contract call
+
+### Patch Changes
+
+- Updated dependencies [98dbfbb]
+- Updated dependencies [d0b5446]
+- Updated dependencies [369feef]
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [17bd929]
+- Updated dependencies [aa7e656]
+  - @fuel-ts/account@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/abi-coder@0.92.0
+  - @fuel-ts/address@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/transactions@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- 0206568: fix: added docs for `isReadOnly` function
+- Updated dependencies [ab1f8bf]
+- Updated dependencies [7befc6a]
+- Updated dependencies [a9ece17]
+- Updated dependencies [34f1ac7]
+- Updated dependencies [eec0806]
+- Updated dependencies [3be2251]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/account@0.91.0
+  - @fuel-ts/transactions@0.91.0
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/address@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
 ## 0.90.0
 
 ### Patch Changes

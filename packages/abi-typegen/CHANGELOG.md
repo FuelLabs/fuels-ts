@@ -1,5 +1,67 @@
 # @fuel-ts/abi-typegen
 
+## 0.93.0
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+- 5b670a5: fix: make properties of configurables optional in typegen
+- ad9adcd: fix: export interfaces in typegen
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/utils@0.92.1
+- @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 17bd929: feat!: made `deployContract` a non-blocking call
+
+### Patch Changes
+
+- 369feef: build(deps): bump the deps group with 2 updates
+- 968ad03: chore: mimic `JsonAbi` interface from `abi-coder` in `abi-typegen`
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- 7befc6a: fix!: stop piping into `process.stdout/stderr` and use `console.log`
+- a9ece17: build: add support for latest node versions
+- a6c45fd: chore!: upgrade `commander` to`12.1.0`
+- 31764d6: build(deps): bump rimraf from 3.0.2 to 5.0.7
+- fbfe9b9: build(deps): bump handlebars from 4.7.7 to 4.7.8
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/utils@0.91.0
+
 ## 0.90.0
 
 ### Minor Changes

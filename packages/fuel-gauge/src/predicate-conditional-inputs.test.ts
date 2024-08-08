@@ -1,26 +1,20 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
-import { Provider, FUEL_NETWORK_URL, Predicate, Wallet, ScriptTransactionRequest, bn } from 'fuels';
+import { Wallet, ScriptTransactionRequest, bn } from 'fuels';
+import { launchTestNode, ASSET_A, ASSET_B } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { PredicateConditionalInputs } from '../test/typegen/predicates';
 
 /**
  * @group node
+ * @group browser
  */
 describe('PredicateConditionalInputs', () => {
-  let baseAssetId: string;
-
-  const { binHexlified: predicateBytecode, abiContents: abiJSON } = getFuelGaugeForcProject(
-    FuelGaugeProjectsEnum.PREDICATE_CONDITIONAL_INPUTS
-  );
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('should execute custom transaction where predicate transfers to Alice (ALICE PAYS FEES)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
 
     const aliceWallet = Wallet.generate({
       provider,
@@ -28,16 +22,11 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const adminWallet = await generateTestWallet(provider, [
-      [800_000, baseAssetId],
-      [800_000, ASSET_A],
-    ]);
-
-    const predicate = new Predicate({
-      bytecode: predicateBytecode,
-      abi: abiJSON,
+    const predicate = new PredicateConditionalInputs({
       provider,
-      configurableConstants: { MAKER: aliceWallet.address.toB256() },
+      configurableConstants: {
+        MAKER: aliceWallet.address.toB256(),
+      },
     });
 
     // transfer asset A to predicate so it can transfer to alice
@@ -46,7 +35,7 @@ describe('PredicateConditionalInputs', () => {
     await tx1.waitForResult();
 
     // transfer base asset to Alice so she can pay the fees
-    const tx2 = await adminWallet.transfer(aliceWallet.address, 200_000, baseAssetId);
+    const tx2 = await adminWallet.transfer(aliceWallet.address, 200_000, provider.getBaseAssetId());
 
     await tx2.waitForResult();
 
@@ -54,14 +43,14 @@ describe('PredicateConditionalInputs', () => {
 
     // fetch predicate resources to spend
     const predicateResoruces = await predicate.getResourcesToSpend([[amountToTransfer, ASSET_A]]);
-    const aliceResources = await aliceWallet.getResourcesToSpend([[1, baseAssetId]]);
+    const aliceResources = await aliceWallet.getResourcesToSpend([[1, provider.getBaseAssetId()]]);
 
     request
       .addResources(aliceResources)
       .addResources(predicateResoruces)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
 
-    const txCost = await aliceWallet.provider.getTransactionCost(request, {
+    const txCost = await aliceWallet.getTransactionCost(request, {
       resourcesOwner: aliceWallet,
     });
 
@@ -97,7 +86,12 @@ describe('PredicateConditionalInputs', () => {
   });
 
   it('should execute custom transaction where predicate transfer to Alice (PREDICATE PAYS FEES)', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
 
     const aliceWallet = Wallet.generate({
       provider,
@@ -105,17 +99,11 @@ describe('PredicateConditionalInputs', () => {
 
     const amountToTransfer = 1000;
 
-    const adminWallet = await generateTestWallet(provider, [
-      [500_000, baseAssetId],
-      [500_000, ASSET_A],
-      [500_000, ASSET_B],
-    ]);
-
-    const predicate = new Predicate({
-      bytecode: predicateBytecode,
-      abi: abiJSON,
+    const predicate = new PredicateConditionalInputs({
       provider,
-      configurableConstants: { MAKER: aliceWallet.address.toB256() },
+      configurableConstants: {
+        MAKER: aliceWallet.address.toB256(),
+      },
     });
 
     // transfer asset A to predicate so it can transfer to alice
@@ -124,7 +112,7 @@ describe('PredicateConditionalInputs', () => {
     await tx1.waitForResult();
 
     // transfer base asset to predicate so it can pay the fees
-    const tx2 = await adminWallet.transfer(predicate.address, 200_000, baseAssetId);
+    const tx2 = await adminWallet.transfer(predicate.address, 200_000, provider.getBaseAssetId());
 
     await tx2.waitForResult();
 
@@ -150,7 +138,7 @@ describe('PredicateConditionalInputs', () => {
       .addResources(predicateResources)
       .addCoinOutput(aliceWallet.address, amountToTransfer, ASSET_A);
 
-    const txCost = await aliceWallet.provider.getTransactionCost(request);
+    const txCost = await aliceWallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

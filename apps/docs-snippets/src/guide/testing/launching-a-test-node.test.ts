@@ -3,8 +3,7 @@ import { WalletUnlocked } from 'fuels';
 import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-import { CounterAbi__factory as TestContract__factory } from '../../../test/typegen/contracts';
-import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
+import { Counter, CounterFactory } from '../../../test/typegen/contracts';
 
 /**
  * @group node
@@ -51,16 +50,10 @@ describe('launching a test node', () => {
     // #region basic-example
     // #import { launchTestNode };
 
-    // #context import { TestContract__factory } from 'path/to/typegen/output';
-    // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
+    // #context import { CounterFactory } from 'path/to/typegen/output';
 
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: TestContract__factory,
-          bytecode,
-        },
-      ],
+      contractsConfigs: [{ factory: CounterFactory }],
     });
 
     const {
@@ -69,7 +62,8 @@ describe('launching a test node', () => {
       wallets,
     } = launched;
 
-    const response = await contract.functions.get_count().call();
+    const { waitForResult } = await contract.functions.get_count().call();
+    const response = await waitForResult();
     // #endregion basic-example
     expect(response.value.toNumber()).toBe(0);
     expect(provider).toBeDefined();
@@ -80,8 +74,7 @@ describe('launching a test node', () => {
     // #region advanced-example
     // #import { launchTestNode, AssetId, TestMessage };
 
-    // #context import { TestContract__factory } from 'path/to/typegen/output';
-    // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
+    // #context import { CounterFactory } from 'path/to/typegen/output';
 
     const assets = AssetId.random(2);
     const message = new TestMessage({ amount: 1000 });
@@ -96,8 +89,7 @@ describe('launching a test node', () => {
       },
       contractsConfigs: [
         {
-          deployer: TestContract__factory,
-          bytecode,
+          factory: CounterFactory,
           walletIndex: 3,
           options: { storageSlots: [] },
         },
@@ -190,7 +182,7 @@ describe('launching a test node', () => {
       wallets: [wallet],
     } = launched;
 
-    const coins = await wallet.getCoins(assets[0].value);
+    const { coins } = await wallet.getCoins(assets[0].value);
     // #endregion asset-ids
     expect(coins[0].assetId).toEqual(assets[0].value);
   });
@@ -211,7 +203,9 @@ describe('launching a test node', () => {
       wallets: [wallet],
     } = launched;
 
-    const [message] = await wallet.getMessages();
+    const {
+      messages: [message],
+    } = await wallet.getMessages();
     // message.nonce === testMessage.nonce
     // #endregion test-messages
 
@@ -242,7 +236,9 @@ describe('launching a test node', () => {
 
     recipient.provider = provider;
 
-    const [message] = await recipient.getMessages();
+    const {
+      messages: [message],
+    } = await recipient.getMessages();
     // message.nonce === testMessage.nonce
     // #endregion test-messages-chain
 

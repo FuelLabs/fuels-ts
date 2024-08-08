@@ -16,32 +16,24 @@ The first step is to run the command:
 ::: code-group
 
 ```sh-vue [npm]
-npm create fuels@{{fuels}}
+npm create fuels@{{fuels}} -- --npm
 ```
 
 ```sh-vue [pnpm]
-pnpm create fuels@{{fuels}}
+pnpm create fuels@{{fuels}} --pnpm
 ```
 
 ```sh-vue [bun]
-bunx --bun create-fuels@{{fuels}}
+bunx --bun create-fuels@{{fuels}} --bun
 ```
 
 :::
 
-Once you run the command, you will be greeted with a few simple questions. We will answer them as follows:
+Once you run the command, you will be asked to choose a name for your project:
 
 ```md
 ◇ What is the name of your project?
 │ my-fuel-project
-│
-◇ Select a package manager:
-│ pnpm
-│
-◆ Which Sway programs do you want? (space to toggle)
-│ ● Contract
-│ ○ Predicate
-│ ○ Script
 └
 ```
 
@@ -68,11 +60,13 @@ The project scaffolded by `npm create fuels` has roughly the following directory
 ```md
 my-fuel-project
 ├── src
-│ ├── pages
-│ │ ├── index.tsx
+│ ├── app
+│ │ ├── page.tsx
 │ │ └── ...
 │ ├── components
 │ │ └── ...
+│ ├── hooks
+│ └── ...
 │ ├── styles
 │ │ └── ...
 │ └── lib.ts
@@ -99,7 +93,7 @@ This is the configuration file for the [`fuels` CLI](../fuels-cli/index.md), the
 
 This is where our Sway contract lives. Out of the box, it is a simple counter contract that can only be incremented. We will add a decrement functionality to it in the next step.
 
-### `./src/pages/index.tsx`
+### `./src/app/page.tsx`
 
 This file contains the source code for the frontend of our dApp. It is a Next.js page that renders the counter value and allows the user to increment the counter.
 
@@ -147,15 +141,13 @@ You should now be able to see the counter dApp running at `http://localhost:3000
 
 ![Fullstack Fuel Dev Workflow](../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
 
-:::
-
-**Note** You may wish to learn more about how you could create a Fuel dApp that uses predicates, check out our [Working with Predicates](./working-with-predicates.md) guide.
+**Note:** You may wish to learn more about how you could create a Fuel dApp that uses predicates, check out our [Working with Predicates](./working-with-predicates.md) guide.
 
 ---
 
 ## Adding Decrement Functionality
 
-To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/pages/index.tsx` file to add a button that calls this function.
+To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/app/page.tsx` file to add a button that calls this function.
 
 ### 1. Modifying the Sway Contract
 
@@ -175,11 +167,11 @@ We will add the implementation of the `decrement_counter` function right below t
 
 ### 2. Modifying the Frontend
 
-We will now add a new button to the frontend that will call the `decrement_counter` function when clicked. To do this, we will modify the `./src/pages/index.tsx` file.
+We will now add a new button to the frontend that will call the `decrement_counter` function when clicked. To do this, we will modify the `./src/app/page.tsx` file.
 
 First, we will add a function called `onDecrementPressed` similar to the `onIncrementPressed` function:
 
-<<< @/../../create-fuels-counter-guide/src/pages/index.tsx#create-fuels-counter-guide-on-decrement-react-function{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/app/page.tsx#create-fuels-counter-guide-on-decrement-react-function{ts:line-numbers}
 
 Second, we will add a new button to the UI that will call the `onDecrementPressed` function when clicked:
 
@@ -191,13 +183,21 @@ Second, we will add a new button to the UI that will call the `onDecrementPresse
 </Button>
 ```
 
-Congratulations! That's all. You should now be able to see the counter dApp running at `http://localhost:3000` with our newly added decrement functionality.
+Congratulations! You should now be able to see the counter dApp running at `http://localhost:3000` with our newly added decrement functionality.
 
 You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 
 ![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
 Whenever you want to add a new feature to your dApp and quickly prototype things, you can follow the same steps we followed in this guide.
+
+### 3. Extending the Test Suite (Optional)
+
+Testing the integration with your smart contract isn't essential, but it's good practice to ensure that your application is working as expected. It also gives you the ability to test your application in a controlled environment against a local node.
+
+We've provided some examples for each program type in the `./test` directory of your project. But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
+
+<<< @/../../docs-snippets/src/guide/create-fuels/decrement_counter.test.ts#decrement-counter{ts:line-numbers}
 
 ## Next Steps
 
@@ -207,7 +207,8 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 - If you want to deploy your dApp to the testnet, check out our [Deploying a dApp to Testnet](./deploying-a-dapp-to-testnet.md) guide.
 
+- If you want to further validate the functionality of your dApp and program types, check out the `test` directory in your `create fuels` project. Couple this with our [testing guide](https://docs.fuel.network/docs/fuels-ts/testing/) to get a better understanding of how to test your dApp.
+
 - If you have any questions or need help, feel free to reach out to us on the [Official Fuel Forum](https://forum.fuel.network/).
 
 - If you want to learn more about the Fuel Stack, check out the [Fuel Docs](https://docs.fuel.network/).
-

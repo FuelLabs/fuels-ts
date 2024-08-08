@@ -1,41 +1,29 @@
 {{header}}
 
-import { Interface, Contract, ContractFactory } from "fuels";
-import type { Provider, Account, AbstractAddress, BytesLike, DeployContractOptions, StorageSlot } from "fuels";
-import type { {{capitalizedName}}, {{capitalizedName}}Interface } from "../{{capitalizedName}}";
+import { ContractFactory } from "fuels";
+import type { Provider, Account, DeployContractOptions, DeployContractResult } from "fuels";
 
-const _abi = {{abiJsonString}};
+import { {{capitalizedName}} } from "./{{capitalizedName}}";
 
-const _storageSlots: StorageSlot[] = {{storageSlotsJsonString}};
+const bytecode = "{{hexlifiedBinString}}";
 
-export const {{capitalizedName}}__factory = {
-  abi: _abi,
+export class {{capitalizedName}}Factory extends ContractFactory {
 
-  storageSlots: _storageSlots,
+  static readonly bytecode = bytecode;
 
-  createInterface(): {{capitalizedName}}Interface {
-    return new Interface(_abi) as unknown as {{capitalizedName}}Interface
-  },
+  constructor(accountOrProvider: Account | Provider) {
+    super(bytecode, {{capitalizedName}}.abi, accountOrProvider);
+  }
 
-  connect(
-    id: string | AbstractAddress,
-    accountOrProvider: Account | Provider
-  ): {{capitalizedName}} {
-    return new Contract(id, _abi, accountOrProvider) as unknown as {{capitalizedName}}
-  },
-
-  async deployContract(
-    bytecode: BytesLike,
+  static async deploy (
     wallet: Account,
     options: DeployContractOptions = {}
-  ): Promise<{{capitalizedName}}> {
-    const factory = new ContractFactory(bytecode, _abi, wallet);
+  ): Promise<DeployContractResult<{{capitalizedName}}>> {
+    const factory = new {{capitalizedName}}Factory(wallet);
 
-    const contract = await factory.deployContract({
-      storageSlots: _storageSlots,
+    return factory.deploy({
+      storageSlots: {{capitalizedName}}.storageSlots,
       ...options,
     });
-
-    return contract as unknown as {{capitalizedName}};
   }
 }

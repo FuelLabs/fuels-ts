@@ -1,5 +1,53 @@
 # @fuel-ts/utils
 
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- 6d63732: fix: sync chain config schema
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/math@0.91.0
+
 ## 0.90.0
 
 ### Patch Changes

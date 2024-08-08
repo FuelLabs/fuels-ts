@@ -1,5 +1,42 @@
 # @fuel-ts/errors
 
+## 0.93.0
+
+### Minor Changes
+
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- Updated dependencies [99794e4]
+  - @fuel-ts/versions@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- eec0806: chore: add `UNKNOWN` error code
+- dddde62: docs: merge error related pages
+- Updated dependencies [a9ece17]
+- Updated dependencies [8676a9e]
+  - @fuel-ts/versions@0.91.0
+
 ## 0.90.0
 
 ### Patch Changes

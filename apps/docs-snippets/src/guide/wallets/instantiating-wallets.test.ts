@@ -1,16 +1,12 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, TESTNET_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
+import { HDWallet, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  beforeAll(async () => {
-    // Avoids using the actual network.
-    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
-    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
-  });
-
+describe('Instantiating wallets', () => {
   it('should generate a new wallet just fine', () => {
     // #region instantiating-wallets-1
     const unlockedWallet: WalletUnlocked = Wallet.generate();
@@ -88,7 +84,8 @@ describe(__filename, () => {
   });
 
   it('should instantiate a locked wallet using a bech32 string address', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
     const address = `fuel14kjrdcdcp7z4l9xk0pm3cwz9qnjxxd04wx4zgnc3kknslclxzezqyeux5d`;
 
@@ -106,7 +103,8 @@ describe(__filename, () => {
     const myWallet = Wallet.fromAddress(address);
 
     // #region instantiating-wallets-9
-    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
     myWallet.connect(provider);
     // #endregion instantiating-wallets-9
@@ -115,7 +113,8 @@ describe(__filename, () => {
   });
 
   it('should instantiate wallet alreay connected to a provider', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
 

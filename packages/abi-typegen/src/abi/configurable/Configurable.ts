@@ -1,18 +1,23 @@
 import type { IConfigurable } from '../../types/interfaces/IConfigurable';
-import type { IRawAbiConfigurable } from '../../types/interfaces/IRawAbiConfigurable';
 import type { IType } from '../../types/interfaces/IType';
-import { findType } from '../../utils/findType';
+import type { JsonAbiConfigurable } from '../../types/interfaces/JsonAbi';
+import { resolveInputLabel } from '../../utils/getTypeDeclaration';
 
 export class Configurable implements IConfigurable {
   public name: string;
-  public type: IType;
-  public rawAbiConfigurable: IRawAbiConfigurable;
+  public inputLabel: string;
 
-  constructor(params: { types: IType[]; rawAbiConfigurable: IRawAbiConfigurable }) {
-    const { types, rawAbiConfigurable } = params;
+  constructor(params: { types: IType[]; rawAbiConfigurable: JsonAbiConfigurable }) {
+    const {
+      types,
+      rawAbiConfigurable: {
+        name,
+        configurableType: { type, typeArguments },
+      },
+    } = params;
 
-    this.name = rawAbiConfigurable.name;
-    this.rawAbiConfigurable = rawAbiConfigurable;
-    this.type = findType({ types, typeId: rawAbiConfigurable.configurableType.type });
+    this.name = name;
+
+    this.inputLabel = resolveInputLabel(types, type, typeArguments);
   }
 }

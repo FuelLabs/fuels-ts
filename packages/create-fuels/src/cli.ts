@@ -1,3 +1,4 @@
+import { FuelError } from '@fuel-ts/errors';
 import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import chalk from 'chalk';
@@ -9,9 +10,11 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
+import { doesTemplateExist } from './lib/doesTemplateExist';
 import { getPackageManager } from './lib/getPackageManager';
 import { getPackageVersion } from './lib/getPackageVersion';
-import type { ProgramOptions } from './lib/setupProgram';
+import { defaultTemplate, templates } from './lib/setupProgram';
+import type { Template, ProgramOptions } from './lib/setupProgram';
 import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
 
@@ -44,10 +47,22 @@ export const runScaffoldCli = async ({
   args: string[];
 }) => {
   program.parse(args);
+  const opts = program.opts<ProgramOptions>();
+
+  const templateOfChoice = (opts.template ?? defaultTemplate) as Template;
+
+  if (!doesTemplateExist(templateOfChoice)) {
+    error(`Template '${templateOfChoice}' does not exist.`);
+    log();
+    log('Available templates:');
+    for (const template of templates) {
+      log(`  - ${template}`);
+    }
+    process.exit(1);
+  }
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
 
-  const opts = program.opts<ProgramOptions>();
   const verboseEnabled = opts.verbose ?? false;
   const packageManager = getPackageManager(opts);
 
@@ -60,7 +75,10 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
@@ -71,7 +89,10 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
@@ -84,7 +105,8 @@ export const runScaffoldCli = async ({
 
   await mkdir(projectPath);
 
-  await cp(join(__dirname, '../templates/nextjs'), projectPath, {
+  const templateDir = join(__dirname, '..', 'templates', templateOfChoice);
+  await cp(templateDir, projectPath, {
     recursive: true,
     filter: (filename) => !filename.includes('CHANGELOG.md'),
   });
@@ -118,7 +140,7 @@ export const runScaffoldCli = async ({
 
   fileCopySpinner.succeed('Copied template files!');
 
-  if (opts['no-install'] === false) {
+  if (opts.install) {
     const installDepsSpinner = ora({
       text: 'Installing dependencies..',
       color: 'green',

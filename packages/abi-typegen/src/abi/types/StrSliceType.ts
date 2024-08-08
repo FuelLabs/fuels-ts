@@ -14,10 +14,15 @@ export class StrSliceType extends AType implements IType {
   }
 
   public parseComponentsAttributes(_params: { types: IType[] }) {
+    const capitalizedName = 'StrSlice';
+
     this.attributes = {
-      inputLabel: 'StrSlice',
-      outputLabel: 'StrSlice',
+      inputLabel: capitalizedName,
+      outputLabel: capitalizedName,
     };
+
+    this.requiredFuelsMembersImports = [capitalizedName];
+
     return this.attributes;
   }
 }

@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects';
-import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
@@ -32,7 +32,7 @@ describe('ArrayType.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_WITH_ARRAY);
 
     const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     // validating `struct B`, with simple tuples on property `x`
     const b = findType({ types, typeId: 0 }) as ArrayType;
@@ -50,7 +50,7 @@ describe('ArrayType.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.ARRAY_WITH_GENERICS);
 
     const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     const a = findType({ types, typeId: 1 }) as ArrayType;
 

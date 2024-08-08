@@ -1,4 +1,4 @@
-import type { IFile, IRawAbiTypeRoot, IRawAbiConfigurable } from '../../src/index';
+import type { IFile, JsonAbiType, JsonAbiConfigurable } from '../../src/index';
 import { AbiTypeGen } from '../../src/index';
 import { ProgramTypeEnum } from '../../src/types/enums/ProgramTypeEnum';
 
@@ -17,7 +17,7 @@ export function getNewAbiTypegen(
     includeBinFiles = false,
   } = params;
 
-  const optionType: IRawAbiTypeRoot = {
+  const optionType: JsonAbiType = {
     typeId: 3,
     type: 'enum Option',
     components: [
@@ -35,7 +35,7 @@ export function getNewAbiTypegen(
     typeParameters: [2],
   };
 
-  const types: IRawAbiTypeRoot[] = [
+  const types: JsonAbiType[] = [
     {
       typeId: 1,
       type: 'u8',
@@ -72,7 +72,7 @@ export function getNewAbiTypegen(
 
   const functions = includeMainFunction ? [main] : [];
 
-  const configurables: IRawAbiConfigurable[] = [
+  const configurables: JsonAbiConfigurable[] = [
     {
       name: 'configurable',
       configurableType: {

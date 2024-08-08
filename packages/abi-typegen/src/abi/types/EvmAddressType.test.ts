@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { IRawAbiTypeRoot } from '../../index';
+import type { JsonAbiType } from '../../index';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 import * as parseTypeArgumentsMod from '../../utils/parseTypeArguments';
@@ -21,7 +21,7 @@ describe('EvmAddressType.ts', () => {
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.EVM_ADDRESS);
 
     const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     const suitableForEvmAddress = EvmAddressType.isSuitableFor({ type: EvmAddressType.swayType });
     const suitableForStruct = EvmAddressType.isSuitableFor({ type: StructType.swayType });

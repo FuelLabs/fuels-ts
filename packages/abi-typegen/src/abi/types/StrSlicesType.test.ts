@@ -31,6 +31,6 @@ describe('StrSlicesType.ts', () => {
 
     expect(strSlices.attributes.inputLabel).toEqual('StrSlice');
     expect(strSlices.attributes.outputLabel).toEqual('StrSlice');
-    expect(strSlices.requiredFuelsMembersImports).toStrictEqual([]);
+    expect(strSlices.requiredFuelsMembersImports).toStrictEqual(['StrSlice']);
   });
 });

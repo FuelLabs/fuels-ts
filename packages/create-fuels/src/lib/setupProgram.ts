@@ -2,6 +2,10 @@ import { Command } from 'commander';
 
 import packageJson from '../../package.json';
 
+export type Template = 'nextjs';
+export const templates: Set<Template> = new Set(['nextjs']);
+export const defaultTemplate: Template = 'nextjs';
+
 export interface ProgramOptions {
   contract?: boolean;
   predicate?: boolean;
@@ -10,7 +14,8 @@ export interface ProgramOptions {
   npm?: boolean;
   bun?: boolean;
   verbose?: boolean;
-  'no-install'?: boolean;
+  install?: boolean;
+  template?: Template;
 }
 
 export const setupProgram = () => {
@@ -21,7 +26,8 @@ export const setupProgram = () => {
     .option('--npm', 'Use npm to install dependencies')
     .option('--bun', 'Use bun to install dependencies')
     .option('--verbose', 'Enable verbose logging')
-    .option('--no-install', `Do not install dependencies after scaffolding`, false)
+    .option('--no-install', 'Do not install dependencies')
+    .option('--template <template>', 'Specify a template to use', defaultTemplate)
     .addHelpCommand()
     .showHelpAfterError(true);
   return program;

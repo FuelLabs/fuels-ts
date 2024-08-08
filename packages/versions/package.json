@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.90.0",
+  "version": "0.93.0",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -45,6 +45,6 @@
     "cli-table": "^0.3.11"
   },
   "devDependencies": {
-    "@types/cli-table": "^0.3.1"
+    "@types/cli-table": "^0.3.4"
   }
 }

@@ -6,6 +6,7 @@ const options: Options = {
   entry: {
     ...indexBinAndCliConfig.entry,
     'test-utils': 'src/test-utils.ts',
+    'cli-utils': 'src/cli-utils.ts',
   },
   loader: {
     '.hbs': 'text',

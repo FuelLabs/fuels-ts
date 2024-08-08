@@ -1,5 +1,111 @@
 # Change Log
 
+## 0.93.0
+
+### Minor Changes
+
+- ad0a081: chore!: remove `awaitExecution` functionality
+- d4c4e55: chore!: refactored the `getTransactionCost` method
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- c99f56b: docs: added connector documentation
+- 16ee1bf: chore: cache UTXOs by default upon TX submission
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/transactions@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/crypto@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/math@0.93.0
+  - @fuel-ts/merkle@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- c62ae85: build(deps): bump @fuels/vm-asm from 0.54.0 to 0.55.0
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/address@0.92.1
+  - @fuel-ts/crypto@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/hasher@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/math@0.92.1
+  - @fuel-ts/merkle@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+  - @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 98dbfbb: fix!: `launchNode.cleanup` not killing node in last test of test group
+- 17bd929: feat!: made `deployContract` a non-blocking call
+- aa7e656: feat!: implement pagination for `Account` methods
+
+### Patch Changes
+
+- d0b5446: chore: fix repetitive words
+- 369feef: build(deps): bump the deps group with 2 updates
+- 638eae3: build(deps-dev): bump the dev-deps group with 29 updates
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/crypto@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/abi-coder@0.92.0
+  - @fuel-ts/address@0.92.0
+  - @fuel-ts/hasher@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/transactions@0.92.0
+  - @fuel-ts/merkle@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Minor Changes
+
+- 7befc6a: fix!: stop piping into `process.stdout/stderr` and use `console.log`
+
+### Patch Changes
+
+- ab1f8bf: build(deps-dev): bump @graphql-codegen/typescript-\*
+- a9ece17: build: add support for latest node versions
+- 34f1ac7: chore: add browser testing infrastructure
+- eec0806: chore: add `UNKNOWN` error code
+- 3be2251: build(deps-dev): bump prettier from 3.0.3 to 3.3.2
+- 6d63732: fix: sync chain config schema
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [3be2251]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/transactions@0.91.0
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/address@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/merkle@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
 ## 0.90.0
 
 ### Minor Changes

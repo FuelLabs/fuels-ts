@@ -1,15 +1,4 @@
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
-import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
-import type {
-  TransactionRequestLike,
-  TransactionResponse,
-  TransactionType,
-  JsonAbi,
-  ScriptTransactionRequest,
-  TransferParams,
-} from 'fuels';
 import {
   BN,
   getRandomB256,
@@ -17,34 +6,37 @@ import {
   multiply,
   toHex,
   toNumber,
-  Provider,
   Contract,
   transactionRequestify,
-  FunctionInvocationResult,
   Wallet,
   ContractFactory,
-  ZeroBytes32,
-  FUEL_NETWORK_URL,
   Predicate,
   PolicyType,
+  ZeroBytes32,
+  buildFunctionResult,
 } from 'fuels';
+import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
+import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
+import type { DeployContractConfig } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import {
+  CallTestContract,
+  CallTestContractFactory,
+  StorageTestContract,
+  StorageTestContractFactory,
+} from '../test/typegen/contracts';
+import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
-import { createSetupConfig } from './utils';
+import { launchTestContract } from './utils';
 
-const { binHexlified: predicateBytecode } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.PREDICATE_TRUE
-);
-
-const { binHexlified: contractBytecode, abiContents: abi } = getFuelGaugeForcProject(
-  FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-);
-
-const setupContract = createSetupConfig({
-  contractBytecode,
-  abi,
-});
+const contractsConfigs: DeployContractConfig[] = [
+  {
+    factory: CallTestContractFactory,
+  },
+  {
+    factory: CallTestContractFactory,
+  },
+];
 
 const jsonFragment: JsonAbi = {
   configurables: [],
@@ -166,21 +158,25 @@ const txPointer = '0x00000000000000000000000000000000';
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
+function setupTestContract() {
+  return launchTestContract({
+    factory: CallTestContractFactory,
+  });
+}
+
 /**
  * @group node
+ * @group browser
  */
 describe('Contract', () => {
-  let provider: Provider;
-  let baseAssetId: string;
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('generates function methods on a simple contract', async () => {
-    const spy = vi.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
+
     const fragment = contract.interface.getFunction('entry_one');
     const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 
@@ -190,14 +186,17 @@ describe('Contract', () => {
       // The call will fail, but it doesn't matter
     }
 
-    expect(spy).toHaveBeenCalled();
     expect(interfaceSpy).toHaveBeenCalled();
   });
 
   it('generates function methods on a complex contract', async () => {
-    const spy = vi.spyOn(provider, 'sendTransaction');
-    const wallet = await generateTestWallet(provider, [[1_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const contract = new Contract(ZeroBytes32, complexFragment, wallet);
+
     const fragment = contract.interface.getFunction('tuple_function');
     const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
 
@@ -210,18 +209,33 @@ describe('Contract', () => {
       // The call will fail, but it doesn't matter
     }
 
-    expect(spy).toHaveBeenCalled();
     expect(interfaceSpy).toHaveBeenCalled();
   });
 
-  it('assigns a provider if passed', () => {
+  it('assigns a provider if passed', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     const contract = new Contract(getRandomB256(), jsonFragment, provider);
 
     expect(contract.provider).toEqual(provider);
   });
 
+  it('should executes a contract call just nice', async () => {
+    using contract = await setupTestContract();
+
+    const numberToSend = 1336;
+
+    const { waitForResult } = await contract.functions.foo(numberToSend).call();
+
+    const { value, transactionResult } = await waitForResult();
+
+    expect(value.toNumber()).toEqual(numberToSend + 1);
+    expect(transactionResult.isStatusSuccess).toBeTruthy();
+  });
+
   it('should fail to execute call if gasLimit is too low', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     let failed;
     try {
@@ -239,23 +253,30 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on invocation', async () => {
-    const contract = await setupContract();
-    const otherContract = await setupContract({
-      cache: false,
+    using launched = await launchTestNode({
+      contractsConfigs,
     });
 
+    const {
+      contracts: [contract, otherContract],
+    } = launched;
+
     const scope = contract.functions.call_external_foo(1336, otherContract.id.toB256());
+    const { waitForResult } = await scope.call();
+    const { value } = await waitForResult();
 
-    const { value: results } = await scope.call();
-
-    expect(results.toHex()).toEqual(toHex(1338));
+    expect(value.toHex()).toEqual(toHex(1338));
   });
 
   it('adds multiple contracts on multicalls', async () => {
-    const contract = await setupContract();
-    const otherContract = await setupContract({
-      cache: false,
+    using launched = await launchTestNode({
+      contractsConfigs,
     });
+
+    const {
+      contracts: [contract, otherContract],
+    } = launched;
+
     const calls = [
       contract.functions.foo(1336),
       contract.functions.call_external_foo(1336, otherContract.id.toB256()),
@@ -275,22 +296,27 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
-    const { value: results } = await scope.call();
+    const { waitForResult } = await scope.call();
+    const { value: results } = await waitForResult();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1338)]));
   });
 
   it('submits multiple calls', async () => {
-    const contract = await setupContract();
-    const { value: results } = await contract
+    using contract = await setupTestContract();
+
+    const { waitForResult } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
+
+    const { value: results } = await waitForResult();
+
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337), bn(1337)]));
   });
 
   it('submits multiple calls, six calls', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
-    const { value: results } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.foo(1336),
         contract.functions.foo(1336),
@@ -301,15 +327,18 @@ describe('Contract', () => {
         contract.functions.foo(1336),
       ])
       .call();
+
+    const { value: results } = await waitForResult();
+
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([bn(1337), bn(1337), bn(1337), bn(1337), bn(1337), bn(1337)])
     );
   });
 
   it('submits multiple calls, eight calls', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
-    const { value: results } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.foo(1336),
         contract.functions.foo(1336),
@@ -321,6 +350,7 @@ describe('Contract', () => {
         contract.functions.foo(1336),
       ])
       .call();
+    const { value: results } = await waitForResult();
     expect(JSON.stringify(results)).toEqual(
       JSON.stringify([
         bn(1337),
@@ -336,7 +366,7 @@ describe('Contract', () => {
   });
 
   it('should fail to execute multiple calls if gasLimit is too low', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     let failed;
     try {
@@ -354,8 +384,13 @@ describe('Contract', () => {
   });
 
   it('adds multiple contracts on multicalls', async () => {
-    const contract = await setupContract();
-    const otherContract = await setupContract({ cache: false });
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+
+    const {
+      contracts: [contract, otherContract],
+    } = launched;
 
     const scope = contract.multiCall([contract.functions.foo(1336)]).addContracts([otherContract]);
 
@@ -371,12 +406,13 @@ describe('Contract', () => {
       { type: 1, inputIndex: 1 },
     ]);
 
-    const { value: results } = await scope.call();
+    const { waitForResult } = await scope.call();
+    const { value: results } = await waitForResult();
     expect(JSON.stringify(results)).toEqual(JSON.stringify([bn(1337)]));
   });
 
   it('dryRuns multiple calls', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     const { value: results } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -385,7 +421,7 @@ describe('Contract', () => {
   });
 
   it('simulates multiple calls', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     const { value, callResult, gasUsed } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
@@ -396,18 +432,21 @@ describe('Contract', () => {
   });
 
   it('Returns gasUsed and transactionId', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
-    const { transactionId, gasUsed } = await contract
+    const { waitForResult } = await contract
       .multiCall([contract.functions.foo(1336), contract.functions.foo(1336)])
       .call();
+
+    const { transactionId, gasUsed } = await waitForResult();
     expect(transactionId).toBeTruthy();
     expect(toNumber(gasUsed)).toBeGreaterThan(0);
   });
 
   it('Single call with forwarding a alt token', async () => {
-    const contract = await setupContract();
-    const { value } = await contract.functions
+    using contract = await setupTestContract();
+
+    const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [200, AltToken],
@@ -417,16 +456,18 @@ describe('Contract', () => {
         gasLimit: 3000000,
       })
       .call<BN>();
+
+    const { value } = await waitForResult();
     expect(value.toHex()).toEqual(toHex(200));
   });
 
   it('MultiCall with multiple forwarding', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
-    const { value } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, baseAssetId],
+          forward: [100, contract.provider.getBaseAssetId()],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -439,17 +480,20 @@ describe('Contract', () => {
         gasLimit: 5000000,
       })
       .call<[BN, BN, BN]>();
+
+    const { value } = await waitForResult();
+
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200), AltToken]));
   });
 
   it('Check if gas per call is lower than transaction', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     await expect(
       contract
         .multiCall([
           contract.functions.return_context_amount().callParams({
-            forward: [100, baseAssetId],
+            forward: [100, contract.provider.getBaseAssetId()],
             gasLimit: 100,
           }),
           contract.functions.return_context_amount().callParams({
@@ -467,9 +511,9 @@ describe('Contract', () => {
   });
 
   it('can forward gas to multicall calls', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
-    const { value } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_gas().callParams({
           // Forward only 500_000 gas
@@ -485,6 +529,7 @@ describe('Contract', () => {
       })
       .call<[BN, BN]>();
 
+    const { value } = await waitForResult();
     const minThreshold = 0.019;
 
     expect(value[0].toNumber()).toBeGreaterThanOrEqual(500_000 * minThreshold);
@@ -495,11 +540,11 @@ describe('Contract', () => {
   });
 
   it('Get transaction cost', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, baseAssetId],
+        forward: [100, contract.provider.getBaseAssetId()],
       }),
       contract.functions.return_context_amount().callParams({
         forward: [200, AltToken],
@@ -510,20 +555,21 @@ describe('Contract', () => {
     expect(toNumber(transactionCost.minFee)).toBeGreaterThanOrEqual(0);
     expect(toNumber(transactionCost.gasUsed)).toBeGreaterThan(300);
 
-    const { value } = await invocationScope
+    const { waitForResult } = await invocationScope
       .txParams({
         gasLimit: transactionCost.gasUsed,
       })
       .call<[string, string]>();
 
+    const { value } = await waitForResult();
     expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(200)]));
   });
 
   it('Fail before submit if gasLimit is lower than gasUsed', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     const invocationScope = contract.functions.return_context_amount().callParams({
-      forward: [100, baseAssetId],
+      forward: [100, contract.provider.getBaseAssetId()],
     });
     const { gasUsed } = await invocationScope.getTransactionCost();
 
@@ -538,99 +584,114 @@ describe('Contract', () => {
   });
 
   it('calls array functions', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
-    const { value: arrayBoolean } = await contract.functions
-      .take_array_boolean([true, false, false])
-      .call();
+    const call1 = await contract.functions.take_array_boolean([true, false, false]).call();
+    const { value: arrayBoolean } = await call1.waitForResult();
 
     expect(arrayBoolean).toEqual(true);
 
-    const { value: arrayNumber } = await contract.functions.take_array_number([1, 2, 3]).call();
+    const call2 = await contract.functions.take_array_number([1, 2, 3]).call();
+    const { value: arrayNumber } = await call2.waitForResult();
 
     expect(arrayNumber.toHex()).toEqual(toHex(1));
 
-    const { value: arrayReturnShuffle } = await contract.functions
-      .take_array_string_shuffle(['abc', 'efg', 'hij'])
-      .call();
+    const call3 = await contract.functions.take_array_string_shuffle(['abc', 'efg', 'hij']).call();
+    const { value: arrayReturnShuffle } = await call3.waitForResult();
 
     expect(arrayReturnShuffle).toEqual(['hij', 'abc', 'efg']);
 
-    const { value: arrayReturnSingle } = await contract.functions
+    const call4 = await contract.functions
       .take_array_string_return_single(['abc', 'efg', 'hij'])
       .call();
 
+    const { value: arrayReturnSingle } = await call4.waitForResult();
+
     expect(arrayReturnSingle).toEqual(['abc']);
 
-    const { value: arrayReturnSingleElement } = await contract.functions
+    const call5 = await contract.functions
       .take_array_string_return_single_element(['abc', 'efg', 'hij'])
       .call();
+
+    const { value: arrayReturnSingleElement } = await call5.waitForResult();
 
     expect(arrayReturnSingleElement).toEqual('abc');
   });
 
   it('calls enum functions', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
-    const { value: enumB256ReturnValue } = await contract.functions
+    const call1 = await contract.functions
       .take_b256_enum({
         Value: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
       })
       .call();
 
+    const { value: enumB256ReturnValue } = await call1.waitForResult();
+
     expect(enumB256ReturnValue).toEqual(
       '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b'
     );
 
-    const { value: enumB256ReturnData } = await contract.functions
+    const call2 = await contract.functions
       .take_b256_enum({
         Data: '0x1111111111111111111111111111111111111111111111111111111111111111',
       })
       .call();
 
+    const { value: enumB256ReturnData } = await call2.waitForResult();
+
     expect(enumB256ReturnData).toEqual(
       '0x1111111111111111111111111111111111111111111111111111111111111111'
     );
 
-    const { value: enumBoolReturnValue } = await contract.functions
+    const call3 = await contract.functions
       .take_bool_enum({
         Value: true,
       })
       .call();
 
+    const { value: enumBoolReturnValue } = await call3.waitForResult();
+
     expect(enumBoolReturnValue).toEqual(true);
 
-    const { value: enumBoolReturnData } = await contract.functions
+    const call4 = await contract.functions
       .take_bool_enum({
         Data: false,
       })
       .call();
 
+    const { value: enumBoolReturnData } = await call4.waitForResult();
+
     expect(enumBoolReturnData).toEqual(false);
 
-    const { value: enumStrReturnValue } = await contract.functions
+    const call5 = await contract.functions
       .take_string_enum({
         Value: 'abc',
       })
       .call();
 
+    const { value: enumStrReturnValue } = await call5.waitForResult();
+
     expect(enumStrReturnValue).toEqual('abc');
 
-    const { value: enumStrReturnData } = await contract.functions
+    const call6 = await contract.functions
       .take_string_enum({
         Data: 'efg',
       })
       .call();
 
+    const { value: enumStrReturnData } = await call6.waitForResult();
+
     expect(enumStrReturnData).toEqual('efg');
   });
 
   it('dryRun and get should not validate the signature', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
     const { value } = await contract
       .multiCall([
         contract.functions.return_context_amount().callParams({
-          forward: [100, baseAssetId],
+          forward: [100, contract.provider.getBaseAssetId()],
         }),
         contract.functions.return_context_amount().callParams({
           forward: [200, AltToken],
@@ -642,7 +703,7 @@ describe('Contract', () => {
   });
 
   it('Parse TX to JSON and parse back to TX', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     const num = 1337;
     const struct = { a: true, b: 1337 };
@@ -660,7 +721,12 @@ describe('Contract', () => {
     const {
       value: [resultA, resultB],
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await FunctionInvocationResult.build<any>(invocationScopes, response, true, contract);
+    } = await buildFunctionResult<any>({
+      funcScope: invocationScopes,
+      transactionResponse: response,
+      isMultiCall: true,
+      program: contract,
+    });
 
     expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
     expect(resultB.a).toEqual(!struct.a);
@@ -668,16 +734,16 @@ describe('Contract', () => {
   });
 
   it('Parse create TX to JSON and parse back to create TX', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(wallet, [
-      {
-        amount: bn(1_000_000),
-        assetId: baseAssetId,
-      },
-    ]);
-    const contract = new ContractFactory(contractBytecode, abi, wallet);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const contract = new ContractFactory(
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
+      wallet
+    );
     const { transactionRequest } = contract.createTransactionRequest();
 
     const txRequest = JSON.stringify(transactionRequest);
@@ -687,7 +753,7 @@ describe('Contract', () => {
       txRequestParsed
     ) as ScriptTransactionRequest;
 
-    const txCost = await provider.getTransactionCost(transactionRequestParsed);
+    const txCost = await wallet.getTransactionCost(transactionRequestParsed);
 
     transactionRequestParsed.gasLimit = txCost.gasUsed;
     transactionRequestParsed.maxFee = txCost.maxFee;
@@ -701,103 +767,12 @@ describe('Contract', () => {
     expect(result.status).toBe('success');
   });
 
-  it('Provide a custom provider and public wallet to the contract instance', async () => {
-    const contract = await setupContract();
-
-    const externalWallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(externalWallet, [
-      {
-        amount: bn(1_000_000),
-        assetId: baseAssetId,
-      },
-    ]);
-
-    // Create a custom provider to emulate a external signer
-    // like Wallet Extension or a Hardware wallet
-    let signedTransaction;
-    class ProviderCustom extends Provider {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      static async create(url: string) {
-        const newProvider = new ProviderCustom(url);
-        return newProvider;
-      }
-
-      async sendTransaction(
-        transactionRequestLike: TransactionRequestLike
-      ): Promise<TransactionResponse> {
-        const transactionRequest = transactionRequestify(transactionRequestLike);
-        // Simulate a external request of signature
-        signedTransaction = await externalWallet.signTransaction(transactionRequest);
-        transactionRequest.updateWitnessByOwner(externalWallet.address, signedTransaction);
-        return super.sendTransaction(transactionRequestLike);
-      }
-    }
-
-    // Set custom provider to contract instance
-    const customProvider = await ProviderCustom.create(FUEL_NETWORK_URL);
-    contract.account = Wallet.fromAddress(externalWallet.address, customProvider);
-    contract.provider = customProvider;
-
-    const num = 1337;
-    const struct = { a: true, b: 1337 };
-    const invocationScopes = [contract.functions.foo(num), contract.functions.boo(struct)];
-    const multiCallScope = contract.multiCall(invocationScopes).txParams({ gasLimit: 20_000 });
-
-    const transactionRequest = await multiCallScope.getTransactionRequest();
-
-    const txRequest = JSON.stringify(transactionRequest);
-    const txRequestParsed = JSON.parse(txRequest);
-
-    const transactionRequestParsed = transactionRequestify(
-      txRequestParsed
-    ) as ScriptTransactionRequest;
-
-    const txCost = await contract.provider.getTransactionCost(transactionRequestParsed);
-
-    transactionRequestParsed.gasLimit = txCost.gasUsed;
-    transactionRequestParsed.maxFee = txCost.maxFee;
-
-    await contract.account.fund(transactionRequestParsed, txCost);
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const response = await contract.account!.sendTransaction(transactionRequestParsed);
-    const {
-      value: [resultA, resultB],
-      transactionResult,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } = await FunctionInvocationResult.build<any, TransactionType.Script>(
-      invocationScopes,
-      response,
-      true,
-      contract
-    );
-
-    expect(transactionResult.transaction.witnesses.length).toEqual(1);
-    expect(transactionResult.transaction.witnesses[0].data).toEqual(signedTransaction);
-    expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
-    expect(resultB.a).toEqual(!struct.a);
-    expect(resultB.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
-  });
-
   it('should ensure multicall allows multiple heap types', async () => {
-    const wallet = Wallet.generate({
-      provider,
-    });
-    await seedTestWallet(wallet, [
-      {
-        amount: bn(500_000),
-        assetId: baseAssetId,
-      },
-    ]);
-    const factory = new ContractFactory(contractBytecode, abi, wallet);
-
-    const contract = await factory.deployContract();
+    using contract = await setupTestContract();
 
     const vector = [5, 4, 3, 2, 1];
 
-    const { value } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.return_context_amount(),
         contract.functions.return_vector(vector), // returns heap type Vec
@@ -805,11 +780,13 @@ describe('Contract', () => {
       ])
       .call();
 
+    const { value } = await waitForResult();
+
     expect(JSON.stringify(value)).toBe(JSON.stringify([bn(0), vector, new Uint8Array()]));
   });
 
   it('Read only call', async () => {
-    const contract = await setupContract({ cache: false });
+    using contract = await setupTestContract();
     const { value } = await contract.functions.echo_b256(contract.id.toB256()).simulate();
     expect(value).toEqual(contract.id.toB256());
   });
@@ -820,37 +797,58 @@ describe('Contract', () => {
    * currently placed inside the `fuel-gauge` package. It might make sense
    * to move them to another test suite when addressing https://github.com/FuelLabs/fuels-ts/issues/1043.
    */
-  it('should tranfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
-    const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
+  it('should transfer asset to a deployed contract just fine (NATIVE ASSET)', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
 
-    const contract = await setupContract();
-
-    const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
+    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
 
     const u64Amount = bn(10_000);
     const amountToContract = u64Amount;
 
-    const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId);
+    const tx = await wallet.transferToContract(
+      contract.id,
+      amountToContract,
+      provider.getBaseAssetId()
+    );
 
     await tx.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
+    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
   it('should set "gasLimit" and "maxFee" when transferring amounts to contract just fine', async () => {
-    const wallet = await generateTestWallet(provider, [[10_000_000, baseAssetId]]);
-    const contract = await setupContract();
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
     const amountToContract = 5_000;
 
     const gasLimit = 80_000;
     const maxFee = 70_000;
 
-    const tx = await wallet.transferToContract(contract.id, amountToContract, baseAssetId, {
-      gasLimit,
-      maxFee,
-    });
+    const tx = await wallet.transferToContract(
+      contract.id,
+      amountToContract,
+      provider.getBaseAssetId(),
+      {
+        gasLimit,
+        maxFee,
+      }
+    );
 
     const { transaction } = await tx.waitForResult();
 
@@ -862,9 +860,13 @@ describe('Contract', () => {
   });
 
   it('should ensure gas price and gas limit are validated when transfering to contract', async () => {
-    const wallet = await generateTestWallet(provider, [[1000, baseAssetId]]);
-
-    const contract = await setupContract();
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
 
     const amountToContract = 100;
 
@@ -872,7 +874,7 @@ describe('Contract', () => {
       const result = await wallet.transferToContract(
         contract.id.toB256(),
         amountToContract,
-        baseAssetId,
+        contract.provider.getBaseAssetId(),
         {
           gasLimit: 1,
         }
@@ -884,12 +886,13 @@ describe('Contract', () => {
   it('should tranfer asset to a deployed contract just fine (NOT NATIVE ASSET)', async () => {
     const asset = '0x0101010101010101010101010101010101010101010101010101010101010101';
 
-    const wallet = await generateTestWallet(provider, [
-      [500_000, baseAssetId],
-      [200, asset],
-    ]);
-
-    const contract = await setupContract();
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
 
     const initialBalance = new BN(await contract.getBalance(asset)).toNumber();
 
@@ -905,36 +908,50 @@ describe('Contract', () => {
   });
 
   it('should tranfer asset to a deployed contract just fine (FROM PREDICATE)', async () => {
-    const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
 
-    const contract = await setupContract();
-
-    const initialBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
+    const initialBalance = new BN(
+      await contract.getBalance(contract.provider.getBaseAssetId())
+    ).toNumber();
 
     const amountToContract = 200;
     const amountToPredicate = 500_000;
 
     const predicate = new Predicate({
-      bytecode: predicateBytecode,
+      bytecode: PredicateTrue.bytecode,
       provider,
     });
 
-    const tx1 = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId);
+    const tx1 = await wallet.transfer(
+      predicate.address,
+      amountToPredicate,
+      provider.getBaseAssetId()
+    );
 
     await tx1.waitForResult();
 
-    const tx2 = await predicate.transferToContract(contract.id, amountToContract, baseAssetId);
+    const tx2 = await predicate.transferToContract(
+      contract.id,
+      amountToContract,
+      provider.getBaseAssetId()
+    );
 
     await tx2.waitForResult();
 
-    const finalBalance = new BN(await contract.getBalance(baseAssetId)).toNumber();
+    const finalBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
 
     expect(finalBalance).toBe(initialBalance + amountToContract);
   });
 
   it('should ensure TX revert error can be extracted for dryRun and simulate calls', async () => {
-    const contract = await setupContract({ cache: false });
-
+    using contract = await setupTestContract();
     const scope = contract.functions.assert_u8(10, 11);
 
     await expect(scope.dryRun()).rejects.toThrowError(
@@ -947,27 +964,22 @@ describe('Contract', () => {
   });
 
   it('should ensure assets can be transfered to wallets (SINGLE TRANSFER)', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-    );
-
-    const wallet = await generateTestWallet(provider, [[300_000, baseAssetId]]);
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    const contract = await factory.deployContract();
+    using contract = await setupTestContract();
+    const { provider } = contract;
 
     const receiver = Wallet.generate({ provider });
     const amountToTransfer = 300;
 
-    await contract.functions
+    const call = await contract.functions
       .sum(40, 50)
       .addTransfer({
         destination: receiver.address,
         amount: amountToTransfer,
-        assetId: baseAssetId,
+        assetId: provider.getBaseAssetId(),
       })
       .call();
+
+    await call.waitForResult();
 
     const finalBalance = await receiver.getBalance();
 
@@ -975,19 +987,20 @@ describe('Contract', () => {
   });
 
   it('should ensure assets can be transfered to wallets (MULTI TRANSFER)', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      CallTestContractFactory.bytecode,
+      CallTestContract.abi,
+      wallet
     );
 
-    const wallet = await generateTestWallet(provider, [
-      [300_000, baseAssetId],
-      [300_000, ASSET_A],
-      [300_000, ASSET_B],
-    ]);
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    const contract = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
+    const { contract } = await waitForResult();
 
     const receiver1 = Wallet.generate({ provider });
     const receiver2 = Wallet.generate({ provider });
@@ -998,14 +1011,19 @@ describe('Contract', () => {
     const amountToTransfer3 = 122;
 
     const transferParams: TransferParams[] = [
-      { destination: receiver1.address, amount: amountToTransfer1, assetId: baseAssetId },
+      {
+        destination: receiver1.address,
+        amount: amountToTransfer1,
+        assetId: provider.getBaseAssetId(),
+      },
       { destination: receiver2.address, amount: amountToTransfer2, assetId: ASSET_A },
       { destination: receiver3.address, amount: amountToTransfer3, assetId: ASSET_B },
     ];
 
-    await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
+    const call = await contract.functions.sum(40, 50).addBatchTransfer(transferParams).call();
+    await call.waitForResult();
 
-    const finalBalance1 = await receiver1.getBalance(baseAssetId);
+    const finalBalance1 = await receiver1.getBalance(provider.getBaseAssetId());
     const finalBalance2 = await receiver2.getBalance(ASSET_A);
     const finalBalance3 = await receiver3.getBalance(ASSET_B);
 
@@ -1015,37 +1033,39 @@ describe('Contract', () => {
   });
 
   it('should throw when trying to transfer a zero or negative amount to a contract', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      CallTestContractFactory.bytecode,
+      CallTestContract.abi,
+      wallet
     );
 
-    const wallet = await generateTestWallet(provider, [
-      [300_000, baseAssetId],
-      [300_000, ASSET_A],
-      [300_000, ASSET_B],
-    ]);
+    const { waitForResult } = await factory.deploy();
 
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    const contract = await factory.deployContract();
+    const { contract } = await waitForResult();
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, 0, baseAssetId);
+        await wallet.transferToContract(contract.id, 0, provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
 
     await expectToThrowFuelError(
       async () => {
-        await wallet.transferToContract(contract.id, -1, baseAssetId);
+        await wallet.transferToContract(contract.id, -1, provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
   });
 
   it('should throw when using "simulate" with an unfunded wallet', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     contract.account = Wallet.generate({ provider: contract.provider });
 
@@ -1053,28 +1073,28 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, baseAssetId],
+          forward: [100, contract.provider.getBaseAssetId()],
         })
         .simulate()
     ).rejects.toThrowError('not enough coins to fit the target');
   });
 
   it('should throw when using "simulate" without a wallet', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     contract.account = null;
     await expect(
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, baseAssetId],
+          forward: [100, contract.provider.getBaseAssetId()],
         })
         .simulate()
     ).rejects.toThrowError('Wallet is required!');
   });
 
   it('should throw when using "simulate" with a locked wallet', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     contract.account = Wallet.fromAddress(getRandomB256());
 
@@ -1082,14 +1102,14 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, baseAssetId],
+          forward: [100, contract.provider.getBaseAssetId()],
         })
         .simulate()
     ).rejects.toThrowError('An unlocked wallet is required to simulate a contract call.');
   });
 
   it('should use "dryRun" with an unfunded wallet just fine', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     contract.account = Wallet.generate({ provider: contract.provider });
 
@@ -1097,14 +1117,14 @@ describe('Contract', () => {
       contract.functions
         .return_context_amount()
         .callParams({
-          forward: [100, baseAssetId],
+          forward: [100, contract.provider.getBaseAssetId()],
         })
         .dryRun()
     ).resolves.not.toThrow();
   });
 
   it('should ensure "get" does not spend any funds', async () => {
-    const contract = await setupContract({ cache: false });
+    using contract = await setupTestContract();
 
     const balance = await contract.account?.getBalance();
 
@@ -1119,7 +1139,7 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" can be used to execute a contract call without a wallet', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     // contract with no account set
     const contractToCall = new Contract(contract.id, contract.interface, contract.provider);
@@ -1131,7 +1151,7 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" can be used to execute a contract call with an unfunded wallet', async () => {
-    const contract = await setupContract();
+    using contract = await setupTestContract();
 
     const unfundedWallet = Wallet.generate({ provider: contract.provider });
 
@@ -1147,15 +1167,19 @@ describe('Contract', () => {
   });
 
   it('should ensure "get" does not modify the blockchain state', async () => {
-    const { abiContents, binHexlified } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
+      wallet
     );
 
-    const wallet = await generateTestWallet(provider, [[200_000, baseAssetId]]);
-
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    const storageContract = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
+    const { contract: storageContract } = await waitForResult();
 
     const initialCounterValue = 20;
 
@@ -1168,7 +1192,8 @@ describe('Contract', () => {
     expect(value.toNumber()).toBe(0);
 
     // Actually changing the contract state
-    await storageContract.functions.initialize_counter(initialCounterValue).call();
+    const call = await storageContract.functions.initialize_counter(initialCounterValue).call();
+    await call.waitForResult();
 
     // Validating that the contract state was modified
     ({ value } = await storageContract.functions.counter().get());
@@ -1177,27 +1202,31 @@ describe('Contract', () => {
   });
 
   it('should ensure "maxFee" and "gasLimit" can be set for a contract call', async () => {
-    const { abiContents, binHexlified } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT
-    );
-
-    const wallet = await generateTestWallet(provider, [[350_000, baseAssetId]]);
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-
-    const storageContract = await factory.deployContract();
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: StorageTestContractFactory,
+        },
+      ],
+    });
+    const {
+      contracts: [storageContract],
+    } = launched;
 
     const gasLimit = 200_000;
     const maxFee = 100_000;
 
-    const {
-      transactionResult: { transaction },
-    } = await storageContract.functions
+    const { waitForResult } = await storageContract.functions
       .counter()
       .txParams({
         gasLimit,
         maxFee,
       })
       .call();
+
+    const {
+      transactionResult: { transaction },
+    } = await waitForResult();
 
     const maxFeePolicy = transaction.policies?.find((policy) => policy.type === PolicyType.MaxFee);
     const scriptGasLimit = transaction.scriptGasLimit;
@@ -1207,16 +1236,12 @@ describe('Contract', () => {
   });
 
   it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
-    const contract = await setupContract({
-      cache: false,
-    });
+    using contract = await setupTestContract();
 
     const gasLimit = 500_000;
     const maxFee = 250_000;
 
-    const {
-      transactionResult: { transaction },
-    } = await contract
+    const { waitForResult } = await contract
       .multiCall([
         contract.functions.foo(1336),
         contract.functions.foo(1336),
@@ -1229,6 +1254,10 @@ describe('Contract', () => {
       ])
       .txParams({ gasLimit, maxFee })
       .call();
+
+    const {
+      transactionResult: { transaction },
+    } = await waitForResult();
 
     const { scriptGasLimit, policies } = transaction;
 

@@ -10,7 +10,7 @@ import {
   assets,
 } from 'fuels';
 
-import { getScript } from './utils';
+import { ScriptMainArgBool } from '../test/typegen';
 
 enum Networks {
   DEVNET = 'devnet',
@@ -81,13 +81,14 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       return;
     }
 
-    const scriptInstance = getScript<[boolean], boolean>('script-main-arg-bool', wallet);
+    const scriptInstance = new ScriptMainArgBool(wallet);
 
     let output: boolean = false;
     try {
       const callScope = scriptInstance.functions.main(true);
 
-      const { value } = await callScope.call();
+      const { waitForResult } = await callScope.call();
+      const { value } = await waitForResult();
 
       output = value;
     } catch (e) {

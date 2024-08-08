@@ -15,7 +15,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   const {
     wallet: browserWallet,
-    walletBalance: isBrowserWalletConnected,
+    isConnected: isBrowserWalletConnected,
     network: browserWalletNetwork,
   } = useBrowserWallet();
 
@@ -29,6 +29,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       return console.error("Unable to topup wallet because wallet is not set.");
     }
 
+    /**
+     * If the current environment is local, transfer 5 ETH to the wallet
+     * from the local faucet wallet
+     */
     if (CURRENT_ENVIRONMENT === "local") {
       if (!faucetWallet) {
         return toast.error("Faucet wallet not found.");
@@ -45,6 +49,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       return await refreshWalletBalance?.();
     }
 
+    // If the current environment is testnet, open the testnet faucet link in a new tab
     if (CURRENT_ENVIRONMENT === "testnet") {
       return window.open(
         `${TESTNET_FAUCET_LINK}?address=${wallet.address.toAddress()}`,

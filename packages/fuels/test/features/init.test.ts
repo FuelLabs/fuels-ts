@@ -85,7 +85,7 @@ describe('init', () => {
   });
 
   it('should error if no inputs/workspace is supplied', async () => {
-    const write = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
+    const logSpy = vi.spyOn(console, 'log');
     const exit = vi.spyOn(process, 'exit').mockResolvedValue({} as never);
 
     await runCommand(Commands.init, ['--path', paths.root, '-o', paths.outputDir]);
@@ -93,8 +93,8 @@ describe('init', () => {
     expect(exit).toHaveBeenCalledTimes(1);
     expect(exit).toHaveBeenCalledWith(1);
 
-    expect(write).toHaveBeenCalledTimes(1);
-    expect(write).toHaveBeenCalledWith(
+    expect(logSpy).toHaveBeenCalledTimes(1);
+    expect(logSpy).toHaveBeenCalledWith(
       `error: required option '-w, --workspace <path>' not specified\r`
     );
   });

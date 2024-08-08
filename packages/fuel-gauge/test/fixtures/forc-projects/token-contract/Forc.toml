@@ -1,0 +1,7 @@
+[project]
+authors = ["Fuel Labs <contact@fuel.sh>"]
+license = "Apache-2.0"
+name = "token-contract"
+
+[dependencies]
+token-abi = { path = "../token-abi" }

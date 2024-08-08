@@ -1,20 +1,22 @@
-import type { Contract } from 'fuels';
 import { bn, getMintedAssetId } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { TokenFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TOKEN);
-  });
-
+describe('Minted Token Asset Id', () => {
   it('should successfully execute contract call with forwarded amount', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: TokenFactory }],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region minted-token-asset-id-2
     // #import { bn, getMintedAssetId };
 
@@ -22,9 +24,10 @@ describe(__filename, () => {
     const subID = '0xc7fd1d987ada439fc085cfa3c49416cf2b504ac50151e3c2335d60595cb90745';
     const mintAmount = bn(1000);
 
-    const txResult = await contract.functions.mint_coins(subID, mintAmount).call();
+    const { waitForResult } = await contract.functions.mint_coins(subID, mintAmount).call();
+    const txResult = await waitForResult();
 
-    const mintedAssetId = getMintedAssetId(subID, contract.id.toB256());
+    const mintedAssetId = getMintedAssetId(contract.id.toB256(), subID);
     // #endregion minted-token-asset-id-2
 
     expect(mintedAssetId).toBeDefined();

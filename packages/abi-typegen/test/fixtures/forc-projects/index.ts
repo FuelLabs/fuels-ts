@@ -1,7 +1,7 @@
 import { getForcProject } from '@fuel-ts/utils/test-utils';
 import { join } from 'path';
 
-import type { IRawAbi } from '../../../src/index';
+import type { JsonAbi } from '../../../src/index';
 
 export enum AbiTypegenProjectsEnum {
   ARRAY_OF_ENUMS = 'array-of-enums',
@@ -34,7 +34,7 @@ export const getTypegenForcProject = (
   project: AbiTypegenProjectsEnum,
   build: 'release' | 'debug' = 'release'
 ) =>
-  getForcProject<IRawAbi>({
+  getForcProject<JsonAbi>({
     projectDir: join(__dirname, project),
     projectName: project,
     build,

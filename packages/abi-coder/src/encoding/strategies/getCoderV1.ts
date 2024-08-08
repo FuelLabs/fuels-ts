@@ -20,6 +20,7 @@ import {
   U64_CODER_TYPE,
   U8_CODER_TYPE,
   VEC_CODER_TYPE,
+  VOID_TYPE,
   arrayRegEx,
   enumRegEx,
   stringRegEx,
@@ -44,6 +45,7 @@ import { StringCoder } from '../coders/StringCoder';
 import { StructCoder } from '../coders/StructCoder';
 import { TupleCoder } from '../coders/TupleCoder';
 import { VecCoder } from '../coders/VecCoder';
+import { VoidCoder } from '../coders/VoidCoder';
 
 import { getCoders } from './getCoders';
 
@@ -82,6 +84,8 @@ export const getCoder: GetCoderFn = (
       return new StdStringCoder();
     case STR_SLICE_CODER_TYPE:
       return new StrSliceCoder();
+    case VOID_TYPE:
+      return new VoidCoder();
     default:
       break;
   }

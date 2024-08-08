@@ -1,7 +1,13 @@
 import { Interface } from '@fuel-ts/abi-coder';
 import type { JsonAbi, InputValue } from '@fuel-ts/abi-coder';
+import type {
+  Account,
+  CreateTransactionRequestLike,
+  Provider,
+  TransactionResult,
+  TransactionType,
+} from '@fuel-ts/account';
 import { CreateTransactionRequest } from '@fuel-ts/account';
-import type { Account, CreateTransactionRequestLike, Provider } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
@@ -9,7 +15,12 @@ import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined } from '@fuel-ts/utils';
 
-import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
+import {
+  MAX_CONTRACT_SIZE,
+  getContractId,
+  getContractStorageRoot,
+  hexlifyWithPrefix,
+} from './util';
 
 /**
  * Options for deploying a contract.
@@ -20,6 +31,15 @@ export type DeployContractOptions = {
   stateRoot?: BytesLike;
   configurableConstants?: { [name: string]: unknown };
 } & CreateTransactionRequestLike;
+
+export type DeployContractResult<TContract extends Contract = Contract> = {
+  transactionId: string;
+  contractId: string;
+  waitForResult: () => Promise<{
+    contract: TContract;
+    transactionResult: TransactionResult<TransactionType.Create>;
+  }>;
+};
 
 /**
  * `ContractFactory` provides utilities for deploying and configuring contracts.
@@ -86,11 +106,11 @@ export default class ContractFactory {
   /**
    * Create a transaction request to deploy a contract with the specified options.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
-  createTransactionRequest(deployContractOptions?: DeployContractOptions) {
-    const storageSlots = deployContractOptions?.storageSlots
+  createTransactionRequest(deployOptions?: DeployContractOptions) {
+    const storageSlots = deployOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
         value: hexlifyWithPrefix(value),
@@ -99,7 +119,7 @@ export default class ContractFactory {
 
     const options = {
       salt: randomBytes(32),
-      ...deployContractOptions,
+      ...deployOptions,
       storageSlots: storageSlots || [],
     };
 
@@ -128,43 +148,33 @@ export default class ContractFactory {
   /**
    * Deploy a contract with the specified options.
    *
-   * @param deployContractOptions - Options for deploying the contract.
+   * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContract(deployContractOptions: DeployContractOptions = {}) {
-    if (!this.account) {
-      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Cannot deploy Contract without account.');
+  async deploy<TContract extends Contract = Contract>(
+    deployOptions: DeployContractOptions = {}
+  ): Promise<DeployContractResult<TContract>> {
+    if (this.bytecode.length > MAX_CONTRACT_SIZE) {
+      throw new FuelError(
+        ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
+        'Contract bytecode is too large. Max contract size is 100KB'
+      );
     }
 
-    const { configurableConstants } = deployContractOptions;
+    const { contractId, transactionRequest } = await this.prepareDeploy(deployOptions);
 
-    if (configurableConstants) {
-      this.setConfigurableConstants(configurableConstants);
-    }
+    const account = this.getAccount();
 
-    const { contractId, transactionRequest } = this.createTransactionRequest(deployContractOptions);
+    const transactionResponse = await account.sendTransaction(transactionRequest);
 
-    const txCost = await this.account.provider.getTransactionCost(transactionRequest);
+    const waitForResult = async () => {
+      const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
+      const contract = new Contract(contractId, this.interface, account) as TContract;
 
-    const { maxFee: setMaxFee } = deployContractOptions;
+      return { contract, transactionResult };
+    };
 
-    if (isDefined(setMaxFee)) {
-      if (txCost.maxFee.gt(setMaxFee)) {
-        throw new FuelError(
-          ErrorCode.MAX_FEE_TOO_LOW,
-          `Max fee '${deployContractOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
-        );
-      }
-    } else {
-      transactionRequest.maxFee = txCost.maxFee;
-    }
-
-    await this.account.fund(transactionRequest, txCost);
-    await this.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
-    });
-
-    return new Contract(contractId, this.interface, this.account);
+    return { waitForResult, contractId, transactionId: transactionResponse.id };
   }
 
   /**
@@ -177,12 +187,18 @@ export default class ContractFactory {
       const hasConfigurable = Object.keys(this.interface.configurables).length;
 
       if (!hasConfigurable) {
-        throw new Error('Contract does not have configurables to be set');
+        throw new FuelError(
+          ErrorCode.CONFIGURABLE_NOT_FOUND,
+          'Contract does not have configurables to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!this.interface.configurables[key]) {
-          throw new Error(`Contract does not have a configurable named: '${key}'`);
+          throw new FuelError(
+            ErrorCode.CONFIGURABLE_NOT_FOUND,
+            `Contract does not have a configurable named: '${key}'`
+          );
         }
 
         const { offset } = this.interface.configurables[key];
@@ -201,5 +217,46 @@ export default class ContractFactory {
         `Error setting configurable constants on contract: ${(<Error>err).message}.`
       );
     }
+  }
+
+  private getAccount(): Account {
+    if (!this.account) {
+      throw new FuelError(ErrorCode.ACCOUNT_REQUIRED, 'Account not assigned to contract.');
+    }
+    return this.account;
+  }
+
+  private async prepareDeploy(deployOptions: DeployContractOptions) {
+    const { configurableConstants } = deployOptions;
+
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
+    }
+
+    const { contractId, transactionRequest } = this.createTransactionRequest(deployOptions);
+
+    const account = this.getAccount();
+
+    const txCost = await account.getTransactionCost(transactionRequest);
+
+    const { maxFee: setMaxFee } = deployOptions;
+
+    if (isDefined(setMaxFee)) {
+      if (txCost.maxFee.gt(setMaxFee)) {
+        throw new FuelError(
+          ErrorCode.MAX_FEE_TOO_LOW,
+          `Max fee '${deployOptions.maxFee}' is lower than the required: '${txCost.maxFee}'.`
+        );
+      }
+    } else {
+      transactionRequest.maxFee = txCost.maxFee;
+    }
+
+    await account.fund(transactionRequest, txCost);
+
+    return {
+      contractId,
+      transactionRequest,
+    };
   }
 }

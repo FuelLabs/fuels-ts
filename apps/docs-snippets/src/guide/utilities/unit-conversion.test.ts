@@ -1,10 +1,11 @@
 import { BN, DECIMAL_GWEI, DECIMAL_KWEI, bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoValuesFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('unit-conversion', () => {
   describe('instantiation', () => {
@@ -37,12 +38,23 @@ describe('unit-conversion', () => {
 
   describe('Contract', () => {
     it('should use BN in a contract', async () => {
-      const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            factory: EchoValuesFactory,
+          },
+        ],
+      });
+
+      const {
+        contracts: [contract],
+      } = launched;
 
       // #region contract-calls-1
       const MAX_U64 = bn('18446744073709551615');
 
-      const { value } = await contract.functions.echo_u64(MAX_U64).call();
+      const { waitForResult } = await contract.functions.echo_u64(MAX_U64).call();
+      const { value } = await waitForResult();
 
       value.toString();
       // "18446744073709551615"

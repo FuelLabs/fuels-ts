@@ -1,22 +1,21 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, Signer, Wallet } from 'fuels';
+import { Signer, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let provider: Provider;
-  let wallet: WalletUnlocked;
-  let privateKey: string;
+describe('Private keys', () => {
+  it('wallet-from-private-key', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [testWallet],
+    } = launched;
+    const privateKey = testWallet.privateKey;
 
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = Wallet.generate({ provider });
-    privateKey = wallet.privateKey;
-  });
-
-  it('wallet-from-private-key', () => {
-    const lockedWallet: WalletLocked = wallet.lock();
+    const lockedWallet: WalletLocked = testWallet.lock();
     const PRIVATE_KEY = privateKey;
 
     // #region wallet-from-private-key
@@ -26,16 +25,22 @@ describe(__filename, () => {
     unlockedWallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
     // #endregion wallet-from-private-key
 
-    expect(unlockedWallet.address).toStrictEqual(wallet.address);
+    expect(unlockedWallet.address).toStrictEqual(testWallet.address);
   });
 
-  it('signer-address', () => {
+  it('signer-address', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [testWallet],
+    } = launched;
+    const privateKey = testWallet.privateKey;
+
     const PRIVATE_KEY = privateKey;
 
     // #region signer-address
     const signer = new Signer(PRIVATE_KEY);
     // #endregion signer-address
 
-    expect(wallet.address).toStrictEqual(signer.address);
+    expect(testWallet.address).toStrictEqual(signer.address);
   });
 });

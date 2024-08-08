@@ -1,7 +1,6 @@
 "use client";
 
-import type { TestContractAbi } from "@/sway-api";
-import { TestContractAbi__factory } from "@/sway-api";
+import { TestContract } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
@@ -11,16 +10,21 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT } from "@/lib";
+import {
+  CURRENT_ENVIRONMENT,
+  DOCS_URL,
+  Environments,
+  FAUCET_LINK,
+} from "@/lib";
 
 const contractId =
-  CURRENT_ENVIRONMENT === "local"
+  CURRENT_ENVIRONMENT === Environments.LOCAL
     ? contractIds.testContract
     : (process.env.NEXT_PUBLIC_TESTNET_CONTRACT_ID as string); // Testnet Contract ID
 
 export default function Home() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
-  const [contract, setContract] = useState<TestContractAbi>();
+  const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
 
   /**
@@ -29,8 +33,11 @@ export default function Home() {
    */
   useAsync(async () => {
     if (wallet) {
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
+      // Create a new instance of the contract
+      const testContract = new TestContract(contractId, wallet);
       setContract(testContract);
+
+      // Read the current value of the counter
       const { value } = await testContract.functions.get_count().get();
       setCounter(value.toNumber());
     }
@@ -44,11 +51,23 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        <span>
+          Your wallet does not have enough funds. Please top it up using the{" "}
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
+        </span>,
       );
     }
 
-    const { value } = await contract.functions.increment_counter(bn(1)).call();
+    // Call the increment_counter function on the contract
+    const { waitForResult } = await contract.functions
+      .increment_counter(bn(1))
+      .call();
+
+    // Wait for the transaction to be mined, and then read the value returned
+    const { value } = await waitForResult();
+
     setCounter(value.toNumber());
 
     await refreshWalletBalance?.();
@@ -68,7 +87,7 @@ export default function Home() {
 
       <span className="text-gray-400">
         This template uses the new{" "}
-        <Link href="https://docs.fuel.network/docs/fuels-ts/fuels/#fuels-cli">
+        <Link href={`${DOCS_URL}/docs/fuels-ts/fuels/#fuels-cli`}>
           Fuels CLI
         </Link>{" "}
         to enable type-safe hot-reloading for your Sway programs.
@@ -93,7 +112,7 @@ export default function Home() {
       <Link href="/script" className="mt-4">
         Script Example
       </Link>
-      <Link href="https://docs.fuel.network" target="_blank" className="mt-12">
+      <Link href={DOCS_URL} target="_blank" className="mt-12">
         Fuel Docs
       </Link>
     </>

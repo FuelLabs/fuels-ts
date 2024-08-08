@@ -14,7 +14,6 @@ import {
   Provider,
 } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
-import { generateTestWallet, seedTestWallet } from '@fuel-ts/account/test-utils';
 import { Address } from '@fuel-ts/address';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
@@ -40,6 +39,7 @@ import {
   hexlify,
   createConfig,
 } from 'fuels';
+import { generateTestWallet, seedTestWallet } from 'fuels/test-utils';
 
 const { log } = console;
 

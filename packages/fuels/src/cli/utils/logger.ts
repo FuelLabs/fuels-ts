@@ -12,7 +12,8 @@ export function configureLogging(params: { isDebugEnabled: boolean; isLoggingEna
 
 export function log(...data: unknown[]) {
   if (loggingConfig.isLoggingEnabled) {
-    process.stdout.write(`${data.join(' ')}\n`);
+    // eslint-disable-next-line no-console
+    console.log(data.join(' '));
   }
 }
 
@@ -23,9 +24,10 @@ export function debug(...data: unknown[]) {
 }
 
 export function error(...data: unknown[]) {
-  process.stderr.write(`${chalk.red(data.join(' '))}\n`);
+  // eslint-disable-next-line no-console
+  console.log(chalk.red(data.join(' ')));
 }
 
 export function warn(...data: unknown[]) {
-  log(`${chalk.yellow(data.join(' '))}\n`);
+  log(chalk.yellow(data.join(' ')));
 }

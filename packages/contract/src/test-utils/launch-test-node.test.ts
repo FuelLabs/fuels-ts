@@ -92,12 +92,11 @@ describe('launchTestNode', () => {
       launchTestNode({
         contractsConfigs: [
           {
-            deployer: {
-              deployContract: () => {
+            factory: {
+              deploy: () => {
                 throw new Error('Test error');
               },
             },
-            bytecode: binHexlified,
           },
         ],
       })
@@ -118,13 +117,12 @@ describe('launchTestNode', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
-              return factory.deployContract(options);
+          factory: {
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
+              return factory.deploy(options);
             },
           },
-          bytecode: binHexlified,
         },
       ],
     });
@@ -133,7 +131,8 @@ describe('launchTestNode', () => {
       contracts: [contract],
     } = launched;
 
-    const response = await contract.functions.test_function().call();
+    const { waitForResult } = await contract.functions.test_function().call();
+    const response = await waitForResult();
     expect(response.value).toBe(true);
   });
 
@@ -141,22 +140,20 @@ describe('launchTestNode', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
-              return factory.deployContract(options);
+          factory: {
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
+              return factory.deploy(options);
             },
           },
-          bytecode: binHexlified,
         },
         {
-          deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
-              return factory.deployContract(options);
+          factory: {
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
+              return factory.deploy(options);
             },
           },
-          bytecode: binHexlified,
         },
       ],
     });
@@ -165,8 +162,12 @@ describe('launchTestNode', () => {
       contracts: [contract, contract2],
     } = launched;
 
-    const response1 = await contract.functions.test_function().call();
-    const response2 = await contract2.functions.test_function().call();
+    const { waitForResult: waitForResult1 } = await contract.functions.test_function().call();
+    const { waitForResult: waitForResult2 } = await contract2.functions.test_function().call();
+
+    const response1 = await waitForResult1();
+    const response2 = await waitForResult2();
+
     expect(response1.value).toBe(true);
     expect(response2.value).toBe(true);
   });
@@ -178,22 +179,20 @@ describe('launchTestNode', () => {
       },
       contractsConfigs: [
         {
-          deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
-              return factory.deployContract(options);
+          factory: {
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
+              return factory.deploy(options);
             },
           },
-          bytecode: binHexlified,
         },
         {
-          deployer: {
-            deployContract: async (bytecode, wallet, options) => {
-              const factory = new ContractFactory(bytecode, abiContents, wallet);
-              return factory.deployContract(options);
+          factory: {
+            deploy: async (wallet, options) => {
+              const factory = new ContractFactory(binHexlified, abiContents, wallet);
+              return factory.deploy(options);
             },
           },
-          bytecode: binHexlified,
           walletIndex: 1,
         },
       ],
@@ -204,11 +203,14 @@ describe('launchTestNode', () => {
       wallets: [wallet1, wallet2],
     } = launched;
 
-    const contract1Response = (await contract1.functions.test_function().call()).value;
-    const contract2Response = (await contract2.functions.test_function().call()).value;
+    const { waitForResult: waitForResult1 } = await contract1.functions.test_function().call();
+    const { waitForResult: waitForResult2 } = await contract2.functions.test_function().call();
 
-    expect(contract1Response).toBe(true);
-    expect(contract2Response).toBe(true);
+    const contract1Response = await waitForResult1();
+    const contract2Response = await waitForResult2();
+
+    expect(contract1Response.value).toBe(true);
+    expect(contract2Response.value).toBe(true);
 
     expect(contract1.account).toEqual(wallet1);
     expect(contract2.account).toEqual(wallet2);
@@ -220,13 +222,12 @@ describe('launchTestNode', () => {
         await launchTestNode({
           contractsConfigs: [
             {
-              deployer: {
-                deployContract: async (bytecode, wallet, options) => {
-                  const factory = new ContractFactory(bytecode, abiContents, wallet);
-                  return factory.deployContract(options);
+              factory: {
+                deploy: async (wallet, options) => {
+                  const factory = new ContractFactory(binHexlified, abiContents, wallet);
+                  return factory.deploy(options);
                 },
               },
-              bytecode: binHexlified,
               walletIndex: 2,
             },
           ],
