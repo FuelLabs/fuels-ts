@@ -365,13 +365,7 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(
-      ConfigurableContractFactory.bytecode,
-      ConfigurableContract.abi,
-      wallet
-    );
-
-    const deploy = await factory.deploy();
+    const deploy = await ConfigurableContractFactory.deploy(wallet);
     const { contract } = await deploy.waitForResult();
 
     const call = await contract.functions.echo_u8().call();
@@ -390,9 +384,7 @@ describe('Contract Factory', () => {
       wallets: [wallet],
     } = launched;
 
-    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-
-    const deploy = await factory.deploy();
+    const deploy = await LargeContractFactory.deploy(wallet);
     const { contract } = await deploy.waitForResult();
 
     const call = await contract.functions.something().call();
