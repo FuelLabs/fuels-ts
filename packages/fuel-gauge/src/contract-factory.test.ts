@@ -265,7 +265,7 @@ describe('Contract Factory', () => {
       () => factory.deployContract(),
       new FuelError(
         ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
-        'Contract bytecode is too large. Max contract size is 100KB'
+        'Contract bytecode is too large. Please use `deployContractAsBlobs` instead.'
       )
     );
   });

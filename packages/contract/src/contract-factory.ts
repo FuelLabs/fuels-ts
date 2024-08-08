@@ -221,7 +221,7 @@ export default class ContractFactory {
     if (this.bytecode.length > maxContractSize) {
       throw new FuelError(
         ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
-        'Contract bytecode is too large. Max contract size is 100KB' // change error
+        'Contract bytecode is too large. Please use `deployContractAsBlobs` instead.'
       );
     }
 
