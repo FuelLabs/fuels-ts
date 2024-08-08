@@ -768,7 +768,10 @@ describe('Provider', () => {
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-    await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await Provider.create(provider.url);
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -800,7 +803,10 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-    await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await Provider.create(provider.url);
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
