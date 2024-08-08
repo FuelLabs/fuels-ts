@@ -696,10 +696,18 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   private validateTransaction(tx: TransactionRequest, consensusParameters: ConsensusParameters) {
-    if (bn(tx.inputs.length).gt(consensusParameters.txParameters.maxInputs)) {
+    const { maxOutputs, maxInputs } = consensusParameters.txParameters;
+    if (bn(tx.inputs.length).gt(maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs for funding.'
+        'The transaction exceeds the maximum allowed number of inputs.'
+      );
+    }
+
+    if (bn(tx.outputs.length).gt(maxOutputs)) {
+      throw new FuelError(
+        ErrorCode.MAX_OUTPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of outputs.'
       );
     }
   }
