@@ -30,6 +30,7 @@
     "textlint-rule-no-dead-link",
     "@elasticpath/textlint-rule-no-dead-relative-link",
     "ts-generator",
-    "webdriverio"
+    "webdriverio",
+    "syncpack"
   ]
 }
