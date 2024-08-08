@@ -799,8 +799,8 @@ importers:
         specifier: workspace:^
         version: link:../interfaces
       '@fuel-ts/math':
-        specifier: ^0.93.0
-        version: 0.93.0
+        specifier: workspace:^
+        version: link:../math
       '@fuel-ts/merkle':
         specifier: workspace:*
         version: link:../merkle
@@ -3289,19 +3289,6 @@ packages:
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
-
-  '@fuel-ts/errors@0.93.0':
-    resolution: {integrity: sha512-izR2qVKA1XlB3FDmpFZFF5CSCknC3InouuulF/dbX1mEsGMkYAcCykDezBc32JgyiVM0vXfs5bTHpICoeg3dQg==}
-    engines: {node: ^18.20.3 || ^20.0.0 || ^22.0.0}
-
-  '@fuel-ts/math@0.93.0':
-    resolution: {integrity: sha512-niFLZXkuEnJ5kTiXTc2HqfxO9YiSWZAMkYwjy7veXY0Dlb89LUnpCY+zSlqW15VurrpgbtwMYcajzRU0tFA4SA==}
-    engines: {node: ^18.20.3 || ^20.0.0 || ^22.0.0}
-
-  '@fuel-ts/versions@0.93.0':
-    resolution: {integrity: sha512-3215zKyFxe2yPT25noagYBdfqLdYRNuCyH0+1waL87TDLcTIywdaNRLZ9G4CZMuTGv40CBKN5kv+tymXzs4o6g==}
-    engines: {node: ^18.20.3 || ^20.0.0 || ^22.0.0}
-    hasBin: true
 
   '@fuels/connectors@0.8.1':
     resolution: {integrity: sha512-y9BUnWdyq7rcBJc3yMp6kAUdJhPOu1D09+/t+c/Ayy+cGuzYiFOfF2H/BMTM37YatlZnpkXmTh1Cf/XHKQfnPw==}
@@ -17602,21 +17589,6 @@ snapshots:
   '@ethersproject/logger@5.7.0': {}
 
   '@fastify/busboy@2.1.1': {}
-
-  '@fuel-ts/errors@0.93.0':
-    dependencies:
-      '@fuel-ts/versions': 0.93.0
-
-  '@fuel-ts/math@0.93.0':
-    dependencies:
-      '@fuel-ts/errors': 0.93.0
-      '@types/bn.js': 5.1.5
-      bn.js: 5.2.1
-
-  '@fuel-ts/versions@0.93.0':
-    dependencies:
-      chalk: 4.1.2
-      cli-table: 0.3.11
 
   '@fuels/connectors@0.8.1(2ye2xm7hfi7uwggy4i344anz3m)':
     dependencies:
