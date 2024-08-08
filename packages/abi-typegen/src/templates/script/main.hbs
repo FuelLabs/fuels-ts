@@ -53,7 +53,7 @@ export type {{capitalizedName}}Configurables = Partial<{
 
 const abi = {{abiJsonString}};
 
-const bytecode = '{{hexlifiedBinString}}';
+const bytecode = decompressBytecode('{{compressedBytecode}}');
 
 export class {{capitalizedName}} extends Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
 
