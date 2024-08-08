@@ -1,0 +1,39 @@
+{
+  "dependencyTypes": [
+    "dev",
+    "prod"
+  ],
+  "versionGroups": [
+    {
+      "label": "Ignore local dependencies",
+      "dependencies": [
+        "$LOCAL"
+      ],
+      "isIgnored": true
+    }
+  ],
+  "sortAz": [],
+  "sortFirst": [
+    "private",
+    "name",
+    "description",
+    "repository",
+    "homepage",
+    "bugs",
+    "version",
+    "author",
+    "license",
+    "engines",
+    "packageManager",
+    "bin",
+    "main",
+    "module",
+    "exports",
+    "types",
+    "typesVersions",
+    "files",
+    "scripts",
+    "dependencies",
+    "devDependencies"
+  ]
+}
