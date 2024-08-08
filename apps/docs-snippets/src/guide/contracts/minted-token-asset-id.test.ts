@@ -1,7 +1,8 @@
-import { bn, getMintedAssetId } from 'fuels';
+import type { AssetId } from 'fuels';
+import { bn, getMintedAssetId, createAssetId } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { TokenFactory } from '../../../test/typegen';
+import { EchoAssetIdFactory, TokenFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -32,5 +33,27 @@ describe('Minted Token Asset Id', () => {
 
     expect(mintedAssetId).toBeDefined();
     expect(txResult.transactionResult.isStatusSuccess).toBeTruthy();
+  });
+
+  it('should create valid asset ID', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: EchoAssetIdFactory }],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
+    // #region create-asset-id-1
+    // #import { createAssetId, AssetId };
+
+    const subID = '0xc7fd1d987ada439fc085cfa3c49416cf2b504ac50151e3c2335d60595cb90745';
+
+    const assetId: AssetId = createAssetId(contract.id.toB256(), subID);
+    // #endregion create-asset-id-1
+    const { value } = await contract.functions.echo_asset_id_input(assetId).simulate();
+
+    expect(assetId).toBeDefined();
+    expect(value).toEqual(assetId);
   });
 });

@@ -27,6 +27,9 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
+      - name: Verify package version mismatches
+        run: pnpm depsync:lint
+
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons
 
