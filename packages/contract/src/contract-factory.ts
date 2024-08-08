@@ -327,7 +327,7 @@ export default class ContractFactory {
     }
 
     // Get the loader bytecode
-    const blobIds = chunks.map((c) => c.blobId as string);
+    const blobIds = chunks.map((c) => c.blobId);
     const loaderBytecode = getLoaderInstructions(blobIds);
 
     // Deploy the loader contract via create tx
