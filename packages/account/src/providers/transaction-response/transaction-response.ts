@@ -31,7 +31,7 @@ import type {
   AbiMap,
   GqlTransactionStatusesNames,
 } from '../transaction-summary/types';
-import { extractTxError, normalizeJSON } from '../utils';
+import { extractTxError } from '../utils';
 
 import { getDecodedLogs } from './getDecodedLogs';
 
