@@ -325,13 +325,26 @@ export default class ContractFactory {
       }
     }
 
-    // Generate the loader bytecode
+    // Get the loader bytecode
     const blobIds = chunks.map((c) => c.blobId);
     const loaderBytecode = getLoaderInstructions(blobIds);
-    this.bytecode = loaderBytecode;
 
-    // Deploy the loader contract
-    return this.deployContract(deployOptions);
+    // Deploy the loader contract via create tx
+    const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
+      bytecode: loaderBytecode,
+      ...deployOptions,
+    });
+    await this.fundTransactionRequest(createRequest, deployOptions);
+    const transactionResponse = await account.sendTransaction(createRequest);
+
+    const waitForResult = async () => {
+      const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
+      const contract = new Contract(contractId, this.interface, account) as TContract;
+
+      return { contract, transactionResult };
+    };
+
+    return { waitForResult, contractId, transactionId: transactionResponse.id };
   }
 
   /**
