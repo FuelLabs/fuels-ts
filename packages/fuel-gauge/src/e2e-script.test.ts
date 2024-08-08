@@ -82,6 +82,10 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   });
 
   it('calls a loader contract function on a live Fuel Node', async () => {
+    if (shouldSkip) {
+      return;
+    }
+
     const CONTRACT_ID = new Address(
       'fuel16h4j2rl69xur49zlx88khh3syjtpv84fv0nph94npr3t6v3qm7vsr3wq82'
     ).toB256();
@@ -102,7 +106,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
       const { waitForResult } = await factory.deployContractAsBlobs({
         salt: hexlify(randomBytes(32)),
-        chunkSizeTolerance: 0.5,
+        chunkSizeTolerance: 0.825,
       });
 
       const { contract } = await waitForResult();
