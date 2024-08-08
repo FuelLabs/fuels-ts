@@ -77,7 +77,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     wallet = new WalletUnlocked(privateKey, provider);
   });
 
-  it.only('can deploy a large contract to a live Fuel Node', async () => {
+  it('can deploy a large contract to a live Fuel Node', async () => {
     if (shouldSkip) {
       return;
     }

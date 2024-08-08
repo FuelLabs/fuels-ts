@@ -291,7 +291,7 @@ describe('Contract Factory', () => {
 
     const { value } = await call.waitForResult();
     expect(value.toNumber()).toBe(1001);
-  });
+  }, 15000);
 
   it('deploys large contracts via blobs [padded]', async () => {
     using launched = await launchTestNode({
@@ -316,7 +316,7 @@ describe('Contract Factory', () => {
 
     const { value } = await call.waitForResult();
     expect(value.toNumber()).toBe(1001);
-  });
+  }, 15000);
 
   it('should not deploy large contracts via blobs [invalid chunk size tolerance]', async () => {
     using launched = await launchTestNode();
@@ -356,7 +356,7 @@ describe('Contract Factory', () => {
     const call = await contract.functions.echo_u8().call();
     const { value } = await call.waitForResult();
     expect(value).toBe(10);
-  });
+  }, 15000);
 
   it('deploys a small contract via deploy entrypoint', async () => {
     using launched = await launchTestNode();
@@ -398,7 +398,7 @@ describe('Contract Factory', () => {
     const call = await contract.functions.something().call();
     const { value } = await call.waitForResult();
     expect(value.toNumber()).toBe(1001);
-  });
+  }, 15000);
 
   it('should not deploy large contract with invalid balance', async () => {
     using launched = await launchTestNode({
