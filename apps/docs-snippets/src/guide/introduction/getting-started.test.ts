@@ -1,16 +1,18 @@
-import { FUEL_NETWORK_URL, TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
+import { TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Getting started', () => {
-  beforeAll(async () => {
-    // Avoids using the actual network.
-    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
-    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
-  });
-
   it('can connect to a local network', async () => {
+    const { cleanup } = await launchTestNode({
+      nodeOptions: {
+        port: '4000',
+      },
+    });
+
     // #region connecting-to-the-local-node
     // #import { Provider, Wallet };
 
@@ -27,6 +29,8 @@ describe('Getting started', () => {
     expect(provider).toBeInstanceOf(Provider);
     expect(wallet).toBeTruthy();
     expect(wallet).toBeInstanceOf(WalletUnlocked);
+
+    cleanup();
   });
 
   it('can connect to testnet', async () => {
