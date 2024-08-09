@@ -1,5 +1,18 @@
 # create-fuels
 
+## 0.94.0
+
+### Minor Changes
+
+- 799db38: feat!: prettify `typegen` api
+
+### Patch Changes
+
+- 95e7108: chore: dependencies version consistency
+- 1a73ae3: build(deps): bump @tanstack/react-query from 5.51.15 to 5.51.21
+- 751d638: chore: switching `Error` to `FuelError`
+- 4e82ad4: chore: add infra to support multiple `create fuels` templates
+
 ## 0.93.0
 
 ### Patch Changes

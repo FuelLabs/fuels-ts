@@ -1,5 +1,13 @@
 # @fuel-ts/errors
 
+## 0.94.0
+
+### Patch Changes
+
+- 0110fd8: chore: handle exceeding maximum inputs when funding a transaction
+- 1d2abd7: chore: add validation for TX max outputs exceeded
+  - @fuel-ts/versions@0.94.0
+
 ## 0.93.0
 
 ### Minor Changes
