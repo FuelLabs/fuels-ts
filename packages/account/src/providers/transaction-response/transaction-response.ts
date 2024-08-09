@@ -156,7 +156,7 @@ export class TransactionResponse {
 
     // Refetch if the expected status is not the same as the response status
     if (this.expectedStatus && response.transaction.status?.type !== this.expectedStatus) {
-      await sleep(1000);
+      await sleep(100);
       return this.fetch();
     }
 
