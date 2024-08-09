@@ -426,14 +426,9 @@ describe('Provider', () => {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
       walletsConfig: {
-<<<<<<< HEAD
-        coinsPerAsset: 1,
-        amountPerCoin: 50_000,
-=======
         coinsPerAsset: utxosAmount,
         amountPerCoin: resourceAmount,
         messages: [testMessage],
->>>>>>> c7e01b4438552a7afbbd654b7c6baa37371fa5fc
       },
     });
     const {
