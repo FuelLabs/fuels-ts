@@ -1,11 +1,11 @@
 {{header}}
 
-import { ContractFactory } from "fuels";
+import { ContractFactory, decompressBytecode } from "fuels";
 import type { Provider, Account, DeployContractOptions, DeployContractResult } from "fuels";
 
 import { {{capitalizedName}} } from "./{{capitalizedName}}";
 
-const bytecode = "{{hexlifiedBinString}}";
+const bytecode = decompressBytecode("{{compressedBytecode}}");
 
 export class {{capitalizedName}}Factory extends ContractFactory {
 

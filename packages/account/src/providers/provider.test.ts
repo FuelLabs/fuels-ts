@@ -677,7 +677,53 @@ describe('Provider', () => {
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs for funding.'
+        'The transaction exceeds the maximum allowed number of inputs.'
+      )
+    );
+  });
+
+  it('should throws if max of ouputs was exceeded', async () => {
+    const maxOutputs = 2;
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: {
+            consensus_parameters: {
+              V1: {
+                tx_params: {
+                  V1: {
+                    max_outputs: maxOutputs,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      walletsConfig: {
+        count: 3,
+      },
+    });
+
+    const {
+      wallets: [sender, receiver1, receiver2],
+      provider,
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+
+    const request = new ScriptTransactionRequest();
+    const resources = await sender.getResourcesToSpend([[1000, baseAssetId]]);
+    request.addCoinOutput(receiver1.address, 1, baseAssetId);
+    request.addCoinOutput(receiver2.address, 1, baseAssetId);
+
+    request.addResources(resources);
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        ErrorCode.MAX_OUTPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of outputs.'
       )
     );
   });
