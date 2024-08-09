@@ -56,6 +56,7 @@ export enum ErrorCode {
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
+  NOT_ENOUGH_FUNDS = 'not-enough-funds',
 
   // crypto
   INVALID_CREDENTIALS = 'invalid-credentials',
