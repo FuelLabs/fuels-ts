@@ -5,6 +5,9 @@ import { CallTestContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
+/**
+ * @group node
+ */
 test('not enough coins error', async () => {
   using contract = await launchTestContract({ factory: CallTestContractFactory });
 
