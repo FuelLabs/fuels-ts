@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 
+import { launchTestNode } from '../../src/test-utils';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import {
   bootstrapProject,
@@ -15,14 +16,22 @@ import {
 describe(
   'deploy',
   () => {
+    let destroy: () => void;
     const paths = bootstrapProject(__filename);
+
+    beforeEach(async () => {
+      const { cleanup } = await launchTestNode({
+        nodeOptions: {
+          port: '4000',
+        },
+      });
+      destroy = cleanup;
+    });
 
     afterEach(() => {
       resetConfigAndMocks(paths.fuelsConfigPath);
-    });
-
-    afterAll(() => {
       resetDiskAndMocks(paths.root);
+      destroy();
     });
 
     it('should run `deploy` command', async () => {
