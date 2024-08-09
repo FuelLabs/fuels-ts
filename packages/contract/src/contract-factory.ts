@@ -117,7 +117,7 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns The CreateTransactionRequest object for deploying the contract.
    */
-  createTransactionRequest(deployOptions?: DeployContractOptions & { bytecode?: Uint8Array }) {
+  createTransactionRequest(deployOptions?: DeployContractOptions & { bytecode?: BytesLike }) {
     const storageSlots = deployOptions?.storageSlots
       ?.map(({ key, value }) => ({
         key: hexlifyWithPrefix(key),
@@ -422,7 +422,7 @@ export default class ContractFactory {
    * @param options - options for creating a blob transaction request.
    * @returns a populated BlobTransactionRequest.
    */
-  private blobTransactionRequest(options: { bytecode: Uint8Array } & DeployContractOptions) {
+  private blobTransactionRequest(options: { bytecode: BytesLike } & DeployContractOptions) {
     const { bytecode } = options;
     return new BlobTransactionRequest({
       blobId: hash(bytecode),
