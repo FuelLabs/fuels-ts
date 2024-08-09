@@ -228,13 +228,6 @@ export class TransactionResponse {
 
     for await (const { statusChange } of subscription) {
       if (statusChange.type === 'SqueezedOutStatus') {
-        if (statusChange.reason.indexOf('BlobIdAlreadyUploaded') > -1) {
-          throw new FuelError(
-            ErrorCode.BLOB_ID_ALREADY_UPLOADED,
-            `Blob ID already uploaded and is available for reuse.`
-          );
-        }
-
         throw new FuelError(
           ErrorCode.TRANSACTION_SQUEEZED_OUT,
           `Transaction Squeezed Out with reason: ${statusChange.reason}`

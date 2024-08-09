@@ -24,12 +24,6 @@ When an [`Account`](../../api/Account/Account.md) is required for an operation. 
 
 It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
 
-### `BLOB_ID_ALREADY_UPLOADED`
-
-When the blob ID that is being submitted has already been uploaded.
-
-If the blob ID has already been uploaded, then it is available for use and does not need to be reuploaded.
-
 ### `CONFIG_FILE_NOT_FOUND`
 
 When a configuration file is not found. This could either be a `fuels.config.[ts,js,mjs,cjs]` file or a TOML file.

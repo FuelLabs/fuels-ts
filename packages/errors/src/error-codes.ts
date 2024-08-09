@@ -77,7 +77,6 @@ export enum ErrorCode {
   DUPLICATED_POLICY = 'duplicated-policy',
   TRANSACTION_SQUEEZED_OUT = 'transaction-squeezed-out',
   CONTRACT_SIZE_EXCEEDS_LIMIT = 'contract-size-exceeds-limit',
-  BLOB_ID_ALREADY_UPLOADED = 'blob-id-already-uploaded',
   INVALID_CHUNK_SIZE_TOLERANCE = 'invalid-chunk-size-tolerance',
   MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
   FUNDS_TOO_LOW = 'funds-too-low',

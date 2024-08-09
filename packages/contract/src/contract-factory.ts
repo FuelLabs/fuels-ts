@@ -312,7 +312,7 @@ export default class ContractFactory {
         } catch (err: unknown) {
           // Core will throw for blobs that have already been uploaded, but the blobId
           // is still valid so we can use this for the loader contract
-          if ((<FuelError>err).code === ErrorCode.BLOB_ID_ALREADY_UPLOADED) {
+          if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
             // eslint-disable-next-line no-continue
             continue;
           }
@@ -450,8 +450,10 @@ export default class ContractFactory {
     const { consensusParameters } = provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
     const transactionSizeLimit = consensusParameters.txParameters.maxSize.toNumber();
-    const sizeLimit =
+    const maxLimit = 64000;
+    const chainLimit =
       transactionSizeLimit < contractSizeLimit ? transactionSizeLimit : contractSizeLimit;
+    const sizeLimit = chainLimit < maxLimit ? chainLimit : maxLimit;
 
     // Get an estimate base tx length
     const blobTx = this.blobTransactionRequest({
