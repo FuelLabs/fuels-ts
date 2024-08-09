@@ -13,7 +13,7 @@ describe('launchNode', () => {
   test('launchNodeAndGetWallets - empty config', async () => {
     const { stop, provider, wallets } = await launchNodeAndGetWallets({
       providerOptions: {
-        cacheUtxo: 1,
+        resourceCacheTTL: 1,
       },
       launchNodeOptions: {
         loggingEnabled: false,
@@ -32,7 +32,7 @@ describe('launchNode', () => {
 
     const { stop, provider } = await launchNodeAndGetWallets({
       providerOptions: {
-        cacheUtxo: 1,
+        resourceCacheTTL: 1,
       },
       launchNodeOptions: {
         args: ['--snapshot', snapshotDir],
@@ -57,7 +57,7 @@ describe('launchNode', () => {
     const { stop, wallets } = await launchNodeAndGetWallets({
       walletCount: 5,
       providerOptions: {
-        cacheUtxo: 1,
+        resourceCacheTTL: 1,
       },
       launchNodeOptions: {
         loggingEnabled: false,
@@ -85,7 +85,7 @@ describe('launchNode', () => {
     test('launchNodeAndGetWallets - empty config', async () => {
       const { stop, provider, wallets } = await launchNodeAndGetWallets({
         providerOptions: {
-          cacheUtxo: 1,
+          resourceCacheTTL: 1,
         },
         launchNodeOptions: {
           loggingEnabled: false,
