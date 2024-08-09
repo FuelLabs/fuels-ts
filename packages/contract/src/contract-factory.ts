@@ -449,13 +449,19 @@ export default class ContractFactory {
     const { provider } = this.getAccount();
     const { consensusParameters } = provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
-    // Get the base tx length
-    const blobTx = this.blobTransactionRequest({ ...deployOptions, bytecode: randomBytes(32) });
-    blobTx.fundWithFakeUtxos([], provider.getBaseAssetId());
-    // Allow tolerance for fluctuating transaction size and request limit
+    const transactionSizeLimit = consensusParameters.txParameters.maxSize.toNumber();
+    const sizeLimit =
+      transactionSizeLimit < contractSizeLimit ? transactionSizeLimit : contractSizeLimit;
+
+    // Get an estimate base tx length
+    const blobTx = this.blobTransactionRequest({
+      ...deployOptions,
+      bytecode: randomBytes(32),
+    }).fundWithFakeUtxos([], provider.getBaseAssetId());
+    // Allow tolerance for fluctuating transaction size
     const toleranceMultiplier = 1 - chunkSizeTolerance;
-    const maxChunkSize =
-      (contractSizeLimit - blobTx.byteLength() - WORD_SIZE) * toleranceMultiplier;
+    // Given above, calculate the maximum chunk size
+    const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * toleranceMultiplier;
 
     // Ensure chunksize is byte aligned
     return Math.round(maxChunkSize / WORD_SIZE) * WORD_SIZE;

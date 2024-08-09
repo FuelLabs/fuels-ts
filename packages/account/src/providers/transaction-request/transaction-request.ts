@@ -621,6 +621,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     updateAssetInput(baseAssetId, bn(100_000_000_000));
     quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
+
+    return this;
   }
 
   /**
