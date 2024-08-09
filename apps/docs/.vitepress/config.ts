@@ -433,6 +433,10 @@ export default defineConfig({
                 text: 'Custom Blocks',
                 link: '/guide/testing/custom-blocks',
               },
+              {
+                text: 'Setting up test wallets',
+                link: '/guide/testing/setting-up-test-wallets',
+              },
             ],
           },
           {

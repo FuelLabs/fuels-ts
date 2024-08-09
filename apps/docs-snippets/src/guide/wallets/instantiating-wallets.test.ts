@@ -1,6 +1,6 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
 import { HDWallet, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { AssetId, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -112,7 +112,7 @@ describe('Instantiating wallets', () => {
     expect(myWallet).toBeDefined();
   });
 
-  it('should instantiate wallet alreay connected to a provider', async () => {
+  it('should instantiate wallet already connected to a provider', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;
 
@@ -125,5 +125,26 @@ describe('Instantiating wallets', () => {
     myWallet.connect(provider);
 
     expect(myWallet).toBeDefined();
+  });
+
+  it('should instantiate multiple wallets with different configurations', async () => {
+    // #region multiple-wallets
+    using launched = await launchTestNode({
+      walletsConfig: {
+        count: 3,
+        assets: [AssetId.A, AssetId.B],
+        coinsPerAsset: 5,
+        amountPerCoin: 100_000,
+      },
+    });
+
+    const {
+      wallets: [wallet1, wallet2, wallet3],
+    } = launched;
+    // #endregion multiple-wallets
+
+    expect(wallet1).toBeDefined();
+    expect(wallet2).toBeDefined();
+    expect(wallet3).toBeDefined();
   });
 });
