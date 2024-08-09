@@ -1,5 +1,5 @@
-import { readdirSync, mkdirSync, copyFileSync, renameSync, writeFileSync, rmSync } from 'fs';
-import { join, dirname } from 'path';
+import { readdirSync, renameSync, rmSync, statSync, writeFileSync } from 'fs';
+import { dirname, join } from 'path';
 import replace from 'replace';
 import { fileURLToPath } from 'url';
 
@@ -21,21 +21,10 @@ type RegexReplacement = {
 const filename = fileURLToPath(import.meta.url);
 const docsDir = join(dirname(filename), '../src/');
 const apiDocsDir = join(docsDir, '/api');
-const classesDir = join(apiDocsDir, '/classes');
-const modulesDir = join(apiDocsDir, '/modules');
-const interfacesDir = join(apiDocsDir, '/interfaces_typedoc');
-const enumsDir = join(apiDocsDir, '/enums');
 
 const filesToRemove = [
-  'api/modules.md',
-  'api/classes',
-  'api/modules',
-  'api/interfaces_typedoc',
-  'api/enums',
+  'api/_media'
 ];
-
-const secondaryEntryPoints = ['-index.md', '-test_utils.md', '-cli-utils.md'];
-const secondaryModules: string[] = [];
 
 const filePathReplacements: RegexReplacement[] = [];
 
@@ -49,10 +38,6 @@ const removeUnwantedFiles = () =>
     const fullDirPath = join(docsDir, dirPath);
     rmSync(fullDirPath, { recursive: true, force: true });
   });
-
-const renameInterfaces = () => {
-  renameSync(join(apiDocsDir, 'interfaces'), join(apiDocsDir, 'interfaces_typedoc'));
-};
 
 /**
  * Generates a json file containing the links for the sidebar to be used by vitepress.
@@ -87,129 +72,46 @@ const exportLinksJson = () => {
  * has multiple entry points.
  */
 const flattenSecondaryModules = () => {
-  const modulesFiles = readdirSync(modulesDir);
-  const classesFiles = readdirSync(classesDir);
-  const interfacesFiles = readdirSync(interfacesDir);
-  const enumsFiles = readdirSync(enumsDir);
-
-  const files = [
-    ...classesFiles.map((c) => ({ name: c, path: classesDir })),
-    ...interfacesFiles.map((i) => ({ name: i, path: interfacesDir })),
-    ...enumsFiles.map((e) => ({ name: e, path: enumsDir })),
-  ];
-
-  // Extract secondary modules
-  secondaryModules.push(
-    ...modulesFiles
-      .filter((file) => secondaryEntryPoints.some((entryPoint) => file.includes(entryPoint)))
-      .map((file) => file.replace('fuel_ts_', ''))
-      .map((file) => file.split('.')[0])
-  );
-
-  // Move files to the primary module
-  secondaryModules.forEach((secondaryModule) => {
-    const primaryModule = secondaryModule.split('-')[0];
-    files.forEach(({ name, path }) => {
-      if (name.includes(secondaryModule)) {
-        const nameWithPrimaryModule = name.replace(secondaryModule, primaryModule);
-        renameSync(join(path, name), join(path, nameWithPrimaryModule));
-
-        // Regenerate internal links for primary module
-        filePathReplacements.push({
-          regex: name.replace('.md', ''),
-          replacement: nameWithPrimaryModule.replace('.md', ''),
-        });
-      }
-    });
+  const primaryDirs = readdirSync(apiDocsDir);
+  primaryDirs.forEach((primaryDirName) => {
+    const primaryDirPath = join(apiDocsDir, primaryDirName);
+    if (statSync(primaryDirPath).isDirectory()) {
+      const secondaryDirs = readdirSync(primaryDirPath);
+      const toFlattern = ["classes", "interfaces", "enumerations"];
+      const capitalPrimaryDirName = primaryDirName.charAt(0).toUpperCase() + primaryDirName.slice(1);
+      secondaryDirs.forEach((secondaryDirName) => {
+        if (toFlattern.includes(secondaryDirName)) {
+          const secondaryDirPath = join(primaryDirPath, secondaryDirName);
+          const secondaryDirFiles = readdirSync(secondaryDirPath);
+          secondaryDirFiles.forEach((file) => {
+            renameSync(join(secondaryDirPath, file), join(primaryDirPath, file));
+            filePathReplacements.push({
+              regex: `${primaryDirName}/${secondaryDirName}/${file}`,
+              replacement: `${capitalPrimaryDirName}/${file}`,
+            });
+          });
+          rmSync(secondaryDirPath, {recursive: true, force: true});
+        }
+      });
+    }
   });
 };
 
 /**
- * Alters the typedoc generated file structure to be more semantic.
+ * Capitalise the Primary Directories
  */
-const alterFileStructure = () => {
-  const modulesFiles = readdirSync(modulesDir);
-  const classesFiles = readdirSync(classesDir);
-  const interfacesFiles = readdirSync(interfacesDir);
-  const enumsFiles = readdirSync(enumsDir);
-
-  const files = [
-    ...classesFiles.map((c) => ({ name: c, path: classesDir })),
-    ...interfacesFiles.map((i) => ({ name: i, path: interfacesDir })),
-    ...enumsFiles.map((e) => ({ name: e, path: enumsDir })),
-  ];
-
-  modulesFiles.forEach((modulesFile) => {
-    // Create a new directory for each module
-    const newDirName = modulesFile.split('.')[0];
-    const newDirPath = join(apiDocsDir, newDirName);
-    mkdirSync(newDirPath);
-
-    // Prepare new module directory to remove 'fuel_ts_' prefix
-    const formattedDirName = newDirPath.split('fuel_ts_')[1];
-    const capitalisedDirName = formattedDirName.charAt(0).toUpperCase() + formattedDirName.slice(1);
-
-    files.forEach(({ name, path }) => {
-      if (name.startsWith(newDirName)) {
-        const newFilePath = join(newDirPath, name);
-        copyFileSync(join(path, name), newFilePath);
-
-        // Rename the file to remove module prefix
-        const newName = name.split('-')[1];
-        renameSync(newFilePath, join(newDirPath, newName));
-        // Push a replacement for internal links cleanup
-        filePathReplacements.push({
-          regex: name,
-          replacement: `/api/${capitalisedDirName}/${newName}`,
-        });
-      }
-    });
-
-    // Move module index file
-    copyFileSync(join(modulesDir, modulesFile), join(newDirPath, 'index.md'));
-
-    // Push a replacement for internal links cleanup
+const capitalisePrimaryDirs = () => {
+  const primaryDirs = readdirSync(apiDocsDir);
+  primaryDirs.filter((directory) => !directory.includes(".md")).forEach((primaryDirName) => {
+    const capitalise = primaryDirName.charAt(0).toUpperCase() + primaryDirName.slice(1);
+    const primaryDirPath = join(apiDocsDir, primaryDirName);
+    renameSync(primaryDirPath, join(apiDocsDir, capitalise));
     filePathReplacements.push({
-      regex: modulesFile,
-      replacement: `/api/${capitalisedDirName}/index.md`,
+      regex: `${primaryDirName}/index.md`,
+      replacement: `index.md`,
     });
-
-    // Rename module directory to capitalised name
-    renameSync(newDirPath, join(apiDocsDir, capitalisedDirName));
-  });
-};
-
-/**
- * Cleans up the secondary modules generated by typedoc.
- */
-const cleanupSecondaryModules = () => {
-  secondaryModules.forEach((secondaryModule) => {
-    const primaryModule = secondaryModule.split('-')[0];
-    const capitalisedSecondaryModuleName =
-      secondaryModule.charAt(0).toUpperCase() + secondaryModule.slice(1);
-    const capitalisedPrimaryModuleName =
-      primaryModule.charAt(0).toUpperCase() + primaryModule.slice(1);
-
-    const oldFilePath = join(apiDocsDir, capitalisedSecondaryModuleName, 'index.md');
-
-    // Format the name so there isn't multiple index files for a single package
-    let newFileName = secondaryModule.split('-')[1];
-    newFileName = newFileName === 'index' ? 'src-index' : `${newFileName.replace('_', '-')}-index`;
-    const newFilePath = join(apiDocsDir, capitalisedPrimaryModuleName, `${newFileName}.md`);
-
-    // Move the secondary module index file to the primary module
-    renameSync(oldFilePath, newFilePath);
-
-    // Regenerate links for the secondary module
-    filePathReplacements.push({
-      regex: `${capitalisedSecondaryModuleName}/index`,
-      replacement: `${capitalisedPrimaryModuleName}/${newFileName}`,
-    });
-
-    // Remove the secondary module
-    rmSync(join(apiDocsDir, capitalisedSecondaryModuleName), { recursive: true, force: true });
-  });
-};
+  })
+}
 
 /**
  * Recreates the generated typedoc links
@@ -219,18 +121,16 @@ const recreateInternalLinks = () => {
 
   const prefixReplacements: RegexReplacement[] = [
     // Prefix/Typedoc cleanups
-    { regex: '../modules/', replacement: '/api/' },
-    { regex: '../classes/', replacement: '/api/' },
-    { regex: '../interfaces/', replacement: '/api/' },
-    { regex: '../enums/', replacement: '/api/' },
-    { regex: 'fuel_ts_', replacement: '' },
-    { regex: '/api//api/', replacement: '/api/' },
+    { regex: 'classes/', replacement: './' },
+    { regex: 'interfaces/', replacement: './' },
+    { regex: 'enumerations/', replacement: './' },
+    { regex: '.././', replacement: './' },
+    { regex: '../../', replacement: '../' },
     // Resolves `[plugin:vite:vue] Element is missing end tag.` error
     { regex: '<', replacement: '&lt;' },
   ];
 
   topLevelDirs
-    .filter((directory) => !directory.endsWith('.md'))
     .forEach((dir) => {
       [...filePathReplacements, ...prefixReplacements].forEach(({ regex, replacement }) => {
         replace({
@@ -246,11 +146,9 @@ const recreateInternalLinks = () => {
 
 const main = () => {
   log('Cleaning up API docs.');
-  renameInterfaces();
-  flattenSecondaryModules();
-  alterFileStructure();
-  cleanupSecondaryModules();
   removeUnwantedFiles();
+  flattenSecondaryModules();
+  capitalisePrimaryDirs();
   exportLinksJson();
   recreateInternalLinks();
 };
