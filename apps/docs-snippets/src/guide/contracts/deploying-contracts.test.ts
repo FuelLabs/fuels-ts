@@ -45,7 +45,7 @@ describe('Deploying Contracts', () => {
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
     const factory = new ContractFactory(bytecode, abi, wallet);
     // #endregion setup
-    expect(hexlify(factory.bytecode)).toBe(bytecode);
+    expect(hexlify(factory.bytecode)).toBe(hexlify(bytecode));
 
     // #region deploy
     // Deploy the contract
@@ -89,7 +89,7 @@ describe('Deploying Contracts', () => {
 
     // Deploy the contract as blobs
     const { waitForResult, contractId, transactionId } = await factory.deployContractAsBlobs({
-      // Increasing chunk size tolerance to 10% incase of fee fluctuations
+      // Increasing chunk size tolerance to 10%
       chunkSizeTolerance: 0.1,
     });
     // Await it's deployment
