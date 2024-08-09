@@ -18,14 +18,19 @@ import type {
   ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, sleep } from '@fuel-ts/utils';
 
 import type { GqlReceiptFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
-import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
+import type {
+  TransactionSummary,
+  GqlTransaction,
+  AbiMap,
+  GqlTransactionStatusesNames,
+} from '../transaction-summary/types';
 import { extractTxError } from '../utils';
 
 import { getDecodedLogs } from './getDecodedLogs';
@@ -129,25 +134,52 @@ export class TransactionResponse {
    * @returns Transaction with receipts query result.
    */
   async fetch(): Promise<GqlTransaction> {
+    const subscription = this.provider.operations.statusChange({
+      transactionId: this.id,
+    });
+
+    for await (const { statusChange } of subscription) {
+      if (statusChange.type === 'SqueezedOutStatus') {
+        this.gqlTransaction = await this.fetchTransactionWithReceipts('SqueezedOutStatus');
+        break;
+      }
+
+      if (statusChange.type !== 'SubmittedStatus') {
+        this.gqlTransaction = statusChange.transaction;
+        break;
+      }
+    }
+
+    // This block should never be reached, but it's here to satisfy the compiler
+    if (!this.gqlTransaction) {
+      return this.fetch();
+    }
+
+    return this.gqlTransaction;
+  }
+
+  /**
+   * This method will fetch the transaction with receipts and will keep fetching
+   * until the transaction status is the expected one.
+   *
+   * @param expectedStatus - the expected status of the transaction
+   * @returns Transaction with receipts query result.
+   */
+  private async fetchTransactionWithReceipts(
+    expectedStatus: GqlTransactionStatusesNames
+  ): Promise<GqlTransaction> {
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
 
-    if (!response.transaction) {
-      const subscription = this.provider.operations.statusChange({
-        transactionId: this.id,
-      });
-
-      for await (const { statusChange } of subscription) {
-        if (statusChange) {
-          break;
-        }
-      }
-
-      return this.fetch();
+    if (response.transaction?.status?.type !== expectedStatus) {
+      await sleep(1000);
+      return this.fetchTransactionWithReceipts(expectedStatus);
     }
 
-    this.gqlTransaction = response.transaction;
+    if (response.transaction) {
+      this.gqlTransaction = response.transaction;
+    }
 
     return response.transaction;
   }
@@ -235,11 +267,10 @@ export class TransactionResponse {
         );
       }
       if (statusChange.type !== 'SubmittedStatus') {
+        this.gqlTransaction = statusChange.transaction;
         break;
       }
     }
-
-    await this.fetch();
   }
 
   /**
