@@ -298,3 +298,11 @@ The purpose of the lock function is to provide a way to ensure that the implemen
 In cases where the error hasn't been mapped yet, this code will be used.
 
 If you believe you found a bug, please report the [issue](https://github.com/FuelLabs/fuels-ts/issues/new/choose) to the team.
+
+### `MAX_INPUTS_EXCEEDED`
+
+When the number of transaction inputs exceeds the maximum limit allowed by the blockchain.
+
+### `MAX_OUTPUTS_EXCEEDED`
+
+When the number of transaction outputs exceeds the maximum limit allowed by the blockchain.

@@ -583,7 +583,7 @@ describe('TransactionSummary', () => {
     });
 
     it('should ensure that transfer operations are assembled correctly if only seeded with a MessageInput (SPENDABLE MESSAGE)', async () => {
-      const testMessage = new TestMessage({ amount: 1000000, data: '' });
+      const testMessage = new TestMessage({ amount: 1000000 });
 
       using launched = await launchTestNode({
         contractsConfigs: [
