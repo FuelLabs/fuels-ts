@@ -307,7 +307,7 @@ describe('Contract Factory', () => {
     const bytecode = concat([arrayify(LargeContractFactory.bytecode), new Uint8Array(3)]);
     const factory = new ContractFactory(bytecode, LargeContract.abi, wallet);
     expect(factory.bytecode.length % 8 === 0).toBe(false);
-    const deploy = await factory.deployContractAsBlobs<LargeContract>();
+    const deploy = await factory.deployContractAsBlobs<LargeContract>({ chunkSizeOverride: 0.5 });
 
     const { contract } = await deploy.waitForResult();
     expect(contract.id).toBeDefined();
@@ -318,7 +318,7 @@ describe('Contract Factory', () => {
     expect(value.toNumber()).toBe(1001);
   }, 15000);
 
-  it('should not deploy large contracts via blobs [invalid chunk size tolerance]', async () => {
+  it('should not deploy large contracts via blobs [invalid chunk size override]', async () => {
     using launched = await launchTestNode();
 
     const {
@@ -331,8 +331,8 @@ describe('Contract Factory', () => {
     await expectToThrowFuelError(
       () => factory.deployContractAsBlobs<LargeContract>({ chunkSizeOverride }),
       new FuelError(
-        ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
-        'Chunk size tolerance must be between 0 and 1'
+        ErrorCode.INVALID_CHUNK_SIZE_OVERRIDE,
+        'Chunk size override must be between 0 and 1'
       )
     );
   });

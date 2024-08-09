@@ -441,8 +441,8 @@ export default class ContractFactory {
   ) {
     if (chunkSizeOverride < 0 || chunkSizeOverride > 1) {
       throw new FuelError(
-        ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
-        'Chunk size tolerance must be between 0 and 1'
+        ErrorCode.INVALID_CHUNK_SIZE_OVERRIDE,
+        'Chunk size override must be between 0 and 1'
       );
     }
 
@@ -460,10 +460,10 @@ export default class ContractFactory {
       ...deployOptions,
       bytecode: randomBytes(32),
     }).fundWithFakeUtxos([], provider.getBaseAssetId());
-    // Allow tolerance for fluctuating transaction size
-    const toleranceMultiplier = 1 - chunkSizeOverride;
+    // Allow override for fluctuating transaction size
+    const override = 1 - chunkSizeOverride;
     // Given above, calculate the maximum chunk size
-    const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * toleranceMultiplier;
+    const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * override;
 
     // Ensure chunksize is byte aligned
     return Math.round(maxChunkSize / WORD_SIZE) * WORD_SIZE;
