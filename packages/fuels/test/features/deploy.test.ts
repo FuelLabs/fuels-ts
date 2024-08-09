@@ -19,7 +19,7 @@ describe(
     let destroy: () => void;
     const paths = bootstrapProject(__filename);
 
-    beforeAll(async () => {
+    beforeEach(async () => {
       const { cleanup } = await launchTestNode({
         nodeOptions: {
           port: '4000',
@@ -28,7 +28,7 @@ describe(
       destroy = cleanup;
     });
 
-    afterAll(() => {
+    afterEach(() => {
       resetConfigAndMocks(paths.fuelsConfigPath);
       resetDiskAndMocks(paths.root);
       destroy();
