@@ -16,4 +16,5 @@ export const {
   pbkdf2,
   computeHmac,
   ripemd160,
+  randomUUID,
 } = cryptoApi;

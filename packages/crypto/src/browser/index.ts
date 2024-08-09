@@ -7,6 +7,7 @@ import { decryptJsonWalletData, encryptJsonWalletData } from './encryptJsonWalle
 import { computeHmac } from './hmac';
 import { pbkdf2 } from './pbkdf2';
 import { randomBytes } from './randomBytes';
+import { randomUUID } from './randomUUID';
 import { stringFromBuffer } from './stringFromBuffer';
 
 const api: CryptoApi = {
@@ -23,6 +24,7 @@ const api: CryptoApi = {
   computeHmac,
   pbkdf2,
   ripemd160,
+  randomUUID,
 };
 
 export default api;
