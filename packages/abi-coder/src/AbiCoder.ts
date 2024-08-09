@@ -2,11 +2,11 @@ import { ResolvedAbiType } from './ResolvedAbiType';
 import type { DecodedValue, InputValue, Coder } from './encoding/coders/AbstractCoder';
 import { getCoderForEncoding } from './encoding/strategies/getCoderForEncoding';
 import type { EncodingOptions } from './types/EncodingOptions';
-import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument } from './types/JsonAbi';
 
 export abstract class AbiCoder {
   static getCoder(
-    abi: JsonAbi,
+    abi: JsonAbiOld,
     argument: JsonAbiArgument,
     options: EncodingOptions = {
       padToWordSize: false,
@@ -17,7 +17,7 @@ export abstract class AbiCoder {
   }
 
   static encode(
-    abi: JsonAbi,
+    abi: JsonAbiOld,
     argument: JsonAbiArgument,
     value: InputValue,
     options?: EncodingOptions
@@ -26,7 +26,7 @@ export abstract class AbiCoder {
   }
 
   static decode(
-    abi: JsonAbi,
+    abi: JsonAbiOld,
     argument: JsonAbiArgument,
     data: Uint8Array,
     offset: number,

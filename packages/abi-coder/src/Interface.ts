@@ -5,23 +5,26 @@ import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
-import type { InputValue } from './encoding/coders/AbstractCoder';
-import type { JsonAbi, JsonAbiConfigurable } from './types/JsonAbi';
+import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
+import type { JsonAbiArgument, JsonAbiOld } from './types/JsonAbi';
+import type { Configurable, JsonAbi } from './types/JsonAbiNew';
 import { type EncodingVersion } from './utils/constants';
-import { findTypeById, getEncodingVersion } from './utils/json-abi';
+import { getEncodingVersion } from './utils/json-abi';
+import { parseConcreteType, transpileAbi } from './utils/transpile-abi';
 
-export class Interface<TAbi extends JsonAbi = JsonAbi> {
+export class Interface {
   readonly functions!: Record<string, FunctionFragment>;
-  readonly configurables: Record<string, JsonAbiConfigurable>;
-  readonly jsonAbi: TAbi;
+  readonly configurables: Record<string, Configurable>;
+  readonly jsonAbi: JsonAbi;
   readonly encoding: EncodingVersion;
+  private readonly jsonAbiOld: JsonAbiOld;
 
-  constructor(jsonAbi: TAbi) {
+  constructor(jsonAbi: JsonAbi) {
     this.jsonAbi = jsonAbi;
-    this.encoding = getEncodingVersion(jsonAbi.encoding);
-
+    this.encoding = getEncodingVersion(jsonAbi.encodingVersion);
+    this.jsonAbiOld = transpileAbi(jsonAbi) as JsonAbiOld;
     this.functions = Object.fromEntries(
-      this.jsonAbi.functions.map((x) => [x.name, new FunctionFragment(this.jsonAbi, x.name)])
+      this.jsonAbi.functions.map((fn) => [fn.name, new FunctionFragment(this.jsonAbiOld, fn)])
     );
 
     this.configurables = Object.fromEntries(this.jsonAbi.configurables.map((x) => [x.name, x]));
@@ -58,7 +61,7 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
   }
 
   decodeLog(data: BytesLike, logId: string): any {
-    const loggedType = this.jsonAbi.loggedTypes.find((type) => type.logId === logId);
+    const loggedType = this.jsonAbiOld.loggedTypes.find((type) => type.logId === logId);
     if (!loggedType) {
       throw new FuelError(
         ErrorCode.LOG_TYPE_NOT_FOUND,
@@ -66,13 +69,13 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       );
     }
 
-    return AbiCoder.decode(this.jsonAbi, loggedType.loggedType, arrayify(data), 0, {
+    return AbiCoder.decode(this.jsonAbiOld, loggedType.loggedType, arrayify(data), 0, {
       encoding: this.encoding,
     });
   }
 
   encodeConfigurable(name: string, value: InputValue) {
-    const configurable = this.jsonAbi.configurables.find((c) => c.name === name);
+    const configurable = this.jsonAbiOld.configurables.find((c) => c.name === name);
     if (!configurable) {
       throw new FuelError(
         ErrorCode.CONFIGURABLE_NOT_FOUND,
@@ -80,12 +83,31 @@ export class Interface<TAbi extends JsonAbi = JsonAbi> {
       );
     }
 
-    return AbiCoder.encode(this.jsonAbi, configurable.configurableType, value, {
+    return AbiCoder.encode(this.jsonAbiOld, configurable.configurableType, value, {
       encoding: this.encoding,
     });
   }
 
-  getTypeById(typeId: number) {
-    return findTypeById(this.jsonAbi, typeId);
+  encodeType(concreteTypeId: string, value: InputValue): Uint8Array {
+    const typeArg = parseConcreteType(
+      this.jsonAbi,
+      this.jsonAbiOld.types,
+      concreteTypeId,
+      ''
+    ) as JsonAbiArgument;
+    return AbiCoder.encode(this.jsonAbiOld, typeArg, value, {
+      encoding: this.encoding,
+    });
+  }
+
+  decodeType(concreteTypeId: string, data: Uint8Array): [DecodedValue | undefined, number] {
+    const typeArg = parseConcreteType(
+      this.jsonAbi,
+      this.jsonAbiOld.types,
+      concreteTypeId,
+      ''
+    ) as JsonAbiArgument;
+
+    return AbiCoder.decode(this.jsonAbiOld, typeArg, data, 0, { encoding: this.encoding });
   }
 }

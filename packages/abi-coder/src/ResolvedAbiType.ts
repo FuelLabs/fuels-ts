@@ -1,17 +1,17 @@
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 
-import type { JsonAbi, JsonAbiArgument } from './types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument } from './types/JsonAbi';
 import { arrayRegEx, enumRegEx, genericRegEx, stringRegEx, structRegEx } from './utils/constants';
 import { findTypeById } from './utils/json-abi';
 
 export class ResolvedAbiType {
-  readonly abi: JsonAbi;
+  readonly abi: JsonAbiOld;
   name: string;
   readonly type: string;
   readonly originalTypeArguments: readonly JsonAbiArgument[] | null;
   readonly components: readonly ResolvedAbiType[] | null;
 
-  constructor(abi: JsonAbi, argument: JsonAbiArgument) {
+  constructor(abi: JsonAbiOld, argument: JsonAbiArgument) {
     this.abi = abi;
 
     this.name = argument.name;
@@ -37,7 +37,7 @@ export class ResolvedAbiType {
   }
 
   private static getResolvedGenericComponents(
-    abi: JsonAbi,
+    abi: JsonAbiOld,
     arg: JsonAbiArgument,
     components: readonly JsonAbiArgument[] | null,
     typeParameters: readonly number[] | null
@@ -70,7 +70,7 @@ export class ResolvedAbiType {
   }
 
   private static resolveGenericArgTypes(
-    abi: JsonAbi,
+    abi: JsonAbiOld,
     args: readonly JsonAbiArgument[],
     typeParametersAndArgsMap: Record<number, JsonAbiArgument>
   ): readonly JsonAbiArgument[] {
@@ -108,7 +108,7 @@ export class ResolvedAbiType {
   }
 
   private static getImplicitGenericTypeParameters(
-    abi: JsonAbi,
+    abi: JsonAbiOld,
     args: readonly JsonAbiArgument[] | null,
     implicitGenericParametersParam?: number[]
   ) {

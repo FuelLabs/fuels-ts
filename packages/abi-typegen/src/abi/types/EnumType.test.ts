@@ -21,7 +21,7 @@ describe('EnumType.ts', () => {
   function getTypesForContract(project: AbiTypegenProjectsEnum) {
     const {
       abiContents: { types: rawTypes },
-    } = getTypegenForcProject(project);
+    } = getTypegenForcProject(project, { transpile: true });
 
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 

@@ -1,5 +1,5 @@
 import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument } from '../types/JsonAbi';
 
 import { ENCODING_V1 } from './constants';
 import {
@@ -10,7 +10,7 @@ import {
   getEncodingVersion,
 } from './json-abi';
 
-const MOCK_ABI: JsonAbi = {
+const MOCK_ABI: JsonAbiOld = {
   types: [
     { typeId: 1, type: '()', components: [], typeParameters: [] },
     { typeId: 2, type: 'u256', components: [], typeParameters: [] },

@@ -1,6 +1,6 @@
-import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument } from '../types/JsonAbi';
 
-import { OPTION_REGEX, VOID_TYPE } from './constants';
+import { optionRegEx, VOID_TYPE } from './constants';
 import { findTypeById } from './json-abi';
 
 export type FunctionInput<TArg extends JsonAbiArgument = JsonAbiArgument> = TArg & {
@@ -8,7 +8,7 @@ export type FunctionInput<TArg extends JsonAbiArgument = JsonAbiArgument> = TArg
 };
 
 export const getFunctionInputs = (params: {
-  jsonAbi: JsonAbi;
+  jsonAbi: JsonAbiOld;
   inputs: readonly JsonAbiArgument[];
 }): Array<FunctionInput> => {
   const { jsonAbi, inputs } = params;
@@ -16,7 +16,7 @@ export const getFunctionInputs = (params: {
 
   return inputs.reduceRight((result, input) => {
     const type = findTypeById(jsonAbi, input.type);
-    isMandatory = isMandatory || (type.type !== VOID_TYPE && !OPTION_REGEX.test(type.type));
+    isMandatory = isMandatory || (type.type !== VOID_TYPE && !optionRegEx.test(type.type));
     return [{ ...input, isOptional: !isMandatory }, ...result];
   }, [] as FunctionInput[]);
 };
