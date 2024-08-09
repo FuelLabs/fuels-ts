@@ -75,7 +75,8 @@ describe('Vector Types', () => {
       } = launched;
 
       // #region vector-bytecode-input-ts
-      // #import { BytecodeInputFactory };
+      // #import { arrayify };
+      // #context import { BytecodeInputFactory } from '../path/to/typegen';
 
       const bytecodeAsVecU8 = arrayify(BytecodeInputFactory.bytecode);
 
