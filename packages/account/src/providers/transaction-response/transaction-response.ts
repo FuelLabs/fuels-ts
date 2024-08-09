@@ -18,7 +18,7 @@ import type {
   ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, sleep } from '@fuel-ts/utils';
 
 import type { GqlReceiptFragment } from '../__generated__/operations';
 import type Provider from '../provider';
@@ -96,6 +96,8 @@ export class TransactionResponse {
   gqlTransaction?: GqlTransaction;
 
   abis?: JsonAbisFromAllCalls;
+  /** The expected status from the getTransactionWithReceipts response */
+  private expectedStatus?: GqlTransactionStatusesNames;
 
   /**
    * Constructor for `TransactionResponse`.
@@ -132,7 +134,7 @@ export class TransactionResponse {
    *
    * @returns Transaction with receipts query result.
    */
-  async fetch(expectedStatusType?: GqlTransactionStatusesNames): Promise<GqlTransaction> {
+  async fetch(): Promise<GqlTransaction> {
     const response = await this.provider.operations.getTransactionWithReceipts({
       transactionId: this.id,
     });
@@ -142,20 +144,20 @@ export class TransactionResponse {
         transactionId: this.id,
       });
 
-      let expectedStatus: GqlTransactionStatusesNames | undefined;
-
       for await (const { statusChange } of subscription) {
         if (statusChange) {
-          expectedStatus = statusChange.type;
+          this.expectedStatus = statusChange.type;
           break;
         }
       }
 
-      return this.fetch(expectedStatus);
+      return this.fetch();
     }
 
-    if (expectedStatusType && response.transaction.status?.type !== expectedStatusType) {
-      return this.fetch(expectedStatusType);
+    // Refetch if the expected status is not the same as the response status
+    if (this.expectedStatus && response.transaction.status?.type !== this.expectedStatus) {
+      await sleep(1000);
+      return this.fetch();
     }
 
     this.gqlTransaction = response.transaction;
@@ -238,8 +240,6 @@ export class TransactionResponse {
       transactionId: this.id,
     });
 
-    let expectedStatus: GqlTransactionStatusesNames | undefined;
-
     for await (const { statusChange } of subscription) {
       if (statusChange.type === 'SqueezedOutStatus') {
         throw new FuelError(
@@ -248,12 +248,12 @@ export class TransactionResponse {
         );
       }
       if (statusChange.type !== 'SubmittedStatus') {
-        expectedStatus = statusChange.type;
+        this.expectedStatus = statusChange.type;
         break;
       }
     }
 
-    await this.fetch(expectedStatus);
+    await this.fetch();
   }
 
   /**
