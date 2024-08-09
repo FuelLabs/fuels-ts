@@ -413,4 +413,44 @@ describe('Contract Factory', () => {
       new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.')
     );
   });
+
+  it('deploys a small contract via blobs', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      ConfigurableContractFactory.bytecode,
+      ConfigurableContract.abi,
+      wallet
+    );
+
+    const deploy = await factory.deployContractAsBlobs({
+      configurableConstants: {
+        U8: 1,
+        U16: 2,
+        U32: 3,
+        U64: 4,
+      },
+    });
+    const { contract } = await deploy.waitForResult();
+
+    const u8Call = await contract.functions.echo_u8().call();
+    const u8Result = await u8Call.waitForResult();
+    expect(u8Result.value).toBe(1);
+
+    const u16Call = await contract.functions.echo_u16().call();
+    const u16Result = await u16Call.waitForResult();
+    expect(u16Result.value).toBe(2);
+
+    const u32Call = await contract.functions.echo_u32().call();
+    const u32Result = await u32Call.waitForResult();
+    expect(u32Result.value).toBe(3);
+
+    const u64Call = await contract.functions.echo_u64().call();
+    const u64Result = await u64Call.waitForResult();
+    expect(u64Result.value.toNumber()).toBe(4);
+  }, 15000);
 });
