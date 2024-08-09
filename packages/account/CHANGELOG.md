@@ -1,5 +1,39 @@
 # Change Log
 
+## 0.94.0
+
+### Minor Changes
+
+- c7e01b4: feat!: consider message on resources cache
+- 799db38: feat!: prettify `typegen` api
+
+### Patch Changes
+
+- 0110fd8: chore: handle exceeding maximum inputs when funding a transaction
+- 896add9: chore: default TestMessage to be spendable
+- 751d638: chore: switching `Error` to `FuelError`
+- 1d2abd7: chore: add validation for TX max outputs exceeded
+- fc39124: fix: return correct operations from coin and message inputs
+- Updated dependencies [84dfdc5]
+- Updated dependencies [0110fd8]
+- Updated dependencies [95e7108]
+- Updated dependencies [751d638]
+- Updated dependencies [1e93dac]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [9c07b00]
+  - @fuel-ts/transactions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/abi-coder@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/address@0.94.0
+  - @fuel-ts/crypto@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/hasher@0.94.0
+  - @fuel-ts/merkle@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+  - @fuel-ts/versions@0.94.0
+
 ## 0.93.0
 
 ### Minor Changes

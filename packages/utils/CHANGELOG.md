@@ -1,5 +1,18 @@
 # @fuel-ts/utils
 
+## 0.94.0
+
+### Patch Changes
+
+- 751d638: chore: switching `Error` to `FuelError`
+- a056da3: feat: improve typegen bytecode compression
+- Updated dependencies [0110fd8]
+- Updated dependencies [1d2abd7]
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+  - @fuel-ts/versions@0.94.0
+
 ## 0.93.0
 
 ### Patch Changes
