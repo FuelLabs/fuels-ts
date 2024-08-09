@@ -697,6 +697,23 @@ Supported fuel-core version: ${supportedVersion}.`
     });
   }
 
+  private validateTransaction(tx: TransactionRequest, consensusParameters: ConsensusParameters) {
+    const { maxOutputs, maxInputs } = consensusParameters.txParameters;
+    if (bn(tx.inputs.length).gt(maxInputs)) {
+      throw new FuelError(
+        ErrorCode.MAX_INPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of inputs.'
+      );
+    }
+
+    if (bn(tx.outputs.length).gt(maxOutputs)) {
+      throw new FuelError(
+        ErrorCode.MAX_OUTPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of outputs.'
+      );
+    }
+  }
+
   /**
    * Submits a transaction to the chain to be executed.
    *
@@ -717,6 +734,10 @@ Supported fuel-core version: ${supportedVersion}.`
       await this.estimateTxDependencies(transactionRequest);
     }
     // #endregion Provider-sendTransaction
+
+    const { consensusParameters } = this.getChain();
+
+    this.validateTransaction(transactionRequest, consensusParameters);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 

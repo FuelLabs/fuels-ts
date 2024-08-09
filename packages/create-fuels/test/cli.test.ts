@@ -4,6 +4,8 @@ import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 import { runScaffoldCli, setupProgram } from '../src/cli';
+import * as doesTemplateExistMod from '../src/lib/doesTemplateExist';
+import { templates } from '../src/lib/setupProgram';
 
 import type { ProjectPaths } from './utils/bootstrapProject';
 import {
@@ -20,7 +22,7 @@ import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles'
  * @group node
  */
 describe('CLI', { timeout: 15_000 }, () => {
-  const { error } = mockLogger();
+  const { error, log } = mockLogger();
   let paths: ProjectPaths;
 
   beforeEach(() => {
@@ -39,11 +41,12 @@ describe('CLI', { timeout: 15_000 }, () => {
   });
 
   test('create-fuels extracts the template to the specified directory', async () => {
-    const args = generateArgv(paths.projectRoot);
+    const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
 
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
       args,
     });
 
@@ -56,11 +59,12 @@ describe('CLI', { timeout: 15_000 }, () => {
   });
 
   test('create-fuels checks the versions on the fuel-toolchain file', async () => {
-    const args = generateArgv(paths.projectRoot);
+    const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
 
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
       args,
     });
 
@@ -75,11 +79,16 @@ describe('CLI', { timeout: 15_000 }, () => {
   });
 
   test('should rewrite for the appropriate package manager', async () => {
-    const args = generateArgv(paths.projectRoot, 'bun');
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      packageManager: 'bun',
+      template: paths.templateName,
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
 
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
       args,
     });
 
@@ -94,15 +103,16 @@ describe('CLI', { timeout: 15_000 }, () => {
   });
 
   test('create-fuels reports an error if the project directory already exists', async () => {
-    const args = generateArgv(paths.projectRoot);
+    const args = generateArgv({ projectName: paths.projectRoot, template: paths.templateName });
 
     // Generate the project once
     mkdirSync(paths.projectRoot, { recursive: true });
 
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(true);
+
     // Generate the project again
     await runScaffoldCli({
       program: setupProgram(),
-      templateName: paths.templateName,
       args,
     }).catch((e) => {
       expect(e).toBeInstanceOf(Error);
@@ -111,5 +121,30 @@ describe('CLI', { timeout: 15_000 }, () => {
     expect(error).toHaveBeenCalledWith(
       expect.stringContaining(`A folder already exists at ${paths.projectRoot}`)
     );
+  });
+
+  test('create-fuels reports an error if the template does not exist', async () => {
+    const args = generateArgv({
+      projectName: paths.projectRoot,
+      template: 'non-existent-template',
+    });
+
+    vi.spyOn(doesTemplateExistMod, 'doesTemplateExist').mockReturnValueOnce(false);
+
+    await runScaffoldCli({
+      program: setupProgram(),
+      args,
+    }).catch((e) => {
+      expect(e).toBeInstanceOf(Error);
+    });
+
+    expect(error).toHaveBeenCalledWith(
+      expect.stringContaining(`Template 'non-existent-template' does not exist.`)
+    );
+    expect(log).toHaveBeenCalledWith();
+    expect(log).toHaveBeenCalledWith('Available templates:');
+    for (const template of templates) {
+      expect(log).toHaveBeenCalledWith(`  - ${template}`);
+    }
   });
 });
