@@ -107,10 +107,10 @@ describe('Provider', () => {
     // #endregion options-fetch
   });
 
-  it('options: cacheUtxo', async () => {
+  it('options: resourceCacheTTL', async () => {
     // #region options-cache-utxo
     const provider = await Provider.create(FUEL_NETWORK_URL, {
-      cacheUtxo: 5000, // cache UTXO for 5 seconds
+      resourceCacheTTL: 5000, // cache resources (Coin's and Message's) for 5 seconds
     });
     // #endregion options-cache-utxo
 
