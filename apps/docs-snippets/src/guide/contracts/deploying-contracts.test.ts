@@ -89,7 +89,7 @@ describe('Deploying Contracts', () => {
 
     // Deploy the contract as blobs
     const { waitForResult, contractId, transactionId } = await factory.deployContractAsBlobs({
-      // Increasing chunk size tolerance to 10%
+      // Increasing chunk size override to 10%
       chunkSizeOverride: 0.1,
     });
     // Await it's deployment
