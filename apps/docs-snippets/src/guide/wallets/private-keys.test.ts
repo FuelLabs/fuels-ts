@@ -33,9 +33,8 @@ describe('Private keys', () => {
     const {
       wallets: [testWallet],
     } = launched;
-    const privateKey = testWallet.privateKey;
 
-    const PRIVATE_KEY = privateKey;
+    const PRIVATE_KEY = testWallet.privateKey;
 
     // #region signer-address
     const signer = new Signer(PRIVATE_KEY);
