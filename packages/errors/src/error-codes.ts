@@ -81,6 +81,7 @@ export enum ErrorCode {
   INVALID_CHUNK_SIZE_TOLERANCE = 'invalid-chunk-size-tolerance',
   MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
   FUNDS_TOO_LOW = 'funds-too-low',
+  MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',

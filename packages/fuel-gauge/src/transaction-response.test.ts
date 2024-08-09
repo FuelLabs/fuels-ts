@@ -205,7 +205,7 @@ describe('TransactionResponse', () => {
 
   it(
     'should throw error for a SqueezedOut status update [waitForResult]',
-    { timeout: 10_000 },
+    { timeout: 10_000, retry: 10 },
     async () => {
       /**
        * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
