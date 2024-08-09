@@ -13,7 +13,7 @@ describe('renderHbsTemplate.ts', () => {
     // executing
     const template = `{{header}}\nHello, {{project}}!`;
     const data = { project: 'Fuel' };
-    const rendered = renderHbsTemplate({ template, data });
+    const rendered = renderHbsTemplate({ template, data, versions });
 
     // validating
     restore();

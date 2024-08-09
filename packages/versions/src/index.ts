@@ -39,4 +39,5 @@ import { getBuiltinVersions } from './lib/getBuiltinVersions';
 
 export const versions = getBuiltinVersions();
 
+export * from './lib/types';
 export * from './lib/checkFuelCoreVersionCompatibility';

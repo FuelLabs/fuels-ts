@@ -9,6 +9,7 @@ import { getSystemVersions } from './lib/getSystemVersions';
 
 export * from './lib/compareSystemVersions';
 export * from './lib/fuelUpLink';
+export * from './lib/getBinaryVersions';
 export * from './lib/getSystemVersions';
 export * from './lib/getBuiltinVersions';
 

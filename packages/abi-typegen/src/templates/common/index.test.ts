@@ -8,12 +8,12 @@ import { renderIndexTemplate } from './index';
 describe('templates/index', () => {
   test('should render index template for contracts', () => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     // executing
     const files = [{ path: './Contract.ts' }, { path: './ContractFactory.ts' }];
 
-    const rendered = renderIndexTemplate({ files });
+    const rendered = renderIndexTemplate({ files, versions });
 
     // validating
     restore();

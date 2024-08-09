@@ -26,7 +26,7 @@ describe('main.ts', () => {
   test('should render main template', () => {
     vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
 
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
 
@@ -40,7 +40,7 @@ describe('main.ts', () => {
       programType: ProgramTypeEnum.PREDICATE,
     });
 
-    let rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi, versions });
 
     rendered = autoUpdateFixture(
       join(__dirname, '../../../test/fixtures/templates/predicate/main.hbs'),
@@ -55,7 +55,7 @@ describe('main.ts', () => {
   test('should render main template with configurable', () => {
     vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
 
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
 
@@ -69,7 +69,7 @@ describe('main.ts', () => {
       programType: ProgramTypeEnum.PREDICATE,
     });
 
-    let rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi, versions });
 
     rendered = autoUpdateFixture(
       join(__dirname, '../../../test/fixtures/templates/predicate-with-configurable/main.hbs'),
@@ -82,7 +82,7 @@ describe('main.ts', () => {
   });
 
   test('should throw for invalid Predicate ABI', async () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
     const rawContents = project.abiContents;
@@ -101,7 +101,7 @@ describe('main.ts', () => {
     });
 
     const { error } = await safeExec(() => {
-      renderMainTemplate({ abi });
+      renderMainTemplate({ abi, versions });
     });
 
     expect(error?.message).toMatch(/ABI doesn't have a 'main\(\)' method/);

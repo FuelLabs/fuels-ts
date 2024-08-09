@@ -1,3 +1,5 @@
+import type { BinaryVersions } from '@fuel-ts/versions';
+
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
 import { formatEnums } from '../utils/formatEnums';
@@ -6,9 +8,9 @@ import { formatStructs } from '../utils/formatStructs';
 
 import mainTemplate from './main.hbs';
 
-export function renderMainTemplate(params: { abi: Abi }) {
-  const { camelizedName, capitalizedName, types, functions, commonTypesInUse, configurables } =
-    params.abi;
+export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions }) {
+  const { versions, abi } = params;
+  const { camelizedName, capitalizedName, types, functions, commonTypesInUse, configurables } = abi;
 
   /*
     First we format all attributes
@@ -42,6 +44,7 @@ export function renderMainTemplate(params: { abi: Abi }) {
   */
   const text = renderHbsTemplate({
     template: mainTemplate,
+    versions,
     data: {
       camelizedName,
       capitalizedName,

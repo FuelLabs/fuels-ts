@@ -19,7 +19,7 @@ import { renderFactoryTemplate } from './factory';
 describe('templates/factory', () => {
   test('should render factory template', () => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     // executing
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
@@ -36,7 +36,7 @@ describe('templates/factory', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    let rendered = renderFactoryTemplate({ abi });
+    let rendered = renderFactoryTemplate({ abi, versions });
 
     rendered = autoUpdateFixture(
       join(__dirname, '../../../test/fixtures/templates/contract/factory.hbs'),

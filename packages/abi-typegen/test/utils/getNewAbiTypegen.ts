@@ -2,6 +2,8 @@ import type { IFile, JsonAbiType, JsonAbiConfigurable } from '../../src/index';
 import { AbiTypeGen } from '../../src/index';
 import { ProgramTypeEnum } from '../../src/types/enums/ProgramTypeEnum';
 
+import { DEFAULT_MOCK_VERSIONS } from './mockVersions';
+
 export function getNewAbiTypegen(
   params: {
     programType?: ProgramTypeEnum;
@@ -123,12 +125,15 @@ export function getNewAbiTypegen(
 
   const outputDir = './contracts';
 
+  const versions = DEFAULT_MOCK_VERSIONS;
+
   const typegen = new AbiTypeGen({
     abiFiles,
     binFiles: includeBinFiles ? binFiles : [],
     storageSlotsFiles,
     outputDir,
     programType,
+    versions,
   });
 
   return { typegen };

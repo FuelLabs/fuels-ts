@@ -1,4 +1,5 @@
 import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
+import { mockVersions } from '../../test/utils/mockVersions';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderMainTemplateMod from '../templates/script/main';
@@ -39,6 +40,7 @@ describe('assembleScripts.ts', () => {
   });
 
   test('should assemble all files from Script ABI ', () => {
+    const { versions } = mockVersions();
     const { renderCommonTemplate, renderMainTemplate, renderIndexTemplate } = mockAllDeps();
 
     const {
@@ -52,7 +54,7 @@ describe('assembleScripts.ts', () => {
 
     vi.resetAllMocks();
 
-    const files = assembleScripts({ abis, outputDir });
+    const files = assembleScripts({ abis, outputDir, versions });
 
     expect(files.length).toEqual(3); // 2x factories, 1x index
 
@@ -62,6 +64,7 @@ describe('assembleScripts.ts', () => {
   });
 
   test('should assemble all files from Script ABI, including `common` file', () => {
+    const { versions } = mockVersions();
     const { renderCommonTemplate, renderMainTemplate, renderIndexTemplate } = mockAllDeps();
 
     const {
@@ -75,7 +78,7 @@ describe('assembleScripts.ts', () => {
 
     vi.resetAllMocks();
 
-    const files = assembleScripts({ abis, outputDir });
+    const files = assembleScripts({ abis, outputDir, versions });
 
     expect(files.length).toEqual(4); // 2x factories, 1x index, 1x common
 

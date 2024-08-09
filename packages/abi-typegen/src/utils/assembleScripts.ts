@@ -1,3 +1,4 @@
+import type { BinaryVersions } from '@fuel-ts/versions';
 import { join } from 'path';
 
 import type { Abi } from '../abi/Abi';
@@ -11,8 +12,12 @@ import { renderMainTemplate } from '../templates/script/main';
  * an array of `IFile` with them all. For here on,
  * the only thing missing is to write them to disk.
  */
-export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
-  const { abis, outputDir } = params;
+export function assembleScripts(params: {
+  abis: Abi[];
+  outputDir: string;
+  versions: BinaryVersions;
+}) {
+  const { abis, outputDir, versions } = params;
 
   const files: IFile[] = [];
   const usesCommonTypes = abis.find((a) => a.commonTypesInUse.length > 0);
@@ -24,7 +29,7 @@ export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
 
     const factory: IFile = {
       path: factoryFilepath,
-      contents: renderMainTemplate({ abi }),
+      contents: renderMainTemplate({ abi, versions }),
     };
 
     files.push(factory);
@@ -33,7 +38,7 @@ export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
   // Includes index file
   const indexFile: IFile = {
     path: `${outputDir}/index.ts`,
-    contents: renderIndexTemplate({ files }),
+    contents: renderIndexTemplate({ files, versions }),
   };
 
   files.push(indexFile);
@@ -43,7 +48,7 @@ export function assembleScripts(params: { abis: Abi[]; outputDir: string }) {
     const commonsFilepath = join(outputDir, 'common.d.ts');
     const file: IFile = {
       path: commonsFilepath,
-      contents: renderCommonTemplate(),
+      contents: renderCommonTemplate({ versions }),
     };
     files.push(file);
   }

@@ -1,4 +1,4 @@
-import { versions } from '@fuel-ts/versions';
+import { versions as builtinVersion } from '@fuel-ts/versions';
 import { Command, Option } from 'commander';
 
 import { runTypegen } from './runTypegen';
@@ -84,7 +84,7 @@ export function run(params: { argv: string[]; programName: string }) {
   const { argv, programName } = params;
 
   program.name(programName);
-  program.version(versions.FUELS);
+  program.version(builtinVersion.FUELS);
   program.usage(`-i ../out/*-abi.json -o ./generated/`);
 
   configureCliOptions(program);
