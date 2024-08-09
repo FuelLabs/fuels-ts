@@ -4,8 +4,9 @@ import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Getting started with wallet manager', () => {
   it('instantiates the WalletManager', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;

@@ -31,19 +31,15 @@ describe('Deploying contracts', () => {
     // #region contract-setup-2
     // #context const contractsDir = join(__dirname, '../path/to/contracts/dir')
     // #context const contractName = "contract-name"
-
     const byteCodePath = join(projectsPath, `${contractName}/out/release/${contractName}.bin`);
     const byteCode = readFileSync(byteCodePath);
 
     const abiJsonPath = join(projectsPath, `${contractName}/out/release/${contractName}-abi.json`);
     const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
-
     // #endregion contract-setup-2
 
     // #region contract-setup-3
-
     const factory = new ContractFactory(byteCode, abi, wallet);
-
     const { contractId, transactionId, waitForResult } = await factory.deploy();
     // #endregion contract-setup-3
 

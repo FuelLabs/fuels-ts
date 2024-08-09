@@ -23,7 +23,6 @@ function decorateResponseWithCustomLogic(response: Response) {
  * @group node
  * @group browser
  */
-
 describe('Provider', () => {
   it('base examples', async () => {
     using launched = await launchTestNode();

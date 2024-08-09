@@ -144,11 +144,14 @@ describe('querying the chain', () => {
   });
 
   it('can getBlocks', async () => {
-    // #region Provider-get-blocks
-    // #import { launchTestNode };
-
     using launched = await launchTestNode();
-    const { provider } = launched;
+
+    const FUEL_NETWORK_URL = launched.provider.url;
+
+    // #region Provider-get-blocks
+    // #import { Provider, FUEL_NETWORK_URL };
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
 
     const blockToProduce = 3;
 

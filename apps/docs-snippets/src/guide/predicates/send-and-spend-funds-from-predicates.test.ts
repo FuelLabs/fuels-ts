@@ -8,8 +8,6 @@ import { SimplePredicate } from '../../../test/typegen';
  * @group browser
  */
 describe('Send and Spend Funds from Predicates', () => {
-  const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
-
   it('should successfully use predicate to spend assets', async () => {
     using launched = await launchTestNode();
     const {
@@ -18,6 +16,8 @@ describe('Send and Spend Funds from Predicates', () => {
     } = launched;
 
     // #region send-and-spend-funds-from-predicates-2
+    const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
+
     const predicate = new Predicate({
       bytecode: SimplePredicate.bytecode,
       provider,
@@ -65,6 +65,8 @@ describe('Send and Spend Funds from Predicates', () => {
     expect(isStatusSuccess).toBeTruthy();
     // #endregion send-and-spend-funds-from-predicates-5
   });
+
+  const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
 
   it('should fail when trying to spend predicates entire amount', async () => {
     using launched = await launchTestNode();
