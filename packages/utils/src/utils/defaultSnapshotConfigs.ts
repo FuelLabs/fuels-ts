@@ -4,7 +4,6 @@ import stateConfigJson from './defaultSnapshots/stateConfig.json';
 import type { SnapshotConfigs } from './types';
 
 export const defaultSnapshotConfigs: SnapshotConfigs = {
-  // @ts-expect-error Getting type errors as we can't gen the fuel schema for v4 gas costs
   chainConfig: chainConfigJson,
   metadata: metadataJson,
   stateConfig: stateConfigJson,

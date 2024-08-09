@@ -44,7 +44,7 @@ interface GasCosts {
   retd: Operation;
   add: number;
   addi: number;
-  aloc: number;
+  aloc: Operation;
   and: number;
   andi: number;
   bal: number;
@@ -54,7 +54,7 @@ interface GasCosts {
   bldd: Operation;
   bsiz: Operation;
   cb: number;
-  cfei: number;
+  cfei: Operation;
   cfsi: number;
   croo: Operation;
   div: number;
@@ -65,7 +65,7 @@ interface GasCosts {
   popl: number;
   pshh: number;
   pshl: number;
-  ed19: number;
+  ed19: Operation;
   eq: number;
   exp: number;
   expi: number;
@@ -197,7 +197,7 @@ interface ConsensusParameters {
     };
   };
   block_gas_limit: number;
-  gas_costs: { V1: GasCosts };
+  gas_costs: { V4: GasCosts };
 }
 
 interface ChainConfig {
