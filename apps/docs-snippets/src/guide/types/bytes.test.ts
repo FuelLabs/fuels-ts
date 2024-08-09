@@ -1,19 +1,26 @@
-import type { Contract, Bytes } from 'fuels';
+import type { Bytes } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoBytesFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Bytes', () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_BYTES);
-  });
-
   it('should pass bytes to a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoBytesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region bytes-1
     // #import { Bytes };
 
@@ -26,6 +33,18 @@ describe('Bytes', () => {
   });
 
   it('should retrieve bytes from a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoBytesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region bytes-2
     // #import { Bytes };
 

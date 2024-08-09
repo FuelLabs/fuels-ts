@@ -1,44 +1,36 @@
 import { WalletUnlocked, Predicate, BN, getRandomB256 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { WhitelistedAddressPredicate } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 
-describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let baseAssetId: string;
+describe('Predicate With Configurables', () => {
+  it('should successfully transfer to setted whitelisted address', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
-  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.WHITELISTED_ADDRESS_PREDICATE
-  );
-
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    baseAssetId = wallet.provider.getBaseAssetId();
-  });
-
-  it('should successfully tranfer to setted whitelisted address', async () => {
     // #region predicate-with-configurable-constants-2
     const newWhitelistedAddress = getRandomB256();
 
     const configurable = { WHITELISTED: newWhitelistedAddress };
     // instantiate predicate with configurable constants
     const predicate = new Predicate<[string]>({
-      bytecode: bin,
+      bytecode: WhitelistedAddressPredicate.bytecode,
       provider: wallet.provider,
-      abi,
+      abi: WhitelistedAddressPredicate.abi,
       data: [configurable.WHITELISTED],
       configurableConstants: configurable,
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 200_000, baseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 200_000, provider.getBaseAssetId(), {
       gasLimit: 1000,
     });
 
@@ -51,29 +43,40 @@ describe(__filename, () => {
     const amountToTransfer = 100;
 
     // transferring funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
-      gasLimit: 1000,
-    });
+    const tx2 = await predicate.transfer(
+      destinationWallet.address,
+      amountToTransfer,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 1000,
+      }
+    );
 
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-2
 
-    const destinationBalance = await destinationWallet.getBalance(baseAssetId);
+    const destinationBalance = await destinationWallet.getBalance(provider.getBaseAssetId());
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });
 
-  it('should successfully tranfer to default whitelisted address', async () => {
+  it('should successfully transfer to default whitelisted address', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     // #region predicate-with-configurable-constants-3
     const predicate = new Predicate({
-      bytecode: bin,
-      provider: wallet.provider,
-      abi,
+      bytecode: WhitelistedAddressPredicate.bytecode,
+      provider,
+      abi: WhitelistedAddressPredicate.abi,
       data: ['0xa703b26833939dabc41d3fcaefa00e62cee8e1ac46db37e0fa5d4c9fe30b4132'],
     });
 
     // transferring funds to the predicate
-    const tx1 = await wallet.transfer(predicate.address, 200_000, baseAssetId, {
+    const tx1 = await wallet.transfer(predicate.address, 200_000, provider.getBaseAssetId(), {
       gasLimit: 1000,
     });
 
@@ -86,14 +89,19 @@ describe(__filename, () => {
     const amountToTransfer = 100;
 
     // transferring funds from the predicate to destination if predicate returns true
-    const tx2 = await predicate.transfer(destinationWallet.address, amountToTransfer, baseAssetId, {
-      gasLimit: 1000,
-    });
+    const tx2 = await predicate.transfer(
+      destinationWallet.address,
+      amountToTransfer,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 1000,
+      }
+    );
 
     await tx2.waitForResult();
     // #endregion predicate-with-configurable-constants-3
 
-    const destinationBalance = await destinationWallet.getBalance(baseAssetId);
+    const destinationBalance = await destinationWallet.getBalance(provider.getBaseAssetId());
 
     expect(new BN(destinationBalance).toNumber()).toEqual(amountToTransfer);
   });

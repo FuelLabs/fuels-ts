@@ -138,12 +138,6 @@ pnpm test:filter packages/my-desired-package/src/my.test.ts
 pnpm test -- --coverage --my-other-flag
 ```
 
-Or if you want to start a local Fuel-Core node and run all tests serially you can do:
-
-```sh
-pnpm ci:test
-```
-
 This will run `node:run`, `test` and then `node:clean`
 
 > The tests may break if you are running your tests locally using `node:run` in a separate terminal.

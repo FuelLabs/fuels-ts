@@ -1,35 +1,25 @@
-import {
-  FUEL_NETWORK_URL,
-  Provider,
-  AbiCoder,
-  Script,
-  ReceiptType,
-  arrayify,
-  buildFunctionResult,
-} from 'fuels';
-import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { AbiCoder, Script, ReceiptType, arrayify, buildFunctionResult } from 'fuels';
+import type { JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
 import { SumScript as factory } from '../../../test/typegen/scripts/SumScript';
 
 /**
  * @group node
+ * @group browser
  */
 describe('encode and decode', () => {
-  let wallet: Account;
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [{ assetId, amount: 500_000 }]);
-  });
-
   it('generates valid ABI', () => {
     expect(abiSnippet).toEqual(factory.abi);
   });
 
   it('encodes and decodes', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     // #region encode-and-decode-3
     // #import { JsonAbi, Script };
     // #context import { factory } from './sway-programs-api';

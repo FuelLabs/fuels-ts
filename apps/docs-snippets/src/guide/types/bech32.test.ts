@@ -2,8 +2,9 @@ import { Address } from 'fuels';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Bech32 Types', () => {
   it('should successfully generate a bech32 address', () => {
     // #region bech32-2
     const address = Address.fromRandom();

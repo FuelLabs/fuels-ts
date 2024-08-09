@@ -207,7 +207,6 @@ describe('extractImports', () => {
         import type { AssetId, Contract, B256Address } from 'fuels';
 
         import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-        import { createAndDeployContractFromProject } from '../../utils';
 
         describe('AssetId', () => {
       `;

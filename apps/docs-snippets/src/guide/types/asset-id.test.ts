@@ -1,19 +1,15 @@
 import { Address } from 'fuels';
-import type { AssetId, Contract, B256Address } from 'fuels';
+import type { AssetId, B256Address } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoAssetIdFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('AssetId', () => {
-  let contract: Contract;
   const Bits256: B256Address = '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c';
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_ASSET_ID);
-  });
 
   it('should demonstrate typed asset id example', () => {
     // #region asset-id-1
@@ -28,6 +24,18 @@ describe('AssetId', () => {
   });
 
   it('should create an AssetId from a B256Address', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoAssetIdFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region asset-id-2
     // #import { AssetId };
 
@@ -44,6 +52,18 @@ describe('AssetId', () => {
   });
 
   it('should pass an asset id to a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoAssetIdFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region asset-id-3
     // #import { AssetId };
 
@@ -58,6 +78,18 @@ describe('AssetId', () => {
   });
 
   it('should retrieve an asset id from a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoAssetIdFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region asset-id-4
     // #import { AssetId };
 

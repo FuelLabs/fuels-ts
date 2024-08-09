@@ -1,13 +1,14 @@
 import { toBigInt } from 'ethers';
 import { bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoValuesFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Numbers Types', () => {
   test('should successfully create new Sway-compatible BigNumber from a JavaScript number', () => {
     // #region numbers-docs-1
     // #context import { bn } from 'fuels';
@@ -32,8 +33,18 @@ describe(__filename, () => {
     // #endregion numbers-docs-2
   });
 
-  test('should succcesfully pass in and read a number to/from a contract', async () => {
-    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+  test('should successfully pass in and read a number to/from a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoValuesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
 
     // #region numbers-docs-3
     const originalNumber = 20;
@@ -45,8 +56,18 @@ describe(__filename, () => {
     // #endregion numbers-docs-3
   });
 
-  test('should succcesfully pass in and read a number to/from a contract - small numbers', async () => {
-    const contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
+  test('should successfully pass in and read a number to/from a contract - small numbers', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoValuesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
 
     // #region numbers-docs-4
     const originalNumber = 20;

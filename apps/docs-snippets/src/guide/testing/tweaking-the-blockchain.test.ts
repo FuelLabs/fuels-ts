@@ -4,6 +4,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('tweaking the blockchain', () => {
   test('produceBlocks', async () => {

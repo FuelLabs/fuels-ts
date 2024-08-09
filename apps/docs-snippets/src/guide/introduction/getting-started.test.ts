@@ -1,14 +1,28 @@
-import { FUEL_NETWORK_URL, TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-shadow */
+import { TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
  * @group browser
  */
 describe('Getting started', () => {
-  beforeAll(async () => {
-    // Avoids using the actual network.
-    const mockProvider = await Provider.create(FUEL_NETWORK_URL);
-    vi.spyOn(Provider, 'create').mockResolvedValue(mockProvider);
+  let destroy: () => void;
+  let url: string;
+
+  beforeEach(async () => {
+    const { cleanup, provider } = await launchTestNode({
+      nodeOptions: {
+        port: '4000',
+      },
+    });
+    destroy = cleanup;
+    url = provider.url;
+  });
+
+  afterEach(() => {
+    destroy();
   });
 
   it('can connect to a local network', async () => {
@@ -16,7 +30,7 @@ describe('Getting started', () => {
     // #import { Provider, Wallet };
 
     // Create a provider.
-    const LOCAL_FUEL_NETWORK = 'http://127.0.0.1:4000/v1/graphql';
+    const LOCAL_FUEL_NETWORK = `http://127.0.0.1:4000/v1/graphql`;
     const provider = await Provider.create(LOCAL_FUEL_NETWORK);
 
     // Create our wallet (with a private key).
@@ -31,6 +45,7 @@ describe('Getting started', () => {
   });
 
   it('can connect to testnet', async () => {
+    const TESTNET_NETWORK_URL = url;
     // #region connecting-to-the-testnet
     // #import { Provider, Wallet, TESTNET_NETWORK_URL };
 

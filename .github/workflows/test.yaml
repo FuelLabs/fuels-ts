@@ -38,8 +38,14 @@ jobs:
       - name: Validate Tests
         run: pnpm test:validate
 
+      - name: Clean env
+        run: pnpm node:clean
+
+      - name: Pretest
+        run: pnpm pretest
+
       - name: Run Tests - ${{ matrix.env.name }}
-        run: pnpm ci:test --${{ matrix.env.name }}
+        run: pnpm test:${{ matrix.env.name }}
 
       - name: Upload Coverage - ${{ matrix.env.name }}
         uses: actions/upload-artifact@v4

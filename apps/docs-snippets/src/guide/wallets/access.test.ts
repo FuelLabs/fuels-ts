@@ -1,17 +1,16 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let provider: Provider | undefined;
+describe('Wallet Access', () => {
+  it('wallets', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-  });
-
-  it('wallets', () => {
     // #region wallets
     // #import { Wallet, WalletLocked, WalletUnlocked };
 
@@ -26,7 +25,10 @@ describe(__filename, () => {
     expect(someWallet.address).toBeTruthy();
   });
 
-  it('wallet-locked-to-unlocked', () => {
+  it('wallet-locked-to-unlocked', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     const myWallet: WalletUnlocked = Wallet.generate({ provider });
     const PRIVATE_KEY = myWallet.privateKey;
 
@@ -44,7 +46,10 @@ describe(__filename, () => {
     expect(unlockedWallet.address).toEqual(myWallet.address);
   });
 
-  it('wallet-unlocked-to-locked', () => {
+  it('wallet-unlocked-to-locked', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     const unlockedWallet: WalletUnlocked = Wallet.generate({ provider });
 
     // #region wallet-unlocked-to-locked

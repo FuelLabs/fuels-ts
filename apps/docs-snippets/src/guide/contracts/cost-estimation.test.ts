@@ -1,26 +1,31 @@
-import { type Contract } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { ReturnContextFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let contract: Contract;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.RETURN_CONTEXT);
-    baseAssetId = contract.provider.getBaseAssetId();
-  });
-
+describe('Cost Estimation', () => {
   it('should successfully get transaction cost estimate for a single contract call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: ReturnContextFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
     // #region cost-estimation-1
     const cost = await contract.functions
       .return_context_amount()
       .callParams({
-        forward: [100, baseAssetId],
+        forward: [100, provider.getBaseAssetId()],
       })
       .getTransactionCost();
 
@@ -33,14 +38,26 @@ describe(__filename, () => {
   });
 
   it('should get transaction cost estimate for multi contract calls just fine', async () => {
-    // #region cost-estimation-2
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: ReturnContextFactory,
+        },
+      ],
+    });
 
+    const {
+      contracts: [contract],
+      provider,
+    } = launched;
+
+    // #region cost-estimation-2
     const scope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
-        forward: [100, baseAssetId],
+        forward: [100, provider.getBaseAssetId()],
       }),
       contract.functions.return_context_amount().callParams({
-        forward: [300, baseAssetId],
+        forward: [300, provider.getBaseAssetId()],
       }),
     ]);
 

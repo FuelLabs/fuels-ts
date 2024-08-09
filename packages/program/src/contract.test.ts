@@ -1,6 +1,6 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Account, Wallet, Provider } from '@fuel-ts/account';
-import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
+import { Account } from '@fuel-ts/account';
+import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 
 import Contract from './contract';
 
@@ -39,30 +39,35 @@ const ABI: JsonAbi = {
 
 /**
  * @group node
+ * @group browser
  */
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
   });
 
   test('Create contract instance with wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = Wallet.generate({
-      provider,
-    });
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     expect(contract.provider).toBe(wallet.provider);
     expect(contract.account).toBe(wallet);
   });
 
   test('Create contract instance with custom wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const generatedWallet = Wallet.generate({
-      provider,
-    });
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [generatedWallet],
+    } = launched;
+
     // Create a custom wallet that extends BaseWalletLocked
     // but without reference to the BaseWalletLocked class
     const BaseWalletLockedCustom = Object.assign(Account);

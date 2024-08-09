@@ -1,5 +1,6 @@
 {
   "ignore": [
+    ".github/**",
     "**/*/fuels.config.*",
     "**/*/.vitepress/*",
     "/apps/docs/*",

@@ -1,19 +1,14 @@
-import type { Contract } from 'fuels';
+import type { BigNumberish } from 'fuels';
 import { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoU64ArrayFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_U64_ARRAY);
-  });
-
+describe('Arrays Types', () => {
   it('should successfully demonstrate typed arrays examples', () => {
     // #region arrays-1
     const numberArray: number[] = [1, 2, 3, 4, 5]; // in Sway: [u8; 5]
@@ -26,9 +21,21 @@ describe(__filename, () => {
   });
 
   it('should successfully execute echo u64 array contract call', async () => {
-    // #region arrays-2
-    const u64Array = [10000000, 20000000];
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoU64ArrayFactory,
+        },
+      ],
+    });
 
+    const {
+      contracts: [contract],
+    } = launched;
+    // #region arrays-2
+    const u64Array: [BigNumberish, BigNumberish] = [10000000, 20000000];
+
+    // This expects two arguments
     const { value } = await contract.functions.echo_u64_array(u64Array).simulate();
 
     expect(new BN(value[0]).toNumber()).toEqual(u64Array[0]);
@@ -39,6 +46,17 @@ describe(__filename, () => {
 
   it('should throw an error for array length mismatch', async () => {
     let error: unknown;
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoU64ArrayFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
     try {
       // #region arrays-3
       // will throw error because the array length is not 2
@@ -53,6 +71,17 @@ describe(__filename, () => {
 
   it('should throw an error for array type mismatch', async () => {
     let error: unknown;
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoU64ArrayFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
     try {
       // #region arrays-4
       // will throw error because the second element is not of type u64

@@ -1,10 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
-import { bn } from '@fuel-ts/math';
 
-import { FUEL_NETWORK_URL } from '../configs';
-import { transactionRequestify, Provider } from '../providers';
-import type { TransactionRequestLike, TransactionResponse } from '../providers';
-import { generateTestWallet } from '../test-utils/generateTestWallet';
+import { Provider } from '../providers';
+import { setupTestProviderAndWallets } from '../test-utils';
 
 import { Wallet } from './wallet';
 import { WalletLocked, WalletUnlocked } from './wallets';
@@ -13,24 +10,25 @@ import { WalletLocked, WalletUnlocked } from './wallets';
  * @group node
  */
 describe('Wallet', () => {
-  let wallet: WalletUnlocked;
-  let provider: Provider;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    wallet = Wallet.generate({ provider });
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   describe('WalletLocked.constructor', () => {
-    it('should instatiate from a constructor', () => {
+    it('should instatiate from a constructor', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
       const lockedWallet = new WalletLocked(wallet.address, provider);
 
       expect(lockedWallet.address).toEqual(wallet.address);
     });
 
-    it('should instatiate from a constructor, without a provider', () => {
+    it('should instatiate from a constructor, without a provider', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        wallets: [wallet],
+      } = launched;
+
       const lockedWallet = new WalletLocked(wallet.address);
 
       expect(lockedWallet.address).toStrictEqual(wallet.address);
@@ -39,14 +37,25 @@ describe('Wallet', () => {
   });
 
   describe('WalletLocked.fromAddress', () => {
-    it('should instantiate from an address', () => {
+    it('should instantiate from an address', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
       const lockedWallet = Wallet.fromAddress(wallet.address, provider);
 
       expect(lockedWallet.address).toStrictEqual(wallet.address);
       expect(lockedWallet).toBeInstanceOf(WalletLocked);
     });
 
-    it('should instantiate from an address, without a provider', () => {
+    it('should instantiate from an address, without a provider', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        wallets: [wallet],
+      } = launched;
+
       const lockedWallet = Wallet.fromAddress(wallet.address);
 
       expect(lockedWallet.address).toStrictEqual(wallet.address);
@@ -55,7 +64,13 @@ describe('Wallet', () => {
   });
 
   describe('WalletLocked.unlock', () => {
-    it('should be able to unlock a locked wallet', () => {
+    it('should be able to unlock a locked wallet', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
       const lockedWallet = Wallet.fromAddress(wallet.address, provider);
       expect(lockedWallet).toBeInstanceOf(WalletLocked);
 
@@ -68,13 +83,24 @@ describe('Wallet', () => {
   });
 
   describe('WalletUnlocked.constructor', () => {
-    it('Should instatiate from a constructor', () => {
+    it('Should instantiate from a constructor', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
       const unlockedWallet = new WalletUnlocked(wallet.privateKey, provider);
 
       expect(unlockedWallet.address).toStrictEqual(wallet.address);
     });
 
-    it('should instatiate from a constructor, without a provider', () => {
+    it('should instantiate from a constructor, without a provider', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        wallets: [wallet],
+      } = launched;
+
       const unlockedWallet = new WalletUnlocked(wallet.privateKey);
 
       expect(unlockedWallet.address).toStrictEqual(wallet.address);
@@ -88,14 +114,25 @@ describe('Wallet', () => {
    * @see {@link WalletUnlocked.fromPrivateKey}
    */
   describe('WalletUnlocked.fromPrivateKey', () => {
-    it('Should instantiate fromPrivateKey', () => {
+    it('Should instantiate fromPrivateKey', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
+
       const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey, provider);
 
       expect(unlockedWallet.address).toStrictEqual(wallet.address);
       expect(unlockedWallet.privateKey).toEqual(wallet.privateKey);
     });
 
-    it('Should instantiate fromPrivateKey, without a provider', () => {
+    it('Should instantiate fromPrivateKey, without a provider', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const {
+        wallets: [wallet],
+      } = launched;
+
       const unlockedWallet = Wallet.fromPrivateKey(wallet.privateKey);
 
       expect(unlockedWallet.address).toStrictEqual(wallet.address);
@@ -108,7 +145,10 @@ describe('Wallet', () => {
    * @see {@link WalletUnlocked.generate}
    */
   describe('WalletUnlocked.generate', () => {
-    it('Should instantiate from generate', () => {
+    it('Should instantiate from generate', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
+
       const unlockedWallet = WalletUnlocked.generate({ provider });
 
       expect(unlockedWallet.address).toBeDefined();
@@ -129,9 +169,12 @@ describe('Wallet', () => {
    */
   describe('WalletUnlocked.fromEncryptedJson', () => {
     it('should encrypt and decrypt a JSON wallet', async () => {
-      wallet = WalletUnlocked.generate({
+      using launched = await setupTestProviderAndWallets();
+      const {
         provider,
-      });
+        wallets: [wallet],
+      } = launched;
+
       const password = 'password';
       const jsonWallet = await wallet.encrypt(password);
 
@@ -143,7 +186,11 @@ describe('Wallet', () => {
     });
 
     it('should encrypt and decrypt a JSON wallet, without a provider', async () => {
-      wallet = WalletUnlocked.generate();
+      using launched = await setupTestProviderAndWallets();
+      const {
+        wallets: [wallet],
+      } = launched;
+
       const password = 'password';
       const jsonWallet = await wallet.encrypt(password);
 
@@ -155,9 +202,11 @@ describe('Wallet', () => {
     });
 
     it('Should fail to decrypt JSON wallet for a given wrong password', async () => {
-      wallet = WalletUnlocked.generate({
+      using launched = await setupTestProviderAndWallets();
+      const {
         provider,
-      });
+        wallets: [wallet],
+      } = launched;
       const password = 'password';
       const jsonWallet = await wallet.encrypt(password);
 
@@ -172,91 +221,28 @@ describe('Wallet', () => {
     });
   });
 
-  it('Provide a custom provider on a public wallet to the contract instance', async () => {
-    const externalWallet = await generateTestWallet(provider, [
-      {
-        amount: bn(1_000_000_000),
-        assetId: baseAssetId,
-      },
-    ]);
-    const externalWalletReceiver = await generateTestWallet(provider);
-
-    // Create a custom provider to emulate a external signer
-    // like Wallet Extension or a Hardware wallet
-
-    // Set custom provider to contract instance
-    class ProviderCustom extends Provider {
-      // eslint-disable-next-line @typescript-eslint/require-await
-      static async connect(url: string) {
-        const newProvider = new ProviderCustom(url, {});
-        return newProvider;
-      }
-
-      async sendTransaction(
-        transactionRequestLike: TransactionRequestLike
-      ): Promise<TransactionResponse> {
-        const transactionRequest = transactionRequestify(transactionRequestLike);
-        // Simulate a external request of signature
-        const signedTransaction = await externalWallet.signTransaction(transactionRequest);
-        transactionRequest.updateWitnessByOwner(externalWallet.address.toB256(), signedTransaction);
-        return super.sendTransaction(transactionRequestLike);
-      }
-    }
-
-    const customProvider = await ProviderCustom.connect(FUEL_NETWORK_URL);
-    const lockedWallet = Wallet.fromAddress(externalWallet.address, customProvider);
-
-    const response = await lockedWallet.transfer(
-      externalWalletReceiver.address,
-      bn(1_000_000),
-      baseAssetId,
-      { gasLimit: 10_000 }
-    );
-    await response.wait();
-
-    const balance = await externalWalletReceiver.getBalance(baseAssetId);
-    expect(balance.eq(1_000_000)).toBeTruthy();
-  });
-
   describe('Wallet.connect', () => {
-    let walletUnlocked: WalletUnlocked;
-    let providerInstance: Provider;
-
-    Provider.prototype.getContractBalance;
-
-    beforeAll(async () => {
-      providerInstance = await Provider.create(FUEL_NETWORK_URL);
-
-      walletUnlocked = WalletUnlocked.generate({
-        provider: providerInstance,
-      });
-    });
-
     it('Wallet provider should be assigned on creation', async () => {
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
 
-      const myWallet = Wallet.generate({ provider: newProviderInstance });
+      const myWallet = Wallet.generate({ provider });
 
-      expect(myWallet.provider).toBe(newProviderInstance);
+      expect(myWallet.provider).toBe(provider);
     });
 
     it('connect should assign a new instance of the provider', async () => {
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+      using launched = await setupTestProviderAndWallets();
+      const {
+        provider,
+        wallets: [wallet],
+      } = launched;
 
-      walletUnlocked.connect(newProviderInstance);
+      const newProviderInstance = await Provider.create(provider.url);
 
-      expect(walletUnlocked.provider).toBe(newProviderInstance);
-    });
+      wallet.connect(newProviderInstance);
 
-    it('connect should replace the current provider instance', async () => {
-      const currentInstance = walletUnlocked.provider;
-
-      const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
-
-      walletUnlocked.connect(newProviderInstance);
-
-      expect(walletUnlocked.provider).toBe(newProviderInstance);
-      expect(walletUnlocked.provider).not.toBe(currentInstance);
+      expect(wallet.provider).toBe(newProviderInstance);
     });
   });
 });

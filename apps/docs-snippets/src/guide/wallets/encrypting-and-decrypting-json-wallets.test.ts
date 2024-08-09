@@ -1,12 +1,15 @@
 import fs from 'fs';
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
  */
-describe(__filename, () => {
+describe('Encrypting and decrypting JSON wallets', () => {
   it('should successfully encrypt wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     // #region encrypting-and-decrypting-json-wallets-1
     // #import { Wallet, fs };
 
@@ -24,7 +27,9 @@ describe(__filename, () => {
   });
 
   it('should successfully decrypt a wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     const jsonWallet = await Wallet.generate({
       provider,
     }).encrypt('my-password');

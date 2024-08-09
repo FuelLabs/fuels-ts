@@ -1,5 +1,6 @@
 import type { PredicateParams } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, Predicate } from 'fuels';
+import { Predicate } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
@@ -15,10 +16,11 @@ describe(__filename, () => {
   );
 
   it('should successfully instantiate a predicate', async () => {
-    // #region predicate-index-2
-    // #import { Predicate, Provider, FUEL_NETWORK_URL };
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    // #region predicate-index-2
+    // #import { Predicate, PredicateParams };
     const predicateParams: PredicateParams = {
       bytecode: binary,
       provider,

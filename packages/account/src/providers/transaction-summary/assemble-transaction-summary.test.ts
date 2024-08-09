@@ -14,8 +14,8 @@ import {
   MOCK_SUBMITTED_STATUS,
   MOCK_SQUEEZEDOUT_STATUS,
 } from '../../../test/fixtures/transaction-summary';
+import { setupTestProviderAndWallets } from '../../test-utils';
 import type { GasCosts } from '../provider';
-import Provider from '../provider';
 import type { TransactionResultReceipt } from '../transaction-response';
 
 import { assembleTransactionSummary } from './assemble-transaction-summary';
@@ -26,9 +26,7 @@ import type { GraphqlTransactionStatus, Operation } from './types';
  * @group node
  */
 describe('TransactionSummary', () => {
-  let provider: Provider;
   let gasCosts: GasCosts;
-  let baseAssetId: string;
 
   const id = '0x2bfbebca58da94ba3ee258698c9be5884e2874688bdffa29cb535cf05d665215';
   const gasPerByte = bn(2);
@@ -45,18 +43,6 @@ describe('TransactionSummary', () => {
     MOCK_RECEIPT_SCRIPT_RESULT,
   ];
 
-  beforeAll(async () => {
-    provider = await Provider.create('http://127.0.0.1:4000/v1/graphql');
-    baseAssetId = provider.getBaseAssetId();
-    ({
-      consensusParameters: { gasCosts },
-    } = provider.getChain());
-  });
-
-  beforeEach(() => {
-    vi.resetAllMocks();
-  });
-
   const mockCalculateTransactionFee = () => {
     const calculateTransactionFee = vi
       .spyOn(calculateTransactionFeeMod, 'calculateTXFeeForSummary')
@@ -67,7 +53,11 @@ describe('TransactionSummary', () => {
     };
   };
 
-  const runTest = (status: GraphqlTransactionStatus, expected: Record<string, unknown>) => {
+  const runTest = (
+    status: GraphqlTransactionStatus,
+    expected: Record<string, unknown>,
+    baseAssetId: string
+  ) => {
     const { calculateTransactionFee } = mockCalculateTransactionFee();
 
     const transactionSummary = assembleTransactionSummary({
@@ -90,7 +80,10 @@ describe('TransactionSummary', () => {
     expect(calculateTransactionFee).toHaveBeenCalledTimes(1);
   };
 
-  it('should assemble transaction summary just fine (SUCCESS)', () => {
+  it('should assemble transaction summary just fine (SUCCESS)', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const expected = {
       id,
       blockId: MOCK_SUCCESS_STATUS.block.id,
@@ -110,10 +103,13 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_SUCCESS_STATUS, expected);
+    runTest(MOCK_SUCCESS_STATUS, expected, provider.getBaseAssetId());
   });
 
-  it('should assemble transaction summary just fine (FAILURE)', () => {
+  it('should assemble transaction summary just fine (FAILURE)', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const expected = {
       id,
       blockId: MOCK_FAILURE_STATUS.block.id,
@@ -133,10 +129,13 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_FAILURE_STATUS, expected);
+    runTest(MOCK_FAILURE_STATUS, expected, provider.getBaseAssetId());
   });
 
-  it('should assemble transaction summary just fine (SUBMITTED)', () => {
+  it('should assemble transaction summary just fine (SUBMITTED)', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const expected = {
       id,
       blockId: undefined,
@@ -156,10 +155,13 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_SUBMITTED_STATUS, expected);
+    runTest(MOCK_SUBMITTED_STATUS, expected, provider.getBaseAssetId());
   });
 
-  it('should assemble transaction summary just fine (SQUEEZEDOUT)', () => {
+  it('should assemble transaction summary just fine (SQUEEZEDOUT)', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const expected = {
       id,
       blockId: undefined,
@@ -179,6 +181,6 @@ describe('TransactionSummary', () => {
       type: expect.any(String),
     };
 
-    runTest(MOCK_SQUEEZEDOUT_STATUS, expected);
+    runTest(MOCK_SQUEEZEDOUT_STATUS, expected, provider.getBaseAssetId());
   });
 });

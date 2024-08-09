@@ -1,44 +1,30 @@
-import type { Contract, WalletUnlocked } from 'fuels';
-import { BN, ContractFactory } from 'fuels';
+import { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { SimpleTokenFactory, TokenDepositorFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let simpleToken: Contract;
-  let tokenDepositor: Contract;
-
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-
-    const tokenArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.SIMPLE_TOKEN);
-    const depositorArtifacts = getDocsSnippetsForcProject(DocSnippetProjectsEnum.TOKEN_DEPOSITOR);
-
-    const { waitForResult } = await new ContractFactory(
-      tokenArtifacts.binHexlified,
-      tokenArtifacts.abiContents,
-      wallet
-    ).deploy();
-
-    ({ contract: simpleToken } = await waitForResult());
-
-    const { waitForResult: waitForResult2 } = await new ContractFactory(
-      depositorArtifacts.binHexlified,
-      depositorArtifacts.abiContents,
-      wallet
-    ).deploy();
-
-    ({ contract: tokenDepositor } = await waitForResult2());
-  });
-
+describe('Inter-Contract Calls', () => {
   it('should successfully make call to another contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: SimpleTokenFactory,
+        },
+        {
+          factory: TokenDepositorFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [simpleToken, tokenDepositor],
+      wallets: [wallet],
+    } = launched;
+
     // #region inter-contract-calls-3
     const amountToDeposit = 70;
     const call1 = await simpleToken.functions.get_balance(wallet.address.toB256()).call();

@@ -1,37 +1,31 @@
-import type { Contract, WalletUnlocked, Provider } from 'fuels';
-import { ContractFactory, Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
+import { Wallet, ZeroBytes32, getMintedAssetId } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { LiquidityPoolFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let sender: WalletUnlocked;
-  let liquidityPoolContract: Contract;
-  let provider: Provider;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    sender = await getTestWallet();
-
-    const { abiContents, binHexlified } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.LIQUIDITY_POOL
-    );
-    provider = sender.provider;
-    baseAssetId = provider.getBaseAssetId();
-    const factory = new ContractFactory(binHexlified, abiContents, sender);
-    const { waitForResult } = await factory.deploy({
-      configurableConstants: { TOKEN: { bits: baseAssetId } },
-    });
-    ({ contract: liquidityPoolContract } = await waitForResult());
-  });
-
+describe('Deposit and Withdraw with Liquidity Pool', () => {
   it('deposit and withdraw cookbook guide', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const liquidityPoolContractFactory = new LiquidityPoolFactory(wallet);
+
+    const { waitForResult } = await liquidityPoolContractFactory.deploy({
+      configurableConstants: {
+        TOKEN: { bits: provider.getBaseAssetId() },
+      },
+    });
+
+    const { contract: liquidityPoolContract } = await waitForResult();
+
     // #region deposit-and-withdraw-cookbook-2
     const depositAmount = 100_000;
     const liquidityOwner = Wallet.generate({ provider });
@@ -44,7 +38,7 @@ describe(__filename, () => {
 
     const call1 = await liquidityPoolContract.functions
       .deposit({ bits: liquidityOwner.address.toB256() })
-      .callParams({ forward: [depositAmount, baseAssetId] })
+      .callParams({ forward: [depositAmount, provider.getBaseAssetId()] })
       .txParams({ variableOutputs: 1 })
       .call();
 
@@ -58,13 +52,13 @@ describe(__filename, () => {
     // #region deposit-and-withdraw-cookbook-3
     const call2 = await liquidityPoolContract.functions
       .withdraw({ bits: liquidityOwner.address.toB256() })
-      .callParams({ forward: [depositAmount, baseAssetId] })
+      .callParams({ forward: [depositAmount, provider.getBaseAssetId()] })
       .txParams({ variableOutputs: 1 })
       .call();
 
     await call2.waitForResult();
 
-    const baseAssetAfterWithdraw = await liquidityOwner.getBalance(baseAssetId);
+    const baseAssetAfterWithdraw = await liquidityOwner.getBalance(provider.getBaseAssetId());
 
     expect(baseAssetAfterWithdraw.toNumber()).toBe(depositAmount / 2);
     // #endregion deposit-and-withdraw-cookbook-3
