@@ -414,7 +414,7 @@ describe('Contract Factory', () => {
     );
   });
 
-  it('deploys a small contract via blobs [configurables]', async () => {
+  it('deploys a contract via blobs [configurables]', async () => {
     using launched = await launchTestNode();
 
     const {
@@ -453,4 +453,32 @@ describe('Contract Factory', () => {
     const u64Result = await u64Call.waitForResult();
     expect(u64Result.value.toNumber()).toBe(4);
   }, 15000);
+
+  it('deploys a contract via blobs [storage]', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
+      wallet
+    );
+
+    const deploy = await factory.deployContractAsBlobs({
+      storageSlots: StorageTestContract.storageSlots,
+    });
+
+    const { contract } = await deploy.waitForResult();
+    const call = await contract.functions.return_var5().call();
+    const { value } = await call.waitForResult();
+    expect(JSON.stringify(value)).toEqual(
+      JSON.stringify({
+        v1: true,
+        v2: bn(50),
+      })
+    );
+  });
 });
