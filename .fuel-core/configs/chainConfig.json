@@ -40,51 +40,47 @@
       },
       "chain_id": 0,
       "gas_costs": {
-        "V1": {
+        "V4": {
           "add": 2,
           "addi": 2,
-          "aloc": 2,
           "and": 2,
           "andi": 2,
-          "bal": 86,
+          "bal": 29,
           "bhei": 2,
           "bhsh": 2,
-          "burn": 25770,
+          "burn": 19976,
           "cb": 2,
-          "cfei": 2,
           "cfsi": 2,
           "div": 2,
           "divi": 2,
-          "eck1": 3114,
-          "ecr1": 42270,
-          "ed19": 2878,
+          "eck1": 1907,
+          "ecr1": 26135,
           "eq": 2,
           "exp": 2,
           "expi": 2,
-          "flag": 1,
+          "flag": 2,
           "gm": 2,
           "gt": 2,
-          "gtf": 12,
+          "gtf": 13,
           "ji": 2,
           "jmp": 2,
           "jne": 2,
           "jnei": 2,
           "jnzi": 2,
-          "jmpf": 1,
-          "jmpb": 1,
-          "jnzf": 1,
-          "jnzb": 1,
-          "jnef": 1,
-          "jneb": 1,
+          "jmpf": 2,
+          "jmpb": 2,
+          "jnzf": 2,
+          "jnzb": 2,
+          "jnef": 2,
+          "jneb": 2,
           "lb": 2,
-          "log": 165,
+          "log": 102,
           "lt": 2,
           "lw": 2,
-          "mint": 29024,
+          "mint": 18042,
           "mlog": 2,
-          "mod_op": 2,
           "modi": 2,
-          "move_op": 2,
+          "mod_op": 2,
           "movi": 2,
           "mroo": 4,
           "mul": 2,
@@ -96,55 +92,68 @@
           "ori": 2,
           "poph": 3,
           "popl": 3,
-          "pshh": 4,
-          "pshl": 4,
-          "ret": 134,
-          "rvrt": 153,
+          "pshh": 5,
+          "pshl": 5,
+          "move_op": 2,
+          "ret": 53,
           "sb": 2,
           "sll": 2,
           "slli": 2,
           "srl": 2,
           "srli": 2,
-          "srw": 209,
+          "srw": 177,
           "sub": 2,
           "subi": 2,
           "sw": 2,
-          "sww": 22501,
-          "time": 50,
-          "tr": 33912,
-          "tro": 24294,
+          "sww": 17302,
+          "time": 35,
+          "tr": 27852,
+          "tro": 19718,
           "wdcm": 2,
-          "wqcm": 3,
+          "wqcm": 2,
           "wdop": 3,
           "wqop": 3,
           "wdml": 3,
-          "wqml": 4,
-          "wddv": 5,
-          "wqdv": 6,
-          "wdmd": 10,
-          "wqmd": 17,
-          "wdam": 9,
-          "wqam": 11,
-          "wdmm": 10,
-          "wqmm": 10,
+          "wqml": 3,
+          "wddv": 4,
+          "wqdv": 5,
+          "wdmd": 8,
+          "wqmd": 12,
+          "wdam": 7,
+          "wqam": 8,
+          "wdmm": 8,
+          "wqmm": 8,
           "xor": 2,
           "xori": 2,
-          "alocDependentCost": {
+          "rvrt": 2,
+          "aloc": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
+            }
+          },
+          "bsiz": {
+            "LightOperation": {
+              "base": 17,
+              "units_per_gas": 790
+            }
+          },
+          "bldd": {
+            "LightOperation": {
+              "base": 15,
+              "units_per_gas": 272
             }
           },
           "cfe": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
             }
           },
-          "cfeiDependentCost": {
+          "cfei": {
             "HeavyOperation": {
               "base": 2,
-              "gasPerUnit": 0
+              "gas_per_unit": 0
             }
           },
           "call": {
@@ -166,6 +175,12 @@
             }
           },
           "csiz": {
+            "LightOperation": {
+              "base": 45,
+              "units_per_gas": 237
+            }
+          },
+          "ed19": {
             "LightOperation": {
               "base": 45,
               "units_per_gas": 237

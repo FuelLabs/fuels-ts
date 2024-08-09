@@ -55,6 +55,8 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
       return TransactionTypeName.Create;
     case TransactionType.Script:
       return TransactionTypeName.Script;
+    case TransactionType.Blob:
+      return TransactionTypeName.Blob;
     default:
       throw new FuelError(
         ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
@@ -93,6 +95,11 @@ export function isTypeUpgrade(transactionType: TransactionType) {
 /** @hidden */
 export function isTypeUpload(transactionType: TransactionType) {
   return isType(transactionType, TransactionTypeName.Upload);
+}
+
+/** @hidden */
+export function isTypeBlob(transactionType: TransactionType) {
+  return isType(transactionType, TransactionTypeName.Blob);
 }
 
 /** @hidden */

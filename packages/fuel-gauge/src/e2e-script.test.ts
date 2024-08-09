@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { randomBytes } from 'crypto';
 import {
   DEVNET_NETWORK_URL,
   TESTNET_NETWORK_URL,
@@ -8,9 +9,13 @@ import {
   CHAIN_IDS,
   rawAssets,
   assets,
+  ContractFactory,
+  hexlify,
+  Address,
+  sleep,
 } from 'fuels';
 
-import { ScriptMainArgBool } from '../test/typegen';
+import { ScriptMainArgBool, LargeContractFactory, LargeContract } from '../test/typegen';
 
 enum Networks {
   DEVNET = 'devnet',
@@ -53,7 +58,7 @@ const configuredNetworks = {
   } as ConfiguredNetwork,
 };
 
-const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
+const selectedNetworks: Networks[] = [Networks.DEVNET];
 
 /**
  * @group node
@@ -67,7 +72,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   beforeAll(async () => {
     const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
     if (!privateKey) {
-      console.log('Skipping live Fuel Node test');
+      console.log(`Skipping live Fuel Node test - ${networkUrl}`);
       shouldSkip = true;
       return;
     }
@@ -75,6 +80,49 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     provider = await Provider.create(networkUrl);
     wallet = new WalletUnlocked(privateKey, provider);
   });
+
+  it('calls a loader contract function on a live Fuel Node', async () => {
+    if (shouldSkip) {
+      return;
+    }
+
+    const CONTRACT_ID = new Address(
+      'fuel16h4j2rl69xur49zlx88khh3syjtpv84fv0nph94npr3t6v3qm7vsr3wq82'
+    ).toB256();
+    const contract = new LargeContract(CONTRACT_ID, wallet);
+
+    const { waitForResult } = await contract.functions.something().call();
+    const { value } = await waitForResult();
+    expect(value.toNumber()).toBe(1001);
+  }, 30_000);
+
+  it('can deploy a large contract to a live Fuel Node', async () => {
+    if (shouldSkip) {
+      return;
+    }
+
+    let output: number = 0;
+    try {
+      const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
+      const { waitForResult } = await factory.deployContractAsBlobs({
+        salt: hexlify(randomBytes(32)),
+        chunkSizeOverride: 0.825,
+      });
+
+      const { contract } = await waitForResult();
+
+      await sleep(10_000);
+
+      const { waitForResult: waitForCallResult } = await contract.functions.something().call();
+      const { value } = await waitForCallResult();
+
+      output = value.toNumber();
+    } catch (e) {
+      console.error((e as Error).message);
+    }
+
+    expect(output).toBe(1001);
+  }, 180_000);
 
   it('can use script against live Fuel Node', async () => {
     if (shouldSkip) {

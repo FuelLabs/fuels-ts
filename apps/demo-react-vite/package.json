@@ -11,7 +11,7 @@
     "pretest": "pnpm original:build"
   },
   "dependencies": {
-    "@fuels/vm-asm": "0.55.0",
+    "@fuels/vm-asm": "0.56.0",
     "fuels": "workspace:*",
     "react-dom": "^18.3.1",
     "react": "^18.3.1"

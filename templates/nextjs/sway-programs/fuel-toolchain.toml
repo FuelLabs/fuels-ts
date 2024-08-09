@@ -3,4 +3,4 @@ channel = "testnet"
 
 [components]
 forc = "0.62.0"
-fuel-core = "0.31.0"
+fuel-core = "0.32.0"

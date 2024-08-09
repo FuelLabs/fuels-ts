@@ -6,7 +6,12 @@ import { FuelError } from '@fuel-ts/errors';
 import type { AddressLike, AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN, BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
-import type { TransactionScript, Policy, TransactionCreate } from '@fuel-ts/transactions';
+import type {
+  TransactionScript,
+  Policy,
+  TransactionCreate,
+  TransactionBlob,
+} from '@fuel-ts/transactions';
 import {
   PolicyType,
   TransactionCoder,
@@ -187,7 +192,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     };
   }
 
-  abstract toTransaction(): TransactionCreate | TransactionScript;
+  abstract toTransaction(): TransactionCreate | TransactionScript | TransactionBlob;
 
   /**
    * Converts the transaction request to a byte array.
@@ -616,6 +621,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
 
     updateAssetInput(baseAssetId, bn(100_000_000_000));
     quantities.forEach((q) => updateAssetInput(q.assetId, q.amount));
+
+    return this;
   }
 
   /**
@@ -684,5 +691,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
         i.predicateGasUsed = correspondingInput.predicateGasUsed;
       }
     });
+  }
+
+  byteLength(): number {
+    return this.toTransactionBytes().byteLength;
   }
 }

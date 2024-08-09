@@ -24,7 +24,7 @@ A `CreateTransactionRequest` is used for create transactions, which are transact
 
 <<< @/../../docs-snippets/src/guide/transactions/transaction-request.test.ts#transaction-request-2{ts:line-numbers}
 
-> **Note**: We recommend you use the `ContractFactory` for contract deployment as this will shape the create transaction request for you. Information on this can be found in the [contract deployment guide](../contracts/deploying-contracts.md#4-deploying-the-contract).
+> **Note**: We recommend you use the `ContractFactory` for contract deployment as this will shape the create transaction request for you. Information on this can be found in the [contract deployment guide](../contracts/deploying-contracts.md#2-contract-deployment).
 
 ## Modifying a Transaction Request
 

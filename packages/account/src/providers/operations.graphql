@@ -398,6 +398,12 @@ fragment GasCostsFragment on GasCosts {
   alocDependentCost {
     ...DependentCostFragment
   }
+  bldd {
+    ...DependentCostFragment
+  }
+  bsiz {
+    ...DependentCostFragment
+  }
   cfe {
     ...DependentCostFragment
   }
@@ -414,6 +420,9 @@ fragment GasCostsFragment on GasCosts {
     ...DependentCostFragment
   }
   csiz {
+    ...DependentCostFragment
+  }
+  ed19DependentCost {
     ...DependentCostFragment
   }
   k256 {

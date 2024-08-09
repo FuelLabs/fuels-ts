@@ -140,6 +140,7 @@ describe('TransactionResponse', () => {
     expect(transactionSummary.mintedAssets).toBeDefined();
     expect(transactionSummary.burnedAssets).toBeDefined();
     expect(transactionSummary.isTypeMint).toBeDefined();
+    expect(transactionSummary.isTypeBlob).toBeDefined();
     expect(transactionSummary.isTypeCreate).toBeDefined();
     expect(transactionSummary.isTypeScript).toBeDefined();
     expect(transactionSummary.isStatusFailure).toBeDefined();

@@ -220,10 +220,12 @@ describe('Funding Transactions', () => {
 
     const {
       provider,
-      wallets: [sender, receiver],
+      wallets: [funded],
     } = launched;
 
     const splitIn = 20;
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
 
     /**
      * Splitting funds in 24 UTXOs to result in the transaction become more expensive
@@ -234,7 +236,7 @@ describe('Funding Transactions', () => {
       totalAmount: 2400,
       splitIn,
       baseAssetId: provider.getBaseAssetId(),
-      mainWallet: sender,
+      mainWallet: funded,
     });
 
     const request = new ScriptTransactionRequest();

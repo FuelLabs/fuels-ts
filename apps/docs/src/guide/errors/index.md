@@ -24,6 +24,12 @@ When an [`Account`](../../api/Account/Account.md) is required for an operation. 
 
 It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
 
+### `BLOB_ID_ALREADY_UPLOADED`
+
+When the blob ID that is being submitted has already been uploaded.
+
+If the blob ID has already been uploaded, then it is available for use and does not need to be reuploaded.
+
 ### `CONFIG_FILE_NOT_FOUND`
 
 When a configuration file is not found. This could either be a `fuels.config.[ts,js,mjs,cjs]` file or a TOML file.
@@ -66,6 +72,12 @@ When the function with the given name, signature or selector is not found in the
 
 Check that the function name, signature or selector is correct and exits on the ABI.
 
+### `FUNDS_TOO_LOW`
+
+When the funds in the account are lower than the required amount.
+
+Ensure that the account has enough funds to cover the transaction.
+
 ### `GAS_LIMIT_TOO_LOW`
 
 When the gas limit is lower than the minimum gas limit.
@@ -89,6 +101,12 @@ The error message will determine which element of the configuration is incorrect
 Checksum validation failed for the provided mnemonic.
 
 Ensure that the mnemonic is correct.
+
+### `INVALID_CHUNK_SIZE_TOLERANCE`
+
+When the chunk size tolerance not between 0 and 1.
+
+Ensure that the chunk size tolerance is a number that it is between 0 and 1.
 
 ### `INVALID_CONFIGURABLE_CONSTANTS`
 
