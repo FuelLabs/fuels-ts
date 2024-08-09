@@ -414,7 +414,7 @@ describe('Contract Factory', () => {
     );
   });
 
-  it('deploys a small contract via blobs', async () => {
+  it('deploys a small contract via blobs [configurables]', async () => {
     using launched = await launchTestNode();
 
     const {
