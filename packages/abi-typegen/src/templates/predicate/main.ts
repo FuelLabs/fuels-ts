@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { compressBytecode } from '@fuel-ts/utils';
 import type { BinaryVersions } from '@fuel-ts/versions';
 
 import type { Abi } from '../../abi/Abi';
@@ -33,7 +34,7 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: ['Predicate', 'Provider', 'InputValue', 'PredicateParams'],
+    baseMembers: ['Predicate', 'Provider', 'InputValue', 'PredicateParams', 'decompressBytecode'],
   });
 
   const { prefixedInputs: inputs, output } = func.attributes;
@@ -47,7 +48,7 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
       structs,
       enums,
       abiJsonString,
-      hexlifiedBinString,
+      compressedBytecode: compressBytecode(hexlifiedBinString),
       capitalizedName,
       imports,
       configurables,

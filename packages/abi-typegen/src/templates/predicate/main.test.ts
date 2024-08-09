@@ -1,4 +1,5 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
+import * as utilsMod from '@fuel-ts/utils';
 import { join } from 'path';
 
 import {
@@ -18,7 +19,13 @@ import { renderMainTemplate } from './main';
  * @group node
  */
 describe('main.ts', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('should render main template', () => {
+    vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
+
     const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE);
@@ -46,6 +53,8 @@ describe('main.ts', () => {
   });
 
   test('should render main template with configurable', () => {
+    vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
+
     const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);

@@ -1,3 +1,4 @@
+import { compressBytecode } from '@fuel-ts/utils';
 import type { BinaryVersions } from '@fuel-ts/versions';
 
 import type { Abi } from '../../abi/Abi';
@@ -26,7 +27,7 @@ export function renderFactoryTemplate(params: { abi: Abi; versions: BinaryVersio
       capitalizedName,
       abiJsonString,
       storageSlotsJsonString,
-      hexlifiedBinString,
+      compressedBytecode: compressBytecode(hexlifiedBinString),
     },
   });
 
