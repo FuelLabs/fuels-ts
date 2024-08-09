@@ -3,4 +3,4 @@
 "@fuel-ts/crypto": patch
 ---
 
-feat: add randomUUID into @fuel-ts/crypto
+feat: add randomUUID into `fuel-ts/crypto`
