@@ -89,7 +89,7 @@ export class TransactionResponse {
   gasUsed: BN = bn(0);
   /** The graphql Transaction with receipts object. */
   gqlTransaction?: GqlTransaction;
-
+  /** The ABIs used for decoding logs */
   abis?: JsonAbisFromAllCalls;
 
   /**
@@ -97,6 +97,7 @@ export class TransactionResponse {
    *
    * @param id - The transaction ID.
    * @param provider - The provider.
+   * @param abis - The ABIs used for decoding logs.
    */
   constructor(id: string, provider: Provider, abis?: JsonAbisFromAllCalls) {
     this.id = id;
