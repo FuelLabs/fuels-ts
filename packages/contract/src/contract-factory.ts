@@ -26,8 +26,8 @@ import { arrayify, isDefined } from '@fuel-ts/utils';
 import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
-/** Amount of tolerance for chunk sizes in blob transactions */
-export const CHUNK_SIZE_TOLERANCE = 0.05;
+/** Amount of percentage override for chunk sizes in blob transactions */
+export const CHUNK_SIZE_OVERRIDE = 0.05;
 
 /**
  * Options for deploying a contract.
@@ -37,7 +37,7 @@ export type DeployContractOptions = {
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
   configurableConstants?: { [name: string]: unknown };
-  chunkSizeTolerance?: number;
+  chunkSizeOverride?: number;
 } & CreateTransactionRequestLike;
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
@@ -246,17 +246,17 @@ export default class ContractFactory {
    */
   async deployContractAsBlobs<TContract extends Contract = Contract>(
     deployOptions: DeployContractOptions = {
-      chunkSizeTolerance: CHUNK_SIZE_TOLERANCE,
+      chunkSizeOverride: CHUNK_SIZE_OVERRIDE,
     }
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
-    const { configurableConstants, chunkSizeTolerance } = deployOptions;
+    const { configurableConstants, chunkSizeOverride } = deployOptions;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
     // Generate the chunks based on the maximum chunk size
-    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeTolerance);
+    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeOverride);
     const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
         ...deployOptions,
@@ -437,9 +437,9 @@ export default class ContractFactory {
    */
   private getMaxChunkSize(
     deployOptions: DeployContractOptions,
-    chunkSizeTolerance: number = CHUNK_SIZE_TOLERANCE
+    chunkSizeOverride: number = CHUNK_SIZE_OVERRIDE
   ) {
-    if (chunkSizeTolerance < 0 || chunkSizeTolerance > 1) {
+    if (chunkSizeOverride < 0 || chunkSizeOverride > 1) {
       throw new FuelError(
         ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
         'Chunk size tolerance must be between 0 and 1'
@@ -459,7 +459,7 @@ export default class ContractFactory {
       bytecode: randomBytes(32),
     }).fundWithFakeUtxos([], provider.getBaseAssetId());
     // Allow tolerance for fluctuating transaction size
-    const toleranceMultiplier = 1 - chunkSizeTolerance;
+    const toleranceMultiplier = 1 - chunkSizeOverride;
     // Given above, calculate the maximum chunk size
     const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * toleranceMultiplier;
 

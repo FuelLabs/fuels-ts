@@ -326,10 +326,10 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-    const chunkSizeTolerance = 2;
+    const chunkSizeOverride = 2;
 
     await expectToThrowFuelError(
-      () => factory.deployContractAsBlobs<LargeContract>({ chunkSizeTolerance }),
+      () => factory.deployContractAsBlobs<LargeContract>({ chunkSizeOverride }),
       new FuelError(
         ErrorCode.INVALID_CHUNK_SIZE_TOLERANCE,
         'Chunk size tolerance must be between 0 and 1'

@@ -106,7 +106,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
       const { waitForResult } = await factory.deployContractAsBlobs({
         salt: hexlify(randomBytes(32)),
-        chunkSizeTolerance: 0.825,
+        chunkSizeOverride: 0.825,
       });
 
       const { contract } = await waitForResult();

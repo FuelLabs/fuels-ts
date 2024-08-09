@@ -57,4 +57,4 @@ In the above guide we use the recommended `deploy` method. If you are working wi
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#blobs{ts:line-numbers}
 
-In the above example, we also pass a `chunkSizeTolerance` option to the deployment method. The SDK will attempt to chunk the contract to the most optimal about, however due to fee fluctuations the transaction size can change, and you can also be limited by request size limits against the node. By default we set a tolerance of 5%, however you can adjust this to suit your needs and ensure the transaction passes. It must be set to a value between 0 and 1.
+In the above example, we also pass a `chunkSizeOverride` option to the deployment method. The SDK will attempt to chunk the contract to the most optimal about, however the transaction size can fluctuate and you can also be limited by request size limits against the node. By default we set an of 5%, however you can adjust this to suit your needs and ensure the transaction passes. It must be set to a value between 0 and 1.
