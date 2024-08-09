@@ -63,6 +63,16 @@ fragment transactionStatusFragment on TransactionStatus {
 
 fragment transactionStatusSubscriptionFragment on TransactionStatus {
   type: __typename
+  ... on SuccessStatus {
+    transaction {
+      ...transactionFragment
+    }
+  }
+  ... on FailureStatus {
+    transaction {
+      ...transactionFragment
+    }
+  }
   ... on SqueezedOutStatus {
     reason
   }
