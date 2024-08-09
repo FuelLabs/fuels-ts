@@ -242,6 +242,7 @@ export class TransactionResponse {
 
     for await (const { statusChange } of subscription) {
       if (statusChange.type === 'SqueezedOutStatus') {
+        this.unsetResourceCache();
         throw new FuelError(
           ErrorCode.TRANSACTION_SQUEEZED_OUT,
           `Transaction Squeezed Out with reason: ${statusChange.reason}`
@@ -293,6 +294,7 @@ export class TransactionResponse {
     const { gqlTransaction, receipts } = transactionResult;
 
     if (gqlTransaction.status?.type === 'FailureStatus') {
+      this.unsetResourceCache();
       const { reason } = gqlTransaction.status;
       throw extractTxError({
         receipts,
@@ -325,5 +327,9 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     return this.waitForResult<TTransactionType>(contractsAbiMap);
+  }
+
+  private unsetResourceCache() {
+    this.provider.cache?.unset(this.id);
   }
 }
