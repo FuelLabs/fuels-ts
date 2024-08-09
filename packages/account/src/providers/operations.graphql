@@ -416,6 +416,9 @@ fragment GasCostsFragment on GasCosts {
   csiz {
     ...DependentCostFragment
   }
+  ed19DependentCost {
+    ...DependentCostFragment
+  }
   k256 {
     ...DependentCostFragment
   }
