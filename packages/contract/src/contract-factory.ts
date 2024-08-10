@@ -310,7 +310,6 @@ export default class ContractFactory {
           const blobTx = await account.sendTransaction(fundedBlobRequest);
           result = await blobTx.waitForResult();
         } catch (err: unknown) {
-          console.log('err: ', err);
           // Core will throw for blobs that have already been uploaded, but the blobId
           // is still valid so we can use this for the loader contract
           if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
@@ -322,7 +321,6 @@ export default class ContractFactory {
         }
 
         if (!result.status || result.status !== TransactionStatus.success) {
-          console.log('result: ', result);
           throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
         }
 
