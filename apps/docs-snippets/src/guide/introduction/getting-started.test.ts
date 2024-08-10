@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-shadow */
 import { TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -8,24 +6,11 @@ import { launchTestNode } from 'fuels/test-utils';
  * @group browser
  */
 describe('Getting started', () => {
-  let destroy: () => void;
-  let url: string;
-
-  beforeEach(async () => {
-    const { cleanup, provider } = await launchTestNode({
-      nodeOptions: {
-        port: '4000',
-      },
-    });
-    destroy = cleanup;
-    url = provider.url;
-  });
-
-  afterEach(() => {
-    destroy();
-  });
-
   it('can connect to a local network', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    using launched = await launchTestNode({
+      nodeOptions: { port: '4000' },
+    });
     // #region connecting-to-the-local-node
     // #import { Provider, Wallet };
 
@@ -45,7 +30,6 @@ describe('Getting started', () => {
   });
 
   it('can connect to testnet', async () => {
-    const TESTNET_NETWORK_URL = url;
     // #region connecting-to-the-testnet
     // #import { Provider, Wallet, TESTNET_NETWORK_URL };
 
