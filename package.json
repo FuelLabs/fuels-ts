@@ -120,7 +120,8 @@
   },
   "pnpm": {
     "overrides": {
-      "cross-fetch": "4.0.0"
+      "cross-fetch": "4.0.0",
+      "whatwg-url": "^14.0.0"
     }
   }
 }
