@@ -353,6 +353,7 @@ type FailureStatus {
   transactionId: TransactionId!
   blockHeight: U32!
   block: Block!
+  transaction: Transaction!
   time: Tai64Timestamp!
   reason: String!
   programState: ProgramState
@@ -980,11 +981,6 @@ type Query {
   estimatePredicates(tx: HexString!): Transaction!
 
   """
-  Returns all possible receipts for test purposes.
-  """
-  allReceipts: [Receipt!]!
-
-  """
   Returns true when the GraphQL API is serving requests.
   """
   health: Boolean!
@@ -1252,6 +1248,7 @@ type SuccessStatus {
   transactionId: TransactionId!
   blockHeight: U32!
   block: Block!
+  transaction: Transaction!
   time: Tai64Timestamp!
   programState: ProgramState
   receipts: [Receipt!]!
