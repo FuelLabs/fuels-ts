@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { randomBytes } from 'crypto';
 import {
   DEVNET_NETWORK_URL,
   TESTNET_NETWORK_URL,
@@ -13,6 +12,7 @@ import {
   hexlify,
   sleep,
 } from 'fuels';
+import { randomBytes } from 'fuels';
 
 import { ScriptMainArgBool, LargeContractFactory, LargeContract } from '../test/typegen';
 
@@ -57,7 +57,7 @@ const configuredNetworks = {
   } as ConfiguredNetwork,
 };
 
-const selectedNetworks: Networks[] = [Networks.DEVNET];
+const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
 
 /**
  * @group node
