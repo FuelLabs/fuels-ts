@@ -11,8 +11,8 @@ import {
   ContractFactory,
   hexlify,
   sleep,
+  randomBytes,
 } from 'fuels';
-import { randomBytes } from 'fuels';
 
 import { ScriptMainArgBool, LargeContractFactory, LargeContract } from '../test/typegen';
 
