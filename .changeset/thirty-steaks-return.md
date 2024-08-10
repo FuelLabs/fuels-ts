@@ -8,4 +8,4 @@
 "@fuel-ts/utils": minor
 ---
 
-feat!: `fuel-core@0.32.0` and large contract deployments
+feat!: `fuel-core@0.32.1` and large contract deployments
