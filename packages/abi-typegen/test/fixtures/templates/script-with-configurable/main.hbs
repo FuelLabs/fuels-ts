@@ -13,6 +13,7 @@
 import {
   Account,
   BigNumberish,
+  decompressBytecode,
   Script,
 } from 'fuels';
 
@@ -85,7 +86,7 @@ const abi = {
   ]
 };
 
-const bytecode = '0x000';
+const bytecode = decompressBytecode('0x-bytecode-here');
 
 export class MyScript extends Script<MyScriptInputs, MyScriptOutput> {
 

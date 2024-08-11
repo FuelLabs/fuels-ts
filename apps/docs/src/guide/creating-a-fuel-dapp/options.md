@@ -23,6 +23,10 @@ bunx --bun create-fuels@{{fuels}} --bun [project-name] [options]
 
 :::
 
+## `--template <template-name>`
+
+Specifies the template to use for your project. The available templates are: `nextjs`.
+
 ## `--pnpm`
 
 Notifies the tool to use pnpm as the package manager to install the necessary dependencies.

@@ -3,12 +3,11 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -26,14 +25,18 @@ import {
 import { Wallet } from '../wallet';
 
 import type { Coin } from './coin';
+import { coinQuantityfy } from './coin-quantity';
+import type { Message } from './message';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
-  DEFAULT_UTXOS_CACHE_TTL,
+  DEFAULT_RESOURCE_CACHE_TTL,
   RESOURCES_PAGE_SIZE_LIMIT,
 } from './provider';
+import type { ExcludeResourcesOption } from './resource';
+import { isCoin } from './resource';
 import type { CoinTransactionRequestInput } from './transaction-request';
-import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
+import { CreateTransactionRequest, ScriptTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
@@ -375,11 +378,11 @@ describe('Provider', () => {
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
-  it('can cacheUtxo', async () => {
+  it('can set cache ttl', async () => {
     const ttl = 10000;
     using launched = await setupTestProviderAndWallets({
       providerOptions: {
-        cacheUtxo: ttl,
+        resourceCacheTTL: ttl,
       },
     });
     const { provider } = launched;
@@ -387,16 +390,16 @@ describe('Provider', () => {
     expect(provider.cache?.ttl).toEqual(ttl);
   });
 
-  it('should use utxos cache by default', async () => {
+  it('should use resource cache by default', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(provider.cache?.ttl).toEqual(DEFAULT_UTXOS_CACHE_TTL);
+    expect(provider.cache?.ttl).toEqual(DEFAULT_RESOURCE_CACHE_TTL);
   });
 
-  it('should validate cacheUtxo value [invalid numerical]', async () => {
+  it('should validate resource cache value [invalid numerical]', async () => {
     const { error } = await safeExec(async () => {
-      await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
+      await setupTestProviderAndWallets({ providerOptions: { resourceCacheTTL: -500 } });
     });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
@@ -404,7 +407,7 @@ describe('Provider', () => {
   it('should be possible to disable the cache by using -1', async () => {
     using launched = await setupTestProviderAndWallets({
       providerOptions: {
-        cacheUtxo: -1,
+        resourceCacheTTL: -1,
       },
     });
     const { provider } = launched;
@@ -412,14 +415,20 @@ describe('Provider', () => {
     expect(provider.cache).toBeUndefined();
   });
 
-  it('should cache UTXOs only when TX is successfully submitted', async () => {
+  it('should cache resources only when TX is successfully submitted', async () => {
+    const resourceAmount = 50_000;
+    const utxosAmount = 2;
+
+    const testMessage = new TestMessage({ amount: resourceAmount });
+
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
       walletsConfig: {
-        coinsPerAsset: 3,
-        amountPerCoin: 50_000,
+        coinsPerAsset: utxosAmount,
+        amountPerCoin: resourceAmount,
+        messages: [testMessage],
       },
     });
     const {
@@ -429,21 +438,24 @@ describe('Provider', () => {
 
     const baseAssetId = provider.getBaseAssetId();
     const { coins } = await wallet.getCoins(baseAssetId);
-    const EXPECTED: BytesLike[] = coins.map((coin) => coin.id);
+
+    expect(coins.length).toBe(utxosAmount);
+
+    const EXPECTED = {
+      utxos: coins.map((coin) => coin.id),
+      messages: [testMessage.nonce],
+    };
 
     await wallet.transfer(receiver.address, 10_000);
 
-    const cachedCoins = provider.cache?.getActiveData() || [];
-    expect(new Set(cachedCoins)).toEqual(new Set(EXPECTED));
-
-    // clear cache
-    const activeData = provider.cache?.getActiveData() || [];
-    activeData.forEach((coin) => {
-      provider.cache?.del(coin);
-    });
+    const cachedResources = provider.cache?.getActiveData();
+    expect(new Set(cachedResources?.utxos)).toEqual(new Set(EXPECTED.utxos));
+    expect(new Set(cachedResources?.messages)).toEqual(new Set(EXPECTED.messages));
   });
 
-  it('should NOT cache UTXOs when TX submission fails', async () => {
+  it('should NOT cache resources when TX submission fails', async () => {
+    const message = new TestMessage({ amount: 100_000 });
+
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
@@ -451,6 +463,7 @@ describe('Provider', () => {
       walletsConfig: {
         coinsPerAsset: 2,
         amountPerCoin: 20_000,
+        messages: [message],
       },
     });
     const {
@@ -461,6 +474,10 @@ describe('Provider', () => {
     const baseAssetId = provider.getBaseAssetId();
     const maxFee = 100_000;
     const transferAmount = 10_000;
+
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const utxos = coins.map((c) => c.id);
+    const messages = [message.nonce];
 
     // No enough funds to pay for the TX fee
     const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
@@ -477,21 +494,80 @@ describe('Provider', () => {
       { code: ErrorCode.INVALID_REQUEST }
     );
 
-    // No UTXOs were cached since the TX submission failed
-    const cachedCoins = provider.cache?.getActiveData() || [];
-    expect(cachedCoins).lengthOf(0);
+    // No resources were cached since the TX submission failed
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(key)).toBeFalsy();
+    });
   });
 
-  it('should ensure cached UTXOs are not being queried', async () => {
-    // Fund the wallet with 2 UTXOs
-    const totalUtxos = 2;
+  it('should unset cached resources when TX execution fails', async () => {
+    const message = new TestMessage({ amount: 100_000 });
+
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
       walletsConfig: {
-        coinsPerAsset: totalUtxos,
+        coinsPerAsset: 1,
+        amountPerCoin: 100_000,
+        messages: [message],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+    const maxFee = 100_000;
+    const transferAmount = 10_000;
+
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const utxos = coins.map((c) => c.id);
+    const messages = [message.nonce];
+
+    // Should fetch resources enough to pay for the TX fee and transfer amount
+    const resources = await wallet.getResourcesToSpend([[maxFee + transferAmount, baseAssetId]]);
+
+    const request = new ScriptTransactionRequest({
+      maxFee,
+      // No enough gas to execute the TX
+      gasLimit: 0,
+    });
+
+    request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
+    request.addResources(resources);
+
+    // TX submission will succeed
+    const submitted = await wallet.sendTransaction(request, { estimateTxDependencies: false });
+
+    // Resources were cached since the TX submission succeeded
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(key)).toBeTruthy();
+    });
+
+    // TX execution will fail
+    await expectToThrowFuelError(() => submitted.waitForResult(), {
+      code: ErrorCode.SCRIPT_REVERTED,
+    });
+
+    // Ensure user's resouces were unset from the cache
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(key)).toBeFalsy();
+    });
+  });
+
+  it('should ensure cached resources are not being queried', async () => {
+    // Fund the wallet with 2 resources
+    const testMessage = new TestMessage({ amount: 100_000_000_000 });
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
         amountPerCoin: 100_000_000_000,
+        messages: [testMessage],
       },
     });
 
@@ -502,29 +578,44 @@ describe('Provider', () => {
     const baseAssetId = provider.getBaseAssetId();
     const transferAmount = 10_000;
 
-    const { coins } = await wallet.getCoins(baseAssetId);
-    expect(coins.length).toBe(totalUtxos);
+    const {
+      coins: [coin],
+    } = await wallet.getCoins(baseAssetId);
 
-    // One of the UTXOs will be cached as the TX submission was successful
+    const {
+      messages: [message],
+    } = await wallet.getMessages();
+
+    // One of the resources will be cached as the TX submission was successful
     await wallet.transfer(receiver.address, transferAmount);
 
-    const cachedUtxos = provider.cache?.getActiveData() || [];
+    // Determine the used and unused resource
+    const cachedResource = provider.cache?.isCached(coin.id) ? coin : message;
+    const uncachedResource = provider.cache?.isCached(coin.id) ? message : coin;
 
-    // Ensure the cached UTXO is the only one in the cache
-    expect(cachedUtxos.length).toBe(1);
+    expect(cachedResource).toBeDefined();
+    expect(uncachedResource).toBeDefined();
 
-    // Determine the used UTXO and the unused UTXO
-    const usedUtxo = cachedUtxos[0];
-    const unusedUtxos = coins.filter((coin) => coin.id !== usedUtxo);
-
-    // Spy on the getCoinsToSpend method to ensure the cached UTXO is not being queried
+    // Spy on the getCoinsToSpend method to ensure the cached resource is not being queried
     const resourcesToSpendSpy = vi.spyOn(provider.operations, 'getCoinsToSpend');
-    const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
+    const fetchedResources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
 
-    // Ensure the returned UTXO is the unused UTXO
-    expect((<Coin>resources[0]).id).toEqual(unusedUtxos[0].id);
+    // Only one resource is available as the other one was cached
+    expect(fetchedResources.length).toBe(1);
 
-    // Ensure the getCoinsToSpend query was called excluding the cached UTXO
+    // Ensure the returned resource is the non-cached one
+    const excludedIds: Required<ExcludeResourcesOption> = { messages: [], utxos: [] };
+    if (isCoin(fetchedResources[0])) {
+      excludedIds.messages = expect.arrayContaining([(<Message>cachedResource).nonce]);
+      excludedIds.utxos = expect.arrayContaining([]);
+      expect(fetchedResources[0].id).toEqual((<Coin>uncachedResource).id);
+    } else {
+      excludedIds.utxos = expect.arrayContaining([(<Coin>cachedResource).id]);
+      excludedIds.messages = expect.arrayContaining([]);
+      expect(fetchedResources[0].nonce).toEqual((<Message>uncachedResource).nonce);
+    }
+
+    // Ensure the getCoinsToSpend query was called excluding the cached resource
     expect(resourcesToSpendSpy).toHaveBeenCalledWith({
       owner: wallet.address.toB256(),
       queryPerAsset: [
@@ -534,11 +625,107 @@ describe('Provider', () => {
           max: undefined,
         },
       ],
-      excludedIds: {
-        messages: [],
-        utxos: [usedUtxo],
+      excludedIds,
+    });
+  });
+
+  it('should throws if max of inputs was exceeded', async () => {
+    const maxInputs = 2;
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: {
+            consensus_parameters: {
+              V1: {
+                tx_params: {
+                  V1: {
+                    max_inputs: maxInputs,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      walletsConfig: {
+        amountPerCoin: 500_000,
       },
     });
+
+    const {
+      wallets: [sender, receiver],
+      provider,
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+
+    const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
+    const resources = await sender.getResourcesToSpend(quantities);
+
+    request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
+
+    const txCost = await sender.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    request.addResources(resources);
+
+    await sender.fund(request, txCost);
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        ErrorCode.MAX_INPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of inputs.'
+      )
+    );
+  });
+
+  it('should throws if max of ouputs was exceeded', async () => {
+    const maxOutputs = 2;
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: {
+            consensus_parameters: {
+              V1: {
+                tx_params: {
+                  V1: {
+                    max_outputs: maxOutputs,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      walletsConfig: {
+        count: 3,
+      },
+    });
+
+    const {
+      wallets: [sender, receiver1, receiver2],
+      provider,
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+
+    const request = new ScriptTransactionRequest();
+    const resources = await sender.getResourcesToSpend([[1000, baseAssetId]]);
+    request.addCoinOutput(receiver1.address, 1, baseAssetId);
+    request.addCoinOutput(receiver2.address, 1, baseAssetId);
+
+    request.addResources(resources);
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        ErrorCode.MAX_OUTPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of outputs.'
+      )
+    );
   });
 
   it('can getBlocks', async () => {

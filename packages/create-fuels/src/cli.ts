@@ -10,9 +10,11 @@ import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
+import { doesTemplateExist } from './lib/doesTemplateExist';
 import { getPackageManager } from './lib/getPackageManager';
 import { getPackageVersion } from './lib/getPackageVersion';
-import type { ProgramOptions } from './lib/setupProgram';
+import { defaultTemplate, templates } from './lib/setupProgram';
+import type { Template, ProgramOptions } from './lib/setupProgram';
 import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
 
@@ -39,18 +41,28 @@ function writeEnvFile(envFilePath: string) {
 
 export const runScaffoldCli = async ({
   program,
-  templateName = 'nextjs',
   args = process.argv,
 }: {
   program: Command;
   args: string[];
-  templateName: string;
 }) => {
   program.parse(args);
+  const opts = program.opts<ProgramOptions>();
+
+  const templateOfChoice = (opts.template ?? defaultTemplate) as Template;
+
+  if (!doesTemplateExist(templateOfChoice)) {
+    error(`Template '${templateOfChoice}' does not exist.`);
+    log();
+    log('Available templates:');
+    for (const template of templates) {
+      log(`  - ${template}`);
+    }
+    process.exit(1);
+  }
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
 
-  const opts = program.opts<ProgramOptions>();
   const verboseEnabled = opts.verbose ?? false;
   const packageManager = getPackageManager(opts);
 
@@ -93,7 +105,7 @@ export const runScaffoldCli = async ({
 
   await mkdir(projectPath);
 
-  const templateDir = join(__dirname, '..', 'templates', templateName);
+  const templateDir = join(__dirname, '..', 'templates', templateOfChoice);
   await cp(templateDir, projectPath, {
     recursive: true,
     filter: (filename) => !filename.includes('CHANGELOG.md'),

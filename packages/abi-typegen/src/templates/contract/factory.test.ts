@@ -1,3 +1,4 @@
+import * as utilsMod from '@fuel-ts/utils';
 import { join } from 'path';
 
 import {
@@ -23,6 +24,8 @@ describe('templates/factory', () => {
     // executing
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL);
     const rawContents = project.abiContents;
+
+    vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
 
     // executing
     const abi = new Abi({

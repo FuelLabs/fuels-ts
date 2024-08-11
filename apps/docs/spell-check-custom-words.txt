@@ -2,6 +2,7 @@ ABI
 ABIs
 ABI's
 ASM
+AssetId
 IDE
 IDEs
 LSP

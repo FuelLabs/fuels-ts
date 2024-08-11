@@ -13,6 +13,7 @@
 import {
   BigNumberish,
   BN,
+  decompressBytecode,
   InputValue,
   Predicate,
   PredicateParams,
@@ -273,7 +274,7 @@ const abi = {
   "configurables": []
 };
 
-const bytecode = '0x000';
+const bytecode = decompressBytecode('0x-bytecode-here');
 
 export class MyPredicate extends Predicate<
   MyPredicateInputs,
