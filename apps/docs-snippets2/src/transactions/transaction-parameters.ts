@@ -3,18 +3,13 @@ import type { TxParams } from 'fuels';
 import { bn, LOCAL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
 import { WALLET_PVT_KEY } from '../env';
-import { CounterAbi__factory } from '../typegend';
-import counterBytecode from '../typegend/contracts/CounterAbi.hex';
-import { ScriptSumAbi__factory } from '../typegend/scripts';
-
-const { storageSlots } = CounterAbi__factory;
+import { CounterFactory } from '../typegend';
+import { ScriptSum } from '../typegend/scripts';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-const deploy = await CounterAbi__factory.deployContract(counterBytecode, wallet, {
-  storageSlots,
-});
+const deploy = await CounterFactory.deploy(wallet);
 
 const { contract } = await deploy.waitForResult();
 
@@ -40,7 +35,7 @@ const txParams: TxParams = {
 
 // #region transaction-parameters-7
 const transactionRequest = new ScriptTransactionRequest({
-  script: ScriptSumAbi__factory.bin,
+  script: ScriptSum.bytecode,
   gasLimit: 100,
 });
 // #endregion transaction-parameters-7
