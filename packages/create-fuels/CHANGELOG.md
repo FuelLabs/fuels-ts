@@ -1,5 +1,16 @@
 # create-fuels
 
+## 0.93.0
+
+### Patch Changes
+
+- 40a3510: chore: handle `create fuels` template scenarios for insufficient funds
+- 950abf9: build(deps): bump the deps group with 2 updates
+- 4bc0387: fix: add back `create fuels` template metadata
+- 8b7d148: build(deps): bump the deps group with 2 updates
+- 740f1ae: feat: add testing to `create-fuels`
+- f3e89d2: docs: add more comments around the `create-fuels` template app
+
 ## 0.92.1
 
 ### Patch Changes

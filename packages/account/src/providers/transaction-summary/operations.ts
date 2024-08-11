@@ -57,8 +57,8 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
       return TransactionTypeName.Script;
     default:
       throw new FuelError(
-        ErrorCode.INVALID_TRANSACTION_TYPE,
-        `Invalid transaction type: ${transactionType}.`
+        ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
+        `Unsupported transaction type: ${transactionType}.`
       );
   }
 }
@@ -198,7 +198,7 @@ export function getWithdrawFromFuelOperations({
 
   const withdrawFromFuelOperations = messageOutReceipts.reduce(
     (prevWithdrawFromFuelOps, receipt) => {
-      const input = getInputFromAssetId(inputs, baseAssetId);
+      const input = getInputFromAssetId(inputs, baseAssetId, true);
       if (input) {
         const inputAddress = getInputAccountAddress(input);
         const newWithdrawFromFuelOps = addOperation(prevWithdrawFromFuelOps, {
@@ -239,9 +239,10 @@ export function getContractCallOperations({
   abiMap,
   rawPayload,
   maxInputs,
+  baseAssetId,
 }: InputOutputParam &
   ReceiptParam &
-  Pick<GetOperationParams, 'abiMap' | 'maxInputs'> &
+  Pick<GetOperationParams, 'abiMap' | 'maxInputs' | 'baseAssetId'> &
   RawPayloadParam): Operation[] {
   const contractCallReceipts = getReceiptsCall(receipts);
   const contractOutputs = getOutputsContract(outputs);
@@ -252,7 +253,10 @@ export function getContractCallOperations({
     if (contractInput) {
       const newCallOps = contractCallReceipts.reduce((prevContractCallOps, receipt) => {
         if (receipt.to === contractInput.contractID) {
-          const input = getInputFromAssetId(inputs, receipt.assetId);
+          // # TODO: This is a temporary fix to ensure that the base assetId is used when the assetId is ZeroBytes32
+          // The assetId is returned as ZeroBytes32 if the contract call has no assets in it (see https://github.com/FuelLabs/fuel-core/issues/1941)
+          const assetId = receipt.assetId === ZeroBytes32 ? baseAssetId : receipt.assetId;
+          const input = getInputFromAssetId(inputs, assetId, assetId === baseAssetId);
           if (input) {
             const inputAddress = getInputAccountAddress(input);
             const calls = [];
@@ -497,6 +501,7 @@ export function getOperations({
         abiMap,
         rawPayload,
         maxInputs,
+        baseAssetId,
       }),
       ...getWithdrawFromFuelOperations({ inputs, receipts, baseAssetId }),
     ];

@@ -1,6 +1,10 @@
-import type { CoinQuantityLike, ExcludeResourcesOption } from 'fuels';
+import type {
+  TransactionResultMessageOutReceipt,
+  CoinQuantityLike,
+  ExcludeResourcesOption,
+} from 'fuels';
 import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -141,5 +145,116 @@ describe('querying the chain', () => {
 
     expect(message).toBeDefined();
     expect(message?.nonce).toEqual(nonce);
+  });
+
+  it('can getMessage', async () => {
+    // #region Message-getMessages
+    // #import { TestMessage, launchTestNode };
+
+    // Creates a test message with an amount of 100
+    const testMessage = new TestMessage({ amount: 100 });
+
+    // Launches a test node with the test message configured
+    using launched = await launchTestNode({ walletsConfig: { messages: [testMessage] } });
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    // Retrieves messages from the wallet
+    const { messages } = await wallet.getMessages();
+    // #endregion Message-getMessages
+
+    expect(messages[0].nonce).toEqual(testMessage.nonce);
+  });
+
+  it('can getMessageProof with blockId', async () => {
+    // #region Message-getMessageProof-blockId
+    // #import { launchTestNode, TransactionResultMessageOutReceipt };
+
+    // Launches a test node
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+
+    const {
+      wallets: [sender, recipient],
+      provider,
+    } = launched;
+
+    // Performs a withdrawal transaction from sender to recipient, thus generating a message
+    const withdrawTx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
+    const result = await withdrawTx.waitForResult();
+
+    // Waiting for a new block to be commited (1 confirmation block)
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
+
+    // Retrives the latest block
+    const latestBlock = await provider.getBlock('latest');
+
+    // Retrieves the `nonce` via message out receipt from the initial transaction result
+    const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
+
+    // Retrieves the message proof for the transaction ID and nonce using the next block Id
+    const messageProof = await provider.getMessageProof(
+      result.gqlTransaction.id,
+      nonce,
+      latestBlock?.id
+    );
+    // #endregion Message-getMessageProof-blockId
+
+    expect(messageProof?.amount.toNumber()).toEqual(100);
+    expect(messageProof?.sender.toHexString()).toEqual(result.id);
+  });
+
+  it('can getMessageProof with blockHeight', async () => {
+    // #region Message-getMessageProof-blockHeight
+    // #import { launchTestNode, TransactionResultMessageOutReceipt };
+
+    // Launches a test node
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+
+    const {
+      wallets: [sender, recipient],
+      provider,
+    } = launched;
+
+    // Performs a withdrawal transaction from sender to recipient, thus generating a message
+    const withdrawTx = await sender.withdrawToBaseLayer(recipient.address.toB256(), 100);
+    const result = await withdrawTx.waitForResult();
+
+    // Waiting for a new block to be commited (1 confirmation block)
+    await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, 1000);
+    });
+
+    // Retrieves the `nonce` via message out receipt from the initial transaction result
+    const { nonce } = result.receipts[0] as TransactionResultMessageOutReceipt;
+
+    // Retrives the latest block
+    const latestBlock = await provider.getBlock('latest');
+
+    // Retrieves the message proof for the transaction ID and nonce using the block height
+    const messageProof = await provider.getMessageProof(
+      result.gqlTransaction.id,
+      nonce,
+      undefined,
+      latestBlock?.height
+    );
+    // #endregion Message-getMessageProof-blockHeight
+
+    expect(messageProof?.amount.toNumber()).toEqual(100);
+    expect(messageProof?.sender.toHexString()).toEqual(result.id);
   });
 });

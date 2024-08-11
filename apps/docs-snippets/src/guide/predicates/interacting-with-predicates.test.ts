@@ -1,4 +1,4 @@
-import type { Provider, WalletUnlocked } from 'fuels';
+import type { WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, bn, Predicate, BN } from 'fuels';
 import { seedTestWallet } from 'fuels/test-utils';
 
@@ -15,7 +15,6 @@ describe(__filename, () => {
   let wallet: WalletUnlocked;
   let receiver: WalletUnlocked;
   let baseAssetId: string;
-  let provider: Provider;
   let predicate: Predicate<[string]>;
 
   const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
@@ -27,7 +26,6 @@ describe(__filename, () => {
   beforeAll(async () => {
     wallet = await getTestWallet();
     receiver = await getTestWallet();
-    provider = wallet.provider;
 
     baseAssetId = wallet.provider.getBaseAssetId();
 
@@ -35,7 +33,7 @@ describe(__filename, () => {
       bytecode: bin,
       provider: wallet.provider,
       abi,
-      inputData: [inputAddress],
+      data: [inputAddress],
     });
     await seedTestWallet(predicate, [[100_000_000, baseAssetId]]);
   });
@@ -65,9 +63,7 @@ describe(__filename, () => {
     const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
     transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(transactionRequest, {
-      resourcesOwner: predicate,
-    });
+    const txCost = await predicate.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
@@ -91,9 +87,7 @@ describe(__filename, () => {
     const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
     transactionRequest.addCoinOutput(receiver.address, 1000000, baseAssetId);
 
-    const txCost = await provider.getTransactionCost(transactionRequest, {
-      resourcesOwner: predicate,
-    });
+    const txCost = await predicate.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;

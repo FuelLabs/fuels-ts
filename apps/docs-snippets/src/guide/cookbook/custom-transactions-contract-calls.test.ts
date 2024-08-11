@@ -24,7 +24,7 @@ describe('Custom Transactions from Contract Calls', () => {
     senderWallet = await getTestWallet();
     receiverWallet = Wallet.generate({ provider: senderWallet.provider });
     const factory = new ContractFactory(binHexlified, abiContents, senderWallet);
-    const { waitForResult } = await factory.deployContract({ storageSlots });
+    const { waitForResult } = await factory.deploy({ storageSlots });
     ({ contract } = await waitForResult());
     abi = abiContents;
     baseAssetId = senderWallet.provider.getBaseAssetId();
@@ -52,7 +52,7 @@ describe('Custom Transactions from Contract Calls', () => {
     // Add coin output for the recipient
     transactionRequest.addCoinOutput(receiverWallet.address, amountToRecipient, baseAssetId);
 
-    const txCost = await senderWallet.provider.getTransactionCost(transactionRequest);
+    const txCost = await senderWallet.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;

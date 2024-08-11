@@ -9,6 +9,8 @@
 
 This guide walks you through deploying a contract using the SDK, covering loading contract artifacts, initializing a contract factory, and deploying the contract.
 
+> **Note:** The maximum contract deployment size supported by the SDK is 100 KB. The SDK will `throw` an [error](../errors/index.md) for contracts larger than this size.
+
 ## 1. Obtaining Contract Artifacts
 
 After writing a contract in Sway and compiling it with `forc build` (<a :href="indexUrl" target="_blank" rel="noreferrer">read more</a> on how to work with Sway), you will obtain two important artifacts: the compiled binary file and the JSON ABI file. These files are required for deploying a contract using the SDK.
@@ -27,7 +29,7 @@ Load the contract bytecode and JSON ABI, generated from the Sway source, into th
 
 ## 4. Deploying the Contract
 
-To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deployContract` method. This call resolves as soon as the transaction to deploy the contract is submitted and returns three items: the `contractId`, the `transactionId` and a `waitForResult` function.
+To deploy the contract, instantiate the [`ContractFactory`](../../api/Contract/ContractFactory.md) with the bytecode, ABI, and wallet. Then, call the `deploy` method. This call resolves as soon as the transaction to deploy the contract is submitted and returns three items: the `contractId`, the `transactionId` and a `waitForResult` function.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#contract-setup-3{ts:line-numbers}
 

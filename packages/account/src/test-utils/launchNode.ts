@@ -1,14 +1,14 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
-import { randomBytes } from '@fuel-ts/crypto';
+import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
-import { randomUUID } from 'crypto';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
 
+import type { ProviderOptions } from '../providers';
 import { Provider } from '../providers';
 import { Signer } from '../signer';
 import type { WalletUnlocked } from '../wallet';
@@ -129,6 +129,8 @@ export const launchNode = async ({
       '--consensus-key',
       '--db-type',
       '--poa-instant',
+      '--min-gas-price',
+      '--native-executor-version',
     ]);
 
     const snapshotDir = getFlagValueFromArgs(args, '--snapshot');
@@ -141,6 +143,8 @@ export const launchNode = async ({
     const poaInstant = poaInstantFlagValue === 'true' || poaInstantFlagValue === undefined;
 
     const nativeExecutorVersion = getFlagValueFromArgs(args, '--native-executor-version') || '0';
+
+    const minGasPrice = getFlagValueFromArgs(args, '--min-gas-price') || '1';
 
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
@@ -194,7 +198,7 @@ export const launchNode = async ({
         ['--ip', ipToUse],
         ['--port', portToUse],
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDir],
-        ['--min-gas-price', '1'],
+        ['--min-gas-price', minGasPrice],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--native-executor-version', nativeExecutorVersion],
         ['--consensus-key', consensusKey],
@@ -323,14 +327,16 @@ export type LaunchNodeAndGetWalletsResult = Promise<{
  * */
 export const launchNodeAndGetWallets = async ({
   launchNodeOptions,
+  providerOptions,
   walletCount = 10,
 }: {
   launchNodeOptions?: Partial<LaunchNodeOptions>;
+  providerOptions?: Partial<ProviderOptions>;
   walletCount?: number;
 } = {}): LaunchNodeAndGetWalletsResult => {
   const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
 
-  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
+  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`, providerOptions);
   const wallets = await generateWallets(walletCount, provider);
 
   const cleanup = () => {

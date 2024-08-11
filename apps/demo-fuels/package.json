@@ -4,13 +4,14 @@
   "description": "Simple demo using Fuels CLI",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "pretest": "pnpm fuels build"
+    "build": "pnpm fuels build",
+    "pretest": "pnpm build",
+    "test": "cd ../.. && pnpm run test:filter apps/demo-fuels"
   },
   "license": "Apache-2.0",
   "dependencies": {
     "@fuel-ts/errors": "workspace:^",
     "@fuel-ts/account": "workspace:^",
     "fuels": "workspace:*"
-  },
-  "version": null
+  }
 }

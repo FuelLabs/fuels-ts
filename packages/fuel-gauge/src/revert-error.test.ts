@@ -4,16 +4,13 @@ import type { TransactionResultReceipt } from 'fuels';
 import { bn, getRandomB256, ContractFactory } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { RevertErrorAbi__factory, TokenContractAbi__factory } from '../test/typegen/contracts';
-import RevertErrorAbiHex from '../test/typegen/contracts/RevertErrorAbi.hex';
-import TokenContractAbiHex from '../test/typegen/contracts/TokenContractAbi.hex';
+import { RevertErrorFactory, TokenContract, TokenContractFactory } from '../test/typegen';
 
 import { launchTestContract } from './utils';
 
 function launchContract() {
   return launchTestContract({
-    deployer: RevertErrorAbi__factory,
-    bytecode: RevertErrorAbiHex,
+    factory: RevertErrorFactory,
   });
 }
 
@@ -196,11 +193,10 @@ describe('Revert Error Testing', () => {
 
     const {
       wallets: [wallet],
-      provider,
     } = launched;
 
-    const factory = new ContractFactory(TokenContractAbiHex, TokenContractAbi__factory.abi, wallet);
-    const { waitForResult } = await factory.deployContract();
+    const factory = new ContractFactory(TokenContractFactory.bytecode, TokenContract.abi, wallet);
+    const { waitForResult } = await factory.deploy();
     const { contract: tokenContract } = await waitForResult();
 
     const addresses = [
@@ -216,7 +212,7 @@ describe('Revert Error Testing', () => {
       ])
       .getTransactionRequest();
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

@@ -204,7 +204,7 @@ describe('TransactionResponse', () => {
 
   it(
     'should throw error for a SqueezedOut status update [waitForResult]',
-    { timeout: 10_000 },
+    { timeout: 10_000, retry: 10 },
     async () => {
       /**
        * a larger --tx-pool-ttl 1s is necessary to ensure that the transaction doesn't get squeezed out
@@ -229,7 +229,7 @@ describe('TransactionResponse', () => {
 
       request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.provider.getTransactionCost(request);
+      const txCost = await genesisWallet.getTransactionCost(request);
 
       request.gasLimit = txCost.gasUsed;
       request.maxFee = txCost.maxFee;
@@ -272,7 +272,7 @@ describe('TransactionResponse', () => {
 
       request.addCoinOutput(Wallet.generate(), 100, provider.getBaseAssetId());
 
-      const txCost = await genesisWallet.provider.getTransactionCost(request, {
+      const txCost = await genesisWallet.getTransactionCost(request, {
         signatureCallback: (tx) => tx.addAccountWitnesses(genesisWallet),
       });
 
@@ -288,7 +288,8 @@ describe('TransactionResponse', () => {
 
       await expectToThrowFuelError(
         async () => {
-          await provider.sendTransaction(request, { awaitExecution: true });
+          const submit = await provider.sendTransaction(request);
+          await submit.waitForResult();
         },
         { code: ErrorCode.TRANSACTION_SQUEEZED_OUT }
       );

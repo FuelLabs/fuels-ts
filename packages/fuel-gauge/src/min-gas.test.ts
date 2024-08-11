@@ -11,11 +11,11 @@ import {
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
-  ComplexPredicateAbi__factory,
-  ComplexScriptAbi__factory,
-  CoverageContractAbi__factory,
+  ComplexPredicate,
+  ComplexScript,
+  CoverageContract,
+  CoverageContractFactory,
 } from '../test/typegen';
-import CoverageContractAbiHex from '../test/typegen/contracts/CoverageContractAbi.hex';
 
 /**
  * @group node
@@ -35,13 +35,13 @@ describe('Minimum gas tests', () => {
      */
 
     const contractFactory = new ContractFactory(
-      CoverageContractAbiHex,
-      CoverageContractAbi__factory.abi,
+      CoverageContractFactory.bytecode,
+      CoverageContract.abi,
       wallet
     );
 
     const { transactionRequest: request } = contractFactory.createTransactionRequest({
-      storageSlots: CoverageContractAbi__factory.storageSlots,
+      storageSlots: CoverageContract.storageSlots,
     });
 
     const resources = await provider.getResourcesToSpend(wallet.address, [
@@ -55,7 +55,7 @@ describe('Minimum gas tests', () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const { maxFee } = await provider.getTransactionCost(request);
+    const { maxFee } = await wallet.getTransactionCost(request);
 
     request.maxFee = maxFee;
 
@@ -81,7 +81,7 @@ describe('Minimum gas tests', () => {
      */
 
     const request = new ScriptTransactionRequest({
-      script: ComplexScriptAbi__factory.bin,
+      script: ComplexScript.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
     request.addCoinOutput(Address.fromRandom(), bn(100), provider.getBaseAssetId());
@@ -89,7 +89,7 @@ describe('Minimum gas tests', () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -117,7 +117,10 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicateAbi__factory.createInstance(provider, [bn(1000)]);
+    const predicate = new ComplexPredicate({
+      provider,
+      data: [bn(1000)],
+    });
 
     /**
      * Fund the predicate
@@ -134,7 +137,7 @@ describe('Minimum gas tests', () => {
     /**
      * Get the transaction cost to set a strict gasLimit and min gasPrice
      */
-    const txCost = await provider.getTransactionCost(request, { resourcesOwner: predicate });
+    const txCost = await predicate.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -165,7 +168,10 @@ describe('Minimum gas tests', () => {
     /**
      * Setup predicate
      */
-    const predicate = ComplexPredicateAbi__factory.createInstance(provider, [bn(1000)]);
+    const predicate = new ComplexPredicate({
+      provider,
+      data: [bn(1000)],
+    });
 
     /**
      * Fund the predicate
@@ -177,7 +183,7 @@ describe('Minimum gas tests', () => {
      * Create a script transaction
      */
     const request = new ScriptTransactionRequest({
-      script: ComplexScriptAbi__factory.bin,
+      script: ComplexScript.bytecode,
       scriptData: hexlify(new BigNumberCoder('u64').encode(bn(2000))),
     });
 
@@ -193,9 +199,7 @@ describe('Minimum gas tests', () => {
     // add account transfer
     request.addCoinOutput(Address.fromRandom(), bn(100), baseAssetId);
 
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: predicate,
-    });
+    const txCost = await predicate.getTransactionCost(request);
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
 

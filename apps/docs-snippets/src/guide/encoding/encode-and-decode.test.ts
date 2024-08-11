@@ -11,7 +11,7 @@ import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataRece
 import { generateTestWallet } from 'fuels/test-utils';
 
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
-import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';
+import { SumScript as factory } from '../../../test/typegen/scripts/SumScript';
 
 /**
  * @group node
@@ -37,7 +37,7 @@ describe('encode and decode', () => {
     // First we need to build out the transaction via the script that we want to encode.
     // For that we'll need the ABI and the bytecode of the script
     const abi: JsonAbi = factory.abi;
-    const bytecode: string = factory.bin;
+    const bytecode: string = factory.bytecode;
 
     // Create the invocation scope for the script call, passing the initial
     // value for the configurable constant
@@ -71,7 +71,7 @@ describe('encode and decode', () => {
     request.scriptData = encodedArguments;
 
     // Now we can build out the rest of the transaction and then fund it
-    const txCost = await wallet.provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
     await wallet.fund(request, txCost);

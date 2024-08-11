@@ -29,6 +29,9 @@ export interface AppWallet {
 
 export const TESTNET_FAUCET_LINK = 'https://faucet-testnet.fuel.network/';
 
+export const FAUCET_LINK =
+  CURRENT_ENVIRONMENT === Environments.LOCAL ? '/faucet' : TESTNET_FAUCET_LINK;
+
 export const FAUCET_PRIVATE_KEY = '0x01';
 
 export const DOCS_URL = 'https://docs.fuel.network';

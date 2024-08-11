@@ -1,17 +1,5 @@
 {{header}}
 
-{{#if isGeneratingContracts}}
-{{#each abis}}
-export type { {{name}} } from './{{name}}';
-{{/each}}
-{{/if}}
-
-{{#if isGeneratingPredicates}}
-{{#each abis}}
-export type { {{name}}Inputs } from './factories/{{name}}__factory';
-{{/each}}
-{{/if}}
-
-{{#each abis}}
-export { {{name}}__factory } from './factories/{{name}}__factory';
+{{#each members}}
+export { {{this}} } from './{{this}}';
 {{/each}}

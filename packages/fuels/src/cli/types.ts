@@ -80,7 +80,7 @@ export type UserFuelsConfig = {
 
   /**
    * Contracts will be deployed using this provider.
-   * Default: http://localhost:4000
+   * Default: http://localhost:4000/v1/graphql
    */
   providerUrl?: string;
 

@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
-import { ScriptTransactionRequest, Wallet, bn } from 'fuels';
+import { DEFAULT_RESOURCE_CACHE_TTL, ScriptTransactionRequest, Wallet, bn, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -34,7 +34,7 @@ describe('Funding Transactions', () => {
     const resources = await mainWallet.getResourcesToSpend([[totalAmount + 2_000, baseAssetId]]);
     request.addResources(resources);
 
-    const txCost = await mainWallet.provider.getTransactionCost(request);
+    const txCost = await mainWallet.getTransactionCost(request);
 
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
@@ -75,7 +75,7 @@ describe('Funding Transactions', () => {
 
     request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     const getResourcesToSpendSpy = vi.spyOn(sender, 'getResourcesToSpend');
 
@@ -132,7 +132,7 @@ describe('Funding Transactions', () => {
     request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
     request.addResources(enoughtResources);
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     // TX request already carries enough resources, it does not need to be funded
     expect(request.inputs.length).toBe(1);
@@ -186,7 +186,7 @@ describe('Funding Transactions', () => {
     const amountToTransfer = 1000;
     request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     // TX request does NOT carry any resources, it needs to be funded
     expect(request.inputs.length).toBe(0);
@@ -242,7 +242,7 @@ describe('Funding Transactions', () => {
     const amountToTransfer = 1000;
     request.addCoinOutput(receiver.address, amountToTransfer, provider.getBaseAssetId());
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await sender.getTransactionCost(request);
 
     expect(request.inputs.length).toBe(0);
 
@@ -293,14 +293,26 @@ describe('Funding Transactions', () => {
      * Funding wallet1 with only half of the required amount in Asset A and with enough amount
      * in the Base Asset to pay the fee
      */
-    await wallet.transfer(wallet1.address, totalInBaseAsset, provider.getBaseAssetId());
-    await wallet.transfer(wallet1.address, partiallyInAssetA, assetA);
+    const submitted1 = await wallet.transfer(
+      wallet1.address,
+      totalInBaseAsset,
+      provider.getBaseAssetId()
+    );
+    await submitted1.waitForResult();
+
+    const submitted2 = await wallet.transfer(wallet1.address, partiallyInAssetA, assetA);
+    await submitted2.waitForResult();
 
     /**
      * Funding wallet2 with the remaining amount needed in Asset A.
      * Note: This wallet does not have any additional funds to pay for the transaction fee.
      */
-    await wallet.transfer(wallet2.address, totalInAssetA - partiallyInAssetA, assetA);
+    const submitted3 = await wallet.transfer(
+      wallet2.address,
+      totalInAssetA - partiallyInAssetA,
+      assetA
+    );
+    await submitted3.waitForResult();
 
     let transactionRequest = new ScriptTransactionRequest();
 
@@ -308,7 +320,7 @@ describe('Funding Transactions', () => {
     transactionRequest.addCoinOutput(receiver.address, totalInAssetA, assetA);
 
     // Executing getTransactionCost to proper estimate maxFee and gasLimit
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet1.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
@@ -369,7 +381,7 @@ describe('Funding Transactions', () => {
     transactionRequest.addCoinOutput(receiver.address, 3000, assetA);
     transactionRequest.addCoinOutput(receiver.address, 4500, assetB);
 
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await fundedWallet.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
@@ -401,4 +413,90 @@ describe('Funding Transactions', () => {
 
     expect(isStatusSuccess).toBeTruthy();
   });
+
+  it('should cache UTXOs by default upon TX submission', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        // A new block will be generated every 5 seconds
+        args: ['--poa-instant', 'false', '--poa-interval-period', '5s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 2,
+      },
+    });
+
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
+    const receiver = Wallet.generate({ provider });
+
+    const transferAmount = 100_000;
+
+    // Submitting TX 1
+    const submission1 = await fundedWallet.transfer(
+      receiver.address,
+      transferAmount,
+      provider.getBaseAssetId()
+    );
+
+    // Submitting TX 2 before TX 1 finished to process.
+    const submission2 = await fundedWallet.transfer(
+      receiver.address,
+      transferAmount,
+      provider.getBaseAssetId()
+    );
+
+    const result1 = await submission1.waitForResult();
+    const result2 = await submission2.waitForResult();
+
+    expect(result1.isStatusSuccess).toBeTruthy();
+    expect(result2.isStatusSuccess).toBeTruthy();
+
+    expect(result1.blockId).toBe(result2.blockId);
+
+    expect(provider.cache).toBeTruthy();
+    expect(provider.cache?.ttl).toBe(DEFAULT_RESOURCE_CACHE_TTL);
+  }, 15_000);
+
+  it('should fail when trying to use the same UTXO in multiple TXs without cache', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        // A new block will be generated every 5 seconds
+        args: ['--poa-instant', 'false', '--poa-interval-period', '5s'],
+      },
+      providerOptions: {
+        // Cache will last for 1 millisecond
+        resourceCacheTTL: 1,
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+      },
+    });
+
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
+    const receiver = Wallet.generate({ provider });
+
+    const transferAmount = 100_000;
+
+    // Submitting TX 1
+    await fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId());
+
+    // ensure cache is cleared
+    await sleep(100);
+
+    // Submitting TX 2 before TX 1 finished to process.
+    await expectToThrowFuelError(
+      () => fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId()),
+      new FuelError(
+        FuelError.CODES.INVALID_REQUEST,
+        'Transaction is not inserted. Hash is already known'
+      )
+    );
+  }, 15_000);
 });

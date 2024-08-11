@@ -5,7 +5,8 @@ import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/a
 import { Provider, ScriptTransactionRequest } from '@fuel-ts/account';
 import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
@@ -45,7 +46,7 @@ const callScript = async <TData, TResult>(
 
   // Keep a list of coins we need to input to this transaction
 
-  const txCost = await account.provider.getTransactionCost(request);
+  const txCost = await account.getTransactionCost(request);
 
   request.gasLimit = txCost.gasUsed;
   request.maxFee = txCost.maxFee;
@@ -129,11 +130,13 @@ describe('Script', () => {
 
     const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
-    const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
-
-    const errMsg = `Error setting configurable constants: The script does not have configurable constants to be set.`;
-
-    expect((<Error>error).message).toBe(errMsg);
+    await expectToThrowFuelError(
+      () => newScript.setConfigurableConstants({ FEE: 8 }),
+      new FuelError(
+        FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+        'Error setting configurable constants: The script does not have configurable constants to be set.'
+      )
+    );
   });
 
   it('should throw when setting configurable with wrong name', async () => {
@@ -156,10 +159,12 @@ describe('Script', () => {
 
     const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 
-    const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
-
-    const errMsg = `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`;
-
-    expect((<Error>error).message).toBe(errMsg);
+    await expectToThrowFuelError(
+      () => script.setConfigurableConstants({ NOT_DEFINED: 8 }),
+      new FuelError(
+        FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`
+      )
+    );
   });
 });

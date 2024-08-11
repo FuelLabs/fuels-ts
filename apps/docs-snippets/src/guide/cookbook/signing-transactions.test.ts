@@ -80,7 +80,7 @@ describe('Signing transactions', () => {
       bytecode,
       abi,
       provider,
-      inputData: [signer.address.toB256()],
+      data: [signer.address.toB256()],
     });
     const tx1 = await sender.transfer(predicate.address, 200_000, baseAssetId);
     await tx1.waitForResult();
@@ -102,9 +102,8 @@ describe('Signing transactions', () => {
 
     // Add witnesses including the signer
     // Estimate the predicate inputs
-    const txCost = await provider.getTransactionCost(request, {
+    const txCost = await predicate.getTransactionCost(request, {
       signatureCallback: (tx) => tx.addAccountWitnesses(signer),
-      resourcesOwner: predicate,
     });
 
     request.updatePredicateGasUsed(txCost.estimatedPredicates);

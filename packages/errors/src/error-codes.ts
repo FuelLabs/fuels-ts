@@ -19,6 +19,10 @@ export enum ErrorCode {
   INVALID_DATA = 'invalid-data',
   FUNCTION_NOT_FOUND = 'function-not-found',
   UNSUPPORTED_ENCODING_VERSION = 'unsupported-encoding-version',
+  TIMEOUT_EXCEEDED = 'timeout-exceeded',
+  CONFIG_FILE_NOT_FOUND = 'config-file-not-found',
+  CONFIG_FILE_ALREADY_EXISTS = 'config-file-already-exists',
+  WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
 
   // address
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
@@ -67,11 +71,14 @@ export enum ErrorCode {
   INVALID_TRANSACTION_INPUT = 'invalid-transaction-input',
   INVALID_TRANSACTION_OUTPUT = 'invalid-transaction-output',
   INVALID_TRANSACTION_STATUS = 'invalid-transaction-status',
-  INVALID_TRANSACTION_TYPE = 'invalid-transaction-type',
+  UNSUPPORTED_TRANSACTION_TYPE = 'unsupported-transaction-type',
   TRANSACTION_ERROR = 'transaction-error',
   INVALID_POLICY_TYPE = 'invalid-policy-type',
   DUPLICATED_POLICY = 'duplicated-policy',
   TRANSACTION_SQUEEZED_OUT = 'transaction-squeezed-out',
+  CONTRACT_SIZE_EXCEEDS_LIMIT = 'contract-size-exceeds-limit',
+  MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
+  MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
 
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',

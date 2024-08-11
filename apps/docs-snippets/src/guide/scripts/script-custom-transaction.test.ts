@@ -42,7 +42,7 @@ describe(__filename, () => {
     ];
     wallet = await getTestWallet(seedQuantities);
     const factory = new ContractFactory(contractBin, contractAbi, wallet);
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     ({ contract } = await waitForResult());
   });
 
@@ -79,7 +79,7 @@ describe(__filename, () => {
     const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
 
     // 5. Calculate the transaction fee
-    const txCost = await provider.getTransactionCost(request, { quantitiesToContract: quantities });
+    const txCost = await wallet.getTransactionCost(request, { quantities });
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

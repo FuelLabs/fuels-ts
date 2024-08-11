@@ -1,7 +1,6 @@
 "use client";
 
-import type { TestContractAbi } from "@/sway-api";
-import { TestContractAbi__factory } from "@/sway-api";
+import { TestContract } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
 import { bn } from "fuels";
@@ -11,7 +10,7 @@ import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT, DOCS_URL, Environments } from "@/lib";
+import { CURRENT_ENVIRONMENT, DOCS_URL, Environments, FAUCET_LINK } from "@/lib";
 
 // #region deploying-dapp-to-testnet-frontend-contract-id
 const contractId =
@@ -22,7 +21,7 @@ const contractId =
 
 export default function Home() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
-  const [contract, setContract] = useState<TestContractAbi>();
+  const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
 
   /**
@@ -32,7 +31,7 @@ export default function Home() {
   useAsync(async () => {
     if (wallet) {
       // Create a new instance of the contract
-      const testContract = TestContractAbi__factory.connect(contractId, wallet);
+      const testContract = new TestContract(contractId, wallet);
       setContract(testContract);
 
       // Read the current value of the counter
@@ -49,7 +48,10 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        <span>
+          Your wallet does not have enough funds. Please top it up using the{" "}
+          <Link href={FAUCET_LINK} target='_blank'>faucet.</Link>
+        </span>,
       );
     }
 
@@ -71,7 +73,10 @@ export default function Home() {
 
     if (walletBalance?.eq(0)) {
       return toast.error(
-        "Your wallet does not have enough funds. Please click the 'Top-up Wallet' button in the top right corner, or use the local faucet.",
+        <span>
+          Your wallet does not have enough funds. Please top it up using the{" "}
+          <Link href={FAUCET_LINK} target='_blank'>faucet.</Link>
+        </span>,
       );
     }
 

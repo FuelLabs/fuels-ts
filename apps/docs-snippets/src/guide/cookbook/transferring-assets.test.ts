@@ -23,7 +23,7 @@ describe(__filename, () => {
     );
     provider = sender.provider;
     const factory = new ContractFactory(binHexlified, abiContents, sender);
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     ({ contract: deployedContract } = await waitForResult());
   });
 
@@ -37,7 +37,7 @@ describe(__filename, () => {
     });
     const amountToTransfer = 500;
 
-    const baseAssetId = await sender.provider.getBaseAssetId();
+    const baseAssetId = sender.provider.getBaseAssetId();
 
     const response = await sender.transfer(destination.address, amountToTransfer, baseAssetId);
 
@@ -126,6 +126,7 @@ describe(__filename, () => {
     const contractBalance = await deployedContract.getBalance(assetId);
 
     const tx = await sender.transferToContract(contractId, amountToTransfer, assetId);
+    await tx.waitForResult();
     expect(new BN(contractBalance).toNumber()).toBe(0);
 
     await tx.waitForResult();
