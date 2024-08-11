@@ -35,7 +35,7 @@ Remove this section if there are no breaking changes.
 
 # Checklist
 
-- [ ] I **_added_** — `tests` to prove my changes
-- [ ] I **_updated_** — all the necessary `docs`
-- [ ] I **_reviewed_** — the entire PR myself, using the GitHub UI
-- [ ] I **_described_** — all breaking changes and the Migration Guide
+- [ ] All **changes** are **covered** by **tests** (or not applicable)
+- [ ] All **changes** are **documented** (or not applicable)
+- [ ] I **reviewed** the **entire PR** myself (prefarably, on GH UI)
+- [ ] I **described** all **Breaking Changes** (or there's none)
