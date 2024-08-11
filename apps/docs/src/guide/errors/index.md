@@ -302,3 +302,7 @@ If you believe you found a bug, please report the [issue](https://github.com/Fue
 ### `MAX_INPUTS_EXCEEDED`
 
 When the number of transaction inputs exceeds the maximum limit allowed by the blockchain.
+
+### `MAX_OUTPUTS_EXCEEDED`
+
+When the number of transaction outputs exceeds the maximum limit allowed by the blockchain.
