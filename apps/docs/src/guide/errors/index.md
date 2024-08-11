@@ -24,6 +24,18 @@ When an [`Account`](../../api/Account/Account.md) is required for an operation. 
 
 It could be caused during the deployments of contracts when an account is required to sign the transaction. This can be resolved by following the deployment guide [here](../contracts/deploying-contracts.md).
 
+### `CONFIG_FILE_NOT_FOUND`
+
+When a configuration file is not found. This could either be a `fuels.config.[ts,js,mjs,cjs]` file or a TOML file.
+
+Ensure that the configuration file is present in the root directory of your project.
+
+### `CONFIG_FILE_ALREADY_EXISTS`
+
+When a configuration file already exists in the root directory of your project.
+
+You can not run `fuels init` more than once for a given project. Either remove the existing configuration file or update it.
+
 ### `CONVERTING_FAILED`
 
 When converting a big number into an incompatible format.
@@ -240,6 +252,12 @@ When the Fuel Node info cache is empty; This is usually caused by not being conn
 
 Ensure that the provider has connected to a Fuel Node successfully.
 
+### `TIMEOUT_EXCEEDED`
+
+When the timeout has been exceeded for a given operation.
+
+Check that you're connected to the network and that the network is stable.
+
 ### `TYPE_NOT_FOUND`
 
 When the type with the given type ID is not found in the ABI.
@@ -264,6 +282,12 @@ A wallet manager will throw for a multitude of reasons. The error message will d
 
 It could be that the passphrase is incorrect and/or the wallet does _not_ exist in the manager.
 
+### `WORKSPACE_NOT_DETECTED`
+
+When the workspace is not detected in the directory indicated in the message.
+
+Ensure that the workspace is present in the directory specified.
+
 ### `HASHER_LOCKED`
 
 The hashing algorithm is currently locked, any subsequent attempts to register a new implementation will throw this error.
@@ -274,3 +298,11 @@ The purpose of the lock function is to provide a way to ensure that the implemen
 In cases where the error hasn't been mapped yet, this code will be used.
 
 If you believe you found a bug, please report the [issue](https://github.com/FuelLabs/fuels-ts/issues/new/choose) to the team.
+
+### `MAX_INPUTS_EXCEEDED`
+
+When the number of transaction inputs exceeds the maximum limit allowed by the blockchain.
+
+### `MAX_OUTPUTS_EXCEEDED`
+
+When the number of transaction outputs exceeds the maximum limit allowed by the blockchain.

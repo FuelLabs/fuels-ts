@@ -1,9 +1,8 @@
 import { bn, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { PredicateBytesAbi__factory, ScriptBytesAbi__factory } from '../test/typegen';
-import { BytesAbi__factory } from '../test/typegen/contracts';
-import BytesAbiHex from '../test/typegen/contracts/BytesAbi.hex';
+import { PredicateBytes, ScriptBytes } from '../test/typegen';
+import { BytesContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
@@ -14,8 +13,7 @@ import { launchTestContract } from './utils';
 describe('Bytes Tests', () => {
   it('should test bytes output', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi__factory,
-      bytecode: BytesAbiHex,
+      factory: BytesContractFactory,
     });
 
     const { waitForResult } = await contractInstance.functions.return_bytes(10).call();
@@ -26,8 +24,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes output [100 items]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi__factory,
-      bytecode: BytesAbiHex,
+      factory: BytesContractFactory,
     });
 
     const { waitForResult } = await contractInstance.functions.return_bytes(100).call();
@@ -38,8 +35,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi__factory,
-      bytecode: BytesAbiHex,
+      factory: BytesContractFactory,
     });
 
     const INPUT = [40, 41, 42];
@@ -52,8 +48,7 @@ describe('Bytes Tests', () => {
 
   it('should test bytes input [nested]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: BytesAbi__factory,
-      bytecode: BytesAbiHex,
+      factory: BytesContractFactory,
     });
     const bytes = [40, 41, 42];
 
@@ -73,8 +68,7 @@ describe('Bytes Tests', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: BytesAbi__factory,
-          bytecode: BytesAbiHex,
+          factory: BytesContractFactory,
         },
       ],
     });
@@ -89,12 +83,15 @@ describe('Bytes Tests', () => {
 
     const bytes = [40, 41, 42];
 
-    const predicate = PredicateBytesAbi__factory.createInstance(wallet.provider, [
-      {
-        inner: [bytes, bytes],
-        inner_enum: { Second: bytes },
-      },
-    ]);
+    const predicate = new PredicateBytes({
+      provider: wallet.provider,
+      data: [
+        {
+          inner: [bytes, bytes],
+          inner_enum: { Second: bytes },
+        },
+      ],
+    });
 
     // setup predicate
     const setupTx = await wallet.transfer(
@@ -138,7 +135,7 @@ describe('Bytes Tests', () => {
 
     const bytes = [40, 41, 42];
 
-    const scriptInstance = ScriptBytesAbi__factory.createInstance(wallet);
+    const scriptInstance = new ScriptBytes(wallet);
 
     const { waitForResult } = await scriptInstance.functions
       .main(1, {

@@ -1,16 +1,31 @@
+import { compressBytecode } from '@fuel-ts/utils';
+
 import type { Abi } from '../../abi/Abi';
 import { renderHbsTemplate } from '../renderHbsTemplate';
 
 import factoryTemplate from './factory.hbs';
 
 export function renderFactoryTemplate(params: { abi: Abi }) {
-  const { name: capitalizedName, rawContents, storageSlotsContents } = params.abi;
+  const {
+    camelizedName,
+    capitalizedName,
+    rawContents,
+    storageSlotsContents,
+    hexlifiedBinContents: hexlifiedBinString,
+  } = params.abi;
+
   const abiJsonString = JSON.stringify(rawContents, null, 2);
   const storageSlotsJsonString = storageSlotsContents ?? '[]';
 
   const text = renderHbsTemplate({
     template: factoryTemplate,
-    data: { capitalizedName, abiJsonString, storageSlotsJsonString },
+    data: {
+      camelizedName,
+      capitalizedName,
+      abiJsonString,
+      storageSlotsJsonString,
+      compressedBytecode: compressBytecode(hexlifiedBinString),
+    },
   });
 
   return text;
