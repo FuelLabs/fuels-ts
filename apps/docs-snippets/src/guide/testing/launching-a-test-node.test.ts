@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { WalletUnlocked } from 'fuels';
-import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
+import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
 import { Counter, CounterFactory } from '../../../test/typegen/contracts';
@@ -72,11 +72,11 @@ describe('launching a test node', () => {
 
   test('multiple contracts and wallets', async () => {
     // #region advanced-example
-    // #import { launchTestNode, AssetId, TestMessage };
+    // #import { launchTestNode, TestAssetId, TestMessage };
 
     // #context import { CounterFactory } from 'path/to/typegen/output';
 
-    const assets = AssetId.random(2);
+    const assets = TestAssetId.random(2);
     const message = new TestMessage({ amount: 1000 });
 
     using launched = await launchTestNode({
@@ -146,9 +146,9 @@ describe('launching a test node', () => {
 
   test('customizing node options', async () => {
     // #region custom-node-options
-    // #import { launchTestNode, AssetId };
+    // #import { launchTestNode, TestAssetId };
 
-    const [baseAssetId] = AssetId.random();
+    const [baseAssetId] = TestAssetId.random();
 
     using launched = await launchTestNode({
       nodeOptions: {
@@ -166,11 +166,11 @@ describe('launching a test node', () => {
     // #endregion custom-node-options
   });
 
-  test('using assetId', async () => {
+  test('using TestAssetId', async () => {
     // #region asset-ids
-    // #import { launchTestNode, AssetId };
+    // #import { launchTestNode, TestAssetId };
 
-    const assets = AssetId.random();
+    const assets = TestAssetId.random();
 
     using launched = await launchTestNode({
       walletsConfig: {
