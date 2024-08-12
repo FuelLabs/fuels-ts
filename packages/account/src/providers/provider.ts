@@ -570,10 +570,9 @@ Supported fuel-core version: ${supportedVersion}.`
           const graphQlResponse = response.response as GraphQLResponse;
 
           if (Array.isArray(graphQlResponse?.errors)) {
-            const errorMessage = graphQlResponse.errors
-              .map((err: Error) => err.message)
-              .join('\n\n');
-            handleGqlErrorMessage(errorMessage);
+            for (const error of graphQlResponse.errors) {
+              handleGqlErrorMessage(error.message);
+            }
           }
         }
       },
