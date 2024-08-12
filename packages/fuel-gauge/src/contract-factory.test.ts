@@ -368,7 +368,7 @@ describe('Contract Factory', () => {
 
     const { consensusParameters } = provider.getChain();
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
-    expect(ConfigurableContractFactory.bytecode.length).toBeLessThanOrEqual(maxContractSize);
+    expect(ConfigurableContractFactory.bytecode.length).toBeLessThan(maxContractSize);
 
     const deploy = await ConfigurableContractFactory.deploy(wallet);
     const { contract } = await deploy.waitForResult();
