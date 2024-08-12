@@ -27,7 +27,7 @@ import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /** Amount of percentage override for chunk sizes in blob transactions */
-export const CHUNK_SIZE_OVERRIDE = 0.05;
+const CHUNK_SIZE_OVERRIDE = 0.05;
 
 /**
  * Options for deploying a contract.
