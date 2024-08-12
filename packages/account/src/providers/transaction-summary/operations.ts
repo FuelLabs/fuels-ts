@@ -1,8 +1,9 @@
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import type { InputContract, Output, OutputChange } from '@fuel-ts/transactions';
+import type { InputContract, Output, OutputChange, Input } from '@fuel-ts/transactions';
 
 import type {
   TransactionResultReceipt,
@@ -12,6 +13,7 @@ import type {
   TransactionResultTransferReceipt,
 } from '../transaction-response';
 
+import type { FunctionCall } from './call';
 import { getFunctionCall } from './call';
 import {
   getInputFromAssetId,
@@ -36,6 +38,7 @@ import type {
   Operation,
   GetOperationParams,
   GetTransferOperationsParams,
+  AbiMap,
 } from './types';
 
 /** @hidden */
@@ -118,31 +121,29 @@ export function getReceiptsMessageOut(receipts: TransactionResultReceipt[]) {
 }
 
 /** @hidden */
-const mergeAssets = (op1: Operation, op2: Operation) => {
+function mergeAssets(op1: Operation, op2: Operation): OperationCoin[] {
   const assets1 = op1.assetsSent || [];
   const assets2 = op2.assetsSent || [];
 
-  // Getting assets from op2 that don't exist in op1
-  const filteredAssets = assets2.filter(
-    (asset2) => !assets1.some((asset1) => asset1.assetId === asset2.assetId)
-  );
+  const assetMap = new Map<string, OperationCoin>();
 
-  // Merge assets that already exist in op1
-  const mergedAssets = assets1.map((asset1) => {
-    // Find matching asset in op2
-    const matchingAsset = assets2.find((asset2) => asset2.assetId === asset1.assetId);
-    if (!matchingAsset) {
-      // No matching asset found, return asset1
-      return asset1;
-    }
-    // Matching asset found, merge amounts
-    const mergedAmount = bn(asset1.amount).add(matchingAsset.amount);
-    return { ...asset1, amount: mergedAmount };
+  // Merge assets from op1
+  assets1.forEach((asset) => {
+    assetMap.set(asset.assetId, { ...asset });
   });
 
-  // Return merged assets from op1 with filtered assets from op2
-  return mergedAssets.concat(filteredAssets);
-};
+  // Merge assets from op2, adding to existing assets or creating new ones
+  assets2.forEach((asset) => {
+    const existingAsset = assetMap.get(asset.assetId);
+    if (existingAsset) {
+      existingAsset.amount = bn(existingAsset.amount).add(asset.amount);
+    } else {
+      assetMap.set(asset.assetId, { ...asset });
+    }
+  });
+
+  return Array.from(assetMap.values());
+}
 
 /** @hidden */
 function isSameOperation(a: Operation, b: Operation) {
@@ -156,38 +157,41 @@ function isSameOperation(a: Operation, b: Operation) {
 }
 
 /** @hidden */
-export function addOperation(operations: Operation[], toAdd: Operation) {
-  const allOperations = [...operations];
-
-  // Verifying if the operation to add already exists.
-  const index = allOperations.findIndex((op) => isSameOperation(op, toAdd));
-
-  if (allOperations[index]) {
-    // Existent operation, we want to edit it.
-    const existentOperation = { ...allOperations[index] };
-
-    if (toAdd.assetsSent?.length) {
-      /**
-       * If the assetSent already exists, we call 'mergeAssets' to merge possible
-       * entries of the same 'assetId', otherwise we just add the new 'assetSent'.
-       */
-      existentOperation.assetsSent = existentOperation.assetsSent?.length
-        ? mergeAssets(existentOperation, toAdd)
-        : toAdd.assetsSent;
-    }
-
-    if (toAdd.calls?.length) {
-      // We need to stack the new call(s) with the possible existent ones.
-      existentOperation.calls = [...(existentOperation.calls || []), ...toAdd.calls];
-    }
-
-    allOperations[index] = existentOperation;
-  } else {
-    // New operation, we can simply add it.
-    allOperations.push(toAdd);
+function mergeAssetsSent(existing: Operation, toAdd: Operation): Operation['assetsSent'] {
+  if (!toAdd.assetsSent?.length) {
+    return existing.assetsSent;
   }
 
-  return allOperations;
+  return existing.assetsSent?.length ? mergeAssets(existing, toAdd) : toAdd.assetsSent;
+}
+
+/** @hidden */
+function mergeCalls(existing: Operation, toAdd: Operation): Operation['calls'] {
+  if (!toAdd.calls?.length) {
+    return existing.calls;
+  }
+
+  return [...(existing.calls || []), ...toAdd.calls];
+}
+
+/** @hidden */
+function mergeOperations(existing: Operation, toAdd: Operation): Operation {
+  return {
+    ...existing,
+    assetsSent: mergeAssetsSent(existing, toAdd),
+    calls: mergeCalls(existing, toAdd),
+  };
+}
+
+/** @hidden */
+export function addOperation(operations: Operation[], toAdd: Operation): Operation[] {
+  const existingIndex = operations.findIndex((op) => isSameOperation(op, toAdd));
+
+  if (existingIndex === -1) {
+    return [...operations, toAdd];
+  }
+
+  return operations.map((op, index) => (index === existingIndex ? mergeOperations(op, toAdd) : op));
 }
 
 /** @hidden */
@@ -239,6 +243,77 @@ export function getWithdrawFromFuelOperations({
 }
 
 /** @hidden */
+function getContractCalls(
+  contractInput: InputContract,
+  abiMap: AbiMap | undefined,
+  receipt: TransactionResultCallReceipt,
+  rawPayload: string,
+  maxInputs: BN
+): FunctionCall[] {
+  const abi = abiMap?.[contractInput.contractID];
+  if (!abi) {
+    return [];
+  }
+
+  return [
+    getFunctionCall({
+      abi,
+      receipt,
+      rawPayload,
+      maxInputs,
+    }),
+  ];
+}
+
+/** @hidden */
+function getAssetsSent(receipt: TransactionResultCallReceipt): OperationCoin[] | undefined {
+  return receipt.amount?.isZero()
+    ? undefined
+    : [
+        {
+          amount: receipt.amount,
+          assetId: receipt.assetId,
+        },
+      ];
+}
+
+/** @hidden */
+function processCallReceipt(
+  receipt: TransactionResultCallReceipt,
+  contractInput: InputContract,
+  inputs: Input[],
+  abiMap: AbiMap | undefined,
+  rawPayload: string,
+  maxInputs: BN,
+  baseAssetId: string
+): Operation[] {
+  const assetId = receipt.assetId === ZeroBytes32 ? baseAssetId : receipt.assetId;
+  const input = getInputFromAssetId(inputs, assetId, assetId === baseAssetId);
+  if (!input) {
+    return [];
+  }
+
+  const inputAddress = getInputAccountAddress(input);
+  const calls = getContractCalls(contractInput, abiMap, receipt, rawPayload, maxInputs);
+
+  return [
+    {
+      name: OperationName.contractCall,
+      from: {
+        type: AddressType.account,
+        address: inputAddress,
+      },
+      to: {
+        type: AddressType.contract,
+        address: receipt.to,
+      },
+      assetsSent: getAssetsSent(receipt),
+      calls,
+    },
+  ];
+}
+
+/** @hidden */
 export function getContractCallOperations({
   inputs,
   outputs,
@@ -254,67 +329,26 @@ export function getContractCallOperations({
   const contractCallReceipts = getReceiptsCall(receipts);
   const contractOutputs = getOutputsContract(outputs);
 
-  const contractCallOperations = contractOutputs.reduce((prevOutputCallOps, output) => {
+  return contractOutputs.flatMap((output) => {
     const contractInput = getInputContractFromIndex(inputs, output.inputIndex);
-
-    if (contractInput) {
-      const newCallOps = contractCallReceipts.reduce((prevContractCallOps, receipt) => {
-        if (receipt.to === contractInput.contractID) {
-          // # TODO: This is a temporary fix to ensure that the base assetId is used when the assetId is ZeroBytes32
-          // The assetId is returned as ZeroBytes32 if the contract call has no assets in it (see https://github.com/FuelLabs/fuel-core/issues/1941)
-          const assetId = receipt.assetId === ZeroBytes32 ? baseAssetId : receipt.assetId;
-          const input = getInputFromAssetId(inputs, assetId, assetId === baseAssetId);
-          if (input) {
-            const inputAddress = getInputAccountAddress(input);
-            const calls = [];
-
-            const abi = abiMap?.[contractInput.contractID];
-            if (abi) {
-              calls.push(
-                getFunctionCall({
-                  abi,
-                  receipt,
-                  rawPayload,
-                  maxInputs,
-                })
-              );
-            }
-
-            const newContractCallOps = addOperation(prevContractCallOps, {
-              name: OperationName.contractCall,
-              from: {
-                type: AddressType.account,
-                address: inputAddress,
-              },
-              to: {
-                type: AddressType.contract,
-                address: receipt.to,
-              },
-              // if no amount is forwarded to the contract, skip showing assetsSent
-              assetsSent: receipt.amount?.isZero()
-                ? undefined
-                : [
-                    {
-                      amount: receipt.amount,
-                      assetId: receipt.assetId,
-                    },
-                  ],
-              calls,
-            });
-
-            return newContractCallOps;
-          }
-        }
-        return prevContractCallOps;
-      }, prevOutputCallOps as Operation[]);
-
-      return newCallOps;
+    if (!contractInput) {
+      return [];
     }
 
-    return prevOutputCallOps;
-  }, [] as Operation[]);
-
-  return contractCallOperations;
+    return contractCallReceipts
+      .filter((receipt) => receipt.to === contractInput.contractID)
+      .flatMap((receipt) =>
+        processCallReceipt(
+          receipt,
+          contractInput,
+          inputs,
+          abiMap,
+          rawPayload as string,
+          maxInputs,
+          baseAssetId
+        )
+      );
+  });
 }
 
 /** @hidden */

@@ -14,15 +14,15 @@ This reference describes all the options of the [`launchTestNode`](./launching-a
 Used to set the node's genesis block state (coins and messages).
 
 - `count`: number of wallets/addresses to generate on the genesis block.
-- `assets`: configure how many unique assets each wallet will own with the base asset included. Can be `number` or `AssetId[]`.
-  - The `AssetId` utility simplifies testing when different assets are necessary.
+- `assets`: configure how many unique assets each wallet will own with the base asset included. Can be `number` or `TestAssetId[]`.
+  - The `TestAssetId` utility simplifies testing when different assets are necessary.
 - `coinsPerAsset`: number of coins (UTXOs) per asset id.
 - `amountPerCoin`: for each coin, the amount it'll contain.
 - `messages`: messages to assign to the wallets.
 
 ### `walletsConfig.assets`
 
-The `AssetId` utility integrates with [`walletsConfig`](./test-node-options.md#walletsconfig) and gives you an easy way to generate multiple random asset ids via the `AssetId.random` static method.
+The `TestAssetId` utility integrates with [`walletsConfig`](./test-node-options.md#walletsconfig) and gives you an easy way to generate multiple random asset ids via the `TestAssetId.random` static method.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#asset-ids{ts:line-numbers}
 
