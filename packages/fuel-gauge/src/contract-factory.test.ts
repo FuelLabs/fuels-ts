@@ -273,7 +273,7 @@ describe('Contract Factory', () => {
   it('deploys large contracts via blobs [byte aligned]', async () => {
     using launched = await launchTestNode({
       providerOptions: {
-        cacheUtxo: -1,
+        resourceCacheTTL: -1,
       },
     });
 
@@ -296,7 +296,7 @@ describe('Contract Factory', () => {
   it('deploys large contracts via blobs [padded]', async () => {
     using launched = await launchTestNode({
       providerOptions: {
-        cacheUtxo: -1,
+        resourceCacheTTL: -1,
       },
     });
 
@@ -307,7 +307,7 @@ describe('Contract Factory', () => {
     const bytecode = concat([arrayify(LargeContractFactory.bytecode), new Uint8Array(3)]);
     const factory = new ContractFactory(bytecode, LargeContract.abi, wallet);
     expect(factory.bytecode.length % 8 === 0).toBe(false);
-    const deploy = await factory.deployContractAsBlobs<LargeContract>({ chunkSizeOverride: 0.5 });
+    const deploy = await factory.deployContractAsBlobs<LargeContract>({ chunkSizeMultiplier: 0.5 });
 
     const { contract } = await deploy.waitForResult();
     expect(contract.id).toBeDefined();
@@ -318,7 +318,7 @@ describe('Contract Factory', () => {
     expect(value.toNumber()).toBe(1001);
   }, 15000);
 
-  it('should not deploy large contracts via blobs [invalid chunk size override]', async () => {
+  it('should not deploy large contracts via blobs [invalid chunk size multiplier]', async () => {
     using launched = await launchTestNode();
 
     const {
@@ -326,13 +326,13 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-    const chunkSizeOverride = 2;
+    const chunkSizeMultiplier = 2;
 
     await expectToThrowFuelError(
-      () => factory.deployContractAsBlobs<LargeContract>({ chunkSizeOverride }),
+      () => factory.deployContractAsBlobs<LargeContract>({ chunkSizeMultiplier }),
       new FuelError(
-        ErrorCode.INVALID_CHUNK_SIZE_OVERRIDE,
-        'Chunk size override must be between 0 and 1'
+        ErrorCode.INVALID_CHUNK_SIZE_MULTIPLIER,
+        'Chunk size multiplier must be between 0 and 1'
       )
     );
   });
@@ -376,7 +376,7 @@ describe('Contract Factory', () => {
   it('deploys a large contract via deploy entrypoint', async () => {
     using launched = await launchTestNode({
       providerOptions: {
-        cacheUtxo: -1,
+        resourceCacheTTL: -1,
       },
     });
 
@@ -395,7 +395,7 @@ describe('Contract Factory', () => {
   it('should not deploy large contract with invalid balance', async () => {
     using launched = await launchTestNode({
       providerOptions: {
-        cacheUtxo: -1,
+        resourceCacheTTL: -1,
       },
       walletsConfig: {
         amountPerCoin: 0,

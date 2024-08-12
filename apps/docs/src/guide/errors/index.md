@@ -96,11 +96,11 @@ Checksum validation failed for the provided mnemonic.
 
 Ensure that the mnemonic is correct.
 
-### `INVALID_CHUNK_SIZE_OVERRIDE`
+### `INVALID_CHUNK_SIZE_MULTIPLIER`
 
-When the chunk size override is not between 0 and 1.
+When the chunk size multiplier is not between 0 and 1.
 
-Ensure that the chunk size override is a number that it is between 0 and 1.
+Ensure that the chunk size multiplier is a number that it is between 0 and 1.
 
 ### `INVALID_CONFIGURABLE_CONSTANTS`
 

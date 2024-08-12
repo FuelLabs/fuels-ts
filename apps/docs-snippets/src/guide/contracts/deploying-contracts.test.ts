@@ -91,8 +91,8 @@ describe('Deploying Contracts', () => {
 
     // Deploy the contract as blobs
     const { waitForResult, contractId, transactionId } = await factory.deployContractAsBlobs({
-      // Increasing chunk size override to 10%
-      chunkSizeOverride: 0.1,
+      // Increasing chunk size multiplier to be 90% of the max chunk size
+      chunkSizeMultiplier: 0.9,
     });
     // Await it's deployment
     const { contract, transactionResult } = await waitForResult();

@@ -27,7 +27,7 @@ import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /** Amount of percentage override for chunk sizes in blob transactions */
-export const CHUNK_SIZE_OVERRIDE = 0.05;
+export const CHUNK_SIZE_MULTIPLIER = 0.95;
 
 /**
  * Options for deploying a contract.
@@ -37,7 +37,7 @@ export type DeployContractOptions = {
   storageSlots?: StorageSlot[];
   stateRoot?: BytesLike;
   configurableConstants?: { [name: string]: unknown };
-  chunkSizeOverride?: number;
+  chunkSizeMultiplier?: number;
 } & CreateTransactionRequestLike;
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
@@ -246,17 +246,17 @@ export default class ContractFactory {
    */
   async deployContractAsBlobs<TContract extends Contract = Contract>(
     deployOptions: DeployContractOptions = {
-      chunkSizeOverride: CHUNK_SIZE_OVERRIDE,
+      chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
     }
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
-    const { configurableConstants, chunkSizeOverride } = deployOptions;
+    const { configurableConstants, chunkSizeMultiplier } = deployOptions;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
     // Generate the chunks based on the maximum chunk size
-    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeOverride);
+    const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
     const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
         ...deployOptions,
@@ -437,12 +437,12 @@ export default class ContractFactory {
    */
   private getMaxChunkSize(
     deployOptions: DeployContractOptions,
-    chunkSizeOverride: number = CHUNK_SIZE_OVERRIDE
+    chunkSizeMultiplier: number = CHUNK_SIZE_MULTIPLIER
   ) {
-    if (chunkSizeOverride < 0 || chunkSizeOverride > 1) {
+    if (chunkSizeMultiplier < 0 || chunkSizeMultiplier > 1) {
       throw new FuelError(
-        ErrorCode.INVALID_CHUNK_SIZE_OVERRIDE,
-        'Chunk size override must be between 0 and 1'
+        ErrorCode.INVALID_CHUNK_SIZE_MULTIPLIER,
+        'Chunk size multiplier must be between 0 and 1'
       );
     }
 
@@ -460,10 +460,8 @@ export default class ContractFactory {
       ...deployOptions,
       bytecode: randomBytes(32),
     }).fundWithFakeUtxos([], provider.getBaseAssetId());
-    // Allow override for fluctuating transaction size
-    const override = 1 - chunkSizeOverride;
     // Given above, calculate the maximum chunk size
-    const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * override;
+    const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * chunkSizeMultiplier;
 
     // Ensure chunksize is byte aligned
     return Math.round(maxChunkSize / WORD_SIZE) * WORD_SIZE;
