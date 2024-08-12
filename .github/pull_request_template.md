@@ -37,5 +37,5 @@ Remove this section if there are no breaking changes.
 
 - [ ] All **changes** are **covered** by **tests** (or not applicable)
 - [ ] All **changes** are **documented** (or not applicable)
-- [ ] I **reviewed** the **entire PR** myself (prefarably, on GH UI)
+- [ ] I **reviewed** the **entire PR** myself (preferably, on GH UI)
 - [ ] I **described** all **Breaking Changes** (or there's none)
