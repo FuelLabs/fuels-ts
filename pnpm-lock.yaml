@@ -620,8 +620,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       type-fest:
-        specifier: ^4.6.0
-        version: 4.19.0
+        specifier: ^4.24.0
+        version: 4.24.0
 
   packages/abi-typegen:
     dependencies:
@@ -748,8 +748,8 @@ importers:
         specifier: ^2.1.2
         version: 2.1.2
       type-fest:
-        specifier: ^4.6.0
-        version: 4.19.0
+        specifier: ^4.24.0
+        version: 4.24.0
 
   packages/address:
     dependencies:
@@ -6524,6 +6524,7 @@ packages:
 
   bun@1.1.21:
     resolution: {integrity: sha512-mvqYEvafGskIVTjlftbKvsXtyR6z/SQnhJsVw0xCU46pc56oX1sAGvaemWKOy/sy/gGMHcgLE0KUidDQQzqXWQ==}
+    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -13362,8 +13363,8 @@ packages:
     resolution: {integrity: sha512-StmrZmK3eD9mDF9Vt7UhqthrDSk66O9iYl5t5a0TSoVkHjl0XZx/xuc/BRz4urAXXGHOY5OLsE0RdJFIApSFmw==}
     engines: {node: '>=14.16'}
 
-  type-fest@4.19.0:
-    resolution: {integrity: sha512-CN2l+hWACRiejlnr68vY0/7734Kzu+9+TOslUXbSCQ1ruY9XIHDBSceVXCcHm/oXrdzhtLMMdJEKfemf1yXiZQ==}
+  type-fest@4.24.0:
+    resolution: {integrity: sha512-spAaHzc6qre0TlZQQ2aA/nGMe+2Z/wyGk5Z+Ru2VUfdNwT6kWO6TjevOlpebsATEG1EIQ2sOiDszud3lO5mt/Q==}
     engines: {node: '>=16'}
 
   type-is@1.6.18:
@@ -30727,7 +30728,7 @@ snapshots:
   type-fest@3.1.0:
     optional: true
 
-  type-fest@4.19.0: {}
+  type-fest@4.24.0: {}
 
   type-is@1.6.18:
     dependencies:
