@@ -363,7 +363,12 @@ describe('Contract Factory', () => {
 
     const {
       wallets: [wallet],
+      provider,
     } = launched;
+
+    const { consensusParameters } = provider.getChain();
+    const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
+    expect(ConfigurableContractFactory.bytecode.length).toBeLessThanOrEqual(maxContractSize);
 
     const deploy = await ConfigurableContractFactory.deploy(wallet);
     const { contract } = await deploy.waitForResult();
@@ -382,7 +387,12 @@ describe('Contract Factory', () => {
 
     const {
       wallets: [wallet],
+      provider,
     } = launched;
+
+    const { consensusParameters } = provider.getChain();
+    const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
+    expect(LargeContractFactory.bytecode.length).toBeGreaterThan(maxContractSize);
 
     const deploy = await LargeContractFactory.deploy(wallet);
     const { contract } = await deploy.waitForResult();
