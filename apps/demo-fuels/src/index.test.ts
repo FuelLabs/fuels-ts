@@ -73,7 +73,9 @@ describe('ExampleContract', () => {
       contractInstance.functions.return_input(1337).simulate()
     );
 
-    expect((<Error>error).message).toMatch('not enough coins to fit the target');
+    expect((<Error>error).message).toMatch(
+      'This account does not have enough funds to cover this transaction.'
+    );
   });
 
   it('should not throw when dry running via contract factory with wallet with no resources', async () => {

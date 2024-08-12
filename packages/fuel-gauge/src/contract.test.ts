@@ -1076,7 +1076,7 @@ describe('Contract', () => {
           forward: [100, contract.provider.getBaseAssetId()],
         })
         .simulate()
-    ).rejects.toThrowError('not enough coins to fit the target');
+    ).rejects.toThrowError('This account does not have enough funds to cover this transaction.');
   });
 
   it('should throw when using "simulate" without a wallet', async () => {
