@@ -111,19 +111,17 @@ See also:
 
 # Testing
 
-In order to run tests locally, you need `fuel-core` running locally.
-
-To do that run this command in your terminal:
+In order to run tests locally, you can run the following commands:
 
 ```sh
-pnpm node:run
-```
+# run pretest to ensure all test dependencies are built
+pnpm pretest
 
-And then run the tests in another terminal tab:
+# run all tests in a node environment
+pnpm test:node
 
-```sh
-# run all tests
-pnpm test
+# you may also run tests in a browser environment
+pnpm test:browser
 
 # watch all tests
 pnpm test:watch
@@ -137,11 +135,6 @@ pnpm test:filter packages/my-desired-package/src/my.test.ts
 # run tests while passing other flags to sub-program
 pnpm test -- --coverage --my-other-flag
 ```
-
-This will run `node:run`, `test` and then `node:clean`
-
-> The tests may break if you are running your tests locally using `node:run` in a separate terminal.
-> To reset your local fuel-core node data and start from scratch, run `node:clean`
 
 ### CI Test
 
@@ -239,7 +232,7 @@ Manually edit the `internal/fuel-core/VERSION` file, add the right version, and 
 
 ```sh
 pnpm install # will download new binaries
-pnpm test:ci
+pnpm test:node
 ```
 
 If all tests pass, that's it.
