@@ -498,7 +498,7 @@ describe('Funding Transactions', () => {
       () => fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId()),
       new FuelError(
         FuelError.CODES.INVALID_REQUEST,
-        'Transaction is not inserted. Hash is already known'
+        'Unknown error: Transaction is not inserted. Hash is already known'
       )
     );
   }, 15_000);
