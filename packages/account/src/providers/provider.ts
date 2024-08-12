@@ -571,7 +571,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
           if (Array.isArray(graphQlResponse?.errors)) {
             for (const error of graphQlResponse.errors) {
-              handleGqlErrorMessage(error.message);
+              handleGqlErrorMessage(error.message, error);
             }
           }
         }

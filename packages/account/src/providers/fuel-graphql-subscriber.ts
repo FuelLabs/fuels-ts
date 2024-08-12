@@ -50,8 +50,9 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const { data, errors } = this.events.shift()!;
         if (Array.isArray(errors)) {
-          const errorMessage = errors.map((err) => err.message).join('\n\n');
-          handleGqlErrorMessage(errorMessage);
+          for (const error of errors) {
+            handleGqlErrorMessage(error.message);
+          }
         }
         return { value: data, done: false };
       }
