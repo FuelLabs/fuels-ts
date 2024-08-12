@@ -1,6 +1,6 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
 import { HDWallet, Wallet } from 'fuels';
-import { AssetId, launchTestNode } from 'fuels/test-utils';
+import { TestAssetId, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -132,7 +132,7 @@ describe('Instantiating wallets', () => {
     using launched = await launchTestNode({
       walletsConfig: {
         count: 3,
-        assets: [AssetId.A, AssetId.B],
+        assets: [TestAssetId.A, TestAssetId.B],
         coinsPerAsset: 5,
         amountPerCoin: 100_000,
       },

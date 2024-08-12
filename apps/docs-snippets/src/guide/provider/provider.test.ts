@@ -1,14 +1,4 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-import {
-  Provider,
-  ScriptTransactionRequest,
-  sleep,
-  WalletUnlocked,
-  Address,
-  FUEL_NETWORK_URL,
-} from 'fuels';
+import { Provider, ScriptTransactionRequest, sleep, WalletUnlocked, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 async function fetchSomeExternalCredentials() {
@@ -27,10 +17,13 @@ describe('Provider', () => {
   it('base examples', async () => {
     using launched = await launchTestNode();
 
-    const FUEL_NETWORK_URL = launched.provider.url;
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
 
     // #region provider-definition
-    // #import { Provider, FUEL_NETWORK_URL, WalletUnlocked };
+    // #import { Provider, WalletUnlocked };
+
+    const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
     // Create the provider
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -57,6 +50,7 @@ describe('Provider', () => {
     using launched = await launchTestNode();
 
     const FUEL_NETWORK_URL = launched.provider.url;
+
     // #region options-requestMiddleware
     // synchronous request middleware
     await Provider.create(FUEL_NETWORK_URL, {
@@ -147,13 +141,16 @@ describe('Provider', () => {
     const recipientAddress = Address.fromRandom();
     using launched = await launchTestNode();
 
-    const FUEL_NETWORK_URL = launched.provider.url;
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
 
     // #region provider-getBaseAssetId
-    // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest };
+    // #import { Provider, ScriptTransactionRequest };
+
+    const NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
     // Fetch the base asset ID using the provider
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const provider = await Provider.create(NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
     // 0x...
 

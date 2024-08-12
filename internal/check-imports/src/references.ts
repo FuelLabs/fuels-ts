@@ -13,7 +13,6 @@ import {
   Predicate,
   Provider,
 } from '@fuel-ts/account';
-import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { Address } from '@fuel-ts/address';
 import { ContractFactory } from '@fuel-ts/contract';
 import { encrypt, decrypt } from '@fuel-ts/crypto';
@@ -170,7 +169,6 @@ log(WalletManager);
 log(Wallet);
 log(generateTestWallet);
 log(seedTestWallet);
-log(FUEL_NETWORK_URL);
 
 /**
  * wordlists

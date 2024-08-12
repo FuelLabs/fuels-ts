@@ -7,10 +7,11 @@ import { launchTestNode } from 'fuels/test-utils';
  */
 describe('Getting started', () => {
   it('can connect to a local network', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    using launched = await launchTestNode({
-      nodeOptions: { port: '4000' },
-    });
+    using launched = await launchTestNode();
+
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
+
     // #region connecting-to-the-local-node
     // #import { Provider, Wallet };
 
@@ -30,6 +31,11 @@ describe('Getting started', () => {
   });
 
   it('can connect to testnet', async () => {
+    using launched = await launchTestNode();
+
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
+
     // #region connecting-to-the-testnet
     // #import { Provider, Wallet, TESTNET_NETWORK_URL };
 

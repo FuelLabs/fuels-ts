@@ -10,7 +10,7 @@ import { Account } from './account';
 import type { CoinQuantity, Resource } from './providers';
 import { ScriptTransactionRequest, Provider } from './providers';
 import * as providersMod from './providers';
-import { AssetId, setupTestProviderAndWallets } from './test-utils';
+import { TestAssetId, setupTestProviderAndWallets } from './test-utils';
 import { Wallet } from './wallet';
 /**
  * @group node
@@ -332,7 +332,7 @@ describe('Account', () => {
     using launched = await setupTestProviderAndWallets({
       walletsConfig: {
         amountPerCoin: 500_000,
-        assets: [AssetId.A],
+        assets: [TestAssetId.A],
       },
     });
     const {
@@ -342,7 +342,7 @@ describe('Account', () => {
 
     const receiver = Wallet.generate({ provider });
 
-    const response = await sender.transfer(receiver.address, 1, AssetId.A.value, {
+    const response = await sender.transfer(receiver.address, 1, TestAssetId.A.value, {
       gasLimit: 10_000,
     });
 
@@ -354,10 +354,10 @@ describe('Account', () => {
     const expectedRemaining = 441899;
 
     expect(senderBalances).toEqual([
-      { assetId: AssetId.A.value, amount: bn(499_999) },
+      { assetId: TestAssetId.A.value, amount: bn(499_999) },
       { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
     ]);
-    expect(receiverBalances).toEqual([{ assetId: AssetId.A.value, amount: bn(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: TestAssetId.A.value, amount: bn(1) }]);
   });
 
   it('can transfer to multiple destinations', async () => {
