@@ -7,33 +7,24 @@ import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
 import type { FakeResources, TransferParams } from './account';
 import { Account } from './account';
-import { FUEL_NETWORK_URL } from './configs';
+import type { CoinQuantity, Resource } from './providers';
 import { ScriptTransactionRequest, Provider } from './providers';
 import * as providersMod from './providers';
-import type { CoinQuantity, Resource } from './providers';
-import { generateTestWallet, seedTestWallet } from './test-utils';
+import { TestAssetId, setupTestProviderAndWallets } from './test-utils';
 import { Wallet } from './wallet';
 
 /**
  * @group node
  */
-
 describe('Account', () => {
-  const assets = [ASSET_A, ASSET_B];
-  let provider: Provider;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    assets.push(baseAssetId);
-  });
-
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('should create account using an address, with a provider', () => {
+  it('should create account using an address, with a provider', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -60,20 +51,27 @@ describe('Account', () => {
   });
 
   it('should get coins just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
+
     const { coins } = await account.getCoins();
-    const assetA = coins.find((c) => c.assetId === assets[0]);
+    const assetA = coins.find((c) => c.assetId === ASSET_A);
     expect(assetA?.amount.gt(1)).toBeTruthy();
-    const assetB = coins.find((c) => c.assetId === assets[1]);
+    const assetB = coins.find((c) => c.assetId === ASSET_B);
     expect(assetB?.amount.gt(1)).toBeTruthy();
-    const assetC = coins.find((c) => c.assetId === assets[2]);
+    const assetC = coins.find((c) => c.assetId === provider.getBaseAssetId());
     expect(assetC?.amount.gt(1)).toBeTruthy();
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     // #region Message-getResourcesToSpend
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -90,6 +88,9 @@ describe('Account', () => {
   });
 
   it('getResourcesToSpend should work with <1 amount', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -104,6 +105,9 @@ describe('Account', () => {
   });
 
   it('should get messages just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
       provider
@@ -117,17 +121,23 @@ describe('Account', () => {
   });
 
   it('should get single asset balance just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
     const balanceA = await account.getBalance(); // native asset
-    const balanceB = await account.getBalance(assets[1]);
+    const balanceB = await account.getBalance(ASSET_B);
     expect(balanceA.gte(1)).toBeTruthy();
     expect(balanceB.gte(1)).toBeTruthy();
   });
 
   it('should get multiple balances just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
@@ -137,12 +147,17 @@ describe('Account', () => {
   });
 
   it('should connect with provider just fine [INSTANCE]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
 
-    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+    using newProvider = await setupTestProviderAndWallets();
+
+    const { provider: newProviderInstance } = newProvider;
 
     expect(account.provider).not.toBe(newProviderInstance);
 
@@ -153,11 +168,15 @@ describe('Account', () => {
   });
 
   it('should be able to set a provider', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
       provider
     );
-    const newProviderInstance = await Provider.create(FUEL_NETWORK_URL);
+
+    const newProviderInstance = await Provider.create(provider.url);
 
     expect(account.provider).not.toBe(newProviderInstance);
 
@@ -168,6 +187,9 @@ describe('Account', () => {
   });
 
   it('should execute fund just as fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const quantities: CoinQuantity[] = [
       {
         amount: bn(10),
@@ -203,13 +225,13 @@ describe('Account', () => {
     expect(addAmountToCoinQuantitiesSpy).toBeCalledTimes(1);
     expect(addAmountToCoinQuantitiesSpy).toHaveBeenCalledWith({
       amount: bn(fee),
-      assetId: baseAssetId,
+      assetId: provider.getBaseAssetId(),
       coinQuantities: quantities,
     });
 
     const expectedTotalResources = [
       { amount: bn(quantities[0].amount), assetId: quantities[0].assetId },
-      { amount: bn(fee), assetId: baseAssetId },
+      { amount: bn(fee), assetId: provider.getBaseAssetId() },
     ];
     expect(getResourcesToSpendSpy).toHaveBeenCalled();
     expect(getResourcesToSpendSpy).toBeCalledWith(expectedTotalResources, {
@@ -222,6 +244,9 @@ describe('Account', () => {
   });
 
   it('should execute sendTransaction just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
     };
@@ -261,6 +286,9 @@ describe('Account', () => {
   });
 
   it('should execute simulateTransaction just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
     };
@@ -301,28 +329,47 @@ describe('Account', () => {
   });
 
   it('can transfer a single type of coin to a single destination', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-    const receiver = await generateTestWallet(provider);
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 500_000,
+        assets: [TestAssetId.A],
+      },
+    });
+    const {
+      provider,
+      wallets: [sender],
+    } = launched;
 
-    const response = await sender.transfer(receiver.address, 1, baseAssetId, {
+    const receiver = Wallet.generate({ provider });
+
+    const response = await sender.transfer(receiver.address, 1, TestAssetId.A.value, {
       gasLimit: 10_000,
     });
+
     await response.wait();
 
     const { balances: senderBalances } = await sender.getBalances();
     const { balances: receiverBalances } = await receiver.getBalances();
 
-    const expectedRemaining = 442069;
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
-    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
+    const expectedRemaining = 441899;
+
+    expect(senderBalances).toEqual([
+      { assetId: TestAssetId.A.value, amount: bn(499_999) },
+      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
+    ]);
+    expect(receiverBalances).toEqual([{ assetId: TestAssetId.A.value, amount: bn(1) }]);
   });
 
   it('can transfer to multiple destinations', async () => {
-    const sender = await generateTestWallet(provider, [
-      [900_000, baseAssetId],
-      [900_000, ASSET_A],
-      [900_000, ASSET_B],
-    ]);
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      wallets: [sender],
+      provider,
+    } = launched;
 
     const amounts = [100, 200, 300, 400];
 
@@ -333,7 +380,7 @@ describe('Account', () => {
     ];
 
     const transferConfig: TransferParams[] = [
-      { amount: amounts[0], destination: receivers[0].address, assetId: baseAssetId },
+      { amount: amounts[0], destination: receivers[0].address, assetId: provider.getBaseAssetId() },
       { amount: amounts[1], destination: receivers[1].address, assetId: ASSET_A },
       { amount: amounts[2], destination: receivers[2].address, assetId: ASSET_B },
       { amount: amounts[3], destination: receivers[2].address, assetId: ASSET_A },
@@ -344,7 +391,7 @@ describe('Account', () => {
     expect(isStatusSuccess).toBeTruthy();
 
     const expectedBalances = [
-      { receiver: receivers[0], assetId: baseAssetId, expectedBalance: amounts[0] },
+      { receiver: receivers[0], assetId: provider.getBaseAssetId(), expectedBalance: amounts[0] },
       { receiver: receivers[1], assetId: ASSET_A, expectedBalance: amounts[1] },
       { receiver: receivers[2], assetId: ASSET_B, expectedBalance: amounts[2] },
       { receiver: receivers[2], assetId: ASSET_A, expectedBalance: amounts[3] },
@@ -389,12 +436,26 @@ describe('Account', () => {
   });
 
   it('can create transfer request just fine', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-    const receiver = await generateTestWallet(provider);
-
-    const request = await sender.createTransfer(receiver.address.toB256(), 1, baseAssetId, {
-      gasLimit: 10_000,
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 500_000,
+      },
     });
+    const {
+      wallets: [sender],
+      provider,
+    } = launched;
+
+    const receiver = Wallet.generate({ provider });
+
+    const request = await sender.createTransfer(
+      receiver.address.toB256(),
+      1,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
 
     const response = await sender.sendTransaction(request);
     await response.wait();
@@ -403,18 +464,27 @@ describe('Account', () => {
     const { balances: receiverBalances } = await receiver.getBalances();
 
     const expectedRemaining = 442069;
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
-    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
+    expect(senderBalances).toEqual([
+      { assetId: ASSET_A, amount: bn(500_000) },
+      { assetId: ASSET_B, amount: bn(500_000) },
+      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
+    ]);
+    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
   });
 
   it('can set "gasLimit" and "maxFee" when transferring amounts', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender],
+      provider,
+    } = launched;
+
     const receiver = Address.fromRandom();
 
     const gasLimit = 30_000;
     const maxFee = 60_000;
 
-    const request = await sender.createTransfer(receiver, 1, baseAssetId, {
+    const request = await sender.createTransfer(receiver, 1, provider.getBaseAssetId(), {
       gasLimit,
       maxFee,
     });
@@ -430,10 +500,15 @@ describe('Account', () => {
   });
 
   it('can transfer with custom TX Params', async () => {
-    const sender = await generateTestWallet(provider, [[200_000, baseAssetId]]);
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender],
+      provider,
+    } = launched;
+
     const receiver = Wallet.generate({ provider });
 
-    const tx = await sender.transfer(receiver.address, 1, baseAssetId, {
+    const tx = await sender.transfer(receiver.address, 1, provider.getBaseAssetId(), {
       gasLimit: 1000,
       tip: 10,
       witnessLimit: 10000,
@@ -441,22 +516,34 @@ describe('Account', () => {
 
     const response = await tx.wait();
     const { balances: receiverBalances } = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
     expect(response.isStatusSuccess).toBeTruthy();
   });
 
   it('can exclude IDs when getResourcesToSpend is called', async () => {
-    const user = await generateTestWallet(provider, [
-      [500_000, ASSET_A],
-      [500_000, ASSET_B],
-      [500_000, baseAssetId],
-    ]);
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 500_000,
+      },
+    });
+    const {
+      wallets: [user],
+    } = launched;
 
     const { coins } = await user.getCoins();
 
+    const assetAUTXO = coins.find((coin) => coin.assetId === ASSET_A);
+
+    if (!assetAUTXO) {
+      throw new Error('Asset A UTXO not found');
+    }
+
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
     await expect(
-      user.getResourcesToSpend([[1, ASSET_A, 500_000]], { utxos: [coins[0].id] })
+      user.getResourcesToSpend([[1, ASSET_A, 500_000]], {
+        utxos: [assetAUTXO.id],
+      })
     ).rejects.toThrow(/not enough coins to fit the target/);
   });
 
@@ -465,14 +552,16 @@ describe('Account', () => {
     const assetIdB = ASSET_B;
     const amount = 1;
 
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        count: 3,
+      },
+    });
+    const {
+      wallets: [sender, receiverA, receiverB],
+    } = launched;
+
     const request = new ScriptTransactionRequest();
-    const sender = await generateTestWallet(provider, [
-      [500_000, assetIdA],
-      [500_000, assetIdB],
-      [500_000, baseAssetId],
-    ]);
-    const receiverA = await generateTestWallet(provider);
-    const receiverB = await generateTestWallet(provider);
 
     request.addCoinOutputs(receiverA.address, [
       [amount, assetIdA],
@@ -512,7 +601,17 @@ describe('Account', () => {
   });
 
   it('can withdraw an amount of base asset', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        count: 1,
+        amountPerCoin: 500_000,
+      },
+    });
+    const {
+      wallets: [sender],
+      provider,
+    } = launched;
+
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
@@ -531,11 +630,20 @@ describe('Account', () => {
 
     const { balances: senderBalances } = await sender.getBalances();
     const expectedRemaining = 441598;
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
+    expect(senderBalances).toEqual([
+      { assetId: ASSET_A, amount: bn(500_000) },
+      { assetId: ASSET_B, amount: bn(500_000) },
+      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
+    ]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
-    const sender = await generateTestWallet(provider, [[500_000, baseAssetId]]);
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender],
+      provider,
+    } = launched;
+
     const RECIPIENT_ID = '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263';
     const AMOUNT = 10;
     const recipient = Address.fromB256(RECIPIENT_ID);
@@ -546,7 +654,7 @@ describe('Account', () => {
 
     // Wait for the next block to be minter on out case we are using a local provider
     // so we can create a new tx to generate next block
-    const resp = await sender.transfer(recipient, AMOUNT, baseAssetId, {
+    const resp = await sender.transfer(recipient, AMOUNT, provider.getBaseAssetId(), {
       gasLimit: 10_000,
     });
     const nextBlock = await resp.waitForResult();
@@ -563,30 +671,51 @@ describe('Account', () => {
     expect(messageProof?.sender.toHexString()).toEqual(result.id);
   });
 
-  it('can transfer amount using mutiple utxos', async () => {
-    const sender = Wallet.generate({
+  it('can transfer amount using multiple utxos', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [fundingWallet],
       provider,
-    });
-    const receiver = Wallet.generate({
-      provider,
-    });
+    } = launched;
+
+    // create two fresh wallets
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
+
+    // Create transaction
+    const request = new ScriptTransactionRequest();
 
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[1_500_000, baseAssetId]], 3);
+    const amount = bn(1_500_000);
+    for (let i = 0; i < 3; i++) {
+      request.addCoinOutput(sender.address, amount.div(3), provider.getBaseAssetId());
+    }
 
-    const transfer = await sender.transfer(receiver.address, 110, baseAssetId, {
+    const txCost = await fundingWallet.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await fundingWallet.fund(request, txCost);
+
+    const tx1 = await fundingWallet.sendTransaction(request);
+    await tx1.waitForResult();
+
+    const transfer = await sender.transfer(receiver.address, 110, provider.getBaseAssetId(), {
       gasLimit: 10_000,
     });
     await transfer.wait();
 
     const { balances: receiverBalances } = await receiver.getBalances();
-    expect(receiverBalances).toEqual([{ assetId: baseAssetId, amount: bn(110) }]);
+    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(110) }]);
   });
 
   it('can generate and use fake coins', async () => {
-    const sender = Wallet.generate({
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender],
       provider,
-    });
+    } = launched;
 
     const amount1 = bn(100_000);
     const amount2 = bn(200_000);
@@ -594,7 +723,7 @@ describe('Account', () => {
     const amountToTransferBaseAsset = bn(1000);
 
     const fakeCoinsConfig: FakeResources[] = [
-      { amount: amount1, assetId: baseAssetId },
+      { amount: amount1, assetId: provider.getBaseAssetId() },
       { amount: amount2, assetId: ASSET_A },
       { amount: amount3, assetId: ASSET_B },
     ];
@@ -606,7 +735,11 @@ describe('Account', () => {
     });
 
     request.addResources(fakeCoins);
-    request.addCoinOutput(Address.fromRandom(), amountToTransferBaseAsset, baseAssetId);
+    request.addCoinOutput(
+      Address.fromRandom(),
+      amountToTransferBaseAsset,
+      provider.getBaseAssetId()
+    );
     request.addCoinOutput(Address.fromRandom(), amount2, ASSET_A);
     request.addCoinOutput(Address.fromRandom(), amount3, ASSET_B);
 
@@ -618,12 +751,33 @@ describe('Account', () => {
     expect(dryRunStatus?.type).toBe('DryRunSuccessStatus');
   });
 
-  it('can withdraw an amount of base asset using mutiple uxtos', async () => {
-    const sender = Wallet.generate({
+  it('can withdraw an amount of base asset using multiple utxos', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [fundingWallet],
       provider,
-    });
+    } = launched;
+
+    // fresh sender wallet
+    const sender = Wallet.generate({ provider });
     // seed wallet with 3 distinct utxos
-    await seedTestWallet(sender, [[1_500_000, baseAssetId]], 3);
+    const request = new ScriptTransactionRequest();
+
+    const fundingAmount = bn(1_500_000);
+    for (let i = 0; i < 3; i++) {
+      request.addCoinOutput(sender.address, fundingAmount.div(3), provider.getBaseAssetId());
+    }
+
+    const txCost = await fundingWallet.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await fundingWallet.fund(request, txCost);
+
+    const tx1 = await fundingWallet.sendTransaction(request);
+    await tx1.waitForResult();
+
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
@@ -639,15 +793,16 @@ describe('Account', () => {
     const { balances: senderBalances } = await sender.getBalances();
 
     const expectedRemaining = 1441498;
-    expect(senderBalances).toEqual([{ assetId: baseAssetId, amount: bn(expectedRemaining) }]);
+    expect(senderBalances).toEqual([
+      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
+    ]);
   });
 
   it('can set "gasLimit" and "maxFee" when withdrawing to base layer', async () => {
-    const sender = Wallet.generate({
-      provider,
-    });
-
-    await seedTestWallet(sender, [[500_000, baseAssetId]]);
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender],
+    } = launched;
 
     const recipient = Address.fromRandom();
     const amount = 110;
@@ -665,12 +820,19 @@ describe('Account', () => {
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
-  it('should ensure gas price and gas limit are validated when transfering amounts', async () => {
-    const sender = await generateTestWallet(provider, [[100_000, baseAssetId]]);
-    const receiver = Wallet.generate({ provider });
+  it('should ensure gas price and gas limit are validated when transferring amounts', async () => {
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      wallets: [sender, receiver],
+      provider,
+    } = launched;
 
     await expect(async () => {
-      const result = await sender.transfer(receiver.address, 1, baseAssetId, {
+      const result = await sender.transfer(receiver.address, 1, provider.getBaseAssetId(), {
         gasLimit: 0,
       });
       await result.wait();
@@ -678,7 +840,15 @@ describe('Account', () => {
   });
 
   it('should ensure gas limit and price are validated when withdraw an amount of base asset', async () => {
-    const sender = await generateTestWallet(provider, [[10_000, baseAssetId]]);
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+    });
+    const {
+      wallets: [sender],
+    } = launched;
+
     const recipient = Address.fromB256(
       '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
     );
@@ -692,25 +862,31 @@ describe('Account', () => {
   });
 
   it('should throw when trying to transfer a zero or negative amount', async () => {
-    const sender = await generateTestWallet(provider, [[10_000, baseAssetId]]);
-    const receiver = Wallet.generate({ provider });
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [sender, receiver],
+      provider,
+    } = launched;
 
     await expectToThrowFuelError(
       async () => {
-        await sender.transfer(receiver.address, 0, baseAssetId);
+        await sender.transfer(receiver.address, 0, provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
 
     await expectToThrowFuelError(
       async () => {
-        await sender.transfer(receiver.address, -1, baseAssetId);
+        await sender.transfer(receiver.address, -1, provider.getBaseAssetId());
       },
       new FuelError(ErrorCode.INVALID_TRANSFER_AMOUNT, 'Transfer amount must be a positive number.')
     );
   });
 
   it('can properly use getCoins', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = Wallet.generate({ provider });
     const spy = vi.spyOn(account.provider, 'getCoins');
 
@@ -719,17 +895,24 @@ describe('Account', () => {
     await account.getCoins();
     expect(spy.mock.calls[0]).toStrictEqual([account.address, undefined, undefined]);
 
-    await account.getCoins(baseAssetId);
-    expect(spy.mock.calls[1]).toStrictEqual([account.address, baseAssetId, undefined]);
+    await account.getCoins(provider.getBaseAssetId());
+    expect(spy.mock.calls[1]).toStrictEqual([
+      account.address,
+      provider.getBaseAssetId(),
+      undefined,
+    ]);
 
-    await account.getCoins(baseAssetId, args);
-    expect(spy.mock.calls[2]).toStrictEqual([account.address, baseAssetId, args]);
+    await account.getCoins(provider.getBaseAssetId(), args);
+    expect(spy.mock.calls[2]).toStrictEqual([account.address, provider.getBaseAssetId(), args]);
 
     expect(spy).toHaveBeenCalled();
     vi.restoreAllMocks();
   });
 
   it('can properly use getMessages', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const account = Wallet.generate({ provider });
     const spy = vi.spyOn(account.provider, 'getMessages');
 
@@ -747,21 +930,24 @@ describe('Account', () => {
   });
 
   test('can properly use getBalances', async () => {
-    const wallet = Wallet.generate({ provider });
-
     const fundAmount = 10_000;
 
-    await seedTestWallet(wallet, [
-      [fundAmount, baseAssetId],
-      [fundAmount, ASSET_A],
-    ]);
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: fundAmount,
+      },
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
 
     const { balances } = await wallet.getBalances();
 
-    expect(balances.length).toBe(2);
+    expect(balances.length).toBe(3);
     balances.forEach((balance) => {
       expect(balance.amount.toNumber()).toBe(fundAmount);
-      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+      expect([provider.getBaseAssetId(), ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
   });
 });
