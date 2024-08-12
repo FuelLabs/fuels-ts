@@ -3,7 +3,7 @@
 import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory, hexlify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { EchoValuesFactory, EchoValues } from '../../../test/typegen';
+import { EchoValuesFactory as TypegenFactory, EchoValues } from '../../../test/typegen';
 
 /**
  * @group node
@@ -18,6 +18,7 @@ describe('Deploying Contracts', () => {
 
     // #region get-contract-max-size
     // #import { Provider, TESTNET_NETWORK_URL };
+
     const provider = await Provider.create(TESTNET_NETWORK_URL);
     const { consensusParameters } = provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize;
@@ -34,16 +35,16 @@ describe('Deploying Contracts', () => {
     } = launched;
     const TESTNET_NETWORK_URL = testProvider.url;
     const WALLET_PVT_KEY = testWallet.privateKey;
-    const abi = EchoValues.abi;
-    const bytecode = EchoValuesFactory.bytecode;
+    const bytecode = TypegenFactory.bytecode;
 
     // #region setup
-    // #import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory };
+    // #import { Provider, TESTNET_NETWORK_URL, Wallet };
     // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
-    // #context import { bytecode, abi } from 'path/to/typegen/outputs';
+    // #context import { TypegenFactory } from 'path/to/typegen/outputs';
+
     const provider = await Provider.create(TESTNET_NETWORK_URL);
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
-    const factory = new ContractFactory(bytecode, abi, wallet);
+    const factory = new TypegenFactory(wallet);
     // #endregion setup
     expect(hexlify(factory.bytecode)).toBe(hexlify(bytecode));
 
@@ -77,12 +78,13 @@ describe('Deploying Contracts', () => {
     const TESTNET_NETWORK_URL = testProvider.url;
     const WALLET_PVT_KEY = testWallet.privateKey;
     const abi = EchoValues.abi;
-    const bytecode = EchoValuesFactory.bytecode;
+    const bytecode = TypegenFactory.bytecode;
 
     // #region blobs
     // #import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory };
     // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
     // #context import { bytecode, abi } from 'path/to/typegen/outputs';
+
     const provider = await Provider.create(TESTNET_NETWORK_URL);
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
     const factory = new ContractFactory(bytecode, abi, wallet);

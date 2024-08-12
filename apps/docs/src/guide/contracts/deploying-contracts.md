@@ -25,7 +25,7 @@ The `ContractFactory` offers the following methods for the different processes:
 
 ## Deploying a Contract Guide
 
-This guide will cover the process of deploying a contract using the `deploy` method, however all these methods can be used interchangeably dependent on the contract size.
+This guide will cover the process of deploying a contract using the `deploy` method, however all these methods can be used interchangeably dependent on the contract size. In the guide we use a contract factory that has been built using [Typegen](../fuels-cli/abi-typegen.md). This tool provided by the [Fuels CLI](../fuels-cli/index.md) provides a better developer experience and end to end type support for your smart contracts.
 
 ### 1. Setup
 
