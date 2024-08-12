@@ -1,10 +1,4 @@
-import type {
-  BaseTransactionRequest,
-  BigNumberish,
-  Transaction,
-  Account,
-  AbstractAddress,
-} from 'fuels';
+import type { BaseTransactionRequest, BigNumberish, Transaction } from 'fuels';
 import {
   ContractFactory,
   CreateTransactionRequest,
@@ -13,7 +7,6 @@ import {
   ScriptTransactionRequest,
   Wallet,
   bn,
-  Address,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -355,14 +348,6 @@ describe('Policies', () => {
   });
 
   describe('should ensure TX maxFee policy limits TX execution as expected', () => {
-    // When the node was just started, the gas price estimation is always 0.
-    // Resulting in the max fee being allowed to be 0.
-    // This happens until the first block is mined.
-    const waitForFirstBlockTx = async (wallet: Account, receiver: AbstractAddress) => {
-      const res = await wallet.transfer(receiver, 1, wallet.provider.getBaseAssetId());
-      await res.waitForResult();
-    };
-
     it('on account transfer', async () => {
       using launched = await launchTestNode({
         nodeOptions: {
@@ -376,8 +361,6 @@ describe('Policies', () => {
       } = launched;
 
       const receiver = Wallet.generate({ provider });
-
-      await waitForFirstBlockTx(wallet, receiver.address);
 
       const maxFee = 1;
 
@@ -442,8 +425,6 @@ describe('Policies', () => {
         wallets: [wallet],
       } = launched;
 
-      await waitForFirstBlockTx(wallet, Address.fromRandom());
-
       const maxFee = 1;
       const receiver = Wallet.generate({ provider });
 
@@ -468,8 +449,6 @@ describe('Policies', () => {
       const {
         wallets: [wallet],
       } = launched;
-
-      await waitForFirstBlockTx(wallet, Address.fromRandom());
 
       const maxFee = 1;
 
