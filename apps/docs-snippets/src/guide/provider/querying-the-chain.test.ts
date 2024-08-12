@@ -6,7 +6,7 @@ import type {
   ExcludeResourcesOption,
 } from 'fuels';
 import { ScriptTransactionRequest, FUEL_NETWORK_URL, Provider } from 'fuels';
-import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
+import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
@@ -17,7 +17,7 @@ describe('querying the chain', () => {
     using launched = await launchTestNode({
       walletsConfig: {
         amountPerCoin: 100,
-        assets: [AssetId.A],
+        assets: [TestAssetId.A],
       },
     });
     const {
@@ -63,7 +63,7 @@ describe('querying the chain', () => {
     using launched = await launchTestNode({
       walletsConfig: {
         amountPerCoin: 100,
-        assets: [AssetId.A],
+        assets: [TestAssetId.A],
       },
     });
     const {
@@ -114,7 +114,7 @@ describe('querying the chain', () => {
     using launched = await launchTestNode({
       walletsConfig: {
         amountPerCoin: 100,
-        assets: [AssetId.A],
+        assets: [TestAssetId.A],
       },
     });
     const {
