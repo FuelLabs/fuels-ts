@@ -61,7 +61,7 @@ export type EstimatedTxParams = Pick<
   TransactionCost,
   'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
 >;
-const MAX_FUNDING_ATTEMPTS = 2;
+const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
 
