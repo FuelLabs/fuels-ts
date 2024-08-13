@@ -258,6 +258,7 @@ export class Account extends AbstractAccount {
       }
 
       if (!updateMaxFee) {
+        needsToBeFunded = false;
         break;
       }
       const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
@@ -284,6 +285,14 @@ export class Account extends AbstractAccount {
       }
 
       fundingAttempts += 1;
+    }
+
+    // If the transaction still needs to be funded after the maximum number of attempts
+    if (needsToBeFunded) {
+      throw new FuelError(
+        ErrorCode.NOT_ENOUGH_FUNDS,
+        `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
+      );
     }
 
     request.updatePredicateGasUsed(estimatedPredicates);
