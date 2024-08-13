@@ -3,7 +3,7 @@ import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import { hexlify } from '@fuel-ts/utils';
 
-import { AssetId } from './asset-id';
+import { TestAssetId } from './test-asset-id';
 import type { WalletsConfigOptions } from './wallet-config';
 import { WalletsConfig } from './wallet-config';
 
@@ -13,7 +13,7 @@ import { WalletsConfig } from './wallet-config';
 describe('WalletsConfig', () => {
   const configOptions: WalletsConfigOptions = {
     count: 2,
-    assets: [AssetId.A, AssetId.B],
+    assets: [TestAssetId.A, TestAssetId.B],
     coinsPerAsset: 1,
     amountPerCoin: 10_000_000_000,
     messages: [],
@@ -90,7 +90,7 @@ describe('WalletsConfig', () => {
   });
 
   it('allows custom assets to be provided', () => {
-    const [assetId] = AssetId.random();
+    const [assetId] = TestAssetId.random();
     const baseAssetId = hexlify(randomBytes(32));
     const {
       stateConfig: { coins: allCoins },
