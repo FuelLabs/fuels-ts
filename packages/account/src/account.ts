@@ -59,7 +59,7 @@ export type TransferParams = {
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
+  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee' | 'gasPrice'
 >;
 const MAX_FUNDING_ATTEMPTS = 5;
 
@@ -199,7 +199,8 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
+    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee, gasPrice } =
+      params;
 
     const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
@@ -261,8 +262,11 @@ export class Account extends AbstractAccount {
         needsToBeFunded = false;
         break;
       }
+
+      // Recalculate the fee after adding the resources
       const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
         transactionRequest: requestToReestimate,
+        gasPrice,
       });
 
       const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
@@ -271,6 +275,7 @@ export class Account extends AbstractAccount {
         baseAssetId
       );
 
+      // Update the new total as the fee will change after adding new resources
       const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
 
       if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
