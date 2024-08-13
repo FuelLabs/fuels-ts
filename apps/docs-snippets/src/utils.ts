@@ -1,6 +1,5 @@
 import type { CoinQuantityLike, Contract } from 'fuels';
 import {
-  FUEL_NETWORK_URL,
   Provider,
   ScriptTransactionRequest,
   Wallet,
@@ -13,6 +12,8 @@ import type { DocSnippetProjectsEnum } from '../test/fixtures/forc-projects';
 import { getDocsSnippetsForcProject } from '../test/fixtures/forc-projects';
 
 export const getTestWallet = async (seedQuantities?: CoinQuantityLike[]) => {
+  const FUEL_NETWORK_URL = process.env.FUEL_NETWORK_URL ?? 'http://127.0.0.1:4000/v1/graphql';
+
   // create a provider using the Fuel network URL
   const provider = await Provider.create(FUEL_NETWORK_URL);
 

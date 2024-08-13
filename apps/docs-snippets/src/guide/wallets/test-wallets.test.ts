@@ -1,5 +1,5 @@
 import type { WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, bn } from 'fuels';
+import { Provider, bn } from 'fuels';
 import { generateTestWallet } from 'fuels/test-utils';
 
 /**
@@ -8,8 +8,10 @@ import { generateTestWallet } from 'fuels/test-utils';
 describe(__filename, () => {
   it('wallet-setup', async () => {
     // #region wallet-setup
-    // #import { FUEL_NETWORK_URL, Provider, WalletUnlocked, CoinQuantity, generateTestWallet };
+    // #import { Provider, WalletUnlocked, CoinQuantity, generateTestWallet };
     // #context import { generateTestWallet } from 'fuels/test-utils';
+
+    const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
