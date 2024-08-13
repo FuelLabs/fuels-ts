@@ -15,7 +15,7 @@ import {
   ZeroBytes32,
   Predicate,
 } from 'fuels';
-import { AssetId, launchTestNode } from 'fuels/test-utils';
+import { TestAssetId, launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue } from '../test/typegen';
 import { CallTestContract } from '../test/typegen/contracts';
@@ -199,8 +199,8 @@ describe('Doc Examples', () => {
     const submitted = await fundingWallet.batchTransfer([
       { amount: 100, destination: walletA.address, assetId: baseAssetId },
       { amount: 100, destination: walletB.address, assetId: baseAssetId },
-      { amount: 100, destination: walletB.address, assetId: AssetId.B.value },
-      { amount: 100, destination: walletB.address, assetId: AssetId.A.value },
+      { amount: 100, destination: walletB.address, assetId: TestAssetId.B.value },
+      { amount: 100, destination: walletB.address, assetId: TestAssetId.A.value },
     ]);
 
     await submitted.waitForResult();
@@ -216,8 +216,8 @@ describe('Doc Examples', () => {
     // validate balances
     expect(walletABalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(100) }]);
     expect(walletBBalances).toEqual([
-      { assetId: AssetId.A.value, amount: bn(100) },
-      { assetId: AssetId.B.value, amount: bn(100) },
+      { assetId: TestAssetId.A.value, amount: bn(100) },
+      { assetId: TestAssetId.B.value, amount: bn(100) },
       { assetId: provider.getBaseAssetId(), amount: bn(100) },
     ]);
     expect(walletCBalances).toEqual([]);

@@ -11,6 +11,6 @@ describe('test-utils.js', () => {
     expect(testUtilsMod.setupTestProviderAndWallets).toBeTruthy();
     expect(testUtilsMod.WalletsConfig).toBeTruthy();
     expect(testUtilsMod.TestMessage).toBeTruthy();
-    expect(testUtilsMod.AssetId).toBeTruthy();
+    expect(testUtilsMod.TestAssetId).toBeTruthy();
   });
 });

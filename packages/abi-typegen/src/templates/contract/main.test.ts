@@ -19,7 +19,7 @@ import { renderMainTemplate } from './main';
 describe('templates/dts', () => {
   test('should render main template', () => {
     // mocking
-    const { restore } = mockVersions();
+    const { versions } = mockVersions();
 
     // executing
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.FULL);
@@ -32,21 +32,18 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    let rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi, versions });
 
     rendered = autoUpdateFixture(
       join(__dirname, '../../../test/fixtures/templates/contract/main.hbs'),
       rendered
     );
 
-    // validating
-    restore();
-
     expect(rendered).toEqual(expectedMainFullTemplate);
   });
 
   test('should render main template with configurable', () => {
-    const { restore } = mockVersions();
+    const { versions } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.MINIMAL_WITH_CONFIGURABLE);
 
@@ -59,19 +56,18 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    let rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi, versions });
 
     rendered = autoUpdateFixture(
       join(__dirname, '../../../test/fixtures/templates/contract-with-configurable/main.hbs'),
       rendered
     );
 
-    restore();
-
     expect(rendered).toEqual(expectedMainMinimalConfigurableTemplate);
   });
 
   test('should render main template w/ custom common types', () => {
+    const { versions } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.VECTOR_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -82,12 +78,13 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    const rendered = renderMainTemplate({ abi, versions });
 
     expect(rendered).toMatch(/^import type.+from ".\/common";$/m);
   });
 
   test('should render dts cross-referencing for identical structs', () => {
+    const { versions } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -98,12 +95,13 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    const rendered = renderMainTemplate({ abi, versions });
 
     expect(rendered).toMatch(/export type StructBOutput<T> = StructBInput<T>;$/m);
   });
 
   test('should render dts cross-referencing for identical enums', () => {
+    const { versions } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE);
     const { abiContents: rawContents } = project;
 
@@ -114,12 +112,13 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    const rendered = renderMainTemplate({ abi, versions });
 
     expect(rendered).toMatch(/export type MyEnumOutput = MyEnumInput;$/m);
   });
 
   test('should not render same value for native identical enums', () => {
+    const { versions } = mockVersions();
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.ENUM_SIMPLE_NATIVE);
     const { abiContents: rawContents } = project;
 
@@ -130,7 +129,7 @@ describe('templates/dts', () => {
       programType: ProgramTypeEnum.CONTRACT,
     });
 
-    const rendered = renderMainTemplate({ abi });
+    const rendered = renderMainTemplate({ abi, versions });
 
     expect(rendered).toMatch(
       /export enum MyEnumOutput { Checked = 'Checked', Pending = 'Pending' };$/m

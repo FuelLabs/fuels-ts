@@ -40,5 +40,5 @@ runs:
         bun-version: ${{ inputs.bun-version }}
 
     - name: Build
-      run: pnpm build
+      run: pnpm build:all
       shell: bash
