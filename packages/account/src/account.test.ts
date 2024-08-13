@@ -12,18 +12,23 @@ import { ScriptTransactionRequest, Provider } from './providers';
 import * as providersMod from './providers';
 import { TestAssetId, setupTestProviderAndWallets } from './test-utils';
 import { Wallet } from './wallet';
+
 /**
  * @group node
  */
-
 describe('Account', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
+  async function setupTestProvider(providerOptions = {}) {
+    const { provider, cleanup } = await setupTestProviderAndWallets({ providerOptions });
+
+    return Object.assign(provider, { [Symbol.dispose]: cleanup });
+  }
+
   it('should create account using an address, with a provider', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -51,8 +56,7 @@ describe('Account', () => {
   });
 
   it('should get coins just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -69,8 +73,7 @@ describe('Account', () => {
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     // #region Message-getResourcesToSpend
     const account = new Account(
@@ -88,8 +91,7 @@ describe('Account', () => {
   });
 
   it('getResourcesToSpend should work with <1 amount', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -105,8 +107,7 @@ describe('Account', () => {
   });
 
   it('should get messages just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
@@ -121,8 +122,7 @@ describe('Account', () => {
   });
 
   it('should get single asset balance just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -135,8 +135,7 @@ describe('Account', () => {
   });
 
   it('should get multiple balances just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -147,8 +146,7 @@ describe('Account', () => {
   });
 
   it('should connect with provider just fine [INSTANCE]', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -168,8 +166,7 @@ describe('Account', () => {
   });
 
   it('should be able to set a provider', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -187,8 +184,7 @@ describe('Account', () => {
   });
 
   it('should execute fund just as fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const quantities: CoinQuantity[] = [
       {
@@ -244,8 +240,7 @@ describe('Account', () => {
   });
 
   it('should execute sendTransaction just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
@@ -286,8 +281,7 @@ describe('Account', () => {
   });
 
   it('should execute simulateTransaction just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
@@ -884,8 +878,7 @@ describe('Account', () => {
   });
 
   it('can properly use getCoins', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = Wallet.generate({ provider });
     const spy = vi.spyOn(account.provider, 'getCoins');
@@ -910,8 +903,7 @@ describe('Account', () => {
   });
 
   it('can properly use getMessages', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = Wallet.generate({ provider });
     const spy = vi.spyOn(account.provider, 'getMessages');
