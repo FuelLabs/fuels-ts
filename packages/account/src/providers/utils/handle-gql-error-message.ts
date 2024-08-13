@@ -15,6 +15,6 @@ export const handleGqlErrorMessage = (errorMessage: string, rawError?: GraphQLEr
         rawError
       );
     default:
-      throw new FuelError(ErrorCode.INVALID_REQUEST, `Unknown error: ${errorMessage}`);
+      throw new FuelError(ErrorCode.INVALID_REQUEST, errorMessage);
   }
 };
