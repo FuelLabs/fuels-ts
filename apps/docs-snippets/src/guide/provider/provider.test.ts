@@ -147,10 +147,10 @@ describe('Provider', () => {
     // #region provider-getBaseAssetId
     // #import { Provider, ScriptTransactionRequest };
 
-    const NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
+    const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
     // Fetch the base asset ID using the provider
-    const provider = await Provider.create(NETWORK_URL);
+    const provider = await Provider.create(FUEL_NETWORK_URL);
     const baseAssetId = provider.getBaseAssetId();
     // 0x...
 
