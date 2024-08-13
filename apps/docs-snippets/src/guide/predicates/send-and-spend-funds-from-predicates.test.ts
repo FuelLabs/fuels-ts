@@ -103,7 +103,7 @@ describe(__filename, () => {
     );
 
     // #region send-and-spend-funds-from-predicates-6
-    const errorMsg = 'This account does not have enough funds to cover this transaction.';
+    const errorMsg = 'The transaction does not have enough funds to cover its execution.';
     // #endregion send-and-spend-funds-from-predicates-6
 
     expect((<Error>error).message).toMatch(errorMsg);

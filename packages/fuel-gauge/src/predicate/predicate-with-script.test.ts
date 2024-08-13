@@ -34,7 +34,7 @@ describe('Predicate', () => {
       scriptInstance.account = receiver;
 
       await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
-        /This account does not have enough funds to cover this transaction./
+        /The transaction does not have enough funds to cover its execution./
       );
 
       // setup predicate

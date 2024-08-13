@@ -54,6 +54,6 @@ This section demonstrates additional examples of transferring assets between wal
 
 ## Checking Balances
 
-Before transferring assets, ensure your wallet has sufficient funds. Attempting a transfer without enough funds will result in an error: `This account does not have enough funds to cover this transaction.`.
+Before transferring assets, ensure your wallet has sufficient funds. Attempting a transfer without enough funds will result in an error: `The transaction does not have enough funds to cover its execution.`.
 
 You can see how to check your balance at the [`checking-balances`](./checking-balances.md) page.

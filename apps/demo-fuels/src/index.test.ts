@@ -74,7 +74,7 @@ describe('ExampleContract', () => {
     );
 
     expect((<Error>error).message).toMatch(
-      'This account does not have enough funds to cover this transaction.'
+      'The transaction does not have enough funds to cover its execution.'
     );
   });
 

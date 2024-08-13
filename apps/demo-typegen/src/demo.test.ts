@@ -108,7 +108,7 @@ it('should throw when simulating via contract factory with wallet with no resour
   const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
 
   expect((<Error>error).message).toMatch(
-    'This account does not have enough funds to cover this transaction.'
+    'The transaction does not have enough funds to cover its execution.'
   );
 });
 

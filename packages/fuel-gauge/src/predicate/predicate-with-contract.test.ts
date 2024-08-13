@@ -60,7 +60,7 @@ describe('Predicate', () => {
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
       await expect(contract.functions.mint_coins(200).call()).rejects.toThrow(
-        /This account does not have enough funds to cover this transaction./
+        /The transaction does not have enough funds to cover its execution./
       );
 
       // setup predicate

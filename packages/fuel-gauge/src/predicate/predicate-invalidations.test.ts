@@ -38,7 +38,7 @@ describe('Predicate', () => {
             gasLimit: 100_000_000,
           }
         )
-      ).rejects.toThrow(/This account does not have enough funds to cover this transaction./i);
+      ).rejects.toThrow(/The transaction does not have enough funds to cover its execution./i);
     });
 
     it('throws if the passed gas limit is too low', async () => {
