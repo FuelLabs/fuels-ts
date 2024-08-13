@@ -52,6 +52,7 @@ export class Fuel extends FuelConnector {
   private _targetUnsubscribe: () => void;
   private _pingCache: CacheFor = {};
   private _currentConnector?: FuelConnector | null;
+  private _initializationPromise: Promise<void>;
 
   constructor(config: FuelConfig = Fuel.defaultConfig) {
     super();
@@ -66,10 +67,17 @@ export class Fuel extends FuelConnector {
     // Setup all methods
     this.setupMethods();
     // Get the current connector from the storage
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.setDefaultConnector();
+    this._initializationPromise = this.initialize();
     // Setup new connector listener for global events
     this._targetUnsubscribe = this.setupConnectorListener();
+  }
+
+  private async initialize(): Promise<void> {
+    await this.setDefaultConnector();
+  }
+
+  private async ensureInitialized(): Promise<void> {
+    await this._initializationPromise;
   }
 
   /**
@@ -301,6 +309,7 @@ export class Fuel extends FuelConnector {
    * Return the list of connectors with the status of installed and connected.
    */
   async connectors(): Promise<Array<FuelConnector>> {
+    await this.ensureInitialized();
     await this.fetchConnectorsStatus();
     return this._connectors;
   }
@@ -314,6 +323,7 @@ export class Fuel extends FuelConnector {
       emitEvents: true,
     }
   ): Promise<boolean> {
+    await this.ensureInitialized();
     const connector = this.getConnector(connectorName);
     if (!connector) {
       return false;
@@ -350,6 +360,7 @@ export class Fuel extends FuelConnector {
    * Return true if any connector is available.
    */
   async hasConnector(): Promise<boolean> {
+    await this.ensureInitialized();
     // If there is a current connector return true
     // as the connector is ready
     if (this._currentConnector) {
@@ -370,6 +381,7 @@ export class Fuel extends FuelConnector {
   }
 
   async hasWallet(): Promise<boolean> {
+    await this.ensureInitialized();
     return this.hasConnector();
   }
 
