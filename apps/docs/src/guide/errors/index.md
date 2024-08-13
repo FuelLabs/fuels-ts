@@ -256,6 +256,8 @@ Ensure that the provider has connected to a Fuel Node successfully.
 
 When the account sending the transaction does not have enough funds to cover the transaction fee.
 
+Ensure that the account creating the transaction has been funded appropriately.
+
 ### `TIMEOUT_EXCEEDED`
 
 When the timeout has been exceeded for a given operation.
