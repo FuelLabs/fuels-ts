@@ -1,5 +1,5 @@
-import { Predicate, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { ErrorCode, FuelError, Predicate, Wallet } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { PredicateMainArgsStruct } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
@@ -29,17 +29,21 @@ describe('Predicate', () => {
 
       const receiver = Wallet.generate({ provider });
 
-      await expect(
-        predicate.transfer(
-          receiver.address,
-          await predicate.getBalance(),
-          provider.getBaseAssetId(),
-          {
-            gasLimit: 100_000_000,
-          }
+      await expectToThrowFuelError(
+        async () =>
+          predicate.transfer(
+            receiver.address,
+            await predicate.getBalance(),
+            provider.getBaseAssetId(),
+            {
+              gasLimit: 100_000_000,
+            }
+          ),
+        new FuelError(
+          ErrorCode.NOT_ENOUGH_FUNDS,
+          'The transaction does not have enough funds to cover its execution.'
         )
-      ).rejects.toThrow(/The transaction does not have enough funds to cover its execution./i);
-    });
+      );
 
     it('throws if the passed gas limit is too low', async () => {
       using launched = await launchTestNode();

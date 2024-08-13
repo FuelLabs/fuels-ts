@@ -455,9 +455,13 @@ describe('Account', () => {
     const { coins } = await user.getCoins();
 
     // Test excludes the UTXO where the assetIdA gets added to the senders wallet
-    await expect(
-      user.getResourcesToSpend([[1, ASSET_A, 500_000]], { utxos: [coins[0].id] })
-    ).rejects.toThrow(/The transaction does not have enough funds to cover its execution./);
+    await expectToThrowFuelError(
+      () => user.getResourcesToSpend([[1, ASSET_A, 500_000]], { utxos: [coins[0].id] }),
+      new FuelError(
+        ErrorCode.NOT_ENOUGH_FUNDS,
+        'The transaction does not have enough funds to cover its execution.'
+      )
+    );
   });
 
   it('can transfer multiple types of coins to multiple destinations', async () => {

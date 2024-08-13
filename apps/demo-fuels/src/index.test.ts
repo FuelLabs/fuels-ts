@@ -5,8 +5,8 @@
  * It ensures that built code is fully working.
  */
 
-import { Provider, toHex, Wallet, FUEL_NETWORK_URL } from 'fuels';
-import { generateTestWallet, safeExec } from 'fuels/test-utils';
+import { Provider, toHex, Wallet, FUEL_NETWORK_URL, FuelError, ErrorCode } from 'fuels';
+import { expectToThrowFuelError, generateTestWallet } from 'fuels/test-utils';
 
 import { SampleFactory, Sample } from './sway-programs-api';
 
@@ -69,12 +69,12 @@ describe('ExampleContract', () => {
 
     const contractInstance = new Sample(contract.id, unfundedWallet);
 
-    const { error } = await safeExec(() =>
-      contractInstance.functions.return_input(1337).simulate()
-    );
-
-    expect((<Error>error).message).toMatch(
-      'The transaction does not have enough funds to cover its execution.'
+    await expectToThrowFuelError(
+      () => contractInstance.functions.return_input(1337).simulate(),
+      new FuelError(
+        ErrorCode.NOT_ENOUGH_FUNDS,
+        'The transaction does not have enough funds to cover its execution.'
+      )
     );
   });
 
