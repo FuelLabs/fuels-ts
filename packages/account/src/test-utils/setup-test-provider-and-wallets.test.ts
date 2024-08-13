@@ -10,9 +10,9 @@ import { Provider } from '../providers';
 import { Signer } from '../signer';
 import { WalletUnlocked } from '../wallet';
 
-import { AssetId } from './asset-id';
 import * as launchNodeMod from './launchNode';
 import { setupTestProviderAndWallets } from './setup-test-provider-and-wallets';
+import { TestAssetId } from './test-asset-id';
 import type { ChainMessage } from './test-message';
 import { TestMessage } from './test-message';
 
@@ -91,7 +91,7 @@ describe('setupTestProviderAndWallets', () => {
     expect(sutCoin.blockCreated.toNumber()).toEqual(coin.tx_pointer_block_height);
   });
 
-  it('default: two wallets, three assets (BaseAssetId, AssetId.A, AssetId.B), one coin, 10_000_000_000_ amount', async () => {
+  it('default: two wallets, three assets (BaseAssetId, TestAssetId.A, TestAssetId.B), one coin, 10_000_000_000_ amount', async () => {
     using providerAndWallets = await setupTestProviderAndWallets();
     const { wallets, provider } = providerAndWallets;
 
@@ -119,16 +119,16 @@ describe('setupTestProviderAndWallets', () => {
     expect(baseAssetIdCoin.amount.toNumber()).toBe(10_000_000_000);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const assetACoin = coins1.find((x) => x.assetId === AssetId.A.value)!;
+    const assetACoin = coins1.find((x) => x.assetId === TestAssetId.A.value)!;
     expect(assetACoin.amount.toNumber()).toBe(10_000_000_000);
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const assetBCoin = coins1.find((x) => x.assetId === AssetId.B.value)!;
+    const assetBCoin = coins1.find((x) => x.assetId === TestAssetId.B.value)!;
     expect(assetBCoin.amount.toNumber()).toBe(10_000_000_000);
   });
 
   it('can be given custom asset id and message', async () => {
-    const [assetId] = AssetId.random();
+    const [assetId] = TestAssetId.random();
     const spendableMessage = new TestMessage();
     const dataMessage = new TestMessage({
       data: '0x2bca2aa612b304ece5b25988818dd7234e049913233eb918c11638af89d575be',
