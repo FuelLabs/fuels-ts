@@ -2,8 +2,6 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { DocumentNode } from 'graphql';
 import { print } from 'graphql';
 
-import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
-
 type FuelGraphQLSubscriberOptions = {
   url: string;
   query: DocumentNode;
@@ -50,9 +48,10 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const { data, errors } = this.events.shift()!;
         if (Array.isArray(errors)) {
-          for (const error of errors) {
-            handleGqlErrorMessage(error.message);
-          }
+          throw new FuelError(
+            FuelError.CODES.INVALID_REQUEST,
+            errors.map((err) => err.message).join('\n\n')
+          );
         }
         return { value: data, done: false };
       }

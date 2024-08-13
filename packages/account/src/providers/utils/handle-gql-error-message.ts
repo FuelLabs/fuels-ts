@@ -5,7 +5,7 @@ export enum GqlErrorMessage {
   NOT_ENOUGH_COINS = 'not enough coins to fit the target',
 }
 
-export const handleGqlErrorMessage = (errorMessage: string, rawError?: GraphQLError) => {
+export const handleGqlErrorMessage = (errorMessage: string, rawError: GraphQLError) => {
   switch (errorMessage) {
     case GqlErrorMessage.NOT_ENOUGH_COINS:
       throw new FuelError(
