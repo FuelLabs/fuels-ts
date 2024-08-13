@@ -1,4 +1,14 @@
-import { Provider, ScriptTransactionRequest, sleep, WalletUnlocked, Address } from 'fuels';
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+import {
+  Provider,
+  ScriptTransactionRequest,
+  sleep,
+  WalletUnlocked,
+  Address,
+  FUEL_NETWORK_URL,
+} from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 async function fetchSomeExternalCredentials() {
@@ -17,13 +27,10 @@ describe('Provider', () => {
   it('base examples', async () => {
     using launched = await launchTestNode();
 
-    const mockedProvider = await Provider.create(launched.provider.url);
-    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
+    const FUEL_NETWORK_URL = launched.provider.url;
 
     // #region provider-definition
-    // #import { Provider, WalletUnlocked };
-
-    const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
+    // #import { Provider, FUEL_NETWORK_URL, WalletUnlocked };
 
     // Create the provider
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -50,7 +57,6 @@ describe('Provider', () => {
     using launched = await launchTestNode();
 
     const FUEL_NETWORK_URL = launched.provider.url;
-
     // #region options-requestMiddleware
     // synchronous request middleware
     await Provider.create(FUEL_NETWORK_URL, {
@@ -141,13 +147,10 @@ describe('Provider', () => {
     const recipientAddress = Address.fromRandom();
     using launched = await launchTestNode();
 
-    const mockedProvider = await Provider.create(launched.provider.url);
-    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
+    const FUEL_NETWORK_URL = launched.provider.url;
 
     // #region provider-getBaseAssetId
-    // #import { Provider, ScriptTransactionRequest };
-
-    const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
+    // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest };
 
     // Fetch the base asset ID using the provider
     const provider = await Provider.create(FUEL_NETWORK_URL);

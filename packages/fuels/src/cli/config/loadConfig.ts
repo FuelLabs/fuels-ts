@@ -1,3 +1,4 @@
+import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { FuelError } from '@fuel-ts/errors';
 import { defaultConsensusKey } from '@fuel-ts/utils';
 import { bundleRequire } from 'bundle-require';
@@ -63,7 +64,7 @@ export async function loadConfig(cwd: string): Promise<FuelsConfig> {
     deployConfig: {},
     autoStartFuelCore: true,
     fuelCorePort: 4000,
-    providerUrl: process.env.FUEL_NETWORK_URL ?? 'http://127.0.0.1:4000/v1/graphql',
+    providerUrl: FUEL_NETWORK_URL,
     privateKey: defaultConsensusKey,
     ...userConfig,
     basePath: cwd,
