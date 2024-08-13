@@ -1,4 +1,6 @@
-export function getBuiltinVersions() {
+import type { Versions } from './types';
+
+export function getBuiltinVersions(): Versions {
   return {
     FORC: 'git:esdrubal/abi_changes',
     FUEL_CORE: '0.31.0',

@@ -26,7 +26,7 @@ describe('main.ts', () => {
   test('should render main template', () => {
     vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
 
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const rawContents = project.abiContents;
@@ -39,7 +39,7 @@ describe('main.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    let rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi, versions });
 
     rendered = autoUpdateFixture(
       join(__dirname, '../../../test/fixtures/templates/script/main.hbs'),
@@ -54,7 +54,7 @@ describe('main.ts', () => {
   test('should render main template with configurables', () => {
     vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
 
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT_WITH_CONFIGURABLE);
     const rawContents = project.abiContents;
@@ -67,7 +67,7 @@ describe('main.ts', () => {
       programType: ProgramTypeEnum.SCRIPT,
     });
 
-    let rendered = renderMainTemplate({ abi });
+    let rendered = renderMainTemplate({ abi, versions });
 
     rendered = autoUpdateFixture(
       join(__dirname, '../../../test/fixtures/templates/script-with-configurable/main.hbs'),
@@ -80,7 +80,7 @@ describe('main.ts', () => {
   });
 
   test('should throw for invalid Script ABI', async () => {
-    const { restore } = mockVersions();
+    const { versions, restore } = mockVersions();
 
     const project = getTypegenForcProject(AbiTypegenProjectsEnum.SCRIPT);
     const rawContents = project.abiContents;
@@ -99,7 +99,7 @@ describe('main.ts', () => {
     });
 
     const { error } = await safeExec(() => {
-      renderMainTemplate({ abi });
+      renderMainTemplate({ abi, versions });
     });
 
     restore();

@@ -21,7 +21,7 @@ jobs:
         uses: ./.github/actions/ci-setup
 
       - name: Build
-        run: pnpm build
+        run: pnpm build:all
 
       - name: Publish to NPM
         id: release
