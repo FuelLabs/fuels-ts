@@ -1,4 +1,5 @@
 import { getNewAbiTypegen } from '../../test/utils/getNewAbiTypegen';
+import { mockVersions } from '../../test/utils/mockVersions';
 import * as renderCommonTemplateMod from '../templates/common/common';
 import * as renderIndexTemplateMod from '../templates/common/index';
 import * as renderMainTemplateMod from '../templates/contract/main';
@@ -33,6 +34,7 @@ describe('assembleContracts.ts', () => {
   }
 
   test('should assemble all files from Contract ABI ', () => {
+    const { versions } = mockVersions();
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
@@ -42,7 +44,7 @@ describe('assembleContracts.ts', () => {
 
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const files = assembleContracts({ abis, outputDir });
+    const files = assembleContracts({ abis, outputDir, versions });
 
     expect(files.length).toEqual(5); // 2x main, 2x factory, 1x index
 
@@ -52,6 +54,7 @@ describe('assembleContracts.ts', () => {
   });
 
   test('should assemble all files from Contract ABI, including `common` file', () => {
+    const { versions } = mockVersions();
     const {
       typegen: { abis, outputDir },
     } = getNewAbiTypegen({
@@ -61,7 +64,7 @@ describe('assembleContracts.ts', () => {
 
     const { renderCommonTemplate, renderFactoryTemplate, renderIndexTemplate } = mockAllDeps();
 
-    const files = assembleContracts({ abis, outputDir });
+    const files = assembleContracts({ abis, outputDir, versions });
 
     expect(files.length).toEqual(6); // 2x main, 2x factory, 1x index, 1x common
 
