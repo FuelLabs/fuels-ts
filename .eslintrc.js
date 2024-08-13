@@ -58,8 +58,6 @@ module.exports = {
     'eslint-comments/no-unused-disable': 'error',
     'import/prefer-default-export': 'off',
     'tsdoc/syntax': 'warn',
-    'require-await': 'off',
-    '@typescript-eslint/require-await': 'error',
     '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/no-unused-vars': [
       'warn',
