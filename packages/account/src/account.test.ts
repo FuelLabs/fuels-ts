@@ -198,6 +198,7 @@ describe('Account', () => {
       requiredQuantities: quantities,
       estimatedPredicates: [],
       addedSignatures: 0,
+      gasPrice: bn(1),
     });
 
     expect(addAmountToCoinQuantitiesSpy).toBeCalledTimes(1);

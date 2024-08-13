@@ -491,33 +491,4 @@ describe('Contract Factory', () => {
       })
     );
   });
-
-
-  it('deploys a contract via blobs [asfasfsaaf]', async () => {
-    using launched = await launchTestNode();
-
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    const factory = new ContractFactory(
-      StorageTestContractFactory.bytecode,
-      StorageTestContract.abi,
-      wallet
-    );
-
-    const deploy = await factory.deployContractAsBlobs({
-      storageSlots: StorageTestContract.storageSlots,
-    });
-
-    const { contract } = await deploy.waitForResult();
-    const call = await contract.functions.return_var5().call();
-    const { value } = await call.waitForResult();
-    expect(JSON.stringify(value)).toEqual(
-      JSON.stringify({
-        v1: true,
-        v2: bn(50),
-      })
-    );
-  });
 });
