@@ -11,7 +11,7 @@ export function toFixed(value?: string | number, options?: ToFixedConfig) {
 
   // strip traling zeros limited by minPrecision
   if (minPrecision < precision) {
-    const trimmedDecimal = decimals.match(/.*[1-9]{1}/);
+    const trimmedDecimal = decimals.match(/.*[1-9]/);
     const lastNonZeroIndex = trimmedDecimal?.[0].length || 0;
     const keepChars = Math.max(minPrecision, lastNonZeroIndex);
     decimals = decimals.slice(0, keepChars);
