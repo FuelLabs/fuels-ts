@@ -53,7 +53,7 @@ const configuredNetworks = {
   } as ConfiguredNetwork,
 };
 
-const selectedNetworks: Networks[] = [Networks.DEVNET];
+const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
 
 describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let provider: Provider;
