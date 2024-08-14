@@ -21,7 +21,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify, isDefined } from '@fuel-ts/utils';
+import { arrayify, isDefined, sleep } from '@fuel-ts/utils';
 
 import { getLoaderInstructions, getContractChunks } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
@@ -314,8 +314,8 @@ export default class ContractFactory {
       throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
     }
 
-    // Not set correctly
-    let transactionId: string = 'nada';
+    // Transaction id is unset until we have funded the create tx, which is dependent on the blob txs
+    let transactionId: string;
 
     const waitForResult = async () => {
       // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
@@ -354,7 +354,6 @@ export default class ContractFactory {
 
       await this.fundTransactionRequest(createRequest, deployOptions);
       transactionId = createRequest.getTransactionId(account.provider.getChainId());
-
       const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
       const contract = new Contract(contractId, this.interface, account) as TContract;
@@ -362,7 +361,14 @@ export default class ContractFactory {
       return { contract, transactionResult };
     };
 
-    return { waitForResult, contractId, transactionId };
+    const getTransactionId = async () => {
+      while (!transactionId) {
+        await sleep(500);
+      }
+      return Promise.resolve(transactionId);
+    };
+
+    return { waitForResult, contractId, getTransactionId };
   }
 
   /**
