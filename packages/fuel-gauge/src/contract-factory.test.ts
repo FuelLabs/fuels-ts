@@ -295,7 +295,9 @@ describe('Contract Factory', () => {
 
   it('deploys large contracts via blobs and awaits transaction id', async () => {
     using launched = await launchTestNode({
-      args: ['--poa-instant', 'false', '--poa-interval-period', '4s', '--tx-pool-ttl', '1s'],
+      nodeOptions: {
+        args: ['--tx-pool-ttl', '1s'],
+      },
       providerOptions: {
         resourceCacheTTL: -1,
       },
@@ -306,7 +308,7 @@ describe('Contract Factory', () => {
     } = launched;
 
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-    const deploy = await factory.deployContractAsBlobs<LargeContract>();
+    const deploy = await factory.deployAsBlobTx<LargeContract>();
     const initTxId = deploy.getTransactionId();
     expect(initTxId).toStrictEqual(new Promise(() => {}));
     const { contract } = await deploy.waitForResult();
