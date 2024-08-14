@@ -56,6 +56,7 @@ export enum ErrorCode {
   MISSING_REQUIRED_PARAMETER = 'missing-required-parameter',
   INVALID_REQUEST = 'invalid-request',
   INVALID_TRANSFER_AMOUNT = 'invalid-transfer-amount',
+  NOT_ENOUGH_FUNDS = 'not-enough-funds',
 
   // crypto
   INVALID_CREDENTIALS = 'invalid-credentials',
@@ -77,7 +78,9 @@ export enum ErrorCode {
   DUPLICATED_POLICY = 'duplicated-policy',
   TRANSACTION_SQUEEZED_OUT = 'transaction-squeezed-out',
   CONTRACT_SIZE_EXCEEDS_LIMIT = 'contract-size-exceeds-limit',
+  INVALID_CHUNK_SIZE_MULTIPLIER = 'invalid-chunk-size-multiplier',
   MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
+  FUNDS_TOO_LOW = 'funds-too-low',
   MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
 
   // receipt

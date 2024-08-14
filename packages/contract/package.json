@@ -45,16 +45,18 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/hasher": "workspace:*",
     "@fuel-ts/interfaces": "workspace:^",
+    "@fuel-ts/math": "workspace:^",
     "@fuel-ts/merkle": "workspace:*",
     "@fuel-ts/program": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
+    "@fuels/vm-asm": "0.56.0",
     "ramda": "^0.30.1"
   },
   "devDependencies": {
+    "@fuel-ts/utils": "workspace:*",
     "@internal/forc": "workspace:*",
-    "@types/ramda": "^0.30.1",
-    "@fuel-ts/utils": "workspace:*"
+    "@types/ramda": "^0.30.1"
   }
 }
