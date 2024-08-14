@@ -18,7 +18,7 @@ It either uses a single create transaction to deploy the entire contract bytecod
 The `ContractFactory` offers the following methods for the different processes:
 
 - `deploy` for deploying contacts of any size (will automatically choose the appropriate deployment process).
-- `deployContract` for deploying the entire contract bytecode in a single create transaction.
+- `deployAsCreateTx` for deploying the entire contract bytecode in a single create transaction.
 - `deployAsBlobTx` for deploying the contract in chunks as blobs, and then deploying the contract as a create transaction.
 
 > **Note:** If the contract is deployed via blob deployments, multiple transactions will be required to deploy the contract.
