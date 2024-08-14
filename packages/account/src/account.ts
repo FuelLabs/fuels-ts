@@ -334,7 +334,7 @@ export class Account extends AbstractAccount {
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
-  ): Promise<TransactionRequest> {
+  ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addTransfer(request, { destination, amount, assetId });
     request = await this.estimateAndFundTransaction(request, txParams);
