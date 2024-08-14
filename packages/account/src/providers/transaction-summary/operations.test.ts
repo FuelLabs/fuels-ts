@@ -42,6 +42,7 @@ import {
   getTransactionTypeName,
   getWithdrawFromFuelOperations,
   isType,
+  isTypeBlob,
   isTypeCreate,
   isTypeMint,
   isTypeScript,
@@ -831,6 +832,7 @@ describe('operations', () => {
       expect(isType(TransactionType.Script, TransactionTypeName.Create)).toBeFalsy();
       expect(isType(TransactionType.Mint, TransactionTypeName.Script)).toBeFalsy();
       expect(isType(TransactionType.Create, TransactionTypeName.Mint)).toBeFalsy();
+      expect(isType(TransactionType.Blob, TransactionTypeName.Blob)).toBeTruthy();
     });
 
     it('should isTypeMint return if is mint', () => {
@@ -849,6 +851,13 @@ describe('operations', () => {
       expect(isTypeScript(TransactionType.Script)).toBeTruthy();
       expect(isTypeScript(TransactionType.Mint)).toBeFalsy();
       expect(isTypeScript(TransactionType.Create)).toBeFalsy();
+    });
+
+    it('should isTypeBlob return if is Blob', () => {
+      expect(isTypeBlob(TransactionType.Blob)).toBeTruthy();
+      expect(isTypeBlob(TransactionType.Mint)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Create)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Script)).toBeFalsy();
     });
   });
 
@@ -937,6 +946,7 @@ describe('operations', () => {
     expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeName.Create);
     expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeName.Mint);
     expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeName.Script);
+    expect(getTransactionTypeName(TransactionType.Blob)).toBe(TransactionTypeName.Blob);
 
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
       'Unsupported transaction type: '
