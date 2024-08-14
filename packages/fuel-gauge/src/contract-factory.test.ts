@@ -262,10 +262,10 @@ describe('Contract Factory', () => {
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
 
     await expectToThrowFuelError(
-      () => factory.deployContract(),
+      () => factory.deployAsCreateTx(),
       new FuelError(
         ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
-        'Contract bytecode is too large. Please use `deployContractAsBlobs` instead.'
+        'Contract bytecode is too large. Please use `deployAsBlobTx` instead.'
       )
     );
   });
@@ -283,8 +283,10 @@ describe('Contract Factory', () => {
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
     expect(factory.bytecode.length % 8 === 0).toBe(true);
 
-    const deploy = await factory.deployContractAsBlobs<LargeContract>();
+    const deploy = await factory.deployAsBlobTx<LargeContract>();
+
     const { contract } = await deploy.waitForResult();
+
     const call = await contract.functions.something().call();
 
     const { value } = await call.waitForResult();
@@ -331,7 +333,7 @@ describe('Contract Factory', () => {
     const bytecode = concat([arrayify(LargeContractFactory.bytecode), new Uint8Array(3)]);
     const factory = new ContractFactory(bytecode, LargeContract.abi, wallet);
     expect(factory.bytecode.length % 8 === 0).toBe(false);
-    const deploy = await factory.deployContractAsBlobs<LargeContract>({ chunkSizeMultiplier: 0.5 });
+    const deploy = await factory.deployAsBlobTx<LargeContract>({ chunkSizeMultiplier: 0.5 });
 
     const { contract } = await deploy.waitForResult();
     expect(contract.id).toBeDefined();
@@ -353,7 +355,7 @@ describe('Contract Factory', () => {
     const chunkSizeMultiplier = 2;
 
     await expectToThrowFuelError(
-      () => factory.deployContractAsBlobs<LargeContract>({ chunkSizeMultiplier }),
+      () => factory.deployAsBlobTx<LargeContract>({ chunkSizeMultiplier }),
       new FuelError(
         ErrorCode.INVALID_CHUNK_SIZE_MULTIPLIER,
         'Chunk size multiplier must be between 0 and 1'
@@ -374,7 +376,7 @@ describe('Contract Factory', () => {
       wallet
     );
 
-    const deploy = await factory.deployContractAsBlobs();
+    const deploy = await factory.deployAsBlobTx();
     const { contract } = await deploy.waitForResult();
 
     const call = await contract.functions.echo_u8().call();
@@ -461,7 +463,7 @@ describe('Contract Factory', () => {
       wallet
     );
 
-    const deploy = await factory.deployContractAsBlobs({
+    const deploy = await factory.deployAsBlobTx({
       configurableConstants: {
         U8: 1,
         U16: 2,
@@ -501,7 +503,7 @@ describe('Contract Factory', () => {
       wallet
     );
 
-    const deploy = await factory.deployContractAsBlobs({
+    const deploy = await factory.deployAsBlobTx({
       storageSlots: StorageTestContract.storageSlots,
     });
 

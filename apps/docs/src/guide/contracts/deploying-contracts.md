@@ -18,8 +18,8 @@ It either uses a single create transaction to deploy the entire contract bytecod
 The `ContractFactory` offers the following methods for the different processes:
 
 - `deploy` for deploying contacts of any size (will automatically choose the appropriate deployment process).
-- `deployContract` for deploying the entire contract bytecode in a single create transaction.
-- `deployContractAsBlobs` for deploying the contract in chunks as blobs, and then deploying the contract as a create transaction.
+- `deployAsCreateTx` for deploying the entire contract bytecode in a single create transaction.
+- `deployAsBlobTx` for deploying the contract in chunks as blobs, and then deploying the contract as a create transaction.
 
 > **Note:** If the contract is deployed via blob deployments, multiple transactions will be required to deploy the contract.
 
@@ -53,8 +53,19 @@ Now that the contract is deployed, you can interact with it by submitting a cont
 
 ## Deploying a Large Contract as Blobs
 
+<<<<<<< HEAD
 In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the `deployContractAsBlobs` method, also available on the `ContractFactory` should you want to use that directly.
+=======
+In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the `deployAsBlobTx` method, also available on the `ContractFactory` should you want to use that directly.
+
+> > > > > > > 03ac5508ed49d5185d24333d8bf0517e32fdb5dd
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#blobs{ts:line-numbers}
 
 In the above example, we also pass a `chunkSizeMultiplier` option to the deployment method. The SDK will attempt to chunk the contract to the most optimal about, however the transaction size can fluctuate and you can also be limited by request size limits against the node. By default we set a multiplier of 0.95, meaning the chunk size will be 95% of the potential maximum size, however you can adjust this to suit your needs and ensure the transaction passes. It must be set to a value between 0 and 1.
+<<<<<<< HEAD
+=======
+
+> **Note:** Blob deployments contain multiple dependent transactions, so you will need to wait longer than usual for the contract to be fully deployed and can be interacted with.
+>
+> > > > > > > 03ac5508ed49d5185d24333d8bf0517e32fdb5dd
