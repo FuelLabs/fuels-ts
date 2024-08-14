@@ -57,7 +57,7 @@ const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
 
 /**
  * @group node
- * @group browser
+ * @group e2e
  */
 describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let provider: Provider;
