@@ -4,9 +4,6 @@ import { calcRoot, SparseMerkleTree } from '@fuel-ts/merkle';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { chunkAndPadBytes, hexlify, concat, arrayify } from '@fuel-ts/utils';
 
-// Max contract size in bytes is 100KB
-export const MAX_CONTRACT_SIZE = 102400;
-
 /**
  * @hidden
  *

@@ -153,7 +153,7 @@ describe('TransactionRequest', () => {
 });
 
 describe('transactionRequestify', () => {
-  it('should keep data from input in transaction request created', () => {
+  it('should keep data from input in transaction request created [script]', () => {
     const script = Uint8Array.from([1, 2, 3, 4]);
     const scriptData = Uint8Array.from([5, 6]);
     const txRequestLike: TransactionRequestLike = {
@@ -193,5 +193,59 @@ describe('transactionRequestify', () => {
     expect(() => transactionRequestify(txRequestLike)).toThrow(
       'Unsupported transaction type: 1234'
     );
+  });
+
+  it('should keep data from input in transaction request created [create]', () => {
+    const txRequestLike: TransactionRequestLike = {
+      type: TransactionType.Create,
+      bytecodeWitnessIndex: 1,
+      storageSlots: [],
+      salt: '0x1234',
+      tip: 1,
+      maturity: 1,
+      inputs: [],
+      outputs: [],
+      witnesses: [],
+    };
+    const txRequest = transactionRequestify(txRequestLike);
+
+    if (txRequest.type === TransactionType.Create) {
+      expect(txRequest.bytecodeWitnessIndex).toEqual(txRequestLike.bytecodeWitnessIndex);
+      expect(txRequest.salt).toEqual(txRequestLike.salt);
+      expect(txRequest.storageSlots).toEqual(txRequestLike.storageSlots);
+    }
+
+    expect(txRequest.type).toEqual(txRequestLike.type);
+    expect(txRequest.tip?.toNumber()).toEqual(txRequestLike.tip);
+    expect(txRequest.maturity).toEqual(txRequestLike.maturity);
+    expect(txRequest.inputs).toEqual(txRequestLike.inputs);
+    expect(txRequest.outputs).toEqual(txRequestLike.outputs);
+    expect(txRequest.witnesses).toEqual(txRequestLike.witnesses);
+  });
+
+  it('should keep data from input in transaction request created [blob]', () => {
+    const txRequestLike: TransactionRequestLike = {
+      type: TransactionType.Blob,
+      blobId: '0x1234',
+      witnessIndex: 1,
+      tip: 1,
+      maturity: 1,
+      inputs: [],
+      outputs: [],
+      witnesses: [],
+    };
+    const txRequest = transactionRequestify(txRequestLike);
+
+    if (txRequest.type === TransactionType.Blob) {
+      expect(txRequest.blobId).toEqual(txRequestLike.blobId);
+      expect(txRequest.witnessIndex).toEqual(txRequestLike.witnessIndex);
+    }
+
+    expect(txRequest.type).toEqual(txRequestLike.type);
+    expect(txRequest.tip?.toNumber()).toEqual(txRequestLike.tip);
+    expect(txRequest.maturity).toEqual(txRequestLike.maturity);
+    expect(txRequest.inputs).toEqual(txRequestLike.inputs);
+    expect(txRequest.outputs).toEqual(txRequestLike.outputs);
+    expect(txRequest.witnesses).toEqual(txRequestLike.witnesses);
   });
 });
