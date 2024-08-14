@@ -59,4 +59,4 @@ In the above guide we use the recommended `deploy` method. If you are working wi
 
 In the above example, we also pass a `chunkSizeMultiplier` option to the deployment method. The SDK will attempt to chunk the contract to the most optimal about, however the transaction size can fluctuate and you can also be limited by request size limits against the node. By default we set a multiplier of 0.95, meaning the chunk size will be 95% of the potential maximum size, however you can adjust this to suit your needs and ensure the transaction passes. It must be set to a value between 0 and 1.
 
-> **Note:** Blob deployments contain multiple dependent transactions, so you will need to wait longer than usual for the contract to be fully deployed and can be interacted with.
+> **Note:** Deploying large contracts using blob transactions will take more time. Each transaction is dependent and has to wait for a block to be produced before it gets mined. Then a create transaction is submitted as normal. So you will need to wait longer than usual for the contract to be fully deployed and can be interacted with.
