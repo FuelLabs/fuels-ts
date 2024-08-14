@@ -42,7 +42,7 @@
   "scripts": {
     "build": "tsup",
     "prebuild": "pnpm build:operations",
-    "build:schema": "tsx ./scripts/get-fuel-core-schema.ts",
+    "build:schema": "tsx ./scripts/sync-fuel-core-schema.ts",
     "build:operations": "pnpm graphql-codegen",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },

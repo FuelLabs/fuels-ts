@@ -3,7 +3,7 @@ import { error, log } from 'console';
 
 import { launchNode } from '../src/test-utils/launchNode';
 
-const schemaSync = async () => {
+export const syncSchema = async () => {
   const { url, cleanup } = await launchNode({
     loggingEnabled: false,
   });
@@ -18,6 +18,6 @@ const schemaSync = async () => {
   cleanup();
 };
 
-schemaSync()
+syncSchema()
   .then(() => log('fuel-core schema synced successfully'))
   .catch(error);
