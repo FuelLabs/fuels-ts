@@ -200,8 +200,8 @@ export default class ContractFactory {
     const maxContractSize = consensusParameters.contractParameters.contractMaxSize.toNumber();
 
     return this.bytecode.length > maxContractSize
-      ? this.deployContractAsBlobs(deployOptions)
-      : this.deployContract(deployOptions);
+      ? this.deployAsBlobTx(deployOptions)
+      : this.deployAsCreateTx(deployOptions);
   }
 
   /**
@@ -210,7 +210,7 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContract<TContract extends Contract = Contract>(
+  async deployAsCreateTx<TContract extends Contract = Contract>(
     deployOptions: DeployContractOptions = {}
   ): Promise<DeployContractResult<TContract>> {
     const account = this.getAccount();
@@ -220,7 +220,7 @@ export default class ContractFactory {
     if (this.bytecode.length > maxContractSize) {
       throw new FuelError(
         ErrorCode.CONTRACT_SIZE_EXCEEDS_LIMIT,
-        'Contract bytecode is too large. Please use `deployContractAsBlobs` instead.'
+        'Contract bytecode is too large. Please use `deployAsBlobTx` instead.'
       );
     }
 
@@ -244,7 +244,7 @@ export default class ContractFactory {
    * @param deployOptions - Options for deploying the contract.
    * @returns A promise that resolves to the deployed contract instance.
    */
-  async deployContractAsBlobs<TContract extends Contract = Contract>(
+  async deployAsBlobTx<TContract extends Contract = Contract>(
     deployOptions: DeployContractOptions = {
       chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
     }

@@ -90,7 +90,7 @@ describe('Deploying Contracts', () => {
     const factory = new ContractFactory(bytecode, abi, wallet);
 
     // Deploy the contract as blobs
-    const { waitForResult, contractId, transactionId } = await factory.deployContractAsBlobs({
+    const { waitForResult, contractId, transactionId } = await factory.deployAsBlobTx({
       // Increasing chunk size multiplier to be 90% of the max chunk size
       chunkSizeMultiplier: 0.9,
     });

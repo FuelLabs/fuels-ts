@@ -19,7 +19,7 @@ The `ContractFactory` offers the following methods for the different processes:
 
 - `deploy` for deploying contacts of any size (will automatically choose the appropriate deployment process).
 - `deployContract` for deploying the entire contract bytecode in a single create transaction.
-- `deployContractAsBlobs` for deploying the contract in chunks as blobs, and then deploying the contract as a create transaction.
+- `deployAsBlobTx` for deploying the contract in chunks as blobs, and then deploying the contract as a create transaction.
 
 > **Note:** If the contract is deployed via blob deployments, multiple transactions will be required to deploy the contract.
 
@@ -53,7 +53,7 @@ Now that the contract is deployed, you can interact with it by submitting a cont
 
 ## Deploying a Large Contract as Blobs
 
-In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the `deployContractAsBlobs` method, also available on the `ContractFactory` should you want to use that directly.
+In the above guide we use the recommended `deploy` method. If you are working with a contract that is too large to be deployed in a single transaction, then the SDK will chunk the contract for you and submit it as blobs, to then be accessed later by a create transaction. This process is handled by the `deployAsBlobTx` method, also available on the `ContractFactory` should you want to use that directly.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#blobs{ts:line-numbers}
 
