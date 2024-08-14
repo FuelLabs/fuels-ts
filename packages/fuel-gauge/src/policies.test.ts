@@ -349,7 +349,11 @@ describe('Policies', () => {
 
   describe('should ensure TX maxFee policy limits TX execution as expected', () => {
     it('on account transfer', async () => {
-      using launched = await launchTestNode();
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        },
+      });
 
       const {
         provider,
@@ -410,7 +414,11 @@ describe('Policies', () => {
     });
 
     it('on account withdraw to base layer', async () => {
-      using launched = await launchTestNode();
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        },
+      });
 
       const {
         provider,
@@ -432,7 +440,11 @@ describe('Policies', () => {
     });
 
     it('on ContractFactory when deploying contracts', async () => {
-      using launched = await launchTestNode();
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+        },
+      });
 
       const {
         wallets: [wallet],
