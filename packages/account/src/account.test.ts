@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
@@ -345,7 +346,7 @@ describe('Account', () => {
     const { balances: receiverBalances } = await receiver.getBalances();
 
     expect(isStatusSuccess).toBeTruthy();
-    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
+    expect(receiverBalances).toEqual([{ assetId: TestAssetId.A.value, amount: bn(1) }]);
   });
 
   it('can transfer to multiple destinations', async () => {
