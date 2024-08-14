@@ -18,6 +18,8 @@
     "knip:fix": "knip --fix",
     "depsync:lint": "syncpack list-mismatches",
     "depsync:fix": "syncpack fix-mismatches",
+    "test": "pnpm run test:node",
+    "test:all": "run-p test:node test:browser",
     "test:node": "vitest --run --coverage --config vitest.node.config.mts $(scripts/tests-find.sh --node)",
     "test:filter": "vitest --run --coverage false --config vitest.node.config.mts",
     "test:coverage-merge": "tsx ./scripts/tests-coverage-merge.ts",
