@@ -10,7 +10,7 @@
   },
   "packageManager": "pnpm@9.4.0",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'pnpm build'",
+    "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build --filter=!docs --filter=!template-* --filter=!demo-* --cache-dir=.turbo",
     "build:all": "turbo run build --cache-dir=.turbo",
     "ci:test": "./scripts/tests-ci.sh",
