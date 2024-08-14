@@ -34,7 +34,7 @@ const filesToRemove = [
   'api/enums',
 ];
 
-const secondaryEntryPoints = ['-index.md', '-test_utils.md', '-cli-utils.md'];
+const secondaryEntryPoints = ['-index.md', '-test_utils.md', '-cli_utils.md'];
 const secondaryModules: string[] = [];
 
 const filePathReplacements: RegexReplacement[] = [];
@@ -65,7 +65,12 @@ const exportLinksJson = () => {
     .forEach((directory) => {
       links.items.push({ text: directory, link: `/api/${directory}/`, collapsed: true, items: [] });
       readdirSync(join(apiDocsDir, directory))
-        .filter((file) => file !== 'index.md')
+        .filter(
+          (file) =>
+            !['index.md', 'src-index.md', 'test-utils-index.md', 'cli-utils-index.md'].includes(
+              file
+            )
+        )
         .forEach((file) => {
           const index = links.items.findIndex((item) => item.text === directory);
           if (index !== -1) {
