@@ -55,6 +55,10 @@ const configuredNetworks = {
 
 const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
 
+/**
+ * @group node
+ * @group browser
+ */
 describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let provider: Provider;
   let wallet: WalletUnlocked;
