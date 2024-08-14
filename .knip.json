@@ -9,6 +9,7 @@
     "apps/create-fuels-counter-guide/**"
   ],
   "ignoreDependencies": [
+    "get-graphql-schema",
     "bun",
     "@/sway-api/*",
     "@fuel-ts/*",
