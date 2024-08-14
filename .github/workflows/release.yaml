@@ -48,7 +48,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Build
-        run: pnpm build:all
+        run: pnpm build
 
       - name: Set branch name and changeset PR title
         run: |
@@ -136,7 +136,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git merge origin/$GITHUB_REF_NAME --no-edit
           pnpm install
-          pnpm build:all
+          pnpm build
           rm -f apps/docs/.gitignore
           git add apps/docs/src/api/
           git add apps/docs/.typedoc/api-links.json
