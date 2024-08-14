@@ -362,8 +362,17 @@ export default class ContractFactory {
     };
 
     const getTransactionId = async () => {
+      const maxPollingTime = 15_000_000; // 15 Minutes
+      const timePerPoll = 500; // 1/2 Second
+      const maxPollingAttempts = maxPollingTime / timePerPoll;
+      let attempts = 0;
+
       while (!transactionId) {
-        await sleep(500);
+        if (attempts++ > maxPollingAttempts) {
+          throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to retrieve transaction ID');
+        }
+
+        await sleep(timePerPoll);
       }
       return Promise.resolve(transactionId);
     };

@@ -51,11 +51,13 @@ describe('Deploying Contracts', () => {
     // #region deploy
     // Deploy the contract
     const { waitForResult, contractId, getTransactionId } = await factory.deploy();
+    // Retrieve the transactionId
+    const transactionId = await getTransactionId();
     // Await it's deployment
     const { contract, transactionResult } = await waitForResult();
     // #endregion deploy
     expect(contract).toBeDefined();
-    expect(getTransactionId).toBeDefined();
+    expect(transactionId).toBeDefined();
     expect(transactionResult.status).toBeTruthy();
     expect(contractId).toBe(contract.id.toB256());
 
@@ -98,8 +100,9 @@ describe('Deploying Contracts', () => {
     const { contract, transactionResult } = await waitForResult();
     // #endregion blobs
 
+    const transactionId = await getTransactionId();
     expect(contract).toBeDefined();
-    expect(getTransactionId).toBeDefined();
+    expect(transactionId).toBeDefined();
     expect(transactionResult.status).toBeTruthy();
     expect(contractId).toBe(contract.id.toB256());
 
