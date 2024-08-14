@@ -7,4 +7,4 @@
 "fuels": patch
 ---
 
-chore: integrate `launchTestNode` in remaining packages
+chore!: integrate `launchTestNode` in remaining packages
