@@ -26,6 +26,7 @@ export enum TransactionType /* u8 */ {
   Mint = 2,
   Upgrade = 3,
   Upload = 4,
+  Blob = 5,
 }
 
 export type TransactionScript = {
@@ -568,12 +569,113 @@ export class TransactionUploadCoder extends Coder<TransactionUpload, Transaction
   }
 }
 
+export type TransactionBlob = {
+  type: TransactionType.Blob;
+
+  /** Hash of the bytecode. (b256) */
+  blobId: string;
+
+  /** Witness index of contract bytecode (u16) */
+  witnessIndex: number;
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
+
+  /** List of policies, sorted by PolicyType. */
+  policies: Policy[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** List of witnesses (Witness[]) */
+  witnesses: Witness[];
+};
+
+export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob> {
+  constructor() {
+    super('TransactionBlob', 'struct TransactionBlob', 0);
+  }
+
+  encode(value: TransactionBlob): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new B256Coder().encode(value.blobId));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessIndex));
+    parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(value.policyTypes));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.inputsCount));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputsCount));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessesCount));
+    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionBlob, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new B256Coder().decode(data, o);
+    const blobId = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const witnessIndex = decoded;
+    [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
+    const policyTypes = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const inputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const witnessesCount = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    const witnesses = decoded;
+
+    return [
+      {
+        type: TransactionType.Blob,
+        blobId,
+        witnessIndex,
+        policyTypes,
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        policies,
+        inputs,
+        outputs,
+        witnesses,
+      },
+      o,
+    ];
+  }
+}
+
 type PossibleTransactions =
   | TransactionScript
   | TransactionCreate
   | TransactionMint
   | TransactionUpgrade
-  | TransactionUpload;
+  | TransactionUpload
+  | TransactionBlob;
 
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
@@ -581,7 +683,8 @@ export type Transaction<TTransactionType = void> = TTransactionType extends Tran
       Partial<Omit<TransactionCreate, 'type'>> &
       Partial<Omit<TransactionMint, 'type'>> &
       Partial<Omit<TransactionUpgrade, 'type'>> &
-      Partial<Omit<TransactionUpload, 'type'>> & {
+      Partial<Omit<TransactionUpload, 'type'>> &
+      Partial<Omit<TransactionBlob, 'type'>> & {
         type: TransactionType;
       };
 
@@ -626,6 +729,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         );
         break;
       }
+      case TransactionType.Blob: {
+        parts.push(new TransactionBlobCoder().encode(value as Transaction<TransactionType.Blob>));
+        break;
+      }
       default: {
         throw new FuelError(
           ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
@@ -663,6 +770,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
       case TransactionType.Upload: {
         [decoded, o] = new TransactionUploadCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.Blob: {
+        [decoded, o] = new TransactionBlobCoder().decode(data, o);
         return [decoded, o];
       }
       default: {

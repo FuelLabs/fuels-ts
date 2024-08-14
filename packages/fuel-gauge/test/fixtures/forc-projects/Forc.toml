@@ -15,6 +15,7 @@ members = [
   "configurable-contract",
   "coverage-contract",
   "generic-types-contract",
+  "large-contract",
   "multi-token-contract",
   "options",
   "payable-annotation",
