@@ -39,11 +39,11 @@ Once you have the contract artifacts, it can be passed to the `ContractFactory` 
 
 As mentioned earlier, there are two different processes for contract deployment handled by the `ContractFactory`. These can be used interchangeably, however, the `deploy` method is recommended as it will automatically choose the appropriate deployment process based on the contract size.
 
-This call resolves as soon as the transaction to deploy the contract is submitted and returns three items: the `contractId`, the `transactionId` and a `waitForResult` function.
+This call resolves as soon as the transaction to deploy the contract is submitted and returns three items: the `contractId`, a `waitForTransactionId` function and a `waitForResult` function.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#deploy{ts:line-numbers}
 
-The `contract` instance will be returned only after calling `waitForResult` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed.
+The `contract` instance will be returned only after calling `waitForResult` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed. Similarly, the transaction ID is only available once the underlying transaction has been funded. To avoid blocking the code until the ID is ready, you can use the `waitForTransactionId` function to await it's retrieval.
 
 ### 3. Executing a Contract Call
 
@@ -59,4 +59,4 @@ In the above guide we use the recommended `deploy` method. If you are working wi
 
 In the above example, we also pass a `chunkSizeMultiplier` option to the deployment method. The SDK will attempt to chunk the contract to the most optimal about, however the transaction size can fluctuate and you can also be limited by request size limits against the node. By default we set a multiplier of 0.95, meaning the chunk size will be 95% of the potential maximum size, however you can adjust this to suit your needs and ensure the transaction passes. It must be set to a value between 0 and 1.
 
-> **Note:** Blob deployments contain multiple dependent transactions, so you will need to wait longer than usual for the contract to be fully deployed and can be interacted with.
+> **Note:** Deploying large contracts using blob transactions will take more time. Each transaction is dependent and has to wait for a block to be produced before it gets mined. Then a create transaction is submitted as normal. So you will need to wait longer than usual for the contract to be fully deployed and can be interacted with.
