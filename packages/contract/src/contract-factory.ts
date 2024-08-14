@@ -315,7 +315,10 @@ export default class ContractFactory {
     }
 
     // Transaction id is unset until we have funded the create tx, which is dependent on the blob txs
-    let transactionId: string;
+    let txIdResolver: (value: string | PromiseLike<string>) => void;
+    const txIdPromise = new Promise<string>((resolve) => {
+      txIdResolver = resolve;
+    });
 
     const waitForResult = async () => {
       // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
@@ -353,7 +356,7 @@ export default class ContractFactory {
       }
 
       await this.fundTransactionRequest(createRequest, deployOptions);
-      transactionId = createRequest.getTransactionId(account.provider.getChainId());
+      txIdResolver(createRequest.getTransactionId(account.provider.getChainId()));
       const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
       const contract = new Contract(contractId, this.interface, account) as TContract;
@@ -361,21 +364,7 @@ export default class ContractFactory {
       return { contract, transactionResult };
     };
 
-    const waitForTransactionId = async () => {
-      const maxPollingTime = 15_000_000; // 15 Minutes
-      const timePerPoll = 500; // 1/2 Second
-      const maxPollingAttempts = maxPollingTime / timePerPoll;
-      let attempts = 0;
-
-      while (!transactionId) {
-        if (attempts++ > maxPollingAttempts) {
-          throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to retrieve transaction ID');
-        }
-
-        await sleep(timePerPoll);
-      }
-      return Promise.resolve(transactionId);
-    };
+    const waitForTransactionId = () => txIdPromise;
 
     return { waitForResult, contractId, waitForTransactionId };
   }
