@@ -39,11 +39,11 @@ Once you have the contract artifacts, it can be passed to the `ContractFactory` 
 
 As mentioned earlier, there are two different processes for contract deployment handled by the `ContractFactory`. These can be used interchangeably, however, the `deploy` method is recommended as it will automatically choose the appropriate deployment process based on the contract size.
 
-This call resolves as soon as the transaction to deploy the contract is submitted and returns three items: the `contractId`, a `getTransactionId` function and a `waitForResult` function.
+This call resolves as soon as the transaction to deploy the contract is submitted and returns three items: the `contractId`, a `waitForTransactionId` function and a `waitForResult` function.
 
 <<< @/../../docs-snippets/src/guide/contracts/deploying-contracts.test.ts#deploy{ts:line-numbers}
 
-The `contract` instance will be returned only after calling `waitForResult` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed. Similarly, the transaction ID is only available once the underlying transaction has been funded. To avoid blocking the code until the ID is ready, you can use the `getTransactionId` function to await it's retrieval.
+The `contract` instance will be returned only after calling `waitForResult` and waiting for it to resolve. To avoid blocking the rest of your code, you can attach this promise to a hook or listener that will use the contract only after it is fully deployed. Similarly, the transaction ID is only available once the underlying transaction has been funded. To avoid blocking the code until the ID is ready, you can use the `waitForTransactionId` function to await it's retrieval.
 
 ### 3. Executing a Contract Call
 

@@ -42,7 +42,7 @@ export type DeployContractOptions = {
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
   contractId: string;
-  getTransactionId: () => Promise<string>;
+  waitForTransactionId: () => Promise<string>;
   waitForResult: () => Promise<{
     contract: TContract;
     transactionResult: TransactionResult<TransactionType.Create>;
@@ -237,7 +237,7 @@ export default class ContractFactory {
 
     return {
       contractId,
-      getTransactionId: () => Promise.resolve(transactionResponse.id),
+      waitForTransactionId: () => Promise.resolve(transactionResponse.id),
       waitForResult,
     };
   }
@@ -361,7 +361,7 @@ export default class ContractFactory {
       return { contract, transactionResult };
     };
 
-    const getTransactionId = async () => {
+    const waitForTransactionId = async () => {
       const maxPollingTime = 15_000_000; // 15 Minutes
       const timePerPoll = 500; // 1/2 Second
       const maxPollingAttempts = maxPollingTime / timePerPoll;
@@ -377,7 +377,7 @@ export default class ContractFactory {
       return Promise.resolve(transactionId);
     };
 
-    return { waitForResult, contractId, getTransactionId };
+    return { waitForResult, contractId, waitForTransactionId };
   }
 
   /**

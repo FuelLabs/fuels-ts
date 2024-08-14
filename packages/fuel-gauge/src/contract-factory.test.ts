@@ -309,11 +309,11 @@ describe('Contract Factory', () => {
 
     const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
     const deploy = await factory.deployAsBlobTx<LargeContract>();
-    const initTxId = deploy.getTransactionId();
+    const initTxId = deploy.waitForTransactionId();
     expect(initTxId).toStrictEqual(new Promise(() => {}));
     const { contract } = await deploy.waitForResult();
     expect(contract.id).toBeDefined();
-    const awaitTxId = await deploy.getTransactionId();
+    const awaitTxId = await deploy.waitForTransactionId();
     expect(awaitTxId).toBeTruthy();
 
     const call = await contract.functions.something().call();
