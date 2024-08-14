@@ -59,9 +59,9 @@ export type TransferParams = {
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
+  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee' | 'gasPrice'
 >;
-const MAX_FUNDING_ATTEMPTS = 2;
+const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
 
@@ -199,7 +199,8 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
+    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee, gasPrice } =
+      params;
 
     const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
@@ -258,10 +259,14 @@ export class Account extends AbstractAccount {
       }
 
       if (!updateMaxFee) {
+        needsToBeFunded = false;
         break;
       }
+
+      // Recalculate the fee after adding the resources
       const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
         transactionRequest: requestToReestimate,
+        gasPrice,
       });
 
       const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
@@ -270,6 +275,7 @@ export class Account extends AbstractAccount {
         baseAssetId
       );
 
+      // Update the new total as the fee will change after adding new resources
       const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
 
       if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
@@ -284,6 +290,14 @@ export class Account extends AbstractAccount {
       }
 
       fundingAttempts += 1;
+    }
+
+    // If the transaction still needs to be funded after the maximum number of attempts
+    if (needsToBeFunded) {
+      throw new FuelError(
+        ErrorCode.NOT_ENOUGH_FUNDS,
+        `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
+      );
     }
 
     request.updatePredicateGasUsed(estimatedPredicates);
@@ -320,7 +334,7 @@ export class Account extends AbstractAccount {
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
-  ): Promise<TransactionRequest> {
+  ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addTransfer(request, { destination, amount, assetId });
     request = await this.estimateAndFundTransaction(request, txParams);

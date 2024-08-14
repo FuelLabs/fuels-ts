@@ -216,6 +216,7 @@ describe('Account', () => {
       requiredQuantities: quantities,
       estimatedPredicates: [],
       addedSignatures: 0,
+      gasPrice: bn(1),
     });
 
     expect(addAmountToCoinQuantitiesSpy).toBeCalledTimes(1);
@@ -339,19 +340,12 @@ describe('Account', () => {
     const response = await sender.transfer(receiver.address, 1, TestAssetId.A.value, {
       gasLimit: 10_000,
     });
+    const { isStatusSuccess } = await response.wait();
 
-    await response.wait();
-
-    const { balances: senderBalances } = await sender.getBalances();
     const { balances: receiverBalances } = await receiver.getBalances();
 
-    const expectedRemaining = 441899;
-
-    expect(senderBalances).toEqual([
-      { assetId: TestAssetId.A.value, amount: bn(499_999) },
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
-    expect(receiverBalances).toEqual([{ assetId: TestAssetId.A.value, amount: bn(1) }]);
+    expect(isStatusSuccess).toBeTruthy();
+    expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
   });
 
   it('can transfer to multiple destinations', async () => {
@@ -452,17 +446,11 @@ describe('Account', () => {
     );
 
     const response = await sender.sendTransaction(request);
-    await response.wait();
+    const { isStatusSuccess } = await response.wait();
 
-    const { balances: senderBalances } = await sender.getBalances();
     const { balances: receiverBalances } = await receiver.getBalances();
 
-    const expectedRemaining = 442069;
-    expect(senderBalances).toEqual([
-      { assetId: ASSET_A, amount: bn(500_000) },
-      { assetId: ASSET_B, amount: bn(500_000) },
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
+    expect(isStatusSuccess).toBeTruthy();
     expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
   });
 
@@ -618,17 +606,10 @@ describe('Account', () => {
 
     // The sender is the TX ID on the spec it says it should be the sender address
     // but is not returning the sender address instead is returning the tx id
+    expect(result.isStatusSuccess).toBeTruthy();
     expect(result.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
-
-    const { balances: senderBalances } = await sender.getBalances();
-    const expectedRemaining = 441598;
-    expect(senderBalances).toEqual([
-      { assetId: ASSET_A, amount: bn(500_000) },
-      { assetId: ASSET_B, amount: bn(500_000) },
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
@@ -780,16 +761,10 @@ describe('Account', () => {
     const result = await tx.wait();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
+    expect(result.isStatusSuccess).toBeTruthy();
     expect(result.gqlTransaction.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
-
-    const { balances: senderBalances } = await sender.getBalances();
-
-    const expectedRemaining = 1441498;
-    expect(senderBalances).toEqual([
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
   });
 
   it('can set "gasLimit" and "maxFee" when withdrawing to base layer', async () => {

@@ -10,9 +10,10 @@
   },
   "packageManager": "pnpm@9.4.0",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'pnpm build'",
-    "build": "turbo run build --filter=!docs --filter=!template-* --filter=!demo-* --cache-dir=.turbo",
-    "build:all": "turbo run build --cache-dir=.turbo",
+    "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
+    "build": "turbo run build --cache-dir=.turbo",
+    "build:packages": "turbo run build --filter=!docs --filter=!template-*",
+    "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
     "depcheck": "knip --dependencies --tags=-knipignore",
     "knip:fix": "knip --fix",
