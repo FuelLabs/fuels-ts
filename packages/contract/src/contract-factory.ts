@@ -5,7 +5,6 @@ import type {
   CreateTransactionRequestLike,
   Provider,
   TransactionRequest,
-  TransactionResponse,
   TransactionResult,
   TransactionType,
 } from '@fuel-ts/account';
@@ -42,8 +41,8 @@ export type DeployContractOptions = {
 } & CreateTransactionRequestLike;
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
-  transactionId: string;
   contractId: string;
+  getTransactionId: () => Promise<string>;
   waitForResult: () => Promise<{
     contract: TContract;
     transactionResult: TransactionResult<TransactionType.Create>;
@@ -236,7 +235,11 @@ export default class ContractFactory {
       return { contract, transactionResult };
     };
 
-    return { waitForResult, contractId, transactionId: transactionResponse.id };
+    return {
+      contractId,
+      getTransactionId: () => Promise.resolve(transactionResponse.id),
+      waitForResult,
+    };
   }
 
   /**
@@ -311,12 +314,8 @@ export default class ContractFactory {
       throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
     }
 
-    await this.fundTransactionRequest(createRequest, deployOptions);
-
-    // Start funding and submitting the txs
-    // Preset the transactionId to as we will not have it's actual value until we have
-    // submitted all the blob txs and then funded the create tx
-    let transactionId: string = 'not-yet-set';
+    // Not set correctly
+    let transactionId: string = 'nada';
 
     const waitForResult = async () => {
       // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
