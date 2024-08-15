@@ -1,23 +1,27 @@
-import type { Provider } from 'fuels';
 import { Contract } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
+import { CounterFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let counterContract: Contract;
-  let provider: Provider;
-  let baseAssetId: string;
-  beforeAll(async () => {
-    counterContract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
-    provider = counterContract.provider;
-    baseAssetId = provider.getBaseAssetId();
-  });
-
+describe('Interacting with Contracts', () => {
   it('should successfully use "get" to read from the blockchain', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [counterContract],
+      provider,
+    } = launched;
+
     const { waitForResult } = await counterContract.functions.increment_counter(1).call();
     await waitForResult();
 
@@ -32,6 +36,19 @@ describe(__filename, () => {
   });
 
   it('should successfully use "dryRun" to validate a TX without a wallet', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [counterContract],
+      provider,
+    } = launched;
+
     const { id: contractId, interface: abi } = counterContract;
 
     // #region interacting-with-contracts-2
@@ -43,9 +60,20 @@ describe(__filename, () => {
   });
 
   it('should successfully use "simulate" to validate if wallet can pay for transaction', async () => {
-    const { id: contractId, interface: abi } = counterContract;
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+      ],
+    });
 
-    const fundedWallet = await getTestWallet([[200_000, baseAssetId]]);
+    const {
+      contracts: [counterContract],
+      wallets: [fundedWallet],
+    } = launched;
+
+    const { id: contractId, interface: abi } = counterContract;
 
     // #region interacting-with-contracts-3
     const contract = new Contract(contractId, abi, fundedWallet);
@@ -56,7 +84,17 @@ describe(__filename, () => {
   });
 
   it('should successfully execute a contract call without a wallet [call]', async () => {
-    const contract = counterContract;
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
 
     // #region interacting-with-contracts-4
     const { transactionId, waitForResult } = await contract.functions.increment_counter(10).call();
@@ -69,7 +107,17 @@ describe(__filename, () => {
   });
 
   it('should successfully execute a contract call without a wallet [call]', async () => {
-    const contract = counterContract;
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
 
     // #region interacting-with-contracts-5
     const { waitForResult } = await contract.functions.increment_counter(10).call();

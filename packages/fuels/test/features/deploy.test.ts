@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'fs';
 
+import { launchTestNode } from '../../src/test-utils';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import {
   bootstrapProject,
@@ -12,37 +13,41 @@ import {
 /**
  * @group node
  */
-describe(
-  'deploy',
-  () => {
-    const paths = bootstrapProject(__filename);
+describe('deploy', { timeout: 180000 }, () => {
+  let destroy: () => void;
+  const paths = bootstrapProject(__filename);
 
-    afterEach(() => {
-      resetConfigAndMocks(paths.fuelsConfigPath);
+  beforeAll(async () => {
+    const { cleanup } = await launchTestNode({
+      nodeOptions: {
+        port: '4000',
+      },
+    });
+    destroy = cleanup;
+  });
+
+  afterAll(() => {
+    resetConfigAndMocks(paths.fuelsConfigPath);
+    resetDiskAndMocks(paths.root);
+    destroy();
+  });
+
+  it('should run `deploy` command', async () => {
+    await runInit({
+      root: paths.root,
+      workspace: paths.workspaceDir,
+      output: paths.outputDir,
+      forcPath: paths.forcPath,
+      fuelCorePath: paths.fuelCorePath,
     });
 
-    afterAll(() => {
-      resetDiskAndMocks(paths.root);
-    });
+    await runBuild({ root: paths.root });
+    await runDeploy({ root: paths.root });
 
-    it('should run `deploy` command', async () => {
-      await runInit({
-        root: paths.root,
-        workspace: paths.workspaceDir,
-        output: paths.outputDir,
-        forcPath: paths.forcPath,
-        fuelCorePath: paths.fuelCorePath,
-      });
+    expect(existsSync(paths.contractsJsonPath)).toBeTruthy();
 
-      await runBuild({ root: paths.root });
-      await runDeploy({ root: paths.root });
-
-      expect(existsSync(paths.contractsJsonPath)).toBeTruthy();
-
-      const fuelsContents = JSON.parse(readFileSync(paths.contractsJsonPath, 'utf-8'));
-      expect(fuelsContents.barFoo).toMatch(/0x/);
-      expect(fuelsContents.fooBar).toMatch(/0x/);
-    });
-  },
-  { timeout: 180000 }
-);
+    const fuelsContents = JSON.parse(readFileSync(paths.contractsJsonPath, 'utf-8'));
+    expect(fuelsContents.barFoo).toMatch(/0x/);
+    expect(fuelsContents.fooBar).toMatch(/0x/);
+  });
+});
