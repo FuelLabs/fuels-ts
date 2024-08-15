@@ -39,7 +39,6 @@ import {
   hexlify,
   createConfig,
 } from 'fuels';
-import { generateTestWallet, seedTestWallet } from 'fuels/test-utils';
 
 const { log } = console;
 
@@ -168,8 +167,6 @@ log(WalletManager);
  * wallet
  */
 log(Wallet);
-log(generateTestWallet);
-log(seedTestWallet);
 log(FUEL_NETWORK_URL);
 
 /**

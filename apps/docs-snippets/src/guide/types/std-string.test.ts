@@ -1,19 +1,26 @@
-import type { Contract, StdString } from 'fuels';
+import type { StdString } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoStdStringFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('StdString', () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_STD_STRING);
-  });
-
   it('should pass a std string to a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoStdStringFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region std-string-1
     // #import { StdString };
 
@@ -26,6 +33,18 @@ describe('StdString', () => {
   });
 
   it('should retrieve a std string from a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoStdStringFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region std-string-2
     // #import { StdString };
 

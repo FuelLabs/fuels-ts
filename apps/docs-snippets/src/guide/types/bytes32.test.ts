@@ -3,8 +3,9 @@ import { arrayify, hexlify, randomBytes } from 'fuels';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Bytes32 Types', () => {
   it('should successfully generate and convert byte32 to hexlified string', () => {
     // #region bytes32-1
     // #region bytes32-2
