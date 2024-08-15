@@ -10,8 +10,8 @@
     "pretest": "pnpm original:build"
   },
   "dependencies": {
-    "@fuels/vm-asm": "0.55.0",
-    "@types/node": "^20.14.11",
+    "@fuels/vm-asm": "0.56.0",
+    "@types/node": "^22.2.0",
     "@types/react-dom": "^18.3",
     "@types/react": "^18.3.3",
     "fuels": "workspace:*",

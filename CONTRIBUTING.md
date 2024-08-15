@@ -118,7 +118,7 @@ In order to run tests locally, you can run the following commands:
 pnpm pretest
 
 # run all tests in a node environment
-pnpm test:node
+pnpm test
 
 # you may also run tests in a browser environment
 pnpm test:browser
@@ -232,7 +232,7 @@ Manually edit the `internal/fuel-core/VERSION` file, add the right version, and 
 
 ```sh
 pnpm install # will download new binaries
-pnpm test:node
+pnpm test
 ```
 
 If all tests pass, that's it.

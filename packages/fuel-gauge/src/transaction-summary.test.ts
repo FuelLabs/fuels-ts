@@ -39,6 +39,7 @@ describe('TransactionSummary', () => {
     expect(transaction.isTypeMint).toBe(false);
     expect(transaction.isTypeCreate).toBe(false);
     expect(transaction.isTypeScript).toBe(true);
+    expect(transaction.isTypeBlob).toBe(false);
     expect(transaction.isStatusFailure).toBe(false);
     expect(transaction.isStatusSuccess).toBe(!isRequest);
     expect(transaction.isStatusPending).toBe(false);

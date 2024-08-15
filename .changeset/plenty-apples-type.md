@@ -1,8 +1,5 @@
 ---
-"@fuel-ts/account": patch
-"@fuel-ts/program": patch
-"@fuel-ts/script": patch
-"fuels": patch
+"@fuel-ts/account": minor
 ---
 
-chore: integrate `launchTestNode` in remaining packages
+chore!: integrate `launchTestNode` in remaining packages

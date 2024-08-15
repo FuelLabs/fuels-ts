@@ -35,6 +35,7 @@ export enum TransactionTypeName {
   Script = 'Script',
   Upgrade = 'Upgrade',
   Upload = 'Upload',
+  Blob = 'Blob',
 }
 
 /**
@@ -170,6 +171,7 @@ export type TransactionSummary<TTransactionType = void> = {
   isTypeScript: boolean;
   isTypeUpgrade: boolean;
   isTypeUpload: boolean;
+  isTypeBlob: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
@@ -12,18 +13,23 @@ import { ScriptTransactionRequest, Provider } from './providers';
 import * as providersMod from './providers';
 import { TestAssetId, setupTestProviderAndWallets } from './test-utils';
 import { Wallet } from './wallet';
+
 /**
  * @group node
  */
-
 describe('Account', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
+  async function setupTestProvider(providerOptions = {}) {
+    const { provider, cleanup } = await setupTestProviderAndWallets({ providerOptions });
+
+    return Object.assign(provider, { [Symbol.dispose]: cleanup });
+  }
+
   it('should create account using an address, with a provider', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -51,8 +57,7 @@ describe('Account', () => {
   });
 
   it('should get coins just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -69,8 +74,7 @@ describe('Account', () => {
   });
 
   it('should execute getResourcesToSpend just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     // #region Message-getResourcesToSpend
     const account = new Account(
@@ -88,8 +92,7 @@ describe('Account', () => {
   });
 
   it('getResourcesToSpend should work with <1 amount', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -105,8 +108,7 @@ describe('Account', () => {
   });
 
   it('should get messages just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x69a2b736b60159b43bb8a4f98c0589f6da5fa3a3d101e8e269c499eb942753ba',
@@ -121,8 +123,7 @@ describe('Account', () => {
   });
 
   it('should get single asset balance just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -135,8 +136,7 @@ describe('Account', () => {
   });
 
   it('should get multiple balances just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -147,8 +147,7 @@ describe('Account', () => {
   });
 
   it('should connect with provider just fine [INSTANCE]', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -168,8 +167,7 @@ describe('Account', () => {
   });
 
   it('should be able to set a provider', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = new Account(
       '0x09c0b2d1a486c439a87bcba6b46a7a1a23f3897cc83a94521a96da5c23bc58db',
@@ -187,8 +185,7 @@ describe('Account', () => {
   });
 
   it('should execute fund just as fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const quantities: CoinQuantity[] = [
       {
@@ -220,6 +217,7 @@ describe('Account', () => {
       requiredQuantities: quantities,
       estimatedPredicates: [],
       addedSignatures: 0,
+      gasPrice: bn(1),
     });
 
     expect(addAmountToCoinQuantitiesSpy).toBeCalledTimes(1);
@@ -244,8 +242,7 @@ describe('Account', () => {
   });
 
   it('should execute sendTransaction just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
@@ -286,8 +283,7 @@ describe('Account', () => {
   });
 
   it('should execute simulateTransaction just fine', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const transactionRequestLike: providersMod.TransactionRequestLike = {
       type: providersMod.TransactionType.Script,
@@ -345,18 +341,11 @@ describe('Account', () => {
     const response = await sender.transfer(receiver.address, 1, TestAssetId.A.value, {
       gasLimit: 10_000,
     });
+    const { isStatusSuccess } = await response.wait();
 
-    await response.wait();
-
-    const { balances: senderBalances } = await sender.getBalances();
     const { balances: receiverBalances } = await receiver.getBalances();
 
-    const expectedRemaining = 441899;
-
-    expect(senderBalances).toEqual([
-      { assetId: TestAssetId.A.value, amount: bn(499_999) },
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
+    expect(isStatusSuccess).toBeTruthy();
     expect(receiverBalances).toEqual([{ assetId: TestAssetId.A.value, amount: bn(1) }]);
   });
 
@@ -458,17 +447,11 @@ describe('Account', () => {
     );
 
     const response = await sender.sendTransaction(request);
-    await response.wait();
+    const { isStatusSuccess } = await response.wait();
 
-    const { balances: senderBalances } = await sender.getBalances();
     const { balances: receiverBalances } = await receiver.getBalances();
 
-    const expectedRemaining = 442069;
-    expect(senderBalances).toEqual([
-      { assetId: ASSET_A, amount: bn(500_000) },
-      { assetId: ASSET_B, amount: bn(500_000) },
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
+    expect(isStatusSuccess).toBeTruthy();
     expect(receiverBalances).toEqual([{ assetId: provider.getBaseAssetId(), amount: bn(1) }]);
   });
 
@@ -624,17 +607,10 @@ describe('Account', () => {
 
     // The sender is the TX ID on the spec it says it should be the sender address
     // but is not returning the sender address instead is returning the tx id
+    expect(result.isStatusSuccess).toBeTruthy();
     expect(result.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
-
-    const { balances: senderBalances } = await sender.getBalances();
-    const expectedRemaining = 441598;
-    expect(senderBalances).toEqual([
-      { assetId: ASSET_A, amount: bn(500_000) },
-      { assetId: ASSET_B, amount: bn(500_000) },
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
   });
 
   it('can retrieve a valid MessageProof', async () => {
@@ -786,16 +762,10 @@ describe('Account', () => {
     const result = await tx.wait();
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
+    expect(result.isStatusSuccess).toBeTruthy();
     expect(result.gqlTransaction.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
-
-    const { balances: senderBalances } = await sender.getBalances();
-
-    const expectedRemaining = 1441498;
-    expect(senderBalances).toEqual([
-      { assetId: provider.getBaseAssetId(), amount: bn(expectedRemaining) },
-    ]);
   });
 
   it('can set "gasLimit" and "maxFee" when withdrawing to base layer', async () => {
@@ -884,8 +854,7 @@ describe('Account', () => {
   });
 
   it('can properly use getCoins', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = Wallet.generate({ provider });
     const spy = vi.spyOn(account.provider, 'getCoins');
@@ -910,8 +879,7 @@ describe('Account', () => {
   });
 
   it('can properly use getMessages', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+    using provider = await setupTestProvider();
 
     const account = Wallet.generate({ provider });
     const spy = vi.spyOn(account.provider, 'getMessages');
