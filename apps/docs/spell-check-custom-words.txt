@@ -329,4 +329,5 @@ Vitest
 CODEOWNERS
 incentivise
 URI
+walletsConfig
 reuploaded

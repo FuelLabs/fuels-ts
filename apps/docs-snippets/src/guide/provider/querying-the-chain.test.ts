@@ -1,39 +1,51 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-shadow */
 import type {
   TransactionResultMessageOutReceipt,
   CoinQuantityLike,
   ExcludeResourcesOption,
 } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, ScriptTransactionRequest } from 'fuels';
-import { TestMessage, generateTestWallet, launchTestNode } from 'fuels/test-utils';
+import { ScriptTransactionRequest, FUEL_NETWORK_URL, Provider } from 'fuels';
+import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('querying the chain', () => {
   it('query coins', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100,
+        assets: [TestAssetId.A],
+      },
+    });
+    const {
+      provider: testProvider,
+      wallets: [wallet],
+    } = launched;
+
+    const FUEL_NETWORK_URL = testProvider.url;
+
     // #region get-coins-1
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
+    // #import { Provider, FUEL_NETWORK_URL };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
+
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
     const baseAssetId = provider.getBaseAssetId();
-
-    const wallet = await generateTestWallet(provider, [
-      [42, baseAssetId],
-      [100, assetIdA],
-    ]);
 
     // fetches up to 100 coins from baseAssetId
     const { coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId);
     // [
-    //   { amount: bn(42), assetId: baseAssetId },
+    //   { amount: bn(100), assetId: baseAssetId },
     //   ...
     // ]
 
     // fetches up to 100 coins from all assets
     await provider.getCoins(wallet.address);
     // [
-    //   { amount: bn(42), assetId: baseAssetId }
+    //   { amount: bn(100), assetId: baseAssetId }
     //   { amount: bn(100), assetId: assetIdA }
     //   ...
     // ]
@@ -48,17 +60,26 @@ describe('querying the chain', () => {
   });
 
   it('get spendable resources', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100,
+        assets: [TestAssetId.A],
+      },
+    });
+    const {
+      provider: testProvider,
+      wallets: [wallet],
+    } = launched;
+
+    const FUEL_NETWORK_URL = testProvider.url;
+
     // #region get-spendable-resources-1
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet, ScriptTransactionRequest, CoinQuantityLike, ExcludeResourcesOption };
+    // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest, CoinQuantityLike, ExcludeResourcesOption };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const baseAssetId = provider.getBaseAssetId();
 
-    const wallet = await generateTestWallet(provider, [
-      [42, baseAssetId],
-      [100, assetIdA],
-    ]);
+    const baseAssetId = provider.getBaseAssetId();
 
     const quantities: CoinQuantityLike[] = [
       { amount: 32, assetId: baseAssetId, max: 42 },
@@ -90,17 +111,23 @@ describe('querying the chain', () => {
   });
 
   it('get balances', async () => {
+    using launched = await launchTestNode({
+      walletsConfig: {
+        amountPerCoin: 100,
+        assets: [TestAssetId.A],
+      },
+    });
+    const {
+      provider: testProvider,
+      wallets: [wallet],
+    } = launched;
+
+    const FUEL_NETWORK_URL = testProvider.url;
+
     // #region get-balances-1
-    // #import { Provider, FUEL_NETWORK_URL, generateTestWallet };
+    // #import { Provider, FUEL_NETWORK_URL };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const baseAssetId = provider.getBaseAssetId();
-
-    const wallet = await generateTestWallet(provider, [
-      [42, baseAssetId],
-      [100, assetIdA],
-    ]);
 
     const { balances } = await provider.getBalances(wallet.address);
     // [
@@ -117,10 +144,15 @@ describe('querying the chain', () => {
   });
 
   it('can getBlocks', async () => {
+    using launched = await launchTestNode();
+
+    const FUEL_NETWORK_URL = launched.provider.url;
+
     // #region Provider-get-blocks
     // #import { Provider, FUEL_NETWORK_URL };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
+
     const blockToProduce = 3;
 
     // Force-producing some blocks to make sure that 10 blocks exist
@@ -134,8 +166,13 @@ describe('querying the chain', () => {
   });
 
   it('can getMessageByNonce', async () => {
+    using launched = await launchTestNode();
+    const { provider: testProvider } = launched;
+
+    const FUEL_NETWORK_URL = testProvider.url;
+
     // #region get-message-by-nonce-1
-    // #import { FUEL_NETWORK_URL, Provider };
+    // #import { Provider, FUEL_NETWORK_URL };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
