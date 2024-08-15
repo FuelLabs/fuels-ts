@@ -65,12 +65,14 @@ const exportLinksJson = () => {
     .forEach((directory) => {
       links.items.push({ text: directory, link: `/api/${directory}/`, collapsed: true, items: [] });
       readdirSync(join(apiDocsDir, directory))
-        .filter(
-          (file) =>
-            !['index.md', 'src-index.md', 'test-utils-index.md', 'cli-utils-index.md'].includes(
-              file
-            )
-        )
+        .filter((file) => {
+          // Exclude index files and files related to secondary entry points
+          const isIndexFile = file.endsWith('index.md');
+          const isSecondaryEntryPoint = secondaryEntryPoints.some((entryPoint) =>
+            file.includes(entryPoint.replace('-', '-').replace('.md', ''))
+          );
+          return !isIndexFile && !isSecondaryEntryPoint;
+        })
         .forEach((file) => {
           const index = links.items.findIndex((item) => item.text === directory);
           if (index !== -1) {
