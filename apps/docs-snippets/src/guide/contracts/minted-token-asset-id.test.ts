@@ -6,8 +6,9 @@ import { EchoAssetIdFactory, TokenFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Minted Token Asset Id', () => {
   it('should successfully execute contract call with forwarded amount', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [{ factory: TokenFactory }],
