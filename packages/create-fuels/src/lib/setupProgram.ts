@@ -2,9 +2,9 @@ import { Command } from 'commander';
 
 import packageJson from '../../package.json';
 
-export type Template = 'nextjs';
-export const templates: Set<Template> = new Set(['nextjs']);
-export const defaultTemplate: Template = 'nextjs';
+export type Template = 'nextjs' | 'vite';
+export const templates: Set<Template> = new Set(['nextjs', 'vite']);
+export const defaultTemplate: Template = 'vite';
 
 export interface ProgramOptions {
   contract?: boolean;

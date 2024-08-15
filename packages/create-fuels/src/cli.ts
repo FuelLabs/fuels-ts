@@ -30,11 +30,16 @@ const processWorkspaceToml = (fileContents: string) => {
   return toml.stringify(parsed);
 };
 
-function writeEnvFile(envFilePath: string) {
+function writeEnvFile(envFilePath: string, template: Template) {
   let newFileContents = '';
 
-  newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
-  newFileContents += `\nNEXT_PUBLIC_DAPP_ENVIRONMENT=local`;
+  const prefixes: Record<Template, string> = {
+    nextjs: 'NEXT_PUBLIC_',
+    vite: 'VITE_',
+  };
+
+  newFileContents += `\n${prefixes[template]}FUEL_NODE_PORT=4000`;
+  newFileContents += `\n${prefixes[template]}DAPP_ENVIRONMENT=local`;
 
   writeFileSync(envFilePath, newFileContents);
 }
@@ -112,7 +117,7 @@ export const runScaffoldCli = async ({
   });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
-  writeEnvFile(join(projectPath, '.env.local'));
+  writeEnvFile(join(projectPath, '.env.local'), templateOfChoice);
 
   const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
   const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
