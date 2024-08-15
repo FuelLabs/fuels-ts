@@ -156,7 +156,6 @@ cp .env.example .env.test
 And changing the below variables:
 
 ```sh
-FUEL_NETWORK_URL=https://testnet.fuel.network/v1/graphql
 TEST_WALLET_PVT_KEY=0x...
 ```
 
