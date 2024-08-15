@@ -2,9 +2,8 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/account';
-import { Provider, ScriptTransactionRequest } from '@fuel-ts/account';
-import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
+import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
@@ -18,19 +17,10 @@ import { jsonAbiMock } from '../test/mocks';
 
 import { Script } from './index';
 
+// #TODO: we should refactor this to use Script Instance, need to do typegen here
 const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcProject(
   ScriptProjectsEnum.CALL_TEST_SCRIPT
 );
-
-const setup = async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
-
-  return wallet;
-};
 
 const callScript = async <TData, TResult>(
   account: Account,
@@ -99,7 +89,12 @@ describe('Script', () => {
   // #endregion script-init
 
   it('can call a script', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -114,7 +109,12 @@ describe('Script', () => {
   });
 
   it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -126,7 +126,11 @@ describe('Script', () => {
   });
 
   it('should throw if script has no configurable to be set', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const newScript = new Script(scriptBin, jsonAbiMock, wallet);
 
@@ -140,7 +144,11 @@ describe('Script', () => {
   });
 
   it('should throw when setting configurable with wrong name', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const jsonAbiWithConfigurablesMock: JsonAbi = {
       ...jsonAbiMock,

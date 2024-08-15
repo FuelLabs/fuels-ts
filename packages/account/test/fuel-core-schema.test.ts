@@ -4,6 +4,8 @@ import type { BinaryToTextEncoding } from 'crypto';
 import { createHash } from 'crypto';
 import { readFile } from 'fs/promises';
 
+import { setupTestProviderAndWallets } from '../src/test-utils';
+
 const FUEL_CORE_SCHEMA_FILE_PATH = 'packages/account/src/providers/fuel-core-schema.graphql';
 const FUEL_CORE_SCHEMA_SYNC_COMMAND = 'pnpm --filter @fuel-ts/account build:schema';
 
@@ -21,6 +23,21 @@ function generateChecksum(
  * @group node
  */
 describe('fuel-core-schema.graphql', () => {
+  let destroy: () => void;
+
+  beforeEach(async () => {
+    const { cleanup } = await setupTestProviderAndWallets({
+      nodeOptions: {
+        port: '4000',
+      },
+    });
+    destroy = cleanup;
+  });
+
+  afterEach(() => {
+    destroy();
+  });
+
   it('should not change on schema build', async () => {
     const preSyncChecksum = await readFile(FUEL_CORE_SCHEMA_FILE_PATH).then(generateChecksum);
 

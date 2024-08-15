@@ -1,15 +1,6 @@
 import type { WalletLocked, AssetId } from 'fuels';
-import {
-  Wallet,
-  FUEL_NETWORK_URL,
-  Provider,
-  Contract,
-  Address,
-  isBech32,
-  toBech32,
-  toB256,
-  isB256,
-} from 'fuels';
+import { Wallet, Contract, Address, isBech32, toBech32, toB256, isB256 } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import {
   DocSnippetProjectsEnum,
@@ -19,13 +10,8 @@ import {
 /**
  * @group node
  */
-describe(__filename, () => {
+describe('Conversion Types', () => {
   const { abiContents: abi } = getDocsSnippetsForcProject(DocSnippetProjectsEnum.ECHO_VALUES);
-  let provider: Provider;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-  });
 
   it('converts between bech32 and b256 using address', () => {
     // #region conversion-5
@@ -88,7 +74,10 @@ describe(__filename, () => {
     expect(bech32).toBe('fuel1d5cfwekq78r0zq73g7eg0747etkaxxltrqx5tncm7lvg89awe3hswhqjhs');
   });
 
-  it('should successfully validate contract id equality', () => {
+  it('should successfully validate contract id equality', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     // #region conversion-2
     // #import { Address, Contract };
 
@@ -105,7 +94,9 @@ describe(__filename, () => {
     expect(bech32).toBe('fuel1d5cfwekq78r0zq73g7eg0747etkaxxltrqx5tncm7lvg89awe3hswhqjhs');
   });
 
-  it('should successfully validate a wallet address equality', () => {
+  it('should successfully validate a wallet address equality', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
     // #region conversion-3
     // #import { Wallet, Address };
 
