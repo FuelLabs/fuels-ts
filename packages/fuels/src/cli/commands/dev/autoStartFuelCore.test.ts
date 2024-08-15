@@ -34,6 +34,7 @@ describe('autoStartFuelCore', () => {
         port: '4000',
         url: 'http://127.0.0.1:4000/v1/graphql',
         snapshotDir: '/some/path',
+        pid: 1234,
       })
     );
     return { launchNode };

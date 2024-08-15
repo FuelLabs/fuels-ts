@@ -156,8 +156,8 @@ cp .env.example .env.test
 And changing the below variables:
 
 ```sh
-FUEL_NETWORK_URL=https://testnet.fuel.network/v1/graphql
-TEST_WALLET_PVT_KEY=0x...
+DEVNET_WALLET_PVT_KEY=0x...
+TESTNET_WALLET_PVT_KEY=0x...
 ```
 
 <!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
