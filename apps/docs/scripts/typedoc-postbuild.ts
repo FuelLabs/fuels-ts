@@ -69,7 +69,7 @@ const exportLinksJson = () => {
           // Exclude index files and files related to secondary entry points
           const isIndexFile = file.endsWith('index.md');
           const isSecondaryEntryPoint = secondaryEntryPoints.some((entryPoint) =>
-            file.includes(entryPoint.replace('-', '-').replace('.md', ''))
+            file.includes(entryPoint.replace('_', '-').replace('.md', ''))
           );
           return !isIndexFile && !isSecondaryEntryPoint;
         })
