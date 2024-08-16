@@ -20,6 +20,27 @@ import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils'
 
 import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
 
+function convertBnsToHex(value: unknown): unknown {
+  if (value instanceof BN) {
+    return value.toHex();
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((v) => convertBnsToHex(v));
+  }
+
+  if (typeof value === 'object') {
+    // imagine, typeof null returns 'object'...
+    if (value === null) {
+      return value;
+    }
+    const entries = Object.entries(value).map(([key, v]) => [key, convertBnsToHex(v)]);
+    return Object.fromEntries(entries);
+  }
+
+  return value;
+}
+
 /**
  * @group node
  * @group browser
@@ -44,7 +65,6 @@ describe('TransactionSummary', () => {
     expect(transaction.isStatusSuccess).toBe(!isRequest);
     expect(transaction.isStatusPending).toBe(false);
     if (!isRequest) {
-      expect((<TransactionResult>transaction).gqlTransaction).toStrictEqual(expect.any(Object));
       expect(transaction.blockId).toEqual(expect.any(String));
       expect(transaction.time).toEqual(expect.any(String));
       expect(transaction.status).toEqual(expect.any(String));
@@ -92,8 +112,7 @@ describe('TransactionSummary', () => {
       transaction: transactionSummary,
     });
 
-    expect(transactionResponse).toStrictEqual(transactionSummary);
-    expect(transactionSummary.transaction).toStrictEqual(transactionResponse.transaction);
+    expect(convertBnsToHex(transactionResponse)).toStrictEqual(convertBnsToHex(transactionSummary));
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
@@ -145,8 +164,8 @@ describe('TransactionSummary', () => {
       });
     });
 
-    expect(transactions[0]).toStrictEqual(transactionResponse1);
-    expect(transactions[1]).toStrictEqual(transactionResponse2);
+    expect(convertBnsToHex(transactions[0])).toStrictEqual(convertBnsToHex(transactionResponse1));
+    expect(convertBnsToHex(transactions[1])).toStrictEqual(convertBnsToHex(transactionResponse2));
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {

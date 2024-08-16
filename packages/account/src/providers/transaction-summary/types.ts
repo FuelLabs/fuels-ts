@@ -157,7 +157,7 @@ export interface MintedAsset {
 export type BurnedAsset = MintedAsset;
 
 export type TransactionSummary<TTransactionType = void> = {
-  id?: string;
+  id: string;
   time?: string;
   operations: Operation[];
   gasUsed: BN;

@@ -61,10 +61,64 @@ fragment transactionStatusFragment on TransactionStatus {
   }
 }
 
+fragment malleableFieldsFragment on Transaction {
+  receiptsRoot
+  inputs {
+    type: __typename
+    ... on InputCoin {
+      txPointer
+    }
+    ... on InputContract {
+      txPointer
+    }
+  }
+  outputs {
+    type: __typename
+    ... on CoinOutput {
+      to
+      amount
+      assetId
+    }
+    ... on ContractOutput {
+      inputIndex
+      balanceRoot
+      stateRoot
+    }
+    ... on ChangeOutput {
+      to
+      amount
+      assetId
+    }
+    ... on VariableOutput {
+      to
+      amount
+      assetId
+    }
+    ... on ContractCreated {
+      contract
+      stateRoot
+    }
+  }
+}
+
 fragment transactionStatusSubscriptionFragment on TransactionStatus {
-  type: __typename
+  ... on SubmittedStatus {
+    ...SubmittedStatusFragment
+  }
+  ... on SuccessStatus {
+    ...SuccessStatusFragment
+    transaction {
+      ...malleableFieldsFragment
+    }
+  }
+  ... on FailureStatus {
+    ...FailureStatusFragment
+    transaction {
+      ...malleableFieldsFragment
+    }
+  }
   ... on SqueezedOutStatus {
-    reason
+    ...SqueezedOutStatusFragment
   }
 }
 
