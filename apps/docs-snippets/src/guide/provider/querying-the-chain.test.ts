@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-shadow */
 import type {
   TransactionResultMessageOutReceipt,
   CoinQuantityLike,
   ExcludeResourcesOption,
 } from 'fuels';
-import { ScriptTransactionRequest, FUEL_NETWORK_URL, Provider } from 'fuels';
+import { ScriptTransactionRequest, Provider } from 'fuels';
 import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -28,7 +27,7 @@ describe('querying the chain', () => {
     const FUEL_NETWORK_URL = testProvider.url;
 
     // #region get-coins-1
-    // #import { Provider, FUEL_NETWORK_URL };
+    // #import { Provider };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -74,7 +73,7 @@ describe('querying the chain', () => {
     const FUEL_NETWORK_URL = testProvider.url;
 
     // #region get-spendable-resources-1
-    // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest, CoinQuantityLike, ExcludeResourcesOption };
+    // #import { Provider, ScriptTransactionRequest, CoinQuantityLike, ExcludeResourcesOption };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
     const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -125,7 +124,7 @@ describe('querying the chain', () => {
     const FUEL_NETWORK_URL = testProvider.url;
 
     // #region get-balances-1
-    // #import { Provider, FUEL_NETWORK_URL };
+    // #import { Provider };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -149,7 +148,7 @@ describe('querying the chain', () => {
     const FUEL_NETWORK_URL = launched.provider.url;
 
     // #region Provider-get-blocks
-    // #import { Provider, FUEL_NETWORK_URL };
+    // #import { Provider };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
@@ -172,7 +171,7 @@ describe('querying the chain', () => {
     const FUEL_NETWORK_URL = testProvider.url;
 
     // #region get-message-by-nonce-1
-    // #import { Provider, FUEL_NETWORK_URL };
+    // #import { Provider };
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
