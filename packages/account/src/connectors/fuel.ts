@@ -88,7 +88,6 @@ export class Fuel extends FuelConnector implements FuelSdk {
   private _targetUnsubscribe = () => {};
   private _pingCache: CacheFor = {};
   private _currentConnector?: FuelConnector | null;
-  // private _initializationPromise: Promise<void>;
 
   constructor(config: FuelConfig = Fuel.defaultConfig) {
     super();
@@ -105,7 +104,9 @@ export class Fuel extends FuelConnector implements FuelSdk {
 
     (async () => {
       await this.initialize();
-    })();
+    })().catch((error) => {
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Error initializing Fuel Connector', error);
+    });
   }
 
   private async initialize(): Promise<void> {
@@ -114,10 +115,6 @@ export class Fuel extends FuelConnector implements FuelSdk {
     // Setup new connector listener for global events
     this._targetUnsubscribe = this.setupConnectorListener();
   }
-
-  // private async ensureInitialized(): Promise<void> {
-  //   await this._initializationPromise;
-  // }
 
   /**
    * Return the target object to listen for global events.
@@ -349,7 +346,6 @@ export class Fuel extends FuelConnector implements FuelSdk {
    * Return the list of connectors with the status of installed and connected.
    */
   async connectors(): Promise<Array<FuelConnector>> {
-    // await this.ensureInitialized();
     await this.fetchConnectorsStatus();
     return this._connectors;
   }
@@ -363,7 +359,6 @@ export class Fuel extends FuelConnector implements FuelSdk {
       emitEvents: true,
     }
   ): Promise<boolean> {
-    // await this.ensureInitialized();
     const connector = this.getConnector(connectorName);
     if (!connector) {
       return false;
@@ -400,7 +395,6 @@ export class Fuel extends FuelConnector implements FuelSdk {
    * Return true if any connector is available.
    */
   async hasConnector(): Promise<boolean> {
-    // await this.ensureInitialized();
     // If there is a current connector return true
     // as the connector is ready
     if (this._currentConnector) {
@@ -421,7 +415,6 @@ export class Fuel extends FuelConnector implements FuelSdk {
   }
 
   async hasWallet(): Promise<boolean> {
-    // await this.ensureInitialized();
     return this.hasConnector();
   }
 

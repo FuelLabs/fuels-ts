@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: ensure that connectors wait for the default connector
+fix: avoid potential race-condition in fuel connectors init
