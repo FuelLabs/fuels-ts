@@ -863,6 +863,7 @@ Supported fuel-core version: ${supportedVersion}.`
       } = await this.operations.dryRun({
         encodedTransactions: [hexlify(transactionRequest.toTransactionBytes())],
         utxoValidation: false,
+        gasPrice: '0',
       });
 
       receipts = rawReceipts.map(processGqlReceipt);
