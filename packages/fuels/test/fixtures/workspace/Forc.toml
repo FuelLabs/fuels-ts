@@ -6,3 +6,6 @@ members = [
   "./predicates/predicate",
   "./libraries/library",
 ]
+
+[patch.'https://github.com/fuellabs/sway']
+std = { git = "https://github.com/fuellabs/sway", branch = "master" }
