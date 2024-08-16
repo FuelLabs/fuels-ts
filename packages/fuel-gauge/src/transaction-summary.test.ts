@@ -20,7 +20,7 @@ import {
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
 
-import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
+import { MultiTokenContractFactory, PredicateTrue, TokenContractFactory } from '../test/typegen';
 
 /**
  * @group node
@@ -309,6 +309,73 @@ describe('TransactionSummary', () => {
           {
             address: majorWallet.address,
             quantities: [{ amount: tranferBackAmount, assetId: provider.getBaseAssetId() }],
+          },
+        ],
+      });
+    });
+
+    it('should ensure transfer operation is assembled (UNLOCKING PREDICATE)', async () => {
+      const amountInPredicate = 100_000_000;
+      const amountToUnlockFromPredicate = 1_000_000;
+      const amountInFeePayeeUserWallet = 10_000;
+
+      using launched = await launchTestNode();
+
+      const {
+        provider,
+        wallets: [genesisWallet],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+
+      // Make predicate and fund it
+      const predicate = new PredicateTrue({ provider });
+      const funding = await genesisWallet.transfer(
+        predicate.address,
+        amountInPredicate,
+        baseAssetId
+      );
+      await funding.waitForResult();
+
+      // Add some funds to the payee wallet
+      const feePayeeWallet = Wallet.generate({ provider });
+      const fundingFeePayee = await genesisWallet.transfer(
+        feePayeeWallet.address,
+        amountInFeePayeeUserWallet,
+        baseAssetId
+      );
+      await fundingFeePayee.waitForResult();
+
+      // Recipient wallet
+      const recipient = Wallet.generate({ provider });
+
+      // Unlocking funds from predicate request
+      const request = new ScriptTransactionRequest();
+      const predicateResources = await predicate.getResourcesToSpend([
+        [amountToUnlockFromPredicate, baseAssetId],
+      ]);
+      request.addResources(predicateResources);
+      request.addCoinOutput(recipient.address, amountToUnlockFromPredicate, baseAssetId);
+
+      // Fund the request from the fee payee wallet
+      const txCosts = await feePayeeWallet.getTransactionCost(request);
+      request.gasLimit = txCosts.gasUsed;
+      request.maxFee = txCosts.maxFee;
+      await feePayeeWallet.fund(request, txCosts);
+
+      // Send the transaction
+      const tx = await feePayeeWallet.sendTransaction(request);
+      const { operations } = await tx.waitForResult();
+
+      validateTransferOperation({
+        operations,
+        sender: feePayeeWallet.address,
+        fromType: AddressType.account,
+        toType: AddressType.account,
+        recipients: [
+          {
+            address: recipient.address,
+            quantities: [{ amount: amountToUnlockFromPredicate, assetId: baseAssetId }],
           },
         ],
       });
