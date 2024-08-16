@@ -2,5 +2,5 @@
 channel = "testnet"
 
 [components]
-forc = "git:esdrubal/abi_changes"
+forc = "git:master"
 fuel-core = "0.32.1"
