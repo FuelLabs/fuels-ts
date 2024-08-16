@@ -1,11 +1,9 @@
+import type { JsonAbi, TransactionResultReturnDataReceipt } from 'fuels';
+import { buildFunctionResult, ReceiptType, arrayify, Script, Interface } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore JSONC extension requires mapping but behaves fine
-import type { JsonAbi, TransactionResultReturnDataReceipt } from 'fuels';
-import { buildFunctionResult, ReceiptType, arrayify } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
-import { Interface } from 'readline';
-import { Script } from 'vm';
-
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
 import { SumScript as factory } from '../../../test/typegen/scripts/SumScript';
 
@@ -31,7 +29,7 @@ describe('encode and decode', () => {
     // First we need to build out the transaction via the script that we want to encode.
     // For that we'll need the ABI and the bytecode of the script
     const abi: JsonAbi = factory.abi;
-    const bytecode: string = factory.bytecode;
+    const bytecode = factory.bytecode;
 
     // Create the invocation scope for the script call, passing the initial
     // value for the configurable constant
