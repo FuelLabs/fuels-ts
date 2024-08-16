@@ -49,10 +49,10 @@ export class Fuel extends FuelConnector {
   private _connectors: Array<FuelConnector> = [];
   private _targetObject: TargetObject | null = null;
   private _unsubscribes: Array<() => void> = [];
-  private _targetUnsubscribe: () => void;
+  private _targetUnsubscribe = () => {};
   private _pingCache: CacheFor = {};
   private _currentConnector?: FuelConnector | null;
-  private _initializationPromise: Promise<void>;
+  // private _initializationPromise: Promise<void>;
 
   constructor(config: FuelConfig = Fuel.defaultConfig) {
     super();
@@ -66,19 +66,22 @@ export class Fuel extends FuelConnector {
     this._storage = config.storage === undefined ? this.getStorage() : config.storage;
     // Setup all methods
     this.setupMethods();
+
+    (async () => {
+      await this.initialize();
+    })();
+  }
+
+  private async initialize(): Promise<void> {
     // Get the current connector from the storage
-    this._initializationPromise = this.initialize();
+    await this.setDefaultConnector();
     // Setup new connector listener for global events
     this._targetUnsubscribe = this.setupConnectorListener();
   }
 
-  private async initialize(): Promise<void> {
-    await this.setDefaultConnector();
-  }
-
-  private async ensureInitialized(): Promise<void> {
-    await this._initializationPromise;
-  }
+  // private async ensureInitialized(): Promise<void> {
+  //   await this._initializationPromise;
+  // }
 
   /**
    * Return the target object to listen for global events.
@@ -309,7 +312,7 @@ export class Fuel extends FuelConnector {
    * Return the list of connectors with the status of installed and connected.
    */
   async connectors(): Promise<Array<FuelConnector>> {
-    await this.ensureInitialized();
+    // await this.ensureInitialized();
     await this.fetchConnectorsStatus();
     return this._connectors;
   }
@@ -323,7 +326,7 @@ export class Fuel extends FuelConnector {
       emitEvents: true,
     }
   ): Promise<boolean> {
-    await this.ensureInitialized();
+    // await this.ensureInitialized();
     const connector = this.getConnector(connectorName);
     if (!connector) {
       return false;
@@ -360,7 +363,7 @@ export class Fuel extends FuelConnector {
    * Return true if any connector is available.
    */
   async hasConnector(): Promise<boolean> {
-    await this.ensureInitialized();
+    // await this.ensureInitialized();
     // If there is a current connector return true
     // as the connector is ready
     if (this._currentConnector) {
@@ -381,7 +384,7 @@ export class Fuel extends FuelConnector {
   }
 
   async hasWallet(): Promise<boolean> {
-    await this.ensureInitialized();
+    // await this.ensureInitialized();
     return this.hasConnector();
   }
 
