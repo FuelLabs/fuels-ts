@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { BN } from '@fuel-ts/math';
 import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -41,6 +42,38 @@ export function getInputsContract(inputs: Input[]) {
 function findCoinInput(inputs: Input[], assetId: string): InputCoin | undefined {
   const coinInputs = getInputsCoin(inputs);
   return coinInputs.find((i) => i.assetId === assetId);
+}
+
+/** @hidden */
+export function aggregateInputsAmountsByAssetAndOwner(
+  inputs: Input[],
+  baseAssetID: string
+): Map<string, Map<string, BN>> {
+  const aggregated = new Map<string, Map<string, BN>>();
+
+  getInputsCoinAndMessage(inputs).forEach((input) => {
+    const assetId = isInputCoin(input) ? input.assetId : baseAssetID;
+    const owner = isInputCoin(input) ? input.owner : input.recipient;
+
+    // Ensure that the map for the assetId exists
+    let ownersMap = aggregated.get(assetId);
+    if (!ownersMap) {
+      ownersMap = new Map<string, BN>();
+      aggregated.set(assetId, ownersMap);
+    }
+
+    // Ensure that the map for the owner exists
+    let ownerBalance = ownersMap.get(owner);
+    if (!ownerBalance) {
+      ownerBalance = new BN(0);
+      ownersMap.set(owner, ownerBalance);
+    }
+
+    // Update the balance
+    ownersMap.set(owner, ownerBalance.add(input.amount));
+  });
+
+  return aggregated;
 }
 
 /** @hidden */
