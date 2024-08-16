@@ -398,6 +398,7 @@ export function getTransferOperations({
   inputs,
   outputs,
   receipts,
+  baseAssetId,
 }: GetTransferOperationsParams): Operation[] {
   let operations: Operation[] = [];
 
@@ -534,7 +535,7 @@ export function getOperations({
 
   if (isTypeScript(transactionType)) {
     return [
-      ...getTransferOperations({ inputs, outputs, receipts }),
+      ...getTransferOperations({ inputs, outputs, receipts, baseAssetId }),
       ...getContractCallOperations({
         inputs,
         outputs,
