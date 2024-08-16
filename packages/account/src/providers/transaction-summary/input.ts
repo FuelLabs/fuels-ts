@@ -28,6 +28,11 @@ export function getInputsCoinAndMessage(inputs: Input[]) {
 }
 
 /** @hidden */
+export function isInputCoin(input: Input): input is InputCoin {
+  return input.type === InputType.Coin;
+}
+
+/** @hidden */
 export function getInputsContract(inputs: Input[]) {
   return getInputsByType<InputContract>(inputs, InputType.Contract);
 }
