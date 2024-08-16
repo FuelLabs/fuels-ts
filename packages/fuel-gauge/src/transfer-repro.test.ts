@@ -17,7 +17,9 @@ describe('transferRepro', () => {
     const assetId = sender.provider.getBaseAssetId();
     const initialBalance = await receiver.getBalance();
 
-    const tx = await sender.transfer(receiver.address, amount, assetId);
+    const transfer = await sender.createTransfer(receiver.address, amount, assetId);
+
+    const tx = await sender.sendTransaction(transfer);
     await tx.waitForResult();
 
     const finalBalance = await receiver.getBalance();
@@ -39,7 +41,9 @@ describe('transferRepro', () => {
     const assetId = provider.getBaseAssetId();
     const initialBalance = await receiver.getBalance();
 
-    const tx = await sender.transfer(receiver.address, amount, assetId);
+    const transfer = await sender.createTransfer(receiver.address, amount, assetId);
+
+    const tx = await sender.sendTransaction(transfer);
     await tx.waitForResult();
 
     const finalBalance = await receiver.getBalance();
