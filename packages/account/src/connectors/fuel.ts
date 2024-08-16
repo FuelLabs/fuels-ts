@@ -88,6 +88,7 @@ export class Fuel extends FuelConnector implements FuelSdk {
   private _targetUnsubscribe = () => {};
   private _pingCache: CacheFor = {};
   private _currentConnector?: FuelConnector | null;
+  private _initializationPromise: Promise<void> | null = null;
 
   constructor(config: FuelConfig = Fuel.defaultConfig) {
     super();
@@ -101,19 +102,21 @@ export class Fuel extends FuelConnector implements FuelSdk {
     this._storage = config.storage === undefined ? this.getStorage() : config.storage;
     // Setup all methods
     this.setupMethods();
-
-    (async () => {
-      await this.initialize();
-    })().catch((error) => {
-      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Error initializing Fuel Connector', error);
-    });
+    this._initializationPromise = this.initialize();
   }
 
   private async initialize(): Promise<void> {
-    // Get the current connector from the storage
-    await this.setDefaultConnector();
-    // Setup new connector listener for global events
-    this._targetUnsubscribe = this.setupConnectorListener();
+    try {
+      await this.setDefaultConnector();
+      this._targetUnsubscribe = this.setupConnectorListener();
+    } catch (error) {
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Error initializing Fuel Connector');
+    }
+  }
+
+  public async init(): Promise<Fuel> {
+    await this._initializationPromise;
+    return this;
   }
 
   /**
