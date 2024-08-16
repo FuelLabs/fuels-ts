@@ -539,10 +539,7 @@ export function getOperations({
   baseAssetId,
 }: GetOperationParams): Operation[] {
   if (isTypeCreate(transactionType)) {
-    return [
-      ...getContractCreatedOperations({ inputs, outputs }),
-      ...getTransferOperations({ inputs, outputs, receipts }),
-    ];
+    return [...getContractCreatedOperations({ inputs, outputs })];
   }
 
   if (isTypeScript(transactionType)) {
