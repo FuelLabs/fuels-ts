@@ -858,6 +858,7 @@ Supported fuel-core version: ${supportedVersion}.`
     let dryRunStatus: DryRunStatus | undefined;
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      console.log('################# GAS PRICE 0 #################');
       const {
         dryRun: [{ receipts: rawReceipts, status }],
       } = await this.operations.dryRun({
