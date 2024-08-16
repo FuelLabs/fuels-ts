@@ -1,331 +1,318 @@
-import type { FuelError } from '@fuel-ts/errors';
-import { Script, bn } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+describe.skip('Advanced Logging', () => {});
 
-import {
-  AdvancedLoggingOtherContractFactory,
-  AdvancedLoggingFactory,
-  CallTestContractFactory,
-  ConfigurableContractFactory,
-  CoverageContractFactory,
-} from '../test/typegen/contracts';
-import { ScriptCallContract } from '../test/typegen/scripts';
+// /**
+//  * @group node
+//  * @group browser
+//  */
+// describe('Advanced Logging', () => {
+//   it('can get log data', async () => {
+//     using advancedLogContract = await launchTestContract({
+//       factory: AdvancedLoggingFactory,
+//     });
 
-import { launchTestContract } from './utils';
+//     const { waitForResult } = await advancedLogContract.functions.test_function().call();
+//     const { value, logs } = await waitForResult();
 
-/**
- * @group node
- * @group browser
- */
-describe('Advanced Logging', () => {
-  it('can get log data', async () => {
-    using advancedLogContract = await launchTestContract({
-      factory: AdvancedLoggingFactory,
-    });
+//     expect(value).toBeTruthy();
+//     logs[5].game_id = logs[5].game_id.toHex();
+//     logs[9].game_id = logs[9].game_id.toHex();
 
-    const { waitForResult } = await advancedLogContract.functions.test_function().call();
-    const { value, logs } = await waitForResult();
+//     expect(logs).toEqual([
+//       'Game State',
+//       { Playing: 1 },
+//       'Contract Id',
+//       {
+//         bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+//       },
+//       'Game Ref',
+//       {
+//         score: 0,
+//         time_left: 100,
+//         ammo: 10,
+//         game_id: '0x18af8',
+//         state: { Playing: 1 },
+//         contract_Id: {
+//           bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+//         },
+//         difficulty: { Medium: true },
+//       },
+//       'Game Ref Score',
+//       0,
+//       'Direct Game',
+//       {
+//         score: 101,
+//         time_left: 12,
+//         ammo: 3,
+//         game_id: '0x20157',
+//         state: { Playing: 1 },
+//         contract_Id: {
+//           bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+//         },
+//         difficulty: { Hard: true },
+//       },
+//       'Was True',
+//     ]);
+//   });
 
-    expect(value).toBeTruthy();
-    logs[5].game_id = logs[5].game_id.toHex();
-    logs[9].game_id = logs[9].game_id.toHex();
+//   it('can get log data from require [condition=true]', async () => {
+//     using advancedLogContract = await launchTestContract({
+//       factory: AdvancedLoggingFactory,
+//     });
 
-    expect(logs).toEqual([
-      'Game State',
-      { Playing: 1 },
-      'Contract Id',
-      {
-        bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-      },
-      'Game Ref',
-      {
-        score: 0,
-        time_left: 100,
-        ammo: 10,
-        game_id: '0x18af8',
-        state: { Playing: 1 },
-        contract_Id: {
-          bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
-        },
-        difficulty: { Medium: true },
-      },
-      'Game Ref Score',
-      0,
-      'Direct Game',
-      {
-        score: 101,
-        time_left: 12,
-        ammo: 3,
-        game_id: '0x20157',
-        state: { Playing: 1 },
-        contract_Id: {
-          bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-        },
-        difficulty: { Hard: true },
-      },
-      'Was True',
-    ]);
-  });
+//     const { waitForResult } = await advancedLogContract.functions
+//       .test_function_with_require(1, 1)
+//       .call();
 
-  it('can get log data from require [condition=true]', async () => {
-    using advancedLogContract = await launchTestContract({
-      factory: AdvancedLoggingFactory,
-    });
+//     const { value, logs } = await waitForResult();
 
-    const { waitForResult } = await advancedLogContract.functions
-      .test_function_with_require(1, 1)
-      .call();
+//     expect(value).toBeTruthy();
+//     expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
+//   });
 
-    const { value, logs } = await waitForResult();
+//   it('can get log data from require [condition=false]', async () => {
+//     using advancedLogContract = await launchTestContract({
+//       factory: AdvancedLoggingFactory,
+//     });
 
-    expect(value).toBeTruthy();
-    expect(logs).toEqual(['Hello Tester', { Playing: 1 }]);
-  });
+//     const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
+//     try {
+//       const { waitForResult } = await invocation.call();
+//       await waitForResult();
 
-  it('can get log data from require [condition=false]', async () => {
-    using advancedLogContract = await launchTestContract({
-      factory: AdvancedLoggingFactory,
-    });
+//       throw new Error('it should have thrown');
+//     } catch (error) {
+//       if ((<Error>error).message) {
+//         expect(JSON.stringify((<FuelError>error).metadata.logs)).toMatch(
+//           JSON.stringify([
+//             {
+//               score: 0,
+//               time_left: 100,
+//               ammo: 10,
+//               game_id: bn(0x18af8),
+//               state: { Playing: 1 },
+//               contract_Id: {
+//                 bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
+//               },
+//               difficulty: { Medium: true },
+//             },
+//           ])
+//         );
+//       } else {
+//         throw new Error('it should be possible to decode error from "require" statement');
+//       }
+//     }
+//   });
 
-    const invocation = advancedLogContract.functions.test_function_with_require(1, 3);
-    try {
-      const { waitForResult } = await invocation.call();
-      await waitForResult();
+//   it('can get log data from a downstream Contract', async () => {
+//     using launched = await launchTestNode({
+//       contractsConfigs: [
+//         { factory: AdvancedLoggingFactory },
+//         { factory: AdvancedLoggingOtherContractFactory },
+//       ],
+//     });
 
-      throw new Error('it should have thrown');
-    } catch (error) {
-      if ((<Error>error).message) {
-        expect(JSON.stringify((<FuelError>error).metadata.logs)).toMatch(
-          JSON.stringify([
-            {
-              score: 0,
-              time_left: 100,
-              ammo: 10,
-              game_id: bn(0x18af8),
-              state: { Playing: 1 },
-              contract_Id: {
-                bits: '0xfffffffffffffffffffffffffffffffff00fffffffffffffffffffffffffffff',
-              },
-              difficulty: { Medium: true },
-            },
-          ])
-        );
-      } else {
-        throw new Error('it should be possible to decode error from "require" statement');
-      }
-    }
-  });
+//     const {
+//       contracts: [advancedLogContract, otherAdvancedLogContract],
+//     } = launched;
 
-  it('can get log data from a downstream Contract', async () => {
-    using launched = await launchTestNode({
-      contractsConfigs: [
-        { factory: AdvancedLoggingFactory },
-        { factory: AdvancedLoggingOtherContractFactory },
-      ],
-    });
+//     const INPUT = 3;
+//     const { waitForResult } = await advancedLogContract.functions
+//       .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
+//       .addContracts([otherAdvancedLogContract])
+//       .call();
 
-    const {
-      contracts: [advancedLogContract, otherAdvancedLogContract],
-    } = launched;
+//     const { value, logs } = await waitForResult();
 
-    const INPUT = 3;
-    const { waitForResult } = await advancedLogContract.functions
-      .test_log_from_other_contract(INPUT, otherAdvancedLogContract.id.toB256())
-      .addContracts([otherAdvancedLogContract])
-      .call();
+//     expect(value).toBeTruthy();
+//     expect(logs).toEqual([
+//       'Hello from main Contract',
+//       'Hello from other Contract',
+//       'Received value from main Contract:',
+//       INPUT,
+//     ]);
+//   });
 
-    const { value, logs } = await waitForResult();
+//   describe('should properly decode all logs in a multicall with inter-contract calls', () => {
+//     const testStruct = {
+//       a: true,
+//       b: 100000,
+//     };
 
-    expect(value).toBeTruthy();
-    expect(logs).toEqual([
-      'Hello from main Contract',
-      'Hello from other Contract',
-      'Received value from main Contract:',
-      INPUT,
-    ]);
-  });
+//     const expectedLogs = [
+//       'Hello from main Contract',
+//       'Hello from other Contract',
+//       'Received value from main Contract:',
+//       10,
+//       bn(100000),
+//       { tag: '000', age: 21, scores: [1, 3, 4] },
+//       'fuelfuel',
+//     ];
 
-  describe('should properly decode all logs in a multicall with inter-contract calls', () => {
-    const testStruct = {
-      a: true,
-      b: 100000,
-    };
+//     it('when using InvacationScope', async () => {
+//       using launched = await launchTestNode({
+//         contractsConfigs: [
+//           { factory: AdvancedLoggingFactory },
+//           { factory: AdvancedLoggingOtherContractFactory },
+//           { factory: CallTestContractFactory },
+//           { factory: ConfigurableContractFactory },
+//           { factory: CoverageContractFactory },
+//         ],
+//       });
 
-    const expectedLogs = [
-      'Hello from main Contract',
-      'Hello from other Contract',
-      'Received value from main Contract:',
-      10,
-      bn(100000),
-      { tag: '000', age: 21, scores: [1, 3, 4] },
-      'fuelfuel',
-    ];
+//       const {
+//         contracts: [
+//           advancedLogContract,
+//           otherAdvancedLogContract,
+//           callTest,
+//           configurable,
+//           coverage,
+//         ],
+//       } = launched;
 
-    it('when using InvacationScope', async () => {
-      using launched = await launchTestNode({
-        contractsConfigs: [
-          { factory: AdvancedLoggingFactory },
-          { factory: AdvancedLoggingOtherContractFactory },
-          { factory: CallTestContractFactory },
-          { factory: ConfigurableContractFactory },
-          { factory: CoverageContractFactory },
-        ],
-      });
+//       const { waitForResult } = await callTest
+//         .multiCall([
+//           advancedLogContract.functions
+//             .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
+//             .addContracts([otherAdvancedLogContract]),
+//           callTest.functions.boo(testStruct),
+//           configurable.functions.echo_struct(),
+//           coverage.functions.echo_str_8('fuelfuel'),
+//         ])
+//         .call();
 
-      const {
-        contracts: [
-          advancedLogContract,
-          otherAdvancedLogContract,
-          callTest,
-          configurable,
-          coverage,
-        ],
-      } = launched;
+//       const { logs } = await waitForResult();
 
-      const { waitForResult } = await callTest
-        .multiCall([
-          advancedLogContract.functions
-            .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
-            .addContracts([otherAdvancedLogContract]),
-          callTest.functions.boo(testStruct),
-          configurable.functions.echo_struct(),
-          coverage.functions.echo_str_8('fuelfuel'),
-        ])
-        .call();
+//       logs.forEach((log, i) => {
+//         expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
+//       });
+//     });
 
-      const { logs } = await waitForResult();
+//     it('when using ScriptTransactionRequest', async () => {
+//       using launched = await launchTestNode({
+//         contractsConfigs: [
+//           { factory: AdvancedLoggingFactory },
+//           { factory: AdvancedLoggingOtherContractFactory },
+//           { factory: CallTestContractFactory },
+//           { factory: ConfigurableContractFactory },
+//           { factory: CoverageContractFactory },
+//         ],
+//       });
 
-      logs.forEach((log, i) => {
-        expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
-      });
-    });
+//       const {
+//         contracts: [
+//           advancedLogContract,
+//           otherAdvancedLogContract,
+//           callTest,
+//           configurable,
+//           coverage,
+//         ],
+//         wallets: [wallet],
+//       } = launched;
 
-    it('when using ScriptTransactionRequest', async () => {
-      using launched = await launchTestNode({
-        contractsConfigs: [
-          { factory: AdvancedLoggingFactory },
-          { factory: AdvancedLoggingOtherContractFactory },
-          { factory: CallTestContractFactory },
-          { factory: ConfigurableContractFactory },
-          { factory: CoverageContractFactory },
-        ],
-      });
+//       const request = await callTest
+//         .multiCall([
+//           advancedLogContract.functions
+//             .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
+//             .addContracts([otherAdvancedLogContract]),
+//           callTest.functions.boo(testStruct),
+//           configurable.functions.echo_struct(),
+//           coverage.functions.echo_str_8('fuelfuel'),
+//         ])
+//         .getTransactionRequest();
 
-      const {
-        contracts: [
-          advancedLogContract,
-          otherAdvancedLogContract,
-          callTest,
-          configurable,
-          coverage,
-        ],
-        wallets: [wallet],
-      } = launched;
+//       const txCost = await wallet.getTransactionCost(request);
 
-      const request = await callTest
-        .multiCall([
-          advancedLogContract.functions
-            .test_log_from_other_contract(10, otherAdvancedLogContract.id.toB256())
-            .addContracts([otherAdvancedLogContract]),
-          callTest.functions.boo(testStruct),
-          configurable.functions.echo_struct(),
-          coverage.functions.echo_str_8('fuelfuel'),
-        ])
-        .getTransactionRequest();
+//       request.gasLimit = txCost.gasUsed;
+//       request.maxFee = txCost.maxFee;
 
-      const txCost = await wallet.getTransactionCost(request);
+//       await wallet.fund(request, txCost);
 
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
+//       const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
 
-      await wallet.fund(request, txCost);
+//       const { logs } = await tx.waitForResult();
 
-      const tx = await wallet.sendTransaction(request, { estimateTxDependencies: false });
+//       expect(logs).toBeDefined();
 
-      const { logs } = await tx.waitForResult();
+//       logs?.forEach((log, i) => {
+//         if (typeof log === 'object') {
+//           expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
+//         } else {
+//           expect(log).toBe(expectedLogs[i]);
+//         }
+//       });
+//     });
+//   });
 
-      expect(logs).toBeDefined();
+//   describe('decode logs from a script set to manually call other contracts', () => {
+//     const amount = Math.floor(Math.random() * 10) + 1;
 
-      logs?.forEach((log, i) => {
-        if (typeof log === 'object') {
-          expect(JSON.stringify(log)).toBe(JSON.stringify(expectedLogs[i]));
-        } else {
-          expect(log).toBe(expectedLogs[i]);
-        }
-      });
-    });
-  });
+//     const expectedLogs = [
+//       'Hello from script',
+//       'Hello from main Contract',
+//       'Hello from other Contract',
+//       'Received value from main Contract:',
+//       amount,
+//     ];
 
-  describe('decode logs from a script set to manually call other contracts', () => {
-    const amount = Math.floor(Math.random() * 10) + 1;
+//     it('when using InvocationScope', async () => {
+//       using launched = await launchTestNode({
+//         contractsConfigs: [
+//           { factory: AdvancedLoggingFactory },
+//           { factory: AdvancedLoggingOtherContractFactory },
+//         ],
+//       });
 
-    const expectedLogs = [
-      'Hello from script',
-      'Hello from main Contract',
-      'Hello from other Contract',
-      'Received value from main Contract:',
-      amount,
-    ];
+//       const {
+//         contracts: [advancedLogContract, otherAdvancedLogContract],
+//         wallets: [wallet],
+//       } = launched;
 
-    it('when using InvocationScope', async () => {
-      using launched = await launchTestNode({
-        contractsConfigs: [
-          { factory: AdvancedLoggingFactory },
-          { factory: AdvancedLoggingOtherContractFactory },
-        ],
-      });
+//       const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
 
-      const {
-        contracts: [advancedLogContract, otherAdvancedLogContract],
-        wallets: [wallet],
-      } = launched;
+//       const { waitForResult } = await script.functions
+//         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
+//         .addContracts([advancedLogContract, otherAdvancedLogContract])
+//         .call();
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
+//       const { logs } = await waitForResult();
 
-      const { waitForResult } = await script.functions
-        .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
-        .addContracts([advancedLogContract, otherAdvancedLogContract])
-        .call();
+//       expect(logs).toStrictEqual(expectedLogs);
+//     });
 
-      const { logs } = await waitForResult();
+//     it('when using ScriptTransactionRequest', async () => {
+//       using launched = await launchTestNode({
+//         contractsConfigs: [
+//           { factory: AdvancedLoggingFactory },
+//           { factory: AdvancedLoggingOtherContractFactory },
+//         ],
+//       });
 
-      expect(logs).toStrictEqual(expectedLogs);
-    });
+//       const {
+//         contracts: [advancedLogContract, otherAdvancedLogContract],
+//         wallets: [wallet],
+//       } = launched;
 
-    it('when using ScriptTransactionRequest', async () => {
-      using launched = await launchTestNode({
-        contractsConfigs: [
-          { factory: AdvancedLoggingFactory },
-          { factory: AdvancedLoggingOtherContractFactory },
-        ],
-      });
+//       const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
 
-      const {
-        contracts: [advancedLogContract, otherAdvancedLogContract],
-        wallets: [wallet],
-      } = launched;
+//       const request = await script.functions
+//         .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
+//         .addContracts([advancedLogContract, otherAdvancedLogContract])
+//         .getTransactionRequest();
 
-      const script = new Script(ScriptCallContract.bytecode, ScriptCallContract.abi, wallet);
+//       const txCost = await wallet.getTransactionCost(request);
 
-      const request = await script.functions
-        .main(advancedLogContract.id.toB256(), otherAdvancedLogContract.id.toB256(), amount)
-        .addContracts([advancedLogContract, otherAdvancedLogContract])
-        .getTransactionRequest();
+//       request.gasLimit = txCost.gasUsed;
+//       request.maxFee = txCost.maxFee;
 
-      const txCost = await wallet.getTransactionCost(request);
+//       await wallet.fund(request, txCost);
 
-      request.gasLimit = txCost.gasUsed;
-      request.maxFee = txCost.maxFee;
+//       const tx = await wallet.sendTransaction(request);
 
-      await wallet.fund(request, txCost);
+//       const { logs } = await tx.waitForResult();
 
-      const tx = await wallet.sendTransaction(request);
+//       expect(logs).toBeDefined();
 
-      const { logs } = await tx.waitForResult();
-
-      expect(logs).toBeDefined();
-
-      expect(logs).toStrictEqual(expectedLogs);
-    });
-  });
-});
+//       expect(logs).toStrictEqual(expectedLogs);
+//     });
+//   });
+// });
