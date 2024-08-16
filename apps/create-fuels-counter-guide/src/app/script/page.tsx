@@ -5,7 +5,7 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { TestScriptAbi__factory } from "@/sway-api";
+import { TestScript } from "@/sway-api";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -20,7 +20,8 @@ export default function ScriptExample() {
 
   useAsync(async () => {
     if (wallet) {
-      const script = TestScriptAbi__factory.createInstance(wallet);
+      // Initialize script instance
+      const script = new TestScript(wallet);
       setScript(script);
     }
   }, [wallet]);
@@ -31,12 +32,19 @@ export default function ScriptExample() {
         return toast.error("Script not loaded");
       }
 
-      const { value } = await script.functions.main(bn(input)).call();
+      // Call the script with the input value
+      const { waitForResult } = await script.functions.main(bn(input)).call();
+      const { value } = await waitForResult();
 
       setResult(value.toString());
     } catch (error) {
       console.error(error);
-      toast.error("Error running script.");
+      toast.error(
+        <span>
+          Error running script. Please make sure your wallet has enough funds.
+          You can top it up using the <Link href="/faucet">faucet.</Link>
+        </span>,
+      );
     }
   };
 

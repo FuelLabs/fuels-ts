@@ -306,6 +306,10 @@ export default defineConfig({
                 text: 'Methods',
                 link: '/guide/predicates/methods',
               },
+              {
+                text: 'Custom Transactions',
+                link: '/guide/predicates/custom-transactions',
+              },
             ],
           },
           {
@@ -428,6 +432,10 @@ export default defineConfig({
               {
                 text: 'Custom Blocks',
                 link: '/guide/testing/custom-blocks',
+              },
+              {
+                text: 'Setting up test wallets',
+                link: '/guide/testing/setting-up-test-wallets',
               },
             ],
           },

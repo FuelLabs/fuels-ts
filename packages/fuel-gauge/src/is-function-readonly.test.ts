@@ -1,13 +1,19 @@
-import { FuelGaugeProjectsEnum } from '../test/fixtures';
+import { StorageTestContractFactory } from '../test/typegen/contracts';
 
-import { getSetupContract } from './utils';
+import { launchTestContract } from './utils';
 
+function setupContract() {
+  return launchTestContract({
+    factory: StorageTestContractFactory,
+  });
+}
 /**
  * @group node
+ * @group browser
  */
 describe('isReadOnly', () => {
   test('isReadOnly returns true for a read-only function', async () => {
-    const contract = await getSetupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT)();
+    using contract = await setupContract();
 
     const isReadOnly = contract.functions.counter.isReadOnly();
 
@@ -15,7 +21,7 @@ describe('isReadOnly', () => {
   });
 
   test('isReadOnly returns false for a function containing write operations', async () => {
-    const contract = await getSetupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT)();
+    using contract = await setupContract();
 
     const isReadOnly = contract.functions.increment_counter.isReadOnly();
 
@@ -23,7 +29,7 @@ describe('isReadOnly', () => {
   });
 
   test('isReadOnly does not throw a runtime error for a function that does not use storage', async () => {
-    const contract = await getSetupContract(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT)();
+    using contract = await setupContract();
 
     const isReadOnly = contract.functions.return_true.isReadOnly();
 

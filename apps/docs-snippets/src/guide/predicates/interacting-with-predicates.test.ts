@@ -1,46 +1,56 @@
-import type { Provider, WalletUnlocked } from 'fuels';
-import { ScriptTransactionRequest, bn, Predicate, BN } from 'fuels';
-import { seedTestWallet } from 'fuels/test-utils';
+import type { JsonAbi, Provider, WalletUnlocked } from 'fuels';
+import { ScriptTransactionRequest, bn, Predicate, BN, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { SimplePredicate } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  let receiver: WalletUnlocked;
-  let baseAssetId: string;
-  let provider: Provider;
-  let predicate: Predicate<[string]>;
-
-  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SIMPLE_PREDICATE
-  );
-
+describe('Interacting with Predicates', () => {
   const inputAddress = '0xfc05c23a8f7f66222377170ddcbfea9c543dff0dd2d2ba4d0478a4521423a9d4';
 
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    receiver = await getTestWallet();
-    provider = wallet.provider;
-
-    baseAssetId = wallet.provider.getBaseAssetId();
-
-    predicate = new Predicate<[string]>({
-      bytecode: bin,
-      provider: wallet.provider,
+  async function createAndFundPredicate(
+    provider: Provider,
+    fundedWallet: WalletUnlocked,
+    inputData: [string],
+    abi: JsonAbi,
+    bytecode: string,
+    configurableConstants?: Record<string, unknown>
+  ): Promise<Predicate<string[]>> {
+    const predicate = new Predicate({
+      bytecode,
+      provider,
       abi,
-      inputData: [inputAddress],
+      data: [inputAddress],
+      configurableConstants,
     });
-    await seedTestWallet(predicate, [[100_000_000, baseAssetId]]);
-  });
+
+    const tx1 = await fundedWallet.transfer(
+      predicate.address,
+      100_000_000,
+      provider.getBaseAssetId()
+    );
+    await tx1.waitForResult();
+    return predicate;
+  }
 
   it('should get predicate resources and add them to the predicate data', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
+    const predicate = await createAndFundPredicate(
+      provider,
+      fundedWallet,
+      [inputAddress],
+      SimplePredicate.abi,
+      SimplePredicate.bytecode
+    );
+
     // #region interacting-with-predicates-1
 
     // Instantiate the transaction request
@@ -50,7 +60,7 @@ describe(__filename, () => {
     });
 
     const predicateCoins = await predicate.getResourcesToSpend([
-      { amount: 2000, assetId: baseAssetId },
+      { amount: 2000, assetId: provider.getBaseAssetId() },
     ]);
 
     // Add the predicate input and resources
@@ -62,12 +72,26 @@ describe(__filename, () => {
   });
 
   it('should successfully transfer funds to the predicate', async () => {
-    const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-    transactionRequest.addCoinOutput(receiver.address, 100, baseAssetId);
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
 
-    const txCost = await provider.getTransactionCost(transactionRequest, {
-      resourcesOwner: predicate,
-    });
+    const predicate = await createAndFundPredicate(
+      provider,
+      fundedWallet,
+      [inputAddress],
+      SimplePredicate.abi,
+      SimplePredicate.bytecode
+    );
+
+    const receiver = Wallet.generate({ provider });
+
+    const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
+    transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
+
+    const txCost = await predicate.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;
@@ -87,13 +111,27 @@ describe(__filename, () => {
   });
 
   it('should successfully simulate a transaction with predicate', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
+    const predicate = await createAndFundPredicate(
+      provider,
+      fundedWallet,
+      [inputAddress],
+      SimplePredicate.abi,
+      SimplePredicate.bytecode
+    );
+
+    const receiver = Wallet.generate({ provider });
+
     // #region interacting-with-predicates-3
     const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-    transactionRequest.addCoinOutput(receiver.address, 1000000, baseAssetId);
+    transactionRequest.addCoinOutput(receiver.address, 1000000, provider.getBaseAssetId());
 
-    const txCost = await provider.getTransactionCost(transactionRequest, {
-      resourcesOwner: predicate,
-    });
+    const txCost = await predicate.getTransactionCost(transactionRequest);
 
     transactionRequest.gasLimit = txCost.gasUsed;
     transactionRequest.maxFee = txCost.maxFee;

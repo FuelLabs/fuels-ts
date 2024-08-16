@@ -1,19 +1,24 @@
-import type { Contract } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { SumOptionU8Factory } from '../../../test/typegen';
+
+function setupContract() {
+  return launchTestNode({
+    contractsConfigs: [{ factory: SumOptionU8Factory }],
+  });
+}
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.SUM_OPTION_U8);
-  });
-
+describe('options', () => {
   it('should successfully execute contract call to sum 2 option inputs (2 INPUTS)', async () => {
+    using launched = await setupContract();
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region options-1
     // Sway Option<u8>
     // #region options-3
@@ -29,6 +34,11 @@ describe(__filename, () => {
   });
 
   it('should successfully execute contract call to sum 2 option inputs (1 INPUT)', async () => {
+    using launched = await setupContract();
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region options-4
     const input: number | undefined = 5;
 

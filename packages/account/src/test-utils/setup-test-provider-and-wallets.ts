@@ -6,9 +6,9 @@ import type { ProviderOptions } from '../providers';
 import { Provider } from '../providers';
 import type { WalletUnlocked } from '../wallet';
 
-import { AssetId } from './asset-id';
 import type { LaunchNodeOptions } from './launchNode';
 import { launchNode } from './launchNode';
+import { TestAssetId } from './test-asset-id';
 import type { WalletsConfigOptions } from './wallet-config';
 import { WalletsConfig } from './wallet-config';
 
@@ -28,7 +28,7 @@ export interface LaunchCustomProviderAndGetWalletsOptions {
 
 const defaultWalletConfigOptions: WalletsConfigOptions = {
   count: 2,
-  assets: [AssetId.A, AssetId.B],
+  assets: [TestAssetId.A, TestAssetId.B],
   coinsPerAsset: 1,
   amountPerCoin: 10_000_000_000,
   messages: [],
@@ -73,7 +73,7 @@ export async function setupTestProviderAndWallets({
       defaultSnapshotConfigs,
       walletsConfig.apply(nodeOptions?.snapshotConfig)
     ),
-    port: '0',
+    port: nodeOptions.port || '0',
   };
 
   let cleanup: () => void;

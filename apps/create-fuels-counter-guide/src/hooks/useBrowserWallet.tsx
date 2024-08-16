@@ -9,6 +9,10 @@ interface BrowserWallet extends AppWallet {
   network: any;
 }
 
+/**
+ * This hook returns an instance of the browser wallet connected via
+ * any of the supported connectors.
+ **/
 export const useBrowserWallet: () => BrowserWallet = () => {
   const { wallet } = useWallet();
   const [browserWalletBalance, setBrowserWalletBalance] = useState<BN>();

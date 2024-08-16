@@ -1,24 +1,27 @@
-import { readFile } from 'fs/promises';
-import type { Contract } from 'fuels';
 import { BN, arrayify, getRandomB256 } from 'fuels';
-import { join } from 'path';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { BytecodeInputFactory, EchoEmployeeDataVectorFactory } from '../../../test/typegen';
+import type { EmployeeDataInput } from '../../../test/typegen/contracts/EchoU64Array';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(
-      DocSnippetProjectsEnum.ECHO_EMPLOYEE_DATA_VECTOR
-    );
-  });
-
+describe('Vector Types', () => {
   it('should successfully execute and validate contract call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoEmployeeDataVectorFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region vector-1
     // Sway Vec<u8>
     // #context const basicU8Vector = [1, 2, 3];
@@ -26,8 +29,9 @@ describe(__filename, () => {
 
     // #region vector-4
     // #import { getRandomB256 };
+    // #context import { EmployeeDataInput } from '../path/to/typegen/contracts/EchoU64Array';
 
-    const employees = [
+    const employees: EmployeeDataInput[] = [
       {
         name: 'John Doe',
         age: 30,
@@ -58,19 +62,23 @@ describe(__filename, () => {
   it(
     'should successfully execute a contract call with a bytecode input',
     async () => {
-      const bytecodeContract = await createAndDeployContractFromProject(
-        DocSnippetProjectsEnum.BYTECODE_INPUT
-      );
-      const bytecodePath = join(
-        __dirname,
-        '../../../test/fixtures/forc-projects/bytecode-input/out/release/bytecode-input.bin'
-      );
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            factory: BytecodeInputFactory,
+          },
+        ],
+      });
+
+      const {
+        contracts: [bytecodeContract],
+      } = launched;
 
       // #region vector-bytecode-input-ts
-      // #import { arrayify, readFile };
+      // #import { arrayify };
+      // #context import { BytecodeInputFactory } from '../path/to/typegen';
 
-      const bytecode = await readFile(bytecodePath);
-      const bytecodeAsVecU8 = arrayify(bytecode);
+      const bytecodeAsVecU8 = arrayify(BytecodeInputFactory.bytecode);
 
       const { waitForResult } = await bytecodeContract.functions
         .compute_bytecode_root(bytecodeAsVecU8)

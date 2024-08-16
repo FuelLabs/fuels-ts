@@ -1,37 +1,27 @@
-import type { Contract, WalletUnlocked } from 'fuels';
-import { ContractFactory, FUEL_NETWORK_URL, Provider, ReceiptType, bn } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { ContractFactory, ReceiptType, bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-const bar = getFuelGaugeForcProject(FuelGaugeProjectsEnum.REENTRANT_BAR);
-const foo = getFuelGaugeForcProject(FuelGaugeProjectsEnum.REENTRANT_FOO);
-const storageTest = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
+import {
+  ReentrantBarFactory,
+  ReentrantFooFactory,
+  StorageTestContract,
+  StorageTestContractFactory,
+} from '../test/typegen/contracts';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Reentrant Contract Calls', () => {
-  let barContract: Contract;
-  let fooContract: Contract;
-  let wallet: WalletUnlocked;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-
-    const factoryBar = new ContractFactory(bar.binHexlified, bar.abiContents, wallet);
-    let { waitForResult } = await factoryBar.deployContract();
-    ({ contract: barContract } = await waitForResult());
-
-    const factoryFoo = new ContractFactory(foo.binHexlified, foo.abiContents, wallet);
-    ({ waitForResult } = await factoryFoo.deployContract());
-    ({ contract: fooContract } = await waitForResult());
-  });
-
   it('should ensure the SDK returns the proper value for a reentrant call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: ReentrantFooFactory }, { factory: ReentrantBarFactory }],
+    });
+
+    const {
+      contracts: [fooContract, barContract],
+    } = launched;
+
     const { waitForResult } = await fooContract.functions
       .foo({ bits: fooContract.id.toB256() }, { bits: barContract.id.toB256() })
       .addContracts([barContract])
@@ -68,11 +58,20 @@ describe('Reentrant Contract Calls', () => {
   });
 
   it('should ensure the SDK returns the proper value for a reentrant call on multi-call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [{ factory: ReentrantFooFactory }, { factory: ReentrantBarFactory }],
+    });
+
+    const {
+      wallets: [wallet],
+      contracts: [fooContract, barContract],
+    } = launched;
+
     const deploy = await new ContractFactory(
-      storageTest.binHexlified,
-      storageTest.abiContents,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
-    ).deployContract({ storageSlots: storageTest.storageSlots });
+    ).deploy({ storageSlots: StorageTestContract.storageSlots });
 
     const { contract: storageContract } = await deploy.waitForResult();
 

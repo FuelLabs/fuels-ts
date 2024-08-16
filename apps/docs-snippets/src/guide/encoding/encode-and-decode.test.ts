@@ -1,35 +1,25 @@
-import {
-  FUEL_NETWORK_URL,
-  Provider,
-  AbiCoder,
-  Script,
-  ReceiptType,
-  arrayify,
-  buildFunctionResult,
-} from 'fuels';
-import type { Account, JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { AbiCoder, Script, ReceiptType, arrayify, buildFunctionResult } from 'fuels';
+import type { JsonAbi, JsonAbiArgument, TransactionResultReturnDataReceipt } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 import abiSnippet from '../../../test/fixtures/abi/encode-and-decode.jsonc';
-import { SumScriptAbi__factory as factory } from '../../../test/typegen/scripts/factories/SumScriptAbi__factory';
+import { SumScript as factory } from '../../../test/typegen/scripts/SumScript';
 
 /**
  * @group node
+ * @group browser
  */
 describe('encode and decode', () => {
-  let wallet: Account;
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [{ assetId, amount: 500_000 }]);
-  });
-
   it('generates valid ABI', () => {
     expect(abiSnippet).toEqual(factory.abi);
   });
 
   it('encodes and decodes', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     // #region encode-and-decode-3
     // #import { JsonAbi, Script };
     // #context import { factory } from './sway-programs-api';
@@ -37,7 +27,7 @@ describe('encode and decode', () => {
     // First we need to build out the transaction via the script that we want to encode.
     // For that we'll need the ABI and the bytecode of the script
     const abi: JsonAbi = factory.abi;
-    const bytecode: string = factory.bin;
+    const bytecode: string = factory.bytecode;
 
     // Create the invocation scope for the script call, passing the initial
     // value for the configurable constant
@@ -71,7 +61,7 @@ describe('encode and decode', () => {
     request.scriptData = encodedArguments;
 
     // Now we can build out the rest of the transaction and then fund it
-    const txCost = await wallet.provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
     request.maxFee = txCost.maxFee;
     request.gasLimit = txCost.gasUsed;
     await wallet.fund(request, txCost);

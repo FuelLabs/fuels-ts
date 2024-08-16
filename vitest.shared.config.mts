@@ -14,6 +14,7 @@ export default defineConfig({
   ],
   esbuild: { target: "es2022" },
   test: {
+    globalSetup: ["vitest.global-setup.ts"],
     coverage: {
       enabled: true,
       provider: "istanbul",
@@ -40,7 +41,6 @@ export default defineConfig({
       "/apps/demo-react-vite",
     ],
     globals: true,
-    setupFiles: ["./vitest.env.ts"],
     env: loadEnv(mode, process.cwd(), ""),
     poolOptions: {
       threads: {

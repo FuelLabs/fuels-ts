@@ -1,20 +1,27 @@
-import { Address, type Contract } from 'fuels';
+import { Address } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { InputOutputTypesFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 
-describe(__filename, () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.INPUT_OUTPUT_TYPES);
-  });
-
+describe('Contract Types', () => {
   it('should successfully call a function with an Address type input and output parameters', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: InputOutputTypesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region address-input
     // #import { Address };
     const address = Address.fromRandom();
@@ -31,6 +38,18 @@ describe(__filename, () => {
   });
 
   it('should successfully call a function with a ContractId type input and output parameters', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: InputOutputTypesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region contract-id-input
     const contractId = '0x7296ff960b5eb86b5f79aa587d7ebe1bae147c7cac046a16d062fbd7f3a753ec';
     const contractIdInput = { bits: contractId.toString() };
@@ -46,6 +65,18 @@ describe(__filename, () => {
   });
 
   it('should successfully call a function with a Identity type input and output parameters', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: InputOutputTypesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region identity-address-input
     // #import { Address };
     const address = Address.fromRandom();
@@ -78,6 +109,18 @@ describe(__filename, () => {
   });
 
   it('should successfully call a function with an AssetId type input and output parameters', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: InputOutputTypesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region asset-id-input
     const assetId = '0x0cfabde7bbe58d253cf3103d8f55d26987b3dc4691205b9299ac6826c613a2e2';
     const assetIdInput = { bits: assetId };

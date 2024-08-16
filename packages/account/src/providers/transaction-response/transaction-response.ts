@@ -18,14 +18,19 @@ import type {
   ReceiptBurn,
 } from '@fuel-ts/transactions';
 import { TransactionCoder } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, sleep } from '@fuel-ts/utils';
 
 import type { GqlReceiptFragment } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
-import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
+import type {
+  TransactionSummary,
+  GqlTransaction,
+  AbiMap,
+  GqlTransactionStatusesNames,
+} from '../transaction-summary/types';
 import { extractTxError } from '../utils';
 
 import { getDecodedLogs } from './getDecodedLogs';
@@ -91,6 +96,8 @@ export class TransactionResponse {
   gqlTransaction?: GqlTransaction;
 
   abis?: JsonAbisFromAllCalls;
+  /** The expected status from the getTransactionWithReceipts response */
+  private expectedStatus?: GqlTransactionStatusesNames;
 
   /**
    * Constructor for `TransactionResponse`.
@@ -139,10 +146,17 @@ export class TransactionResponse {
 
       for await (const { statusChange } of subscription) {
         if (statusChange) {
+          this.expectedStatus = statusChange.type;
           break;
         }
       }
 
+      return this.fetch();
+    }
+
+    // Refetch if the expected status is not the same as the response status
+    if (this.expectedStatus && response.transaction.status?.type !== this.expectedStatus) {
+      await sleep(100);
       return this.fetch();
     }
 
@@ -228,12 +242,14 @@ export class TransactionResponse {
 
     for await (const { statusChange } of subscription) {
       if (statusChange.type === 'SqueezedOutStatus') {
+        this.unsetResourceCache();
         throw new FuelError(
           ErrorCode.TRANSACTION_SQUEEZED_OUT,
           `Transaction Squeezed Out with reason: ${statusChange.reason}`
         );
       }
       if (statusChange.type !== 'SubmittedStatus') {
+        this.expectedStatus = statusChange.type;
         break;
       }
     }
@@ -278,6 +294,7 @@ export class TransactionResponse {
     const { gqlTransaction, receipts } = transactionResult;
 
     if (gqlTransaction.status?.type === 'FailureStatus') {
+      this.unsetResourceCache();
       const { reason } = gqlTransaction.status;
       throw extractTxError({
         receipts,
@@ -310,5 +327,9 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     return this.waitForResult<TTransactionType>(contractsAbiMap);
+  }
+
+  private unsetResourceCache() {
+    this.provider.cache?.unset(this.id);
   }
 }

@@ -111,19 +111,17 @@ See also:
 
 # Testing
 
-In order to run tests locally, you need `fuel-core` running locally.
-
-To do that run this command in your terminal:
+In order to run tests locally, you can run the following commands:
 
 ```sh
-pnpm node:run
-```
+# run pretest to ensure all test dependencies are built
+pnpm pretest
 
-And then run the tests in another terminal tab:
-
-```sh
-# run all tests
+# run all tests in a node environment
 pnpm test
+
+# you may also run tests in a browser environment
+pnpm test:browser
 
 # watch all tests
 pnpm test:watch
@@ -137,17 +135,6 @@ pnpm test:filter packages/my-desired-package/src/my.test.ts
 # run tests while passing other flags to sub-program
 pnpm test -- --coverage --my-other-flag
 ```
-
-Or if you want to start a local Fuel-Core node and run all tests serially you can do:
-
-```sh
-pnpm ci:test
-```
-
-This will run `node:run`, `test` and then `node:clean`
-
-> The tests may break if you are running your tests locally using `node:run` in a separate terminal.
-> To reset your local fuel-core node data and start from scratch, run `node:clean`
 
 ### CI Test
 
@@ -169,8 +156,8 @@ cp .env.example .env.test
 And changing the below variables:
 
 ```sh
-FUEL_NETWORK_URL=https://testnet.fuel.network/v1/graphql
-TEST_WALLET_PVT_KEY=0x...
+DEVNET_WALLET_PVT_KEY=0x...
+TESTNET_WALLET_PVT_KEY=0x...
 ```
 
 <!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
@@ -245,7 +232,7 @@ Manually edit the `internal/fuel-core/VERSION` file, add the right version, and 
 
 ```sh
 pnpm install # will download new binaries
-pnpm test:ci
+pnpm test
 ```
 
 If all tests pass, that's it.

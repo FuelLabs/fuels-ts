@@ -1,35 +1,19 @@
-import type { BN, BaseWalletUnlocked } from 'fuels';
-import {
-  ContractFactory,
-  FUEL_NETWORK_URL,
-  Predicate,
-  Provider,
-  ScriptTransactionRequest,
-  Wallet,
-  getRandomB256,
-} from 'fuels';
-import { generateTestWallet, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
+import { ContractFactory, ScriptTransactionRequest, Wallet, getRandomB256 } from 'fuels';
+import type { BN } from 'fuels';
+import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import {
+  CallTestContractFactory,
+  MultiTokenContract,
+  MultiTokenContractFactory,
+} from '../test/typegen/contracts';
+import { PredicateU32 } from '../test/typegen/predicates/PredicateU32';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Fee', () => {
-  let wallet: BaseWalletUnlocked;
-  let provider: Provider;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-    wallet = await generateTestWallet(provider, [
-      [1_000_000_000, baseAssetId],
-      [1_000_000_000, ASSET_A],
-      [1_000_000_000, ASSET_B],
-    ]);
-  });
-
   const expectFeeInMarginOfError = (fee: BN, expectedFee: BN) => {
     const feeNumber = fee.toNumber();
     const expectedFeeNumber = expectedFee.toNumber();
@@ -48,13 +32,18 @@ describe('Fee', () => {
   };
 
   it('should ensure fee is properly calculated when minting and burning coins', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
-    );
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+      ],
+    });
 
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const { waitForResult } = await factory.deployContract();
-    const { contract } = await waitForResult();
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
 
     // minting coins
     let balanceBefore = await wallet.getBalance();
@@ -89,14 +78,26 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on simple transfer transactions', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const destination = Wallet.generate({ provider });
 
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();
 
-    const tx = await wallet.transfer(destination.address, amountToTransfer, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx = await wallet.transfer(
+      destination.address,
+      amountToTransfer,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     const { fee } = await tx.wait();
 
     const balanceAfter = await wallet.getBalance();
@@ -110,9 +111,16 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on multi transfer transactions', async () => {
-    const destination1 = Wallet.generate({ provider });
-    const destination2 = Wallet.generate({ provider });
-    const destination3 = Wallet.generate({ provider });
+    using launched = await launchTestNode({
+      walletsConfig: {
+        count: 4,
+      },
+    });
+
+    const {
+      provider,
+      wallets: [wallet, destination1, destination2, destination3],
+    } = launched;
 
     const amountToTransfer = 120;
     const balanceBefore = await wallet.getBalance();
@@ -121,13 +129,11 @@ describe('Fee', () => {
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(destination1.address, amountToTransfer, baseAssetId);
+    request.addCoinOutput(destination1.address, amountToTransfer, provider.getBaseAssetId());
     request.addCoinOutput(destination2.address, amountToTransfer, ASSET_A);
     request.addCoinOutput(destination3.address, amountToTransfer, ASSET_B);
 
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: wallet,
-    });
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -148,15 +154,21 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract deploy', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
-    );
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const balanceBefore = await wallet.getBalance();
 
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
+    const factory = new ContractFactory(
+      MultiTokenContractFactory.bytecode,
+      MultiTokenContract.abi,
+      wallet
+    );
     const { transactionRequest } = factory.createTransactionRequest();
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
 
@@ -176,13 +188,18 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on a contract call', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-    );
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
 
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const deploy = await factory.deployContract();
-    const { contract } = await deploy.waitForResult();
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
 
     const balanceBefore = await wallet.getBalance();
 
@@ -203,13 +220,18 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated a contract multi call', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.CALL_TEST_CONTRACT
-    );
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CallTestContractFactory,
+        },
+      ],
+    });
 
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const deploy = await factory.deployContract();
-    const { contract } = await deploy.waitForResult();
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
 
     const balanceBefore = await wallet.getBalance();
 
@@ -237,13 +259,18 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated in a multi call [MINT TO 15 ADDRESSES]', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.MULTI_TOKEN_CONTRACT
-    );
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: MultiTokenContractFactory,
+        },
+      ],
+    });
 
-    const factory = new ContractFactory(binHexlified, abiContents, wallet);
-    const deploy = await factory.deployContract();
-    const { contract } = await deploy.waitForResult();
+    const {
+      contracts: [contract],
+      wallets: [wallet],
+    } = launched;
 
     const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
 
@@ -276,23 +303,21 @@ describe('Fee', () => {
   });
 
   it('should ensure fee is properly calculated on transactions with predicate', async () => {
-    const { binHexlified, abiContents } = getFuelGaugeForcProject(
-      FuelGaugeProjectsEnum.PREDICATE_U32
-    );
+    using launched = await launchTestNode();
 
-    const predicate = new Predicate({
-      bytecode: binHexlified,
-      abi: abiContents,
+    const {
       provider,
-      inputData: [1078],
-    });
+      wallets: [wallet],
+    } = launched;
 
-    const tx1 = await wallet.transfer(predicate.address, 2000, baseAssetId);
+    const predicate = new PredicateU32({ provider, data: [1078] });
+
+    const tx1 = await wallet.transfer(predicate.address, 1_000_000, provider.getBaseAssetId());
     await tx1.wait();
 
     const transferAmount = 100;
     const balanceBefore = await predicate.getBalance();
-    const tx2 = await predicate.transfer(wallet.address, transferAmount, baseAssetId);
+    const tx2 = await predicate.transfer(wallet.address, transferAmount, provider.getBaseAssetId());
 
     const { fee } = await tx2.wait();
 

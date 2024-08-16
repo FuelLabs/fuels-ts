@@ -6,6 +6,9 @@ import { AppWallet } from "@/lib";
 /**
  * burner -> a burner wallet embedded inside of the template app and stored in local storage
  * browser -> a wallet connected via a browser extension like the Fuel Wallet
+ *
+ * Whenever a browser wallet is connected, this hook will return an instance of the browser wallet.
+ * Otherwise, it will return an instance of a local burner wallet.
  */
 type WalletTypes = "burner" | "browser";
 

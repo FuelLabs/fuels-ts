@@ -1,6 +1,7 @@
 ABI
 ABIs
 ASM
+AssetId
 IDE
 IDEs
 LSP
@@ -327,3 +328,6 @@ launchTestNode
 Vitest
 CODEOWNERS
 incentivise
+URI
+walletsConfig
+reuploaded

@@ -1,10 +1,12 @@
-import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
-import type { BN, Contract } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { bn, Predicate, Wallet, Address } from 'fuels';
+import type { BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { ScriptRawSlice } from '../test/typegen';
+import { RawSliceContractFactory } from '../test/typegen/contracts';
+import { PredicateRawSlice } from '../test/typegen/predicates';
 
-import { getScript, getSetupContract } from './utils';
+import { launchTestContract } from './utils';
 
 type SomeEnum = {
   First?: boolean;
@@ -16,29 +18,19 @@ type Wrapper = {
   inner_enum: SomeEnum;
 };
 
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
-
-  return wallet;
-};
-
-const setupContract = getSetupContract('raw-slice');
-let contractInstance: Contract;
-let baseAssetId: string;
-beforeAll(async () => {
-  contractInstance = await setupContract();
-  baseAssetId = contractInstance.provider.getBaseAssetId();
-});
-
+function setupRawSliceContract() {
+  return launchTestContract({
+    factory: RawSliceContractFactory,
+  });
+}
 /**
  * @group node
+ * @group browser
  */
 describe('Raw Slice Tests', () => {
   it('should test raw slice output', async () => {
+    using contractInstance = await setupRawSliceContract();
+
     const INPUT = 10;
 
     const { waitForResult } = await contractInstance.functions.return_raw_slice(INPUT).call();
@@ -48,6 +40,8 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input', async () => {
+    using contractInstance = await setupRawSliceContract();
+
     const INPUT = [40, 41, 42];
 
     const { waitForResult } = await contractInstance.functions
@@ -60,6 +54,8 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [nested]', async () => {
+    using contractInstance = await setupRawSliceContract();
+
     const slice = [40, 41, 42];
     const INPUT = {
       inner: [slice, slice],
@@ -76,14 +72,17 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [predicate-raw-slice]', async () => {
-    const wallet = await setup();
-    const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const receiver = Wallet.fromAddress(Address.fromRandom(), provider);
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     type MainArgs = [Wrapper];
-
-    const { binHexlified: predicateRawSlice, abiContents: predicateRawSliceAbi } =
-      getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_RAW_SLICE);
 
     const bytes = [40, 41, 42];
     const INPUT: Wrapper = {
@@ -92,23 +91,33 @@ describe('Raw Slice Tests', () => {
     };
 
     const predicate = new Predicate<MainArgs>({
-      bytecode: predicateRawSlice,
-      abi: predicateRawSliceAbi,
+      abi: PredicateRawSlice.abi,
+      bytecode: PredicateRawSlice.bytecode,
       provider: wallet.provider,
-      inputData: [INPUT],
+      data: [INPUT],
     });
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const setupTx = await wallet.transfer(
+      predicate.address,
+      amountToPredicate,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     await setupTx.waitForResult();
 
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx = await predicate.transfer(
+      receiver.address,
+      amountToReceiver,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     const { isStatusSuccess } = await tx.waitForResult();
 
     // Check the balance of the receiver
@@ -120,9 +129,13 @@ describe('Raw Slice Tests', () => {
   });
 
   it('should test raw slice input [script-raw-slice]', async () => {
-    const wallet = await setup();
-    type MainArgs = [number, Wrapper];
-    const scriptInstance = getScript<MainArgs, void>('script-raw-slice', wallet);
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const scriptInstance = new ScriptRawSlice(wallet);
 
     const bytes = [40, 41, 42];
     const INPUT: Wrapper = {

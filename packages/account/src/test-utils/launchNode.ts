@@ -1,19 +1,14 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
-import { randomBytes } from '@fuel-ts/crypto';
+import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
-import { randomUUID } from 'crypto';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
 
-import { Provider } from '../providers';
 import { Signer } from '../signer';
-import type { WalletUnlocked } from '../wallet';
-
-import { generateTestWallet } from './generateTestWallet';
 
 const getFlagValueFromArgs = (args: string[], flag: string) => {
   const flagIndex = args.indexOf(flag);
@@ -129,6 +124,8 @@ export const launchNode = async ({
       '--consensus-key',
       '--db-type',
       '--poa-instant',
+      '--min-gas-price',
+      '--native-executor-version',
     ]);
 
     const snapshotDir = getFlagValueFromArgs(args, '--snapshot');
@@ -141,6 +138,8 @@ export const launchNode = async ({
     const poaInstant = poaInstantFlagValue === 'true' || poaInstantFlagValue === undefined;
 
     const nativeExecutorVersion = getFlagValueFromArgs(args, '--native-executor-version') || '0';
+
+    const minGasPrice = getFlagValueFromArgs(args, '--min-gas-price') || '1';
 
     // This string is logged by the client when the node has successfully started. We use it to know when to resolve.
     const graphQLStartSubstring = 'Binding GraphQL provider to';
@@ -194,7 +193,7 @@ export const launchNode = async ({
         ['--ip', ipToUse],
         ['--port', portToUse],
         useInMemoryDb ? ['--db-type', 'in-memory'] : ['--db-path', tempDir],
-        ['--min-gas-price', '1'],
+        ['--min-gas-price', minGasPrice],
         poaInstant ? ['--poa-instant', 'true'] : [],
         ['--native-executor-version', nativeExecutorVersion],
         ['--consensus-key', consensusKey],
@@ -299,43 +298,3 @@ export const launchNode = async ({
 
     child.on('error', reject);
   });
-
-const generateWallets = async (count: number, provider: Provider) => {
-  const baseAssetId = provider.getBaseAssetId();
-  const wallets: WalletUnlocked[] = [];
-  for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
-    wallets.push(wallet);
-  }
-  return wallets;
-};
-
-export type LaunchNodeAndGetWalletsResult = Promise<{
-  wallets: WalletUnlocked[];
-  stop: () => void;
-  provider: Provider;
-}>;
-
-/**
- * Launches a fuel-core node and returns a provider, 10 wallets, and a cleanup function to stop the node.
- * @param launchNodeOptions - options to launch the fuel-core node with.
- * @param walletCount - the number of wallets to generate. (optional, defaults to 10)
- * */
-export const launchNodeAndGetWallets = async ({
-  launchNodeOptions,
-  walletCount = 10,
-}: {
-  launchNodeOptions?: Partial<LaunchNodeOptions>;
-  walletCount?: number;
-} = {}): LaunchNodeAndGetWalletsResult => {
-  const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
-
-  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`);
-  const wallets = await generateWallets(walletCount, provider);
-
-  const cleanup = () => {
-    closeNode();
-  };
-
-  return { wallets, stop: cleanup, provider };
-};

@@ -7,64 +7,18 @@ import {
   Address,
   bn,
   Predicate,
-  Provider,
-  FUEL_NETWORK_URL,
   WalletUnlocked,
 } from 'fuels';
-import { seedTestWallet } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
+import { SimplePredicate, SumScript } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Transaction Request', () => {
-  let provider: Provider;
-  let baseAssetId: string = ZeroBytes32;
-
-  const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
-
-  const { abiContents: predicateAbi, binHexlified: predicateBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SIMPLE_PREDICATE
-  );
-
   const address = Address.fromRandom();
-
-  const message = {
-    assetId: baseAssetId,
-    sender: address,
-    recipient: address,
-    nonce: '0x',
-    amount: bn(0),
-    daHeight: bn(0),
-  };
-  const coin: Coin = {
-    id: '0x',
-    assetId: baseAssetId,
-    amount: bn(0),
-    owner: address,
-    blockCreated: bn(0),
-    txCreatedIdx: bn(0),
-  };
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-
-    const predicate = new Predicate({
-      bytecode: predicateBytecode,
-      abi: predicateAbi,
-      inputData: [ZeroBytes32],
-      provider,
-    });
-
-    baseAssetId = provider.getBaseAssetId();
-    await seedTestWallet(predicate, [[50_000, baseAssetId]]);
-  });
 
   it('creates a transaction request from ScriptTransactionRequest', () => {
     const scriptMainFunctionArguments = [1];
@@ -74,14 +28,14 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request using a ScriptTransactionRequest
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
 
     // Set the script main function arguments (can also be passed in the class constructor)
-    transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
     // #endregion transaction-request-1
 
-    expect(transactionRequest.script).toEqual(arrayify(scriptBytecode));
+    expect(transactionRequest.script).toEqual(arrayify(SumScript.bytecode));
   });
 
   it('creates a transaction request fromm a CreateTransactionRequest', () => {
@@ -99,7 +53,26 @@ describe('Transaction Request', () => {
     expect(transactionRequest.witnesses[0]).toEqual(contractByteCode);
   });
 
-  it('modifies a transaction request', () => {
+  it('modifies a transaction request', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
+    const message = {
+      assetId: provider.getBaseAssetId(),
+      sender: address,
+      recipient: address,
+      nonce: '0x',
+      amount: bn(0),
+      daHeight: bn(0),
+    };
+    const coin: Coin = {
+      id: '0x',
+      assetId: provider.getBaseAssetId(),
+      amount: bn(0),
+      owner: address,
+      blockCreated: bn(0),
+      txCreatedIdx: bn(0),
+    };
     const recipientAddress = address;
     const resource = coin;
     const resources: Resource[] = [resource];
@@ -107,12 +80,9 @@ describe('Transaction Request', () => {
     // #region transaction-request-3
     // #import { ScriptTransactionRequest };
 
-    // Fetch the base asset ID
-    baseAssetId = provider.getBaseAssetId();
-
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
 
     // Adding resources (coins or messages)
@@ -121,13 +91,13 @@ describe('Transaction Request', () => {
 
     // Adding coin inputs and outputs (including transfer to recipient)
     transactionRequest.addCoinInput(coin);
-    transactionRequest.addCoinOutput(recipientAddress, 1000, baseAssetId);
+    transactionRequest.addCoinOutput(recipientAddress, 1000, provider.getBaseAssetId());
 
     // Adding message inputs
     transactionRequest.addMessageInput(message);
     // #endregion transaction-request-3
 
-    expect(transactionRequest.script).toEqual(arrayify(scriptBytecode));
+    expect(transactionRequest.script).toEqual(arrayify(SumScript.bytecode));
     expect(transactionRequest.inputs.length).toEqual(4);
     expect(transactionRequest.outputs.length).toEqual(2);
     expect(transactionRequest.witnesses.length).toEqual(1);
@@ -141,7 +111,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
 
     // Add the contract input and output using the contract ID
@@ -153,6 +123,12 @@ describe('Transaction Request', () => {
   });
 
   it('adds a predicate to a transaction request', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
     const dataToValidatePredicate = [ZeroBytes32];
 
     // #region transaction-request-5
@@ -160,20 +136,24 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
 
     // Instantiate the predicate and pass valid input data to validate
     // the predicate and unlock the funds
     const predicate = new Predicate({
-      bytecode: predicateBytecode,
-      abi: predicateAbi,
-      inputData: dataToValidatePredicate,
+      bytecode: SimplePredicate.bytecode,
+      abi: SimplePredicate.abi,
+      data: dataToValidatePredicate,
       provider,
     });
 
+    // fund the predicate
+    const tx1 = await fundedWallet.transfer(predicate.address, bn(100_000));
+    await tx1.waitForResult();
+
     const predicateCoins = await predicate.getResourcesToSpend([
-      { amount: 2000, assetId: baseAssetId },
+      { amount: 2000, assetId: provider.getBaseAssetId() },
     ]);
 
     // Add the predicate input and resources
@@ -185,6 +165,9 @@ describe('Transaction Request', () => {
   });
 
   it('adds a witness to a transaction request', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     const witness = ZeroBytes32;
 
     // #region transaction-request-6
@@ -192,7 +175,7 @@ describe('Transaction Request', () => {
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
 
     // Add a witness directly
@@ -206,13 +189,16 @@ describe('Transaction Request', () => {
     expect(transactionRequest.witnesses.length).toEqual(2);
   });
 
-  it('gets the transaction ID', () => {
+  it('gets the transaction ID', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     // #region transaction-request-7
     // #import { ScriptTransactionRequest };
 
     // Instantiate the transaction request
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
 
     // Get the chain ID
@@ -224,7 +210,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0xdc83dc7d36caaaacd96e4bf4649c3ef5c372a87c3fb49b14d218e3d8a5b8d240'
+      '0x5e12f588de0cbf2ec0f085078880d5eeb3e18cd239a288d4a06ee4247a97e4f2'
     );
   });
 });

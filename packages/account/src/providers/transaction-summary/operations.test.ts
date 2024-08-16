@@ -42,6 +42,7 @@ import {
   getTransactionTypeName,
   getWithdrawFromFuelOperations,
   isType,
+  isTypeBlob,
   isTypeCreate,
   isTypeMint,
   isTypeScript,
@@ -87,6 +88,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_CONTRACT, MOCK_OUTPUT_VARIABLE, MOCK_OUTPUT_CHANGE],
         receipts,
         maxInputs: bn(255),
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);
@@ -150,6 +152,7 @@ describe('operations', () => {
         },
         rawPayload: MOCK_TRANSACTION_RAWPAYLOAD,
         maxInputs: bn(255),
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(1);
@@ -162,6 +165,7 @@ describe('operations', () => {
         outputs: [MOCK_OUTPUT_COIN, MOCK_OUTPUT_CHANGE],
         receipts: [MOCK_RECEIPT_RETURN, MOCK_RECEIPT_SCRIPT_RESULT],
         maxInputs: bn(255),
+        baseAssetId: ZeroBytes32,
       });
 
       expect(operations.length).toEqual(0);
@@ -828,6 +832,7 @@ describe('operations', () => {
       expect(isType(TransactionType.Script, TransactionTypeName.Create)).toBeFalsy();
       expect(isType(TransactionType.Mint, TransactionTypeName.Script)).toBeFalsy();
       expect(isType(TransactionType.Create, TransactionTypeName.Mint)).toBeFalsy();
+      expect(isType(TransactionType.Blob, TransactionTypeName.Blob)).toBeTruthy();
     });
 
     it('should isTypeMint return if is mint', () => {
@@ -846,6 +851,13 @@ describe('operations', () => {
       expect(isTypeScript(TransactionType.Script)).toBeTruthy();
       expect(isTypeScript(TransactionType.Mint)).toBeFalsy();
       expect(isTypeScript(TransactionType.Create)).toBeFalsy();
+    });
+
+    it('should isTypeBlob return if is Blob', () => {
+      expect(isTypeBlob(TransactionType.Blob)).toBeTruthy();
+      expect(isTypeBlob(TransactionType.Mint)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Create)).toBeFalsy();
+      expect(isTypeBlob(TransactionType.Script)).toBeFalsy();
     });
   });
 
@@ -934,9 +946,10 @@ describe('operations', () => {
     expect(getTransactionTypeName(TransactionType.Create)).toBe(TransactionTypeName.Create);
     expect(getTransactionTypeName(TransactionType.Mint)).toBe(TransactionTypeName.Mint);
     expect(getTransactionTypeName(TransactionType.Script)).toBe(TransactionTypeName.Script);
+    expect(getTransactionTypeName(TransactionType.Blob)).toBe(TransactionTypeName.Blob);
 
     expect(() => getTransactionTypeName('' as unknown as TransactionType)).toThrowError(
-      'Invalid transaction type: '
+      'Unsupported transaction type: '
     );
   });
 });

@@ -2,10 +2,10 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { Interface } from '@fuel-ts/abi-coder';
 import type { Account, TransactionResponse, TransactionResult } from '@fuel-ts/account';
-import { Provider, ScriptTransactionRequest } from '@fuel-ts/account';
-import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ScriptTransactionRequest } from '@fuel-ts/account';
+import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BigNumberish } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { ScriptRequest } from '@fuel-ts/program';
@@ -17,19 +17,10 @@ import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
 
 import { Script } from './index';
 
+// #TODO: we should refactor this to use Script Instance, need to do typegen here
 const { abiContents: scriptJsonAbi, binHexlified: scriptBin } = getScriptForcProject(
   ScriptProjectsEnum.CALL_TEST_SCRIPT
 );
-
-const setup = async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[5_000_000, baseAssetId]]);
-
-  return wallet;
-};
 
 const callScript = async <TData, TResult>(
   account: Account,
@@ -45,7 +36,7 @@ const callScript = async <TData, TResult>(
 
   // Keep a list of coins we need to input to this transaction
 
-  const txCost = await account.provider.getTransactionCost(request);
+  const txCost = await account.getTransactionCost(request);
 
   request.gasLimit = txCost.gasUsed;
   request.maxFee = txCost.maxFee;
@@ -98,7 +89,12 @@ describe('Script', () => {
   // #endregion script-init
 
   it('can call a script', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -113,7 +109,12 @@ describe('Script', () => {
   });
 
   it('should TransactionResponse fetch return graphql transaction and also decoded transaction', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const input = {
       arg_one: true,
       arg_two: 1337,
@@ -125,19 +126,29 @@ describe('Script', () => {
   });
 
   it('should throw if script has no configurable to be set', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
 
-    const { error } = await safeExec(() => newScript.setConfigurableConstants({ FEE: 8 }));
-
-    const errMsg = `Error setting configurable constants: The script does not have configurable constants to be set.`;
-
-    expect((<Error>error).message).toBe(errMsg);
+    await expectToThrowFuelError(
+      () => newScript.setConfigurableConstants({ FEE: 8 }),
+      new FuelError(
+        FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+        'Error setting configurable constants: The script does not have configurable constants to be set.'
+      )
+    );
   });
 
   it('should throw when setting configurable with wrong name', async () => {
-    const wallet = await setup();
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const jsonAbiWithConfigurablesMock: JsonAbi = {
       ...jsonAbiMock,
@@ -156,10 +167,12 @@ describe('Script', () => {
 
     const script = new Script(scriptBin, jsonAbiWithConfigurablesMock, wallet);
 
-    const { error } = await safeExec(() => script.setConfigurableConstants({ NOT_DEFINED: 8 }));
-
-    const errMsg = `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`;
-
-    expect((<Error>error).message).toBe(errMsg);
+    await expectToThrowFuelError(
+      () => script.setConfigurableConstants({ NOT_DEFINED: 8 }),
+      new FuelError(
+        FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
+        `Error setting configurable constants: The script does not have a configurable constant named: 'NOT_DEFINED'.`
+      )
+    );
   });
 });

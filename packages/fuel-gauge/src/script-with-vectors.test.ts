@@ -1,27 +1,26 @@
-import type { BigNumberish } from 'fuels';
-import { FUEL_NETWORK_URL, Provider } from 'fuels';
-import { generateTestWallet } from 'fuels/test-utils';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { getScript } from './utils';
-
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
-
-  return wallet;
-};
+import {
+  ScriptWithArray,
+  ScriptWithVector,
+  ScriptWithVectorAdvanced,
+  ScriptWithVectorMixed,
+} from '../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Script With Vectors', () => {
   it('can call script and use main argument [array]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const someArray = [1, 100];
-    const scriptInstance = getScript<[BigNumberish[]], void>('script-with-array', wallet);
+    const scriptInstance = new ScriptWithArray(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(someArray).call();
     const { logs } = await waitForResult();
@@ -30,9 +29,14 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [vec]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const someVec = [7, 2, 1, 5];
-    const scriptInstance = getScript<[BigNumberish[]], void>('script-with-vector', wallet);
+    const scriptInstance = new ScriptWithVector(wallet);
 
     const scriptInvocationScope = scriptInstance.functions.main(someVec);
 
@@ -55,7 +59,11 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const importantDates = [
       {
@@ -87,8 +95,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const scriptInstance = getScript<[any], void>('script-with-vector-mixed', wallet);
+    const scriptInstance = new ScriptWithVectorMixed(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(importantDates).call();
     const { value } = await waitForResult();
@@ -96,7 +103,11 @@ describe('Script With Vectors', () => {
   });
 
   it('can call script and use main argument [struct in vec in struct in vec in struct in vec]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
 
     const scores = [24, 56, 43];
 
@@ -155,8 +166,7 @@ describe('Script With Vectors', () => {
       },
     ];
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const scriptInstance = getScript<[any[]], void>('script-with-vector-advanced', wallet);
+    const scriptInstance = new ScriptWithVectorAdvanced(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(vectorOfStructs).call();
     const { value } = await waitForResult();

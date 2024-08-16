@@ -37,10 +37,9 @@
         "type": 0,
         "typeArguments": null,
       },
-      "offset": 824,
+      "offset": 856,
     },
   ],
 }
-
 
 // #endregion encode-and-decode-2

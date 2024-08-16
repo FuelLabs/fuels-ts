@@ -3,6 +3,7 @@ import { join } from 'path';
 
 import {
   bootstrapProject,
+  cleanupFilesystem,
   copyTemplate,
   resetFilesystem,
   type ProjectPaths,
@@ -24,19 +25,23 @@ describe('rewriteTemplateFiles', () => {
 
   beforeEach(() => {
     paths = bootstrapProject(__filename);
-    copyTemplate(paths.sourceTemplate, paths.template, false);
+    copyTemplate(paths.templateSource, paths.templateRoot, false);
   });
 
   afterEach(() => {
-    resetFilesystem(paths.root);
-    resetFilesystem(paths.template);
+    resetFilesystem(paths.projectRoot);
+    resetFilesystem(paths.templateRoot);
     vi.resetAllMocks();
   });
 
-  it('should rewrite the package.json', () => {
-    const packageJsonPath = join(paths.template, 'package.json');
+  afterAll(() => {
+    cleanupFilesystem();
+  });
 
-    rewriteTemplateFiles(paths.template);
+  it('should rewrite the package.json', () => {
+    const packageJsonPath = join(paths.templateRoot, 'package.json');
+
+    rewriteTemplateFiles(paths.templateRoot);
 
     const packageJson = readFileSync(packageJsonPath, 'utf-8');
 
@@ -49,13 +54,42 @@ describe('rewriteTemplateFiles', () => {
   });
 
   it('should rewrite the fuels.config.ts', () => {
-    const fuelsConfigPath = join(paths.template, 'fuels.config.ts');
+    const fuelsConfigPath = join(paths.templateRoot, 'fuels.config.ts');
 
-    rewriteTemplateFiles(paths.template);
+    rewriteTemplateFiles(paths.templateRoot);
 
     const fuelsConfig = readFileSync(fuelsConfigPath, 'utf-8');
 
     expect(fuelsConfig).not.toContain(/\n\W+forcPath: 'fuels-forc',/g);
     expect(fuelsConfig).not.toContain(/\n\W+fuelCorePath: 'fuels-core',/g);
+  });
+
+  it('should rewrite the test files', () => {
+    const testDir = join(paths.templateRoot, 'test');
+    const programs = [
+      {
+        program: 'contract',
+        capitalised: 'Contract',
+      },
+      {
+        program: 'predicate',
+        capitalised: 'Predicate',
+      },
+      {
+        program: 'script',
+        capitalised: 'Script',
+      },
+    ];
+
+    rewriteTemplateFiles(paths.templateRoot);
+
+    programs.forEach(({ program, capitalised }) => {
+      const testFilePath = join(testDir, `${program}.test.ts`);
+      const testFileContents = readFileSync(testFilePath, 'utf-8');
+
+      expect(testFileContents).not.toContain('@group node');
+      expect(testFileContents).not.toContain('@group browser');
+      expect(testFileContents).toContain(`${capitalised} Testing`);
+    });
   });
 });

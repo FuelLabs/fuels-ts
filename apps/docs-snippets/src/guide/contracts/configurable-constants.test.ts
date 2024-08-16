@@ -1,22 +1,12 @@
-import type { WalletUnlocked } from 'fuels';
-import { ContractFactory } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { EchoConfigurablesFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('configurable-constants', () => {
-  let wallet: WalletUnlocked;
-
-  const { abiContents: abi, binHexlified: bin } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.ECHO_CONFIGURABLES
-  );
-
   const defaultValues = {
     age: 25,
     tag: 'fuel',
@@ -28,11 +18,13 @@ describe('configurable-constants', () => {
     },
   };
 
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-  });
-
   it('should successfully set new values for all configurable constants', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     // #region configurable-constants-2
     const configurableConstants: typeof defaultValues = {
       age: 30,
@@ -45,9 +37,9 @@ describe('configurable-constants', () => {
       },
     };
 
-    const factory = new ContractFactory(bin, abi, wallet);
+    const echoFactory = new EchoConfigurablesFactory(wallet);
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await echoFactory.deploy({
       configurableConstants,
     });
 
@@ -63,14 +55,20 @@ describe('configurable-constants', () => {
   });
 
   it('should successfully set new value for one configurable constant', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     // #region configurable-constants-3
     const configurableConstants = {
       age: 10,
     };
 
-    const factory = new ContractFactory(bin, abi, wallet);
+    const echoFactory = new EchoConfigurablesFactory(wallet);
 
-    const { waitForResult } = await factory.deployContract({
+    const { waitForResult } = await echoFactory.deploy({
       configurableConstants,
     });
 
@@ -86,6 +84,12 @@ describe('configurable-constants', () => {
   });
 
   it('should throw when not properly setting new values for structs', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
     // #region configurable-constants-4
     const configurableConstants = {
       my_struct: {
@@ -93,10 +97,10 @@ describe('configurable-constants', () => {
       },
     };
 
-    const factory = new ContractFactory(bin, abi, wallet);
+    const echoFactory = new EchoConfigurablesFactory(wallet);
 
     await expect(
-      factory.deployContract({
+      echoFactory.deploy({
         configurableConstants,
       })
     ).rejects.toThrowError();
