@@ -93,14 +93,6 @@ export function transpileAbi(abi) {
   // 0. define empty types array
   const types = [];
 
-  /**
-   * Helpers
-   */
-
-  /**
-   * Transpiling
-   */
-
   // 1. root level of metadata types
   abi.metadataTypes.forEach((m) => {
     const t = {
