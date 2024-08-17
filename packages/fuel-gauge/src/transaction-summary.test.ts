@@ -381,6 +381,64 @@ describe('TransactionSummary', () => {
       });
     });
 
+    it('should ensure transfer operation is assembled (TWO ACCOUNTS TO ANOTHER ACCOUNT)', async () => {
+      const amountFromA = 10;
+      const amountFromB = 10;
+
+      using launched = await launchTestNode();
+
+      const {
+        provider,
+        wallets: [genesis, feePayee],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+
+      // Sender A
+      const senderA = Wallet.generate({ provider });
+      const txA = await genesis.transfer(senderA.address, amountFromA, baseAssetId);
+      await txA.waitForResult();
+
+      // Sender B
+      const senderB = Wallet.generate({ provider });
+      const txBase = await genesis.transfer(senderB.address, amountFromB, baseAssetId);
+      await txBase.waitForResult();
+
+      const recipient = Wallet.generate({ provider });
+
+      let request = new ScriptTransactionRequest();
+
+      const resourcesA = await senderA.getResourcesToSpend([[amountFromA, baseAssetId]]);
+      const resourcesB = await senderB.getResourcesToSpend([[amountFromB, baseAssetId]]);
+      request.addResources([...resourcesA, ...resourcesB]);
+      request.addCoinOutput(recipient.address, amountFromA, baseAssetId);
+      request.addCoinOutput(recipient.address, amountFromB, baseAssetId);
+
+      const txCost = await feePayee.getTransactionCost(request);
+      request.gasLimit = txCost.gasUsed;
+      request.maxFee = txCost.maxFee;
+      await feePayee.fund(request, txCost);
+
+      request = await senderA.populateTransactionWitnessesSignature(request);
+      request = await senderB.populateTransactionWitnessesSignature(request);
+
+      const txResponse = await feePayee.sendTransaction(request);
+      const { operations } = await txResponse.waitForResult();
+
+      validateTransferOperation({
+        operations,
+        sender: senderA.address,
+        fromType: AddressType.account,
+        toType: AddressType.account,
+        recipients: [
+          {
+            address: recipient.address,
+            quantities: [{ amount: amountFromA + amountFromB, assetId: provider.getBaseAssetId() }],
+          },
+        ],
+      });
+    });
+
     it('should ensure transfer operation is assembled (ACCOUNT TRANSFER TO CONTRACT)', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
