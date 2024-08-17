@@ -369,7 +369,7 @@ describe('TransactionSummary', () => {
 
       validateTransferOperation({
         operations,
-        sender: feePayeeWallet.address,
+        sender: predicate.address,
         fromType: AddressType.account,
         toType: AddressType.account,
         recipients: [
