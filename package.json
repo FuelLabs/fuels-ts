@@ -79,7 +79,7 @@
     "@types/node-fetch": "^2.6.11",
     "@types/web": "^0.0.154",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "@vitest/browser": "^1.6.0",
     "@vitest/coverage-istanbul": "^1.6.0",
     "compare-versions": "^6.1.1",
