@@ -21,6 +21,7 @@ import {
   getInputContractFromIndex,
   getInputsContract,
   getInputsCoinAndMessage,
+  aggregateInputsAmountsByAssetAndOwner,
 } from './input';
 import {
   getOutputsChange,
@@ -398,6 +399,7 @@ export function getTransferOperations({
   inputs,
   outputs,
   receipts,
+  baseAssetId,
 }: GetTransferOperationsParams): Operation[] {
   let operations: Operation[] = [];
 
@@ -405,31 +407,42 @@ export function getTransferOperations({
   const contractInputs = getInputsContract(inputs);
   const changeOutputs = getOutputsChange(outputs);
 
+  const aggregated = aggregateInputsAmountsByAssetAndOwner(inputs, baseAssetId);
+
   /**
    * Extracting transfer operations between wallets, as they do not produce receipts
    */
-  coinOutputs.forEach((output) => {
-    const { amount, assetId, to } = output;
+  coinOutputs.forEach(({ amount, assetId, to }) => {
+    const txPayers = aggregated.get(assetId) || new Map<string, BN>();
+    let selectedPayer: string | undefined;
+    let fallbackPayer: string | undefined;
 
-    const changeOutput = changeOutputs.find((change) => change.assetId === assetId);
+    for (const [address, payedAmount] of txPayers) {
+      if (!fallbackPayer) {
+        fallbackPayer = address; // Set the first payer as a fallback
+      }
 
-    if (changeOutput) {
+      if (payedAmount.gte(amount)) {
+        selectedPayer = address;
+        break; // Stop looping once a suitable payer is found
+      }
+    }
+
+    // If no suitable payer is found, use the fallback payer
+    selectedPayer = selectedPayer || fallbackPayer;
+
+    if (selectedPayer) {
       operations = addOperation(operations, {
         name: OperationName.transfer,
         from: {
           type: AddressType.account,
-          address: changeOutput.to,
+          address: selectedPayer,
         },
         to: {
           type: AddressType.account,
           address: to,
         },
-        assetsSent: [
-          {
-            assetId,
-            amount,
-          },
-        ],
+        assetsSent: [{ assetId, amount }],
       });
     }
   });
@@ -526,15 +539,12 @@ export function getOperations({
   baseAssetId,
 }: GetOperationParams): Operation[] {
   if (isTypeCreate(transactionType)) {
-    return [
-      ...getContractCreatedOperations({ inputs, outputs }),
-      ...getTransferOperations({ inputs, outputs, receipts }),
-    ];
+    return [...getContractCreatedOperations({ inputs, outputs })];
   }
 
   if (isTypeScript(transactionType)) {
     return [
-      ...getTransferOperations({ inputs, outputs, receipts }),
+      ...getTransferOperations({ inputs, outputs, receipts, baseAssetId }),
       ...getContractCallOperations({
         inputs,
         outputs,
