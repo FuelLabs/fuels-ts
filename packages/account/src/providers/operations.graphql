@@ -61,7 +61,7 @@ fragment transactionStatusFragment on TransactionStatus {
   }
 }
 
-fragment malleableFieldsFragment on Transaction {
+fragment malleableTransactionFieldsFragment on Transaction {
   receiptsRoot
   inputs {
     type: __typename
@@ -108,13 +108,13 @@ fragment transactionStatusSubscriptionFragment on TransactionStatus {
   ... on SuccessStatus {
     ...SuccessStatusFragment
     transaction {
-      ...malleableFieldsFragment
+      ...malleableTransactionFieldsFragment
     }
   }
   ... on FailureStatus {
     ...FailureStatusFragment
     transaction {
-      ...malleableFieldsFragment
+      ...malleableTransactionFieldsFragment
     }
   }
   ... on SqueezedOutStatus {

@@ -28,7 +28,7 @@ import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transacti
 import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
 import type {
-  GqlMalleableFieldsFragment,
+  GqlMalleableTransactionFieldsFragment,
   GqlStatusChangeSubscription,
 } from '../__generated__/operations';
 import type Provider from '../provider';
@@ -86,7 +86,9 @@ export type TransactionResult<TTransactionType = void> = TransactionSummary<TTra
   logs?: Array<unknown>;
 };
 
-function mapGqlOutputsToTxOutputs(outputs: GqlMalleableFieldsFragment['outputs']): Output[] {
+function mapGqlOutputsToTxOutputs(
+  outputs: GqlMalleableTransactionFieldsFragment['outputs']
+): Output[] {
   return outputs.map((o) => {
     const obj = 'amount' in o ? { ...o, amount: bn(o.amount) } : o;
     switch (obj.type) {
