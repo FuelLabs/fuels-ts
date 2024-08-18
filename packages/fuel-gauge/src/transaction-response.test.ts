@@ -1,5 +1,5 @@
 import { ErrorCode } from '@fuel-ts/errors';
-import { TransactionResponse, Wallet, ScriptTransactionRequest } from 'fuels';
+import { TransactionResponse, Wallet, ScriptTransactionRequest, normalizeJSON, bn } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 import type { MockInstance } from 'vitest';
 
@@ -100,6 +100,31 @@ describe('TransactionResponse', () => {
     expect(response.gqlTransaction).toBeDefined();
     expect(response.gqlTransaction?.status).toBeDefined();
     expect(response.gqlTransaction?.id).toBe(transactionId);
+  });
+
+  it('should ensure that the transaction result from ID and request are equal', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+    const recipient = Wallet.generate({ provider });
+
+    // From transaction request
+    const transfer = await adminWallet.transfer(recipient.address, 100, baseAssetId);
+    const responseFromRequest = await transfer.waitForResult();
+    const summaryFromRequest = await transfer.getTransactionSummary();
+
+    // From transaction ID
+    const response = await TransactionResponse.create(transfer.id, provider);
+    const responseFromId = await response.assembleResult();
+    const summaryFromId = await response.getTransactionSummary();
+
+    expect(normalizeJSON(responseFromRequest)).toEqual(normalizeJSON(responseFromId));
+    expect(normalizeJSON(summaryFromRequest)).toEqual(normalizeJSON(summaryFromId));
   });
 
   it('should ensure getTransactionSummary fetches a transaction and assembles transaction summary', async () => {
