@@ -367,11 +367,22 @@ type ChainInfoCache = Record<string, ChainInfo>;
  */
 type NodeInfoCache = Record<string, NodeInfo>;
 
+type Operations = ReturnType<typeof getOperationsSdk>;
+
+type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
+  submitAndAwait: (
+    ...args: Parameters<Operations['submitAndAwait']>
+  ) => Promise<ReturnType<Operations['submitAndAwait']>>;
+  statusChange: (
+    ...args: Parameters<Operations['statusChange']>
+  ) => Promise<ReturnType<Operations['statusChange']>>;
+};
+
 /**
  * A provider for connecting to a node
  */
 export default class Provider {
-  operations: ReturnType<typeof getOperationsSdk>;
+  operations: SdkOperations;
   cache?: ResourceCache;
 
   /** @hidden */
@@ -558,7 +569,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns The operation SDK object
    * @hidden
    */
-  private createOperations() {
+  private createOperations(): SdkOperations {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
       fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
@@ -582,7 +593,7 @@ Supported fuel-core version: ${supportedVersion}.`
       const isSubscription = opDefinition?.operation === 'subscription';
 
       if (isSubscription) {
-        return new FuelGraphqlSubscriber({
+        return FuelGraphqlSubscriber.create({
           url: this.url,
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),

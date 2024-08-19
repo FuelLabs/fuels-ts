@@ -46,7 +46,7 @@ describe('Edge Cases', () => {
 
     await response.waitForResult();
 
-    const subsciption = provider.operations.statusChange({ transactionId });
+    const subsciption = await provider.operations.statusChange({ transactionId });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const iterator of subsciption) {
