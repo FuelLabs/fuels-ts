@@ -5,6 +5,3 @@ license = "Apache-2.0"
 name = "demo-script"
 
 [dependencies]
-
-[patch.'https://github.com/fuellabs/sway']
-std = { git = "https://github.com/fuellabs/sway", branch = "master" }
