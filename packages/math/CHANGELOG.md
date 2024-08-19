@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.94.0
+
+### Patch Changes
+
+- Updated dependencies [0110fd8]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [03ac550]
+  - @fuel-ts/errors@0.94.0
+
 ## 0.93.0
 
 ### Patch Changes

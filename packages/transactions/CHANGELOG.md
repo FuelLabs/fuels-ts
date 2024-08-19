@@ -1,5 +1,32 @@
 # Change Log
 
+## 0.94.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 84dfdc5: chore: implement a helper createAssetId function
+- 1e93dac: chore: add missing reasons to `PANIC_REASONS` constant
+- Updated dependencies [d875416]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [95e7108]
+- Updated dependencies [751d638]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [9c07b00]
+- Updated dependencies [03ac550]
+  - @fuel-ts/abi-coder@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/address@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/hasher@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
 ## 0.93.0
 
 ### Minor Changes
