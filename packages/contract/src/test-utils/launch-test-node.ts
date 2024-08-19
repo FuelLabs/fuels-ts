@@ -5,7 +5,7 @@ import type {
   SetupTestProviderAndWalletsReturn,
 } from '@fuel-ts/account/test-utils';
 import { FuelError } from '@fuel-ts/errors';
-import type { SnapshotConfigs } from '@fuel-ts/utils';
+import { sleep, type SnapshotConfigs } from '@fuel-ts/utils';
 import { readFileSync } from 'fs';
 import * as path from 'path';
 import { mergeDeepRight } from 'ramda';
@@ -155,6 +155,9 @@ export async function launchTestNode<const TFactories extends DeployContractConf
     cleanup();
     throw err;
   }
+
+  await sleep(1500);
+
   return {
     provider,
     wallets,
