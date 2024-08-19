@@ -545,16 +545,18 @@ export class Account extends AbstractAccount {
         if ('assetId' in input) {
           return input.assetId === assetId;
         }
+        if ('recipient' in input) {
+          return baseAssetId === assetId;
+        }
+
         return false;
       });
 
     const updateAssetInput = (assetId: string, quantity: BN) => {
       const assetInput = findAssetInput(assetId);
-
       const usedQuantity = quantity;
 
-      if (assetInput && 'assetId' in assetInput) {
-        assetInput.id = hexlify(randomBytes(UTXO_ID_LEN));
+      if (assetInput && 'amount' in assetInput) {
         assetInput.amount = usedQuantity;
       } else {
         txRequestClone.addResources(
