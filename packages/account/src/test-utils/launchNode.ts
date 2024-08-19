@@ -265,9 +265,11 @@ export const launchNode = async ({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
 
-        // Resolve with the cleanup method.
+        // TODO: Remove delay after fuel-core issue is fixed
+        // https://github.com/FuelLabs/fuel-core/issues/2107
         setTimeout(
           () =>
+            // Resolve with the cleanup method.
             resolve({
               cleanup,
               ip: realIp,
