@@ -57,7 +57,6 @@ describe('Contract Factory', () => {
       receipts: expect.arrayContaining([expect.any(Object)]),
       status: expect.any(String),
       type: expect.any(String),
-      gqlTransaction: expect.any(Object),
       operations: expect.any(Array),
       isStatusFailure: expect.any(Boolean),
       isStatusPending: expect.any(Boolean),

@@ -637,7 +637,7 @@ describe('Account', () => {
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
     const messageProof = await provider.getMessageProof(
-      result.gqlTransaction.id,
+      result.id,
       messageOutReceipt.nonce,
       nextBlock.blockId
     );
@@ -763,7 +763,7 @@ describe('Account', () => {
 
     const messageOutReceipt = <providersMod.TransactionResultMessageOutReceipt>result.receipts[0];
     expect(result.isStatusSuccess).toBeTruthy();
-    expect(result.gqlTransaction.id).toEqual(messageOutReceipt.sender);
+    expect(result.id).toEqual(messageOutReceipt.sender);
     expect(recipient.toHexString()).toEqual(messageOutReceipt.recipient);
     expect(amount.toString()).toEqual(messageOutReceipt.amount.toString());
   });

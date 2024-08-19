@@ -25,7 +25,7 @@ export interface AssembleTransactionSummaryParams {
   gasPerByte: BN;
   gasPriceFactor: BN;
   transaction: Transaction;
-  id?: string;
+  id: string;
   transactionBytes: Uint8Array;
   gqlTransactionStatus?: GraphqlTransactionStatus;
   receipts: TransactionResultReceipt[];
