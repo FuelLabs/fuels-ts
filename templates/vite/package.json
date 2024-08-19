@@ -8,7 +8,6 @@
     "dev": "vite",
     "build": "pnpm xprebuild && tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
     "fuels:dev": "fuels dev",
     "test": "vitest"
   },
