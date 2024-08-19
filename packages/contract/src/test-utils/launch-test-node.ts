@@ -156,7 +156,7 @@ export async function launchTestNode<const TFactories extends DeployContractConf
     throw err;
   }
 
-  await sleep(1500);
+  await sleep(500);
 
   return {
     provider,
