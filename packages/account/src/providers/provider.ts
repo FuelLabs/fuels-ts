@@ -768,7 +768,7 @@ Supported fuel-core version: ${supportedVersion}.`
     } = await this.operations.submit({ encodedTransaction });
     this.#cacheInputs(transactionRequest.inputs, transactionId);
 
-    return new TransactionResponse(transactionId, this, abis);
+    return new TransactionResponse(transactionRequest, this, abis);
   }
 
   /**
