@@ -319,6 +319,9 @@ It can be instantiated as follows:
 
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-instantiation-1{ts:line-numbers}
 
+> [!NOTE] Note
+> We recommend initializing the Fuel class with the `init` method to avoid the any potential race conditions that may arise from the async nature of instantiating a connector.
+
 ### Options
 
 Several options can be passed to the `Fuel` connector manager:
