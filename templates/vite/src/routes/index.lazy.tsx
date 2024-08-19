@@ -14,6 +14,7 @@ import {
   DOCS_URL,
   Environments,
   FAUCET_LINK,
+  TESTNET_CONTRACT_ID,
 } from "../lib";
 
 export const Route = createLazyFileRoute("/")({
@@ -23,7 +24,7 @@ export const Route = createLazyFileRoute("/")({
 const contractId =
   CURRENT_ENVIRONMENT === Environments.LOCAL
     ? contractIds.testContract
-    : (process.env.NEXT_PUBLIC_TESTNET_CONTRACT_ID as string); // Testnet Contract ID
+    : TESTNET_CONTRACT_ID; // Testnet Contract ID
 
 function Index() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();

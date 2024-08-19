@@ -35,3 +35,5 @@ export const FAUCET_LINK =
 export const FAUCET_PRIVATE_KEY = '0x01';
 
 export const DOCS_URL = 'https://docs.fuel.network';
+
+export const TESTNET_CONTRACT_ID = process.env.VITE_TESTNET_CONTRACT_ID as string;
