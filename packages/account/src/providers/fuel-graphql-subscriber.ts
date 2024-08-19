@@ -10,14 +10,12 @@ type FuelGraphQLSubscriberOptions = {
 };
 
 export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
-  private stream!: ReadableStreamDefaultReader<Uint8Array>;
   private static textDecoder = new TextDecoder();
 
-  public constructor(private options: FuelGraphQLSubscriberOptions) {}
+  private constructor(private stream: ReadableStreamDefaultReader<Uint8Array>) {}
 
-  private async setStream() {
-    const { url, query, variables, fetchFn } = this.options;
-
+  public static async create(options: FuelGraphQLSubscriberOptions) {
+    const { url, query, variables, fetchFn } = options;
     const response = await fetchFn(`${url}-sub`, {
       method: 'POST',
       body: JSON.stringify({
@@ -31,17 +29,13 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.stream = response.body!.getReader();
+    return new FuelGraphqlSubscriber(response.body!.getReader());
   }
 
   private events: Array<{ data: unknown; errors?: { message: string }[] }> = [];
   private parsingLeftover = '';
 
   async next(): Promise<IteratorResult<unknown, unknown>> {
-    if (!this.stream) {
-      await this.setStream();
-    }
-
     // eslint-disable-next-line no-constant-condition
     while (true) {
       if (this.events.length > 0) {
