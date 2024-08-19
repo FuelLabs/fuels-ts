@@ -9,6 +9,8 @@ This reference describes all the options of the [`launchTestNode`](./launching-a
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#options{ts:line-numbers}
 
+Check out the [API reference](../../api/Contract/LaunchTestNodeOptions.md) for usage information on the Test Node Options.
+
 ## `walletsConfig`
 
 Used to set the node's genesis block state (coins and messages).
