@@ -10,20 +10,11 @@ updates:
       - "chore"
     commit-message:
       prefix: "build(deps):"
-      prefix-development: "build(deps-dev):"
     versioning-strategy: "increase"
     groups:
-      dev-deps:
-        dependency-type: "development"
+      all:
         applies-to: "version-updates"
-        update-types:
-          - "minor"
-          - "patch"
-      deps:
-        dependency-type: "production"
-        applies-to: "version-updates"
-        update-types:
-          - "patch"
+        pattern: "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
