@@ -2,5 +2,5 @@
 channel = "testnet"
 
 [components]
-forc = "git:master"
+forc = "0.63.0"
 fuel-core = "0.33.0"
