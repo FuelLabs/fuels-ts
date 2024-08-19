@@ -13,7 +13,7 @@ import { ReceiptType } from '@fuel-ts/transactions';
 import { arrayify } from '@fuel-ts/utils';
 
 import { getScriptForcProject, ScriptProjectsEnum } from '../test/fixtures';
-import { jsonAbiMock, jsonAbiFragmentMock } from '../test/mocks';
+import { jsonAbiMock } from '../test/mocks';
 
 import { Script } from './index';
 
@@ -132,7 +132,7 @@ describe('Script', () => {
       wallets: [wallet],
     } = launched;
 
-    const newScript = new Script(scriptBin, jsonAbiFragmentMock, wallet);
+    const newScript = new Script(scriptBin, jsonAbiMock, wallet);
 
     await expectToThrowFuelError(
       () => newScript.setConfigurableConstants({ FEE: 8 }),
@@ -155,11 +155,7 @@ describe('Script', () => {
       configurables: [
         {
           name: 'FEE',
-          configurableType: {
-            name: '',
-            type: 1,
-            typeArguments: null,
-          },
+          concreteTypeId: 'a760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903',
           offset: 44,
         },
       ],

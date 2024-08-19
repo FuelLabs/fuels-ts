@@ -21,7 +21,9 @@ describe('StructType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE, {
+      transpile: true,
+    });
 
     const rawTypes = project.abiContents.types;
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));

@@ -1,29 +1,25 @@
 // #region encode-and-decode-2
 {
-  "encoding": "1",
-  "types": [
+  "programType": "script",
+  "specVersion": "1",
+  "encodingVersion": "1",
+  "concreteTypes": [
     {
-      "typeId": 0,
       "type": "u32",
-      "components": null,
-      "typeParameters": null,
+      "concreteTypeId": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
     },
   ],
+  "metadataTypes": [],
   "functions": [
     {
       "inputs": [
         {
           "name": "inputted_amount",
-          "type": 0,
-          "typeArguments": null,
+          "concreteTypeId": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
         },
       ],
       "name": "main",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null,
-      },
+      "output": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
       "attributes": null,
     },
   ],
@@ -32,14 +28,9 @@
   "configurables": [
     {
       "name": "AMOUNT",
-      "configurableType": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null,
-      },
-      "offset": 856,
+      "concreteTypeId": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
+      "offset": 920,
     },
   ],
 }
-
 // #endregion encode-and-decode-2
