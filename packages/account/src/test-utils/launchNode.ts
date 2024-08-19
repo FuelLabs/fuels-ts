@@ -254,6 +254,9 @@ export const launchNode = async ({
       }
     };
 
+    let realIp = '';
+    let realPort = '';
+
     // Look for a specific graphql start point in the output.
     child.stderr.on('data', (chunk: string | Buffer) => {
       const text = typeof chunk === 'string' ? chunk : chunk.toString(); // chunk is sometimes Buffer and sometimes string...
@@ -263,8 +266,10 @@ export const launchNode = async ({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const rowWithUrl = rows.find((row) => row.indexOf(graphQLStartSubstring) !== -1)!;
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
+        [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
+      }
 
+      if (text.indexOf('GasPriceUpdater') !== -1) {
         // Resolve with the cleanup method.
         resolve({
           cleanup,
