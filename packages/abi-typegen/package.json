@@ -43,12 +43,11 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "run-s build:forc-callpaths build:forc",
+    "pretest": "run-s build build:forc",
     "test": "cd ../.. && pnpm run test:filter packages/abi-typegen",
     "test:update-fixtures": "UPDATE_FIXTURES=true pnpm run test",
     "build": "tsup",
     "build:forc": "pnpm fuels-forc build -p test/fixtures/forc-projects --release",
-    "build:forc-callpaths": "pnpm fuels-forc build -p test/fixtures/forc-projects --json-abi-with-callpaths",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "license": "Apache-2.0",

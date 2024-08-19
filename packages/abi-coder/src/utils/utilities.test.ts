@@ -1,3 +1,4 @@
+import { OPTION_CODER_TYPE } from './constants';
 import { hasNestedOption, type TCoders } from './utilities';
 
 /**
@@ -15,7 +16,7 @@ describe('findNestedOption', () => {
         coders: {
           a: {
             name: 'tuple',
-            type: '(boolean, [enum Option; 3])',
+            type: `(boolean, [${OPTION_CODER_TYPE}; 3])`,
             encodedLength: 28,
             coders: [
               {
@@ -26,12 +27,12 @@ describe('findNestedOption', () => {
               },
               {
                 name: 'array',
-                type: '[enum Option; 3]',
+                type: `[${OPTION_CODER_TYPE}; 3]`,
                 encodedLength: 27,
                 // Deeply nested option
                 coder: {
                   name: 'Option',
-                  type: 'enum Option',
+                  type: `${OPTION_CODER_TYPE}`,
                   encodedLength: 9,
                   coders: {
                     None: { name: 'tuple', type: '()', encodedLength: 0, coders: [] },
@@ -65,7 +66,7 @@ describe('findNestedOption', () => {
         coders: {
           a: {
             name: 'tuple',
-            type: '(boolean, [enum Option; 3])',
+            type: `(boolean, [${OPTION_CODER_TYPE}; 3])`,
             encodedLength: 28,
             coders: [
               {
@@ -76,7 +77,7 @@ describe('findNestedOption', () => {
               },
               {
                 name: 'array',
-                type: '[enum Option; 3]',
+                type: `[${OPTION_CODER_TYPE}; 3]`,
                 encodedLength: 27,
                 coder: {
                   name: 'AnotherEnum',
