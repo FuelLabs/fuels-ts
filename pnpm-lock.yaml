@@ -1283,7 +1283,7 @@ importers:
         version: 9.9.0
       '@tanstack/router-plugin':
         specifier: ^1.47.0
-        version: 1.47.0(vite@5.4.0(@types/node@22.2.0)(terser@5.31.5))
+        version: 1.47.0(vite@5.4.1(@types/node@22.2.0)(terser@5.31.5))
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -1292,7 +1292,7 @@ importers:
         version: 18.3.0
       '@vitejs/plugin-react-swc':
         specifier: ^3.5.0
-        version: 3.7.0(@swc/helpers@0.5.5)(vite@5.4.0(@types/node@22.2.0)(terser@5.31.5))
+        version: 3.7.0(@swc/helpers@0.5.5)(vite@5.4.1(@types/node@22.2.0)(terser@5.31.5))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.41)
@@ -1312,8 +1312,8 @@ importers:
         specifier: ^8
         version: 8.4.41
       tailwindcss:
-        specifier: ^3.4.9
-        version: 3.4.9(ts-node@10.9.1(@swc/core@1.7.11)(@types/node@22.2.0)(typescript@5.5.4))
+        specifier: ^3.4.10
+        version: 3.4.10(ts-node@10.9.1(@swc/core@1.7.11)(@types/node@22.2.0)(typescript@5.5.4))
       typescript:
         specifier: ^5.5.3
         version: 5.5.4
@@ -1321,8 +1321,8 @@ importers:
         specifier: ^8.0.0
         version: 8.1.0(eslint@9.9.0(jiti@1.21.6))(typescript@5.5.4)
       vite:
-        specifier: ^5.4.0
-        version: 5.4.0(@types/node@22.2.0)(terser@5.31.5)
+        specifier: ^5.4.1
+        version: 5.4.1(@types/node@22.2.0)(terser@5.31.5)
       vitest:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@22.2.0)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.5)
@@ -13460,11 +13460,6 @@ packages:
     engines: {node: '>=14.0.0'}
     hasBin: true
 
-  tailwindcss@3.4.9:
-    resolution: {integrity: sha512-1SEOvRr6sSdV5IDf9iC+NU4dhwdqzF4zKKq3sAbasUWHEM6lsMhX+eNN5gkPx1BvLFEnZQEUFbXnGj8Qlp83Pg==}
-    engines: {node: '>=14.0.0'}
-    hasBin: true
-
   tapable@1.1.3:
     resolution: {integrity: sha512-4WK/bYZmj8xLr+HUCODHGF1ZFzsYffasLUgEiMBY4fgtltdO6B4WJtlSbPaDTLpYTcGVwM2qLnFTICEcNxs3kA==}
     engines: {node: '>=6'}
@@ -14312,37 +14307,6 @@ packages:
 
   vite-plugin-plain-text@1.4.2:
     resolution: {integrity: sha512-nkCWW16lkTidaGZ9kItwMZ5OEkUeXMrY4Okc9IQXrN/p6SAuDYmEiGqMRKl1rnhm6CR1h98uJtn+ODkv0cL7DA==}
-
-  vite@5.4.0:
-    resolution: {integrity: sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
 
   vite@5.4.1:
     resolution: {integrity: sha512-1oE6yuNXssjrZdblI9AfBbHCC41nnyoVoEZxQnID6yvQZAFBzxxkqoFLtHUMkYunL8hwOLEjgTuxpkRxvba3kA==}
@@ -20697,7 +20661,7 @@ snapshots:
       prettier: 3.3.3
       zod: 3.23.8
 
-  '@tanstack/router-plugin@1.47.0(vite@5.4.0(@types/node@22.2.0)(terser@5.31.5))':
+  '@tanstack/router-plugin@1.47.0(vite@5.4.1(@types/node@22.2.0)(terser@5.31.5))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/generator': 7.25.0
@@ -20717,7 +20681,7 @@ snapshots:
       unplugin: 1.12.1
       zod: 3.23.8
     optionalDependencies:
-      vite: 5.4.0(@types/node@22.2.0)(terser@5.31.5)
+      vite: 5.4.1(@types/node@22.2.0)(terser@5.31.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -21536,10 +21500,10 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@vitejs/plugin-react-swc@3.7.0(@swc/helpers@0.5.5)(vite@5.4.0(@types/node@22.2.0)(terser@5.31.5))':
+  '@vitejs/plugin-react-swc@3.7.0(@swc/helpers@0.5.5)(vite@5.4.1(@types/node@22.2.0)(terser@5.31.5))':
     dependencies:
       '@swc/core': 1.7.11(@swc/helpers@0.5.5)
-      vite: 5.4.0(@types/node@22.2.0)(terser@5.31.5)
+      vite: 5.4.1(@types/node@22.2.0)(terser@5.31.5)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -31513,7 +31477,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.4.9(ts-node@10.9.1(@swc/core@1.7.11)(@types/node@22.2.0)(typescript@5.5.4)):
+  tailwindcss@3.4.10(ts-node@10.9.1(@swc/core@1.7.11)(@types/node@22.2.0)(typescript@5.5.4)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -32472,16 +32436,6 @@ snapshots:
       '@napi-rs/magic-string': 0.3.4
       fast-glob: 3.3.1
       minimatch: 6.2.0
-
-  vite@5.4.0(@types/node@22.2.0)(terser@5.31.5):
-    dependencies:
-      esbuild: 0.21.5
-      postcss: 8.4.41
-      rollup: 4.20.0
-    optionalDependencies:
-      '@types/node': 22.2.0
-      fsevents: 2.3.3
-      terser: 5.31.5
 
   vite@5.4.1(@types/node@22.2.0)(terser@5.31.5):
     dependencies:
