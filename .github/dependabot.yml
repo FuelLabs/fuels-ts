@@ -14,7 +14,8 @@ updates:
     groups:
       all:
         applies-to: "version-updates"
-        pattern: "*"
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
