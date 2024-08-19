@@ -3,4 +3,4 @@ channel = "testnet"
 
 [components]
 forc = "git:master"
-fuel-core = "0.32.1"
+fuel-core = "0.33.0"

@@ -62,7 +62,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.32.1');
+    expect(version).toEqual('0.33.0');
   });
 
   it('can call()', async () => {
@@ -955,7 +955,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     await expectToThrowFuelError(
       async () => {
-        for await (const value of provider.operations.statusChange({
+        for await (const value of await provider.operations.statusChange({
           transactionId: 'invalid transaction id',
         })) {
           // shouldn't be reached and should fail if reached
@@ -1012,7 +1012,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     );
 
     const { error } = await safeExec(async () => {
-      for await (const iterator of provider.operations.statusChange({
+      for await (const iterator of await provider.operations.statusChange({
         transactionId: 'doesnt matter, will be aborted',
       })) {
         // shouldn't be reached and should fail if reached
@@ -1153,7 +1153,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       expect(submitAndAwait.type).toEqual('SuccessStatus');
@@ -1185,7 +1185,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1232,7 +1232,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1280,7 +1280,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       expect(submitAndAwait.type).toEqual('SuccessStatus');
@@ -1328,7 +1328,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1387,7 +1387,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1425,7 +1425,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     await expectToThrowFuelError(
       async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+        for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
           encodedTransaction: "it's mocked so doesn't matter",
         })) {
           // shouldn't be reached!
@@ -1492,7 +1492,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     });
 
     await safeExec(async () => {
-      for await (const iterator of provider.operations.statusChange({
+      for await (const iterator of await provider.operations.statusChange({
         transactionId: 'doesnt matter, will be aborted',
       })) {
         // Just running a subscription to trigger the middleware
