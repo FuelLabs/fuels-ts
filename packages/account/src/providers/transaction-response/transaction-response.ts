@@ -244,7 +244,7 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      const subscription = this.provider.operations.statusChange({
+      const subscription = await this.provider.operations.statusChange({
         transactionId: this.id,
       });
 
@@ -319,7 +319,7 @@ export class TransactionResponse {
       return;
     }
 
-    const subscription = this.provider.operations.statusChange({
+    const subscription = await this.provider.operations.statusChange({
       transactionId: this.id,
     });
 

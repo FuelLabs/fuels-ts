@@ -136,6 +136,7 @@ export type InputOutputParam = InputParam & OutputParam;
 
 export interface GetTransferOperationsParams extends InputOutputParam {
   receipts: TransactionResultReceipt[];
+  baseAssetId: string;
 }
 
 export type GetOperationParams = {

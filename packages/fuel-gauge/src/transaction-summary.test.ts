@@ -4,6 +4,7 @@ import type {
   TransactionSummary,
   TransactionResult,
   AbstractAddress,
+  OutputChange,
 } from 'fuels';
 import {
   BN,
@@ -15,6 +16,7 @@ import {
   Wallet,
   AddressType,
   OperationName,
+  OutputType,
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
 
@@ -253,6 +255,79 @@ describe('TransactionSummary', () => {
           {
             address: recipient.address,
             quantities: [{ amount, assetId: provider.getBaseAssetId() }],
+          },
+        ],
+      });
+    });
+
+    it('should ensure transfer operation is assembled (CUSTOM ACCOUNT TRANSFER)', async () => {
+      const transferAmount = 1233;
+      const minorAmount = 1000;
+      const majorAmount = 100_000_000_000;
+      const tranferBackAmount = majorAmount - 10_000;
+
+      using launched = await launchTestNode({
+        walletsConfig: {
+          coinsPerAsset: 2,
+          amountPerCoin: majorAmount,
+        },
+      });
+
+      const {
+        provider,
+        wallets: [majorWallet],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+      const recipient = Wallet.generate({ provider });
+      const minorWallet = Wallet.generate({ provider });
+
+      // Adding small funds to the semi funded wallet
+      const submitted = await majorWallet.transfer(
+        minorWallet.address,
+        minorAmount,
+        provider.getBaseAssetId()
+      );
+      await submitted.waitForResult();
+
+      const majorResources = await majorWallet.getResourcesToSpend([[majorAmount, baseAssetId]]);
+      const minorResources = await minorWallet.getResourcesToSpend([[minorAmount, baseAssetId]]);
+
+      let request = new ScriptTransactionRequest({
+        gasLimit: 100_000,
+        maxFee: 120_000,
+      });
+      request.addResources([...majorResources, ...minorResources]);
+
+      // Add tranfer to recipient
+      request.addCoinOutput(recipient.address, transferAmount, provider.getBaseAssetId());
+
+      // Add transfer to self
+      request.addCoinOutput(majorWallet.address, tranferBackAmount, provider.getBaseAssetId());
+
+      // Explicitly setting the Output Change address to the recipient
+      const index = request.outputs.findIndex((output) => output.type === OutputType.Change);
+      (<OutputChange>request.outputs[index]).to = recipient.address.toB256();
+
+      request = await majorWallet.populateTransactionWitnessesSignature(request);
+      request = await minorWallet.populateTransactionWitnessesSignature(request);
+
+      const tx = await majorWallet.sendTransaction(request);
+      const { operations } = await tx.waitForResult();
+
+      validateTransferOperation({
+        operations,
+        sender: majorWallet.address,
+        fromType: AddressType.account,
+        toType: AddressType.account,
+        recipients: [
+          {
+            address: recipient.address,
+            quantities: [{ amount: transferAmount, assetId: provider.getBaseAssetId() }],
+          },
+          {
+            address: majorWallet.address,
+            quantities: [{ amount: tranferBackAmount, assetId: provider.getBaseAssetId() }],
           },
         ],
       });
