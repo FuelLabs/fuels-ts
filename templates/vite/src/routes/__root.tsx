@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { createRootRoute, Outlet } from "@tanstack/react-router";
-import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Layout } from "../components/Layout";
 import { useEffect, useMemo, useState } from "react";
 import { Provider } from "fuels";
@@ -71,8 +70,6 @@ export const Route = createRootRoute({
             </ActiveWalletProvider>
           </FuelProvider>
         </QueryClientProvider>
-
-        <TanStackRouterDevtools />
       </>
     );
   },
