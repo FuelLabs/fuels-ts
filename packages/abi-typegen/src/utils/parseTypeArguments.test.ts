@@ -12,7 +12,7 @@ import { parseTypeArguments } from './parseTypeArguments';
   Sample ABI with components in both fashions:
     — WITH and WITHOUT `typeArguments`
 */
-const defautRawTypes: JsonAbiType[] = [
+const defautRawTypes: readonly JsonAbiType[] = [
   {
     typeId: 0,
     type: 'bool',
@@ -106,7 +106,7 @@ describe('parseTypeArguments.ts', () => {
   });
 
   test('should fallback to void for null outputs', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID, { transpile: true });
 
     const types = bundleTypes(project.abiContents.types);
     const typeArguments = [project.abiContents.functions[0].output];
