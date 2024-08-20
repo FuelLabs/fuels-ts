@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/abi-coder": patch
+"@fuel-ts/abi-coder": minor
 ---
 
 fix!: PRs tagged with `!` must have minor changes
