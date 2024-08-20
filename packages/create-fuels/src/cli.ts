@@ -110,8 +110,8 @@ export const runScaffoldCli = async ({
     filter: (filename) => !filename.includes('CHANGELOG.md'),
   });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
-  await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
   writeEnvFile(projectPath);
+  await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
 
   const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
   const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
