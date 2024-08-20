@@ -535,10 +535,9 @@ export default class Provider {
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
   async fetchChainAndNodeInfo() {
-    const chain = await this.fetchChain();
     const nodeInfo = await this.fetchNode();
-
     Provider.ensureClientVersionIsSupported(nodeInfo);
+    const chain = await this.fetchChain();
 
     return {
       chain,
@@ -768,7 +767,7 @@ Supported fuel-core version: ${supportedVersion}.`
     } = await this.operations.submit({ encodedTransaction });
     this.#cacheInputs(transactionRequest.inputs, transactionId);
 
-    return new TransactionResponse(transactionId, this, abis);
+    return new TransactionResponse(transactionRequest, this, abis);
   }
 
   /**

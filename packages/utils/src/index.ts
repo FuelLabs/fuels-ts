@@ -14,3 +14,10 @@ export * from './utils/dataSlice';
 export * from './utils/toUtf8Bytes';
 export * from './utils/toUtf8String';
 export * from './utils/bytecode';
+
+/**
+ * Used to verify that a switch statement exhausts all variants.
+ */
+export function assertUnreachable(_x: never): never {
+  throw new Error("Didn't expect to get here");
+}

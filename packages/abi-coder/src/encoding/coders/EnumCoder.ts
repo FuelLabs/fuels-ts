@@ -3,7 +3,7 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { OPTION_CODER_TYPE, VOID_TYPE } from '../../utils/constants';
+import { OPTION_CODER_TYPE, optionRegEx, VOID_TYPE } from '../../utils/constants';
 import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
@@ -38,7 +38,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
     this.#encodedValueSize = encodedValueSize;
-    this.#shouldValidateLength = !(this.type === OPTION_CODER_TYPE || hasNestedOption(coders));
+    this.#shouldValidateLength = !(optionRegEx.test(this.type) || hasNestedOption(coders));
   }
 
   // Checks that we're handling a native enum that is of type void.
