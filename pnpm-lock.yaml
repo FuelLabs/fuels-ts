@@ -1266,10 +1266,10 @@ importers:
         specifier: workspace:*
         version: link:../../packages/fuels
       react:
-        specifier: ^18.3
+        specifier: 18.3.1
         version: 18.3.1
       react-dom:
-        specifier: ^18.3
+        specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-hot-toast:
         specifier: ^2.4.1
@@ -1285,7 +1285,7 @@ importers:
         specifier: ^1.47.0
         version: 1.47.0(vite@5.4.1(@types/node@22.2.0)(terser@5.31.5))
       '@types/react':
-        specifier: ^18.3
+        specifier: ^18.3.3
         version: 18.3.3
       '@types/react-dom':
         specifier: ^18.3

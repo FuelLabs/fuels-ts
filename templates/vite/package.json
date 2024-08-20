@@ -18,15 +18,15 @@
     "@tanstack/react-router": "^1.48.1",
     "dotenv": "^16.4.5",
     "fuels": "workspace:*",
-    "react": "^18.3",
-    "react-dom": "^18.3",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-use": "^17.5.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@tanstack/router-plugin": "^1.47.0",
-    "@types/react": "^18.3",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
