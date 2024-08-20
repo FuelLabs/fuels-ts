@@ -761,13 +761,14 @@ Supported fuel-core version: ${supportedVersion}.`
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
+    const subscription = await this.operations.submitAndAwait({ encodedTransaction });
 
-    const {
-      submit: { id: transactionId },
-    } = await this.operations.submit({ encodedTransaction });
-    this.#cacheInputs(transactionRequest.inputs, transactionId);
+    this.#cacheInputs(
+      transactionRequest.inputs,
+      transactionRequest.getTransactionId(this.getChainId())
+    );
 
-    return new TransactionResponse(transactionRequest, this, abis);
+    return new TransactionResponse(transactionRequest, this, abis, subscription);
   }
 
   /**

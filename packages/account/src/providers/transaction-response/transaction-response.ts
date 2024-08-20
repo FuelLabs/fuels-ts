@@ -30,6 +30,7 @@ import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 import type {
   GqlMalleableTransactionFieldsFragment,
   GqlStatusChangeSubscription,
+  GqlSubmitAndAwaitSubscription,
 } from '../__generated__/operations';
 import type Provider from '../provider';
 import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
@@ -141,7 +142,12 @@ export class TransactionResponse {
    * @param tx - The transaction ID or TransactionRequest.
    * @param provider - The provider.
    */
-  constructor(tx: string | TransactionRequest, provider: Provider, abis?: JsonAbisFromAllCalls) {
+  constructor(
+    tx: string | TransactionRequest,
+    provider: Provider,
+    abis?: JsonAbisFromAllCalls,
+    private submitTxSubscription?: AsyncIterable<GqlSubmitAndAwaitSubscription>
+  ) {
     this.id = typeof tx === 'string' ? tx : tx.getTransactionId(provider.getChainId());
 
     this.provider = provider;
@@ -319,11 +325,14 @@ export class TransactionResponse {
       return;
     }
 
-    const subscription = await this.provider.operations.statusChange({
-      transactionId: this.id,
-    });
+    const subscription =
+      this.submitTxSubscription ??
+      (await this.provider.operations.statusChange({
+        transactionId: this.id,
+      }));
 
-    for await (const { statusChange } of subscription) {
+    for await (const sub of subscription) {
+      const statusChange = 'statusChange' in sub ? sub.statusChange : sub.submitAndAwait;
       this.status = statusChange;
       if (statusChange.type === 'SqueezedOutStatus') {
         this.unsetResourceCache();
