@@ -10,6 +10,16 @@
 
 ## Properties
 
+### baseAssetId
+
+• **baseAssetId**: `string`
+
+#### Defined in
+
+[packages/account/src/providers/transaction-summary/types.ts:139](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/providers/transaction-summary/types.ts#L139)
+
+___
+
 ### inputs
 
 • **inputs**: `Input`[]
@@ -20,7 +30,7 @@ InputOutputParam.inputs
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:117](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/providers/transaction-summary/types.ts#L117)
+[packages/account/src/providers/transaction-summary/types.ts:118](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/providers/transaction-summary/types.ts#L118)
 
 ___
 
@@ -34,7 +44,7 @@ InputOutputParam.outputs
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:121](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/providers/transaction-summary/types.ts#L121)
+[packages/account/src/providers/transaction-summary/types.ts:122](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/providers/transaction-summary/types.ts#L122)
 
 ___
 
@@ -44,4 +54,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:137](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/providers/transaction-summary/types.ts#L137)
+[packages/account/src/providers/transaction-summary/types.ts:138](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/providers/transaction-summary/types.ts#L138)

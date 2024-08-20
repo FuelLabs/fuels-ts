@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L56)
+[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packag/api/src/index.ts#L56)
 
 ___
 
@@ -48,7 +48,7 @@ ___
 
 #### Defined in
 
-[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L52)
+[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packag/api/src/index.ts#L52)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L53)
+[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packag/api/src/index.ts#L53)
 
 ___
 
@@ -76,7 +76,7 @@ ___
 
 #### Defined in
 
-[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L55)
+[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packag/api/src/index.ts#L55)
 
 ___
 
@@ -90,7 +90,7 @@ ___
 
 #### Defined in
 
-[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L54)
+[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packag/api/src/index.ts#L54)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[index.ts:50](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L50)
+[index.ts:50](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packag/api/src/index.ts#L50)
 
 ___
 
@@ -118,4 +118,4 @@ ___
 
 #### Defined in
 
-[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packag/api/src/index.ts#L51)
+[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packag/api/src/index.ts#L51)

@@ -41,7 +41,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:134
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:134
 
 ## Properties
 
@@ -51,7 +51,7 @@ node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:134
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L89)
+[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L90)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L91)
+[packages/account/src/connectors/fuel-connector.ts:92](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L92)
 
 ___
 
@@ -71,7 +71,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L90)
+[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L91)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:88](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L88)
+[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L89)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:87](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L87)
+[packages/account/src/connectors/fuel-connector.ts:88](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L88)
 
 ___
 
@@ -113,7 +113,7 @@ EventEmitter.captureRejectionSymbol
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:452
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:452
 
 ___
 
@@ -135,7 +135,7 @@ EventEmitter.captureRejections
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:459
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:459
 
 ___
 
@@ -189,7 +189,7 @@ EventEmitter.defaultMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:498
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:498
 
 ___
 
@@ -212,7 +212,7 @@ EventEmitter.errorMonitor
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:445
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
 
 ## Methods
 
@@ -244,7 +244,7 @@ EventEmitter.[captureRejectionSymbol]
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:136
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:136
 
 ___
 
@@ -267,7 +267,7 @@ Connector.accounts
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:129](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L129)
+[packages/account/src/connectors/fuel-connector.ts:130](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L130)
 
 ___
 
@@ -296,7 +296,7 @@ Connector.addABI
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:300](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L300)
+[packages/account/src/connectors/fuel-connector.ts:301](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L301)
 
 ___
 
@@ -333,7 +333,7 @@ Connector.addAsset
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:238](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L238)
+[packages/account/src/connectors/fuel-connector.ts:239](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L239)
 
 ___
 
@@ -370,7 +370,7 @@ Connector.addAssets
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:223](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L223)
+[packages/account/src/connectors/fuel-connector.ts:224](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L224)
 
 ___
 
@@ -407,7 +407,7 @@ EventEmitter.addListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:597
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:597
 
 ___
 
@@ -441,7 +441,7 @@ Connector.addNetwork
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:259](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L259)
+[packages/account/src/connectors/fuel-connector.ts:260](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L260)
 
 ___
 
@@ -463,7 +463,7 @@ Connector.assets
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:247](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L247)
+[packages/account/src/connectors/fuel-connector.ts:248](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L248)
 
 ___
 
@@ -490,7 +490,7 @@ Connector.connect
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:142](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L142)
+[packages/account/src/connectors/fuel-connector.ts:143](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L143)
 
 ___
 
@@ -515,7 +515,7 @@ Connector.currentAccount
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:208](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L208)
+[packages/account/src/connectors/fuel-connector.ts:209](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L209)
 
 ___
 
@@ -537,7 +537,7 @@ Connector.currentNetwork
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:289](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L289)
+[packages/account/src/connectors/fuel-connector.ts:290](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L290)
 
 ___
 
@@ -562,7 +562,7 @@ Connector.disconnect
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:153](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L153)
+[packages/account/src/connectors/fuel-connector.ts:154](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L154)
 
 ___
 
@@ -635,7 +635,7 @@ EventEmitter.emit
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:859
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:859
 
 ___
 
@@ -674,7 +674,7 @@ EventEmitter.eventNames
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:922
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:922
 
 ___
 
@@ -702,7 +702,7 @@ Connector.getABI
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:310](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L310)
+[packages/account/src/connectors/fuel-connector.ts:311](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L311)
 
 ___
 
@@ -727,7 +727,7 @@ EventEmitter.getMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:774
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:774
 
 ___
 
@@ -755,7 +755,7 @@ Connector.hasABI
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:320](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L320)
+[packages/account/src/connectors/fuel-connector.ts:321](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L321)
 
 ___
 
@@ -778,7 +778,7 @@ Connector.isConnected
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:119](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L119)
+[packages/account/src/connectors/fuel-connector.ts:120](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L120)
 
 ___
 
@@ -817,7 +817,7 @@ EventEmitter.listenerCount
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:868
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:868
 
 ___
 
@@ -861,7 +861,7 @@ EventEmitter.listeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:787
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:787
 
 ___
 
@@ -883,7 +883,7 @@ Connector.networks
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:280](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L280)
+[packages/account/src/connectors/fuel-connector.ts:281](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L281)
 
 ___
 
@@ -920,7 +920,7 @@ EventEmitter.off
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:747
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:747
 
 ___
 
@@ -954,7 +954,7 @@ EventEmitter.on
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:330](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L330)
+[packages/account/src/connectors/fuel-connector.ts:331](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L331)
 
 ___
 
@@ -1014,7 +1014,7 @@ EventEmitter.once
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:659
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:659
 
 ___
 
@@ -1037,7 +1037,7 @@ Connector.ping
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:99](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L99)
+[packages/account/src/connectors/fuel-connector.ts:100](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L100)
 
 ___
 
@@ -1085,7 +1085,7 @@ EventEmitter.prependListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:886
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:886
 
 ___
 
@@ -1131,7 +1131,7 @@ EventEmitter.prependOnceListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:902
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:902
 
 ___
 
@@ -1193,7 +1193,7 @@ EventEmitter.rawListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:818
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:818
 
 ___
 
@@ -1229,7 +1229,7 @@ EventEmitter.removeAllListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:758
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:758
 
 ___
 
@@ -1344,7 +1344,7 @@ EventEmitter.removeListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:742
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:742
 
 ___
 
@@ -1378,7 +1378,7 @@ Connector.selectNetwork
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:271](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L271)
+[packages/account/src/connectors/fuel-connector.ts:272](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L272)
 
 ___
 
@@ -1412,7 +1412,7 @@ Connector.sendTransaction
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:196](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L196)
+[packages/account/src/connectors/fuel-connector.ts:197](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L197)
 
 ___
 
@@ -1447,7 +1447,7 @@ EventEmitter.setMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:768
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:768
 
 ___
 
@@ -1477,7 +1477,7 @@ Connector.signMessage
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:166](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L166)
+[packages/account/src/connectors/fuel-connector.ts:167](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L167)
 
 ___
 
@@ -1507,7 +1507,7 @@ Connector.signTransaction
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:179](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L179)
+[packages/account/src/connectors/fuel-connector.ts:180](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L180)
 
 ___
 
@@ -1530,7 +1530,7 @@ Connector.version
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:109](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/connectors/fuel-connector.ts#L109)
+[packages/account/src/connectors/fuel-connector.ts:110](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/fuel-connector.ts#L110)
 
 ___
 
@@ -1591,7 +1591,7 @@ EventEmitter.addAbortListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:437
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:437
 
 ___
 
@@ -1645,7 +1645,7 @@ EventEmitter.getEventListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:358
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:358
 
 ___
 
@@ -1699,7 +1699,7 @@ EventEmitter.getMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:387
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:387
 
 ___
 
@@ -1744,7 +1744,7 @@ EventEmitter.listenerCount
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:330
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:330
 
 ___
 
@@ -1853,7 +1853,7 @@ EventEmitter.on
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:303
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:303
 
 ▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
 
@@ -1875,7 +1875,7 @@ EventEmitter.on
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:308
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:308
 
 ___
 
@@ -1982,7 +1982,7 @@ EventEmitter.once
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:217
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:217
 
 ▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
 
@@ -2004,7 +2004,7 @@ EventEmitter.once
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:222
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:222
 
 ___
 
@@ -2042,4 +2042,4 @@ EventEmitter.setMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:402
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:402

@@ -1,6 +1,6 @@
 # Class: ContractFactory
 
-[@fuel-ts/contract](/api/Contract/index.md).ContractFactory
+[@fuel-ts/contract](/api/Contract/index.md).[index](/api/Contract/src-index.md).ContractFactory
 
 `ContractFactory` provides utilities for deploying and configuring contracts.
 
@@ -17,7 +17,7 @@ Create a ContractFactory instance.
 | Name | Type | Default value | Description |
 | :------ | :------ | :------ | :------ |
 | `bytecode` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | `undefined` | The bytecode of the contract. |
-| `abi` | `JsonAbi` \| `Interface`&lt;`JsonAbi`\> | `undefined` | The contract's ABI (Application Binary Interface). |
+| `abi` | `Interface` \| `JsonAbi` | `undefined` | The contract's ABI (Application Binary Interface). |
 | `accountOrProvider` | ``null`` \| [`Provider`](/api/Account/Provider.md) \| [`Account`](/api/Account/Account.md) | `null` | An account or provider to be associated with the factory. |
 
 #### Returns
@@ -26,7 +26,7 @@ Create a ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:60](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L60)
+[packages/contract/src/contract-factory.ts:68](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L68)
 
 ## Properties
 
@@ -36,7 +36,7 @@ Create a ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:51](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L51)
+[packages/contract/src/contract-factory.ts:59](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L59)
 
 ___
 
@@ -46,17 +46,17 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:48](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L48)
+[packages/contract/src/contract-factory.ts:56](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L56)
 
 ___
 
 ### interface
 
-• **interface**: `Interface`&lt;`JsonAbi`\>
+• **interface**: `Interface`
 
 #### Defined in
 
-[contract-factory.ts:49](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L49)
+[packages/contract/src/contract-factory.ts:57](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L57)
 
 ___
 
@@ -66,9 +66,33 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:50](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L50)
+[packages/contract/src/contract-factory.ts:58](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L58)
 
 ## Methods
+
+### blobTransactionRequest
+
+▸ **blobTransactionRequest**(`options`): [`BlobTransactionRequest`](/api/Account/BlobTransactionRequest.md)
+
+Create a blob transaction request, used for deploying contract chunks.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `options` | { `bytecode`: [`BytesLike`](/api/Interfaces/index.md#byteslike)  } & { `chunkSizeMultiplier?`: `number` ; `configurableConstants?`: { `[name: string]`: `unknown`;  } ; `salt?`: [`BytesLike`](/api/Interfaces/index.md#byteslike) ; `stateRoot?`: [`BytesLike`](/api/Interfaces/index.md#byteslike) ; `storageSlots?`: `StorageSlot`[]  } & `CreateTransactionRequestLike` | options for creating a blob transaction request. |
+
+#### Returns
+
+[`BlobTransactionRequest`](/api/Account/BlobTransactionRequest.md)
+
+a populated BlobTransactionRequest.
+
+#### Defined in
+
+[packages/contract/src/contract-factory.ts:444](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L444)
+
+___
 
 ### connect
 
@@ -90,13 +114,13 @@ A new ContractFactory instance.
 
 #### Defined in
 
-[contract-factory.ts:102](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L102)
+[packages/contract/src/contract-factory.ts:110](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L110)
 
 ___
 
 ### createTransactionRequest
 
-▸ **createTransactionRequest**(`deployContractOptions?`): `Object`
+▸ **createTransactionRequest**(`deployOptions?`): `Object`
 
 Create a transaction request to deploy a contract with the specified options.
 
@@ -104,7 +128,7 @@ Create a transaction request to deploy a contract with the specified options.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `deployContractOptions?` | [`DeployContractOptions`](/api/Contract/index.md#deploycontractoptions) | Options for deploying the contract. |
+| `deployOptions?` | { `chunkSizeMultiplier?`: `number` ; `configurableConstants?`: { `[name: string]`: `unknown`;  } ; `salt?`: [`BytesLike`](/api/Interfaces/index.md#byteslike) ; `stateRoot?`: [`BytesLike`](/api/Interfaces/index.md#byteslike) ; `storageSlots?`: `StorageSlot`[]  } & `CreateTransactionRequestLike` & { `bytecode?`: [`BytesLike`](/api/Interfaces/index.md#byteslike)  } | Options for deploying the contract. |
 
 #### Returns
 
@@ -119,13 +143,73 @@ The CreateTransactionRequest object for deploying the contract.
 
 #### Defined in
 
-[contract-factory.ts:112](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L112)
+[packages/contract/src/contract-factory.ts:120](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L120)
 
 ___
 
-### deployContract
+### deploy
 
-▸ **deployContract**&lt;`TContract`\>(`deployContractOptions?`): `Promise`&lt;[`DeployContractResult`](/api/Contract/index.md#deploycontractresult)&lt;`TContract`\>\>
+▸ **deploy**&lt;`TContract`\>(`deployOptions?`): `Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)&lt;`TContract`\>\>
+
+Deploy a contract of any length with the specified options.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TContract` | extends [`Contract`](/api/Program/Contract.md) = [`Contract`](/api/Program/Contract.md) |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `deployOptions` | [`DeployContractOptions`](/api/Contract/src-index.md#deploycontractoptions) | Options for deploying the contract. |
+
+#### Returns
+
+`Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)&lt;`TContract`\>\>
+
+A promise that resolves to the deployed contract instance.
+
+#### Defined in
+
+[packages/contract/src/contract-factory.ts:195](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L195)
+
+___
+
+### deployAsBlobTx
+
+▸ **deployAsBlobTx**&lt;`TContract`\>(`deployOptions?`): `Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)&lt;`TContract`\>\>
+
+Chunks and deploys a contract via a loader contract. Suitable for deploying contracts larger than the max contract size.
+
+#### Type parameters
+
+| Name | Type |
+| :------ | :------ |
+| `TContract` | extends [`Contract`](/api/Program/Contract.md) = [`Contract`](/api/Program/Contract.md) |
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `deployOptions` | [`DeployContractOptions`](/api/Contract/src-index.md#deploycontractoptions) | Options for deploying the contract. |
+
+#### Returns
+
+`Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)&lt;`TContract`\>\>
+
+A promise that resolves to the deployed contract instance.
+
+#### Defined in
+
+[packages/contract/src/contract-factory.ts:251](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L251)
+
+___
+
+### deployAsCreateTx
+
+▸ **deployAsCreateTx**&lt;`TContract`\>(`deployOptions?`): `Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)&lt;`TContract`\>\>
 
 Deploy a contract with the specified options.
 
@@ -139,17 +223,42 @@ Deploy a contract with the specified options.
 
 | Name | Type | Description |
 | :------ | :------ | :------ |
-| `deployContractOptions` | [`DeployContractOptions`](/api/Contract/index.md#deploycontractoptions) | Options for deploying the contract. |
+| `deployOptions` | [`DeployContractOptions`](/api/Contract/src-index.md#deploycontractoptions) | Options for deploying the contract. |
 
 #### Returns
 
-`Promise`&lt;[`DeployContractResult`](/api/Contract/index.md#deploycontractresult)&lt;`TContract`\>\>
+`Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)&lt;`TContract`\>\>
 
 A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[contract-factory.ts:154](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L154)
+[packages/contract/src/contract-factory.ts:213](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L213)
+
+___
+
+### fundTransactionRequest
+
+▸ **fundTransactionRequest**(`request`, `options?`): `Promise`&lt;[`TransactionRequest`](/api/Account/index.md#transactionrequest)\>
+
+Takes a transaction request, estimates it and funds it.
+
+#### Parameters
+
+| Name | Type | Description |
+| :------ | :------ | :------ |
+| `request` | [`TransactionRequest`](/api/Account/index.md#transactionrequest) | the request to fund. |
+| `options` | [`DeployContractOptions`](/api/Contract/src-index.md#deploycontractoptions) | options for funding the request. |
+
+#### Returns
+
+`Promise`&lt;[`TransactionRequest`](/api/Account/index.md#transactionrequest)\>
+
+a funded transaction request.
+
+#### Defined in
+
+[packages/contract/src/contract-factory.ts:164](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L164)
 
 ___
 
@@ -163,19 +272,42 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:216](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L216)
+[packages/contract/src/contract-factory.ts:414](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L414)
+
+___
+
+### getMaxChunkSize
+
+▸ **getMaxChunkSize**(`deployOptions`, `chunkSizeMultiplier?`): `number`
+
+Get the maximum chunk size for deploying a contract by chunks.
+
+#### Parameters
+
+| Name | Type | Default value |
+| :------ | :------ | :------ |
+| `deployOptions` | [`DeployContractOptions`](/api/Contract/src-index.md#deploycontractoptions) | `undefined` |
+| `chunkSizeMultiplier` | `number` | `CHUNK_SIZE_MULTIPLIER` |
+
+#### Returns
+
+`number`
+
+#### Defined in
+
+[packages/contract/src/contract-factory.ts:457](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L457)
 
 ___
 
 ### prepareDeploy
 
-▸ **prepareDeploy**(`deployContractOptions`): `Promise`&lt;{ `contractId`: `string` ; `transactionRequest`: [`CreateTransactionRequest`](/api/Account/CreateTransactionRequest.md)  }\>
+▸ **prepareDeploy**(`deployOptions`): `Promise`&lt;{ `contractId`: `string` ; `transactionRequest`: [`CreateTransactionRequest`](/api/Account/CreateTransactionRequest.md)  }\>
 
 #### Parameters
 
 | Name | Type |
 | :------ | :------ |
-| `deployContractOptions` | [`DeployContractOptions`](/api/Contract/index.md#deploycontractoptions) |
+| `deployOptions` | [`DeployContractOptions`](/api/Contract/src-index.md#deploycontractoptions) |
 
 #### Returns
 
@@ -183,7 +315,7 @@ ___
 
 #### Defined in
 
-[contract-factory.ts:223](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L223)
+[packages/contract/src/contract-factory.ts:421](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L421)
 
 ___
 
@@ -205,4 +337,4 @@ Set configurable constants of the contract with the specified values.
 
 #### Defined in
 
-[contract-factory.ts:185](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/contract/src/contract-factory.ts#L185)
+[packages/contract/src/contract-factory.ts:377](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L377)

@@ -41,7 +41,7 @@ Represents configuration for calling a contract function.
 
 #### Defined in
 
-[types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L53)
+[types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L53)
 
 ___
 
@@ -53,7 +53,7 @@ Represents call parameters for a contract call.
 
 #### Defined in
 
-[types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L31)
+[types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L31)
 
 ___
 
@@ -77,7 +77,7 @@ Represents a contract call.
 
 #### Defined in
 
-[types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L18)
+[types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L18)
 
 ___
 
@@ -103,7 +103,7 @@ ___
 
 #### Defined in
 
-[types.ts:119](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L119)
+[types.ts:119](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L119)
 
 ___
 
@@ -133,7 +133,7 @@ ___
 
 #### Defined in
 
-[types.ts:106](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L106)
+[types.ts:106](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L106)
 
 ___
 
@@ -157,7 +157,7 @@ Represents a like object of InvocationScope with a method to get its call config
 
 #### Defined in
 
-[types.ts:91](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L91)
+[types.ts:91](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L91)
 
 ___
 
@@ -169,7 +169,7 @@ Represents options for calculating the transaction cost.
 
 #### Defined in
 
-[types.ts:102](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L102)
+[types.ts:102](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L102)
 
 ___
 
@@ -181,4 +181,4 @@ Represents transaction parameters for a contract call.
 
 #### Defined in
 
-[types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/program/src/types.ts#L39)
+[types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/program/src/types.ts#L39)

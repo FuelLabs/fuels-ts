@@ -37,7 +37,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:37](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/types.ts#L37)
+[packages/account/src/wallet-manager/types.ts:37](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/types.ts#L37)
 
 ## Properties
 
@@ -47,7 +47,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:35](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/types.ts#L35)
+[packages/account/src/wallet-manager/types.ts:35](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/types.ts#L35)
 
 ## Methods
 
@@ -61,7 +61,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:49](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/types.ts#L49)
+[packages/account/src/wallet-manager/types.ts:49](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/types.ts#L49)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/types.ts#L53)
+[packages/account/src/wallet-manager/types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/types.ts#L53)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:45](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/types.ts#L45)
+[packages/account/src/wallet-manager/types.ts:45](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/types.ts#L45)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:57](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/types.ts#L57)
+[packages/account/src/wallet-manager/types.ts:57](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/types.ts#L57)
 
 ___
 
@@ -129,4 +129,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:41](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/types.ts#L41)
+[packages/account/src/wallet-manager/types.ts:41](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/types.ts#L41)

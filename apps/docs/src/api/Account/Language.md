@@ -10,4 +10,4 @@
 
 #### Defined in
 
-[packages/account/src/wordlists/index.ts:4](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wordlists/index.ts#L4)
+[packages/account/src/wordlists/index.ts:4](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wordlists/index.ts#L4)

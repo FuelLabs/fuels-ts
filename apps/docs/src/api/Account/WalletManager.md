@@ -35,7 +35,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L71)
+[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L71)
 
 ## Properties
 
@@ -45,7 +45,7 @@ EventEmitter.constructor
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:69](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L69)
+[packages/account/src/wallet-manager/wallet-manager.ts:69](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L69)
 
 ___
 
@@ -55,7 +55,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:68](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L68)
+[packages/account/src/wallet-manager/wallet-manager.ts:68](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L68)
 
 ___
 
@@ -65,7 +65,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:67](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L67)
+[packages/account/src/wallet-manager/wallet-manager.ts:67](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L67)
 
 ___
 
@@ -75,7 +75,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L64)
+[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L64)
 
 ___
 
@@ -89,7 +89,7 @@ Persistent encrypted data. `The default storage works only on memory`.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L62)
+[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L62)
 
 ___
 
@@ -106,7 +106,7 @@ Each vault has access to its own state
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L56)
+[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L56)
 
 ___
 
@@ -128,7 +128,7 @@ EventEmitter.captureRejectionSymbol
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:452
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:452
 
 ___
 
@@ -150,7 +150,7 @@ EventEmitter.captureRejections
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:459
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:459
 
 ___
 
@@ -204,7 +204,7 @@ EventEmitter.defaultMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:498
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:498
 
 ___
 
@@ -227,7 +227,7 @@ EventEmitter.errorMonitor
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:445
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
 
 ## Accessors
 
@@ -241,7 +241,7 @@ node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:445
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L76)
+[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L76)
 
 ## Methods
 
@@ -265,7 +265,7 @@ Deserialize all vaults to state
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:287](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L287)
+[packages/account/src/wallet-manager/wallet-manager.ts:287](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L287)
 
 ___
 
@@ -289,7 +289,7 @@ Serialize all vaults to store
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:274](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L274)
+[packages/account/src/wallet-manager/wallet-manager.ts:274](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L274)
 
 ___
 
@@ -321,7 +321,7 @@ EventEmitter.[captureRejectionSymbol]
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:136
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:136
 
 ___
 
@@ -345,7 +345,7 @@ If not vaults are adds it will return error
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L143)
+[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L143)
 
 ___
 
@@ -382,7 +382,7 @@ EventEmitter.addListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:597
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:597
 
 ___
 
@@ -405,7 +405,7 @@ didn't found it will throw.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L170)
+[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L170)
 
 ___
 
@@ -478,7 +478,7 @@ EventEmitter.emit
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:859
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:859
 
 ___
 
@@ -517,7 +517,7 @@ EventEmitter.eventNames
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:922
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:922
 
 ___
 
@@ -539,7 +539,7 @@ Export specific account privateKey
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L128)
+[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L128)
 
 ___
 
@@ -568,7 +568,7 @@ the format of the return depends on the Vault type.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L84)
+[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L84)
 
 ___
 
@@ -584,7 +584,7 @@ List all accounts on the Wallet Manager not vault information is revealed
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L105)
+[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L105)
 
 ___
 
@@ -609,7 +609,7 @@ EventEmitter.getMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:774
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:774
 
 ___
 
@@ -631,7 +631,7 @@ typeof [`MnemonicVault`](/api/Account/MnemonicVault.md) \| typeof [`PrivateKeyVa
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:301](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L301)
+[packages/account/src/wallet-manager/wallet-manager.ts:301](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L301)
 
 ___
 
@@ -647,7 +647,7 @@ List all vaults on the Wallet Manager, this function not return secret's
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L94)
+[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L94)
 
 ___
 
@@ -669,7 +669,7 @@ Create a Wallet instance for the specific account
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L115)
+[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L115)
 
 ___
 
@@ -708,7 +708,7 @@ EventEmitter.listenerCount
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:868
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:868
 
 ___
 
@@ -752,7 +752,7 @@ EventEmitter.listeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:787
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:787
 
 ___
 
@@ -768,7 +768,7 @@ Retrieve and decrypt WalletManager state from storage
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L246)
+[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L246)
 
 ___
 
@@ -785,7 +785,7 @@ secrets.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L191)
+[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L191)
 
 ___
 
@@ -822,7 +822,7 @@ EventEmitter.off
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:747
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:747
 
 ___
 
@@ -884,7 +884,7 @@ EventEmitter.on
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:629
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:629
 
 ___
 
@@ -944,7 +944,7 @@ EventEmitter.once
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:659
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:659
 
 ___
 
@@ -992,7 +992,7 @@ EventEmitter.prependListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:886
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:886
 
 ___
 
@@ -1038,7 +1038,7 @@ EventEmitter.prependOnceListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:902
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:902
 
 ___
 
@@ -1100,7 +1100,7 @@ EventEmitter.rawListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:818
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:818
 
 ___
 
@@ -1136,7 +1136,7 @@ EventEmitter.removeAllListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:758
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:758
 
 ___
 
@@ -1251,7 +1251,7 @@ EventEmitter.removeListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:742
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:742
 
 ___
 
@@ -1274,7 +1274,7 @@ created by the vault.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L161)
+[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L161)
 
 ___
 
@@ -1290,7 +1290,7 @@ Store encrypted WalletManager state on storage
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:259](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L259)
+[packages/account/src/wallet-manager/wallet-manager.ts:259](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L259)
 
 ___
 
@@ -1325,7 +1325,7 @@ EventEmitter.setMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:768
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:768
 
 ___
 
@@ -1348,7 +1348,7 @@ Vaults with secrets are not unlocked or instantiated on this moment.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L205)
+[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L205)
 
 ___
 
@@ -1371,7 +1371,7 @@ Update WalletManager encryption passphrase
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/wallet-manager/wallet-manager.ts#L227)
+[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet-manager/wallet-manager.ts#L227)
 
 ___
 
@@ -1432,7 +1432,7 @@ EventEmitter.addAbortListener
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:437
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:437
 
 ___
 
@@ -1486,7 +1486,7 @@ EventEmitter.getEventListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:358
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:358
 
 ___
 
@@ -1540,7 +1540,7 @@ EventEmitter.getMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:387
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:387
 
 ___
 
@@ -1585,7 +1585,7 @@ EventEmitter.listenerCount
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:330
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:330
 
 ___
 
@@ -1694,7 +1694,7 @@ EventEmitter.on
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:303
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:303
 
 ▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
 
@@ -1716,7 +1716,7 @@ EventEmitter.on
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:308
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:308
 
 ___
 
@@ -1823,7 +1823,7 @@ EventEmitter.once
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:217
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:217
 
 ▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
 
@@ -1845,7 +1845,7 @@ EventEmitter.once
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:222
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:222
 
 ___
 
@@ -1883,4 +1883,4 @@ EventEmitter.setMaxListeners
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@20.14.11/node_modules/@types/node/events.d.ts:402
+node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:402

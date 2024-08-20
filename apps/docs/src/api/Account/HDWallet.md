@@ -22,7 +22,7 @@ HDWallet is a implementation of the BIP-0044 and BIP-0032, Multi-Account Hierarc
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L80)
+[packages/account/src/hdwallet/hdwallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L80)
 
 ## Properties
 
@@ -32,7 +32,7 @@ HDWallet is a implementation of the BIP-0044 and BIP-0032, Multi-Account Hierarc
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:73](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L73)
+[packages/account/src/hdwallet/hdwallet.ts:73](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L73)
 
 ___
 
@@ -42,7 +42,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:67](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L67)
+[packages/account/src/hdwallet/hdwallet.ts:67](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L67)
 
 ___
 
@@ -52,7 +52,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L69)
+[packages/account/src/hdwallet/hdwallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L69)
 
 ___
 
@@ -62,7 +62,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:68](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L68)
+[packages/account/src/hdwallet/hdwallet.ts:68](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L68)
 
 ___
 
@@ -72,7 +72,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L70)
+[packages/account/src/hdwallet/hdwallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L70)
 
 ___
 
@@ -82,7 +82,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:71](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L71)
+[packages/account/src/hdwallet/hdwallet.ts:71](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L71)
 
 ___
 
@@ -92,7 +92,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L72)
+[packages/account/src/hdwallet/hdwallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L72)
 
 ## Accessors
 
@@ -106,7 +106,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:104](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L104)
+[packages/account/src/hdwallet/hdwallet.ts:104](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L104)
 
 ## Methods
 
@@ -131,7 +131,7 @@ A new instance of HDWallet on the derived index
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:115](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L115)
+[packages/account/src/hdwallet/hdwallet.ts:115](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L115)
 
 ___
 
@@ -155,7 +155,7 @@ A new instance of HDWallet on the derived path
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:174](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L174)
+[packages/account/src/hdwallet/hdwallet.ts:174](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L174)
 
 ___
 
@@ -180,7 +180,7 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:187](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L187)
+[packages/account/src/hdwallet/hdwallet.ts:187](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L187)
 
 ___
 
@@ -200,7 +200,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:223](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L223)
+[packages/account/src/hdwallet/hdwallet.ts:223](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L223)
 
 ___
 
@@ -224,4 +224,4 @@ A new instance of HDWallet
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:214](https://github.com/FuelLabs/fuels-ts/blob/b2e1be607ab99b238da6db64c8e1c10470e15f39/packages/account/src/hdwallet/hdwallet.ts#L214)
+[packages/account/src/hdwallet/hdwallet.ts:214](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/hdwallet/hdwallet.ts#L214)

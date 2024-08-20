@@ -4,6 +4,16 @@
 
 ## Enumeration Members
 
+### Blob
+
+• **Blob** = ``5``
+
+#### Defined in
+
+packages/transactions/dist/coders/transaction.d.ts:16
+
+___
+
 ### Create
 
 • **Create** = ``1``
