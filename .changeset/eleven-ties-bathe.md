@@ -1,4 +1,4 @@
 ---
 ---
 
-fix: PRs tagged with `!` must have minor changes
+fix: PRs tagged as breaking must have minor changes
