@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { BN } from '@fuel-ts/math';
 import type { Input, InputCoin, InputContract, InputMessage } from '@fuel-ts/transactions';
 import { InputType } from '@fuel-ts/transactions';
 
@@ -13,7 +14,7 @@ export function getInputsByType<T = Input>(inputs: Input[], type: InputType) {
 }
 
 /** @hidden */
-export function getInputsCoin(inputs: Input[]) {
+export function getInputsCoin(inputs: Input[]): InputCoin[] {
   return getInputsByType<InputCoin>(inputs, InputType.Coin);
 }
 
@@ -28,21 +29,74 @@ export function getInputsCoinAndMessage(inputs: Input[]) {
 }
 
 /** @hidden */
+export function isInputCoin(input: Input): input is InputCoin {
+  return input.type === InputType.Coin;
+}
+
+/** @hidden */
 export function getInputsContract(inputs: Input[]) {
   return getInputsByType<InputContract>(inputs, InputType.Contract);
 }
 
 /** @hidden */
-export function getInputFromAssetId(inputs: Input[], assetId: string) {
+function findCoinInput(inputs: Input[], assetId: string): InputCoin | undefined {
   const coinInputs = getInputsCoin(inputs);
-  const messageInputs = getInputsMessage(inputs);
-  const coinInput = coinInputs.find((i) => i.assetId === assetId);
-  // TODO: should include assetId in InputMessage as well. for now we're mocking ETH
-  const messageInput = messageInputs.find(
-    (_) => assetId === '0x0000000000000000000000000000000000000000000000000000000000000000'
-  );
+  return coinInputs.find((i) => i.assetId === assetId);
+}
 
-  return coinInput || messageInput;
+/** @hidden */
+export function aggregateInputsAmountsByAssetAndOwner(
+  inputs: Input[],
+  baseAssetID: string
+): Map<string, Map<string, BN>> {
+  const aggregated = new Map<string, Map<string, BN>>();
+
+  getInputsCoinAndMessage(inputs).forEach((input) => {
+    const assetId = isInputCoin(input) ? input.assetId : baseAssetID;
+    const owner = isInputCoin(input) ? input.owner : input.recipient;
+
+    // Ensure that the map for the assetId exists
+    let ownersMap = aggregated.get(assetId);
+    if (!ownersMap) {
+      ownersMap = new Map<string, BN>();
+      aggregated.set(assetId, ownersMap);
+    }
+
+    // Ensure that the map for the owner exists
+    let ownerBalance = ownersMap.get(owner);
+    if (!ownerBalance) {
+      ownerBalance = new BN(0);
+      ownersMap.set(owner, ownerBalance);
+    }
+
+    // Update the balance
+    ownersMap.set(owner, ownerBalance.add(input.amount));
+  });
+
+  return aggregated;
+}
+
+/** @hidden */
+function findMessageInput(inputs: Input[]): InputMessage | undefined {
+  return getInputsMessage(inputs)?.[0];
+}
+/** @hidden */
+export function getInputFromAssetId(
+  inputs: Input[],
+  assetId: string,
+  isBaseAsset = false
+): InputCoin | InputMessage | undefined {
+  const coinInput = findCoinInput(inputs, assetId);
+  if (coinInput) {
+    return coinInput;
+  }
+
+  if (isBaseAsset) {
+    return findMessageInput(inputs);
+  }
+
+  // #TODO: we should throw an error here if we are unable to return a valid input
+  return undefined;
 }
 
 /** @hidden */

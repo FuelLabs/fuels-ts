@@ -1,17 +1,12 @@
-import type { Contract } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoValuesFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let contract: Contract;
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_VALUES);
-  });
-
+describe('String Types', () => {
   it('should validate string', () => {
     // #region string-1
     // Sway str[2]
@@ -26,6 +21,18 @@ describe(__filename, () => {
   });
 
   it('should successfully execute and validate echoed 8 contract call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoValuesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region string-2
     const { value } = await contract.functions.echo_str_8('fuel-sdk').simulate();
 
@@ -34,6 +41,18 @@ describe(__filename, () => {
   });
 
   it('will throw given an input string that is too long or too short', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoValuesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region string-3
     const longString = 'fuel-sdk-WILL-THROW-ERROR';
 

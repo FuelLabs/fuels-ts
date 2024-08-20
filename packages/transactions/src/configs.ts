@@ -89,6 +89,17 @@ export const PANIC_REASONS = [
   'BalanceOverflow',
   'InvalidBlockHeight',
   'TooManySlots',
+  'ExpectedNestedCaller',
+  'MemoryGrowthOverlap',
+  'UninitalizedMemoryAccess',
+  'OverridingConsensusParameters',
+  'UnknownStateTransactionBytecodeRoot',
+  'OverridingStateTransactionBytecode',
+  'BytecodeAlreadyUploaded',
+  'ThePartIsNotSequentiallyConnected',
+  'BlobIdAlreadyUploaded',
+  'BlobNotFound',
+  'GasCostNotDefined',
 ];
 
 export const PANIC_DOC_URL = 'https://docs.rs/fuel-asm/latest/fuel_asm/enum.PanicReason.html';

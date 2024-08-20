@@ -59,9 +59,9 @@ export type TransferParams = {
 
 export type EstimatedTxParams = Pick<
   TransactionCost,
-  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee'
+  'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee' | 'gasPrice'
 >;
-const MAX_FUNDING_ATTEMPTS = 2;
+const MAX_FUNDING_ATTEMPTS = 5;
 
 export type FakeResources = Partial<Coin> & Required<Pick<Coin, 'amount' | 'assetId'>>;
 
@@ -199,7 +199,8 @@ export class Account extends AbstractAccount {
    * @returns A promise that resolves to the funded transaction request.
    */
   async fund<T extends TransactionRequest>(request: T, params: EstimatedTxParams): Promise<T> {
-    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee } = params;
+    const { addedSignatures, estimatedPredicates, requiredQuantities, updateMaxFee, gasPrice } =
+      params;
 
     const fee = request.maxFee;
     const baseAssetId = this.provider.getBaseAssetId();
@@ -258,10 +259,14 @@ export class Account extends AbstractAccount {
       }
 
       if (!updateMaxFee) {
+        needsToBeFunded = false;
         break;
       }
+
+      // Recalculate the fee after adding the resources
       const { maxFee: newFee } = await this.provider.estimateTxGasAndFee({
         transactionRequest: requestToReestimate,
+        gasPrice,
       });
 
       const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
@@ -270,6 +275,7 @@ export class Account extends AbstractAccount {
         baseAssetId
       );
 
+      // Update the new total as the fee will change after adding new resources
       const totalBaseAssetRequiredWithFee = requiredInBaseAsset.add(newFee);
 
       if (totalBaseAssetOnInputs.gt(totalBaseAssetRequiredWithFee)) {
@@ -284,6 +290,14 @@ export class Account extends AbstractAccount {
       }
 
       fundingAttempts += 1;
+    }
+
+    // If the transaction still needs to be funded after the maximum number of attempts
+    if (needsToBeFunded) {
+      throw new FuelError(
+        ErrorCode.NOT_ENOUGH_FUNDS,
+        `The account ${this.address} does not have enough base asset funds to cover the transaction execution.`
+      );
     }
 
     request.updatePredicateGasUsed(estimatedPredicates);
@@ -320,7 +334,7 @@ export class Account extends AbstractAccount {
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
-  ): Promise<TransactionRequest> {
+  ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addTransfer(request, { destination, amount, assetId });
     request = await this.estimateAndFundTransaction(request, txParams);
@@ -525,10 +539,40 @@ export class Account extends AbstractAccount {
     const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantities);
     // An arbitrary amount of the base asset is added to cover the transaction fee during dry runs
     const transactionFeeForDryRun = [{ assetId: baseAssetId, amount: bn('100000000000000000') }];
-    const resources = this.generateFakeResources(
-      mergeQuantities(requiredQuantities, transactionFeeForDryRun)
+
+    const findAssetInput = (assetId: string) =>
+      txRequestClone.inputs.find((input) => {
+        if ('assetId' in input) {
+          return input.assetId === assetId;
+        }
+        if ('recipient' in input) {
+          return baseAssetId === assetId;
+        }
+
+        return false;
+      });
+
+    const updateAssetInput = (assetId: string, quantity: BN) => {
+      const assetInput = findAssetInput(assetId);
+      const usedQuantity = quantity;
+
+      if (assetInput && 'amount' in assetInput) {
+        assetInput.amount = usedQuantity;
+      } else {
+        txRequestClone.addResources(
+          this.generateFakeResources([
+            {
+              amount: quantity,
+              assetId,
+            },
+          ])
+        );
+      }
+    };
+
+    mergeQuantities(requiredQuantities, transactionFeeForDryRun).forEach(({ amount, assetId }) =>
+      updateAssetInput(assetId, amount)
     );
-    txRequestClone.addResources(resources);
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,

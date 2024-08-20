@@ -2,11 +2,11 @@
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
-import { Interface } from '../src';
-/** @knipignore */
-import type { JsonAbiConfigurable } from '../src/json-abi';
+import { Interface } from '../src/Interface';
+import type { JsonAbiConfigurable } from '../src/types/JsonAbi';
+import type { AbiFunction } from '../src/types/JsonAbiNew';
 
-import exhaustiveExamplesAbi from './fixtures/forc-projects/exhaustive-examples/out/release/exhaustive-examples-abi.json';
+import { AbiCoderProjectsEnum, getCoderForcProject } from './fixtures/forc-projects';
 import {
   B256_DECODED,
   B256_ENCODED,
@@ -34,6 +34,10 @@ import {
   U8_MAX_ENCODED,
   U8_MIN_ENCODED,
 } from './utils/constants';
+
+const exhaustiveExamplesAbi = getCoderForcProject(
+  AbiCoderProjectsEnum.EXHAUSTIVE_EXAMPLES
+).abiContents;
 
 const exhaustiveExamplesInterface = new Interface(exhaustiveExamplesAbi);
 
@@ -423,7 +427,6 @@ describe('Abi interface', () => {
           encodedValue: Uint8Array.from([0, 0, 0, 0, 0, 0, 0, 4, U8_MAX, 0, U8_MAX, U8_MAX]),
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.arg_then_vector_u8,
           title: '[vector] some arg then u8 vector',
           value: [{ a: true, b: U32_MAX }, [U8_MAX, 0, U8_MAX, U8_MAX]],
@@ -434,7 +437,6 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_u8_then_arg,
           title: '[vector] Vector u8 and then b256',
           value: [[U8_MAX, 0, U8_MAX, U8_MAX], B256_DECODED],
@@ -444,7 +446,6 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.two_u8_vectors,
           title: '[vector] two u8 vectors',
           value: [
@@ -457,10 +458,13 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.u32_then_three_vectors_u64,
           title: '[vector] arg u32 and then three vectors u64',
           value: [33, [450, 202, 340], [12, 13, 14], [11, 9]],
+          decodedTransformer: (decoded: Array<any>) =>
+            decoded.map((v) =>
+              Array.isArray(v) ? v.map((bignumber: BN) => bignumber.toNumber()) : v
+            ),
           encodedValue: [
             Uint8Array.from([0, 0, 0, 33]),
             Uint8Array.from([
@@ -477,7 +481,6 @@ describe('Abi interface', () => {
           ],
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_vector,
           title: '[vector] vector inside vector [with offset]',
           value: [
@@ -535,7 +538,6 @@ describe('Abi interface', () => {
           offset: 40,
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_enum,
           title: '[vector] vector inside enum',
           value: [
@@ -555,7 +557,6 @@ describe('Abi interface', () => {
           offset: 0,
         },
         {
-          skipDecoding: true,
           fn: exhaustiveExamplesInterface.functions.vector_inside_struct,
           title: '[vector] vector inside struct [with offset]',
           value: [
@@ -579,21 +580,31 @@ describe('Abi interface', () => {
         },
       ])(
         '$title: $value',
-        ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, skipDecoding }) => {
-          const encoded = Array.isArray(value)
-            ? fn.encodeArguments(value)
-            : fn.encodeArguments([value]);
+        ({ fn, title: _title, value, encodedValue, decodedTransformer, offset }) => {
+          const fnArguments = Array.isArray(value) ? value : [value];
+          const encodedArguments = fn.encodeArguments(fnArguments);
 
           const encodedVal =
             encodedValue instanceof Function ? encodedValue(value, offset) : encodedValue;
           const expectedEncoded =
             encodedVal instanceof Uint8Array ? encodedVal : concat(encodedVal);
 
-          expect(encoded).toEqual(expectedEncoded);
+          expect(encodedArguments).toEqual(expectedEncoded);
 
-          if (skipDecoding) {
-            return;
-          }
+          const jsonFn = exhaustiveExamplesInterface.jsonAbi.functions.find(
+            (f) => f.name === fn.name
+          ) as AbiFunction;
+
+          // test Interface.encodeType
+          const argsEncodedAsSingleTypes = jsonFn.inputs
+            .map((i) => i.concreteTypeId)
+            .map((arg, idx) => exhaustiveExamplesInterface.encodeType(arg, fnArguments[idx]));
+
+          argsEncodedAsSingleTypes?.forEach((arg, idx, arr) => {
+            const argOffset = arr.slice(0, idx).reduce((result, val) => result + val.length, 0);
+
+            expect(arg).toEqual(expectedEncoded.slice(argOffset, argOffset + arg.length));
+          });
 
           let decoded = fn.decodeOutput(expectedEncoded)[0];
 
@@ -604,6 +615,18 @@ describe('Abi interface', () => {
           const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
 
           expect(decoded).toStrictEqual(expectedDecoded);
+
+          // test Interface.decodeType
+          let decodedType = exhaustiveExamplesInterface.decodeType(
+            jsonFn.output,
+            expectedEncoded
+          )[0];
+
+          if (decodedTransformer) {
+            decodedType = decodedTransformer(decodedType);
+          }
+
+          expect(decodedType).toEqual(expectedDecoded);
         }
       );
     });
@@ -730,22 +753,6 @@ describe('Abi interface', () => {
           Array.isArray(value) ? fn.encodeArguments(value) : fn.encodeArguments([value])
         ).toThrow();
       });
-    });
-  });
-
-  describe('abi types', () => {
-    it('should return the correct type when it exists', () => {
-      const abiType = exhaustiveExamplesInterface.getTypeById(0);
-      expect(abiType.type).toEqual('()');
-      expect(abiType.components).toBeDefined();
-      expect(abiType.typeParameters).toBeNull();
-    });
-
-    it('should throw an error when type does not exist', () => {
-      const id = 999;
-      expect(() => exhaustiveExamplesInterface.getTypeById(id)).toThrowError(
-        `Type with typeId '${id}' doesn't exist in the ABI.`
-      );
     });
   });
 });

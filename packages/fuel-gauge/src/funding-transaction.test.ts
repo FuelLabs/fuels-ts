@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
-import { DEFAULT_UTXOS_CACHE_TTL, ScriptTransactionRequest, Wallet, bn, sleep } from 'fuels';
+import { DEFAULT_RESOURCE_CACHE_TTL, ScriptTransactionRequest, Wallet, bn, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -220,10 +220,12 @@ describe('Funding Transactions', () => {
 
     const {
       provider,
-      wallets: [sender, receiver],
+      wallets: [funded],
     } = launched;
 
     const splitIn = 20;
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
 
     /**
      * Splitting funds in 24 UTXOs to result in the transaction become more expensive
@@ -234,7 +236,7 @@ describe('Funding Transactions', () => {
       totalAmount: 2400,
       splitIn,
       baseAssetId: provider.getBaseAssetId(),
-      mainWallet: sender,
+      mainWallet: funded,
     });
 
     const request = new ScriptTransactionRequest();
@@ -457,7 +459,7 @@ describe('Funding Transactions', () => {
     expect(result1.blockId).toBe(result2.blockId);
 
     expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.ttl).toBe(DEFAULT_UTXOS_CACHE_TTL);
+    expect(provider.cache?.ttl).toBe(DEFAULT_RESOURCE_CACHE_TTL);
   }, 15_000);
 
   it('should fail when trying to use the same UTXO in multiple TXs without cache', async () => {
@@ -468,7 +470,7 @@ describe('Funding Transactions', () => {
       },
       providerOptions: {
         // Cache will last for 1 millisecond
-        cacheUtxo: 1,
+        resourceCacheTTL: 1,
       },
       walletsConfig: {
         coinsPerAsset: 1,

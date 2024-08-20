@@ -1,20 +1,14 @@
 import { BYTES_32 } from '@fuel-ts/abi-coder';
-import { randomBytes } from '@fuel-ts/crypto';
+import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError } from '@fuel-ts/errors';
 import type { SnapshotConfigs } from '@fuel-ts/utils';
 import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/utils';
-import { randomUUID } from 'crypto';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
 import { getPortPromise } from 'portfinder';
 
-import type { ProviderOptions } from '../providers';
-import { Provider } from '../providers';
 import { Signer } from '../signer';
-import type { WalletUnlocked } from '../wallet';
-
-import { generateTestWallet } from './generateTestWallet';
 
 const getFlagValueFromArgs = (args: string[], flag: string) => {
   const flagIndex = args.indexOf(flag);
@@ -271,15 +265,21 @@ export const launchNode = async ({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
 
-        // Resolve with the cleanup method.
-        resolve({
-          cleanup,
-          ip: realIp,
-          port: realPort,
-          url: `http://${realIp}:${realPort}/v1/graphql`,
-          snapshotDir: snapshotDirToUse as string,
-          pid: child.pid as number,
-        });
+        // TODO: Remove delay after fuel-core issue is fixed
+        // https://github.com/FuelLabs/fuel-core/issues/2107
+        setTimeout(
+          () =>
+            // Resolve with the cleanup method.
+            resolve({
+              cleanup,
+              ip: realIp,
+              port: realPort,
+              url: `http://${realIp}:${realPort}/v1/graphql`,
+              snapshotDir: snapshotDirToUse as string,
+              pid: child.pid as number,
+            }),
+          500
+        );
       }
       if (/error/i.test(text)) {
         // eslint-disable-next-line no-console
@@ -304,45 +304,3 @@ export const launchNode = async ({
 
     child.on('error', reject);
   });
-
-const generateWallets = async (count: number, provider: Provider) => {
-  const baseAssetId = provider.getBaseAssetId();
-  const wallets: WalletUnlocked[] = [];
-  for (let i = 0; i < count; i += 1) {
-    const wallet = await generateTestWallet(provider, [[100_000, baseAssetId]]);
-    wallets.push(wallet);
-  }
-  return wallets;
-};
-
-export type LaunchNodeAndGetWalletsResult = Promise<{
-  wallets: WalletUnlocked[];
-  stop: () => void;
-  provider: Provider;
-}>;
-
-/**
- * Launches a fuel-core node and returns a provider, 10 wallets, and a cleanup function to stop the node.
- * @param launchNodeOptions - options to launch the fuel-core node with.
- * @param walletCount - the number of wallets to generate. (optional, defaults to 10)
- * */
-export const launchNodeAndGetWallets = async ({
-  launchNodeOptions,
-  providerOptions,
-  walletCount = 10,
-}: {
-  launchNodeOptions?: Partial<LaunchNodeOptions>;
-  providerOptions?: Partial<ProviderOptions>;
-  walletCount?: number;
-} = {}): LaunchNodeAndGetWalletsResult => {
-  const { cleanup: closeNode, ip, port } = await launchNode(launchNodeOptions || {});
-
-  const provider = await Provider.create(`http://${ip}:${port}/v1/graphql`, providerOptions);
-  const wallets = await generateWallets(walletCount, provider);
-
-  const cleanup = () => {
-    closeNode();
-  };
-
-  return { wallets, stop: cleanup, provider };
-};

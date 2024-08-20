@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { WalletUnlocked } from 'fuels';
-import { AssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
+import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-import { CounterAbi__factory as TestContract__factory } from '../../../test/typegen/contracts';
-import bytecode from '../../../test/typegen/contracts/CounterAbi.hex';
+import { Counter, CounterFactory } from '../../../test/typegen/contracts';
 
 /**
  * @group node
@@ -51,16 +50,10 @@ describe('launching a test node', () => {
     // #region basic-example
     // #import { launchTestNode };
 
-    // #context import { TestContract__factory } from 'path/to/typegen/output';
-    // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
+    // #context import { CounterFactory } from 'path/to/typegen/output';
 
     using launched = await launchTestNode({
-      contractsConfigs: [
-        {
-          deployer: TestContract__factory,
-          bytecode,
-        },
-      ],
+      contractsConfigs: [{ factory: CounterFactory }],
     });
 
     const {
@@ -79,12 +72,11 @@ describe('launching a test node', () => {
 
   test('multiple contracts and wallets', async () => {
     // #region advanced-example
-    // #import { launchTestNode, AssetId, TestMessage };
+    // #import { launchTestNode, TestAssetId, TestMessage };
 
-    // #context import { TestContract__factory } from 'path/to/typegen/output';
-    // #context import bytecode from 'path/to/typegen/output/TestContract.hex.ts';
+    // #context import { CounterFactory } from 'path/to/typegen/output';
 
-    const assets = AssetId.random(2);
+    const assets = TestAssetId.random(2);
     const message = new TestMessage({ amount: 1000 });
 
     using launched = await launchTestNode({
@@ -97,8 +89,7 @@ describe('launching a test node', () => {
       },
       contractsConfigs: [
         {
-          deployer: TestContract__factory,
-          bytecode,
+          factory: CounterFactory,
           walletIndex: 3,
           options: { storageSlots: [] },
         },
@@ -155,9 +146,9 @@ describe('launching a test node', () => {
 
   test('customizing node options', async () => {
     // #region custom-node-options
-    // #import { launchTestNode, AssetId };
+    // #import { launchTestNode, TestAssetId };
 
-    const [baseAssetId] = AssetId.random();
+    const [baseAssetId] = TestAssetId.random();
 
     using launched = await launchTestNode({
       nodeOptions: {
@@ -175,11 +166,11 @@ describe('launching a test node', () => {
     // #endregion custom-node-options
   });
 
-  test('using assetId', async () => {
+  test('using TestAssetId', async () => {
     // #region asset-ids
-    // #import { launchTestNode, AssetId };
+    // #import { launchTestNode, TestAssetId };
 
-    const assets = AssetId.random();
+    const assets = TestAssetId.random();
 
     using launched = await launchTestNode({
       walletsConfig: {

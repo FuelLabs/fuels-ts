@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.93.0",
+  "version": "0.94.0",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -93,7 +93,7 @@
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.9",
     "@types/rimraf": "^3.0.2",
-    "vite": "^5.3.5"
+    "vite": "^5.4.1"
   },
   "keywords": [
     "ethereum",

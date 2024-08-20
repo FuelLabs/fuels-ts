@@ -1,9 +1,10 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
 import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument, JsonAbiFunction, JsonAbiType } from '../types/JsonAbi';
+import type { JsonAbiOld, JsonAbiArgument, JsonAbiType } from '../types/JsonAbi';
+import type { AbiFunction, JsonAbi } from '../types/JsonAbiNew';
 
-import { ENCODING_V1, type EncodingVersion } from './constants';
+import { ENCODING_V1, VOID_TYPE, type EncodingVersion } from './constants';
 
 /**
  * Asserts that the encoding version is supported by the ABI coder.
@@ -33,7 +34,7 @@ export const getEncodingVersion = (encoding?: string): EncodingVersion => {
  * @param name - the name of the function to find
  * @returns the JsonAbi function object
  */
-export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction => {
+export const findFunctionByName = (abi: JsonAbi, name: string): AbiFunction => {
   const fn = abi.functions.find((f) => f.name === name);
   if (!fn) {
     throw new FuelError(
@@ -51,7 +52,7 @@ export const findFunctionByName = (abi: JsonAbi, name: string): JsonAbiFunction 
  * @param typeId - the typeId of the type to find
  * @returns the JsonAbi type object
  */
-export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
+export const findTypeById = (abi: JsonAbiOld, typeId: number): JsonAbiType => {
   const type = abi.types.find((t) => t.typeId === typeId);
   if (!type) {
     throw new FuelError(
@@ -63,17 +64,17 @@ export const findTypeById = (abi: JsonAbi, typeId: number): JsonAbiType => {
 };
 
 /**
- * Find all non-empty inputs in a list of inputs.
+ * Find all non-void inputs in a list of inputs.
  * i.e. all inputs that are not of the type '()'.
  *
  * @param abi - the JsonAbi object
  * @param inputs - the list of inputs to filter
- * @returns the list of non-empty inputs
+ * @returns the list of non-void inputs
  */
-export const findNonEmptyInputs = (
-  abi: JsonAbi,
+export const findNonVoidInputs = (
+  abi: JsonAbiOld,
   inputs: readonly JsonAbiArgument[]
-): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== '()');
+): JsonAbiArgument[] => inputs.filter((input) => findTypeById(abi, input.type).type !== VOID_TYPE);
 
 /**
  * Find the vector buffer argument in a list of components.

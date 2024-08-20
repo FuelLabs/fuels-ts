@@ -1,61 +1,40 @@
-import type { Provider, BN, JsonAbi } from 'fuels';
-import { WalletUnlocked, Predicate, Script, ScriptTransactionRequest } from 'fuels';
+import type { BN } from 'fuels';
+import { Predicate, Script, ScriptTransactionRequest, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { ScriptSigning } from '../../../test/typegen';
+import { PredicateSigning } from '../../../test/typegen/predicates';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Signing transactions', () => {
-  let bytecode: string;
-  let abi: JsonAbi;
-  let sender: WalletUnlocked;
-  let receiver: WalletUnlocked;
-  let signer: WalletUnlocked;
-  let provider: Provider;
-  let baseAssetId: string;
-  const { abiContents: abiPredicate, binHexlified: binPredicate } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.PREDICATE_SIGNING
-  );
-  const { abiContents: abiScript, binHexlified: binScript } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SCRIPT_SIGNING
-  );
-
-  beforeAll(async () => {
-    sender = await getTestWallet();
-    signer = WalletUnlocked.generate({
-      provider: sender.provider,
-    });
-
-    provider = sender.provider;
-    baseAssetId = provider.getBaseAssetId();
-  });
-
-  beforeEach(() => {
-    receiver = WalletUnlocked.generate({
-      provider: sender.provider,
-    });
-  });
-
   it('creates a transfer with external signer [script]', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [sender],
+    } = launched;
     const amountToReceiver = 100;
-    bytecode = binScript;
-    abi = abiScript;
 
+    const signer = Wallet.generate({
+      provider,
+    });
+
+    const receiver = Wallet.generate({
+      provider,
+    });
     // #region multiple-signers-2
     // #import { Script };
 
-    const script = new Script(bytecode, abi, sender);
+    const script = new Script(ScriptSigning.bytecode, ScriptSigning.abi, sender);
     const { waitForResult } = await script.functions
       .main(signer.address.toB256())
       .addTransfer({
         destination: receiver.address,
         amount: amountToReceiver,
-        assetId: baseAssetId,
+        assetId: provider.getBaseAssetId(),
       })
       .addSigners(signer)
       .call<BN>();
@@ -68,31 +47,42 @@ describe('Signing transactions', () => {
   });
 
   it('creates a transfer with external signer [predicate]', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [sender],
+    } = launched;
     const amountToReceiver = 100;
-    bytecode = binPredicate;
-    abi = abiPredicate;
+
+    const signer = Wallet.generate({
+      provider,
+    });
+
+    const receiver = Wallet.generate({
+      provider,
+    });
 
     // #region multiple-signers-4
     // #import { Predicate, ScriptTransactionRequest };
 
     // Create and fund the predicate
     const predicate = new Predicate<[string]>({
-      bytecode,
-      abi,
+      bytecode: PredicateSigning.bytecode,
+      abi: PredicateSigning.abi,
       provider,
-      inputData: [signer.address.toB256()],
+      data: [signer.address.toB256()],
     });
-    const tx1 = await sender.transfer(predicate.address, 200_000, baseAssetId);
+    const tx1 = await sender.transfer(predicate.address, 200_000, provider.getBaseAssetId());
     await tx1.waitForResult();
 
     // Create the transaction request
     const request = new ScriptTransactionRequest();
-    request.addCoinOutput(receiver.address, amountToReceiver, baseAssetId);
+    request.addCoinOutput(receiver.address, amountToReceiver, provider.getBaseAssetId());
 
     // Get the predicate resources and add them and predicate data to the request
     const resources = await predicate.getResourcesToSpend([
       {
-        assetId: baseAssetId,
+        assetId: provider.getBaseAssetId(),
         amount: amountToReceiver,
       },
     ]);

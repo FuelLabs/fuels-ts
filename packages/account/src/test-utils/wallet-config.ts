@@ -5,7 +5,7 @@ import type { PartialDeep } from 'type-fest';
 
 import { WalletUnlocked } from '../wallet';
 
-import { AssetId } from './asset-id';
+import { TestAssetId } from './test-asset-id';
 import type { TestMessage } from './test-message';
 
 export interface WalletsConfigOptions {
@@ -17,9 +17,9 @@ export interface WalletsConfigOptions {
   /**
    * If `number`, the number of unique asset ids each wallet will own with the base asset included.
    *
-   * If `AssetId[]`, the asset ids the each wallet will own besides the base asset.
+   * If `TestAssetId[]`, the asset ids the each wallet will own besides the base asset.
    */
-  assets: number | AssetId[];
+  assets: number | TestAssetId[];
 
   /**
    * Number of coins (UTXOs) per asset id.
@@ -103,7 +103,7 @@ export class WalletsConfig {
   private static createCoins(
     wallets: WalletUnlocked[],
     baseAssetId: string,
-    assets: number | AssetId[],
+    assets: number | TestAssetId[],
     coinsPerAsset: number,
     amountPerCoin: number
   ) {
@@ -113,7 +113,7 @@ export class WalletsConfig {
     if (Array.isArray(assets)) {
       assetIds = assetIds.concat(assets.map((a) => a.value));
     } else {
-      assetIds = assetIds.concat(AssetId.random(assets - 1).map((a) => a.value));
+      assetIds = assetIds.concat(TestAssetId.random(assets - 1).map((a) => a.value));
     }
 
     wallets
@@ -167,10 +167,10 @@ export class WalletsConfig {
         'Number of coins per asset must be greater than zero.'
       );
     }
-    if (amountPerCoin <= 0) {
+    if (amountPerCoin < 0) {
       throw new FuelError(
         FuelError.CODES.INVALID_INPUT_PARAMETERS,
-        'Amount per coin must be greater than zero.'
+        'Amount per coin must be greater than or equal to zero.'
       );
     }
   }

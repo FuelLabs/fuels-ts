@@ -13,12 +13,8 @@ export class EmptyType extends AType implements IType {
   constructor(params: { rawAbiType: JsonAbiType }) {
     super(params);
     this.attributes = {
-      /**
-       * The empty type is always ignored in function inputs. If it makes
-       * its way into a function's inputs list, it's a bug in the typegen.
-       */
-      inputLabel: `never`,
-      outputLabel: `void`,
+      inputLabel: 'undefined',
+      outputLabel: 'void',
     };
   }
 
