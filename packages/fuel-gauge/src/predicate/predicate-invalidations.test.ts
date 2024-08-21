@@ -41,7 +41,7 @@ describe('Predicate', () => {
           ),
         new FuelError(
           ErrorCode.NOT_ENOUGH_FUNDS,
-          'The transaction does not have enough funds to cover its execution.'
+          `The account(s) sending the transaction don't have enough funds to cover the transaction.`
         )
       );
     });

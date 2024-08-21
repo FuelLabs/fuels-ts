@@ -270,7 +270,7 @@ describe('Funding Transactions', () => {
       () => sender.fund(request, txCost),
       new FuelError(
         FuelError.CODES.NOT_ENOUGH_FUNDS,
-        'The transaction does not have enough funds to cover its execution.',
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
         {},
         {
           locations: [

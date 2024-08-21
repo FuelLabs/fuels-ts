@@ -10,7 +10,7 @@ export const handleGqlErrorMessage = (errorMessage: string, rawError: GraphQLErr
     case GqlErrorMessage.NOT_ENOUGH_COINS:
       throw new FuelError(
         ErrorCode.NOT_ENOUGH_FUNDS,
-        'The transaction does not have enough funds to cover its execution.',
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
         {},
         rawError
       );

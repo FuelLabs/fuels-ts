@@ -17,6 +17,6 @@ test('not enough coins error', async () => {
 
   await expectToThrowFuelError(() => emptyWalletContract.functions.return_void().call(), {
     code: ErrorCode.NOT_ENOUGH_FUNDS,
-    message: 'The transaction does not have enough funds to cover its execution.',
+    message: `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
   });
 });

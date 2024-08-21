@@ -108,7 +108,7 @@ describe('Send and Spend Funds from Predicates', () => {
     );
 
     // #region send-and-spend-funds-from-predicates-6
-    const errorMsg = 'The transaction does not have enough funds to cover its execution.';
+    const errorMsg = `The account(s) sending the transaction don't have enough funds to cover the transaction.`;
     // #endregion send-and-spend-funds-from-predicates-6
 
     expect((<Error>error).message).toMatch(errorMsg);
