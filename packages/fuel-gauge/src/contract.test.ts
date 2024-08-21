@@ -1082,6 +1082,7 @@ describe('Contract', () => {
         'The transaction does not have enough funds to cover its execution.'
       )
     );
+  });
 
   it('should throw when using "simulate" without a wallet', async () => {
     using contract = await setupTestContract();

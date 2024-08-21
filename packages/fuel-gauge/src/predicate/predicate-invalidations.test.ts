@@ -44,6 +44,7 @@ describe('Predicate', () => {
           'The transaction does not have enough funds to cover its execution.'
         )
       );
+    });
 
     it('throws if the passed gas limit is too low', async () => {
       using launched = await launchTestNode();
