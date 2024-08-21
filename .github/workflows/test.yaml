@@ -54,7 +54,8 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    # TODO: remove db/fix/integration-tests after the fix is merged
+    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master' || github.head_ref == 'db/fix/integration-tests'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -80,12 +81,12 @@ jobs:
       - name: Run tests (with published version)
         run: pnpm test:integration
         env:
-          PUBLISHED_NPM_TAG: next
+          PUBLISHED_NPM_TAG: 0.0.0-pr-2992-20240821151126
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
-          PUBLISHED_NPM_TAG: next
+          PUBLISHED_NPM_TAG: 0.0.0-pr-2992-20240821151126
 
   e2e:
     runs-on: ubuntu-latest
