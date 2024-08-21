@@ -44,7 +44,7 @@ test('top-up wallet button', async ({ page }) => {
   const topUpWalletButton = page.getByText('Top-up Wallet');
   await topUpWalletButton.click();
 
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(2000);
 
   // Expect the balance to be updated
   await expect(walletBalance).not.toContainText('Balance: 0.000 ETH');
@@ -68,8 +68,6 @@ test('faucet page', async ({ page }) => {
   // click the send funds button
   const sendFundsButton = page.getByText('Send Funds');
   await sendFundsButton.click();
-
-  await page.waitForTimeout(500);
 
   const successToast = page.getByText('Funds sent!');
   await expect(successToast).toBeVisible();
