@@ -982,8 +982,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       uglify-js:
-        specifier: ^3.18.0
-        version: 3.18.0
+        specifier: ^3.19.2
+        version: 3.19.2
       yup:
         specifier: ^1.4.0
         version: 1.4.0
@@ -13928,13 +13928,13 @@ packages:
   ufo@1.5.4:
     resolution: {integrity: sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==}
 
-  uglify-js@3.17.4:
-    resolution: {integrity: sha512-T9q82TJI9e/C1TAxYvfb16xO120tMVFZrGA3f9/P4424DNu6ypK103y0GPFVa17yotwSyZW5iYXgjYHkGrJW/g==}
+  uglify-js@3.18.0:
+    resolution: {integrity: sha512-SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==}
     engines: {node: '>=0.8.0'}
     hasBin: true
 
-  uglify-js@3.18.0:
-    resolution: {integrity: sha512-SyVVbcNBCk0dzr9XL/R/ySrmYf0s372K6/hFklzgcp2lBFyXtw4I7BOdDjlLhE1aVqaI/SHWXWmYdlZxuyF38A==}
+  uglify-js@3.19.2:
+    resolution: {integrity: sha512-S8KA6DDI47nQXJSi2ctQ629YzwOVs+bQML6DAtvy0wgNdpi+0ySpQK0g2pxBq2xfF2z3YCscu7NNA8nXT9PlIQ==}
     engines: {node: '>=0.8.0'}
     hasBin: true
 
@@ -25888,7 +25888,7 @@ snapshots:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.18.0
+      uglify-js: 3.19.2
 
   handlebars@4.7.8:
     dependencies:
@@ -25897,7 +25897,7 @@ snapshots:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.17.4
+      uglify-js: 3.18.0
 
   harmony-reflect@1.6.2: {}
 
@@ -31789,10 +31789,10 @@ snapshots:
 
   ufo@1.5.4: {}
 
-  uglify-js@3.17.4:
+  uglify-js@3.18.0:
     optional: true
 
-  uglify-js@3.18.0: {}
+  uglify-js@3.19.2: {}
 
   uint8arrays@3.1.0:
     dependencies:
