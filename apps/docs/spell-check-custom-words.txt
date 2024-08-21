@@ -1,5 +1,6 @@
 ABI
 ABIs
+ABI's
 ASM
 AssetId
 IDE
