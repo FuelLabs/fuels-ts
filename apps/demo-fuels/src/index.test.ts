@@ -5,8 +5,8 @@
  * It ensures that built code is fully working.
  */
 
-import { toHex, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { ErrorCode, FuelError, toHex, Wallet } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { SampleFactory, Sample } from './sway-programs-api';
 
