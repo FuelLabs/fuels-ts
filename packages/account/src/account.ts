@@ -334,7 +334,7 @@ export class Account extends AbstractAccount {
     amount: BigNumberish,
     assetId?: BytesLike,
     txParams: TxParamsType = {}
-  ): Promise<TransactionRequest> {
+  ): Promise<ScriptTransactionRequest> {
     let request = new ScriptTransactionRequest(txParams);
     request = this.addTransfer(request, { destination, amount, assetId });
     request = await this.estimateAndFundTransaction(request, txParams);
@@ -539,10 +539,40 @@ export class Account extends AbstractAccount {
     const requiredQuantities = mergeQuantities(coinOutputsQuantities, quantities);
     // An arbitrary amount of the base asset is added to cover the transaction fee during dry runs
     const transactionFeeForDryRun = [{ assetId: baseAssetId, amount: bn('100000000000000000') }];
-    const resources = this.generateFakeResources(
-      mergeQuantities(requiredQuantities, transactionFeeForDryRun)
+
+    const findAssetInput = (assetId: string) =>
+      txRequestClone.inputs.find((input) => {
+        if ('assetId' in input) {
+          return input.assetId === assetId;
+        }
+        if ('recipient' in input) {
+          return baseAssetId === assetId;
+        }
+
+        return false;
+      });
+
+    const updateAssetInput = (assetId: string, quantity: BN) => {
+      const assetInput = findAssetInput(assetId);
+      const usedQuantity = quantity;
+
+      if (assetInput && 'amount' in assetInput) {
+        assetInput.amount = usedQuantity;
+      } else {
+        txRequestClone.addResources(
+          this.generateFakeResources([
+            {
+              amount: quantity,
+              assetId,
+            },
+          ])
+        );
+      }
+    };
+
+    mergeQuantities(requiredQuantities, transactionFeeForDryRun).forEach(({ amount, assetId }) =>
+      updateAssetInput(assetId, amount)
     );
-    txRequestClone.addResources(resources);
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,

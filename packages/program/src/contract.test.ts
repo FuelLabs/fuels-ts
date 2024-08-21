@@ -1,17 +1,15 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
-import { Account, Wallet, Provider } from '@fuel-ts/account';
-import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
+import { Account } from '@fuel-ts/account';
+import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 
 import Contract from './contract';
 
 const CONTRACT_ID = '0x0101010101010101010101010101010101010101010101010101010101010101';
 const ABI: JsonAbi = {
-  types: [
+  concreteTypes: [
     {
-      typeId: 0,
+      concreteTypeId: 'asdf',
       type: 'u64',
-      typeParameters: null,
-      components: null,
     },
   ],
   functions: [
@@ -19,50 +17,54 @@ const ABI: JsonAbi = {
       inputs: [
         {
           name: 'input',
-          type: 0,
-          typeArguments: null,
+          concreteTypeId: 'asdf',
         },
       ],
       name: 'foo',
-      output: {
-        type: 0,
-        typeArguments: null,
-        name: '',
-      },
+      output: 'asdf',
       attributes: null,
     },
   ],
   loggedTypes: [],
   messagesTypes: [],
   configurables: [],
+  encodingVersion: '1',
+  metadataTypes: [],
+  programType: 'contract',
+  specVersion: '1',
 };
 
 /**
  * @group node
+ * @group browser
  */
 describe('Contract', () => {
   test('Create contract instance with provider', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const contract = new Contract(CONTRACT_ID, ABI, provider);
     expect(contract.provider).toBe(provider);
     expect(contract.account).toBe(null);
   });
 
   test('Create contract instance with wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = Wallet.generate({
-      provider,
-    });
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const contract = new Contract(CONTRACT_ID, ABI, wallet);
     expect(contract.provider).toBe(wallet.provider);
     expect(contract.account).toBe(wallet);
   });
 
   test('Create contract instance with custom wallet', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const generatedWallet = Wallet.generate({
-      provider,
-    });
+    using launched = await setupTestProviderAndWallets();
+    const {
+      wallets: [generatedWallet],
+    } = launched;
+
     // Create a custom wallet that extends BaseWalletLocked
     // but without reference to the BaseWalletLocked class
     const BaseWalletLockedCustom = Object.assign(Account);

@@ -9,7 +9,6 @@ import type {
   ConnectorMetadata,
   Network,
 } from '../../src';
-import { FUEL_NETWORK_URL } from '../../src/configs';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
 import { FuelConnectorEventTypes } from '../../src/connectors/types';
 import type { Asset } from '../../src/providers/assets/types';
@@ -51,7 +50,7 @@ export class MockConnector extends FuelConnector {
     this._networks = options.networks ?? [
       {
         chainId: 0,
-        url: FUEL_NETWORK_URL,
+        url: 'http://127.0.0.1/v1/graphql',
       },
     ];
     // Time should be under 1 second

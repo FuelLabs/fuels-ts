@@ -41,8 +41,8 @@ export type DeployContractOptions = {
 } & CreateTransactionRequestLike;
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
-  transactionId: string;
   contractId: string;
+  waitForTransactionId: () => Promise<string>;
   waitForResult: () => Promise<{
     contract: TContract;
     transactionResult: TransactionResult<TransactionType.Create>;
@@ -235,7 +235,11 @@ export default class ContractFactory {
       return { contract, transactionResult };
     };
 
-    return { waitForResult, contractId, transactionId: transactionResponse.id };
+    return {
+      contractId,
+      waitForTransactionId: () => Promise.resolve(transactionResponse.id),
+      waitForResult,
+    };
   }
 
   /**
@@ -255,7 +259,7 @@ export default class ContractFactory {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    // Generate the chunks based on the maximum chunk size
+    // Generate the chunks based on the maximum chunk size and create blob txs
     const chunkSize = this.getMaxChunkSize(deployOptions, chunkSizeMultiplier);
     const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
@@ -269,10 +273,19 @@ export default class ContractFactory {
       };
     });
 
-    // Check the account can afford to deploy all chunks
+    // Generate the associated create tx for the loader contract
+    const blobIds = chunks.map(({ blobId }) => blobId);
+    const loaderBytecode = getLoaderInstructions(blobIds);
+    const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
+      bytecode: loaderBytecode,
+      ...deployOptions,
+    });
+
+    // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
     const chainInfo = account.provider.getChain();
     const gasPrice = await account.provider.estimateGasPrice(10);
+    const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
     const estimatedBlobIds: string[] = [];
 
     for (const { transactionRequest, blobId } of chunks) {
@@ -281,73 +294,79 @@ export default class ContractFactory {
         const minFee = calculateGasFee({
           gasPrice,
           gas: minGas,
-          priceFactor: chainInfo.consensusParameters.feeParameters.gasPriceFactor,
+          priceFactor,
           tip: transactionRequest.tip,
         }).add(1);
 
         totalCost = totalCost.add(minFee);
         estimatedBlobIds.push(blobId);
       }
+      const createMinGas = createRequest.calculateMinGas(chainInfo);
+      const createMinFee = calculateGasFee({
+        gasPrice,
+        gas: createMinGas,
+        priceFactor,
+        tip: createRequest.tip,
+      }).add(1);
+      totalCost = totalCost.add(createMinFee);
     }
     if (totalCost.gt(await account.getBalance())) {
       throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
     }
 
-    // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
-    const uploadedBlobs: string[] = [];
-
-    // Deploy the chunks as blob txs
-    for (const { blobId, transactionRequest } of chunks) {
-      if (!uploadedBlobs.includes(blobId)) {
-        const fundedBlobRequest = await this.fundTransactionRequest(
-          transactionRequest,
-          deployOptions
-        );
-
-        let result: TransactionResult<TransactionType.Blob>;
-
-        try {
-          const blobTx = await account.sendTransaction(fundedBlobRequest);
-          result = await blobTx.waitForResult();
-        } catch (err: unknown) {
-          // Core will throw for blobs that have already been uploaded, but the blobId
-          // is still valid so we can use this for the loader contract
-          if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
-            // eslint-disable-next-line no-continue
-            continue;
-          }
-
-          throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
-        }
-
-        if (!result.status || result.status !== TransactionStatus.success) {
-          throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
-        }
-
-        uploadedBlobs.push(blobId);
-      }
-    }
-
-    // Get the loader bytecode
-    const blobIds = chunks.map(({ blobId }) => blobId);
-    const loaderBytecode = getLoaderInstructions(blobIds);
-
-    // Deploy the loader contract via create tx
-    const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
-      bytecode: loaderBytecode,
-      ...deployOptions,
+    // Transaction id is unset until we have funded the create tx, which is dependent on the blob txs
+    let txIdResolver: (value: string | PromiseLike<string>) => void;
+    const txIdPromise = new Promise<string>((resolve) => {
+      txIdResolver = resolve;
     });
-    await this.fundTransactionRequest(createRequest, deployOptions);
-    const transactionResponse = await account.sendTransaction(createRequest);
 
     const waitForResult = async () => {
+      // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
+      const uploadedBlobs: string[] = [];
+      // Deploy the chunks as blob txs
+      for (const { blobId, transactionRequest } of chunks) {
+        if (!uploadedBlobs.includes(blobId)) {
+          const fundedBlobRequest = await this.fundTransactionRequest(
+            transactionRequest,
+            deployOptions
+          );
+
+          let result: TransactionResult<TransactionType.Blob>;
+
+          try {
+            const blobTx = await account.sendTransaction(fundedBlobRequest);
+            result = await blobTx.waitForResult();
+          } catch (err: unknown) {
+            // Core will throw for blobs that have already been uploaded, but the blobId
+            // is still valid so we can use this for the loader contract
+            if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
+              // eslint-disable-next-line no-continue
+              continue;
+            }
+
+            throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+          }
+
+          if (!result.status || result.status !== TransactionStatus.success) {
+            throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+          }
+
+          uploadedBlobs.push(blobId);
+        }
+      }
+
+      await this.fundTransactionRequest(createRequest, deployOptions);
+      txIdResolver(createRequest.getTransactionId(account.provider.getChainId()));
+      const transactionResponse = await account.sendTransaction(createRequest);
       const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
       const contract = new Contract(contractId, this.interface, account) as TContract;
 
       return { contract, transactionResult };
     };
 
-    return { waitForResult, contractId, transactionId: transactionResponse.id };
+    const waitForTransactionId = () => txIdPromise;
+
+    return { waitForResult, contractId, waitForTransactionId };
   }
 
   /**

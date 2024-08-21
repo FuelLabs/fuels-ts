@@ -1,4 +1,3 @@
-import { FUEL_NETWORK_URL } from '@fuel-ts/account/configs';
 import { join } from 'path';
 
 import type { FuelsConfig } from '../../src';
@@ -21,7 +20,7 @@ export const fuelsConfig: FuelsConfig = {
   deployConfig: {},
   autoStartFuelCore: true,
   fuelCorePort: 4000,
-  providerUrl: FUEL_NETWORK_URL,
+  providerUrl: 'http://127.0.0.1:4000/v1/graphql',
   configPath: __filename,
   forcBuildFlags: [],
   buildMode: 'debug',

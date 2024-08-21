@@ -17,7 +17,7 @@ describe('TupleType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.TUPLE_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.TUPLE_SIMPLE, { transpile: true });
     const rawTypes = project.abiContents.types;
 
     const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
@@ -30,7 +30,7 @@ describe('TupleType.ts', () => {
 
     // validating `struct B`, with simple tuples on property `x`
     parseTypeArguments.mockClear();
-    const b = findType({ types, typeId: 0 }) as TupleType;
+    const b = findType({ types, typeId: 1 }) as TupleType;
 
     expect(b.attributes.inputLabel).toEqual('[boolean, BigNumberish]');
     expect(b.attributes.outputLabel).toEqual('[boolean, BN]');
@@ -40,7 +40,7 @@ describe('TupleType.ts', () => {
 
     // validating `struct C`, with nested (tuple) `typeArguments` on `b` property
     parseTypeArguments.mockClear();
-    const c = findType({ types, typeId: 1 }) as TupleType;
+    const c = findType({ types, typeId: 0 }) as TupleType;
 
     expect(c.attributes.inputLabel).toEqual(
       '[BigNumberish, StructAInput<StructBInput<BigNumberish>, string>]'

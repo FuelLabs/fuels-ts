@@ -1,36 +1,26 @@
 import type { TransactionResultReturnDataReceipt } from 'fuels';
-import {
-  FUEL_NETWORK_URL,
-  Provider,
-  ReceiptType,
-  ScriptTransactionRequest,
-  Wallet,
-  bn,
-} from 'fuels';
+import { ReceiptType, ScriptTransactionRequest, bn } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
+import { ReturnScript } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Generate fake resources', () => {
   it('should generate fake resources just fine', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = Wallet.generate({ provider });
+    const {
+      provider,
+      wallets: [wallet],
+    } = await launchTestNode();
     const baseAssetId = provider.getBaseAssetId();
-
-    const { binHexlified: scriptHexBytes } = getDocsSnippetsForcProject(
-      DocSnippetProjectsEnum.RETURN_SCRIPT
-    );
 
     // #region generate-fake-resources-2
     const transactionRequest = new ScriptTransactionRequest({
       gasLimit: bn(62_000),
       maxFee: bn(60_000),
-      script: scriptHexBytes,
+      script: ReturnScript.bytecode,
     });
 
     const resources = wallet.generateFakeResources([

@@ -50,7 +50,9 @@ describe('Deploying Contracts', () => {
 
     // #region deploy
     // Deploy the contract
-    const { waitForResult, contractId, transactionId } = await factory.deploy();
+    const { waitForResult, contractId, waitForTransactionId } = await factory.deploy();
+    // Retrieve the transactionId
+    const transactionId = await waitForTransactionId();
     // Await it's deployment
     const { contract, transactionResult } = await waitForResult();
     // #endregion deploy
@@ -90,7 +92,7 @@ describe('Deploying Contracts', () => {
     const factory = new ContractFactory(bytecode, abi, wallet);
 
     // Deploy the contract as blobs
-    const { waitForResult, contractId, transactionId } = await factory.deployAsBlobTx({
+    const { waitForResult, contractId, waitForTransactionId } = await factory.deployAsBlobTx({
       // Increasing chunk size multiplier to be 90% of the max chunk size
       chunkSizeMultiplier: 0.9,
     });
@@ -98,6 +100,7 @@ describe('Deploying Contracts', () => {
     const { contract, transactionResult } = await waitForResult();
     // #endregion blobs
 
+    const transactionId = await waitForTransactionId();
     expect(contract).toBeDefined();
     expect(transactionId).toBeDefined();
     expect(transactionResult.status).toBeTruthy();

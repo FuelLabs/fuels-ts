@@ -55,10 +55,12 @@ export function runTypegen(params: IGenerateFilesParams) {
     Assembling file paths x contents
   */
   const abiFiles = filepaths.map((filepath) => {
+    const contents = readFileSync(filepath, 'utf-8');
     const abi: IFile = {
       path: filepath,
-      contents: readFileSync(filepath, 'utf-8'),
+      contents,
     };
+
     return abi;
   });
 

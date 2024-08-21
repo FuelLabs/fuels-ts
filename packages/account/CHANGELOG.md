@@ -1,5 +1,61 @@
 # Change Log
 
+## 0.94.0
+
+### Minor Changes
+
+- c7e01b4: feat!: consider message on resources cache
+- 799db38: feat!: prettify `typegen` api
+- 7f50d40: feat!: read malleable fields from transaction status on subscription
+- 56018e3: chore!: deprecate `FUEL_NETWORK_URL` and `LOCAL_NETWORK_URL`
+- 5e8a087: chore!: integrate `launchTestNode` in remaining packages
+- 80cb187: fix!: assembly process for account transfer operation
+- bbd794a: chore!: wrap subscriptions in promise
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 26cb189: chore: refactor helpers related to transaction operations
+- 9309598: chore: upgrade `fuel-core@0.33.0`
+- d875416: build(deps): bump type-fest from 4.19.0 to 4.24.0
+- 2a8cb38: fix: avoid re-add fake resources at `Account.getTransactionCost`
+- 0110fd8: chore: handle exceeding maximum inputs when funding a transaction
+- c7104da: fix: transaction revert error
+- 2be4a5e: chore: improve node incompatibility warning
+- f6b12bd: fix: gas price estimation test flakiness
+- a467d54: fix: `Account.createTransfer` return type
+- 896add9: chore: default TestMessage to be spendable
+- 751d638: chore: switching `Error` to `FuelError`
+- 1d2abd7: chore: add validation for TX max outputs exceeded
+- fc39124: fix: return correct operations from coin and message inputs
+- b0c161f: feat: add randomUUID into `fuel-ts/crypto`
+- 25efc03: chore!: renamed `AssetId` to `TestAssetId`
+- Updated dependencies [9309598]
+- Updated dependencies [d875416]
+- Updated dependencies [84dfdc5]
+- Updated dependencies [29c556d]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [95e7108]
+- Updated dependencies [751d638]
+- Updated dependencies [1e93dac]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [9c07b00]
+- Updated dependencies [03ac550]
+- Updated dependencies [b0c161f]
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/abi-coder@0.94.0
+  - @fuel-ts/transactions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/crypto@0.94.0
+  - @fuel-ts/address@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/hasher@0.94.0
+  - @fuel-ts/merkle@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
 ## 0.93.0
 
 ### Minor Changes

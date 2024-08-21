@@ -57,7 +57,6 @@ describe('Contract Factory', () => {
       receipts: expect.arrayContaining([expect.any(Object)]),
       status: expect.any(String),
       type: expect.any(String),
-      gqlTransaction: expect.any(Object),
       operations: expect.any(Array),
       isStatusFailure: expect.any(Boolean),
       isStatusPending: expect.any(Boolean),
@@ -292,6 +291,34 @@ describe('Contract Factory', () => {
     const { value } = await call.waitForResult();
     expect(value.toNumber()).toBe(1001);
   }, 15000);
+
+  it('deploys large contracts via blobs and awaits transaction id', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--tx-pool-ttl', '1s'],
+      },
+      providerOptions: {
+        resourceCacheTTL: -1,
+      },
+    });
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
+    const deploy = await factory.deployAsBlobTx<LargeContract>();
+    const initTxId = deploy.waitForTransactionId();
+    expect(initTxId).toStrictEqual(new Promise(() => {}));
+    const { contract } = await deploy.waitForResult();
+    expect(contract.id).toBeDefined();
+    const awaitTxId = await deploy.waitForTransactionId();
+    expect(awaitTxId).toBeTruthy();
+
+    const call = await contract.functions.something().call();
+    const { value } = await call.waitForResult();
+    expect(value.toNumber()).toBe(1001);
+  });
 
   it('deploys large contracts via blobs [padded]', async () => {
     using launched = await launchTestNode({
