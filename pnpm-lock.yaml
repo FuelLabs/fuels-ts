@@ -982,8 +982,8 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       uglify-js:
-        specifier: ^3.18.0
-        version: 3.18.0
+        specifier: ^3.19.2
+        version: 3.19.2
       yup:
         specifier: ^1.4.0
         version: 1.4.0
@@ -13916,6 +13916,11 @@ packages:
     engines: {node: '>=0.8.0'}
     hasBin: true
 
+  uglify-js@3.19.2:
+    resolution: {integrity: sha512-S8KA6DDI47nQXJSi2ctQ629YzwOVs+bQML6DAtvy0wgNdpi+0ySpQK0g2pxBq2xfF2z3YCscu7NNA8nXT9PlIQ==}
+    engines: {node: '>=0.8.0'}
+    hasBin: true
+
   uint8arrays@3.1.0:
     resolution: {integrity: sha512-ei5rfKtoRO8OyOIor2Rz5fhzjThwIHJZ3uyDPnDHTXbP0aMQ1RN/6AI5B5d9dBxJOU+BvOAk7ZQ1xphsX8Lrog==}
 
@@ -26419,7 +26424,7 @@ snapshots:
       source-map: 0.6.1
       wordwrap: 1.0.0
     optionalDependencies:
-      uglify-js: 3.18.0
+      uglify-js: 3.19.2
 
   handlebars@4.7.8:
     dependencies:
@@ -32324,7 +32329,10 @@ snapshots:
 
   ufo@1.5.4: {}
 
-  uglify-js@3.18.0: {}
+  uglify-js@3.18.0:
+    optional: true
+
+  uglify-js@3.19.2: {}
 
   uint8arrays@3.1.0:
     dependencies:
