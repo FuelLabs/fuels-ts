@@ -54,7 +54,6 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    # TODO: disable branch head ref
     if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
