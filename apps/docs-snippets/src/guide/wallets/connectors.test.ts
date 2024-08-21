@@ -144,7 +144,13 @@ describe('connectors', () => {
       // #region fuel-instantiation-1
       // #import { Fuel };
 
-      const sdk = await new Fuel().init();
+      const sdk = new Fuel();
+
+      /*
+        Awaits for initialization to mitigate potential race conditions
+        derived from the async nature of instantiating a connector.
+      */
+      await sdk.init(); 
       // #endregion fuel-instantiation-1
 
       expect(sdk).toBeDefined();
