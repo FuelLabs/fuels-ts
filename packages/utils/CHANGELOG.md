@@ -1,5 +1,26 @@
 # @fuel-ts/utils
 
+## 0.94.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 751d638: chore: switching `Error` to `FuelError`
+- a056da3: feat: improve typegen bytecode compression
+- Updated dependencies [9309598]
+- Updated dependencies [29c556d]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [03ac550]
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
 ## 0.93.0
 
 ### Patch Changes

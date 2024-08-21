@@ -14,25 +14,19 @@ import {
  * @group node
  */
 describe('deploy', { timeout: 180000 }, () => {
-  let destroy: () => void;
   const paths = bootstrapProject(__filename);
-
-  beforeAll(async () => {
-    const { cleanup } = await launchTestNode({
-      nodeOptions: {
-        port: '4000',
-      },
-    });
-    destroy = cleanup;
-  });
 
   afterAll(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
     resetDiskAndMocks(paths.root);
-    destroy();
   });
 
   it('should run `deploy` command', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    using launched = await launchTestNode({
+      nodeOptions: { port: '4000' },
+    });
+
     await runInit({
       root: paths.root,
       workspace: paths.workspaceDir,
