@@ -81,7 +81,7 @@ export default function ScriptExample() {
       </span>
 
       <Link
-        href="https://docs.fuel.network/docs/intro/glossary/#script"
+        href="https://docs.fuel.network/docs/fuels-ts/scripts"
         className="mt-4"
       >
         Learn more about Scripts
