@@ -14,14 +14,16 @@ import {
   PolicyType,
   ZeroBytes32,
   buildFunctionResult,
+  ReceiptType,
 } from 'fuels';
-import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
+import type { JsonAbi, ReceiptMessageOut, ScriptTransactionRequest, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
   CallTestContract,
   CallTestContractFactory,
+  SmoContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
 } from '../test/typegen/contracts';
@@ -1235,35 +1237,37 @@ describe('Contract', () => {
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
-  it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
-    using contract = await setupTestContract();
+  it('can call SMO contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: SmoContractFactory,
+        },
+      ],
+    });
 
-    const gasLimit = 500_000;
-    const maxFee = 250_000;
+    const {
+      provider,
+      wallets: [recipient],
+      contracts: [contract],
+    } = launched;
 
-    const { waitForResult } = await contract
-      .multiCall([
-        contract.functions.foo(1336),
-        contract.functions.foo(1336),
-        contract.functions.foo(1336),
-        contract.functions.foo(1336),
-        contract.functions.foo(1336),
-        contract.functions.foo(1336),
-        contract.functions.foo(1336),
-        contract.functions.foo(1336),
-      ])
-      .txParams({ gasLimit, maxFee })
+    const data = [1, 2, 3, 4, 5];
+    const baseAssetId = provider.getBaseAssetId();
+
+    const { waitForResult } = await contract.functions
+      .send_message(recipient.address.toB256(), data, 1)
+      .callParams({ forward: [1, baseAssetId] })
       .call();
 
     const {
-      transactionResult: { transaction },
+      transactionResult: { receipts },
     } = await waitForResult();
 
-    const { scriptGasLimit, policies } = transaction;
+    const messageOutReceipt = receipts.find(
+      ({ type }) => ReceiptType.MessageOut === type
+    ) as ReceiptMessageOut;
 
-    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
-
-    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
-    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+    expect(messageOutReceipt.recipient).toBe(recipient.address.toB256());
   });
 });
