@@ -1,19 +1,22 @@
-"use client";
-
-import { Button } from "@/components/Button";
-import { FuelLogo } from "@/components/FuelLogo";
-import { Input } from "@/components/Input";
-import { Link } from "@/components/Link";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { TestPredicate } from "@/sway-api/predicates/index";
-import { FAUCET_LINK } from '@/lib';
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { Button } from "../components/Button";
+import { FuelLogo } from "../components/FuelLogo";
+import { Input } from "../components/Input";
+import { Link } from "../components/Link";
+import { useActiveWallet } from "../hooks/useActiveWallet";
+import { TestPredicate } from "../sway-api/predicates/index";
+import { FAUCET_LINK } from "../lib";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
-export default function PredicateExample() {
+export const Route = createLazyFileRoute("/predicate")({
+  component: Index,
+});
+
+function Index() {
   let baseAssetId: string;
 
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
@@ -29,7 +32,7 @@ export default function PredicateExample() {
       baseAssetId = wallet.provider.getBaseAssetId();
       // Initialize a new predicate instance
       const predicate = new TestPredicate({
-        provider: wallet.provider
+        provider: wallet.provider,
       });
       setPredicate(predicate);
       setPredicateBalance(await predicate.getBalance());
@@ -63,7 +66,10 @@ export default function PredicateExample() {
       toast.error(
         <span>
           Failed to transfer funds. Please make sure your wallet has enough
-          funds. You can top it up using the <Link href={FAUCET_LINK} target="_blank">faucet.</Link>
+          funds. You can top it up using the{" "}
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
         </span>,
       );
     }
@@ -114,57 +120,6 @@ export default function PredicateExample() {
     }
   };
 
-  // #region change-pin-react-function
-  const changePin = async () => {
-    if (!wallet) {
-      return toast.error("Wallet not loaded");
-    }
-    if (!predicate) {
-      return toast.error("Predicate not loaded");
-    }
-
-    if (walletBalance?.eq(0)) {
-      return toast.error(
-        <span>Your wallet does not have enough funds. Please top it up using the <Link href={FAUCET_LINK} target="_blank">faucet.</Link></span>
-      );
-    }
-
-    if (!pin) {
-      return toast.error("Please enter a pin");
-    }
-
-    const configurableConstants = { PIN: bn(pin) };
-    // instantiate predicate with configurable constants
-    const reInitializePredicate = new TestPredicate({
-      provider: wallet.provider,
-      data: [configurableConstants.PIN],
-      configurableConstants,
-    });
-
-    if (!reInitializePredicate) {
-      return toast.error("Failed to initialize predicate");
-    }
-
-    // transferring funds to the predicate
-    const tx = await wallet.transfer(reInitializePredicate.address, 1000, baseAssetId, {
-      gasLimit: 10_000,
-    });
-
-    const { isStatusSuccess } = await tx.wait();
-
-    if (!isStatusSuccess) {
-      toast.error("Failed to update pin in  predicate");
-      return;
-    }
-
-    if (isStatusSuccess) {
-      toast.success("Predicate pin updated");
-    }
-
-    await refreshWalletBalance?.();
-  };
-  // #endregion change-pin-react-function
-
   return (
     <>
       <div className="flex gap-4">
@@ -200,13 +155,11 @@ export default function PredicateExample() {
         Transfer 0.1 ETH to Predicate
       </Button>
 
-      <Button onClick={changePin}>Change Pin</Button>
-
       <Input
         className="w-[300px] mt-8"
         value={pin as string}
         onChange={(e) => setPin(e.target.value)}
-        placeholder="Enter a new pin"
+        placeholder="Hint - the correct pin is 1337"
       />
 
       <Button
