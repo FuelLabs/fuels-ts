@@ -3,22 +3,28 @@ import { gzipSync, gunzipSync } from 'fflate';
 
 import { arrayify } from './arrayify';
 
-export const compressBytecode = (bytecode?: BytesLike) => {
-  if (!bytecode) {
+export const compressBytecode = (bytecodeAsBinary?: BytesLike) => {
+  if (!bytecodeAsBinary) {
     return '';
   }
 
-  const bytecodeBytes = arrayify(bytecode);
-  const bytecodeGzipped = gzipSync(bytecodeBytes);
-  const bytecodeEncoded = Buffer.from(bytecodeGzipped).toString('base64');
+  const bytecodeCompressBytes = arrayify(bytecodeAsBinary);
+  const bytecodeCompressGzipped = gzipSync(bytecodeCompressBytes);
+  const bytecodeCompressBinary = String.fromCharCode.apply(
+    null,
+    new Uint8Array(bytecodeCompressGzipped) as unknown as number[]
+  );
+  const bytecodeCompressEncoded = btoa(bytecodeCompressBinary);
 
-  return bytecodeEncoded;
+  return bytecodeCompressEncoded;
 };
 
-export const decompressBytecode = (bytecode: string) => {
-  const bytecodeDecoded = Buffer.from(bytecode, 'base64').toString('binary');
-  const bytecodeGzipped = Buffer.from(bytecodeDecoded, 'binary');
-  const bytecodeBytes = gunzipSync(bytecodeGzipped);
+export const decompressBytecode = (bytecodeAsBase64: string) => {
+  const bytecodeDecompressBinary = atob(bytecodeAsBase64);
+  const bytecodeDecompressDecoded = new Uint8Array(bytecodeDecompressBinary.length).map((_, i) =>
+    bytecodeDecompressBinary.charCodeAt(i)
+  );
+  const bytecodeDecompressBytes = gunzipSync(bytecodeDecompressDecoded);
 
-  return bytecodeBytes;
+  return bytecodeDecompressBytes;
 };
