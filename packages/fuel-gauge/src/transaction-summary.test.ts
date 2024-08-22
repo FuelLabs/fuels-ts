@@ -19,8 +19,6 @@ import {
   Address,
   ChainName,
   bn,
-  ZeroBytes32,
-  TransactionType,
   OutputType,
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
