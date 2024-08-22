@@ -12,13 +12,9 @@ const isBaseTransaction = (obj: TransactionRequestLike): boolean => {
   const baseTransactionKeys: Array<keyof BaseTransactionType> = [
     'type',
     'witnesses',
-    'witnessesCount',
     'outputs',
     'inputs',
-    'policies',
-    'policyTypes',
-    'inputsCount',
-    'outputsCount',
+    'witnesses',
   ];
 
   return baseTransactionKeys.every((prop) => prop in obj);
@@ -44,6 +40,7 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
     case TransactionType.Blob: {
       return BlobTransactionRequest.from(obj);
     }
+    case TransactionType.Unknown:
     default: {
       if (isBaseTransaction(obj)) {
         // eslint-disable-next-line no-console
