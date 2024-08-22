@@ -22,7 +22,7 @@ describe('Transaction', () => {
     expect(tx.type).toBe(TransactionType.Mint);
   });
 
-  it.only('Should log a warning when the transaction type is unknown', async () => {
+  it('Should log a warning when the transaction type is unknown', async () => {
     using launched = await launchTestNode();
     const {
       provider,
