@@ -18,7 +18,6 @@ import type {
   ExcludeResourcesOption,
   Provider,
   ScriptTransactionRequestLike,
-  TransactionResponse,
   TransactionCost,
   EstimateTransactionParams,
   CursorPaginationArgs,
@@ -36,6 +35,8 @@ import {
   ScriptTransactionRequest,
   transactionRequestify,
   addAmountToCoinQuantities,
+  isTransactionTypeUnknown,
+  TransactionResponse,
 } from './providers';
 import {
   cacheRequestInputsResourcesFromOwner,
@@ -632,6 +633,9 @@ export class Account extends AbstractAccount {
       );
     }
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    if (isTransactionTypeUnknown(transactionRequest)) {
+      return new TransactionResponse(transactionRequest, this.provider);
+    }
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }

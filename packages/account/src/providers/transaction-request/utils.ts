@@ -1,10 +1,10 @@
-import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { TransactionType } from '@fuel-ts/transactions';
 
 import { BlobTransactionRequest } from './blob-transaction-request';
 import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './types';
+import { UnknownTransactionRequest } from './unknown-transaction-request';
 
 /** @hidden */
 export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {
@@ -15,8 +15,6 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
   ) {
     return obj;
   }
-
-  const { type } = obj;
 
   switch (obj.type) {
     case TransactionType.Script: {
@@ -29,10 +27,11 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
       return BlobTransactionRequest.from(obj);
     }
     default: {
-      throw new FuelError(
-        ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
-        `Unsupported transaction type: ${type}.`
+      // eslint-disable-next-line no-console
+      console.warn(
+        'This transaction type is not supported in this SDK version, it will be ignored, if you believe this is an error, please upgrade your SDK'
       );
+      return UnknownTransactionRequest.from(obj);
     }
   }
 };
@@ -51,3 +50,8 @@ export const isTransactionTypeCreate = (
 export const isTransactionTypeBlob = (
   request: TransactionRequestLike
 ): request is BlobTransactionRequest => request.type === TransactionType.Blob;
+
+/** @hidden */
+export const isTransactionTypeUnknown = (
+  request: TransactionRequestLike
+): request is UnknownTransactionRequest => request.type === TransactionType.Unknown;

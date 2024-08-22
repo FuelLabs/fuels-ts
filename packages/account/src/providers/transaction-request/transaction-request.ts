@@ -11,6 +11,7 @@ import type {
   Policy,
   TransactionCreate,
   TransactionBlob,
+  TransactionUnknown,
 } from '@fuel-ts/transactions';
 import {
   PolicyType,
@@ -192,7 +193,11 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     };
   }
 
-  abstract toTransaction(): TransactionCreate | TransactionScript | TransactionBlob;
+  abstract toTransaction():
+    | TransactionCreate
+    | TransactionScript
+    | TransactionBlob
+    | TransactionUnknown;
 
   /**
    * Converts the transaction request to a byte array.

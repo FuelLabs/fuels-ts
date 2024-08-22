@@ -46,6 +46,7 @@ import type {
 import {
   isTransactionTypeCreate,
   isTransactionTypeScript,
+  isTransactionTypeUnknown,
   transactionRequestify,
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
@@ -739,12 +740,15 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param sendTransactionParams - The provider send transaction parameters (optional).
    * @returns A promise that resolves to the transaction response object.
    */
-  // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    if (isTransactionTypeUnknown(transactionRequest)) {
+      return new TransactionResponse(transactionRequest, this);
+    }
+    // #region Provider-sendTransaction
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }

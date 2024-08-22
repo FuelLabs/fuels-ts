@@ -2,6 +2,7 @@
 
 import { Coder, ArrayCoder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { type BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
@@ -27,9 +28,38 @@ export enum TransactionType /* u8 */ {
   Upgrade = 3,
   Upload = 4,
   Blob = 5,
+  Unknown = 6,
 }
 
-export type TransactionScript = {
+type BaseTransaction = {
+  /** The type of the transaction */
+  type: TransactionType;
+  /** List of witnesses (Witness[]) */
+  witnesses: Witness[];
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
+
+  /** List of policies. */
+  policies: Policy[];
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+};
+
+export type TransactionScript = BaseTransaction & {
   type: TransactionType.Script;
 
   /** Gas limit for transaction (u64) */
@@ -44,35 +74,11 @@ export type TransactionScript = {
   /** Length of script input data, in bytes (u64) */
   scriptDataLength: BN;
 
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
   /** Script to execute (byte[]) */
   script: string;
 
   /** Script input data (parameters) (byte[]) */
   scriptData: string;
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionScriptCoder extends Coder<TransactionScript, TransactionScript> {
@@ -156,7 +162,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   }
 }
 
-export type TransactionCreate = {
+export type TransactionCreate = BaseTransaction & {
   type: TransactionType.Create;
 
   /** Witness index of contract bytecode to create (u8) */
@@ -168,32 +174,8 @@ export type TransactionCreate = {
   /** Number of storage slots to initialize (u16) */
   storageSlotsCount: BN;
 
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
-
-  /** List of policies. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionCreateCoder extends Coder<TransactionCreate, TransactionCreate> {
@@ -348,35 +330,11 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
   }
 }
 
-export type TransactionUpgrade = {
+export type TransactionUpgrade = BaseTransaction & {
   type: TransactionType.Upgrade;
 
   /** The purpose of the upgrade. */
   upgradePurpose: UpgradePurpose;
-
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, TransactionUpgrade> {
@@ -441,7 +399,7 @@ export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, Transacti
   }
 }
 
-export type TransactionUpload = {
+export type TransactionUpload = BaseTransaction & {
   type: TransactionType.Upload;
 
   /** The root of the Merkle tree is created over the bytecode. (b256) */
@@ -459,32 +417,8 @@ export type TransactionUpload = {
   /** Number of Merkle nodes in the proof. (u16) */
   proofSetCount: number;
 
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
-  /** The proof set of Merkle nodes to verify the connection of the subsection to the root. (b256[]) */
+  /** List of proof nodes (b256[]) */
   proofSet: string[];
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionUploadCoder extends Coder<TransactionUpload, TransactionUpload> {
@@ -569,7 +503,7 @@ export class TransactionUploadCoder extends Coder<TransactionUpload, Transaction
   }
 }
 
-export type TransactionBlob = {
+export type TransactionBlob = BaseTransaction & {
   type: TransactionType.Blob;
 
   /** Hash of the bytecode. (b256) */
@@ -577,30 +511,6 @@ export type TransactionBlob = {
 
   /** Witness index of contract bytecode (u16) */
   witnessIndex: number;
-
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob> {
@@ -669,13 +579,79 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
   }
 }
 
+export type TransactionUnknown = BaseTransaction & {
+  type: TransactionType.Unknown;
+
+  /** Data of the transaction */
+  data?: BytesLike;
+};
+
+export class TransactionUnknownCoder extends Coder<TransactionUnknown, TransactionUnknown> {
+  constructor() {
+    super('TransactionUnknown', 'struct TransactionUnknown', 0);
+  }
+
+  encode(value: TransactionUnknown): Uint8Array {
+    const parts: Uint8Array[] = [];
+
+    parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(value.policyTypes));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.inputsCount));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputsCount));
+    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessesCount));
+    parts.push(new PoliciesCoder().encode(value.policies));
+    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
+    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
+    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
+
+    return concat(parts);
+  }
+
+  decode(data: Uint8Array, offset: number): [TransactionUnknown, number] {
+    let decoded;
+    let o = offset;
+
+    [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
+    const policyTypes = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const inputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const outputsCount = decoded;
+    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
+    const witnessesCount = decoded;
+    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
+    const policies = decoded;
+    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
+    const inputs = decoded;
+    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
+    const outputs = decoded;
+    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
+    const witnesses = decoded;
+
+    return [
+      {
+        type: TransactionType.Unknown,
+        policyTypes,
+        inputsCount,
+        outputsCount,
+        witnessesCount,
+        policies,
+        inputs,
+        outputs,
+        witnesses,
+      },
+      o,
+    ];
+  }
+}
+
 type PossibleTransactions =
   | TransactionScript
   | TransactionCreate
   | TransactionMint
   | TransactionUpgrade
   | TransactionUpload
-  | TransactionBlob;
+  | TransactionBlob
+  | TransactionUnknown;
 
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
@@ -684,7 +660,8 @@ export type Transaction<TTransactionType = void> = TTransactionType extends Tran
       Partial<Omit<TransactionMint, 'type'>> &
       Partial<Omit<TransactionUpgrade, 'type'>> &
       Partial<Omit<TransactionUpload, 'type'>> &
-      Partial<Omit<TransactionBlob, 'type'>> & {
+      Partial<Omit<TransactionBlob, 'type'>> &
+      Partial<Omit<TransactionUnknown, 'type'>> & {
         type: TransactionType;
       };
 
@@ -733,6 +710,12 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         parts.push(new TransactionBlobCoder().encode(value as Transaction<TransactionType.Blob>));
         break;
       }
+      case TransactionType.Unknown: {
+        parts.push(
+          new TransactionUnknownCoder().encode(value as Transaction<TransactionType.Unknown>)
+        );
+        break;
+      }
       default: {
         throw new FuelError(
           ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
@@ -774,6 +757,10 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
       case TransactionType.Blob: {
         [decoded, o] = new TransactionBlobCoder().decode(data, o);
+        return [decoded, o];
+      }
+      case TransactionType.Unknown: {
+        [decoded, o] = new TransactionUnknownCoder().decode(data, o);
         return [decoded, o];
       }
       default: {

@@ -3,9 +3,8 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { hexlify } from '@fuel-ts/utils';
 
 import { Account } from '../account';
-import { transactionRequestify } from '../providers';
+import { isTransactionTypeUnknown, transactionRequestify, TransactionResponse } from '../providers';
 import type {
-  TransactionResponse,
   TransactionRequestLike,
   CallResult,
   Provider,
@@ -115,6 +114,9 @@ export class BaseWalletUnlocked extends Account {
     { estimateTxDependencies = false }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    if (isTransactionTypeUnknown(transactionRequest)) {
+      return new TransactionResponse(transactionRequest, this.provider);
+    }
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }

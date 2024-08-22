@@ -36,6 +36,7 @@ export enum TransactionTypeName {
   Upgrade = 'Upgrade',
   Upload = 'Upload',
   Blob = 'Blob',
+  Unknown = 'Unknown',
 }
 
 /**
