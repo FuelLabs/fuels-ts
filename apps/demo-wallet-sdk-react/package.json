@@ -1,6 +1,6 @@
 {
-  "name": "demo-wallet-sdk-react",
-  "version": "0.1.5",
+  "name": "demo-wallet-sdk-react-2",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,8 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.8.1",
-    "@fuels/react": "^0.20.0",
+    "@fuels/connectors": "^0.25.0",
+    "@fuels/react": "^0.25.0",
     "@tanstack/react-query": "^5.51.23",
     "fuels": "workspace:*",
     "next": "14.2.5",
@@ -21,7 +21,8 @@
     "@types/node": "^22.2.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3",
-    "autoprefixer": "^10.4.20",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.10",
     "typescript": "~5.4.5"
