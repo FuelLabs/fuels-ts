@@ -1,7 +1,5 @@
 contract;
 
-use std::bytes::Bytes;
-use std::string::String;
 use std::message::send_typed_message;
 
 abi SMOContract {
