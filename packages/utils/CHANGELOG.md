@@ -1,5 +1,15 @@
 # @fuel-ts/utils
 
+## 0.94.1
+
+### Patch Changes
+
+- 9bba305: fix: made bytecode compression browser compatible
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+  - @fuel-ts/versions@0.94.1
+
 ## 0.94.0
 
 ### Minor Changes

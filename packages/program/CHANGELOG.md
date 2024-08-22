@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/abi-coder@0.94.1
+  - @fuel-ts/account@0.94.1
+  - @fuel-ts/address@0.94.1
+  - @fuel-ts/transactions@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+
 ## 0.94.0
 
 ### Minor Changes
