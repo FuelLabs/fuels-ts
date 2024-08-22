@@ -31,7 +31,8 @@ export enum TransactionType /* u8 */ {
   Unknown = 6,
 }
 
-type BaseTransaction = {
+/** @hidden */
+export type BaseTransactionType = {
   /** The type of the transaction */
   type: TransactionType;
   /** List of witnesses (Witness[]) */
@@ -59,7 +60,7 @@ type BaseTransaction = {
   outputsCount: number;
 };
 
-export type TransactionScript = BaseTransaction & {
+export type TransactionScript = BaseTransactionType & {
   type: TransactionType.Script;
 
   /** Gas limit for transaction (u64) */
@@ -162,7 +163,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   }
 }
 
-export type TransactionCreate = BaseTransaction & {
+export type TransactionCreate = BaseTransactionType & {
   type: TransactionType.Create;
 
   /** Witness index of contract bytecode to create (u8) */
@@ -330,7 +331,7 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
   }
 }
 
-export type TransactionUpgrade = BaseTransaction & {
+export type TransactionUpgrade = BaseTransactionType & {
   type: TransactionType.Upgrade;
 
   /** The purpose of the upgrade. */
@@ -399,7 +400,7 @@ export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, Transacti
   }
 }
 
-export type TransactionUpload = BaseTransaction & {
+export type TransactionUpload = BaseTransactionType & {
   type: TransactionType.Upload;
 
   /** The root of the Merkle tree is created over the bytecode. (b256) */
@@ -503,7 +504,7 @@ export class TransactionUploadCoder extends Coder<TransactionUpload, Transaction
   }
 }
 
-export type TransactionBlob = BaseTransaction & {
+export type TransactionBlob = BaseTransactionType & {
   type: TransactionType.Blob;
 
   /** Hash of the bytecode. (b256) */
@@ -579,7 +580,7 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
   }
 }
 
-export type TransactionUnknown = BaseTransaction & {
+export type TransactionUnknown = BaseTransactionType & {
   type: TransactionType.Unknown;
 
   /** Data of the transaction */
