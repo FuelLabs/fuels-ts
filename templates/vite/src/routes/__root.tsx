@@ -13,6 +13,7 @@ import {
   FuelWalletDevelopmentConnector,
   FueletWalletConnector,
   WalletConnectConnector,
+  SolanaConnector,
 } from "@fuels/connectors";
 import { ActiveWalletProvider } from "../hooks/useActiveWallet";
 
@@ -60,6 +61,9 @@ export const Route = createRootRoute({
                 new BakoSafeConnector(),
                 new FueletWalletConnector(),
                 new FuelWalletDevelopmentConnector(),
+                new SolanaConnector({
+                  fuelProvider: providerToUse,
+                }),
               ],
             }}
           >
