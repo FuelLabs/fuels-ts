@@ -131,6 +131,21 @@ describe('Abi interface', () => {
     });
   });
 
+  describe('messagesTypes', () => {
+    it('sets messagesTypes properties just fine', () => {
+      const messagesTypes = exhaustiveExamplesAbi.messagesTypes;
+      expect(messagesTypes.length).greaterThan(0);
+      messagesTypes.forEach((messageType) => {
+        expect(messageType.messageId).toBeDefined();
+        expect(messageType.concreteTypeId).toBeDefined();
+        const foundType = exhaustiveExamplesAbi.concreteTypes.find(
+          (id) => id.concreteTypeId === messageType.concreteTypeId
+        );
+        expect(foundType).toBeDefined();
+      });
+    });
+  });
+
   describe('encoding/decoding', () => {
     describe('encodes and decodes', () => {
       it.each([
