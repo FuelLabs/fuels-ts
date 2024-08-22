@@ -44,7 +44,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:48](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/test-utils/launch-test-node.ts#L48)
+[packages/contract/src/test-utils/launch-test-node.ts:48](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/test-utils/launch-test-node.ts#L48)
 
 ___
 

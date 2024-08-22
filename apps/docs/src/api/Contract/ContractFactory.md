@@ -26,7 +26,7 @@ Create a ContractFactory instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:68](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L68)
+[packages/contract/src/contract-factory.ts:68](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L68)
 
 ## Properties
 
@@ -36,7 +36,7 @@ Create a ContractFactory instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:59](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L59)
+[packages/contract/src/contract-factory.ts:59](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L59)
 
 ___
 
@@ -46,7 +46,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:56](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L56)
+[packages/contract/src/contract-factory.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L56)
 
 ___
 
@@ -56,7 +56,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:57](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L57)
+[packages/contract/src/contract-factory.ts:57](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L57)
 
 ___
 
@@ -66,7 +66,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:58](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L58)
+[packages/contract/src/contract-factory.ts:58](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L58)
 
 ## Methods
 
@@ -90,7 +90,7 @@ a populated BlobTransactionRequest.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:444](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L444)
+[packages/contract/src/contract-factory.ts:444](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L444)
 
 ___
 
@@ -114,7 +114,7 @@ A new ContractFactory instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:110](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L110)
+[packages/contract/src/contract-factory.ts:110](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L110)
 
 ___
 
@@ -143,7 +143,7 @@ The CreateTransactionRequest object for deploying the contract.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:120](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L120)
+[packages/contract/src/contract-factory.ts:120](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L120)
 
 ___
 
@@ -173,7 +173,7 @@ A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:195](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L195)
+[packages/contract/src/contract-factory.ts:195](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L195)
 
 ___
 
@@ -203,7 +203,7 @@ A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:251](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L251)
+[packages/contract/src/contract-factory.ts:251](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L251)
 
 ___
 
@@ -233,7 +233,7 @@ A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:213](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L213)
+[packages/contract/src/contract-factory.ts:213](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L213)
 
 ___
 
@@ -258,7 +258,7 @@ a funded transaction request.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:164](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L164)
+[packages/contract/src/contract-factory.ts:164](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L164)
 
 ___
 
@@ -272,7 +272,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:414](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L414)
+[packages/contract/src/contract-factory.ts:414](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L414)
 
 ___
 
@@ -295,7 +295,7 @@ Get the maximum chunk size for deploying a contract by chunks.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:457](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L457)
+[packages/contract/src/contract-factory.ts:457](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L457)
 
 ___
 
@@ -315,7 +315,7 @@ ___
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:421](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L421)
+[packages/contract/src/contract-factory.ts:421](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L421)
 
 ___
 
@@ -337,4 +337,4 @@ Set configurable constants of the contract with the specified values.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:377](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/contract-factory.ts#L377)
+[packages/contract/src/contract-factory.ts:377](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/contract-factory.ts#L377)

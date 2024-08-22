@@ -29,7 +29,7 @@ the event bus should be provided.
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:12](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/types/target-object.ts#L12)
+[packages/account/src/connectors/types/target-object.ts:12](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L12)
 
 ___
 
@@ -54,7 +54,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:11](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/types/target-object.ts#L11)
+[packages/account/src/connectors/types/target-object.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L11)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:10](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/types/target-object.ts#L10)
+[packages/account/src/connectors/types/target-object.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L10)
 
 ___
 
@@ -104,7 +104,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:9](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/types/target-object.ts#L9)
+[packages/account/src/connectors/types/target-object.ts:9](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L9)
 
 ___
 
@@ -128,7 +128,7 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:14](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/types/target-object.ts#L14)
+[packages/account/src/connectors/types/target-object.ts:14](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L14)
 
 ___
 
@@ -153,4 +153,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:13](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/connectors/types/target-object.ts#L13)
+[packages/account/src/connectors/types/target-object.ts:13](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L13)

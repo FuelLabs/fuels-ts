@@ -12,7 +12,7 @@ Contract factory class outputted by `pnpm fuels typegen`.
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:23](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/test-utils/launch-test-node.ts#L23)
+[packages/contract/src/test-utils/launch-test-node.ts:23](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/test-utils/launch-test-node.ts#L23)
 
 ___
 
@@ -24,7 +24,7 @@ Options for contract deployment taken from `ContractFactory`.
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:27](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/test-utils/launch-test-node.ts#L27)
+[packages/contract/src/test-utils/launch-test-node.ts:27](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/test-utils/launch-test-node.ts#L27)
 
 ___
 
@@ -36,4 +36,4 @@ Index of wallet to be used for deployment. Defaults to `0` (first wallet).
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:31](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/contract/src/test-utils/launch-test-node.ts#L31)
+[packages/contract/src/test-utils/launch-test-node.ts:31](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/test-utils/launch-test-node.ts#L31)

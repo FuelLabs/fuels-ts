@@ -40,7 +40,7 @@ Create a Wallet Unlocked from an encrypted JSON.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet/wallet.ts#L79)
+[packages/account/src/wallet/wallet.ts:79](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallet.ts#L79)
 
 ___
 
@@ -67,7 +67,7 @@ Create a Wallet Unlocked from an extended key.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet/wallet.ts#L69)
+[packages/account/src/wallet/wallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallet.ts#L69)
 
 ___
 
@@ -96,7 +96,7 @@ Create a Wallet Unlocked from a mnemonic phrase.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet/wallet.ts#L60)
+[packages/account/src/wallet/wallet.ts:60](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallet.ts#L60)
 
 ___
 
@@ -124,7 +124,7 @@ Create a Wallet Unlocked from a seed.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet/wallet.ts#L49)
+[packages/account/src/wallet/wallet.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallet.ts#L49)
 
 ___
 
@@ -150,7 +150,7 @@ Generate a new Wallet Unlocked with a random key pair.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet/wallet.ts#L39)
+[packages/account/src/wallet/wallet.ts:39](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallet.ts#L39)
 
 ## Methods
 
@@ -175,7 +175,7 @@ A locked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet/wallet.ts#L18)
+[packages/account/src/wallet/wallet.ts:18](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallet.ts#L18)
 
 ___
 
@@ -200,4 +200,4 @@ An unlocked wallet instance.
 
 #### Defined in
 
-[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/445f0f888f28026e859fb676e7a803be367fd58d/packages/account/src/wallet/wallet.ts#L29)
+[packages/account/src/wallet/wallet.ts:29](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallet.ts#L29)
