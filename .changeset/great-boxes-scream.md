@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-chore: make 'nextjs' the default template
+chore: make `nextjs` the default `create fuels` template
