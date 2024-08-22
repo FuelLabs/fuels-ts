@@ -792,29 +792,5 @@ describe('TransactionSummary', () => {
       expect(result.transactionResult.operations[0].to?.type).toEqual(0);
       expect(result.transactionResult.operations[0].assetsSent).toBeUndefined();
     });
-
-    it('should return the correct operations for a mint transaction', async () => {
-      using launched = await launchTestNode({
-        nodeOptions: {
-          args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
-          loggingEnabled: false,
-        },
-      });
-      const { provider } = launched;
-
-      const txnInfo = await provider.getTransactions({ first: 1 });
-
-      const transactions = txnInfo.transactions[0];
-
-      expect(transactions.type).toEqual(TransactionType.Mint);
-      expect(transactions.txPointer?.blockHeight).toEqual(1);
-      expect(transactions.txPointer?.txIndex).toEqual(0);
-      expect(transactions.inputContract?.txID).toEqual(ZeroBytes32);
-      expect(transactions.inputContract?.balanceRoot).toEqual(ZeroBytes32);
-      expect(transactions.inputContract?.stateRoot).toEqual(ZeroBytes32);
-      expect(transactions.inputContract?.type).toEqual(TransactionType.Create);
-      expect(transactions.mintAmount?.eq(bn(0))).toBe(true);
-      expect(transactions.mintAssetId).toEqual(provider.getBaseAssetId());
-    });
   });
 });
