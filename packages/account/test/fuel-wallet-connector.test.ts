@@ -1,11 +1,11 @@
 import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { EventEmitter } from 'events';
-import { expectToThrowFuelError } from 'fuels/test-utils';
 
 import type { ProviderOptions } from '../src';
 import { Fuel } from '../src/connectors/fuel';
