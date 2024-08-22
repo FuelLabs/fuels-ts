@@ -112,6 +112,18 @@ jobs:
             fi
           fi
 
+          # Check if the PR title contains an exclamation mark (breaking)
+          if echo "$PR_TITLE" | grep -q '!'; then
+            # If the PR is breaking, ensure that the changeset contains minor changes
+            if ! echo "$AFFECTED_PACKAGES" | grep -q 'minor'; then
+              echo "PR is marked as breaking but changeset does not contain minor changes."
+              echo "Changeset file: $CHANGESET_FILE"
+              echo "Changeset content:"
+              cat "$CHANGESET_FILE"
+              exit 1
+            fi
+          fi
+
           CHANGESET_DESCRIPTION=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
 
           if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then

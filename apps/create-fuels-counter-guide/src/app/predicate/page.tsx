@@ -225,7 +225,7 @@ export default function PredicateExample() {
       </span>
 
       <Link
-        href="https://docs.fuel.network/docs/intro/glossary/#predicate"
+        href="https://docs.fuel.network/docs/fuels-ts/predicates"
         target="_blank"
       >
         Learn more about Predicates
