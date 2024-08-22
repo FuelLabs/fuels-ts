@@ -1,9 +1,11 @@
 import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
+import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
 import { EventEmitter } from 'events';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 
 import type { ProviderOptions } from '../src';
 import { Fuel } from '../src/connectors/fuel';
@@ -568,5 +570,40 @@ describe('Fuel Connector', () => {
     ).hasWallet();
 
     expect(hasWallet).toBeTruthy();
+  });
+
+  it('should ensure getProvider works just fine', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    const defaultWallet = Wallet.generate({
+      provider,
+    });
+
+    const connector = new MockConnector({
+      wallets: [defaultWallet],
+    });
+
+    const fuel = new Fuel({
+      connectors: [connector],
+    });
+
+    let sameProvider = await fuel.getProvider(provider);
+
+    expect(sameProvider).toStrictEqual(provider);
+
+    const customProvider: unknown = {
+      chainId: 1,
+      url: provider.url,
+    };
+
+    sameProvider = await fuel.getProvider(customProvider as Provider);
+
+    expect(sameProvider instanceof Provider).toBeTruthy();
+
+    await expectToThrowFuelError(
+      () => fuel.getProvider([] as unknown as Provider),
+      new FuelError(ErrorCode.INVALID_PROVIDER, 'Provider is not valid.')
+    );
   });
 });
