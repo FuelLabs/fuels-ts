@@ -90,7 +90,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^46.8.2",
+    "eslint-plugin-jsdoc": "^50.2.2",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.35.0",

@@ -96,8 +96,8 @@ importers:
         specifier: ^2.29.1
         version: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
       eslint-plugin-jsdoc:
-        specifier: ^46.8.2
-        version: 46.8.2(eslint@8.57.0)
+        specifier: ^50.2.2
+        version: 50.2.2(eslint@8.57.0)
       eslint-plugin-jsx-a11y:
         specifier: ^6.9.0
         version: 6.9.0(eslint@8.57.0)
@@ -2894,8 +2894,8 @@ packages:
     resolution: {integrity: sha512-j7XAh1vJmY1rnLOBGDcuno/HPHU6PUOHsJyY+rACIKkjsLChPlw4ACEwxeooE81tzJFOma0IdMviK/noqc5gIg==}
     engines: {node: '>=6.0.0'}
 
-  '@es-joy/jsdoccomment@0.40.1':
-    resolution: {integrity: sha512-YORCdZSusAlBrFpZ77pJjc5r1bQs5caPWtAu+WWmiSo+8XaUzseapVrfAtiRFbQWnrBxxLLEwF6f6ZG/UgCQCg==}
+  '@es-joy/jsdoccomment@0.48.0':
+    resolution: {integrity: sha512-G6QUWIcC+KvSwXNsJyDTHvqUdNoAVJPPgkc3+Uk4WBKqZvoXhlvazOgm9aL0HwihJLQf0l+tOE2UFzXBqCqgDw==}
     engines: {node: '>=16'}
 
   '@esbuild/aix-ppc64@0.21.5':
@@ -6979,6 +6979,7 @@ packages:
 
   bun@1.1.24:
     resolution: {integrity: sha512-vZt5zNVaoNTSlNprdVdQVZInBcGC2QSik6o9ZsMzuYiiUEAEqpRwwMXAYDUN85mt2FNnsGvmk/8xVlUXS7IzEw==}
+    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -7319,8 +7320,8 @@ packages:
     resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
     engines: {node: ^12.20.0 || >=14}
 
-  comment-parser@1.4.0:
-    resolution: {integrity: sha512-QLyTNiZ2KDOibvFPlZ6ZngVsZ/0gYnE6uTXi5aoDg8ed3AkJAz4sEje3Y8a29hQ1s6A99MZXe47fLAXQ1rTqaw==}
+  comment-parser@1.4.1:
+    resolution: {integrity: sha512-buhp5kePrmda3vhc5B9t7pUQXAb2Tnd0qgpkIhPhkHXxJpiPJ11H0ZEU0oBpJ2QztSbzG/ZxMj/CHsYJqRHmyg==}
     engines: {node: '>= 12.0.0'}
 
   common-path-prefix@3.0.0:
@@ -8150,6 +8151,9 @@ packages:
   es-module-lexer@1.3.0:
     resolution: {integrity: sha512-vZK7T0N2CBmBOixhmjdqx2gWVbFZ4DXZ/NyRMZVlJXPa7CyFS+/a4QQsDGDQy9ZfEzxFuNEsMLeQJnKP2p5/JA==}
 
+  es-module-lexer@1.5.4:
+    resolution: {integrity: sha512-MVNK56NiMrOwitFB7cqDwq0CQutbw+0BvLshJSse0MUNU+y1FC3bUS/AQg7oUng+/wKrrki7JfmwtVHkVfPLlw==}
+
   es-object-atoms@1.0.0:
     resolution: {integrity: sha512-MZ4iQ6JwHOBQjahnjwaC1ZtIBH+2ohjamzAO3oaHcXYup7qxjF2fixyH+Q71voWHeOkI2q/TnJao/KfXYIZWbw==}
     engines: {node: '>= 0.4'}
@@ -8337,11 +8341,11 @@ packages:
       jest:
         optional: true
 
-  eslint-plugin-jsdoc@46.8.2:
-    resolution: {integrity: sha512-5TSnD018f3tUJNne4s4gDWQflbsgOycIKEUBoCLn6XtBMgNHxQFmV8vVxUtiPxAQq8lrX85OaSG/2gnctxw9uQ==}
-    engines: {node: '>=16'}
+  eslint-plugin-jsdoc@50.2.2:
+    resolution: {integrity: sha512-i0ZMWA199DG7sjxlzXn5AeYZxpRfMJjDPUl7lL9eJJX8TPRoIaxJU4ys/joP5faM5AXE1eqW/dslCj3uj4Nqpg==}
+    engines: {node: '>=18'}
     peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0
+      eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
 
   eslint-plugin-jsx-a11y@6.6.1:
     resolution: {integrity: sha512-sXgFVNHiWffBq23uiS/JaP6eVR622DqwB4yTzKvGZGcPq6/yZ3WmOZfuBks/vHWo9GaFOqC2ZK4i6+C35knx7Q==}
@@ -8417,6 +8421,10 @@ packages:
     resolution: {integrity: sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
+  eslint-visitor-keys@4.0.0:
+    resolution: {integrity: sha512-OtIRv/2GyiF6o/d8K7MYKKbXrOUBIK6SfkIRM4Z0dY3w+LiQ0vy3F57m0Z71bjbyeiWFiHJ8brqnmE6H6/jEuw==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
   eslint-webpack-plugin@3.2.0:
     resolution: {integrity: sha512-avrKcGncpPbPSUHX6B3stNGzkKFto3eL+DKM4+VyMrVnhPc3vRczVlCq3uhuFOdRvDHTVXuzwk1ZKUrqDQHQ9w==}
     engines: {node: '>= 12.13.0'}
@@ -8429,6 +8437,10 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     hasBin: true
 
+  espree@10.1.0:
+    resolution: {integrity: sha512-M1M6CpiE6ffoigIOWYO9UDP8TMUw9kqb21tf+08IgDYjCsOvCuDt4jQcZmoYxx+w7zlKw9/N0KXfto+I8/FrXA==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
   espree@9.6.1:
     resolution: {integrity: sha512-oruZaFkjorTpF32kDSI5/75ViwGeZginGGy2NoOSg3Q9bnwlnmDm4HLnkl0RE3n+njDXR037aY1+x58Z/zFdwQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -8440,6 +8452,10 @@ packages:
 
   esquery@1.5.0:
     resolution: {integrity: sha512-YQLXUplAwJgCydQ78IMJywZCceoqk1oH01OERdSAJc/7U2AylwjhSCLDEtqwg811idIS/9fIU5GjG73IgjKMVg==}
+    engines: {node: '>=0.10'}
+
+  esquery@1.6.0:
+    resolution: {integrity: sha512-ca9pw9fomFcKPvFLXhBKUK90ZvGibiGOvRJNbjljY7s7uq/5YO4BOzcYtJqExdx99rF6aAcnRxHmcUHcz6sQsg==}
     engines: {node: '>=0.10'}
 
   esrecurse@4.3.0:
@@ -9494,10 +9510,6 @@ packages:
     resolution: {integrity: sha512-i2R6zNFDwgEHJyQUtJEk0XFi1i0dPFn/oqjK3/vPCcDeJvW5NQ83V8QbicfF1SupOaB0h8ntgBC2YiE7dfyctQ==}
     engines: {node: '>=4'}
 
-  is-builtin-module@3.2.1:
-    resolution: {integrity: sha512-BSLE3HnV2syZ0FK0iMA/yUGplUeMmNz4AW5fnTunbCIqZi4vG3WjJT9FHMy5D69xmAYBHXQhJdALdpwVxV501A==}
-    engines: {node: '>=6'}
-
   is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
@@ -10130,8 +10142,8 @@ packages:
     peerDependencies:
       '@babel/preset-env': ^7.1.6
 
-  jsdoc-type-pratt-parser@4.0.0:
-    resolution: {integrity: sha512-YtOli5Cmzy3q4dP26GraSOeAhqecewG04hoO8DY56CH4KJ9Fvv5qKWUCCo3HZob7esJQHCv6/+bnTy72xZZaVQ==}
+  jsdoc-type-pratt-parser@4.1.0:
+    resolution: {integrity: sha512-Hicd6JK5Njt2QB6XYFS7ok9e37O8AYk3jTcppG4YVQnYjOemymvTcmc7OWsmq/Qqj5TdRFO5/x/tIPmBeRtGHg==}
     engines: {node: '>=12.0.0'}
 
   jsdom@16.7.0:
@@ -11358,6 +11370,10 @@ packages:
     resolution: {integrity: sha512-FwdRXKCohSVeXqwtYonZTXtbGJKrn+HNyWDYVcp5yuJlesTwNH4rsmRZ+GrKAPJ5bLpRxESMeS+Rl0VCHRvB2Q==}
     engines: {node: '>=0.8'}
 
+  parse-imports@2.1.1:
+    resolution: {integrity: sha512-TDT4HqzUiTMO1wJRwg/t/hYk8Wdp3iF/ToMIlAoVQfL1Xs/sTxq1dKWSMjMbQmIarfWKymOyly40+zmPHXMqCA==}
+    engines: {node: '>= 18'}
+
   parse-json@2.2.0:
     resolution: {integrity: sha512-QR/GGaKCkhwk1ePQNYDRKYZ3mwU9ypsKhB0XyFnLQdomyEqk3e8wpW3V5Jp88zbxK4n5ST1nqo+g9juTpownhQ==}
     engines: {node: '>=0.10.0'}
@@ -12184,6 +12200,7 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qr-code-styling@1.6.0-rc.1:
@@ -12976,6 +12993,9 @@ packages:
     resolution: {integrity: sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==}
     engines: {node: '>=14.16'}
 
+  slashes@3.0.12:
+    resolution: {integrity: sha512-Q9VME8WyGkc7pJf6QEkj3wE+2CnvZMI+XJhwdTPR8Z/kWQRXi7boAWLDibRPyHRTUTPx5FaU7MsyrjI3yLB4HA==}
+
   slice-ansi@2.1.0:
     resolution: {integrity: sha512-Qu+VC3EwYLldKa1fCxuuvULvSJOKEgk9pi8dZeCVK7TqBfUNTH4sFkk4joj8afVSfAYgJoSOetjx9QWOJ5mYoQ==}
     engines: {node: '>=6'}
@@ -13087,6 +13107,9 @@ packages:
 
   spdx-expression-parse@3.0.1:
     resolution: {integrity: sha512-cbqHunsQWnJNE6KhVSMsMeH5H/L9EpymbzqTQ3uLwNCLZ1Q481oWaofqH7nO6V07xlXwY6PhQdQ2IedWx/ZK4Q==}
+
+  spdx-expression-parse@4.0.0:
+    resolution: {integrity: sha512-Clya5JIij/7C6bRR22+tnGXbc4VKlibKSVj2iHvVeX5iMW7s1SIQlqu699JkODJJIhh/pUu8L0/VLh8xflD+LQ==}
 
   spdx-license-ids@3.0.13:
     resolution: {integrity: sha512-XkD+zwiqXHikFZm4AX/7JSCXA98U5Db4AFd5XUg/+9UNtnH75+Z9KxtpYiJZx36mUDVOwH83pl7yvCer6ewM3w==}
@@ -17541,7 +17564,7 @@ snapshots:
       outdent: 0.5.0
       prettier: 2.8.8
       resolve-from: 5.0.0
-      semver: 7.5.4
+      semver: 7.6.3
 
   '@changesets/assemble-release-plan@6.0.3':
     dependencies:
@@ -17551,7 +17574,7 @@ snapshots:
       '@changesets/should-skip-package': 0.1.0
       '@changesets/types': 6.0.0
       '@manypkg/get-packages': 1.1.3
-      semver: 7.5.4
+      semver: 7.6.3
 
   '@changesets/changelog-git@0.2.0':
     dependencies:
@@ -17612,7 +17635,7 @@ snapshots:
       '@manypkg/get-packages': 1.1.3
       chalk: 2.4.2
       fs-extra: 7.0.1
-      semver: 7.5.4
+      semver: 7.6.3
 
   '@changesets/get-github-info@0.6.0':
     dependencies:
@@ -17835,11 +17858,11 @@ snapshots:
       github-slugger: 1.5.0
       textlint-rule-helper: 2.3.0
 
-  '@es-joy/jsdoccomment@0.40.1':
+  '@es-joy/jsdoccomment@0.48.0':
     dependencies:
-      comment-parser: 1.4.0
-      esquery: 1.5.0
-      jsdoc-type-pratt-parser: 4.0.0
+      comment-parser: 1.4.1
+      esquery: 1.6.0
+      jsdoc-type-pratt-parser: 4.1.0
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
@@ -18223,7 +18246,7 @@ snapshots:
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-codegen/cli@5.0.2(@parcel/watcher@2.4.1)(@types/node@22.4.0)(bufferutil@4.0.8)(cosmiconfig-toml-loader@1.0.0)(enquirer@2.4.1)(graphql@16.9.0)(typescript@5.4.5)(utf-8-validate@6.0.4)':
     dependencies:
@@ -18310,7 +18333,7 @@ snapshots:
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       auto-bind: 4.0.0
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -18359,7 +18382,7 @@ snapshots:
       auto-bind: 4.0.0
       change-case-all: 1.0.15
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -18429,7 +18452,7 @@ snapshots:
       graphql: 16.9.0
       graphql-tag: 2.12.6(graphql@16.9.0)
       parse-filepath: 1.0.2
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -18466,7 +18489,7 @@ snapshots:
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       dataloader: 2.2.2
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
       value-or-promise: 1.0.12
 
   '@graphql-tools/code-file-loader@8.1.2(graphql@16.9.0)':
@@ -18488,13 +18511,13 @@ snapshots:
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       dataloader: 2.2.2
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/documents@1.0.1(graphql@16.9.0)':
     dependencies:
       graphql: 16.9.0
       lodash.sortby: 4.7.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/executor-graphql-ws@1.1.2(bufferutil@4.0.8)(graphql@16.9.0)(utf-8-validate@6.0.4)':
     dependencies:
@@ -18503,7 +18526,7 @@ snapshots:
       graphql: 16.9.0
       graphql-ws: 5.16.0(graphql@16.9.0)
       isomorphic-ws: 5.0.0(ws@8.17.1(bufferutil@4.0.8)(utf-8-validate@6.0.4))
-      tslib: 2.6.0
+      tslib: 2.6.3
       ws: 8.17.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)
     transitivePeerDependencies:
       - bufferutil
@@ -18517,7 +18540,7 @@ snapshots:
       extract-files: 11.0.0
       graphql: 16.9.0
       meros: 1.3.0(@types/node@22.4.0)
-      tslib: 2.6.0
+      tslib: 2.6.3
       value-or-promise: 1.0.12
     transitivePeerDependencies:
       - '@types/node'
@@ -18528,7 +18551,7 @@ snapshots:
       '@types/ws': 8.5.5
       graphql: 16.9.0
       isomorphic-ws: 5.0.0(ws@8.17.1(bufferutil@4.0.8)(utf-8-validate@6.0.4))
-      tslib: 2.6.0
+      tslib: 2.6.3
       ws: 8.17.1(bufferutil@4.0.8)(utf-8-validate@6.0.4)
     transitivePeerDependencies:
       - bufferutil
@@ -18540,7 +18563,7 @@ snapshots:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.9.0)
       '@repeaterjs/repeater': 3.0.4
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
       value-or-promise: 1.0.12
 
   '@graphql-tools/git-loader@8.0.6(graphql@16.9.0)':
@@ -18588,7 +18611,7 @@ snapshots:
       '@babel/types': 7.24.6
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - supports-color
 
@@ -18597,7 +18620,7 @@ snapshots:
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       graphql: 16.9.0
       resolve-from: 5.0.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/json-file-loader@8.0.1(graphql@16.9.0)':
     dependencies:
@@ -18619,17 +18642,17 @@ snapshots:
     dependencies:
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/optimize@1.4.0(graphql@16.9.0)':
     dependencies:
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/optimize@2.0.0(graphql@16.9.0)':
     dependencies:
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/prisma-loader@8.0.4(@types/node@22.4.0)(bufferutil@4.0.8)(graphql@16.9.0)(utf-8-validate@6.0.4)':
     dependencies:
@@ -18662,7 +18685,7 @@ snapshots:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.9.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -18672,7 +18695,7 @@ snapshots:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.9.0)
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -18682,7 +18705,7 @@ snapshots:
       '@graphql-tools/merge': 9.0.4(graphql@16.9.0)
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
       value-or-promise: 1.0.12
 
   '@graphql-tools/url-loader@8.0.2(@types/node@22.4.0)(bufferutil@4.0.8)(graphql@16.9.0)(utf-8-validate@6.0.4)':
@@ -18718,13 +18741,13 @@ snapshots:
   '@graphql-tools/utils@8.13.1(graphql@16.9.0)':
     dependencies:
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/utils@9.2.1(graphql@16.9.0)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@graphql-tools/wrap@10.0.5(graphql@16.9.0)':
     dependencies:
@@ -18732,7 +18755,7 @@ snapshots:
       '@graphql-tools/schema': 10.0.4(graphql@16.9.0)
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
       graphql: 16.9.0
-      tslib: 2.6.0
+      tslib: 2.6.3
       value-or-promise: 1.0.12
 
   '@graphql-typed-document-node/core@3.2.0(graphql@16.9.0)':
@@ -19591,18 +19614,18 @@ snapshots:
     dependencies:
       asn1js: 3.0.5
       pvtsutils: 1.3.2
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@peculiar/json-schema@1.1.12':
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@peculiar/webcrypto@1.4.3':
     dependencies:
       '@peculiar/asn1-schema': 2.3.6
       '@peculiar/json-schema': 1.1.12
       pvtsutils: 1.3.2
-      tslib: 2.6.0
+      tslib: 2.6.3
       webcrypto-core: 1.7.7
 
   '@pkgjs/parseargs@0.11.0':
@@ -21108,7 +21131,7 @@ snapshots:
       grapheme-splitter: 1.0.4
       ignore: 5.2.4
       natural-compare-lite: 1.4.0
-      semver: 7.3.8
+      semver: 7.6.3
       tsutils: 3.21.0(typescript@5.4.5)
     optionalDependencies:
       typescript: 5.4.5
@@ -21394,7 +21417,7 @@ snapshots:
       '@typescript-eslint/types': 6.9.1
       '@typescript-eslint/typescript-estree': 6.9.1(typescript@5.4.5)
       eslint: 8.57.0
-      semver: 7.5.4
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -21465,7 +21488,7 @@ snapshots:
       '@vitest/utils': 1.6.0
       magic-string: 0.30.5
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@22.4.0)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6)
+      vitest: 1.6.0(@types/node@22.2.0)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6)
     optionalDependencies:
       playwright: 1.46.1
       webdriverio: 8.40.2(bufferutil@4.0.8)(utf-8-validate@6.0.4)
@@ -22236,7 +22259,7 @@ snapshots:
       busboy: 1.6.0
       fast-querystring: 1.1.2
       fast-url-parser: 1.1.3
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@whatwg-node/node-fetch@0.5.11':
     dependencies:
@@ -22244,7 +22267,7 @@ snapshots:
       '@whatwg-node/events': 0.1.1
       busboy: 1.6.0
       fast-querystring: 1.1.2
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   '@xobotyi/scrollbar-width@1.9.5': {}
 
@@ -22289,6 +22312,10 @@ snapshots:
   acorn-jsx@5.3.2(acorn@8.11.3):
     dependencies:
       acorn: 8.11.3
+
+  acorn-jsx@5.3.2(acorn@8.12.1):
+    dependencies:
+      acorn: 8.12.1
 
   acorn-walk@7.2.0: {}
 
@@ -22600,7 +22627,7 @@ snapshots:
     dependencies:
       pvtsutils: 1.3.2
       pvutils: 1.1.3
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   assert@2.1.0:
     dependencies:
@@ -23264,7 +23291,7 @@ snapshots:
   capital-case@1.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.0
+      tslib: 2.6.3
       upper-case-first: 2.0.2
 
   case-sensitive-paths-webpack-plugin@2.4.0: {}
@@ -23342,7 +23369,7 @@ snapshots:
       path-case: 3.0.4
       sentence-case: 3.0.4
       snake-case: 3.0.4
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   char-regex@1.0.2: {}
 
@@ -23537,7 +23564,7 @@ snapshots:
 
   commander@9.5.0: {}
 
-  comment-parser@1.4.0: {}
+  comment-parser@1.4.1: {}
 
   common-path-prefix@3.0.0: {}
 
@@ -23595,7 +23622,7 @@ snapshots:
   constant-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.0
+      tslib: 2.6.3
       upper-case: 2.0.2
 
   constants-browserify@1.0.0: {}
@@ -23729,7 +23756,7 @@ snapshots:
 
   cross-inspect@1.0.0:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   cross-spawn@5.1.0:
     dependencies:
@@ -23798,7 +23825,7 @@ snapshots:
       postcss-modules-scope: 3.0.0(postcss@8.4.41)
       postcss-modules-values: 4.0.0(postcss@8.4.41)
       postcss-value-parser: 4.2.0
-      semver: 7.3.8
+      semver: 7.6.3
       webpack: 5.88.0(@swc/core@1.7.14)(esbuild@0.17.19)
 
   css-minimizer-webpack-plugin@3.4.1(esbuild@0.17.19)(webpack@5.88.0(@swc/core@1.7.14)(esbuild@0.17.19)):
@@ -24525,6 +24552,8 @@ snapshots:
 
   es-module-lexer@1.3.0: {}
 
+  es-module-lexer@1.5.4: {}
+
   es-object-atoms@1.0.0:
     dependencies:
       es-errors: 1.3.0
@@ -24700,8 +24729,8 @@ snapshots:
       '@typescript-eslint/parser': 6.9.1(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.9.0(eslint@8.57.0)
       eslint-plugin-react: 7.35.0(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -24750,13 +24779,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0):
+  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       debug: 4.3.6
       enhanced-resolve: 5.17.1
       eslint: 8.57.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.6
       is-core-module: 2.13.1
@@ -24787,14 +24816,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0):
+  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 6.9.1(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -24862,6 +24891,33 @@ snapshots:
       - eslint-import-resolver-webpack
       - supports-color
 
+  eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1)(eslint@8.57.0):
+    dependencies:
+      array-includes: 3.1.7
+      array.prototype.findlastindex: 1.2.3
+      array.prototype.flat: 1.3.2
+      array.prototype.flatmap: 1.3.2
+      debug: 3.2.7
+      doctrine: 2.1.0
+      eslint: 8.57.0
+      eslint-import-resolver-node: 0.3.9
+      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.9.1(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+      hasown: 2.0.0
+      is-core-module: 2.13.1
+      is-glob: 4.0.3
+      minimatch: 3.1.2
+      object.fromentries: 2.0.7
+      object.groupby: 1.0.1
+      object.values: 1.1.7
+      semver: 6.3.1
+      tsconfig-paths: 3.15.0
+    optionalDependencies:
+      '@typescript-eslint/parser': 6.9.1(eslint@8.57.0)(typescript@5.4.5)
+    transitivePeerDependencies:
+      - eslint-import-resolver-typescript
+      - eslint-import-resolver-webpack
+      - supports-color
+
   eslint-plugin-jest@25.7.0(@typescript-eslint/eslint-plugin@5.59.0(@typescript-eslint/parser@5.59.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(jest@27.5.1(bufferutil@4.0.8)(ts-node@10.9.1(@swc/core@1.7.14)(@types/node@22.2.0)(typescript@5.4.5))(utf-8-validate@6.0.4))(typescript@5.4.5):
     dependencies:
       '@typescript-eslint/experimental-utils': 5.60.1(eslint@8.57.0)(typescript@5.4.5)
@@ -24873,18 +24929,20 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-jsdoc@46.8.2(eslint@8.57.0):
+  eslint-plugin-jsdoc@50.2.2(eslint@8.57.0):
     dependencies:
-      '@es-joy/jsdoccomment': 0.40.1
+      '@es-joy/jsdoccomment': 0.48.0
       are-docs-informative: 0.0.2
-      comment-parser: 1.4.0
+      comment-parser: 1.4.1
       debug: 4.3.6
       escape-string-regexp: 4.0.0
       eslint: 8.57.0
-      esquery: 1.5.0
-      is-builtin-module: 3.2.1
-      semver: 7.5.4
-      spdx-expression-parse: 3.0.1
+      espree: 10.1.0
+      esquery: 1.6.0
+      parse-imports: 2.1.1
+      semver: 7.6.3
+      spdx-expression-parse: 4.0.0
+      synckit: 0.9.1
     transitivePeerDependencies:
       - supports-color
 
@@ -24996,6 +25054,8 @@ snapshots:
 
   eslint-visitor-keys@3.4.3: {}
 
+  eslint-visitor-keys@4.0.0: {}
+
   eslint-webpack-plugin@3.2.0(eslint@8.57.0)(webpack@5.88.0(@swc/core@1.7.14)(esbuild@0.17.19)):
     dependencies:
       '@types/eslint': 8.40.2
@@ -25049,6 +25109,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  espree@10.1.0:
+    dependencies:
+      acorn: 8.12.1
+      acorn-jsx: 5.3.2(acorn@8.12.1)
+      eslint-visitor-keys: 4.0.0
+
   espree@9.6.1:
     dependencies:
       acorn: 8.11.3
@@ -25058,6 +25124,10 @@ snapshots:
   esprima@4.0.1: {}
 
   esquery@1.5.0:
+    dependencies:
+      estraverse: 5.3.0
+
+  esquery@1.6.0:
     dependencies:
       estraverse: 5.3.0
 
@@ -25952,7 +26022,7 @@ snapshots:
   header-case@2.0.4:
     dependencies:
       capital-case: 1.0.4
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   hermes-estree@0.19.1: {}
 
@@ -26308,10 +26378,6 @@ snapshots:
 
   is-buffer@2.0.5: {}
 
-  is-builtin-module@3.2.1:
-    dependencies:
-      builtin-modules: 3.3.0
-
   is-callable@1.2.7: {}
 
   is-core-module@2.12.1:
@@ -26376,7 +26442,7 @@ snapshots:
 
   is-lower-case@2.0.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   is-map@2.0.2: {}
 
@@ -26482,7 +26548,7 @@ snapshots:
 
   is-upper-case@2.0.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   is-utf8@0.2.1: {}
 
@@ -27221,12 +27287,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  jsdoc-type-pratt-parser@4.0.0: {}
+  jsdoc-type-pratt-parser@4.1.0: {}
 
   jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4):
     dependencies:
       abab: 2.0.6
-      acorn: 8.11.3
+      acorn: 8.12.1
       acorn-globals: 6.0.0
       cssom: 0.4.4
       cssstyle: 2.3.0
@@ -27609,11 +27675,11 @@ snapshots:
 
   lower-case-first@2.0.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   lower-case@2.0.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   lowercase-keys@3.0.0: {}
 
@@ -28181,7 +28247,7 @@ snapshots:
 
   mlly@1.7.0:
     dependencies:
-      acorn: 8.11.3
+      acorn: 8.12.1
       pathe: 1.1.2
       pkg-types: 1.1.1
       ufo: 1.5.3
@@ -28311,7 +28377,7 @@ snapshots:
   no-case@3.0.4:
     dependencies:
       lower-case: 2.0.2
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   nocache@3.0.4: {}
 
@@ -28811,6 +28877,11 @@ snapshots:
       map-cache: 0.2.2
       path-root: 0.1.1
 
+  parse-imports@2.1.1:
+    dependencies:
+      es-module-lexer: 1.5.4
+      slashes: 3.0.12
+
   parse-json@2.2.0:
     dependencies:
       error-ex: 1.3.2
@@ -28843,7 +28914,7 @@ snapshots:
   path-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   path-exists@3.0.0: {}
 
@@ -29187,7 +29258,7 @@ snapshots:
       cosmiconfig: 7.1.0
       klona: 2.0.6
       postcss: 8.4.41
-      semver: 7.3.8
+      semver: 7.6.3
       webpack: 5.88.0(@swc/core@1.7.14)(esbuild@0.17.19)
 
   postcss-logical@5.0.4(postcss@8.4.41):
@@ -29628,7 +29699,7 @@ snapshots:
 
   pvtsutils@1.3.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   pvutils@1.1.3: {}
 
@@ -30358,7 +30429,7 @@ snapshots:
 
   rxjs@7.8.1:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   safaridriver@0.1.2: {}
 
@@ -30500,7 +30571,7 @@ snapshots:
   sentence-case@3.0.4:
     dependencies:
       no-case: 3.0.4
-      tslib: 2.6.0
+      tslib: 2.6.3
       upper-case-first: 2.0.2
 
   serialize-error@11.0.3:
@@ -30616,7 +30687,7 @@ snapshots:
 
   simple-update-notifier@2.0.0:
     dependencies:
-      semver: 7.5.4
+      semver: 7.6.3
 
   sirv@2.0.4:
     dependencies:
@@ -30631,6 +30702,8 @@ snapshots:
   slash@4.0.0: {}
 
   slash@5.1.0: {}
+
+  slashes@3.0.12: {}
 
   slice-ansi@2.1.0:
     dependencies:
@@ -30657,7 +30730,7 @@ snapshots:
   snake-case@3.0.4:
     dependencies:
       dot-case: 3.0.4
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   socket.io-client@4.7.2(bufferutil@4.0.8)(utf-8-validate@6.0.4):
     dependencies:
@@ -30771,6 +30844,11 @@ snapshots:
       spdx-exceptions: 2.3.0
       spdx-license-ids: 3.0.13
 
+  spdx-expression-parse@4.0.0:
+    dependencies:
+      spdx-exceptions: 2.3.0
+      spdx-license-ids: 3.0.13
+
   spdx-license-ids@3.0.13: {}
 
   spdy-transport@3.0.0:
@@ -30802,7 +30880,7 @@ snapshots:
 
   sponge-case@1.0.1:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   sprintf-js@1.0.3: {}
 
@@ -31142,7 +31220,7 @@ snapshots:
 
   swap-case@2.0.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   symbol-tree@3.2.4: {}
 
@@ -31298,7 +31376,7 @@ snapshots:
   terser@5.18.2:
     dependencies:
       '@jridgewell/source-map': 0.3.3
-      acorn: 8.11.3
+      acorn: 8.12.1
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -31430,7 +31508,7 @@ snapshots:
 
   title-case@3.0.3:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   tmp@0.0.33:
     dependencies:
@@ -31946,11 +32024,11 @@ snapshots:
 
   upper-case-first@2.0.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   upper-case@2.0.2:
     dependencies:
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   uqr@0.1.2: {}
 
@@ -32373,7 +32451,7 @@ snapshots:
       '@peculiar/json-schema': 1.1.12
       asn1js: 3.0.5
       pvtsutils: 1.3.2
-      tslib: 2.6.0
+      tslib: 2.6.3
 
   webdriver@8.40.2(bufferutil@4.0.8)(utf-8-validate@6.0.4):
     dependencies:
