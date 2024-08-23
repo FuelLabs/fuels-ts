@@ -30,14 +30,13 @@ const processWorkspaceToml = (fileContents: string) => {
   return toml.stringify(parsed);
 };
 
-function writeEnvFile(envFilePath: string) {
-  let newFileContents = '';
+const writeEnvFile = (rootDirPath: string) => {
+  const envFilePath = join(rootDirPath, 'env');
+  const envFileContents = readFileSync(envFilePath, 'utf-8');
+  const newEnvFilePath = join(rootDirPath, '.env.local');
 
-  newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
-  newFileContents += `\nNEXT_PUBLIC_DAPP_ENVIRONMENT=local`;
-
-  writeFileSync(envFilePath, newFileContents);
-}
+  writeFileSync(newEnvFilePath, envFileContents);
+};
 
 export const runScaffoldCli = async ({
   program,
@@ -111,8 +110,8 @@ export const runScaffoldCli = async ({
     filter: (filename) => !filename.includes('CHANGELOG.md'),
   });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
+  writeEnvFile(projectPath);
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
-  writeEnvFile(join(projectPath, '.env.local'));
 
   const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
   const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
