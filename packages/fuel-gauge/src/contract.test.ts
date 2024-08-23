@@ -1237,6 +1237,38 @@ describe('Contract', () => {
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
   });
 
+  it('should ensure "maxFee" and "gasLimit" can be set on a multicall', async () => {
+    using contract = await setupTestContract();
+
+    const gasLimit = 500_000;
+    const maxFee = 250_000;
+
+    const { waitForResult } = await contract
+      .multiCall([
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+        contract.functions.foo(1336),
+      ])
+      .txParams({ gasLimit, maxFee })
+      .call();
+
+    const {
+      transactionResult: { transaction },
+    } = await waitForResult();
+
+    const { scriptGasLimit, policies } = transaction;
+
+    const maxFeePolicy = policies?.find((policy) => policy.type === PolicyType.MaxFee);
+
+    expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
+    expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+  });
+
   it('can call SMO contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
