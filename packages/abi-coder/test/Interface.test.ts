@@ -133,13 +133,13 @@ describe('Abi interface', () => {
 
   describe('messagesTypes', () => {
     it('sets messagesTypes properties just fine', () => {
-      const messagesTypes = exhaustiveExamplesAbi.messagesTypes;
+      const { messagesTypes } = exhaustiveExamplesAbi;
       expect(messagesTypes.length).greaterThan(0);
-      messagesTypes.forEach((messageType) => {
-        expect(messageType.messageId).toBeDefined();
-        expect(messageType.concreteTypeId).toBeDefined();
+      messagesTypes.forEach(({ concreteTypeId, messageId }) => {
+        expect(messageId).toBeDefined();
+        expect(concreteTypeId).toBeDefined();
         const foundType = exhaustiveExamplesAbi.concreteTypes.find(
-          (id) => id.concreteTypeId === messageType.concreteTypeId
+          (id) => id.concreteTypeId === concreteTypeId
         );
         expect(foundType).toBeDefined();
       });
