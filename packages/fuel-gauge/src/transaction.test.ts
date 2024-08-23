@@ -37,7 +37,7 @@ describe('Transaction', () => {
     const receipient = Wallet.generate({ provider });
 
     const request = new UnknownTransactionRequest({
-      data: '0x',
+      bytes: '0x',
     });
 
     request.addCoinOutput(receipient.address, amountToTransfer, provider.getBaseAssetId());

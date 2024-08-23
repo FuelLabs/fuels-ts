@@ -1,7 +1,6 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { TransactionUnknown } from '@fuel-ts/transactions';
 
-import { hashTransaction } from './hash-transaction';
 import type { BaseTransactionRequestLike } from './transaction-request';
 import { BaseTransactionRequest, TransactionType } from './transaction-request';
 
@@ -9,9 +8,11 @@ import { BaseTransactionRequest, TransactionType } from './transaction-request';
  * @hidden
  */
 export interface UnknownTransactionRequestLike extends BaseTransactionRequestLike {
-  data?: BytesLike;
+  bytes?: BytesLike;
 }
-
+/**
+ * @hidden
+ */
 export class UnknownTransactionRequest extends BaseTransactionRequest {
   static from(obj: UnknownTransactionRequestLike) {
     if (obj instanceof this) {
@@ -24,11 +25,11 @@ export class UnknownTransactionRequest extends BaseTransactionRequest {
   type = TransactionType.Unknown as const;
 
   /** Data of the transaction */
-  data?: BytesLike;
+  bytes?: BytesLike;
 
-  constructor({ data, ...rest }: UnknownTransactionRequestLike = {}) {
+  constructor({ bytes, ...rest }: UnknownTransactionRequestLike = {}) {
     super(rest);
-    this.data = data;
+    this.bytes = bytes;
   }
 
   /**
@@ -38,8 +39,8 @@ export class UnknownTransactionRequest extends BaseTransactionRequest {
    *
    * @returns - A hash of the transaction, which is the transaction ID.
    */
-  getTransactionId(chainId: number): string {
-    return hashTransaction(this, chainId);
+  getTransactionId(): string {
+    return '';
   }
 
   /**
@@ -51,7 +52,7 @@ export class UnknownTransactionRequest extends BaseTransactionRequest {
     return {
       ...this.getBaseTransaction(),
       type: TransactionType.Unknown,
-      data: this.data,
+      bytes: this.bytes,
     };
   }
 }

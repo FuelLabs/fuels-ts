@@ -584,66 +584,8 @@ export type TransactionUnknown = BaseTransactionType & {
   type: TransactionType.Unknown;
 
   /** Data of the transaction */
-  data?: BytesLike;
+  bytes?: BytesLike;
 };
-
-export class TransactionUnknownCoder extends Coder<TransactionUnknown, TransactionUnknown> {
-  constructor() {
-    super('TransactionUnknown', 'struct TransactionUnknown', 0);
-  }
-
-  encode(value: TransactionUnknown): Uint8Array {
-    const parts: Uint8Array[] = [];
-
-    parts.push(new NumberCoder('u32', { padToWordSize: true }).encode(value.policyTypes));
-    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.inputsCount));
-    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.outputsCount));
-    parts.push(new NumberCoder('u16', { padToWordSize: true }).encode(value.witnessesCount));
-    parts.push(new PoliciesCoder().encode(value.policies));
-    parts.push(new ArrayCoder(new InputCoder(), value.inputsCount).encode(value.inputs));
-    parts.push(new ArrayCoder(new OutputCoder(), value.outputsCount).encode(value.outputs));
-    parts.push(new ArrayCoder(new WitnessCoder(), value.witnessesCount).encode(value.witnesses));
-
-    return concat(parts);
-  }
-
-  decode(data: Uint8Array, offset: number): [TransactionUnknown, number] {
-    let decoded;
-    let o = offset;
-
-    [decoded, o] = new NumberCoder('u32', { padToWordSize: true }).decode(data, o);
-    const policyTypes = decoded;
-    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-    const inputsCount = decoded;
-    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-    const outputsCount = decoded;
-    [decoded, o] = new NumberCoder('u16', { padToWordSize: true }).decode(data, o);
-    const witnessesCount = decoded;
-    [decoded, o] = new PoliciesCoder().decode(data, o, policyTypes);
-    const policies = decoded;
-    [decoded, o] = new ArrayCoder(new InputCoder(), inputsCount).decode(data, o);
-    const inputs = decoded;
-    [decoded, o] = new ArrayCoder(new OutputCoder(), outputsCount).decode(data, o);
-    const outputs = decoded;
-    [decoded, o] = new ArrayCoder(new WitnessCoder(), witnessesCount).decode(data, o);
-    const witnesses = decoded;
-
-    return [
-      {
-        type: TransactionType.Unknown,
-        policyTypes,
-        inputsCount,
-        outputsCount,
-        witnessesCount,
-        policies,
-        inputs,
-        outputs,
-        witnesses,
-      },
-      o,
-    ];
-  }
-}
 
 type PossibleTransactions =
   | TransactionScript
@@ -711,12 +653,6 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         parts.push(new TransactionBlobCoder().encode(value as Transaction<TransactionType.Blob>));
         break;
       }
-      case TransactionType.Unknown: {
-        parts.push(
-          new TransactionUnknownCoder().encode(value as Transaction<TransactionType.Unknown>)
-        );
-        break;
-      }
       default: {
         throw new FuelError(
           ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
@@ -758,10 +694,6 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
       }
       case TransactionType.Blob: {
         [decoded, o] = new TransactionBlobCoder().decode(data, o);
-        return [decoded, o];
-      }
-      case TransactionType.Unknown: {
-        [decoded, o] = new TransactionUnknownCoder().decode(data, o);
         return [decoded, o];
       }
       default: {

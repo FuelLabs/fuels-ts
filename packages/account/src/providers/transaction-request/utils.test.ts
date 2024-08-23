@@ -51,7 +51,7 @@ describe('isTransactionTypeBlob', () => {
 
 describe('isTransactionTypeUnknown', () => {
   it('should return true if the request is an unknown transaction', () => {
-    const request = new UnknownTransactionRequest({ data: '0x' });
+    const request = new UnknownTransactionRequest({ bytes: '0x' });
     expect(isTransactionTypeUnknown(request)).toBe(true);
   });
 

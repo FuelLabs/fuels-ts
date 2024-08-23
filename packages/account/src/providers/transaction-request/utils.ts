@@ -47,11 +47,8 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
         console.warn(
           'This transaction type is not supported in this SDK version, it will be ignored, if you believe this is an error, please upgrade your SDK'
         );
-        return UnknownTransactionRequest.from({
-          ...obj,
-        });
+        return new UnknownTransactionRequest({ ...obj });
       }
-
       throw new FuelError(
         ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
         `Unsupported transaction type: ${obj.type}`
