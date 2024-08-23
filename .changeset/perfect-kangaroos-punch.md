@@ -3,4 +3,4 @@
 "create-fuels": patch
 ---
 
-build(deps): bump the deps-patch group across 1 directory with 10 updates
+build(deps): bump the deps-patch group with 10 updates
