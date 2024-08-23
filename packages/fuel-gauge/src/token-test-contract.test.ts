@@ -4,6 +4,7 @@ import { toHex, Wallet, bn } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { TokenContractFactory } from '../test/typegen';
+import type { AddressInput } from '../test/typegen/contracts/TokenContract';
 
 /**
  * @group node
@@ -80,7 +81,7 @@ describe('TokenTestContract', () => {
 
     const addresses = [wallet1, wallet2, wallet3].map((wallet) => ({
       bits: wallet.address.toB256(),
-    }));
+    })) as [AddressInput, AddressInput, AddressInput];
 
     const functionCallOne = token.functions.mint_to_addresses(addresses, 10);
     await functionCallOne.dryRun();
@@ -195,6 +196,8 @@ describe('TokenTestContract', () => {
     const assetId: AssetId = { bits: provider.getBaseAssetId() };
 
     await expectToThrowFuelError(
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       () => token.functions.transfer_to_address(addressParameter, assetId, 50).call(),
       new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid b256.')
     );
