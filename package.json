@@ -78,7 +78,7 @@
     "@types/node": "^22.2.0",
     "@types/node-fetch": "^2.6.11",
     "@types/web": "^0.0.155",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
     "@vitest/browser": "^1.6.0",
     "@vitest/coverage-istanbul": "^1.6.0",
