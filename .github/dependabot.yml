@@ -10,28 +10,14 @@ updates:
       - "chore"
     commit-message:
       prefix: "build(deps):"
-      prefix-development: "build(deps-dev):"
     versioning-strategy: "increase"
     groups:
       deps:
-        dependency-type: "production"
-        applies-to: "version-updates"
-        update-types:
-          - "major"
-          - "minor"
-      deps-dev:
-        dependency-type: "development"
         applies-to: "version-updates"
         update-types:
           - "major"
           - "minor"
       deps-patch:
-        dependency-type: "production"
-        applies-to: "version-updates"
-        update-types:
-          - "patch"
-      deps-dev-patch:
-        dependency-type: "development"
         applies-to: "version-updates"
         update-types:
           - "patch"
