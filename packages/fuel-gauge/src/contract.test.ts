@@ -1252,11 +1252,11 @@ describe('Contract', () => {
       contracts: [contract],
     } = launched;
 
-    const data = [1, 2, 3, 4, 5];
+    const data = true;
     const baseAssetId = provider.getBaseAssetId();
 
     const { waitForResult } = await contract.functions
-      .send_message(recipient.address.toB256(), data, 1)
+      .send_typed_message_bool(recipient.address.toB256(), data, 1)
       .callParams({ forward: [1, baseAssetId] })
       .call();
 
