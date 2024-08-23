@@ -7,6 +7,7 @@ import {
   MultiTokenContract,
   MultiTokenContractFactory,
 } from '../test/typegen/contracts';
+import type { AddressInput } from '../test/typegen/contracts/MultiTokenContract';
 import { PredicateU32 } from '../test/typegen/predicates/PredicateU32';
 
 /**
@@ -276,8 +277,10 @@ describe('Fee', () => {
 
     const genAddresses = () => Array.from({ length: 3 }, () => ({ bits: getRandomB256() }));
 
+    const addresses = genAddresses() as [AddressInput, AddressInput, AddressInput];
+
     const calls = Array.from({ length: 15 }).map(() =>
-      contract.functions.mint_to_addresses(genAddresses(), subId, 100)
+      contract.functions.mint_to_addresses(addresses, subId, 100)
     );
 
     const balanceBefore = await wallet.getBalance();
