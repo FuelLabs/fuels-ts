@@ -20,15 +20,15 @@
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
-    "chalk": "4",
+    "chalk": "5",
     "commander": "12.1.0",
-    "ora": "5.4.1",
+    "ora": "8.0.1",
     "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "@types/prompts": "^2.4.8",
-    "glob": "^10.2.6"
+    "glob": "^11.0.0"
   }
 }

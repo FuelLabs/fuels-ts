@@ -41,7 +41,7 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/utils": "workspace:^",
-    "@noble/hashes": "^1.3.3",
+    "@noble/hashes": "^1.4.0",
     "bech32": "^2.0.0"
   }
 }

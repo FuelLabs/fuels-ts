@@ -41,7 +41,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "chalk": "4",
+    "chalk": "5",
     "cli-table": "^0.3.11"
   },
   "devDependencies": {
