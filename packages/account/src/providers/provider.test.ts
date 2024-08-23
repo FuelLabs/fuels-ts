@@ -121,7 +121,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(107),
+        gasUsed: bn(159),
       },
     ];
 
@@ -407,7 +407,7 @@ describe('Provider', () => {
   });
 
   it('should cache resources only when TX is successfully submitted', async () => {
-    const resourceAmount = 50_000;
+    const resourceAmount = 5_000;
     const utxosAmount = 2;
 
     const testMessage = new TestMessage({ amount: resourceAmount });
@@ -416,6 +416,7 @@ describe('Provider', () => {
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
+      // 3 resources with a total of 15_000
       walletsConfig: {
         coinsPerAsset: utxosAmount,
         amountPerCoin: resourceAmount,
@@ -432,6 +433,7 @@ describe('Provider', () => {
 
     expect(coins.length).toBe(utxosAmount);
 
+    // Tx will cost 10_000 for the transfer + 1 for fee. All resources will be used
     const EXPECTED = {
       utxos: coins.map((coin) => coin.id),
       messages: [testMessage.nonce],
