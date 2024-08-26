@@ -1,7 +1,7 @@
 import { launchTestNode } from 'fuels/test-utils';
 
 import { VoidFactory } from '../test/typegen';
-import type { NativeEnumInput } from '../test/typegen/contracts/VoidAbi';
+import type { NativeEnumInput } from '../test/typegen/contracts/Void';
 import type { Option } from '../test/typegen/contracts/common';
 
 /**

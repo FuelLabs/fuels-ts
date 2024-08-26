@@ -14,6 +14,7 @@ import {
   MultiTokenContractFactory,
   RevertErrorFactory,
 } from '../test/typegen/contracts';
+import type { AddressInput } from '../test/typegen/contracts/MultiTokenContract';
 
 /**
  * @group node
@@ -146,7 +147,7 @@ describe('dry-run-multiple-txs', () => {
     const resources = await wallet.getResourcesToSpend([[500_000, provider.getBaseAssetId()]]);
 
     // creating receives to be used by the request 2 and 3
-    const addresses = [
+    const addresses: [AddressInput, AddressInput, AddressInput] = [
       { bits: Wallet.generate({ provider }).address.toB256() },
       { bits: Wallet.generate({ provider }).address.toB256() },
       { bits: Wallet.generate({ provider }).address.toB256() },
