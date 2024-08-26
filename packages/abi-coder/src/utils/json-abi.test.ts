@@ -1,5 +1,5 @@
 import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbiOld, JsonAbiArgument } from '../types/JsonAbi';
+import type { JsonAbiArgument } from '../types/JsonAbi';
 
 import { ENCODING_V1 } from './constants';
 import {
@@ -9,8 +9,10 @@ import {
   findVectorBufferArgument,
   getEncodingVersion,
 } from './json-abi';
+import { transpileAbi } from './transpile-abi';
 
-const MOCK_ABI: JsonAbiOld = {
+const MOCK_ABI = transpileAbi({
+  encoding: 'V1',
   types: [
     { typeId: 1, type: '()', components: [], typeParameters: [] },
     { typeId: 2, type: 'u256', components: [], typeParameters: [] },
@@ -20,7 +22,8 @@ const MOCK_ABI: JsonAbiOld = {
   ],
   loggedTypes: [],
   configurables: [],
-};
+  messagesTypes: [],
+});
 
 const DEFAULT_ENCODING_VERSION = ENCODING_V1;
 
