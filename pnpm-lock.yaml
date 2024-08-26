@@ -452,6 +452,9 @@ importers:
       eslint-config-next:
         specifier: 14.2.6
         version: 14.2.6(eslint@8.57.0)(typescript@5.4.5)
+      postcss:
+        specifier: ^8.4.41
+        version: 8.4.41
       postcss-load-config:
         specifier: ^6.0.1
         version: 6.0.1(jiti@1.21.6)(postcss@8.4.41)(tsx@4.17.0)(yaml@2.5.0)
@@ -7188,7 +7191,6 @@ packages:
 
   bun@1.1.26:
     resolution: {integrity: sha512-dWSewAqE7sVbYmflJxgG47dW4vmsbar7VAnQ4ao45y3ulr3n7CwdsMLFnzd28jhPRtF+rsaVK2y4OLIkP3OD4A==}
-    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
