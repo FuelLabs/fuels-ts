@@ -28,7 +28,7 @@ export enum TransactionType /* u8 */ {
   Upgrade = 3,
   Upload = 4,
   Blob = 5,
-  Unknown = 6,
+  Unknown = -1,
 }
 
 /** @hidden */
