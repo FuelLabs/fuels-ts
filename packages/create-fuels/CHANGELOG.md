@@ -1,5 +1,12 @@
 # create-fuels
 
+## 0.94.1
+
+### Patch Changes
+
+- c57f30a: chore: make `nextjs` the default `create fuels` template
+- c2fa2a5: feat: add vite template to `create-fuels`
+
 ## 0.94.0
 
 ### Minor Changes

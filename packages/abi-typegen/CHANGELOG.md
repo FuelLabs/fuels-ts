@@ -1,5 +1,16 @@
 # @fuel-ts/abi-typegen
 
+## 0.94.1
+
+### Patch Changes
+
+- 66c0454: fix: stop building `typegen` on `pretest` script
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/versions@0.94.1
+
 ## 0.94.0
 
 ### Minor Changes
