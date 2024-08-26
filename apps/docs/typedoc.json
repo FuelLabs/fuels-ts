@@ -27,10 +27,6 @@
   // ********************** //
   "hideBreadcrumbs": true,
   "membersWithOwnFile": ["Class", "Enum", "Interface"],
-  "typeDeclarationFormat": "table",
-  "parametersFormat": "table",
-  "interfacePropertiesFormat": "table",
-  "classPropertiesFormat": "table",
   "excludeScopesInPaths": true,
   "entryFileName": "index.md",
   "modulesFileName": "index",
