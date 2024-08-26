@@ -1,4 +1,7 @@
 // #region wallet-sdk-react-ui
+
+"use client";
+
 import {
   useAccount,
   useBalance,

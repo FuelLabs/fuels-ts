@@ -12,8 +12,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.8.1",
-    "@fuels/react": "^0.20.0",
+    "@fuels/connectors": "^0.25.0",
+    "@fuels/react": "^0.25.0",
     "fuels": "workspace:*",
     "@tanstack/react-query": "^5.51.23",
     "dotenv": "^16.4.5",

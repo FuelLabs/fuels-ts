@@ -1,7 +1,7 @@
 {
   "name": "template-vite",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "xprebuild": "fuels build",
@@ -12,8 +12,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.8.1",
-    "@fuels/react": "^0.20.0",
+    "@fuels/connectors": "^0.25.0",
+    "@fuels/react": "^0.25.0",
     "@tanstack/react-query": "^5.51.23",
     "@tanstack/react-router": "^1.48.1",
     "dotenv": "^16.4.5",
