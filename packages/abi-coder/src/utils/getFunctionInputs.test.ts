@@ -1,4 +1,4 @@
-import type { JsonAbi, JsonAbiArgument, JsonAbiType } from '../types/JsonAbi';
+import type { JsonAbiArgument, JsonAbiOld, JsonAbiType } from '../types/JsonAbi';
 
 import { getFunctionInputs } from './getFunctionInputs';
 
@@ -36,7 +36,7 @@ const EMPTY_ABI_TYPES: [string, JsonAbiType][] = [
   ['option (debug)', debugOptionAbiType],
 ];
 
-const jsonAbi: JsonAbi = {
+const jsonAbi: JsonAbiOld = {
   encoding: '1',
   types: [nonEmptyType, voidAbiType, optionAbiType, debugOptionAbiType],
   functions: [],
