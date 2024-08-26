@@ -453,7 +453,7 @@ importers:
         specifier: 14.2.6
         version: 14.2.6(eslint@8.57.0)(typescript@5.4.5)
       postcss:
-        specifier: ^8.4.41
+        specifier: ^8
         version: 8.4.41
       postcss-load-config:
         specifier: ^6.0.1
