@@ -22,13 +22,18 @@
   "cacheBust": true,
   "hideGenerator": true,
   "plugin": ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules"],
-  "filenameSeparator": "-",
   // ********************** //
   // Markdown Config
   // ********************** //
   "hideBreadcrumbs": true,
-  "hideInPageTOC": true,
-  "entryDocument": "index.md",
+  "membersWithOwnFile": ["Class", "Enum", "Interface"],
+  "typeDeclarationFormat": "table",
+  "parametersFormat": "table",
+  "interfacePropertiesFormat": "table",
+  "classPropertiesFormat": "table",
+  "excludeScopesInPaths": true,
+  "entryFileName": "index.md",
+  "modulesFileName": "index",
   // ******************** //
   // Merge Modules Config
   // ******************** //
