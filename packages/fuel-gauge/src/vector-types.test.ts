@@ -1,3 +1,4 @@
+import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -7,6 +8,9 @@ import { VectorTypesScript } from '../test/typegen/scripts';
 
 import { launchTestContract } from './utils';
 
+type ArrayOfTuplesType = [BigNumberish, BigNumberish][];
+type TupleOfArraysType = [BigNumberish[], BigNumberish[]];
+
 const U32_VEC = [0, 1, 2];
 const VEC_IN_VEC = [
   [0, 1, 2],
@@ -14,21 +18,21 @@ const VEC_IN_VEC = [
 ];
 const STRUCT_IN_VEC = [{ a: 0 }, { a: 1 }];
 const VEC_IN_STRUCT = { a: [0, 1, 2] };
-const ARRAY_IN_VEC = [
+const ARRAY_IN_VEC: ArrayOfTuplesType = [
   [0, 1],
   [0, 1],
 ];
-const VEC_IN_ARRAY = [
+const VEC_IN_ARRAY: TupleOfArraysType = [
   [0, 1, 2],
   [0, 1, 2],
 ];
 const VEC_IN_ENUM = { a: [0, 1, 2] };
 const ENUM_IN_VEC = [{ a: 0 }, { a: 1 }];
-const TUPLE_IN_VEC = [
+const TUPLE_IN_VEC: ArrayOfTuplesType = [
   [0, 0],
   [1, 1],
 ];
-const VEC_IN_TUPLE = [
+const VEC_IN_TUPLE: TupleOfArraysType = [
   [0, 1, 2],
   [0, 1, 2],
 ];
@@ -67,12 +71,12 @@ type MainArgs = [
   TwoDimensionArray, // VEC_IN_VEC
   SomeStruct[], // STRUCT_IN_VEC
   SomeStructWithVec, // VEC_IN_STRUCT
-  TwoDimensionArray, // ARRAY_IN_VEC
-  TwoDimensionArray, // VEC_IN_ARRAY
+  ArrayOfTuplesType, // ARRAY_IN_VEC
+  TupleOfArraysType, // VEC_IN_ARRAY
   SomeStructWithVec, // VEC_IN_ENUM
   SomeStruct[], // ENUM_IN_VEC
-  TwoDimensionArray, // TUPLE_IN_VEC
-  TwoDimensionArray, // VEC_IN_TUPLE
+  ArrayOfTuplesType, // TUPLE_IN_VEC
+  TupleOfArraysType, // VEC_IN_TUPLE
   VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
