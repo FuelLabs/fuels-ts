@@ -16,7 +16,7 @@
     "@fuels/react": "^0.25.0",
     "@tanstack/react-query": "^5.52.1",
     "@tanstack/react-router": "^1.48.1",
-    "@wagmi/connectors": "5.0.26",
+    "@wagmi/connectors": "^5.0.26",
     "dotenv": "^16.4.5",
     "fuels": "workspace:*",
     "react": "^18.3.1",
