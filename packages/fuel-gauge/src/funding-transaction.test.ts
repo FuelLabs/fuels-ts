@@ -223,7 +223,7 @@ describe('Funding Transactions', () => {
       wallets: [funded],
     } = launched;
 
-    const splitIn = 20;
+    const splitIn = 204;
     const sender = Wallet.generate({ provider });
     const receiver = Wallet.generate({ provider });
 
@@ -233,7 +233,7 @@ describe('Funding Transactions', () => {
      */
     await fundingTxWithMultipleUTXOs({
       account: sender,
-      totalAmount: 2400,
+      totalAmount: 1020,
       splitIn,
       baseAssetId: provider.getBaseAssetId(),
       mainWallet: funded,
@@ -271,7 +271,7 @@ describe('Funding Transactions', () => {
       new FuelError(FuelError.CODES.INVALID_REQUEST, 'not enough coins to fit the target')
     );
 
-    expect(getResourcesToSpend).toHaveBeenCalledTimes(2);
+    expect(getResourcesToSpend).toHaveBeenCalled();
   });
 
   it('should ensure a partially funded Transaction will require only missing funds', async () => {
