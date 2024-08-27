@@ -63,6 +63,11 @@ input BalanceFilterInput {
   owner: Address!
 }
 
+type Blob {
+  id: BlobId!
+  bytecode: HexString!
+}
+
 scalar BlobId
 
 type Block {
@@ -942,6 +947,12 @@ type Query {
     last: Int
     before: String
   ): BalanceConnection!
+  blob(
+    """
+    ID of the Blob
+    """
+    id: BlobId!
+  ): Blob
   block(
     """
     ID of the block
