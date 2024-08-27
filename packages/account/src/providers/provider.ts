@@ -1458,9 +1458,20 @@ Supported fuel-core version: ${supportedVersion}.`
     } = await this.operations.getTransactions(paginationArgs);
 
     const coder = new TransactionCoder();
-    const transactions = edges.map(
-      ({ node: { rawPayload } }) => coder.decode(arrayify(rawPayload), 0)[0]
-    );
+    const transactions = edges
+      .map(({ node: { rawPayload } }) => {
+        try {
+          return coder.decode(arrayify(rawPayload), 0)[0];
+        } catch (error) {
+          if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+            // eslint-disable-next-line no-console
+            console.warn('Unsupported transaction type encountered:');
+            return null;
+          }
+          throw error;
+        }
+      })
+      .filter((tx): tx is Transaction => tx !== null);
 
     return { transactions, pageInfo };
   }

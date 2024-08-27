@@ -28,7 +28,7 @@ export enum TransactionType /* u8 */ {
   Upgrade = 3,
   Upload = 4,
   Blob = 5,
-  Unknown = -1,
+  Unknown = 6,
 }
 
 /** @hidden */
@@ -696,6 +696,7 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         [decoded, o] = new TransactionBlobCoder().decode(data, o);
         return [decoded, o];
       }
+      case TransactionType.Unknown:
       default: {
         throw new FuelError(
           ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
