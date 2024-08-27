@@ -1438,13 +1438,24 @@ Supported fuel-core version: ${supportedVersion}.`
     transactionId: string
   ): Promise<Transaction<TTransactionType> | null> {
     const { transaction } = await this.operations.getTransaction({ transactionId });
+
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder().decode(
-      arrayify(transaction.rawPayload),
-      0
-    )?.[0] as Transaction<TTransactionType>;
+
+    try {
+      return new TransactionCoder().decode(
+        arrayify(transaction.rawPayload),
+        0
+      )?.[0] as Transaction<TTransactionType>;
+    } catch (error) {
+      if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+        // eslint-disable-next-line no-console
+        console.warn('Unsupported transaction type encountered');
+        return null;
+      }
+      throw error;
+    }
   }
 
   /**
@@ -1465,7 +1476,7 @@ Supported fuel-core version: ${supportedVersion}.`
         } catch (error) {
           if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
             // eslint-disable-next-line no-console
-            console.warn('Unsupported transaction type encountered:');
+            console.warn('Unsupported transaction type encountered');
             return null;
           }
           throw error;

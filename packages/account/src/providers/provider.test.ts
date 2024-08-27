@@ -73,10 +73,20 @@ describe('Provider', () => {
       }),
     });
 
-    await expectToThrowFuelError(
-      () => mockProvider.getTransaction('0x1234567890abcdef'),
-      new FuelError(ErrorCode.UNSUPPORTED_TRANSACTION_TYPE, 'Unsupported transaction type: 6')
+    // Spy on console.warn
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    // Verify that only one transaction was returned (the known type)
+    const transaction = await mockProvider.getTransaction('0x1234567890abcdef');
+
+    expect(transaction).toBeNull();
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Unsupported transaction type encountered')
     );
+
+    // Clean up
+    consoleWarnSpy.mockRestore();
   });
 
   it('should log a warning when retrieving batch transactions with an unknown transaction type', async () => {
@@ -120,7 +130,7 @@ describe('Provider', () => {
 
     // Check if warning was logged
     expect(consoleWarnSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Unsupported transaction type encountered:')
+      expect.stringContaining('Unsupported transaction type encountered')
     );
 
     // Clean up
