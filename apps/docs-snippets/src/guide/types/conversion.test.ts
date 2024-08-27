@@ -119,6 +119,6 @@ describe('Conversion Types', () => {
     const assetId: AssetId = address.toAssetId();
     // #endregion conversion-4
 
-    expect(assetId.value);
+    expect(assetId.bits).toEqual(b256);
   });
 });

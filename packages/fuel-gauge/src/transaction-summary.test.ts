@@ -24,6 +24,7 @@ import {
 import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
 
 import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
+import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
 
 function convertBnsToHex(value: unknown): unknown {
   if (value instanceof BN) {
@@ -471,6 +472,12 @@ describe('TransactionSummary', () => {
               asset_id: { bits: assetId },
               amount,
             })),
+          ] as [
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
           ])
           .call();
 
@@ -596,6 +603,12 @@ describe('TransactionSummary', () => {
             asset_id: { bits: assetId },
             amount,
           })),
+        ] as [
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
         ])
         .call();
 
