@@ -3,4 +3,4 @@
 "@fuel-ts/abi-coder": patch
 ---
 
-fix: rename abi `MessageType.messageId` property
+feat: support message types
