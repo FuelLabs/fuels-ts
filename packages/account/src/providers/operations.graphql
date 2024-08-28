@@ -897,6 +897,12 @@ query getMessageByNonce($nonce: Nonce!) {
   }
 }
 
+query getBlob($blobId: BlobId!) {
+  blob(id: $blobId) {
+    id
+  }
+}
+
 subscription submitAndAwait($encodedTransaction: HexString!) {
   submitAndAwait(tx: $encodedTransaction) {
     ...transactionStatusSubscriptionFragment

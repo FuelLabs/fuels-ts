@@ -281,15 +281,24 @@ export default class ContractFactory {
       ...deployOptions,
     });
 
+    // BlobIDs only need to be uploaded once and we can check if they exist on chain
+    const blobsToUpload = [...new Set(blobIds)];
+    for (const [index, blobId] of blobsToUpload.entries()) {
+      // Todo: refactor to a single call
+      const id = await account.provider.getBlob(blobId);
+      if (id) {
+        blobsToUpload.splice(index, 1);
+      }
+    }
+
     // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
     const chainInfo = account.provider.getChain();
     const gasPrice = await account.provider.estimateGasPrice(10);
     const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
-    const estimatedBlobIds: string[] = [];
 
     for (const { transactionRequest, blobId } of chunks) {
-      if (!estimatedBlobIds.includes(blobId)) {
+      if (blobsToUpload.includes(blobId)) {
         const minGas = transactionRequest.calculateMinGas(chainInfo);
         const minFee = calculateGasFee({
           gasPrice,
@@ -299,7 +308,6 @@ export default class ContractFactory {
         }).add(1);
 
         totalCost = totalCost.add(minFee);
-        estimatedBlobIds.push(blobId);
       }
       const createMinGas = createRequest.calculateMinGas(chainInfo);
       const createMinFee = calculateGasFee({
@@ -325,7 +333,7 @@ export default class ContractFactory {
       const uploadedBlobs: string[] = [];
       // Deploy the chunks as blob txs
       for (const { blobId, transactionRequest } of chunks) {
-        if (!uploadedBlobs.includes(blobId)) {
+        if (!uploadedBlobs.includes(blobId) && blobsToUpload.includes(blobId)) {
           const fundedBlobRequest = await this.fundTransactionRequest(
             transactionRequest,
             deployOptions
@@ -340,6 +348,7 @@ export default class ContractFactory {
             // Core will throw for blobs that have already been uploaded, but the blobId
             // is still valid so we can use this for the loader contract
             if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
+              uploadedBlobs.push(blobId);
               // eslint-disable-next-line no-continue
               continue;
             }

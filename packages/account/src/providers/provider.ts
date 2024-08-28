@@ -1331,6 +1331,17 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * Returns a blob ID if it exists.
+   *
+   * @param blobId - the blob ID to check.
+   * @returns A promise that resolves to the blob ID or null.
+   */
+  async getBlob(blobId: string): Promise<string | null> {
+    const { blob } = await this.operations.getBlob({ blobId });
+    return blob?.id;
+  }
+
+  /**
    * Returns block matching the given ID or height.
    *
    * @param idOrHeight - ID or height of the block.
