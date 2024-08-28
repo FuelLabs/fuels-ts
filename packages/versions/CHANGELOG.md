@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.94.2
+
+### Patch Changes
+
+- ccd94fc: chore: upgrade `fuel-core@0.34.0`
+
 ## 0.94.1
 
 ## 0.94.0
