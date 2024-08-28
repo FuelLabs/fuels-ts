@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.94.1
+
+## 0.94.0
+
+## 0.93.0
+
+### Minor Changes
+
+- d4c4e55: chore!: refactored the `getTransactionCost` method
+
 ## 0.92.1
 
 ## 0.92.0

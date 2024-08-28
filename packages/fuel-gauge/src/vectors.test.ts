@@ -1,23 +1,17 @@
 import { bn, randomBytes, hexlify } from 'fuels';
 import type { BigNumberish, BN } from 'fuels';
 
-import { VectorsAbi__factory } from '../test/typegen/contracts';
-import type { SmallEnumInput } from '../test/typegen/contracts/CoverageContractAbi';
-import VectorsAbiHex from '../test/typegen/contracts/VectorsAbi.hex';
+import { VectorsFactory } from '../test/typegen/contracts';
+import { SmallEnumInput } from '../test/typegen/contracts/CoverageContract';
 import type { Vec } from '../test/typegen/contracts/common';
 
 import { launchTestContract } from './utils';
 
 const toNumbers = (nums: BN[]) => nums.map((num: BN) => bn(num).toNumber());
 
-enum SmallEnum {
-  Empty = 'Empty',
-}
-
 function setupContract() {
   return launchTestContract({
-    deployer: VectorsAbi__factory,
-    bytecode: VectorsAbiHex,
+    factory: VectorsFactory,
   });
 }
 
@@ -158,7 +152,7 @@ describe('Vector Tests', () => {
   it('should test [u8; 2] vector input/output', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = [
+    const INPUT: Array<[BigNumberish, BigNumberish]> = [
       [1, 2],
       [5, 6],
     ];
@@ -290,11 +284,11 @@ describe('Vector Tests', () => {
     using contractInstance = await setupContract();
 
     const INPUT: Vec<SmallEnumInput> = [
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
-      SmallEnum.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
+      SmallEnumInput.Empty,
     ];
 
     const { waitForResult } = await contractInstance.functions

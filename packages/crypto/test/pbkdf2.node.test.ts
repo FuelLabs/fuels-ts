@@ -1,9 +1,31 @@
-import { bufferFromString, pbkdf2 } from '..';
+import { bufferFromString, pbkdf2 as pbkdf2Node } from '..';
+
+interface PBKDF2Node {
+  (
+    password: Uint8Array,
+    salt: Uint8Array,
+    iterations: number,
+    keylen: number,
+    algo: string
+  ): string;
+  register(
+    fn: (
+      password: Uint8Array,
+      salt: Uint8Array,
+      iterations: number,
+      keylen: number,
+      algo: string
+    ) => string
+  ): void;
+  lock(): void;
+}
 
 /**
  * @group node
  */
 describe('pbkdf2 node', () => {
+  const pbkdf2 = pbkdf2Node as PBKDF2Node;
+
   it('should use the registered function for PBKDF2 computation', () => {
     const expectedResult = '0x90eceedd899d5cdcdfd9b315ad6e2c3391bf95cc131b6f0f016339db5ee60494';
     const passwordBuffer = bufferFromString(String('password123').normalize('NFKC'), 'utf-8');
@@ -28,7 +50,7 @@ describe('pbkdf2 node', () => {
     pbkdf2.lock();
 
     expect(() => {
-      pbkdf2.register(() => {});
+      pbkdf2.register(() => '');
     }).toThrowError('pbkdf2 is locked');
   });
 

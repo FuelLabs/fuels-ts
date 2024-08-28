@@ -5,8 +5,8 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { TestScript } from "@/sway-api";
 import { FAUCET_LINK } from "@/lib";
-import { TestScriptAbi__factory } from "@/sway-api";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -22,7 +22,7 @@ export default function ScriptExample() {
   useAsync(async () => {
     if (wallet) {
       // Initialize script instance
-      const script = TestScriptAbi__factory.createInstance(wallet);
+      const script = new TestScript(wallet);
       setScript(script);
     }
   }, [wallet]);
@@ -81,7 +81,7 @@ export default function ScriptExample() {
       </span>
 
       <Link
-        href="https://docs.fuel.network/docs/intro/glossary/#script"
+        href="https://docs.fuel.network/docs/fuels-ts/scripts"
         className="mt-4"
       >
         Learn more about Scripts

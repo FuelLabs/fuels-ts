@@ -32,14 +32,14 @@ describe('functions.ts', () => {
       name: 'f1',
       inputs: [{ name: 'u8', type: 1, typeArguments: null }],
       output: { name: 'u8', type: 1, typeArguments: null },
-      attributes: null,
+      attributes: [],
     };
 
     const rawF2: JsonAbiFunction = {
       name: 'f2',
       inputs: [{ name: 'u16', type: 2, typeArguments: null }],
       output: { name: 'u16', type: 2, typeArguments: null },
-      attributes: null,
+      attributes: [],
     };
 
     const rawAbiFunctions = [rawF1, rawF2];

@@ -38,8 +38,11 @@ jobs:
       - name: Validate Tests
         run: pnpm test:validate
 
+      - name: Pretest
+        run: pnpm pretest
+
       - name: Run Tests - ${{ matrix.env.name }}
-        run: pnpm ci:test --${{ matrix.env.name }}
+        run: pnpm test:${{ matrix.env.name }}
 
       - name: Upload Coverage - ${{ matrix.env.name }}
         uses: actions/upload-artifact@v4
@@ -50,7 +53,8 @@ jobs:
 
   integration:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
+    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,7 +70,6 @@ jobs:
         run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
-        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: "refs/heads/master"
@@ -75,20 +78,18 @@ jobs:
           wait-interval: 30
 
       - name: Run tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         run: pnpm test:integration
         env:
           PUBLISHED_NPM_TAG: next
 
       - name: Run UI tests (with published version)
-        if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
         run: sh ./scripts/tests-ui-integration.sh
         env:
           PUBLISHED_NPM_TAG: next
 
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     needs: [environments]
     steps:
       - name: Checkout

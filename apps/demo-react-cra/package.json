@@ -3,11 +3,11 @@
   "version": "0.1.29",
   "private": true,
   "dependencies": {
-    "@fuels/vm-asm": "0.55.0",
+    "@fuels/vm-asm": "0.56.0",
     "@testing-library/react": "^16.0.0",
-    "@types/node": "^20.14.11",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
+    "@types/node": "^22.2.0",
+    "@types/react": "^18.3.4",
+    "@types/react-dom": "^18.3",
     "eslint-config-react-app": "^7.0.1",
     "fuels": "workspace:*",
     "react": "^18.3.1",
@@ -18,7 +18,7 @@
   },
   "scripts": {
     "original:start": "react-scripts start",
-    "original:build": "react-scripts build",
+    "original:build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "original:test": "react-scripts test",
     "original:eject": "react-scripts eject",
     "pretest": "pnpm original:build"

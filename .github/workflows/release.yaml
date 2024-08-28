@@ -52,7 +52,7 @@ jobs:
 
       - name: Set branch name and changeset PR title
         run: |
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+          echo "CHANGESET_PR_TITLE=$(echo "ci(release): \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
       - name: Get latest release
         run: |
@@ -70,7 +70,7 @@ jobs:
         with:
           publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
           version: pnpm changeset:version-with-docs
-          commit: "ci(changesets): versioning packages"
+          commit: "ci(release): versioning packages and changesets"
           title: ${{ env.CHANGESET_PR_TITLE }}
           createGithubReleases: aggregate
           githubReleaseName: ${{ env.RELEASE_VERSION }}
@@ -119,7 +119,7 @@ jobs:
         run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
 
       - name: Decides if Docs should be deployed
-        if: startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
       - name: Checkout API Docs
@@ -202,3 +202,11 @@ jobs:
           aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
         env:
           S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
+
+      - name: Notify migrations and disclosures of the new release (breaking changes)
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
+            https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
+            -d '{"event_type":"update_versions"}'

@@ -3,13 +3,8 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
-import {
-  InputType,
-  TransactionType,
-  InputMessageCoder,
-  TransactionCoder,
-} from '@fuel-ts/transactions';
-import { arrayify, hexlify, DateTime } from '@fuel-ts/utils';
+import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
+import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
 import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
@@ -37,18 +32,22 @@ import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
 import { coinQuantityfy } from './coin-quantity';
 import { FuelGraphqlSubscriber } from './fuel-graphql-subscriber';
-import { MemoryCache } from './memory-cache';
 import type { Message, MessageCoin, MessageProof, MessageStatus } from './message';
 import type { ExcludeResourcesOption, Resource } from './resource';
+import { ResourceCache } from './resource-cache';
 import type {
   TransactionRequestLike,
   TransactionRequest,
   TransactionRequestInput,
   CoinTransactionRequestInput,
-  ScriptTransactionRequest,
   JsonAbisFromAllCalls,
+  ScriptTransactionRequest,
 } from './transaction-request';
-import { transactionRequestify } from './transaction-request';
+import {
+  isTransactionTypeCreate,
+  isTransactionTypeScript,
+  transactionRequestify,
+} from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
 import { TransactionResponse, getDecodedLogs } from './transaction-response';
 import { processGqlReceipt } from './transaction-summary/receipt';
@@ -65,6 +64,7 @@ const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
+export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -301,9 +301,9 @@ export type ProviderOptions = {
    */
   timeout?: number;
   /**
-   * Cache UTXOs for the given time [ms].
+   * Resources cache for the given time [ms]. If set to -1, the cache will be disabled.
    */
-  cacheUtxo?: number;
+  resourceCacheTTL?: number;
   /**
    * Retry options to use when fetching data from the node.
    */
@@ -367,12 +367,23 @@ type ChainInfoCache = Record<string, ChainInfo>;
  */
 type NodeInfoCache = Record<string, NodeInfo>;
 
+type Operations = ReturnType<typeof getOperationsSdk>;
+
+type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
+  submitAndAwait: (
+    ...args: Parameters<Operations['submitAndAwait']>
+  ) => Promise<ReturnType<Operations['submitAndAwait']>>;
+  statusChange: (
+    ...args: Parameters<Operations['statusChange']>
+  ) => Promise<ReturnType<Operations['statusChange']>>;
+};
+
 /**
  * A provider for connecting to a node
  */
 export default class Provider {
-  operations: ReturnType<typeof getOperationsSdk>;
-  cache?: MemoryCache;
+  operations: SdkOperations;
+  cache?: ResourceCache;
 
   /** @hidden */
   static clearChainAndNodeCaches() {
@@ -387,7 +398,7 @@ export default class Provider {
 
   options: ProviderOptions = {
     timeout: undefined,
-    cacheUtxo: undefined,
+    resourceCacheTTL: undefined,
     fetch: undefined,
     retryOptions: undefined,
   };
@@ -426,9 +437,18 @@ export default class Provider {
   ) {
     this.options = { ...this.options, ...options };
     this.url = url;
-
     this.operations = this.createOperations();
-    this.cache = options.cacheUtxo ? new MemoryCache(options.cacheUtxo) : undefined;
+
+    const { resourceCacheTTL } = this.options;
+    if (isDefined(resourceCacheTTL)) {
+      if (resourceCacheTTL !== -1) {
+        this.cache = new ResourceCache(resourceCacheTTL);
+      } else {
+        this.cache = undefined;
+      }
+    } else {
+      this.cache = new ResourceCache(DEFAULT_RESOURCE_CACHE_TTL);
+    }
   }
 
   /**
@@ -515,10 +535,9 @@ export default class Provider {
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
   async fetchChainAndNodeInfo() {
-    const chain = await this.fetchChain();
     const nodeInfo = await this.fetchNode();
-
     Provider.ensureClientVersionIsSupported(nodeInfo);
+    const chain = await this.fetchChain();
 
     return {
       chain,
@@ -550,7 +569,7 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns The operation SDK object
    * @hidden
    */
-  private createOperations() {
+  private createOperations(): SdkOperations {
     const fetchFn = Provider.getFetchFn(this.options);
     const gqlClient = new GraphQLClient(this.url, {
       fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
@@ -574,7 +593,7 @@ Supported fuel-core version: ${supportedVersion}.`
       const isSubscription = opDefinition?.operation === 'subscription';
 
       if (isSubscription) {
-        return new FuelGraphqlSubscriber({
+        return FuelGraphqlSubscriber.create({
           url: this.url,
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
@@ -673,16 +692,41 @@ Supported fuel-core version: ${supportedVersion}.`
   /**
    * @hidden
    */
-  #cacheInputs(inputs: TransactionRequestInput[]): void {
+  #cacheInputs(inputs: TransactionRequestInput[], transactionId: string): void {
     if (!this.cache) {
       return;
     }
 
-    inputs.forEach((input) => {
-      if (input.type === InputType.Coin) {
-        this.cache?.set(input.id);
-      }
-    });
+    const inputsToCache = inputs.reduce(
+      (acc, input) => {
+        if (input.type === InputType.Coin) {
+          acc.utxos.push(input.id);
+        } else if (input.type === InputType.Message) {
+          acc.messages.push(input.nonce);
+        }
+        return acc;
+      },
+      { utxos: [], messages: [] } as Required<ExcludeResourcesOption>
+    );
+
+    this.cache.set(transactionId, inputsToCache);
+  }
+
+  private validateTransaction(tx: TransactionRequest, consensusParameters: ConsensusParameters) {
+    const { maxOutputs, maxInputs } = consensusParameters.txParameters;
+    if (bn(tx.inputs.length).gt(maxInputs)) {
+      throw new FuelError(
+        ErrorCode.MAX_INPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of inputs.'
+      );
+    }
+
+    if (bn(tx.outputs.length).gt(maxOutputs)) {
+      throw new FuelError(
+        ErrorCode.MAX_OUTPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of outputs.'
+      );
+    }
   }
 
   /**
@@ -701,25 +745,29 @@ Supported fuel-core version: ${supportedVersion}.`
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    this.#cacheInputs(transactionRequest.inputs);
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
     // #endregion Provider-sendTransaction
 
+    const { consensusParameters } = this.getChain();
+
+    this.validateTransaction(transactionRequest, consensusParameters);
+
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
     let abis: JsonAbisFromAllCalls | undefined;
 
-    if (transactionRequest.type === TransactionType.Script) {
+    if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
 
     const {
       submit: { id: transactionId },
     } = await this.operations.submit({ encodedTransaction });
+    this.#cacheInputs(transactionRequest.inputs, transactionId);
 
-    return new TransactionResponse(transactionId, this, abis);
+    return new TransactionResponse(transactionRequest, this, abis);
   }
 
   /**
@@ -806,7 +854,7 @@ Supported fuel-core version: ${supportedVersion}.`
   async estimateTxDependencies(
     transactionRequest: TransactionRequest
   ): Promise<EstimateTxDependenciesReturns> {
-    if (transactionRequest.type === TransactionType.Create) {
+    if (isTransactionTypeCreate(transactionRequest)) {
       return {
         receipts: [],
         outputVariables: 0,
@@ -836,7 +884,7 @@ Supported fuel-core version: ${supportedVersion}.`
       const hasMissingOutputs =
         missingOutputVariables.length !== 0 || missingOutputContractIds.length !== 0;
 
-      if (hasMissingOutputs) {
+      if (hasMissingOutputs && isTransactionTypeScript(transactionRequest)) {
         outputVariables += missingOutputVariables.length;
         transactionRequest.addVariableOutputs(missingOutputVariables.length);
         missingOutputContractIds.forEach(({ contractId }) => {
@@ -890,7 +938,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
     // Prepare ScriptTransactionRequests and their indices
     allRequests.forEach((req, index) => {
-      if (req.type === TransactionType.Script) {
+      if (isTransactionTypeScript(req)) {
         serializedTransactionsMap.set(index, hexlify(req.toTransactionBytes()));
       }
     });
@@ -922,7 +970,7 @@ Supported fuel-core version: ${supportedVersion}.`
         const hasMissingOutputs =
           missingOutputVariables.length > 0 || missingOutputContractIds.length > 0;
         const request = allRequests[requestIdx];
-        if (hasMissingOutputs && request?.type === TransactionType.Script) {
+        if (hasMissingOutputs && isTransactionTypeScript(request)) {
           result.outputVariables += missingOutputVariables.length;
           request.addVariableOutputs(missingOutputVariables.length);
           missingOutputContractIds.forEach(({ contractId }) => {
@@ -1002,7 +1050,7 @@ Supported fuel-core version: ${supportedVersion}.`
     let gasLimit = bn(0);
 
     // Only Script transactions consume gas
-    if (transactionRequest.type === TransactionType.Script) {
+    if (isTransactionTypeScript(transactionRequest)) {
       // If the gasLimit is set to 0, it means we need to estimate it.
       gasLimit = transactionRequest.gasLimit;
       if (transactionRequest.gasLimit.eq(0)) {
@@ -1099,17 +1147,17 @@ Supported fuel-core version: ${supportedVersion}.`
     { signatureCallback }: TransactionCostParams = {}
   ): Promise<Omit<TransactionCost, 'requiredQuantities'>> {
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
-    const isScriptTransaction = txRequestClone.type === TransactionType.Script;
     const updateMaxFee = txRequestClone.maxFee.eq(0);
+    const isScriptTransaction = isTransactionTypeScript(txRequestClone);
 
     // Remove gasLimit to avoid gasLimit when estimating predicates
     if (isScriptTransaction) {
       txRequestClone.gasLimit = bn(0);
     }
 
-    const signedRequest = clone(txRequestClone) as ScriptTransactionRequest;
+    const signedRequest = clone(txRequestClone);
     let addedSignatures = 0;
-    if (signatureCallback && isScriptTransaction) {
+    if (signatureCallback && isTransactionTypeScript(signedRequest)) {
       const lengthBefore = signedRequest.witnesses.length;
       await signatureCallback(signedRequest);
       addedSignatures = signedRequest.witnesses.length - lengthBefore;
@@ -1232,11 +1280,11 @@ Supported fuel-core version: ${supportedVersion}.`
     };
 
     if (this.cache) {
-      const uniqueUtxos = new Set(
-        excludeInput.utxos.concat(this.cache?.getActiveData().map((id) => hexlify(id)))
-      );
-      excludeInput.utxos = Array.from(uniqueUtxos);
+      const cached = this.cache.getActiveData();
+      excludeInput.messages.push(...cached.messages);
+      excludeInput.utxos.push(...cached.utxos);
     }
+
     const coinsQuery = {
       owner: ownerAddress.toB256(),
       queryPerAsset: quantities

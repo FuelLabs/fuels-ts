@@ -16,13 +16,23 @@ import type {
   Transaction,
   ReceiptMint,
   ReceiptBurn,
+  OutputCoin,
+  OutputContract,
+  OutputChange,
+  OutputVariable,
+  OutputContractCreated,
+  Output,
+  TransactionType,
 } from '@fuel-ts/transactions';
-import { TransactionCoder } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
+import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
-import type { GqlReceiptFragment } from '../__generated__/operations';
+import type {
+  GqlMalleableTransactionFieldsFragment,
+  GqlStatusChangeSubscription,
+} from '../__generated__/operations';
 import type Provider from '../provider';
-import type { JsonAbisFromAllCalls } from '../transaction-request';
+import type { JsonAbisFromAllCalls, TransactionRequest } from '../transaction-request';
 import { assembleTransactionSummary } from '../transaction-summary/assemble-transaction-summary';
 import { processGqlReceipt } from '../transaction-summary/receipt';
 import type { TransactionSummary, GqlTransaction, AbiMap } from '../transaction-summary/types';
@@ -73,9 +83,41 @@ export type TransactionResultReceipt =
 
 /** @hidden */
 export type TransactionResult<TTransactionType = void> = TransactionSummary<TTransactionType> & {
-  gqlTransaction: GqlTransaction;
   logs?: Array<unknown>;
 };
+
+function mapGqlOutputsToTxOutputs(
+  outputs: GqlMalleableTransactionFieldsFragment['outputs']
+): Output[] {
+  return outputs.map((o) => {
+    const obj = 'amount' in o ? { ...o, amount: bn(o.amount) } : o;
+    switch (obj.type) {
+      case 'CoinOutput':
+        return { ...obj, type: OutputType.Coin } satisfies OutputCoin;
+      case 'ContractOutput':
+        return {
+          ...obj,
+          type: OutputType.Contract,
+          inputIndex: parseInt(obj.inputIndex, 10),
+        } satisfies OutputContract;
+      case 'ChangeOutput':
+        return {
+          ...obj,
+          type: OutputType.Change,
+        } satisfies OutputChange;
+      case 'VariableOutput':
+        return { ...obj, type: OutputType.Variable } satisfies OutputVariable;
+      case 'ContractCreated':
+        return {
+          ...obj,
+          type: OutputType.ContractCreated,
+          contractId: obj.contract,
+        } satisfies OutputContractCreated;
+      default:
+        return assertUnreachable(obj);
+    }
+  });
+}
 
 /**
  * Represents a response for a transaction.
@@ -88,20 +130,23 @@ export class TransactionResponse {
   /** Gas used on the transaction */
   gasUsed: BN = bn(0);
   /** The graphql Transaction with receipts object. */
-  gqlTransaction?: GqlTransaction;
-
+  private gqlTransaction?: GqlTransaction;
+  private request?: TransactionRequest;
+  private status?: GqlStatusChangeSubscription['statusChange'];
   abis?: JsonAbisFromAllCalls;
 
   /**
    * Constructor for `TransactionResponse`.
    *
-   * @param id - The transaction ID.
+   * @param tx - The transaction ID or TransactionRequest.
    * @param provider - The provider.
    */
-  constructor(id: string, provider: Provider, abis?: JsonAbisFromAllCalls) {
-    this.id = id;
+  constructor(tx: string | TransactionRequest, provider: Provider, abis?: JsonAbisFromAllCalls) {
+    this.id = typeof tx === 'string' ? tx : tx.getTransactionId(provider.getChainId());
+
     this.provider = provider;
     this.abis = abis;
+    this.request = typeof tx === 'string' ? undefined : tx;
   }
 
   /**
@@ -122,6 +167,72 @@ export class TransactionResponse {
     return response;
   }
 
+  private applyMalleableSubscriptionFields<TTransactionType = void>(
+    transaction: Transaction<TTransactionType>
+  ) {
+    const status = this.status;
+    if (!status) {
+      return;
+    }
+
+    // The SDK currently submits only these
+    const tx = transaction as Transaction<
+      TransactionType.Script | TransactionType.Create | TransactionType.Blob
+    >;
+
+    if (status.type === 'SuccessStatus' || status.type === 'FailureStatus') {
+      tx.inputs = tx.inputs.map((input, idx) => {
+        if ('txPointer' in input) {
+          const correspondingInput = status.transaction.inputs?.[idx] as { txPointer: string };
+          return {
+            ...input,
+            txPointer: TxPointerCoder.decodeFromGqlScalar(correspondingInput.txPointer),
+          };
+        }
+        return input;
+      });
+
+      tx.outputs = mapGqlOutputsToTxOutputs(status.transaction.outputs);
+
+      if ('receiptsRoot' in status.transaction) {
+        (tx as Transaction<TransactionType.Script>).receiptsRoot = status.transaction
+          .receiptsRoot as string;
+      }
+    }
+  }
+
+  private async getTransaction<TTransactionType = void>(): Promise<{
+    tx: Transaction<TTransactionType>;
+    bytes: Uint8Array;
+  }> {
+    if (this.request) {
+      const tx = this.request.toTransaction() as Transaction<TTransactionType>;
+      this.applyMalleableSubscriptionFields(tx);
+      return {
+        tx,
+        bytes: this.request.toTransactionBytes(),
+      };
+    }
+
+    const gqlTransaction = this.gqlTransaction ?? (await this.fetch());
+    return {
+      tx: this.decodeTransaction(gqlTransaction) as Transaction<TTransactionType>,
+      bytes: arrayify(gqlTransaction.rawPayload),
+    };
+  }
+
+  private getReceipts(): TransactionResultReceipt[] {
+    const status = this.status ?? this.gqlTransaction?.status;
+
+    switch (status?.type) {
+      case 'SuccessStatus':
+      case 'FailureStatus':
+        return status.receipts.map(processGqlReceipt);
+      default:
+        return [];
+    }
+  }
+
   /**
    * Fetch the transaction with receipts from the provider.
    *
@@ -133,12 +244,13 @@ export class TransactionResponse {
     });
 
     if (!response.transaction) {
-      const subscription = this.provider.operations.statusChange({
+      const subscription = await this.provider.operations.statusChange({
         transactionId: this.id,
       });
 
       for await (const { statusChange } of subscription) {
         if (statusChange) {
+          this.status = statusChange;
           break;
         }
       }
@@ -174,23 +286,8 @@ export class TransactionResponse {
   async getTransactionSummary<TTransactionType = void>(
     contractsAbiMap?: AbiMap
   ): Promise<TransactionSummary<TTransactionType>> {
-    let transaction = this.gqlTransaction;
-
-    if (!transaction) {
-      transaction = await this.fetch();
-    }
-
-    const decodedTransaction = this.decodeTransaction<TTransactionType>(
-      transaction
-    ) as Transaction<TTransactionType>;
-
-    let txReceipts: GqlReceiptFragment[] = [];
-
-    if (transaction?.status && 'receipts' in transaction.status) {
-      txReceipts = transaction.status.receipts;
-    }
-
-    const receipts = txReceipts.map(processGqlReceipt) || [];
+    const { tx: transaction, bytes: transactionBytes } =
+      await this.getTransaction<TTransactionType>();
 
     const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = this.provider.getGasConfig();
     const gasPrice = await this.provider.getLatestGasPrice();
@@ -199,10 +296,10 @@ export class TransactionResponse {
 
     const transactionSummary = assembleTransactionSummary<TTransactionType>({
       id: this.id,
-      receipts,
-      transaction: decodedTransaction,
-      transactionBytes: arrayify(transaction.rawPayload),
-      gqlTransactionStatus: transaction.status,
+      receipts: this.getReceipts(),
+      transaction,
+      transactionBytes,
+      gqlTransactionStatus: this.status ?? this.gqlTransaction?.status,
       gasPerByte,
       gasPriceFactor,
       abiMap: contractsAbiMap,
@@ -222,12 +319,14 @@ export class TransactionResponse {
       return;
     }
 
-    const subscription = this.provider.operations.statusChange({
+    const subscription = await this.provider.operations.statusChange({
       transactionId: this.id,
     });
 
     for await (const { statusChange } of subscription) {
+      this.status = statusChange;
       if (statusChange.type === 'SqueezedOutStatus') {
+        this.unsetResourceCache();
         throw new FuelError(
           ErrorCode.TRANSACTION_SQUEEZED_OUT,
           `Transaction Squeezed Out with reason: ${statusChange.reason}`
@@ -237,8 +336,6 @@ export class TransactionResponse {
         break;
       }
     }
-
-    await this.fetch();
   }
 
   /**
@@ -259,7 +356,6 @@ export class TransactionResponse {
     const transactionSummary = await this.getTransactionSummary<TTransactionType>(contractsAbiMap);
 
     const transactionResult: TransactionResult<TTransactionType> = {
-      gqlTransaction: this.gqlTransaction as GqlTransaction,
       ...transactionSummary,
     };
 
@@ -275,10 +371,12 @@ export class TransactionResponse {
       transactionResult.logs = logs;
     }
 
-    const { gqlTransaction, receipts } = transactionResult;
+    const { receipts } = transactionResult;
 
-    if (gqlTransaction.status?.type === 'FailureStatus') {
-      const { reason } = gqlTransaction.status;
+    const status = this.status ?? this.gqlTransaction?.status;
+    if (status?.type === 'FailureStatus') {
+      this.unsetResourceCache();
+      const { reason } = status;
       throw extractTxError({
         receipts,
         statusReason: reason,
@@ -310,5 +408,9 @@ export class TransactionResponse {
     contractsAbiMap?: AbiMap
   ): Promise<TransactionResult<TTransactionType>> {
     return this.waitForResult<TTransactionType>(contractsAbiMap);
+  }
+
+  private unsetResourceCache() {
+    this.provider.cache?.unset(this.id);
   }
 }

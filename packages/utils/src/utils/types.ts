@@ -37,14 +37,8 @@ type Operation =
     };
 
 interface GasCosts {
-  mod_op: number;
-  move_op: number;
-  ret: number;
-  rvrt: number;
-  retd: Operation;
   add: number;
   addi: number;
-  aloc: number;
   and: number;
   andi: number;
   bal: number;
@@ -52,18 +46,11 @@ interface GasCosts {
   bhsh: number;
   burn: number;
   cb: number;
-  cfei: number;
   cfsi: number;
-  croo: Operation;
   div: number;
   divi: number;
-  ecr1: number;
   eck1: number;
-  poph: number;
-  popl: number;
-  pshh: number;
-  pshl: number;
-  ed19: number;
+  ecr1: number;
   eq: number;
   exp: number;
   expi: number;
@@ -82,14 +69,15 @@ interface GasCosts {
   jnzb: number;
   jnef: number;
   jneb: number;
-  k256: Operation;
   lb: number;
   log: number;
   lt: number;
   lw: number;
   mint: number;
   mlog: number;
+  mod: number;
   modi: number;
+  move: number;
   movi: number;
   mroo: number;
   mul: number;
@@ -99,9 +87,13 @@ interface GasCosts {
   not: number;
   or: number;
   ori: number;
-  s256: Operation;
+  poph: number;
+  popl: number;
+  pshh: number;
+  pshl: number;
+  ret_contract: number;
+  rvrt_contract: number;
   sb: number;
-  scwq: Operation;
   sll: number;
   slli: number;
   srl: number;
@@ -111,7 +103,6 @@ interface GasCosts {
   subi: number;
   sw: number;
   sww: number;
-  swwq: Operation;
   time: number;
   tr: number;
   tro: number;
@@ -132,21 +123,33 @@ interface GasCosts {
   xor: number;
   xori: number;
   new_storage_per_byte: number;
-  contract_root: Operation;
-  state_root: Operation;
-  vm_initialization: Operation;
+  aloc: Operation;
+  bsiz: Operation;
+  bldd: Operation;
+  cfe: Operation;
+  cfei: Operation;
   call: Operation;
-  mcpi: Operation;
   ccp: Operation;
+  croo: Operation;
   csiz: Operation;
+  ed19: Operation;
+  k256: Operation;
   ldc: Operation;
   logd: Operation;
   mcl: Operation;
   mcli: Operation;
   mcp: Operation;
+  mcpi: Operation;
   meq: Operation;
+  retd_contract: Operation;
+  s256: Operation;
+  scwq: Operation;
   smo: Operation;
   srwq: Operation;
+  swwq: Operation;
+  contract_root: Operation;
+  state_root: Operation;
+  vm_initialization: Operation;
 }
 
 interface Consensus {
@@ -195,7 +198,7 @@ interface ConsensusParameters {
     };
   };
   block_gas_limit: number;
-  gas_costs: { V1: GasCosts };
+  gas_costs: { V4: GasCosts };
 }
 
 interface ChainConfig {

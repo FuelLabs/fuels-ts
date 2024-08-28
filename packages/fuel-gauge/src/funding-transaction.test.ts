@@ -1,7 +1,7 @@
 import { FuelError } from '@fuel-ts/errors';
 import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
-import { ScriptTransactionRequest, Wallet, bn } from 'fuels';
+import { DEFAULT_RESOURCE_CACHE_TTL, ScriptTransactionRequest, Wallet, bn, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -220,10 +220,12 @@ describe('Funding Transactions', () => {
 
     const {
       provider,
-      wallets: [sender, receiver],
+      wallets: [funded],
     } = launched;
 
-    const splitIn = 20;
+    const splitIn = 204;
+    const sender = Wallet.generate({ provider });
+    const receiver = Wallet.generate({ provider });
 
     /**
      * Splitting funds in 24 UTXOs to result in the transaction become more expensive
@@ -231,10 +233,10 @@ describe('Funding Transactions', () => {
      */
     await fundingTxWithMultipleUTXOs({
       account: sender,
-      totalAmount: 2400,
+      totalAmount: 1020,
       splitIn,
       baseAssetId: provider.getBaseAssetId(),
-      mainWallet: sender,
+      mainWallet: funded,
     });
 
     const request = new ScriptTransactionRequest();
@@ -269,7 +271,7 @@ describe('Funding Transactions', () => {
       new FuelError(FuelError.CODES.INVALID_REQUEST, 'not enough coins to fit the target')
     );
 
-    expect(getResourcesToSpend).toHaveBeenCalledTimes(2);
+    expect(getResourcesToSpend).toHaveBeenCalled();
   });
 
   it('should ensure a partially funded Transaction will require only missing funds', async () => {
@@ -413,4 +415,90 @@ describe('Funding Transactions', () => {
 
     expect(isStatusSuccess).toBeTruthy();
   });
+
+  it('should cache UTXOs by default upon TX submission', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        // A new block will be generated every 5 seconds
+        args: ['--poa-instant', 'false', '--poa-interval-period', '5s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 2,
+      },
+    });
+
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
+    const receiver = Wallet.generate({ provider });
+
+    const transferAmount = 100_000;
+
+    // Submitting TX 1
+    const submission1 = await fundedWallet.transfer(
+      receiver.address,
+      transferAmount,
+      provider.getBaseAssetId()
+    );
+
+    // Submitting TX 2 before TX 1 finished to process.
+    const submission2 = await fundedWallet.transfer(
+      receiver.address,
+      transferAmount,
+      provider.getBaseAssetId()
+    );
+
+    const result1 = await submission1.waitForResult();
+    const result2 = await submission2.waitForResult();
+
+    expect(result1.isStatusSuccess).toBeTruthy();
+    expect(result2.isStatusSuccess).toBeTruthy();
+
+    expect(result1.blockId).toBe(result2.blockId);
+
+    expect(provider.cache).toBeTruthy();
+    expect(provider.cache?.ttl).toBe(DEFAULT_RESOURCE_CACHE_TTL);
+  }, 15_000);
+
+  it('should fail when trying to use the same UTXO in multiple TXs without cache', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        // A new block will be generated every 5 seconds
+        args: ['--poa-instant', 'false', '--poa-interval-period', '5s'],
+      },
+      providerOptions: {
+        // Cache will last for 1 millisecond
+        resourceCacheTTL: 1,
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+      },
+    });
+
+    const {
+      provider,
+      wallets: [fundedWallet],
+    } = launched;
+
+    const receiver = Wallet.generate({ provider });
+
+    const transferAmount = 100_000;
+
+    // Submitting TX 1
+    await fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId());
+
+    // ensure cache is cleared
+    await sleep(100);
+
+    // Submitting TX 2 before TX 1 finished to process.
+    await expectToThrowFuelError(
+      () => fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId()),
+      new FuelError(
+        FuelError.CODES.INVALID_REQUEST,
+        'Transaction is not inserted. Hash is already known'
+      )
+    );
+  }, 15_000);
 });

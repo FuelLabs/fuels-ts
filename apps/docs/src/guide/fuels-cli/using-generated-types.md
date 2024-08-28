@@ -20,7 +20,7 @@ Let's use the Contract class to deploy a contract:
 
 ### Autoloading of Storage Slots
 
-Typegen tries to resolve, auto-load, and embed the [Storage Slots](../contracts/storage-slots.md) for your Contract within the `MyContract__factory` class. Still, you can override it alongside other options from [`DeployContractOptions`](https://github.com/FuelLabs/fuels-ts/blob/a64b67b9fb2d7f764ab9151a21d2266bf2df3643/packages/contract/src/contract-factory.ts#L19-L24), when calling the `deployContract` method:
+Typegen tries to resolve, auto-load, and embed the [Storage Slots](../contracts/storage-slots.md) for your Contract within the `MyContract` class. Still, you can override it alongside other options from [`DeployContractOptions`](https://github.com/FuelLabs/fuels-ts/blob/a64b67b9fb2d7f764ab9151a21d2266bf2df3643/packages/contract/src/contract-factory.ts#L19-L24), when calling the `deploy` method:
 
 <<< @/../../demo-typegen/src/demo.test.ts#typegen-demo-contract-storage-slots{ts:line-numbers}
 

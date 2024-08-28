@@ -25,7 +25,7 @@ const prTypes = ["feat", "fix", "refactor", "chore", "docs"];
 async function getChangelogInfo(
   octokit: Octokit,
   changeset: NewChangeset,
-): Promise<ChangelogInfo> {
+): Promise<ChangelogInfo | undefined> {
   const changesetCommit = execSync(
     `git log -n 1 --diff-filter=A --oneline --pretty=format:%H -- ${join(
       process.cwd(),
@@ -49,6 +49,15 @@ async function getChangelogInfo(
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     pull_number: prNo!,
   });
+
+  /**
+   * There are special cases that follow a different flow.
+   * e.g. https://github.com/FuelLabs/fuels-ts/commit/16ee1bfe66733551d00f0a76c21e8a09ea33006f.
+   * They should be ignored in the changelogs.
+   */
+  if (title === undefined) {
+    return undefined;
+  }
 
   const prType = title.replace(/(\w+).*/, "$1"); // chore!: add something -> chore
   const isBreaking = title.includes(`${prType}!`);
@@ -107,7 +116,7 @@ async function getChangelogs(octokit: Octokit, changesets: NewChangeset[]) {
     ),
   );
 
-  return changelogs.sort(sortChangelogsByPrType);
+  return changelogs.filter((c) => c !== undefined).sort(sortChangelogsByPrType);
 }
 
 function mapPrTypeToTitle(prType: string) {

@@ -3,12 +3,11 @@ import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
 import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
-import { DateTime, arrayify, hexlify, sleep } from '@fuel-ts/utils';
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
+import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
+import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
 import * as fuelTsVersionsMod from '@fuel-ts/versions';
 
@@ -17,28 +16,24 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
-import {
-  setupTestProviderAndWallets,
-  launchNode,
-  seedTestWallet,
-  TestMessage,
-} from '../test-utils';
-import { Wallet } from '../wallet';
+import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
+import type { Coin } from './coin';
+import { coinQuantityfy } from './coin-quantity';
+import type { Message } from './message';
 import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
-import Provider, { BLOCKS_PAGE_SIZE_LIMIT, RESOURCES_PAGE_SIZE_LIMIT } from './provider';
-import type {
-  CoinTransactionRequestInput,
-  MessageTransactionRequestInput,
-} from './transaction-request';
-import { ScriptTransactionRequest, CreateTransactionRequest } from './transaction-request';
+import Provider, {
+  BLOCKS_PAGE_SIZE_LIMIT,
+  DEFAULT_RESOURCE_CACHE_TTL,
+  RESOURCES_PAGE_SIZE_LIMIT,
+} from './provider';
+import type { ExcludeResourcesOption } from './resource';
+import { isCoin } from './resource';
+import type { CoinTransactionRequestInput } from './transaction-request';
+import { CreateTransactionRequest, ScriptTransactionRequest } from './transaction-request';
 import { TransactionResponse } from './transaction-response';
 import type { SubmittedStatus } from './transaction-summary/types';
 import * as gasMod from './utils/gas';
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
 
 const getCustomFetch =
   (expectedOperationName: string, expectedResponse: object) =>
@@ -57,9 +52,6 @@ const getCustomFetch =
     return fetch(url, options);
   };
 
-// TODO: Figure out a way to import this constant from `@fuel-ts/account/configs`
-const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
-
 /**
  * @group node
  */
@@ -70,7 +62,7 @@ describe('Provider', () => {
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.31.0');
+    expect(version).toEqual('0.34.0');
   });
 
   it('can call()', async () => {
@@ -129,7 +121,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(170),
+        gasUsed: bn(159),
       },
     ];
 
@@ -226,14 +218,18 @@ describe('Provider', () => {
   });
 
   it('gets the chain ID', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const chainId = provider.getChainId();
 
     expect(chainId).toBe(0);
   });
 
   it('gets the base asset ID', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
 
     expect(baseAssetId).toBeDefined();
@@ -373,349 +369,356 @@ describe('Provider', () => {
     expect(producedBlocks).toEqual(expectedBlocks);
   });
 
-  it('can cacheUtxo [undefined]', async () => {
+  it('can set cache ttl', async () => {
+    const ttl = 10000;
+    using launched = await setupTestProviderAndWallets({
+      providerOptions: {
+        resourceCacheTTL: ttl,
+      },
+    });
+    const { provider } = launched;
+
+    expect(provider.cache?.ttl).toEqual(ttl);
+  });
+
+  it('should use resource cache by default', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(provider.cache).toEqual(undefined);
+    expect(provider.cache?.ttl).toEqual(DEFAULT_RESOURCE_CACHE_TTL);
   });
 
-  it('can cacheUtxo [numerical]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 2500 } });
-    const { provider } = launched;
-
-    expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.ttl).toEqual(2_500);
-  });
-
-  it('can cacheUtxo [invalid numerical]', async () => {
+  it('should validate resource cache value [invalid numerical]', async () => {
     const { error } = await safeExec(async () => {
-      await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: -500 } });
+      await setupTestProviderAndWallets({ providerOptions: { resourceCacheTTL: -500 } });
     });
     expect(error?.message).toMatch(/Invalid TTL: -500\. Use a value greater than zero/);
   });
 
-  it('can cacheUtxo [will not cache inputs if no cache]', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-    const transactionRequest = new ScriptTransactionRequest();
-
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
-
-    expect(error).toBeTruthy();
-    expect(provider.cache).toEqual(undefined);
-  });
-
-  it('can cacheUtxo [will not cache inputs cache enabled + no coins]', async () => {
+  it('should be possible to disable the cache by using -1', async () => {
     using launched = await setupTestProviderAndWallets({
       providerOptions: {
-        cacheUtxo: 1,
+        resourceCacheTTL: -1,
       },
     });
     const { provider } = launched;
 
-    const baseAssetId = provider.getBaseAssetId();
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput],
-    });
-
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
-
-    expect(error).toBeTruthy();
-    expect(provider.cache).toBeTruthy();
-    expect(provider.cache?.getActiveData()).toStrictEqual([]);
+    expect(provider.cache).toBeUndefined();
   });
 
-  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
+  it('should cache resources only when TX is successfully submitted', async () => {
+    const resourceAmount = 5_000;
+    const utxosAmount = 2;
+
+    const testMessage = new TestMessage({ amount: resourceAmount });
+
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      // 3 resources with a total of 15_000
+      walletsConfig: {
+        coinsPerAsset: utxosAmount,
+        amountPerCoin: resourceAmount,
+        messages: [testMessage],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
 
     const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
-    });
+    const { coins } = await wallet.getCoins(baseAssetId);
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    expect(coins.length).toBe(utxosAmount);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    // Tx will cost 10_000 for the transfer + 1 for fee. All resources will be used
+    const EXPECTED = {
+      utxos: coins.map((coin) => coin.id),
+      messages: [testMessage.nonce],
+    };
 
-    // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
+    await wallet.transfer(receiver.address, 10_000);
+
+    const cachedResources = provider.cache?.getActiveData();
+    expect(new Set(cachedResources?.utxos)).toEqual(new Set(EXPECTED.utxos));
+    expect(new Set(cachedResources?.messages)).toEqual(new Set(EXPECTED.messages));
   });
 
-  it('can cacheUtxo [will cache inputs and also use in exclude list]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
+  it('should NOT cache resources when TX submission fails', async () => {
+    const message = new TestMessage({ amount: 100_000 });
+
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 2,
+        amountPerCoin: 20_000,
+        messages: [message],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
 
     const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
+    const maxFee = 100_000;
+    const transferAmount = 10_000;
+
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const utxos = coins.map((c) => c.id);
+    const messages = [message.nonce];
+
+    // No enough funds to pay for the TX fee
+    const resources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
+
+    const request = new ScriptTransactionRequest({
+      maxFee,
     });
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
+    request.addResources(resources);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    await expectToThrowFuelError(
+      () => wallet.sendTransaction(request, { estimateTxDependencies: false }),
+      { code: ErrorCode.INVALID_REQUEST }
+    );
 
-    const owner = Address.fromRandom();
-    const resourcesToSpendMock = vi.fn(() =>
-      Promise.resolve({ coinsToSpend: [] })
-    ) as unknown as typeof provider.operations.getCoinsToSpend;
-    provider.operations.getCoinsToSpend = resourcesToSpendMock;
-    await provider.getResourcesToSpend(owner, []);
+    // No resources were cached since the TX submission failed
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(key)).toBeFalsy();
+    });
+  });
 
-    expect(resourcesToSpendMock).toHaveBeenCalledWith({
-      owner: owner.toB256(),
-      queryPerAsset: [],
-      excludedIds: {
-        messages: [],
-        utxos: EXPECTED,
+  it('should unset cached resources when TX execution fails', async () => {
+    const message = new TestMessage({ amount: 100_000 });
+
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 100_000,
+        messages: [message],
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+    const maxFee = 100_000;
+    const transferAmount = 10_000;
+
+    const { coins } = await wallet.getCoins(baseAssetId);
+    const utxos = coins.map((c) => c.id);
+    const messages = [message.nonce];
+
+    // Should fetch resources enough to pay for the TX fee and transfer amount
+    const resources = await wallet.getResourcesToSpend([[maxFee + transferAmount, baseAssetId]]);
+
+    const request = new ScriptTransactionRequest({
+      maxFee,
+      // No enough gas to execute the TX
+      gasLimit: 0,
+    });
+
+    request.addCoinOutput(receiver.address, transferAmount, baseAssetId);
+    request.addResources(resources);
+
+    // TX submission will succeed
+    const submitted = await wallet.sendTransaction(request, { estimateTxDependencies: false });
+
+    // Resources were cached since the TX submission succeeded
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(key)).toBeTruthy();
+    });
+
+    // TX execution will fail
+    await expectToThrowFuelError(() => submitted.waitForResult(), {
+      code: ErrorCode.SCRIPT_REVERTED,
+    });
+
+    // Ensure user's resouces were unset from the cache
+    [...utxos, ...messages].forEach((key) => {
+      expect(provider.cache?.isCached(key)).toBeFalsy();
+    });
+  });
+
+  it('should ensure cached resources are not being queried', async () => {
+    // Fund the wallet with 2 resources
+    const testMessage = new TestMessage({ amount: 100_000_000_000 });
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+      },
+      walletsConfig: {
+        coinsPerAsset: 1,
+        amountPerCoin: 100_000_000_000,
+        messages: [testMessage],
       },
     });
 
-    // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
-  });
-
-  it('can cacheUtxo [will cache inputs cache enabled + coins]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
-
+    const {
+      provider,
+      wallets: [wallet, receiver],
+    } = launched;
     const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c500',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c501',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3f02',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
-    });
+    const transferAmount = 10_000;
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    const {
+      coins: [coin],
+    } = await wallet.getCoins(baseAssetId);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    const {
+      messages: [message],
+    } = await wallet.getMessages();
 
-    // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
-  });
+    // One of the resources will be cached as the TX submission was successful
+    await wallet.transfer(receiver.address, transferAmount);
 
-  it('can cacheUtxo [will cache inputs and also merge/de-dupe in exclude list]', async () => {
-    using launched = await setupTestProviderAndWallets({ providerOptions: { cacheUtxo: 10000 } });
-    const { provider } = launched;
+    // Determine the used and unused resource
+    const cachedResource = provider.cache?.isCached(coin.id) ? coin : message;
+    const uncachedResource = provider.cache?.isCached(coin.id) ? message : coin;
 
-    const baseAssetId = provider.getBaseAssetId();
-    const EXPECTED: BytesLike[] = [
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-      '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c504',
-      '0xda5d131c490db3868be9f8e228cf279bd98ef1de97129682777ed93fa088bc3505',
-    ];
-    const MessageInput: MessageTransactionRequestInput = {
-      type: InputType.Message,
-      amount: 100,
-      sender: baseAssetId,
-      recipient: baseAssetId,
-      witnessIndex: 1,
-      nonce: baseAssetId,
-    };
-    const CoinInputA: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[0],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputB: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: arrayify(EXPECTED[1]),
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const CoinInputC: CoinTransactionRequestInput = {
-      type: InputType.Coin,
-      id: EXPECTED[2],
-      owner: baseAssetId,
-      assetId: baseAssetId,
-      txPointer: baseAssetId,
-      witnessIndex: 1,
-      amount: 100,
-    };
-    const transactionRequest = new ScriptTransactionRequest({
-      inputs: [MessageInput, CoinInputA, CoinInputB, CoinInputC],
-    });
+    expect(cachedResource).toBeDefined();
+    expect(uncachedResource).toBeDefined();
 
-    const { error } = await safeExec(() => provider.sendTransaction(transactionRequest));
+    // Spy on the getCoinsToSpend method to ensure the cached resource is not being queried
+    const resourcesToSpendSpy = vi.spyOn(provider.operations, 'getCoinsToSpend');
+    const fetchedResources = await wallet.getResourcesToSpend([[transferAmount, baseAssetId]]);
 
-    expect(error).toBeTruthy();
-    const EXCLUDED = provider.cache?.getActiveData() || [];
-    expect(EXCLUDED.length).toEqual(3);
-    expect(EXCLUDED.map((value) => hexlify(value))).toStrictEqual(EXPECTED);
+    // Only one resource is available as the other one was cached
+    expect(fetchedResources.length).toBe(1);
 
-    const owner = Address.fromRandom();
-    const resourcesToSpendMock = vi.fn(() =>
-      Promise.resolve({ coinsToSpend: [] })
-    ) as unknown as typeof provider.operations.getCoinsToSpend;
-    provider.operations.getCoinsToSpend = resourcesToSpendMock;
-    await provider.getResourcesToSpend(owner, [], {
-      utxos: [
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
-        '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
+    // Ensure the returned resource is the non-cached one
+    const excludedIds: Required<ExcludeResourcesOption> = { messages: [], utxos: [] };
+    if (isCoin(fetchedResources[0])) {
+      excludedIds.messages = expect.arrayContaining([(<Message>cachedResource).nonce]);
+      excludedIds.utxos = expect.arrayContaining([]);
+      expect(fetchedResources[0].id).toEqual((<Coin>uncachedResource).id);
+    } else {
+      excludedIds.utxos = expect.arrayContaining([(<Coin>cachedResource).id]);
+      excludedIds.messages = expect.arrayContaining([]);
+      expect(fetchedResources[0].nonce).toEqual((<Message>uncachedResource).nonce);
+    }
+
+    // Ensure the getCoinsToSpend query was called excluding the cached resource
+    expect(resourcesToSpendSpy).toHaveBeenCalledWith({
+      owner: wallet.address.toB256(),
+      queryPerAsset: [
+        {
+          assetId: baseAssetId,
+          amount: String(transferAmount),
+          max: undefined,
+        },
       ],
+      excludedIds,
     });
+  });
 
-    expect(resourcesToSpendMock).toHaveBeenCalledWith({
-      owner: owner.toB256(),
-      queryPerAsset: [],
-      excludedIds: {
-        messages: [],
-        utxos: [
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c503',
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c507',
-          '0xbc90ada45d89ec6648f8304eaf8fa2b03384d3c0efabc192b849658f4689b9c508',
-          EXPECTED[1],
-          EXPECTED[2],
-        ],
+  it('should throws if max of inputs was exceeded', async () => {
+    const maxInputs = 2;
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: {
+            consensus_parameters: {
+              V1: {
+                tx_params: {
+                  V1: {
+                    max_inputs: maxInputs,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      walletsConfig: {
+        amountPerCoin: 500_000,
       },
     });
 
-    // clear cache
-    EXCLUDED.forEach((value) => provider.cache?.del(value));
+    const {
+      wallets: [sender, receiver],
+      provider,
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+
+    const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
+    const resources = await sender.getResourcesToSpend(quantities);
+
+    request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
+
+    const txCost = await sender.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    request.addResources(resources);
+
+    await sender.fund(request, txCost);
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        ErrorCode.MAX_INPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of inputs.'
+      )
+    );
+  });
+
+  it('should throws if max of ouputs was exceeded', async () => {
+    const maxOutputs = 2;
+    using launched = await setupTestProviderAndWallets({
+      nodeOptions: {
+        snapshotConfig: {
+          chainConfig: {
+            consensus_parameters: {
+              V1: {
+                tx_params: {
+                  V1: {
+                    max_outputs: maxOutputs,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      walletsConfig: {
+        count: 3,
+      },
+    });
+
+    const {
+      wallets: [sender, receiver1, receiver2],
+      provider,
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
+
+    const request = new ScriptTransactionRequest();
+    const resources = await sender.getResourcesToSpend([[1000, baseAssetId]]);
+    request.addCoinOutput(receiver1.address, 1, baseAssetId);
+    request.addCoinOutput(receiver2.address, 1, baseAssetId);
+
+    request.addResources(resources);
+
+    await expectToThrowFuelError(
+      () => sender.sendTransaction(request),
+      new FuelError(
+        ErrorCode.MAX_OUTPUTS_EXCEEDED,
+        'The transaction exceeds the maximum allowed number of outputs.'
+      )
+    );
   });
 
   it('can getBlocks', async () => {
@@ -743,7 +746,10 @@ describe('Provider', () => {
   it('can getMessageProof with all data', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
+    const provider = await Provider.create(nodeProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageProof', { messageProof: MESSAGE_PROOF_RAW_RESPONSE })(
           url,
@@ -763,7 +769,10 @@ describe('Provider', () => {
   it('can getMessageStatus', async () => {
     // Create a mock provider to return the message proof
     // It test mainly types and converstions
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
+    const provider = await Provider.create(nodeProvider.url, {
       fetch: async (url, options) =>
         getCustomFetch('getMessageStatus', { messageStatus: messageStatusResponse })(url, options),
     });
@@ -893,7 +902,10 @@ describe('Provider', () => {
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-    await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await Provider.create(provider.url);
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -925,7 +937,10 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     const consoleWarnSpy = vi.spyOn(console, 'warn');
 
-    await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await Provider.create(provider.url);
 
     expect(consoleWarnSpy).toHaveBeenCalledOnce();
     expect(consoleWarnSpy).toHaveBeenCalledWith(
@@ -936,13 +951,57 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     );
   });
 
+  it('should ensure fuel node version warning is shown before chain incompatibility error', async () => {
+    const { FUEL_CORE } = versions;
+    const [major, minor, patch] = FUEL_CORE.split('.');
+    const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
+
+    const mock = {
+      isMajorSupported: false,
+      isMinorSupported: true,
+      isPatchSupported: true,
+      supportedVersion: `${majorMismatch}.${minor}.${patch}`,
+    };
+
+    if (mock.supportedVersion === FUEL_CORE) {
+      throw new Error();
+    }
+
+    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
+    spy.mockImplementationOnce(() => mock);
+
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    const graphQLDummyError = `Unknown field "height" on type "Block".
+      Unknown field "version" on type "ScriptParameters".
+      Unknown field "version" on type "ConsensusParameters".`;
+
+    const fuelError = new FuelError(ErrorCode.INVALID_REQUEST, graphQLDummyError);
+
+    const fetchChainSpy = vi
+      .spyOn(Provider.prototype, 'fetchChain')
+      .mockImplementationOnce(async () => Promise.reject(fuelError));
+
+    await expectToThrowFuelError(() => setupTestProviderAndWallets(), fuelError);
+
+    expect(consoleWarnSpy).toHaveBeenCalledOnce();
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
+which is not supported by the version of the TS SDK that you are using.
+Things may not work as expected.
+Supported fuel-core version: ${mock.supportedVersion}.`
+    );
+
+    expect(fetchChainSpy).toHaveBeenCalledOnce();
+  });
+
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     await expectToThrowFuelError(
       async () => {
-        for await (const value of provider.operations.statusChange({
+        for await (const value of await provider.operations.statusChange({
           transactionId: 'invalid transaction id',
         })) {
           // shouldn't be reached and should fail if reached
@@ -999,7 +1058,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     );
 
     const { error } = await safeExec(async () => {
-      for await (const iterator of provider.operations.statusChange({
+      for await (const iterator of await provider.operations.statusChange({
         transactionId: 'doesnt matter, will be aborted',
       })) {
         // shouldn't be reached and should fail if reached
@@ -1113,7 +1172,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when stream contains more than one "data:"', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = {
@@ -1139,7 +1199,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       expect(submitAndAwait.type).toEqual('SuccessStatus');
@@ -1148,7 +1208,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('subscriptions: ignores keep-alive messages', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
@@ -1170,7 +1231,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1180,7 +1241,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when stream has two events in the same chunk', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
@@ -1216,7 +1278,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1232,7 +1294,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(numberOfEvents).toEqual(2);
   });
   it('subscriptions: does not throw when an event is streamed in multiple chunks', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const responseObject = JSON.stringify({
@@ -1263,7 +1326,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       );
     });
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       expect(submitAndAwait.type).toEqual('SuccessStatus');
@@ -1271,7 +1334,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when chunk has a full and partial event in it', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = {
@@ -1310,7 +1374,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1327,7 +1391,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: does not throw when multiple chunks contain multiple events with a keep-alive message in-between', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
       const event1 = JSON.stringify({
@@ -1368,7 +1433,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     let numberOfEvents = 0;
 
-    for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+    for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
       encodedTransaction: "it's mocked so doesn't matter",
     })) {
       numberOfEvents += 1;
@@ -1385,7 +1450,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   it('subscriptions: throws if the stream data string parsing fails for some reason', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const badResponse = 'data: {f: {}\n\n';
     vi.spyOn(global, 'fetch').mockImplementationOnce(() => {
@@ -1405,7 +1471,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     await expectToThrowFuelError(
       async () => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for await (const { submitAndAwait } of provider.operations.submitAndAwait({
+        for await (const { submitAndAwait } of await provider.operations.submitAndAwait({
           encodedTransaction: "it's mocked so doesn't matter",
         })) {
           // shouldn't be reached!
@@ -1419,8 +1485,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const fetchSpy = vi.spyOn(global, 'fetch');
-    await Provider.create(FUEL_NETWORK_URL, {
+    await Provider.create(provider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
@@ -1436,8 +1505,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('requestMiddleware modifies the request before being sent to the node [async]', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     const fetchSpy = vi.spyOn(global, 'fetch');
-    await Provider.create(FUEL_NETWORK_URL, {
+    await Provider.create(provider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
@@ -1453,8 +1525,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('requestMiddleware works for subscriptions', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
     const fetchSpy = vi.spyOn(global, 'fetch');
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    const provider = await Provider.create(nodeProvider.url, {
       requestMiddleware: (request) => {
         request.headers ??= {};
         (request.headers as Record<string, string>)['x-custom-header'] = 'custom-value';
@@ -1463,7 +1538,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     });
 
     await safeExec(async () => {
-      for await (const iterator of provider.operations.statusChange({
+      for await (const iterator of await provider.operations.statusChange({
         transactionId: 'doesnt matter, will be aborted',
       })) {
         // Just running a subscription to trigger the middleware
@@ -1481,8 +1556,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('custom fetch works with requestMiddleware', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
     let requestHeaders: HeadersInit | undefined;
-    await Provider.create(FUEL_NETWORK_URL, {
+    await Provider.create(provider.url, {
       fetch: async (url, requestInit) => {
         requestHeaders = requestInit?.headers;
         return fetch(url, requestInit);
@@ -1500,8 +1578,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('custom fetch works with timeout', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
     const timeout = 500;
-    const provider = await Provider.create(FUEL_NETWORK_URL, {
+    const provider = await Provider.create(nodeProvider.url, {
       fetch: async (url, requestInit) => fetch(url, requestInit),
       timeout,
     });
@@ -1523,7 +1604,8 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('getMessageByNonce', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
     const message = await provider.getMessageByNonce(nonce);
@@ -1781,23 +1863,27 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   });
 
   test('can properly use getBalances', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
-    const wallet = Wallet.generate({ provider });
-
     const fundAmount = 10_000;
 
-    await seedTestWallet(wallet, [
-      [fundAmount, baseAssetId],
-      [fundAmount, ASSET_A],
-    ]);
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: fundAmount,
+      },
+    });
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const baseAssetId = provider.getBaseAssetId();
 
     const { balances } = await provider.getBalances(wallet.address);
 
-    expect(balances.length).toBe(2);
+    expect(balances.length).toBe(3);
+
     balances.forEach((balance) => {
       expect(balance.amount.toNumber()).toBe(fundAmount);
-      expect([baseAssetId, ASSET_A].includes(balance.assetId)).toBeTruthy();
+      expect([baseAssetId, ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
   });
 });

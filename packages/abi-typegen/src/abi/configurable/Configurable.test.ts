@@ -43,7 +43,9 @@ describe('Configurable.ts', () => {
 
   it('should get configurable declaration with type', () => {
     const { type, findType } = mockAllDeps();
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE, {
+      transpile: true,
+    });
 
     const { configurables } = project.abiContents;
 
@@ -54,7 +56,6 @@ describe('Configurable.ts', () => {
 
     expect(findType).toHaveBeenCalledTimes(1);
     expect(configurable.name).toEqual('FEE');
-    expect(configurable.type).toEqual(type);
-    expect(configurable.rawAbiConfigurable).toEqual(rawAbiConfigurable);
+    expect(configurable.inputLabel).toEqual('mockType');
   });
 });

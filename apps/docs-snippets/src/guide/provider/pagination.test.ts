@@ -1,9 +1,10 @@
 import type { GqlPageInfo } from '@fuel-ts/account/dist/providers/__generated__/operations';
 import type { CursorPaginationArgs } from 'fuels';
-import { FUEL_NETWORK_URL, Provider, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('querying the chain', () => {
   it('pagination snippet test 1', () => {
@@ -30,12 +31,13 @@ describe('querying the chain', () => {
   });
 
   it('pagination snippet test 2', async () => {
-    // #region pagination-3
-    // #import { Provider, CursorPaginationArgs, FUEL_NETWORK_URL, Wallet };
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [myWallet],
+    } = launched;
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const baseAssetId = provider.getBaseAssetId();
-    const myWallet = Wallet.generate({ provider });
+    // #region pagination-3
 
     let paginationArgs: CursorPaginationArgs = {
       first: 10, // It will return only the first 10 coins
@@ -43,7 +45,7 @@ describe('querying the chain', () => {
 
     const { coins, pageInfo } = await provider.getCoins(
       myWallet.address,
-      baseAssetId,
+      provider.getBaseAssetId(),
       paginationArgs
     );
 
@@ -53,7 +55,7 @@ describe('querying the chain', () => {
         first: 10,
       };
       // The coins array will include the next 10 coins after the last one in the previous array
-      await provider.getCoins(myWallet.address, baseAssetId, paginationArgs);
+      await provider.getCoins(myWallet.address, provider.getBaseAssetId(), paginationArgs);
     }
     // #endregion pagination-3
 
@@ -65,7 +67,7 @@ describe('querying the chain', () => {
       };
 
       // It will includes the previous 10 coins before the first one in the previous array
-      await provider.getCoins(myWallet.address, baseAssetId, paginationArgs);
+      await provider.getCoins(myWallet.address, provider.getBaseAssetId(), paginationArgs);
     }
     // #endregion pagination-4
 
@@ -90,11 +92,12 @@ describe('querying the chain', () => {
   });
 
   it('pagination snippet test 5', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [myWallet],
+    } = launched;
     // #region pagination-7
-    // #import { Provider, FUEL_NETWORK_URL, Wallet };
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const myWallet = Wallet.generate({ provider });
 
     // It will return the first 100 coins of the base asset
     const { coins, pageInfo } = await provider.getCoins(myWallet.address);

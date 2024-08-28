@@ -1,7 +1,7 @@
 import { toHex } from 'fuels';
 
-import { GenericTypesContractAbi__factory } from '../test/typegen/contracts';
-import GenericTypesContractAbiHex from '../test/typegen/contracts/GenericTypesContractAbi.hex';
+import type { GenericTypesContract } from '../test/typegen/contracts';
+import { GenericTypesContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 /**
@@ -11,8 +11,7 @@ import { launchTestContract } from './utils';
 describe('GenericTypesContract', () => {
   it('should call complex contract function with generic type', async () => {
     using contract = await launchTestContract({
-      deployer: GenericTypesContractAbi__factory,
-      bytecode: GenericTypesContractAbiHex,
+      factory: GenericTypesContractFactory,
     });
 
     const b256 = '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b';
@@ -76,6 +75,8 @@ describe('GenericTypesContract', () => {
 
     const { value } = await call1.waitForResult();
 
+    type ComplexFnType = GenericTypesContract['functions']['generic_complex_type_function'];
+
     const arg1 = {
       bim: toHex(1),
       bam: true,
@@ -85,7 +86,7 @@ describe('GenericTypesContract', () => {
         b: toHex(32),
       },
       foo_list: new Array(10).fill(b256),
-    };
+    } as Parameters<ComplexFnType>[0];
     const arg2 = {
       bim: toHex(1),
       bam: 2,
@@ -101,7 +102,7 @@ describe('GenericTypesContract', () => {
         x: toHex(31),
         b: toHex(32),
       }),
-    };
+    } as Parameters<ComplexFnType>[1];
 
     const call2 = await contract.functions.generic_complex_type_function(arg1, arg2).call();
     const { value: value2 } = await call2.waitForResult();

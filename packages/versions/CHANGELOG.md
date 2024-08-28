@@ -1,5 +1,25 @@
 # @fuel-ts/versions
 
+## 0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 4c653d0: feat!: adding `abi` transpiler
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 9309598: chore: upgrade `fuel-core@0.33.0`
+- 29c556d: fix: typegen reporting the correct versions
+
+## 0.93.0
+
+### Patch Changes
+
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+
 ## 0.92.1
 
 ## 0.92.0

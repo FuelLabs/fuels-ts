@@ -5,8 +5,8 @@ import { FuelLogo } from "@/components/FuelLogo";
 import { Input } from "@/components/Input";
 import { Link } from "@/components/Link";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { TestPredicate } from "@/sway-api/predicates/index";
 import { FAUCET_LINK } from "@/lib";
-import { TestPredicateAbi__factory } from "@/sway-api/predicates/index";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
@@ -28,9 +28,9 @@ export default function PredicateExample() {
     if (wallet) {
       baseAssetId = wallet.provider.getBaseAssetId();
       // Initialize a new predicate instance
-      const predicate = TestPredicateAbi__factory.createInstance(
-        wallet.provider,
-      );
+      const predicate = new TestPredicate({
+        provider: wallet.provider,
+      });
       setPredicate(predicate);
       setPredicateBalance(await predicate.getBalance());
     }
@@ -79,10 +79,10 @@ export default function PredicateExample() {
       }
 
       // Initialize a new predicate instance with the entered pin
-      const reInitializePredicate = TestPredicateAbi__factory.createInstance(
-        wallet.provider,
-        [bn(pin)],
-      );
+      const reInitializePredicate = new TestPredicate({
+        provider: wallet.provider,
+        data: [bn(pin)],
+      });
 
       if (!reInitializePredicate) {
         return toast.error("Failed to initialize predicate");
@@ -175,7 +175,7 @@ export default function PredicateExample() {
       </span>
 
       <Link
-        href="https://docs.fuel.network/docs/intro/glossary/#predicate"
+        href="https://docs.fuel.network/docs/fuels-ts/predicates"
         target="_blank"
       >
         Learn more about Predicates

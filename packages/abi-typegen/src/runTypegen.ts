@@ -1,4 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { versions as builtinVersions, type BinaryVersions } from '@fuel-ts/versions';
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import mkdirp from 'mkdirp';
@@ -18,10 +19,12 @@ export interface IGenerateFilesParams {
   output: string;
   silent?: boolean;
   programType: ProgramTypeEnum;
+  versions?: BinaryVersions;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
   const { cwd, inputs, output, silent, programType, filepaths: inputFilepaths } = params;
+  const versions: BinaryVersions = { FUELS: builtinVersions.FUELS, ...params.versions };
 
   const cwdBasename = basename(cwd);
 
@@ -52,10 +55,12 @@ export function runTypegen(params: IGenerateFilesParams) {
     Assembling file paths x contents
   */
   const abiFiles = filepaths.map((filepath) => {
+    const contents = readFileSync(filepath, 'utf-8');
     const abi: IFile = {
       path: filepath,
-      contents: readFileSync(filepath, 'utf-8'),
+      contents,
     };
+
     return abi;
   });
 
@@ -76,6 +81,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     binFiles,
     storageSlotsFiles,
     programType,
+    versions,
   });
 
   /*
@@ -83,7 +89,7 @@ export function runTypegen(params: IGenerateFilesParams) {
   */
   log('Generating files..\n');
 
-  mkdirp.sync(`${output}/factories`);
+  mkdirp.sync(`${output}`);
 
   abiTypeGen.files.forEach((file) => {
     rimrafSync(file.path);

@@ -1,16 +1,18 @@
 import type { ResolvedAbiType } from '../ResolvedAbiType';
-import type { JsonAbi, JsonAbiArgument } from '../types/JsonAbi';
+import type { JsonAbiArgument } from '../types/JsonAbi';
 
 import { ENCODING_V1 } from './constants';
 import {
   findFunctionByName,
-  findNonEmptyInputs,
+  findNonVoidInputs,
   findTypeById,
   findVectorBufferArgument,
   getEncodingVersion,
 } from './json-abi';
+import { transpileAbi } from './transpile-abi';
 
-const MOCK_ABI: JsonAbi = {
+const MOCK_ABI = transpileAbi({
+  encoding: 'V1',
   types: [
     { typeId: 1, type: '()', components: [], typeParameters: [] },
     { typeId: 2, type: 'u256', components: [], typeParameters: [] },
@@ -21,7 +23,7 @@ const MOCK_ABI: JsonAbi = {
   loggedTypes: [],
   configurables: [],
   messagesTypes: [],
-};
+});
 
 const DEFAULT_ENCODING_VERSION = ENCODING_V1;
 
@@ -99,7 +101,7 @@ describe('json-abi', () => {
     });
   });
 
-  describe('findNonEmptyInputs', () => {
+  describe('findNonVoidInputs', () => {
     it('should find non-empty inputs', () => {
       const inputs: JsonAbiArgument[] = [
         { name: 'a', type: 1, typeArguments: [] },
@@ -107,7 +109,7 @@ describe('json-abi', () => {
       ];
       const expected = [{ name: 'b', type: 2, typeArguments: [] }];
 
-      const actual = findNonEmptyInputs(MOCK_ABI, inputs);
+      const actual = findNonVoidInputs(MOCK_ABI, inputs);
 
       expect(actual).toEqual(expected);
     });
@@ -115,7 +117,7 @@ describe('json-abi', () => {
     it('should throw an error if the type is not found', () => {
       const inputs: JsonAbiArgument[] = [{ name: 'a', type: -1, typeArguments: [] }];
 
-      expect(() => findNonEmptyInputs(MOCK_ABI, inputs)).toThrowError(
+      expect(() => findNonVoidInputs(MOCK_ABI, inputs)).toThrowError(
         `Type with typeId '-1' doesn't exist in the ABI.`
       );
     });

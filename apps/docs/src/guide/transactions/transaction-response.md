@@ -6,7 +6,6 @@ Once a transaction has been submitted, you may want to extract information regar
 - The status (submitted, success, squeezed out, or failure)
 - Receipts (return data, logs, mints/burns, transfers and panic/reverts)
 - Gas fees and usages
-- The raw payload of the transaction including inputs and outputs
 - Date and time of the transaction
 - The block the transaction was included in
 

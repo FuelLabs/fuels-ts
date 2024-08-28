@@ -1,5 +1,31 @@
 # @fuel-ts/logger
 
+## 0.94.1
+
+### Patch Changes
+
+- @fuel-ts/address@0.94.1
+- @fuel-ts/interfaces@0.94.1
+- @fuel-ts/math@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- @fuel-ts/address@0.94.0
+- @fuel-ts/math@0.94.0
+- @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- 950abf9: build(deps): bump the deps group with 2 updates
+- Updated dependencies [d4c4e55]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/math@0.93.0
+
 ## 0.92.1
 
 ### Patch Changes

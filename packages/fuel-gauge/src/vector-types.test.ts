@@ -2,13 +2,14 @@ import type { BigNumberish } from 'fuels';
 import { bn, Predicate, Wallet, Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { VectorTypesScriptAbi__factory } from '../test/typegen';
-import { VectorTypesContractAbi__factory } from '../test/typegen/contracts';
-import VectorTypesContractAbiHex from '../test/typegen/contracts/VectorTypesContractAbi.hex';
-import type { Vec } from '../test/typegen/contracts/common';
-import { PredicateVectorTypesAbi__factory } from '../test/typegen/predicates';
+import { VectorTypesContractFactory } from '../test/typegen';
+import { PredicateVectorTypes } from '../test/typegen/predicates';
+import { VectorTypesScript } from '../test/typegen/scripts';
 
 import { launchTestContract } from './utils';
+
+type ArrayOfTuplesType = [BigNumberish, BigNumberish][];
+type TupleOfArraysType = [BigNumberish[], BigNumberish[]];
 
 const U32_VEC = [0, 1, 2];
 const VEC_IN_VEC = [
@@ -17,21 +18,21 @@ const VEC_IN_VEC = [
 ];
 const STRUCT_IN_VEC = [{ a: 0 }, { a: 1 }];
 const VEC_IN_STRUCT = { a: [0, 1, 2] };
-const ARRAY_IN_VEC: Vec<[BigNumberish, BigNumberish]> = [
+const ARRAY_IN_VEC: ArrayOfTuplesType = [
   [0, 1],
   [0, 1],
 ];
-const VEC_IN_ARRAY = [
+const VEC_IN_ARRAY: TupleOfArraysType = [
   [0, 1, 2],
   [0, 1, 2],
 ];
 const VEC_IN_ENUM = { a: [0, 1, 2] };
 const ENUM_IN_VEC = [{ a: 0 }, { a: 1 }];
-const TUPLE_IN_VEC = [
+const TUPLE_IN_VEC: ArrayOfTuplesType = [
   [0, 0],
   [1, 1],
 ];
-const VEC_IN_TUPLE = [
+const VEC_IN_TUPLE: TupleOfArraysType = [
   [0, 1, 2],
   [0, 1, 2],
 ];
@@ -70,12 +71,12 @@ type MainArgs = [
   TwoDimensionArray, // VEC_IN_VEC
   SomeStruct[], // STRUCT_IN_VEC
   SomeStructWithVec, // VEC_IN_STRUCT
-  TwoDimensionArray, // ARRAY_IN_VEC
-  TwoDimensionArray, // VEC_IN_ARRAY
+  ArrayOfTuplesType, // ARRAY_IN_VEC
+  TupleOfArraysType, // VEC_IN_ARRAY
   SomeStructWithVec, // VEC_IN_ENUM
   SomeStruct[], // ENUM_IN_VEC
-  TwoDimensionArray, // TUPLE_IN_VEC
-  TwoDimensionArray, // VEC_IN_TUPLE
+  ArrayOfTuplesType, // TUPLE_IN_VEC
+  TupleOfArraysType, // VEC_IN_TUPLE
   VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
@@ -86,8 +87,7 @@ type MainArgs = [
 describe('Vector Types Validation', () => {
   it('can use supported vector types [vector-types-contract]', async () => {
     using contractInstance = await launchTestContract({
-      deployer: VectorTypesContractAbi__factory,
-      bytecode: VectorTypesContractAbiHex,
+      factory: VectorTypesContractFactory,
     });
 
     const { waitForResult } = await contractInstance.functions
@@ -117,7 +117,7 @@ describe('Vector Types Validation', () => {
       wallets: [wallet],
     } = launched;
 
-    const scriptInstance = VectorTypesScriptAbi__factory.createInstance(wallet);
+    const scriptInstance = new VectorTypesScript(wallet);
 
     const { waitForResult } = await scriptInstance.functions
       .main(
@@ -152,10 +152,10 @@ describe('Vector Types Validation', () => {
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     const predicate = new Predicate<MainArgs>({
-      bytecode: PredicateVectorTypesAbi__factory.bin,
       provider: wallet.provider,
-      abi: PredicateVectorTypesAbi__factory.abi,
-      inputData: [
+      abi: PredicateVectorTypes.abi,
+      bytecode: PredicateVectorTypes.bytecode,
+      data: [
         U32_VEC,
         VEC_IN_VEC,
         STRUCT_IN_VEC,

@@ -12,149 +12,30 @@ import {
   ContractFactory,
   Predicate,
   PolicyType,
-  ZeroBytes32,
   buildFunctionResult,
 } from 'fuels';
-import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
+import type { ScriptTransactionRequest, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
-  CallTestContractAbi__factory,
-  StorageTestContractAbi__factory,
+  CallTestContract,
+  CallTestContractFactory,
+  StorageTestContract,
+  StorageTestContractFactory,
 } from '../test/typegen/contracts';
-import CallTestContractAbiHex from '../test/typegen/contracts/CallTestContractAbi.hex';
-import StorageTestContractAbiHex from '../test/typegen/contracts/StorageTestContractAbi.hex';
-import { PredicateTrueAbi__factory } from '../test/typegen/predicates/factories/PredicateTrueAbi__factory';
+import { PredicateTrue } from '../test/typegen/predicates/PredicateTrue';
 
 import { launchTestContract } from './utils';
 
 const contractsConfigs: DeployContractConfig[] = [
   {
-    deployer: CallTestContractAbi__factory,
-    bytecode: CallTestContractAbiHex,
+    factory: CallTestContractFactory,
   },
   {
-    deployer: CallTestContractAbi__factory,
-    bytecode: CallTestContractAbiHex,
+    factory: CallTestContractFactory,
   },
 ];
-
-const jsonFragment: JsonAbi = {
-  configurables: [],
-  loggedTypes: [],
-  types: [
-    {
-      typeId: 0,
-      type: '()',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 1,
-      type: 'u64',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 2,
-      type: 'struct MyStruct',
-      components: [
-        {
-          type: 0,
-          name: 'arg_one',
-          typeArguments: null,
-        },
-        {
-          type: 1,
-          name: 'arg_two',
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-  ],
-  functions: [
-    {
-      name: 'entry_one',
-      inputs: [
-        {
-          name: 'arg',
-          type: 1,
-          typeArguments: null,
-        },
-      ],
-      output: {
-        name: '',
-        type: 0,
-        typeArguments: null,
-      },
-      attributes: [],
-    },
-  ],
-  messagesTypes: [],
-};
-
-const complexFragment: JsonAbi = {
-  configurables: [],
-  loggedTypes: [],
-  types: [
-    {
-      typeId: 0,
-      type: '()',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 1,
-      type: 'str[20]',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 2,
-      type: 'b256',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 3,
-      type: '(_, _)',
-      components: [
-        {
-          name: '__tuple_element',
-          type: 1,
-          typeArguments: null,
-        },
-        {
-          name: '__tuple_element',
-          type: 2,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-  ],
-  functions: [
-    {
-      name: 'tuple_function',
-      inputs: [
-        {
-          name: 'person',
-          type: 2,
-          typeArguments: null,
-        },
-      ],
-      output: {
-        name: '',
-        type: 0,
-        typeArguments: null,
-      },
-      attributes: [],
-    },
-  ],
-  messagesTypes: [],
-};
 
 const txPointer = '0x00000000000000000000000000000000';
 
@@ -162,8 +43,7 @@ const AltToken = '0x010101010101010101010101010101010101010101010101010101010101
 
 function setupTestContract() {
   return launchTestContract({
-    deployer: CallTestContractAbi__factory,
-    bytecode: CallTestContractAbiHex,
+    factory: CallTestContractFactory,
   });
 }
 
@@ -172,54 +52,11 @@ function setupTestContract() {
  * @group browser
  */
 describe('Contract', () => {
-  it('generates function methods on a simple contract', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
-
-    const fragment = contract.interface.getFunction('entry_one');
-    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
-
-    try {
-      await contract.functions.entry_one(42);
-    } catch {
-      // The call will fail, but it doesn't matter
-    }
-
-    expect(interfaceSpy).toHaveBeenCalled();
-  });
-
-  it('generates function methods on a complex contract', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    const contract = new Contract(ZeroBytes32, complexFragment, wallet);
-
-    const fragment = contract.interface.getFunction('tuple_function');
-    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
-
-    try {
-      await contract.functions.tuple_function({
-        address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
-        name: 'foo',
-      });
-    } catch {
-      // The call will fail, but it doesn't matter
-    }
-
-    expect(interfaceSpy).toHaveBeenCalled();
-  });
-
   it('assigns a provider if passed', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;
 
-    const contract = new Contract(getRandomB256(), jsonFragment, provider);
+    const contract = new Contract(getRandomB256(), CallTestContract.abi, provider);
 
     expect(contract.provider).toEqual(provider);
   });
@@ -743,8 +580,8 @@ describe('Contract', () => {
     } = launched;
 
     const contract = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
     const { transactionRequest } = contract.createTransactionRequest();
@@ -928,7 +765,7 @@ describe('Contract', () => {
     const amountToPredicate = 500_000;
 
     const predicate = new Predicate({
-      bytecode: PredicateTrueAbi__factory.bin,
+      bytecode: PredicateTrue.bytecode,
       provider,
     });
 
@@ -997,12 +834,12 @@ describe('Contract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      CallTestContractAbiHex,
-      CallTestContractAbi__factory.abi,
+      CallTestContractFactory.bytecode,
+      CallTestContract.abi,
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     const { contract } = await waitForResult();
 
     const receiver1 = Wallet.generate({ provider });
@@ -1043,12 +880,12 @@ describe('Contract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      CallTestContractAbiHex,
-      CallTestContractAbi__factory.abi,
+      CallTestContractFactory.bytecode,
+      CallTestContract.abi,
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
 
     const { contract } = await waitForResult();
 
@@ -1176,12 +1013,12 @@ describe('Contract', () => {
     } = launched;
 
     const factory = new ContractFactory(
-      StorageTestContractAbiHex,
-      StorageTestContractAbi__factory.abi,
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
       wallet
     );
 
-    const { waitForResult } = await factory.deployContract();
+    const { waitForResult } = await factory.deploy();
     const { contract: storageContract } = await waitForResult();
 
     const initialCounterValue = 20;
@@ -1208,8 +1045,7 @@ describe('Contract', () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
-          deployer: StorageTestContractAbi__factory,
-          bytecode: StorageTestContractAbiHex,
+          factory: StorageTestContractFactory,
         },
       ],
     });

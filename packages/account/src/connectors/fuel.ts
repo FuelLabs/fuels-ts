@@ -85,9 +85,10 @@ export class Fuel extends FuelConnector implements FuelSdk {
   private _connectors: Array<FuelConnector> = [];
   private _targetObject: TargetObject | null = null;
   private _unsubscribes: Array<() => void> = [];
-  private _targetUnsubscribe: () => void;
+  private _targetUnsubscribe = () => {};
   private _pingCache: CacheFor = {};
   private _currentConnector?: FuelConnector | null;
+  private _initializationPromise: Promise<void> | null = null;
 
   constructor(config: FuelConfig = Fuel.defaultConfig) {
     super();
@@ -101,11 +102,21 @@ export class Fuel extends FuelConnector implements FuelSdk {
     this._storage = config.storage === undefined ? this.getStorage() : config.storage;
     // Setup all methods
     this.setupMethods();
-    // Get the current connector from the storage
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.setDefaultConnector();
-    // Setup new connector listener for global events
-    this._targetUnsubscribe = this.setupConnectorListener();
+    this._initializationPromise = this.initialize();
+  }
+
+  private async initialize(): Promise<void> {
+    try {
+      await this.setDefaultConnector();
+      this._targetUnsubscribe = this.setupConnectorListener();
+    } catch (error) {
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Error initializing Fuel Connector');
+    }
+  }
+
+  public async init(): Promise<Fuel> {
+    await this._initializationPromise;
+    return this;
   }
 
   /**
@@ -174,7 +185,8 @@ export class Fuel extends FuelConnector implements FuelSdk {
     const hasConnector = await this.hasConnector();
     await this.pingConnector();
     if (!this._currentConnector || !hasConnector) {
-      throw new Error(
+      throw new FuelError(
+        ErrorCode.MISSING_CONNECTOR,
         `No connector selected for calling ${method}. Use hasConnector before executing other methods.`
       );
     }
@@ -255,7 +267,7 @@ export class Fuel extends FuelConnector implements FuelSdk {
         cacheTime: PING_CACHE_TIME,
       })();
     } catch {
-      throw new Error('Current connector is not available.');
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Current connector is not available.');
     }
   }
 

@@ -1,10 +1,9 @@
-import { Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { ScriptWithConfigurableAbi__factory } from '../test/typegen';
-import type { ScriptWithConfigurableAbiConfigurables } from '../test/typegen/scripts/factories/ScriptWithConfigurableAbi__factory';
+import { ScriptWithConfigurable } from '../test/typegen';
+import type { ScriptWithConfigurableConfigurables } from '../test/typegen/scripts/ScriptWithConfigurable';
 
-const defaultValues: ScriptWithConfigurableAbiConfigurables = {
+const defaultValues: Required<ScriptWithConfigurableConfigurables> = {
   FEE: 5,
 };
 
@@ -20,11 +19,7 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(defaultValues);
 
@@ -41,15 +36,11 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: ScriptWithConfigurableAbiConfigurables = { FEE: 71 };
+    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = { FEE: 71 };
 
     expect(configurableConstants.FEE).not.toEqual(defaultValues.FEE);
 
-    const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(defaultValues);
 
@@ -66,13 +57,9 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: ScriptWithConfigurableAbiConfigurables = { FEE: 35 };
+    const configurableConstants: Required<ScriptWithConfigurableConfigurables> = { FEE: 35 };
 
-    const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(configurableConstants);
 
@@ -89,17 +76,13 @@ describe('Script With Configurable', () => {
       wallets: [wallet],
     } = launched;
 
-    const configurableConstants: ScriptWithConfigurableAbiConfigurables = { FEE: 10 };
+    const configurableConstants: ScriptWithConfigurableConfigurables = { FEE: 10 };
 
     const input = { FEE: 15 };
 
     expect(configurableConstants.FEE).not.toEqual(input.FEE);
 
-    const script = new Script(
-      ScriptWithConfigurableAbi__factory.bin,
-      ScriptWithConfigurableAbi__factory.abi,
-      wallet
-    );
+    const script = new ScriptWithConfigurable(wallet);
 
     script.setConfigurableConstants(configurableConstants);
 

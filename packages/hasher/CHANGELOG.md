@@ -1,5 +1,35 @@
 # Change Log
 
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/crypto@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- Updated dependencies [751d638]
+- Updated dependencies [a056da3]
+- Updated dependencies [03ac550]
+- Updated dependencies [b0c161f]
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/crypto@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/crypto@0.93.0
+
 ## 0.92.1
 
 ### Patch Changes

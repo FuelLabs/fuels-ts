@@ -1,5 +1,58 @@
 # @fuel-ts/abi-typegen
 
+## 0.94.1
+
+### Patch Changes
+
+- 66c0454: fix: stop building `typegen` on `pretest` script
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 799db38: feat!: prettify `typegen` api
+- 4c653d0: feat!: adding `abi` transpiler
+- 9c07b00: feat!: improve `()` and `Option<T>` type handling
+
+### Patch Changes
+
+- 29c556d: fix: typegen reporting the correct versions
+- 9156c02: fix: typegen generic configurables
+- a056da3: feat: improve typegen bytecode compression
+- Updated dependencies [9309598]
+- Updated dependencies [29c556d]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [751d638]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [03ac550]
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+- 5b670a5: fix: make properties of configurables optional in typegen
+- ad9adcd: fix: export interfaces in typegen
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+
 ## 0.92.1
 
 ### Patch Changes

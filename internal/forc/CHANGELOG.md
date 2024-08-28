@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.89.0
+
+### Minor Changes
+
+- 4c653d0: feat!: adding `abi` transpiler
+
+## 0.88.5
+
+### Patch Changes
+
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+
 ## 0.88.4
 
 ### Patch Changes

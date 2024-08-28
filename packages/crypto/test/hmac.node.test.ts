@@ -1,10 +1,20 @@
+import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify } from '@fuel-ts/utils';
 
-import { computeHmac } from '..';
+import { computeHmac as computeHmacNode } from '..';
+
+interface ComputeHmacNode {
+  (algorithm: 'sha256' | 'sha512', key: string, data: string): string;
+  register(func: (algorithm: 'sha256' | 'sha512', key: string, data: string) => BytesLike): void;
+  lock(): void;
+}
+
 /**
  * @group node
  */
 describe('computeHmac node', () => {
+  const computeHmac = computeHmacNode as ComputeHmacNode;
+
   it('should use the registered HMAC function', () => {
     const key = '0x0102030405060708090a0b0c0d0e0f10';
     const data = '0x11121314151617181920212223242526';

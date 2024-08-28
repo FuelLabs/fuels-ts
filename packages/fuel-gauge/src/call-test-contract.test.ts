@@ -2,13 +2,12 @@ import type { Contract } from 'fuels';
 import { BN, bn, toHex } from 'fuels';
 import { ASSET_A } from 'fuels/test-utils';
 
-import { CallTestContractAbi__factory } from '../test/typegen/contracts';
-import bytecode from '../test/typegen/contracts/CallTestContractAbi.hex';
+import { CallTestContractFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
 
 function setupContract() {
-  return launchTestContract({ deployer: CallTestContractAbi__factory, bytecode });
+  return launchTestContract({ factory: CallTestContractFactory });
 }
 const U64_MAX = bn(2).pow(64).sub(1);
 
@@ -46,7 +45,7 @@ describe('CallTestContract', () => {
     const { value: empty } = await call1.waitForResult();
     expect(empty.toHex()).toEqual(toHex(63));
 
-    const call2 = await contract.functions.empty_then_value(35).call();
+    const call2 = await contract.functions.empty_then_value(undefined, 35).call();
     const { value: emptyThenValue } = await call2.waitForResult();
     expect(emptyThenValue.toHex()).toEqual(toHex(63));
 
@@ -54,8 +53,7 @@ describe('CallTestContract', () => {
     const { value: valueThenEmpty } = await call3.waitForResult();
     expect(valueThenEmpty.toHex()).toEqual(toHex(63));
 
-    const call4 = await contract.functions.value_then_empty_then_value(35, 35).call();
-
+    const call4 = await contract.functions.value_then_empty_then_value(35, undefined, 35).call();
     const { value: valueThenEmptyThenValue } = await call4.waitForResult();
     expect(valueThenEmptyThenValue.toHex()).toEqual(toHex(63));
   });
