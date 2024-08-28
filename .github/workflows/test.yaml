@@ -85,7 +85,7 @@ jobs:
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
         env:
-          PUBLISHED_NPM_TAG: pr-3043
+          PUBLISHED_NPM_TAG: pr-3044
 
   e2e:
     runs-on: ubuntu-latest
