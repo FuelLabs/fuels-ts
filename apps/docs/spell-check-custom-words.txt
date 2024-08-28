@@ -332,3 +332,4 @@ incentivise
 URI
 walletsConfig
 reuploaded
+Vite
