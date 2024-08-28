@@ -12,8 +12,8 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.25.0",
-    "@fuels/react": "^0.25.0",
+    "@fuels/connectors": "0.25.0",
+    "@fuels/react": "0.25.0",
     "fuels": "workspace:*",
     "@tanstack/react-query": "^5.52.1",
     "@wagmi/connectors": "^5.0.26",
