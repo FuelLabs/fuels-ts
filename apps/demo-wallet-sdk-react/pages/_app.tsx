@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
           fuelConfig={{
             connectors: [
               new FuelWalletConnector(),
-              new WalletConnectConnector(),
+              new WalletConnectConnector({}),
               new BakoSafeConnector(),
               new FueletWalletConnector(),
               new FuelWalletDevelopmentConnector(),
