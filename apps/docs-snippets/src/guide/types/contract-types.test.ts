@@ -1,12 +1,12 @@
 import { Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
+
+import { InputOutputTypesFactory } from '../../../test/typegen';
 import type {
   IdentityOutput,
   AddressOutput,
   ContractIdOutput,
-} from 'test/typegen/contracts/InputOutputTypes';
-
-import { InputOutputTypesFactory } from '../../../test/typegen';
+} from '../../../test/typegen/contracts/InputOutputTypes';
 
 /**
  * @group node
