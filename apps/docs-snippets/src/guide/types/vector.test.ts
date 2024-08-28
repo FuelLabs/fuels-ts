@@ -1,7 +1,5 @@
-import type { BigNumberish } from 'fuels';
 import { BN, arrayify, getRandomB256 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
-import type { Vec } from 'test/typegen/contracts/common';
 
 import { BytecodeInputFactory, EchoEmployeeDataVectorFactory } from '../../../test/typegen';
 import type { EmployeeDataInput } from '../../../test/typegen/contracts/EchoU64Array';

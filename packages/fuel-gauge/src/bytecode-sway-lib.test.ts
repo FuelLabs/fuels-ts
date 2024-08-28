@@ -1,4 +1,4 @@
-import { Predicate, arrayify } from 'fuels';
+import { arrayify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { PredicateTrue } from '../test/typegen';
