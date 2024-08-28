@@ -1,2 +1,4 @@
 ---
 ---
+
+chore: adding type checking
