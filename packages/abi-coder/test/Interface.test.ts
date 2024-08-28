@@ -3,8 +3,7 @@ import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
 import { Interface } from '../src/Interface';
-import type { JsonAbiConfigurable } from '../src/types/JsonAbi';
-import type { AbiFunction } from '../src/types/JsonAbiNew';
+import type { AbiFunction, Configurable } from '../src/types/JsonAbiNew';
 
 import { AbiCoderProjectsEnum, getCoderForcProject } from './fixtures/forc-projects';
 import {
@@ -112,7 +111,7 @@ describe('Abi interface', () => {
   describe('configurables', () => {
     it('sets configurables as dictionary', () => {
       const dict = exhaustiveExamplesAbi.configurables.reduce((obj, val) => {
-        const o: Record<string, JsonAbiConfigurable> = obj;
+        const o: Record<string, Configurable> = obj;
         o[val.name] = val;
         return o;
       }, {});
@@ -624,7 +623,7 @@ describe('Abi interface', () => {
           let decoded = fn.decodeOutput(expectedEncoded)[0];
 
           if (decodedTransformer) {
-            decoded = decodedTransformer(decoded);
+            decoded = decodedTransformer(decoded as any[]);
           }
 
           const expectedDecoded = Array.isArray(value) && value.length === 1 ? value[0] : value; // the conditional is when the input is a SINGLE array/tuple - then de-nest it
@@ -638,7 +637,7 @@ describe('Abi interface', () => {
           )[0];
 
           if (decodedTransformer) {
-            decodedType = decodedTransformer(decodedType);
+            decodedType = decodedTransformer(decodedType as any[]);
           }
 
           expect(decodedType).toEqual(expectedDecoded);
