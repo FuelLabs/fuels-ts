@@ -5,6 +5,7 @@ import { arrayify } from '@fuel-ts/utils';
 
 import { AbiCoder } from './AbiCoder';
 import { FunctionFragment } from './FunctionFragment';
+import { NumberCoder } from './encoding/coders';
 import type { DecodedValue, InputValue } from './encoding/coders/AbstractCoder';
 import type { JsonAbiArgument, JsonAbiOld } from './types/JsonAbi';
 import type { Configurable, JsonAbi } from './types/JsonAbiNew';
@@ -72,6 +73,24 @@ export class Interface {
     return AbiCoder.decode(this.jsonAbiOld, loggedType.loggedType, arrayify(data), 0, {
       encoding: this.encoding,
     });
+  }
+
+  decodeMessage(messageData: Uint8Array) {
+    const [decodedAbiMessageId, offset] = new NumberCoder('u8', { padToWordSize: true }).decode(
+      messageData,
+      0
+    );
+    const dataOffset = messageData.slice(offset, messageData.length);
+
+    const messageType = this.jsonAbi.messagesTypes.find(
+      (type) => type.messageId === decodedAbiMessageId.toString()
+    );
+
+    if (!messageType) {
+      // TODO: Add error code and message
+      throw new FuelError(FuelError.CODES.DECODE_ERROR, 'TBD');
+    }
+    return this.decodeType(messageType.concreteTypeId, dataOffset)[0];
   }
 
   encodeConfigurable(name: string, value: InputValue) {
