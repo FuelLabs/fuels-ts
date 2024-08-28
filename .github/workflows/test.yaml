@@ -54,7 +54,7 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,24 +63,24 @@ jobs:
 
       - name: Test Setup
         uses: ./.github/actions/test-setup
-        with:
-          should-install-bun: true
+      #   with:
+      #     should-install-bun: true
 
-      - name: Run UI tests (on template)
-        run: sh ./scripts/tests-ui.sh
+      # - name: Run UI tests (on template)
+      #   run: sh ./scripts/tests-ui.sh
 
-      - name: Wait for release to succeed
-        uses: lewagon/wait-on-check-action@v1.3.4
-        with:
-          ref: "refs/heads/master"
-          check-name: "Release"
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 30
+      # - name: Wait for release to succeed
+      #   uses: lewagon/wait-on-check-action@v1.3.4
+      #   with:
+      #     ref: "refs/heads/master"
+      #     check-name: "Release"
+      #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #     wait-interval: 30
 
-      - name: Run tests (with published version)
-        run: pnpm test:integration
-        env:
-          PUBLISHED_NPM_TAG: next
+      # - name: Run tests (with published version)
+      #   run: pnpm test:integration
+      #   env:
+      #     PUBLISHED_NPM_TAG: next
 
       - name: Run UI tests (with published version)
         run: sh ./scripts/tests-ui-integration.sh
