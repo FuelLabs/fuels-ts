@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/abi-typegen",
-  "version": "0.94.0",
+  "version": "0.94.1",
   "description": "Generates Typescript definitions from Sway ABI Json files",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -43,7 +43,7 @@
     "dist"
   ],
   "scripts": {
-    "pretest": "run-s build build:forc",
+    "pretest": "pnpm build:forc",
     "test": "cd ../.. && pnpm run test:filter packages/abi-typegen",
     "test:update-fixtures": "UPDATE_FIXTURES=true pnpm run test",
     "build": "tsup",

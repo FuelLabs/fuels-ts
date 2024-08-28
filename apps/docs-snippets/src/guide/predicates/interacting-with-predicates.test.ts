@@ -1,4 +1,4 @@
-import type { JsonAbi, Provider, WalletUnlocked } from 'fuels';
+import type { BytesLike, JsonAbi, Provider, WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, bn, Predicate, BN, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -16,7 +16,7 @@ describe('Interacting with Predicates', () => {
     fundedWallet: WalletUnlocked,
     inputData: [string],
     abi: JsonAbi,
-    bytecode: string,
+    bytecode: BytesLike,
     configurableConstants?: Record<string, unknown>
   ): Promise<Predicate<string[]>> {
     const predicate = new Predicate({
