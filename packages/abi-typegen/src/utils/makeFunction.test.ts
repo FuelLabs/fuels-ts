@@ -32,6 +32,7 @@ describe('functions.ts', () => {
       name: 'f1',
       inputs: [{ name: 'u8', type: 1, typeArguments: null }],
       output: { name: 'u8', type: 1, typeArguments: null },
+      attributes: [],
     };
 
     expect(makeFunction({ rawAbiFunction, types })).toBeTruthy();

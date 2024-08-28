@@ -9,7 +9,7 @@ export const compressBytecode = (bytecodeAsBinary?: BytesLike) => {
   }
 
   const bytecodeCompressBytes = arrayify(bytecodeAsBinary);
-  const bytecodeCompressGzipped = gzipSync(bytecodeCompressBytes);
+  const bytecodeCompressGzipped = gzipSync(bytecodeCompressBytes, { mtime: 0 });
   const bytecodeCompressBinary = String.fromCharCode.apply(
     null,
     new Uint8Array(bytecodeCompressGzipped) as unknown as number[]
