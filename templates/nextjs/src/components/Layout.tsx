@@ -9,7 +9,7 @@ import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
 import Head from "next/head";
 import { bn } from "fuels";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { faucetWallet } = useFaucet();

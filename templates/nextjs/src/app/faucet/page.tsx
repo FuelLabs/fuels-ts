@@ -95,7 +95,7 @@ export default function Faucet() {
                 : TESTNET_FAUCET_LINK
             }
             title="faucet"
-            className="w-full h-screen ovreflow-scroll"
+            className="w-full h-screen overflow-scroll"
           />
         </>
       )}
