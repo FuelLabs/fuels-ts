@@ -1,3 +1,4 @@
+import { Interface } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
@@ -24,7 +25,7 @@ import type {
   Output,
   TransactionType,
 } from '@fuel-ts/transactions';
-import { OutputType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
+import { OutputType, ReceiptType, TransactionCoder, TxPointerCoder } from '@fuel-ts/transactions';
 import { arrayify, assertUnreachable } from '@fuel-ts/utils';
 
 import type {
@@ -369,6 +370,20 @@ export class TransactionResponse {
       );
 
       transactionResult.logs = logs;
+
+      const decodedMessage: Record<string, unknown> = {};
+
+      const abiInterface = new Interface(this.abis.main);
+
+      transactionSummary.receipts.forEach((receipt) => {
+        if (receipt.type === ReceiptType.MessageOut) {
+          try {
+            const decoded = abiInterface.decodeMessage(receipt.data);
+            decodedMessage[receipt.nonce] = decoded;
+            // eslint-disable-next-line no-empty
+          } catch {}
+        }
+      });
     }
 
     const { receipts } = transactionResult;
