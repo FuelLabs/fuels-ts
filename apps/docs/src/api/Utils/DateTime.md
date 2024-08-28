@@ -1,6 +1,8 @@
-# Class: DateTime
+[**@fuel-ts/utils v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/utils](/api/Utils/index.md).DateTime
+***
+
+# Class: DateTime
 
 This class is used to represent a date and time in the Tai64 format.
 
@@ -29,171 +31,145 @@ now.toISOString(); // '2023-04-13T13:09:58.000Z'
 now.getTime(); // 1681391398000
 ```
 
-## Hierarchy
+## Extends
 
 - `Date`
-
-  ↳ **`DateTime`**
 
 ## Implements
 
 - `Date`
 
-## Constructors
-
-### constructor
-
-• **new DateTime**(`date`): [`DateTime`](/api/Utils/DateTime.md)
-
-Hide the constructor to prevent direct instantiation.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `date` | `string` \| `number` \| `Date` |
-
-#### Returns
-
-[`DateTime`](/api/Utils/DateTime.md)
-
-#### Overrides
-
-Date.constructor
-
-#### Defined in
-
-[packages/utils/src/utils/date-time.ts:130](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L130)
-
 ## Properties
 
 ### TAI64\_NULL
 
-▪ `Static` **TAI64\_NULL**: `string` = `''`
+> `static` **TAI64\_NULL**: `string` = `''`
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L99)
+[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/date-time.ts#L99)
 
 ## Methods
 
-### [toPrimitive]
+### \[toPrimitive\]()
 
-▸ **[toPrimitive]**(`hint`): `string`
+#### \[toPrimitive\](hint)
 
-Converts a Date object to a string.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `hint` | ``"default"`` |
-
-#### Returns
-
-`string`
-
-#### Implementation of
-
-Date.[toPrimitive]
-
-#### Inherited from
-
-Date.[toPrimitive]
-
-#### Defined in
-
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:116
-
-▸ **[toPrimitive]**(`hint`): `string`
+> **\[toPrimitive\]**(`hint`): `string`
 
 Converts a Date object to a string.
 
-#### Parameters
+##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `hint` | ``"string"`` |
+• **hint**: `"default"`
 
-#### Returns
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.[toPrimitive]
+`Date.[toPrimitive]`
 
-#### Inherited from
+##### Inherited from
 
-Date.[toPrimitive]
+`Date.[toPrimitive]`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:120
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:116
 
-▸ **[toPrimitive]**(`hint`): `number`
+#### \[toPrimitive\](hint)
+
+> **\[toPrimitive\]**(`hint`): `string`
+
+Converts a Date object to a string.
+
+##### Parameters
+
+• **hint**: `"string"`
+
+##### Returns
+
+`string`
+
+##### Implementation of
+
+`Date.[toPrimitive]`
+
+##### Inherited from
+
+`Date.[toPrimitive]`
+
+##### Defined in
+
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:120
+
+#### \[toPrimitive\](hint)
+
+> **\[toPrimitive\]**(`hint`): `number`
 
 Converts a Date object to a number.
 
-#### Parameters
+##### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `hint` | ``"number"`` |
+• **hint**: `"number"`
 
-#### Returns
+##### Returns
 
 `number`
 
-#### Implementation of
+##### Implementation of
 
-Date.[toPrimitive]
+`Date.[toPrimitive]`
 
-#### Inherited from
+##### Inherited from
 
-Date.[toPrimitive]
+`Date.[toPrimitive]`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:124
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:124
 
-▸ **[toPrimitive]**(`hint`): `string` \| `number`
+#### \[toPrimitive\](hint)
+
+> **\[toPrimitive\]**(`hint`): `string` \| `number`
 
 Converts a Date object to a string or number.
 
-**`Throws`**
+##### Parameters
 
-If 'hint' was given something other than "number", "string", or "default".
+• **hint**: `string`
 
-#### Parameters
+The strings "number", "string", or "default" to specify what primitive to return.
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `hint` | `string` | The strings "number", "string", or "default" to specify what primitive to return. |
-
-#### Returns
+##### Returns
 
 `string` \| `number`
 
 A number if 'hint' was "number", a string if 'hint' was "string" or "default".
 
-#### Implementation of
+##### Throws
 
-Date.[toPrimitive]
+If 'hint' was given something other than "number", "string", or "default".
 
-#### Inherited from
+##### Implementation of
 
-Date.[toPrimitive]
+`Date.[toPrimitive]`
 
-#### Defined in
+##### Inherited from
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:133
+`Date.[toPrimitive]`
 
-___
+##### Defined in
 
-### getDate
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:133
 
-▸ **getDate**(): `number`
+***
+
+### getDate()
+
+> **getDate**(): `number`
 
 Gets the day-of-the-month, using local time.
 
@@ -203,21 +179,21 @@ Gets the day-of-the-month, using local time.
 
 #### Implementation of
 
-Date.getDate
+`Date.getDate`
 
 #### Inherited from
 
-Date.getDate
+`Date.getDate`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:798
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:798
 
-___
+***
 
-### getDay
+### getDay()
 
-▸ **getDay**(): `number`
+> **getDay**(): `number`
 
 Gets the day of the week, using local time.
 
@@ -227,21 +203,21 @@ Gets the day of the week, using local time.
 
 #### Implementation of
 
-Date.getDay
+`Date.getDay`
 
 #### Inherited from
 
-Date.getDay
+`Date.getDay`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:802
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:802
 
-___
+***
 
-### getFullYear
+### getFullYear()
 
-▸ **getFullYear**(): `number`
+> **getFullYear**(): `number`
 
 Gets the year, using local time.
 
@@ -251,21 +227,21 @@ Gets the year, using local time.
 
 #### Implementation of
 
-Date.getFullYear
+`Date.getFullYear`
 
 #### Inherited from
 
-Date.getFullYear
+`Date.getFullYear`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:790
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:790
 
-___
+***
 
-### getHours
+### getHours()
 
-▸ **getHours**(): `number`
+> **getHours**(): `number`
 
 Gets the hours in a date, using local time.
 
@@ -275,21 +251,21 @@ Gets the hours in a date, using local time.
 
 #### Implementation of
 
-Date.getHours
+`Date.getHours`
 
 #### Inherited from
 
-Date.getHours
+`Date.getHours`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:806
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:806
 
-___
+***
 
-### getMilliseconds
+### getMilliseconds()
 
-▸ **getMilliseconds**(): `number`
+> **getMilliseconds**(): `number`
 
 Gets the milliseconds of a Date, using local time.
 
@@ -299,21 +275,21 @@ Gets the milliseconds of a Date, using local time.
 
 #### Implementation of
 
-Date.getMilliseconds
+`Date.getMilliseconds`
 
 #### Inherited from
 
-Date.getMilliseconds
+`Date.getMilliseconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:818
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:818
 
-___
+***
 
-### getMinutes
+### getMinutes()
 
-▸ **getMinutes**(): `number`
+> **getMinutes**(): `number`
 
 Gets the minutes of a Date object, using local time.
 
@@ -323,21 +299,21 @@ Gets the minutes of a Date object, using local time.
 
 #### Implementation of
 
-Date.getMinutes
+`Date.getMinutes`
 
 #### Inherited from
 
-Date.getMinutes
+`Date.getMinutes`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:810
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:810
 
-___
+***
 
-### getMonth
+### getMonth()
 
-▸ **getMonth**(): `number`
+> **getMonth**(): `number`
 
 Gets the month, using local time.
 
@@ -347,21 +323,21 @@ Gets the month, using local time.
 
 #### Implementation of
 
-Date.getMonth
+`Date.getMonth`
 
 #### Inherited from
 
-Date.getMonth
+`Date.getMonth`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:794
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:794
 
-___
+***
 
-### getSeconds
+### getSeconds()
 
-▸ **getSeconds**(): `number`
+> **getSeconds**(): `number`
 
 Gets the seconds of a Date object, using local time.
 
@@ -371,21 +347,21 @@ Gets the seconds of a Date object, using local time.
 
 #### Implementation of
 
-Date.getSeconds
+`Date.getSeconds`
 
 #### Inherited from
 
-Date.getSeconds
+`Date.getSeconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:814
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:814
 
-___
+***
 
-### getTime
+### getTime()
 
-▸ **getTime**(): `number`
+> **getTime**(): `number`
 
 Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC.
 
@@ -395,21 +371,21 @@ Returns the stored time value in milliseconds since midnight, January 1, 1970 UT
 
 #### Implementation of
 
-Date.getTime
+`Date.getTime`
 
 #### Inherited from
 
-Date.getTime
+`Date.getTime`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:788
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:788
 
-___
+***
 
-### getTimezoneOffset
+### getTimezoneOffset()
 
-▸ **getTimezoneOffset**(): `number`
+> **getTimezoneOffset**(): `number`
 
 Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC).
 
@@ -419,21 +395,21 @@ Gets the difference in minutes between the time on the local computer and Univer
 
 #### Implementation of
 
-Date.getTimezoneOffset
+`Date.getTimezoneOffset`
 
 #### Inherited from
 
-Date.getTimezoneOffset
+`Date.getTimezoneOffset`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:822
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:822
 
-___
+***
 
-### getUTCDate
+### getUTCDate()
 
-▸ **getUTCDate**(): `number`
+> **getUTCDate**(): `number`
 
 Gets the day-of-the-month, using Universal Coordinated Time (UTC).
 
@@ -443,21 +419,21 @@ Gets the day-of-the-month, using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCDate
+`Date.getUTCDate`
 
 #### Inherited from
 
-Date.getUTCDate
+`Date.getUTCDate`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:800
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:800
 
-___
+***
 
-### getUTCDay
+### getUTCDay()
 
-▸ **getUTCDay**(): `number`
+> **getUTCDay**(): `number`
 
 Gets the day of the week using Universal Coordinated Time (UTC).
 
@@ -467,21 +443,21 @@ Gets the day of the week using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCDay
+`Date.getUTCDay`
 
 #### Inherited from
 
-Date.getUTCDay
+`Date.getUTCDay`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:804
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:804
 
-___
+***
 
-### getUTCFullYear
+### getUTCFullYear()
 
-▸ **getUTCFullYear**(): `number`
+> **getUTCFullYear**(): `number`
 
 Gets the year using Universal Coordinated Time (UTC).
 
@@ -491,21 +467,21 @@ Gets the year using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCFullYear
+`Date.getUTCFullYear`
 
 #### Inherited from
 
-Date.getUTCFullYear
+`Date.getUTCFullYear`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:792
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:792
 
-___
+***
 
-### getUTCHours
+### getUTCHours()
 
-▸ **getUTCHours**(): `number`
+> **getUTCHours**(): `number`
 
 Gets the hours value in a Date object using Universal Coordinated Time (UTC).
 
@@ -515,21 +491,21 @@ Gets the hours value in a Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCHours
+`Date.getUTCHours`
 
 #### Inherited from
 
-Date.getUTCHours
+`Date.getUTCHours`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:808
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:808
 
-___
+***
 
-### getUTCMilliseconds
+### getUTCMilliseconds()
 
-▸ **getUTCMilliseconds**(): `number`
+> **getUTCMilliseconds**(): `number`
 
 Gets the milliseconds of a Date object using Universal Coordinated Time (UTC).
 
@@ -539,21 +515,21 @@ Gets the milliseconds of a Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCMilliseconds
+`Date.getUTCMilliseconds`
 
 #### Inherited from
 
-Date.getUTCMilliseconds
+`Date.getUTCMilliseconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:820
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:820
 
-___
+***
 
-### getUTCMinutes
+### getUTCMinutes()
 
-▸ **getUTCMinutes**(): `number`
+> **getUTCMinutes**(): `number`
 
 Gets the minutes of a Date object using Universal Coordinated Time (UTC).
 
@@ -563,21 +539,21 @@ Gets the minutes of a Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCMinutes
+`Date.getUTCMinutes`
 
 #### Inherited from
 
-Date.getUTCMinutes
+`Date.getUTCMinutes`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:812
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:812
 
-___
+***
 
-### getUTCMonth
+### getUTCMonth()
 
-▸ **getUTCMonth**(): `number`
+> **getUTCMonth**(): `number`
 
 Gets the month of a Date object using Universal Coordinated Time (UTC).
 
@@ -587,21 +563,21 @@ Gets the month of a Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCMonth
+`Date.getUTCMonth`
 
 #### Inherited from
 
-Date.getUTCMonth
+`Date.getUTCMonth`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:796
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:796
 
-___
+***
 
-### getUTCSeconds
+### getUTCSeconds()
 
-▸ **getUTCSeconds**(): `number`
+> **getUTCSeconds**(): `number`
 
 Gets the seconds of a Date object using Universal Coordinated Time (UTC).
 
@@ -611,29 +587,29 @@ Gets the seconds of a Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.getUTCSeconds
+`Date.getUTCSeconds`
 
 #### Inherited from
 
-Date.getUTCSeconds
+`Date.getUTCSeconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:816
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:816
 
-___
+***
 
-### setDate
+### setDate()
 
-▸ **setDate**(`date`): `number`
+> **setDate**(`date`): `number`
 
 Sets the numeric day-of-the-month value of the Date object using local time.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `date` | `number` | A numeric value equal to the day of the month. |
+• **date**: `number`
+
+A numeric value equal to the day of the month.
 
 #### Returns
 
@@ -641,31 +617,37 @@ Sets the numeric day-of-the-month value of the Date object using local time.
 
 #### Implementation of
 
-Date.setDate
+`Date.setDate`
 
 #### Inherited from
 
-Date.setDate
+`Date.setDate`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:885
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:885
 
-___
+***
 
-### setFullYear
+### setFullYear()
 
-▸ **setFullYear**(`year`, `month?`, `date?`): `number`
+> **setFullYear**(`year`, `month`?, `date`?): `number`
 
 Sets the year of the Date object using local time.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `year` | `number` | A numeric value for the year. |
-| `month?` | `number` | A zero-based numeric value for the month (0 for January, 11 for December). Must be specified if numDate is specified. |
-| `date?` | `number` | A numeric value equal for the day of the month. |
+• **year**: `number`
+
+A numeric value for the year.
+
+• **month?**: `number`
+
+A zero-based numeric value for the month (0 for January, 11 for December). Must be specified if numDate is specified.
+
+• **date?**: `number`
+
+A numeric value equal for the day of the month.
 
 #### Returns
 
@@ -673,32 +655,41 @@ Sets the year of the Date object using local time.
 
 #### Implementation of
 
-Date.setFullYear
+`Date.setFullYear`
 
 #### Inherited from
 
-Date.setFullYear
+`Date.setFullYear`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:909
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:909
 
-___
+***
 
-### setHours
+### setHours()
 
-▸ **setHours**(`hours`, `min?`, `sec?`, `ms?`): `number`
+> **setHours**(`hours`, `min`?, `sec`?, `ms`?): `number`
 
 Sets the hour value in the Date object using local time.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `hours` | `number` | A numeric value equal to the hours value. |
-| `min?` | `number` | A numeric value equal to the minutes value. |
-| `sec?` | `number` | A numeric value equal to the seconds value. |
-| `ms?` | `number` | A numeric value equal to the milliseconds value. |
+• **hours**: `number`
+
+A numeric value equal to the hours value.
+
+• **min?**: `number`
+
+A numeric value equal to the minutes value.
+
+• **sec?**: `number`
+
+A numeric value equal to the seconds value.
+
+• **ms?**: `number`
+
+A numeric value equal to the milliseconds value.
 
 #### Returns
 
@@ -706,29 +697,29 @@ Sets the hour value in the Date object using local time.
 
 #### Implementation of
 
-Date.setHours
+`Date.setHours`
 
 #### Inherited from
 
-Date.setHours
+`Date.setHours`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:872
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:872
 
-___
+***
 
-### setMilliseconds
+### setMilliseconds()
 
-▸ **setMilliseconds**(`ms`): `number`
+> **setMilliseconds**(`ms`): `number`
 
 Sets the milliseconds value in the Date object using local time.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `ms` | `number` | A numeric value equal to the millisecond value. |
+• **ms**: `number`
+
+A numeric value equal to the millisecond value.
 
 #### Returns
 
@@ -736,31 +727,37 @@ Sets the milliseconds value in the Date object using local time.
 
 #### Implementation of
 
-Date.setMilliseconds
+`Date.setMilliseconds`
 
 #### Inherited from
 
-Date.setMilliseconds
+`Date.setMilliseconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:832
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:832
 
-___
+***
 
-### setMinutes
+### setMinutes()
 
-▸ **setMinutes**(`min`, `sec?`, `ms?`): `number`
+> **setMinutes**(`min`, `sec`?, `ms`?): `number`
 
 Sets the minutes value in the Date object using local time.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `min` | `number` | A numeric value equal to the minutes value. |
-| `sec?` | `number` | A numeric value equal to the seconds value. |
-| `ms?` | `number` | A numeric value equal to the milliseconds value. |
+• **min**: `number`
+
+A numeric value equal to the minutes value.
+
+• **sec?**: `number`
+
+A numeric value equal to the seconds value.
+
+• **ms?**: `number`
+
+A numeric value equal to the milliseconds value.
 
 #### Returns
 
@@ -768,30 +765,33 @@ Sets the minutes value in the Date object using local time.
 
 #### Implementation of
 
-Date.setMinutes
+`Date.setMinutes`
 
 #### Inherited from
 
-Date.setMinutes
+`Date.setMinutes`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:857
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:857
 
-___
+***
 
-### setMonth
+### setMonth()
 
-▸ **setMonth**(`month`, `date?`): `number`
+> **setMonth**(`month`, `date`?): `number`
 
 Sets the month value in the Date object using local time.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `month` | `number` | A numeric value equal to the month. The value for January is 0, and other month values follow consecutively. |
-| `date?` | `number` | A numeric value representing the day of the month. If this value is not supplied, the value from a call to the getDate method is used. |
+• **month**: `number`
+
+A numeric value equal to the month. The value for January is 0, and other month values follow consecutively.
+
+• **date?**: `number`
+
+A numeric value representing the day of the month. If this value is not supplied, the value from a call to the getDate method is used.
 
 #### Returns
 
@@ -799,30 +799,33 @@ Sets the month value in the Date object using local time.
 
 #### Implementation of
 
-Date.setMonth
+`Date.setMonth`
 
 #### Inherited from
 
-Date.setMonth
+`Date.setMonth`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:896
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:896
 
-___
+***
 
-### setSeconds
+### setSeconds()
 
-▸ **setSeconds**(`sec`, `ms?`): `number`
+> **setSeconds**(`sec`, `ms`?): `number`
 
 Sets the seconds value in the Date object using local time.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `sec` | `number` | A numeric value equal to the seconds value. |
-| `ms?` | `number` | A numeric value equal to the milliseconds value. |
+• **sec**: `number`
+
+A numeric value equal to the seconds value.
+
+• **ms?**: `number`
+
+A numeric value equal to the milliseconds value.
 
 #### Returns
 
@@ -830,29 +833,29 @@ Sets the seconds value in the Date object using local time.
 
 #### Implementation of
 
-Date.setSeconds
+`Date.setSeconds`
 
 #### Inherited from
 
-Date.setSeconds
+`Date.setSeconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:844
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:844
 
-___
+***
 
-### setTime
+### setTime()
 
-▸ **setTime**(`time`): `number`
+> **setTime**(`time`): `number`
 
 Sets the date and time value in the Date object.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `time` | `number` | A numeric value representing the number of elapsed milliseconds since midnight, January 1, 1970 GMT. |
+• **time**: `number`
+
+A numeric value representing the number of elapsed milliseconds since midnight, January 1, 1970 GMT.
 
 #### Returns
 
@@ -860,29 +863,29 @@ Sets the date and time value in the Date object.
 
 #### Implementation of
 
-Date.setTime
+`Date.setTime`
 
 #### Inherited from
 
-Date.setTime
+`Date.setTime`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:827
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:827
 
-___
+***
 
-### setUTCDate
+### setUTCDate()
 
-▸ **setUTCDate**(`date`): `number`
+> **setUTCDate**(`date`): `number`
 
 Sets the numeric day of the month in the Date object using Universal Coordinated Time (UTC).
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `date` | `number` | A numeric value equal to the day of the month. |
+• **date**: `number`
+
+A numeric value equal to the day of the month.
 
 #### Returns
 
@@ -890,31 +893,37 @@ Sets the numeric day of the month in the Date object using Universal Coordinated
 
 #### Implementation of
 
-Date.setUTCDate
+`Date.setUTCDate`
 
 #### Inherited from
 
-Date.setUTCDate
+`Date.setUTCDate`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:890
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:890
 
-___
+***
 
-### setUTCFullYear
+### setUTCFullYear()
 
-▸ **setUTCFullYear**(`year`, `month?`, `date?`): `number`
+> **setUTCFullYear**(`year`, `month`?, `date`?): `number`
 
 Sets the year value in the Date object using Universal Coordinated Time (UTC).
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `year` | `number` | A numeric value equal to the year. |
-| `month?` | `number` | A numeric value equal to the month. The value for January is 0, and other month values follow consecutively. Must be supplied if numDate is supplied. |
-| `date?` | `number` | A numeric value equal to the day of the month. |
+• **year**: `number`
+
+A numeric value equal to the year.
+
+• **month?**: `number`
+
+A numeric value equal to the month. The value for January is 0, and other month values follow consecutively. Must be supplied if numDate is supplied.
+
+• **date?**: `number`
+
+A numeric value equal to the day of the month.
 
 #### Returns
 
@@ -922,32 +931,41 @@ Sets the year value in the Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.setUTCFullYear
+`Date.setUTCFullYear`
 
 #### Inherited from
 
-Date.setUTCFullYear
+`Date.setUTCFullYear`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:916
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:916
 
-___
+***
 
-### setUTCHours
+### setUTCHours()
 
-▸ **setUTCHours**(`hours`, `min?`, `sec?`, `ms?`): `number`
+> **setUTCHours**(`hours`, `min`?, `sec`?, `ms`?): `number`
 
 Sets the hours value in the Date object using Universal Coordinated Time (UTC).
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `hours` | `number` | A numeric value equal to the hours value. |
-| `min?` | `number` | A numeric value equal to the minutes value. |
-| `sec?` | `number` | A numeric value equal to the seconds value. |
-| `ms?` | `number` | A numeric value equal to the milliseconds value. |
+• **hours**: `number`
+
+A numeric value equal to the hours value.
+
+• **min?**: `number`
+
+A numeric value equal to the minutes value.
+
+• **sec?**: `number`
+
+A numeric value equal to the seconds value.
+
+• **ms?**: `number`
+
+A numeric value equal to the milliseconds value.
 
 #### Returns
 
@@ -955,29 +973,29 @@ Sets the hours value in the Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.setUTCHours
+`Date.setUTCHours`
 
 #### Inherited from
 
-Date.setUTCHours
+`Date.setUTCHours`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:880
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:880
 
-___
+***
 
-### setUTCMilliseconds
+### setUTCMilliseconds()
 
-▸ **setUTCMilliseconds**(`ms`): `number`
+> **setUTCMilliseconds**(`ms`): `number`
 
 Sets the milliseconds value in the Date object using Universal Coordinated Time (UTC).
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `ms` | `number` | A numeric value equal to the millisecond value. |
+• **ms**: `number`
+
+A numeric value equal to the millisecond value.
 
 #### Returns
 
@@ -985,31 +1003,37 @@ Sets the milliseconds value in the Date object using Universal Coordinated Time 
 
 #### Implementation of
 
-Date.setUTCMilliseconds
+`Date.setUTCMilliseconds`
 
 #### Inherited from
 
-Date.setUTCMilliseconds
+`Date.setUTCMilliseconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:837
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:837
 
-___
+***
 
-### setUTCMinutes
+### setUTCMinutes()
 
-▸ **setUTCMinutes**(`min`, `sec?`, `ms?`): `number`
+> **setUTCMinutes**(`min`, `sec`?, `ms`?): `number`
 
 Sets the minutes value in the Date object using Universal Coordinated Time (UTC).
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `min` | `number` | A numeric value equal to the minutes value. |
-| `sec?` | `number` | A numeric value equal to the seconds value. |
-| `ms?` | `number` | A numeric value equal to the milliseconds value. |
+• **min**: `number`
+
+A numeric value equal to the minutes value.
+
+• **sec?**: `number`
+
+A numeric value equal to the seconds value.
+
+• **ms?**: `number`
+
+A numeric value equal to the milliseconds value.
 
 #### Returns
 
@@ -1017,30 +1041,33 @@ Sets the minutes value in the Date object using Universal Coordinated Time (UTC)
 
 #### Implementation of
 
-Date.setUTCMinutes
+`Date.setUTCMinutes`
 
 #### Inherited from
 
-Date.setUTCMinutes
+`Date.setUTCMinutes`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:864
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:864
 
-___
+***
 
-### setUTCMonth
+### setUTCMonth()
 
-▸ **setUTCMonth**(`month`, `date?`): `number`
+> **setUTCMonth**(`month`, `date`?): `number`
 
 Sets the month value in the Date object using Universal Coordinated Time (UTC).
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `month` | `number` | A numeric value equal to the month. The value for January is 0, and other month values follow consecutively. |
-| `date?` | `number` | A numeric value representing the day of the month. If it is not supplied, the value from a call to the getUTCDate method is used. |
+• **month**: `number`
+
+A numeric value equal to the month. The value for January is 0, and other month values follow consecutively.
+
+• **date?**: `number`
+
+A numeric value representing the day of the month. If it is not supplied, the value from a call to the getUTCDate method is used.
 
 #### Returns
 
@@ -1048,30 +1075,33 @@ Sets the month value in the Date object using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.setUTCMonth
+`Date.setUTCMonth`
 
 #### Inherited from
 
-Date.setUTCMonth
+`Date.setUTCMonth`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:902
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:902
 
-___
+***
 
-### setUTCSeconds
+### setUTCSeconds()
 
-▸ **setUTCSeconds**(`sec`, `ms?`): `number`
+> **setUTCSeconds**(`sec`, `ms`?): `number`
 
 Sets the seconds value in the Date object using Universal Coordinated Time (UTC).
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `sec` | `number` | A numeric value equal to the seconds value. |
-| `ms?` | `number` | A numeric value equal to the milliseconds value. |
+• **sec**: `number`
+
+A numeric value equal to the seconds value.
+
+• **ms?**: `number`
+
+A numeric value equal to the milliseconds value.
 
 #### Returns
 
@@ -1079,21 +1109,21 @@ Sets the seconds value in the Date object using Universal Coordinated Time (UTC)
 
 #### Implementation of
 
-Date.setUTCSeconds
+`Date.setUTCSeconds`
 
 #### Inherited from
 
-Date.setUTCSeconds
+`Date.setUTCSeconds`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:850
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:850
 
-___
+***
 
-### toDateString
+### toDateString()
 
-▸ **toDateString**(): `string`
+> **toDateString**(): `string`
 
 Returns a date as a string value.
 
@@ -1103,21 +1133,21 @@ Returns a date as a string value.
 
 #### Implementation of
 
-Date.toDateString
+`Date.toDateString`
 
 #### Inherited from
 
-Date.toDateString
+`Date.toDateString`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:776
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:776
 
-___
+***
 
-### toISOString
+### toISOString()
 
-▸ **toISOString**(): `string`
+> **toISOString**(): `string`
 
 Returns a date as a string value in ISO format.
 
@@ -1127,29 +1157,27 @@ Returns a date as a string value in ISO format.
 
 #### Implementation of
 
-Date.toISOString
+`Date.toISOString`
 
 #### Inherited from
 
-Date.toISOString
+`Date.toISOString`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:920
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:920
 
-___
+***
 
-### toJSON
+### toJSON()
 
-▸ **toJSON**(`key?`): `string`
+> **toJSON**(`key`?): `string`
 
 Used by the JSON.stringify method to enable the transformation of an object's data for JavaScript Object Notation (JSON) serialization.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key?` | `any` |
+• **key?**: `any`
 
 #### Returns
 
@@ -1157,255 +1185,291 @@ Used by the JSON.stringify method to enable the transformation of an object's da
 
 #### Implementation of
 
-Date.toJSON
+`Date.toJSON`
 
 #### Inherited from
 
-Date.toJSON
+`Date.toJSON`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:922
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:922
 
-___
+***
 
-### toLocaleDateString
+### toLocaleDateString()
 
-▸ **toLocaleDateString**(): `string`
+#### toLocaleDateString(undefined)
+
+> **toLocaleDateString**(): `string`
 
 Returns a date as a string value appropriate to the host environment's current locale.
 
-#### Returns
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleDateString
+`Date.toLocaleDateString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleDateString
+`Date.toLocaleDateString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:782
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:782
 
-▸ **toLocaleDateString**(`locales?`, `options?`): `string`
+#### toLocaleDateString(locales, options)
+
+> **toLocaleDateString**(`locales`?, `options`?): `string`
 
 Converts a date to a string by using the current or specified locale.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `locales?` | `string` \| `string`[] | A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. |
-| `options?` | `DateTimeFormatOptions` | An object that contains one or more properties that specify comparison options. |
+• **locales?**: `string` \| `string`[]
 
-#### Returns
+A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+
+• **options?**: `DateTimeFormatOptions`
+
+An object that contains one or more properties that specify comparison options.
+
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleDateString
+`Date.toLocaleDateString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleDateString
+`Date.toLocaleDateString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:4555
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:4555
 
-▸ **toLocaleDateString**(`locales?`, `options?`): `string`
+#### toLocaleDateString(locales, options)
+
+> **toLocaleDateString**(`locales`?, `options`?): `string`
 
 Converts a date to a string by using the current or specified locale.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `locales?` | `LocalesArgument` | A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. |
-| `options?` | `DateTimeFormatOptions` | An object that contains one or more properties that specify comparison options. |
+• **locales?**: `LocalesArgument`
 
-#### Returns
+A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+
+• **options?**: `DateTimeFormatOptions`
+
+An object that contains one or more properties that specify comparison options.
+
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleDateString
+`Date.toLocaleDateString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleDateString
+`Date.toLocaleDateString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2020.date.d.ts:34
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2020.date.d.ts:34
 
-___
+***
 
-### toLocaleString
+### toLocaleString()
 
-▸ **toLocaleString**(): `string`
+#### toLocaleString(undefined)
+
+> **toLocaleString**(): `string`
 
 Returns a value as a string value appropriate to the host environment's current locale.
 
-#### Returns
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleString
+`Date.toLocaleString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleString
+`Date.toLocaleString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:780
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:780
 
-▸ **toLocaleString**(`locales?`, `options?`): `string`
+#### toLocaleString(locales, options)
+
+> **toLocaleString**(`locales`?, `options`?): `string`
 
 Converts a date and time to a string by using the current or specified locale.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `locales?` | `string` \| `string`[] | A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. |
-| `options?` | `DateTimeFormatOptions` | An object that contains one or more properties that specify comparison options. |
+• **locales?**: `string` \| `string`[]
 
-#### Returns
+A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+
+• **options?**: `DateTimeFormatOptions`
+
+An object that contains one or more properties that specify comparison options.
+
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleString
+`Date.toLocaleString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleString
+`Date.toLocaleString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:4549
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:4549
 
-▸ **toLocaleString**(`locales?`, `options?`): `string`
+#### toLocaleString(locales, options)
+
+> **toLocaleString**(`locales`?, `options`?): `string`
 
 Converts a date and time to a string by using the current or specified locale.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `locales?` | `LocalesArgument` | A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. |
-| `options?` | `DateTimeFormatOptions` | An object that contains one or more properties that specify comparison options. |
+• **locales?**: `LocalesArgument`
 
-#### Returns
+A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+
+• **options?**: `DateTimeFormatOptions`
+
+An object that contains one or more properties that specify comparison options.
+
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleString
+`Date.toLocaleString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleString
+`Date.toLocaleString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2020.date.d.ts:27
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2020.date.d.ts:27
 
-___
+***
 
-### toLocaleTimeString
+### toLocaleTimeString()
 
-▸ **toLocaleTimeString**(): `string`
+#### toLocaleTimeString(undefined)
+
+> **toLocaleTimeString**(): `string`
 
 Returns a time as a string value appropriate to the host environment's current locale.
 
-#### Returns
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleTimeString
+`Date.toLocaleTimeString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleTimeString
+`Date.toLocaleTimeString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:784
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:784
 
-▸ **toLocaleTimeString**(`locales?`, `options?`): `string`
+#### toLocaleTimeString(locales, options)
+
+> **toLocaleTimeString**(`locales`?, `options`?): `string`
 
 Converts a time to a string by using the current or specified locale.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `locales?` | `string` \| `string`[] | A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. |
-| `options?` | `DateTimeFormatOptions` | An object that contains one or more properties that specify comparison options. |
+• **locales?**: `string` \| `string`[]
 
-#### Returns
+A locale string or array of locale strings that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+
+• **options?**: `DateTimeFormatOptions`
+
+An object that contains one or more properties that specify comparison options.
+
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleTimeString
+`Date.toLocaleTimeString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleTimeString
+`Date.toLocaleTimeString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:4562
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:4562
 
-▸ **toLocaleTimeString**(`locales?`, `options?`): `string`
+#### toLocaleTimeString(locales, options)
+
+> **toLocaleTimeString**(`locales`?, `options`?): `string`
 
 Converts a time to a string by using the current or specified locale.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `locales?` | `LocalesArgument` | A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used. |
-| `options?` | `DateTimeFormatOptions` | An object that contains one or more properties that specify comparison options. |
+• **locales?**: `LocalesArgument`
 
-#### Returns
+A locale string, array of locale strings, Intl.Locale object, or array of Intl.Locale objects that contain one or more language or locale tags. If you include more than one locale string, list them in descending order of priority so that the first entry is the preferred locale. If you omit this parameter, the default locale of the JavaScript runtime is used.
+
+• **options?**: `DateTimeFormatOptions`
+
+An object that contains one or more properties that specify comparison options.
+
+##### Returns
 
 `string`
 
-#### Implementation of
+##### Implementation of
 
-Date.toLocaleTimeString
+`Date.toLocaleTimeString`
 
-#### Inherited from
+##### Inherited from
 
-Date.toLocaleTimeString
+`Date.toLocaleTimeString`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2020.date.d.ts:41
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2020.date.d.ts:41
 
-___
+***
 
-### toString
+### toString()
 
-▸ **toString**(): `string`
+> **toString**(): `string`
 
 Returns a string representation of a date. The format of the string depends on the locale.
 
@@ -1415,21 +1479,21 @@ Returns a string representation of a date. The format of the string depends on t
 
 #### Implementation of
 
-Date.toString
+`Date.toString`
 
 #### Inherited from
 
-Date.toString
+`Date.toString`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:774
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:774
 
-___
+***
 
-### toTai64
+### toTai64()
 
-▸ **toTai64**(): `string`
+> **toTai64**(): `string`
 
 Returns the Tai64 timestamp.
 
@@ -1441,13 +1505,13 @@ the Tai64 timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L139)
+[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/date-time.ts#L139)
 
-___
+***
 
-### toTimeString
+### toTimeString()
 
-▸ **toTimeString**(): `string`
+> **toTimeString**(): `string`
 
 Returns a time as a string value.
 
@@ -1457,21 +1521,21 @@ Returns a time as a string value.
 
 #### Implementation of
 
-Date.toTimeString
+`Date.toTimeString`
 
 #### Inherited from
 
-Date.toTimeString
+`Date.toTimeString`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:778
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:778
 
-___
+***
 
-### toUTCString
+### toUTCString()
 
-▸ **toUTCString**(): `string`
+> **toUTCString**(): `string`
 
 Returns a date converted to a string using Universal Coordinated Time (UTC).
 
@@ -1481,21 +1545,21 @@ Returns a date converted to a string using Universal Coordinated Time (UTC).
 
 #### Implementation of
 
-Date.toUTCString
+`Date.toUTCString`
 
 #### Inherited from
 
-Date.toUTCString
+`Date.toUTCString`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:918
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:918
 
-___
+***
 
-### toUnixMilliseconds
+### toUnixMilliseconds()
 
-▸ **toUnixMilliseconds**(): `number`
+> **toUnixMilliseconds**(): `number`
 
 #### Returns
 
@@ -1505,13 +1569,13 @@ the unix milliseconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L146)
+[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/date-time.ts#L146)
 
-___
+***
 
-### toUnixSeconds
+### toUnixSeconds()
 
-▸ **toUnixSeconds**(): `number`
+> **toUnixSeconds**(): `number`
 
 #### Returns
 
@@ -1521,13 +1585,13 @@ the unix seconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L153)
+[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/date-time.ts#L153)
 
-___
+***
 
-### valueOf
+### valueOf()
 
-▸ **valueOf**(): `number`
+> **valueOf**(): `number`
 
 Returns the stored time value in milliseconds since midnight, January 1, 1970 UTC.
 
@@ -1537,149 +1601,189 @@ Returns the stored time value in milliseconds since midnight, January 1, 1970 UT
 
 #### Implementation of
 
-Date.valueOf
+`Date.valueOf`
 
 #### Inherited from
 
-Date.valueOf
+`Date.valueOf`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:786
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:786
 
-___
+***
 
-### UTC
+### UTC()
 
-▸ **UTC**(`year`, `monthIndex`, `date?`, `hours?`, `minutes?`, `seconds?`, `ms?`): `number`
+#### UTC(year, monthIndex, date, hours, minutes, seconds, ms)
+
+> `static` **UTC**(`year`, `monthIndex`, `date`?, `hours`?, `minutes`?, `seconds`?, `ms`?): `number`
 
 Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `year` | `number` | The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year. |
-| `monthIndex` | `number` | The month as a number between 0 and 11 (January to December). |
-| `date?` | `number` | The date as a number between 1 and 31. |
-| `hours?` | `number` | Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour. |
-| `minutes?` | `number` | Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes. |
-| `seconds?` | `number` | Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds. |
-| `ms?` | `number` | A number from 0 to 999 that specifies the milliseconds. |
+• **year**: `number`
 
-#### Returns
+The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
+
+• **monthIndex**: `number`
+
+The month as a number between 0 and 11 (January to December).
+
+• **date?**: `number`
+
+The date as a number between 1 and 31.
+
+• **hours?**: `number`
+
+Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
+
+• **minutes?**: `number`
+
+Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
+
+• **seconds?**: `number`
+
+Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
+
+• **ms?**: `number`
+
+A number from 0 to 999 that specifies the milliseconds.
+
+##### Returns
 
 `number`
 
-#### Inherited from
+##### Inherited from
 
-Date.UTC
+`Date.UTC`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:956
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:956
 
-▸ **UTC**(`year`, `monthIndex?`, `date?`, `hours?`, `minutes?`, `seconds?`, `ms?`): `number`
+#### UTC(year, monthIndex, date, hours, minutes, seconds, ms)
+
+> `static` **UTC**(`year`, `monthIndex`?, `date`?, `hours`?, `minutes`?, `seconds`?, `ms`?): `number`
 
 Returns the number of milliseconds between midnight, January 1, 1970 Universal Coordinated Time (UTC) (or GMT) and the specified date.
 
-#### Parameters
+##### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `year` | `number` | The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year. |
-| `monthIndex?` | `number` | The month as a number between 0 and 11 (January to December). |
-| `date?` | `number` | The date as a number between 1 and 31. |
-| `hours?` | `number` | Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour. |
-| `minutes?` | `number` | Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes. |
-| `seconds?` | `number` | Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds. |
-| `ms?` | `number` | A number from 0 to 999 that specifies the milliseconds. |
+• **year**: `number`
 
-#### Returns
+The full year designation is required for cross-century date accuracy. If year is between 0 and 99 is used, then year is assumed to be 1900 + year.
+
+• **monthIndex?**: `number`
+
+The month as a number between 0 and 11 (January to December).
+
+• **date?**: `number`
+
+The date as a number between 1 and 31.
+
+• **hours?**: `number`
+
+Must be supplied if minutes is supplied. A number from 0 to 23 (midnight to 11pm) that specifies the hour.
+
+• **minutes?**: `number`
+
+Must be supplied if seconds is supplied. A number from 0 to 59 that specifies the minutes.
+
+• **seconds?**: `number`
+
+Must be supplied if milliseconds is supplied. A number from 0 to 59 that specifies the seconds.
+
+• **ms?**: `number`
+
+A number from 0 to 999 that specifies the milliseconds.
+
+##### Returns
 
 `number`
 
-#### Inherited from
+##### Inherited from
 
-Date.UTC
+`Date.UTC`
 
-#### Defined in
+##### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es2017.date.d.ts:30
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2017.date.d.ts:30
 
-___
+***
 
-### fromTai64
+### fromTai64()
 
-▸ **fromTai64**(`tai64`): [`DateTime`](/api/Utils/DateTime.md)
+> `static` **fromTai64**(`tai64`): [`DateTime`](DateTime.md)
 
 Generates a new DateTime instance from a Tai64 timestamp.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `tai64` | `string` | Tai64 timestamp |
+• **tai64**: `string`
+
+Tai64 timestamp
 
 #### Returns
 
-[`DateTime`](/api/Utils/DateTime.md)
+[`DateTime`](DateTime.md)
 
 a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L107)
+[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/date-time.ts#L107)
 
-___
+***
 
-### fromUnixMilliseconds
+### fromUnixMilliseconds()
 
-▸ **fromUnixMilliseconds**(`unixMilliseconds`): [`DateTime`](/api/Utils/DateTime.md)
+> `static` **fromUnixMilliseconds**(`unixMilliseconds`): [`DateTime`](DateTime.md)
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `unixMilliseconds` | `number` | unix milliseconds timestamp |
+• **unixMilliseconds**: `number`
+
+unix milliseconds timestamp
 
 #### Returns
 
-[`DateTime`](/api/Utils/DateTime.md)
+[`DateTime`](DateTime.md)
 
 a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L115)
+[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/date-time.ts#L115)
 
-___
+***
 
-### fromUnixSeconds
+### fromUnixSeconds()
 
-▸ **fromUnixSeconds**(`unixSeconds`): [`DateTime`](/api/Utils/DateTime.md)
+> `static` **fromUnixSeconds**(`unixSeconds`): [`DateTime`](DateTime.md)
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `unixSeconds` | `number` | unix seconds timestamp |
+• **unixSeconds**: `number`
+
+unix seconds timestamp
 
 #### Returns
 
-[`DateTime`](/api/Utils/DateTime.md)
+[`DateTime`](DateTime.md)
 
 a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/date-time.ts#L123)
+[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/date-time.ts#L123)
 
-___
+***
 
-### now
+### now()
 
-▸ **now**(): `number`
+> `static` **now**(): `number`
 
 Returns the number of milliseconds elapsed since midnight, January 1, 1970 Universal Coordinated Time (UTC).
 
@@ -1689,25 +1793,25 @@ Returns the number of milliseconds elapsed since midnight, January 1, 1970 Unive
 
 #### Inherited from
 
-Date.now
+`Date.now`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:958
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:958
 
-___
+***
 
-### parse
+### parse()
 
-▸ **parse**(`s`): `number`
+> `static` **parse**(`s`): `number`
 
 Parses a string containing a date, and returns the number of milliseconds between that date and midnight, January 1, 1970.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `s` | `string` | A date string |
+• **s**: `string`
+
+A date string
 
 #### Returns
 
@@ -1715,8 +1819,8 @@ Parses a string containing a date, and returns the number of milliseconds betwee
 
 #### Inherited from
 
-Date.parse
+`Date.parse`
 
 #### Defined in
 
-node_modules/.pnpm/typescript@5.4.5/node_modules/typescript/lib/lib.es5.d.ts:945
+node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:945

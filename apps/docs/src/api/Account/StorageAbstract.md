@@ -1,93 +1,85 @@
-# Class: StorageAbstract
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).StorageAbstract
+***
 
-## Implemented by
-
-- [`LocalStorage`](/api/Account/LocalStorage.md)
-- [`MemoryStorage`](/api/Account/MemoryStorage.md)
+# Class: `abstract` StorageAbstract
 
 ## Constructors
 
-### constructor
+### new StorageAbstract()
 
-• **new StorageAbstract**(): [`StorageAbstract`](/api/Account/StorageAbstract.md)
+> **new StorageAbstract**(): [`StorageAbstract`](StorageAbstract.md)
 
 #### Returns
 
-[`StorageAbstract`](/api/Account/StorageAbstract.md)
+[`StorageAbstract`](StorageAbstract.md)
 
 ## Methods
 
-### clear
+### clear()
 
-▸ **clear**(): `Promise`&lt;`void`\>
+> `abstract` **clear**(): `Promise`\&lt;`void`\>
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:66](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L66)
+[packages/account/src/wallet-manager/types.ts:66](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L66)
 
-___
+***
 
-### getItem
+### getItem()
 
-▸ **getItem**(`key`): `Promise`&lt;`undefined` \| ``null`` \| `string`\>
+> `abstract` **getItem**(`key`): `Promise`\&lt;`undefined` \| `null` \| `string`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
+• **key**: `string`
 
 #### Returns
 
-`Promise`&lt;`undefined` \| ``null`` \| `string`\>
+`Promise`\&lt;`undefined` \| `null` \| `string`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L64)
+[packages/account/src/wallet-manager/types.ts:64](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L64)
 
-___
+***
 
-### removeItem
+### removeItem()
 
-▸ **removeItem**(`key`): `Promise`&lt;`void`\>
+> `abstract` **removeItem**(`key`): `Promise`\&lt;`void`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
+• **key**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:65](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L65)
+[packages/account/src/wallet-manager/types.ts:65](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L65)
 
-___
+***
 
-### setItem
+### setItem()
 
-▸ **setItem**(`key`, `value`): `Promise`&lt;`void`\>
+> `abstract` **setItem**(`key`, `value`): `Promise`\&lt;`void`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
-| `value` | `string` |
+• **key**: `string`
+
+• **value**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:63](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L63)
+[packages/account/src/wallet-manager/types.ts:63](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L63)

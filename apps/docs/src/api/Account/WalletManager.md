@@ -1,87 +1,55 @@
-# Class: WalletManager
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).WalletManager
+***
+
+# Class: WalletManager
 
 WalletManager is a upper package to manage multiple vaults like mnemonic and privateKeys.
 
 - VaultTypes can be add to `WalletManager.Vaults` enabling to add custom Vault types.
 - Storage can be instantiate when initializing enabling custom storage types.
 
-## Hierarchy
+## Extends
 
 - `EventEmitter`
 
-  ↳ **`WalletManager`**
-
 ## Constructors
 
-### constructor
+### new WalletManager()
 
-• **new WalletManager**(`options?`): [`WalletManager`](/api/Account/WalletManager.md)
+> **new WalletManager**(`options`?): [`WalletManager`](WalletManager.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `options?` | [`WalletManagerOptions`](/api/Account/index.md#walletmanageroptions) |
+• **options?**: [`WalletManagerOptions`](../index.md#walletmanageroptions)
 
 #### Returns
 
-[`WalletManager`](/api/Account/WalletManager.md)
+[`WalletManager`](WalletManager.md)
 
 #### Overrides
 
-EventEmitter.constructor
+`EventEmitter.constructor`
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L71)
+[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L71)
 
 ## Properties
 
-### #isLocked
-
-• `Private` **#isLocked**: `boolean` = `true`
-
-#### Defined in
-
-[packages/account/src/wallet-manager/wallet-manager.ts:69](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L69)
-
-___
-
-### #passphrase
-
-• `Private` **#passphrase**: `string` = `''`
-
-#### Defined in
-
-[packages/account/src/wallet-manager/wallet-manager.ts:68](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L68)
-
-___
-
-### #vaults
-
-• `Private` **#vaults**: [`VaultsState`](/api/Account/index.md#vaultsstate) = `[]`
-
-#### Defined in
-
-[packages/account/src/wallet-manager/wallet-manager.ts:67](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L67)
-
-___
-
 ### STORAGE\_KEY
 
-• `Readonly` **STORAGE\_KEY**: `string` = `'WalletManager'`
+> `readonly` **STORAGE\_KEY**: `string` = `'WalletManager'`
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L64)
+[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L64)
 
-___
+***
 
 ### storage
 
-• `Readonly` **storage**: [`StorageAbstract`](/api/Account/StorageAbstract.md)
+> `readonly` **storage**: [`StorageAbstract`](StorageAbstract.md)
 
 Storage
 
@@ -89,13 +57,13 @@ Persistent encrypted data. `The default storage works only on memory`.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L62)
+[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L62)
 
-___
+***
 
 ### Vaults
 
-▪ `Static` **Vaults**: (typeof [`MnemonicVault`](/api/Account/MnemonicVault.md) \| typeof [`PrivateKeyVault`](/api/Account/PrivateKeyVault.md))[]
+> `static` **Vaults**: (*typeof* [`MnemonicVault`](MnemonicVault.md) \| *typeof* [`PrivateKeyVault`](PrivateKeyVault.md))[]
 
 Vaults
 
@@ -106,57 +74,57 @@ Each vault has access to its own state
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L56)
+[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L56)
 
-___
+***
 
 ### captureRejectionSymbol
 
-▪ `Static` `Readonly` **captureRejectionSymbol**: typeof [`captureRejectionSymbol`](/api/Account/WalletManager.md#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](WalletManager.md#capturerejectionsymbol)
 
 Value: `Symbol.for('nodejs.rejection')`
 
 See how to write a custom `rejection handler`.
 
-**`Since`**
+#### Since
 
 v13.4.0, v12.16.0
 
 #### Inherited from
 
-EventEmitter.captureRejectionSymbol
+`EventEmitter.captureRejectionSymbol`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:452
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:452
 
-___
+***
 
 ### captureRejections
 
-▪ `Static` **captureRejections**: `boolean`
+> `static` **captureRejections**: `boolean`
 
 Value: [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)
 
 Change the default `captureRejections` option on all new `EventEmitter` objects.
 
-**`Since`**
+#### Since
 
 v13.4.0, v12.16.0
 
 #### Inherited from
 
-EventEmitter.captureRejections
+`EventEmitter.captureRejections`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:459
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:459
 
-___
+***
 
 ### defaultMaxListeners
 
-▪ `Static` **defaultMaxListeners**: `number`
+> `static` **defaultMaxListeners**: `number`
 
 By default, a maximum of `10` listeners can be registered for any single
 event. This limit can be changed for individual `EventEmitter` instances
@@ -194,46 +162,46 @@ the event emitter instance, the event's name and the number of attached
 listeners, respectively.
 Its `name` property is set to `'MaxListenersExceededWarning'`.
 
-**`Since`**
+#### Since
 
 v0.11.2
 
 #### Inherited from
 
-EventEmitter.defaultMaxListeners
+`EventEmitter.defaultMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:498
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:498
 
-___
+***
 
 ### errorMonitor
 
-▪ `Static` `Readonly` **errorMonitor**: typeof [`errorMonitor`](/api/Account/WalletManager.md#errormonitor)
+> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](WalletManager.md#errormonitor)
 
 This symbol shall be used to install a listener for only monitoring `'error'` events. Listeners installed using this symbol are called before the regular `'error'` listeners are called.
 
 Installing a listener using this symbol does not change the behavior once an `'error'` event is emitted. Therefore, the process will still crash if no
 regular `'error'` listener is installed.
 
-**`Since`**
+#### Since
 
 v13.6.0, v12.17.0
 
 #### Inherited from
 
-EventEmitter.errorMonitor
+`EventEmitter.errorMonitor`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:445
 
 ## Accessors
 
 ### isLocked
 
-• `get` **isLocked**(): `boolean`
+> `get` **isLocked**(): `boolean`
 
 #### Returns
 
@@ -241,75 +209,25 @@ node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L76)
+[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L76)
 
 ## Methods
 
-### #deserializeVaults
+### \[captureRejectionSymbol\]()?
 
-▸ **#deserializeVaults**(`vaults`): { `title`: `undefined` \| `string` ; `type`: `string` ; `vault`: [`MnemonicVault`](/api/Account/MnemonicVault.md) \| [`PrivateKeyVault`](/api/Account/PrivateKeyVault.md)  }[]
+> `optional` **\[captureRejectionSymbol\]**\&lt;`K`\>(`error`, `event`, ...`args`): `void`
 
-Deserialize all vaults to state
+#### Type Parameters
 
-`This is only accessible from inside the class`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `vaults` | [`VaultsState`](/api/Account/index.md#vaultsstate) |
-
-#### Returns
-
-{ `title`: `undefined` \| `string` ; `type`: `string` ; `vault`: [`MnemonicVault`](/api/Account/MnemonicVault.md) \| [`PrivateKeyVault`](/api/Account/PrivateKeyVault.md)  }[]
-
-#### Defined in
-
-[packages/account/src/wallet-manager/wallet-manager.ts:287](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L287)
-
-___
-
-### #serializeVaults
-
-▸ **#serializeVaults**(`vaults`): { `data`: { `secret?`: `string`  } ; `title`: `undefined` \| `string` ; `type`: `string`  }[]
-
-Serialize all vaults to store
-
-`This is only accessible from inside the class`
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `vaults` | [`VaultsState`](/api/Account/index.md#vaultsstate) |
+• **error**: `Error`
 
-#### Returns
+• **event**: `string` \| `symbol`
 
-{ `data`: { `secret?`: `string`  } ; `title`: `undefined` \| `string` ; `type`: `string`  }[]
-
-#### Defined in
-
-[packages/account/src/wallet-manager/wallet-manager.ts:274](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L274)
-
-___
-
-### [captureRejectionSymbol]
-
-▸ **[captureRejectionSymbol]**&lt;`K`\>(`error`, `event`, `...args`): `void`
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `error` | `Error` |
-| `event` | `string` \| `symbol` |
-| `...args` | `AnyRest` |
+• ...**args**: `AnyRest`
 
 #### Returns
 
@@ -317,101 +235,95 @@ ___
 
 #### Inherited from
 
-EventEmitter.[captureRejectionSymbol]
+`EventEmitter.[captureRejectionSymbol]`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:136
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:136
 
-___
+***
 
-### addAccount
+### addAccount()
 
-▸ **addAccount**(`options?`): `Promise`&lt;[`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)\>
+> **addAccount**(`options`?): `Promise`\&lt;[`WalletManagerAccount`](../index.md#walletmanageraccount)\>
 
 Add account to a selected vault or on the first vault as default.
 If not vaults are adds it will return error
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `options?` | `Object` |
-| `options.vaultId` | `number` |
+• **options?**
+
+• **options.vaultId?**: `number`
 
 #### Returns
 
-`Promise`&lt;[`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)\>
+`Promise`\&lt;[`WalletManagerAccount`](../index.md#walletmanageraccount)\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L143)
+[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L143)
 
-___
+***
 
-### addListener
+### addListener()
 
-▸ **addListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **addListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.on(eventName, listener)`.
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.addListener
+`EventEmitter.addListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:597
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:597
 
-___
+***
 
-### addVault
+### addVault()
 
-▸ **addVault**(`vaultConfig`): `Promise`&lt;`void`\>
+> **addVault**(`vaultConfig`): `Promise`\&lt;`void`\>
 
 Add Vault, the `vaultConfig.type` will look for the Vaults supported if
 didn't found it will throw.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `vaultConfig` | [`VaultConfig`](/api/Account/index.md#vaultconfig) |
+• **vaultConfig**: [`VaultConfig`](../index.md#vaultconfig)
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L170)
+[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L170)
 
-___
+***
 
-### emit
+### emit()
 
-▸ **emit**&lt;`K`\>(`eventName`, `...args`): `boolean`
+> **emit**\&lt;`K`\>(`eventName`, ...`args`): `boolean`
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -451,40 +363,37 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 // event with parameters 1, 2, 3, 4, 5 in third listener
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `...args` | `AnyRest` |
+• **eventName**: `string` \| `symbol`
+
+• ...**args**: `AnyRest`
 
 #### Returns
 
 `boolean`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.emit
+`EventEmitter.emit`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:859
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:859
 
-___
+***
 
-### eventNames
+### eventNames()
 
-▸ **eventNames**(): (`string` \| `symbol`)[]
+> **eventNames**(): (`string` \| `symbol`)[]
 
 Returns an array listing the events for which the emitter has registered
 listeners. The values in the array are strings or `Symbol`s.
@@ -503,35 +412,33 @@ console.log(myEE.eventNames());
 // Prints: [ 'foo', 'bar', Symbol(symbol) ]
 ```
 
-**`Since`**
-
-v6.0.0
-
 #### Returns
 
 (`string` \| `symbol`)[]
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-EventEmitter.eventNames
+`EventEmitter.eventNames`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:922
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:922
 
-___
+***
 
-### exportPrivateKey
+### exportPrivateKey()
 
-▸ **exportPrivateKey**(`address`): `string`
+> **exportPrivateKey**(`address`): `string`
 
 Export specific account privateKey
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+• **address**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Returns
 
@@ -539,182 +446,155 @@ Export specific account privateKey
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L128)
+[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L128)
 
-___
+***
 
-### exportVault
+### exportVault()
 
-▸ **exportVault**&lt;`T`\>(`vaultId`): `ReturnType`&lt;`T`[``"serialize"``]\>
+> **exportVault**\&lt;`T`\>(`vaultId`): `ReturnType`\&lt;`T`\[`"serialize"`\]\>
 
 Return the vault serialized object containing all the privateKeys,
 the format of the return depends on the Vault type.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`Vault`](/api/Account/Vault.md)&lt;{ `secret?`: `string`  }\> |
+• **T** *extends* [`Vault`](Vault.md)\&lt;`object`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `vaultId` | `number` |
+• **vaultId**: `number`
 
 #### Returns
 
-`ReturnType`&lt;`T`[``"serialize"``]\>
+`ReturnType`\&lt;`T`\[`"serialize"`\]\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L84)
+[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L84)
 
-___
+***
 
-### getAccounts
+### getAccounts()
 
-▸ **getAccounts**(): [`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)[]
+> **getAccounts**(): [`WalletManagerAccount`](../index.md#walletmanageraccount)[]
 
 List all accounts on the Wallet Manager not vault information is revealed
 
 #### Returns
 
-[`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)[]
+[`WalletManagerAccount`](../index.md#walletmanageraccount)[]
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L105)
+[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L105)
 
-___
+***
 
-### getMaxListeners
+### getMaxListeners()
 
-▸ **getMaxListeners**(): `number`
+> **getMaxListeners**(): `number`
 
 Returns the current max listener value for the `EventEmitter` which is either
-set by `emitter.setMaxListeners(n)` or defaults to [defaultMaxListeners](/api/Account/WalletManager.md#defaultmaxlisteners).
-
-**`Since`**
-
-v1.0.0
+set by `emitter.setMaxListeners(n)` or defaults to [defaultMaxListeners](WalletManager.md#defaultmaxlisteners).
 
 #### Returns
 
 `number`
 
+#### Since
+
+v1.0.0
+
 #### Inherited from
 
-EventEmitter.getMaxListeners
+`EventEmitter.getMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:774
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:774
 
-___
+***
 
-### getVaultClass
+### getVaults()
 
-▸ **getVaultClass**(`type`): typeof [`MnemonicVault`](/api/Account/MnemonicVault.md) \| typeof [`PrivateKeyVault`](/api/Account/PrivateKeyVault.md)
-
-Return a instantiable Class reference from `WalletManager.Vaults` supported list.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `type` | `string` |
-
-#### Returns
-
-typeof [`MnemonicVault`](/api/Account/MnemonicVault.md) \| typeof [`PrivateKeyVault`](/api/Account/PrivateKeyVault.md)
-
-#### Defined in
-
-[packages/account/src/wallet-manager/wallet-manager.ts:301](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L301)
-
-___
-
-### getVaults
-
-▸ **getVaults**(): { `title?`: `string` ; `type`: `string` ; `vaultId`: `number`  }[]
+> **getVaults**(): `object`[]
 
 List all vaults on the Wallet Manager, this function not return secret's
 
 #### Returns
 
-{ `title?`: `string` ; `type`: `string` ; `vaultId`: `number`  }[]
+`object`[]
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L94)
+[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L94)
 
-___
+***
 
-### getWallet
+### getWallet()
 
-▸ **getWallet**(`address`): [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
+> **getWallet**(`address`): [`WalletUnlocked`](WalletUnlocked.md)
 
 Create a Wallet instance for the specific account
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+• **address**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Returns
 
-[`WalletUnlocked`](/api/Account/WalletUnlocked.md)
+[`WalletUnlocked`](WalletUnlocked.md)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L115)
+[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L115)
 
-___
+***
 
-### listenerCount
+### listenerCount()
 
-▸ **listenerCount**&lt;`K`\>(`eventName`, `listener?`): `number`
+> **listenerCount**\&lt;`K`\>(`eventName`, `listener`?): `number`
 
 Returns the number of listeners listening for the event named `eventName`.
 If `listener` is provided, it will return how many times the listener is found
 in the list of the listeners of the event.
 
-**`Since`**
+#### Type Parameters
 
-v3.2.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event being listened for |
-| `listener?` | `Function` | The event handler function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event being listened for
+
+• **listener?**: `Function`
+
+The event handler function
 
 #### Returns
 
 `number`
 
+#### Since
+
+v3.2.0
+
 #### Inherited from
 
-EventEmitter.listenerCount
+`EventEmitter.listenerCount`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:868
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:868
 
-___
+***
 
-### listeners
+### listeners()
 
-▸ **listeners**&lt;`K`\>(`eventName`): `Function`[]
+> **listeners**\&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`.
 
@@ -726,55 +606,51 @@ console.log(util.inspect(server.listeners('connection')));
 // Prints: [ [Function] ]
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
+• **eventName**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.listeners
+`EventEmitter.listeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:787
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:787
 
-___
+***
 
-### loadState
+### loadState()
 
-▸ **loadState**(): `Promise`&lt;`void`\>
+> **loadState**(): `Promise`\&lt;`void`\>
 
 Retrieve and decrypt WalletManager state from storage
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L246)
+[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L246)
 
-___
+***
 
-### lock
+### lock()
 
-▸ **lock**(): `void`
+> **lock**(): `void`
 
 Lock wallet. It removes passphrase from class instance, encrypt and hide all address and
 secrets.
@@ -785,50 +661,47 @@ secrets.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L191)
+[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L191)
 
-___
+***
 
-### off
+### off()
 
-▸ **off**&lt;`K`\>(`eventName`, `listener`): `this`
+> **off**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.removeListener()`.
 
-**`Since`**
+#### Type Parameters
 
-v10.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v10.0.0
+
 #### Inherited from
 
-EventEmitter.off
+`EventEmitter.off`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:747
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:747
 
-___
+***
 
-### on
+### on()
 
-▸ **on**&lt;`K`\>(`eventName`, `listener`): `this`
+> **on**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`. No checks are made to see if the `listener` has already
@@ -857,40 +730,41 @@ myEE.emit('foo');
 //   a
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.1.101
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.101
+
 #### Inherited from
 
-EventEmitter.on
+`EventEmitter.on`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:629
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:629
 
-___
+***
 
-### once
+### once()
 
-▸ **once**&lt;`K`\>(`eventName`, `listener`): `this`
+> **once**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -917,40 +791,41 @@ myEE.emit('foo');
 //   a
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.3.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.3.0
+
 #### Inherited from
 
-EventEmitter.once
+`EventEmitter.once`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:659
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:659
 
-___
+***
 
-### prependListener
+### prependListener()
 
-▸ **prependListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **prependListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds the `listener` function to the _beginning_ of the listeners array for the
 event named `eventName`. No checks are made to see if the `listener` has
@@ -965,40 +840,41 @@ server.prependListener('connection', (stream) => {
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v6.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-EventEmitter.prependListener
+`EventEmitter.prependListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:886
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:886
 
-___
+***
 
-### prependOnceListener
+### prependOnceListener()
 
-▸ **prependOnceListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **prependOnceListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds a **one-time**`listener` function for the event named `eventName` to the _beginning_ of the listeners array. The next time `eventName` is triggered, this
 listener is removed, and then invoked.
@@ -1011,40 +887,41 @@ server.prependOnceListener('connection', (stream) => {
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v6.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-EventEmitter.prependOnceListener
+`EventEmitter.prependOnceListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:902
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:902
 
-___
+***
 
-### rawListeners
+### rawListeners()
 
-▸ **rawListeners**&lt;`K`\>(`eventName`): `Function`[]
+> **rawListeners**\&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`,
 including any wrappers (such as those created by `.once()`).
@@ -1074,39 +951,35 @@ newListeners[0]();
 emitter.emit('log');
 ```
 
-**`Since`**
+#### Type Parameters
 
-v9.4.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
+• **eventName**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v9.4.0
+
 #### Inherited from
 
-EventEmitter.rawListeners
+`EventEmitter.rawListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:818
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:818
 
-___
+***
 
-### removeAllListeners
+### removeAllListeners()
 
-▸ **removeAllListeners**(`eventName?`): `this`
+> **removeAllListeners**(`eventName`?): `this`
 
 Removes all listeners, or those of the specified `eventName`.
 
@@ -1116,33 +989,31 @@ component or module (e.g. sockets or file streams).
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
-
-v0.1.26
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName?` | `string` \| `symbol` |
+• **eventName?**: `string` \| `symbol`
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.removeAllListeners
+`EventEmitter.removeAllListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:758
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:758
 
-___
+***
 
-### removeListener
+### removeListener()
 
-▸ **removeListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **removeListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Removes the specified `listener` from the listener array for the event named `eventName`.
 
@@ -1224,79 +1095,58 @@ ee.emit('ping');
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.removeListener
+`EventEmitter.removeListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:742
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:742
 
-___
+***
 
-### removeVault
+### removeVault()
 
-▸ **removeVault**(`index`): `Promise`&lt;`void`\>
+> **removeVault**(`index`): `Promise`\&lt;`void`\>
 
 Remove vault by index, by remove the vault you also remove all accounts
 created by the vault.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `index` | `number` |
+• **index**: `number`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L161)
+[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L161)
 
-___
+***
 
-### saveState
+### setMaxListeners()
 
-▸ **saveState**(): `Promise`&lt;`void`\>
-
-Store encrypted WalletManager state on storage
-
-#### Returns
-
-`Promise`&lt;`void`\>
-
-#### Defined in
-
-[packages/account/src/wallet-manager/wallet-manager.ts:259](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L259)
-
-___
-
-### setMaxListeners
-
-▸ **setMaxListeners**(`n`): `this`
+> **setMaxListeners**(`n`): `this`
 
 By default `EventEmitter`s will print a warning if more than `10` listeners are
 added for a particular event. This is a useful default that helps finding
@@ -1305,79 +1155,76 @@ modified for this specific `EventEmitter` instance. The value can be set to `Inf
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
-
-v0.3.5
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `n` | `number` |
+• **n**: `number`
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.3.5
+
 #### Inherited from
 
-EventEmitter.setMaxListeners
+`EventEmitter.setMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:768
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:768
 
-___
+***
 
-### unlock
+### unlock()
 
-▸ **unlock**(`passphrase`): `Promise`&lt;`void`\>
+> **unlock**(`passphrase`): `Promise`\&lt;`void`\>
 
 Unlock wallet. It sets passphrase on WalletManger instance load all address from configured vaults.
 Vaults with secrets are not unlocked or instantiated on this moment.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `passphrase` | `string` |
+• **passphrase**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L205)
+[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L205)
 
-___
+***
 
-### updatePassphrase
+### updatePassphrase()
 
-▸ **updatePassphrase**(`oldpass`, `newpass`): `Promise`&lt;`void`\>
+> **updatePassphrase**(`oldpass`, `newpass`): `Promise`\&lt;`void`\>
 
 Update WalletManager encryption passphrase
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `oldpass` | `string` |
-| `newpass` | `string` |
+• **oldpass**: `string`
+
+• **newpass**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/wallet-manager.ts#L227)
+[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/wallet-manager.ts#L227)
 
-___
+***
 
-### addAbortListener
+### addAbortListener()
 
-▸ **addAbortListener**(`signal`, `resource`): `Disposable`
+> `static` **addAbortListener**(`signal`, `resource`): `Disposable`
+
+**`Experimental`**
 
 Listens once to the `abort` event on the provided `signal`.
 
@@ -1409,16 +1256,11 @@ function example(signal) {
 }
 ```
 
-**`Since`**
-
-v20.5.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `signal` | `AbortSignal` |
-| `resource` | (`event`: `Event`) => `void` |
+• **signal**: `AbortSignal`
+
+• **resource**
 
 #### Returns
 
@@ -1426,19 +1268,23 @@ v20.5.0
 
 Disposable that removes the `abort` listener.
 
+#### Since
+
+v20.5.0
+
 #### Inherited from
 
-EventEmitter.addAbortListener
+`EventEmitter.addAbortListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:437
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:437
 
-___
+***
 
-### getEventListeners
+### getEventListeners()
 
-▸ **getEventListeners**(`emitter`, `name`): `Function`[]
+> `static` **getEventListeners**(`emitter`, `name`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`.
 
@@ -1465,34 +1311,33 @@ import { getEventListeners, EventEmitter } from 'node:events';
 }
 ```
 
-**`Since`**
-
-v15.2.0, v14.17.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
-| `name` | `string` \| `symbol` |
+• **emitter**: `EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>
+
+• **name**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v15.2.0, v14.17.0
+
 #### Inherited from
 
-EventEmitter.getEventListeners
+`EventEmitter.getEventListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:358
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:358
 
-___
+***
 
-### getMaxListeners
+### getMaxListeners()
 
-▸ **getMaxListeners**(`emitter`): `number`
+> `static` **getMaxListeners**(`emitter`): `number`
 
 Returns the currently set max amount of listeners.
 
@@ -1520,33 +1365,31 @@ import { getMaxListeners, setMaxListeners, EventEmitter } from 'node:events';
 }
 ```
 
-**`Since`**
-
-v19.9.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
+• **emitter**: `EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>
 
 #### Returns
 
 `number`
 
+#### Since
+
+v19.9.0
+
 #### Inherited from
 
-EventEmitter.getMaxListeners
+`EventEmitter.getMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:387
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:387
 
-___
+***
 
-### listenerCount
+### ~~listenerCount()~~
 
-▸ **listenerCount**(`emitter`, `eventName`): `number`
+> `static` **listenerCount**(`emitter`, `eventName`): `number`
 
 A class method that returns the number of listeners for the given `eventName` registered on the given `emitter`.
 
@@ -1560,38 +1403,43 @@ console.log(listenerCount(myEmitter, 'event'));
 // Prints: 2
 ```
 
-**`Since`**
-
-v0.9.12
-
-**`Deprecated`**
-
-Since v3.2.0 - Use `listenerCount` instead.
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> | The emitter to query |
-| `eventName` | `string` \| `symbol` | The event name |
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
+
+The emitter to query
+
+• **eventName**: `string` \| `symbol`
+
+The event name
 
 #### Returns
 
 `number`
 
+#### Since
+
+v0.9.12
+
+#### Deprecated
+
+Since v3.2.0 - Use `listenerCount` instead.
+
 #### Inherited from
 
-EventEmitter.listenerCount
+`EventEmitter.listenerCount`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:330
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:330
 
-___
+***
 
-### on
+### on()
 
-▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
+#### on(emitter, eventName, options)
+
+> `static` **on**(`emitter`, `eventName`, `options`?): `AsyncIterableIterator`\&lt;`any`[]\>
 
 ```js
 import { on, EventEmitter } from 'node:events';
@@ -1670,59 +1518,63 @@ for await (const event of on(ee, 'foo', { close: ['close'] })) {
 console.log('done'); // prints 'done'
 ```
 
-**`Since`**
+##### Parameters
 
-v13.6.0, v12.16.0
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
 
-#### Parameters
+• **eventName**: `string` \| `symbol`
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
-| `eventName` | `string` \| `symbol` |
-| `options?` | `StaticEventEmitterIteratorOptions` |
+• **options?**: `StaticEventEmitterIteratorOptions`
 
-#### Returns
+##### Returns
 
-`AsyncIterableIterator`&lt;`any`[]\>
+`AsyncIterableIterator`\&lt;`any`[]\>
 
 An `AsyncIterator` that iterates `eventName` events emitted by the `emitter`
 
-#### Inherited from
+##### Since
 
-EventEmitter.on
+v13.6.0, v12.16.0
 
-#### Defined in
+##### Inherited from
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:303
+`EventEmitter.on`
 
-▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
+##### Defined in
 
-#### Parameters
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:303
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` |
-| `eventName` | `string` |
-| `options?` | `StaticEventEmitterIteratorOptions` |
+#### on(emitter, eventName, options)
 
-#### Returns
+> `static` **on**(`emitter`, `eventName`, `options`?): `AsyncIterableIterator`\&lt;`any`[]\>
 
-`AsyncIterableIterator`&lt;`any`[]\>
+##### Parameters
 
-#### Inherited from
+• **emitter**: `EventTarget`
 
-EventEmitter.on
+• **eventName**: `string`
 
-#### Defined in
+• **options?**: `StaticEventEmitterIteratorOptions`
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:308
+##### Returns
 
-___
+`AsyncIterableIterator`\&lt;`any`[]\>
 
-### once
+##### Inherited from
 
-▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
+`EventEmitter.on`
+
+##### Defined in
+
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:308
+
+***
+
+### once()
+
+#### once(emitter, eventName, options)
+
+> `static` **once**(`emitter`, `eventName`, `options`?): `Promise`\&lt;`any`[]\>
 
 Creates a `Promise` that is fulfilled when the `EventEmitter` emits the given
 event or that is rejected if the `EventEmitter` emits `'error'` while waiting.
@@ -1801,57 +1653,59 @@ ac.abort(); // Abort waiting for the event
 ee.emit('foo'); // Prints: Waiting for the event was canceled!
 ```
 
-**`Since`**
+##### Parameters
+
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
+
+• **eventName**: `string` \| `symbol`
+
+• **options?**: `StaticEventEmitterOptions`
+
+##### Returns
+
+`Promise`\&lt;`any`[]\>
+
+##### Since
 
 v11.13.0, v10.16.0
 
-#### Parameters
+##### Inherited from
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
-| `eventName` | `string` \| `symbol` |
-| `options?` | `StaticEventEmitterOptions` |
+`EventEmitter.once`
 
-#### Returns
+##### Defined in
 
-`Promise`&lt;`any`[]\>
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:217
 
-#### Inherited from
+#### once(emitter, eventName, options)
 
-EventEmitter.once
+> `static` **once**(`emitter`, `eventName`, `options`?): `Promise`\&lt;`any`[]\>
 
-#### Defined in
+##### Parameters
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:217
+• **emitter**: `EventTarget`
 
-▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
+• **eventName**: `string`
 
-#### Parameters
+• **options?**: `StaticEventEmitterOptions`
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` |
-| `eventName` | `string` |
-| `options?` | `StaticEventEmitterOptions` |
+##### Returns
 
-#### Returns
+`Promise`\&lt;`any`[]\>
 
-`Promise`&lt;`any`[]\>
+##### Inherited from
 
-#### Inherited from
+`EventEmitter.once`
 
-EventEmitter.once
+##### Defined in
 
-#### Defined in
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:222
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:222
+***
 
-___
+### setMaxListeners()
 
-### setMaxListeners
-
-▸ **setMaxListeners**(`n?`, `...eventTargets`): `void`
+> `static` **setMaxListeners**(`n`?, ...`eventTargets`?): `void`
 
 ```js
 import { setMaxListeners, EventEmitter } from 'node:events';
@@ -1862,25 +1716,26 @@ const emitter = new EventEmitter();
 setMaxListeners(5, target, emitter);
 ```
 
-**`Since`**
-
-v15.4.0
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `n?` | `number` | A non-negative number. The maximum number of listeners per `EventTarget` event. |
-| `...eventTargets` | (`EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\>)[] | - |
+• **n?**: `number`
+
+A non-negative number. The maximum number of listeners per `EventTarget` event.
+
+• ...**eventTargets?**: (`EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>)[]
 
 #### Returns
 
 `void`
 
+#### Since
+
+v15.4.0
+
 #### Inherited from
 
-EventEmitter.setMaxListeners
+`EventEmitter.setMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:402
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:402

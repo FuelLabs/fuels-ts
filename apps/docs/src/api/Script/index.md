@@ -1,5 +1,9 @@
-# Module: @fuel-ts/script
+**@fuel-ts/script v0.94.2** • [**Docs**](index.md)
+
+***
+
+# @fuel-ts/script
 
 ## Classes
 
-- [Script](/api/Script/Script.md)
+- [Script](./Script.md)

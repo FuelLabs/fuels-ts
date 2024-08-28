@@ -1,175 +1,171 @@
-# Class: Script&lt;TInput, TOutput\>
+[**@fuel-ts/script v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/script](/api/Script/index.md).Script
+***
+
+# Class: Script\&lt;TInput, TOutput\>
 
 `Script` provides a typed interface for interacting with the script program type.
 
-## Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `TInput` | extends `any`[] |
-| `TOutput` | `TOutput` |
-
-## Hierarchy
+## Extends
 
 - `AbstractScript`
 
-  ↳ **`Script`**
+## Type Parameters
+
+• **TInput** *extends* `any`[]
+
+• **TOutput**
 
 ## Constructors
 
-### constructor
+### new Script()
 
-• **new Script**&lt;`TInput`, `TOutput`\>(`bytecode`, `abi`, `account`): [`Script`](/api/Script/Script.md)&lt;`TInput`, `TOutput`\>
+> **new Script**\&lt;`TInput`, `TOutput`\>(`bytecode`, `abi`, `account`): [`Script`](Script.md)\&lt;`TInput`, `TOutput`\>
 
 Create a new instance of the Script class.
 
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `TInput` | extends `any`[] |
-| `TOutput` | `TOutput` |
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `bytecode` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The compiled bytecode of the script. |
-| `abi` | `JsonAbi` | The ABI interface for the script. |
-| `account` | [`Account`](/api/Account/Account.md) | The account associated with the script. |
+• **bytecode**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The compiled bytecode of the script.
+
+• **abi**: `JsonAbi`
+
+The ABI interface for the script.
+
+• **account**: [`Account`](../Account/Account.md)
+
+The account associated with the script.
 
 #### Returns
 
-[`Script`](/api/Script/Script.md)&lt;`TInput`, `TOutput`\>
+[`Script`](Script.md)\&lt;`TInput`, `TOutput`\>
 
 #### Overrides
 
-AbstractScript.constructor
+`AbstractScript.constructor`
 
 #### Defined in
 
-[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L70)
+[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L70)
 
 ## Properties
 
 ### account
 
-• **account**: [`Account`](/api/Account/Account.md)
+> **account**: [`Account`](../Account/Account.md)
 
 The account associated with the script.
 
 #### Overrides
 
-AbstractScript.account
+`AbstractScript.account`
 
 #### Defined in
 
-[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L46)
+[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L46)
 
-___
+***
 
 ### bytes
 
-• **bytes**: `Uint8Array`
+> **bytes**: `Uint8Array`
 
 The compiled bytecode of the script.
 
 #### Overrides
 
-AbstractScript.bytes
+`AbstractScript.bytes`
 
 #### Defined in
 
-[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L36)
+[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L36)
 
-___
+***
 
 ### functions
 
-• **functions**: `Object`
+> **functions**: `object`
 
 Functions that can be invoked within the script.
 
-#### Type declaration
+#### main
 
-| Name | Type |
-| :------ | :------ |
-| `main` | `InvokeMain`&lt;`TInput`, `TOutput`\> |
+> **main**: `InvokeMain`\&lt;`TInput`, `TOutput`\>
 
 #### Defined in
 
-[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L61)
+[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L61)
 
-___
+***
 
 ### interface
 
-• **interface**: `Interface`
+> **interface**: `Interface`
 
 The ABI interface for the script.
 
 #### Overrides
 
-AbstractScript.interface
+`AbstractScript.interface`
 
 #### Defined in
 
-[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L41)
+[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L41)
 
-___
+***
 
 ### provider
 
-• **provider**: [`Provider`](/api/Account/Provider.md)
+> **provider**: [`Provider`](../Account/Provider.md)
 
 The provider used for interacting with the network.
 
 #### Overrides
 
-AbstractScript.provider
+`AbstractScript.provider`
 
 #### Defined in
 
-[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L56)
+[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L56)
 
-___
+***
 
 ### script
 
-• **script**: [`ScriptRequest`](/api/Program/ScriptRequest.md)&lt;`InputValue`&lt;`void`\>[], `Result`&lt;`TOutput`\>\>
+> **script**: [`ScriptRequest`](../Program/ScriptRequest.md)\&lt;`InputValue`\&lt;`void`\>[], `Result`\&lt;`TOutput`\>\>
 
 The script request object.
 
 #### Defined in
 
-[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L51)
+[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L51)
 
 ## Methods
 
-### setConfigurableConstants
+### setConfigurableConstants()
 
-▸ **setConfigurableConstants**(`configurables`): [`Script`](/api/Script/Script.md)&lt;`TInput`, `TOutput`\>
+> **setConfigurableConstants**(`configurables`): [`Script`](Script.md)\&lt;`TInput`, `TOutput`\>
 
 Set the configurable constants of the script.
 
-**`Throws`**
-
-Will throw an error if the script has no configurable constants to be set or if an invalid constant is provided.
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `configurables` | `Object` | An object containing the configurable constants and their values. |
+• **configurables**
+
+An object containing the configurable constants and their values.
 
 #### Returns
 
-[`Script`](/api/Script/Script.md)&lt;`TInput`, `TOutput`\>
+[`Script`](Script.md)\&lt;`TInput`, `TOutput`\>
 
 This instance of the `Script`.
 
+#### Throws
+
+Will throw an error if the script has no configurable constants to be set or if an invalid constant is provided.
+
 #### Defined in
 
-[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/script/src/script.ts#L91)
+[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/script/src/script.ts#L91)

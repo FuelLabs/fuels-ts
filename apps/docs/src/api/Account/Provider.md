@@ -1,79 +1,84 @@
-# Class: Provider
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).Provider
+***
+
+# Class: Provider
 
 A provider for connecting to a node
 
 ## Properties
 
-### cache
+### cache?
 
-• `Optional` **cache**: `ResourceCache`
+> `optional` **cache**: `ResourceCache`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:386](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L386)
+[packages/account/src/providers/provider.ts:386](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L386)
 
-___
+***
 
 ### operations
 
-• **operations**: `SdkOperations`
+> **operations**: `SdkOperations`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:385](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L385)
+[packages/account/src/providers/provider.ts:385](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L385)
 
-___
+***
 
 ### options
 
-• **options**: [`ProviderOptions`](/api/Account/index.md#provideroptions)
+> **options**: [`ProviderOptions`](../index.md#provideroptions)
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:399](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L399)
+[packages/account/src/providers/provider.ts:399](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L399)
 
-___
+***
 
 ### url
 
-• **url**: `string`
+> **url**: `string`
 
 GraphQL endpoint of the Fuel node
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:435](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L435)
+[packages/account/src/providers/provider.ts:435](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L435)
 
 ## Methods
 
-### connect
+### connect()
 
-▸ **connect**(`url`, `options?`): `Promise`&lt;`void`\>
+> **connect**(`url`, `options`?): `Promise`\&lt;`void`\>
 
 Updates the URL for the provider and fetches the consensus parameters for the new URL, if needed.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `url` | `string` | The URL to connect to. |
-| `options?` | [`ProviderOptions`](/api/Account/index.md#provideroptions) | Additional options for the provider. |
+• **url**: `string`
+
+The URL to connect to.
+
+• **options?**: [`ProviderOptions`](../index.md#provideroptions)
+
+Additional options for the provider.
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:525](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L525)
+[packages/account/src/providers/provider.ts:525](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L525)
 
-___
+***
 
-### dryRun
+### dryRun()
 
-▸ **dryRun**(`transactionRequestLike`, `sendTransactionParams?`): `Promise`&lt;[`CallResult`](/api/Account/index.md#callresult)\>
+> **dryRun**(`transactionRequestLike`, `sendTransactionParams`): `Promise`\&lt;[`CallResult`](../index.md#callresult)\>
 
 Executes a transaction without actually submitting it to the chain.
 
@@ -82,75 +87,81 @@ the transaction will be mutated and those dependencies will be added.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequestLike` | [`TransactionRequestLike`](/api/Account/index.md#transactionrequestlike) | The transaction request object. |
-| `sendTransactionParams` | [`ProviderCallParams`](/api/Account/index.md#providercallparams) | The provider call parameters (optional). |
+• **transactionRequestLike**: [`TransactionRequestLike`](../index.md#transactionrequestlike)
+
+The transaction request object.
+
+• **sendTransactionParams**: [`ProviderCallParams`](../index.md#providercallparams) = `{}`
+
+The provider call parameters (optional).
 
 #### Returns
 
-`Promise`&lt;[`CallResult`](/api/Account/index.md#callresult)\>
+`Promise`\&lt;[`CallResult`](../index.md#callresult)\>
 
 A promise that resolves to the call result object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:783](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L783)
+[packages/account/src/providers/provider.ts:783](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L783)
 
-___
+***
 
-### dryRunMultipleTransactions
+### dryRunMultipleTransactions()
 
-▸ **dryRunMultipleTransactions**(`transactionRequests`, `sendTransactionParams?`): `Promise`&lt;[`CallResult`](/api/Account/index.md#callresult)[]\>
+> **dryRunMultipleTransactions**(`transactionRequests`, `sendTransactionParams`): `Promise`\&lt;[`CallResult`](../index.md#callresult)[]\>
 
 Dry runs multiple transactions.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequests` | [`TransactionRequest`](/api/Account/index.md#transactionrequest)[] | Array of transaction request objects. |
-| `sendTransactionParams` | [`ProviderCallParams`](/api/Account/index.md#providercallparams) | The provider call parameters (optional). |
+• **transactionRequests**: [`TransactionRequest`](../index.md#transactionrequest)[]
+
+Array of transaction request objects.
+
+• **sendTransactionParams**: [`ProviderCallParams`](../index.md#providercallparams) = `{}`
+
+The provider call parameters (optional).
 
 #### Returns
 
-`Promise`&lt;[`CallResult`](/api/Account/index.md#callresult)[]\>
+`Promise`\&lt;[`CallResult`](../index.md#callresult)[]\>
 
 A promise that resolves to an array of results for each transaction call.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1005](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1005)
+[packages/account/src/providers/provider.ts:1005](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1005)
 
-___
+***
 
-### estimateGasPrice
+### estimateGasPrice()
 
-▸ **estimateGasPrice**(`blockHorizon`): `Promise`&lt;`BN`\>
+> **estimateGasPrice**(`blockHorizon`): `Promise`\&lt;`BN`\>
 
 Returns the estimate gas price for the given block horizon.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `blockHorizon` | `number` | The block horizon to estimate gas price for. |
+• **blockHorizon**: `number`
+
+The block horizon to estimate gas price for.
 
 #### Returns
 
-`Promise`&lt;`BN`\>
+`Promise`\&lt;`BN`\>
 
 A promise that resolves to the estimated gas price.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1718](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1718)
+[packages/account/src/providers/provider.ts:1718](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1718)
 
-___
+***
 
-### estimateMultipleTxDependencies
+### estimateMultipleTxDependencies()
 
-▸ **estimateMultipleTxDependencies**(`transactionRequests`): `Promise`&lt;[`EstimateTxDependenciesReturns`](/api/Account/index.md#estimatetxdependenciesreturns)[]\>
+> **estimateMultipleTxDependencies**(`transactionRequests`): `Promise`\&lt;[`EstimateTxDependenciesReturns`](../index.md#estimatetxdependenciesreturns)[]\>
 
 Dry runs multiple transactions and checks for missing dependencies in batches.
 
@@ -160,55 +171,55 @@ and performs subsequent dry runs until all dependencies for each transaction are
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequests` | [`TransactionRequest`](/api/Account/index.md#transactionrequest)[] | Array of transaction request objects. |
+• **transactionRequests**: [`TransactionRequest`](../index.md#transactionrequest)[]
+
+Array of transaction request objects.
 
 #### Returns
 
-`Promise`&lt;[`EstimateTxDependenciesReturns`](/api/Account/index.md#estimatetxdependenciesreturns)[]\>
+`Promise`\&lt;[`EstimateTxDependenciesReturns`](../index.md#estimatetxdependenciesreturns)[]\>
 
 A promise that resolves to an array of results for each transaction.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:924](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L924)
+[packages/account/src/providers/provider.ts:924](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L924)
 
-___
+***
 
-### estimatePredicates
+### estimatePredicates()
 
-▸ **estimatePredicates**&lt;`T`\>(`transactionRequest`): `Promise`&lt;`T`\>
+> **estimatePredicates**\&lt;`T`\>(`transactionRequest`): `Promise`\&lt;`T`\>
 
 Verifies whether enough gas is available to complete transaction.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `T` | extends [`TransactionRequest`](/api/Account/index.md#transactionrequest) | The type of the transaction request object. |
+• **T** *extends* [`TransactionRequest`](../index.md#transactionrequest)
+
+The type of the transaction request object.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequest` | `T` | The transaction request object. |
+• **transactionRequest**: `T`
+
+The transaction request object.
 
 #### Returns
 
-`Promise`&lt;`T`\>
+`Promise`\&lt;`T`\>
 
 A promise that resolves to the estimated transaction request object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:810](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L810)
+[packages/account/src/providers/provider.ts:810](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L810)
 
-___
+***
 
-### estimateTxDependencies
+### estimateTxDependencies()
 
-▸ **estimateTxDependencies**(`transactionRequest`): `Promise`&lt;[`EstimateTxDependenciesReturns`](/api/Account/index.md#estimatetxdependenciesreturns)\>
+> **estimateTxDependencies**(`transactionRequest`): `Promise`\&lt;[`EstimateTxDependenciesReturns`](../index.md#estimatetxdependenciesreturns)\>
 
 Will dryRun a transaction and check for missing dependencies.
 
@@ -217,154 +228,189 @@ If there are missing variable outputs,
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequest` | [`TransactionRequest`](/api/Account/index.md#transactionrequest) | The transaction request object. |
+• **transactionRequest**: [`TransactionRequest`](../index.md#transactionrequest)
+
+The transaction request object.
 
 #### Returns
 
-`Promise`&lt;[`EstimateTxDependenciesReturns`](/api/Account/index.md#estimatetxdependenciesreturns)\>
+`Promise`\&lt;[`EstimateTxDependenciesReturns`](../index.md#estimatetxdependenciesreturns)\>
 
 A promise that resolves to the estimate transaction dependencies.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:854](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L854)
+[packages/account/src/providers/provider.ts:854](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L854)
 
-___
+***
 
-### estimateTxGasAndFee
+### estimateTxGasAndFee()
 
-▸ **estimateTxGasAndFee**(`params`): `Promise`&lt;{ `gasLimit`: `BN` ; `gasPrice`: `BN` ; `maxFee`: `BN` ; `maxGas`: `BN` ; `minFee`: `BN` ; `minGas`: `BN`  }\>
+> **estimateTxGasAndFee**(`params`): `Promise`\&lt;`object`\>
 
 Estimates the transaction gas and fee based on the provided transaction request.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | `Object` |
-| `params.gasPrice?` | `BN` |
-| `params.transactionRequest` | [`TransactionRequest`](/api/Account/index.md#transactionrequest) |
+• **params**
+
+• **params.gasPrice?**: `BN`
+
+• **params.transactionRequest**: [`TransactionRequest`](../index.md#transactionrequest)
 
 #### Returns
 
-`Promise`&lt;{ `gasLimit`: `BN` ; `gasPrice`: `BN` ; `maxFee`: `BN` ; `maxGas`: `BN` ; `minFee`: `BN` ; `minGas`: `BN`  }\>
+`Promise`\&lt;`object`\>
 
 An object containing the estimated minimum gas, minimum fee, maximum gas, and maximum fee.
 
+##### gasLimit
+
+> **gasLimit**: `BN`
+
+##### gasPrice
+
+> **gasPrice**: `BN`
+
+##### maxFee
+
+> **maxFee**: `BN`
+
+##### maxGas
+
+> **maxGas**: `BN`
+
+##### minFee
+
+> **minFee**: `BN`
+
+##### minGas
+
+> **minGas**: `BN`
+
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1031](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1031)
+[packages/account/src/providers/provider.ts:1031](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1031)
 
-___
+***
 
-### fetchChain
+### fetchChain()
 
-▸ **fetchChain**(): `Promise`&lt;[`ChainInfo`](/api/Account/index.md#chaininfo)\>
+> **fetchChain**(): `Promise`\&lt;[`ChainInfo`](../index.md#chaininfo)\>
 
 Returns the chain information for the current provider network.
 
 #### Returns
 
-`Promise`&lt;[`ChainInfo`](/api/Account/index.md#chaininfo)\>
+`Promise`\&lt;[`ChainInfo`](../index.md#chaininfo)\>
 
 a promise that resolves to the chain information.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:658](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L658)
+[packages/account/src/providers/provider.ts:658](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L658)
 
-___
+***
 
-### fetchChainAndNodeInfo
+### fetchChainAndNodeInfo()
 
-▸ **fetchChainAndNodeInfo**(): `Promise`&lt;{ `chain`: [`ChainInfo`](/api/Account/index.md#chaininfo) ; `nodeInfo`: [`NodeInfo`](/api/Account/index.md#nodeinfo)  }\>
+> **fetchChainAndNodeInfo**(): `Promise`\&lt;`object`\>
 
 Return the chain and node information.
 
 #### Returns
 
-`Promise`&lt;{ `chain`: [`ChainInfo`](/api/Account/index.md#chaininfo) ; `nodeInfo`: [`NodeInfo`](/api/Account/index.md#nodeinfo)  }\>
+`Promise`\&lt;`object`\>
 
 A promise that resolves to the Chain and NodeInfo.
 
+##### chain
+
+> **chain**: [`ChainInfo`](../index.md#chaininfo)
+
+##### nodeInfo
+
+> **nodeInfo**: [`NodeInfo`](../index.md#nodeinfo)
+
 #### Defined in
 
-[packages/account/src/providers/provider.ts:537](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L537)
+[packages/account/src/providers/provider.ts:537](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L537)
 
-___
+***
 
-### fetchNode
+### fetchNode()
 
-▸ **fetchNode**(): `Promise`&lt;[`NodeInfo`](/api/Account/index.md#nodeinfo)\>
+> **fetchNode**(): `Promise`\&lt;[`NodeInfo`](../index.md#nodeinfo)\>
 
 Returns the node information for the current provider network.
 
 #### Returns
 
-`Promise`&lt;[`NodeInfo`](/api/Account/index.md#nodeinfo)\>
+`Promise`\&lt;[`NodeInfo`](../index.md#nodeinfo)\>
 
 a promise that resolves to the node information.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:637](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L637)
+[packages/account/src/providers/provider.ts:637](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L637)
 
-___
+***
 
-### getBalance
+### getBalance()
 
-▸ **getBalance**(`owner`, `assetId`): `Promise`&lt;`BN`\>
+> **getBalance**(`owner`, `assetId`): `Promise`\&lt;`BN`\>
 
 Returns the balance for the given owner for the given asset ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `owner` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address to get coins for. |
-| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of coins to get. |
+• **owner**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+The address to get coins for.
+
+• **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The asset ID of coins to get.
 
 #### Returns
 
-`Promise`&lt;`BN`\>
+`Promise`\&lt;`BN`\>
 
 A promise that resolves to the balance.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1505](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1505)
+[packages/account/src/providers/provider.ts:1505](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1505)
 
-___
+***
 
-### getBalances
+### getBalances()
 
-▸ **getBalances**(`owner`): `Promise`&lt;[`GetBalancesResponse`](/api/Account/index.md#getbalancesresponse)\>
+> **getBalances**(`owner`): `Promise`\&lt;[`GetBalancesResponse`](../index.md#getbalancesresponse)\>
 
 Returns balances for the given owner.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `owner` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address to get coins for. |
+• **owner**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+The address to get coins for.
 
 #### Returns
 
-`Promise`&lt;[`GetBalancesResponse`](/api/Account/index.md#getbalancesresponse)\>
+`Promise`\&lt;[`GetBalancesResponse`](../index.md#getbalancesresponse)\>
 
 A promise that resolves to the balances.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1525](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1525)
+[packages/account/src/providers/provider.ts:1525](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1525)
 
-___
+***
 
-### getBaseAssetId
+### getBaseAssetId()
 
-▸ **getBaseAssetId**(): `string`
+> **getBaseAssetId**(): `string`
 
 Returns the base asset ID for the current provider network.
 
@@ -376,121 +422,121 @@ the base asset ID.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:685](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L685)
+[packages/account/src/providers/provider.ts:685](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L685)
 
-___
+***
 
-### getBlock
+### getBlock()
 
-▸ **getBlock**(`idOrHeight`): `Promise`&lt;``null`` \| [`Block`](/api/Account/index.md#block)\>
+> **getBlock**(`idOrHeight`): `Promise`\&lt;`null` \| [`Block`](../index.md#block)\>
 
 Returns block matching the given ID or height.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `idOrHeight` | `string` \| `number` | ID or height of the block. |
+• **idOrHeight**: `string` \| `number`
+
+ID or height of the block.
 
 #### Returns
 
-`Promise`&lt;``null`` \| [`Block`](/api/Account/index.md#block)\>
+`Promise`\&lt;`null` \| [`Block`](../index.md#block)\>
 
 A promise that resolves to the block or null.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1339](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1339)
+[packages/account/src/providers/provider.ts:1339](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1339)
 
-___
+***
 
-### getBlockNumber
+### getBlockNumber()
 
-▸ **getBlockNumber**(): `Promise`&lt;`BN`\>
+> **getBlockNumber**(): `Promise`\&lt;`BN`\>
 
 Returns the latest block number.
 
 #### Returns
 
-`Promise`&lt;`BN`\>
+`Promise`\&lt;`BN`\>
 
 A promise that resolves to the latest block number.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:627](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L627)
+[packages/account/src/providers/provider.ts:627](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L627)
 
-___
+***
 
-### getBlockWithTransactions
+### getBlockWithTransactions()
 
-▸ **getBlockWithTransactions**(`idOrHeight`): `Promise`&lt;``null`` \| [`Block`](/api/Account/index.md#block) & { `transactions`: `Partial`&lt;`Omit`&lt;`TransactionScript`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionCreate`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionMint`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionUpgrade`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionUpload`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionBlob`, ``"type"``\>\> & { `type`: [`TransactionType`](/api/Account/TransactionType.md)  }[]  }\>
+> **getBlockWithTransactions**(`idOrHeight`): `Promise`\&lt;`null` \| [`Block`](../index.md#block) & `object`\>
 
 Returns block matching the given ID or type, including transaction data.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `idOrHeight` | `string` \| `number` | ID or height of the block. |
+• **idOrHeight**: `string` \| `number`
+
+ID or height of the block.
 
 #### Returns
 
-`Promise`&lt;``null`` \| [`Block`](/api/Account/index.md#block) & { `transactions`: `Partial`&lt;`Omit`&lt;`TransactionScript`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionCreate`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionMint`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionUpgrade`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionUpload`, ``"type"``\>\> & `Partial`&lt;`Omit`&lt;`TransactionBlob`, ``"type"``\>\> & { `type`: [`TransactionType`](/api/Account/TransactionType.md)  }[]  }\>
+`Promise`\&lt;`null` \| [`Block`](../index.md#block) & `object`\>
 
 A promise that resolves to the block.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1397](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1397)
+[packages/account/src/providers/provider.ts:1397](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1397)
 
-___
+***
 
-### getBlocks
+### getBlocks()
 
-▸ **getBlocks**(`params?`): `Promise`&lt;[`GetBlocksResponse`](/api/Account/index.md#getblocksresponse)\>
+> **getBlocks**(`params`?): `Promise`\&lt;[`GetBlocksResponse`](../index.md#getblocksresponse)\>
 
 Returns all the blocks matching the given parameters.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `params?` | `CursorPaginationArgs` | The parameters to query blocks. |
+• **params?**: `CursorPaginationArgs`
+
+The parameters to query blocks.
 
 #### Returns
 
-`Promise`&lt;[`GetBlocksResponse`](/api/Account/index.md#getblocksresponse)\>
+`Promise`\&lt;[`GetBlocksResponse`](../index.md#getblocksresponse)\>
 
 A promise that resolves to the blocks.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1371](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1371)
+[packages/account/src/providers/provider.ts:1371](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1371)
 
-___
+***
 
-### getChain
+### getChain()
 
-▸ **getChain**(): [`ChainInfo`](/api/Account/index.md#chaininfo)
+> **getChain**(): [`ChainInfo`](../index.md#chaininfo)
 
 Returns the cached chainInfo for the current URL.
 
 #### Returns
 
-[`ChainInfo`](/api/Account/index.md#chaininfo)
+[`ChainInfo`](../index.md#chaininfo)
 
 the chain information configuration.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:473](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L473)
+[packages/account/src/providers/provider.ts:473](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L473)
 
-___
+***
 
-### getChainId
+### getChainId()
 
-▸ **getChainId**(): `number`
+> **getChainId**(): `number`
 
 Returns the chain ID for the current provider network.
 
@@ -502,419 +548,457 @@ A promise that resolves to the chain ID number.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:673](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L673)
+[packages/account/src/providers/provider.ts:673](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L673)
 
-___
+***
 
-### getCoins
+### getCoins()
 
-▸ **getCoins**(`owner`, `assetId?`, `paginationArgs?`): `Promise`&lt;[`GetCoinsResponse`](/api/Account/index.md#getcoinsresponse)\>
+> **getCoins**(`owner`, `assetId`?, `paginationArgs`?): `Promise`\&lt;[`GetCoinsResponse`](../index.md#getcoinsresponse)\>
 
 Returns coins for the given owner.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `owner` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address to get coins for. |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of coins to get (optional). |
-| `paginationArgs?` | `CursorPaginationArgs` | Pagination arguments (optional). |
+• **owner**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+The address to get coins for.
+
+• **assetId?**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The asset ID of coins to get (optional).
+
+• **paginationArgs?**: `CursorPaginationArgs`
+
+Pagination arguments (optional).
 
 #### Returns
 
-`Promise`&lt;[`GetCoinsResponse`](/api/Account/index.md#getcoinsresponse)\>
+`Promise`\&lt;[`GetCoinsResponse`](../index.md#getcoinsresponse)\>
 
 A promise that resolves to the coins.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1232](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1232)
+[packages/account/src/providers/provider.ts:1232](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1232)
 
-___
+***
 
-### getContract
+### getContract()
 
-▸ **getContract**(`contractId`): `Promise`&lt;``null`` \| [`ContractResult`](/api/Account/index.md#contractresult)\>
+> **getContract**(`contractId`): `Promise`\&lt;`null` \| [`ContractResult`](../index.md#contractresult)\>
 
 Get deployed contract with the given ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractId` | `string` | ID of the contract. |
+• **contractId**: `string`
+
+ID of the contract.
 
 #### Returns
 
-`Promise`&lt;``null`` \| [`ContractResult`](/api/Account/index.md#contractresult)\>
+`Promise`\&lt;`null` \| [`ContractResult`](../index.md#contractresult)\>
 
 A promise that resolves to the contract.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1470](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1470)
+[packages/account/src/providers/provider.ts:1470](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1470)
 
-___
+***
 
-### getContractBalance
+### getContractBalance()
 
-▸ **getContractBalance**(`contractId`, `assetId`): `Promise`&lt;`BN`\>
+> **getContractBalance**(`contractId`, `assetId`): `Promise`\&lt;`BN`\>
 
 Returns the balance for the given contract for the given asset ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractId` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The contract ID to get the balance for. |
-| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The asset ID of coins to get. |
+• **contractId**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+The contract ID to get the balance for.
+
+• **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The asset ID of coins to get.
 
 #### Returns
 
-`Promise`&lt;`BN`\>
+`Promise`\&lt;`BN`\>
 
 A promise that resolves to the balance.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1485](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1485)
+[packages/account/src/providers/provider.ts:1485](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1485)
 
-___
+***
 
-### getGasConfig
+### getGasConfig()
 
-▸ **getGasConfig**(): `Object`
+> **getGasConfig**(): `object`
 
 Returns some helpful parameters related to gas fees.
 
 #### Returns
 
-`Object`
+`object`
 
-| Name | Type |
-| :------ | :------ |
-| `gasCosts` | [`GasCosts`](/api/Account/index.md#gascosts) |
-| `gasPerByte` | `BN` |
-| `gasPriceFactor` | `BN` |
-| `maxGasPerPredicate` | `BN` |
-| `maxGasPerTx` | `BN` |
+##### gasCosts
+
+> **gasCosts**: [`GasCosts`](../index.md#gascosts-1)
+
+##### gasPerByte
+
+> **gasPerByte**: `BN`
+
+##### gasPriceFactor
+
+> **gasPriceFactor**: `BN`
+
+##### maxGasPerPredicate
+
+> **maxGasPerPredicate**: `BN`
+
+##### maxGasPerTx
+
+> **maxGasPerTx**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:503](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L503)
+[packages/account/src/providers/provider.ts:503](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L503)
 
-___
+***
 
-### getLatestGasPrice
+### getLatestGasPrice()
 
-▸ **getLatestGasPrice**(): `Promise`&lt;`BN`\>
+> **getLatestGasPrice**(): `Promise`\&lt;`BN`\>
 
 Get the latest gas price from the node.
 
 #### Returns
 
-`Promise`&lt;`BN`\>
+`Promise`\&lt;`BN`\>
 
 A promise that resolves to the latest gas price.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1707](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1707)
+[packages/account/src/providers/provider.ts:1707](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1707)
 
-___
+***
 
-### getMessageByNonce
+### getMessageByNonce()
 
-▸ **getMessageByNonce**(`nonce`): `Promise`&lt;``null`` \| `GqlMessage`\>
+> **getMessageByNonce**(`nonce`): `Promise`\&lt;`null` \| `GqlMessage`\>
 
 Returns Message for given nonce.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `nonce` | `string` | The nonce of the message to retrieve. |
+• **nonce**: `string`
+
+The nonce of the message to retrieve.
 
 #### Returns
 
-`Promise`&lt;``null`` \| `GqlMessage`\>
+`Promise`\&lt;`null` \| `GqlMessage`\>
 
 A promise that resolves to the Message object or null.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1771](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1771)
+[packages/account/src/providers/provider.ts:1771](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1771)
 
-___
+***
 
-### getMessageProof
+### getMessageProof()
 
-▸ **getMessageProof**(`transactionId`, `nonce`, `commitBlockId?`, `commitBlockHeight?`): `Promise`&lt;``null`` \| [`MessageProof`](/api/Account/index.md#messageproof)\>
+> **getMessageProof**(`transactionId`, `nonce`, `commitBlockId`?, `commitBlockHeight`?): `Promise`\&lt;`null` \| [`MessageProof`](../index.md#messageproof)\>
 
 Returns Message Proof for given transaction id and the message id from MessageOut receipt.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionId` | `string` | The transaction to get message from. |
-| `nonce` | `string` | - |
-| `commitBlockId?` | `string` | The commit block id (optional). |
-| `commitBlockHeight?` | `BN` | The commit block height (optional). |
+• **transactionId**: `string`
+
+The transaction to get message from.
+
+• **nonce**: `string`
+
+• **commitBlockId?**: `string`
+
+The commit block id (optional).
+
+• **commitBlockHeight?**: `BN`
+
+The commit block height (optional).
 
 #### Returns
 
-`Promise`&lt;``null`` \| [`MessageProof`](/api/Account/index.md#messageproof)\>
+`Promise`\&lt;`null` \| [`MessageProof`](../index.md#messageproof)\>
 
 A promise that resolves to the message proof.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1597](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1597)
+[packages/account/src/providers/provider.ts:1597](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1597)
 
-___
+***
 
-### getMessageStatus
+### getMessageStatus()
 
-▸ **getMessageStatus**(`nonce`): `Promise`&lt;[`MessageStatus`](/api/Account/index.md#messagestatus)\>
+> **getMessageStatus**(`nonce`): `Promise`\&lt;[`MessageStatus`](../index.md#messagestatus)\>
 
 Returns Message Proof for given transaction id and the message id from MessageOut receipt.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `nonce` | `string` | The nonce of the message to get status from. |
+• **nonce**: `string`
+
+The nonce of the message to get status from.
 
 #### Returns
 
-`Promise`&lt;[`MessageStatus`](/api/Account/index.md#messagestatus)\>
+`Promise`\&lt;[`MessageStatus`](../index.md#messagestatus)\>
 
 A promise that resolves to the message status
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1731](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1731)
+[packages/account/src/providers/provider.ts:1731](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1731)
 
-___
+***
 
-### getMessages
+### getMessages()
 
-▸ **getMessages**(`address`, `paginationArgs?`): `Promise`&lt;[`GetMessagesResponse`](/api/Account/index.md#getmessagesresponse)\>
+> **getMessages**(`address`, `paginationArgs`?): `Promise`\&lt;[`GetMessagesResponse`](../index.md#getmessagesresponse)\>
 
 Returns message for the given address.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address to get message from. |
-| `paginationArgs?` | `CursorPaginationArgs` | Pagination arguments (optional). |
+• **address**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+The address to get message from.
+
+• **paginationArgs?**: `CursorPaginationArgs`
+
+Pagination arguments (optional).
 
 #### Returns
 
-`Promise`&lt;[`GetMessagesResponse`](/api/Account/index.md#getmessagesresponse)\>
+`Promise`\&lt;[`GetMessagesResponse`](../index.md#getmessagesresponse)\>
 
 A promise that resolves to the messages.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1552](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1552)
+[packages/account/src/providers/provider.ts:1552](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1552)
 
-___
+***
 
-### getNode
+### getNode()
 
-▸ **getNode**(): [`NodeInfo`](/api/Account/index.md#nodeinfo)
+> **getNode**(): [`NodeInfo`](../index.md#nodeinfo)
 
 Returns the cached nodeInfo for the current URL.
 
 #### Returns
 
-[`NodeInfo`](/api/Account/index.md#nodeinfo)
+[`NodeInfo`](../index.md#nodeinfo)
 
 the node information configuration.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:489](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L489)
+[packages/account/src/providers/provider.ts:489](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L489)
 
-___
+***
 
-### getRelayedTransactionStatus
+### getRelayedTransactionStatus()
 
-▸ **getRelayedTransactionStatus**(`relayedTransactionId`): `Promise`&lt;``null`` \| `GqlRelayedTransactionFailed`\>
+> **getRelayedTransactionStatus**(`relayedTransactionId`): `Promise`\&lt;`null` \| `GqlRelayedTransactionFailed`\>
 
 Get the relayed transaction for the given transaction ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `relayedTransactionId` | `string` | The relayed transaction ID to get the response for. |
+• **relayedTransactionId**: `string`
+
+The relayed transaction ID to get the response for.
 
 #### Returns
 
-`Promise`&lt;``null`` \| `GqlRelayedTransactionFailed`\>
+`Promise`\&lt;`null` \| `GqlRelayedTransactionFailed`\>
 
 A promise that resolves to the relayed transaction.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1787](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1787)
+[packages/account/src/providers/provider.ts:1787](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1787)
 
-___
+***
 
-### getResourcesToSpend
+### getResourcesToSpend()
 
-▸ **getResourcesToSpend**(`owner`, `quantities`, `excludedIds?`): `Promise`&lt;[`Resource`](/api/Account/index.md#resource)[]\>
+> **getResourcesToSpend**(`owner`, `quantities`, `excludedIds`?): `Promise`\&lt;[`Resource`](../index.md#resource)[]\>
 
 Returns resources for the given owner satisfying the spend query.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `owner` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address to get resources for. |
-| `quantities` | [`CoinQuantityLike`](/api/Account/index.md#coinquantitylike)[] | The coin quantities to get. |
-| `excludedIds?` | `ExcludeResourcesOption` | IDs of excluded resources from the selection (optional). |
+• **owner**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+The address to get resources for.
+
+• **quantities**: [`CoinQuantityLike`](../index.md#coinquantitylike)[]
+
+The coin quantities to get.
+
+• **excludedIds?**: `ExcludeResourcesOption`
+
+IDs of excluded resources from the selection (optional).
 
 #### Returns
 
-`Promise`&lt;[`Resource`](/api/Account/index.md#resource)[]\>
+`Promise`\&lt;[`Resource`](../index.md#resource)[]\>
 
 A promise that resolves to the resources.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1271](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1271)
+[packages/account/src/providers/provider.ts:1271](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1271)
 
-___
+***
 
-### getTransaction
+### getTransaction()
 
-▸ **getTransaction**&lt;`TTransactionType`\>(`transactionId`): `Promise`&lt;``null`` \| `Transaction`&lt;`TTransactionType`\>\>
+> **getTransaction**\&lt;`TTransactionType`\>(`transactionId`): `Promise`\&lt;`null` \| `Transaction`\&lt;`TTransactionType`\>\>
 
 Get transaction with the given ID.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `TTransactionType` | `void` |
+• **TTransactionType** = `void`
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionId` | `string` | ID of the transaction. |
+• **transactionId**: `string`
+
+ID of the transaction.
 
 #### Returns
 
-`Promise`&lt;``null`` \| `Transaction`&lt;`TTransactionType`\>\>
+`Promise`\&lt;`null` \| `Transaction`\&lt;`TTransactionType`\>\>
 
 A promise that resolves to the transaction.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1433](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1433)
+[packages/account/src/providers/provider.ts:1433](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1433)
 
-___
+***
 
-### getTransactionResponse
+### getTransactionResponse()
 
-▸ **getTransactionResponse**(`transactionId`): `Promise`&lt;[`TransactionResponse`](/api/Account/TransactionResponse.md)\>
+> **getTransactionResponse**(`transactionId`): `Promise`\&lt;[`TransactionResponse`](TransactionResponse.md)\>
 
 Get the transaction response for the given transaction ID.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionId` | `string` | The transaction ID to get the response for. |
+• **transactionId**: `string`
+
+The transaction ID to get the response for.
 
 #### Returns
 
-`Promise`&lt;[`TransactionResponse`](/api/Account/TransactionResponse.md)\>
+`Promise`\&lt;[`TransactionResponse`](TransactionResponse.md)\>
 
 A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1761](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1761)
+[packages/account/src/providers/provider.ts:1761](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1761)
 
-___
+***
 
-### getTransactions
+### getTransactions()
 
-▸ **getTransactions**(`paginationArgs?`): `Promise`&lt;[`GetTransactionsResponse`](/api/Account/index.md#gettransactionsresponse)\>
+> **getTransactions**(`paginationArgs`?): `Promise`\&lt;[`GetTransactionsResponse`](../index.md#gettransactionsresponse)\>
 
 Retrieves transactions based on the provided pagination arguments.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `paginationArgs?` | `CursorPaginationArgs` | The pagination arguments for retrieving transactions. |
+• **paginationArgs?**: `CursorPaginationArgs`
+
+The pagination arguments for retrieving transactions.
 
 #### Returns
 
-`Promise`&lt;[`GetTransactionsResponse`](/api/Account/index.md#gettransactionsresponse)\>
+`Promise`\&lt;[`GetTransactionsResponse`](../index.md#gettransactionsresponse)\>
 
 A promise that resolves to an object containing the retrieved transactions and pagination information.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1451](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1451)
+[packages/account/src/providers/provider.ts:1451](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1451)
 
-___
+***
 
-### getVersion
+### getVersion()
 
-▸ **getVersion**(): `Promise`&lt;`string`\>
+> **getVersion**(): `Promise`\&lt;`string`\>
 
 Returns the version of the connected node.
 
 #### Returns
 
-`Promise`&lt;`string`\>
+`Promise`\&lt;`string`\>
 
 A promise that resolves to the version string.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:615](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L615)
+[packages/account/src/providers/provider.ts:615](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L615)
 
-___
+***
 
-### produceBlocks
+### produceBlocks()
 
-▸ **produceBlocks**(`amount`, `startTime?`): `Promise`&lt;`BN`\>
+> **produceBlocks**(`amount`, `startTime`?): `Promise`\&lt;`BN`\>
 
 Lets you produce blocks with custom timestamps and the block number of the last block produced.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `number` | The amount of blocks to produce. |
-| `startTime?` | `number` | The UNIX timestamp (milliseconds) to set for the first produced block (optional). |
+• **amount**: `number`
+
+The amount of blocks to produce.
+
+• **startTime?**: `number`
+
+The UNIX timestamp (milliseconds) to set for the first produced block (optional).
 
 #### Returns
 
-`Promise`&lt;`BN`\>
+`Promise`\&lt;`BN`\>
 
 A promise that resolves to the block number of the last produced block.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1746](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1746)
+[packages/account/src/providers/provider.ts:1746](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1746)
 
-___
+***
 
-### sendTransaction
+### sendTransaction()
 
-▸ **sendTransaction**(`transactionRequestLike`, `sendTransactionParams?`): `Promise`&lt;[`TransactionResponse`](/api/Account/TransactionResponse.md)\>
+> **sendTransaction**(`transactionRequestLike`, `sendTransactionParams`): `Promise`\&lt;[`TransactionResponse`](TransactionResponse.md)\>
 
 Submits a transaction to the chain to be executed.
 
@@ -923,26 +1007,29 @@ the transaction will be mutated and those dependencies will be added.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequestLike` | [`TransactionRequestLike`](/api/Account/index.md#transactionrequestlike) | The transaction request object. |
-| `sendTransactionParams` | [`EstimateTransactionParams`](/api/Account/index.md#estimatetransactionparams) | The provider send transaction parameters (optional). |
+• **transactionRequestLike**: [`TransactionRequestLike`](../index.md#transactionrequestlike)
+
+The transaction request object.
+
+• **sendTransactionParams**: [`EstimateTransactionParams`](../index.md#estimatetransactionparams) = `{}`
+
+The provider send transaction parameters (optional).
 
 #### Returns
 
-`Promise`&lt;[`TransactionResponse`](/api/Account/TransactionResponse.md)\>
+`Promise`\&lt;[`TransactionResponse`](TransactionResponse.md)\>
 
 A promise that resolves to the transaction response object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:743](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L743)
+[packages/account/src/providers/provider.ts:743](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L743)
 
-___
+***
 
-### simulate
+### simulate()
 
-▸ **simulate**(`transactionRequestLike`, `estimateTxParams?`): `Promise`&lt;[`CallResult`](/api/Account/index.md#callresult)\>
+> **simulate**(`transactionRequestLike`, `estimateTxParams`): `Promise`\&lt;[`CallResult`](../index.md#callresult)\>
 
 Executes a signed transaction without applying the states changes
 on the chain.
@@ -952,63 +1039,48 @@ the transaction will be mutated and those dependencies will be added
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `transactionRequestLike` | [`TransactionRequestLike`](/api/Account/index.md#transactionrequestlike) | The transaction request object. |
-| `estimateTxParams` | [`EstimateTransactionParams`](/api/Account/index.md#estimatetransactionparams) | The estimate transaction params (optional). |
+• **transactionRequestLike**: [`TransactionRequestLike`](../index.md#transactionrequestlike)
+
+The transaction request object.
+
+• **estimateTxParams**: [`EstimateTransactionParams`](../index.md#estimatetransactionparams) = `{}`
+
+The estimate transaction params (optional).
 
 #### Returns
 
-`Promise`&lt;[`CallResult`](/api/Account/index.md#callresult)\>
+`Promise`\&lt;[`CallResult`](../index.md#callresult)\>
 
 A promise that resolves to the call result object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1107](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L1107)
+[packages/account/src/providers/provider.ts:1107](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L1107)
 
-___
+***
 
-### validateTransaction
+### create()
 
-▸ **validateTransaction**(`tx`, `consensusParameters`): `void`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `tx` | [`TransactionRequest`](/api/Account/index.md#transactionrequest) |
-| `consensusParameters` | [`ConsensusParameters`](/api/Account/index.md#consensusparameters) |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/account/src/providers/provider.ts:715](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L715)
-
-___
-
-### create
-
-▸ **create**(`url`, `options?`): `Promise`&lt;[`Provider`](/api/Account/Provider.md)\>
+> `static` **create**(`url`, `options`): `Promise`\&lt;[`Provider`](Provider.md)\>
 
 Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `url` | `string` | GraphQL endpoint of the Fuel node |
-| `options` | [`ProviderOptions`](/api/Account/index.md#provideroptions) | Additional options for the provider |
+• **url**: `string`
+
+GraphQL endpoint of the Fuel node
+
+• **options**: [`ProviderOptions`](../index.md#provideroptions) = `{}`
+
+Additional options for the provider
 
 #### Returns
 
-`Promise`&lt;[`Provider`](/api/Account/Provider.md)\>
+`Promise`\&lt;[`Provider`](Provider.md)\>
 
 A promise that resolves to a Provider instance.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:462](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L462)
+[packages/account/src/providers/provider.ts:462](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L462)

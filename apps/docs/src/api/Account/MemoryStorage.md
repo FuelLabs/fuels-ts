@@ -1,124 +1,119 @@
-# Class: MemoryStorage
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).MemoryStorage
+***
+
+# Class: MemoryStorage
 
 ## Implements
 
-- [`StorageAbstract`](/api/Account/StorageAbstract.md)
+- [`StorageAbstract`](StorageAbstract.md)
 
 ## Constructors
 
-### constructor
+### new MemoryStorage()
 
-• **new MemoryStorage**(): [`MemoryStorage`](/api/Account/MemoryStorage.md)
+> **new MemoryStorage**(): [`MemoryStorage`](MemoryStorage.md)
 
 #### Returns
 
-[`MemoryStorage`](/api/Account/MemoryStorage.md)
+[`MemoryStorage`](MemoryStorage.md)
 
 ## Properties
 
 ### storage
 
-• **storage**: `Map`&lt;`string`, `unknown`\>
+> **storage**: `Map`\&lt;`string`, `unknown`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:4](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/storages/memory-storage.ts#L4)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:4](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/storages/memory-storage.ts#L4)
 
 ## Methods
 
-### clear
+### clear()
 
-▸ **clear**(): `Promise`&lt;`void`\>
+> **clear**(): `Promise`\&lt;`void`\>
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[clear](/api/Account/StorageAbstract.md#clear)
+[`StorageAbstract`](StorageAbstract.md).[`clear`](StorageAbstract.md#clear)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/storages/memory-storage.ts#L19)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/storages/memory-storage.ts#L19)
 
-___
+***
 
-### getItem
+### getItem()
 
-▸ **getItem**&lt;`T`\>(`key`): `Promise`&lt;``null`` \| `T`\>
+> **getItem**\&lt;`T`\>(`key`): `Promise`\&lt;`null` \| `T`\>
 
-#### Type parameters
+#### Type Parameters
 
-| Name |
-| :------ |
-| `T` |
+• **T**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
+• **key**: `string`
 
 #### Returns
 
-`Promise`&lt;``null`` \| `T`\>
+`Promise`\&lt;`null` \| `T`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[getItem](/api/Account/StorageAbstract.md#getitem)
+[`StorageAbstract`](StorageAbstract.md).[`getItem`](StorageAbstract.md#getitem)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/storages/memory-storage.ts#L6)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:6](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/storages/memory-storage.ts#L6)
 
-___
+***
 
-### removeItem
+### removeItem()
 
-▸ **removeItem**(`key`): `Promise`&lt;`void`\>
+> **removeItem**(`key`): `Promise`\&lt;`void`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
+• **key**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[removeItem](/api/Account/StorageAbstract.md#removeitem)
+[`StorageAbstract`](StorageAbstract.md).[`removeItem`](StorageAbstract.md#removeitem)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/storages/memory-storage.ts#L15)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/storages/memory-storage.ts#L15)
 
-___
+***
 
-### setItem
+### setItem()
 
-▸ **setItem**(`key`, `value`): `Promise`&lt;`void`\>
+> **setItem**(`key`, `value`): `Promise`\&lt;`void`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
-| `value` | `string` |
+• **key**: `string`
+
+• **value**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[setItem](/api/Account/StorageAbstract.md#setitem)
+[`StorageAbstract`](StorageAbstract.md).[`setItem`](StorageAbstract.md#setitem)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/storages/memory-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/storages/memory-storage.ts#L11)
+[packages/account/src/wallet-manager/storages/memory-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/storages/memory-storage.ts#L11)

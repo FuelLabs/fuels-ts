@@ -1,44 +1,34 @@
-# Class: InstructionSet
+[**@fuel-ts/program v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/program](/api/Program/index.md).InstructionSet
+***
+
+# Class: InstructionSet
 
 A wrapper around fuel-asm to make dynamic instructions and convert to different formats
 
 ## Constructors
 
-### constructor
+### new InstructionSet()
 
-• **new InstructionSet**(`...args`): [`InstructionSet`](/api/Program/InstructionSet.md)
+> **new InstructionSet**(...`args`): [`InstructionSet`](InstructionSet.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `...args` | `Instruction`[] |
+• ...**args**: `Instruction`[]
 
 #### Returns
 
-[`InstructionSet`](/api/Program/InstructionSet.md)
+[`InstructionSet`](InstructionSet.md)
 
 #### Defined in
 
-[instruction-set.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L10)
-
-## Properties
-
-### #operations
-
-• `Private` **#operations**: `Instruction`[]
-
-#### Defined in
-
-[instruction-set.ts:8](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L8)
+[instruction-set.ts:10](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L10)
 
 ## Methods
 
-### byteLength
+### byteLength()
 
-▸ **byteLength**(): `number`
+> **byteLength**(): `number`
 
 #### Returns
 
@@ -46,19 +36,17 @@ A wrapper around fuel-asm to make dynamic instructions and convert to different 
 
 #### Defined in
 
-[instruction-set.ts:47](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L47)
+[instruction-set.ts:47](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L47)
 
-___
+***
 
-### concat
+### concat()
 
-▸ **concat**(`ops`): `Instruction`[]
+> **concat**(`ops`): `Instruction`[]
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `ops` | `Instruction`[] |
+• **ops**: `Instruction`[]
 
 #### Returns
 
@@ -66,13 +54,13 @@ ___
 
 #### Defined in
 
-[instruction-set.ts:22](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L22)
+[instruction-set.ts:22](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L22)
 
-___
+***
 
-### entries
+### entries()
 
-▸ **entries**(): `Instruction`[]
+> **entries**(): `Instruction`[]
 
 #### Returns
 
@@ -80,19 +68,17 @@ ___
 
 #### Defined in
 
-[instruction-set.ts:14](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L14)
+[instruction-set.ts:14](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L14)
 
-___
+***
 
-### extend
+### extend()
 
-▸ **extend**(`ops`): `void`
+> **extend**(`ops`): `void`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `ops` | `Instruction`[] |
+• **ops**: `Instruction`[]
 
 #### Returns
 
@@ -100,19 +86,17 @@ ___
 
 #### Defined in
 
-[instruction-set.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L26)
+[instruction-set.ts:26](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L26)
 
-___
+***
 
-### push
+### push()
 
-▸ **push**(`...args`): `void`
+> **push**(...`args`): `void`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `...args` | `Instruction`[] |
+• ...**args**: `Instruction`[]
 
 #### Returns
 
@@ -120,13 +104,13 @@ ___
 
 #### Defined in
 
-[instruction-set.ts:18](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L18)
+[instruction-set.ts:18](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L18)
 
-___
+***
 
-### toBytes
+### toBytes()
 
-▸ **toBytes**(): `Uint8Array`
+> **toBytes**(): `Uint8Array`
 
 #### Returns
 
@@ -134,27 +118,13 @@ ___
 
 #### Defined in
 
-[instruction-set.ts:30](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L30)
+[instruction-set.ts:30](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L30)
 
-___
+***
 
-### toHex
+### toHex()
 
-▸ **toHex**(): `string`
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[instruction-set.ts:39](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L39)
-
-___
-
-### toString
-
-▸ **toString**(): `string`
+> **toHex**(): `string`
 
 #### Returns
 
@@ -162,4 +132,18 @@ ___
 
 #### Defined in
 
-[instruction-set.ts:43](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/instruction-set.ts#L43)
+[instruction-set.ts:39](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L39)
+
+***
+
+### toString()
+
+> **toString**(): `string`
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[instruction-set.ts:43](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/instruction-set.ts#L43)

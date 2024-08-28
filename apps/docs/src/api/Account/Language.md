@@ -1,13 +1,15 @@
-# Enumeration: Language
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).Language
+***
+
+# Enumeration: Language
 
 ## Enumeration Members
 
 ### english
 
-• **english** = ``"english"``
+> **english**: `"english"`
 
 #### Defined in
 
-[packages/account/src/wordlists/index.ts:4](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wordlists/index.ts#L4)
+[packages/account/src/wordlists/index.ts:4](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wordlists/index.ts#L4)

@@ -1,17 +1,19 @@
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
+
+***
+
 # Class: Fuel
 
-[@fuel-ts/account](/api/Account/index.md).Fuel
+**`Name`**
 
 FuelConnector
 
 Wallet Connector is a interface that represents a Wallet Connector and all the methods
 that should be implemented to be compatible with the Fuel SDK.
 
-## Hierarchy
+## Extends
 
-- [`FuelConnector`](/api/Account/FuelConnector.md)
-
-  ↳ **`Fuel`**
+- [`FuelConnector`](FuelConnector.md)
 
 ## Implements
 
@@ -19,245 +21,165 @@ that should be implemented to be compatible with the Fuel SDK.
 
 ## Constructors
 
-### constructor
+### new Fuel()
 
-• **new Fuel**(`config?`): [`Fuel`](/api/Account/Fuel.md)
+> **new Fuel**(`config`): [`Fuel`](Fuel.md)
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `config` | [`FuelConfig`](/api/Account/index.md#fuelconfig) | `Fuel.defaultConfig` |
+• **config**: [`FuelConfig`](../index.md#fuelconfig) = `Fuel.defaultConfig`
 
 #### Returns
 
-[`Fuel`](/api/Account/Fuel.md)
+[`Fuel`](Fuel.md)
 
 #### Overrides
 
-[FuelConnector](/api/Account/FuelConnector.md).[constructor](/api/Account/FuelConnector.md#constructor)
+[`FuelConnector`](FuelConnector.md).[`constructor`](FuelConnector.md#constructors)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:92](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L92)
+[packages/account/src/connectors/fuel.ts:93](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L93)
 
 ## Properties
 
-### \_connectors
-
-• `Private` **\_connectors**: [`FuelConnector`](/api/Account/FuelConnector.md)[] = `[]`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:85](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L85)
-
-___
-
-### \_currentConnector
-
-• `Private` `Optional` **\_currentConnector**: ``null`` \| [`FuelConnector`](/api/Account/FuelConnector.md)
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:90](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L90)
-
-___
-
-### \_pingCache
-
-• `Private` **\_pingCache**: [`CacheFor`](/api/Account/index.md#cachefor) = `{}`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:89](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L89)
-
-___
-
-### \_storage
-
-• `Private` `Optional` **\_storage**: ``null`` \| [`StorageAbstract`](/api/Account/StorageAbstract.md) = `null`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:84](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L84)
-
-___
-
-### \_targetObject
-
-• `Private` **\_targetObject**: ``null`` \| [`TargetObject`](/api/Account/TargetObject.md) = `null`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:86](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L86)
-
-___
-
-### \_targetUnsubscribe
-
-• `Private` **\_targetUnsubscribe**: () => `void`
-
-#### Type declaration
-
-▸ (): `void`
-
-##### Returns
-
-`void`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:88](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L88)
-
-___
-
-### \_unsubscribes
-
-• `Private` **\_unsubscribes**: () => `void`[] = `[]`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:87](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L87)
-
-___
-
 ### connected
 
-• **connected**: `boolean` = `false`
+> **connected**: `boolean` = `false`
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[connected](/api/Account/FuelConnector.md#connected)
+[`FuelConnector`](FuelConnector.md).[`connected`](FuelConnector.md#connected)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L90)
+[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L90)
 
-___
+***
 
 ### events
 
-• **events**: typeof [`FuelConnectorEventTypes`](/api/Account/FuelConnectorEventTypes.md) = `FuelConnectorEventTypes`
+> **events**: *typeof* [`FuelConnectorEventTypes`](./FuelConnectorEventTypes.md) = `FuelConnectorEventTypes`
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[events](/api/Account/FuelConnector.md#events)
+[`FuelConnector`](FuelConnector.md).[`events`](FuelConnector.md#events)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:92](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L92)
+[packages/account/src/connectors/fuel-connector.ts:92](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L92)
 
-___
+***
 
 ### installed
 
-• **installed**: `boolean` = `false`
+> **installed**: `boolean` = `false`
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[installed](/api/Account/FuelConnector.md#installed)
+[`FuelConnector`](FuelConnector.md).[`installed`](FuelConnector.md#installed)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L91)
+[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L91)
 
-___
+***
 
 ### metadata
 
-• **metadata**: [`ConnectorMetadata`](/api/Account/index.md#connectormetadata)
+> **metadata**: [`ConnectorMetadata`](../index.md#connectormetadata)
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[metadata](/api/Account/FuelConnector.md#metadata)
+[`FuelConnector`](FuelConnector.md).[`metadata`](FuelConnector.md#metadata)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L89)
+[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L89)
 
-___
+***
 
 ### name
 
-• **name**: `string` = `''`
+> **name**: `string` = `''`
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[name](/api/Account/FuelConnector.md#name)
+[`FuelConnector`](FuelConnector.md).[`name`](FuelConnector.md#name)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:88](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L88)
+[packages/account/src/connectors/fuel-connector.ts:88](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L88)
 
-___
+***
 
 ### STORAGE\_KEY
 
-▪ `Static` **STORAGE\_KEY**: `string` = `'fuel-current-connector'`
+> `static` **STORAGE\_KEY**: `string` = `'fuel-current-connector'`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:82](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L82)
+[packages/account/src/connectors/fuel.ts:82](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L82)
 
-___
+***
 
 ### captureRejectionSymbol
 
-▪ `Static` `Readonly` **captureRejectionSymbol**: typeof [`captureRejectionSymbol`](/api/Account/WalletManager.md#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](WalletManager.md#capturerejectionsymbol)
 
 Value: `Symbol.for('nodejs.rejection')`
 
 See how to write a custom `rejection handler`.
 
-**`Since`**
+#### Since
 
 v13.4.0, v12.16.0
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[captureRejectionSymbol](/api/Account/FuelConnector.md#capturerejectionsymbol)
+[`FuelConnector`](FuelConnector.md).[`captureRejectionSymbol`](FuelConnector.md#capturerejectionsymbol)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:452
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:452
 
-___
+***
 
 ### captureRejections
 
-▪ `Static` **captureRejections**: `boolean`
+> `static` **captureRejections**: `boolean`
 
 Value: [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)
 
 Change the default `captureRejections` option on all new `EventEmitter` objects.
 
-**`Since`**
+#### Since
 
 v13.4.0, v12.16.0
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[captureRejections](/api/Account/FuelConnector.md#capturerejections)
+[`FuelConnector`](FuelConnector.md).[`captureRejections`](FuelConnector.md#capturerejections)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:459
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:459
 
-___
+***
 
 ### defaultConfig
 
-▪ `Static` **defaultConfig**: [`FuelConfig`](/api/Account/index.md#fuelconfig) = `{}`
+> `static` **defaultConfig**: [`FuelConfig`](../index.md#fuelconfig) = `{}`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:83](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L83)
+[packages/account/src/connectors/fuel.ts:83](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L83)
 
-___
+***
 
 ### defaultMaxListeners
 
-▪ `Static` **defaultMaxListeners**: `number`
+> `static` **defaultMaxListeners**: `number`
 
 By default, a maximum of `10` listeners can be registered for any single
 event. This limit can be changed for individual `EventEmitter` instances
@@ -295,60 +217,58 @@ the event emitter instance, the event's name and the number of attached
 listeners, respectively.
 Its `name` property is set to `'MaxListenersExceededWarning'`.
 
-**`Since`**
+#### Since
 
 v0.11.2
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[defaultMaxListeners](/api/Account/FuelConnector.md#defaultmaxlisteners)
+[`FuelConnector`](FuelConnector.md).[`defaultMaxListeners`](FuelConnector.md#defaultmaxlisteners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:498
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:498
 
-___
+***
 
 ### errorMonitor
 
-▪ `Static` `Readonly` **errorMonitor**: typeof [`errorMonitor`](/api/Account/WalletManager.md#errormonitor)
+> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](WalletManager.md#errormonitor)
 
 This symbol shall be used to install a listener for only monitoring `'error'` events. Listeners installed using this symbol are called before the regular `'error'` listeners are called.
 
 Installing a listener using this symbol does not change the behavior once an `'error'` event is emitted. Therefore, the process will still crash if no
 regular `'error'` listener is installed.
 
-**`Since`**
+#### Since
 
 v13.6.0, v12.17.0
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[errorMonitor](/api/Account/FuelConnector.md#errormonitor)
+[`FuelConnector`](FuelConnector.md).[`errorMonitor`](FuelConnector.md#errormonitor)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:445
 
 ## Methods
 
-### [captureRejectionSymbol]
+### \[captureRejectionSymbol\]()?
 
-▸ **[captureRejectionSymbol]**&lt;`K`\>(`error`, `event`, `...args`): `void`
+> `optional` **\[captureRejectionSymbol\]**\&lt;`K`\>(`error`, `event`, ...`args`): `void`
 
-#### Type parameters
+#### Type Parameters
 
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `error` | `Error` |
-| `event` | `string` \| `symbol` |
-| `...args` | `AnyRest` |
+• **error**: `Error`
+
+• **event**: `string` \| `symbol`
+
+• ...**args**: `AnyRest`
 
 #### Returns
 
@@ -356,92 +276,70 @@ node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[[captureRejectionSymbol]](/api/Account/FuelConnector.md#[capturerejectionsymbol])
+[`FuelConnector`](FuelConnector.md).[`[captureRejectionSymbol]`](FuelConnector.md#%5Bcapturerejectionsymbol%5D)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:136
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:136
 
-___
+***
 
-### \_getProvider
+### accounts()
 
-▸ **_getProvider**(`providerOrNetwork?`): `Promise`&lt;[`Provider`](/api/Account/Provider.md)\>
-
-Return a Fuel Provider instance with extends features to work with
-connectors.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `providerOrNetwork?` | [`Provider`](/api/Account/Provider.md) \| [`Network`](/api/Account/index.md#network) |
-
-#### Returns
-
-`Promise`&lt;[`Provider`](/api/Account/Provider.md)\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:430](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L430)
-
-___
-
-### accounts
-
-▸ **accounts**(): `Promise`&lt;`string`[]\>
+> **accounts**(): `Promise`\&lt;`string`[]\>
 
 Should return all the accounts authorized for the
 current connection.
 
 #### Returns
 
-`Promise`&lt;`string`[]\>
+`Promise`\&lt;`string`[]\>
 
 The accounts addresses strings
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[accounts](/api/Account/FuelConnector.md#accounts)
+[`FuelConnector`](FuelConnector.md).[`accounts`](FuelConnector.md#accounts)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:130](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L130)
+[packages/account/src/connectors/fuel-connector.ts:130](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L130)
 
-___
+***
 
-### addABI
+### addABI()
 
-▸ **addABI**(`_contractId`, `_abi`): `Promise`&lt;`boolean`\>
+> **addABI**(`_contractId`, `_abi`): `Promise`\&lt;`boolean`\>
 
 Should add the ABI to the connector and return true if the ABI was added successfully.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_contractId` | `string` |
-| `_abi` | `JsonAbi` |
+• **\_contractId**: `string`
+
+• **\_abi**: `JsonAbi`
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Return true if the ABI was added successfully.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[addABI](/api/Account/FuelConnector.md#addabi)
+[`FuelConnector`](FuelConnector.md).[`addABI`](FuelConnector.md#addabi)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:301](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L301)
+[packages/account/src/connectors/fuel-connector.ts:301](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L301)
 
-___
+***
 
-### addAsset
+### addAsset()
 
-▸ **addAsset**(`_asset`): `Promise`&lt;`boolean`\>
+> **addAsset**(`_asset`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should add the asset metadata to the connector and return true if the asset
 was added successfully.
@@ -450,35 +348,35 @@ If the asset already exists it should throw an error.
 
  assets
 
-**`Throws`**
-
-Error if the asset already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_asset` | [`Asset`](/api/Account/index.md#asset) |
+• **\_asset**: [`Asset`](../index.md#asset)
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 True if the asset was added successfully
 
+#### Throws
+
+Error if the asset already exists
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[addAsset](/api/Account/FuelConnector.md#addasset)
+[`FuelConnector`](FuelConnector.md).[`addAsset`](FuelConnector.md#addasset)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:239](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L239)
+[packages/account/src/connectors/fuel-connector.ts:239](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L239)
 
-___
+***
 
-### addAssets
+### addAssets()
 
-▸ **addAssets**(`_assets`): `Promise`&lt;`boolean`\>
+> **addAssets**(`_assets`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should add the assets metadata to the connector and return true if the asset
 was added successfully.
@@ -487,193 +385,145 @@ If the asset already exists it should throw an error.
 
  assets
 
-**`Throws`**
-
-Error if the asset already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_assets` | [`Asset`](/api/Account/index.md#asset)[] |
+• **\_assets**: [`Asset`](../index.md#asset)[]
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 True if the asset was added successfully
 
+#### Throws
+
+Error if the asset already exists
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[addAssets](/api/Account/FuelConnector.md#addassets)
+[`FuelConnector`](FuelConnector.md).[`addAssets`](FuelConnector.md#addassets)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:224](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L224)
+[packages/account/src/connectors/fuel-connector.ts:224](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L224)
 
-___
+***
 
-### addConnector
+### addListener()
 
-▸ **addConnector**(`connector`): `Promise`&lt;`void`\>
-
-Add a new connector to the list of connectors.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `connector` | [`FuelConnector`](/api/Account/FuelConnector.md) |
-
-#### Returns
-
-`Promise`&lt;`void`\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:292](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L292)
-
-___
-
-### addListener
-
-▸ **addListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **addListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.on(eventName, listener)`.
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[addListener](/api/Account/FuelConnector.md#addlistener)
+[`FuelConnector`](FuelConnector.md).[`addListener`](FuelConnector.md#addlistener)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:597
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:597
 
-___
+***
 
-### addNetwork
+### addNetwork()
 
-▸ **addNetwork**(`_networkUrl`): `Promise`&lt;`boolean`\>
+> **addNetwork**(`_networkUrl`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should start the add network process and return true if the network was added successfully.
 
  networks
 
-**`Throws`**
-
-Error if the network already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_networkUrl` | `string` |
+• **\_networkUrl**: `string`
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Return true if the network was added successfully
 
+#### Throws
+
+Error if the network already exists
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[addNetwork](/api/Account/FuelConnector.md#addnetwork)
+[`FuelConnector`](FuelConnector.md).[`addNetwork`](FuelConnector.md#addnetwork)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:260](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L260)
+[packages/account/src/connectors/fuel-connector.ts:260](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L260)
 
-___
+***
 
-### assets
+### assets()
 
-▸ **assets**(): `Promise`&lt;[`Asset`](/api/Account/index.md#asset)[]\>
+> **assets**(): `Promise`\&lt;[`Asset`](../index.md#asset)[]\>
 
 Should return all the assets added to the connector. If a connection is already established.
 
 #### Returns
 
-`Promise`&lt;[`Asset`](/api/Account/index.md#asset)[]\>
+`Promise`\&lt;[`Asset`](../index.md#asset)[]\>
 
 Array of assets metadata from the connector vinculated to the all accounts from a specific Wallet.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[assets](/api/Account/FuelConnector.md#assets)
+[`FuelConnector`](FuelConnector.md).[`assets`](FuelConnector.md#assets)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:248](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L248)
+[packages/account/src/connectors/fuel-connector.ts:248](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L248)
 
-___
+***
 
-### callMethod
+### clean()
 
-▸ **callMethod**(`method`, `...args`): `Promise`&lt;`any`\>
-
-Call method from the current connector.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `method` | `string` |
-| `...args` | `unknown`[] |
-
-#### Returns
-
-`Promise`&lt;`any`\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:173](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L173)
-
-___
-
-### clean
-
-▸ **clean**(): `Promise`&lt;`void`\>
+> **clean**(): `Promise`\&lt;`void`\>
 
 Clean all the data from the storage.
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-FuelSdk.clean
+`FuelSdk.clean`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:478](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L478)
+[packages/account/src/connectors/fuel.ts:489](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L489)
 
-___
+***
 
-### connect
+### connect()
 
-▸ **connect**(): `Promise`&lt;`boolean`\>
+> **connect**(): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should start the connection process and return
 true if the account authorize the connection.
@@ -684,43 +534,43 @@ and return false if the user reject the connection.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 boolean - connection status.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[connect](/api/Account/FuelConnector.md#connect)
+[`FuelConnector`](FuelConnector.md).[`connect`](FuelConnector.md#connect)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:143](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L143)
+[packages/account/src/connectors/fuel-connector.ts:143](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L143)
 
-___
+***
 
-### connectors
+### connectors()
 
-▸ **connectors**(): `Promise`&lt;[`FuelConnector`](/api/Account/FuelConnector.md)[]\>
+> **connectors**(): `Promise`\&lt;[`FuelConnector`](FuelConnector.md)[]\>
 
 Return the list of connectors with the status of installed and connected.
 
 #### Returns
 
-`Promise`&lt;[`FuelConnector`](/api/Account/FuelConnector.md)[]\>
+`Promise`\&lt;[`FuelConnector`](FuelConnector.md)[]\>
 
 #### Implementation of
 
-FuelSdk.connectors
+`FuelSdk.connectors`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:340](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L340)
+[packages/account/src/connectors/fuel.ts:351](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L351)
 
-___
+***
 
-### currentAccount
+### currentAccount()
 
-▸ **currentAccount**(): `Promise`&lt;``null`` \| `string`\>
+> **currentAccount**(): `Promise`\&lt;`null` \| `string`\>
 
 Should return the current account selected inside the connector, if the account
 is authorized for the connection.
@@ -729,85 +579,87 @@ If the account is not authorized it should return null.
 
 #### Returns
 
-`Promise`&lt;``null`` \| `string`\>
+`Promise`\&lt;`null` \| `string`\>
 
 The current account selected otherwise null.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[currentAccount](/api/Account/FuelConnector.md#currentaccount)
+[`FuelConnector`](FuelConnector.md).[`currentAccount`](FuelConnector.md#currentaccount)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:209](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L209)
+[packages/account/src/connectors/fuel-connector.ts:209](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L209)
 
-___
+***
 
-### currentConnector
+### currentConnector()
 
-▸ **currentConnector**(): `undefined` \| ``null`` \| [`FuelConnector`](/api/Account/FuelConnector.md)
+> **currentConnector**(): `undefined` \| `null` \| [`FuelConnector`](FuelConnector.md)
 
 Return the current selected connector.
 
 #### Returns
 
-`undefined` \| ``null`` \| [`FuelConnector`](/api/Account/FuelConnector.md)
+`undefined` \| `null` \| [`FuelConnector`](FuelConnector.md)
 
 #### Implementation of
 
-FuelSdk.currentConnector
+`FuelSdk.currentConnector`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:382](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L382)
+[packages/account/src/connectors/fuel.ts:393](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L393)
 
-___
+***
 
-### currentNetwork
+### currentNetwork()
 
-▸ **currentNetwork**(): `Promise`&lt;[`Network`](/api/Account/index.md#network)\>
+> **currentNetwork**(): `Promise`\&lt;[`Network`](../index.md#network)\>
 
 Should return the current network selected inside the connector. Even if the connection is not established.
 
 #### Returns
 
-`Promise`&lt;[`Network`](/api/Account/index.md#network)\>
+`Promise`\&lt;[`Network`](../index.md#network)\>
 
 Return the current network selected inside the connector.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[currentNetwork](/api/Account/FuelConnector.md#currentnetwork)
+[`FuelConnector`](FuelConnector.md).[`currentNetwork`](FuelConnector.md#currentnetwork)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:290](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L290)
+[packages/account/src/connectors/fuel-connector.ts:290](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L290)
 
-___
+***
 
-### destroy
+### destroy()
 
-▸ **destroy**(): `Promise`&lt;`void`\>
+> **destroy**(): `Promise`\&lt;`void`\>
 
 Removes all listeners and cleans the storage.
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-FuelSdk.destroy
+`FuelSdk.destroy`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:485](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L485)
+[packages/account/src/connectors/fuel.ts:496](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L496)
 
-___
+***
 
-### disconnect
+### disconnect()
 
-▸ **disconnect**(): `Promise`&lt;`boolean`\>
+> **disconnect**(): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should disconnect the current connection and
 return false if the disconnection was successful.
@@ -816,23 +668,23 @@ return false if the disconnection was successful.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 The connection status.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[disconnect](/api/Account/FuelConnector.md#disconnect)
+[`FuelConnector`](FuelConnector.md).[`disconnect`](FuelConnector.md#disconnect)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:154](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L154)
+[packages/account/src/connectors/fuel-connector.ts:154](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L154)
 
-___
+***
 
-### emit
+### emit()
 
-▸ **emit**&lt;`K`\>(`eventName`, `...args`): `boolean`
+> **emit**\&lt;`K`\>(`eventName`, ...`args`): `boolean`
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -872,40 +724,37 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 // event with parameters 1, 2, 3, 4, 5 in third listener
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `...args` | `AnyRest` |
+• **eventName**: `string` \| `symbol`
+
+• ...**args**: `AnyRest`
 
 #### Returns
 
 `boolean`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[emit](/api/Account/FuelConnector.md#emit)
+[`FuelConnector`](FuelConnector.md).[`emit`](FuelConnector.md#emit)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:859
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:859
 
-___
+***
 
-### eventNames
+### eventNames()
 
-▸ **eventNames**(): (`string` \| `symbol`)[]
+> **eventNames**(): (`string` \| `symbol`)[]
 
 Returns an array listing the events for which the emitter has registered
 listeners. The values in the array are strings or `Symbol`s.
@@ -924,367 +773,295 @@ console.log(myEE.eventNames());
 // Prints: [ 'foo', 'bar', Symbol(symbol) ]
 ```
 
-**`Since`**
-
-v6.0.0
-
 #### Returns
 
 (`string` \| `symbol`)[]
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[eventNames](/api/Account/FuelConnector.md#eventnames)
+[`FuelConnector`](FuelConnector.md).[`eventNames`](FuelConnector.md#eventnames)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:922
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:922
 
-___
+***
 
-### fetchConnectorStatus
+### getABI()
 
-▸ **fetchConnectorStatus**(`connector`): `Promise`&lt;[`Status`](/api/Account/index.md#status)\>
-
-Fetch the status of a connector and set the installed and connected
-status.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `connector` | [`FuelConnector`](/api/Account/FuelConnector.md) & { `_latestUpdate?`: `number`  } |
-
-#### Returns
-
-`Promise`&lt;[`Status`](/api/Account/index.md#status)\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:203](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L203)
-
-___
-
-### fetchConnectorsStatus
-
-▸ **fetchConnectorsStatus**(): `Promise`&lt;[`Status`](/api/Account/index.md#status)[]\>
-
-Fetch the status of all connectors and set the installed and connected
-status.
-
-#### Returns
-
-`Promise`&lt;[`Status`](/api/Account/index.md#status)[]\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:235](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L235)
-
-___
-
-### getABI
-
-▸ **getABI**(`_id`): `Promise`&lt;``null`` \| `JsonAbi`\>
+> **getABI**(`_id`): `Promise`\&lt;`null` \| `JsonAbi`\>
 
 Should return the ABI from the connector vinculated to the all accounts from a specific Wallet.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_id` | `string` |
+• **\_id**: `string`
 
 #### Returns
 
-`Promise`&lt;``null`` \| `JsonAbi`\>
+`Promise`\&lt;`null` \| `JsonAbi`\>
 
 The ABI if it exists, otherwise return null.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[getABI](/api/Account/FuelConnector.md#getabi)
+[`FuelConnector`](FuelConnector.md).[`getABI`](FuelConnector.md#getabi)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:311](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L311)
+[packages/account/src/connectors/fuel-connector.ts:311](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L311)
 
-___
+***
 
-### getConnector
+### getConnector()
 
-▸ **getConnector**(`connector`): ``null`` \| [`FuelConnector`](/api/Account/FuelConnector.md)
+> **getConnector**(`connector`): `null` \| [`FuelConnector`](FuelConnector.md)
 
 Get a connector from the list of connectors.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `connector` | `string` \| [`FuelConnector`](/api/Account/FuelConnector.md) |
+• **connector**: `string` \| [`FuelConnector`](FuelConnector.md)
 
 #### Returns
 
-``null`` \| [`FuelConnector`](/api/Account/FuelConnector.md)
+`null` \| [`FuelConnector`](FuelConnector.md)
 
 #### Implementation of
 
-FuelSdk.getConnector
+`FuelSdk.getConnector`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:331](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L331)
+[packages/account/src/connectors/fuel.ts:342](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L342)
 
-___
+***
 
-### getMaxListeners
+### getMaxListeners()
 
-▸ **getMaxListeners**(): `number`
+> **getMaxListeners**(): `number`
 
 Returns the current max listener value for the `EventEmitter` which is either
-set by `emitter.setMaxListeners(n)` or defaults to [defaultMaxListeners](/api/Account/Fuel.md#defaultmaxlisteners).
-
-**`Since`**
-
-v1.0.0
+set by `emitter.setMaxListeners(n)` or defaults to [defaultMaxListeners](Fuel.md#defaultmaxlisteners).
 
 #### Returns
 
 `number`
 
+#### Since
+
+v1.0.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[getMaxListeners](/api/Account/FuelConnector.md#getmaxlisteners)
+[`FuelConnector`](FuelConnector.md).[`getMaxListeners`](FuelConnector.md#getmaxlisteners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:774
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:774
 
-___
+***
 
-### getProvider
+### ~~getProvider()~~
 
-▸ **getProvider**(`providerOrNetwork?`): `Promise`&lt;[`Provider`](/api/Account/Provider.md)\>
+> **getProvider**(`providerOrNetwork`?): `Promise`\&lt;[`Provider`](Provider.md)\>
 
 Return a Fuel Provider instance with extends features to work with
 connectors.
 
-**`Deprecated`**
+#### Parameters
+
+• **providerOrNetwork?**: [`Provider`](Provider.md) \| [`Network`](../index.md#network)
+
+#### Returns
+
+`Promise`\&lt;[`Provider`](Provider.md)\>
+
+#### Deprecated
 
 getProvider is deprecated and is going to be removed in the future, use getWallet instead.
 
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `providerOrNetwork?` | [`Provider`](/api/Account/Provider.md) \| [`Network`](/api/Account/index.md#network) |
-
-#### Returns
-
-`Promise`&lt;[`Provider`](/api/Account/Provider.md)\>
-
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:419](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L419)
+[packages/account/src/connectors/fuel.ts:430](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L430)
 
-___
+***
 
-### getStorage
+### getWallet()
 
-▸ **getStorage**(): `undefined` \| [`StorageAbstract`](/api/Account/StorageAbstract.md)
-
-Return the storage used.
-
-#### Returns
-
-`undefined` \| [`StorageAbstract`](/api/Account/StorageAbstract.md)
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:130](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L130)
-
-___
-
-### getTargetObject
-
-▸ **getTargetObject**(`targetObject?`): ``null`` \| [`TargetObject`](/api/Account/TargetObject.md)
-
-Return the target object to listen for global events.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `targetObject?` | [`TargetObject`](/api/Account/TargetObject.md) |
-
-#### Returns
-
-``null`` \| [`TargetObject`](/api/Account/TargetObject.md)
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:114](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L114)
-
-___
-
-### getWallet
-
-▸ **getWallet**(`address`, `providerOrNetwork?`): `Promise`&lt;[`Account`](/api/Account/Account.md)\>
+> **getWallet**(`address`, `providerOrNetwork`?): `Promise`\&lt;[`Account`](Account.md)\>
 
 Return a Fuel Wallet Locked instance with extends features to work with
 connectors.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
-| `providerOrNetwork?` | [`Provider`](/api/Account/Provider.md) \| [`Network`](/api/Account/index.md#network) |
+• **address**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+• **providerOrNetwork?**: [`Provider`](Provider.md) \| [`Network`](../index.md#network)
 
 #### Returns
 
-`Promise`&lt;[`Account`](/api/Account/Account.md)\>
+`Promise`\&lt;[`Account`](Account.md)\>
 
 #### Implementation of
 
-FuelSdk.getWallet
+`FuelSdk.getWallet`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:455](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L455)
+[packages/account/src/connectors/fuel.ts:466](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L466)
 
-___
+***
 
-### hasABI
+### hasABI()
 
-▸ **hasABI**(`_id`): `Promise`&lt;`boolean`\>
+> **hasABI**(`_id`): `Promise`\&lt;`boolean`\>
 
 Should return true if the abi exists in the connector vinculated to the all accounts from a specific Wallet.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_id` | `string` |
+• **\_id**: `string`
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Returns true if the abi exists or false if not.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[hasABI](/api/Account/FuelConnector.md#hasabi)
+[`FuelConnector`](FuelConnector.md).[`hasABI`](FuelConnector.md#hasabi)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:321](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L321)
+[packages/account/src/connectors/fuel-connector.ts:321](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L321)
 
-___
+***
 
-### hasConnector
+### hasConnector()
 
-▸ **hasConnector**(): `Promise`&lt;`boolean`\>
+> **hasConnector**(): `Promise`\&lt;`boolean`\>
 
 Return true if any connector is available.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 #### Implementation of
 
-FuelSdk.hasConnector
+`FuelSdk.hasConnector`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:389](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L389)
+[packages/account/src/connectors/fuel.ts:400](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L400)
 
-___
+***
 
-### hasWallet
+### hasWallet()
 
-▸ **hasWallet**(): `Promise`&lt;`boolean`\>
+> **hasWallet**(): `Promise`\&lt;`boolean`\>
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 #### Implementation of
 
-FuelSdk.hasWallet
+`FuelSdk.hasWallet`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:409](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L409)
+[packages/account/src/connectors/fuel.ts:420](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L420)
 
-___
+***
 
-### isConnected
+### init()
 
-▸ **isConnected**(): `Promise`&lt;`boolean`\>
+> **init**(): `Promise`\&lt;[`Fuel`](Fuel.md)\>
+
+#### Returns
+
+`Promise`\&lt;[`Fuel`](Fuel.md)\>
+
+#### Defined in
+
+[packages/account/src/connectors/fuel.ts:117](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L117)
+
+***
+
+### isConnected()
+
+> **isConnected**(): `Promise`\&lt;`boolean`\>
 
 Should return true if the connector is connected
 to any of the accounts available.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 The connection status.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[isConnected](/api/Account/FuelConnector.md#isconnected)
+[`FuelConnector`](FuelConnector.md).[`isConnected`](FuelConnector.md#isconnected)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:120](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L120)
+[packages/account/src/connectors/fuel-connector.ts:120](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L120)
 
-___
+***
 
-### listenerCount
+### listenerCount()
 
-▸ **listenerCount**&lt;`K`\>(`eventName`, `listener?`): `number`
+> **listenerCount**\&lt;`K`\>(`eventName`, `listener`?): `number`
 
 Returns the number of listeners listening for the event named `eventName`.
 If `listener` is provided, it will return how many times the listener is found
 in the list of the listeners of the event.
 
-**`Since`**
+#### Type Parameters
 
-v3.2.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event being listened for |
-| `listener?` | `Function` | The event handler function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event being listened for
+
+• **listener?**: `Function`
+
+The event handler function
 
 #### Returns
 
 `number`
 
+#### Since
+
+v3.2.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[listenerCount](/api/Account/FuelConnector.md#listenercount)
+[`FuelConnector`](FuelConnector.md).[`listenerCount`](FuelConnector.md#listenercount)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:868
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:868
 
-___
+***
 
-### listeners
+### listeners()
 
-▸ **listeners**&lt;`K`\>(`eventName`): `Function`[]
+> **listeners**\&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`.
 
@@ -1296,114 +1073,109 @@ console.log(util.inspect(server.listeners('connection')));
 // Prints: [ [Function] ]
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
+• **eventName**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[listeners](/api/Account/FuelConnector.md#listeners)
+[`FuelConnector`](FuelConnector.md).[`listeners`](FuelConnector.md#listeners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:787
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:787
 
-___
+***
 
-### networks
+### networks()
 
-▸ **networks**(): `Promise`&lt;[`Network`](/api/Account/index.md#network)[]\>
+> **networks**(): `Promise`\&lt;[`Network`](../index.md#network)[]\>
 
 Should return all the networks available from the connector. If the connection is already established.
 
 #### Returns
 
-`Promise`&lt;[`Network`](/api/Account/index.md#network)[]\>
+`Promise`\&lt;[`Network`](../index.md#network)[]\>
 
 Return all the networks added to the connector.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[networks](/api/Account/FuelConnector.md#networks)
+[`FuelConnector`](FuelConnector.md).[`networks`](FuelConnector.md#networks)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:281](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L281)
+[packages/account/src/connectors/fuel-connector.ts:281](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L281)
 
-___
+***
 
-### off
+### off()
 
-▸ **off**&lt;`K`\>(`eventName`, `listener`): `this`
+> **off**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.removeListener()`.
 
-**`Since`**
+#### Type Parameters
+
+• **K**
+
+#### Parameters
+
+• **eventName**: `string` \| `symbol`
+
+• **listener**
+
+#### Returns
+
+`this`
+
+#### Since
 
 v10.0.0
 
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
-
-#### Returns
-
-`this`
-
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[off](/api/Account/FuelConnector.md#off)
+[`FuelConnector`](FuelConnector.md).[`off`](FuelConnector.md#off)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:747
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:747
 
-___
+***
 
-### on
+### on()
 
-▸ **on**&lt;`E`, `D`\>(`eventName`, `listener`): `this`
+> **on**\&lt;`E`, `D`\>(`eventName`, `listener`): `this`
 
 Event listener for the connector.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `E` | extends [`connectors`](/api/Account/FuelConnectorEventTypes.md#connectors) \| [`currentConnector`](/api/Account/FuelConnectorEventTypes.md#currentconnector) \| [`connection`](/api/Account/FuelConnectorEventTypes.md#connection) \| [`accounts`](/api/Account/FuelConnectorEventTypes.md#accounts) \| [`currentAccount`](/api/Account/FuelConnectorEventTypes.md#currentaccount) \| [`networks`](/api/Account/FuelConnectorEventTypes.md#networks) \| [`currentNetwork`](/api/Account/FuelConnectorEventTypes.md#currentnetwork) \| [`assets`](/api/Account/FuelConnectorEventTypes.md#assets) |
-| `D` | extends `never` |
+• **E** *extends* [`connectors`](./FuelConnectorEventTypes.md#connectors) \| [`currentConnector`](./FuelConnectorEventTypes.md#currentconnector) \| [`connection`](./FuelConnectorEventTypes.md#connection) \| [`accounts`](./FuelConnectorEventTypes.md#accounts) \| [`currentAccount`](./FuelConnectorEventTypes.md#currentaccount) \| [`networks`](./FuelConnectorEventTypes.md#networks) \| [`currentNetwork`](./FuelConnectorEventTypes.md#currentnetwork) \| [`assets`](./FuelConnectorEventTypes.md#assets)
+
+• **D** *extends* `never`
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `E` | The event name to listen |
-| `listener` | (`data`: `D`) => `void` | The listener function |
+• **eventName**: `E`
+
+The event name to listen
+
+• **listener**
+
+The listener function
 
 #### Returns
 
@@ -1411,17 +1183,17 @@ Event listener for the connector.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[on](/api/Account/FuelConnector.md#on)
+[`FuelConnector`](FuelConnector.md).[`on`](FuelConnector.md#on)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:331](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L331)
+[packages/account/src/connectors/fuel-connector.ts:331](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L331)
 
-___
+***
 
-### once
+### once()
 
-▸ **once**&lt;`K`\>(`eventName`, `listener`): `this`
+> **once**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -1448,86 +1220,64 @@ myEE.emit('foo');
 //   a
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.3.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.3.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[once](/api/Account/FuelConnector.md#once)
+[`FuelConnector`](FuelConnector.md).[`once`](FuelConnector.md#once)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:659
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:659
 
-___
+***
 
-### ping
+### ping()
 
-▸ **ping**(): `Promise`&lt;`boolean`\>
+> **ping**(): `Promise`\&lt;`boolean`\>
 
 Should return true if the connector is loaded
 in less then one second.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Always true.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[ping](/api/Account/FuelConnector.md#ping)
+[`FuelConnector`](FuelConnector.md).[`ping`](FuelConnector.md#ping)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:100](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L100)
+[packages/account/src/connectors/fuel-connector.ts:100](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L100)
 
-___
+***
 
-### pingConnector
+### prependListener()
 
-▸ **pingConnector**(`connector?`): `Promise`&lt;`boolean`\>
-
-Fetch the status of a connector and set the installed and connected
-status. If no connector is provided it will ping the current connector.
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `connector?` | [`FuelConnector`](/api/Account/FuelConnector.md) |
-
-#### Returns
-
-`Promise`&lt;`boolean`\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:245](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L245)
-
-___
-
-### prependListener
-
-▸ **prependListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **prependListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds the `listener` function to the _beginning_ of the listeners array for the
 event named `eventName`. No checks are made to see if the `listener` has
@@ -1542,40 +1292,41 @@ server.prependListener('connection', (stream) => {
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v6.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[prependListener](/api/Account/FuelConnector.md#prependlistener)
+[`FuelConnector`](FuelConnector.md).[`prependListener`](FuelConnector.md#prependlistener)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:886
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:886
 
-___
+***
 
-### prependOnceListener
+### prependOnceListener()
 
-▸ **prependOnceListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **prependOnceListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds a **one-time**`listener` function for the event named `eventName` to the _beginning_ of the listeners array. The next time `eventName` is triggered, this
 listener is removed, and then invoked.
@@ -1588,40 +1339,41 @@ server.prependOnceListener('connection', (stream) => {
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v6.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[prependOnceListener](/api/Account/FuelConnector.md#prependoncelistener)
+[`FuelConnector`](FuelConnector.md).[`prependOnceListener`](FuelConnector.md#prependoncelistener)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:902
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:902
 
-___
+***
 
-### rawListeners
+### rawListeners()
 
-▸ **rawListeners**&lt;`K`\>(`eventName`): `Function`[]
+> **rawListeners**\&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`,
 including any wrappers (such as those created by `.once()`).
@@ -1651,39 +1403,35 @@ newListeners[0]();
 emitter.emit('log');
 ```
 
-**`Since`**
+#### Type Parameters
 
-v9.4.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
+• **eventName**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v9.4.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[rawListeners](/api/Account/FuelConnector.md#rawlisteners)
+[`FuelConnector`](FuelConnector.md).[`rawListeners`](FuelConnector.md#rawlisteners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:818
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:818
 
-___
+***
 
-### removeAllListeners
+### removeAllListeners()
 
-▸ **removeAllListeners**(`eventName?`): `this`
+> **removeAllListeners**(`eventName`?): `this`
 
 Removes all listeners, or those of the specified `eventName`.
 
@@ -1693,33 +1441,31 @@ component or module (e.g. sockets or file streams).
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
-
-v0.1.26
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName?` | `string` \| `symbol` |
+• **eventName?**: `string` \| `symbol`
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[removeAllListeners](/api/Account/FuelConnector.md#removealllisteners)
+[`FuelConnector`](FuelConnector.md).[`removeAllListeners`](FuelConnector.md#removealllisteners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:758
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:758
 
-___
+***
 
-### removeListener
+### removeListener()
 
-▸ **removeListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **removeListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Removes the specified `listener` from the listener array for the event named `eventName`.
 
@@ -1801,101 +1547,97 @@ ee.emit('ping');
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[removeListener](/api/Account/FuelConnector.md#removelistener)
+[`FuelConnector`](FuelConnector.md).[`removeListener`](FuelConnector.md#removelistener)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:742
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:742
 
-___
+***
 
-### selectConnector
+### selectConnector()
 
-▸ **selectConnector**(`connectorName`, `options?`): `Promise`&lt;`boolean`\>
+> **selectConnector**(`connectorName`, `options`): `Promise`\&lt;`boolean`\>
 
 Set the current connector to be used.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `connectorName` | `string` |
-| `options` | [`FuelConnectorSelectOptions`](/api/Account/index.md#fuelconnectorselectoptions) |
+• **connectorName**: `string`
+
+• **options**: [`FuelConnectorSelectOptions`](../index.md#fuelconnectorselectoptions) = `...`
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 #### Implementation of
 
-FuelSdk.selectConnector
+`FuelSdk.selectConnector`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:348](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L348)
+[packages/account/src/connectors/fuel.ts:359](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L359)
 
-___
+***
 
-### selectNetwork
+### selectNetwork()
 
-▸ **selectNetwork**(`_network`): `Promise`&lt;`boolean`\>
+> **selectNetwork**(`_network`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should start the select network process and return true if the network has change successfully.
 
  networks
 
-**`Throws`**
-
-Error if the network already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_network` | [`Network`](/api/Account/index.md#network) |
+• **\_network**: [`Network`](../index.md#network)
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Return true if the network was added successfully
 
+#### Throws
+
+Error if the network already exists
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[selectNetwork](/api/Account/FuelConnector.md#selectnetwork)
+[`FuelConnector`](FuelConnector.md).[`selectNetwork`](FuelConnector.md#selectnetwork)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:272](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L272)
+[packages/account/src/connectors/fuel-connector.ts:272](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L272)
 
-___
+***
 
-### sendTransaction
+### sendTransaction()
 
-▸ **sendTransaction**(`_address`, `_transaction`): `Promise`&lt;`string`\>
+> **sendTransaction**(`_address`, `_transaction`): `Promise`\&lt;`string`\>
 
 Should start the send transaction process and return
 the transaction id submitted to the network.
@@ -1906,46 +1648,29 @@ to be sent to the wrong network and lost.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | `string` |
-| `_transaction` | [`TransactionRequestLike`](/api/Account/index.md#transactionrequestlike) |
+• **\_address**: `string`
+
+• **\_transaction**: [`TransactionRequestLike`](../index.md#transactionrequestlike)
 
 #### Returns
 
-`Promise`&lt;`string`\>
+`Promise`\&lt;`string`\>
 
 The transaction id
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[sendTransaction](/api/Account/FuelConnector.md#sendtransaction)
+[`FuelConnector`](FuelConnector.md).[`sendTransaction`](FuelConnector.md#sendtransaction)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:197](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L197)
+[packages/account/src/connectors/fuel-connector.ts:197](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L197)
 
-___
+***
 
-### setDefaultConnector
+### setMaxListeners()
 
-▸ **setDefaultConnector**(): `Promise`&lt;`undefined` \| `boolean`\>
-
-Setup the default connector from the storage.
-
-#### Returns
-
-`Promise`&lt;`undefined` \| `boolean`\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:140](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L140)
-
-___
-
-### setMaxListeners
-
-▸ **setMaxListeners**(`n`): `this`
+> **setMaxListeners**(`n`): `this`
 
 By default `EventEmitter`s will print a warning if more than `10` listeners are
 added for a particular event. This is a useful default that helps finding
@@ -1954,170 +1679,89 @@ modified for this specific `EventEmitter` instance. The value can be set to `Inf
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
-
-v0.3.5
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `n` | `number` |
+• **n**: `number`
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.3.5
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[setMaxListeners](/api/Account/FuelConnector.md#setmaxlisteners)
+[`FuelConnector`](FuelConnector.md).[`setMaxListeners`](FuelConnector.md#setmaxlisteners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:768
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:768
 
-___
+***
 
-### setupConnectorEvents
+### signMessage()
 
-▸ **setupConnectorEvents**(`events`): `void`
-
-Start listener for all the events of the current
-connector and emit them to the Fuel instance
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `events` | `string`[] |
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:157](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L157)
-
-___
-
-### setupConnectorListener
-
-▸ **setupConnectorListener**(): () => `void`
-
-Setup a listener for the FuelConnector event and add the connector
-to the list of new connectors.
-
-#### Returns
-
-`fn`
-
-▸ (): `void`
-
-##### Returns
-
-`void`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:267](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L267)
-
-___
-
-### setupMethods
-
-▸ **setupMethods**(): `void`
-
-Create a method for each method proxy that is available on the Common interface
-and call the method from the current connector.
-
-#### Returns
-
-`void`
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:193](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L193)
-
-___
-
-### signMessage
-
-▸ **signMessage**(`_address`, `_message`): `Promise`&lt;`string`\>
+> **signMessage**(`_address`, `_message`): `Promise`\&lt;`string`\>
 
 Should start the sign message process and return
 the signed message.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | `string` |
-| `_message` | `string` |
+• **\_address**: `string`
+
+• **\_message**: `string`
 
 #### Returns
 
-`Promise`&lt;`string`\>
+`Promise`\&lt;`string`\>
 
 Message signature
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[signMessage](/api/Account/FuelConnector.md#signmessage)
+[`FuelConnector`](FuelConnector.md).[`signMessage`](FuelConnector.md#signmessage)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:167](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L167)
+[packages/account/src/connectors/fuel-connector.ts:167](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L167)
 
-___
+***
 
-### signTransaction
+### signTransaction()
 
-▸ **signTransaction**(`_address`, `_transaction`): `Promise`&lt;`string`\>
+> **signTransaction**(`_address`, `_transaction`): `Promise`\&lt;`string`\>
 
 Should start the sign transaction process and return
 the signed transaction.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | `string` |
-| `_transaction` | [`TransactionRequestLike`](/api/Account/index.md#transactionrequestlike) |
+• **\_address**: `string`
+
+• **\_transaction**: [`TransactionRequestLike`](../index.md#transactionrequestlike)
 
 #### Returns
 
-`Promise`&lt;`string`\>
+`Promise`\&lt;`string`\>
 
 Transaction signature
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[signTransaction](/api/Account/FuelConnector.md#signtransaction)
+[`FuelConnector`](FuelConnector.md).[`signTransaction`](FuelConnector.md#signtransaction)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:180](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L180)
+[packages/account/src/connectors/fuel-connector.ts:180](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L180)
 
-___
+***
 
-### triggerConnectorEvents
+### unsubscribe()
 
-▸ **triggerConnectorEvents**(): `Promise`&lt;`void`\>
-
-#### Returns
-
-`Promise`&lt;`void`\>
-
-#### Defined in
-
-[packages/account/src/connectors/fuel.ts:309](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L309)
-
-___
-
-### unsubscribe
-
-▸ **unsubscribe**(): `void`
+> **unsubscribe**(): `void`
 
 Remove all open listeners this is useful when you want to
 remove the Fuel instance and avoid memory leaks.
@@ -2128,40 +1772,42 @@ remove the Fuel instance and avoid memory leaks.
 
 #### Implementation of
 
-FuelSdk.unsubscribe
+`FuelSdk.unsubscribe`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:467](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L467)
+[packages/account/src/connectors/fuel.ts:478](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L478)
 
-___
+***
 
-### version
+### version()
 
-▸ **version**(): `Promise`&lt;[`Version`](/api/Account/index.md#version)\>
+> **version**(): `Promise`\&lt;[`Version`](../index.md#version-7)\>
 
 Should return the current version of the connector
 and the network version that is compatible.
 
 #### Returns
 
-`Promise`&lt;[`Version`](/api/Account/index.md#version)\>
+`Promise`\&lt;[`Version`](../index.md#version-7)\>
 
 boolean - connection status.
 
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[version](/api/Account/FuelConnector.md#version)
+[`FuelConnector`](FuelConnector.md).[`version`](FuelConnector.md#version)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:110](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L110)
+[packages/account/src/connectors/fuel-connector.ts:110](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L110)
 
-___
+***
 
-### addAbortListener
+### addAbortListener()
 
-▸ **addAbortListener**(`signal`, `resource`): `Disposable`
+> `static` **addAbortListener**(`signal`, `resource`): `Disposable`
+
+**`Experimental`**
 
 Listens once to the `abort` event on the provided `signal`.
 
@@ -2193,16 +1839,11 @@ function example(signal) {
 }
 ```
 
-**`Since`**
-
-v20.5.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `signal` | `AbortSignal` |
-| `resource` | (`event`: `Event`) => `void` |
+• **signal**: `AbortSignal`
+
+• **resource**
 
 #### Returns
 
@@ -2210,19 +1851,23 @@ v20.5.0
 
 Disposable that removes the `abort` listener.
 
+#### Since
+
+v20.5.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[addAbortListener](/api/Account/FuelConnector.md#addabortlistener)
+[`FuelConnector`](FuelConnector.md).[`addAbortListener`](FuelConnector.md#addabortlistener)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:437
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:437
 
-___
+***
 
-### getEventListeners
+### getEventListeners()
 
-▸ **getEventListeners**(`emitter`, `name`): `Function`[]
+> `static` **getEventListeners**(`emitter`, `name`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`.
 
@@ -2249,34 +1894,33 @@ import { getEventListeners, EventEmitter } from 'node:events';
 }
 ```
 
-**`Since`**
-
-v15.2.0, v14.17.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
-| `name` | `string` \| `symbol` |
+• **emitter**: `EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>
+
+• **name**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v15.2.0, v14.17.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[getEventListeners](/api/Account/FuelConnector.md#geteventlisteners)
+[`FuelConnector`](FuelConnector.md).[`getEventListeners`](FuelConnector.md#geteventlisteners)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:358
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:358
 
-___
+***
 
-### getMaxListeners
+### getMaxListeners()
 
-▸ **getMaxListeners**(`emitter`): `number`
+> `static` **getMaxListeners**(`emitter`): `number`
 
 Returns the currently set max amount of listeners.
 
@@ -2304,33 +1948,31 @@ import { getMaxListeners, setMaxListeners, EventEmitter } from 'node:events';
 }
 ```
 
-**`Since`**
-
-v19.9.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
+• **emitter**: `EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>
 
 #### Returns
 
 `number`
 
+#### Since
+
+v19.9.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[getMaxListeners](/api/Account/FuelConnector.md#getmaxlisteners-1)
+[`FuelConnector`](FuelConnector.md).[`getMaxListeners`](FuelConnector.md#getmaxlisteners-1)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:387
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:387
 
-___
+***
 
-### listenerCount
+### ~~listenerCount()~~
 
-▸ **listenerCount**(`emitter`, `eventName`): `number`
+> `static` **listenerCount**(`emitter`, `eventName`): `number`
 
 A class method that returns the number of listeners for the given `eventName` registered on the given `emitter`.
 
@@ -2344,38 +1986,43 @@ console.log(listenerCount(myEmitter, 'event'));
 // Prints: 2
 ```
 
-**`Since`**
-
-v0.9.12
-
-**`Deprecated`**
-
-Since v3.2.0 - Use `listenerCount` instead.
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> | The emitter to query |
-| `eventName` | `string` \| `symbol` | The event name |
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
+
+The emitter to query
+
+• **eventName**: `string` \| `symbol`
+
+The event name
 
 #### Returns
 
 `number`
 
+#### Since
+
+v0.9.12
+
+#### Deprecated
+
+Since v3.2.0 - Use `listenerCount` instead.
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[listenerCount](/api/Account/FuelConnector.md#listenercount-1)
+[`FuelConnector`](FuelConnector.md).[`listenerCount`](FuelConnector.md#listenercount-1)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:330
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:330
 
-___
+***
 
-### on
+### on()
 
-▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
+#### on(emitter, eventName, options)
+
+> `static` **on**(`emitter`, `eventName`, `options`?): `AsyncIterableIterator`\&lt;`any`[]\>
 
 ```js
 import { on, EventEmitter } from 'node:events';
@@ -2454,59 +2101,63 @@ for await (const event of on(ee, 'foo', { close: ['close'] })) {
 console.log('done'); // prints 'done'
 ```
 
-**`Since`**
+##### Parameters
 
-v13.6.0, v12.16.0
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
 
-#### Parameters
+• **eventName**: `string` \| `symbol`
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
-| `eventName` | `string` \| `symbol` |
-| `options?` | `StaticEventEmitterIteratorOptions` |
+• **options?**: `StaticEventEmitterIteratorOptions`
 
-#### Returns
+##### Returns
 
-`AsyncIterableIterator`&lt;`any`[]\>
+`AsyncIterableIterator`\&lt;`any`[]\>
 
 An `AsyncIterator` that iterates `eventName` events emitted by the `emitter`
 
-#### Inherited from
+##### Since
 
-[FuelConnector](/api/Account/FuelConnector.md).[on](/api/Account/FuelConnector.md#on-1)
+v13.6.0, v12.16.0
 
-#### Defined in
+##### Inherited from
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:303
+[`FuelConnector`](FuelConnector.md).[`on`](FuelConnector.md#on-1)
 
-▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
+##### Defined in
 
-#### Parameters
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:303
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` |
-| `eventName` | `string` |
-| `options?` | `StaticEventEmitterIteratorOptions` |
+#### on(emitter, eventName, options)
 
-#### Returns
+> `static` **on**(`emitter`, `eventName`, `options`?): `AsyncIterableIterator`\&lt;`any`[]\>
 
-`AsyncIterableIterator`&lt;`any`[]\>
+##### Parameters
 
-#### Inherited from
+• **emitter**: `EventTarget`
 
-[FuelConnector](/api/Account/FuelConnector.md).[on](/api/Account/FuelConnector.md#on-1)
+• **eventName**: `string`
 
-#### Defined in
+• **options?**: `StaticEventEmitterIteratorOptions`
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:308
+##### Returns
 
-___
+`AsyncIterableIterator`\&lt;`any`[]\>
 
-### once
+##### Inherited from
 
-▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
+[`FuelConnector`](FuelConnector.md).[`on`](FuelConnector.md#on-1)
+
+##### Defined in
+
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:308
+
+***
+
+### once()
+
+#### once(emitter, eventName, options)
+
+> `static` **once**(`emitter`, `eventName`, `options`?): `Promise`\&lt;`any`[]\>
 
 Creates a `Promise` that is fulfilled when the `EventEmitter` emits the given
 event or that is rejected if the `EventEmitter` emits `'error'` while waiting.
@@ -2585,57 +2236,59 @@ ac.abort(); // Abort waiting for the event
 ee.emit('foo'); // Prints: Waiting for the event was canceled!
 ```
 
-**`Since`**
+##### Parameters
+
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
+
+• **eventName**: `string` \| `symbol`
+
+• **options?**: `StaticEventEmitterOptions`
+
+##### Returns
+
+`Promise`\&lt;`any`[]\>
+
+##### Since
 
 v11.13.0, v10.16.0
 
-#### Parameters
+##### Inherited from
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
-| `eventName` | `string` \| `symbol` |
-| `options?` | `StaticEventEmitterOptions` |
+[`FuelConnector`](FuelConnector.md).[`once`](FuelConnector.md#once-1)
 
-#### Returns
+##### Defined in
 
-`Promise`&lt;`any`[]\>
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:217
 
-#### Inherited from
+#### once(emitter, eventName, options)
 
-[FuelConnector](/api/Account/FuelConnector.md).[once](/api/Account/FuelConnector.md#once-1)
+> `static` **once**(`emitter`, `eventName`, `options`?): `Promise`\&lt;`any`[]\>
 
-#### Defined in
+##### Parameters
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:217
+• **emitter**: `EventTarget`
 
-▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
+• **eventName**: `string`
 
-#### Parameters
+• **options?**: `StaticEventEmitterOptions`
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` |
-| `eventName` | `string` |
-| `options?` | `StaticEventEmitterOptions` |
+##### Returns
 
-#### Returns
+`Promise`\&lt;`any`[]\>
 
-`Promise`&lt;`any`[]\>
+##### Inherited from
 
-#### Inherited from
+[`FuelConnector`](FuelConnector.md).[`once`](FuelConnector.md#once-1)
 
-[FuelConnector](/api/Account/FuelConnector.md).[once](/api/Account/FuelConnector.md#once-1)
+##### Defined in
 
-#### Defined in
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:222
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:222
+***
 
-___
+### setMaxListeners()
 
-### setMaxListeners
-
-▸ **setMaxListeners**(`n?`, `...eventTargets`): `void`
+> `static` **setMaxListeners**(`n`?, ...`eventTargets`?): `void`
 
 ```js
 import { setMaxListeners, EventEmitter } from 'node:events';
@@ -2646,25 +2299,26 @@ const emitter = new EventEmitter();
 setMaxListeners(5, target, emitter);
 ```
 
-**`Since`**
-
-v15.4.0
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `n?` | `number` | A non-negative number. The maximum number of listeners per `EventTarget` event. |
-| `...eventTargets` | (`EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\>)[] | - |
+• **n?**: `number`
+
+A non-negative number. The maximum number of listeners per `EventTarget` event.
+
+• ...**eventTargets?**: (`EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>)[]
 
 #### Returns
 
 `void`
 
+#### Since
+
+v15.4.0
+
 #### Inherited from
 
-[FuelConnector](/api/Account/FuelConnector.md).[setMaxListeners](/api/Account/FuelConnector.md#setmaxlisteners-1)
+[`FuelConnector`](FuelConnector.md).[`setMaxListeners`](FuelConnector.md#setmaxlisteners-1)
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:402
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:402

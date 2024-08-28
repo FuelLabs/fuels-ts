@@ -1,32 +1,30 @@
-# Class: AbstractAddress
+[**@fuel-ts/interfaces v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/interfaces](/api/Interfaces/index.md).AbstractAddress
+***
 
-## Hierarchy
+# Class: `abstract` AbstractAddress
 
-- **`AbstractAddress`**
+## Extended by
 
 ## Constructors
 
-### constructor
+### new AbstractAddress()
 
-• **new AbstractAddress**(): [`AbstractAddress`](/api/Interfaces/AbstractAddress.md)
+> **new AbstractAddress**(): [`AbstractAddress`](AbstractAddress.md)
 
 #### Returns
 
-[`AbstractAddress`](/api/Interfaces/AbstractAddress.md)
+[`AbstractAddress`](AbstractAddress.md)
 
 ## Methods
 
-### equals
+### equals()
 
-▸ **equals**(`other`): `boolean`
+> `abstract` **equals**(`other`): `boolean`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `other` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+• **other**: [`AbstractAddress`](AbstractAddress.md)
 
 #### Returns
 
@@ -34,27 +32,27 @@
 
 #### Defined in
 
-[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L56)
+[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L56)
 
-___
+***
 
-### toAddress
+### toAddress()
 
-▸ **toAddress**(): \`fuel${string}\`
+> `abstract` **toAddress**(): \`fuel$\{string\}\`
 
 #### Returns
 
-\`fuel${string}\`
+\`fuel$\{string\}\`
 
 #### Defined in
 
-[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L52)
+[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L52)
 
-___
+***
 
-### toB256
+### toB256()
 
-▸ **toB256**(): `string`
+> `abstract` **toB256**(): `string`
 
 #### Returns
 
@@ -62,13 +60,13 @@ ___
 
 #### Defined in
 
-[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L53)
+[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L53)
 
-___
+***
 
-### toBytes
+### toBytes()
 
-▸ **toBytes**(): `Uint8Array`
+> `abstract` **toBytes**(): `Uint8Array`
 
 #### Returns
 
@@ -76,27 +74,13 @@ ___
 
 #### Defined in
 
-[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L55)
+[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L55)
 
-___
+***
 
-### toHexString
+### toHexString()
 
-▸ **toHexString**(): `string`
-
-#### Returns
-
-`string`
-
-#### Defined in
-
-[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L54)
-
-___
-
-### toJSON
-
-▸ **toJSON**(): `string`
+> `abstract` **toHexString**(): `string`
 
 #### Returns
 
@@ -104,13 +88,13 @@ ___
 
 #### Defined in
 
-[index.ts:50](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L50)
+[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L54)
 
-___
+***
 
-### toString
+### toJSON()
 
-▸ **toString**(): `string`
+> `abstract` **toJSON**(): `string`
 
 #### Returns
 
@@ -118,4 +102,18 @@ ___
 
 #### Defined in
 
-[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L51)
+[index.ts:50](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L50)
+
+***
+
+### toString()
+
+> `abstract` **toString**(): `string`
+
+#### Returns
+
+`string`
+
+#### Defined in
+
+[index.ts:51](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L51)

@@ -1,24 +1,25 @@
-# Interface: DeployableContractFactory
+[**@fuel-ts/contract v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/contract](/api/Contract/index.md).[test-utils](/api/Contract/test-utils-index.md).DeployableContractFactory
+***
+
+# Interface: DeployableContractFactory
 
 ## Methods
 
-### deploy
+### deploy()
 
-▸ **deploy**(`wallet`, `options?`): `Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)\>
+> **deploy**(`wallet`, `options`?): `Promise`\&lt;[`DeployContractResult`](./src-index.md#deploycontractresulttcontract)\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `wallet` | [`Account`](/api/Account/Account.md) |
-| `options?` | [`DeployContractOptions`](/api/Contract/src-index.md#deploycontractoptions) |
+• **wallet**: [`Account`](../Account/Account.md)
+
+• **options?**: [`DeployContractOptions`](./src-index.md#deploycontractoptions)
 
 #### Returns
 
-`Promise`&lt;[`DeployContractResult`](/api/Contract/src-index.md#deploycontractresult)\>
+`Promise`\&lt;[`DeployContractResult`](./src-index.md#deploycontractresulttcontract)\>
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:16](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/test-utils/launch-test-node.ts#L16)
+[packages/contract/src/test-utils/launch-test-node.ts:16](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/contract/src/test-utils/launch-test-node.ts#L16)

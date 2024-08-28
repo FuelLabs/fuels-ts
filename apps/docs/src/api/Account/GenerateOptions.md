@@ -1,25 +1,27 @@
-# Interface: GenerateOptions
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).GenerateOptions
+***
+
+# Interface: GenerateOptions
 
 ## Properties
 
-### entropy
+### entropy?
 
-• `Optional` **entropy**: [`BytesLike`](/api/Interfaces/index.md#byteslike)
+> `optional` **entropy**: [`BytesLike`](../Interfaces/index.md#byteslike)
 
 Additional entropy for the random bytes
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallets.ts#L19)
+[packages/account/src/wallet/wallets.ts:19](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet/wallets.ts#L19)
 
-___
+***
 
-### provider
+### provider?
 
-• `Optional` **provider**: [`Provider`](/api/Account/Provider.md)
+> `optional` **provider**: [`Provider`](./Provider.md)
 
 #### Defined in
 
-[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet/wallets.ts#L20)
+[packages/account/src/wallet/wallets.ts:20](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet/wallets.ts#L20)

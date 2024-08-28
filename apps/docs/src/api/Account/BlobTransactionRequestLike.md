@@ -1,145 +1,145 @@
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
+
+***
+
 # Interface: BlobTransactionRequestLike
 
-[@fuel-ts/account](/api/Account/index.md).BlobTransactionRequestLike
-
-## Hierarchy
+## Extends
 
 - `BaseTransactionRequestLike`
-
-  ↳ **`BlobTransactionRequestLike`**
 
 ## Properties
 
 ### blobId
 
-• **blobId**: `string`
+> **blobId**: `string`
 
 Blob ID
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:13](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L13)
+[packages/account/src/providers/transaction-request/blob-transaction-request.ts:13](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L13)
 
-___
+***
 
-### inputs
+### inputs?
 
-• `Optional` **inputs**: [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput)[]
+> `optional` **inputs**: [`TransactionRequestInput`](../index.md#transactionrequestinput)[]
 
 List of inputs
 
 #### Inherited from
 
-BaseTransactionRequestLike.inputs
+`BaseTransactionRequestLike.inputs`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:79](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L79)
+[packages/account/src/providers/transaction-request/transaction-request.ts:79](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L79)
 
-___
+***
 
-### maturity
+### maturity?
 
-• `Optional` **maturity**: `number`
+> `optional` **maturity**: `number`
 
 Block until which tx cannot be included
 
 #### Inherited from
 
-BaseTransactionRequestLike.maturity
+`BaseTransactionRequestLike.maturity`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:73](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L73)
+[packages/account/src/providers/transaction-request/transaction-request.ts:73](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L73)
 
-___
+***
 
-### maxFee
+### maxFee?
 
-• `Optional` **maxFee**: `BigNumberish`
+> `optional` **maxFee**: `BigNumberish`
 
 The maximum fee payable by this transaction using BASE_ASSET.
 
 #### Inherited from
 
-BaseTransactionRequestLike.maxFee
+`BaseTransactionRequestLike.maxFee`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:75](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L75)
+[packages/account/src/providers/transaction-request/transaction-request.ts:75](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L75)
 
-___
+***
 
-### outputs
+### outputs?
 
-• `Optional` **outputs**: [`TransactionRequestOutput`](/api/Account/index.md#transactionrequestoutput)[]
+> `optional` **outputs**: [`TransactionRequestOutput`](../index.md#transactionrequestoutput)[]
 
 List of outputs
 
 #### Inherited from
 
-BaseTransactionRequestLike.outputs
+`BaseTransactionRequestLike.outputs`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:81](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L81)
+[packages/account/src/providers/transaction-request/transaction-request.ts:81](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L81)
 
-___
+***
 
-### tip
+### tip?
 
-• `Optional` **tip**: `BigNumberish`
+> `optional` **tip**: `BigNumberish`
 
 Gas price for transaction
 
 #### Inherited from
 
-BaseTransactionRequestLike.tip
+`BaseTransactionRequestLike.tip`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:71](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L71)
+[packages/account/src/providers/transaction-request/transaction-request.ts:71](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L71)
 
-___
+***
 
-### witnessIndex
+### witnessIndex?
 
-• `Optional` **witnessIndex**: `number`
+> `optional` **witnessIndex**: `number`
 
 Witness index of contract bytecode to create
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:15](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L15)
+[packages/account/src/providers/transaction-request/blob-transaction-request.ts:15](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L15)
 
-___
+***
 
-### witnessLimit
+### witnessLimit?
 
-• `Optional` **witnessLimit**: `BigNumberish`
+> `optional` **witnessLimit**: `BigNumberish`
 
 The maximum amount of witness data allowed for the transaction
 
 #### Inherited from
 
-BaseTransactionRequestLike.witnessLimit
+`BaseTransactionRequestLike.witnessLimit`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:77](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L77)
+[packages/account/src/providers/transaction-request/transaction-request.ts:77](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L77)
 
-___
+***
 
-### witnesses
+### witnesses?
 
-• `Optional` **witnesses**: [`BytesLike`](/api/Interfaces/index.md#byteslike)[]
+> `optional` **witnesses**: [`BytesLike`](../Interfaces/index.md#byteslike)[]
 
 List of witnesses
 
 #### Inherited from
 
-BaseTransactionRequestLike.witnesses
+`BaseTransactionRequestLike.witnesses`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:83](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L83)
+[packages/account/src/providers/transaction-request/transaction-request.ts:83](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L83)

@@ -1,52 +1,51 @@
-# Interface: InvokeFunction&lt;TArgs, TReturn\>
+[**@fuel-ts/program v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/program](/api/Program/index.md).InvokeFunction
+***
+
+# Interface: InvokeFunction()\&lt;TArgs, TReturn\>
 
 Represents a function that can be invoked.
 
-## Type parameters
+## Type Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `TArgs` | extends `any`[] = `any`[] | Type of the function's arguments. |
-| `TReturn` | `any` | Type of the function's return value. |
+• **TArgs** *extends* `any`[] = `any`[]
 
-## Callable
+Type of the function's arguments.
 
-### InvokeFunction
+• **TReturn** = `any`
 
-▸ **InvokeFunction**(`...args`): [`FunctionInvocationScope`](/api/Program/FunctionInvocationScope.md)&lt;`TArgs`, `TReturn`\>
+Type of the function's return value.
 
-#### Parameters
+> **InvokeFunction**(...`args`): [`FunctionInvocationScope`](./FunctionInvocationScope.md)\&lt;`TArgs`, `TReturn`\>
 
-| Name | Type |
-| :------ | :------ |
-| `...args` | `TArgs` |
+Represents a function that can be invoked.
 
-#### Returns
+## Parameters
 
-[`FunctionInvocationScope`](/api/Program/FunctionInvocationScope.md)&lt;`TArgs`, `TReturn`\>
+• ...**args**: `TArgs`
 
-#### Defined in
+## Returns
 
-[types.ts:71](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L71)
+[`FunctionInvocationScope`](./FunctionInvocationScope.md)\&lt;`TArgs`, `TReturn`\>
+
+## Defined in
+
+[types.ts:71](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L71)
 
 ## Properties
 
-### isReadOnly
+### isReadOnly()
 
-• **isReadOnly**: () => `boolean`
+> **isReadOnly**: () => `boolean`
 
 Checks if the function is read-only i.e. it only reads from storage, does not write to it.
 
-#### Type declaration
-
-▸ (): `boolean`
-
-##### Returns
+#### Returns
 
 `boolean`
 
+True if the function is read-only or pure, false otherwise.
+
 #### Defined in
 
-[types.ts:77](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L77)
+[types.ts:77](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L77)

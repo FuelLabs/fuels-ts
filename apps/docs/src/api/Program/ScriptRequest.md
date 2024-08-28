@@ -1,125 +1,120 @@
-# Class: ScriptRequest&lt;TData, TResult\>
+[**@fuel-ts/program v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/program](/api/Program/index.md).ScriptRequest
+***
+
+# Class: ScriptRequest\&lt;TData, TResult\>
 
 `ScriptRequest` provides functionality to encode and decode script data and results.
 
-## Type parameters
+## Type Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `TData` | `void` | Type of the script data. |
-| `TResult` | `void` | Type of the script result. |
+• **TData** = `void`
+
+Type of the script data.
+
+• **TResult** = `void`
+
+Type of the script result.
 
 ## Constructors
 
-### constructor
+### new ScriptRequest()
 
-• **new ScriptRequest**&lt;`TData`, `TResult`\>(`bytes`, `scriptDataEncoder`, `scriptResultDecoder`): [`ScriptRequest`](/api/Program/ScriptRequest.md)&lt;`TData`, `TResult`\>
+> **new ScriptRequest**\&lt;`TData`, `TResult`\>(`bytes`, `scriptDataEncoder`, `scriptResultDecoder`): [`ScriptRequest`](ScriptRequest.md)\&lt;`TData`, `TResult`\>
 
 Creates an instance of the ScriptRequest class.
 
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `TData` | `void` |
-| `TResult` | `void` |
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `bytes` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The bytes of the script. |
-| `scriptDataEncoder` | (`data`: `TData`) => `EncodedScriptCall` | The script data encoder function. |
-| `scriptResultDecoder` | (`scriptResult`: `ScriptResult`) => `TResult` | The script result decoder function. |
+• **bytes**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The bytes of the script.
+
+• **scriptDataEncoder**
+
+The script data encoder function.
+
+• **scriptResultDecoder**
+
+The script result decoder function.
 
 #### Returns
 
-[`ScriptRequest`](/api/Program/ScriptRequest.md)&lt;`TData`, `TResult`\>
+[`ScriptRequest`](ScriptRequest.md)\&lt;`TData`, `TResult`\>
 
 #### Defined in
 
-[script-request.ts:205](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L205)
+[script-request.ts:205](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L205)
 
 ## Properties
 
 ### bytes
 
-• **bytes**: `Uint8Array`
+> **bytes**: `Uint8Array`
 
 The bytes of the script.
 
 #### Defined in
 
-[script-request.ts:186](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L186)
+[script-request.ts:186](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L186)
 
-___
+***
 
-### scriptDataEncoder
+### scriptDataEncoder()
 
-• **scriptDataEncoder**: (`data`: `TData`) => `EncodedScriptCall`
+> **scriptDataEncoder**: (`data`) => `EncodedScriptCall`
 
 A function to encode the script data.
 
-#### Type declaration
+#### Parameters
 
-▸ (`data`): `EncodedScriptCall`
+• **data**: `TData`
 
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `data` | `TData` |
-
-##### Returns
+#### Returns
 
 `EncodedScriptCall`
 
 #### Defined in
 
-[script-request.ts:191](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L191)
+[script-request.ts:191](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L191)
 
-___
+***
 
-### scriptResultDecoder
+### scriptResultDecoder()
 
-• **scriptResultDecoder**: (`scriptResult`: `ScriptResult`) => `TResult`
+> **scriptResultDecoder**: (`scriptResult`) => `TResult`
 
 A function to decode the script result.
 
-#### Type declaration
+#### Parameters
 
-▸ (`scriptResult`): `TResult`
+• **scriptResult**: `ScriptResult`
 
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `scriptResult` | `ScriptResult` |
-
-##### Returns
+#### Returns
 
 `TResult`
 
 #### Defined in
 
-[script-request.ts:196](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L196)
+[script-request.ts:196](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L196)
 
 ## Methods
 
-### decodeCallResult
+### decodeCallResult()
 
-▸ **decodeCallResult**(`callResult`, `logs?`): `TResult`
+> **decodeCallResult**(`callResult`, `logs`): `TResult`
 
 Decodes the result of a script call.
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `callResult` | [`CallResult`](/api/Account/index.md#callresult) | `undefined` | The CallResult from the script call. |
-| `logs` | `any`[] | `[]` | Optional logs associated with the decoding. |
+• **callResult**: [`CallResult`](../Account/index.md#callresult)
+
+The CallResult from the script call.
+
+• **logs**: `any`[] = `[]`
+
+Optional logs associated with the decoding.
 
 #### Returns
 
@@ -129,21 +124,21 @@ The decoded result.
 
 #### Defined in
 
-[script-request.ts:262](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L262)
+[script-request.ts:262](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L262)
 
-___
+***
 
-### encodeScriptData
+### encodeScriptData()
 
-▸ **encodeScriptData**(`data`): `Uint8Array`
+> **encodeScriptData**(`data`): `Uint8Array`
 
 Encodes the data for a script call.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `data` | `TData` | The script data. |
+• **data**: `TData`
+
+The script data.
 
 #### Returns
 
@@ -153,21 +148,21 @@ The encoded data.
 
 #### Defined in
 
-[script-request.ts:243](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L243)
+[script-request.ts:243](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L243)
 
-___
+***
 
-### getScriptDataOffset
+### getScriptDataOffset()
 
-▸ **getScriptDataOffset**(`maxInputs`): `number`
+> **getScriptDataOffset**(`maxInputs`): `number`
 
 Gets the script data offset.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `maxInputs` | `number` | The maxInputs value from the chain's consensus params. |
+• **maxInputs**: `number`
+
+The maxInputs value from the chain's consensus params.
 
 #### Returns
 
@@ -177,22 +172,25 @@ The script data offset.
 
 #### Defined in
 
-[script-request.ts:233](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L233)
+[script-request.ts:233](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L233)
 
-___
+***
 
-### getScriptDataOffsetWithScriptBytes
+### getScriptDataOffsetWithScriptBytes()
 
-▸ **getScriptDataOffsetWithScriptBytes**(`byteLength`, `maxInputs`): `number`
+> `static` **getScriptDataOffsetWithScriptBytes**(`byteLength`, `maxInputs`): `number`
 
 Gets the script data offset for the given bytes.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `byteLength` | `number` | The byte length of the script. |
-| `maxInputs` | `number` | The maxInputs value from the chain's consensus params. |
+• **byteLength**: `number`
+
+The byte length of the script.
+
+• **maxInputs**: `number`
+
+The maxInputs value from the chain's consensus params.
 
 #### Returns
 
@@ -202,4 +200,4 @@ The script data offset.
 
 #### Defined in
 
-[script-request.ts:222](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/script-request.ts#L222)
+[script-request.ts:222](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/script-request.ts#L222)

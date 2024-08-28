@@ -1,79 +1,64 @@
-# Class: Vault&lt;TOptions\>
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).Vault
+***
 
-## Type parameters
+# Class: `abstract` Vault\&lt;TOptions\>
 
-| Name | Type |
-| :------ | :------ |
-| `TOptions` | { `secret?`: `string`  } |
+## Type Parameters
 
-## Implemented by
-
-- [`MnemonicVault`](/api/Account/MnemonicVault.md)
-- [`PrivateKeyVault`](/api/Account/PrivateKeyVault.md)
+• **TOptions** = `object`
 
 ## Constructors
 
-### constructor
+### new Vault()
 
-• **new Vault**&lt;`TOptions`\>(`_options`): [`Vault`](/api/Account/Vault.md)&lt;`TOptions`\>
-
-#### Type parameters
-
-| Name | Type |
-| :------ | :------ |
-| `TOptions` | { `secret?`: `string`  } |
+> **new Vault**\&lt;`TOptions`\>(`_options`): [`Vault`](Vault.md)\&lt;`TOptions`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_options` | `TOptions` |
+• **\_options**: `TOptions`
 
 #### Returns
 
-[`Vault`](/api/Account/Vault.md)&lt;`TOptions`\>
+[`Vault`](Vault.md)\&lt;`TOptions`\>
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:37](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L37)
+[packages/account/src/wallet-manager/types.ts:37](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L37)
 
 ## Properties
 
 ### type
 
-▪ `Static` `Readonly` **type**: `string`
+> `readonly` `static` **type**: `string`
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:35](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L35)
+[packages/account/src/wallet-manager/types.ts:35](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L35)
 
 ## Methods
 
-### addAccount
+### addAccount()
 
-▸ **addAccount**(): [`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)
+> **addAccount**(): [`WalletManagerAccount`](../index.md#walletmanageraccount)
 
 #### Returns
 
-[`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)
+[`WalletManagerAccount`](../index.md#walletmanageraccount)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L49)
+[packages/account/src/wallet-manager/types.ts:49](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L49)
 
-___
+***
 
-### exportAccount
+### exportAccount()
 
-▸ **exportAccount**(`_address`): `string`
+> **exportAccount**(`_address`): `string`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+• **\_address**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Returns
 
@@ -81,47 +66,45 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L53)
+[packages/account/src/wallet-manager/types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L53)
 
-___
+***
 
-### getAccounts
+### getAccounts()
 
-▸ **getAccounts**(): [`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)[]
+> **getAccounts**(): [`WalletManagerAccount`](../index.md#walletmanageraccount)[]
 
 #### Returns
 
-[`WalletManagerAccount`](/api/Account/index.md#walletmanageraccount)[]
+[`WalletManagerAccount`](../index.md#walletmanageraccount)[]
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:45](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L45)
+[packages/account/src/wallet-manager/types.ts:45](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L45)
 
-___
+***
 
-### getWallet
+### getWallet()
 
-▸ **getWallet**(`_address`): [`WalletUnlocked`](/api/Account/WalletUnlocked.md)
+> **getWallet**(`_address`): [`WalletUnlocked`](WalletUnlocked.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+• **\_address**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Returns
 
-[`WalletUnlocked`](/api/Account/WalletUnlocked.md)
+[`WalletUnlocked`](WalletUnlocked.md)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:57](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L57)
+[packages/account/src/wallet-manager/types.ts:57](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L57)
 
-___
+***
 
-### serialize
+### serialize()
 
-▸ **serialize**(): `TOptions`
+> **serialize**(): `TOptions`
 
 #### Returns
 
@@ -129,4 +112,4 @@ ___
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:41](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L41)
+[packages/account/src/wallet-manager/types.ts:41](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L41)

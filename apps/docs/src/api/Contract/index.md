@@ -1,6 +1,10 @@
-# Module: @fuel-ts/contract
+**@fuel-ts/contract v0.94.2** • [**Docs**](index.md)
+
+***
+
+# @fuel-ts/contract
 
 ## Modules
 
-- [index](/api/Contract/src-index.md)
-- [test-utils](/api/Contract/test-utils-index.md)
+- [index](./src-index.md)
+- [test-utils](./test-utils-index.md)

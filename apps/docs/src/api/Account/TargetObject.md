@@ -1,6 +1,8 @@
-# Interface: TargetObject
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).TargetObject
+***
+
+# Interface: TargetObject
 
 Target Object that represents the global event bus used by Fuel Connector Manager.
 On browser the default target is the window or document. For other environments
@@ -8,149 +10,118 @@ the event bus should be provided.
 
 ## Properties
 
-### addEventListener
+### addEventListener()?
 
-• `Optional` **addEventListener**: (`event`: `string`, `callback`: `any`) => `void`
+> `optional` **addEventListener**: (`event`, `callback`) => `void`
 
-#### Type declaration
+#### Parameters
 
-▸ (`event`, `callback`): `void`
+• **event**: `string`
 
-##### Parameters
+• **callback**: `any`
 
-| Name | Type |
-| :------ | :------ |
-| `event` | `string` |
-| `callback` | `any` |
-
-##### Returns
+#### Returns
 
 `void`
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:12](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L12)
+[packages/account/src/connectors/types/target-object.ts:12](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/target-object.ts#L12)
 
-___
+***
 
-### emit
+### emit()?
 
-• `Optional` **emit**: (`event`: `string`, `data`: `any`) => `void`
+> `optional` **emit**: (`event`, `data`) => `void`
 
-#### Type declaration
+#### Parameters
 
-▸ (`event`, `data`): `void`
+• **event**: `string`
 
-##### Parameters
+• **data**: `any`
 
-| Name | Type |
-| :------ | :------ |
-| `event` | `string` |
-| `data` | `any` |
-
-##### Returns
+#### Returns
 
 `void`
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L11)
+[packages/account/src/connectors/types/target-object.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/target-object.ts#L11)
 
-___
+***
 
-### off
+### off()?
 
-• `Optional` **off**: (`event`: `string`, `callback`: `any`) => `void`
+> `optional` **off**: (`event`, `callback`) => `void`
 
-#### Type declaration
+#### Parameters
 
-▸ (`event`, `callback`): `void`
+• **event**: `string`
 
-##### Parameters
+• **callback**: `any`
 
-| Name | Type |
-| :------ | :------ |
-| `event` | `string` |
-| `callback` | `any` |
-
-##### Returns
+#### Returns
 
 `void`
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L10)
+[packages/account/src/connectors/types/target-object.ts:10](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/target-object.ts#L10)
 
-___
+***
 
-### on
+### on()?
 
-• `Optional` **on**: (`event`: `string`, `callback`: `any`) => `void`
+> `optional` **on**: (`event`, `callback`) => `void`
 
-#### Type declaration
+#### Parameters
 
-▸ (`event`, `callback`): `void`
+• **event**: `string`
 
-##### Parameters
+• **callback**: `any`
 
-| Name | Type |
-| :------ | :------ |
-| `event` | `string` |
-| `callback` | `any` |
-
-##### Returns
+#### Returns
 
 `void`
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:9](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L9)
+[packages/account/src/connectors/types/target-object.ts:9](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/target-object.ts#L9)
 
-___
+***
 
-### postMessage
+### postMessage()?
 
-• `Optional` **postMessage**: (`message`: `string`) => `void`
+> `optional` **postMessage**: (`message`) => `void`
 
-#### Type declaration
+#### Parameters
 
-▸ (`message`): `void`
+• **message**: `string`
 
-##### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `message` | `string` |
-
-##### Returns
+#### Returns
 
 `void`
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:14](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L14)
+[packages/account/src/connectors/types/target-object.ts:14](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/target-object.ts#L14)
 
-___
+***
 
-### removeEventListener
+### removeEventListener()?
 
-• `Optional` **removeEventListener**: (`event`: `string`, `callback`: `any`) => `void`
+> `optional` **removeEventListener**: (`event`, `callback`) => `void`
 
-#### Type declaration
+#### Parameters
 
-▸ (`event`, `callback`): `void`
+• **event**: `string`
 
-##### Parameters
+• **callback**: `any`
 
-| Name | Type |
-| :------ | :------ |
-| `event` | `string` |
-| `callback` | `any` |
-
-##### Returns
+#### Returns
 
 `void`
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:13](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/target-object.ts#L13)
+[packages/account/src/connectors/types/target-object.ts:13](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/target-object.ts#L13)

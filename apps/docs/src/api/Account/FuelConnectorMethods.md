@@ -1,193 +1,195 @@
-# Enumeration: FuelConnectorMethods
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).FuelConnectorMethods
+***
+
+# Enumeration: FuelConnectorMethods
 
 ## Enumeration Members
 
 ### accounts
 
-• **accounts** = ``"accounts"``
+> **accounts**: `"accounts"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L10)
+[packages/account/src/connectors/types/connector-types.ts:10](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L10)
 
-___
+***
 
 ### addABI
 
-• **addABI** = ``"addABI"``
+> **addABI**: `"addABI"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L25)
+[packages/account/src/connectors/types/connector-types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L25)
 
-___
+***
 
 ### addAsset
 
-• **addAsset** = ``"addAsset"``
+> **addAsset**: `"addAsset"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L17)
+[packages/account/src/connectors/types/connector-types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L17)
 
-___
+***
 
 ### addAssets
 
-• **addAssets** = ``"addAssets"``
+> **addAssets**: `"addAssets"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L18)
+[packages/account/src/connectors/types/connector-types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L18)
 
-___
+***
 
 ### addNetwork
 
-• **addNetwork** = ``"addNetwork"``
+> **addNetwork**: `"addNetwork"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:22](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L22)
+[packages/account/src/connectors/types/connector-types.ts:22](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L22)
 
-___
+***
 
 ### assets
 
-• **assets** = ``"assets"``
+> **assets**: `"assets"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:16](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L16)
+[packages/account/src/connectors/types/connector-types.ts:16](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L16)
 
-___
+***
 
 ### connect
 
-• **connect** = ``"connect"``
+> **connect**: `"connect"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L6)
+[packages/account/src/connectors/types/connector-types.ts:6](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L6)
 
-___
+***
 
 ### currentAccount
 
-• **currentAccount** = ``"currentAccount"``
+> **currentAccount**: `"currentAccount"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L11)
+[packages/account/src/connectors/types/connector-types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L11)
 
-___
+***
 
 ### currentNetwork
 
-• **currentNetwork** = ``"currentNetwork"``
+> **currentNetwork**: `"currentNetwork"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L21)
+[packages/account/src/connectors/types/connector-types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L21)
 
-___
+***
 
 ### disconnect
 
-• **disconnect** = ``"disconnect"``
+> **disconnect**: `"disconnect"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L7)
+[packages/account/src/connectors/types/connector-types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L7)
 
-___
+***
 
 ### getABI
 
-• **getABI** = ``"getABI"``
+> **getABI**: `"getABI"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L26)
+[packages/account/src/connectors/types/connector-types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L26)
 
-___
+***
 
 ### hasABI
 
-• **hasABI** = ``"hasABI"``
+> **hasABI**: `"hasABI"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L27)
+[packages/account/src/connectors/types/connector-types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L27)
 
-___
+***
 
 ### isConnected
 
-• **isConnected** = ``"isConnected"``
+> **isConnected**: `"isConnected"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:8](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L8)
+[packages/account/src/connectors/types/connector-types.ts:8](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L8)
 
-___
+***
 
 ### networks
 
-• **networks** = ``"networks"``
+> **networks**: `"networks"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L20)
+[packages/account/src/connectors/types/connector-types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L20)
 
-___
+***
 
 ### ping
 
-• **ping** = ``"ping"``
+> **ping**: `"ping"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:3](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L3)
+[packages/account/src/connectors/types/connector-types.ts:3](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L3)
 
-___
+***
 
 ### selectNetwork
 
-• **selectNetwork** = ``"selectNetwork"``
+> **selectNetwork**: `"selectNetwork"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L23)
+[packages/account/src/connectors/types/connector-types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L23)
 
-___
+***
 
 ### sendTransaction
 
-• **sendTransaction** = ``"sendTransaction"``
+> **sendTransaction**: `"sendTransaction"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:14](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L14)
+[packages/account/src/connectors/types/connector-types.ts:14](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L14)
 
-___
+***
 
 ### signMessage
 
-• **signMessage** = ``"signMessage"``
+> **signMessage**: `"signMessage"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L13)
+[packages/account/src/connectors/types/connector-types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L13)
 
-___
+***
 
 ### version
 
-• **version** = ``"version"``
+> **version**: `"version"`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L4)
+[packages/account/src/connectors/types/connector-types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L4)

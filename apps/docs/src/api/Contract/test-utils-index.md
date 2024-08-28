@@ -1,50 +1,50 @@
-# Module: test-utils
+[**@fuel-ts/contract v0.94.2**](../index.md) • **Docs**
 
-## Interfaces
+***
 
-- [DeployContractConfig](/api/Contract/DeployContractConfig.md)
-- [DeployableContractFactory](/api/Contract/DeployableContractFactory.md)
-- [LaunchTestNodeOptions](/api/Contract/LaunchTestNodeOptions.md)
-- [LaunchTestNodeReturn](/api/Contract/LaunchTestNodeReturn.md)
+# test-utils
+
+## Index
+
+### Interfaces
+
+- [DeployContractConfig](./DeployContractConfig.md)
+- [DeployableContractFactory](./DeployableContractFactory.md)
+- [LaunchTestNodeOptions](./LaunchTestNodeOptions.md)
+- [LaunchTestNodeReturn](./LaunchTestNodeReturn.md)
 
 ## Type Aliases
 
-### TContracts
+### TContracts\&lt;T\>
 
-Ƭ **TContracts**&lt;`T`\>: { [K in keyof T]: Awaited&lt;ReturnType&lt;Awaited&lt;ReturnType&lt;T[K]["factory"]["deploy"]\>\>["waitForResult"]\>\>["contract"] }
+> **TContracts**\&lt;`T`\>: `{ [K in keyof T]: Awaited&lt;ReturnType&lt;Awaited&lt;ReturnType&lt;T[K]["factory"]["deploy"]>>["waitForResult"]>>["contract"] }`
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`DeployContractConfig`](/api/Contract/DeployContractConfig.md)[] |
+• **T** *extends* [`DeployContractConfig`](./DeployContractConfig.md)[]
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:41](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/test-utils/launch-test-node.ts#L41)
+[packages/contract/src/test-utils/launch-test-node.ts:41](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/contract/src/test-utils/launch-test-node.ts#L41)
 
 ## Functions
 
-### launchTestNode
+### launchTestNode()
 
-▸ **launchTestNode**&lt;`TFactories`\>(`«destructured»?`): `Promise`&lt;[`LaunchTestNodeReturn`](/api/Contract/LaunchTestNodeReturn.md)&lt;`TFactories`\>\>
+> **launchTestNode**\&lt;`TFactories`\>(`__namedParameters`): `Promise`\&lt;[`LaunchTestNodeReturn`](./LaunchTestNodeReturn.md)\&lt;`TFactories`\>\>
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `TFactories` | extends [`DeployContractConfig`](/api/Contract/DeployContractConfig.md)[] |
+• **TFactories** *extends* [`DeployContractConfig`](./DeployContractConfig.md)[]
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Partial`&lt;[`LaunchTestNodeOptions`](/api/Contract/LaunchTestNodeOptions.md)&lt;`TFactories`\>\> |
+• **\_\_namedParameters**: `Partial`\&lt;[`LaunchTestNodeOptions`](./LaunchTestNodeOptions.md)\&lt;`TFactories`\>\> = `{}`
 
 #### Returns
 
-`Promise`&lt;[`LaunchTestNodeReturn`](/api/Contract/LaunchTestNodeReturn.md)&lt;`TFactories`\>\>
+`Promise`\&lt;[`LaunchTestNodeReturn`](./LaunchTestNodeReturn.md)\&lt;`TFactories`\>\>
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:124](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/contract/src/test-utils/launch-test-node.ts#L124)
+[packages/contract/src/test-utils/launch-test-node.ts:124](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/contract/src/test-utils/launch-test-node.ts#L124)

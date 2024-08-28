@@ -1,73 +1,75 @@
-# Interface: IGetMaxGasParams
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).IGetMaxGasParams
+***
+
+# Interface: IGetMaxGasParams
 
 ## Properties
 
-### blobSize
+### blobSize?
 
-• `Optional` **blobSize**: `BN`
-
-#### Defined in
-
-[packages/account/src/providers/utils/gas.ts:106](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L106)
-
-___
-
-### gasLimit
-
-• `Optional` **gasLimit**: `BN`
+> `optional` **blobSize**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:105](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L105)
+[packages/account/src/providers/utils/gas.ts:106](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L106)
 
-___
+***
+
+### gasLimit?
+
+> `optional` **gasLimit**: `BN`
+
+#### Defined in
+
+[packages/account/src/providers/utils/gas.ts:105](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L105)
+
+***
 
 ### gasPerByte
 
-• **gasPerByte**: `BN`
+> **gasPerByte**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:103](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L103)
+[packages/account/src/providers/utils/gas.ts:103](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L103)
 
-___
+***
 
 ### maxGasPerTx
 
-• **maxGasPerTx**: `BN`
+> **maxGasPerTx**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:107](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L107)
+[packages/account/src/providers/utils/gas.ts:107](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L107)
 
-___
+***
 
 ### minGas
 
-• **minGas**: `BN`
+> **minGas**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:104](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L104)
+[packages/account/src/providers/utils/gas.ts:104](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L104)
 
-___
+***
 
-### witnessLimit
+### witnessLimit?
 
-• `Optional` **witnessLimit**: `BN`
+> `optional` **witnessLimit**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:102](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L102)
+[packages/account/src/providers/utils/gas.ts:102](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L102)
 
-___
+***
 
 ### witnessesLength
 
-• **witnessesLength**: `number`
+> **witnessesLength**: `number`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:101](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L101)
+[packages/account/src/providers/utils/gas.ts:101](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L101)

@@ -1,43 +1,45 @@
-# Interface: CalculateGasFeeParams
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).CalculateGasFeeParams
+***
+
+# Interface: CalculateGasFeeParams
 
 ## Properties
 
 ### gas
 
-• **gas**: `BN`
+> **gas**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:178](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L178)
+[packages/account/src/providers/utils/gas.ts:178](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L178)
 
-___
+***
 
 ### gasPrice
 
-• **gasPrice**: `BN`
+> **gasPrice**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:179](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L179)
+[packages/account/src/providers/utils/gas.ts:179](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L179)
 
-___
+***
 
 ### priceFactor
 
-• **priceFactor**: `BN`
+> **priceFactor**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:180](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L180)
+[packages/account/src/providers/utils/gas.ts:180](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L180)
 
-___
+***
 
-### tip
+### tip?
 
-• `Optional` **tip**: `BN`
+> `optional` **tip**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:177](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L177)
+[packages/account/src/providers/utils/gas.ts:177](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L177)

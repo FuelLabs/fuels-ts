@@ -1,686 +1,956 @@
-# Module: @fuel-ts/account
+**@fuel-ts/account v0.94.2** • [**Docs**](index.md)
 
-## Enumerations
+***
 
-- [FuelConnectorEventTypes](/api/Account/FuelConnectorEventTypes.md)
-- [FuelConnectorMethods](/api/Account/FuelConnectorMethods.md)
-- [Language](/api/Account/Language.md)
-- [TransactionType](/api/Account/TransactionType.md)
-
-## Classes
-
-- [Account](/api/Account/Account.md)
-- [BaseTransactionRequest](/api/Account/BaseTransactionRequest.md)
-- [BaseWalletUnlocked](/api/Account/BaseWalletUnlocked.md)
-- [BlobTransactionRequest](/api/Account/BlobTransactionRequest.md)
-- [CreateTransactionRequest](/api/Account/CreateTransactionRequest.md)
-- [Fuel](/api/Account/Fuel.md)
-- [FuelConnector](/api/Account/FuelConnector.md)
-- [HDWallet](/api/Account/HDWallet.md)
-- [LocalStorage](/api/Account/LocalStorage.md)
-- [MemoryStorage](/api/Account/MemoryStorage.md)
-- [Mnemonic](/api/Account/Mnemonic.md)
-- [MnemonicVault](/api/Account/MnemonicVault.md)
-- [Predicate](/api/Account/Predicate.md)
-- [PrivateKeyVault](/api/Account/PrivateKeyVault.md)
-- [Provider](/api/Account/Provider.md)
-- [ScriptTransactionRequest](/api/Account/ScriptTransactionRequest.md)
-- [Signer](/api/Account/Signer.md)
-- [StorageAbstract](/api/Account/StorageAbstract.md)
-- [TransactionResponse](/api/Account/TransactionResponse.md)
-- [Vault](/api/Account/Vault.md)
-- [Wallet](/api/Account/Wallet.md)
-- [WalletLocked](/api/Account/WalletLocked.md)
-- [WalletManager](/api/Account/WalletManager.md)
-- [WalletUnlocked](/api/Account/WalletUnlocked.md)
-
-## Interfaces
-
-- [AssembleTransactionSummaryParams](/api/Account/AssembleTransactionSummaryParams.md)
-- [BlobTransactionRequestLike](/api/Account/BlobTransactionRequestLike.md)
-- [CalculateGasFeeParams](/api/Account/CalculateGasFeeParams.md)
-- [GenerateOptions](/api/Account/GenerateOptions.md)
-- [GetTransactionSummaryFromRequestParams](/api/Account/GetTransactionSummaryFromRequestParams.md)
-- [GetTransactionsSummariesParams](/api/Account/GetTransactionsSummariesParams.md)
-- [GetTransactionsSummariesReturns](/api/Account/GetTransactionsSummariesReturns.md)
-- [GetTransferOperationsParams](/api/Account/GetTransferOperationsParams.md)
-- [IAddAmountToAssetParams](/api/Account/IAddAmountToAssetParams.md)
-- [IGetMaxGasParams](/api/Account/IGetMaxGasParams.md)
-- [IGetMinGasParams](/api/Account/IGetMinGasParams.md)
-- [MintedAsset](/api/Account/MintedAsset.md)
-- [MnemonicVaultOptions](/api/Account/MnemonicVaultOptions.md)
-- [PkVaultOptions](/api/Account/PkVaultOptions.md)
-- [TargetObject](/api/Account/TargetObject.md)
-- [WalletManagerState](/api/Account/WalletManagerState.md)
+# @fuel-ts/account
 
 ## Type Aliases
 
 ### AbiMap
 
-Ƭ **AbiMap**: `Record`&lt;`string`, `JsonAbi`\>
+> **AbiMap**: `Record`\&lt;`string`, `JsonAbi`\>
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:129](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L129)
+[packages/account/src/providers/transaction-summary/types.ts:129](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L129)
 
-___
+***
 
 ### AccountEvent
 
-Ƭ **AccountEvent**: `Object`
+> **AccountEvent**: `object`
 
 Event trigger when the current account on the connector is changed
 if the account is not authorized for the connection it should trigger with value null.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `string` \| ``null`` |
-| `type` | [`currentAccount`](/api/Account/FuelConnectorEventTypes.md#currentaccount) |
+##### data
+
+> **data**: `string` \| `null`
+
+##### type
+
+> **type**: [`currentAccount`](./FuelConnectorEventTypes.md#currentaccount)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:40](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L40)
+[packages/account/src/connectors/types/events.ts:40](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L40)
 
-___
+***
 
 ### AccountsEvent
 
-Ƭ **AccountsEvent**: `Object`
+> **AccountsEvent**: `object`
 
 Event trigger when the accounts available to the
 connection changes.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `string`[] |
-| `type` | [`accounts`](/api/Account/FuelConnectorEventTypes.md#accounts) |
+##### data
+
+> **data**: `string`[]
+
+##### type
+
+> **type**: [`accounts`](./FuelConnectorEventTypes.md#accounts)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:28](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L28)
+[packages/account/src/connectors/types/events.ts:28](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L28)
 
-___
+***
 
 ### Asset
 
-Ƭ **Asset**: `Object`
+> **Asset**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `icon` | `string` | icon of the asset |
-| `name` | `string` | name of the asset |
-| `networks` | ([`NetworkEthereum`](/api/Account/index.md#networkethereum) \| [`NetworkFuel`](/api/Account/index.md#networkfuel))[] | asset id on Fuel Network |
-| `symbol` | `string` | description of the asset |
+##### icon
+
+> **icon**: `string`
+
+icon of the asset
+
+##### name
+
+> **name**: `string`
+
+name of the asset
+
+##### networks
+
+> **networks**: ([`NetworkEthereum`](index.md#networkethereum) \| [`NetworkFuel`](index.md#networkfuel))[]
+
+asset id on Fuel Network
+
+##### symbol
+
+> **symbol**: `string`
+
+description of the asset
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/types.ts#L25)
+[packages/account/src/providers/assets/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/types.ts#L25)
 
-___
+***
 
 ### AssetEth
 
-Ƭ **AssetEth**: `Omit`&lt;[`Asset`](/api/Account/index.md#asset), ``"networks"``\> & [`NetworkEthereum`](/api/Account/index.md#networkethereum)
+> **AssetEth**: `Omit`\&lt;[`Asset`](index.md#asset), `"networks"`\> & [`NetworkEthereum`](index.md#networkethereum)
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:38](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/types.ts#L38)
+[packages/account/src/providers/assets/types.ts:38](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/types.ts#L38)
 
-___
+***
 
 ### AssetFuel
 
-Ƭ **AssetFuel**: `Omit`&lt;[`Asset`](/api/Account/index.md#asset), ``"networks"``\> & [`NetworkFuel`](/api/Account/index.md#networkfuel)
+> **AssetFuel**: `Omit`\&lt;[`Asset`](index.md#asset), `"networks"`\> & [`NetworkFuel`](index.md#networkfuel)
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/types.ts#L39)
+[packages/account/src/providers/assets/types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/types.ts#L39)
 
-___
+***
 
 ### Assets
 
-Ƭ **Assets**: [`Asset`](/api/Account/index.md#asset)[]
+> **Assets**: [`Asset`](index.md#asset)[]
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/types.ts#L36)
+[packages/account/src/providers/assets/types.ts:36](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/types.ts#L36)
 
-___
+***
 
 ### Block
 
-Ƭ **Block**: `Object`
+> **Block**: `object`
 
 A Fuel block
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `height` | `BN` |
-| `id` | `string` |
-| `time` | `string` |
-| `transactionIds` | `string`[] |
+##### height
+
+> **height**: `BN`
+
+##### id
+
+> **id**: `string`
+
+##### time
+
+> **time**: `string`
+
+##### transactionIds
+
+> **transactionIds**: `string`[]
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:87](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L87)
+[packages/account/src/providers/provider.ts:87](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L87)
 
-___
+***
 
 ### BlockHeader
 
-Ƭ **BlockHeader**: `Object`
+> **BlockHeader**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `applicationHash` | `string` |
-| `consensusParametersVersion` | `number` |
-| `daHeight` | `BN` |
-| `eventInboxRoot` | `string` |
-| `height` | `BN` |
-| `id` | `string` |
-| `messageOutboxRoot` | `string` |
-| `messageReceiptCount` | `number` |
-| `prevRoot` | `string` |
-| `stateTransitionBytecodeVersion` | `number` |
-| `time` | `string` |
-| `transactionsCount` | `number` |
-| `transactionsRoot` | `string` |
+##### applicationHash
+
+> **applicationHash**: `string`
+
+##### consensusParametersVersion
+
+> **consensusParametersVersion**: `number`
+
+##### daHeight
+
+> **daHeight**: `BN`
+
+##### eventInboxRoot
+
+> **eventInboxRoot**: `string`
+
+##### height
+
+> **height**: `BN`
+
+##### id
+
+> **id**: `string`
+
+##### messageOutboxRoot
+
+> **messageOutboxRoot**: `string`
+
+##### messageReceiptCount
+
+> **messageReceiptCount**: `number`
+
+##### prevRoot
+
+> **prevRoot**: `string`
+
+##### stateTransitionBytecodeVersion
+
+> **stateTransitionBytecodeVersion**: `number`
+
+##### time
+
+> **time**: `string`
+
+##### transactionsCount
+
+> **transactionsCount**: `number`
+
+##### transactionsRoot
+
+> **transactionsRoot**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:37](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/message.ts#L37)
+[packages/account/src/providers/message.ts:37](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/message.ts#L37)
 
-___
+***
 
 ### BlockId
 
-Ƭ **BlockId**: [`SuccessStatus`](/api/Account/index.md#successstatus)[``"block"``][``"id"``] \| [`FailureStatus`](/api/Account/index.md#failurestatus)[``"block"``][``"id"``]
+> **BlockId**: [`SuccessStatus`](index.md#successstatus)\[`"block"`\]\[`"id"`\] \| [`FailureStatus`](index.md#failurestatus)\[`"block"`\]\[`"id"`\]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L27)
+[packages/account/src/providers/transaction-summary/types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L27)
 
-___
+***
 
 ### BurnedAsset
 
-Ƭ **BurnedAsset**: [`MintedAsset`](/api/Account/MintedAsset.md)
+> **BurnedAsset**: [`MintedAsset`](./MintedAsset.md)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:158](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L158)
+[packages/account/src/providers/transaction-summary/types.ts:158](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L158)
 
-___
+***
 
 ### CacheFor
 
-Ƭ **CacheFor**: `Object`
+> **CacheFor**: `object`
 
-#### Index signature
+#### Index Signature
 
-▪ [key: `string`]: { `timeout`: `number` ; `value`: `unknown`  } \| ``null``
+ \[`key`: `string`\]: `object` \| `null`
 
 #### Defined in
 
-[packages/account/src/connectors/utils/cache.ts:3](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/utils/cache.ts#L3)
+[packages/account/src/connectors/utils/cache.ts:3](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/utils/cache.ts#L3)
 
-___
+***
 
 ### CalculateTXFeeForSummaryParams
 
-Ƭ **CalculateTXFeeForSummaryParams**: `Object`
+> **CalculateTXFeeForSummaryParams**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `consensusParameters` | `Pick`&lt;[`ConsensusParameters`](/api/Account/index.md#consensusparameters), ``"gasCosts"``\> & { `feeParams`: `FeeParams` ; `maxGasPerTx`: `BN`  } |
-| `gasPrice` | `BN` |
-| `rawPayload` | `string` |
-| `tip` | `BN` |
-| `totalFee?` | `BN` |
+##### consensusParameters
+
+> **consensusParameters**: `Pick`\&lt;[`ConsensusParameters`](index.md#consensusparameters-2), `"gasCosts"`\> & `object`
+
+###### Type declaration
+
+###### feeParams
+
+> **feeParams**: `FeeParams`
+
+###### maxGasPerTx
+
+> **maxGasPerTx**: `BN`
+
+##### gasPrice
+
+> **gasPrice**: `BN`
+
+##### rawPayload
+
+> **rawPayload**: `string`
+
+##### tip
+
+> **tip**: `BN`
+
+##### totalFee?
+
+> `optional` **totalFee**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:24](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L24)
+[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:24](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L24)
 
-___
+***
 
 ### CallResult
 
-Ƭ **CallResult**: `Object`
+> **CallResult**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `dryRunStatus?` | [`DryRunStatus`](/api/Account/index.md#dryrunstatus) |
-| `receipts` | `TransactionResultReceipt`[] |
+##### dryRunStatus?
+
+> `optional` **dryRunStatus**: [`DryRunStatus`](index.md#dryrunstatus-1)
+
+##### receipts
+
+> **receipts**: `TransactionResultReceipt`[]
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:74](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L74)
+[packages/account/src/providers/provider.ts:74](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L74)
 
-___
+***
 
 ### ChainInfo
 
-Ƭ **ChainInfo**: `Object`
+> **ChainInfo**: `object`
 
 Chain information
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `baseChainHeight` | `BN` |
-| `consensusParameters` | [`ConsensusParameters`](/api/Account/index.md#consensusparameters) |
-| `latestBlock` | { `height`: `BN` ; `id`: `string` ; `time`: `string` ; `transactions`: { `id`: `string`  }[]  } |
-| `latestBlock.height` | `BN` |
-| `latestBlock.id` | `string` |
-| `latestBlock.time` | `string` |
-| `latestBlock.transactions` | { `id`: `string`  }[] |
-| `name` | `string` |
+##### baseChainHeight
+
+> **baseChainHeight**: `BN`
+
+##### consensusParameters
+
+> **consensusParameters**: [`ConsensusParameters`](index.md#consensusparameters-2)
+
+##### latestBlock
+
+> **latestBlock**: `object`
+
+##### latestBlock.height
+
+> **latestBlock.height**: `BN`
+
+##### latestBlock.id
+
+> **latestBlock.id**: `string`
+
+##### latestBlock.time
+
+> **latestBlock.time**: `string`
+
+##### latestBlock.transactions
+
+> **latestBlock.transactions**: `object`[]
+
+##### name
+
+> **name**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:154](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L154)
+[packages/account/src/providers/provider.ts:154](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L154)
 
-___
+***
 
 ### ChangeTransactionRequestOutput
 
-Ƭ **ChangeTransactionRequestOutput**: `Object`
+> **ChangeTransactionRequestOutput**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Asset ID of coins |
-| `to` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Receiving address or script hash |
-| `type` | `OutputType.Change` | - |
+##### assetId
+
+> **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Asset ID of coins
+
+##### to
+
+> **to**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Receiving address or script hash
+
+##### type
+
+> **type**: `OutputType.Change`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:24](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/output.ts#L24)
+[packages/account/src/providers/transaction-request/output.ts:24](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/output.ts#L24)
 
-___
+***
 
 ### Coin
 
-Ƭ **Coin**: `Object`
+> **Coin**: `object`
 
 A Fuel coin
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `BN` |
-| `assetId` | `string` |
-| `blockCreated` | `BN` |
-| `id` | `string` |
-| `owner` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
-| `predicate?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `predicateData?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `txCreatedIdx` | `BN` |
+##### amount
+
+> **amount**: `BN`
+
+##### assetId
+
+> **assetId**: `string`
+
+##### blockCreated
+
+> **blockCreated**: `BN`
+
+##### id
+
+> **id**: `string`
+
+##### owner
+
+> **owner**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+##### predicate?
+
+> `optional` **predicate**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### predicateData?
+
+> `optional` **predicateData**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### txCreatedIdx
+
+> **txCreatedIdx**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/coin.ts:7](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/coin.ts#L7)
+[packages/account/src/providers/coin.ts:7](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/coin.ts#L7)
 
-___
+***
 
 ### CoinQuantity
 
-Ƭ **CoinQuantity**: `Object`
+> **CoinQuantity**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `BN` |
-| `assetId` | `string` |
-| `max?` | `BN` |
+##### amount
+
+> **amount**: `BN`
+
+##### assetId
+
+> **assetId**: `string`
+
+##### max?
+
+> `optional` **max**: `BN`
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:9](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/coin-quantity.ts#L9)
+[packages/account/src/providers/coin-quantity.ts:9](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/coin-quantity.ts#L9)
 
-___
+***
 
 ### CoinQuantityLike
 
-Ƭ **CoinQuantityLike**: [amount: BigNumberish, assetId: BytesLike, max?: BigNumberish] \| { `amount`: `BigNumberish` ; `assetId`: [`BytesLike`](/api/Interfaces/index.md#byteslike) ; `max?`: `BigNumberish`  }
+> **CoinQuantityLike**: [`BigNumberish`, [`BytesLike`](../Interfaces/index.md#byteslike), `BigNumberish`] \| `object`
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/coin-quantity.ts#L6)
+[packages/account/src/providers/coin-quantity.ts:6](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/coin-quantity.ts#L6)
 
-___
+***
 
 ### CoinTransactionRequestInput
 
-Ƭ **CoinTransactionRequestInput**: `Object`
+> **CoinTransactionRequestInput**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins |
-| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Asset ID of the coins |
-| `id` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | UTXO ID |
-| `owner` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Owning address or script hash |
-| `predicate?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Predicate bytecode |
-| `predicateData?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Predicate input data (parameters) |
-| `predicateGasUsed?` | `BigNumberish` | Gas used by predicate |
-| `txPointer` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Points to the TX whose output is being spent. (TxPointer) |
-| `type` | `InputType.Coin` | - |
-| `witnessIndex` | `number` | Index of witness that authorizes spending the coin |
+##### amount
+
+> **amount**: `BigNumberish`
+
+Amount of coins
+
+##### assetId
+
+> **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Asset ID of the coins
+
+##### id
+
+> **id**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+UTXO ID
+
+##### owner
+
+> **owner**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Owning address or script hash
+
+##### predicate?
+
+> `optional` **predicate**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Predicate bytecode
+
+##### predicateData?
+
+> `optional` **predicateData**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Predicate input data (parameters)
+
+##### predicateGasUsed?
+
+> `optional` **predicateGasUsed**: `BigNumberish`
+
+Gas used by predicate
+
+##### txPointer
+
+> **txPointer**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Points to the TX whose output is being spent. (TxPointer)
+
+##### type
+
+> **type**: `InputType.Coin`
+
+##### witnessIndex
+
+> **witnessIndex**: `number`
+
+Index of witness that authorizes spending the coin
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/input.ts#L11)
+[packages/account/src/providers/transaction-request/input.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/input.ts#L11)
 
-___
+***
 
 ### CoinTransactionRequestOutput
 
-Ƭ **CoinTransactionRequestOutput**: `Object`
+> **CoinTransactionRequestOutput**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins to send |
-| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Asset ID of coins |
-| `to` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Receiving address or script hash |
-| `type` | `OutputType.Coin` | - |
+##### amount
+
+> **amount**: `BigNumberish`
+
+Amount of coins to send
+
+##### assetId
+
+> **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Asset ID of coins
+
+##### to
+
+> **to**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Receiving address or script hash
+
+##### type
+
+> **type**: `OutputType.Coin`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/output.ts#L10)
+[packages/account/src/providers/transaction-request/output.ts:10](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/output.ts#L10)
 
-___
+***
 
 ### ConnectorMetadata
 
-Ƭ **ConnectorMetadata**: `Object`
+> **ConnectorMetadata**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `image?` | `string` \| { `dark`: `string` ; `light`: `string`  } |
-| `install` | { `action`: `string` ; `description`: `string` ; `link`: `string`  } |
-| `install.action` | `string` |
-| `install.description` | `string` |
-| `install.link` | `string` |
+##### image?
+
+> `optional` **image**: `string` \| `object`
+
+##### install
+
+> **install**: `object`
+
+##### install.action
+
+> **install.action**: `string`
+
+##### install.description
+
+> **install.description**: `string`
+
+##### install.link
+
+> **install.link**: `string`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-metadata.ts:2](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-metadata.ts#L2)
+[packages/account/src/connectors/types/connector-metadata.ts:2](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-metadata.ts#L2)
 
-___
+***
 
 ### ConsensusParameters
 
-Ƭ **ConsensusParameters**: `Object`
+> **ConsensusParameters**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `baseAssetId` | `string` |
-| `chainId` | `BN` |
-| `contractParameters` | `ModifyStringToBN`&lt;[`ContractParameters`](/api/Account/index.md#contractparameters)\> |
-| `feeParameters` | `ModifyStringToBN`&lt;[`FeeParameters`](/api/Account/index.md#feeparameters)\> |
-| `gasCosts` | [`GasCosts`](/api/Account/index.md#gascosts) |
-| `predicateParameters` | `ModifyStringToBN`&lt;[`PredicateParameters`](/api/Account/index.md#predicateparameters)\> |
-| `scriptParameters` | `ModifyStringToBN`&lt;[`ScriptParameters`](/api/Account/index.md#scriptparameters)\> |
-| `txParameters` | `ModifyStringToBN`&lt;[`TxParameters`](/api/Account/index.md#txparameters)\> |
-| `version` | `GqlConsensusParametersVersion` |
+##### baseAssetId
+
+> **baseAssetId**: `string`
+
+##### chainId
+
+> **chainId**: `BN`
+
+##### contractParameters
+
+> **contractParameters**: `ModifyStringToBN`\&lt;[`ContractParameters`](index.md#contractparameters-1)\>
+
+##### feeParameters
+
+> **feeParameters**: `ModifyStringToBN`\&lt;[`FeeParameters`](index.md#feeparameters-1)\>
+
+##### gasCosts
+
+> **gasCosts**: [`GasCosts`](index.md#gascosts-1)
+
+##### predicateParameters
+
+> **predicateParameters**: `ModifyStringToBN`\&lt;[`PredicateParameters`](index.md#predicateparameters-1)\>
+
+##### scriptParameters
+
+> **scriptParameters**: `ModifyStringToBN`\&lt;[`ScriptParameters`](index.md#scriptparameters-1)\>
+
+##### txParameters
+
+> **txParameters**: `ModifyStringToBN`\&lt;[`TxParameters`](index.md#txparameters-1)\>
+
+##### version
+
+> **version**: `GqlConsensusParametersVersion`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:139](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L139)
+[packages/account/src/providers/provider.ts:139](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L139)
 
-___
+***
 
 ### ContractCreatedTransactionRequestOutput
 
-Ƭ **ContractCreatedTransactionRequestOutput**: `Object`
+> **ContractCreatedTransactionRequestOutput**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Contract ID |
-| `stateRoot` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | State Root |
-| `type` | `OutputType.ContractCreated` | - |
+##### contractId
+
+> **contractId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Contract ID
+
+##### stateRoot
+
+> **stateRoot**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+State Root
+
+##### type
+
+> **type**: `OutputType.ContractCreated`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:34](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/output.ts#L34)
+[packages/account/src/providers/transaction-request/output.ts:34](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/output.ts#L34)
 
-___
+***
 
 ### ContractParameters
 
-Ƭ **ContractParameters**: `Object`
+> **ContractParameters**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `contractMaxSize` | `Scalars`[``"U64"``][``"output"``] |
-| `maxStorageSlots` | `Scalars`[``"U64"``][``"output"``] |
-| `version` | `GqlContractParametersVersion` |
+##### contractMaxSize
+
+> **contractMaxSize**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### maxStorageSlots
+
+> **maxStorageSlots**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### version
+
+> **version**: `GqlContractParametersVersion`
 
 #### Defined in
 
-packages/account/src/providers/__generated__/operations.ts:230
+packages/account/src/providers/\_\_generated\_\_/operations.ts:235
 
-___
+***
 
 ### ContractResult
 
-Ƭ **ContractResult**: `Object`
+> **ContractResult**: `object`
 
 Deployed Contract bytecode and contract id
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `bytecode` | `string` |
-| `id` | `string` |
+##### bytecode
+
+> **bytecode**: `string`
+
+##### id
+
+> **id**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:121](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L121)
+[packages/account/src/providers/provider.ts:121](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L121)
 
-___
+***
 
 ### ContractTransactionRequestInput
 
-Ƭ **ContractTransactionRequestInput**: `Object`
+> **ContractTransactionRequestInput**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contractId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Contract ID |
-| `txPointer` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Points to the TX whose output is being spent. (TxPointer) |
-| `type` | `InputType.Contract` | - |
+##### contractId
+
+> **contractId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Contract ID
+
+##### txPointer
+
+> **txPointer**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Points to the TX whose output is being spent. (TxPointer)
+
+##### type
+
+> **type**: `InputType.Contract`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:73](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/input.ts#L73)
+[packages/account/src/providers/transaction-request/input.ts:73](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/input.ts#L73)
 
-___
+***
 
 ### ContractTransactionRequestOutput
 
-Ƭ **ContractTransactionRequestOutput**: `Object`
+> **ContractTransactionRequestOutput**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `inputIndex` | `number` | Index of input contract |
-| `type` | `OutputType.Contract` | - |
+##### inputIndex
+
+> **inputIndex**: `number`
+
+Index of input contract
+
+##### type
+
+> **type**: `OutputType.Contract`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:19](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/output.ts#L19)
+[packages/account/src/providers/transaction-request/output.ts:19](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/output.ts#L19)
 
-___
+***
 
-### DeferPromise
+### DeferPromise\&lt;R\>
 
-Ƭ **DeferPromise**&lt;`R`\>: `Object`
+> **DeferPromise**\&lt;`R`\>: `object`
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `R` | `unknown` |
+• **R** = `unknown`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `promise` | `Promise`&lt;`R`\> |
-| `reject` | (`error`: `unknown`) => `void` |
-| `resolve` | (`value`: `R`) => `void` |
+##### promise
+
+> **promise**: `Promise`\&lt;`R`\>
+
+##### reject()
+
+> **reject**: (`error`) => `void`
+
+###### Parameters
+
+• **error**: `unknown`
+
+###### Returns
+
+`void`
+
+##### resolve()
+
+> **resolve**: (`value`) => `void`
+
+###### Parameters
+
+• **value**: `R`
+
+###### Returns
+
+`void`
 
 #### Defined in
 
-[packages/account/src/connectors/utils/promises.ts:5](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/utils/promises.ts#L5)
+[packages/account/src/connectors/utils/promises.ts:5](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/utils/promises.ts#L5)
 
-___
+***
 
 ### DryRunFailureStatusFragment
 
-Ƭ **DryRunFailureStatusFragment**: `GqlDryRunFailureStatusFragment`
+> **DryRunFailureStatusFragment**: `GqlDryRunFailureStatusFragment`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:69](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L69)
+[packages/account/src/providers/provider.ts:69](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L69)
 
-___
+***
 
 ### DryRunStatus
 
-Ƭ **DryRunStatus**: [`DryRunFailureStatusFragment`](/api/Account/index.md#dryrunfailurestatusfragment) \| [`DryRunSuccessStatusFragment`](/api/Account/index.md#dryrunsuccessstatusfragment)
+> **DryRunStatus**: [`DryRunFailureStatusFragment`](index.md#dryrunfailurestatusfragment) \| [`DryRunSuccessStatusFragment`](index.md#dryrunsuccessstatusfragment)
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:72](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L72)
+[packages/account/src/providers/provider.ts:72](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L72)
 
-___
+***
 
 ### DryRunSuccessStatusFragment
 
-Ƭ **DryRunSuccessStatusFragment**: `GqlDryRunSuccessStatusFragment`
+> **DryRunSuccessStatusFragment**: `GqlDryRunSuccessStatusFragment`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:70](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L70)
+[packages/account/src/providers/provider.ts:70](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L70)
 
-___
+***
 
 ### EstimateTransactionParams
 
-Ƭ **EstimateTransactionParams**: `Object`
+> **EstimateTransactionParams**: `object`
 
 Transaction estimation params
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `estimateTxDependencies?` | `boolean` | Estimate the transaction dependencies. |
+##### estimateTxDependencies?
+
+> `optional` **estimateTxDependencies**: `boolean`
+
+Estimate the transaction dependencies.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:328](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L328)
+[packages/account/src/providers/provider.ts:328](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L328)
 
-___
+***
 
 ### EstimateTxDependenciesReturns
 
-Ƭ **EstimateTxDependenciesReturns**: [`CallResult`](/api/Account/index.md#callresult) & { `missingContractIds`: `string`[] ; `outputVariables`: `number`  }
-
-#### Defined in
-
-[packages/account/src/providers/provider.ts:79](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L79)
-
-___
-
-### EstimatedTxParams
-
-Ƭ **EstimatedTxParams**: `Pick`&lt;[`TransactionCost`](/api/Account/index.md#transactioncost), ``"estimatedPredicates"`` \| ``"addedSignatures"`` \| ``"requiredQuantities"`` \| ``"updateMaxFee"`` \| ``"gasPrice"``\>
-
-#### Defined in
-
-[packages/account/src/account.ts:60](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/account.ts#L60)
-
-___
-
-### FailureStatus
-
-Ƭ **FailureStatus**: `GqlFailureStatusFragment`
-
-#### Defined in
-
-[packages/account/src/providers/transaction-summary/types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L20)
-
-___
-
-### FakeResources
-
-Ƭ **FakeResources**: `Partial`&lt;[`Coin`](/api/Account/index.md#coin)\> & `Required`&lt;`Pick`&lt;[`Coin`](/api/Account/index.md#coin), ``"amount"`` \| ``"assetId"``\>\>
-
-#### Defined in
-
-[packages/account/src/account.ts:66](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/account.ts#L66)
-
-___
-
-### FeeParameters
-
-Ƭ **FeeParameters**: `Object`
+> **EstimateTxDependenciesReturns**: [`CallResult`](index.md#callresult) & `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `gasPerByte` | `Scalars`[``"U64"``][``"output"``] |
-| `gasPriceFactor` | `Scalars`[``"U64"``][``"output"``] |
-| `version` | `GqlFeeParametersVersion` |
+##### missingContractIds
+
+> **missingContractIds**: `string`[]
+
+##### outputVariables
+
+> **outputVariables**: `number`
 
 #### Defined in
 
-packages/account/src/providers/__generated__/operations.ts:289
+[packages/account/src/providers/provider.ts:79](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L79)
 
-___
+***
+
+### EstimatedTxParams
+
+> **EstimatedTxParams**: `Pick`\&lt;[`TransactionCost`](index.md#transactioncost), `"estimatedPredicates"` \| `"addedSignatures"` \| `"requiredQuantities"` \| `"updateMaxFee"` \| `"gasPrice"`\>
+
+#### Defined in
+
+[packages/account/src/account.ts:60](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/account.ts#L60)
+
+***
+
+### FailureStatus
+
+> **FailureStatus**: `GqlFailureStatusFragment`
+
+#### Defined in
+
+[packages/account/src/providers/transaction-summary/types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L20)
+
+***
+
+### FakeResources
+
+> **FakeResources**: `Partial`\&lt;[`Coin`](index.md#coin)\> & `Required`\&lt;`Pick`\&lt;[`Coin`](index.md#coin), `"amount"` \| `"assetId"`\>\>
+
+#### Defined in
+
+[packages/account/src/account.ts:66](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/account.ts#L66)
+
+***
+
+### FeeParameters
+
+> **FeeParameters**: `object`
+
+#### Type declaration
+
+##### gasPerByte
+
+> **gasPerByte**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### gasPriceFactor
+
+> **gasPriceFactor**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### version
+
+> **version**: `GqlFeeParametersVersion`
+
+#### Defined in
+
+packages/account/src/providers/\_\_generated\_\_/operations.ts:294
+
+***
 
 ### FuelABI
 
-Ƭ **FuelABI**: `JsonAbi`
+> **FuelABI**: `JsonAbi`
 
 ABI that represents a binary code interface from Sway.
 
@@ -688,1462 +958,2361 @@ Read more at: https://docs.fuel.network/docs/specs/abi/json-abi-format/
 
 #### Defined in
 
-[packages/account/src/connectors/types/data-type.ts:36](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/data-type.ts#L36)
+[packages/account/src/connectors/types/data-type.ts:36](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/data-type.ts#L36)
 
-___
+***
 
 ### FuelConfig
 
-Ƭ **FuelConfig**: `Object`
+> **FuelConfig**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `connectors?` | [`FuelConnector`](/api/Account/FuelConnector.md)[] |
-| `storage?` | [`StorageAbstract`](/api/Account/StorageAbstract.md) \| ``null`` |
-| `targetObject?` | [`TargetObject`](/api/Account/TargetObject.md) |
+##### connectors?
+
+> `optional` **connectors**: [`FuelConnector`](./FuelConnector.md)[]
+
+##### storage?
+
+> `optional` **storage**: [`StorageAbstract`](./StorageAbstract.md) \| `null`
+
+##### targetObject?
+
+> `optional` **targetObject**: [`TargetObject`](./TargetObject.md)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:30](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L30)
+[packages/account/src/connectors/fuel.ts:30](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L30)
 
-___
+***
 
 ### FuelConnectorEvents
 
-Ƭ **FuelConnectorEvents**: [`ConnectionEvent`](/api/Account/index.md#connectionevent) \| [`NetworkEvent`](/api/Account/index.md#networkevent) \| [`NetworksEvent`](/api/Account/index.md#networksevent) \| [`AccountEvent`](/api/Account/index.md#accountevent) \| [`AccountsEvent`](/api/Account/index.md#accountsevent) \| [`ConnectorsEvent`](/api/Account/index.md#connectorsevent) \| [`ConnectorEvent`](/api/Account/index.md#connectorevent) \| [`AssetsEvent`](/api/Account/index.md#assetsevent)
+> **FuelConnectorEvents**: [`ConnectionEvent`](index.md#connectionevent) \| [`NetworkEvent`](index.md#networkevent) \| [`NetworksEvent`](index.md#networksevent) \| [`AccountEvent`](index.md#accountevent) \| [`AccountsEvent`](index.md#accountsevent) \| [`ConnectorsEvent`](index.md#connectorsevent) \| [`ConnectorEvent`](index.md#connectorevent) \| [`AssetsEvent`](index.md#assetsevent)
 
 All the events available to the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:122](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L122)
+[packages/account/src/connectors/types/events.ts:122](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L122)
 
-___
+***
 
 ### FuelConnectorEventsType
 
-Ƭ **FuelConnectorEventsType**: [`FuelConnectorEvents`](/api/Account/index.md#fuelconnectorevents)[``"type"``]
+> **FuelConnectorEventsType**: [`FuelConnectorEvents`](index.md#fuelconnectorevents)\[`"type"`\]
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:132](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L132)
+[packages/account/src/connectors/types/events.ts:132](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L132)
 
-___
+***
 
 ### FuelConnectorSelectOptions
 
-Ƭ **FuelConnectorSelectOptions**: `Object`
+> **FuelConnectorSelectOptions**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `emitEvents?` | `boolean` |
+##### emitEvents?
+
+> `optional` **emitEvents**: `boolean`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:36](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L36)
+[packages/account/src/connectors/fuel.ts:36](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L36)
 
-___
+***
 
-### FuelEventArg
+### FuelEventArg\&lt;T\>
 
-Ƭ **FuelEventArg**&lt;`T`\>: `Extract`&lt;[`FuelConnectorEventTypes`](/api/Account/FuelConnectorEventTypes.md), { `type`: `T`  }\>[``"data"``]
+> **FuelEventArg**\&lt;`T`\>: `Extract`\&lt;[`FuelConnectorEventTypes`](./FuelConnectorEventTypes.md), `object`\>\[`"data"`\]
 
 Extract the event argument type from the event type.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`FuelConnectorEvents`](/api/Account/index.md#fuelconnectorevents)[``"type"``] |
+• **T** *extends* [`FuelConnectorEvents`](index.md#fuelconnectorevents)\[`"type"`\]
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:16](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L16)
+[packages/account/src/connectors/types/events.ts:16](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L16)
 
-___
+***
 
 ### GasCosts
 
-Ƭ **GasCosts**: `Object`
+> **GasCosts**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `add` | `Scalars`[``"U64"``][``"output"``] |
-| `addi` | `Scalars`[``"U64"``][``"output"``] |
-| `aloc` | `Scalars`[``"U64"``][``"output"``] |
-| `alocDependentCost` | `GqlDependentCost` |
-| `and` | `Scalars`[``"U64"``][``"output"``] |
-| `andi` | `Scalars`[``"U64"``][``"output"``] |
-| `bal` | `Scalars`[``"U64"``][``"output"``] |
-| `bhei` | `Scalars`[``"U64"``][``"output"``] |
-| `bhsh` | `Scalars`[``"U64"``][``"output"``] |
-| `bldd?` | `Maybe`&lt;`GqlDependentCost`\> |
-| `bsiz?` | `Maybe`&lt;`GqlDependentCost`\> |
-| `burn` | `Scalars`[``"U64"``][``"output"``] |
-| `call` | `GqlDependentCost` |
-| `cb` | `Scalars`[``"U64"``][``"output"``] |
-| `ccp` | `GqlDependentCost` |
-| `cfe` | `GqlDependentCost` |
-| `cfei` | `Scalars`[``"U64"``][``"output"``] |
-| `cfeiDependentCost` | `GqlDependentCost` |
-| `cfsi` | `Scalars`[``"U64"``][``"output"``] |
-| `contractRoot` | `GqlDependentCost` |
-| `croo` | `GqlDependentCost` |
-| `csiz` | `GqlDependentCost` |
-| `div` | `Scalars`[``"U64"``][``"output"``] |
-| `divi` | `Scalars`[``"U64"``][``"output"``] |
-| `eck1` | `Scalars`[``"U64"``][``"output"``] |
-| `ecr1` | `Scalars`[``"U64"``][``"output"``] |
-| `ed19` | `Scalars`[``"U64"``][``"output"``] |
-| `ed19DependentCost` | `GqlDependentCost` |
-| `eq` | `Scalars`[``"U64"``][``"output"``] |
-| `exp` | `Scalars`[``"U64"``][``"output"``] |
-| `expi` | `Scalars`[``"U64"``][``"output"``] |
-| `flag` | `Scalars`[``"U64"``][``"output"``] |
-| `gm` | `Scalars`[``"U64"``][``"output"``] |
-| `gt` | `Scalars`[``"U64"``][``"output"``] |
-| `gtf` | `Scalars`[``"U64"``][``"output"``] |
-| `ji` | `Scalars`[``"U64"``][``"output"``] |
-| `jmp` | `Scalars`[``"U64"``][``"output"``] |
-| `jmpb` | `Scalars`[``"U64"``][``"output"``] |
-| `jmpf` | `Scalars`[``"U64"``][``"output"``] |
-| `jne` | `Scalars`[``"U64"``][``"output"``] |
-| `jneb` | `Scalars`[``"U64"``][``"output"``] |
-| `jnef` | `Scalars`[``"U64"``][``"output"``] |
-| `jnei` | `Scalars`[``"U64"``][``"output"``] |
-| `jnzb` | `Scalars`[``"U64"``][``"output"``] |
-| `jnzf` | `Scalars`[``"U64"``][``"output"``] |
-| `jnzi` | `Scalars`[``"U64"``][``"output"``] |
-| `k256` | `GqlDependentCost` |
-| `lb` | `Scalars`[``"U64"``][``"output"``] |
-| `ldc` | `GqlDependentCost` |
-| `log` | `Scalars`[``"U64"``][``"output"``] |
-| `logd` | `GqlDependentCost` |
-| `lt` | `Scalars`[``"U64"``][``"output"``] |
-| `lw` | `Scalars`[``"U64"``][``"output"``] |
-| `mcl` | `GqlDependentCost` |
-| `mcli` | `GqlDependentCost` |
-| `mcp` | `GqlDependentCost` |
-| `mcpi` | `GqlDependentCost` |
-| `meq` | `GqlDependentCost` |
-| `mint` | `Scalars`[``"U64"``][``"output"``] |
-| `mldv` | `Scalars`[``"U64"``][``"output"``] |
-| `mlog` | `Scalars`[``"U64"``][``"output"``] |
-| `modOp` | `Scalars`[``"U64"``][``"output"``] |
-| `modi` | `Scalars`[``"U64"``][``"output"``] |
-| `moveOp` | `Scalars`[``"U64"``][``"output"``] |
-| `movi` | `Scalars`[``"U64"``][``"output"``] |
-| `mroo` | `Scalars`[``"U64"``][``"output"``] |
-| `mul` | `Scalars`[``"U64"``][``"output"``] |
-| `muli` | `Scalars`[``"U64"``][``"output"``] |
-| `newStoragePerByte` | `Scalars`[``"U64"``][``"output"``] |
-| `noop` | `Scalars`[``"U64"``][``"output"``] |
-| `not` | `Scalars`[``"U64"``][``"output"``] |
-| `or` | `Scalars`[``"U64"``][``"output"``] |
-| `ori` | `Scalars`[``"U64"``][``"output"``] |
-| `poph` | `Scalars`[``"U64"``][``"output"``] |
-| `popl` | `Scalars`[``"U64"``][``"output"``] |
-| `pshh` | `Scalars`[``"U64"``][``"output"``] |
-| `pshl` | `Scalars`[``"U64"``][``"output"``] |
-| `ret` | `Scalars`[``"U64"``][``"output"``] |
-| `retd` | `GqlDependentCost` |
-| `rvrt` | `Scalars`[``"U64"``][``"output"``] |
-| `s256` | `GqlDependentCost` |
-| `sb` | `Scalars`[``"U64"``][``"output"``] |
-| `scwq` | `GqlDependentCost` |
-| `sll` | `Scalars`[``"U64"``][``"output"``] |
-| `slli` | `Scalars`[``"U64"``][``"output"``] |
-| `smo` | `GqlDependentCost` |
-| `srl` | `Scalars`[``"U64"``][``"output"``] |
-| `srli` | `Scalars`[``"U64"``][``"output"``] |
-| `srw` | `Scalars`[``"U64"``][``"output"``] |
-| `srwq` | `GqlDependentCost` |
-| `stateRoot` | `GqlDependentCost` |
-| `sub` | `Scalars`[``"U64"``][``"output"``] |
-| `subi` | `Scalars`[``"U64"``][``"output"``] |
-| `sw` | `Scalars`[``"U64"``][``"output"``] |
-| `sww` | `Scalars`[``"U64"``][``"output"``] |
-| `swwq` | `GqlDependentCost` |
-| `time` | `Scalars`[``"U64"``][``"output"``] |
-| `tr` | `Scalars`[``"U64"``][``"output"``] |
-| `tro` | `Scalars`[``"U64"``][``"output"``] |
-| `version` | `GqlGasCostsVersion` |
-| `vmInitialization` | `GqlDependentCost` |
-| `wdam` | `Scalars`[``"U64"``][``"output"``] |
-| `wdcm` | `Scalars`[``"U64"``][``"output"``] |
-| `wddv` | `Scalars`[``"U64"``][``"output"``] |
-| `wdmd` | `Scalars`[``"U64"``][``"output"``] |
-| `wdml` | `Scalars`[``"U64"``][``"output"``] |
-| `wdmm` | `Scalars`[``"U64"``][``"output"``] |
-| `wdop` | `Scalars`[``"U64"``][``"output"``] |
-| `wqam` | `Scalars`[``"U64"``][``"output"``] |
-| `wqcm` | `Scalars`[``"U64"``][``"output"``] |
-| `wqdv` | `Scalars`[``"U64"``][``"output"``] |
-| `wqmd` | `Scalars`[``"U64"``][``"output"``] |
-| `wqml` | `Scalars`[``"U64"``][``"output"``] |
-| `wqmm` | `Scalars`[``"U64"``][``"output"``] |
-| `wqop` | `Scalars`[``"U64"``][``"output"``] |
-| `xor` | `Scalars`[``"U64"``][``"output"``] |
-| `xori` | `Scalars`[``"U64"``][``"output"``] |
+##### add
+
+> **add**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### addi
+
+> **addi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### aloc
+
+> **aloc**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### alocDependentCost
+
+> **alocDependentCost**: `GqlDependentCost`
+
+##### and
+
+> **and**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### andi
+
+> **andi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### bal
+
+> **bal**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### bhei
+
+> **bhei**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### bhsh
+
+> **bhsh**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### bldd?
+
+> `optional` **bldd**: `Maybe`\&lt;`GqlDependentCost`\>
+
+##### bsiz?
+
+> `optional` **bsiz**: `Maybe`\&lt;`GqlDependentCost`\>
+
+##### burn
+
+> **burn**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### call
+
+> **call**: `GqlDependentCost`
+
+##### cb
+
+> **cb**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ccp
+
+> **ccp**: `GqlDependentCost`
+
+##### cfe
+
+> **cfe**: `GqlDependentCost`
+
+##### cfei
+
+> **cfei**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### cfeiDependentCost
+
+> **cfeiDependentCost**: `GqlDependentCost`
+
+##### cfsi
+
+> **cfsi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### contractRoot
+
+> **contractRoot**: `GqlDependentCost`
+
+##### croo
+
+> **croo**: `GqlDependentCost`
+
+##### csiz
+
+> **csiz**: `GqlDependentCost`
+
+##### div
+
+> **div**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### divi
+
+> **divi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### eck1
+
+> **eck1**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ecr1
+
+> **ecr1**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ed19
+
+> **ed19**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ed19DependentCost
+
+> **ed19DependentCost**: `GqlDependentCost`
+
+##### eq
+
+> **eq**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### exp
+
+> **exp**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### expi
+
+> **expi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### flag
+
+> **flag**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### gm
+
+> **gm**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### gt
+
+> **gt**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### gtf
+
+> **gtf**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ji
+
+> **ji**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jmp
+
+> **jmp**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jmpb
+
+> **jmpb**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jmpf
+
+> **jmpf**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jne
+
+> **jne**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jneb
+
+> **jneb**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jnef
+
+> **jnef**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jnei
+
+> **jnei**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jnzb
+
+> **jnzb**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jnzf
+
+> **jnzf**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### jnzi
+
+> **jnzi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### k256
+
+> **k256**: `GqlDependentCost`
+
+##### lb
+
+> **lb**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ldc
+
+> **ldc**: `GqlDependentCost`
+
+##### log
+
+> **log**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### logd
+
+> **logd**: `GqlDependentCost`
+
+##### lt
+
+> **lt**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### lw
+
+> **lw**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### mcl
+
+> **mcl**: `GqlDependentCost`
+
+##### mcli
+
+> **mcli**: `GqlDependentCost`
+
+##### mcp
+
+> **mcp**: `GqlDependentCost`
+
+##### mcpi
+
+> **mcpi**: `GqlDependentCost`
+
+##### meq
+
+> **meq**: `GqlDependentCost`
+
+##### mint
+
+> **mint**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### mldv
+
+> **mldv**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### mlog
+
+> **mlog**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### modOp
+
+> **modOp**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### modi
+
+> **modi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### moveOp
+
+> **moveOp**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### movi
+
+> **movi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### mroo
+
+> **mroo**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### mul
+
+> **mul**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### muli
+
+> **muli**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### newStoragePerByte
+
+> **newStoragePerByte**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### noop
+
+> **noop**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### not
+
+> **not**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### or
+
+> **or**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ori
+
+> **ori**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### poph
+
+> **poph**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### popl
+
+> **popl**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### pshh
+
+> **pshh**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### pshl
+
+> **pshl**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### ret
+
+> **ret**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### retd
+
+> **retd**: `GqlDependentCost`
+
+##### rvrt
+
+> **rvrt**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### s256
+
+> **s256**: `GqlDependentCost`
+
+##### sb
+
+> **sb**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### scwq
+
+> **scwq**: `GqlDependentCost`
+
+##### sll
+
+> **sll**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### slli
+
+> **slli**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### smo
+
+> **smo**: `GqlDependentCost`
+
+##### srl
+
+> **srl**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### srli
+
+> **srli**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### srw
+
+> **srw**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### srwq
+
+> **srwq**: `GqlDependentCost`
+
+##### stateRoot
+
+> **stateRoot**: `GqlDependentCost`
+
+##### sub
+
+> **sub**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### subi
+
+> **subi**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### sw
+
+> **sw**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### sww
+
+> **sww**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### swwq
+
+> **swwq**: `GqlDependentCost`
+
+##### time
+
+> **time**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### tr
+
+> **tr**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### tro
+
+> **tro**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### version
+
+> **version**: `GqlGasCostsVersion`
+
+##### vmInitialization
+
+> **vmInitialization**: `GqlDependentCost`
+
+##### wdam
+
+> **wdam**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wdcm
+
+> **wdcm**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wddv
+
+> **wddv**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wdmd
+
+> **wdmd**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wdml
+
+> **wdml**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wdmm
+
+> **wdmm**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wdop
+
+> **wdop**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wqam
+
+> **wqam**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wqcm
+
+> **wqcm**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wqdv
+
+> **wqdv**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wqmd
+
+> **wqmd**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wqml
+
+> **wqml**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wqmm
+
+> **wqmm**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### wqop
+
+> **wqop**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### xor
+
+> **xor**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### xori
+
+> **xori**: `Scalars`\[`"U64"`\]\[`"output"`\]
 
 #### Defined in
 
-packages/account/src/providers/__generated__/operations.ts:299
+packages/account/src/providers/\_\_generated\_\_/operations.ts:304
 
-___
+***
 
-### GetAssetNetworkParams
+### GetAssetNetworkParams\&lt;T\>
 
-Ƭ **GetAssetNetworkParams**&lt;`T`\>: `Object`
+> **GetAssetNetworkParams**\&lt;`T`\>: `object`
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`NetworkTypes`](/api/Account/index.md#networktypes) \| `undefined` |
+• **T** *extends* [`NetworkTypes`](index.md#networktypes) \| `undefined`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `asset` | [`Asset`](/api/Account/index.md#asset) |
-| `chainId?` | `number` |
-| `networkType` | `T` |
+##### asset
+
+> **asset**: [`Asset`](index.md#asset)
+
+##### chainId?
+
+> `optional` **chainId**: `number`
+
+##### networkType
+
+> **networkType**: `T`
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:22](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/network.ts#L22)
+[packages/account/src/providers/assets/utils/network.ts:22](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/network.ts#L22)
 
-___
+***
 
 ### GetBalancesResponse
 
-Ƭ **GetBalancesResponse**: `Object`
+> **GetBalancesResponse**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `balances` | [`CoinQuantity`](/api/Account/index.md#coinquantity)[] |
+##### balances
+
+> **balances**: [`CoinQuantity`](index.md#coinquantity)[]
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:104](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L104)
+[packages/account/src/providers/provider.ts:104](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L104)
 
-___
+***
 
 ### GetBlocksResponse
 
-Ƭ **GetBlocksResponse**: `Object`
+> **GetBlocksResponse**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `blocks` | [`Block`](/api/Account/index.md#block)[] |
-| `pageInfo` | `GqlPageInfo` |
+##### blocks
+
+> **blocks**: [`Block`](index.md#block)[]
+
+##### pageInfo
+
+> **pageInfo**: `GqlPageInfo`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:113](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L113)
+[packages/account/src/providers/provider.ts:113](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L113)
 
-___
+***
 
 ### GetCoinsResponse
 
-Ƭ **GetCoinsResponse**: `Object`
+> **GetCoinsResponse**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `coins` | [`Coin`](/api/Account/index.md#coin)[] |
-| `pageInfo` | `GqlPageInfo` |
+##### coins
+
+> **coins**: [`Coin`](index.md#coin)[]
+
+##### pageInfo
+
+> **pageInfo**: `GqlPageInfo`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:94](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L94)
+[packages/account/src/providers/provider.ts:94](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L94)
 
-___
+***
 
 ### GetMessagesResponse
 
-Ƭ **GetMessagesResponse**: `Object`
+> **GetMessagesResponse**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `messages` | [`Message`](/api/Account/index.md#message)[] |
-| `pageInfo` | `GqlPageInfo` |
+##### messages
+
+> **messages**: [`Message`](index.md#message)[]
+
+##### pageInfo
+
+> **pageInfo**: `GqlPageInfo`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:99](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L99)
+[packages/account/src/providers/provider.ts:99](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L99)
 
-___
+***
 
 ### GetOperationParams
 
-Ƭ **GetOperationParams**: { `abiMap?`: [`AbiMap`](/api/Account/index.md#abimap) ; `baseAssetId`: `string` ; `maxInputs`: `BN` ; `transactionType`: [`TransactionType`](/api/Account/TransactionType.md)  } & [`InputOutputParam`](/api/Account/index.md#inputoutputparam) & [`ReceiptParam`](/api/Account/index.md#receiptparam) & [`RawPayloadParam`](/api/Account/index.md#rawpayloadparam)
+> **GetOperationParams**: `object` & [`InputOutputParam`](index.md#inputoutputparam) & [`ReceiptParam`](index.md#receiptparam) & [`RawPayloadParam`](index.md#rawpayloadparam)
+
+#### Type declaration
+
+##### abiMap?
+
+> `optional` **abiMap**: [`AbiMap`](index.md#abimap)
+
+##### baseAssetId
+
+> **baseAssetId**: `string`
+
+##### maxInputs
+
+> **maxInputs**: `BN`
+
+##### transactionType
+
+> **transactionType**: [`TransactionType`](./TransactionType.md)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:142](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L142)
+[packages/account/src/providers/transaction-summary/types.ts:142](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L142)
 
-___
+***
 
 ### GetTransactionsResponse
 
-Ƭ **GetTransactionsResponse**: `Object`
+> **GetTransactionsResponse**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `pageInfo` | `GqlPageInfo` |
-| `transactions` | `Transaction`[] |
+##### pageInfo
+
+> **pageInfo**: `GqlPageInfo`
+
+##### transactions
+
+> **transactions**: `Transaction`[]
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:108](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L108)
+[packages/account/src/providers/provider.ts:108](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L108)
 
-___
+***
 
 ### GqlTransaction
 
-Ƭ **GqlTransaction**: `NonNullable`&lt;`GqlGetTransactionQuery`[``"transaction"``]\>
+> **GqlTransaction**: `NonNullable`\&lt;`GqlGetTransactionQuery`\[`"transaction"`\]\>
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:15](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L15)
+[packages/account/src/providers/transaction-summary/types.ts:15](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L15)
 
-___
+***
 
 ### GraphqlTransactionStatus
 
-Ƭ **GraphqlTransactionStatus**: [`GqlTransaction`](/api/Account/index.md#gqltransaction)[``"status"``]
+> **GraphqlTransactionStatus**: [`GqlTransaction`](index.md#gqltransaction)\[`"status"`\]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L17)
+[packages/account/src/providers/transaction-summary/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L17)
 
-___
+***
 
 ### InputOutputParam
 
-Ƭ **InputOutputParam**: [`InputParam`](/api/Account/index.md#inputparam) & [`OutputParam`](/api/Account/index.md#outputparam)
+> **InputOutputParam**: [`InputParam`](index.md#inputparam) & [`OutputParam`](index.md#outputparam)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:135](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L135)
+[packages/account/src/providers/transaction-summary/types.ts:135](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L135)
 
-___
+***
 
 ### InputParam
 
-Ƭ **InputParam**: `Object`
+> **InputParam**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `inputs` | `Input`[] |
+##### inputs
+
+> **inputs**: `Input`[]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:117](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L117)
+[packages/account/src/providers/transaction-summary/types.ts:117](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L117)
 
-___
+***
 
 ### JsonAbisFromAllCalls
 
-Ƭ **JsonAbisFromAllCalls**: `Object`
+> **JsonAbisFromAllCalls**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `main` | `JsonAbi` |
-| `otherContractsAbis` | `Record`&lt;`string`, `JsonAbi`\> |
+##### main
+
+> **main**: `JsonAbi`
+
+##### otherContractsAbis
+
+> **otherContractsAbis**: `Record`\&lt;`string`, `JsonAbi`\>
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/types.ts#L26)
+[packages/account/src/providers/transaction-request/types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/types.ts#L26)
 
-___
+***
 
 ### MerkleProof
 
-Ƭ **MerkleProof**: `Object`
+> **MerkleProof**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `proofIndex` | `BN` |
-| `proofSet` | `string`[] |
+##### proofIndex
+
+> **proofIndex**: `BN`
+
+##### proofSet
+
+> **proofSet**: `string`[]
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:32](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/message.ts#L32)
+[packages/account/src/providers/message.ts:32](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/message.ts#L32)
 
-___
+***
 
 ### Message
 
-Ƭ **Message**: `Object`
+> **Message**: `object`
 
 A Fuel message
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `BN` |
-| `daHeight` | `BN` |
-| `data` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `messageId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `nonce` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `recipient` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
-| `sender` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+##### amount
+
+> **amount**: `BN`
+
+##### daHeight
+
+> **daHeight**: `BN`
+
+##### data
+
+> **data**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### messageId
+
+> **messageId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### nonce
+
+> **nonce**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### recipient
+
+> **recipient**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+##### sender
+
+> **sender**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/message.ts#L10)
+[packages/account/src/providers/message.ts:10](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/message.ts#L10)
 
-___
+***
 
 ### MessageCoin
 
-Ƭ **MessageCoin**: `Object`
+> **MessageCoin**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `BN` |
-| `assetId` | `string` |
-| `daHeight` | `BN` |
-| `nonce` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `predicate?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `predicateData?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `recipient` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
-| `sender` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+##### amount
+
+> **amount**: `BN`
+
+##### assetId
+
+> **assetId**: `string`
+
+##### daHeight
+
+> **daHeight**: `BN`
+
+##### nonce
+
+> **nonce**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### predicate?
+
+> `optional` **predicate**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### predicateData?
+
+> `optional` **predicateData**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### recipient
+
+> **recipient**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+##### sender
+
+> **sender**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:21](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/message.ts#L21)
+[packages/account/src/providers/message.ts:21](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/message.ts#L21)
 
-___
+***
 
 ### MessageProof
 
-Ƭ **MessageProof**: `Object`
+> **MessageProof**: `object`
 
 Message Proof
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `BN` |
-| `blockProof` | [`MerkleProof`](/api/Account/index.md#merkleproof) |
-| `commitBlockHeader` | [`BlockHeader`](/api/Account/index.md#blockheader) |
-| `data` | `string` |
-| `messageBlockHeader` | [`BlockHeader`](/api/Account/index.md#blockheader) |
-| `messageProof` | [`MerkleProof`](/api/Account/index.md#merkleproof) |
-| `nonce` | `string` |
-| `recipient` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
-| `sender` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+##### amount
+
+> **amount**: `BN`
+
+##### blockProof
+
+> **blockProof**: [`MerkleProof`](index.md#merkleproof)
+
+##### commitBlockHeader
+
+> **commitBlockHeader**: [`BlockHeader`](index.md#blockheader)
+
+##### data
+
+> **data**: `string`
+
+##### messageBlockHeader
+
+> **messageBlockHeader**: [`BlockHeader`](index.md#blockheader)
+
+##### messageProof
+
+> **messageProof**: [`MerkleProof`](index.md#merkleproof)
+
+##### nonce
+
+> **nonce**: `string`
+
+##### recipient
+
+> **recipient**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+##### sender
+
+> **sender**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/message.ts#L56)
+[packages/account/src/providers/message.ts:56](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/message.ts#L56)
 
-___
+***
 
 ### MessageStatus
 
-Ƭ **MessageStatus**: `Object`
+> **MessageStatus**: `object`
 
 Message Status
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `state` | `GqlMessageState` |
+##### state
+
+> **state**: `GqlMessageState`
 
 #### Defined in
 
-[packages/account/src/providers/message.ts:71](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/message.ts#L71)
+[packages/account/src/providers/message.ts:71](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/message.ts#L71)
 
-___
+***
 
 ### MessageTransactionRequestInput
 
-Ƭ **MessageTransactionRequestInput**: `Object`
+> **MessageTransactionRequestInput**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `amount` | `BigNumberish` | Amount of coins |
-| `data?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | data of message |
-| `nonce` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Unique nonce of message |
-| `predicate?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Predicate bytecode |
-| `predicateData?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Predicate input data (parameters) |
-| `predicateGasUsed?` | `BigNumberish` | Gas used by predicate |
-| `recipient` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Address of recipient |
-| `sender` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Address of sender |
-| `type` | `InputType.Message` | - |
-| `witnessIndex` | `number` | Index of witness that authorizes the message |
+##### amount
+
+> **amount**: `BigNumberish`
+
+Amount of coins
+
+##### data?
+
+> `optional` **data**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+data of message
+
+##### nonce
+
+> **nonce**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Unique nonce of message
+
+##### predicate?
+
+> `optional` **predicate**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Predicate bytecode
+
+##### predicateData?
+
+> `optional` **predicateData**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Predicate input data (parameters)
+
+##### predicateGasUsed?
+
+> `optional` **predicateGasUsed**: `BigNumberish`
+
+Gas used by predicate
+
+##### recipient
+
+> **recipient**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Address of recipient
+
+##### sender
+
+> **sender**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Address of sender
+
+##### type
+
+> **type**: `InputType.Message`
+
+##### witnessIndex
+
+> **witnessIndex**: `number`
+
+Index of witness that authorizes the message
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:42](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/input.ts#L42)
+[packages/account/src/providers/transaction-request/input.ts:42](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/input.ts#L42)
 
-___
+***
 
 ### MnemonicPhrase
 
-Ƭ **MnemonicPhrase**: `string` \| `string`[]
+> **MnemonicPhrase**: `string` \| `string`[]
 
 #### Defined in
 
-[packages/account/src/mnemonic/utils.ts:7](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/mnemonic/utils.ts#L7)
+[packages/account/src/mnemonic/utils.ts:7](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/mnemonic/utils.ts#L7)
 
-___
+***
 
 ### Network
 
-Ƭ **Network**: `Object`
+> **Network**: `object`
+
+**`Name`**
 
 Network
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `chainId` | `number` | The chain id of the network. |
-| `url` | `string` | The name of the network. |
+##### chainId
+
+> **chainId**: `number`
+
+The chain id of the network.
+
+##### url
+
+> **url**: `string`
+
+The name of the network.
 
 #### Defined in
 
-[packages/account/src/connectors/types/data-type.ts:20](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/data-type.ts#L20)
+[packages/account/src/connectors/types/data-type.ts:20](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/data-type.ts#L20)
 
-___
+***
 
 ### NetworkEthereum
 
-Ƭ **NetworkEthereum**: `Object`
+> **NetworkEthereum**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `address?` | `string` | address of the asset contract |
-| `chainId` | `number` | chain id of the network |
-| `decimals` | `number` | number of decimals of the asset |
-| `type` | ``"ethereum"`` | type of network |
+##### address?
+
+> `optional` **address**: `string`
+
+address of the asset contract
+
+##### chainId
+
+> **chainId**: `number`
+
+chain id of the network
+
+##### decimals
+
+> **decimals**: `number`
+
+number of decimals of the asset
+
+##### type
+
+> **type**: `"ethereum"`
+
+type of network
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:1](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/types.ts#L1)
+[packages/account/src/providers/assets/types.ts:1](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/types.ts#L1)
 
-___
+***
 
 ### NetworkFuel
 
-Ƭ **NetworkFuel**: `Object`
+> **NetworkFuel**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `assetId` | `string` | assetId on the Fuel Network |
-| `chainId` | `number` | chain id of the network |
-| `contractId?` | `string` | the contractId of that generated the Asset on the Fuel Network |
-| `decimals` | `number` | number of decimals of the asset |
-| `type` | ``"fuel"`` | type of network |
+##### assetId
+
+> **assetId**: `string`
+
+assetId on the Fuel Network
+
+##### chainId
+
+> **chainId**: `number`
+
+chain id of the network
+
+##### contractId?
+
+> `optional` **contractId**: `string`
+
+the contractId of that generated the Asset on the Fuel Network
+
+##### decimals
+
+> **decimals**: `number`
+
+number of decimals of the asset
+
+##### type
+
+> **type**: `"fuel"`
+
+type of network
 
 #### Defined in
 
-[packages/account/src/providers/assets/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/types.ts#L12)
+[packages/account/src/providers/assets/types.ts:12](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/types.ts#L12)
 
-___
+***
 
 ### NetworkTypes
 
-Ƭ **NetworkTypes**: [`NetworkEthereum`](/api/Account/index.md#networkethereum)[``"type"``] \| [`NetworkFuel`](/api/Account/index.md#networkfuel)[``"type"``]
+> **NetworkTypes**: [`NetworkEthereum`](index.md#networkethereum)\[`"type"`\] \| [`NetworkFuel`](index.md#networkfuel)\[`"type"`\]
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:5](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/network.ts#L5)
+[packages/account/src/providers/assets/utils/network.ts:5](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/network.ts#L5)
 
-___
+***
 
 ### NodeInfo
 
-Ƭ **NodeInfo**: `Object`
+> **NodeInfo**: `object`
 
 Node information
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `maxDepth` | `BN` |
-| `maxTx` | `BN` |
-| `nodeVersion` | `string` |
-| `utxoValidation` | `boolean` |
-| `vmBacktrace` | `boolean` |
+##### maxDepth
+
+> **maxDepth**: `BN`
+
+##### maxTx
+
+> **maxTx**: `BN`
+
+##### nodeVersion
+
+> **nodeVersion**: `string`
+
+##### utxoValidation
+
+> **utxoValidation**: `boolean`
+
+##### vmBacktrace
+
+> **vmBacktrace**: `boolean`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:169](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L169)
+[packages/account/src/providers/provider.ts:169](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L169)
 
-___
+***
 
 ### NodeInfoAndConsensusParameters
 
-Ƭ **NodeInfoAndConsensusParameters**: `Object`
+> **NodeInfoAndConsensusParameters**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `gasPerByte` | `BN` |
-| `gasPriceFactor` | `BN` |
-| `maxGasPerTx` | `BN` |
-| `nodeVersion` | `string` |
+##### gasPerByte
+
+> **gasPerByte**: `BN`
+
+##### gasPriceFactor
+
+> **gasPriceFactor**: `BN`
+
+##### maxGasPerTx
+
+> **maxGasPerTx**: `BN`
+
+##### nodeVersion
+
+> **nodeVersion**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:177](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L177)
+[packages/account/src/providers/provider.ts:177](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L177)
 
-___
+***
 
 ### Operation
 
-Ƭ **Operation**: `Object`
+> **Operation**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `assetsSent?` | [`OperationCoin`](/api/Account/index.md#operationcoin)[] |
-| `calls?` | [`OperationFunctionCall`](/api/Account/index.md#operationfunctioncall)[] |
-| `from?` | [`OperationTransactionAddress`](/api/Account/index.md#operationtransactionaddress) |
-| `name?` | `OperationName` |
-| `to?` | [`OperationTransactionAddress`](/api/Account/index.md#operationtransactionaddress) |
+##### assetsSent?
+
+> `optional` **assetsSent**: [`OperationCoin`](index.md#operationcoin)[]
+
+##### calls?
+
+> `optional` **calls**: [`OperationFunctionCall`](index.md#operationfunctioncall)[]
+
+##### from?
+
+> `optional` **from**: [`OperationTransactionAddress`](index.md#operationtransactionaddress)
+
+##### name?
+
+> `optional` **name**: `OperationName`
+
+##### to?
+
+> `optional` **to**: [`OperationTransactionAddress`](index.md#operationtransactionaddress)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:87](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L87)
+[packages/account/src/providers/transaction-summary/types.ts:87](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L87)
 
-___
+***
 
 ### OperationCoin
 
-Ƭ **OperationCoin**: `Object`
+> **OperationCoin**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `BNInput` |
-| `assetId` | `string` |
+##### amount
+
+> **amount**: `BNInput`
+
+##### assetId
+
+> **assetId**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:76](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L76)
+[packages/account/src/providers/transaction-summary/types.ts:76](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L76)
 
-___
+***
 
 ### OperationFunctionCall
 
-Ƭ **OperationFunctionCall**: { `argumentsProvided?`: `Record`&lt;`string`, `unknown`\> ; `functionName`: `string` ; `functionSignature`: `string`  } & `Partial`&lt;[`OperationCoin`](/api/Account/index.md#operationcoin)\>
+> **OperationFunctionCall**: `object` & `Partial`\&lt;[`OperationCoin`](index.md#operationcoin)\>
+
+#### Type declaration
+
+##### argumentsProvided?
+
+> `optional` **argumentsProvided**: `Record`\&lt;`string`, `unknown`\>
+
+##### functionName
+
+> **functionName**: `string`
+
+##### functionSignature
+
+> **functionSignature**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:81](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L81)
+[packages/account/src/providers/transaction-summary/types.ts:81](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L81)
 
-___
+***
 
 ### OperationTransactionAddress
 
-Ƭ **OperationTransactionAddress**: `Object`
+> **OperationTransactionAddress**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `address` | `string` |
-| `chain?` | `ChainName` |
-| `type` | `AddressType` |
+##### address
+
+> **address**: `string`
+
+##### chain?
+
+> `optional` **chain**: `ChainName`
+
+##### type
+
+> **type**: `AddressType`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:111](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L111)
+[packages/account/src/providers/transaction-summary/types.ts:111](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L111)
 
-___
+***
 
 ### OutputParam
 
-Ƭ **OutputParam**: `Object`
+> **OutputParam**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `outputs` | `Output`[] |
+##### outputs
+
+> **outputs**: `Output`[]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:121](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L121)
+[packages/account/src/providers/transaction-summary/types.ts:121](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L121)
 
-___
+***
 
 ### PredicateParameters
 
-Ƭ **PredicateParameters**: `Object`
+> **PredicateParameters**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `maxGasPerPredicate` | `Scalars`[``"U64"``][``"output"``] |
-| `maxMessageDataLength` | `Scalars`[``"U64"``][``"output"``] |
-| `maxPredicateDataLength` | `Scalars`[``"U64"``][``"output"``] |
-| `maxPredicateLength` | `Scalars`[``"U64"``][``"output"``] |
-| `version` | `GqlPredicateParametersVersion` |
+##### maxGasPerPredicate
+
+> **maxGasPerPredicate**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### maxMessageDataLength
+
+> **maxMessageDataLength**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### maxPredicateDataLength
+
+> **maxPredicateDataLength**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### maxPredicateLength
+
+> **maxPredicateLength**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### version
+
+> **version**: `GqlPredicateParametersVersion`
 
 #### Defined in
 
-packages/account/src/providers/__generated__/operations.ts:746
+packages/account/src/providers/\_\_generated\_\_/operations.ts:751
 
-___
+***
 
-### PredicateParams
+### PredicateParams\&lt;TData, TConfigurables\>
 
-Ƭ **PredicateParams**&lt;`TData`, `TConfigurables`\>: `Object`
+> **PredicateParams**\&lt;`TData`, `TConfigurables`\>: `object`
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `TData` | extends `InputValue`[] = `InputValue`[] |
-| `TConfigurables` | extends { `[name: string]`: `unknown`;  } \| `undefined` = { `[name: string]`: `unknown`;  } |
+• **TData** *extends* `InputValue`[] = `InputValue`[]
+
+• **TConfigurables** *extends* `object` \| `undefined` = `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `abi?` | `JsonAbi` |
-| `bytecode` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `configurableConstants?` | `TConfigurables` |
-| `data?` | `TData` |
-| `provider` | [`Provider`](/api/Account/Provider.md) |
+##### abi?
+
+> `optional` **abi**: `JsonAbi`
+
+##### bytecode
+
+> **bytecode**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### configurableConstants?
+
+> `optional` **configurableConstants**: `TConfigurables`
+
+##### data?
+
+> `optional` **data**: `TData`
+
+##### provider
+
+> **provider**: [`Provider`](./Provider.md)
 
 #### Defined in
 
-[packages/account/src/predicate/predicate.ts:28](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/predicate/predicate.ts#L28)
+[packages/account/src/predicate/predicate.ts:28](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/predicate/predicate.ts#L28)
 
-___
+***
 
 ### ProgramState
 
-Ƭ **ProgramState**: [`SuccessStatus`](/api/Account/index.md#successstatus)[``"programState"``]
+> **ProgramState**: [`SuccessStatus`](index.md#successstatus)\[`"programState"`\]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L25)
+[packages/account/src/providers/transaction-summary/types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L25)
 
-___
+***
 
 ### ProviderCallParams
 
-Ƭ **ProviderCallParams**: [`UTXOValidationParams`](/api/Account/index.md#utxovalidationparams) & [`EstimateTransactionParams`](/api/Account/index.md#estimatetransactionparams)
+> **ProviderCallParams**: [`UTXOValidationParams`](index.md#utxovalidationparams) & [`EstimateTransactionParams`](index.md#estimatetransactionparams)
 
 Provider Call transaction params
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:353](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L353)
+[packages/account/src/providers/provider.ts:353](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L353)
 
-___
+***
 
 ### ProviderOptions
 
-Ƭ **ProviderOptions**: `Object`
+> **ProviderOptions**: `object`
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `fetch?` | (`url`: `string`, `requestInit?`: `RequestInit`, `providerOptions?`: `Omit`&lt;[`ProviderOptions`](/api/Account/index.md#provideroptions), ``"fetch"``\>) => `Promise`&lt;`Response`\> | - |
-| `requestMiddleware?` | (`request`: `RequestInit`) => `RequestInit` \| `Promise`&lt;`RequestInit`\> | - |
-| `resourceCacheTTL?` | `number` | Resources cache for the given time [ms]. If set to -1, the cache will be disabled. |
-| `retryOptions?` | `RetryOptions` | Retry options to use when fetching data from the node. |
-| `timeout?` | `number` | Timeout [ms] after which every request will be aborted. |
+##### fetch()?
+
+> `optional` **fetch**: (`url`, `requestInit`?, `providerOptions`?) => `Promise`\&lt;`Response`\>
+
+Custom fetch function to use for making requests.
+
+###### Parameters
+
+• **url**: `string`
+
+• **requestInit?**: `RequestInit`
+
+• **providerOptions?**: `Omit`\&lt;[`ProviderOptions`](index.md#provideroptions), `"fetch"`\>
+
+###### Returns
+
+`Promise`\&lt;`Response`\>
+
+##### requestMiddleware()?
+
+> `optional` **requestMiddleware**: (`request`) => `RequestInit` \| `Promise`\&lt;`RequestInit`\>
+
+Middleware to modify the request before it is sent.
+This can be used to add headers, modify the body, etc.
+
+###### Parameters
+
+• **request**: `RequestInit`
+
+###### Returns
+
+`RequestInit` \| `Promise`\&lt;`RequestInit`\>
+
+##### resourceCacheTTL?
+
+> `optional` **resourceCacheTTL**: `number`
+
+Resources cache for the given time [ms]. If set to -1, the cache will be disabled.
+
+##### retryOptions?
+
+> `optional` **retryOptions**: `RetryOptions`
+
+Retry options to use when fetching data from the node.
+
+##### timeout?
+
+> `optional` **timeout**: `number`
+
+Timeout [ms] after which every request will be aborted.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:290](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L290)
+[packages/account/src/providers/provider.ts:290](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L290)
 
-___
+***
 
 ### ProviderSendTxParams
 
-Ƭ **ProviderSendTxParams**: [`EstimateTransactionParams`](/api/Account/index.md#estimatetransactionparams)
+> **ProviderSendTxParams**: [`EstimateTransactionParams`](index.md#estimatetransactionparams)
 
 Provider Send transaction params
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:358](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L358)
+[packages/account/src/providers/provider.ts:358](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L358)
 
-___
+***
 
 ### RawCoin
 
-Ƭ **RawCoin**: `Object`
+> **RawCoin**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `string` |
-| `assetId` | `string` |
-| `blockCreated` | `string` |
-| `owner` | `string` |
-| `txCreatedIdx` | `string` |
-| `utxoId` | `string` |
+##### amount
+
+> **amount**: `string`
+
+##### assetId
+
+> **assetId**: `string`
+
+##### blockCreated
+
+> **blockCreated**: `string`
+
+##### owner
+
+> **owner**: `string`
+
+##### txCreatedIdx
+
+> **txCreatedIdx**: `string`
+
+##### utxoId
+
+> **utxoId**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/resource.ts#L6)
+[packages/account/src/providers/resource.ts:6](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/resource.ts#L6)
 
-___
+***
 
 ### RawMessage
 
-Ƭ **RawMessage**: `Object`
+> **RawMessage**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `string` |
-| `assetId` | `string` |
-| `daHeight` | `string` |
-| `data` | `string` |
-| `nonce` | `string` |
-| `recipient` | `string` |
-| `sender` | `string` |
+##### amount
+
+> **amount**: `string`
+
+##### assetId
+
+> **assetId**: `string`
+
+##### daHeight
+
+> **daHeight**: `string`
+
+##### data
+
+> **data**: `string`
+
+##### nonce
+
+> **nonce**: `string`
+
+##### recipient
+
+> **recipient**: `string`
+
+##### sender
+
+> **sender**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:15](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/resource.ts#L15)
+[packages/account/src/providers/resource.ts:15](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/resource.ts#L15)
 
-___
+***
 
 ### RawPayloadParam
 
-Ƭ **RawPayloadParam**: `Object`
+> **RawPayloadParam**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `rawPayload?` | `string` |
+##### rawPayload?
+
+> `optional` **rawPayload**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:131](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L131)
+[packages/account/src/providers/transaction-summary/types.ts:131](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L131)
 
-___
+***
 
 ### RawResource
 
-Ƭ **RawResource**: [`RawCoin`](/api/Account/index.md#rawcoin) \| [`RawMessage`](/api/Account/index.md#rawmessage)
+> **RawResource**: [`RawCoin`](index.md#rawcoin) \| [`RawMessage`](index.md#rawmessage)
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:25](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/resource.ts#L25)
+[packages/account/src/providers/resource.ts:25](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/resource.ts#L25)
 
-___
+***
 
 ### Reason
 
-Ƭ **Reason**: [`FailureStatus`](/api/Account/index.md#failurestatus)[``"reason"``]
+> **Reason**: [`FailureStatus`](index.md#failurestatus)\[`"reason"`\]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:24](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L24)
+[packages/account/src/providers/transaction-summary/types.ts:24](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L24)
 
-___
+***
 
 ### ReceiptParam
 
-Ƭ **ReceiptParam**: `Object`
+> **ReceiptParam**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `receipts` | `TransactionResultReceipt`[] |
+##### receipts
+
+> **receipts**: `TransactionResultReceipt`[]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:125](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L125)
+[packages/account/src/providers/transaction-summary/types.ts:125](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L125)
 
-___
+***
 
 ### Resource
 
-Ƭ **Resource**: [`Coin`](/api/Account/index.md#coin) \| [`MessageCoin`](/api/Account/index.md#messagecoin)
+> **Resource**: [`Coin`](index.md#coin) \| [`MessageCoin`](index.md#messagecoin)
 
 #### Defined in
 
-[packages/account/src/providers/resource.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/resource.ts#L26)
+[packages/account/src/providers/resource.ts:26](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/resource.ts#L26)
 
-___
+***
 
 ### ScriptParameters
 
-Ƭ **ScriptParameters**: `Object`
+> **ScriptParameters**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `maxScriptDataLength` | `Scalars`[``"U64"``][``"output"``] |
-| `maxScriptLength` | `Scalars`[``"U64"``][``"output"``] |
-| `version` | `GqlScriptParametersVersion` |
+##### maxScriptDataLength
+
+> **maxScriptDataLength**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### maxScriptLength
+
+> **maxScriptLength**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### version
+
+> **version**: `GqlScriptParametersVersion`
 
 #### Defined in
 
-packages/account/src/providers/__generated__/operations.ts:1031
+packages/account/src/providers/\_\_generated\_\_/operations.ts:1042
 
-___
+***
 
 ### SqueezedOutStatus
 
-Ƭ **SqueezedOutStatus**: `GqlSqueezedOutStatusFragment`
+> **SqueezedOutStatus**: `GqlSqueezedOutStatusFragment`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:22](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L22)
+[packages/account/src/providers/transaction-summary/types.ts:22](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L22)
 
-___
+***
 
 ### Status
 
-Ƭ **Status**: `Object`
+> **Status**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `connected` | `boolean` |
-| `installed` | `boolean` |
+##### connected
+
+> **connected**: `boolean`
+
+##### installed
+
+> **installed**: `boolean`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel.ts:40](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel.ts#L40)
+[packages/account/src/connectors/fuel.ts:40](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel.ts#L40)
 
-___
+***
 
 ### SubmittedStatus
 
-Ƭ **SubmittedStatus**: `GqlSubmittedStatusFragment`
+> **SubmittedStatus**: `GqlSubmittedStatusFragment`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L21)
+[packages/account/src/providers/transaction-summary/types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L21)
 
-___
+***
 
 ### SuccessStatus
 
-Ƭ **SuccessStatus**: `GqlSuccessStatusFragment`
+> **SuccessStatus**: `GqlSuccessStatusFragment`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:19](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L19)
+[packages/account/src/providers/transaction-summary/types.ts:19](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L19)
 
-___
+***
 
 ### Time
 
-Ƭ **Time**: [`SubmittedStatus`](/api/Account/index.md#submittedstatus)[``"time"``] \| [`SuccessStatus`](/api/Account/index.md#successstatus)[``"time"``] \| [`FailureStatus`](/api/Account/index.md#failurestatus)[``"time"``]
+> **Time**: [`SubmittedStatus`](index.md#submittedstatus)\[`"time"`\] \| [`SuccessStatus`](index.md#successstatus)\[`"time"`\] \| [`FailureStatus`](index.md#failurestatus)\[`"time"`\]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L26)
+[packages/account/src/providers/transaction-summary/types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L26)
 
-___
+***
 
 ### TransactionCost
 
-Ƭ **TransactionCost**: `Object`
+> **TransactionCost**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `addedSignatures` | `number` |
-| `dryRunStatus?` | [`DryRunStatus`](/api/Account/index.md#dryrunstatus) |
-| `estimatedPredicates` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput)[] |
-| `gasPrice` | `BN` |
-| `gasUsed` | `BN` |
-| `maxFee` | `BN` |
-| `maxGas` | `BN` |
-| `minFee` | `BN` |
-| `minGas` | `BN` |
-| `missingContractIds` | `string`[] |
-| `outputVariables` | `number` |
-| `receipts` | `TransactionResultReceipt`[] |
-| `requiredQuantities` | [`CoinQuantity`](/api/Account/index.md#coinquantity)[] |
-| `updateMaxFee?` | `boolean` |
+##### addedSignatures
+
+> **addedSignatures**: `number`
+
+##### dryRunStatus?
+
+> `optional` **dryRunStatus**: [`DryRunStatus`](index.md#dryrunstatus-1)
+
+##### estimatedPredicates
+
+> **estimatedPredicates**: [`TransactionRequestInput`](index.md#transactionrequestinput)[]
+
+##### gasPrice
+
+> **gasPrice**: `BN`
+
+##### gasUsed
+
+> **gasUsed**: `BN`
+
+##### maxFee
+
+> **maxFee**: `BN`
+
+##### maxGas
+
+> **maxGas**: `BN`
+
+##### minFee
+
+> **minFee**: `BN`
+
+##### minGas
+
+> **minGas**: `BN`
+
+##### missingContractIds
+
+> **missingContractIds**: `string`[]
+
+##### outputVariables
+
+> **outputVariables**: `number`
+
+##### receipts
+
+> **receipts**: `TransactionResultReceipt`[]
+
+##### requiredQuantities
+
+> **requiredQuantities**: [`CoinQuantity`](index.md#coinquantity)[]
+
+##### updateMaxFee?
+
+> `optional` **updateMaxFee**: `boolean`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:185](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L185)
+[packages/account/src/providers/provider.ts:185](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L185)
 
-___
+***
 
 ### TransactionCostParams
 
-Ƭ **TransactionCostParams**: [`EstimateTransactionParams`](/api/Account/index.md#estimatetransactionparams) & { `quantities?`: [`CoinQuantity`](/api/Account/index.md#coinquantity)[] ; `signatureCallback?`: (`request`: [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)) => `Promise`&lt;[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)\>  }
+> **TransactionCostParams**: [`EstimateTransactionParams`](index.md#estimatetransactionparams) & `object`
+
+#### Type declaration
+
+##### quantities?
+
+> `optional` **quantities**: [`CoinQuantity`](index.md#coinquantity)[]
+
+The quantities to forward to the contract.
+
+##### signatureCallback()?
+
+> `optional` **signatureCallback**: (`request`) => `Promise`\&lt;[`ScriptTransactionRequest`](./ScriptTransactionRequest.md)\>
+
+A callback to sign the transaction.
+
+###### Parameters
+
+• **request**: [`ScriptTransactionRequest`](./ScriptTransactionRequest.md)
+
+The transaction request to sign.
+
+###### Returns
+
+`Promise`\&lt;[`ScriptTransactionRequest`](./ScriptTransactionRequest.md)\>
+
+A promise that resolves to the signed transaction request.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:335](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L335)
+[packages/account/src/providers/provider.ts:335](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L335)
 
-___
+***
 
 ### TransactionRequest
 
-Ƭ **TransactionRequest**: [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md) \| [`CreateTransactionRequest`](/api/Account/CreateTransactionRequest.md) \| [`BlobTransactionRequest`](/api/Account/BlobTransactionRequest.md)
+> **TransactionRequest**: [`ScriptTransactionRequest`](./ScriptTransactionRequest.md) \| [`CreateTransactionRequest`](./CreateTransactionRequest.md) \| [`BlobTransactionRequest`](./BlobTransactionRequest.md)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/types.ts#L17)
+[packages/account/src/providers/transaction-request/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/types.ts#L17)
 
-___
+***
 
 ### TransactionRequestInput
 
-Ƭ **TransactionRequestInput**: [`CoinTransactionRequestInput`](/api/Account/index.md#cointransactionrequestinput) \| [`ContractTransactionRequestInput`](/api/Account/index.md#contracttransactionrequestinput) \| [`MessageTransactionRequestInput`](/api/Account/index.md#messagetransactionrequestinput)
+> **TransactionRequestInput**: [`CoinTransactionRequestInput`](index.md#cointransactionrequestinput) \| [`ContractTransactionRequestInput`](index.md#contracttransactionrequestinput) \| [`MessageTransactionRequestInput`](index.md#messagetransactionrequestinput)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/input.ts:82](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/input.ts#L82)
+[packages/account/src/providers/transaction-request/input.ts:82](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/input.ts#L82)
 
-___
+***
 
 ### TransactionRequestLike
 
-Ƭ **TransactionRequestLike**: { `type`: [`Script`](/api/Account/TransactionType.md#script)  } & `ScriptTransactionRequestLike` \| { `type`: [`Create`](/api/Account/TransactionType.md#create)  } & `CreateTransactionRequestLike` \| { `type`: [`Blob`](/api/Account/TransactionType.md#blob)  } & [`BlobTransactionRequestLike`](/api/Account/BlobTransactionRequestLike.md)
+> **TransactionRequestLike**: `object` & `ScriptTransactionRequestLike` \| `object` & `CreateTransactionRequestLike` \| `object` & [`BlobTransactionRequestLike`](./BlobTransactionRequestLike.md)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/types.ts#L21)
+[packages/account/src/providers/transaction-request/types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/types.ts#L21)
 
-___
+***
 
 ### TransactionRequestOutput
 
-Ƭ **TransactionRequestOutput**: [`CoinTransactionRequestOutput`](/api/Account/index.md#cointransactionrequestoutput) \| [`ContractTransactionRequestOutput`](/api/Account/index.md#contracttransactionrequestoutput) \| [`ChangeTransactionRequestOutput`](/api/Account/index.md#changetransactionrequestoutput) \| [`VariableTransactionRequestOutput`](/api/Account/index.md#variabletransactionrequestoutput) \| [`ContractCreatedTransactionRequestOutput`](/api/Account/index.md#contractcreatedtransactionrequestoutput)
+> **TransactionRequestOutput**: [`CoinTransactionRequestOutput`](index.md#cointransactionrequestoutput) \| [`ContractTransactionRequestOutput`](index.md#contracttransactionrequestoutput) \| [`ChangeTransactionRequestOutput`](index.md#changetransactionrequestoutput) \| [`VariableTransactionRequestOutput`](index.md#variabletransactionrequestoutput) \| [`ContractCreatedTransactionRequestOutput`](index.md#contractcreatedtransactionrequestoutput)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:41](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/output.ts#L41)
+[packages/account/src/providers/transaction-request/output.ts:41](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/output.ts#L41)
 
-___
+***
 
 ### TransactionResultBurnReceipt
 
-Ƭ **TransactionResultBurnReceipt**: `ReceiptBurn`
+> **TransactionResultBurnReceipt**: `ReceiptBurn`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:66](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-response/transaction-response.ts#L66)
+[packages/account/src/providers/transaction-response/transaction-response.ts:66](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-response/transaction-response.ts#L66)
 
-___
+***
 
 ### TransactionResultMintReceipt
 
-Ƭ **TransactionResultMintReceipt**: `ReceiptMint`
+> **TransactionResultMintReceipt**: `ReceiptMint`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-response/transaction-response.ts:65](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-response/transaction-response.ts#L65)
+[packages/account/src/providers/transaction-response/transaction-response.ts:65](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-response/transaction-response.ts#L65)
 
-___
+***
 
-### TransactionSummary
+### TransactionSummary\&lt;TTransactionType\>
 
-Ƭ **TransactionSummary**&lt;`TTransactionType`\>: `Object`
+> **TransactionSummary**\&lt;`TTransactionType`\>: `object`
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `TTransactionType` | `void` |
+• **TTransactionType** = `void`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `blockId?` | [`BlockId`](/api/Account/index.md#blockid) |
-| `burnedAssets` | [`BurnedAsset`](/api/Account/index.md#burnedasset)[] |
-| `date?` | `Date` |
-| `fee` | `BN` |
-| `gasUsed` | `BN` |
-| `id` | `string` |
-| `isStatusFailure` | `boolean` |
-| `isStatusPending` | `boolean` |
-| `isStatusSuccess` | `boolean` |
-| `isTypeBlob` | `boolean` |
-| `isTypeCreate` | `boolean` |
-| `isTypeMint` | `boolean` |
-| `isTypeScript` | `boolean` |
-| `isTypeUpgrade` | `boolean` |
-| `isTypeUpload` | `boolean` |
-| `mintedAssets` | [`MintedAsset`](/api/Account/MintedAsset.md)[] |
-| `operations` | [`Operation`](/api/Account/index.md#operation)[] |
-| `receipts` | `TransactionResultReceipt`[] |
-| `status?` | `TransactionStatus` |
-| `time?` | `string` |
-| `tip` | `BN` |
-| `transaction` | `Transaction`&lt;`TTransactionType`\> |
-| `type` | `TransactionTypeName` |
+##### blockId?
+
+> `optional` **blockId**: [`BlockId`](index.md#blockid)
+
+##### burnedAssets
+
+> **burnedAssets**: [`BurnedAsset`](index.md#burnedasset)[]
+
+##### date?
+
+> `optional` **date**: `Date`
+
+##### fee
+
+> **fee**: `BN`
+
+##### gasUsed
+
+> **gasUsed**: `BN`
+
+##### id
+
+> **id**: `string`
+
+##### isStatusFailure
+
+> **isStatusFailure**: `boolean`
+
+##### isStatusPending
+
+> **isStatusPending**: `boolean`
+
+##### isStatusSuccess
+
+> **isStatusSuccess**: `boolean`
+
+##### isTypeBlob
+
+> **isTypeBlob**: `boolean`
+
+##### isTypeCreate
+
+> **isTypeCreate**: `boolean`
+
+##### isTypeMint
+
+> **isTypeMint**: `boolean`
+
+##### isTypeScript
+
+> **isTypeScript**: `boolean`
+
+##### isTypeUpgrade
+
+> **isTypeUpgrade**: `boolean`
+
+##### isTypeUpload
+
+> **isTypeUpload**: `boolean`
+
+##### mintedAssets
+
+> **mintedAssets**: [`MintedAsset`](./MintedAsset.md)[]
+
+##### operations
+
+> **operations**: [`Operation`](index.md#operation)[]
+
+##### receipts
+
+> **receipts**: `TransactionResultReceipt`[]
+
+##### status?
+
+> `optional` **status**: `TransactionStatus`
+
+##### time?
+
+> `optional` **time**: `string`
+
+##### tip
+
+> **tip**: `BN`
+
+##### transaction
+
+> **transaction**: `Transaction`\&lt;`TTransactionType`\>
+
+##### type
+
+> **type**: `TransactionTypeName`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:160](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L160)
+[packages/account/src/providers/transaction-summary/types.ts:160](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L160)
 
-___
+***
 
 ### TransferParams
 
-Ƭ **TransferParams**: `Object`
+> **TransferParams**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount` | `BigNumberish` |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `destination` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+##### amount
+
+> **amount**: `BigNumberish`
+
+##### assetId?
+
+> `optional` **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### destination
+
+> **destination**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Defined in
 
-[packages/account/src/account.ts:54](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/account.ts#L54)
+[packages/account/src/account.ts:54](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/account.ts#L54)
 
-___
+***
 
 ### TxParameters
 
-Ƭ **TxParameters**: `Object`
+> **TxParameters**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `maxBytecodeSubsections` | `Scalars`[``"U16"``][``"output"``] |
-| `maxGasPerTx` | `Scalars`[``"U64"``][``"output"``] |
-| `maxInputs` | `Scalars`[``"U16"``][``"output"``] |
-| `maxOutputs` | `Scalars`[``"U16"``][``"output"``] |
-| `maxSize` | `Scalars`[``"U64"``][``"output"``] |
-| `maxWitnesses` | `Scalars`[``"U32"``][``"output"``] |
-| `version` | `GqlTxParametersVersion` |
+##### maxBytecodeSubsections
+
+> **maxBytecodeSubsections**: `Scalars`\[`"U16"`\]\[`"output"`\]
+
+##### maxGasPerTx
+
+> **maxGasPerTx**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### maxInputs
+
+> **maxInputs**: `Scalars`\[`"U16"`\]\[`"output"`\]
+
+##### maxOutputs
+
+> **maxOutputs**: `Scalars`\[`"U16"`\]\[`"output"`\]
+
+##### maxSize
+
+> **maxSize**: `Scalars`\[`"U64"`\]\[`"output"`\]
+
+##### maxWitnesses
+
+> **maxWitnesses**: `Scalars`\[`"U32"`\]\[`"output"`\]
+
+##### version
+
+> **version**: `GqlTxParametersVersion`
 
 #### Defined in
 
-packages/account/src/providers/__generated__/operations.ts:1162
+packages/account/src/providers/\_\_generated\_\_/operations.ts:1173
 
-___
+***
 
 ### TxParamsType
 
-Ƭ **TxParamsType**: `Pick`&lt;`ScriptTransactionRequestLike`, ``"gasLimit"`` \| ``"tip"`` \| ``"maturity"`` \| ``"maxFee"`` \| ``"witnessLimit"``\>
+> **TxParamsType**: `Pick`\&lt;`ScriptTransactionRequestLike`, `"gasLimit"` \| `"tip"` \| `"maturity"` \| `"maxFee"` \| `"witnessLimit"`\>
 
 #### Defined in
 
-[packages/account/src/account.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/account.ts#L49)
+[packages/account/src/account.ts:49](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/account.ts#L49)
 
-___
+***
 
 ### UTXOValidationParams
 
-Ƭ **UTXOValidationParams**: `Object`
+> **UTXOValidationParams**: `object`
 
 UTXO validation params
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `utxoValidation?` | `boolean` |
+##### utxoValidation?
+
+> `optional` **utxoValidation**: `boolean`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:321](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L321)
+[packages/account/src/providers/provider.ts:321](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L321)
 
-___
+***
 
 ### VariableTransactionRequestOutput
 
-Ƭ **VariableTransactionRequestOutput**: `Object`
+> **VariableTransactionRequestOutput**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `type` | `OutputType.Variable` |
+##### type
+
+> **type**: `OutputType.Variable`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/output.ts:31](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/output.ts#L31)
+[packages/account/src/providers/transaction-request/output.ts:31](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/output.ts#L31)
 
-___
+***
 
 ### VaultConfig
 
-Ƭ **VaultConfig**: `Object`
+> **VaultConfig**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `secret?` | `string` |
-| `title?` | `string` |
-| `type` | `string` |
+##### secret?
+
+> `optional` **secret**: `string`
+
+##### title?
+
+> `optional` **title**: `string`
+
+##### type
+
+> **type**: `string`
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L17)
+[packages/account/src/wallet-manager/types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L17)
 
-___
+***
 
 ### VaultsState
 
-Ƭ **VaultsState**: { `data?`: [`VaultConfig`](/api/Account/index.md#vaultconfig) ; `title?`: `string` ; `type`: `string` ; `vault`: [`Vault`](/api/Account/Vault.md)  }[]
+> **VaultsState**: `object`[]
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L23)
+[packages/account/src/wallet-manager/types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L23)
 
-___
+***
 
 ### Version
 
-Ƭ **Version**: `Object`
+> **Version**: `object`
+
+**`Name`**
 
 Version
 
 #### Type declaration
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `app` | `string` | - |
-| `network` | `string` | Version selection this allow Caret Ranges ^1.2.3 ^0.2.5 ^0.0.4 Tilde Ranges ~1.2.3 ~1.2 ~1 And Exact Versions 1.0.0 |
+##### app
+
+> **app**: `string`
+
+##### network
+
+> **network**: `string`
+
+Version selection this allow
+Caret Ranges ^1.2.3 ^0.2.5 ^0.0.4
+Tilde Ranges ~1.2.3 ~1.2 ~1
+And Exact Versions 1.0.0
 
 #### Defined in
 
-[packages/account/src/connectors/types/data-type.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/data-type.ts#L6)
+[packages/account/src/connectors/types/data-type.ts:6](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/data-type.ts#L6)
 
-___
+***
 
 ### WalletManagerAccount
 
-Ƭ **WalletManagerAccount**: `Object`
+> **WalletManagerAccount**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `address` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
-| `publicKey` | `string` |
-| `vaultId?` | `number` |
+##### address
+
+> **address**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+##### publicKey
+
+> **publicKey**: `string`
+
+##### vaultId?
+
+> `optional` **vaultId**: `number`
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L7)
+[packages/account/src/wallet-manager/types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L7)
 
-___
+***
 
 ### WalletManagerOptions
 
-Ƭ **WalletManagerOptions**: `Object`
+> **WalletManagerOptions**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `storage` | [`StorageAbstract`](/api/Account/StorageAbstract.md) |
+##### storage
+
+> **storage**: [`StorageAbstract`](./StorageAbstract.md)
 
 #### Defined in
 
-[packages/account/src/wallet-manager/types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wallet-manager/types.ts#L13)
+[packages/account/src/wallet-manager/types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wallet-manager/types.ts#L13)
 
 ## Variables
 
 ### BLOCKS\_PAGE\_SIZE\_LIMIT
 
-• `Const` **BLOCKS\_PAGE\_SIZE\_LIMIT**: ``5``
+> `const` **BLOCKS\_PAGE\_SIZE\_LIMIT**: `5` = `5`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:66](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L66)
+[packages/account/src/providers/provider.ts:66](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L66)
 
-___
+***
 
 ### CHAIN\_IDS
 
-• `Const` **CHAIN\_IDS**: `Object`
+> `const` **CHAIN\_IDS**: `object`
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `eth` | { `foundry`: `number` = 31337; `sepolia`: `number` = 11155111 } |
-| `eth.foundry` | `number` |
-| `eth.sepolia` | `number` |
-| `fuel` | { `devnet`: `number` = 0; `testnet`: `number` = 0 } |
-| `fuel.devnet` | `number` |
-| `fuel.testnet` | `number` |
+##### eth
+
+> **eth**: `object`
+
+##### eth.foundry
+
+> **eth.foundry**: `number` = `31337`
+
+##### eth.sepolia
+
+> **eth.sepolia**: `number` = `11155111`
+
+##### fuel
+
+> **fuel**: `object`
+
+##### fuel.devnet
+
+> **fuel.devnet**: `number` = `0`
+
+##### fuel.testnet
+
+> **fuel.testnet**: `number` = `0`
 
 #### Defined in
 
-[packages/account/src/providers/chains.ts:1](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/chains.ts#L1)
+[packages/account/src/providers/chains.ts:1](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/chains.ts#L1)
 
-___
+***
 
 ### DEFAULT\_RESOURCE\_CACHE\_TTL
 
-• `Const` **DEFAULT\_RESOURCE\_CACHE\_TTL**: ``20000``
+> `const` **DEFAULT\_RESOURCE\_CACHE\_TTL**: `20000` = `20_000`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:67](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L67)
+[packages/account/src/providers/provider.ts:67](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L67)
 
-___
+***
 
 ### FuelConnectorEventType
 
-• `Const` **FuelConnectorEventType**: ``"FuelConnector"``
+> `const` **FuelConnectorEventType**: `"FuelConnector"` = `'FuelConnector'`
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:42](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/connector-types.ts#L42)
+[packages/account/src/connectors/types/connector-types.ts:42](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/connector-types.ts#L42)
 
-___
+***
 
 ### MNEMONIC\_SIZES
 
-• `Const` **MNEMONIC\_SIZES**: `number`[]
+> `const` **MNEMONIC\_SIZES**: `number`[]
 
 #### Defined in
 
-[packages/account/src/mnemonic/mnemonic.ts:20](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/mnemonic/mnemonic.ts#L20)
+[packages/account/src/mnemonic/mnemonic.ts:20](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/mnemonic/mnemonic.ts#L20)
 
-___
+***
 
 ### RESOURCES\_PAGE\_SIZE\_LIMIT
 
-• `Const` **RESOURCES\_PAGE\_SIZE\_LIMIT**: ``512``
+> `const` **RESOURCES\_PAGE\_SIZE\_LIMIT**: `512` = `512`
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:65](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/provider.ts#L65)
+[packages/account/src/providers/provider.ts:65](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/provider.ts#L65)
 
-___
+***
 
 ### assets
 
-• `Const` **assets**: { `icon`: `string` ; `name`: `string` ; `networks`: ([`NetworkEthereum`](/api/Account/index.md#networkethereum) \| [`NetworkFuel`](/api/Account/index.md#networkfuel))[] ; `symbol`: `string`  }[]
+> `const` **assets**: `object`[]
 
 #### Defined in
 
-[packages/account/src/providers/assets/assets.ts:38](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/assets.ts#L38)
+[packages/account/src/providers/assets/assets.ts:38](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/assets.ts#L38)
 
-___
+***
 
 ### english
 
-• `Const` **english**: `string`[]
+> `const` **english**: `string`[]
 
 #### Defined in
 
-[packages/account/src/wordlists/words/english.ts:1](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/wordlists/words/english.ts#L1)
+[packages/account/src/wordlists/words/english.ts:1](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/wordlists/words/english.ts#L1)
 
-___
+***
 
 ### fuelAssetsBaseUrl
 
-• `Const` **fuelAssetsBaseUrl**: ``"https://cdn.fuel.network/assets/"``
+> `const` **fuelAssetsBaseUrl**: `"https://cdn.fuel.network/assets/"` = `'https://cdn.fuel.network/assets/'`
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts:1](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts#L1)
+[packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts:1](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/fuelAssetsBaseUrl.ts#L1)
 
-___
+***
 
 ### rawAssets
 
-• `Const` **rawAssets**: [`Assets`](/api/Account/index.md#assets)
+> `const` **rawAssets**: [`Assets`](index.md#assets)
 
 #### Defined in
 
-[packages/account/src/providers/assets/assets.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/assets.ts#L6)
+[packages/account/src/providers/assets/assets.ts:6](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/assets.ts#L6)
 
 ## Functions
 
-### addAmountToCoinQuantities
+### addAmountToCoinQuantities()
 
-▸ **addAmountToCoinQuantities**(`params`): [`CoinQuantity`](/api/Account/index.md#coinquantity)[]
+> **addAmountToCoinQuantities**(`params`): [`CoinQuantity`](index.md#coinquantity)[]
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | [`IAddAmountToAssetParams`](/api/Account/IAddAmountToAssetParams.md) |
+• **params**: [`IAddAmountToAssetParams`](./IAddAmountToAssetParams.md)
 
 #### Returns
 
-[`CoinQuantity`](/api/Account/index.md#coinquantity)[]
+[`CoinQuantity`](index.md#coinquantity)[]
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:40](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/coin-quantity.ts#L40)
+[packages/account/src/providers/coin-quantity.ts:40](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/coin-quantity.ts#L40)
 
-___
+***
 
-### assemblePanicError
+### assemblePanicError()
 
-▸ **assemblePanicError**(`statusReason`, `metadata`): `FuelError`
+> **assemblePanicError**(`statusReason`, `metadata`): `FuelError`
 
 Assembles an error message for a panic status.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `statusReason` | `string` |
-| `metadata` | `Record`&lt;`string`, `unknown`\> |
+• **statusReason**: `string`
+
+• **metadata**: `Record`\&lt;`string`, `unknown`\>
 
 #### Returns
 
@@ -2153,19 +3322,17 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/extract-tx-error.ts:22](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/extract-tx-error.ts#L22)
+[packages/account/src/providers/utils/extract-tx-error.ts:22](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/extract-tx-error.ts#L22)
 
-___
+***
 
-### assembleReceiptByType
+### assembleReceiptByType()
 
-▸ **assembleReceiptByType**(`receipt`): `ReceiptCall` \| `ReceiptReturn` \| `ReceiptReturnData` \| `ReceiptPanic` \| `ReceiptRevert` \| `ReceiptLog` \| `ReceiptLogData` \| `ReceiptTransfer` \| `ReceiptTransferOut` \| `ReceiptScriptResult` \| `ReceiptMessageOut` \| `ReceiptMint` \| `ReceiptBurn`
+> **assembleReceiptByType**(`receipt`): `ReceiptCall` \| `ReceiptReturn` \| `ReceiptReturnData` \| `ReceiptPanic` \| `ReceiptRevert` \| `ReceiptLog` \| `ReceiptLogData` \| `ReceiptTransfer` \| `ReceiptTransferOut` \| `ReceiptScriptResult` \| `ReceiptMessageOut` \| `ReceiptMint` \| `ReceiptBurn`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `receipt` | `GqlReceiptFragment` |
+• **receipt**: `GqlReceiptFragment`
 
 #### Returns
 
@@ -2173,23 +3340,27 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/receipts.ts:69](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/receipts.ts#L69)
+[packages/account/src/providers/utils/receipts.ts:69](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/receipts.ts#L69)
 
-___
+***
 
-### assembleRevertError
+### assembleRevertError()
 
-▸ **assembleRevertError**(`receipts`, `logs`, `metadata`): `FuelError`
+> **assembleRevertError**(`receipts`, `logs`, `metadata`): `FuelError`
 
 Assembles an error message for a revert status.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `receipts` | `TransactionResultReceipt`[] | The transaction result processed receipts. |
-| `logs` | `unknown`[] | The transaction decoded logs. |
-| `metadata` | `Record`&lt;`string`, `unknown`\> | - |
+• **receipts**: `TransactionResultReceipt`[]
+
+The transaction result processed receipts.
+
+• **logs**: `unknown`[]
+
+The transaction decoded logs.
+
+• **metadata**: `Record`\&lt;`string`, `unknown`\>
 
 #### Returns
 
@@ -2199,26 +3370,23 @@ The error message.
 
 #### Defined in
 
-[packages/account/src/providers/utils/extract-tx-error.ts:47](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/extract-tx-error.ts#L47)
+[packages/account/src/providers/utils/extract-tx-error.ts:47](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/extract-tx-error.ts#L47)
 
-___
+***
 
-### cacheFor
+### cacheFor()
 
-▸ **cacheFor**&lt;`F`\>(`fn`, `«destructured»`): `F`
+> **cacheFor**\&lt;`F`\>(`fn`, `__namedParameters`): `F`
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `F` | extends (...`args`: `unknown`[]) => `Promise`&lt;`unknown`\> |
+• **F** *extends* (...`args`) => `Promise`\&lt;`unknown`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `fn` | `F` |
-| `«destructured»` | `CacheForOptions` |
+• **fn**: `F`
+
+• **\_\_namedParameters**: `CacheForOptions`
 
 #### Returns
 
@@ -2226,40 +3394,37 @@ ___
 
 #### Defined in
 
-[packages/account/src/connectors/utils/cache.ts:16](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/utils/cache.ts#L16)
+[packages/account/src/connectors/utils/cache.ts:16](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/utils/cache.ts#L16)
 
-___
+***
 
-### cacheRequestInputsResources
+### cacheRequestInputsResources()
 
-▸ **cacheRequestInputsResources**(`inputs`): `Required`&lt;`ExcludeResourcesOption`\>
+> **cacheRequestInputsResources**(`inputs`): `Required`\&lt;`ExcludeResourcesOption`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `inputs` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput)[] |
+• **inputs**: [`TransactionRequestInput`](index.md#transactionrequestinput)[]
 
 #### Returns
 
-`Required`&lt;`ExcludeResourcesOption`\>
+`Required`\&lt;`ExcludeResourcesOption`\>
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:52](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L52)
+[packages/account/src/providers/transaction-request/helpers.ts:52](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L52)
 
-___
+***
 
-### cacheRequestInputsResourcesFromOwner
+### cacheRequestInputsResourcesFromOwner()
 
-▸ **cacheRequestInputsResourcesFromOwner**(`inputs`, `owner`): `ExcludeResourcesOption`
+> **cacheRequestInputsResourcesFromOwner**(`inputs`, `owner`): `ExcludeResourcesOption`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `inputs` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput)[] |
-| `owner` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+• **inputs**: [`TransactionRequestInput`](index.md#transactionrequestinput)[]
+
+• **owner**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Returns
 
@@ -2267,19 +3432,17 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:68](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L68)
+[packages/account/src/providers/transaction-request/helpers.ts:68](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L68)
 
-___
+***
 
-### calculateGasFee
+### calculateGasFee()
 
-▸ **calculateGasFee**(`params`): `BN`
+> **calculateGasFee**(`params`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | [`CalculateGasFeeParams`](/api/Account/CalculateGasFeeParams.md) |
+• **params**: [`CalculateGasFeeParams`](./CalculateGasFeeParams.md)
 
 #### Returns
 
@@ -2287,22 +3450,23 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:183](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L183)
+[packages/account/src/providers/utils/gas.ts:183](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L183)
 
-___
+***
 
-### calculateMetadataGasForTxBlob
+### calculateMetadataGasForTxBlob()
 
-▸ **calculateMetadataGasForTxBlob**(`«destructured»`): `BN`
+> **calculateMetadataGasForTxBlob**(`__namedParameters`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `gasCosts` | [`GasCosts`](/api/Account/index.md#gascosts) |
-| › `txBytesSize` | `number` |
-| › `witnessBytesSize` | `number` |
+• **\_\_namedParameters**
+
+• **\_\_namedParameters.gasCosts**: [`GasCosts`](index.md#gascosts-1)
+
+• **\_\_namedParameters.txBytesSize**: `number`
+
+• **\_\_namedParameters.witnessBytesSize**: `number`
 
 #### Returns
 
@@ -2310,23 +3474,25 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:162](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L162)
+[packages/account/src/providers/utils/gas.ts:162](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L162)
 
-___
+***
 
-### calculateMetadataGasForTxCreate
+### calculateMetadataGasForTxCreate()
 
-▸ **calculateMetadataGasForTxCreate**(`«destructured»`): `BN`
+> **calculateMetadataGasForTxCreate**(`__namedParameters`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `contractBytesSize` | `BN` |
-| › `gasCosts` | [`GasCosts`](/api/Account/index.md#gascosts) |
-| › `stateRootSize` | `number` |
-| › `txBytesSize` | `number` |
+• **\_\_namedParameters**
+
+• **\_\_namedParameters.contractBytesSize**: `BN`
+
+• **\_\_namedParameters.gasCosts**: [`GasCosts`](index.md#gascosts-1)
+
+• **\_\_namedParameters.stateRootSize**: `number`
+
+• **\_\_namedParameters.txBytesSize**: `number`
 
 #### Returns
 
@@ -2334,21 +3500,21 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:131](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L131)
+[packages/account/src/providers/utils/gas.ts:131](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L131)
 
-___
+***
 
-### calculateMetadataGasForTxScript
+### calculateMetadataGasForTxScript()
 
-▸ **calculateMetadataGasForTxScript**(`«destructured»`): `BN`
+> **calculateMetadataGasForTxScript**(`__namedParameters`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | `Object` |
-| › `gasCosts` | [`GasCosts`](/api/Account/index.md#gascosts) |
-| › `txBytesSize` | `number` |
+• **\_\_namedParameters**
+
+• **\_\_namedParameters.gasCosts**: [`GasCosts`](index.md#gascosts-1)
+
+• **\_\_namedParameters.txBytesSize**: `number`
 
 #### Returns
 
@@ -2356,19 +3522,17 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:152](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L152)
+[packages/account/src/providers/utils/gas.ts:152](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L152)
 
-___
+***
 
-### calculateTXFeeForSummary
+### calculateTXFeeForSummary()
 
-▸ **calculateTXFeeForSummary**(`params`): `BN`
+> **calculateTXFeeForSummary**(`params`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | [`CalculateTXFeeForSummaryParams`](/api/Account/index.md#calculatetxfeeforsummaryparams) |
+• **params**: [`CalculateTXFeeForSummaryParams`](index.md#calculatetxfeeforsummaryparams)
 
 #### Returns
 
@@ -2376,42 +3540,38 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:35](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L35)
+[packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts:35](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/calculate-tx-fee-for-summary.ts#L35)
 
-___
+***
 
-### deferPromise
+### deferPromise()
 
-▸ **deferPromise**&lt;`R`\>(): [`DeferPromise`](/api/Account/index.md#deferpromise)&lt;`R`\>
+> **deferPromise**\&lt;`R`\>(): [`DeferPromise`](index.md#deferpromiser)\&lt;`R`\>
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `R` | `unknown` |
+• **R** = `unknown`
 
 #### Returns
 
-[`DeferPromise`](/api/Account/index.md#deferpromise)&lt;`R`\>
+[`DeferPromise`](index.md#deferpromiser)\&lt;`R`\>
 
 #### Defined in
 
-[packages/account/src/connectors/utils/promises.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/utils/promises.ts#L11)
+[packages/account/src/connectors/utils/promises.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/utils/promises.ts#L11)
 
-___
+***
 
-### dispatchFuelConnectorEvent
+### dispatchFuelConnectorEvent()
 
-▸ **dispatchFuelConnectorEvent**(`connector`): `void`
+> **dispatchFuelConnectorEvent**(`connector`): `void`
 
 Fuel Connector Event is a custom event that can be used by the connector to
 inform the Fuel Connector Manager that a new connector is available.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `connector` | [`FuelConnector`](/api/Account/FuelConnector.md) |
+• **connector**: [`FuelConnector`](./FuelConnector.md)
 
 #### Returns
 
@@ -2419,61 +3579,55 @@ inform the Fuel Connector Manager that a new connector is available.
 
 #### Defined in
 
-[packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts:8](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts#L8)
+[packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts:8](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/utils/dispatch-fuel-connector-event.ts#L8)
 
-___
+***
 
-### extractBurnedAssetsFromReceipts
+### extractBurnedAssetsFromReceipts()
 
-▸ **extractBurnedAssetsFromReceipts**(`receipts`): [`MintedAsset`](/api/Account/MintedAsset.md)[]
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `receipts` | `TransactionResultReceipt`[] |
-
-#### Returns
-
-[`MintedAsset`](/api/Account/MintedAsset.md)[]
-
-#### Defined in
-
-[packages/account/src/providers/transaction-summary/receipt.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/receipt.ts#L49)
-
-___
-
-### extractMintedAssetsFromReceipts
-
-▸ **extractMintedAssetsFromReceipts**(`receipts`): [`MintedAsset`](/api/Account/MintedAsset.md)[]
+> **extractBurnedAssetsFromReceipts**(`receipts`): [`MintedAsset`](./MintedAsset.md)[]
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `receipts` | `TransactionResultReceipt`[] |
+• **receipts**: `TransactionResultReceipt`[]
 
 #### Returns
 
-[`MintedAsset`](/api/Account/MintedAsset.md)[]
+[`MintedAsset`](./MintedAsset.md)[]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/receipt.ts:30](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/receipt.ts#L30)
+[packages/account/src/providers/transaction-summary/receipt.ts:49](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/receipt.ts#L49)
 
-___
+***
 
-### extractTxError
+### extractMintedAssetsFromReceipts()
 
-▸ **extractTxError**(`params`): `FuelError`
+> **extractMintedAssetsFromReceipts**(`receipts`): [`MintedAsset`](./MintedAsset.md)[]
+
+#### Parameters
+
+• **receipts**: `TransactionResultReceipt`[]
+
+#### Returns
+
+[`MintedAsset`](./MintedAsset.md)[]
+
+#### Defined in
+
+[packages/account/src/providers/transaction-summary/receipt.ts:30](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/receipt.ts#L30)
+
+***
+
+### extractTxError()
+
+> **extractTxError**(`params`): `FuelError`
 
 Extracts the transaction error and returns a FuelError object.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | `IExtractTxError` |
+• **params**: `IExtractTxError`
 
 #### Returns
 
@@ -2483,21 +3637,21 @@ The FuelError object.
 
 #### Defined in
 
-[packages/account/src/providers/utils/extract-tx-error.ts:126](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/extract-tx-error.ts#L126)
+[packages/account/src/providers/utils/extract-tx-error.ts:126](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/extract-tx-error.ts#L126)
 
-___
+***
 
-### gasUsedByInputs
+### gasUsedByInputs()
 
-▸ **gasUsedByInputs**(`inputs`, `txBytesSize`, `gasCosts`): `BN`
+> **gasUsedByInputs**(`inputs`, `txBytesSize`, `gasCosts`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `inputs` | ([`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput) \| `Input`)[] |
-| `txBytesSize` | `number` |
-| `gasCosts` | [`GasCosts`](/api/Account/index.md#gascosts) |
+• **inputs**: ([`TransactionRequestInput`](index.md#transactionrequestinput) \| `Input`)[]
+
+• **txBytesSize**: `number`
+
+• **gasCosts**: [`GasCosts`](index.md#gascosts-1)
 
 #### Returns
 
@@ -2505,21 +3659,21 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:40](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L40)
+[packages/account/src/providers/utils/gas.ts:40](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L40)
 
-___
+***
 
-### getAssetAmountInRequestInputs
+### getAssetAmountInRequestInputs()
 
-▸ **getAssetAmountInRequestInputs**(`inputs`, `assetId`, `baseAsset`): `BN`
+> **getAssetAmountInRequestInputs**(`inputs`, `assetId`, `baseAsset`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `inputs` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput)[] |
-| `assetId` | `string` |
-| `baseAsset` | `string` |
+• **inputs**: [`TransactionRequestInput`](index.md#transactionrequestinput)[]
+
+• **assetId**: `string`
+
+• **baseAsset**: `string`
 
 #### Returns
 
@@ -2527,125 +3681,113 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:35](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L35)
+[packages/account/src/providers/transaction-request/helpers.ts:35](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L35)
 
-___
+***
 
-### getAssetEth
+### getAssetEth()
 
-▸ **getAssetEth**(`asset`, `chainId?`): `undefined` \| [`AssetEth`](/api/Account/index.md#asseteth)
+> **getAssetEth**(`asset`, `chainId`?): `undefined` \| [`AssetEth`](index.md#asseteth)
 
 Returns the asset's details on Ethereum
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `asset` | [`Asset`](/api/Account/index.md#asset) |
-| `chainId?` | `number` |
+• **asset**: [`Asset`](index.md#asset)
+
+• **chainId?**: `number`
 
 #### Returns
 
-`undefined` \| [`AssetEth`](/api/Account/index.md#asseteth)
+`undefined` \| [`AssetEth`](index.md#asseteth)
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:80](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/network.ts#L80)
+[packages/account/src/providers/assets/utils/network.ts:80](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/network.ts#L80)
 
-___
+***
 
-### getAssetFuel
+### getAssetFuel()
 
-▸ **getAssetFuel**(`asset`, `chainId?`): `undefined` \| [`AssetFuel`](/api/Account/index.md#assetfuel)
+> **getAssetFuel**(`asset`, `chainId`?): `undefined` \| [`AssetFuel`](index.md#assetfuel)
 
 Returns the asset's details on Fuel
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `asset` | [`Asset`](/api/Account/index.md#asset) |
-| `chainId?` | `number` |
+• **asset**: [`Asset`](index.md#asset)
+
+• **chainId?**: `number`
 
 #### Returns
 
-`undefined` \| [`AssetFuel`](/api/Account/index.md#assetfuel)
+`undefined` \| [`AssetFuel`](index.md#assetfuel)
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:90](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/network.ts#L90)
+[packages/account/src/providers/assets/utils/network.ts:90](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/network.ts#L90)
 
-___
+***
 
-### getAssetNetwork
+### getAssetNetwork()
 
-▸ **getAssetNetwork**&lt;`T`\>(`«destructured»`): `NetworkTypeToNetwork`&lt;`T`\>
+> **getAssetNetwork**\&lt;`T`\>(`__namedParameters`): `NetworkTypeToNetwork`\&lt;`T`\>
 
 Returns the asset's network on the given network
 eg. getAssetNetwork({ asset, chainId: 1, networkType: 'ethereum' }) will return the asset's details on Ethereum mainnet
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends `undefined` \| [`NetworkTypes`](/api/Account/index.md#networktypes) |
+• **T** *extends* `undefined` \| [`NetworkTypes`](index.md#networktypes)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | [`GetAssetNetworkParams`](/api/Account/index.md#getassetnetworkparams)&lt;`T`\> |
+• **\_\_namedParameters**: [`GetAssetNetworkParams`](index.md#getassetnetworkparamst)\&lt;`T`\>
 
 #### Returns
 
-`NetworkTypeToNetwork`&lt;`T`\>
+`NetworkTypeToNetwork`\&lt;`T`\>
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:32](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/network.ts#L32)
+[packages/account/src/providers/assets/utils/network.ts:32](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/network.ts#L32)
 
-___
+***
 
-### getAssetWithNetwork
+### getAssetWithNetwork()
 
-▸ **getAssetWithNetwork**&lt;`T`\>(`«destructured»`): `undefined` \| [`AssetEth`](/api/Account/index.md#asseteth) \| [`AssetFuel`](/api/Account/index.md#assetfuel)
+> **getAssetWithNetwork**\&lt;`T`\>(`__namedParameters`): `undefined` \| [`AssetEth`](index.md#asseteth) \| [`AssetFuel`](index.md#assetfuel)
 
 Returns the asset's details on the given network alongwith the asset itself
 eg. getAssetWithNetwork({ asset, chainId: 1, networkType: 'ethereum' }) will return the asset's details on Ethereum mainnet and the asset itself
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `T` | extends [`NetworkTypes`](/api/Account/index.md#networktypes) |
+• **T** *extends* [`NetworkTypes`](index.md#networktypes)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `«destructured»` | [`GetAssetNetworkParams`](/api/Account/index.md#getassetnetworkparams)&lt;`T`\> |
+• **\_\_namedParameters**: [`GetAssetNetworkParams`](index.md#getassetnetworkparamst)\&lt;`T`\>
 
 #### Returns
 
-`undefined` \| [`AssetEth`](/api/Account/index.md#asseteth) \| [`AssetFuel`](/api/Account/index.md#assetfuel)
+`undefined` \| [`AssetEth`](index.md#asseteth) \| [`AssetFuel`](index.md#assetfuel)
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:48](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/network.ts#L48)
+[packages/account/src/providers/assets/utils/network.ts:48](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/network.ts#L48)
 
-___
+***
 
-### getDefaultChainId
+### getDefaultChainId()
 
-▸ **getDefaultChainId**(`networkType`): `undefined` \| `number`
+> **getDefaultChainId**(`networkType`): `undefined` \| `number`
 
 Returns the default chainId for the given network
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `networkType` | [`NetworkTypes`](/api/Account/index.md#networktypes) |
+• **networkType**: [`NetworkTypes`](index.md#networktypes)
 
 #### Returns
 
@@ -2653,19 +3795,17 @@ Returns the default chainId for the given network
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/network.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/network.ts#L11)
+[packages/account/src/providers/assets/utils/network.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/network.ts#L11)
 
-___
+***
 
-### getMaxGas
+### getMaxGas()
 
-▸ **getMaxGas**(`params`): `BN`
+> **getMaxGas**(`params`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | [`IGetMaxGasParams`](/api/Account/IGetMaxGasParams.md) |
+• **params**: [`IGetMaxGasParams`](./IGetMaxGasParams.md)
 
 #### Returns
 
@@ -2673,19 +3813,17 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:110](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L110)
+[packages/account/src/providers/utils/gas.ts:110](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L110)
 
-___
+***
 
-### getMinGas
+### getMinGas()
 
-▸ **getMinGas**(`params`): `BN`
+> **getMinGas**(`params`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | [`IGetMinGasParams`](/api/Account/IGetMinGasParams.md) |
+• **params**: [`IGetMinGasParams`](./IGetMinGasParams.md)
 
 #### Returns
 
@@ -2693,105 +3831,93 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:88](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L88)
+[packages/account/src/providers/utils/gas.ts:88](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L88)
 
-___
+***
 
-### getRequestInputResourceOwner
+### getRequestInputResourceOwner()
 
-▸ **getRequestInputResourceOwner**(`input`): [`BytesLike`](/api/Interfaces/index.md#byteslike)
+> **getRequestInputResourceOwner**(`input`): [`BytesLike`](../Interfaces/index.md#byteslike)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | [`CoinTransactionRequestInput`](/api/Account/index.md#cointransactionrequestinput) \| [`MessageTransactionRequestInput`](/api/Account/index.md#messagetransactionrequestinput) |
+• **input**: [`CoinTransactionRequestInput`](index.md#cointransactionrequestinput) \| [`MessageTransactionRequestInput`](index.md#messagetransactionrequestinput)
 
 #### Returns
 
-[`BytesLike`](/api/Interfaces/index.md#byteslike)
+[`BytesLike`](../Interfaces/index.md#byteslike)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L26)
+[packages/account/src/providers/transaction-request/helpers.ts:26](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L26)
 
-___
+***
 
-### getTransactionSummary
+### getTransactionSummary()
 
-▸ **getTransactionSummary**&lt;`TTransactionType`\>(`params`): `Promise`&lt;`TransactionResult`\>
+> **getTransactionSummary**\&lt;`TTransactionType`\>(`params`): `Promise`\&lt;`TransactionResult`\>
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `TTransactionType` | `void` |
+• **TTransactionType** = `void`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `params` | `GetTransactionSummaryParams` |
+• **params**: `GetTransactionSummaryParams`
 
 #### Returns
 
-`Promise`&lt;`TransactionResult`\>
+`Promise`\&lt;`TransactionResult`\>
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:26](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L26)
+[packages/account/src/providers/transaction-summary/get-transaction-summary.ts:26](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/get-transaction-summary.ts#L26)
 
-___
+***
 
-### isRequestInputCoin
+### isRequestInputCoin()
 
-▸ **isRequestInputCoin**(`input`): input is CoinTransactionRequestInput
+> **isRequestInputCoin**(`input`): `input is CoinTransactionRequestInput`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput) |
+• **input**: [`TransactionRequestInput`](index.md#transactionrequestinput)
 
 #### Returns
 
-input is CoinTransactionRequestInput
+`input is CoinTransactionRequestInput`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:13](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L13)
+[packages/account/src/providers/transaction-request/helpers.ts:13](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L13)
 
-___
+***
 
-### isRequestInputMessage
+### isRequestInputMessage()
 
-▸ **isRequestInputMessage**(`input`): input is MessageTransactionRequestInput
+> **isRequestInputMessage**(`input`): `input is MessageTransactionRequestInput`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput) |
+• **input**: [`TransactionRequestInput`](index.md#transactionrequestinput)
 
 #### Returns
 
-input is MessageTransactionRequestInput
+`input is MessageTransactionRequestInput`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:17](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L17)
+[packages/account/src/providers/transaction-request/helpers.ts:17](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L17)
 
-___
+***
 
-### isRequestInputResource
+### isRequestInputResource()
 
-▸ **isRequestInputResource**(`input`): input is CoinTransactionRequestInput \| MessageTransactionRequestInput
+> **isRequestInputResource**(`input`): input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput) |
+• **input**: [`TransactionRequestInput`](index.md#transactionrequestinput)
 
 #### Returns
 
@@ -2799,20 +3925,19 @@ input is CoinTransactionRequestInput \| MessageTransactionRequestInput
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:21](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L21)
+[packages/account/src/providers/transaction-request/helpers.ts:21](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L21)
 
-___
+***
 
-### isRequestInputResourceFromOwner
+### isRequestInputResourceFromOwner()
 
-▸ **isRequestInputResourceFromOwner**(`input`, `owner`): `boolean`
+> **isRequestInputResourceFromOwner**(`input`, `owner`): `boolean`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `input` | [`CoinTransactionRequestInput`](/api/Account/index.md#cointransactionrequestinput) \| [`MessageTransactionRequestInput`](/api/Account/index.md#messagetransactionrequestinput) |
-| `owner` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
+• **input**: [`CoinTransactionRequestInput`](index.md#cointransactionrequestinput) \| [`MessageTransactionRequestInput`](index.md#messagetransactionrequestinput)
+
+• **owner**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Returns
 
@@ -2820,19 +3945,17 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/helpers.ts:30](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/helpers.ts#L30)
+[packages/account/src/providers/transaction-request/helpers.ts:30](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/helpers.ts#L30)
 
-___
+***
 
-### processGqlReceipt
+### processGqlReceipt()
 
-▸ **processGqlReceipt**(`gqlReceipt`): `TransactionResultReceipt`
+> **processGqlReceipt**(`gqlReceipt`): `TransactionResultReceipt`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `gqlReceipt` | `GqlReceiptFragment` |
+• **gqlReceipt**: `GqlReceiptFragment`
 
 #### Returns
 
@@ -2840,20 +3963,19 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/receipt.ts:9](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/receipt.ts#L9)
+[packages/account/src/providers/transaction-summary/receipt.ts:9](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/receipt.ts#L9)
 
-___
+***
 
-### resolveGasDependentCosts
+### resolveGasDependentCosts()
 
-▸ **resolveGasDependentCosts**(`byteSize`, `gasDependentCost`): `BN`
+> **resolveGasDependentCosts**(`byteSize`, `gasDependentCost`): `BN`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `byteSize` | `BNInput` |
-| `gasDependentCost` | `GqlDependentCost` |
+• **byteSize**: `BNInput`
+
+• **gasDependentCost**: `GqlDependentCost`
 
 #### Returns
 
@@ -2861,45 +3983,47 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/utils/gas.ts:29](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/utils/gas.ts#L29)
+[packages/account/src/providers/utils/gas.ts:29](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/utils/gas.ts#L29)
 
-___
+***
 
-### resolveIconPaths
+### resolveIconPaths()
 
-▸ **resolveIconPaths**(`assets`, `basePath?`): { `icon`: `string` ; `name`: `string` ; `networks`: ([`NetworkEthereum`](/api/Account/index.md#networkethereum) \| [`NetworkFuel`](/api/Account/index.md#networkfuel))[] ; `symbol`: `string`  }[]
+> **resolveIconPaths**(`assets`, `basePath`): `object`[]
 
 Returns the list of assets with the icon paths 'resolved'. eg. `./eth.svg` -> `https://some-url.com/eth.svg`
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `assets` | [`Assets`](/api/Account/index.md#assets) | `undefined` | List of assets |
-| `basePath` | `string` | `'./'` | Base path for the icon URLs (default: './') |
+• **assets**: [`Assets`](index.md#assets)
+
+List of assets
+
+• **basePath**: `string` = `'./'`
+
+Base path for the icon URLs (default: './')
 
 #### Returns
 
-{ `icon`: `string` ; `name`: `string` ; `networks`: ([`NetworkEthereum`](/api/Account/index.md#networkethereum) \| [`NetworkFuel`](/api/Account/index.md#networkfuel))[] ; `symbol`: `string`  }[]
+`object`[]
 
 The assets with the icon paths resolved
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/resolveIconPaths.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/resolveIconPaths.ts#L11)
+[packages/account/src/providers/assets/utils/resolveIconPaths.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/resolveIconPaths.ts#L11)
 
-___
+***
 
-### urlJoin
+### urlJoin()
 
-▸ **urlJoin**(`baseUrl`, `...paths`): `string`
+> **urlJoin**(`baseUrl`, ...`paths`): `string`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `baseUrl` | `undefined` \| `string` |
-| `...paths` | `string`[] |
+• **baseUrl**: `undefined` \| `string`
+
+• ...**paths**: `string`[]
 
 #### Returns
 
@@ -2907,41 +4031,39 @@ ___
 
 #### Defined in
 
-[packages/account/src/providers/assets/utils/url.ts:5](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/assets/utils/url.ts#L5)
+[packages/account/src/providers/assets/utils/url.ts:5](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/assets/utils/url.ts#L5)
 
-___
+***
 
-### withTimeout
+### withTimeout()
 
-▸ **withTimeout**&lt;`F`, `RT`\>(`promise`, `timeout?`): `Promise`&lt;`RT`\>
+> **withTimeout**\&lt;`F`, `RT`\>(`promise`, `timeout`): `Promise`\&lt;`RT`\>
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `F` | extends `Promise`&lt;`unknown`\> |
-| `RT` | `Awaited`&lt;`F`\> |
+• **F** *extends* `Promise`\&lt;`unknown`\>
+
+• **RT** = `Awaited`\&lt;`F`\>
 
 #### Parameters
 
-| Name | Type | Default value |
-| :------ | :------ | :------ |
-| `promise` | `F` | `undefined` |
-| `timeout` | `number` | `1050` |
+• **promise**: `F`
+
+• **timeout**: `number` = `1050`
 
 #### Returns
 
-`Promise`&lt;`RT`\>
+`Promise`\&lt;`RT`\>
 
 #### Defined in
 
-[packages/account/src/connectors/utils/promises.ts:23](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/utils/promises.ts#L23)
+[packages/account/src/connectors/utils/promises.ts:23](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/utils/promises.ts#L23)
 
 ## Events
 
 ### AssetsEvent
 
-Ƭ **AssetsEvent**: `Object`
+> **AssetsEvent**: `object`
 
 Event trigger when the assets list of metadata changed.
 
@@ -2949,20 +4071,23 @@ Event trigger when the assets list of metadata changed.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | [`Asset`](/api/Account/index.md#asset)[] |
-| `type` | [`assets`](/api/Account/FuelConnectorEventTypes.md#assets) |
+##### data
+
+> **data**: [`Asset`](index.md#asset)[]
+
+##### type
+
+> **type**: [`assets`](./FuelConnectorEventTypes.md#assets)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:114](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L114)
+[packages/account/src/connectors/types/events.ts:114](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L114)
 
-___
+***
 
 ### ConnectionEvent
 
-Ƭ **ConnectionEvent**: `Object`
+> **ConnectionEvent**: `object`
 
 Event trigger when connection status changes. With the new connection status.
 
@@ -2970,20 +4095,23 @@ Event trigger when connection status changes. With the new connection status.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | `boolean` |
-| `type` | [`connection`](/api/Account/FuelConnectorEventTypes.md#connection) |
+##### data
+
+> **data**: `boolean`
+
+##### type
+
+> **type**: [`connection`](./FuelConnectorEventTypes.md#connection)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:52](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L52)
+[packages/account/src/connectors/types/events.ts:52](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L52)
 
-___
+***
 
 ### ConnectorEvent
 
-Ƭ **ConnectorEvent**: `Object`
+> **ConnectorEvent**: `object`
 
 Event trigger when the current connector has changed.
 
@@ -2991,20 +4119,23 @@ Event trigger when the current connector has changed.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | [`FuelConnector`](/api/Account/FuelConnector.md) |
-| `type` | [`currentConnector`](/api/Account/FuelConnectorEventTypes.md#currentconnector) |
+##### data
+
+> **data**: [`FuelConnector`](./FuelConnector.md)
+
+##### type
+
+> **type**: [`currentConnector`](./FuelConnectorEventTypes.md#currentconnector)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:102](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L102)
+[packages/account/src/connectors/types/events.ts:102](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L102)
 
-___
+***
 
 ### ConnectorsEvent
 
-Ƭ **ConnectorsEvent**: `Object`
+> **ConnectorsEvent**: `object`
 
 Event trigger when the list of connectors has changed.
 
@@ -3012,20 +4143,23 @@ Event trigger when the list of connectors has changed.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | [`FuelConnector`](/api/Account/FuelConnector.md)[] |
-| `type` | [`connectors`](/api/Account/FuelConnectorEventTypes.md#connectors) |
+##### data
+
+> **data**: [`FuelConnector`](./FuelConnector.md)[]
+
+##### type
+
+> **type**: [`connectors`](./FuelConnectorEventTypes.md#connectors)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:90](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L90)
+[packages/account/src/connectors/types/events.ts:90](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L90)
 
-___
+***
 
 ### NetworkEvent
 
-Ƭ **NetworkEvent**: `Object`
+> **NetworkEvent**: `object`
 
 Event trigger when the network selected on the connector is changed.
 It should trigger even if the network is not available for the connection.
@@ -3034,20 +4168,23 @@ It should trigger even if the network is not available for the connection.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | [`Network`](/api/Account/index.md#network) |
-| `type` | [`currentNetwork`](/api/Account/FuelConnectorEventTypes.md#currentnetwork) |
+##### data
+
+> **data**: [`Network`](index.md#network)
+
+##### type
+
+> **type**: [`currentNetwork`](./FuelConnectorEventTypes.md#currentnetwork)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:65](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L65)
+[packages/account/src/connectors/types/events.ts:65](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L65)
 
-___
+***
 
 ### NetworksEvent
 
-Ƭ **NetworksEvent**: `Object`
+> **NetworksEvent**: `object`
 
 Event trigger when the network selected on the connector is changed.
 It should trigger even if the network is not available for the connection.
@@ -3056,11 +4193,67 @@ It should trigger even if the network is not available for the connection.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `data` | [`Network`](/api/Account/index.md#network) |
-| `type` | [`networks`](/api/Account/FuelConnectorEventTypes.md#networks) |
+##### data
+
+> **data**: [`Network`](index.md#network)
+
+##### type
+
+> **type**: [`networks`](./FuelConnectorEventTypes.md#networks)
 
 #### Defined in
 
-[packages/account/src/connectors/types/events.ts:78](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/events.ts#L78)
+[packages/account/src/connectors/types/events.ts:78](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/events.ts#L78)
+
+## Enumerations
+
+- [FuelConnectorEventTypes](./FuelConnectorEventTypes.md)
+- [FuelConnectorMethods](./FuelConnectorMethods.md)
+- [Language](./Language.md)
+- [TransactionType](./TransactionType.md)
+
+## Classes
+
+- [Account](./Account.md)
+- [BaseTransactionRequest](./BaseTransactionRequest.md)
+- [BaseWalletUnlocked](./BaseWalletUnlocked.md)
+- [BlobTransactionRequest](./BlobTransactionRequest.md)
+- [CreateTransactionRequest](./CreateTransactionRequest.md)
+- [Fuel](./Fuel.md)
+- [FuelConnector](./FuelConnector.md)
+- [HDWallet](./HDWallet.md)
+- [LocalStorage](./LocalStorage.md)
+- [MemoryStorage](./MemoryStorage.md)
+- [Mnemonic](./Mnemonic.md)
+- [MnemonicVault](./MnemonicVault.md)
+- [Predicate](./Predicate.md)
+- [PrivateKeyVault](./PrivateKeyVault.md)
+- [Provider](./Provider.md)
+- [ScriptTransactionRequest](./ScriptTransactionRequest.md)
+- [Signer](./Signer.md)
+- [StorageAbstract](./StorageAbstract.md)
+- [TransactionResponse](./TransactionResponse.md)
+- [Vault](./Vault.md)
+- [Wallet](./Wallet.md)
+- [WalletLocked](./WalletLocked.md)
+- [WalletManager](./WalletManager.md)
+- [WalletUnlocked](./WalletUnlocked.md)
+
+## Interfaces
+
+- [AssembleTransactionSummaryParams](./AssembleTransactionSummaryParams.md)
+- [BlobTransactionRequestLike](./BlobTransactionRequestLike.md)
+- [CalculateGasFeeParams](./CalculateGasFeeParams.md)
+- [GenerateOptions](./GenerateOptions.md)
+- [GetTransactionSummaryFromRequestParams](./GetTransactionSummaryFromRequestParams.md)
+- [GetTransactionsSummariesParams](./GetTransactionsSummariesParams.md)
+- [GetTransactionsSummariesReturns](./GetTransactionsSummariesReturns.md)
+- [GetTransferOperationsParams](./GetTransferOperationsParams.md)
+- [IAddAmountToAssetParams](./IAddAmountToAssetParams.md)
+- [IGetMaxGasParams](./IGetMaxGasParams.md)
+- [IGetMinGasParams](./IGetMinGasParams.md)
+- [MintedAsset](./MintedAsset.md)
+- [MnemonicVaultOptions](./MnemonicVaultOptions.md)
+- [PkVaultOptions](./PkVaultOptions.md)
+- [TargetObject](./TargetObject.md)
+- [WalletManagerState](./WalletManagerState.md)

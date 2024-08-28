@@ -1,19 +1,23 @@
-# Class: FuelConnector
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).FuelConnector
+***
+
+# Class: `abstract` FuelConnector
+
+**`Name`**
 
 FuelConnector
 
 Wallet Connector is a interface that represents a Wallet Connector and all the methods
 that should be implemented to be compatible with the Fuel SDK.
 
-## Hierarchy
+## Extends
 
 - `EventEmitter`
 
-  ↳ **`FuelConnector`**
+## Extended by
 
-  ↳↳ [`Fuel`](/api/Account/Fuel.md)
+- [`Fuel`](Fuel.md)
 
 ## Implements
 
@@ -21,127 +25,125 @@ that should be implemented to be compatible with the Fuel SDK.
 
 ## Constructors
 
-### constructor
+### new FuelConnector()
 
-• **new FuelConnector**(`options?`): [`FuelConnector`](/api/Account/FuelConnector.md)
+> **new FuelConnector**(`options`?): [`FuelConnector`](FuelConnector.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `options?` | `EventEmitterOptions` |
+• **options?**: `EventEmitterOptions`
 
 #### Returns
 
-[`FuelConnector`](/api/Account/FuelConnector.md)
+[`FuelConnector`](FuelConnector.md)
 
 #### Inherited from
 
-EventEmitter.constructor
+`EventEmitter.constructor`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:134
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:134
 
 ## Properties
 
 ### connected
 
-• **connected**: `boolean` = `false`
+> **connected**: `boolean` = `false`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L90)
+[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L90)
 
-___
+***
 
 ### events
 
-• **events**: typeof [`FuelConnectorEventTypes`](/api/Account/FuelConnectorEventTypes.md) = `FuelConnectorEventTypes`
+> **events**: *typeof* [`FuelConnectorEventTypes`](./FuelConnectorEventTypes.md) = `FuelConnectorEventTypes`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:92](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L92)
+[packages/account/src/connectors/fuel-connector.ts:92](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L92)
 
-___
+***
 
 ### installed
 
-• **installed**: `boolean` = `false`
+> **installed**: `boolean` = `false`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L91)
+[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L91)
 
-___
+***
 
 ### metadata
 
-• **metadata**: [`ConnectorMetadata`](/api/Account/index.md#connectormetadata)
+> **metadata**: [`ConnectorMetadata`](../index.md#connectormetadata)
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L89)
+[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L89)
 
-___
+***
 
 ### name
 
-• **name**: `string` = `''`
+> **name**: `string` = `''`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:88](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L88)
+[packages/account/src/connectors/fuel-connector.ts:88](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L88)
 
-___
+***
 
 ### captureRejectionSymbol
 
-▪ `Static` `Readonly` **captureRejectionSymbol**: typeof [`captureRejectionSymbol`](/api/Account/WalletManager.md#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](WalletManager.md#capturerejectionsymbol)
 
 Value: `Symbol.for('nodejs.rejection')`
 
 See how to write a custom `rejection handler`.
 
-**`Since`**
+#### Since
 
 v13.4.0, v12.16.0
 
 #### Inherited from
 
-EventEmitter.captureRejectionSymbol
+`EventEmitter.captureRejectionSymbol`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:452
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:452
 
-___
+***
 
 ### captureRejections
 
-▪ `Static` **captureRejections**: `boolean`
+> `static` **captureRejections**: `boolean`
 
 Value: [boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type)
 
 Change the default `captureRejections` option on all new `EventEmitter` objects.
 
-**`Since`**
+#### Since
 
 v13.4.0, v12.16.0
 
 #### Inherited from
 
-EventEmitter.captureRejections
+`EventEmitter.captureRejections`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:459
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:459
 
-___
+***
 
 ### defaultMaxListeners
 
-▪ `Static` **defaultMaxListeners**: `number`
+> `static` **defaultMaxListeners**: `number`
 
 By default, a maximum of `10` listeners can be registered for any single
 event. This limit can be changed for individual `EventEmitter` instances
@@ -179,60 +181,58 @@ the event emitter instance, the event's name and the number of attached
 listeners, respectively.
 Its `name` property is set to `'MaxListenersExceededWarning'`.
 
-**`Since`**
+#### Since
 
 v0.11.2
 
 #### Inherited from
 
-EventEmitter.defaultMaxListeners
+`EventEmitter.defaultMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:498
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:498
 
-___
+***
 
 ### errorMonitor
 
-▪ `Static` `Readonly` **errorMonitor**: typeof [`errorMonitor`](/api/Account/WalletManager.md#errormonitor)
+> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](WalletManager.md#errormonitor)
 
 This symbol shall be used to install a listener for only monitoring `'error'` events. Listeners installed using this symbol are called before the regular `'error'` listeners are called.
 
 Installing a listener using this symbol does not change the behavior once an `'error'` event is emitted. Therefore, the process will still crash if no
 regular `'error'` listener is installed.
 
-**`Since`**
+#### Since
 
 v13.6.0, v12.17.0
 
 #### Inherited from
 
-EventEmitter.errorMonitor
+`EventEmitter.errorMonitor`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:445
 
 ## Methods
 
-### [captureRejectionSymbol]
+### \[captureRejectionSymbol\]()?
 
-▸ **[captureRejectionSymbol]**&lt;`K`\>(`error`, `event`, `...args`): `void`
+> `optional` **\[captureRejectionSymbol\]**\&lt;`K`\>(`error`, `event`, ...`args`): `void`
 
-#### Type parameters
+#### Type Parameters
 
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `error` | `Error` |
-| `event` | `string` \| `symbol` |
-| `...args` | `AnyRest` |
+• **error**: `Error`
+
+• **event**: `string` \| `symbol`
+
+• ...**args**: `AnyRest`
 
 #### Returns
 
@@ -240,69 +240,70 @@ node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:445
 
 #### Inherited from
 
-EventEmitter.[captureRejectionSymbol]
+`EventEmitter.[captureRejectionSymbol]`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:136
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:136
 
-___
+***
 
-### accounts
+### accounts()
 
-▸ **accounts**(): `Promise`&lt;`string`[]\>
+> **accounts**(): `Promise`\&lt;`string`[]\>
 
 Should return all the accounts authorized for the
 current connection.
 
 #### Returns
 
-`Promise`&lt;`string`[]\>
+`Promise`\&lt;`string`[]\>
 
 The accounts addresses strings
 
 #### Implementation of
 
-Connector.accounts
+`Connector.accounts`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:130](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L130)
+[packages/account/src/connectors/fuel-connector.ts:130](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L130)
 
-___
+***
 
-### addABI
+### addABI()
 
-▸ **addABI**(`_contractId`, `_abi`): `Promise`&lt;`boolean`\>
+> **addABI**(`_contractId`, `_abi`): `Promise`\&lt;`boolean`\>
 
 Should add the ABI to the connector and return true if the ABI was added successfully.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_contractId` | `string` |
-| `_abi` | `JsonAbi` |
+• **\_contractId**: `string`
+
+• **\_abi**: `JsonAbi`
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Return true if the ABI was added successfully.
 
 #### Implementation of
 
-Connector.addABI
+`Connector.addABI`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:301](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L301)
+[packages/account/src/connectors/fuel-connector.ts:301](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L301)
 
-___
+***
 
-### addAsset
+### addAsset()
 
-▸ **addAsset**(`_asset`): `Promise`&lt;`boolean`\>
+> **addAsset**(`_asset`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should add the asset metadata to the connector and return true if the asset
 was added successfully.
@@ -311,35 +312,35 @@ If the asset already exists it should throw an error.
 
  assets
 
-**`Throws`**
-
-Error if the asset already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_asset` | [`Asset`](/api/Account/index.md#asset) |
+• **\_asset**: [`Asset`](../index.md#asset)
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 True if the asset was added successfully
 
+#### Throws
+
+Error if the asset already exists
+
 #### Implementation of
 
-Connector.addAsset
+`Connector.addAsset`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:239](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L239)
+[packages/account/src/connectors/fuel-connector.ts:239](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L239)
 
-___
+***
 
-### addAssets
+### addAssets()
 
-▸ **addAssets**(`_assets`): `Promise`&lt;`boolean`\>
+> **addAssets**(`_assets`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should add the assets metadata to the connector and return true if the asset
 was added successfully.
@@ -348,128 +349,125 @@ If the asset already exists it should throw an error.
 
  assets
 
-**`Throws`**
-
-Error if the asset already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_assets` | [`Asset`](/api/Account/index.md#asset)[] |
+• **\_assets**: [`Asset`](../index.md#asset)[]
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 True if the asset was added successfully
 
+#### Throws
+
+Error if the asset already exists
+
 #### Implementation of
 
-Connector.addAssets
+`Connector.addAssets`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:224](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L224)
+[packages/account/src/connectors/fuel-connector.ts:224](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L224)
 
-___
+***
 
-### addListener
+### addListener()
 
-▸ **addListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **addListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.on(eventName, listener)`.
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.addListener
+`EventEmitter.addListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:597
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:597
 
-___
+***
 
-### addNetwork
+### addNetwork()
 
-▸ **addNetwork**(`_networkUrl`): `Promise`&lt;`boolean`\>
+> **addNetwork**(`_networkUrl`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should start the add network process and return true if the network was added successfully.
 
  networks
 
-**`Throws`**
-
-Error if the network already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_networkUrl` | `string` |
+• **\_networkUrl**: `string`
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Return true if the network was added successfully
 
+#### Throws
+
+Error if the network already exists
+
 #### Implementation of
 
-Connector.addNetwork
+`Connector.addNetwork`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:260](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L260)
+[packages/account/src/connectors/fuel-connector.ts:260](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L260)
 
-___
+***
 
-### assets
+### assets()
 
-▸ **assets**(): `Promise`&lt;[`Asset`](/api/Account/index.md#asset)[]\>
+> **assets**(): `Promise`\&lt;[`Asset`](../index.md#asset)[]\>
 
 Should return all the assets added to the connector. If a connection is already established.
 
 #### Returns
 
-`Promise`&lt;[`Asset`](/api/Account/index.md#asset)[]\>
+`Promise`\&lt;[`Asset`](../index.md#asset)[]\>
 
 Array of assets metadata from the connector vinculated to the all accounts from a specific Wallet.
 
 #### Implementation of
 
-Connector.assets
+`Connector.assets`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:248](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L248)
+[packages/account/src/connectors/fuel-connector.ts:248](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L248)
 
-___
+***
 
-### connect
+### connect()
 
-▸ **connect**(): `Promise`&lt;`boolean`\>
+> **connect**(): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should start the connection process and return
 true if the account authorize the connection.
@@ -480,23 +478,23 @@ and return false if the user reject the connection.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 boolean - connection status.
 
 #### Implementation of
 
-Connector.connect
+`Connector.connect`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:143](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L143)
+[packages/account/src/connectors/fuel-connector.ts:143](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L143)
 
-___
+***
 
-### currentAccount
+### currentAccount()
 
-▸ **currentAccount**(): `Promise`&lt;``null`` \| `string`\>
+> **currentAccount**(): `Promise`\&lt;`null` \| `string`\>
 
 Should return the current account selected inside the connector, if the account
 is authorized for the connection.
@@ -505,45 +503,47 @@ If the account is not authorized it should return null.
 
 #### Returns
 
-`Promise`&lt;``null`` \| `string`\>
+`Promise`\&lt;`null` \| `string`\>
 
 The current account selected otherwise null.
 
 #### Implementation of
 
-Connector.currentAccount
+`Connector.currentAccount`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:209](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L209)
+[packages/account/src/connectors/fuel-connector.ts:209](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L209)
 
-___
+***
 
-### currentNetwork
+### currentNetwork()
 
-▸ **currentNetwork**(): `Promise`&lt;[`Network`](/api/Account/index.md#network)\>
+> **currentNetwork**(): `Promise`\&lt;[`Network`](../index.md#network)\>
 
 Should return the current network selected inside the connector. Even if the connection is not established.
 
 #### Returns
 
-`Promise`&lt;[`Network`](/api/Account/index.md#network)\>
+`Promise`\&lt;[`Network`](../index.md#network)\>
 
 Return the current network selected inside the connector.
 
 #### Implementation of
 
-Connector.currentNetwork
+`Connector.currentNetwork`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:290](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L290)
+[packages/account/src/connectors/fuel-connector.ts:290](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L290)
 
-___
+***
 
-### disconnect
+### disconnect()
 
-▸ **disconnect**(): `Promise`&lt;`boolean`\>
+> **disconnect**(): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should disconnect the current connection and
 return false if the disconnection was successful.
@@ -552,23 +552,23 @@ return false if the disconnection was successful.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 The connection status.
 
 #### Implementation of
 
-Connector.disconnect
+`Connector.disconnect`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:154](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L154)
+[packages/account/src/connectors/fuel-connector.ts:154](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L154)
 
-___
+***
 
-### emit
+### emit()
 
-▸ **emit**&lt;`K`\>(`eventName`, `...args`): `boolean`
+> **emit**\&lt;`K`\>(`eventName`, ...`args`): `boolean`
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -608,40 +608,37 @@ myEmitter.emit('event', 1, 2, 3, 4, 5);
 // event with parameters 1, 2, 3, 4, 5 in third listener
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `...args` | `AnyRest` |
+• **eventName**: `string` \| `symbol`
+
+• ...**args**: `AnyRest`
 
 #### Returns
 
 `boolean`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.emit
+`EventEmitter.emit`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:859
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:859
 
-___
+***
 
-### eventNames
+### eventNames()
 
-▸ **eventNames**(): (`string` \| `symbol`)[]
+> **eventNames**(): (`string` \| `symbol`)[]
 
 Returns an array listing the events for which the emitter has registered
 listeners. The values in the array are strings or `Symbol`s.
@@ -660,170 +657,167 @@ console.log(myEE.eventNames());
 // Prints: [ 'foo', 'bar', Symbol(symbol) ]
 ```
 
-**`Since`**
-
-v6.0.0
-
 #### Returns
 
 (`string` \| `symbol`)[]
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-EventEmitter.eventNames
+`EventEmitter.eventNames`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:922
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:922
 
-___
+***
 
-### getABI
+### getABI()
 
-▸ **getABI**(`_id`): `Promise`&lt;``null`` \| `JsonAbi`\>
+> **getABI**(`_id`): `Promise`\&lt;`null` \| `JsonAbi`\>
 
 Should return the ABI from the connector vinculated to the all accounts from a specific Wallet.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_id` | `string` |
+• **\_id**: `string`
 
 #### Returns
 
-`Promise`&lt;``null`` \| `JsonAbi`\>
+`Promise`\&lt;`null` \| `JsonAbi`\>
 
 The ABI if it exists, otherwise return null.
 
 #### Implementation of
 
-Connector.getABI
+`Connector.getABI`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:311](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L311)
+[packages/account/src/connectors/fuel-connector.ts:311](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L311)
 
-___
+***
 
-### getMaxListeners
+### getMaxListeners()
 
-▸ **getMaxListeners**(): `number`
+> **getMaxListeners**(): `number`
 
 Returns the current max listener value for the `EventEmitter` which is either
-set by `emitter.setMaxListeners(n)` or defaults to [defaultMaxListeners](/api/Account/FuelConnector.md#defaultmaxlisteners).
-
-**`Since`**
-
-v1.0.0
+set by `emitter.setMaxListeners(n)` or defaults to [defaultMaxListeners](FuelConnector.md#defaultmaxlisteners).
 
 #### Returns
 
 `number`
 
+#### Since
+
+v1.0.0
+
 #### Inherited from
 
-EventEmitter.getMaxListeners
+`EventEmitter.getMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:774
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:774
 
-___
+***
 
-### hasABI
+### hasABI()
 
-▸ **hasABI**(`_id`): `Promise`&lt;`boolean`\>
+> **hasABI**(`_id`): `Promise`\&lt;`boolean`\>
 
 Should return true if the abi exists in the connector vinculated to the all accounts from a specific Wallet.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_id` | `string` |
+• **\_id**: `string`
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Returns true if the abi exists or false if not.
 
 #### Implementation of
 
-Connector.hasABI
+`Connector.hasABI`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:321](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L321)
+[packages/account/src/connectors/fuel-connector.ts:321](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L321)
 
-___
+***
 
-### isConnected
+### isConnected()
 
-▸ **isConnected**(): `Promise`&lt;`boolean`\>
+> **isConnected**(): `Promise`\&lt;`boolean`\>
 
 Should return true if the connector is connected
 to any of the accounts available.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 The connection status.
 
 #### Implementation of
 
-Connector.isConnected
+`Connector.isConnected`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:120](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L120)
+[packages/account/src/connectors/fuel-connector.ts:120](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L120)
 
-___
+***
 
-### listenerCount
+### listenerCount()
 
-▸ **listenerCount**&lt;`K`\>(`eventName`, `listener?`): `number`
+> **listenerCount**\&lt;`K`\>(`eventName`, `listener`?): `number`
 
 Returns the number of listeners listening for the event named `eventName`.
 If `listener` is provided, it will return how many times the listener is found
 in the list of the listeners of the event.
 
-**`Since`**
+#### Type Parameters
 
-v3.2.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event being listened for |
-| `listener?` | `Function` | The event handler function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event being listened for
+
+• **listener?**: `Function`
+
+The event handler function
 
 #### Returns
 
 `number`
 
+#### Since
+
+v3.2.0
+
 #### Inherited from
 
-EventEmitter.listenerCount
+`EventEmitter.listenerCount`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:868
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:868
 
-___
+***
 
-### listeners
+### listeners()
 
-▸ **listeners**&lt;`K`\>(`eventName`): `Function`[]
+> **listeners**\&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`.
 
@@ -835,114 +829,109 @@ console.log(util.inspect(server.listeners('connection')));
 // Prints: [ [Function] ]
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
+• **eventName**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.listeners
+`EventEmitter.listeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:787
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:787
 
-___
+***
 
-### networks
+### networks()
 
-▸ **networks**(): `Promise`&lt;[`Network`](/api/Account/index.md#network)[]\>
+> **networks**(): `Promise`\&lt;[`Network`](../index.md#network)[]\>
 
 Should return all the networks available from the connector. If the connection is already established.
 
 #### Returns
 
-`Promise`&lt;[`Network`](/api/Account/index.md#network)[]\>
+`Promise`\&lt;[`Network`](../index.md#network)[]\>
 
 Return all the networks added to the connector.
 
 #### Implementation of
 
-Connector.networks
+`Connector.networks`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:281](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L281)
+[packages/account/src/connectors/fuel-connector.ts:281](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L281)
 
-___
+***
 
-### off
+### off()
 
-▸ **off**&lt;`K`\>(`eventName`, `listener`): `this`
+> **off**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Alias for `emitter.removeListener()`.
 
-**`Since`**
+#### Type Parameters
 
-v10.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v10.0.0
+
 #### Inherited from
 
-EventEmitter.off
+`EventEmitter.off`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:747
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:747
 
-___
+***
 
-### on
+### on()
 
-▸ **on**&lt;`E`, `D`\>(`eventName`, `listener`): `this`
+> **on**\&lt;`E`, `D`\>(`eventName`, `listener`): `this`
 
 Event listener for the connector.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `E` | extends [`connectors`](/api/Account/FuelConnectorEventTypes.md#connectors) \| [`currentConnector`](/api/Account/FuelConnectorEventTypes.md#currentconnector) \| [`connection`](/api/Account/FuelConnectorEventTypes.md#connection) \| [`accounts`](/api/Account/FuelConnectorEventTypes.md#accounts) \| [`currentAccount`](/api/Account/FuelConnectorEventTypes.md#currentaccount) \| [`networks`](/api/Account/FuelConnectorEventTypes.md#networks) \| [`currentNetwork`](/api/Account/FuelConnectorEventTypes.md#currentnetwork) \| [`assets`](/api/Account/FuelConnectorEventTypes.md#assets) |
-| `D` | extends `never` |
+• **E** *extends* [`connectors`](./FuelConnectorEventTypes.md#connectors) \| [`currentConnector`](./FuelConnectorEventTypes.md#currentconnector) \| [`connection`](./FuelConnectorEventTypes.md#connection) \| [`accounts`](./FuelConnectorEventTypes.md#accounts) \| [`currentAccount`](./FuelConnectorEventTypes.md#currentaccount) \| [`networks`](./FuelConnectorEventTypes.md#networks) \| [`currentNetwork`](./FuelConnectorEventTypes.md#currentnetwork) \| [`assets`](./FuelConnectorEventTypes.md#assets)
+
+• **D** *extends* `never`
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `E` | The event name to listen |
-| `listener` | (`data`: `D`) => `void` | The listener function |
+• **eventName**: `E`
+
+The event name to listen
+
+• **listener**
+
+The listener function
 
 #### Returns
 
@@ -950,17 +939,17 @@ Event listener for the connector.
 
 #### Overrides
 
-EventEmitter.on
+`EventEmitter.on`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:331](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L331)
+[packages/account/src/connectors/fuel-connector.ts:331](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L331)
 
-___
+***
 
-### once
+### once()
 
-▸ **once**&lt;`K`\>(`eventName`, `listener`): `this`
+> **once**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds a **one-time** `listener` function for the event named `eventName`. The
 next time `eventName` is triggered, this listener is removed and then invoked.
@@ -987,63 +976,64 @@ myEE.emit('foo');
 //   a
 ```
 
-**`Since`**
+#### Type Parameters
 
-v0.3.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.3.0
+
 #### Inherited from
 
-EventEmitter.once
+`EventEmitter.once`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:659
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:659
 
-___
+***
 
-### ping
+### ping()
 
-▸ **ping**(): `Promise`&lt;`boolean`\>
+> **ping**(): `Promise`\&lt;`boolean`\>
 
 Should return true if the connector is loaded
 in less then one second.
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Always true.
 
 #### Implementation of
 
-Connector.ping
+`Connector.ping`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:100](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L100)
+[packages/account/src/connectors/fuel-connector.ts:100](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L100)
 
-___
+***
 
-### prependListener
+### prependListener()
 
-▸ **prependListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **prependListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds the `listener` function to the _beginning_ of the listeners array for the
 event named `eventName`. No checks are made to see if the `listener` has
@@ -1058,40 +1048,41 @@ server.prependListener('connection', (stream) => {
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v6.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-EventEmitter.prependListener
+`EventEmitter.prependListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:886
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:886
 
-___
+***
 
-### prependOnceListener
+### prependOnceListener()
 
-▸ **prependOnceListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **prependOnceListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Adds a **one-time**`listener` function for the event named `eventName` to the _beginning_ of the listeners array. The next time `eventName` is triggered, this
 listener is removed, and then invoked.
@@ -1104,40 +1095,41 @@ server.prependOnceListener('connection', (stream) => {
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v6.0.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `eventName` | `string` \| `symbol` | The name of the event. |
-| `listener` | (...`args`: `any`[]) => `void` | The callback function |
+• **eventName**: `string` \| `symbol`
+
+The name of the event.
+
+• **listener**
+
+The callback function
 
 #### Returns
 
 `this`
 
+#### Since
+
+v6.0.0
+
 #### Inherited from
 
-EventEmitter.prependOnceListener
+`EventEmitter.prependOnceListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:902
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:902
 
-___
+***
 
-### rawListeners
+### rawListeners()
 
-▸ **rawListeners**&lt;`K`\>(`eventName`): `Function`[]
+> **rawListeners**\&lt;`K`\>(`eventName`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`,
 including any wrappers (such as those created by `.once()`).
@@ -1167,39 +1159,35 @@ newListeners[0]();
 emitter.emit('log');
 ```
 
-**`Since`**
+#### Type Parameters
 
-v9.4.0
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
+• **eventName**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v9.4.0
+
 #### Inherited from
 
-EventEmitter.rawListeners
+`EventEmitter.rawListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:818
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:818
 
-___
+***
 
-### removeAllListeners
+### removeAllListeners()
 
-▸ **removeAllListeners**(`eventName?`): `this`
+> **removeAllListeners**(`eventName`?): `this`
 
 Removes all listeners, or those of the specified `eventName`.
 
@@ -1209,33 +1197,31 @@ component or module (e.g. sockets or file streams).
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
-
-v0.1.26
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName?` | `string` \| `symbol` |
+• **eventName?**: `string` \| `symbol`
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.removeAllListeners
+`EventEmitter.removeAllListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:758
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:758
 
-___
+***
 
-### removeListener
+### removeListener()
 
-▸ **removeListener**&lt;`K`\>(`eventName`, `listener`): `this`
+> **removeListener**\&lt;`K`\>(`eventName`, `listener`): `this`
 
 Removes the specified `listener` from the listener array for the event named `eventName`.
 
@@ -1317,74 +1303,71 @@ ee.emit('ping');
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
+#### Type Parameters
 
-v0.1.26
-
-#### Type parameters
-
-| Name |
-| :------ |
-| `K` |
+• **K**
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `eventName` | `string` \| `symbol` |
-| `listener` | (...`args`: `any`[]) => `void` |
+• **eventName**: `string` \| `symbol`
+
+• **listener**
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.1.26
+
 #### Inherited from
 
-EventEmitter.removeListener
+`EventEmitter.removeListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:742
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:742
 
-___
+***
 
-### selectNetwork
+### selectNetwork()
 
-▸ **selectNetwork**(`_network`): `Promise`&lt;`boolean`\>
+> **selectNetwork**(`_network`): `Promise`\&lt;`boolean`\>
+
+**`Emits`**
 
 Should start the select network process and return true if the network has change successfully.
 
  networks
 
-**`Throws`**
-
-Error if the network already exists
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_network` | [`Network`](/api/Account/index.md#network) |
+• **\_network**: [`Network`](../index.md#network)
 
 #### Returns
 
-`Promise`&lt;`boolean`\>
+`Promise`\&lt;`boolean`\>
 
 Return true if the network was added successfully
 
+#### Throws
+
+Error if the network already exists
+
 #### Implementation of
 
-Connector.selectNetwork
+`Connector.selectNetwork`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:272](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L272)
+[packages/account/src/connectors/fuel-connector.ts:272](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L272)
 
-___
+***
 
-### sendTransaction
+### sendTransaction()
 
-▸ **sendTransaction**(`_address`, `_transaction`): `Promise`&lt;`string`\>
+> **sendTransaction**(`_address`, `_transaction`): `Promise`\&lt;`string`\>
 
 Should start the send transaction process and return
 the transaction id submitted to the network.
@@ -1395,30 +1378,29 @@ to be sent to the wrong network and lost.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | `string` |
-| `_transaction` | [`TransactionRequestLike`](/api/Account/index.md#transactionrequestlike) |
+• **\_address**: `string`
+
+• **\_transaction**: [`TransactionRequestLike`](../index.md#transactionrequestlike)
 
 #### Returns
 
-`Promise`&lt;`string`\>
+`Promise`\&lt;`string`\>
 
 The transaction id
 
 #### Implementation of
 
-Connector.sendTransaction
+`Connector.sendTransaction`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:197](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L197)
+[packages/account/src/connectors/fuel-connector.ts:197](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L197)
 
-___
+***
 
-### setMaxListeners
+### setMaxListeners()
 
-▸ **setMaxListeners**(`n`): `this`
+> **setMaxListeners**(`n`): `this`
 
 By default `EventEmitter`s will print a warning if more than `10` listeners are
 added for a particular event. This is a useful default that helps finding
@@ -1427,116 +1409,114 @@ modified for this specific `EventEmitter` instance. The value can be set to `Inf
 
 Returns a reference to the `EventEmitter`, so that calls can be chained.
 
-**`Since`**
-
-v0.3.5
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `n` | `number` |
+• **n**: `number`
 
 #### Returns
 
 `this`
 
+#### Since
+
+v0.3.5
+
 #### Inherited from
 
-EventEmitter.setMaxListeners
+`EventEmitter.setMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:768
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:768
 
-___
+***
 
-### signMessage
+### signMessage()
 
-▸ **signMessage**(`_address`, `_message`): `Promise`&lt;`string`\>
+> **signMessage**(`_address`, `_message`): `Promise`\&lt;`string`\>
 
 Should start the sign message process and return
 the signed message.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | `string` |
-| `_message` | `string` |
+• **\_address**: `string`
+
+• **\_message**: `string`
 
 #### Returns
 
-`Promise`&lt;`string`\>
+`Promise`\&lt;`string`\>
 
 Message signature
 
 #### Implementation of
 
-Connector.signMessage
+`Connector.signMessage`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:167](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L167)
+[packages/account/src/connectors/fuel-connector.ts:167](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L167)
 
-___
+***
 
-### signTransaction
+### signTransaction()
 
-▸ **signTransaction**(`_address`, `_transaction`): `Promise`&lt;`string`\>
+> **signTransaction**(`_address`, `_transaction`): `Promise`\&lt;`string`\>
 
 Should start the sign transaction process and return
 the signed transaction.
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `_address` | `string` |
-| `_transaction` | [`TransactionRequestLike`](/api/Account/index.md#transactionrequestlike) |
+• **\_address**: `string`
+
+• **\_transaction**: [`TransactionRequestLike`](../index.md#transactionrequestlike)
 
 #### Returns
 
-`Promise`&lt;`string`\>
+`Promise`\&lt;`string`\>
 
 Transaction signature
 
 #### Implementation of
 
-Connector.signTransaction
+`Connector.signTransaction`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:180](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L180)
+[packages/account/src/connectors/fuel-connector.ts:180](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L180)
 
-___
+***
 
-### version
+### version()
 
-▸ **version**(): `Promise`&lt;[`Version`](/api/Account/index.md#version)\>
+> **version**(): `Promise`\&lt;[`Version`](../index.md#version-7)\>
 
 Should return the current version of the connector
 and the network version that is compatible.
 
 #### Returns
 
-`Promise`&lt;[`Version`](/api/Account/index.md#version)\>
+`Promise`\&lt;[`Version`](../index.md#version-7)\>
 
 boolean - connection status.
 
 #### Implementation of
 
-Connector.version
+`Connector.version`
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:110](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/fuel-connector.ts#L110)
+[packages/account/src/connectors/fuel-connector.ts:110](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/fuel-connector.ts#L110)
 
-___
+***
 
-### addAbortListener
+### addAbortListener()
 
-▸ **addAbortListener**(`signal`, `resource`): `Disposable`
+> `static` **addAbortListener**(`signal`, `resource`): `Disposable`
+
+**`Experimental`**
 
 Listens once to the `abort` event on the provided `signal`.
 
@@ -1568,16 +1548,11 @@ function example(signal) {
 }
 ```
 
-**`Since`**
-
-v20.5.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `signal` | `AbortSignal` |
-| `resource` | (`event`: `Event`) => `void` |
+• **signal**: `AbortSignal`
+
+• **resource**
 
 #### Returns
 
@@ -1585,19 +1560,23 @@ v20.5.0
 
 Disposable that removes the `abort` listener.
 
+#### Since
+
+v20.5.0
+
 #### Inherited from
 
-EventEmitter.addAbortListener
+`EventEmitter.addAbortListener`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:437
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:437
 
-___
+***
 
-### getEventListeners
+### getEventListeners()
 
-▸ **getEventListeners**(`emitter`, `name`): `Function`[]
+> `static` **getEventListeners**(`emitter`, `name`): `Function`[]
 
 Returns a copy of the array of listeners for the event named `eventName`.
 
@@ -1624,34 +1603,33 @@ import { getEventListeners, EventEmitter } from 'node:events';
 }
 ```
 
-**`Since`**
-
-v15.2.0, v14.17.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
-| `name` | `string` \| `symbol` |
+• **emitter**: `EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>
+
+• **name**: `string` \| `symbol`
 
 #### Returns
 
 `Function`[]
 
+#### Since
+
+v15.2.0, v14.17.0
+
 #### Inherited from
 
-EventEmitter.getEventListeners
+`EventEmitter.getEventListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:358
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:358
 
-___
+***
 
-### getMaxListeners
+### getMaxListeners()
 
-▸ **getMaxListeners**(`emitter`): `number`
+> `static` **getMaxListeners**(`emitter`): `number`
 
 Returns the currently set max amount of listeners.
 
@@ -1679,33 +1657,31 @@ import { getMaxListeners, setMaxListeners, EventEmitter } from 'node:events';
 }
 ```
 
-**`Since`**
-
-v19.9.0
-
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\> |
+• **emitter**: `EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>
 
 #### Returns
 
 `number`
 
+#### Since
+
+v19.9.0
+
 #### Inherited from
 
-EventEmitter.getMaxListeners
+`EventEmitter.getMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:387
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:387
 
-___
+***
 
-### listenerCount
+### ~~listenerCount()~~
 
-▸ **listenerCount**(`emitter`, `eventName`): `number`
+> `static` **listenerCount**(`emitter`, `eventName`): `number`
 
 A class method that returns the number of listeners for the given `eventName` registered on the given `emitter`.
 
@@ -1719,38 +1695,43 @@ console.log(listenerCount(myEmitter, 'event'));
 // Prints: 2
 ```
 
-**`Since`**
-
-v0.9.12
-
-**`Deprecated`**
-
-Since v3.2.0 - Use `listenerCount` instead.
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> | The emitter to query |
-| `eventName` | `string` \| `symbol` | The event name |
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
+
+The emitter to query
+
+• **eventName**: `string` \| `symbol`
+
+The event name
 
 #### Returns
 
 `number`
 
+#### Since
+
+v0.9.12
+
+#### Deprecated
+
+Since v3.2.0 - Use `listenerCount` instead.
+
 #### Inherited from
 
-EventEmitter.listenerCount
+`EventEmitter.listenerCount`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:330
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:330
 
-___
+***
 
-### on
+### on()
 
-▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
+#### on(emitter, eventName, options)
+
+> `static` **on**(`emitter`, `eventName`, `options`?): `AsyncIterableIterator`\&lt;`any`[]\>
 
 ```js
 import { on, EventEmitter } from 'node:events';
@@ -1829,59 +1810,63 @@ for await (const event of on(ee, 'foo', { close: ['close'] })) {
 console.log('done'); // prints 'done'
 ```
 
-**`Since`**
+##### Parameters
 
-v13.6.0, v12.16.0
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
 
-#### Parameters
+• **eventName**: `string` \| `symbol`
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
-| `eventName` | `string` \| `symbol` |
-| `options?` | `StaticEventEmitterIteratorOptions` |
+• **options?**: `StaticEventEmitterIteratorOptions`
 
-#### Returns
+##### Returns
 
-`AsyncIterableIterator`&lt;`any`[]\>
+`AsyncIterableIterator`\&lt;`any`[]\>
 
 An `AsyncIterator` that iterates `eventName` events emitted by the `emitter`
 
-#### Inherited from
+##### Since
 
-EventEmitter.on
+v13.6.0, v12.16.0
 
-#### Defined in
+##### Inherited from
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:303
+`EventEmitter.on`
 
-▸ **on**(`emitter`, `eventName`, `options?`): `AsyncIterableIterator`&lt;`any`[]\>
+##### Defined in
 
-#### Parameters
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:303
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` |
-| `eventName` | `string` |
-| `options?` | `StaticEventEmitterIteratorOptions` |
+#### on(emitter, eventName, options)
 
-#### Returns
+> `static` **on**(`emitter`, `eventName`, `options`?): `AsyncIterableIterator`\&lt;`any`[]\>
 
-`AsyncIterableIterator`&lt;`any`[]\>
+##### Parameters
 
-#### Inherited from
+• **emitter**: `EventTarget`
 
-EventEmitter.on
+• **eventName**: `string`
 
-#### Defined in
+• **options?**: `StaticEventEmitterIteratorOptions`
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:308
+##### Returns
 
-___
+`AsyncIterableIterator`\&lt;`any`[]\>
 
-### once
+##### Inherited from
 
-▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
+`EventEmitter.on`
+
+##### Defined in
+
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:308
+
+***
+
+### once()
+
+#### once(emitter, eventName, options)
+
+> `static` **once**(`emitter`, `eventName`, `options`?): `Promise`\&lt;`any`[]\>
 
 Creates a `Promise` that is fulfilled when the `EventEmitter` emits the given
 event or that is rejected if the `EventEmitter` emits `'error'` while waiting.
@@ -1960,57 +1945,59 @@ ac.abort(); // Abort waiting for the event
 ee.emit('foo'); // Prints: Waiting for the event was canceled!
 ```
 
-**`Since`**
+##### Parameters
+
+• **emitter**: `EventEmitter`\&lt;`DefaultEventMap`\>
+
+• **eventName**: `string` \| `symbol`
+
+• **options?**: `StaticEventEmitterOptions`
+
+##### Returns
+
+`Promise`\&lt;`any`[]\>
+
+##### Since
 
 v11.13.0, v10.16.0
 
-#### Parameters
+##### Inherited from
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventEmitter`&lt;`DefaultEventMap`\> |
-| `eventName` | `string` \| `symbol` |
-| `options?` | `StaticEventEmitterOptions` |
+`EventEmitter.once`
 
-#### Returns
+##### Defined in
 
-`Promise`&lt;`any`[]\>
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:217
 
-#### Inherited from
+#### once(emitter, eventName, options)
 
-EventEmitter.once
+> `static` **once**(`emitter`, `eventName`, `options`?): `Promise`\&lt;`any`[]\>
 
-#### Defined in
+##### Parameters
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:217
+• **emitter**: `EventTarget`
 
-▸ **once**(`emitter`, `eventName`, `options?`): `Promise`&lt;`any`[]\>
+• **eventName**: `string`
 
-#### Parameters
+• **options?**: `StaticEventEmitterOptions`
 
-| Name | Type |
-| :------ | :------ |
-| `emitter` | `EventTarget` |
-| `eventName` | `string` |
-| `options?` | `StaticEventEmitterOptions` |
+##### Returns
 
-#### Returns
+`Promise`\&lt;`any`[]\>
 
-`Promise`&lt;`any`[]\>
+##### Inherited from
 
-#### Inherited from
+`EventEmitter.once`
 
-EventEmitter.once
+##### Defined in
 
-#### Defined in
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:222
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:222
+***
 
-___
+### setMaxListeners()
 
-### setMaxListeners
-
-▸ **setMaxListeners**(`n?`, `...eventTargets`): `void`
+> `static` **setMaxListeners**(`n`?, ...`eventTargets`?): `void`
 
 ```js
 import { setMaxListeners, EventEmitter } from 'node:events';
@@ -2021,25 +2008,26 @@ const emitter = new EventEmitter();
 setMaxListeners(5, target, emitter);
 ```
 
-**`Since`**
-
-v15.4.0
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `n?` | `number` | A non-negative number. The maximum number of listeners per `EventTarget` event. |
-| `...eventTargets` | (`EventTarget` \| `EventEmitter`&lt;`DefaultEventMap`\>)[] | - |
+• **n?**: `number`
+
+A non-negative number. The maximum number of listeners per `EventTarget` event.
+
+• ...**eventTargets?**: (`EventTarget` \| `EventEmitter`\&lt;`DefaultEventMap`\>)[]
 
 #### Returns
 
 `void`
 
+#### Since
+
+v15.4.0
+
 #### Inherited from
 
-EventEmitter.setMaxListeners
+`EventEmitter.setMaxListeners`
 
 #### Defined in
 
-node_modules/.pnpm/@types+node@22.2.0/node_modules/@types/node/events.d.ts:402
+node\_modules/.pnpm/@types+node@22.2.0/node\_modules/@types/node/events.d.ts:402

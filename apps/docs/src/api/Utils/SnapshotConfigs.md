@@ -1,33 +1,35 @@
-# Interface: SnapshotConfigs
+[**@fuel-ts/utils v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/utils](/api/Utils/index.md).SnapshotConfigs
+***
+
+# Interface: SnapshotConfigs
 
 ## Properties
 
 ### chainConfig
 
-• **chainConfig**: `ChainConfig`
+> **chainConfig**: `ChainConfig`
 
 #### Defined in
 
-[packages/utils/src/utils/types.ts:222](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/types.ts#L222)
+[packages/utils/src/utils/types.ts:223](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/types.ts#L223)
 
-___
+***
 
 ### metadata
 
-• **metadata**: `MetadataConfig`
+> **metadata**: `MetadataConfig`
 
 #### Defined in
 
-[packages/utils/src/utils/types.ts:223](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/types.ts#L223)
+[packages/utils/src/utils/types.ts:224](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/types.ts#L224)
 
-___
+***
 
 ### stateConfig
 
-• **stateConfig**: `StateConfig`
+> **stateConfig**: `StateConfig`
 
 #### Defined in
 
-[packages/utils/src/utils/types.ts:221](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/utils/src/utils/types.ts#L221)
+[packages/utils/src/utils/types.ts:222](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/types.ts#L222)

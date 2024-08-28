@@ -1,9 +1,11 @@
-# Interface: InvokeFunctions
+[**@fuel-ts/program v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/program](/api/Program/index.md).InvokeFunctions
+***
+
+# Interface: InvokeFunctions
 
 Represents a collection of functions that can be invoked.
 
 ## Indexable
 
-▪ [key: `string`]: [`InvokeFunction`](/api/Program/InvokeFunction.md)
+ \[`key`: `string`\]: [`InvokeFunction`](InvokeFunction.md)

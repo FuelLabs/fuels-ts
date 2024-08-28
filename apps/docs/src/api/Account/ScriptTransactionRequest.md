@@ -1,257 +1,260 @@
-# Class: ScriptTransactionRequest
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).ScriptTransactionRequest
+***
+
+# Class: ScriptTransactionRequest
 
 `ScriptTransactionRequest` provides functionalities for creating a transaction request that uses a script.
 
-## Hierarchy
+## Extends
 
-- [`BaseTransactionRequest`](/api/Account/BaseTransactionRequest.md)
-
-  ↳ **`ScriptTransactionRequest`**
+- [`BaseTransactionRequest`](BaseTransactionRequest.md)
 
 ## Constructors
 
-### constructor
+### new ScriptTransactionRequest()
 
-• **new ScriptTransactionRequest**(`scriptTransactionRequestLike?`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **new ScriptTransactionRequest**(`scriptTransactionRequestLike`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Constructor for `ScriptTransactionRequest`.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `scriptTransactionRequestLike` | `ScriptTransactionRequestLike` | The initial values for the instance. |
+• **scriptTransactionRequestLike**: `ScriptTransactionRequestLike` = `{}`
+
+The initial values for the instance.
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 #### Overrides
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[constructor](/api/Account/BaseTransactionRequest.md#constructor)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`constructor`](BaseTransactionRequest.md#constructors)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L64)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L64)
 
 ## Properties
 
-### abis
+### abis?
 
-• `Optional` **abis**: [`JsonAbisFromAllCalls`](/api/Account/index.md#jsonabisfromallcalls)
+> `optional` **abis**: [`JsonAbisFromAllCalls`](../index.md#jsonabisfromallcalls)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:57](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L57)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:57](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L57)
 
-___
+***
 
 ### gasLimit
 
-• **gasLimit**: `BN`
+> **gasLimit**: `BN`
 
 Gas limit for transaction
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:51](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L51)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:51](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L51)
 
-___
+***
 
 ### inputs
 
-• **inputs**: [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput)[] = `[]`
+> **inputs**: [`TransactionRequestInput`](../index.md#transactionrequestinput)[] = `[]`
 
 List of inputs
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[inputs](/api/Account/BaseTransactionRequest.md#inputs)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`inputs`](BaseTransactionRequest.md#inputs)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:113](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L113)
+[packages/account/src/providers/transaction-request/transaction-request.ts:113](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L113)
 
-___
+***
 
-### maturity
+### maturity?
 
-• `Optional` **maturity**: `number`
+> `optional` **maturity**: `number`
 
 Block until which tx cannot be included
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[maturity](/api/Account/BaseTransactionRequest.md#maturity)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`maturity`](BaseTransactionRequest.md#maturity)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:107](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L107)
+[packages/account/src/providers/transaction-request/transaction-request.ts:107](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L107)
 
-___
+***
 
 ### maxFee
 
-• **maxFee**: `BN`
+> **maxFee**: `BN`
 
 The maximum fee payable by this transaction using BASE_ASSET.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[maxFee](/api/Account/BaseTransactionRequest.md#maxfee)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`maxFee`](BaseTransactionRequest.md#maxfee)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:109](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L109)
+[packages/account/src/providers/transaction-request/transaction-request.ts:109](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L109)
 
-___
+***
 
 ### outputs
 
-• **outputs**: [`TransactionRequestOutput`](/api/Account/index.md#transactionrequestoutput)[] = `[]`
+> **outputs**: [`TransactionRequestOutput`](../index.md#transactionrequestoutput)[] = `[]`
 
 List of outputs
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[outputs](/api/Account/BaseTransactionRequest.md#outputs)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`outputs`](BaseTransactionRequest.md#outputs)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:115](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L115)
+[packages/account/src/providers/transaction-request/transaction-request.ts:115](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L115)
 
-___
+***
 
 ### script
 
-• **script**: `Uint8Array`
+> **script**: `Uint8Array`
 
 Script to execute
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:53](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L53)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:53](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L53)
 
-___
+***
 
 ### scriptData
 
-• **scriptData**: `Uint8Array`
+> **scriptData**: `Uint8Array`
 
 Script input data (parameters)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:55](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L55)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:55](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L55)
 
-___
+***
 
-### tip
+### tip?
 
-• `Optional` **tip**: `BN`
+> `optional` **tip**: `BN`
 
 Gas price for transaction
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[tip](/api/Account/BaseTransactionRequest.md#tip)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`tip`](BaseTransactionRequest.md#tip)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:105](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L105)
+[packages/account/src/providers/transaction-request/transaction-request.ts:105](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L105)
 
-___
+***
 
 ### type
 
-• **type**: [`Script`](/api/Account/TransactionType.md#script)
+> **type**: [`Script`](./TransactionType.md#script)
 
 Type of the transaction
 
 #### Overrides
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[type](/api/Account/BaseTransactionRequest.md#type)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`type`](BaseTransactionRequest.md#type)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:49](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L49)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:49](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L49)
 
-___
+***
 
-### witnessLimit
+### witnessLimit?
 
-• `Optional` **witnessLimit**: `BN`
+> `optional` **witnessLimit**: `BN`
 
 The maximum amount of witness data allowed for the transaction
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[witnessLimit](/api/Account/BaseTransactionRequest.md#witnesslimit)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`witnessLimit`](BaseTransactionRequest.md#witnesslimit)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:111](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L111)
+[packages/account/src/providers/transaction-request/transaction-request.ts:111](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L111)
 
-___
+***
 
 ### witnesses
 
-• **witnesses**: [`BytesLike`](/api/Interfaces/index.md#byteslike)[] = `[]`
+> **witnesses**: [`BytesLike`](../Interfaces/index.md#byteslike)[] = `[]`
 
 List of witnesses
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[witnesses](/api/Account/BaseTransactionRequest.md#witnesses)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`witnesses`](BaseTransactionRequest.md#witnesses)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:117](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L117)
+[packages/account/src/providers/transaction-request/transaction-request.ts:117](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L117)
 
 ## Methods
 
-### addAccountWitnesses
+### addAccountWitnesses()
 
-▸ **addAccountWitnesses**(`account`): `Promise`&lt;[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)\>
+> **addAccountWitnesses**(`account`): `Promise`\&lt;[`ScriptTransactionRequest`](ScriptTransactionRequest.md)\>
 
 Helper function to add an external signature to the transaction.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `account` | [`Account`](/api/Account/Account.md) \| [`Account`](/api/Account/Account.md)[] | The account/s to sign to the transaction. |
+• **account**: [`Account`](Account.md) \| [`Account`](Account.md)[]
+
+The account/s to sign to the transaction.
 
 #### Returns
 
-`Promise`&lt;[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)\>
+`Promise`\&lt;[`ScriptTransactionRequest`](ScriptTransactionRequest.md)\>
 
 The transaction with the signature witness added.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addAccountWitnesses](/api/Account/BaseTransactionRequest.md#addaccountwitnesses)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addAccountWitnesses`](BaseTransactionRequest.md#addaccountwitnesses)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:286](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L286)
+[packages/account/src/providers/transaction-request/transaction-request.ts:286](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L286)
 
-___
+***
 
-### addChangeOutput
+### addChangeOutput()
 
-▸ **addChangeOutput**(`to`, `assetId`): `void`
+> **addChangeOutput**(`to`, `assetId`): `void`
 
 Adds a change output to the transaction.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `to` | [`AddressLike`](/api/Interfaces/index.md#addresslike) | Address of the owner. |
-| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Asset ID of coin. |
+• **to**: [`AddressLike`](../Interfaces/index.md#addresslike)
+
+Address of the owner.
+
+• **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Asset ID of coin.
 
 #### Returns
 
@@ -259,26 +262,26 @@ Adds a change output to the transaction.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addChangeOutput](/api/Account/BaseTransactionRequest.md#addchangeoutput)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addChangeOutput`](BaseTransactionRequest.md#addchangeoutput)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:508](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L508)
+[packages/account/src/providers/transaction-request/transaction-request.ts:508](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L508)
 
-___
+***
 
-### addCoinInput
+### addCoinInput()
 
-▸ **addCoinInput**(`coin`): `void`
+> **addCoinInput**(`coin`): `void`
 
 Adds a single coin input to the transaction and a change output for the related
 assetId, if one it was not added yet.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `coin` | [`Coin`](/api/Account/index.md#coin) | Coin resource. |
+• **coin**: [`Coin`](../index.md#coin)
+
+Coin resource.
 
 #### Returns
 
@@ -286,105 +289,114 @@ assetId, if one it was not added yet.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addCoinInput](/api/Account/BaseTransactionRequest.md#addcoininput)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addCoinInput`](BaseTransactionRequest.md#addcoininput)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:360](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L360)
+[packages/account/src/providers/transaction-request/transaction-request.ts:360](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L360)
 
-___
+***
 
-### addCoinOutput
+### addCoinOutput()
 
-▸ **addCoinOutput**(`to`, `amount`, `assetId`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **addCoinOutput**(`to`, `amount`, `assetId`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Adds a coin output to the transaction.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `to` | [`AddressLike`](/api/Interfaces/index.md#addresslike) | Address of the owner. |
-| `amount` | `BigNumberish` | Amount of coin. |
-| `assetId` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | Asset ID of coin. |
+• **to**: [`AddressLike`](../Interfaces/index.md#addresslike)
+
+Address of the owner.
+
+• **amount**: `BigNumberish`
+
+Amount of coin.
+
+• **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+Asset ID of coin.
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addCoinOutput](/api/Account/BaseTransactionRequest.md#addcoinoutput)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addCoinOutput`](BaseTransactionRequest.md#addcoinoutput)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:472](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L472)
+[packages/account/src/providers/transaction-request/transaction-request.ts:472](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L472)
 
-___
+***
 
-### addCoinOutputs
+### addCoinOutputs()
 
-▸ **addCoinOutputs**(`to`, `quantities`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **addCoinOutputs**(`to`, `quantities`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Adds multiple coin outputs to the transaction.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `to` | [`AddressLike`](/api/Interfaces/index.md#addresslike) | Address of the destination. |
-| `quantities` | [`CoinQuantityLike`](/api/Account/index.md#coinquantitylike)[] | Quantities of coins. |
+• **to**: [`AddressLike`](../Interfaces/index.md#addresslike)
+
+Address of the destination.
+
+• **quantities**: [`CoinQuantityLike`](../index.md#coinquantitylike)[]
+
+Quantities of coins.
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addCoinOutputs](/api/Account/BaseTransactionRequest.md#addcoinoutputs)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addCoinOutputs`](BaseTransactionRequest.md#addcoinoutputs)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:489](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L489)
+[packages/account/src/providers/transaction-request/transaction-request.ts:489](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L489)
 
-___
+***
 
-### addContractInputAndOutput
+### addContractInputAndOutput()
 
-▸ **addContractInputAndOutput**(`contract`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **addContractInputAndOutput**(`contract`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Adds a contract input and output to the transaction request.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `contract` | [`ContractIdLike`](/api/Interfaces/index.md#contractidlike) | The contract ID. |
+• **contract**: [`ContractIdLike`](../Interfaces/index.md#contractidlike)
+
+The contract ID.
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 The current instance of the `ScriptTransactionRequest`.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:190](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L190)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:190](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L190)
 
-___
+***
 
-### addMessageInput
+### addMessageInput()
 
-▸ **addMessageInput**(`message`): `void`
+> **addMessageInput**(`message`): `void`
 
 Adds a single message input to the transaction and a change output for the
 asset against the message
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `message` | [`MessageCoin`](/api/Account/index.md#messagecoin) | Message resource. |
+• **message**: [`MessageCoin`](../index.md#messagecoin)
+
+Message resource.
 
 #### Returns
 
@@ -392,83 +404,83 @@ asset against the message
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addMessageInput](/api/Account/BaseTransactionRequest.md#addmessageinput)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addMessageInput`](BaseTransactionRequest.md#addmessageinput)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:401](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L401)
+[packages/account/src/providers/transaction-request/transaction-request.ts:401](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L401)
 
-___
+***
 
-### addResource
+### addResource()
 
-▸ **addResource**(`resource`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **addResource**(`resource`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Adds a single resource to the transaction by adding a coin/message input and a
 change output for the related assetId, if one it was not added yet.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `resource` | [`Resource`](/api/Account/index.md#resource) | The resource to add. |
+• **resource**: [`Resource`](../index.md#resource)
+
+The resource to add.
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 This transaction.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addResource](/api/Account/BaseTransactionRequest.md#addresource)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addResource`](BaseTransactionRequest.md#addresource)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:442](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L442)
+[packages/account/src/providers/transaction-request/transaction-request.ts:442](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L442)
 
-___
+***
 
-### addResources
+### addResources()
 
-▸ **addResources**(`resources`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **addResources**(`resources`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Adds multiple resources to the transaction by adding coin/message inputs and change
 outputs from the related assetIds.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `resources` | readonly [`Resource`](/api/Account/index.md#resource)[] | The resources to add. |
+• **resources**: readonly [`Resource`](../index.md#resource)[]
+
+The resources to add.
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 This transaction.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[addResources](/api/Account/BaseTransactionRequest.md#addresources)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`addResources`](BaseTransactionRequest.md#addresources)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:459](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L459)
+[packages/account/src/providers/transaction-request/transaction-request.ts:459](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L459)
 
-___
+***
 
-### addVariableOutputs
+### addVariableOutputs()
 
-▸ **addVariableOutputs**(`numberOfVariables?`): `number`
+> **addVariableOutputs**(`numberOfVariables`): `number`
 
 Adds variable outputs to the transaction request.
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `numberOfVariables` | `number` | `1` | The number of variables to add. |
+• **numberOfVariables**: `number` = `1`
+
+The number of variables to add.
 
 #### Returns
 
@@ -478,13 +490,13 @@ The new length of the outputs array.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:142](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L142)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:142](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L142)
 
-___
+***
 
-### byteLength
+### byteLength()
 
-▸ **byteLength**(): `number`
+> **byteLength**(): `number`
 
 #### Returns
 
@@ -492,26 +504,29 @@ ___
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[byteLength](/api/Account/BaseTransactionRequest.md#bytelength)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`byteLength`](BaseTransactionRequest.md#bytelength)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:696](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L696)
+[packages/account/src/providers/transaction-request/transaction-request.ts:696](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L696)
 
-___
+***
 
-### calculateMaxGas
+### calculateMaxGas()
 
-▸ **calculateMaxGas**(`chainInfo`, `minGas`): `BN`
+> **calculateMaxGas**(`chainInfo`, `minGas`): `BN`
 
 Calculates the maximum gas for the transaction.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `chainInfo` | [`ChainInfo`](/api/Account/index.md#chaininfo) | The chain information. |
-| `minGas` | `BN` | The minimum gas. |
+• **chainInfo**: [`ChainInfo`](../index.md#chaininfo)
+
+The chain information.
+
+• **minGas**: `BN`
+
+The minimum gas.
 
 #### Returns
 
@@ -521,46 +536,50 @@ the maximum gas.
 
 #### Overrides
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[calculateMaxGas](/api/Account/BaseTransactionRequest.md#calculatemaxgas)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`calculateMaxGas`](BaseTransactionRequest.md#calculatemaxgas)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:162](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L162)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:162](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L162)
 
-___
+***
 
-### fundWithFakeUtxos
+### fundWithFakeUtxos()
 
-▸ **fundWithFakeUtxos**(`quantities`, `baseAssetId`, `resourcesOwner?`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **fundWithFakeUtxos**(`quantities`, `baseAssetId`, `resourcesOwner`?): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Funds the transaction with fake UTXOs for each assetId and amount in the
 quantities array.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `quantities` | [`CoinQuantity`](/api/Account/index.md#coinquantity)[] | CoinQuantity Array. |
-| `baseAssetId` | `string` | The base asset to fund the transaction. |
-| `resourcesOwner?` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | - |
+• **quantities**: [`CoinQuantity`](../index.md#coinquantity)[]
+
+CoinQuantity Array.
+
+• **baseAssetId**: `string`
+
+The base asset to fund the transaction.
+
+• **resourcesOwner?**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[fundWithFakeUtxos](/api/Account/BaseTransactionRequest.md#fundwithfakeutxos)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`fundWithFakeUtxos`](BaseTransactionRequest.md#fundwithfakeutxos)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:583](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L583)
+[packages/account/src/providers/transaction-request/transaction-request.ts:583](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L583)
 
-___
+***
 
-### getBaseTransaction
+### getBaseTransaction()
 
-▸ **getBaseTransaction**(): `ToBaseTransactionResponse`
+> `protected` **getBaseTransaction**(): `ToBaseTransactionResponse`
 
 Method to obtain the base transaction details.
 
@@ -572,150 +591,150 @@ The base transaction details.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[getBaseTransaction](/api/Account/BaseTransactionRequest.md#getbasetransaction)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`getBaseTransaction`](BaseTransactionRequest.md#getbasetransaction)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:176](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L176)
+[packages/account/src/providers/transaction-request/transaction-request.ts:176](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L176)
 
-___
+***
 
-### getChangeOutputs
+### getChangeOutputs()
 
-▸ **getChangeOutputs**(): [`ChangeTransactionRequestOutput`](/api/Account/index.md#changetransactionrequestoutput)[]
+> **getChangeOutputs**(): [`ChangeTransactionRequestOutput`](../index.md#changetransactionrequestoutput)[]
 
 Gets the change outputs for a transaction.
 
 #### Returns
 
-[`ChangeTransactionRequestOutput`](/api/Account/index.md#changetransactionrequestoutput)[]
+[`ChangeTransactionRequestOutput`](../index.md#changetransactionrequestoutput)[]
 
 The change outputs.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[getChangeOutputs](/api/Account/BaseTransactionRequest.md#getchangeoutputs)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`getChangeOutputs`](BaseTransactionRequest.md#getchangeoutputs)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:324](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L324)
+[packages/account/src/providers/transaction-request/transaction-request.ts:324](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L324)
 
-___
+***
 
-### getCoinInputs
+### getCoinInputs()
 
-▸ **getCoinInputs**(): [`CoinTransactionRequestInput`](/api/Account/index.md#cointransactionrequestinput)[]
+> **getCoinInputs**(): [`CoinTransactionRequestInput`](../index.md#cointransactionrequestinput)[]
 
 Gets the coin inputs for a transaction.
 
 #### Returns
 
-[`CoinTransactionRequestInput`](/api/Account/index.md#cointransactionrequestinput)[]
+[`CoinTransactionRequestInput`](../index.md#cointransactionrequestinput)[]
 
 The coin inputs.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[getCoinInputs](/api/Account/BaseTransactionRequest.md#getcoininputs)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`getCoinInputs`](BaseTransactionRequest.md#getcoininputs)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:302](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L302)
+[packages/account/src/providers/transaction-request/transaction-request.ts:302](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L302)
 
-___
+***
 
-### getCoinOutputs
+### getCoinOutputs()
 
-▸ **getCoinOutputs**(): [`CoinTransactionRequestOutput`](/api/Account/index.md#cointransactionrequestoutput)[]
+> **getCoinOutputs**(): [`CoinTransactionRequestOutput`](../index.md#cointransactionrequestoutput)[]
 
 Gets the coin outputs for a transaction.
 
 #### Returns
 
-[`CoinTransactionRequestOutput`](/api/Account/index.md#cointransactionrequestoutput)[]
+[`CoinTransactionRequestOutput`](../index.md#cointransactionrequestoutput)[]
 
 The coin outputs.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[getCoinOutputs](/api/Account/BaseTransactionRequest.md#getcoinoutputs)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`getCoinOutputs`](BaseTransactionRequest.md#getcoinoutputs)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:313](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L313)
+[packages/account/src/providers/transaction-request/transaction-request.ts:313](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L313)
 
-___
+***
 
-### getCoinOutputsQuantities
+### getCoinOutputsQuantities()
 
-▸ **getCoinOutputsQuantities**(): [`CoinQuantity`](/api/Account/index.md#coinquantity)[]
+> **getCoinOutputsQuantities**(): [`CoinQuantity`](../index.md#coinquantity)[]
 
 Retrieves an array of CoinQuantity for each coin output present in the transaction.
 a transaction.
 
 #### Returns
 
-[`CoinQuantity`](/api/Account/index.md#coinquantity)[]
+[`CoinQuantity`](../index.md#coinquantity)[]
 
 CoinQuantity array.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[getCoinOutputsQuantities](/api/Account/BaseTransactionRequest.md#getcoinoutputsquantities)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`getCoinOutputsQuantities`](BaseTransactionRequest.md#getcoinoutputsquantities)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:634](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L634)
+[packages/account/src/providers/transaction-request/transaction-request.ts:634](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L634)
 
-___
+***
 
-### getContractInputs
+### getContractInputs()
 
-▸ **getContractInputs**(): [`ContractTransactionRequestInput`](/api/Account/index.md#contracttransactionrequestinput)[]
+> **getContractInputs**(): [`ContractTransactionRequestInput`](../index.md#contracttransactionrequestinput)[]
 
 Get contract inputs for the transaction.
 
 #### Returns
 
-[`ContractTransactionRequestInput`](/api/Account/index.md#contracttransactionrequestinput)[]
+[`ContractTransactionRequestInput`](../index.md#contracttransactionrequestinput)[]
 
 An array of contract transaction request inputs.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:97](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L97)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:97](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L97)
 
-___
+***
 
-### getContractOutputs
+### getContractOutputs()
 
-▸ **getContractOutputs**(): [`ContractTransactionRequestOutput`](/api/Account/index.md#contracttransactionrequestoutput)[]
+> **getContractOutputs**(): [`ContractTransactionRequestOutput`](../index.md#contracttransactionrequestoutput)[]
 
 Get contract outputs for the transaction.
 
 #### Returns
 
-[`ContractTransactionRequestOutput`](/api/Account/index.md#contracttransactionrequestoutput)[]
+[`ContractTransactionRequestOutput`](../index.md#contracttransactionrequestoutput)[]
 
 An array of contract transaction request outputs.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:108](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L108)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:108](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L108)
 
-___
+***
 
-### getTransactionId
+### getTransactionId()
 
-▸ **getTransactionId**(`chainId`): `string`
+> **getTransactionId**(`chainId`): `string`
 
 Gets the Transaction Request by hashing the transaction.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `chainId` | `number` | The chain ID. |
+• **chainId**: `number`
+
+The chain ID.
 
 #### Returns
 
@@ -725,65 +744,39 @@ Gets the Transaction Request by hashing the transaction.
 
 #### Overrides
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[getTransactionId](/api/Account/BaseTransactionRequest.md#gettransactionid)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`getTransactionId`](BaseTransactionRequest.md#gettransactionid)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:219](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L219)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:219](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L219)
 
-___
+***
 
-### getVariableOutputs
+### getVariableOutputs()
 
-▸ **getVariableOutputs**(): [`VariableTransactionRequestOutput`](/api/Account/index.md#variabletransactionrequestoutput)[]
+> **getVariableOutputs**(): [`VariableTransactionRequestOutput`](../index.md#variabletransactionrequestoutput)[]
 
 Get variable outputs for the transaction.
 
 #### Returns
 
-[`VariableTransactionRequestOutput`](/api/Account/index.md#variabletransactionrequestoutput)[]
+[`VariableTransactionRequestOutput`](../index.md#variabletransactionrequestoutput)[]
 
 An array of variable transaction request outputs.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:119](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L119)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:119](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L119)
 
-___
+***
 
-### metadataGas
+### removeWitness()
 
-▸ **metadataGas**(`gasCosts`): `BN`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `gasCosts` | [`GasCosts`](/api/Account/index.md#gascosts) |
-
-#### Returns
-
-`BN`
-
-#### Overrides
-
-BaseTransactionRequest.metadataGas
-
-#### Defined in
-
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:236](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L236)
-
-___
-
-### removeWitness
-
-▸ **removeWitness**(`index`): `void`
+> **removeWitness**(`index`): `void`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `index` | `number` |
+• **index**: `number`
 
 #### Returns
 
@@ -791,57 +784,61 @@ ___
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[removeWitness](/api/Account/BaseTransactionRequest.md#removewitness)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`removeWitness`](BaseTransactionRequest.md#removewitness)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:662](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L662)
+[packages/account/src/providers/transaction-request/transaction-request.ts:662](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L662)
 
-___
+***
 
-### setData
+### setData()
 
-▸ **setData**(`abi`, `args`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> **setData**(`abi`, `args`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 Sets the data for the transaction request.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `abi` | `JsonAbi` | Script JSON ABI. |
-| `args` | `InputValue`[] | The input arguments. |
+• **abi**: `JsonAbi`
+
+Script JSON ABI.
+
+• **args**: `InputValue`[]
+
+The input arguments.
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 The current instance of the `ScriptTransactionRequest`.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:230](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L230)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:230](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L230)
 
-___
+***
 
-### setScript
+### setScript()
 
-▸ **setScript**&lt;`T`\>(`script`, `data`): `void`
+> **setScript**\&lt;`T`\>(`script`, `data`): `void`
 
 Set the script and its data.
 
-#### Type parameters
+#### Type Parameters
 
-| Name |
-| :------ |
-| `T` |
+• **T**
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `script` | `AbstractScriptRequest`&lt;`T`\> | The abstract script request. |
-| `data` | `T` | The script data. |
+• **script**: `AbstractScriptRequest`\&lt;`T`\>
+
+The abstract script request.
+
+• **data**: `T`
+
+The script data.
 
 #### Returns
 
@@ -849,13 +846,13 @@ Set the script and its data.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:131](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L131)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:131](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L131)
 
-___
+***
 
-### toJSON
+### toJSON()
 
-▸ **toJSON**(): `any`
+> **toJSON**(): `any`
 
 Return the minimum amount in native coins required to create
 a transaction.
@@ -868,17 +865,17 @@ The transaction as a JSON object.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[toJSON](/api/Account/BaseTransactionRequest.md#tojson)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`toJSON`](BaseTransactionRequest.md#tojson)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:658](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L658)
+[packages/account/src/providers/transaction-request/transaction-request.ts:658](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L658)
 
-___
+***
 
-### toTransaction
+### toTransaction()
 
-▸ **toTransaction**(): `TransactionScript`
+> **toTransaction**(): `TransactionScript`
 
 Converts the transaction request to a `TransactionScript`.
 
@@ -890,17 +887,17 @@ The transaction script object.
 
 #### Overrides
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[toTransaction](/api/Account/BaseTransactionRequest.md#totransaction)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`toTransaction`](BaseTransactionRequest.md#totransaction)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:77](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L77)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:77](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L77)
 
-___
+***
 
-### toTransactionBytes
+### toTransactionBytes()
 
-▸ **toTransactionBytes**(): `Uint8Array`
+> **toTransactionBytes**(): `Uint8Array`
 
 Converts the transaction request to a byte array.
 
@@ -912,23 +909,21 @@ The transaction bytes.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[toTransactionBytes](/api/Account/BaseTransactionRequest.md#totransactionbytes)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`toTransactionBytes`](BaseTransactionRequest.md#totransactionbytes)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:202](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L202)
+[packages/account/src/providers/transaction-request/transaction-request.ts:202](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L202)
 
-___
+***
 
-### updatePredicateGasUsed
+### updatePredicateGasUsed()
 
-▸ **updatePredicateGasUsed**(`inputs`): `void`
+> **updatePredicateGasUsed**(`inputs`): `void`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `inputs` | [`TransactionRequestInput`](/api/Account/index.md#transactionrequestinput)[] |
+• **inputs**: [`TransactionRequestInput`](../index.md#transactionrequestinput)[]
 
 #### Returns
 
@@ -936,57 +931,63 @@ ___
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[updatePredicateGasUsed](/api/Account/BaseTransactionRequest.md#updatepredicategasused)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`updatePredicateGasUsed`](BaseTransactionRequest.md#updatepredicategasused)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:676](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L676)
+[packages/account/src/providers/transaction-request/transaction-request.ts:676](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L676)
 
-___
+***
 
-### updateWitness
+### updateWitness()
 
-▸ **updateWitness**(`index`, `witness`): `void`
+> **updateWitness**(`index`, `witness`): `void`
 
 Updates an existing witness without any side effects.
 
-**`Throws`**
-
-If the witness does not exist.
-
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `index` | `number` | The index of the witness to update. |
-| `witness` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The new witness. |
+• **index**: `number`
+
+The index of the witness to update.
+
+• **witness**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The new witness.
 
 #### Returns
 
 `void`
 
+#### Throws
+
+If the witness does not exist.
+
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[updateWitness](/api/Account/BaseTransactionRequest.md#updatewitness)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`updateWitness`](BaseTransactionRequest.md#updatewitness)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:273](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L273)
+[packages/account/src/providers/transaction-request/transaction-request.ts:273](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L273)
 
-___
+***
 
-### updateWitnessByOwner
+### updateWitnessByOwner()
 
-▸ **updateWitnessByOwner**(`address`, `signature`): `void`
+> **updateWitnessByOwner**(`address`, `signature`): `void`
 
 Updates the witness for a given owner and signature.
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `address` | `string` \| [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) | The address to get the coin input witness index for. |
-| `signature` | [`BytesLike`](/api/Interfaces/index.md#byteslike) | The signature to update the witness with. |
+• **address**: `string` \| [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+The address to get the coin input witness index for.
+
+• **signature**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The signature to update the witness with.
 
 #### Returns
 
@@ -994,57 +995,56 @@ Updates the witness for a given owner and signature.
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[updateWitnessByOwner](/api/Account/BaseTransactionRequest.md#updatewitnessbyowner)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`updateWitnessByOwner`](BaseTransactionRequest.md#updatewitnessbyowner)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:258](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L258)
+[packages/account/src/providers/transaction-request/transaction-request.ts:258](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L258)
 
-___
+***
 
-### from
+### from()
 
-▸ **from**(`obj`): [`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+> `static` **from**(`obj`): [`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `obj` | `ScriptTransactionRequestLike` |
+• **obj**: `ScriptTransactionRequestLike`
 
 #### Returns
 
-[`ScriptTransactionRequest`](/api/Account/ScriptTransactionRequest.md)
+[`ScriptTransactionRequest`](ScriptTransactionRequest.md)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/script-transaction-request.ts:41](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/script-transaction-request.ts#L41)
+[packages/account/src/providers/transaction-request/script-transaction-request.ts:41](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/script-transaction-request.ts#L41)
 
-___
+***
 
-### getPolicyMeta
+### getPolicyMeta()
 
-▸ **getPolicyMeta**(`req`): `Object`
+> `static` **getPolicyMeta**(`req`): `object`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `req` | [`BaseTransactionRequest`](/api/Account/BaseTransactionRequest.md) |
+• **req**: [`BaseTransactionRequest`](BaseTransactionRequest.md)
 
 #### Returns
 
-`Object`
+`object`
 
-| Name | Type |
-| :------ | :------ |
-| `policies` | `Policy`[] |
-| `policyTypes` | `number` |
+##### policies
+
+> **policies**: `Policy`[]
+
+##### policyTypes
+
+> **policyTypes**: `number`
 
 #### Inherited from
 
-[BaseTransactionRequest](/api/Account/BaseTransactionRequest.md).[getPolicyMeta](/api/Account/BaseTransactionRequest.md#getpolicymeta)
+[`BaseTransactionRequest`](BaseTransactionRequest.md).[`getPolicyMeta`](BaseTransactionRequest.md#getpolicymeta)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:142](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-request/transaction-request.ts#L142)
+[packages/account/src/providers/transaction-request/transaction-request.ts:142](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-request/transaction-request.ts#L142)

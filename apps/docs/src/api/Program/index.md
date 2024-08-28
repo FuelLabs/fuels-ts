@@ -1,184 +1,304 @@
-# Module: @fuel-ts/program
+**@fuel-ts/program v0.94.2** • [**Docs**](index.md)
 
-## Classes
+***
 
-- [Contract](/api/Program/Contract.md)
-- [FunctionInvocationScope](/api/Program/FunctionInvocationScope.md)
-- [InstructionSet](/api/Program/InstructionSet.md)
-- [MultiCallInvocationScope](/api/Program/MultiCallInvocationScope.md)
-- [ScriptRequest](/api/Program/ScriptRequest.md)
-
-## Interfaces
-
-- [InvokeFunction](/api/Program/InvokeFunction.md)
-- [InvokeFunctions](/api/Program/InvokeFunctions.md)
+# @fuel-ts/program
 
 ## Type Aliases
 
-### CallConfig
+### CallConfig\&lt;T\>
 
-Ƭ **CallConfig**&lt;`T`\>: `Object`
+> **CallConfig**\&lt;`T`\>: `object`
 
 Represents configuration for calling a contract function.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `T` | `unknown` | Type of the function's arguments. |
+• **T** = `unknown`
+
+Type of the function's arguments.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `args` | `T` |
-| `callParameters?` | [`CallParams`](/api/Program/index.md#callparams) |
-| `externalAbis` | `Record`&lt;`string`, `JsonAbi`\> |
-| `forward?` | [`CoinQuantity`](/api/Account/index.md#coinquantity) |
-| `func` | `FunctionFragment` |
-| `program` | `AbstractProgram` |
-| `txParameters?` | [`TxParams`](/api/Program/index.md#txparams) |
+##### args
+
+> **args**: `T`
+
+##### callParameters?
+
+> `optional` **callParameters**: [`CallParams`](index.md#callparams)
+
+##### externalAbis
+
+> **externalAbis**: `Record`\&lt;`string`, `JsonAbi`\>
+
+##### forward?
+
+> `optional` **forward**: [`CoinQuantity`](../Account/index.md#coinquantity)
+
+##### func
+
+> **func**: `FunctionFragment`
+
+##### program
+
+> **program**: `AbstractProgram`
+
+##### txParameters?
+
+> `optional` **txParameters**: [`TxParams`](index.md#txparams)
 
 #### Defined in
 
-[types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L53)
+[types.ts:53](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L53)
 
-___
+***
 
 ### CallParams
 
-Ƭ **CallParams**: `Partial`&lt;{ `forward`: [`CoinQuantityLike`](/api/Account/index.md#coinquantitylike) ; `gasLimit`: `BigNumberish`  }\>
+> **CallParams**: `Partial`\&lt;`object`\>
 
 Represents call parameters for a contract call.
 
+#### Type declaration
+
+##### forward
+
+> **forward**: [`CoinQuantityLike`](../Account/index.md#coinquantitylike)
+
+##### gasLimit
+
+> **gasLimit**: `BigNumberish`
+
 #### Defined in
 
-[types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L31)
+[types.ts:31](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L31)
 
-___
+***
 
 ### ContractCall
 
-Ƭ **ContractCall**: `Object`
+> **ContractCall**: `object`
 
 Represents a contract call.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `amount?` | `BigNumberish` |
-| `assetId?` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `contractId` | [`AbstractAddress`](/api/Interfaces/AbstractAddress.md) |
-| `data` | [`BytesLike`](/api/Interfaces/index.md#byteslike) |
-| `externalContractsAbis?` | `Record`&lt;`string`, `JsonAbi`\> |
-| `fnSelectorBytes` | `Uint8Array` |
-| `gas?` | `BigNumberish` |
+##### amount?
+
+> `optional` **amount**: `BigNumberish`
+
+##### assetId?
+
+> `optional` **assetId**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### contractId
+
+> **contractId**: [`AbstractAddress`](../Interfaces/AbstractAddress.md)
+
+##### data
+
+> **data**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+##### externalContractsAbis?
+
+> `optional` **externalContractsAbis**: `Record`\&lt;`string`, `JsonAbi`\>
+
+##### fnSelectorBytes
+
+> **fnSelectorBytes**: `Uint8Array`
+
+##### gas?
+
+> `optional` **gas**: `BigNumberish`
 
 #### Defined in
 
-[types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L18)
+[types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L18)
 
-___
+***
 
-### DryRunResult
+### DryRunResult\&lt;TReturn\>
 
-Ƭ **DryRunResult**&lt;`TReturn`\>: `Object`
+> **DryRunResult**\&lt;`TReturn`\>: `object`
 
-#### Type parameters
+#### Type Parameters
 
-| Name |
-| :------ |
-| `TReturn` |
+• **TReturn**
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `callResult` | [`CallResult`](/api/Account/index.md#callresult) |
-| `functionScopes` | [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike)[] |
-| `gasUsed` | `BN` |
-| `isMultiCall` | `boolean` |
-| `value` | `TReturn` |
+##### callResult
+
+> `readonly` **callResult**: [`CallResult`](../Account/index.md#callresult)
+
+##### functionScopes
+
+> `readonly` **functionScopes**: [`InvocationScopeLike`](index.md#invocationscopeliket)[]
+
+##### gasUsed
+
+> `readonly` **gasUsed**: `BN`
+
+##### isMultiCall
+
+> `readonly` **isMultiCall**: `boolean`
+
+##### value
+
+> `readonly` **value**: `TReturn`
 
 #### Defined in
 
-[types.ts:119](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L119)
+[types.ts:119](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L119)
 
-___
+***
 
-### FunctionResult
+### FunctionResult\&lt;TReturn\>
 
-Ƭ **FunctionResult**&lt;`TReturn`\>: `Object`
+> **FunctionResult**\&lt;`TReturn`\>: `object`
 
-#### Type parameters
+#### Type Parameters
 
-| Name |
-| :------ |
-| `TReturn` |
+• **TReturn**
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `functionScopes` | [`InvocationScopeLike`](/api/Program/index.md#invocationscopelike)[] |
-| `gasUsed` | `BN` |
-| `isMultiCall` | `boolean` |
-| `logs` | `any`[] |
-| `program` | `AbstractProgram` |
-| `transactionId` | `string` |
-| `transactionResponse` | [`TransactionResponse`](/api/Account/TransactionResponse.md) |
-| `transactionResult` | `TransactionResult`&lt;[`Script`](/api/Account/TransactionType.md#script)\> |
-| `value` | `TReturn` |
+##### functionScopes
+
+> `readonly` **functionScopes**: [`InvocationScopeLike`](index.md#invocationscopeliket)[]
+
+##### gasUsed
+
+> `readonly` **gasUsed**: `BN`
+
+##### isMultiCall
+
+> `readonly` **isMultiCall**: `boolean`
+
+##### logs
+
+> `readonly` **logs**: `any`[]
+
+##### program
+
+> `readonly` **program**: `AbstractProgram`
+
+##### transactionId
+
+> `readonly` **transactionId**: `string`
+
+##### transactionResponse
+
+> `readonly` **transactionResponse**: [`TransactionResponse`](../Account/TransactionResponse.md)
+
+##### transactionResult
+
+> `readonly` **transactionResult**: `TransactionResult`\&lt;[`Script`](../Account/TransactionType.md#script)\>
+
+##### value
+
+> `readonly` **value**: `TReturn`
 
 #### Defined in
 
-[types.ts:106](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L106)
+[types.ts:106](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L106)
 
-___
+***
 
-### InvocationScopeLike
+### InvocationScopeLike\&lt;T\>
 
-Ƭ **InvocationScopeLike**&lt;`T`\>: `Object`
+> **InvocationScopeLike**\&lt;`T`\>: `object`
 
 Represents a like object of InvocationScope with a method to get its call configuration.
 
-#### Type parameters
+#### Type Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `T` | `unknown` | Type of the function's arguments. |
+• **T** = `unknown`
+
+Type of the function's arguments.
 
 #### Type declaration
 
-| Name | Type |
-| :------ | :------ |
-| `getCallConfig` | () => [`CallConfig`](/api/Program/index.md#callconfig)&lt;`T`\> |
+##### getCallConfig()
+
+Get the call configuration for this invocation scope.
+
+###### Returns
+
+[`CallConfig`](index.md#callconfigt)\&lt;`T`\>
+
+{CallConfig&lt;T>} The call configuration.
 
 #### Defined in
 
-[types.ts:91](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L91)
+[types.ts:91](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L91)
 
-___
+***
 
 ### TransactionCostOptions
 
-Ƭ **TransactionCostOptions**: `Partial`&lt;{ `fundTransaction`: `boolean`  }\>
+> **TransactionCostOptions**: `Partial`\&lt;`object`\>
 
 Represents options for calculating the transaction cost.
 
+#### Type declaration
+
+##### fundTransaction
+
+> **fundTransaction**: `boolean`
+
 #### Defined in
 
-[types.ts:102](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L102)
+[types.ts:102](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L102)
 
-___
+***
 
 ### TxParams
 
-Ƭ **TxParams**: `Partial`&lt;{ `gasLimit`: `BigNumberish` ; `maturity?`: `number` ; `maxFee?`: `BigNumberish` ; `tip`: `BigNumberish` ; `variableOutputs`: `number` ; `witnessLimit?`: `BigNumberish`  }\>
+> **TxParams**: `Partial`\&lt;`object`\>
 
 Represents transaction parameters for a contract call.
 
+#### Type declaration
+
+##### gasLimit
+
+> **gasLimit**: `BigNumberish`
+
+##### maturity?
+
+> `optional` **maturity**: `number`
+
+##### maxFee?
+
+> `optional` **maxFee**: `BigNumberish`
+
+##### tip
+
+> **tip**: `BigNumberish`
+
+##### variableOutputs
+
+> **variableOutputs**: `number`
+
+##### witnessLimit?
+
+> `optional` **witnessLimit**: `BigNumberish`
+
 #### Defined in
 
-[types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/program/src/types.ts#L39)
+[types.ts:39](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/program/src/types.ts#L39)
+
+## Classes
+
+- [Contract](./Contract.md)
+- [FunctionInvocationScope](./FunctionInvocationScope.md)
+- [InstructionSet](./InstructionSet.md)
+- [MultiCallInvocationScope](./MultiCallInvocationScope.md)
+- [ScriptRequest](./ScriptRequest.md)
+
+## Interfaces
+
+- [InvokeFunction](./InvokeFunction.md)
+- [InvokeFunctions](./InvokeFunctions.md)

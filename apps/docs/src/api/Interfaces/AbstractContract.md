@@ -1,81 +1,79 @@
-# Class: AbstractContract
+[**@fuel-ts/interfaces v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/interfaces](/api/Interfaces/index.md).AbstractContract
+***
 
-## Hierarchy
+# Class: `abstract` AbstractContract
+
+## Extends
 
 - `AbstractProgram`
 
-  ↳ **`AbstractContract`**
-
 ## Constructors
 
-### constructor
+### new AbstractContract()
 
-• **new AbstractContract**(): [`AbstractContract`](/api/Interfaces/AbstractContract.md)
+> **new AbstractContract**(): [`AbstractContract`](AbstractContract.md)
 
 #### Returns
 
-[`AbstractContract`](/api/Interfaces/AbstractContract.md)
+[`AbstractContract`](AbstractContract.md)
 
 #### Inherited from
 
-AbstractProgram.constructor
+`AbstractProgram.constructor`
 
 ## Properties
 
 ### account
 
-• `Abstract` **account**: ``null`` \| [`AbstractAccount`](/api/Interfaces/AbstractAccount.md)
+> `abstract` **account**: `null` \| [`AbstractAccount`](AbstractAccount.md)
 
 #### Inherited from
 
-AbstractProgram.account
+`AbstractProgram.account`
 
 #### Defined in
 
-[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L73)
+[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L73)
 
-___
+***
 
 ### id
 
-• `Abstract` **id**: [`AbstractAddress`](/api/Interfaces/AbstractAddress.md)
+> `abstract` **id**: [`AbstractAddress`](AbstractAddress.md)
 
 #### Defined in
 
-[index.ts:85](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L85)
+[index.ts:85](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L85)
 
-___
+***
 
 ### interface
 
-• `Abstract` **interface**: `Object`
+> `abstract` **interface**: `object`
 
-#### Type declaration
+#### jsonAbi
 
-| Name | Type |
-| :------ | :------ |
-| `jsonAbi` | `any` |
+> `readonly` **jsonAbi**: `any`
 
 #### Inherited from
 
-AbstractProgram.interface
+`AbstractProgram.interface`
 
 #### Defined in
 
-[index.ts:74](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L74)
+[index.ts:74](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L74)
 
-___
+***
 
 ### provider
 
-• `Abstract` **provider**: ``null`` \| { `getTransactionCost`: (`transactionRequest`: `any`, `options?`: `any`) => `Promise`&lt;`any`\> ; `sendTransaction`: (`transactionRequest`: `any`, `options?`: `any`) => `any`  }
+> `abstract` **provider**: `null` \| `object`
 
 #### Inherited from
 
-AbstractProgram.provider
+`AbstractProgram.provider`
 
 #### Defined in
 
-[index.ts:78](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L78)
+[index.ts:78](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L78)

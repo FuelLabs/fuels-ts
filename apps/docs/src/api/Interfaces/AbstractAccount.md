@@ -1,116 +1,72 @@
-# Class: AbstractAccount
+[**@fuel-ts/interfaces v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/interfaces](/api/Interfaces/index.md).AbstractAccount
+***
 
-## Hierarchy
+# Class: `abstract` AbstractAccount
 
-- **`AbstractAccount`**
+## Extended by
 
 ## Constructors
 
-### constructor
+### new AbstractAccount()
 
-• **new AbstractAccount**(): [`AbstractAccount`](/api/Interfaces/AbstractAccount.md)
+> **new AbstractAccount**(): [`AbstractAccount`](AbstractAccount.md)
 
 #### Returns
 
-[`AbstractAccount`](/api/Interfaces/AbstractAccount.md)
+[`AbstractAccount`](AbstractAccount.md)
 
 ## Properties
 
 ### address
 
-• `Abstract` **address**: [`AbstractAddress`](/api/Interfaces/AbstractAddress.md)
+> `abstract` **address**: [`AbstractAddress`](AbstractAddress.md)
 
 #### Defined in
 
-[index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L61)
+[index.ts:61](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L61)
 
-___
+***
 
 ### provider
 
-• `Abstract` **provider**: `unknown`
+> `abstract` **provider**: `unknown`
 
 #### Defined in
 
-[index.ts:62](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L62)
+[index.ts:62](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L62)
 
 ## Methods
 
-### fund
+### fund()
 
-▸ **fund**(`transactionRequest`, `txCost`): `Promise`&lt;`any`\>
+> `abstract` **fund**(`transactionRequest`, `txCost`): `Promise`\&lt;`any`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `transactionRequest` | `any` |
-| `txCost` | `any` |
+• **transactionRequest**: `any`
+
+• **txCost**: `any`
 
 #### Returns
 
-`Promise`&lt;`any`\>
+`Promise`\&lt;`any`\>
 
 #### Defined in
 
-[index.ts:67](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L67)
+[index.ts:67](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L67)
 
-___
+***
 
-### getResourcesToSpend
+### getResourcesToSpend()
 
-▸ **getResourcesToSpend**(`quantities`, `options?`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `quantities` | `any`[] |
-| `options?` | `any` |
-
-#### Returns
-
-`any`
-
-#### Defined in
-
-[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L63)
-
-___
-
-### getTransactionCost
-
-▸ **getTransactionCost**(`transactionRequest`, `options?`): `Promise`&lt;`any`\>
+> `abstract` **getResourcesToSpend**(`quantities`, `options`?): `any`
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `transactionRequest` | `any` |
-| `options?` | `any` |
+• **quantities**: `any`[]
 
-#### Returns
-
-`Promise`&lt;`any`\>
-
-#### Defined in
-
-[index.ts:66](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L66)
-
-___
-
-### sendTransaction
-
-▸ **sendTransaction**(`transactionRequest`, `options?`): `any`
-
-#### Parameters
-
-| Name | Type |
-| :------ | :------ |
-| `transactionRequest` | `any` |
-| `options?` | `any` |
+• **options?**: `any`
 
 #### Returns
 
@@ -118,20 +74,39 @@ ___
 
 #### Defined in
 
-[index.ts:64](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L64)
+[index.ts:63](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L63)
 
-___
+***
 
-### simulateTransaction
+### getTransactionCost()
 
-▸ **simulateTransaction**(`transactionRequest`, `options?`): `any`
+> `abstract` **getTransactionCost**(`transactionRequest`, `options`?): `Promise`\&lt;`any`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `transactionRequest` | `any` |
-| `options?` | `any` |
+• **transactionRequest**: `any`
+
+• **options?**: `any`
+
+#### Returns
+
+`Promise`\&lt;`any`\>
+
+#### Defined in
+
+[index.ts:66](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L66)
+
+***
+
+### sendTransaction()
+
+> `abstract` **sendTransaction**(`transactionRequest`, `options`?): `any`
+
+#### Parameters
+
+• **transactionRequest**: `any`
+
+• **options?**: `any`
 
 #### Returns
 
@@ -139,4 +114,24 @@ ___
 
 #### Defined in
 
-[index.ts:65](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packag/api/src/index.ts#L65)
+[index.ts:64](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L64)
+
+***
+
+### simulateTransaction()
+
+> `abstract` **simulateTransaction**(`transactionRequest`, `options`?): `any`
+
+#### Parameters
+
+• **transactionRequest**: `any`
+
+• **options?**: `any`
+
+#### Returns
+
+`any`
+
+#### Defined in
+
+[index.ts:65](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L65)

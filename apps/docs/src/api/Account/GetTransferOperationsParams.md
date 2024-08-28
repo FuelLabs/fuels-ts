@@ -1,57 +1,57 @@
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
+
+***
+
 # Interface: GetTransferOperationsParams
 
-[@fuel-ts/account](/api/Account/index.md).GetTransferOperationsParams
+## Extends
 
-## Hierarchy
-
-- [`InputOutputParam`](/api/Account/index.md#inputoutputparam)
-
-  ↳ **`GetTransferOperationsParams`**
+- [`InputOutputParam`](../index.md#inputoutputparam)
 
 ## Properties
 
 ### baseAssetId
 
-• **baseAssetId**: `string`
+> **baseAssetId**: `string`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:139](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L139)
+[packages/account/src/providers/transaction-summary/types.ts:139](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L139)
 
-___
+***
 
 ### inputs
 
-• **inputs**: `Input`[]
+> **inputs**: `Input`[]
 
 #### Inherited from
 
-InputOutputParam.inputs
+`InputOutputParam.inputs`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:118](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L118)
+[packages/account/src/providers/transaction-summary/types.ts:118](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L118)
 
-___
+***
 
 ### outputs
 
-• **outputs**: `Output`[]
+> **outputs**: `Output`[]
 
 #### Inherited from
 
-InputOutputParam.outputs
+`InputOutputParam.outputs`
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:122](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L122)
+[packages/account/src/providers/transaction-summary/types.ts:122](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L122)
 
-___
+***
 
 ### receipts
 
-• **receipts**: `TransactionResultReceipt`[]
+> **receipts**: `TransactionResultReceipt`[]
 
 #### Defined in
 
-[packages/account/src/providers/transaction-summary/types.ts:138](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/providers/transaction-summary/types.ts#L138)
+[packages/account/src/providers/transaction-summary/types.ts:138](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/providers/transaction-summary/types.ts#L138)

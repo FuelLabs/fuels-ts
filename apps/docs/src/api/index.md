@@ -1,10 +1,15 @@
-<script setup>
-  import { data } from '../versions.data'
-  const { forc, fuels, fuelCore } = data
-</script>
+**Documentation v0.0.0** • [**Docs**](index.md)
 
-# The Fuel TypeScript SDK API Documentation
+***
 
-<br/>
+# Documentation v0.0.0
 
-#### Version Notice: Docs generated using Fuels `v{{fuels}}`, Fuel Core `v{{fuelCore}}`, Sway `v{{forc}}`, and Forc `v{{forc}}`.
+## Packages
+
+- [@fuel-ts/address - v0.94.2](Address/index.md)
+- [@fuel-ts/interfaces - v0.94.2](Interfaces/index.md)
+- [@fuel-ts/account - v0.94.2](Account/index.md)
+- [@fuel-ts/program - v0.94.2](Program/index.md)
+- [@fuel-ts/contract - v0.94.2](Contract/index.md)
+- [@fuel-ts/script - v0.94.2](Script/index.md)
+- [@fuel-ts/utils - v0.94.2](Utils/index.md)

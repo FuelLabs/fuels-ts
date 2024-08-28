@@ -1,104 +1,106 @@
-# Class: HDWallet
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).HDWallet
+***
+
+# Class: HDWallet
 
 ## Constructors
 
-### constructor
+### new HDWallet()
 
-• **new HDWallet**(`config`): [`HDWallet`](/api/Account/HDWallet.md)
+> **new HDWallet**(`config`): [`HDWallet`](HDWallet.md)
 
 HDWallet is a implementation of the BIP-0044 and BIP-0032, Multi-Account Hierarchy for Deterministic Wallets
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `config` | `HDWalletConfig` | Wallet configurations |
+• **config**: `HDWalletConfig`
+
+Wallet configurations
 
 #### Returns
 
-[`HDWallet`](/api/Account/HDWallet.md)
+[`HDWallet`](HDWallet.md)
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L80)
+[packages/account/src/hdwallet/hdwallet.ts:80](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L80)
 
 ## Properties
 
 ### chainCode
 
-• **chainCode**: [`BytesLike`](/api/Interfaces/index.md#byteslike)
+> **chainCode**: [`BytesLike`](../Interfaces/index.md#byteslike)
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:73](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L73)
+[packages/account/src/hdwallet/hdwallet.ts:73](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L73)
 
-___
+***
 
 ### depth
 
-• **depth**: `number` = `0`
+> **depth**: `number` = `0`
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:67](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L67)
+[packages/account/src/hdwallet/hdwallet.ts:67](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L67)
 
-___
+***
 
 ### fingerprint
 
-• **fingerprint**: `string`
+> **fingerprint**: `string`
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L69)
+[packages/account/src/hdwallet/hdwallet.ts:69](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L69)
 
-___
+***
 
 ### index
 
-• **index**: `number` = `0`
+> **index**: `number` = `0`
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:68](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L68)
+[packages/account/src/hdwallet/hdwallet.ts:68](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L68)
 
-___
+***
 
 ### parentFingerprint
 
-• **parentFingerprint**: `string`
+> **parentFingerprint**: `string`
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L70)
+[packages/account/src/hdwallet/hdwallet.ts:70](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L70)
 
-___
+***
 
-### privateKey
+### privateKey?
 
-• `Optional` **privateKey**: `string`
+> `optional` **privateKey**: `string`
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:71](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L71)
+[packages/account/src/hdwallet/hdwallet.ts:71](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L71)
 
-___
+***
 
 ### publicKey
 
-• **publicKey**: `string`
+> **publicKey**: `string`
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L72)
+[packages/account/src/hdwallet/hdwallet.ts:72](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L72)
 
 ## Accessors
 
 ### extendedKey
 
-• `get` **extendedKey**(): `string`
+> `get` **extendedKey**(): `string`
 
 #### Returns
 
@@ -106,71 +108,74 @@ ___
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:104](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L104)
+[packages/account/src/hdwallet/hdwallet.ts:104](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L104)
 
 ## Methods
 
-### deriveIndex
+### deriveIndex()
 
-▸ **deriveIndex**(`index`): [`HDWallet`](/api/Account/HDWallet.md)
+> **deriveIndex**(`index`): [`HDWallet`](HDWallet.md)
 
 Derive the current HDWallet instance navigating only on the index.
 `Ex.: m/44'/0 -> Ex.: m/44'/1 -> m/44'/2`. [Learn more](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `index` | `number` | Index of the child HDWallet. |
+• **index**: `number`
+
+Index of the child HDWallet.
 
 #### Returns
 
-[`HDWallet`](/api/Account/HDWallet.md)
+[`HDWallet`](HDWallet.md)
 
 A new instance of HDWallet on the derived index
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:115](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L115)
+[packages/account/src/hdwallet/hdwallet.ts:115](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L115)
 
-___
+***
 
-### derivePath
+### derivePath()
 
-▸ **derivePath**(`path`): [`HDWallet`](/api/Account/HDWallet.md)
+> **derivePath**(`path`): [`HDWallet`](HDWallet.md)
 
 Derive the current HDWallet instance to the path. [Learn more](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `path` | `string` | The string representation of the child HDWallet. `Ex.: m/44'/0'/0'/0/0` |
+• **path**: `string`
+
+The string representation of the child HDWallet. `Ex.: m/4./0`
 
 #### Returns
 
-[`HDWallet`](/api/Account/HDWallet.md)
+[`HDWallet`](HDWallet.md)
 
 A new instance of HDWallet on the derived path
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:174](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L174)
+[packages/account/src/hdwallet/hdwallet.ts:174](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L174)
 
-___
+***
 
-### toExtendedKey
+### toExtendedKey()
 
-▸ **toExtendedKey**(`isPublic?`, `testnet?`): `string`
+> **toExtendedKey**(`isPublic`, `testnet`): `string`
 
 Get the extendKey as defined on BIP-32 from the provided seed
 
 #### Parameters
 
-| Name | Type | Default value | Description |
-| :------ | :------ | :------ | :------ |
-| `isPublic` | `boolean` | `false` | enable to export public extendedKey, it not required when HDWallet didn't have the privateKey. |
-| `testnet` | `boolean` | `false` | Inform if should use testnet or mainnet prefix, default value is true (`mainnet`). |
+• **isPublic**: `boolean` = `false`
+
+enable to export public extendedKey, it not required when HDWallet didn't have the privateKey.
+
+• **testnet**: `boolean` = `false`
+
+Inform if should use testnet or mainnet prefix, default value is true (`mainnet`).
 
 #### Returns
 
@@ -180,48 +185,46 @@ BIP-32 extended private key
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:187](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L187)
+[packages/account/src/hdwallet/hdwallet.ts:187](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L187)
 
-___
+***
 
-### fromExtendedKey
+### fromExtendedKey()
 
-▸ **fromExtendedKey**(`extendedKey`): [`HDWallet`](/api/Account/HDWallet.md)
+> `static` **fromExtendedKey**(`extendedKey`): [`HDWallet`](HDWallet.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `extendedKey` | `string` |
+• **extendedKey**: `string`
 
 #### Returns
 
-[`HDWallet`](/api/Account/HDWallet.md)
+[`HDWallet`](HDWallet.md)
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:223](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L223)
+[packages/account/src/hdwallet/hdwallet.ts:223](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L223)
 
-___
+***
 
-### fromSeed
+### fromSeed()
 
-▸ **fromSeed**(`seed`): [`HDWallet`](/api/Account/HDWallet.md)
+> `static` **fromSeed**(`seed`): [`HDWallet`](HDWallet.md)
 
 Create HDWallet instance from seed
 
 #### Parameters
 
-| Name | Type | Description |
-| :------ | :------ | :------ |
-| `seed` | `string` | Seed |
+• **seed**: `string`
+
+Seed
 
 #### Returns
 
-[`HDWallet`](/api/Account/HDWallet.md)
+[`HDWallet`](HDWallet.md)
 
 A new instance of HDWallet
 
 #### Defined in
 
-[packages/account/src/hdwallet/hdwallet.ts:214](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/hdwallet/hdwallet.ts#L214)
+[packages/account/src/hdwallet/hdwallet.ts:214](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/hdwallet/hdwallet.ts#L214)

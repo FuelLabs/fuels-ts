@@ -1,128 +1,113 @@
-# Class: LocalStorage
+[**@fuel-ts/account v0.94.2**](../index.md) • **Docs**
 
-[@fuel-ts/account](/api/Account/index.md).LocalStorage
+***
+
+# Class: LocalStorage
 
 ## Implements
 
-- [`StorageAbstract`](/api/Account/StorageAbstract.md)
+- [`StorageAbstract`](StorageAbstract.md)
 
 ## Constructors
 
-### constructor
+### new LocalStorage()
 
-• **new LocalStorage**(`localStorage`): [`LocalStorage`](/api/Account/LocalStorage.md)
+> **new LocalStorage**(`localStorage`): [`LocalStorage`](LocalStorage.md)
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `localStorage` | `Storage` |
+• **localStorage**: `Storage`
 
 #### Returns
 
-[`LocalStorage`](/api/Account/LocalStorage.md)
+[`LocalStorage`](LocalStorage.md)
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:7](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/local-storage.ts#L7)
-
-## Properties
-
-### storage
-
-• `Private` **storage**: `Storage`
-
-#### Defined in
-
-[packages/account/src/connectors/types/local-storage.ts:5](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/local-storage.ts#L5)
+[packages/account/src/connectors/types/local-storage.ts:7](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/local-storage.ts#L7)
 
 ## Methods
 
-### clear
+### clear()
 
-▸ **clear**(): `Promise`&lt;`void`\>
+> **clear**(): `Promise`\&lt;`void`\>
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[clear](/api/Account/StorageAbstract.md#clear)
+[`StorageAbstract`](StorageAbstract.md).[`clear`](StorageAbstract.md#clear)
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:23](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/local-storage.ts#L23)
+[packages/account/src/connectors/types/local-storage.ts:23](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/local-storage.ts#L23)
 
-___
+***
 
-### getItem
+### getItem()
 
-▸ **getItem**(`key`): `Promise`&lt;`undefined` \| ``null`` \| `string`\>
+> **getItem**(`key`): `Promise`\&lt;`undefined` \| `null` \| `string`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
+• **key**: `string`
 
 #### Returns
 
-`Promise`&lt;`undefined` \| ``null`` \| `string`\>
+`Promise`\&lt;`undefined` \| `null` \| `string`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[getItem](/api/Account/StorageAbstract.md#getitem)
+[`StorageAbstract`](StorageAbstract.md).[`getItem`](StorageAbstract.md#getitem)
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/local-storage.ts#L15)
+[packages/account/src/connectors/types/local-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/local-storage.ts#L15)
 
-___
+***
 
-### removeItem
+### removeItem()
 
-▸ **removeItem**(`key`): `Promise`&lt;`void`\>
+> **removeItem**(`key`): `Promise`\&lt;`void`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
+• **key**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[removeItem](/api/Account/StorageAbstract.md#removeitem)
+[`StorageAbstract`](StorageAbstract.md).[`removeItem`](StorageAbstract.md#removeitem)
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/local-storage.ts#L19)
+[packages/account/src/connectors/types/local-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/local-storage.ts#L19)
 
-___
+***
 
-### setItem
+### setItem()
 
-▸ **setItem**(`key`, `value`): `Promise`&lt;`void`\>
+> **setItem**(`key`, `value`): `Promise`\&lt;`void`\>
 
 #### Parameters
 
-| Name | Type |
-| :------ | :------ |
-| `key` | `string` |
-| `value` | `string` |
+• **key**: `string`
+
+• **value**: `string`
 
 #### Returns
 
-`Promise`&lt;`void`\>
+`Promise`\&lt;`void`\>
 
 #### Implementation of
 
-[StorageAbstract](/api/Account/StorageAbstract.md).[setItem](/api/Account/StorageAbstract.md#setitem)
+[`StorageAbstract`](StorageAbstract.md).[`setItem`](StorageAbstract.md#setitem)
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8172e06047e1e0ed06f0ac2f92f4f4ad1a719c7c/packages/account/src/connectors/types/local-storage.ts#L11)
+[packages/account/src/connectors/types/local-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/account/src/connectors/types/local-storage.ts#L11)
