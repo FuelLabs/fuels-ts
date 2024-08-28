@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const WEB_SERVER_URL = 'http://127.0.0.1:3000';
+const WEB_SERVER_URL = 'http://127.0.0.1:5173';
 const FAUCET_URL = `${WEB_SERVER_URL}/faucet`;
 
 test.extend({
