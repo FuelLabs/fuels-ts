@@ -1,3 +1,4 @@
+import type { BigNumberish } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -6,6 +7,7 @@ import {
   ScriptWithVectorAdvanced,
   ScriptWithVectorMixed,
 } from '../test/typegen';
+import { StateErrorInput, UserErrorInput } from '../test/typegen/scripts/ScriptWithVectorAdvanced';
 
 /**
  * @group node
@@ -19,7 +21,7 @@ describe('Script With Vectors', () => {
       wallets: [wallet],
     } = launched;
 
-    const someArray = [1, 100];
+    const someArray: [BigNumberish, BigNumberish] = [1, 100];
     const scriptInstance = new ScriptWithArray(wallet);
 
     const { waitForResult } = await scriptInstance.functions.main(someArray).call();
@@ -109,7 +111,7 @@ describe('Script With Vectors', () => {
       wallets: [wallet],
     } = launched;
 
-    const scores = [24, 56, 43];
+    const scores: number[] = [24, 56, 43];
 
     const importantDates = [
       {
@@ -142,15 +144,15 @@ describe('Script With Vectors', () => {
     ];
 
     const errors = [
-      { StateError: 'Void' },
-      { StateError: 'Pending' },
-      { StateError: 'Completed' },
-      { UserError: 'InsufficientPermissions' },
-      { UserError: 'Unauthorized' },
-      { UserError: 'Unauthorized' },
-      { UserError: 'Unauthorized' },
-      { UserError: 'Unauthorized' },
-      { UserError: 'Unauthorized' },
+      { StateError: StateErrorInput.Void },
+      { StateError: StateErrorInput.Pending },
+      { StateError: StateErrorInput.Completed },
+      { UserError: UserErrorInput.InsufficientPermissions },
+      { UserError: UserErrorInput.Unauthorized },
+      { UserError: UserErrorInput.Unauthorized },
+      { UserError: UserErrorInput.Unauthorized },
+      { UserError: UserErrorInput.Unauthorized },
+      { UserError: UserErrorInput.Unauthorized },
     ];
 
     const vectorOfStructs = [

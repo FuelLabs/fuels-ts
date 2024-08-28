@@ -1,5 +1,14 @@
 # create-fuels
 
+## 0.94.2
+
+### Patch Changes
+
+- fcfbdf1: build(deps): bump the deps-patch group across 1 directory
+- 8c47dc5: chore: upgrade connectors
+- 362ea33: fix: added missing dependencies for templates
+- 50d548c: fix: UI integration tests
+
 ## 0.94.1
 
 ### Patch Changes
