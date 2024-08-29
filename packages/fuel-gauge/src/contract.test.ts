@@ -15,8 +15,14 @@ import {
   ZeroBytes32,
   buildFunctionResult,
 } from 'fuels';
-import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
-import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
+import type { JsonAbi, ScriptTransactionRequest, TransferParams, TxParams } from 'fuels';
+import {
+  expectToThrowFuelError,
+  ASSET_A,
+  ASSET_B,
+  launchTestNode,
+  TestAssetId,
+} from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
@@ -169,6 +175,48 @@ function setupTestContract() {
  * @group browser
  */
 describe('Contract', () => {
+  it('Single call with forwarding a alt token (asserting transaction parameters)', async () => {
+    using launched = await launchTestNode({
+      // contractsConfigs: [{ factory: CallTestContractFactory, walletIndex: 0 }],
+    });
+
+    const {
+      // contracts: [contract],
+      wallets: [wallet],
+    } = launched;
+
+    const { waitForResult } = await CallTestContractFactory.deploy(wallet);
+    const { contract } = await waitForResult();
+
+    const txParams: TxParams = {
+      gasLimit: 5245234,
+      maxFee: 2313234,
+      tip: 123,
+      witnessLimit: 143,
+    };
+
+    const tx = await contract.functions
+      .return_context_amount()
+      .callParams({
+        forward: [200, TestAssetId.A.value],
+      })
+      .txParams(txParams)
+      .call();
+
+    const { value, transactionResult } = await tx.waitForResult();
+    expect(value.toHex()).toEqual(toHex(200));
+
+    const policies = transactionResult.transaction.policies;
+    const maxFee = policies.find((policy) => policy.type === PolicyType.MaxFee);
+    const tip = policies.find((policy) => policy.type === PolicyType.Tip);
+    const witnessLimit = policies.find((policy) => policy.type === PolicyType.WitnessLimit);
+
+    expect(txParams.gasLimit).toEqual(transactionResult.transaction.scriptGasLimit.toNumber());
+    expect(txParams.maxFee).toEqual(bn(maxFee?.data).toNumber());
+    expect(txParams.witnessLimit).toEqual(bn(witnessLimit?.data).toNumber());
+    expect(txParams.tip).toEqual(bn(tip?.data).toNumber());
+  });
+
   it('generates function methods on a simple contract', async () => {
     using launched = await launchTestNode();
     const {
