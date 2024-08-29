@@ -28,7 +28,6 @@ export enum TransactionType /* u8 */ {
   Upgrade = 3,
   Upload = 4,
   Blob = 5,
-  Unknown = 6,
 }
 
 /** @hidden */
@@ -580,21 +579,13 @@ export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob
   }
 }
 
-export type TransactionUnknown = BaseTransactionType & {
-  type: TransactionType.Unknown;
-
-  /** Data of the transaction */
-  bytes?: BytesLike;
-};
-
 type PossibleTransactions =
   | TransactionScript
   | TransactionCreate
   | TransactionMint
   | TransactionUpgrade
   | TransactionUpload
-  | TransactionBlob
-  | TransactionUnknown;
+  | TransactionBlob;
 
 export type Transaction<TTransactionType = void> = TTransactionType extends TransactionType
   ? Extract<PossibleTransactions, { type: TTransactionType }>
@@ -603,8 +594,7 @@ export type Transaction<TTransactionType = void> = TTransactionType extends Tran
       Partial<Omit<TransactionMint, 'type'>> &
       Partial<Omit<TransactionUpgrade, 'type'>> &
       Partial<Omit<TransactionUpload, 'type'>> &
-      Partial<Omit<TransactionBlob, 'type'>> &
-      Partial<Omit<TransactionUnknown, 'type'>> & {
+      Partial<Omit<TransactionBlob, 'type'>> & {
         type: TransactionType;
       };
 
@@ -696,7 +686,6 @@ export class TransactionCoder extends Coder<Transaction, Transaction> {
         [decoded, o] = new TransactionBlobCoder().decode(data, o);
         return [decoded, o];
       }
-      case TransactionType.Unknown:
       default: {
         throw new FuelError(
           ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,

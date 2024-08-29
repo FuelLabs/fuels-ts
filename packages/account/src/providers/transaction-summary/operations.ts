@@ -61,8 +61,6 @@ export function getTransactionTypeName(transactionType: TransactionType): Transa
       return TransactionTypeName.Script;
     case TransactionType.Blob:
       return TransactionTypeName.Blob;
-    case TransactionType.Unknown:
-      return TransactionTypeName.Unknown;
     default:
       throw new FuelError(
         ErrorCode.UNSUPPORTED_TRANSACTION_TYPE,
