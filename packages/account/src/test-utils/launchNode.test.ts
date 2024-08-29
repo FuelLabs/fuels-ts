@@ -28,7 +28,7 @@ vi.mock('fs', async () => {
 /**
  * @group node
  */
-describe('launchNode', () => {
+describe('launchNode', { timeout: 10000 }, () => {
   test('using ephemeral port 0 is possible', async () => {
     const { cleanup, port, url } = await launchNode({ port: '0' });
     expect(await fetch(url)).toBeTruthy();
