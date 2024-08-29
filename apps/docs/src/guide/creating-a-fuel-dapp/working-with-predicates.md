@@ -4,6 +4,8 @@ This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've g
 
 ![End result of this guide](../../public/working-with-predicates-end-result.png)
 
+Or you can test out a version of the create fuels dApp deployed to testnet [here](https://create-fuels-template.vercel.app/).
+
 ## Adding a Configurable pin
 
 The current predicate functionality we have is a simple one that checks if the user has a pin. We will modify this predicate to accept a configurable pin. This will allow the user to set their own pin.
