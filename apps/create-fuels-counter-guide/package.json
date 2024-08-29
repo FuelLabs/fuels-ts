@@ -12,10 +12,12 @@
     "postbuild": "run-s fuels:build original:build"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.25.0",
-    "@fuels/react": "^0.25.0",
+    "@fuels/connectors": "^0.26.0",
+    "@fuels/react": "^0.26.0",
     "fuels": "workspace:*",
     "@tanstack/react-query": "^5.52.1",
+    "@wagmi/connectors": "^5.1.7",
+    "@wagmi/core": "^2.13.4",
     "dotenv": "^16.4.5",
     "next": "14.2.6",
     "react": "^18.3.1",

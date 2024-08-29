@@ -1,5 +1,6 @@
 import { arrayify } from './arrayify';
 import { compressBytecode, decompressBytecode } from './bytecode';
+import { sleep } from './sleep';
 
 /**
  * We are using a base64 encoded bytecode here to avoid having to
@@ -18,6 +19,13 @@ describe('bytecode utils', () => {
   test('should compress bytecode', () => {
     const compressedBytecode = compressBytecode(bytecodeBinary);
     expect(compressedBytecode.length).toBeLessThan(bytecodeBinary.length);
+  });
+
+  test('should compress to the same value', async () => {
+    const compressedBytecode = compressBytecode(bytecodeBinary);
+    await sleep(1000);
+    const compressedBytecode2 = compressBytecode(bytecodeBinary);
+    expect(compressedBytecode).toEqual(compressedBytecode2);
   });
 
   test('should decompress bytecode', () => {
