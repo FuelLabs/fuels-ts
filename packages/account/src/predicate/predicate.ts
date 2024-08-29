@@ -11,8 +11,6 @@ import {
   transactionRequestify,
   isRequestInputResource,
   isRequestInputResourceFromOwner,
-  isTransactionTypeUnknown,
-  TransactionResponse,
 } from '../providers';
 import type {
   CallResult,
@@ -22,6 +20,7 @@ import type {
   Resource,
   TransactionRequest,
   TransactionRequestLike,
+  TransactionResponse,
 } from '../providers';
 
 import { getPredicateRoot } from './utils';
@@ -118,9 +117,7 @@ export class Predicate<
    */
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (isTransactionTypeUnknown(transactionRequest)) {
-      return Promise.resolve(new TransactionResponse(transactionRequest, this.provider));
-    }
+
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 

@@ -46,7 +46,6 @@ import type {
 import {
   isTransactionTypeCreate,
   isTransactionTypeScript,
-  isTransactionTypeUnknown,
   transactionRequestify,
 } from './transaction-request';
 import type { TransactionResultReceipt } from './transaction-response';
@@ -745,9 +744,6 @@ Supported fuel-core version: ${supportedVersion}.`
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
-    if (isTransactionTypeUnknown(transactionRequest)) {
-      return new TransactionResponse(transactionRequest, this);
-    }
     // #region Provider-sendTransaction
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);

@@ -1,13 +1,7 @@
 import { BlobTransactionRequest } from './blob-transaction-request';
 import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
-import { UnknownTransactionRequest } from './unknown-transaction-request';
-import {
-  isTransactionTypeBlob,
-  isTransactionTypeCreate,
-  isTransactionTypeScript,
-  isTransactionTypeUnknown,
-} from './utils';
+import { isTransactionTypeBlob, isTransactionTypeCreate, isTransactionTypeScript } from './utils';
 
 /**
  * @group node
@@ -46,17 +40,5 @@ describe('isTransactionTypeBlob', () => {
   it('should return false if the request is not a blob transaction', () => {
     const request = new ScriptTransactionRequest();
     expect(isTransactionTypeCreate(request)).toBe(false);
-  });
-});
-
-describe('isTransactionTypeUnknown', () => {
-  it('should return true if the request is an unknown transaction', () => {
-    const request = new UnknownTransactionRequest({ bytes: '0x' });
-    expect(isTransactionTypeUnknown(request)).toBe(true);
-  });
-
-  it('should return false if the request is not an unknown transaction', () => {
-    const request = new ScriptTransactionRequest();
-    expect(isTransactionTypeUnknown(request)).toBe(false);
   });
 });

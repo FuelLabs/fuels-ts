@@ -13,18 +13,15 @@ import type {
   ScriptTransactionRequest,
   ScriptTransactionRequestLike,
 } from './script-transaction-request';
-import type { UnknownTransactionRequest } from './unknown-transaction-request';
 
 export type TransactionRequest =
   | ScriptTransactionRequest
   | CreateTransactionRequest
-  | BlobTransactionRequest
-  | UnknownTransactionRequest;
+  | BlobTransactionRequest;
 export type TransactionRequestLike =
   | ({ type: TransactionType.Script } & ScriptTransactionRequestLike)
   | ({ type: TransactionType.Create } & CreateTransactionRequestLike)
-  | ({ type: TransactionType.Blob } & BlobTransactionRequestLike)
-  | ({ type: TransactionType.Unknown } & UnknownTransactionRequest);
+  | ({ type: TransactionType.Blob } & BlobTransactionRequestLike);
 
 export type JsonAbisFromAllCalls = {
   main: JsonAbi;
