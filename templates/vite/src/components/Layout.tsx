@@ -1,16 +1,19 @@
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
-import { CURRENT_ENVIRONMENT, NODE_URL, TESTNET_FAUCET_LINK } from "../lib";
+import { CURRENT_ENVIRONMENT, NODE_URL } from "../lib";
 import { useConnectUI, useDisconnect } from "@fuels/react";
 import { WalletDisplay } from "./WalletDisplay";
 import { useBrowserWallet } from "../hooks/useBrowserWallet";
 import { useActiveWallet } from "../hooks/useActiveWallet";
 import { useFaucet } from "../hooks/useFaucet";
 import { bn } from "fuels";
+import { useRouter } from "@tanstack/react-router";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const { faucetWallet } = useFaucet();
+
+  const { navigate } = useRouter();
 
   const {
     wallet: browserWallet,
@@ -48,12 +51,11 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       return await refreshWalletBalance?.();
     }
 
-    // If the current environment is testnet, open the testnet faucet link in a new tab
+    // If the current environment is testnet, open the faucet page
     if (CURRENT_ENVIRONMENT === "testnet") {
-      return window.open(
-        `${TESTNET_FAUCET_LINK}?address=${wallet.address.toAddress()}`,
-        "_blank",
-      );
+      return navigate({
+        to: "/faucet",
+      });
     }
   };
 
@@ -77,14 +79,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <nav className="flex justify-between items-center p-4 bg-black text-white gap-6">
           <Link href="/">Home</Link>
 
-          <Link
-            href={
-              CURRENT_ENVIRONMENT === "local" ? "/faucet" : TESTNET_FAUCET_LINK
-            }
-            target={CURRENT_ENVIRONMENT === "local" ? "_self" : "_blank"}
-          >
-            Faucet
-          </Link>
+          <Link href="/faucet">Faucet</Link>
 
           {isBrowserWalletConnected && (
             <Button onClick={disconnect}>Disconnect Wallet</Button>
