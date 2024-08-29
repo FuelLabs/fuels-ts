@@ -138,7 +138,7 @@ describe('Raw Slice Tests', () => {
     const scriptInstance = new ScriptRawSlice(wallet);
 
     const bytes = [40, 41, 42];
-    const INPUT: Wrapper = {
+    const INPUT = {
       inner: [bytes, bytes],
       inner_enum: { Second: bytes },
     };

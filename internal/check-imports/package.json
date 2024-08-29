@@ -27,5 +27,5 @@
     "@fuel-ts/account": "workspace:*",
     "fuels": "workspace:*"
   },
-  "version": "0.0.3"
+  "version": "0.0.4"
 }
