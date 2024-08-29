@@ -1,4 +1,4 @@
-import { TransactionType, Wallet } from 'fuels';
+import { TransactionType } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**

@@ -2,7 +2,6 @@
 
 import { Coder, ArrayCoder, B256Coder, NumberCoder, BigNumberCoder } from '@fuel-ts/abi-coder';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
-import type { BytesLike } from '@fuel-ts/interfaces';
 import { type BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
