@@ -59,7 +59,7 @@ describe('Resubmitting Failed Transactions', () => {
       // Set the gasLimit to 0 to force revert with OutOfGas error
       transactionRequest.gasLimit = bn(0);
 
-      // Transaction will successufully submitted
+      // Transaction will be successfully submitted
       const response = await wallet.sendTransaction(transactionRequest);
       try {
         await response.waitForResult();
