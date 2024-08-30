@@ -1,4 +1,4 @@
-**@fuel-ts/contract v0.94.2** • [**Docs**](index.md)
+**@fuel-ts/contract v0.94.3** • [**Docs**](index.md)
 
 ***
 

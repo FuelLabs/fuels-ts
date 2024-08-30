@@ -1,4 +1,4 @@
-[**@fuel-ts/interfaces v0.94.2**](../index.md) • **Docs**
+[**@fuel-ts/interfaces v0.94.3**](../index.md) • **Docs**
 
 ***
 
@@ -34,7 +34,7 @@
 
 #### Defined in
 
-[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L73)
+[index.ts:73](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packag./src/index.ts#L73)
 
 ***
 
@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[index.ts:85](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L85)
+[index.ts:85](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packag./src/index.ts#L85)
 
 ***
 
@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[index.ts:74](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L74)
+[index.ts:74](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packag./src/index.ts#L74)
 
 ***
 
@@ -76,4 +76,4 @@
 
 #### Defined in
 
-[index.ts:78](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packag./src/index.ts#L78)
+[index.ts:78](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packag./src/index.ts#L78)

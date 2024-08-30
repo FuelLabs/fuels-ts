@@ -1,4 +1,4 @@
-[**@fuel-ts/contract v0.94.2**](../index.md) • **Docs**
+[**@fuel-ts/contract v0.94.3**](../index.md) • **Docs**
 
 ***
 
@@ -46,7 +46,7 @@ Options for deploying a contract.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:35](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/contract/src/contract-factory.ts#L35)
+[packages/contract/src/contract-factory.ts:35](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/contract/src/contract-factory.ts#L35)
 
 ***
 
@@ -90,4 +90,4 @@ Options for deploying a contract.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:43](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/contract/src/contract-factory.ts#L43)
+[packages/contract/src/contract-factory.ts:43](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/contract/src/contract-factory.ts#L43)

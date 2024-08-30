@@ -1,4 +1,4 @@
-[**@fuel-ts/utils v0.94.2**](../index.md) • **Docs**
+[**@fuel-ts/utils v0.94.3**](../index.md) • **Docs**
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/utils/src/utils/types.ts:223](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/types.ts#L223)
+[packages/utils/src/utils/types.ts:223](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/utils/src/utils/types.ts#L223)
 
 ***
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/utils/src/utils/types.ts:224](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/types.ts#L224)
+[packages/utils/src/utils/types.ts:224](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/utils/src/utils/types.ts#L224)
 
 ***
 
@@ -32,4 +32,4 @@
 
 #### Defined in
 
-[packages/utils/src/utils/types.ts:222](https://github.com/FuelLabs/fuels-ts/blob/60e570b347e0262535adb24c6b13f5d26907fabb/packages/utils/src/utils/types.ts#L222)
+[packages/utils/src/utils/types.ts:222](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/utils/src/utils/types.ts#L222)
