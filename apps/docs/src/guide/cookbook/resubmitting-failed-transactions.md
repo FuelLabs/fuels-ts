@@ -11,7 +11,7 @@ When submitting a transaction, you will first get a response.
 
 If the `sendTransaction` method resolves without an error, we know that the transaction was successfully submitted and accepted by the network. However, this does not guarantee that the transaction has been processed; it only indicates that the transaction has been accepted and placed in a queue for processing.
 
-To ensure that the transaction has been processed, you need to call `waitForResult`. This method will resolve (or reject with an error) only when the transaction has been fully processed.
+To determine whether the transaction has been processed, you must call `waitForResult`, which will either resolve (with the processed transaction) or reject with an error.
 
 <<< @/../../docs-snippets/src/guide/cookbook/resubmitting-failed-transactions.test.ts#resubmitting-failed-transactions-2{ts:line-numbers}
 
