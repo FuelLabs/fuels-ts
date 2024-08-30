@@ -1,4 +1,3 @@
-import { NumberCoder } from '@fuel-ts/abi-coder';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { UtxoId } from './utxo-id';
