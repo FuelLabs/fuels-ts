@@ -10,6 +10,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
+import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -27,6 +28,7 @@ import type {
   GqlPageInfo,
   GqlRelayedTransactionFailed,
   GqlMessage,
+  Requester,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -376,6 +378,7 @@ type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
+  getBlobCustom: (variables: { blobId: string }) => Promise<{ blob?: { id: string } | null }>;
 };
 
 /**
@@ -603,8 +606,22 @@ Supported fuel-core version: ${supportedVersion}.`
       return gqlClient.request(query, vars);
     };
 
+    const customOperations = (requester: Requester) => ({
+      getBlobCustom(variables: { blobId: string }) {
+        const document = gql`
+          query getBlob($blobId: BlobId!) {
+            blob(id: $blobId) {
+              id
+            }
+          }
+        `;
+
+        return requester(document, variables);
+      },
+    });
+
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
-    return getOperationsSdk(executeQuery);
+    return { ...getOperationsSdk(executeQuery), ...customOperations(executeQuery) };
   }
 
   /**
@@ -1337,8 +1354,8 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the blob ID or null.
    */
   async getBlob(blobId: string): Promise<string | null> {
-    const { blob } = await this.operations.getBlob({ blobId });
-    return blob?.id;
+    const { blob } = await this.operations.getBlobCustom({ blobId });
+    return blob?.id ?? null;
   }
 
   /**
