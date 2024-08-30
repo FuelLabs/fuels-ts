@@ -18,7 +18,6 @@ import type {
   ExcludeResourcesOption,
   Provider,
   ScriptTransactionRequestLike,
-  TransactionResponse,
   TransactionCost,
   EstimateTransactionParams,
   CursorPaginationArgs,
@@ -30,6 +29,7 @@ import type {
   GetBalancesResponse,
   Coin,
   TransactionCostParams,
+  TransactionResponse,
 } from './providers';
 import {
   withdrawScript,
