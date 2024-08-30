@@ -2,7 +2,6 @@
 
 In certain scenarios, you might need to implement a solution to resubmit failed transactions to the Fuel Network. While this approach can be effective, there are important considerations to remember.
 
-While this can work, there is cautions to take when using this approach.
 
 ## Submission and Processing
 
