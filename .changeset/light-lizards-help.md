@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/abi-coder": minor
+"@fuel-ts/abi-coder": patch
 ---
 
 fix: remove `u64` from `NumberCoderType`
