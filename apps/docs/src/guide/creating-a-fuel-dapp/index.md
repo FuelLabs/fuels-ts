@@ -9,7 +9,8 @@
 
 ![End result of this guide](../../public/creating-a-fuel-dapp-create-fuels-end-result.png)
 
-Or you can test out a version of the create fuels dApp deployed to testnet [here](https://create-fuels-template.vercel.app/).
+You can also check it live, deployed to the Testnet:
+ - https://create-fuels-template.vercel.app/
 
 ## Initializing the project
 
