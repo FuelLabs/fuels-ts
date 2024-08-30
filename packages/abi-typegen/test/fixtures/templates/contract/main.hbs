@@ -65,6 +65,11 @@ const abi = {
       "concreteTypeId": "2e38e77b22c314a449e91fafed92a43826ac6aa403ae6a8acb6cf58239fbaf5d"
     },
     {
+      "type": "(struct std::asset_id::AssetId, struct std::asset_id::AssetId, bool)",
+      "concreteTypeId": "a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6",
+      "metadataTypeId": 1
+    },
+    {
       "type": "(u8, u8, u8)",
       "concreteTypeId": "79239b6d6f2383e2cfbaf4da7fdf7ee7fb59b7bf517acfff2d9433e9e76e8fc4",
       "metadataTypeId": 0
@@ -72,7 +77,7 @@ const abi = {
     {
       "type": "[u8; 3]",
       "concreteTypeId": "2dc21094c0e9d81b843d1c1c308e2d60755d727d0f9b8981389845dd6d8686b2",
-      "metadataTypeId": 2
+      "metadataTypeId": 3
     },
     {
       "type": "b256",
@@ -85,12 +90,12 @@ const abi = {
     {
       "type": "enum EnumWithVector",
       "concreteTypeId": "11fe8db04751c1f2572544df9ac6b0659a5c159fecce1236148ed67ccb63f0a4",
-      "metadataTypeId": 4
+      "metadataTypeId": 5
     },
     {
       "type": "enum GenericEnum<u8,u16>",
       "concreteTypeId": "ecbb748d034980313898a72ea8a896a31506cfef0f41883bffe50d0b73f0d693",
-      "metadataTypeId": 5,
+      "metadataTypeId": 6,
       "typeArguments": [
         "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
         "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
@@ -99,22 +104,22 @@ const abi = {
     {
       "type": "enum MyEnum",
       "concreteTypeId": "f097a9c7cabaa22d324d564b43210e927784b6f73609fe9e55900268b15910f5",
-      "metadataTypeId": 6
+      "metadataTypeId": 7
     },
     {
       "type": "enum libs-for-testing::ExternalEnum",
       "concreteTypeId": "d255d7621a80835aee6d3d0643eaec25fbb2c3215ed140fcf98ceffa69d895bc",
-      "metadataTypeId": 7
+      "metadataTypeId": 8
     },
     {
       "type": "enum std::identity::Identity",
       "concreteTypeId": "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335",
-      "metadataTypeId": 8
+      "metadataTypeId": 9
     },
     {
       "type": "enum std::option::Option<struct MyStruct>",
       "concreteTypeId": "3597e0782bd4dbaf5c8025b40ff3a325845ee34caa713a6d664bda034a31d02a",
-      "metadataTypeId": 9,
+      "metadataTypeId": 10,
       "typeArguments": [
         "392d58c694d2d91f3025f2bccfadacf2a105936f5da881b0899185d49f264522"
       ]
@@ -122,7 +127,7 @@ const abi = {
     {
       "type": "enum std::option::Option<u8>",
       "concreteTypeId": "2da102c46c7263beeed95818cd7bee801716ba8303dddafdcd0f6c9efda4a0f1",
-      "metadataTypeId": 9,
+      "metadataTypeId": 10,
       "typeArguments": [
         "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
       ]
@@ -130,7 +135,7 @@ const abi = {
     {
       "type": "enum std::result::Result<u64,str[10]>",
       "concreteTypeId": "9891b1ee451eed790368ea3969e3c8f550efa87de489b5d7b933e2290800791b",
-      "metadataTypeId": 10,
+      "metadataTypeId": 11,
       "typeArguments": [
         "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0",
         "338a25cb65b9251663dcce6362b744fe10aa849758299590f4efed5dd299bf50"
@@ -139,7 +144,7 @@ const abi = {
     {
       "type": "enum std::result::Result<u64,u32>",
       "concreteTypeId": "b3131b4c08c16cfa55b3150d587c3afa3e4cdebe0399f3f599fa160baaa64e0c",
-      "metadataTypeId": 10,
+      "metadataTypeId": 11,
       "typeArguments": [
         "1506e6f44c1d6291cdf46395a8e573276a4fa79e8ace3fc891e092ef32d1b0a0",
         "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc"
@@ -164,7 +169,7 @@ const abi = {
     {
       "type": "struct GenericStructWithEnum<u8,u16>",
       "concreteTypeId": "1fcf420f386194ee1b5bd6d86346b554e2602516dee0b9f14d3a6a5e8b59ee10",
-      "metadataTypeId": 16,
+      "metadataTypeId": 17,
       "typeArguments": [
         "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b",
         "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
@@ -173,52 +178,52 @@ const abi = {
     {
       "type": "struct MyStruct",
       "concreteTypeId": "392d58c694d2d91f3025f2bccfadacf2a105936f5da881b0899185d49f264522",
-      "metadataTypeId": 17
+      "metadataTypeId": 18
     },
     {
       "type": "struct StructWithMultiOption",
       "concreteTypeId": "c581bcb5682ecd8bc2f011d5f0ebd9b1a158d659e41ef715763c48e0a2dbe33e",
-      "metadataTypeId": 18
+      "metadataTypeId": 19
     },
     {
       "type": "struct libs-for-testing::ExternalStruct",
       "concreteTypeId": "d8b341b0e34229cd4e78f2683daadb4e8f32487b5a8d06420889e23530a0b3a5",
-      "metadataTypeId": 19
+      "metadataTypeId": 20
     },
     {
       "type": "struct std::address::Address",
       "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308",
-      "metadataTypeId": 20
+      "metadataTypeId": 21
     },
     {
       "type": "struct std::asset_id::AssetId",
       "concreteTypeId": "c0710b6731b1dd59799cf6bef33eee3b3b04a2e40e80a0724090215bbf2ca974",
-      "metadataTypeId": 21
+      "metadataTypeId": 22
     },
     {
       "type": "struct std::b512::B512",
       "concreteTypeId": "745e252e80bec590efc3999ae943f07ccea4d5b45b00bb6575499b64abdd3322",
-      "metadataTypeId": 22
+      "metadataTypeId": 23
     },
     {
       "type": "struct std::bytes::Bytes",
       "concreteTypeId": "cdd87b7d12fe505416570c294c884bca819364863efe3bf539245fa18515fbbb",
-      "metadataTypeId": 23
+      "metadataTypeId": 24
     },
     {
       "type": "struct std::contract_id::ContractId",
       "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
-      "metadataTypeId": 25
+      "metadataTypeId": 26
     },
     {
       "type": "struct std::string::String",
       "concreteTypeId": "9a7f1d3e963c10e0a4ea70a8e20a4813d1dc5682e28f74cb102ae50d32f7f98c",
-      "metadataTypeId": 26
+      "metadataTypeId": 27
     },
     {
       "type": "struct std::vec::Vec<struct MyStruct>",
       "concreteTypeId": "82a718cca7f57f954a06e7f4016e97f8f5fe2e3544196604d7470c99c9627027",
-      "metadataTypeId": 28,
+      "metadataTypeId": 29,
       "typeArguments": [
         "392d58c694d2d91f3025f2bccfadacf2a105936f5da881b0899185d49f264522"
       ]
@@ -226,7 +231,7 @@ const abi = {
     {
       "type": "struct std::vec::Vec<struct StructWithMultiOption>",
       "concreteTypeId": "7433529a12c0ea55ba489b39a099c831a225e86a5d7319279912df84093dbdba",
-      "metadataTypeId": 28,
+      "metadataTypeId": 29,
       "typeArguments": [
         "c581bcb5682ecd8bc2f011d5f0ebd9b1a158d659e41ef715763c48e0a2dbe33e"
       ]
@@ -234,7 +239,7 @@ const abi = {
     {
       "type": "struct std::vec::Vec<u8>",
       "concreteTypeId": "27a0fb3d3a821e04e7a3f17ab6a617f0eb10f11e6eeb0f2c0ff9e6237207319e",
-      "metadataTypeId": 28,
+      "metadataTypeId": 29,
       "typeArguments": [
         "c89951a24c6ca28c13fd1cfdc646b2b656d69e61a92b91023be7eb58eb914b6b"
       ]
@@ -242,7 +247,7 @@ const abi = {
     {
       "type": "struct std::vm::evm::evm_address::EvmAddress",
       "concreteTypeId": "05a44d8c3e00faf7ed545823b7a2b32723545d8715d87a0ab3cf65904948e8d2",
-      "metadataTypeId": 29
+      "metadataTypeId": 30
     },
     {
       "type": "u16",
@@ -285,8 +290,26 @@ const abi = {
       ]
     },
     {
-      "type": "[_; 2]",
+      "type": "(_, _, _)",
       "metadataTypeId": 1,
+      "components": [
+        {
+          "name": "__tuple_element",
+          "typeId": 22
+        },
+        {
+          "name": "__tuple_element",
+          "typeId": 22
+        },
+        {
+          "name": "__tuple_element",
+          "typeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
+        }
+      ]
+    },
+    {
+      "type": "[_; 2]",
+      "metadataTypeId": 2,
       "components": [
         {
           "name": "__array_element",
@@ -296,7 +319,7 @@ const abi = {
     },
     {
       "type": "[_; 3]",
-      "metadataTypeId": 2,
+      "metadataTypeId": 3,
       "components": [
         {
           "name": "__array_element",
@@ -306,11 +329,11 @@ const abi = {
     },
     {
       "type": "[_; 5]",
-      "metadataTypeId": 3,
+      "metadataTypeId": 4,
       "components": [
         {
           "name": "__array_element",
-          "typeId": 9,
+          "typeId": 10,
           "typeArguments": [
             {
               "name": "",
@@ -322,7 +345,7 @@ const abi = {
     },
     {
       "type": "enum EnumWithVector",
-      "metadataTypeId": 4,
+      "metadataTypeId": 5,
       "components": [
         {
           "name": "num",
@@ -330,7 +353,7 @@ const abi = {
         },
         {
           "name": "vec",
-          "typeId": 28,
+          "typeId": 29,
           "typeArguments": [
             {
               "name": "",
@@ -342,25 +365,25 @@ const abi = {
     },
     {
       "type": "enum GenericEnum",
-      "metadataTypeId": 5,
+      "metadataTypeId": 6,
       "components": [
         {
           "name": "a",
-          "typeId": 13
+          "typeId": 14
         },
         {
           "name": "b",
-          "typeId": 14
+          "typeId": 15
         }
       ],
       "typeParameters": [
-        13,
-        14
+        14,
+        15
       ]
     },
     {
       "type": "enum MyEnum",
-      "metadataTypeId": 6,
+      "metadataTypeId": 7,
       "components": [
         {
           "name": "Checked",
@@ -374,7 +397,7 @@ const abi = {
     },
     {
       "type": "enum libs-for-testing::ExternalEnum",
-      "metadataTypeId": 7,
+      "metadataTypeId": 8,
       "components": [
         {
           "name": "A",
@@ -388,21 +411,21 @@ const abi = {
     },
     {
       "type": "enum std::identity::Identity",
-      "metadataTypeId": 8,
+      "metadataTypeId": 9,
       "components": [
         {
           "name": "Address",
-          "typeId": 20
+          "typeId": 21
         },
         {
           "name": "ContractId",
-          "typeId": 25
+          "typeId": 26
         }
       ]
     },
     {
       "type": "enum std::option::Option",
-      "metadataTypeId": 9,
+      "metadataTypeId": 10,
       "components": [
         {
           "name": "None",
@@ -410,82 +433,82 @@ const abi = {
         },
         {
           "name": "Some",
-          "typeId": 12
+          "typeId": 13
         }
       ],
       "typeParameters": [
-        12
+        13
       ]
     },
     {
       "type": "enum std::result::Result",
-      "metadataTypeId": 10,
+      "metadataTypeId": 11,
       "components": [
         {
           "name": "Ok",
-          "typeId": 12
+          "typeId": 13
         },
         {
           "name": "Err",
-          "typeId": 11
+          "typeId": 12
         }
       ],
       "typeParameters": [
-        12,
-        11
+        13,
+        12
       ]
     },
     {
       "type": "generic E",
-      "metadataTypeId": 11
-    },
-    {
-      "type": "generic T",
       "metadataTypeId": 12
     },
     {
-      "type": "generic T1",
+      "type": "generic T",
       "metadataTypeId": 13
     },
     {
-      "type": "generic T2",
+      "type": "generic T1",
       "metadataTypeId": 14
     },
     {
-      "type": "raw untyped ptr",
+      "type": "generic T2",
       "metadataTypeId": 15
     },
     {
+      "type": "raw untyped ptr",
+      "metadataTypeId": 16
+    },
+    {
       "type": "struct GenericStructWithEnum",
-      "metadataTypeId": 16,
+      "metadataTypeId": 17,
       "components": [
         {
           "name": "a",
-          "typeId": 13
+          "typeId": 14
         },
         {
           "name": "b",
-          "typeId": 5,
+          "typeId": 6,
           "typeArguments": [
             {
               "name": "",
-              "typeId": 13
+              "typeId": 14
             },
             {
               "name": "",
-              "typeId": 14
+              "typeId": 15
             }
           ]
         }
       ],
       "typeParameters": [
-        13,
-        14
+        14,
+        15
       ]
     },
     {
       "type": "struct MyStruct",
-      "metadataTypeId": 17,
+      "metadataTypeId": 18,
       "components": [
         {
           "name": "x",
@@ -497,23 +520,23 @@ const abi = {
         },
         {
           "name": "state",
-          "typeId": 6
+          "typeId": 7
         }
       ]
     },
     {
       "type": "struct StructWithMultiOption",
-      "metadataTypeId": 18,
+      "metadataTypeId": 19,
       "components": [
         {
           "name": "multiple",
-          "typeId": 3
+          "typeId": 4
         }
       ]
     },
     {
       "type": "struct libs-for-testing::ExternalStruct",
-      "metadataTypeId": 19,
+      "metadataTypeId": 20,
       "components": [
         {
           "name": "value",
@@ -523,16 +546,6 @@ const abi = {
     },
     {
       "type": "struct std::address::Address",
-      "metadataTypeId": 20,
-      "components": [
-        {
-          "name": "bits",
-          "typeId": "7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b"
-        }
-      ]
-    },
-    {
-      "type": "struct std::asset_id::AssetId",
       "metadataTypeId": 21,
       "components": [
         {
@@ -542,22 +555,32 @@ const abi = {
       ]
     },
     {
-      "type": "struct std::b512::B512",
+      "type": "struct std::asset_id::AssetId",
       "metadataTypeId": 22,
       "components": [
         {
           "name": "bits",
-          "typeId": 1
+          "typeId": "7c5ee1cecf5f8eacd1284feb5f0bf2bdea533a51e2f0c9aabe9236d335989f3b"
+        }
+      ]
+    },
+    {
+      "type": "struct std::b512::B512",
+      "metadataTypeId": 23,
+      "components": [
+        {
+          "name": "bits",
+          "typeId": 2
         }
       ]
     },
     {
       "type": "struct std::bytes::Bytes",
-      "metadataTypeId": 23,
+      "metadataTypeId": 24,
       "components": [
         {
           "name": "buf",
-          "typeId": 24
+          "typeId": 25
         },
         {
           "name": "len",
@@ -567,11 +590,11 @@ const abi = {
     },
     {
       "type": "struct std::bytes::RawBytes",
-      "metadataTypeId": 24,
+      "metadataTypeId": 25,
       "components": [
         {
           "name": "ptr",
-          "typeId": 15
+          "typeId": 16
         },
         {
           "name": "cap",
@@ -581,7 +604,7 @@ const abi = {
     },
     {
       "type": "struct std::contract_id::ContractId",
-      "metadataTypeId": 25,
+      "metadataTypeId": 26,
       "components": [
         {
           "name": "bits",
@@ -591,21 +614,21 @@ const abi = {
     },
     {
       "type": "struct std::string::String",
-      "metadataTypeId": 26,
+      "metadataTypeId": 27,
       "components": [
         {
           "name": "bytes",
-          "typeId": 23
+          "typeId": 24
         }
       ]
     },
     {
       "type": "struct std::vec::RawVec",
-      "metadataTypeId": 27,
+      "metadataTypeId": 28,
       "components": [
         {
           "name": "ptr",
-          "typeId": 15
+          "typeId": 16
         },
         {
           "name": "cap",
@@ -613,20 +636,20 @@ const abi = {
         }
       ],
       "typeParameters": [
-        12
+        13
       ]
     },
     {
       "type": "struct std::vec::Vec",
-      "metadataTypeId": 28,
+      "metadataTypeId": 29,
       "components": [
         {
           "name": "buf",
-          "typeId": 27,
+          "typeId": 28,
           "typeArguments": [
             {
               "name": "",
-              "typeId": 12
+              "typeId": 13
             }
           ]
         },
@@ -636,12 +659,12 @@ const abi = {
         }
       ],
       "typeParameters": [
-        12
+        13
       ]
     },
     {
       "type": "struct std::vm::evm::evm_address::EvmAddress",
-      "metadataTypeId": 29,
+      "metadataTypeId": 30,
       "components": [
         {
           "name": "bits",
@@ -956,6 +979,17 @@ const abi = {
       "inputs": [
         {
           "name": "x",
+          "concreteTypeId": "a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6"
+        }
+      ],
+      "name": "types_tuple_with_native_types",
+      "output": "a95e1fcceb1451b8a76471f593f66c4a52ca04bde3c227c746ad7aaf988de5c6",
+      "attributes": null
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
           "concreteTypeId": "29881aad8730c5ab11d275376323d8e4ff4179aae8ccb6c13fe4902137e162ef"
         }
       ],
@@ -1138,6 +1172,7 @@ export class MyContractInterface extends Interface {
     types_str_slice: FunctionFragment;
     types_struct: FunctionFragment;
     types_tuple: FunctionFragment;
+    types_tuple_with_native_types: FunctionFragment;
     types_u16: FunctionFragment;
     types_u256: FunctionFragment;
     types_u32: FunctionFragment;
@@ -1185,6 +1220,7 @@ export class MyContract extends Contract {
     types_str_slice: InvokeFunction<[x: StrSlice], StrSlice>;
     types_struct: InvokeFunction<[x: MyStructInput], MyStructOutput>;
     types_tuple: InvokeFunction<[x: [BigNumberish, BigNumberish, BigNumberish]], [number, number, number]>;
+    types_tuple_with_native_types: InvokeFunction<[x: [AssetIdInput, AssetIdInput, boolean]], [AssetIdOutput, AssetIdOutput, boolean]>;
     types_u16: InvokeFunction<[x: BigNumberish], number>;
     types_u256: InvokeFunction<[x: BigNumberish], BN>;
     types_u32: InvokeFunction<[x: BigNumberish], number>;

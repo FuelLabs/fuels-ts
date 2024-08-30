@@ -71,6 +71,7 @@ abi MyContract {
     fn types_struct(x: MyStruct) -> MyStruct;
     fn types_array(x: [u8; 3]) -> [u8; 3];
     fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8);
+    fn types_tuple_with_native_types(x: (AssetId, AssetId, bool)) -> (AssetId, AssetId, bool);
     fn types_enum(x: MyEnum) -> MyEnum;
     fn types_enum_with_vector(x: EnumWithVector) -> EnumWithVector;
     fn types_vector_u8(x: Vec<u8>) -> Vec<u8>;
@@ -148,6 +149,9 @@ impl MyContract for Contract {
         x
     }
     fn types_tuple(x: (u8, u8, u8)) -> (u8, u8, u8) {
+        (x.0, x.1, x.2)
+    }
+    fn types_tuple_with_native_types(x: (AssetId, AssetId, bool)) -> (AssetId, AssetId, bool) {
         (x.0, x.1, x.2)
     }
     fn types_struct(x: MyStruct) -> MyStruct {
