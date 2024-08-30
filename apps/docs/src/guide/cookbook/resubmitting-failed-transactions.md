@@ -5,7 +5,7 @@ In certain scenarios, you might need to implement a solution to resubmit failed 
 
 ## Submission and Processing
 
-When submitting a transaction, it may fail either during submission or during processing.
+When submitting a transaction, you will first get a response.
 
 <<< @/../../docs-snippets/src/guide/cookbook/resubmitting-failed-transactions.test.ts#resubmitting-failed-transactions-1{ts:line-numbers}
 
