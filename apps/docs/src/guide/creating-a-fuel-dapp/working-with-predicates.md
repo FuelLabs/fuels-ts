@@ -4,7 +4,8 @@ This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've g
 
 ![End result of this guide](../../public/working-with-predicates-end-result.png)
 
-Or you can test out a version of the create fuels dApp deployed to testnet [here](https://create-fuels-template.vercel.app/).
+You can also check it live, deployed to the Testnet:
+ - https://create-fuels-template.vercel.app/
 
 ## Adding a Configurable pin
 
