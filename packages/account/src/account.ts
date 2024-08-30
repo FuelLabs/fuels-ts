@@ -45,6 +45,7 @@ import {
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
+import { InputType } from '@fuel-ts/transactions';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
@@ -529,6 +530,7 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike,
     { signatureCallback, quantities = [] }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
+    console.warn('asd TEST TEST TEST');
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const baseAssetId = this.provider.getBaseAssetId();
 
@@ -542,10 +544,11 @@ export class Account extends AbstractAccount {
 
     const findAssetInput = (assetId: string) =>
       txRequestClone.inputs.find((input) => {
-        if ('assetId' in input) {
+        if (input.type === InputType.Coin) {
           return input.assetId === assetId;
         }
-        if ('recipient' in input) {
+        // we only consider the message input if it has no data. messages with `data` cannot fund the gas of transaction
+        if (input.type === InputType.Message && bn(input.data).isZero()) {
           return baseAssetId === assetId;
         }
 
@@ -554,11 +557,14 @@ export class Account extends AbstractAccount {
 
     const updateAssetInput = (assetId: string, quantity: BN) => {
       const assetInput = findAssetInput(assetId);
-      const usedQuantity = quantity;
 
+      console.log(`asd assetInput`, assetInput);
       if (assetInput && 'amount' in assetInput) {
-        assetInput.amount = usedQuantity;
+        console.log(`asd changing assetInput.amount to`, quantity, assetId);
+        assetInput.amount = quantity;
+
       } else {
+        console.log(`asd generating fake resources for amunt`, quantity, assetId);
         txRequestClone.addResources(
           this.generateFakeResources([
             {
@@ -570,7 +576,12 @@ export class Account extends AbstractAccount {
       }
     };
 
-    mergeQuantities(requiredQuantities, transactionFeeForDryRun).forEach(({ amount, assetId }) =>
+    const merged = mergeQuantities(requiredQuantities, transactionFeeForDryRun);
+
+    console.log(`asd txRequestClone.inputs`, txRequestClone.inputs);
+    console.log(`asd merged`, merged);
+
+    merged.forEach(({ amount, assetId }) =>
       updateAssetInput(assetId, amount)
     );
 
