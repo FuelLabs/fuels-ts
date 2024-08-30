@@ -21,7 +21,7 @@ In other words:
 
 ## Resources Spent When a Transaction Is Processed
 
-If a transaction is reverted during processing, the Fuel VM will still consume the funded resources to cover the gas used up to the point of failure. The remaining funds, after deducting the gas cost, will be added to a new UTXO (Unspent Transaction Output) addressed to the owner.
+If a transaction is reverted during processing, the Fuel VM will still consume the funded resources to cover the gas used up to the point of failure. After deducting the gas cost, the remaining funds will be added to a new UTXO (Unspent Transaction Output) addressed to the owner.
 
 Attempting to resubmit the same transaction request that failed during processing will likely result in an error, as the resources that were initially spent no longer exist.
 
