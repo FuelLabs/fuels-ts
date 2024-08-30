@@ -28,36 +28,38 @@ export type MyScriptConfigurables = Partial<{
 }>;
 
 const abi = {
-  "encoding": "1",
-  "types": [
+  "programType": "script",
+  "specVersion": "1",
+  "encodingVersion": "1",
+  "concreteTypes": [
     {
-      "typeId": 0,
       "type": "bool",
-      "components": null,
-      "typeParameters": null
+      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903"
     },
     {
-      "typeId": 1,
       "type": "struct Score",
+      "concreteTypeId": "bd5dbfd643b808e6ef22f73778cc8277cc5f01a4f974359b3169caa06e661d7e",
+      "metadataTypeId": 0
+    }
+  ],
+  "metadataTypes": [
+    {
+      "type": "struct Score",
+      "metadataTypeId": 0,
       "components": [
         {
           "name": "user",
-          "type": 2,
-          "typeArguments": null
+          "typeId": 1
         },
         {
           "name": "points",
-          "type": 2,
-          "typeArguments": null
+          "typeId": 1
         }
-      ],
-      "typeParameters": null
+      ]
     },
     {
-      "typeId": 2,
       "type": "u8",
-      "components": null,
-      "typeParameters": null
+      "metadataTypeId": 1
     }
   ],
   "functions": [
@@ -65,16 +67,11 @@ const abi = {
       "inputs": [
         {
           "name": "score",
-          "type": 1,
-          "typeArguments": null
+          "concreteTypeId": "bd5dbfd643b808e6ef22f73778cc8277cc5f01a4f974359b3169caa06e661d7e"
         }
       ],
       "name": "main",
-      "output": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
+      "output": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
       "attributes": null
     }
   ],
@@ -83,12 +80,8 @@ const abi = {
   "configurables": [
     {
       "name": "SHOULD_RETURN",
-      "configurableType": {
-        "name": "",
-        "type": 0,
-        "typeArguments": null
-      },
-      "offset": 640
+      "concreteTypeId": "b760f44fa5965c2474a3b471467a22c43185152129295af588b022ae50b50903",
+      "offset": 760
     }
   ]
 };

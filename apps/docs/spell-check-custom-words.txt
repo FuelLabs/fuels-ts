@@ -1,5 +1,6 @@
 ABI
 ABIs
+ABI's
 ASM
 AssetId
 IDE
@@ -317,6 +318,7 @@ BigNumber
 Gwei
 onchain
 Vercel
+vercel
 hardcoded
 differentiators
 updatable
@@ -329,3 +331,5 @@ Vitest
 CODEOWNERS
 incentivise
 URI
+walletsConfig
+reuploaded

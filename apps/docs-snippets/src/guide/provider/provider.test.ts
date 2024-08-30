@@ -1,11 +1,5 @@
-import {
-  FUEL_NETWORK_URL,
-  Provider,
-  ScriptTransactionRequest,
-  sleep,
-  WalletUnlocked,
-  Address,
-} from 'fuels';
+import { Provider, ScriptTransactionRequest, sleep, WalletUnlocked, Address } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 async function fetchSomeExternalCredentials() {
   return Promise.resolve('credential');
@@ -21,8 +15,15 @@ function decorateResponseWithCustomLogic(response: Response) {
  */
 describe('Provider', () => {
   it('base examples', async () => {
+    using launched = await launchTestNode();
+
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
+
     // #region provider-definition
-    // #import { Provider, FUEL_NETWORK_URL, WalletUnlocked };
+    // #import { Provider, WalletUnlocked };
+
+    const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
     // Create the provider
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -46,6 +47,10 @@ describe('Provider', () => {
   });
 
   test('options: requestMiddleware', async () => {
+    using launched = await launchTestNode();
+
+    const FUEL_NETWORK_URL = launched.provider.url;
+
     // #region options-requestMiddleware
     // synchronous request middleware
     await Provider.create(FUEL_NETWORK_URL, {
@@ -70,6 +75,10 @@ describe('Provider', () => {
   });
 
   it('options: timeout', async () => {
+    using launched = await launchTestNode();
+
+    const FUEL_NETWORK_URL = launched.provider.url;
+
     // #region options-timeout
     await Provider.create(FUEL_NETWORK_URL, {
       timeout: 30000, // will abort if request takes 30 seconds to complete
@@ -78,6 +87,10 @@ describe('Provider', () => {
   });
 
   it('options: retryOptions', async () => {
+    using launched = await launchTestNode();
+
+    const FUEL_NETWORK_URL = launched.provider.url;
+
     // #region options-retryOptions
     await Provider.create(FUEL_NETWORK_URL, {
       retryOptions: {
@@ -90,6 +103,10 @@ describe('Provider', () => {
   });
 
   it('options: fetch', async () => {
+    using launched = await launchTestNode();
+
+    const FUEL_NETWORK_URL = launched.provider.url;
+
     // #region options-fetch
     await Provider.create(FUEL_NETWORK_URL, {
       fetch: async (url: string, requestInit: RequestInit | undefined) => {
@@ -108,6 +125,9 @@ describe('Provider', () => {
   });
 
   it('options: resourceCacheTTL', async () => {
+    using launched = await launchTestNode();
+
+    const FUEL_NETWORK_URL = launched.provider.url;
     // #region options-cache-utxo
     const provider = await Provider.create(FUEL_NETWORK_URL, {
       resourceCacheTTL: 5000, // cache resources (Coin's and Message's) for 5 seconds
@@ -119,9 +139,15 @@ describe('Provider', () => {
 
   it('fetches the base asset ID', async () => {
     const recipientAddress = Address.fromRandom();
+    using launched = await launchTestNode();
+
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
 
     // #region provider-getBaseAssetId
-    // #import { Provider, FUEL_NETWORK_URL, ScriptTransactionRequest };
+    // #import { Provider, ScriptTransactionRequest };
+
+    const FUEL_NETWORK_URL = 'http://127.0.0.1:4000/v1/graphql';
 
     // Fetch the base asset ID using the provider
     const provider = await Provider.create(FUEL_NETWORK_URL);
@@ -138,6 +164,10 @@ describe('Provider', () => {
   });
 
   it('using operations', async () => {
+    using launched = await launchTestNode();
+
+    const FUEL_NETWORK_URL = launched.provider.url;
+
     // #region operations
     const provider = await Provider.create(FUEL_NETWORK_URL);
 

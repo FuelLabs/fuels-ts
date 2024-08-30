@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/interfaces",
-  "version": "0.93.0",
+  "version": "0.94.2",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",

@@ -97,9 +97,9 @@ describe('TransactionResponse', () => {
 
     const response = await TransactionResponse.create(transactionId, provider);
 
-    expect(response.gqlTransaction).toBeDefined();
-    expect(response.gqlTransaction?.status).toBeDefined();
-    expect(response.gqlTransaction?.id).toBe(transactionId);
+    const { id } = await response.assembleResult();
+
+    expect(id).toEqual(transactionId);
   });
 
   it('should ensure getTransactionSummary fetches a transaction and assembles transaction summary', async () => {
@@ -140,16 +140,13 @@ describe('TransactionResponse', () => {
     expect(transactionSummary.mintedAssets).toBeDefined();
     expect(transactionSummary.burnedAssets).toBeDefined();
     expect(transactionSummary.isTypeMint).toBeDefined();
+    expect(transactionSummary.isTypeBlob).toBeDefined();
     expect(transactionSummary.isTypeCreate).toBeDefined();
     expect(transactionSummary.isTypeScript).toBeDefined();
     expect(transactionSummary.isStatusFailure).toBeDefined();
     expect(transactionSummary.isStatusSuccess).toBeDefined();
     expect(transactionSummary.isStatusPending).toBeDefined();
     expect(transactionSummary.transaction).toBeDefined();
-
-    expect(response.gqlTransaction).toBeDefined();
-    expect(response.gqlTransaction?.status).toBeDefined();
-    expect(response.gqlTransaction?.id).toBe(transactionId);
   });
 
   it.skip(
@@ -185,8 +182,6 @@ describe('TransactionResponse', () => {
       );
       const response = await TransactionResponse.create(transactionId, provider);
 
-      expect(response.gqlTransaction?.status?.type).toBe('SubmittedStatus');
-
       const subscriptionStreamHolder = {
         stream: new ReadableStream<Uint8Array>(),
       };
@@ -194,9 +189,6 @@ describe('TransactionResponse', () => {
       getSubscriptionStreamFromFetch(subscriptionStreamHolder);
 
       await response.waitForResult();
-
-      expect(response.gqlTransaction?.status?.type).toEqual('SuccessStatus');
-      expect(response.gqlTransaction?.id).toBe(transactionId);
 
       await verifyKeepAliveMessageWasSent(subscriptionStreamHolder.stream);
     }

@@ -1,19 +1,26 @@
-import type { Contract, RawSlice } from 'fuels';
+import type { RawSlice } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { EchoRawSliceFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('RawSlice', () => {
-  let contract: Contract;
-
-  beforeAll(async () => {
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.ECHO_RAW_SLICE);
-  });
-
   it('should pass a raw slice to a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoRawSliceFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region raw-slice-1
     // #import { RawSlice };
 
@@ -26,6 +33,18 @@ describe('RawSlice', () => {
   });
 
   it('should retrieve a raw slice from a contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: EchoRawSliceFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region raw-slice-2
     // #import { RawSlice };
 

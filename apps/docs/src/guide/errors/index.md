@@ -66,6 +66,12 @@ When the function with the given name, signature or selector is not found in the
 
 Check that the function name, signature or selector is correct and exits on the ABI.
 
+### `FUNDS_TOO_LOW`
+
+When the funds in the account are lower than the required amount.
+
+Ensure that the account has enough funds to cover the transaction.
+
 ### `GAS_LIMIT_TOO_LOW`
 
 When the gas limit is lower than the minimum gas limit.
@@ -89,6 +95,12 @@ The error message will determine which element of the configuration is incorrect
 Checksum validation failed for the provided mnemonic.
 
 Ensure that the mnemonic is correct.
+
+### `INVALID_CHUNK_SIZE_MULTIPLIER`
+
+When the chunk size multiplier is not between 0 and 1.
+
+Ensure that the chunk size multiplier is a number that it is between 0 and 1.
 
 ### `INVALID_CONFIGURABLE_CONSTANTS`
 

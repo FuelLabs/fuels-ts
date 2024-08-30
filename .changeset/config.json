@@ -20,6 +20,7 @@
     "@fuel-ts/docs-snippets2",
     "template-nextjs",
     "create-fuels-counter-guide",
-    "demo-wallet-sdk-react"
+    "demo-wallet-sdk-react",
+    "template-vite"
   ]
 }

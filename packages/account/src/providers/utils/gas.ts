@@ -103,6 +103,7 @@ export interface IGetMaxGasParams {
   gasPerByte: BN;
   minGas: BN;
   gasLimit?: BN;
+  blobSize?: BN;
   maxGasPerTx: BN;
 }
 
@@ -156,6 +157,20 @@ export function calculateMetadataGasForTxScript({
   txBytesSize: number;
 }) {
   return resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+}
+
+export function calculateMetadataGasForTxBlob({
+  gasCosts,
+  txBytesSize,
+  witnessBytesSize,
+}: {
+  gasCosts: GasCosts;
+  txBytesSize: number;
+  witnessBytesSize: number;
+}) {
+  const txId = resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+  const blobLen = resolveGasDependentCosts(witnessBytesSize, gasCosts.s256);
+  return txId.add(blobLen);
 }
 
 export interface CalculateGasFeeParams {

@@ -1,65 +1,113 @@
-import { readFileSync } from 'fs';
-import { Provider, FUEL_NETWORK_URL, Wallet, ContractFactory } from 'fuels';
-import { join } from 'path';
+/* eslint-disable @typescript-eslint/no-shadow */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory, hexlify } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { EchoValuesFactory as TypegenFactory, EchoValues } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let PRIVATE_KEY: string;
-  let projectsPath: string;
-  let contractName: string;
+describe('Deploying Contracts', () => {
+  it('gets the max contract size for the chain', async () => {
+    using launched = await launchTestNode();
 
-  beforeAll(async () => {
-    const wallet = await getTestWallet();
-    PRIVATE_KEY = wallet.privateKey;
-    projectsPath = join(__dirname, '../../../test/fixtures/forc-projects');
+    const { provider: testProvider } = launched;
+    const TESTNET_NETWORK_URL = testProvider.url;
 
-    contractName = DocSnippetProjectsEnum.ECHO_VALUES;
+    // #region get-contract-max-size
+    // #import { Provider, TESTNET_NETWORK_URL };
+
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const { consensusParameters } = provider.getChain();
+    const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize;
+    // #endregion get-contract-max-size
+    expect(contractSizeLimit).toBeDefined();
   });
 
-  it('should successfully deploy and execute contract function', async () => {
-    // #region contract-setup-1
-    // #context const PRIVATE_KEY = "..."
+  it('deploys a contract', async () => {
+    using launched = await launchTestNode();
 
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    const {
+      provider: testProvider,
+      wallets: [testWallet],
+    } = launched;
+    const TESTNET_NETWORK_URL = testProvider.url;
+    const WALLET_PVT_KEY = testWallet.privateKey;
+    const bytecode = TypegenFactory.bytecode;
 
-    const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
-    // #endregion contract-setup-1
+    // #region setup
+    // #import { Provider, TESTNET_NETWORK_URL, Wallet };
+    // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
+    // #context import { TypegenFactory } from 'path/to/typegen/outputs';
 
-    // #region contract-setup-2
-    // #context const contractsDir = join(__dirname, '../path/to/contracts/dir')
-    // #context const contractName = "contract-name"
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+    const factory = new TypegenFactory(wallet);
+    // #endregion setup
+    expect(hexlify(factory.bytecode)).toBe(hexlify(bytecode));
 
-    const byteCodePath = join(projectsPath, `${contractName}/out/release/${contractName}.bin`);
-    const byteCode = readFileSync(byteCodePath);
-
-    const abiJsonPath = join(projectsPath, `${contractName}/out/release/${contractName}-abi.json`);
-    const abi = JSON.parse(readFileSync(abiJsonPath, 'utf8'));
-    // #endregion contract-setup-2
-
-    // #region contract-setup-3
-    const factory = new ContractFactory(byteCode, abi, wallet);
-
-    const { contractId, transactionId, waitForResult } = await factory.deploy();
-    // #endregion contract-setup-3
-
-    // #region contract-setup-4
+    // #region deploy
+    // Deploy the contract
+    const { waitForResult, contractId, waitForTransactionId } = await factory.deploy();
+    // Retrieve the transactionId
+    const transactionId = await waitForTransactionId();
+    // Await it's deployment
     const { contract, transactionResult } = await waitForResult();
-    // #endregion contract-setup-4
-
-    // #region contract-setup-5
-    const call = await contract.functions.echo_u8(15).call();
-
-    const { value } = await call.waitForResult();
-    // #endregion contract-setup-5
-
+    // #endregion deploy
+    expect(contract).toBeDefined();
     expect(transactionId).toBeDefined();
-    expect(contractId).toBeDefined();
-    expect(transactionResult.isStatusSuccess).toBeTruthy();
-    expect(value).toBe(15);
+    expect(transactionResult.status).toBeTruthy();
+    expect(contractId).toBe(contract.id.toB256());
+
+    // #region call
+    // Call the contract
+    const { waitForResult: waitForCallResult } = await contract.functions.echo_u8(10).call();
+    // Await the result of the call
+    const { value } = await waitForCallResult();
+    // #endregion call
+    expect(value).toBe(10);
+  });
+
+  it('deploys a large contract as blobs', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      provider: testProvider,
+      wallets: [testWallet],
+    } = launched;
+    const TESTNET_NETWORK_URL = testProvider.url;
+    const WALLET_PVT_KEY = testWallet.privateKey;
+    const abi = EchoValues.abi;
+    const bytecode = TypegenFactory.bytecode;
+
+    // #region blobs
+    // #import { Provider, TESTNET_NETWORK_URL, Wallet, ContractFactory };
+    // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
+    // #context import { bytecode, abi } from 'path/to/typegen/outputs';
+
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+    const factory = new ContractFactory(bytecode, abi, wallet);
+
+    // Deploy the contract as blobs
+    const { waitForResult, contractId, waitForTransactionId } = await factory.deployAsBlobTx({
+      // Increasing chunk size multiplier to be 90% of the max chunk size
+      chunkSizeMultiplier: 0.9,
+    });
+    // Await it's deployment
+    const { contract, transactionResult } = await waitForResult();
+    // #endregion blobs
+
+    const transactionId = await waitForTransactionId();
+    expect(contract).toBeDefined();
+    expect(transactionId).toBeDefined();
+    expect(transactionResult.status).toBeTruthy();
+    expect(contractId).toBe(contract.id.toB256());
+
+    const { waitForResult: waitForCallResult } = await contract.functions.echo_u8(10).call();
+    const { value } = await waitForCallResult();
+    expect(value).toBe(10);
   });
 });

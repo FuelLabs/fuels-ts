@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/account",
-  "version": "0.93.0",
+  "version": "0.94.2",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -59,7 +59,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuels/vm-asm": "0.55.0",
+    "@fuels/vm-asm": "0.56.0",
     "@noble/curves": "^1.4.2",
     "events": "^3.3.0",
     "graphql": "^16.9.0",

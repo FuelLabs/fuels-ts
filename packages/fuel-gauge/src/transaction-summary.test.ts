@@ -4,6 +4,7 @@ import type {
   TransactionSummary,
   TransactionResult,
   AbstractAddress,
+  OutputChange,
 } from 'fuels';
 import {
   BN,
@@ -15,10 +16,33 @@ import {
   Wallet,
   AddressType,
   OperationName,
+  OutputType,
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
 
 import { MultiTokenContractFactory, TokenContractFactory } from '../test/typegen';
+import type { ContractIdInput, TransferParamsInput } from '../test/typegen/contracts/TokenContract';
+
+function convertBnsToHex(value: unknown): unknown {
+  if (value instanceof BN) {
+    return value.toHex();
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((v) => convertBnsToHex(v));
+  }
+
+  if (typeof value === 'object') {
+    // imagine, typeof null returns 'object'...
+    if (value === null) {
+      return value;
+    }
+    const entries = Object.entries(value).map(([key, v]) => [key, convertBnsToHex(v)]);
+    return Object.fromEntries(entries);
+  }
+
+  return value;
+}
 
 /**
  * @group node
@@ -39,11 +63,11 @@ describe('TransactionSummary', () => {
     expect(transaction.isTypeMint).toBe(false);
     expect(transaction.isTypeCreate).toBe(false);
     expect(transaction.isTypeScript).toBe(true);
+    expect(transaction.isTypeBlob).toBe(false);
     expect(transaction.isStatusFailure).toBe(false);
     expect(transaction.isStatusSuccess).toBe(!isRequest);
     expect(transaction.isStatusPending).toBe(false);
     if (!isRequest) {
-      expect((<TransactionResult>transaction).gqlTransaction).toStrictEqual(expect.any(Object));
       expect(transaction.blockId).toEqual(expect.any(String));
       expect(transaction.time).toEqual(expect.any(String));
       expect(transaction.status).toEqual(expect.any(String));
@@ -91,8 +115,7 @@ describe('TransactionSummary', () => {
       transaction: transactionSummary,
     });
 
-    expect(transactionResponse).toStrictEqual(transactionSummary);
-    expect(transactionSummary.transaction).toStrictEqual(transactionResponse.transaction);
+    expect(convertBnsToHex(transactionResponse)).toStrictEqual(convertBnsToHex(transactionSummary));
   });
 
   it('should ensure getTransactionsSummaries executes just fine', async () => {
@@ -144,8 +167,8 @@ describe('TransactionSummary', () => {
       });
     });
 
-    expect(transactions[0]).toStrictEqual(transactionResponse1);
-    expect(transactions[1]).toStrictEqual(transactionResponse2);
+    expect(convertBnsToHex(transactions[0])).toStrictEqual(convertBnsToHex(transactionResponse1));
+    expect(convertBnsToHex(transactions[1])).toStrictEqual(convertBnsToHex(transactionResponse2));
   });
 
   it('should ensure getTransactionSummaryFromRequest executes just fine', async () => {
@@ -233,6 +256,79 @@ describe('TransactionSummary', () => {
           {
             address: recipient.address,
             quantities: [{ amount, assetId: provider.getBaseAssetId() }],
+          },
+        ],
+      });
+    });
+
+    it('should ensure transfer operation is assembled (CUSTOM ACCOUNT TRANSFER)', async () => {
+      const transferAmount = 1233;
+      const minorAmount = 1000;
+      const majorAmount = 100_000_000_000;
+      const tranferBackAmount = majorAmount - 10_000;
+
+      using launched = await launchTestNode({
+        walletsConfig: {
+          coinsPerAsset: 2,
+          amountPerCoin: majorAmount,
+        },
+      });
+
+      const {
+        provider,
+        wallets: [majorWallet],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+      const recipient = Wallet.generate({ provider });
+      const minorWallet = Wallet.generate({ provider });
+
+      // Adding small funds to the semi funded wallet
+      const submitted = await majorWallet.transfer(
+        minorWallet.address,
+        minorAmount,
+        provider.getBaseAssetId()
+      );
+      await submitted.waitForResult();
+
+      const majorResources = await majorWallet.getResourcesToSpend([[majorAmount, baseAssetId]]);
+      const minorResources = await minorWallet.getResourcesToSpend([[minorAmount, baseAssetId]]);
+
+      let request = new ScriptTransactionRequest({
+        gasLimit: 100_000,
+        maxFee: 120_000,
+      });
+      request.addResources([...majorResources, ...minorResources]);
+
+      // Add tranfer to recipient
+      request.addCoinOutput(recipient.address, transferAmount, provider.getBaseAssetId());
+
+      // Add transfer to self
+      request.addCoinOutput(majorWallet.address, tranferBackAmount, provider.getBaseAssetId());
+
+      // Explicitly setting the Output Change address to the recipient
+      const index = request.outputs.findIndex((output) => output.type === OutputType.Change);
+      (<OutputChange>request.outputs[index]).to = recipient.address.toB256();
+
+      request = await majorWallet.populateTransactionWitnessesSignature(request);
+      request = await minorWallet.populateTransactionWitnessesSignature(request);
+
+      const tx = await majorWallet.sendTransaction(request);
+      const { operations } = await tx.waitForResult();
+
+      validateTransferOperation({
+        operations,
+        sender: majorWallet.address,
+        fromType: AddressType.account,
+        toType: AddressType.account,
+        recipients: [
+          {
+            address: recipient.address,
+            quantities: [{ amount: transferAmount, assetId: provider.getBaseAssetId() }],
+          },
+          {
+            address: majorWallet.address,
+            quantities: [{ amount: tranferBackAmount, assetId: provider.getBaseAssetId() }],
           },
         ],
       });
@@ -373,6 +469,12 @@ describe('TransactionSummary', () => {
               asset_id: { bits: assetId },
               amount,
             })),
+          ] as [
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
+            TransferParamsInput<ContractIdInput>,
           ])
           .call();
 
@@ -498,6 +600,12 @@ describe('TransactionSummary', () => {
             asset_id: { bits: assetId },
             amount,
           })),
+        ] as [
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
+          TransferParamsInput<ContractIdInput>,
         ])
         .call();
 

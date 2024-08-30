@@ -1,5 +1,34 @@
 # @fuel-ts/errors
 
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [ccd94fc]
+  - @fuel-ts/versions@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 0110fd8: chore: handle exceeding maximum inputs when funding a transaction
+- 1d2abd7: chore: add validation for TX max outputs exceeded
+- Updated dependencies [9309598]
+- Updated dependencies [29c556d]
+- Updated dependencies [4c653d0]
+- Updated dependencies [03ac550]
+  - @fuel-ts/versions@0.94.0
+
 ## 0.93.0
 
 ### Minor Changes

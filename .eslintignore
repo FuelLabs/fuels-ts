@@ -25,3 +25,4 @@ CHANGELOG.md
 *.hbs
 
 templates/nextjs
+templates/vite

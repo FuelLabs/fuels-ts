@@ -1,5 +1,39 @@
 # create-fuels
 
+## 0.94.2
+
+### Patch Changes
+
+- fcfbdf1: build(deps): bump the deps-patch group across 1 directory
+- 8c47dc5: chore: upgrade connectors
+- 362ea33: fix: added missing dependencies for templates
+- 50d548c: fix: UI integration tests
+
+## 0.94.1
+
+### Patch Changes
+
+- c57f30a: chore: make `nextjs` the default `create fuels` template
+- c2fa2a5: feat: add vite template to `create-fuels`
+
+## 0.94.0
+
+### Minor Changes
+
+- 799db38: feat!: prettify `typegen` api
+- 4c653d0: feat!: adding `abi` transpiler
+
+### Patch Changes
+
+- 60b50d1: build(deps): bump @types/node from 20.14.11 to 22.2.0
+- 4aa07b7: build(deps-dev): bump the dev-deps group with 13 updates
+- 95e7108: chore: dependencies version consistency
+- 6b6ff1b: build(deps-dev): bump the dev-deps group with 9 updates
+- 1a73ae3: build(deps): bump @tanstack/react-query from 5.51.15 to 5.51.21
+- 751d638: chore: switching `Error` to `FuelError`
+- 4e82ad4: chore: add infra to support multiple `create fuels` templates
+- da0691d: build(deps): bump @tanstack/react-query from 5.51.21 to 5.51.23
+
 ## 0.93.0
 
 ### Patch Changes

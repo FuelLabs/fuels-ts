@@ -1,5 +1,82 @@
 # Change Log
 
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [3b59f1f]
+- Updated dependencies [01e2f0e]
+- Updated dependencies [ccd94fc]
+- Updated dependencies [986a247]
+  - @fuel-ts/account@0.94.2
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/program@0.94.2
+  - @fuel-ts/abi-coder@0.94.2
+  - @fuel-ts/address@0.94.2
+  - @fuel-ts/transactions@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/abi-coder@0.94.1
+  - @fuel-ts/account@0.94.1
+  - @fuel-ts/address@0.94.1
+  - @fuel-ts/program@0.94.1
+  - @fuel-ts/transactions@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- 751d638: chore: switching `Error` to `FuelError`
+- Updated dependencies [26cb189]
+- Updated dependencies [c7e01b4]
+- Updated dependencies [799db38]
+- Updated dependencies [9309598]
+- Updated dependencies [7f50d40]
+- Updated dependencies [d875416]
+- Updated dependencies [84dfdc5]
+- Updated dependencies [2a8cb38]
+- Updated dependencies [0110fd8]
+- Updated dependencies [c7104da]
+- Updated dependencies [2be4a5e]
+- Updated dependencies [56018e3]
+- Updated dependencies [f6b12bd]
+- Updated dependencies [4c653d0]
+- Updated dependencies [5e8a087]
+- Updated dependencies [80cb187]
+- Updated dependencies [a467d54]
+- Updated dependencies [896add9]
+- Updated dependencies [95e7108]
+- Updated dependencies [751d638]
+- Updated dependencies [1e93dac]
+- Updated dependencies [bbd794a]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [9c07b00]
+- Updated dependencies [fc39124]
+- Updated dependencies [03ac550]
+- Updated dependencies [b0c161f]
+- Updated dependencies [25efc03]
+  - @fuel-ts/account@0.94.0
+  - @fuel-ts/abi-coder@0.94.0
+  - @fuel-ts/transactions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/program@0.94.0
+  - @fuel-ts/address@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
 ## 0.93.0
 
 ### Patch Changes
