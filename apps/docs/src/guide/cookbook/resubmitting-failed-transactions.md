@@ -15,7 +15,9 @@ To ensure that the transaction has been processed, you need to call `waitForResu
 
 <<< @/../../docs-snippets/src/guide/cookbook/resubmitting-failed-transactions.test.ts#resubmitting-failed-transactions-2{ts:line-numbers}
 
-In other words, if `sendTransaction` rejects with an error, it means that the transaction was not accepted by the network and was not processed. On the other hand, if the transaction fails during the call to `waitForResult`, it means that the transaction was accepted but was reverted during processing.
+In other words:
+ - If `sendTransaction` is rejected with an error, the transaction was not accepted by the network and is not processed.
+ - If `waitForResult` is rejected with an error, the transaction was accepted but reverted during processing.
 
 ## Resources Spent When a Transaction Is Processed
 
