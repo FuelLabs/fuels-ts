@@ -76,6 +76,7 @@ module.exports = {
       files: ['*.test.ts'],
       rules: {
         '@typescript-eslint/no-unused-expressions': 'off',
+        '@typescript-eslint/no-floating-promises': 'off',
       },
     },
     {
