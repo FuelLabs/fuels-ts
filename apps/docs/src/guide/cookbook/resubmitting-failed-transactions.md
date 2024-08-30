@@ -33,6 +33,6 @@ The attempt from the above snippet will result in the error:
 FuelError: Transaction is not inserted. UTXO does not exist: {{utxoId}}
 ```
 
-To safely retry a transaction that failed during processing, you should reassemble the transaction request from scratch and then resubmit it.
+To safely retry a transaction that failed during processing, you should reassemble the request from scratch and resubmit it.
 
 <<< @/../../docs-snippets/src/guide/cookbook/resubmitting-failed-transactions.test.ts#resubmitting-failed-transactions-4{ts:line-numbers}
