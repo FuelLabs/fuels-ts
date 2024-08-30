@@ -9,7 +9,7 @@ When submitting a transaction, you will first get a response.
 
 <<< @/../../docs-snippets/src/guide/cookbook/resubmitting-failed-transactions.test.ts#resubmitting-failed-transactions-1{ts:line-numbers}
 
-The `sendTransaction` method resolves without an error as soon as the transaction is successfully submitted and accepted by the network. However, this does not guarantee that the transaction has been processed; it only indicates that the transaction has been accepted and placed in a queue for processing.
+If the `sendTransaction` method resolves without an error, we know that the transaction was successfully submitted and accepted by the network. However, this does not guarantee that the transaction has been processed; it only indicates that the transaction has been accepted and placed in a queue for processing.
 
 To ensure that the transaction has been processed, you need to call `waitForResult`. This method will resolve (or reject with an error) only when the transaction has been fully processed.
 
