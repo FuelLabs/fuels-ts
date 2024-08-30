@@ -6,7 +6,7 @@
   "scripts": {
     "xprebuild": "fuels build",
     "dev": "vite",
-    "build": "pnpm xprebuild && tsc -b && vite build",
+    "build": "pnpm run xprebuild && tsc -b && vite build",
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
     "test": "vitest"
