@@ -558,13 +558,10 @@ export class Account extends AbstractAccount {
     const updateAssetInput = (assetId: string, quantity: BN) => {
       const assetInput = findAssetInput(assetId);
 
-      console.log(`asd assetInput`, assetInput);
       if (assetInput && 'amount' in assetInput) {
-        console.log(`asd changing assetInput.amount to`, quantity, assetId);
         assetInput.amount = quantity;
 
       } else {
-        console.log(`asd generating fake resources for amunt`, quantity, assetId);
         txRequestClone.addResources(
           this.generateFakeResources([
             {
@@ -577,9 +574,6 @@ export class Account extends AbstractAccount {
     };
 
     const merged = mergeQuantities(requiredQuantities, transactionFeeForDryRun);
-
-    console.log(`asd txRequestClone.inputs`, txRequestClone.inputs);
-    console.log(`asd merged`, merged);
 
     merged.forEach(({ amount, assetId }) =>
       updateAssetInput(assetId, amount)
