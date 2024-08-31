@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-chore: fix transaction estimation
+fix: adjust tx estimation for `InputMessage` containing `data`
