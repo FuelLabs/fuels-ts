@@ -6,6 +6,7 @@ import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { InputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -45,7 +46,6 @@ import {
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
 import { assembleTransferToContractScript } from './utils/formatTransferToContractScriptData';
-import { InputType } from '@fuel-ts/transactions';
 
 export type TxParamsType = Pick<
   ScriptTransactionRequestLike,
@@ -530,7 +530,6 @@ export class Account extends AbstractAccount {
     transactionRequestLike: TransactionRequestLike,
     { signatureCallback, quantities = [] }: TransactionCostParams = {}
   ): Promise<TransactionCost> {
-    console.warn('asd TEST TEST TEST');
     const txRequestClone = clone(transactionRequestify(transactionRequestLike));
     const baseAssetId = this.provider.getBaseAssetId();
 
@@ -560,7 +559,6 @@ export class Account extends AbstractAccount {
 
       if (assetInput && 'amount' in assetInput) {
         assetInput.amount = quantity;
-
       } else {
         txRequestClone.addResources(
           this.generateFakeResources([
@@ -575,9 +573,7 @@ export class Account extends AbstractAccount {
 
     const merged = mergeQuantities(requiredQuantities, transactionFeeForDryRun);
 
-    merged.forEach(({ amount, assetId }) =>
-      updateAssetInput(assetId, amount)
-    );
+    merged.forEach(({ amount, assetId }) => updateAssetInput(assetId, amount));
 
     const txCost = await this.provider.getTransactionCost(txRequestClone, {
       signatureCallback,
