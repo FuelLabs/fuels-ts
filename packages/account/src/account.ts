@@ -546,7 +546,9 @@ export class Account extends AbstractAccount {
         if (input.type === InputType.Coin) {
           return input.assetId === assetId;
         }
-        // we only consider the message input if it has no data. messages with `data` cannot fund the gas of transaction
+
+        // We only consider the message input if it has no data.
+        // Messages with `data` cannot fund the gas of a transaction.
         if (input.type === InputType.Message && bn(input.data).isZero()) {
           return baseAssetId === assetId;
         }
