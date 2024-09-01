@@ -39,9 +39,6 @@ To learn how to deploy your Fuel dApp to the testnet, you can follow our [Deploy
 - To make changes to the template locally, you will need to have a `.env.local` file in the `templates/nextjs` directory with the following contents:
 
 ```bash
-NEXT_PUBLIC_HAS_CONTRACT=true
-NEXT_PUBLIC_HAS_PREDICATE=true
-NEXT_PUBLIC_HAS_SCRIPT=true
 NEXT_PUBLIC_FUEL_NETWORK_URL=http://127.0.0.1:4000/v1/graphql
 ```
 

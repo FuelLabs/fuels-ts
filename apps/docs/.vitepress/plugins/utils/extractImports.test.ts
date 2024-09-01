@@ -1,10 +1,15 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import * as extractImportsMod from './extractImports';
 import fs from 'fs';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 
-const { collectImportStatements, combineImportStatements, validateImports, extractImports, validateSnippetContent } =
-  extractImportsMod;
+const {
+  collectImportStatements,
+  combineImportStatements,
+  validateImports,
+  extractImports,
+  validateSnippetContent,
+} = extractImportsMod;
 
 /**
  * @group node
@@ -46,11 +51,11 @@ describe('extractImports', () => {
       const importStatements = {
         somewhere: new Set(['implementationImport']),
         'type::somewhere': new Set(['typeImport']),
-      }
+      };
 
-      const actual = combineImportStatements(importStatements)
+      const actual = combineImportStatements(importStatements);
       expect(actual).toBe(expected);
-    })
+    });
   });
 
   describe('validateImports', () => {
@@ -108,24 +113,21 @@ describe('extractImports', () => {
       ];
       const filepath = '/some/file/asset-id.test.ts';
       expect(() => validateSnippetContent(codeSnippet, filepath)).not.toThrow();
-    })
+    });
 
     it('should throw an error when malformed #imports detected', async () => {
-      const codeSnippet = [
-        '// #import { AssetId }',
-      ]
+      const codeSnippet = ['// #import { AssetId }'];
       const filepath = '/some/file/asset-id.test.ts';
-      
+
       await expectToThrowFuelError(
         () => validateSnippetContent(codeSnippet, filepath),
         new FuelError(
           ErrorCode.VITEPRESS_PLUGIN_ERROR,
           `Found malformed "#import" statements in code snippet.\nCorrect format: "// #import { ExampleImport };"\n\nPlease check "${filepath}".\n\n// #import { AssetId }`
         )
-      )
+      );
     });
-
-  })
+  });
 
   describe('collectImportStatements', () => {
     it('should handle empty lines', () => {
@@ -205,7 +207,6 @@ describe('extractImports', () => {
         import type { AssetId, Contract, B256Address } from 'fuels';
 
         import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-        import { createAndDeployContractFromProject } from '../../utils';
 
         describe('AssetId', () => {
       `;
@@ -216,7 +217,9 @@ describe('extractImports', () => {
 
       expect(readFileSync).toBeCalledTimes(1);
 
-      expect(result).toEqual("import { Address } from 'fuels';\nimport type { AssetId } from 'fuels';");
+      expect(result).toEqual(
+        "import { Address } from 'fuels';\nimport type { AssetId } from 'fuels';"
+      );
     });
   });
 });

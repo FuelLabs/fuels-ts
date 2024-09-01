@@ -1,0 +1,36 @@
+// #region encode-and-decode-2
+{
+  "programType": "script",
+  "specVersion": "1",
+  "encodingVersion": "1",
+  "concreteTypes": [
+    {
+      "type": "u32",
+      "concreteTypeId": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
+    },
+  ],
+  "metadataTypes": [],
+  "functions": [
+    {
+      "inputs": [
+        {
+          "name": "inputted_amount",
+          "concreteTypeId": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
+        },
+      ],
+      "name": "main",
+      "output": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
+      "attributes": null,
+    },
+  ],
+  "loggedTypes": [],
+  "messagesTypes": [],
+  "configurables": [
+    {
+      "name": "AMOUNT",
+      "concreteTypeId": "d7649d428b9ff33d188ecbf38a7e4d8fd167fa01b2e10fe9a8f9308e52f1d7cc",
+      "offset": 920,
+    },
+  ],
+}
+// #endregion encode-and-decode-2

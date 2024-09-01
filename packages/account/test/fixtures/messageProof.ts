@@ -1,7 +1,10 @@
 import { Address } from '@fuel-ts/address';
 import { bn } from '@fuel-ts/math';
 
-import type { GqlGetMessageProofQuery } from '../../src/providers/__generated__/operations';
+import {
+  GqlHeaderVersion,
+  type GqlGetMessageProofQuery,
+} from '../../src/providers/__generated__/operations';
 import type { MessageProof } from '../../src/providers/message';
 
 export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof'] = {
@@ -20,6 +23,7 @@ export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof']
     proofIndex: '432',
   },
   messageBlockHeader: {
+    version: GqlHeaderVersion.V1,
     id: '0x864b55089878bf7009d2ff64cbeeeeb75fcd73768785dcb75d54180e7fbaab7b',
     daHeight: '0',
     transactionsCount: '2',
@@ -35,6 +39,7 @@ export const MESSAGE_PROOF_RAW_RESPONSE: GqlGetMessageProofQuery['messageProof']
     messageOutboxRoot: '0x8817eb3173bc39ae465def50f978153fd84ea4badbe3a4e26486ba7f1bcd0579',
   },
   commitBlockHeader: {
+    version: GqlHeaderVersion.V1,
     id: '0xe4dfe8fc1b5de2c669efbcc5e4c0a61db175d1b2f03e3cd46ed4396e76695c5b',
     daHeight: '0',
     transactionsCount: '2',

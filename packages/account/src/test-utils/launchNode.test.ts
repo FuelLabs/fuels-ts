@@ -1,10 +1,13 @@
-import { safeExec } from '@fuel-ts/errors/test-utils';
+import { ErrorCode } from '@fuel-ts/errors';
+import { safeExec, expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { defaultSnapshotConfigs, sleep } from '@fuel-ts/utils';
+import { waitUntilUnreachable } from '@fuel-ts/utils/test-utils';
 import * as childProcessMod from 'child_process';
+import * as fsMod from 'fs';
 
-import type { LaunchNodeOptions } from './launchNode';
-import { killNode, launchNode } from './launchNode';
+import { Provider } from '../providers';
 
-type ChildProcessWithoutNullStreams = childProcessMod.ChildProcessWithoutNullStreams;
+import { launchNode } from './launchNode';
 
 vi.mock('child_process', async () => {
   const mod = await vi.importActual('child_process');
@@ -14,196 +17,239 @@ vi.mock('child_process', async () => {
   };
 });
 
-/**
- * This should mimic the stderr.on('data') event, returning both
- * success and error messages, as strings. These messages are like
- * the ones from `fuel-core` startup log messages. We filter them
- * to know fuel-core state.
- */
-function mockSpawn(params: { shouldError: boolean } = { shouldError: false }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const stderrOn = (eventName: string, fn: (data: any) => void) => {
-    if (eventName === 'data') {
-      if (params.shouldError) {
-        // The `IO error` message simulates a possible fuel-core error log message
-        fn('IO error');
-      } else {
-        // The `Binding GraphQL provider to` message simulates a fuel-core
-        // successful startup log message, usually meaning that the node
-        // is up and waiting for connections
-        fn('Binding GraphQL provider to');
-      }
-    }
+vi.mock('fs', async () => {
+  const mod = await vi.importActual('fs');
+  return {
+    __esModule: true,
+    ...mod,
   };
-
-  const innerMocks = {
-    on: vi.fn(),
-    stderr: {
-      pipe: vi.fn(),
-      on: vi.fn(stderrOn),
-      removeAllListeners: vi.fn(),
-    },
-    stdout: {
-      pipe: vi.fn(),
-      removeAllListeners: vi.fn(),
-    },
-  } as unknown as ChildProcessWithoutNullStreams;
-
-  const spawn = vi.spyOn(childProcessMod, 'spawn').mockReturnValue(innerMocks);
-
-  return { spawn, innerMocks };
-}
-
-const defaultLaunchNodeConfig: Partial<LaunchNodeOptions> = {
-  ip: '0.0.0.0',
-  port: '4000',
-};
+});
 
 /**
  * @group node
  */
-describe('launchNode', () => {
+describe('launchNode', { timeout: 10000 }, () => {
+  test('using ephemeral port 0 is possible', async () => {
+    const { cleanup, port, url } = await launchNode({ port: '0' });
+    expect(await fetch(url)).toBeTruthy();
+    expect(port).not.toEqual('0');
+
+    cleanup();
+  });
+
+  it('cleanup kills the started node', async () => {
+    const { cleanup, url } = await launchNode();
+    expect(await fetch(url)).toBeTruthy();
+
+    cleanup();
+
+    await waitUntilUnreachable(url);
+  });
+
+  /**
+   * Spawning the child process in a detached state
+   * Results in the OS assigning a process group to the child.
+   * Combining that with `process.kill(-pid)`,
+   * which sends a "kill process group" signal to the OS,
+   * ensures that the node will be killed.
+   */
+  it('spawns the fuel-core node in a detached state and kills the process group on cleanup', async () => {
+    const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
+    const killSpy = vi.spyOn(process, 'kill');
+
+    const { cleanup, pid } = await launchNode();
+
+    const spawnOptions = spawnSpy.mock.calls[0][2];
+    expect(spawnOptions.detached).toBeTruthy();
+
+    cleanup();
+
+    expect(killSpy).toHaveBeenCalledTimes(1);
+    // adding a minus prefix kills the process group
+    expect(killSpy).toHaveBeenCalledWith(-pid);
+  });
+
   test('should start `fuel-core` node using system binary', async () => {
-    mockSpawn();
+    const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
 
-    const { cleanup, ip, port } = await launchNode(defaultLaunchNodeConfig);
+    process.env.FUEL_CORE_PATH = '';
 
-    expect(ip).toBe('0.0.0.0');
-    expect(port).toBe('4000');
+    const { result } = await safeExec(async () => launchNode());
 
-    cleanup();
+    const command = spawnSpy.mock.calls[0][0];
+    expect(command).toEqual('fuel-core');
+
+    process.env.FUEL_CORE_PATH = 'fuels-core';
+
+    /**
+     * result can be undefined when running in CI and fuel-core is not installed
+     * meaning that spawn(fuel-core, ...) threw an error
+     */
+    if (result !== undefined) {
+      (await result)?.cleanup();
+    }
   });
 
-  test('should start `fuel-core` node with custom binary', async () => {
-    const { spawn } = mockSpawn();
+  test('should start `fuel-core` node using custom binary', async () => {
+    const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
 
-    const { cleanup, ip, port } = await launchNode({
-      ...defaultLaunchNodeConfig,
-      fuelCorePath: 'fuels-core',
+    const fuelCorePath = './my-fuel-core-binary-path';
+    const { error } = await safeExec(async () => {
+      await launchNode({ fuelCorePath, loggingEnabled: true });
     });
 
-    expect(ip).toBe('0.0.0.0');
-    expect(port).toBe('4000');
-    expect(spawn).toBeCalledWith('fuels-core', expect.any(Array), expect.any(Object));
+    expect(error).toBeTruthy();
+
+    const command = spawnSpy.mock.calls[0][0];
+    expect(command).toEqual(fuelCorePath);
+  });
+
+  test('reads FUEL_CORE_PATH environment variable for fuel-core binary', async () => {
+    const spawnSpy = vi.spyOn(childProcessMod, 'spawn');
+    process.env.FUEL_CORE_PATH = 'fuels-core';
+    const { cleanup, url } = await launchNode();
+    await Provider.create(url);
+
+    const command = spawnSpy.mock.calls[0][0];
+    expect(command).toEqual('fuels-core');
 
     cleanup();
   });
 
-  test('should start `fuel-core` node with custom binaries', async () => {
-    const { spawn } = mockSpawn();
+  test('should throw on error and log error message', async () => {
+    const logSpy = vi.spyOn(console, 'log');
 
-    const { cleanup, ip, port } = await launchNode({
-      ...defaultLaunchNodeConfig,
-      fuelCorePath: 'custom-fuels-core',
-    });
+    const invalidCoin = {
+      asset_id: 'whatever',
+      tx_id: '',
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+      owner: '',
+      amount: 0,
+    };
 
-    expect(ip).toBe('0.0.0.0');
-    expect(port).toBe('4000');
-    expect(spawn).toBeCalledWith('custom-fuels-core', expect.any(Array), expect.any(Object));
-
-    cleanup();
-  });
-
-  test('should throw on error', async () => {
-    const { innerMocks } = mockSpawn({ shouldError: true });
-
-    const { error: safeError, result } = await safeExec(async () =>
-      launchNode(defaultLaunchNodeConfig)
+    const error = await expectToThrowFuelError(
+      async () =>
+        launchNode({
+          loggingEnabled: false,
+          snapshotConfig: {
+            ...defaultSnapshotConfigs,
+            stateConfig: {
+              coins: [invalidCoin],
+              messages: [],
+            },
+          },
+        }),
+      {
+        code: ErrorCode.NODE_LAUNCH_FAILED,
+      }
     );
 
-    expect(safeError).toBeTruthy();
-    expect(result).not.toBeTruthy();
+    expect(error).toBeTruthy();
 
-    expect(innerMocks.on).toHaveBeenCalledTimes(1);
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
+    expect(logSpy).toHaveBeenCalledWith(error?.message);
   });
 
-  test('should pipe stdout', async () => {
-    vi.spyOn(process.stdout, 'write');
+  test('logs fuel-core outputs via console.log', async () => {
+    const logSpy = vi.spyOn(console, 'log');
 
-    const { innerMocks } = mockSpawn();
-
-    const { cleanup } = await launchNode(defaultLaunchNodeConfig);
-
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(0);
-
+    const { cleanup } = await launchNode({ loggingEnabled: true });
+    const logs = logSpy.mock.calls.map((call) => call[0]);
+    expect(logs.some((log) => log.includes('Binding GraphQL provider'))).toBe(true);
     cleanup();
   });
 
-  test('should pipe stdout and stderr', async () => {
-    vi.spyOn(process.stderr, 'write');
-    vi.spyOn(process.stdout, 'write');
+  test('cleanup removes temporary directory', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
+    const { cleanup } = await launchNode();
 
-    const { innerMocks } = mockSpawn();
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+    const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
+    cleanup();
 
-    await launchNode({
-      ...defaultLaunchNodeConfig,
-      debugEnabled: true,
-    });
-
-    expect(innerMocks.stderr.pipe).toHaveBeenCalledTimes(1);
-    expect(innerMocks.stdout.pipe).toHaveBeenCalledTimes(1);
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
   });
 
-  test('should kill process only if PID exists and node is alive', () => {
-    const killFn = vi.fn();
-    const state = { isDead: true };
+  test('temporary directory gets removed on error', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
 
-    // should not kill
-    let child = {
-      pid: undefined,
-      stdout: {
-        removeAllListeners: () => {},
-      },
-      stderr: {
-        removeAllListeners: () => {},
-      },
-    } as ChildProcessWithoutNullStreams;
+    const invalidCoin = {
+      asset_id: 'whatever',
+      tx_id: '',
+      output_index: 0,
+      tx_pointer_block_height: 0,
+      tx_pointer_tx_idx: 0,
+      owner: '',
+      amount: 0,
+    };
 
-    killNode({
-      child,
-      configPath: '',
-      killFn,
-      state,
-    });
+    const { error } = await safeExec(async () =>
+      launchNode({
+        loggingEnabled: false,
+        snapshotConfig: {
+          ...defaultSnapshotConfigs,
+          stateConfig: {
+            coins: [invalidCoin],
+            messages: [],
+          },
+        },
+      })
+    );
+    expect(error).toBeDefined();
 
-    expect(killFn).toHaveBeenCalledTimes(0);
-    expect(state.isDead).toEqual(true);
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+    const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
 
-    // should not kill
-    child = {
-      pid: 1,
-      stdout: {
-        removeAllListeners: () => {},
-      },
-      stderr: {
-        removeAllListeners: () => {},
-      },
-    } as ChildProcessWithoutNullStreams;
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
+  });
 
-    killNode({
-      child,
-      configPath: '',
-      killFn,
-      state,
-    });
+  test('calling cleanup multiple times does not retry process killing', async () => {
+    const killSpy = vi.spyOn(process, 'kill');
 
-    expect(killFn).toHaveBeenCalledTimes(0);
-    expect(state.isDead).toEqual(true);
+    const { cleanup } = await launchNode({ loggingEnabled: false });
 
-    // should kill
-    state.isDead = false;
+    cleanup();
 
-    killNode({
-      child,
-      configPath: '',
-      killFn,
-      state,
-    });
+    expect(killSpy).toHaveBeenCalledTimes(1);
 
-    expect(killFn).toHaveBeenCalledTimes(1);
-    expect(state.isDead).toEqual(true);
+    cleanup();
+
+    expect(killSpy).toHaveBeenCalledTimes(1);
+  });
+
+  test('external killing of node runs side-effect cleanup', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
+
+    const { pid } = await launchNode({ loggingEnabled: false });
+
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+    const tempDirPath = mkdirSyncSpy.mock.calls[0][0];
+
+    childProcessMod.execSync(`kill -- -${pid}`);
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    expect(fsMod.existsSync(tempDirPath)).toBeFalsy();
+  });
+
+  test('calling cleanup on externally killed node does not throw', async () => {
+    const mkdirSyncSpy = vi.spyOn(fsMod, 'mkdirSync');
+    const logSpy = vi.spyOn(console, 'log');
+
+    const { pid, cleanup } = await launchNode({ loggingEnabled: false });
+    expect(mkdirSyncSpy).toHaveBeenCalledTimes(1);
+
+    childProcessMod.execSync(`kill -- -${pid}`);
+    // wait until cleanup finishes (done via events)
+    await sleep(1500);
+    cleanup();
+
+    expect(logSpy).toHaveBeenCalledWith(
+      `fuel-core node under pid ${pid} does not exist. The node might have been killed before cleanup was called. Exiting cleanly.`
+    );
   });
 });

@@ -1,5 +1,73 @@
 # Change Log
 
+## 0.94.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- Updated dependencies [0110fd8]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [03ac550]
+  - @fuel-ts/errors@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [f3453b9]
+  - @fuel-ts/errors@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [dddde62]
+  - @fuel-ts/errors@0.91.0
+
+## 0.90.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.89.2
+
 ## 0.89.1
 
 ### Patch Changes

@@ -139,6 +139,31 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
       wqmm: '3',
       xor: '1',
       xori: '1',
+      alocDependentCost: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
+      },
+      bldd: {
+        type: 'LightOperation',
+        base: '1',
+        unitsPerGas: '5000',
+      },
+      bsiz: {
+        type: 'LightOperation',
+        base: '1',
+        unitsPerGas: '5000',
+      },
+      cfe: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
+      },
+      cfeiDependentCost: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
+      },
       call: {
         type: 'LightOperation',
         base: '144',
@@ -158,6 +183,11 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
         type: 'LightOperation',
         base: '17',
         unitsPerGas: '790',
+      },
+      ed19DependentCost: {
+        type: 'HeavyOperation',
+        base: '2',
+        gasPerUnit: '0',
       },
       k256: {
         type: 'LightOperation',

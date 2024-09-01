@@ -11,7 +11,7 @@ const configs: Options = {
     index: 'src/index.ts',
     configs: 'src/configs.ts',
     profile: 'src/perf/profile.ts',
-    'test-utils': 'src/test-utils/index.ts',
+    'test-utils': 'src/test-utils.ts',
   },
   // eslint-disable-next-line @typescript-eslint/require-await
   onSuccess: async () => {

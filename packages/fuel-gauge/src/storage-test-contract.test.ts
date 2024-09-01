@@ -1,48 +1,48 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { toHex, Provider, ContractFactory, FUEL_NETWORK_URL } from 'fuels';
+import { toHex, ContractFactory } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
-
-const {
-  binHexlified: bytecode,
-  abiContents: abi,
-  storageSlots,
-} = getFuelGaugeForcProject(FuelGaugeProjectsEnum.STORAGE_TEST_CONTRACT);
-
-const setup = async () => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[1_000_000, baseAssetId]]);
-  // Deploy contract
-  // #region contract-deployment-storage-slots
-  // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
-
-  const factory = new ContractFactory(bytecode, abi, wallet);
-  const contract = await factory.deployContract({
-    storageSlots,
-  });
-  // #endregion contract-deployment-storage-slots
-
-  return contract;
-};
+import { StorageTestContract, StorageTestContractFactory } from '../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('StorageTestContract', () => {
-  let baseAssetId: string;
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
   it('can increment counter', async () => {
-    const contract = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const { storageSlots } = StorageTestContract;
+
+    // #region contract-deployment-storage-slots
+    // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
+
+    const factory = new ContractFactory(
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
+      wallet
+    );
+    const deploy = await factory.deploy({
+      storageSlots,
+    });
+
+    const { contract } = await deploy.waitForResult();
+    // #endregion contract-deployment-storage-slots
 
     // Call contract
-    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
+    const call1 = await contract.functions.initialize_counter(1300).call();
+
+    // Wait for result
+    const { value: initializeResult } = await call1.waitForResult();
+
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
+
+    const call2 = await contract.functions.increment_counter(37).call();
+    const { value: incrementResult } = await call2.waitForResult();
+
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().simulate();
@@ -50,11 +50,19 @@ describe('StorageTestContract', () => {
   });
 
   it('can increment counter - using custom inline storage slots', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const wallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
-    const factory = new ContractFactory(bytecode, abi, wallet);
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const factory = new ContractFactory(
+      StorageTestContractFactory.bytecode,
+      StorageTestContract.abi,
+      wallet
+    );
     // #region contract-deployment-storage-slots-inline
-    const contract = await factory.deployContract({
+    const { waitForResult } = await factory.deploy({
       storageSlots: [
         {
           key: '02dac99c283f16bc91b74f6942db7f012699a2ad51272b15207b9cc14a70dbae',
@@ -78,10 +86,14 @@ describe('StorageTestContract', () => {
         },
       ],
     });
+    const { contract } = await waitForResult();
     // #endregion contract-deployment-storage-slots-inline
-    const { value: initializeResult } = await contract.functions.initialize_counter(1300).call();
+    const call1 = await contract.functions.initialize_counter(1300).call();
+    const { value: initializeResult } = await call1.waitForResult();
     expect(initializeResult.toHex()).toEqual(toHex(1300));
-    const { value: incrementResult } = await contract.functions.increment_counter(37).call();
+
+    const call2 = await contract.functions.increment_counter(37).call();
+    const { value: incrementResult } = await call2.waitForResult();
     expect(incrementResult.toHex()).toEqual(toHex(1337));
 
     const { value: count } = await contract.functions.counter().simulate();

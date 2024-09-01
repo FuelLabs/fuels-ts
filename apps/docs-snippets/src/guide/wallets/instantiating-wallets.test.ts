@@ -1,10 +1,12 @@
 import type { WalletLocked, WalletUnlocked } from 'fuels';
-import { FUEL_NETWORK_URL, HDWallet, Provider, Wallet } from 'fuels';
+import { HDWallet, Wallet } from 'fuels';
+import { TestAssetId, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Instantiating wallets', () => {
   it('should generate a new wallet just fine', () => {
     // #region instantiating-wallets-1
     const unlockedWallet: WalletUnlocked = Wallet.generate();
@@ -82,7 +84,8 @@ describe(__filename, () => {
   });
 
   it('should instantiate a locked wallet using a bech32 string address', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
     const address = `fuel14kjrdcdcp7z4l9xk0pm3cwz9qnjxxd04wx4zgnc3kknslclxzezqyeux5d`;
 
@@ -100,7 +103,8 @@ describe(__filename, () => {
     const myWallet = Wallet.fromAddress(address);
 
     // #region instantiating-wallets-9
-    const provider = await Provider.create('https://devnet.fuel.network/v1/graphql');
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
     myWallet.connect(provider);
     // #endregion instantiating-wallets-9
@@ -108,8 +112,9 @@ describe(__filename, () => {
     expect(myWallet).toBeDefined();
   });
 
-  it('should instantiate wallet alreay connected to a provider', async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+  it('should instantiate wallet already connected to a provider', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
 
     const address = `0xada436e1b80f855f94d678771c384504e46335f571aa244f11b5a70fe3e61644`;
 
@@ -120,5 +125,26 @@ describe(__filename, () => {
     myWallet.connect(provider);
 
     expect(myWallet).toBeDefined();
+  });
+
+  it('should instantiate multiple wallets with different configurations', async () => {
+    // #region multiple-wallets
+    using launched = await launchTestNode({
+      walletsConfig: {
+        count: 3,
+        assets: [TestAssetId.A, TestAssetId.B],
+        coinsPerAsset: 5,
+        amountPerCoin: 100_000,
+      },
+    });
+
+    const {
+      wallets: [wallet1, wallet2, wallet3],
+    } = launched;
+    // #endregion multiple-wallets
+
+    expect(wallet1).toBeDefined();
+    expect(wallet2).toBeDefined();
+    expect(wallet3).toBeDefined();
   });
 });

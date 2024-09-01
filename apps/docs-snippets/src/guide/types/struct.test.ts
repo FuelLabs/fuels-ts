@@ -1,7 +1,8 @@
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
+describe('Struct Types', () => {
   it('should successfully validate struct representation', () => {
     // #region struct-2
     type EmployeeDataStruct = {

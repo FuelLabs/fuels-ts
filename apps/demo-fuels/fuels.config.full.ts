@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { createConfig } from 'fuels';
-import type { CommandEvent, ContractDeployOptions, FuelsConfig } from 'fuels';
+import type { ContractDeployOptions, DeployedContract, FuelsConfig } from 'fuels';
 
 const MY_FIRST_DEPLOYED_CONTRACT_NAME = '';
 
@@ -84,15 +84,35 @@ export default createConfig({
   },
   // #endregion deployConfig-fn
 
-  // #region onSuccess
-  onSuccess: (event: CommandEvent, config: FuelsConfig) => {
-    console.log('fuels:onSuccess', { event, config });
+  // #region onBuild
+  onBuild: (config: FuelsConfig) => {
+    console.log('fuels:onBuild', { config });
   },
-  // #endregion onSuccess
+  // #endregion onBuild
+
+  // #region onDeploy
+  // #import { DeployedContract, FuelsConfig };
+
+  onDeploy: (config: FuelsConfig, data: DeployedContract[]) => {
+    console.log('fuels:onDeploy', { config, data });
+  },
+  // #endregion onDeploy
+
+  // #region onDev
+  onDev: (config: FuelsConfig) => {
+    console.log('fuels:onDev', { config });
+  },
+  // #endregion onDev
+
+  // #region onNode
+  onNode: (config: FuelsConfig) => {
+    console.log('fuels:onNode', { config });
+  },
+  // #endregion onNode
 
   // #region onFailure
-  onFailure: (error: Error, config: FuelsConfig) => {
-    console.log('fuels:onFailure', { error, config });
+  onFailure: (config: FuelsConfig, error: Error) => {
+    console.log('fuels:onFailure', { config, error });
   },
   // #endregion onFailure
 

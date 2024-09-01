@@ -1,4 +1,4 @@
-import type { IRawAbiTypeRoot } from './IRawAbiType';
+import type { JsonAbiType } from './JsonAbi';
 
 export interface ITypeAttributes {
   inputLabel: string;
@@ -12,7 +12,7 @@ export interface ITypeAttributes {
 export interface IType {
   name: string;
   attributes: ITypeAttributes;
-  rawAbiType: IRawAbiTypeRoot;
+  rawAbiType: JsonAbiType;
   requiredFuelsMembersImports: string[];
 
   parseComponentsAttributes(params: { types: IType[] }): ITypeAttributes;

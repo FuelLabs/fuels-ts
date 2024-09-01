@@ -1,6 +1,6 @@
 import { AppWallet } from "@/lib";
 import { useIsConnected, useNetwork, useWallet } from "@fuels/react";
-import { Account, BN } from "fuels";
+import { BN } from "fuels";
 import { useCallback, useState } from "react";
 import useAsync from "react-use/lib/useAsync";
 
@@ -9,6 +9,10 @@ interface BrowserWallet extends AppWallet {
   network: any;
 }
 
+/**
+ * This hook returns an instance of the browser wallet connected via
+ * any of the supported connectors.
+ **/
 export const useBrowserWallet: () => BrowserWallet = () => {
   const { wallet } = useWallet();
   const [browserWalletBalance, setBrowserWalletBalance] = useState<BN>();

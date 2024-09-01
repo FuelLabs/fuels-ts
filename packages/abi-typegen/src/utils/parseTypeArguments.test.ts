@@ -3,7 +3,7 @@ import {
   getTypegenForcProject,
 } from '../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../types/enums/TargetEnum';
-import type { IRawAbiTypeRoot, IRawAbiTypeComponent } from '../types/interfaces/IRawAbiType';
+import type { JsonAbiType, JsonAbiArgument } from '../types/interfaces/JsonAbi';
 
 import { makeType } from './makeType';
 import { parseTypeArguments } from './parseTypeArguments';
@@ -12,7 +12,7 @@ import { parseTypeArguments } from './parseTypeArguments';
   Sample ABI with components in both fashions:
     — WITH and WITHOUT `typeArguments`
 */
-const defautRawTypes: IRawAbiTypeRoot[] = [
+const defautRawTypes: readonly JsonAbiType[] = [
   {
     typeId: 0,
     type: 'bool',
@@ -77,7 +77,7 @@ describe('parseTypeArguments.ts', () => {
 
   function getTypeComponents(params: { typeId: number }) {
     const found = defautRawTypes.find((rt) => rt.typeId === params.typeId);
-    return (found as IRawAbiTypeRoot).components as IRawAbiTypeComponent[];
+    return (found as JsonAbiType).components as JsonAbiArgument[];
   }
 
   /*
@@ -106,7 +106,7 @@ describe('parseTypeArguments.ts', () => {
   });
 
   test('should fallback to void for null outputs', () => {
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.FN_VOID, { transpile: true });
 
     const types = bundleTypes(project.abiContents.types);
     const typeArguments = [project.abiContents.functions[0].output];

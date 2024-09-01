@@ -1,30 +1,79 @@
 /* eslint-disable no-console */
-import { Provider, TransactionType, WalletUnlocked } from 'fuels';
+import {
+  DEVNET_NETWORK_URL,
+  TESTNET_NETWORK_URL,
+  Provider,
+  TransactionType,
+  WalletUnlocked,
+  CHAIN_IDS,
+  rawAssets,
+  assets,
+} from 'fuels';
 
-import { getScript } from './utils';
+import { ScriptMainArgBool } from '../test/typegen';
+
+enum Networks {
+  DEVNET = 'devnet',
+  TESTNET = 'testnet',
+}
+
+type ConfiguredNetwork = {
+  networkUrl: string;
+  privateKey?: string;
+  faucetUrl: string;
+  txIds?: {
+    [TransactionType.Mint]: string;
+    [TransactionType.Upgrade]: string;
+    [TransactionType.Upload]: string;
+  };
+};
+
+const configuredNetworks = {
+  [Networks.DEVNET]: {
+    networkUrl: DEVNET_NETWORK_URL,
+    privateKey: process.env.DEVNET_WALLET_PVT_KEY,
+    faucetUrl: `https://faucet-devnet.fuel.network/`,
+    txIds: {
+      [TransactionType.Upgrade]:
+        '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094',
+      [TransactionType.Upload]:
+        '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73',
+    },
+  } as ConfiguredNetwork,
+  [Networks.TESTNET]: {
+    networkUrl: TESTNET_NETWORK_URL,
+    privateKey: process.env.TESTNET_WALLET_PVT_KEY,
+    faucetUrl: `https://faucet-testnet.fuel.network/`,
+    txIds: {
+      [TransactionType.Upgrade]:
+        '0xd64e3f7589bc1c6dcf1e419f4a3a8fc21d3694abf98f151000f34682d1cacdce',
+      [TransactionType.Upload]:
+        '0x996eec87a702ac978663fe67dbde7ab94d31f32b1860fbfc527d4b5447b3446c',
+    },
+  } as ConfiguredNetwork,
+};
+
+const selectedNetworks: Networks[] = [Networks.DEVNET, Networks.TESTNET];
 
 /**
  * @group node
  * @group e2e
  */
-describe('Live Script Test', () => {
-  const MINT_TX_ID = '0x03299946676ddc0044a52a675dd201d3173886c998a7301262141334b6d5a29e';
-  const UPGRADE_TX_ID = '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094';
-  const UPLOAD_TX_ID = '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73';
-
+describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   let provider: Provider;
   let wallet: WalletUnlocked;
   let shouldSkip: boolean;
 
   beforeAll(async () => {
-    if (!process.env.TEST_WALLET_PVT_KEY || !process.env.FUEL_TESTNET_NETWORK_URL) {
-      console.log('Skipping live Fuel Node test');
+    const { networkUrl, privateKey } = configuredNetworks[selectedNetwork];
+    if (!privateKey) {
+      console.log(`Skipping live Fuel Node test - ${networkUrl}`);
       shouldSkip = true;
       return;
     }
 
-    provider = await Provider.create(process.env.FUEL_TESTNET_NETWORK_URL);
-    wallet = new WalletUnlocked(process.env.TEST_WALLET_PVT_KEY, provider);
+    provider = await Provider.create(networkUrl);
+    wallet = new WalletUnlocked(privateKey, provider);
   });
 
   it('can use script against live Fuel Node', async () => {
@@ -32,13 +81,14 @@ describe('Live Script Test', () => {
       return;
     }
 
-    const scriptInstance = getScript<[boolean], boolean>('script-main-arg-bool', wallet);
+    const scriptInstance = new ScriptMainArgBool(wallet);
 
     let output: boolean = false;
     try {
       const callScope = scriptInstance.functions.main(true);
 
-      const { value } = await callScope.call();
+      const { waitForResult } = await callScope.call();
+      const { value } = await waitForResult();
 
       output = value;
     } catch (e) {
@@ -47,25 +97,60 @@ describe('Live Script Test', () => {
       console.error((e as Error).message);
       console.warn(`
         not enough coins to fit the target?
-        - add assets: https://faucet-devnet.fuel.network/
-        - check balance: https://app.fuel.network/account/${address}/assets/
+        - add assets: ${configuredNetworks[selectedNetwork].faucetUrl}
         - bech32 address: ${address}
       `);
     }
 
     expect(output).toBe(true);
-  });
+  }, 15_000);
 
   it.each([
-    ['Mint', MINT_TX_ID, TransactionType.Mint],
-    ['Upgrade', UPGRADE_TX_ID, TransactionType.Upgrade],
-    ['Upload', UPLOAD_TX_ID, TransactionType.Upload],
-  ])('can query and decode a %s transaction', async (_, txId, type) => {
+    ['Upgrade', TransactionType.Upgrade],
+    ['Upload', TransactionType.Upload],
+  ])(
+    'can query and decode a %s transaction',
+    async (_, type) => {
+      if (shouldSkip) {
+        return;
+      }
+
+      const { txIds } = configuredNetworks[selectedNetwork];
+      if (undefined === txIds) {
+        console.log(`Skipping ${type} transaction test for ${selectedNetwork} network`);
+        return;
+      }
+
+      const txId = txIds[type as keyof ConfiguredNetwork['txIds']];
+      const transaction = await provider.getTransaction(txId);
+      expect(transaction?.type).toBe(type);
+    },
+    15_000
+  );
+
+  it(`should have correct assets`, () => {
     if (shouldSkip) {
       return;
     }
-    const transaction = await provider.getTransaction(txId);
 
-    expect(transaction?.type).toBe(type);
-  });
+    const expected = [
+      {
+        name: 'Ethereum',
+        symbol: 'ETH',
+        icon: expect.stringContaining('eth.svg'),
+        networks: expect.arrayContaining([
+          {
+            type: 'fuel',
+            decimals: 9,
+            chainId: provider.getChainId(),
+            assetId: provider.getBaseAssetId(),
+          },
+        ]),
+      },
+    ];
+
+    expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
+    expect(rawAssets).toEqual(expected);
+    expect(assets).toEqual(expected);
+  }, 15_000);
 });

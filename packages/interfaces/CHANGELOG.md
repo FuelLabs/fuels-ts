@@ -1,5 +1,33 @@
 # Change Log
 
+## 0.94.3
+
+## 0.94.2
+
+## 0.94.1
+
+## 0.94.0
+
+## 0.93.0
+
+### Minor Changes
+
+- d4c4e55: chore!: refactored the `getTransactionCost` method
+
+## 0.92.1
+
+## 0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+
+## 0.90.0
+
+## 0.89.2
+
 ## 0.89.1
 
 ## 0.89.0

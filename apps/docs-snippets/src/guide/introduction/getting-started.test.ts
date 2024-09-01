@@ -1,27 +1,22 @@
-import {
-  FUEL_NETWORK_URL,
-  FUEL_TESTNET_NETWORK_URL,
-  Provider,
-  Wallet,
-  WalletUnlocked,
-} from 'fuels';
+import { TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
  * @group browser
  */
 describe('Getting started', () => {
-  beforeAll(() => {
-    // Avoids using the actual network.
-    vi.spyOn(Provider, 'create').mockImplementationOnce(() => Provider.create(FUEL_NETWORK_URL));
-  });
-
   it('can connect to a local network', async () => {
+    using launched = await launchTestNode();
+
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
+
     // #region connecting-to-the-local-node
     // #import { Provider, Wallet };
 
     // Create a provider.
-    const LOCAL_FUEL_NETWORK = 'http://127.0.0.1:4000/v1/graphql';
+    const LOCAL_FUEL_NETWORK = `http://127.0.0.1:4000/v1/graphql`;
     const provider = await Provider.create(LOCAL_FUEL_NETWORK);
 
     // Create our wallet (with a private key).
@@ -36,18 +31,23 @@ describe('Getting started', () => {
   });
 
   it('can connect to testnet', async () => {
+    using launched = await launchTestNode();
+
+    const mockedProvider = await Provider.create(launched.provider.url);
+    vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
+
     // #region connecting-to-the-testnet
-    // #import { Provider, Wallet, FUEL_TESTNET_NETWORK_URL };
+    // #import { Provider, Wallet, TESTNET_NETWORK_URL };
 
     // Create a provider, with the Latest Testnet URL.
-    const provider = await Provider.create(FUEL_TESTNET_NETWORK_URL);
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
 
     // Create our wallet (with a private key).
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';
     const wallet = Wallet.fromPrivateKey(PRIVATE_KEY, provider);
 
     // Perform a balance check.
-    const balances = await wallet.getBalances();
+    const { balances } = await wallet.getBalances();
     // [{ assetId: '0x..', amount: bn(..) }, ..]
     // #endregion connecting-to-the-testnet
 

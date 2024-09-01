@@ -1,5 +1,113 @@
 # Change Log
 
+## 0.94.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.3
+- @fuel-ts/utils@0.94.3
+- @fuel-ts/crypto@0.94.3
+- @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [01e2f0e]
+- Updated dependencies [986a247]
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/crypto@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/crypto@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+
+## 0.94.0
+
+### Patch Changes
+
+- Updated dependencies [0110fd8]
+- Updated dependencies [751d638]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [03ac550]
+- Updated dependencies [b0c161f]
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/crypto@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/crypto@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.92.1
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+  - @fuel-ts/crypto@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/utils@0.91.0
+
+## 0.90.0
+
+### Patch Changes
+
+- Updated dependencies [bb5a123]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.89.2
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/utils@0.89.2
+
 ## 0.89.1
 
 ### Patch Changes

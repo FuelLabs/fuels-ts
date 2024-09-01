@@ -1,0 +1,66 @@
+{{header}}
+
+{{#if imports}}
+import {
+{{#each imports}}
+  {{this}},
+{{/each}}
+} from 'fuels';
+{{/if}}
+
+{{#if commonTypesInUse}}
+import type { {{commonTypesInUse}} } from "./common";
+{{/if}}
+
+
+{{#each enums}}
+{{#if inputNativeValues}}
+export enum {{structName}}Input { {{inputNativeValues}} };
+{{else}}
+export type {{structName}}Input{{typeAnnotations}} = Enum<{ {{inputValues}} }>;
+{{/if}}
+{{#if outputNativeValues}}
+export enum {{structName}}Output { {{outputNativeValues}} };
+{{else}}
+  {{#if recycleRef}}
+export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
+  {{else}}
+export type {{structName}}Output{{typeAnnotations}} = Enum<{ {{outputValues}} }>;
+  {{/if}}
+{{/if}}
+{{/each}}
+
+
+{{#each structs}}
+export type {{structName}}Input{{typeAnnotations}} = { {{inputValues}} };
+{{#if recycleRef}}
+export type {{structName}}Output{{typeAnnotations}} = {{structName}}Input{{typeAnnotations}};
+{{else}}
+export type {{structName}}Output{{typeAnnotations}} = { {{outputValues}} };
+{{/if}}
+{{/each}}
+
+export type {{capitalizedName}}Inputs = [{{inputs}}];
+export type {{capitalizedName}}Output = {{output}};
+
+{{#if configurables}}
+export type {{capitalizedName}}Configurables = Partial<{
+{{#each configurables}}
+  {{name}}: {{inputLabel}};
+{{/each}}
+}>;
+{{/if}}
+
+const abi = {{abiJsonString}};
+
+const bytecode = decompressBytecode('{{compressedBytecode}}');
+
+export class {{capitalizedName}} extends Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
+
+  static readonly abi = abi;
+  static readonly bytecode = bytecode;
+
+  constructor(wallet: Account) {
+    super(bytecode, abi, wallet);
+  }
+}

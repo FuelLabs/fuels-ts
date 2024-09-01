@@ -14,15 +14,16 @@ jobs:
   environments:
     runs-on: ubuntu-latest
     # name will be node@<version> or browser
-    name: ${{ matrix.env.name }}${{ matrix.env.version && '@' || ''}}${{ matrix.env.version || ''}}
+    name: ${{ matrix.env.display-name }}
     strategy:
       fail-fast: false
       matrix:
         env:
           [
-            { name: node, version: 18.18.2 },
-            { name: node, version: 20 },
-            { name: browser },
+            { name: node, version: 18.20.3, display-name: "node@18" },
+            { name: node, version: 20.14.0, display-name: "node@20" },
+            { name: node, version: 22.3.0, display-name: "node@22" },
+            { name: browser, display-name: "browser" },
           ]
     timeout-minutes: 25
     steps:
@@ -37,8 +38,11 @@ jobs:
       - name: Validate Tests
         run: pnpm test:validate
 
+      - name: Pretest
+        run: pnpm pretest
+
       - name: Run Tests - ${{ matrix.env.name }}
-        run: pnpm ci:test --${{ matrix.env.name }}
+        run: pnpm test:${{ matrix.env.name }}
 
       - name: Upload Coverage - ${{ matrix.env.name }}
         uses: actions/upload-artifact@v4
@@ -47,11 +51,10 @@ jobs:
           path: coverage/environments/${{ matrix.env.name }}
           overwrite: true
 
-  e2e:
+  integration:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [environments]
-    if: ${{ !github.event.pull_request.draft }}
+    timeout-minutes: 25
+    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,16 +63,42 @@ jobs:
 
       - name: Test Setup
         uses: ./.github/actions/test-setup
-
-      - name: Publish PR to NPM
-        id: release
-        uses: ./.github/actions/pr-release
         with:
-          npm-token: ${{ secrets.NPM_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          should-install-bun: true
 
-      - name: Echo Published Version
-        run: echo ${{ steps.release.outputs.published_version }}
+      - name: Run UI tests (on template)
+        run: sh ./scripts/tests-ui.sh
+
+      - name: Wait for release to succeed
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: "refs/heads/master"
+          check-name: "Release"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 30
+
+      - name: Run tests (with published version)
+        run: pnpm test:integration
+        env:
+          PUBLISHED_NPM_TAG: next
+
+      - name: Run UI tests (with published version)
+        run: sh ./scripts/tests-ui-integration.sh
+        env:
+          PUBLISHED_NPM_TAG: next
+
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    needs: [environments]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
 
       - name: Pretest
         run: pnpm pretest
@@ -77,26 +106,9 @@ jobs:
       - name: Run Isolated Tests
         run: pnpm test:e2e
         env:
-          FUEL_NETWORK_URL: https://devnet.fuel.network/v1/graphql
-          TEST_WALLET_PVT_KEY: ${{ secrets.TEST_WALLET_PVT_KEY }}
-          TEST_WALLET_ADDRESS: ${{ secrets.TEST_WALLET_ADDRESS }}
-          FUEL_TESTNET_NETWORK_URL: ${{ secrets.FUEL_TESTNET_NETWORK_URL }}
-          PUBLISHED_NPM_VERSION: ${{ steps.release.outputs.published_version }}
-
-  create-fuels-template-integration:
-    timeout-minutes: 10
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Test Setup
-        uses: ./.github/actions/test-setup
-
-      - name: Run UI tests
-        run: sh ./scripts/create-fuels-template-integration.sh
+          TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
+          # uncomment the below line to test against devnet
+          # DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
 
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
@@ -116,13 +128,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node
-          path: coverage/environments
+          path: coverage/environments/node
 
       - name: Download Coverage Artifact for Browser Tests
         uses: actions/download-artifact@v4
         with:
           name: browser
-          path: coverage/environments
+          path: coverage/environments/browser
 
       - name: Generate Coverage
         run: pnpm test:coverage-merge
@@ -139,7 +151,7 @@ jobs:
           path: coverage/report
 
       - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         if: ${{ steps.findPr.outputs.number }}
         with:
           workflow: test.yaml

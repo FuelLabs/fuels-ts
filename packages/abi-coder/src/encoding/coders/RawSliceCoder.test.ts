@@ -36,14 +36,14 @@ describe('RawSliceCoder', () => {
   it('throws when decoding empty raw slice data', async () => {
     await expectToThrowFuelError(
       () => coder.decode(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 3, 1]), 0),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid raw slice byte data size.')
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid raw slice byte data size.')
     );
   });
 
   it('throws when decoding empty raw slice data', async () => {
     await expectToThrowFuelError(
       () => coder.decode(new Uint8Array([0, 0]), 0),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid raw slice data size.')
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid raw slice data size.')
     );
   });
 });

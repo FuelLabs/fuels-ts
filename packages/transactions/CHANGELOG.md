@@ -1,5 +1,164 @@
 # Change Log
 
+## 0.94.3
+
+### Patch Changes
+
+- a36626a: feat: added support for unknown txn types
+- e286557: fix: `UtxoIdCoder` output index to be `u16`
+- Updated dependencies [2b45e8d]
+  - @fuel-ts/abi-coder@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/utils@0.94.3
+  - @fuel-ts/address@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/hasher@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [01e2f0e]
+- Updated dependencies [986a247]
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/abi-coder@0.94.2
+  - @fuel-ts/address@0.94.2
+  - @fuel-ts/hasher@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/abi-coder@0.94.1
+  - @fuel-ts/address@0.94.1
+  - @fuel-ts/hasher@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 84dfdc5: chore: implement a helper createAssetId function
+- 1e93dac: chore: add missing reasons to `PANIC_REASONS` constant
+- Updated dependencies [d875416]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [95e7108]
+- Updated dependencies [751d638]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [9c07b00]
+- Updated dependencies [03ac550]
+  - @fuel-ts/abi-coder@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/address@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/hasher@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Minor Changes
+
+- f3453b9: feat!: deploy contract validation
+
+### Patch Changes
+
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/address@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.92.1
+- @fuel-ts/address@0.92.1
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/hasher@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/utils@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.0
+- @fuel-ts/utils@0.92.0
+- @fuel-ts/abi-coder@0.92.0
+- @fuel-ts/address@0.92.0
+- @fuel-ts/hasher@0.92.0
+- @fuel-ts/math@0.92.0
+- @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [3be2251]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/address@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/utils@0.91.0
+  - @fuel-ts/math@0.91.0
+
+## 0.90.0
+
+### Patch Changes
+
+- Updated dependencies [bb5a123]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [1beab0e]
+- Updated dependencies [439d0dc]
+- Updated dependencies [436f040]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/address@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/abi-coder@0.89.2
+- @fuel-ts/address@0.89.2
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/hasher@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/utils@0.89.2
+
 ## 0.89.1
 
 ### Patch Changes

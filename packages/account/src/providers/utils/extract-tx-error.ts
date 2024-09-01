@@ -19,14 +19,20 @@ import type { TransactionResultReceipt } from '../transaction-response';
  * @param status - The transaction failure status.
  * @returns The error message.
  */
-export const assemblePanicError = (statusReason: string) => {
+export const assemblePanicError = (
+  statusReason: string,
+  metadata: Record<string, unknown>
+): FuelError => {
   let errorMessage = `The transaction reverted with reason: "${statusReason}".`;
 
   if (PANIC_REASONS.includes(statusReason)) {
     errorMessage = `${errorMessage}\n\nYou can read more about this error at:\n\n${PANIC_DOC_URL}#variant.${statusReason}`;
   }
 
-  return { errorMessage, reason: statusReason };
+  return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, {
+    ...metadata,
+    reason: statusReason,
+  });
 };
 
 /** @hidden */
@@ -40,8 +46,9 @@ const stringify = (obj: unknown) => JSON.stringify(obj, null, 2);
  */
 export const assembleRevertError = (
   receipts: Array<TransactionResultReceipt>,
-  logs: Array<unknown>
-) => {
+  logs: Array<unknown>,
+  metadata: Record<string, unknown>
+): FuelError => {
   let errorMessage = 'The transaction reverted with an unknown reason.';
 
   const revertReceipt = receipts.find(({ type }) => type === ReceiptType.Revert) as ReceiptRevert;
@@ -88,12 +95,21 @@ export const assembleRevertError = (
         break;
 
       default:
-        reason = 'unknown';
-        errorMessage = `The transaction reverted with an unknown reason: ${revertReceipt.val}`;
+        throw new FuelError(
+          ErrorCode.UNKNOWN,
+          `The transaction reverted with an unknown reason: ${revertReceipt.val}`,
+          {
+            ...metadata,
+            reason: 'unknown',
+          }
+        );
     }
   }
 
-  return { errorMessage, reason };
+  return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, {
+    ...metadata,
+    reason,
+  });
 };
 
 interface IExtractTxError {
@@ -112,18 +128,16 @@ export const extractTxError = (params: IExtractTxError): FuelError => {
 
   const isPanic = receipts.some(({ type }) => type === ReceiptType.Panic);
   const isRevert = receipts.some(({ type }) => type === ReceiptType.Revert);
-
-  const { errorMessage, reason } = isPanic
-    ? assemblePanicError(statusReason)
-    : assembleRevertError(receipts, logs);
-
   const metadata = {
     logs,
     receipts,
     panic: isPanic,
     revert: isRevert,
-    reason,
+    reason: '',
   };
 
-  return new FuelError(ErrorCode.SCRIPT_REVERTED, errorMessage, metadata);
+  if (isPanic) {
+    return assemblePanicError(statusReason, metadata);
+  }
+  return assembleRevertError(receipts, logs, metadata);
 };

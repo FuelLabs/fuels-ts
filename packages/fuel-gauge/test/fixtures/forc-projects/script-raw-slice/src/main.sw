@@ -12,7 +12,7 @@ struct Wrapper<T> {
 }
 
 fn validate_raw_slice(input: raw_slice) {
-    let vec: Vec<u64> = Vec::from(input);
+    let vec: Vec<u8> = Vec::from(input);
     require(vec.len() == 3, "raw slice len is not 3");
     require(
         vec
@@ -40,7 +40,7 @@ fn validate_vec(vec: Vec<raw_slice>) {
     validate_raw_slice(vec.get(1).unwrap());
 }
 
-fn main(_arg: u64, wrapper: Wrapper<Vec<raw_slice>>) -> raw_slice {
+fn main(length: u8, wrapper: Wrapper<Vec<raw_slice>>) -> raw_slice {
     if let SomeEnum::Second(enum_raw_slice) = wrapper.inner_enum
     {
         validate_raw_slice(enum_raw_slice);
@@ -50,10 +50,11 @@ fn main(_arg: u64, wrapper: Wrapper<Vec<raw_slice>>) -> raw_slice {
 
     validate_vec(wrapper.inner);
 
-    let mut rtn: Vec<u64> = Vec::new();
-    rtn.push(1);
-    rtn.push(2);
-    rtn.push(3);
-
-    rtn.as_raw_slice()
+    let mut vec = Vec::new();
+    let mut counter = 0u8;
+    while counter < length {
+        vec.push(counter);
+        counter = counter + 1;
+    }
+    vec.as_raw_slice()
 }

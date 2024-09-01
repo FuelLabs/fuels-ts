@@ -1,5 +1,154 @@
 # @fuel-ts/abi-typegen
 
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [b67ded2]
+  - @fuel-ts/versions@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/utils@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [01e2f0e]
+- Updated dependencies [ccd94fc]
+- Updated dependencies [986a247]
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/versions@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- 66c0454: fix: stop building `typegen` on `pretest` script
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 799db38: feat!: prettify `typegen` api
+- 4c653d0: feat!: adding `abi` transpiler
+- 9c07b00: feat!: improve `()` and `Option<T>` type handling
+
+### Patch Changes
+
+- 29c556d: fix: typegen reporting the correct versions
+- 9156c02: fix: typegen generic configurables
+- a056da3: feat: improve typegen bytecode compression
+- Updated dependencies [9309598]
+- Updated dependencies [29c556d]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [751d638]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [03ac550]
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- 99794e4: chore: upgrading `forc` to `0.62.0`
+- 5b670a5: fix: make properties of configurables optional in typegen
+- ad9adcd: fix: export interfaces in typegen
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/utils@0.92.1
+- @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 17bd929: feat!: made `deployContract` a non-blocking call
+
+### Patch Changes
+
+- 369feef: build(deps): bump the deps group with 2 updates
+- 968ad03: chore: mimic `JsonAbi` interface from `abi-coder` in `abi-typegen`
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- 7befc6a: fix!: stop piping into `process.stdout/stderr` and use `console.log`
+- a9ece17: build: add support for latest node versions
+- a6c45fd: chore!: upgrade `commander` to`12.1.0`
+- 31764d6: build(deps): bump rimraf from 3.0.2 to 5.0.7
+- fbfe9b9: build(deps): bump handlebars from 4.7.7 to 4.7.8
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/utils@0.91.0
+
+## 0.90.0
+
+### Minor Changes
+
+- 1beab0e: feat!: remove redundant exports from `v1` encoding
+
+### Patch Changes
+
+- af3202c: feat: support for `bun`
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [81a77d3]
+- Updated dependencies [af3202c]
+- Updated dependencies [90e8cba]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/utils@0.89.2
+- @fuel-ts/versions@0.89.2
+
 ## 0.89.1
 
 ### Patch Changes

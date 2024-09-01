@@ -5,6 +5,7 @@ node_modules
 docs/examples/
 
 apps/demo-fuels/src/sway-programs-api
+apps/demo-bun-fuels/src/sway-programs-api
 apps/demo-nextjs
 apps/demo-react-cra
 apps/demo-react-vite

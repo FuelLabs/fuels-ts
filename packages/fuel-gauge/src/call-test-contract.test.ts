@@ -1,28 +1,25 @@
-import { ASSET_A } from '@fuel-ts/utils/test-utils';
 import type { Contract } from 'fuels';
 import { BN, bn, toHex } from 'fuels';
+import { ASSET_A } from 'fuels/test-utils';
 
-import type { CallTestContractAbi } from '../test/typegen/contracts';
-import { CallTestContractAbi__factory } from '../test/typegen/contracts';
-import binHexlified from '../test/typegen/contracts/CallTestContractAbi.hex';
+import { CallTestContractFactory } from '../test/typegen/contracts';
 
-import { createSetupConfig } from './utils';
+import { launchTestContract } from './utils';
 
-const setupContract = createSetupConfig<CallTestContractAbi>({
-  contractBytecode: binHexlified,
-  abi: CallTestContractAbi__factory.abi,
-  cache: true,
-});
-
+function setupContract() {
+  return launchTestContract({ factory: CallTestContractFactory });
+}
 const U64_MAX = bn(2).pow(64).sub(1);
 
 /**
  * @group node
+ * @group browser
  */
 describe('CallTestContract', () => {
   it.each([0, 1337, U64_MAX.sub(1)])('can call a contract with u64 (%p)', async (num) => {
-    const contract = await setupContract();
-    const { value } = await contract.functions.foo(num).call();
+    using contract = await setupContract();
+    const { waitForResult } = await contract.functions.foo(num).call();
+    const { value } = await waitForResult();
     expect(value.toHex()).toEqual(bn(num).add(1).toHex());
   });
 
@@ -34,35 +31,39 @@ describe('CallTestContract', () => {
     [{ a: false, b: U64_MAX.sub(1) }],
     [{ a: true, b: U64_MAX.sub(1) }],
   ])('can call a contract with structs (%p)', async (struct) => {
-    const contract = await setupContract();
-    const { value } = await contract.functions.boo(struct).call();
+    using contract = await setupContract();
+    const { waitForResult } = await contract.functions.boo(struct).call();
+    const { value } = await waitForResult();
     expect(value.a).toEqual(!struct.a);
     expect(value.b.toHex()).toEqual(bn(struct.b).add(1).toHex());
   });
 
   it('can call a function with empty arguments', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
 
-    const { value: empty } = await contract.functions.empty().call();
+    const call1 = await contract.functions.empty().call();
+    const { value: empty } = await call1.waitForResult();
     expect(empty.toHex()).toEqual(toHex(63));
 
-    const { value: emptyThenValue } = await contract.functions.empty_then_value(35).call();
+    const call2 = await contract.functions.empty_then_value(undefined, 35).call();
+    const { value: emptyThenValue } = await call2.waitForResult();
     expect(emptyThenValue.toHex()).toEqual(toHex(63));
 
-    const { value: valueThenEmpty } = await contract.functions.value_then_empty(35).call();
+    const call3 = await contract.functions.value_then_empty(35).call();
+    const { value: valueThenEmpty } = await call3.waitForResult();
     expect(valueThenEmpty.toHex()).toEqual(toHex(63));
 
-    const { value: valueThenEmptyThenValue } = await contract.functions
-      .value_then_empty_then_value(35, 35)
-      .call();
+    const call4 = await contract.functions.value_then_empty_then_value(35, undefined, 35).call();
+    const { value: valueThenEmptyThenValue } = await call4.waitForResult();
     expect(valueThenEmptyThenValue.toHex()).toEqual(toHex(63));
   });
 
   it('function with empty return should resolve undefined', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
 
     // Call method with no params but with no result and no value on config
-    const { value } = await contract.functions.return_void().call();
+    const { waitForResult } = await contract.functions.return_void().call();
+    const { value } = await waitForResult();
     expect(value).toEqual(undefined);
   });
 
@@ -136,9 +137,10 @@ describe('CallTestContract', () => {
     async (method, { values, expected }) => {
       // Type cast to Contract because of the dynamic nature of the test
       // But the function names are type-constrained to correct Contract's type
-      const contract = (await setupContract()) as Contract;
+      using contract = await setupContract();
 
-      const { value } = await contract.functions[method](...values).call();
+      const { waitForResult } = await (contract as Contract).functions[method](...values).call();
+      const { value } = await waitForResult();
 
       if (BN.isBN(value)) {
         expect(toHex(value)).toBe(toHex(expected));
@@ -149,45 +151,54 @@ describe('CallTestContract', () => {
   );
 
   it('Forward amount value on contract call', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
     const baseAssetId = contract.provider.getBaseAssetId();
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_amount()
       .callParams({
         forward: [1_000_000, baseAssetId],
       })
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value.toHex()).toBe(bn(1_000_000).toHex());
   });
 
   it('Forward asset_id on contract call', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
 
     const assetId = ASSET_A;
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value).toBe(assetId);
   });
 
   it('Forward asset_id on contract simulate call', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
 
     const assetId = ASSET_A;
-    const { value } = await contract.functions
+    const { waitForResult } = await contract.functions
       .return_context_asset()
       .callParams({
         forward: [0, assetId],
       })
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value).toBe(assetId);
   });
 
   it('can make multiple calls', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
 
     const num = 1337;
     const numC = 10;
@@ -204,9 +215,12 @@ describe('CallTestContract', () => {
 
     async function expectContractCall() {
       // Submit multi-call transaction
+      const { waitForResult } = await multiCallScope.call();
+
+      // Wait for the result
       const {
         value: [resultA, resultB, resultC],
-      } = await multiCallScope.call();
+      } = await waitForResult();
 
       expect(resultA.toHex()).toEqual(bn(num).add(1).toHex());
       expect(resultB.a).toEqual(!struct.a);
@@ -222,14 +236,14 @@ describe('CallTestContract', () => {
   });
 
   it('Calling a simple contract function does only one dry run', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
     await contract.functions.no_params().call();
     expect(dryRunSpy).toHaveBeenCalledOnce();
   });
 
   it('Simulating a simple contract function does two dry runs', async () => {
-    const contract = await setupContract();
+    using contract = await setupContract();
     const dryRunSpy = vi.spyOn(contract.provider.operations, 'dryRun');
 
     await contract.functions.no_params().simulate();

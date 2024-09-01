@@ -1,6 +1,8 @@
 ABI
 ABIs
+ABI's
 ASM
+AssetId
 IDE
 IDEs
 LSP
@@ -91,6 +93,7 @@ mempool
 merkle
 monorepo
 monorepos
+nonces
 natively
 npm
 nvm
@@ -302,6 +305,7 @@ MULTICALL
 TTL
 Bech
 CLIs
+typedoc
 backoff
 extractable
 SHA-256
@@ -314,4 +318,18 @@ BigNumber
 Gwei
 onchain
 Vercel
+vercel
 hardcoded
+differentiators
+updatable
+tsconfig
+deployer
+overriden
+typesafe
+launchTestNode
+Vitest
+CODEOWNERS
+incentivise
+URI
+walletsConfig
+reuploaded

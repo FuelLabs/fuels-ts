@@ -1,22 +1,27 @@
-import type { Contract, AssetId } from 'fuels';
-import { Wallet, BN, Provider, FUEL_NETWORK_URL } from 'fuels';
+import type { AssetId } from 'fuels';
+import { Wallet, BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { DocSnippetProjectsEnum } from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject } from '../../utils';
+import { TransferToAddressFactory } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let contract: Contract;
-  let provider: Provider;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.TRANSFER_TO_ADDRESS);
-  });
-
+describe('Contract Balance', () => {
   it('should successfully get a contract balance', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: TransferToAddressFactory,
+        },
+      ],
+    });
+    const {
+      provider,
+      contracts: [contract],
+    } = launched;
+
     // #region contract-balance-3
     // #import { AssetId, Wallet, BN };
 
@@ -32,12 +37,14 @@ describe(__filename, () => {
       bits: baseAssetId,
     };
 
-    await contract.functions
+    const { waitForResult } = await contract.functions
       .transfer(amountToTransfer, asset, recipient.address.toB256())
       .callParams({
         forward: [amountToForward, baseAssetId],
       })
       .call();
+
+    await waitForResult();
 
     const contractBalance = await contract.getBalance(baseAssetId);
 

@@ -1,5 +1,34 @@
 # @internal/fuel-core
 
+## 0.89.1
+
+### Patch Changes
+
+- ccd94fc: chore: upgrade `fuel-core@0.34.0`
+
+## 0.89.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 9309598: chore: upgrade `fuel-core@0.33.0`
+
+## 0.88.4
+
+### Patch Changes
+
+- 4a3c184: chore: upgrading `fuel-core` to `0.31.0`
+
+## 0.88.3
+
+### Patch Changes
+
+- 81a77d3: chore: upgrading `fuel-core` to `0.29.0`
+- 90e8cba: chore: upgrading `fuel-core` to `0.30.0`
+
 ## 0.88.2
 
 ### Patch Changes

@@ -10,26 +10,22 @@ The `npm create fuels` command has several command-line options that you can use
 ::: code-group
 
 ```sh-vue [pnpm]
-pnpm create fuels@{{fuels}} [project-name] [options]
+pnpm create fuels@{{fuels}} --pnpm [project-name] [options]
 ```
 
 ```sh-vue [npm]
-npm create fuels@{{fuels}} [project-name] [options]
+npm create fuels@{{fuels}} -- --npm [project-name] [options]
+```
+
+```sh-vue [bun]
+bunx --bun create-fuels@{{fuels}} --bun [project-name] [options]
 ```
 
 :::
 
-## `-c, --contract`
+## `--template <template-name>`
 
-Notifies the tool to include a Sway contract program in your project.
-
-## `-p, --predicate`
-
-Notifies the tool to include a Sway predicate program in your project.
-
-## `-s, --script`
-
-Notifies the tool to include a Sway script program in your project.
+Specifies the template to use for your project. The available templates are: `nextjs`.
 
 ## `--pnpm`
 
@@ -39,9 +35,9 @@ Notifies the tool to use pnpm as the package manager to install the necessary de
 
 Notifies the tool to use npm as the package manager to install the necessary dependencies.
 
-## `-cs, -cp, -sp, -cps`
+## `--bun`
 
-Shorthand to include a combination of contract, script and predicate programs.
+Notifies the tool to use bun as the package manager to install the necessary dependencies.
 
 ## `--verbose`
 

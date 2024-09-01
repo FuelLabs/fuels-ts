@@ -13,9 +13,6 @@ jobs:
     name: "Release"
     runs-on: ubuntu-latest
     permissions: write-all
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     # Ensure that the workflow runs only after a commit is pushed into the branch
     # and not when the branch is created.
     # This is to avoid running the workflow when a release/* branch is created.
@@ -55,11 +52,15 @@ jobs:
 
       - name: Set branch name and changeset PR title
         run: |
-          echo "CHANGESET_PR_TITLE=$(echo "ci(changesets): versioning packages - \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
+          echo "CHANGESET_PR_TITLE=$(echo "ci(release): \`${{ env.RELEASE_VERSION }}\` @ \`${{ github.ref_name }}\`")" >> $GITHUB_ENV
 
       - name: Get latest release
         run: |
-          echo "LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)" >> $GITHUB_ENV
+          LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)
+          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+
+          pnpm add --global semver
+          echo "RELEASE_VERSION_HIGHER_THAN_LATEST=$(semver $LATEST_RELEASE $RELEASE_VERSION | tail -n1 | grep ${RELEASE_VERSION#v} --silent && echo true || echo false)" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -69,7 +70,7 @@ jobs:
         with:
           publish: pnpm changeset:publish ${{ env.RELEASE_VERSION }} ${{ github.ref_name }}
           version: pnpm changeset:version-with-docs
-          commit: "ci(changesets): versioning packages"
+          commit: "ci(release): versioning packages and changesets"
           title: ${{ env.CHANGESET_PR_TITLE }}
           createGithubReleases: aggregate
           githubReleaseName: ${{ env.RELEASE_VERSION }}
@@ -86,12 +87,7 @@ jobs:
           PUBLISHED: ${{ steps.changesets.outputs.published }}
           REF_NAME: ${{ github.ref_name }}
           LATEST_RELEASE: ${{ env.LATEST_RELEASE }}
-
-      - name: Delete the release branch
-        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/')
-        run: git push origin --delete ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          RELEASE_VERSION_HIGHER_THAN_LATEST: ${{ env.RELEASE_VERSION_HIGHER_THAN_LATEST }}
 
       - name: Release to @next tag on npm
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
@@ -123,23 +119,8 @@ jobs:
         run: echo LAST_COMMIT_MSG=$(git --no-pager log -1 --pretty=%B) >> $GITHUB_ENV
 
       - name: Decides if Docs should be deployed
-        if: github.ref_name == 'master' && startsWith(env.LAST_COMMIT_MSG, 'ci(changesets):')
+        if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
-
-      - name: Configure GitHub Pages
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/configure-pages@v2
-
-      - name: Upload Docs Artifact
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: apps/docs/dist
-
-      - name: Deploy Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        id: deployment
-        uses: actions/deploy-pages@v1
 
       - name: Checkout API Docs
         if: env.SHOULD_DEPLOY_DOCS == 'true'
@@ -153,7 +134,7 @@ jobs:
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git merge origin/master --no-edit
+          git merge origin/$GITHUB_REF_NAME --no-edit
           pnpm install
           pnpm build
           rm -f apps/docs/.gitignore
@@ -164,7 +145,7 @@ jobs:
           git restore apps/docs/.gitignore
 
       - name: Update docs (nightly)
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
+        if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: update-nightly.yml
@@ -172,8 +153,34 @@ jobs:
           repo: FuelLabs/docs-hub
           token: ${{ secrets.REPO_TOKEN }}
 
+      - name: Create PR to apply latest release to master
+        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
+        run: |
+          PR_TITLE_TEXT='apply `latest` release to `master`'
+          if [ ${RELEASE_VERSION#v} = "$(semver "$LATEST_VERSION" --increment minor)" ]; then
+              PR_TITLE="build!: $PR_TITLE_TEXT"
+          else
+              PR_TITLE="build: $PR_TITLE_TEXT"
+          fi
+
+          PR_BODY='Automatically created when `latest` published release is newer than `master` due to publishing done via `release/*` branches.'
+
+          gh pr create -B master -H $GITHUB_REF_NAME --title "$PR_TITLE" --body "$PR_BODY"
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          RELEASE_VERSION: ${{ env.RELEASE_VERSION }}
+          LATEST_VERSION: ${{ env.LATEST_VERSION }}
+
+      - name: Delete the release branch
+        # We check env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
+        # because we don't want to delete the branch that is used in the "Create PR to apply latest release to master" step above
+        if: steps.changesets.outputs.published == 'true' && startsWith(github.ref_name, 'release/') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'false'
+        run: git push origin --delete ${{ github.ref_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+
       # Upload assets to S3
-      - uses: unfor19/install-aws-cli-action@v1.0.3
+      - uses: unfor19/install-aws-cli-action@v1.0.7
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           version: 2
@@ -181,15 +188,25 @@ jobs:
           arch: amd64
           rootdir: ""
           workdir: ""
-      - uses: aws-actions/configure-aws-credentials@v1
+
+      - uses: aws-actions/configure-aws-credentials@v4
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         with:
           aws-access-key-id: ${{ secrets.S3_CDN_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.S3_CDN_SECRET_KEY }}
           aws-region: us-east-1
+
       - name: Upload assets to s3
         if: github.ref_name == 'master' && steps.changesets.outputs.published != 'true'
         run: |
           aws s3 cp ./packages/account/src/providers/assets/images/ s3://${S3_CDN_BUCKET}/assets/ --recursive
         env:
           S3_CDN_BUCKET: ${{ secrets.S3_CDN_BUCKET }}
+
+      - name: Notify migrations and disclosures of the new release (breaking changes)
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.MIGRATIONS_RELEASE_TRIGGER_TOKEN }}" \
+            https://api.github.com/repos/FuelLabs/migrations-and-disclosures/dispatches \
+            -d '{"event_type":"update_versions"}'

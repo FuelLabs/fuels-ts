@@ -6,7 +6,6 @@ import apiLinks from '../.typedoc/api-links.json';
 export default defineConfig({
   title: 'Fuels-ts',
   description: 'Fuel Typescript SDK',
-  base: '/fuels-ts/',
   srcDir: 'src',
   outDir: 'dist',
   lang: 'en-US',
@@ -71,6 +70,12 @@ export default defineConfig({
             ],
           },
           {
+            text: 'The UTXO Model',
+            link: '/guide/the-utxo-model/',
+            collapsed: false,
+            items: [],
+          },
+          {
             text: 'Creating a Fuel dApp',
             link: '/guide/creating-a-fuel-dapp/',
             collapsed: true,
@@ -82,6 +87,10 @@ export default defineConfig({
               {
                 text: 'Deploying a dApp to Testnet',
                 link: '/guide/creating-a-fuel-dapp/deploying-a-dapp-to-testnet',
+              },
+              {
+                text: 'Working with Predicates',
+                link: '/guide/creating-a-fuel-dapp/working-with-predicates',
               },
             ],
           },
@@ -120,6 +129,10 @@ export default defineConfig({
               {
                 text: 'Provider Options',
                 link: '/guide/provider/provider-options',
+              },
+              {
+                text: 'Pagination',
+                link: '/guide/provider/pagination',
               },
               {
                 text: 'Querying the Chain',
@@ -171,10 +184,6 @@ export default defineConfig({
               {
                 text: 'Locking and Unlocking',
                 link: '/guide/wallets/locking-and-unlocking',
-              },
-              {
-                text: 'Test Wallets',
-                link: '/guide/wallets/test-wallets',
               },
             ],
           },
@@ -240,6 +249,10 @@ export default defineConfig({
                 link: '/guide/contracts/configurable-constants',
               },
               {
+                text: 'Minted Token Asset ID',
+                link: '/guide/contracts/minted-token-asset-id',
+              },
+              {
                 text: 'Managing Deployed Contracts',
                 link: '/guide/contracts/managing-deployed-contracts',
               },
@@ -289,6 +302,14 @@ export default defineConfig({
                 text: 'Send And Spend Funds From Predicates',
                 link: '/guide/predicates/send-and-spend-funds-from-predicates',
               },
+              {
+                text: 'Methods',
+                link: '/guide/predicates/methods',
+              },
+              {
+                text: 'Custom Transactions',
+                link: '/guide/predicates/custom-transactions',
+              },
             ],
           },
           {
@@ -311,6 +332,21 @@ export default defineConfig({
               {
                 text: 'Transaction Policies',
                 link: '/guide/transactions/transaction-policies',
+              },
+            ],
+          },
+          {
+            text: 'Encoding',
+            link: '/guide/encoding/',
+            collapsed: true,
+            items: [
+              {
+                text: 'Encode and Decode',
+                link: '/guide/encoding/encode-and-decode',
+              },
+              {
+                text: 'Working with Bytes',
+                link: '/guide/encoding/working-with-bytes',
               },
             ],
           },
@@ -339,10 +375,6 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Transferring Assets',
-                link: '/guide/cookbook/transferring-assets',
-              },
-              {
                 text: 'Deposit And Withdraw',
                 link: '/guide/cookbook/deposit-and-withdraw',
               },
@@ -359,12 +391,20 @@ export default defineConfig({
                 link: '/guide/cookbook/custom-transactions-from-contract-calls',
               },
               {
+                text: 'Generate Fake Resources',
+                link: '/guide/cookbook/generate-fake-resources',
+              },
+              {
                 text: 'Transactions with Multiple Signers',
                 link: '/guide/cookbook/transactions-with-multiple-signers',
               },
               {
                 text: 'GraphQL Integration',
                 link: '/guide/cookbook/graphql-integration',
+              },
+              {
+                text: 'Resubmitting Failed Transactions',
+                link: '/guide/cookbook/resubmitting-failed-transactions',
               },
             ],
           },
@@ -374,16 +414,32 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Testing in TS',
-                link: '/guide/testing/testing-in-ts',
+                text: 'Launching a Test Node',
+                link: '/guide/testing/launching-a-test-node',
               },
               {
-                text: 'Setting Up a Custom Chain',
-                link: '/guide/testing/setting-up-a-custom-chain',
+                text: 'Test Node Options',
+                link: '/guide/testing/test-node-options',
               },
               {
-                text: 'Tweaking the Blockchain',
-                link: '/guide/testing/tweaking-the-blockchain',
+                text: 'Fuel Core Options',
+                link: '/guide/testing/fuel-core-options',
+              },
+              {
+                text: 'Basic Example',
+                link: '/guide/testing/basic-example',
+              },
+              {
+                text: 'Advanced Example',
+                link: '/guide/testing/advanced-example',
+              },
+              {
+                text: 'Custom Blocks',
+                link: '/guide/testing/custom-blocks',
+              },
+              {
+                text: 'Setting up test wallets',
+                link: '/guide/testing/setting-up-test-wallets',
               },
             ],
           },
@@ -473,13 +529,8 @@ export default defineConfig({
           {
             text: 'Errors',
             link: '/guide/errors/',
-            collapsed: true,
-            items: [
-              {
-                text: 'Error Codes',
-                link: '/guide/errors/error-codes',
-              },
-            ],
+            collapsed: false,
+            items: [],
           },
           apiLinks,
         ],

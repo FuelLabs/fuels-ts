@@ -52,6 +52,7 @@ export async function deploy(config: FuelsConfig) {
   }
 
   await saveContractIds(contracts, config.output);
+  config.onDeploy?.(config, contracts);
 
   return contracts;
 }

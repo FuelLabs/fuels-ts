@@ -1,22 +1,35 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
-import { FUEL_NETWORK_URL, Provider, TransactionResponse, Wallet } from 'fuels';
+import { TransactionResponse, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { getSetupContract } from './utils';
+import { CollisionInFnNamesFactory } from '../test/typegen/contracts';
+
+import { launchTestContract } from './utils';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Edge Cases', () => {
   it('can run collision_in_fn_names', async () => {
-    const contract = await getSetupContract('collision_in_fn_names')();
+    using contractInstance = await launchTestContract({
+      factory: CollisionInFnNamesFactory,
+    });
 
-    expect((await contract.functions.new().call()).value.toNumber()).toEqual(12345);
+    const { waitForResult } = await contractInstance.functions.new().call();
+    const { value } = await waitForResult();
+
+    expect(value.toNumber()).toEqual(12345);
   });
 
   test("SSE subscriptions that are closed by the node don't hang a for-await-of loop", async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [adminWallet],
+    } = launched;
+
     const baseAssetId = provider.getBaseAssetId();
-    const adminWallet = await generateTestWallet(provider, [[500_000, baseAssetId]]);
 
     const destination = Wallet.generate({
       provider,
@@ -33,7 +46,7 @@ describe('Edge Cases', () => {
 
     await response.waitForResult();
 
-    const subsciption = provider.operations.statusChange({ transactionId });
+    const subsciption = await provider.operations.statusChange({ transactionId });
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     for await (const iterator of subsciption) {

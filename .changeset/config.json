@@ -10,6 +10,7 @@
     "fuel-gauge",
     "docs",
     "demo-fuels",
+    "demo-bun-fuels",
     "demo-react-cra",
     "demo-react-vite",
     "demo-nextjs",
@@ -18,6 +19,7 @@
     "@fuel-ts/docs-snippets",
     "template-nextjs",
     "create-fuels-counter-guide",
-    "demo-wallet-sdk-react"
+    "demo-wallet-sdk-react",
+    "template-vite"
   ]
 }

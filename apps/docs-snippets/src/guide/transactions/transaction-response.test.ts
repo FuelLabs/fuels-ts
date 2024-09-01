@@ -1,39 +1,32 @@
-import type { Provider, Contract, WalletUnlocked } from 'fuels';
 import { ScriptTransactionRequest, TransactionResponse } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { createAndDeployContractFromProject, getTestWallet } from '../../utils';
+import { CounterFactory, SumScript } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Transaction Response', () => {
-  let contract: Contract;
-  let provider: Provider;
-  let wallet: WalletUnlocked;
-
-  const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
-
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    contract = await createAndDeployContractFromProject(DocSnippetProjectsEnum.COUNTER);
-    provider = contract.provider;
-  });
-
   it('gets transaction response from contract call', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [contract],
+    } = launched;
+
     // #region transaction-response-1
-    // #import { TransactionResponse };
-
     // Call a contract function
-    const call = await contract.functions.increment_count(15).call();
+    const call = await contract.functions.increment_counter(15).call();
 
-    // Pick off the transaction response
-    const transactionResponse: TransactionResponse = call.transactionResponse;
+    // Wait for the result
+    const { transactionResponse } = await call.waitForResult();
 
     // Retrieve the full transaction summary
     const transactionSummary = await transactionResponse.getTransactionSummary();
@@ -43,6 +36,11 @@ describe('Transaction Response', () => {
   });
 
   it('gets transaction response from transaction request', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const scriptMainFunctionArguments = [1];
 
     // #region transaction-response-2
@@ -51,12 +49,12 @@ describe('Transaction Response', () => {
     // Instantiate the transaction request using a ScriptTransactionRequest and set
     // the script main function arguments
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
-    transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
 
     // Fund the transaction
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
     transactionRequest.gasLimit = txCost.gasUsed;
@@ -74,14 +72,20 @@ describe('Transaction Response', () => {
   });
 
   it('gets transaction response from tx id', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const scriptMainFunctionArguments = [1];
 
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
     });
-    transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
 
-    const txCost = await provider.getTransactionCost(transactionRequest);
+    const txCost = await wallet.getTransactionCost(transactionRequest);
 
     transactionRequest.maxFee = txCost.maxFee;
     transactionRequest.gasLimit = txCost.gasUsed;
@@ -94,8 +98,6 @@ describe('Transaction Response', () => {
     );
 
     // #region transaction-response-3
-    // #import { TransactionResponse };
-
     // Take a transaction ID from a previous transaction
     const transactionId = previouslySubmittedTransactionId;
     // 0x...

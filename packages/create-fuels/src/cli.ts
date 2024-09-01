@@ -1,72 +1,69 @@
+import { FuelError } from '@fuel-ts/errors';
+import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
 import type { Command } from 'commander';
-import { existsSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { cp, mkdir, rename } from 'fs/promises';
 import ora from 'ora';
 import { join } from 'path';
 
 import { tryInstallFuelUp } from './lib';
-import {
-  promptForProgramsToInclude,
-  promptForPackageManager,
-  promptForProjectPath,
-} from './prompts';
+import { doesTemplateExist } from './lib/doesTemplateExist';
+import { getPackageManager } from './lib/getPackageManager';
+import { getPackageVersion } from './lib/getPackageVersion';
+import { defaultTemplate, templates } from './lib/setupProgram';
+import type { Template, ProgramOptions } from './lib/setupProgram';
+import { promptForProjectPath } from './prompts';
 import { error, log } from './utils/logger';
 
 export { setupProgram } from './lib/setupProgram';
 
-export type ProgramsToInclude = {
-  contract: boolean;
-  predicate: boolean;
-  script: boolean;
-};
-
-const processWorkspaceToml = (fileContents: string, programsToInclude: ProgramsToInclude) => {
+const processWorkspaceToml = (fileContents: string) => {
   const parsed = toml.parse(fileContents) as {
     workspace: {
       members: ('predicate' | 'contract' | 'script')[];
     };
   };
 
-  parsed.workspace.members = parsed.workspace.members.filter((m) => programsToInclude[m]);
-
   return toml.stringify(parsed);
 };
 
-function writeEnvFile(envFilePath: string, programsToInclude: ProgramsToInclude) {
-  /*
-   * Should be like:
-   * NEXT_PUBLIC_HAS_CONTRACT=true
-   * NEXT_PUBLIC_HAS_PREDICATE=false
-   * NEXT_PUBLIC_HAS_SCRIPT=true
-   */
-  let newFileContents = Object.entries(programsToInclude)
-    .map(([program, include]) => `NEXT_PUBLIC_HAS_${program.toUpperCase()}=${include}`)
-    .join('\n');
+const writeEnvFile = (rootDirPath: string) => {
+  const envFilePath = join(rootDirPath, 'env');
+  const envFileContents = readFileSync(envFilePath, 'utf-8');
+  const newEnvFilePath = join(rootDirPath, '.env.local');
 
-  newFileContents += `\nNEXT_PUBLIC_FUEL_NODE_PORT=4000`;
-  newFileContents += `\nNEXT_PUBLIC_DAPP_ENVIRONMENT=local`;
-
-  writeFileSync(envFilePath, newFileContents);
-}
+  writeFileSync(newEnvFilePath, envFileContents);
+};
 
 export const runScaffoldCli = async ({
   program,
   args = process.argv,
-  shouldInstallDeps = false,
-  forceDisablePrompts = false,
 }: {
   program: Command;
   args: string[];
-  shouldInstallDeps?: boolean;
-  forceDisablePrompts?: boolean;
 }) => {
   program.parse(args);
+  const opts = program.opts<ProgramOptions>();
+
+  const templateOfChoice = (opts.template ?? defaultTemplate) as Template;
+
+  if (!doesTemplateExist(templateOfChoice)) {
+    error(`Template '${templateOfChoice}' does not exist.`);
+    log();
+    log('Available templates:');
+    for (const template of templates) {
+      log(`  - ${template}`);
+    }
+    process.exit(1);
+  }
 
   let projectPath = program.args[0] ?? (await promptForProjectPath());
-  const verboseEnabled = program.opts().verbose ?? false;
+
+  const verboseEnabled = opts.verbose ?? false;
+  const packageManager = getPackageManager(opts);
 
   if (!process.env.VITEST) {
     await tryInstallFuelUp(verboseEnabled);
@@ -77,7 +74,10 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
@@ -88,52 +88,13 @@ export const runScaffoldCli = async ({
 
     // Exit the program if we are testing to prevent hanging
     if (process.env.VITEST) {
-      throw new Error();
+      throw new FuelError(
+        FuelError.CODES.UNKNOWN,
+        'An error occurred due to the environmental variable `VITEST` was detected.'
+      );
     }
 
     projectPath = await promptForProjectPath();
-  }
-
-  const cliPackageManagerChoices = {
-    pnpm: program.opts().pnpm,
-    npm: program.opts().npm,
-  };
-
-  const cliChosenPackageManager = Object.entries(cliPackageManagerChoices).find(([, v]) => v)?.[0];
-
-  let packageManager = cliChosenPackageManager ?? (await promptForPackageManager());
-
-  if (!packageManager) {
-    packageManager = 'pnpm';
-  }
-
-  const cliProgramsToInclude = {
-    contract: program.opts().contract,
-    predicate: program.opts().predicate,
-    script: program.opts().script,
-  };
-  const hasAnyCliProgramsToInclude = Object.values(cliProgramsToInclude).some((v) => v);
-
-  let programsToInclude: ProgramsToInclude;
-  if (hasAnyCliProgramsToInclude) {
-    programsToInclude = cliProgramsToInclude;
-  } else {
-    programsToInclude = await promptForProgramsToInclude({
-      forceDisablePrompts,
-    });
-  }
-
-  while (!programsToInclude.contract && !programsToInclude.predicate && !programsToInclude.script) {
-    error('You must include at least one Sway program.');
-
-    // Exit the program if we are testing to prevent hanging
-    if (process.env.VITEST) {
-      throw new Error();
-    }
-
-    programsToInclude = await promptForProgramsToInclude({
-      forceDisablePrompts,
-    });
   }
 
   const fileCopySpinner = ora({
@@ -143,46 +104,52 @@ export const runScaffoldCli = async ({
 
   await mkdir(projectPath);
 
-  await cp(join(__dirname, '../templates/nextjs'), projectPath, {
+  const templateDir = join(__dirname, '..', 'templates', templateOfChoice);
+  await cp(templateDir, projectPath, {
     recursive: true,
     filter: (filename) => !filename.includes('CHANGELOG.md'),
   });
   await rename(join(projectPath, 'gitignore'), join(projectPath, '.gitignore'));
+  writeEnvFile(projectPath);
   await rename(join(projectPath, 'env'), join(projectPath, '.env.local'));
-  writeEnvFile(join(projectPath, '.env.local'), programsToInclude);
 
-  // delete the programs that are not to be included
-  if (!programsToInclude.contract) {
-    rmSync(join(projectPath, 'sway-programs/contract'), { recursive: true });
-  }
-  if (!programsToInclude.predicate) {
-    rmSync(join(projectPath, 'sway-programs/predicate'), { recursive: true });
-    rmSync(join(projectPath, 'src/pages/predicate.tsx'), { recursive: true });
-  }
-  if (!programsToInclude.script) {
-    rmSync(join(projectPath, 'sway-programs/script'), { recursive: true });
-    rmSync(join(projectPath, 'src/pages/script.tsx'), { recursive: true });
-  }
-
-  // remove the programs that are not included from the Forc.toml members field and rewrite the file
   const forcTomlPath = join(projectPath, 'sway-programs', 'Forc.toml');
   const forcTomlContents = readFileSync(forcTomlPath, 'utf-8');
-  const newForcTomlContents = processWorkspaceToml(forcTomlContents, programsToInclude);
+  const newForcTomlContents = processWorkspaceToml(forcTomlContents);
   writeFileSync(forcTomlPath, newForcTomlContents);
+
+  // Rewrite the package.json file
+  // Note: `pnpm run xprebuild` -> rewritten to -> `pnpm run prebuild` (on prePublish script)
+  const packageJsonPath = join(projectPath, 'package.json');
+  const packageJsonContents = readFileSync(packageJsonPath, 'utf-8');
+  const fuelsVersion = getPackageVersion(args);
+  const newPackageJsonContents = packageJsonContents
+    .replace(`pnpm run prebuild`, packageManager.run('prebuild'))
+    .replace(`"fuels": "${versions.FUELS}"`, `"fuels": "${fuelsVersion}"`);
+
+  writeFileSync(packageJsonPath, newPackageJsonContents);
+
+  // Rewrite the README.md file
+  const readmePath = join(projectPath, 'README.md');
+  const readmeContents = readFileSync(readmePath, 'utf-8');
+  const newReadmeContents = readmeContents
+    .replace('npm run fuels:dev', packageManager.run('fuels:dev'))
+    .replace('npm run dev', packageManager.run('dev'));
+  writeFileSync(readmePath, newReadmeContents);
 
   fileCopySpinner.succeed('Copied template files!');
 
-  const installDepsSpinner = ora({
-    text: 'Installing dependencies..',
-    color: 'green',
-  }).start();
+  if (opts.install) {
+    const installDepsSpinner = ora({
+      text: 'Installing dependencies..',
+      color: 'green',
+    }).start();
 
-  if (shouldInstallDeps) {
     process.chdir(projectPath);
-    execSync(`${packageManager} install`, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
-  }
+    execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
 
-  installDepsSpinner.succeed('Installed dependencies!');
+    installDepsSpinner.succeed('Installed dependencies!');
+  }
 
   log();
   log();
@@ -192,12 +159,8 @@ export const runScaffoldCli = async ({
   log('To get started:');
   log();
   log(`- cd into the project directory: cd ${projectPath}`);
-  log(
-    `- Start a local Fuel dev server: ${packageManager} ${
-      packageManager === 'npm' ? 'run ' : ''
-    }fuels:dev`
-  );
-  log(`- Run the frontend: ${packageManager} ${packageManager === 'npm' ? 'run ' : ''}dev`);
+  log(`- Start a local Fuel dev server: ${packageManager.run('fuels:dev')}`);
+  log(`- Run the frontend: ${packageManager.run('dev')}`);
   log();
   log();
   log('-> TS SDK docs: https://docs.fuel.network/docs/fuels-ts/');

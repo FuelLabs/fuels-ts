@@ -3,7 +3,7 @@ import { toNumber } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 import type { RequireExactlyOne } from 'type-fest';
 
-import { OPTION_CODER_TYPE } from '../../utils/constants';
+import { OPTION_CODER_TYPE, optionRegEx, VOID_TYPE } from '../../utils/constants';
 import { hasNestedOption } from '../../utils/utilities';
 
 import type { TypesOfCoder } from './AbstractCoder';
@@ -16,12 +16,6 @@ export type InputValueOf<TCoders extends Record<string, Coder>> = RequireExactly
 export type DecodedValueOf<TCoders extends Record<string, Coder>> = RequireExactlyOne<{
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 }>;
-
-const isFullyNativeEnum = (enumCoders: { [s: string]: unknown } | ArrayLike<unknown>): boolean =>
-  Object.values(enumCoders).every(
-    // @ts-expect-error complicated types
-    ({ type, coders }) => type === '()' && JSON.stringify(coders) === JSON.stringify([])
-  );
 
 export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
   InputValueOf<TCoders>,
@@ -44,7 +38,12 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     this.coders = coders;
     this.#caseIndexCoder = caseIndexCoder;
     this.#encodedValueSize = encodedValueSize;
-    this.#shouldValidateLength = !(this.type === OPTION_CODER_TYPE || hasNestedOption(coders));
+    this.#shouldValidateLength = !(optionRegEx.test(this.type) || hasNestedOption(coders));
+  }
+
+  // Checks that we're handling a native enum that is of type void.
+  #isNativeEnum(coder: Coder): boolean {
+    return this.type !== OPTION_CODER_TYPE && coder.type === VOID_TYPE;
   }
 
   #encodeNativeEnum(value: string): Uint8Array {
@@ -70,6 +69,16 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
     }
     const valueCoder = this.coders[caseKey];
     const caseIndex = Object.keys(this.coders).indexOf(caseKey);
+    if (caseIndex === -1) {
+      const validCases = Object.keys(this.coders)
+        .map((v) => `'${v}'`)
+        .join(', ');
+      throw new FuelError(
+        ErrorCode.INVALID_DECODE_VALUE,
+        `Invalid case '${caseKey}'. Valid cases: ${validCases}.`
+      );
+    }
+
     const encodedValue = valueCoder.encode(value[caseKey]);
 
     return new Uint8Array([...this.#caseIndexCoder.encode(caseIndex), ...encodedValue]);
@@ -102,7 +111,7 @@ export class EnumCoder<TCoders extends Record<string, Coder>> extends Coder<
 
     const [decoded, newOffset] = valueCoder.decode(data, offsetAndCase);
 
-    if (isFullyNativeEnum(this.coders)) {
+    if (this.#isNativeEnum(this.coders[caseKey])) {
       return this.#decodeNativeEnum(caseKey, newOffset);
     }
 

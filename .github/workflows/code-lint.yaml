@@ -22,10 +22,13 @@ jobs:
     name: Lint
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: CI Setup
         uses: ./.github/actions/test-setup
+
+      - name: Verify package version mismatches
+        run: pnpm depsync:lint
 
       - name: Verify package.json integrity
         run: pnpm lint:package-jsons

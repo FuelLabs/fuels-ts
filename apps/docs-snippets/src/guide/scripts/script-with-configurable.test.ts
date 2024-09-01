@@ -1,28 +1,21 @@
-import type { WalletUnlocked } from 'fuels';
 import { Script, BN } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { SumScript } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let wallet: WalletUnlocked;
-  const { abiContents, binHexlified } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
+describe('Script With Configurable', () => {
+  it('should successfully sum set configurable constants with inputted value', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
 
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-  });
-
-  it('should successfully sum setted configurable constant with inpputed value', async () => {
     // #region script-with-configurable-contants-2
-    const script = new Script(binHexlified, abiContents, wallet);
+    const script = new Script(SumScript.bytecode, SumScript.abi, wallet);
 
     const configurableConstants = {
       AMOUNT: 81,
@@ -30,22 +23,28 @@ describe(__filename, () => {
 
     script.setConfigurableConstants(configurableConstants);
 
-    const inpputedValue = 10;
+    const inputtedValue = 10;
 
-    const { value } = await script.functions.main(inpputedValue).call();
+    const { waitForResult } = await script.functions.main(inputtedValue).call();
+    const { value } = await waitForResult();
 
-    const expectedTotal = inpputedValue + configurableConstants.AMOUNT;
+    const expectedTotal = inputtedValue + configurableConstants.AMOUNT;
 
     expect(new BN(value as number).toNumber()).toEqual(expectedTotal);
     // #endregion script-with-configurable-contants-2
   });
 
   it('prepares a script and retrieves the id before submission', async () => {
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
+
     const argument = 10;
     const expected = 20;
 
     // #region preparing-scripts
-    const script = new Script(binHexlified, abiContents, wallet);
+    const script = new Script(SumScript.bytecode, SumScript.abi, wallet);
 
     const tx = script.functions.main(argument);
 
@@ -59,7 +58,8 @@ describe(__filename, () => {
     const txId = await tx.getTransactionId();
 
     // Retrieve the value of the call and the actual gas used
-    const { value, gasUsed } = await tx.call();
+    const { waitForResult } = await tx.call();
+    const { value, gasUsed } = await waitForResult();
     // #endregion preparing-scripts
     expect(txRequest).toBeDefined();
     expect(txId).toBeDefined();

@@ -1,27 +1,15 @@
-import { seedTestWallet } from '@fuel-ts/account/test-utils';
-import {
-  Address,
-  FUEL_NETWORK_URL,
-  Provider,
-  ScriptTransactionRequest,
-  Signer,
-  WalletUnlocked,
-  hashMessage,
-} from 'fuels';
+import { Address, ScriptTransactionRequest, Signer, WalletUnlocked, hashMessage } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-describe(__filename, () => {
-  let provider: Provider;
-  let baseAssetId: string;
-
-  beforeAll(async () => {
-    provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
+describe('Signing', () => {
   it('should sign a message using wallet instance', async () => {
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
     // #region signing-1
     // #import { WalletUnlocked, hashMessage, Signer };
 
@@ -44,17 +32,20 @@ describe(__filename, () => {
   });
 
   it('should sign a transaction using wallet instance [DETAILED]', async () => {
-    const wallet = WalletUnlocked.generate({ provider });
-    await seedTestWallet(wallet, [[100_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     // #region signing-2
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
+    request.addCoinOutput(Address.fromRandom(), 1000, provider.getBaseAssetId());
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;
@@ -76,16 +67,19 @@ describe(__filename, () => {
   });
 
   it('should sign a transaction using wallet instance [SIMPLIFIED]', async () => {
-    const wallet = WalletUnlocked.generate({ provider });
-    await seedTestWallet(wallet, [[100_000, baseAssetId]]);
+    using launched = await launchTestNode();
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
 
     const request = new ScriptTransactionRequest({
       gasLimit: 10000,
     });
 
-    request.addCoinOutput(Address.fromRandom(), 1000, baseAssetId);
+    request.addCoinOutput(Address.fromRandom(), 1000, provider.getBaseAssetId());
 
-    const txCost = await provider.getTransactionCost(request);
+    const txCost = await wallet.getTransactionCost(request);
 
     request.gasLimit = txCost.gasUsed;
     request.maxFee = txCost.maxFee;

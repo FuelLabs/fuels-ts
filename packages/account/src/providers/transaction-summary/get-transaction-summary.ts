@@ -80,7 +80,6 @@ export async function getTransactionSummary<TTransactionType = void>(
   });
 
   return {
-    gqlTransaction,
     ...transactionInfo,
   };
 }
@@ -97,7 +96,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
 ): Promise<TransactionSummary<TTransactionType>> {
   const { provider, transactionRequest, abiMap } = params;
 
-  const { receipts } = await provider.call(transactionRequest);
+  const { receipts } = await provider.dryRun(transactionRequest);
 
   const { gasPerByte, gasPriceFactor, gasCosts, maxGasPerTx } = provider.getGasConfig();
   const maxInputs = provider.getChain().consensusParameters.txParameters.maxInputs;
@@ -109,6 +108,7 @@ export async function getTransactionSummaryFromRequest<TTransactionType = void>(
   const baseAssetId = provider.getBaseAssetId();
 
   const transactionSummary = assembleTransactionSummary<TTransactionType>({
+    id: transactionRequest.getTransactionId(provider.getChainId()),
     receipts,
     transaction,
     transactionBytes,
@@ -189,7 +189,6 @@ export async function getTransactionsSummaries(
     });
 
     const output: TransactionResult = {
-      gqlTransaction,
       ...transactionSummary,
     };
 

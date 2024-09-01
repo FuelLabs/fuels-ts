@@ -46,7 +46,7 @@ export function bootstrapProject(testFilepath: string) {
 
   const outputDir = join(root, 'output');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
-  const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi__factory.ts');
+  const fooContractFactoryPath = join(outputDir, 'contracts', 'factories', 'FooBarAbi.ts');
 
   const forcPath = 'fuels-forc';
   const fuelCorePath = 'fuels-core';
@@ -114,7 +114,7 @@ export async function runInit(params: InitParams) {
     value ? (flags as string[]) : [];
 
   const flags = [
-    flag(['-p', root], root),
+    flag(['--path', root], root),
     flag(['-o', output], output),
     flag(['-w', workspace], workspace),
     flag(['--contracts', contracts], contracts),
@@ -130,16 +130,16 @@ export async function runInit(params: InitParams) {
 
 export async function runBuild(params: BuildParams) {
   const { root, deploy } = params;
-  const flags = [['-p', root], deploy ? ['--deploy'] : []].flat();
+  const flags = [['--path', root], deploy ? ['--deploy'] : []].flat();
   return runCommand(Commands.build, flags);
 }
 
 export async function runDeploy(params: BaseParams) {
-  return runCommand(Commands.deploy, ['-p', params.root]);
+  return runCommand(Commands.deploy, ['--path', params.root]);
 }
 
 export async function runDev(params: BaseParams) {
-  return runCommand(Commands.dev, ['-p', params.root]);
+  return runCommand(Commands.dev, ['--path', params.root]);
 }
 
 /**

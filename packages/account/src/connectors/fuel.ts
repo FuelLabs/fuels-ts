@@ -42,16 +42,53 @@ export type Status = {
   connected: boolean;
 };
 
-export class Fuel extends FuelConnector {
+interface FuelSdk {
+  // #region connector-manager-method-connectors
+  connectors: () => Promise<Array<FuelConnector>>;
+  // #endregion connector-manager-method-connectors
+  // #region connector-manager-method-getConnector
+  getConnector: (connector: FuelConnector | string) => FuelConnector | null;
+  // #endregion connector-manager-method-getConnector
+  // #region connector-manager-method-hasConnector
+  hasConnector(): Promise<boolean>;
+  // #endregion connector-manager-method-hasConnector
+  // #region connector-manager-method-selectConnector
+  selectConnector(connectorName: string, options: FuelConnectorSelectOptions): Promise<boolean>;
+  // #endregion connector-manager-method-selectConnector
+  // #region connector-manager-method-currentConnector
+  currentConnector(): FuelConnector | null | undefined;
+  // #endregion connector-manager-method-currentConnector
+  // #region connector-manager-method-hasWallet
+  hasWallet(): Promise<boolean>;
+  // #endregion connector-manager-method-hasWallet
+  // #region connector-manager-method-getWallet
+  getWallet(
+    address: string | AbstractAddress,
+    providerOrNetwork?: Provider | Network
+  ): Promise<Account>;
+  // #endregion connector-manager-method-getWallet
+  // #region connector-manager-method-unsubscribe
+  unsubscribe(): void;
+  // #endregion connector-manager-method-unsubscribe
+  // #region connector-manager-method-clean
+  clean(): Promise<void>;
+  // #endregion connector-manager-method-clean
+  // #region connector-manager-method-destroy
+  destroy(): Promise<void>;
+  // #endregion connector-manager-method-destroy
+}
+
+export class Fuel extends FuelConnector implements FuelSdk {
   static STORAGE_KEY = 'fuel-current-connector';
   static defaultConfig: FuelConfig = {};
   private _storage?: StorageAbstract | null = null;
   private _connectors: Array<FuelConnector> = [];
   private _targetObject: TargetObject | null = null;
   private _unsubscribes: Array<() => void> = [];
-  private _targetUnsubscribe: () => void;
+  private _targetUnsubscribe = () => {};
   private _pingCache: CacheFor = {};
   private _currentConnector?: FuelConnector | null;
+  private _initializationPromise: Promise<void> | null = null;
 
   constructor(config: FuelConfig = Fuel.defaultConfig) {
     super();
@@ -65,11 +102,21 @@ export class Fuel extends FuelConnector {
     this._storage = config.storage === undefined ? this.getStorage() : config.storage;
     // Setup all methods
     this.setupMethods();
-    // Get the current connector from the storage
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.setDefaultConnector();
-    // Setup new connector listener for global events
-    this._targetUnsubscribe = this.setupConnectorListener();
+    this._initializationPromise = this.initialize();
+  }
+
+  private async initialize(): Promise<void> {
+    try {
+      await this.setDefaultConnector();
+      this._targetUnsubscribe = this.setupConnectorListener();
+    } catch (error) {
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Error initializing Fuel Connector');
+    }
+  }
+
+  public async init(): Promise<Fuel> {
+    await this._initializationPromise;
+    return this;
   }
 
   /**
@@ -138,7 +185,8 @@ export class Fuel extends FuelConnector {
     const hasConnector = await this.hasConnector();
     await this.pingConnector();
     if (!this._currentConnector || !hasConnector) {
-      throw new Error(
+      throw new FuelError(
+        ErrorCode.MISSING_CONNECTOR,
         `No connector selected for calling ${method}. Use hasConnector before executing other methods.`
       );
     }
@@ -219,7 +267,7 @@ export class Fuel extends FuelConnector {
         cacheTime: PING_CACHE_TIME,
       })();
     } catch {
-      throw new Error('Current connector is not available.');
+      throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Current connector is not available.');
     }
   }
 

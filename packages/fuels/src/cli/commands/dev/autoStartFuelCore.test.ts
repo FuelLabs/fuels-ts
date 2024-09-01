@@ -1,8 +1,8 @@
-import * as testUtilsMod from '@fuel-ts/account/test-utils';
 import { existsSync, rmSync } from 'fs';
 import { join } from 'path';
 
 import { fuelsConfig } from '../../../../test/fixtures/fuels.config';
+import * as testUtilsMod from '../../../test-utils';
 import type { FuelsConfig } from '../../types';
 
 import type { FuelCoreNode } from './autoStartFuelCore';
@@ -32,7 +32,9 @@ describe('autoStartFuelCore', () => {
         cleanup: () => {},
         ip: '0.0.0.0',
         port: '4000',
+        url: 'http://127.0.0.1:4000/v1/graphql',
         snapshotDir: '/some/path',
+        pid: 1234,
       })
     );
     return { launchNode };

@@ -1,0 +1,42 @@
+{
+  "name": "@fuel-ts/logger",
+  "version": "0.94.3",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "description": "A logger for the Fuel-TS ecosystem",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/FuelLabs/fuels-ts/issues"
+  },
+  "engines": {
+    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
+  },
+  "keywords": [
+    "Fuel"
+  ],
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "debug": "^4.3.6",
+    "@fuel-ts/address": "workspace:*",
+    "@fuel-ts/interfaces": "workspace:*",
+    "@fuel-ts/math": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/debug": "^4.1.12"
+  },
+  "license": "Apache-2.0"
+}

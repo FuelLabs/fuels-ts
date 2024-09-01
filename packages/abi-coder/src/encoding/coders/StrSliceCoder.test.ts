@@ -48,7 +48,7 @@ describe('StrSliceCoder', () => {
 
     await expectToThrowFuelError(
       () => coder.decode(input, 0),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid string slice data size.')
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid string slice data size.')
     );
   });
 

@@ -61,10 +61,64 @@ fragment transactionStatusFragment on TransactionStatus {
   }
 }
 
+fragment malleableTransactionFieldsFragment on Transaction {
+  receiptsRoot
+  inputs {
+    type: __typename
+    ... on InputCoin {
+      txPointer
+    }
+    ... on InputContract {
+      txPointer
+    }
+  }
+  outputs {
+    type: __typename
+    ... on CoinOutput {
+      to
+      amount
+      assetId
+    }
+    ... on ContractOutput {
+      inputIndex
+      balanceRoot
+      stateRoot
+    }
+    ... on ChangeOutput {
+      to
+      amount
+      assetId
+    }
+    ... on VariableOutput {
+      to
+      amount
+      assetId
+    }
+    ... on ContractCreated {
+      contract
+      stateRoot
+    }
+  }
+}
+
 fragment transactionStatusSubscriptionFragment on TransactionStatus {
-  type: __typename
+  ... on SubmittedStatus {
+    ...SubmittedStatusFragment
+  }
+  ... on SuccessStatus {
+    ...SuccessStatusFragment
+    transaction {
+      ...malleableTransactionFieldsFragment
+    }
+  }
+  ... on FailureStatus {
+    ...FailureStatusFragment
+    transaction {
+      ...malleableTransactionFieldsFragment
+    }
+  }
   ... on SqueezedOutStatus {
-    reason
+    ...SqueezedOutStatusFragment
   }
 }
 
@@ -212,6 +266,7 @@ fragment messageProofFragment on MessageProof {
     proofIndex
   }
   messageBlockHeader {
+    version
     id
     daHeight
     consensusParametersVersion
@@ -227,6 +282,7 @@ fragment messageProofFragment on MessageProof {
     applicationHash
   }
   commitBlockHeader {
+    version
     id
     daHeight
     consensusParametersVersion
@@ -393,6 +449,21 @@ fragment GasCostsFragment on GasCosts {
   wqmm
   xor
   xori
+  alocDependentCost {
+    ...DependentCostFragment
+  }
+  bldd {
+    ...DependentCostFragment
+  }
+  bsiz {
+    ...DependentCostFragment
+  }
+  cfe {
+    ...DependentCostFragment
+  }
+  cfeiDependentCost {
+    ...DependentCostFragment
+  }
   call {
     ...DependentCostFragment
   }
@@ -403,6 +474,9 @@ fragment GasCostsFragment on GasCosts {
     ...DependentCostFragment
   }
   csiz {
+    ...DependentCostFragment
+  }
+  ed19DependentCost {
     ...DependentCostFragment
   }
   k256 {
@@ -565,6 +639,9 @@ query getTransactions(
         ...transactionFragment
       }
     }
+    pageInfo {
+      ...pageInfoFragment
+    }
   }
 }
 
@@ -616,6 +693,9 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
 
 query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
   blocks(after: $after, before: $before, first: $first, last: $last) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...blockFragment
@@ -644,6 +724,9 @@ query getCoins(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...coinFragment
@@ -712,6 +795,9 @@ query getBalances(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...balanceFragment
@@ -734,6 +820,9 @@ query getMessages(
     first: $first
     last: $last
   ) {
+    pageInfo {
+      ...pageInfoFragment
+    }
     edges {
       node {
         ...messageFragment
@@ -772,8 +861,16 @@ query getRelayedTransactionStatus(
   }
 }
 
-mutation dryRun($encodedTransactions: [HexString!]!, $utxoValidation: Boolean) {
-  dryRun(txs: $encodedTransactions, utxoValidation: $utxoValidation) {
+mutation dryRun(
+  $encodedTransactions: [HexString!]!
+  $utxoValidation: Boolean
+  $gasPrice: U64
+) {
+  dryRun(
+    txs: $encodedTransactions
+    utxoValidation: $utxoValidation
+    gasPrice: $gasPrice
+  ) {
     ...dryRunTransactionExecutionStatusFragment
   }
 }

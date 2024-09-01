@@ -35,6 +35,7 @@ export enum TransactionTypeName {
   Script = 'Script',
   Upgrade = 'Upgrade',
   Upload = 'Upload',
+  Blob = 'Blob',
 }
 
 /**
@@ -135,6 +136,7 @@ export type InputOutputParam = InputParam & OutputParam;
 
 export interface GetTransferOperationsParams extends InputOutputParam {
   receipts: TransactionResultReceipt[];
+  baseAssetId: string;
 }
 
 export type GetOperationParams = {
@@ -156,7 +158,7 @@ export interface MintedAsset {
 export type BurnedAsset = MintedAsset;
 
 export type TransactionSummary<TTransactionType = void> = {
-  id?: string;
+  id: string;
   time?: string;
   operations: Operation[];
   gasUsed: BN;
@@ -170,6 +172,7 @@ export type TransactionSummary<TTransactionType = void> = {
   isTypeScript: boolean;
   isTypeUpgrade: boolean;
   isTypeUpload: boolean;
+  isTypeBlob: boolean;
   isStatusPending: boolean;
   isStatusSuccess: boolean;
   isStatusFailure: boolean;

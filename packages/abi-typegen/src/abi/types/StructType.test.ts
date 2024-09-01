@@ -2,7 +2,7 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { IRawAbiTypeRoot } from '../../index';
+import type { JsonAbiType } from '../../index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
@@ -21,10 +21,12 @@ describe('StructType.ts', () => {
   test('should properly parse type attributes', () => {
     const parseTypeArguments = vi.spyOn(parseTypeArgumentsMod, 'parseTypeArguments');
 
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.STRUCT_SIMPLE, {
+      transpile: true,
+    });
 
     const rawTypes = project.abiContents.types;
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     const suitableForStruct = StructType.isSuitableFor({ type: StructType.swayType });
     const suitableForU16 = StructType.isSuitableFor({ type: U16Type.swayType });

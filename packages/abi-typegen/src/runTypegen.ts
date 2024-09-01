@@ -1,9 +1,10 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
+import { versions as builtinVersions, type BinaryVersions } from '@fuel-ts/versions';
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
 import mkdirp from 'mkdirp';
 import { basename } from 'path';
-import rimraf from 'rimraf';
+import { rimrafSync } from 'rimraf';
 
 import { AbiTypeGen } from './AbiTypeGen';
 import type { ProgramTypeEnum } from './types/enums/ProgramTypeEnum';
@@ -18,16 +19,19 @@ export interface IGenerateFilesParams {
   output: string;
   silent?: boolean;
   programType: ProgramTypeEnum;
+  versions?: BinaryVersions;
 }
 
 export function runTypegen(params: IGenerateFilesParams) {
   const { cwd, inputs, output, silent, programType, filepaths: inputFilepaths } = params;
+  const versions: BinaryVersions = { FUELS: builtinVersions.FUELS, ...params.versions };
 
   const cwdBasename = basename(cwd);
 
   function log(...args: unknown[]) {
     if (!silent) {
-      process.stdout.write(`${args.join(' ')}\n`);
+      // eslint-disable-next-line no-console
+      console.log(args.join(' '));
     }
   }
 
@@ -51,10 +55,12 @@ export function runTypegen(params: IGenerateFilesParams) {
     Assembling file paths x contents
   */
   const abiFiles = filepaths.map((filepath) => {
+    const contents = readFileSync(filepath, 'utf-8');
     const abi: IFile = {
       path: filepath,
-      contents: readFileSync(filepath, 'utf-8'),
+      contents,
     };
+
     return abi;
   });
 
@@ -75,6 +81,7 @@ export function runTypegen(params: IGenerateFilesParams) {
     binFiles,
     storageSlotsFiles,
     programType,
+    versions,
   });
 
   /*
@@ -82,10 +89,10 @@ export function runTypegen(params: IGenerateFilesParams) {
   */
   log('Generating files..\n');
 
-  mkdirp.sync(`${output}/factories`);
+  mkdirp.sync(`${output}`);
 
   abiTypeGen.files.forEach((file) => {
-    rimraf.sync(file.path);
+    rimrafSync(file.path);
     writeFileSync(file.path, file.contents);
     const trimPathRegex = new RegExp(`^.+${cwdBasename}/`, 'm');
     log(` - ${file.path.replace(trimPathRegex, '')}`);

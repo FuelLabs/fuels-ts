@@ -58,7 +58,7 @@ describe('StdStringCoder', () => {
 
     await expectToThrowFuelError(
       () => coder.decode(input, 0),
-      new FuelError(ErrorCode.ENCODE_ERROR, 'Invalid std string data size.')
+      new FuelError(ErrorCode.DECODE_ERROR, 'Invalid std string data size.')
     );
   });
 

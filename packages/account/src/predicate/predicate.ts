@@ -5,6 +5,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
+import type { FakeResources } from '../account';
 import { Account } from '../account';
 import {
   transactionRequestify,
@@ -24,20 +25,26 @@ import type {
 
 import { getPredicateRoot } from './utils';
 
-export type PredicateParams<T = InputValue[]> = {
+export type PredicateParams<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+> = {
   bytecode: BytesLike;
   provider: Provider;
   abi?: JsonAbi;
-  inputData?: T;
-  configurableConstants?: { [name: string]: unknown };
+  data?: TData;
+  configurableConstants?: TConfigurables;
 };
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
  */
-export class Predicate<TInputData extends InputValue[]> extends Account {
+export class Predicate<
+  TData extends InputValue[] = InputValue[],
+  TConfigurables extends { [name: string]: unknown } | undefined = { [name: string]: unknown },
+> extends Account {
   bytes: Uint8Array;
-  predicateData: TInputData = [] as unknown as TInputData;
+  predicateData: TData = [] as unknown as TData;
   interface?: Interface;
 
   /**
@@ -46,16 +53,16 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    * @param bytecode - The bytecode of the predicate.
    * @param abi - The JSON ABI of the predicate.
    * @param provider - The provider used to interact with the blockchain.
-   * @param inputData - The predicate input data (optional).
+   * @param data - The predicate input data (optional).
    * @param configurableConstants - Optional configurable constants for the predicate.
    */
   constructor({
     bytecode,
     abi,
     provider,
-    inputData,
+    data,
     configurableConstants,
-  }: PredicateParams<TInputData>) {
+  }: PredicateParams<TData, TConfigurables>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
       abi,
@@ -66,8 +73,8 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
-    if (inputData !== undefined && inputData.length > 0) {
-      this.predicateData = inputData;
+    if (data !== undefined && data.length > 0) {
+      this.predicateData = data;
     }
   }
 
@@ -110,6 +117,7 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
    */
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
@@ -197,6 +205,20 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
   }
 
   /**
+   * Generates an array of fake resources based on the provided coins.
+   *
+   * @param coins - An array of `FakeResources` objects representing the coins.
+   * @returns An array of `Resource` objects with generated properties.
+   */
+  generateFakeResources(coins: FakeResources[]): Array<Resource> {
+    return super.generateFakeResources(coins).map((coin) => ({
+      ...coin,
+      predicate: hexlify(this.bytes),
+      predicateData: hexlify(this.getPredicateData()),
+    }));
+  }
+
+  /**
    * Sets the configurable constants for the predicate.
    *
    * @param bytes - The bytes of the predicate.
@@ -213,18 +235,25 @@ export class Predicate<TInputData extends InputValue[]> extends Account {
 
     try {
       if (!abiInterface) {
-        throw new Error(
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
           'Cannot validate configurable constants because the Predicate was instantiated without a JSON ABI'
         );
       }
 
       if (Object.keys(abiInterface.configurables).length === 0) {
-        throw new Error('Predicate has no configurable constants to be set');
+        throw new FuelError(
+          ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,
+          'Predicate has no configurable constants to be set'
+        );
       }
 
       Object.entries(configurableConstants).forEach(([key, value]) => {
         if (!abiInterface?.configurables[key]) {
-          throw new Error(`No configurable constant named '${key}' found in the Predicate`);
+          throw new FuelError(
+            ErrorCode.CONFIGURABLE_NOT_FOUND,
+            `No configurable constant named '${key}' found in the Predicate`
+          );
         }
 
         const { offset } = abiInterface.configurables[key];

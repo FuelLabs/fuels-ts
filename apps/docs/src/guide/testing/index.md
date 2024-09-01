@@ -6,38 +6,13 @@
 
 # Testing
 
-In order to test your Sway and TS-SDK applications, you can test your code in a number of ways:
+This guide will teach you how to test Sway applications using the Typescript SDK.
 
-1. Testing with TS-SDK: Compiling you Sway code and connecting to the methods using TS-SDK and JS testing frameworks
-2. Using `forc test` see <a :href="url" target="_blank" rel="noreferrer">the Sway docs</a> for more info
-3. Using [the Rust SDK](https://docs.fuel.network/docs/fuels-rs/testing/)
+While we use [Vitest](https://vitest.dev/) internally, we don't enforce any specific testing library or framework, so you can pick whichever you feel comfortable with.
 
-### Testing with TS-SDK
-
-To test your Sway applications using the TS-SDK, you can pick whatever testing library or framework you feel comfortable with. There isn't any specific testing framework needed, it is entirely up to the user. That being said, the TS-SDK uses [`Vitest`](https://vitest.dev/) for its tests.
-
-### Wallet Test Utilities
-
-You'll often want to create one or more test wallets when testing your contracts.
-
-For this, you can find two simple utilities on the account package:
-
-- [`@fuel-ts/account`](https://github.com/FuelLabs/fuels-ts/tree/master/packages/account#test-utilities)
-
-On top of these two utilities, if you want to quickly get up and running with a local node, you can use the `launchNodeAndGetWallets` from the `@fuel-ts/account/test-utils` package.
-
-```ts
-import { launchNodeAndGetWallets } from "@fuel-ts/account/test-utils";
-
-const { stop, wallets, provider } = await launchNodeAndGetWallets();
-
-// ... do your tests - deploy contracts using the wallets, fetch info from the provider, etc.
-
-// stop the node when you're done
-stop();
-```
+### Not using Typescript?
 
 See also:
 
-1. [Setting up test wallets](../wallets/test-wallets.md)
-2. [Testing in TS](./testing-in-ts.md)
+1. Using [`forc test`](https://docs.fuel.network/docs/forc/commands/forc%5ftest/#forc-test)
+1. Using [the Rust SDK](https://docs.fuel.network/docs/fuels-rs/testing/)

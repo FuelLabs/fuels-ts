@@ -1,8 +1,16 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { InputValue, JsonAbi } from '@fuel-ts/abi-coder';
-import type { Provider, CoinQuantity, CallResult, Account, TransferParams } from '@fuel-ts/account';
-import { ScriptTransactionRequest } from '@fuel-ts/account';
+import type {
+  Provider,
+  CoinQuantity,
+  CallResult,
+  Account,
+  TransferParams,
+  TransactionResponse,
+  TransactionCost,
+} from '@fuel-ts/account';
+import { ScriptTransactionRequest, Wallet } from '@fuel-ts/account';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { AbstractAccount, AbstractContract, AbstractProgram } from '@fuel-ts/interfaces';
@@ -14,10 +22,15 @@ import * as asm from '@fuels/vm-asm';
 import { clone } from 'ramda';
 
 import { getContractCallScript } from '../contract-call-script';
-import type { ContractCall, InvocationScopeLike, TxParams } from '../types';
+import { buildDryRunResult, buildFunctionResult } from '../response';
+import type {
+  ContractCall,
+  InvocationScopeLike,
+  TxParams,
+  FunctionResult,
+  DryRunResult,
+} from '../types';
 import { assert, getAbisFromAllCalls } from '../utils';
-
-import { InvocationCallResult, FunctionInvocationResult } from './invocation-results';
 
 /**
  * Creates a contract call object based on the provided invocation scope.
@@ -31,9 +44,7 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
 
   return {
     contractId: (program as AbstractContract).id,
-    fnSelector: func.selector,
     fnSelectorBytes: func.selectorBytes,
-    encoding: func.encoding,
     data,
     assetId: forward?.assetId,
     amount: forward?.amount,
@@ -218,22 +229,19 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Gets the transaction cost ny dry running the transaction.
+   * Gets the transaction cost for dry running the transaction.
    *
    * @param options - Optional transaction cost options.
    * @returns The transaction cost details.
    */
-  async getTransactionCost() {
-    const provider = this.getProvider();
-
-    const request = await this.getTransactionRequest();
-    const txCost = await provider.getTransactionCost(request, {
-      resourcesOwner: this.program.account as AbstractAccount,
-      quantitiesToContract: this.getRequiredCoins(),
+  async getTransactionCost(): Promise<TransactionCost> {
+    const request = clone(await this.getTransactionRequest());
+    const account: AbstractAccount =
+      this.program.account ?? Wallet.generate({ provider: this.getProvider() });
+    return account.getTransactionCost(request, {
+      quantities: this.getRequiredCoins(),
       signatureCallback: this.addSignersCallback,
     });
-
-    return txCost;
   }
 
   /**
@@ -357,26 +365,39 @@ export class BaseInvocationScope<TReturn = any> {
   }
 
   /**
-   * Submits a transaction.
+   * Submits the contract call transaction and returns a promise that resolves to an object
+   * containing the transaction ID and a function to wait for the result. The promise will resolve
+   * as soon as the transaction is submitted to the node.
    *
-   * @returns The result of the function invocation.
+   * @returns A promise that resolves to an object containing:
+   * - `transactionId`: The ID of the submitted transaction.
+   * - `waitForResult`: A function that waits for the transaction result.
+   * @template T - The type of the return value.
    */
-  async call<T = TReturn>(): Promise<FunctionInvocationResult<T>> {
+  async call<T = TReturn>(): Promise<{
+    transactionId: string;
+    waitForResult: () => Promise<FunctionResult<T>>;
+  }> {
     assert(this.program.account, 'Wallet is required!');
 
     const transactionRequest = await this.fundWithRequiredCoins();
 
-    const response = await this.program.account.sendTransaction(transactionRequest, {
-      awaitExecution: true,
+    const response = (await this.program.account.sendTransaction(transactionRequest, {
       estimateTxDependencies: false,
-    });
+    })) as TransactionResponse;
 
-    return FunctionInvocationResult.build<T>(
-      this.functionInvocationScopes,
-      response,
-      this.isMultiCall,
-      this.program as AbstractContract
-    );
+    const transactionId = response.id;
+
+    return {
+      transactionId,
+      waitForResult: async () =>
+        buildFunctionResult<T>({
+          funcScope: this.functionInvocationScopes,
+          isMultiCall: this.isMultiCall,
+          program: this.program,
+          transactionResponse: response,
+        }),
+    };
   }
 
   /**
@@ -384,7 +405,7 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the invocation call.
    */
-  async simulate<T = TReturn>(): Promise<InvocationCallResult<T>> {
+  async simulate<T = TReturn>(): Promise<DryRunResult<T>> {
     assert(this.program.account, 'Wallet is required!');
 
     if (!('populateTransactionWitnessesSignature' in this.program.account)) {
@@ -395,11 +416,15 @@ export class BaseInvocationScope<TReturn = any> {
     }
     const transactionRequest = await this.fundWithRequiredCoins();
 
-    const result = await this.program.account.simulateTransaction(transactionRequest, {
+    const callResult = await this.program.account.simulateTransaction(transactionRequest, {
       estimateTxDependencies: false,
     });
 
-    return InvocationCallResult.build<T>(this.functionInvocationScopes, result, this.isMultiCall);
+    return buildDryRunResult<T>({
+      funcScopes: this.functionInvocationScopes,
+      callResult,
+      isMultiCall: this.isMultiCall,
+    });
   }
 
   /**
@@ -407,32 +432,32 @@ export class BaseInvocationScope<TReturn = any> {
    *
    * @returns The result of the invocation call.
    */
-  async dryRun<T = TReturn>(): Promise<InvocationCallResult<T>> {
+  async dryRun<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
 
     const callResult: CallResult = {
       receipts,
     };
 
-    return InvocationCallResult.build<T>(
-      this.functionInvocationScopes,
+    return buildDryRunResult<T>({
+      funcScopes: this.functionInvocationScopes,
       callResult,
-      this.isMultiCall
-    );
+      isMultiCall: this.isMultiCall,
+    });
   }
 
-  async get<T = TReturn>(): Promise<InvocationCallResult<T>> {
+  async get<T = TReturn>(): Promise<DryRunResult<T>> {
     const { receipts } = await this.getTransactionCost();
 
     const callResult: CallResult = {
       receipts,
     };
 
-    return InvocationCallResult.build<T>(
-      this.functionInvocationScopes,
+    return buildDryRunResult<T>({
+      funcScopes: this.functionInvocationScopes,
       callResult,
-      this.isMultiCall
-    );
+      isMultiCall: this.isMultiCall,
+    });
   }
 
   getProvider(): Provider {

@@ -16,6 +16,10 @@ npm create next-app my-fuel-app
 pnpm create next-app my-fuel-app
 ```
 
+```sh [bun]
+bun create next-app my-fuel-app
+```
+
 :::
 
 Next, we will install the Fuel Wallet React SDK and the Fuel TypeScript SDK.
@@ -30,6 +34,10 @@ npm install fuels @fuels/connectors @fuels/react @tanstack/react-query
 pnpm add fuels @fuels/connectors @fuels/react @tanstack/react-query
 ```
 
+```sh [bun]
+bun add fuels @fuels/connectors @fuels/react @tanstack/react-query
+```
+
 :::
 
 ## The Provider
@@ -37,13 +45,13 @@ pnpm add fuels @fuels/connectors @fuels/react @tanstack/react-query
 In order to make use of the React hooks provided by the Fuel Wallet SDK, we need to wrap our application in a `FuelProvider` component. This component will provide the hooks with the necessary context to interact with the Fuel Wallet SDK. Add the following to your `pages/_app.tsx` file:
 
 <!-- prettier-ignore -->
-<<< @/../../demo-wallet-sdk-react/pages/_app.tsx#wallet-sdk-react-provider{tsx:line-numbers}
+<<< @/../../demo-wallet-sdk-react/src/app/layout.tsx#wallet-sdk-react-provider{tsx:line-numbers}
 
 ## Building the UI
 
 Go to your `pages/index.tsx` file and replace the contents with the following:
 
-<<< @/../../demo-wallet-sdk-react/pages/index.tsx#wallet-sdk-react-ui{tsx:line-numbers}
+<<< @/../../demo-wallet-sdk-react/src/app/page.tsx#wallet-sdk-react-ui{tsx:line-numbers}
 
 Let's break down what's happening here.
 
@@ -53,7 +61,7 @@ Once a connector has been selected by the user, the `useConnect` hook will retur
 
 The `useAccount` hook returns information about the user's account, if they are connected.
 
-The `useBalance` hook returns the user's ETH balance on the [`testnet` network](https://devnet.fuel.network/v1/playground), if they are connected.
+The `useBalance` hook returns the user's ETH balance on the [`testnet` network](https://testnet.fuel.network/v1/playground), if they are connected.
 
 ## Further Reading
 

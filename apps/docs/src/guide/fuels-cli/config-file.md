@@ -121,16 +121,46 @@ Or use a function for crafting dynamic deployment flows:
 
 <<< @../../../demo-fuels/fuels.config.full.ts#deployConfig-fn{ts:line-numbers}
 
-## `onSuccess`
+## `onBuild`
 
-Pass a callback function to be called after a successful run.
+A callback function that is called after a build event has been successful.
 
 Parameters:
 
-- `event` — The event that triggered this execution
 - `config` — The loaded config (`fuels.config.ts`)
 
-<<< @../../../demo-fuels/fuels.config.full.ts#onSuccess{ts:line-numbers}
+<<< @../../../demo-fuels/fuels.config.full.ts#onBuild{ts:line-numbers}
+
+## `onDeploy`
+
+A callback function that is called after a deployment event has been successful.
+
+Parameters:
+
+- `config` — The loaded config (`fuels.config.ts`)
+- `data` — The data (an array of deployed contracts)
+
+<<< @../../../demo-fuels/fuels.config.full.ts#onDeploy{ts:line-numbers}
+
+## `onDev`
+
+A callback function that is called after the [`fuels dev`](./commands.md#fuels-dev) command has successfully restarted.
+
+Parameters:
+
+- `config` — The loaded config (`fuels.config.ts`)
+
+<<< @../../../demo-fuels/fuels.config.full.ts#onDev{ts:line-numbers}
+
+## `onNode`
+
+A callback function that is called after the [`fuels node`](./commands.md#fuels-node) command has successfully refreshed.
+
+Parameters:
+
+- `config` — The loaded config (`fuels.config.ts`)
+
+<<< @../../../demo-fuels/fuels.config.full.ts#onNode{ts:line-numbers}
 
 ## `onFailure`
 
@@ -138,8 +168,8 @@ Pass a callback function to be called in case of errors.
 
 Parameters:
 
-- `error` — Original error object
 - `config` — The loaded config (`fuels.config.ts`)
+- `error` — Original error object
 
 <<< @../../../demo-fuels/fuels.config.full.ts#onFailure{ts:line-numbers}
 
@@ -173,6 +203,10 @@ pnpm install dotenv
 
 ```sh [npm]
 npm install dotenv
+```
+
+```sh [bun]
+bun install dotenv
 ```
 
 :::

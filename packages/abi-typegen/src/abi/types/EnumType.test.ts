@@ -3,7 +3,7 @@ import {
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
 import { TargetEnum } from '../../types/enums/TargetEnum';
-import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import { findType } from '../../utils/findType';
 import { makeType } from '../../utils/makeType';
 
@@ -21,9 +21,9 @@ describe('EnumType.ts', () => {
   function getTypesForContract(project: AbiTypegenProjectsEnum) {
     const {
       abiContents: { types: rawTypes },
-    } = getTypegenForcProject(project);
+    } = getTypegenForcProject(project, { transpile: true });
 
-    const types = rawTypes.map((rawAbiType: IRawAbiTypeRoot) => makeType({ rawAbiType }));
+    const types = rawTypes.map((rawAbiType: JsonAbiType) => makeType({ rawAbiType }));
 
     return { types };
   }

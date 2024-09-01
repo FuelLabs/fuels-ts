@@ -1,7 +1,7 @@
 import { safeExec } from '@fuel-ts/errors/test-utils';
 
-import type { IRawAbiTypeRoot } from '../types/interfaces/IRawAbiType';
 import type { IType } from '../types/interfaces/IType';
+import type { JsonAbiType } from '../types/interfaces/JsonAbi';
 
 import { findType } from './findType';
 import { makeType } from './makeType';
@@ -11,7 +11,7 @@ import { makeType } from './makeType';
  */
 describe('findType.ts', () => {
   test('should find type', () => {
-    const rawAbiType: IRawAbiTypeRoot = {
+    const rawAbiType: JsonAbiType = {
       type: 'u8',
       typeId: 1,
       components: null,

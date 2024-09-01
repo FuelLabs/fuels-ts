@@ -4,6 +4,7 @@ dist/
 out/
 
 apps/demo-fuels/src/sway-programs-api
+apps/demo-bun-fuels/src/sway-programs-api
 apps/demo-typegen/src/contract-types
 apps/demo-typegen/src/script-types
 apps/demo-typegen/src/predicate-types
@@ -22,3 +23,4 @@ CHANGELOG.md
 *.hbs
 
 templates/nextjs
+templates/vite

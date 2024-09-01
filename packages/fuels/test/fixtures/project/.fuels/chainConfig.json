@@ -129,6 +129,36 @@
           "wqmm": 11,
           "xor": 2,
           "xori": 2,
+          "alocDependentCost": {
+            "HeavyOperation": {
+              "base": 2,
+              "gas_per_unit": 0
+            }
+          },
+          "bsiz": {
+            "LightOperation": {
+              "base": 17,
+              "units_per_gas": 790
+            }
+          },
+          "bldd": {
+            "LightOperation": {
+              "base": 15,
+              "units_per_gas": 272
+            }
+          },
+          "cfe": {
+            "HeavyOperation": {
+              "base": 2,
+              "gas_per_unit": 0
+            }
+          },
+          "cfeiDependentCost": {
+            "HeavyOperation": {
+              "base": 2,
+              "gas_per_unit": 0
+            }
+          },
           "call": {
             "LightOperation": {
               "base": 21687,

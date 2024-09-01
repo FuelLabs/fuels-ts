@@ -21,30 +21,49 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.client_payload.ref }}
+          # workaround to ensure changeset file is pushed with REPO_TOKEN owner's account
+          # see https://github.com/changesets/action/issues/70
+          persist-credentials: false
+
+      - name: Get PR's changeset file
+        run: |
+          echo "CHANGESET_FILE=$(git diff --diff-filter=A --name-only origin/${{ github.base_ref }} .changeset/*.md)" >> $GITHUB_ENV
 
       - name: Setup PNPM
+        if: env.CHANGESET_FILE == ''
         uses: pnpm/action-setup@v4
         with:
-          version: 9.0.5
+          version: 9.4.0
           run_install: true
 
       - name: Install jq
+        if: env.CHANGESET_FILE == ''
         run: sudo apt-get install -y jq
 
       - name: Run dependabot changeset script
+        if: env.CHANGESET_FILE == ''
         run: pnpm changeset:dependabot
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
 
+      - name: Set up .netrc file
+        if: env.CHANGESET_FILE == ''
+        run: |
+          echo "machine github.com" > $HOME/.netrc
+          echo "login github-actions[bot]" >> $HOME/.netrc
+          echo "password ${{ secrets.REPO_TOKEN }}" >> $HOME/.netrc
+          chmod 600 $HOME/.netrc
+
       - name: Commit Changeset
+        if: env.CHANGESET_FILE == ''
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
           git add .
-          git commit -m "build: update dependency changeset [skip ci]"
+          git commit -m "build: update dependency changeset"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
 
   validate-changeset:
     name: Validate PR Changeset
@@ -93,6 +112,18 @@ jobs:
             fi
           fi
 
+          # Check if the PR title contains an exclamation mark (breaking)
+          if echo "$PR_TITLE" | grep -q '!'; then
+            # If the PR is breaking, ensure that the changeset contains minor changes
+            if ! echo "$AFFECTED_PACKAGES" | grep -q 'minor'; then
+              echo "PR is marked as breaking but changeset does not contain minor changes."
+              echo "Changeset file: $CHANGESET_FILE"
+              echo "Changeset content:"
+              cat "$CHANGESET_FILE"
+              exit 1
+            fi
+          fi
+
           CHANGESET_DESCRIPTION=$(sed 's/^\s*\|\s*$//g' "$CHANGESET_FILE" | tail -n1)
 
           if [ "$CHANGESET_DESCRIPTION" != "$PR_TITLE" ]; then
@@ -121,22 +152,44 @@ jobs:
         env:
           CHANGESET_FILE: ${{ env.CHANGESET_FILE }}
 
-      - name: Validate that there are only patch changes
+      - name: Validate release/* branch changesets
         if: startsWith(github.base_ref, 'release/')
         run: |
-          CHANGES=$(sed -n '/---/,/---/p' .changeset/*.md)
-          echo $CHANGES | grep -E 'patch' --silent && echo "Patch changes found." || (echo "No patch changes found." && exit 1)
-          echo $CHANGES | grep -E 'minor|major' --silent && echo "Old releases can only be patched; no minor and major versions allowed." && exit 1 || echo "No minor nor major changes."
-
-      - name: Validate that there was no release for the next patch version
-        if: startsWith(github.base_ref, 'release/')
-        run: |
+          LATEST_RELEASE=$(pnpm run --silent changeset:get-latest-release)
           pnpm changeset version
-          VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)
+          RELEASE_VERSION=v$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)
           git reset --hard
-          STATUS_CODE=$(curl -s -w '%{http_code}\n' "https://www.npmjs.com/package/fuels/v/$VERSION" | tail -n1)
+
+          pnpm add --global semver
+          RELEASE_VERSION_HIGHER_THAN_LATEST=$(semver $LATEST_RELEASE $RELEASE_VERSION | tail -n1 | grep ${RELEASE_VERSION#v} --silent && echo true || echo false)
+
+          CHANGES=$(sed -n '/---/,/---/p' .changeset/*.md)
+
+          if [ "$RELEASE_VERSION_HIGHER_THAN_LATEST" = "true" ]; then
+            echo $CHANGES | grep -E 'patch|minor' --silent && echo "Patch or minor changes found." || (echo "No patch nor minor changes found." && exit 1)
+            echo $CHANGES | grep -E 'major' --silent && echo "The latest release can have a patch or minor version update; no major version updates allowed." && exit 1 || echo "No major changes."
+          else
+            echo $CHANGES | grep -E 'patch' --silent && echo "Patch changes found." || (echo "No patch changes found." && exit 1)
+            echo $CHANGES | grep -E 'minor|major' --silent && echo "Old releases can only be patched; no minor and major version updates allowed." && exit 1 || echo "No minor nor major changes."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate that there was no release for the next version
+        run: |
+          OLD_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)
+          pnpm changeset version
+          NEW_VERSION=$(sed -nE 's/^\s*"version": "(.*?)",$/\1/p' packages/fuels/package.json)
+          git reset --hard
+
+          if [ "$OLD_VERSION" = "$NEW_VERSION" ]; then
+            # the versions didn't change so we won't be releasing it anyways
+            exit 0
+          fi
+
+          STATUS_CODE=$(curl -s -w '%{http_code}\n' "https://www.npmjs.com/package/fuels/v/$NEW_VERSION" | tail -n1)
           if [[ $STATUS_CODE  != 404 ]]; then
-            echo "Release for version $VERSION already exists or curl received an unexpected result (result is $STATUS_CODE). Exiting."
+            echo "Release for version $NEW_VERSION already exists or curl received an unexpected result (result is $STATUS_CODE). Exiting."
             exit 1
           else
             exit 0

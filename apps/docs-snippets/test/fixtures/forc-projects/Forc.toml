@@ -16,6 +16,7 @@ members = [
   "simple-token-abi",
   "echo-configurables",
   "transfer-to-address",
+  "return-script",
   "return-true-predicate",
   "echo-employee-data-vector",
   "whitelisted-address-predicate",
@@ -32,4 +33,5 @@ members = [
   "script-signing",
   "input-output-types",
   "bytecode-input",
+  "configurable-pin",
 ]

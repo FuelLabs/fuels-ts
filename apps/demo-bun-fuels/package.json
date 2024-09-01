@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "demo-bun-fuels",
+  "description": "Simple demo using Bun with Fuels CLI",
+  "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
+  "version": "0.0.0",
+  "scripts": {
+    "pretest": "bun fuels build"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@fuel-ts/account": "workspace:^",
+    "@fuel-ts/errors": "workspace:^",
+    "fuels": "workspace:*"
+  },
+  "devDependencies": {
+    "bun": "^1.1.26"
+  }
+}

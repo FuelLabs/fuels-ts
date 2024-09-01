@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.89.1",
+  "version": "0.94.3",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -10,7 +10,7 @@
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "engines": {
-    "node": "^18.18.2 || ^20.0.0"
+    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },
   "exports": {
     ".": {
@@ -45,6 +45,6 @@
     "cli-table": "^0.3.11"
   },
   "devDependencies": {
-    "@types/cli-table": "^0.3.1"
+    "@types/cli-table": "^0.3.4"
   }
 }

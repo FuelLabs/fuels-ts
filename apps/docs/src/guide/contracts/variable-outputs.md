@@ -2,7 +2,7 @@
 
 Sway includes robust functions for transferring assets to wallets and contracts.
 
-When using these transfer functions within your Sway projects, it is important to be aware that each call will require an [Output Variable](https://specs.fuel.network/master/tx-format/output.html#outputvariable) within the [Outputs](https://specs.fuel.network/master/tx-format/output.html) of the transaction.
+When using these transfer functions within your Sway projects, it is important to be aware that each call will require an [Output Variable](https://docs.fuel.network/docs/specs/tx-format/output#outputvariable) within the [Outputs](https://docs.fuel.network/docs/specs/tx-format/output) of the transaction.
 
 For instance, if a contract function calls a Sway transfer function 3 times, it will require 3 Output Variables present within the list of outputs in your transaction.
 

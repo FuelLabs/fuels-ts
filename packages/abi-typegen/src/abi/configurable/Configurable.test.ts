@@ -2,8 +2,8 @@ import {
   AbiTypegenProjectsEnum,
   getTypegenForcProject,
 } from '../../../test/fixtures/forc-projects/index';
-import type { IRawAbiTypeRoot } from '../../types/interfaces/IRawAbiType';
 import type { IType } from '../../types/interfaces/IType';
+import type { JsonAbiType } from '../../types/interfaces/JsonAbi';
 import * as findTypeMod from '../../utils/findType';
 
 import { Configurable } from './Configurable';
@@ -13,7 +13,7 @@ import { Configurable } from './Configurable';
  */
 describe('Configurable.ts', () => {
   function mockAllDeps() {
-    const rawAbiType: IRawAbiTypeRoot = {
+    const rawAbiType: JsonAbiType = {
       typeId: 1,
       type: 'mockType',
       components: null,
@@ -43,7 +43,9 @@ describe('Configurable.ts', () => {
 
   it('should get configurable declaration with type', () => {
     const { type, findType } = mockAllDeps();
-    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE);
+    const project = getTypegenForcProject(AbiTypegenProjectsEnum.PREDICATE_WITH_CONFIGURABLE, {
+      transpile: true,
+    });
 
     const { configurables } = project.abiContents;
 
@@ -54,7 +56,6 @@ describe('Configurable.ts', () => {
 
     expect(findType).toHaveBeenCalledTimes(1);
     expect(configurable.name).toEqual('FEE');
-    expect(configurable.type).toEqual(type);
-    expect(configurable.rawAbiConfigurable).toEqual(rawAbiConfigurable);
+    expect(configurable.inputLabel).toEqual('mockType');
   });
 });

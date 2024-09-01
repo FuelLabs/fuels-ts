@@ -14,7 +14,7 @@ The `recoverAddress` method from the `Signer` class takes the hashed message and
 
 ## Signing Transactions
 
-Signing a transaction involves using your wallet to sign the transaction ID (also known as [transaction hash](https://specs.fuel.network/master/identifiers/transaction-id.html)) to authorize the use of your resources. Here's how it works:
+Signing a transaction involves using your wallet to sign the transaction ID (also known as [transaction hash](https://docs.fuel.network/docs/specs/identifiers/transaction-id/)) to authorize the use of your resources. Here's how it works:
 
 1. `Generate a Signature`: Using the wallet to create a signature based on the transaction ID.
 

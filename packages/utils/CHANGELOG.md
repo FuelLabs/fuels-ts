@@ -1,5 +1,129 @@
 # @fuel-ts/utils
 
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [b67ded2]
+  - @fuel-ts/versions@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- 01e2f0e: fix: consistent typegen outputs
+- 986a247: chore: made `chainConfig` files match testnet configuration
+- Updated dependencies [ccd94fc]
+  - @fuel-ts/versions@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- 9bba305: fix: made bytecode compression browser compatible
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+  - @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 751d638: chore: switching `Error` to `FuelError`
+- a056da3: feat: improve typegen bytecode compression
+- Updated dependencies [9309598]
+- Updated dependencies [29c556d]
+- Updated dependencies [0110fd8]
+- Updated dependencies [4c653d0]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [03ac550]
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Patch Changes
+
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [f3453b9]
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/math@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- @fuel-ts/errors@0.92.1
+- @fuel-ts/interfaces@0.92.1
+- @fuel-ts/math@0.92.1
+- @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Patch Changes
+
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [44d51ee]
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/math@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- 6d63732: fix: sync chain config schema
+- Updated dependencies [a9ece17]
+- Updated dependencies [eec0806]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/math@0.91.0
+
+## 0.90.0
+
+### Patch Changes
+
+- bb5a123: feat!: add `launchTestNode` utility
+- Updated dependencies [e165e37]
+- Updated dependencies [81a77d3]
+- Updated dependencies [af3202c]
+- Updated dependencies [90e8cba]
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/math@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.89.2
+- @fuel-ts/interfaces@0.89.2
+- @fuel-ts/math@0.89.2
+- @fuel-ts/versions@0.89.2
+
 ## 0.89.1
 
 ### Patch Changes

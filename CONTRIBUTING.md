@@ -16,6 +16,24 @@ Check out our [Help Wanted](https://github.com/FuelLabs/fuels-ts/issues?q=is%3Ao
 
 If you are planning something big, for example, changes related to multiple components or changes to current behaviors, make sure to [open an issue](https://github.com/FuelLabs/fuels-ts/issues/new) to discuss with us before starting on the implementation.
 
+If you find a vulnerability or suspect it may be a security issue, please read our [Security Policy](./SECURITY.md) and follow the instructions.
+
+# Issue Prioritization
+
+If you would like to create an issue, please use the relevant [issue template](https://github.com/FuelLabs/fuels-ts/issues/new/choose). This will allow us to correctly triage and prioritize it. Every externally submitted issue goes through the following process:
+
+1. A new issue is created and is given the `triage` label
+1. It is assigned to a core maintainer for investigation
+1. Once the assigned core maintainer has completed their investigation, they remove the `triage` label and assign the relevant label to the issue i.e. `bug` , `feat`, `chore`, `docs`
+1. The issue is assigned a milestone (e.g. `mainnet`, `post-launch`) and a prioritization label where `p0` is the highest priority and `p2` is the lowest priority
+1. The issue is assigned for development and should be moved to `In Progress`
+1. A pull request is made ready and the issue is now `In Review`
+1. The pull request needs approval by 3 core maintainers, these can be found in the [CODEOWNERS file](https://github.com/FuelLabs/fuels-ts/blob/master/.github/CODEOWNERS)
+1. It can then be merged to `master` and included in a release
+1. The issue is closed automatically and it's status is moved to `Done`
+
+> **Note:** If additional information is ever required by the assigned investigator then the `awaiting` label will be added to the issue, these means they require more information from the author. Any `awaiting` issue left unanswered for 2 weeks will go `stale` and will be closed.
+
 # Setting up
 
 ```sh
@@ -93,19 +111,17 @@ See also:
 
 # Testing
 
-In order to run tests locally, you need `fuel-core` running locally.
-
-To do that run this command in your terminal:
+In order to run tests locally, you can run the following commands:
 
 ```sh
-pnpm node:run
-```
+# run pretest to ensure all test dependencies are built
+pnpm pretest
 
-And then run the tests in another terminal tab:
-
-```sh
-# run all tests
+# run all tests in a node environment
 pnpm test
+
+# you may also run tests in a browser environment
+pnpm test:browser
 
 # watch all tests
 pnpm test:watch
@@ -120,17 +136,6 @@ pnpm test:filter packages/my-desired-package/src/my.test.ts
 pnpm test -- --coverage --my-other-flag
 ```
 
-Or if you want to start a local Fuel-Core node and run all tests serially you can do:
-
-```sh
-pnpm ci:test
-```
-
-This will run `node:run`, `test` and then `node:clean`
-
-> The tests may break if you are running your tests locally using `node:run` in a separate terminal.
-> To reset your local fuel-core node data and start from scratch, run `node:clean`
-
 ### CI Test
 
 During the CI process an automated end-to-end (e2e) test is executed. This test is crucial as it simulates real-world scenarios on the current test-net, ensuring that the changeset maintains the expected functionality and stability.
@@ -138,7 +143,7 @@ During the CI process an automated end-to-end (e2e) test is executed. This test 
 The e2e test can be found at:
 `packages/fuel-gauge/src/e2e-script.test.ts`
 
-The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-devnet.fuel.network/).
+The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 
@@ -151,9 +156,8 @@ cp .env.example .env.test
 And changing the below variables:
 
 ```sh
-FUEL_NETWORK_URL=https://devnet.fuel.network/v1/graphql
-TEST_WALLET_PVT_KEY=0x...
-TEST_WALLET_ADDRESS=fuel...
+DEVNET_WALLET_PVT_KEY=0x...
+TESTNET_WALLET_PVT_KEY=0x...
 ```
 
 <!-- TODO: add/fix block explorer URL after testnet support- Checking Wallet Balance: https://fuellabs.github.io/block-explorer-v2/beta-5/?#/address/fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg -->
@@ -228,7 +232,7 @@ Manually edit the `internal/fuel-core/VERSION` file, add the right version, and 
 
 ```sh
 pnpm install # will download new binaries
-pnpm test:ci
+pnpm test
 ```
 
 If all tests pass, that's it.
@@ -243,7 +247,22 @@ The following example is for releasing a patch for `v0.69.0` -> `v0.69.1`.
 - Create PRs with base set to that release branch
   - When the PR is merged, a changeset PR is created
   - When the changeset PR is merged into the release branch, the next patch version is released and the commit is tagged (e.g. `v0.69.1`)
-- After release, delete the release branch from GitHub
+- After release, the release branch will be automatically deleted
+
+# Patching latest release
+
+Imagine the scenario:
+
+1. We release `v0.80.0`
+1. One day later, we have a new changesets PR that will bump things to `v0.81.0`
+1. Before releasing `v0.81.0`, we find an issue and need to make a `v0.80.1` patch
+
+We'd follow the same approach as explained in the [Patching old releases](#patching-old-releases) section above, bearing in mind the following after the release:
+
+- A PR merging the `latest` release's branch into `master` will be automatically created,
+- The automatically-created PR **must** be merged as soon as possible in order to
+  - have the versions of packages on `master` match the `latest` released package versions,
+  - have the released functionality on `master` as well
 
 # FAQ
 

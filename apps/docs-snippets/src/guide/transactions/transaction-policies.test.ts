@@ -1,28 +1,14 @@
-import type { WalletUnlocked, TransactionResponse, Policy } from 'fuels';
+import type { TransactionResponse, Policy, BNInput } from 'fuels';
 import { ScriptTransactionRequest, bn, PolicyType } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import {
-  DocSnippetProjectsEnum,
-  getDocsSnippetsForcProject,
-} from '../../../test/fixtures/forc-projects';
-import { getTestWallet } from '../../utils';
+import { SumScript } from '../../../test/typegen';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Transaction Policies', () => {
-  let wallet: WalletUnlocked;
-  let baseAssetId: string;
-
-  const { abiContents: scriptAbi, binHexlified: scriptBytecode } = getDocsSnippetsForcProject(
-    DocSnippetProjectsEnum.SUM_SCRIPT
-  );
-
-  beforeAll(async () => {
-    wallet = await getTestWallet();
-    baseAssetId = wallet.provider.getBaseAssetId();
-  });
-
   it('sets policies', () => {
     // #region transaction-policies-1
     // #import { ScriptTransactionRequest };
@@ -39,7 +25,7 @@ describe('Transaction Policies', () => {
 
     expect(policyTypes).toBe(15);
     expect(policies?.[0].type).toBe(PolicyType.Tip);
-    expect(bn(policies?.[0].data).eq(transactionRequest.tip)).toBeTruthy();
+    expect(bn(policies?.[0].data).eq(transactionRequest.tip as BNInput)).toBeTruthy();
     expect(policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(policies?.[1].data).eq(bn(transactionRequest.witnessLimit))).toBeTruthy();
     expect(policies?.[2].type).toBe(PolicyType.Maturity);
@@ -49,8 +35,19 @@ describe('Transaction Policies', () => {
   });
 
   it('gets transaction response from tx id', async () => {
+    using launched = await launchTestNode({
+      nodeOptions: {
+        args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      },
+    });
+    const {
+      wallets: [wallet],
+    } = launched;
+    const { provider } = launched;
     const scriptMainFunctionArguments = [1];
-    const resources = await wallet.getResourcesToSpend([{ amount: 1000, assetId: baseAssetId }]);
+    const resources = await wallet.getResourcesToSpend([
+      { amount: 1000, assetId: provider.getBaseAssetId() },
+    ]);
 
     // #region transaction-policies-2
     // #import { ScriptTransactionRequest, TransactionResponse, Policy };
@@ -58,7 +55,7 @@ describe('Transaction Policies', () => {
     // Instantiate the transaction request with transaction parameters that would
     // set the respective policies.
     const transactionRequest = new ScriptTransactionRequest({
-      script: scriptBytecode,
+      script: SumScript.bytecode,
       gasLimit: bn(2000),
       maturity: 2,
       tip: bn(3),
@@ -67,7 +64,7 @@ describe('Transaction Policies', () => {
     });
 
     // Set the script main function arguments
-    transactionRequest.setData(scriptAbi, scriptMainFunctionArguments);
+    transactionRequest.setData(SumScript.abi, scriptMainFunctionArguments);
 
     // Fund the transaction
     transactionRequest.addResources(resources);
@@ -84,7 +81,7 @@ describe('Transaction Policies', () => {
     }
 
     expect(policies?.[0].type).toBe(PolicyType.Tip);
-    expect(bn(policies?.[0].data).eq(transactionRequest.tip)).toBeTruthy();
+    expect(bn(policies?.[0].data).eq(transactionRequest.tip as BNInput)).toBeTruthy();
     expect(policies?.[1].type).toBe(PolicyType.WitnessLimit);
     expect(bn(policies?.[1].data).eq(bn(transactionRequest.witnessLimit))).toBeTruthy();
     expect(policies?.[2].type).toBe(PolicyType.Maturity);

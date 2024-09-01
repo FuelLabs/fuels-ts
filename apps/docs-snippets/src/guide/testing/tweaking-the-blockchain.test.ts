@@ -1,24 +1,46 @@
-import { launchNode } from '@fuel-ts/account/test-utils';
-import { Provider, DateTime } from 'fuels';
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { DateTime } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
+ * @group browser
  */
-test('produceBlocks with custom timestamp docs snippet', async () => {
-  // TODO: reevaluate/replace after #1356
-  const { cleanup, ip, port } = await launchNode({});
-  const url = `http://${ip}:${port}/v1/graphql`;
-  const provider = await Provider.create(url);
-  const latestBlock = await provider.getBlock('latest');
-  if (!latestBlock) {
-    throw new Error('No latest block');
-  }
-  const lastBlockNumber = latestBlock.height;
-  // #region Provider-produceBlocks-custom-timestamp
-  const lastBlockTimestamp = DateTime.fromTai64(latestBlock.time).toUnixMilliseconds();
-  const latestBlockNumber = await provider.produceBlocks(3, lastBlockTimestamp + 1000);
-  // #endregion Provider-produceBlocks-custom-timestamp
-  expect(latestBlockNumber.toHex()).toBe(lastBlockNumber.add(3).toHex());
+describe('tweaking the blockchain', () => {
+  test('produceBlocks', async () => {
+    // #region produce-blocks
+    using launched = await launchTestNode();
+    const { provider } = launched;
+    const block = await provider.getBlock('latest');
+    if (!block) {
+      throw new Error('No latest block');
+    }
+    const { time: timeLastBlockProduced } = block;
 
-  cleanup();
+    const producedBlockHeight = await provider.produceBlocks(3);
+
+    const producedBlock = await provider.getBlock(producedBlockHeight.toNumber());
+
+    const oldest = DateTime.fromTai64(timeLastBlockProduced);
+    const newest = DateTime.fromTai64(producedBlock!.time);
+    // newest >= oldest
+    // #endregion produce-blocks
+    expect(producedBlock).toBeDefined();
+    expect(newest >= oldest).toBeTruthy();
+  });
+
+  test('produceBlocks with custom timestamp docs snippet', async () => {
+    // #region produceBlocks-custom-timestamp
+    using launched = await launchTestNode();
+    const { provider } = launched;
+
+    const latestBlock = await provider.getBlock('latest');
+    if (!latestBlock) {
+      throw new Error('No latest block');
+    }
+    const latestBlockTimestamp = DateTime.fromTai64(latestBlock.time).toUnixMilliseconds();
+    const newBlockHeight = await provider.produceBlocks(3, latestBlockTimestamp + 1000);
+    // #endregion produceBlocks-custom-timestamp
+    expect(newBlockHeight.toHex()).toBe(latestBlock.height.add(3).toHex());
+  });
 });

@@ -1,5 +1,276 @@
 # Change Log
 
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [b67ded2]
+- Updated dependencies [a36626a]
+- Updated dependencies [2b45e8d]
+- Updated dependencies [e286557]
+  - @fuel-ts/versions@0.94.3
+  - @fuel-ts/transactions@0.94.3
+  - @fuel-ts/account@0.94.3
+  - @fuel-ts/abi-coder@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/utils@0.94.3
+  - @fuel-ts/program@0.94.3
+  - @fuel-ts/crypto@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/hasher@0.94.3
+  - @fuel-ts/merkle@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [3b59f1f]
+- Updated dependencies [01e2f0e]
+- Updated dependencies [ccd94fc]
+- Updated dependencies [986a247]
+  - @fuel-ts/account@0.94.2
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/versions@0.94.2
+  - @fuel-ts/program@0.94.2
+  - @fuel-ts/abi-coder@0.94.2
+  - @fuel-ts/crypto@0.94.2
+  - @fuel-ts/hasher@0.94.2
+  - @fuel-ts/transactions@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/merkle@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- Updated dependencies [9bba305]
+  - @fuel-ts/utils@0.94.1
+  - @fuel-ts/abi-coder@0.94.1
+  - @fuel-ts/account@0.94.1
+  - @fuel-ts/crypto@0.94.1
+  - @fuel-ts/hasher@0.94.1
+  - @fuel-ts/program@0.94.1
+  - @fuel-ts/transactions@0.94.1
+  - @fuel-ts/merkle@0.94.1
+  - @fuel-ts/errors@0.94.1
+  - @fuel-ts/interfaces@0.94.1
+  - @fuel-ts/math@0.94.1
+  - @fuel-ts/versions@0.94.1
+
+## 0.94.0
+
+### Minor Changes
+
+- 799db38: feat!: prettify `typegen` api
+- 48ec97c: feat!: non-blocking blob deployment
+- 03ac550: feat!: `fuel-core@0.32.1` and large contract deployments
+
+### Patch Changes
+
+- 751d638: chore: switching `Error` to `FuelError`
+- Updated dependencies [26cb189]
+- Updated dependencies [c7e01b4]
+- Updated dependencies [799db38]
+- Updated dependencies [9309598]
+- Updated dependencies [7f50d40]
+- Updated dependencies [d875416]
+- Updated dependencies [84dfdc5]
+- Updated dependencies [29c556d]
+- Updated dependencies [2a8cb38]
+- Updated dependencies [0110fd8]
+- Updated dependencies [c7104da]
+- Updated dependencies [2be4a5e]
+- Updated dependencies [56018e3]
+- Updated dependencies [f6b12bd]
+- Updated dependencies [4c653d0]
+- Updated dependencies [5e8a087]
+- Updated dependencies [80cb187]
+- Updated dependencies [a467d54]
+- Updated dependencies [896add9]
+- Updated dependencies [95e7108]
+- Updated dependencies [751d638]
+- Updated dependencies [1e93dac]
+- Updated dependencies [bbd794a]
+- Updated dependencies [1d2abd7]
+- Updated dependencies [a056da3]
+- Updated dependencies [9c07b00]
+- Updated dependencies [fc39124]
+- Updated dependencies [03ac550]
+- Updated dependencies [b0c161f]
+- Updated dependencies [25efc03]
+  - @fuel-ts/account@0.94.0
+  - @fuel-ts/versions@0.94.0
+  - @fuel-ts/abi-coder@0.94.0
+  - @fuel-ts/transactions@0.94.0
+  - @fuel-ts/errors@0.94.0
+  - @fuel-ts/utils@0.94.0
+  - @fuel-ts/program@0.94.0
+  - @fuel-ts/crypto@0.94.0
+  - @fuel-ts/math@0.94.0
+  - @fuel-ts/hasher@0.94.0
+  - @fuel-ts/merkle@0.94.0
+  - @fuel-ts/interfaces@0.94.0
+
+## 0.93.0
+
+### Minor Changes
+
+- ad0a081: chore!: remove `awaitExecution` functionality
+- d4c4e55: chore!: refactored the `getTransactionCost` method
+
+### Patch Changes
+
+- 6b3df9d: build(deps): bump ramda and @types/ramda
+- 538d8b6: chore: integrate `launchTestNode` into current test suites
+- f3453b9: feat!: deploy contract validation
+- Updated dependencies [6b3df9d]
+- Updated dependencies [ad0a081]
+- Updated dependencies [99794e4]
+- Updated dependencies [d4c4e55]
+- Updated dependencies [c99f56b]
+- Updated dependencies [f3453b9]
+- Updated dependencies [16ee1bf]
+  - @fuel-ts/account@0.93.0
+  - @fuel-ts/program@0.93.0
+  - @fuel-ts/versions@0.93.0
+  - @fuel-ts/interfaces@0.93.0
+  - @fuel-ts/transactions@0.93.0
+  - @fuel-ts/errors@0.93.0
+  - @fuel-ts/utils@0.93.0
+  - @fuel-ts/abi-coder@0.93.0
+  - @fuel-ts/crypto@0.93.0
+  - @fuel-ts/hasher@0.93.0
+  - @fuel-ts/merkle@0.93.0
+
+## 0.92.1
+
+### Patch Changes
+
+- 7579259: fix: `launchTestNode` multiple contracts type inference
+- Updated dependencies [c62ae85]
+  - @fuel-ts/account@0.92.1
+  - @fuel-ts/program@0.92.1
+  - @fuel-ts/abi-coder@0.92.1
+  - @fuel-ts/crypto@0.92.1
+  - @fuel-ts/errors@0.92.1
+  - @fuel-ts/hasher@0.92.1
+  - @fuel-ts/interfaces@0.92.1
+  - @fuel-ts/merkle@0.92.1
+  - @fuel-ts/transactions@0.92.1
+  - @fuel-ts/utils@0.92.1
+  - @fuel-ts/versions@0.92.1
+
+## 0.92.0
+
+### Minor Changes
+
+- 661b153: feat!: implement non-blocking contract call
+- 17bd929: feat!: made `deployContract` a non-blocking call
+
+### Patch Changes
+
+- f18a570: fix: export `launchTestNode` interfaces
+- Updated dependencies [98dbfbb]
+- Updated dependencies [d0b5446]
+- Updated dependencies [369feef]
+- Updated dependencies [638eae3]
+- Updated dependencies [4a3c184]
+- Updated dependencies [74a00be]
+- Updated dependencies [661b153]
+- Updated dependencies [44d51ee]
+- Updated dependencies [17bd929]
+- Updated dependencies [aa7e656]
+  - @fuel-ts/account@0.92.0
+  - @fuel-ts/versions@0.92.0
+  - @fuel-ts/crypto@0.92.0
+  - @fuel-ts/program@0.92.0
+  - @fuel-ts/errors@0.92.0
+  - @fuel-ts/utils@0.92.0
+  - @fuel-ts/abi-coder@0.92.0
+  - @fuel-ts/hasher@0.92.0
+  - @fuel-ts/transactions@0.92.0
+  - @fuel-ts/merkle@0.92.0
+  - @fuel-ts/interfaces@0.92.0
+
+## 0.91.0
+
+### Patch Changes
+
+- a9ece17: build: add support for latest node versions
+- Updated dependencies [ab1f8bf]
+- Updated dependencies [7befc6a]
+- Updated dependencies [a9ece17]
+- Updated dependencies [34f1ac7]
+- Updated dependencies [eec0806]
+- Updated dependencies [0206568]
+- Updated dependencies [3be2251]
+- Updated dependencies [8676a9e]
+- Updated dependencies [dddde62]
+- Updated dependencies [6d63732]
+  - @fuel-ts/account@0.91.0
+  - @fuel-ts/transactions@0.91.0
+  - @fuel-ts/interfaces@0.91.0
+  - @fuel-ts/abi-coder@0.91.0
+  - @fuel-ts/versions@0.91.0
+  - @fuel-ts/program@0.91.0
+  - @fuel-ts/crypto@0.91.0
+  - @fuel-ts/errors@0.91.0
+  - @fuel-ts/hasher@0.91.0
+  - @fuel-ts/merkle@0.91.0
+  - @fuel-ts/utils@0.91.0
+
+## 0.90.0
+
+### Patch Changes
+
+- bb5a123: feat!: add `launchTestNode` utility
+- f8c57ef: fix: stop overring user input `maxFee` at `deployContract` method
+- Updated dependencies [bb5a123]
+- Updated dependencies [e165e37]
+- Updated dependencies [1b9fb19]
+- Updated dependencies [1beab0e]
+- Updated dependencies [69c3e51]
+- Updated dependencies [b1dbe42]
+- Updated dependencies [3db38af]
+- Updated dependencies [439d0dc]
+- Updated dependencies [81a77d3]
+- Updated dependencies [436f040]
+- Updated dependencies [af3202c]
+- Updated dependencies [038d1f1]
+- Updated dependencies [41dc617]
+- Updated dependencies [90e8cba]
+- Updated dependencies [be92daf]
+  - @fuel-ts/utils@0.90.0
+  - @fuel-ts/account@0.90.0
+  - @fuel-ts/versions@0.90.0
+  - @fuel-ts/abi-coder@0.90.0
+  - @fuel-ts/program@0.90.0
+  - @fuel-ts/crypto@0.90.0
+  - @fuel-ts/hasher@0.90.0
+  - @fuel-ts/transactions@0.90.0
+  - @fuel-ts/errors@0.90.0
+  - @fuel-ts/merkle@0.90.0
+  - @fuel-ts/interfaces@0.90.0
+
+## 0.89.2
+
+### Patch Changes
+
+- Updated dependencies [78c2d73]
+  - @fuel-ts/account@0.89.2
+  - @fuel-ts/program@0.89.2
+  - @fuel-ts/abi-coder@0.89.2
+  - @fuel-ts/crypto@0.89.2
+  - @fuel-ts/errors@0.89.2
+  - @fuel-ts/hasher@0.89.2
+  - @fuel-ts/interfaces@0.89.2
+  - @fuel-ts/merkle@0.89.2
+  - @fuel-ts/transactions@0.89.2
+  - @fuel-ts/utils@0.89.2
+
 ## 0.89.1
 
 ### Patch Changes

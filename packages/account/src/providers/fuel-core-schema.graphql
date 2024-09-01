@@ -1,3 +1,19 @@
+"""
+Indicates that an Input Object is a OneOf Input Object (and thus requires
+                        exactly one of its field be provided)
+"""
+directive @oneOf on INPUT_OBJECT
+
+"""
+Provides a scalar specification URL for specifying the behavior of custom scalar types.
+"""
+directive @specifiedBy(
+  """
+  URL that specifies the behavior of this scalar.
+  """
+  url: String!
+) on SCALAR
+
 scalar Address
 
 scalar AssetId
@@ -30,14 +46,14 @@ An edge in a connection.
 """
 type BalanceEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Balance!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 input BalanceFilterInput {
@@ -47,11 +63,20 @@ input BalanceFilterInput {
   owner: Address!
 }
 
+type Blob {
+  id: BlobId!
+  bytecode: HexString!
+}
+
+scalar BlobId
+
 type Block {
+  version: BlockVersion!
   id: BlockId!
   height: U32!
   header: Header!
   consensus: Consensus!
+  transactionIds: [TransactionId!]!
   transactions: [Transaction!]!
 }
 
@@ -77,17 +102,21 @@ An edge in a connection.
 """
 type BlockEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Block!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 scalar BlockId
+
+enum BlockVersion {
+  V1
+}
 
 """
 Breakpoint, defined as a tuple of contract ID and relative PC offset inside it
@@ -152,14 +181,14 @@ An edge in a connection.
 """
 type CoinEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Coin!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 input CoinFilterInput {
@@ -244,14 +273,14 @@ An edge in a connection.
 """
 type ContractBalanceEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: ContractBalance!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 input ContractBalanceFilterInput {
@@ -327,7 +356,9 @@ input ExcludeInput {
 
 type FailureStatus {
   transactionId: TransactionId!
+  blockHeight: U32!
   block: Block!
+  transaction: Transaction!
   time: Tai64Timestamp!
   reason: String!
   programState: ProgramState
@@ -436,10 +467,16 @@ type GasCosts {
   wqmm: U64!
   xor: U64!
   xori: U64!
+  alocDependentCost: DependentCost!
+  bldd: DependentCost
+  bsiz: DependentCost
+  cfe: DependentCost!
+  cfeiDependentCost: DependentCost!
   call: DependentCost!
   ccp: DependentCost!
   croo: DependentCost!
   csiz: DependentCost!
+  ed19DependentCost: DependentCost!
   k256: DependentCost!
   ldc: DependentCost!
   logd: DependentCost!
@@ -493,6 +530,11 @@ type Genesis {
 }
 
 type Header {
+  """
+  Version of the header
+  """
+  version: HeaderVersion!
+
   """
   Hash of the header
   """
@@ -557,6 +599,10 @@ type Header {
   Hash of the application header.
   """
   applicationHash: Bytes32!
+}
+
+enum HeaderVersion {
+  V1
 }
 
 type HeavyOperation {
@@ -655,14 +701,14 @@ An edge in a connection.
 """
 type MessageEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Message!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 type MessageProof {
@@ -739,6 +785,7 @@ type Mutation {
   dryRun(
     txs: [HexString!]!
     utxoValidation: Boolean
+    gasPrice: U64
   ): [DryRunTransactionExecutionStatus!]!
 
   """
@@ -769,7 +816,7 @@ type NodeInfo {
 scalar Nonce
 
 union Output =
-    CoinOutput
+  | CoinOutput
   | ContractOutput
   | ChangeOutput
   | VariableOutput
@@ -900,6 +947,12 @@ type Query {
     last: Int
     before: String
   ): BalanceConnection!
+  blob(
+    """
+    ID of the Blob
+    """
+    id: BlobId!
+  ): Blob
   block(
     """
     ID of the block
@@ -1204,7 +1257,9 @@ type Subscription {
 
 type SuccessStatus {
   transactionId: TransactionId!
+  blockHeight: U32!
   block: Block!
+  transaction: Transaction!
   time: Tai64Timestamp!
   programState: ProgramState
   receipts: [Receipt!]!
@@ -1231,6 +1286,7 @@ type Transaction {
   isMint: Boolean!
   isUpgrade: Boolean!
   isUpload: Boolean!
+  isBlob: Boolean!
   inputs: [Input!]
   outputs: [Output!]!
   outputContract: ContractOutput
@@ -1240,6 +1296,7 @@ type Transaction {
   script: HexString
   scriptData: HexString
   bytecodeWitnessIndex: U16
+  blobId: BlobId
   salt: Salt
   storageSlots: [HexString!]
   bytecodeRoot: Bytes32
@@ -1276,20 +1333,20 @@ An edge in a connection.
 """
 type TransactionEdge {
   """
-  A cursor for use in pagination
-  """
-  cursor: String!
-
-  """
   The item at the end of the edge
   """
   node: Transaction!
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
 }
 
 scalar TransactionId
 
 union TransactionStatus =
-    SubmittedStatus
+  | SubmittedStatus
   | SuccessStatus
   | SqueezedOutStatus
   | FailureStatus

@@ -19,21 +19,10 @@ npm install fuels@{{fuels}} --save
 pnpm add fuels@{{fuels}}
 ```
 
+```sh-vue [bun]
+bun add fuels@{{fuels}}
+```
+
 :::
 
 **Note**: Use version `{{fuels}}` to ensure compatibility with `testnet` network—check the [docs](https://docs.fuel.network/guides/installation/#using-the-latest-toolchain).
-
----
-
-If you are using bun, you'll need to add a `trustedDependencies` field to your `package.json`:
-
-```json
-{
-  // ...
-  "trustedDependencies": ["@fuel-ts/fuel-core", "@fuel-ts/forc"]
-}
-```
-
-This is to ensure that bun includes the `fuel-core` and `forc` binaries in your project.
-
-> IMPORTANT: We don't officially support `bun` yet; use it at your own risk.

@@ -1,10 +1,15 @@
-import { generateTestWallet } from '@fuel-ts/account/test-utils';
 import type { BigNumberish } from 'fuels';
-import { bn, Predicate, Wallet, Address, Provider, FUEL_NETWORK_URL } from 'fuels';
+import { bn, Predicate, Wallet, Address } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { FuelGaugeProjectsEnum, getFuelGaugeForcProject } from '../test/fixtures';
+import { VectorTypesContractFactory } from '../test/typegen';
+import { PredicateVectorTypes } from '../test/typegen/predicates';
+import { VectorTypesScript } from '../test/typegen/scripts';
 
-import { getScript, getSetupContract } from './utils';
+import { launchTestContract } from './utils';
+
+type ArrayOfTuplesType = [BigNumberish, BigNumberish][];
+type TupleOfArraysType = [BigNumberish[], BigNumberish[]];
 
 const U32_VEC = [0, 1, 2];
 const VEC_IN_VEC = [
@@ -13,21 +18,21 @@ const VEC_IN_VEC = [
 ];
 const STRUCT_IN_VEC = [{ a: 0 }, { a: 1 }];
 const VEC_IN_STRUCT = { a: [0, 1, 2] };
-const ARRAY_IN_VEC = [
+const ARRAY_IN_VEC: ArrayOfTuplesType = [
   [0, 1],
   [0, 1],
 ];
-const VEC_IN_ARRAY = [
+const VEC_IN_ARRAY: TupleOfArraysType = [
   [0, 1, 2],
   [0, 1, 2],
 ];
 const VEC_IN_ENUM = { a: [0, 1, 2] };
 const ENUM_IN_VEC = [{ a: 0 }, { a: 1 }];
-const TUPLE_IN_VEC = [
+const TUPLE_IN_VEC: ArrayOfTuplesType = [
   [0, 0],
   [1, 1],
 ];
-const VEC_IN_TUPLE = [
+const VEC_IN_TUPLE: TupleOfArraysType = [
   [0, 1, 2],
   [0, 1, 2],
 ];
@@ -66,43 +71,26 @@ type MainArgs = [
   TwoDimensionArray, // VEC_IN_VEC
   SomeStruct[], // STRUCT_IN_VEC
   SomeStructWithVec, // VEC_IN_STRUCT
-  TwoDimensionArray, // ARRAY_IN_VEC
-  TwoDimensionArray, // VEC_IN_ARRAY
+  ArrayOfTuplesType, // ARRAY_IN_VEC
+  TupleOfArraysType, // VEC_IN_ARRAY
   SomeStructWithVec, // VEC_IN_ENUM
   SomeStruct[], // ENUM_IN_VEC
-  TwoDimensionArray, // TUPLE_IN_VEC
-  TwoDimensionArray, // VEC_IN_TUPLE
+  ArrayOfTuplesType, // TUPLE_IN_VEC
+  TupleOfArraysType, // VEC_IN_TUPLE
   VecInAStructInAVec, // VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
 ];
 
-const setup = async (balance = 500_000) => {
-  const provider = await Provider.create(FUEL_NETWORK_URL);
-  const baseAssetId = provider.getBaseAssetId();
-
-  // Create wallet
-  const wallet = await generateTestWallet(provider, [[balance, baseAssetId]]);
-
-  return wallet;
-};
-
 /**
  * @group node
+ * @group browser
  */
 describe('Vector Types Validation', () => {
-  let baseAssetId: string;
-  const { binHexlified: predicateVectorTypes, abiContents: predicateVectorTypesAbi } =
-    getFuelGaugeForcProject(FuelGaugeProjectsEnum.PREDICATE_VECTOR_TYPES);
-
-  beforeAll(async () => {
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    baseAssetId = provider.getBaseAssetId();
-  });
-
   it('can use supported vector types [vector-types-contract]', async () => {
-    const setupContract = getSetupContract('vector-types-contract');
-    const contractInstance = await setupContract();
+    using contractInstance = await launchTestContract({
+      factory: VectorTypesContractFactory,
+    });
 
-    const { value } = await contractInstance.functions
+    const { waitForResult } = await contractInstance.functions
       .test_all(
         U32_VEC,
         VEC_IN_VEC,
@@ -117,14 +105,21 @@ describe('Vector Types Validation', () => {
         VEC_IN_A_VEC_IN_A_STRUCT_IN_A_VEC
       )
       .call();
+
+    const { value } = await waitForResult();
+
     expect(value).toBe(true);
   });
 
   it('can use supported vector types [vector-types-script]', async () => {
-    const wallet = await setup();
-    const scriptInstance = getScript<MainArgs, BigNumberish>('vector-types-script', wallet);
+    using launched = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launched;
 
-    const { value } = await scriptInstance.functions
+    const scriptInstance = new VectorTypesScript(wallet);
+
+    const { waitForResult } = await scriptInstance.functions
       .main(
         U32_VEC,
         VEC_IN_VEC,
@@ -140,19 +135,27 @@ describe('Vector Types Validation', () => {
       )
       .call();
 
+    const { value } = await waitForResult();
+
     expect(value).toBe(true);
   });
 
   it('can use supported vector types [predicate-vector-types]', async () => {
-    const wallet = await setup();
+    using launched = await launchTestNode();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
     const receiver = Wallet.fromAddress(Address.fromRandom(), wallet.provider);
     const amountToPredicate = 300_000;
     const amountToReceiver = 50;
     const predicate = new Predicate<MainArgs>({
-      bytecode: predicateVectorTypes,
       provider: wallet.provider,
-      abi: predicateVectorTypesAbi,
-      inputData: [
+      abi: PredicateVectorTypes.abi,
+      bytecode: PredicateVectorTypes.bytecode,
+      data: [
         U32_VEC,
         VEC_IN_VEC,
         STRUCT_IN_VEC,
@@ -168,16 +171,26 @@ describe('Vector Types Validation', () => {
     });
 
     // setup predicate
-    const setupTx = await wallet.transfer(predicate.address, amountToPredicate, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const setupTx = await wallet.transfer(
+      predicate.address,
+      amountToPredicate,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     await setupTx.waitForResult();
 
     const initialReceiverBalance = await receiver.getBalance();
 
-    const tx = await predicate.transfer(receiver.address, amountToReceiver, baseAssetId, {
-      gasLimit: 10_000,
-    });
+    const tx = await predicate.transfer(
+      receiver.address,
+      amountToReceiver,
+      provider.getBaseAssetId(),
+      {
+        gasLimit: 10_000,
+      }
+    );
     const { isStatusSuccess } = await tx.waitForResult();
 
     // Check the balance of the receiver

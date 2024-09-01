@@ -5,13 +5,13 @@ import { hexlify } from '@fuel-ts/utils';
 import { Account } from '../account';
 import { transactionRequestify } from '../providers';
 import type {
-  TransactionResponse,
   TransactionRequestLike,
   CallResult,
   Provider,
   ProviderSendTxParams,
   EstimateTransactionParams,
   TransactionRequest,
+  TransactionResponse,
 } from '../providers';
 import { Signer } from '../signer';
 
@@ -108,12 +108,11 @@ export class BaseWalletUnlocked extends Account {
    *
    * @param transactionRequestLike - The transaction request to send.
    * @param estimateTxDependencies - Whether to estimate the transaction dependencies.
-   * @param awaitExecution - Whether to wait for the transaction to be executed.
    * @returns A promise that resolves to the TransactionResponse object.
    */
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
-    { estimateTxDependencies = false, awaitExecution }: ProviderSendTxParams = {}
+    { estimateTxDependencies = false }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
     if (estimateTxDependencies) {
@@ -121,12 +120,12 @@ export class BaseWalletUnlocked extends Account {
     }
     return this.provider.sendTransaction(
       await this.populateTransactionWitnessesSignature(transactionRequest),
-      { awaitExecution, estimateTxDependencies: false }
+      { estimateTxDependencies: false }
     );
   }
 
   /**
-   * Populates the witness signature for a transaction and sends a call to the network using `provider.call`.
+   * Populates the witness signature for a transaction and sends a call to the network using `provider.dryRun`.
    *
    * @param transactionRequestLike - The transaction request to simulate.
    * @returns A promise that resolves to the CallResult object.
@@ -139,7 +138,7 @@ export class BaseWalletUnlocked extends Account {
     if (estimateTxDependencies) {
       await this.provider.estimateTxDependencies(transactionRequest);
     }
-    return this.provider.call(
+    return this.provider.dryRun(
       await this.populateTransactionWitnessesSignature(transactionRequest),
       {
         utxoValidation: true,

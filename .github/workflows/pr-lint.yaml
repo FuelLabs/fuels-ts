@@ -27,11 +27,11 @@ jobs:
       - name: Validate Dependencies
         run: pnpm depcheck
 
-  validate-title:
-    name: Validate PR title
+  validate-pr:
+    name: Validate PR content
     runs-on: ubuntu-latest
     steps:
-      - uses: amannn/action-semantic-pull-request@v4
+      - uses: amannn/action-semantic-pull-request@v5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -43,6 +43,7 @@ jobs:
             docs
             ci
             rc
+
       - name: Check PR title length
         env:
           TITLE: ${{ github.event.pull_request.title }}
@@ -52,4 +53,15 @@ jobs:
           then
             echo "PR title is too long (greater than 72 characters)"
             exit 1
+          fi
+
+      - name: Verify PR has breaking changes section
+        if: contains(github.event.pull_request.title, '!')
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if [[ "${PR_BODY}" != *"# Breaking Changes"*"# Checklist"* ]]; then
+              echo "This is a breaking change PR."
+              echo "Please add a '# Breaking Changes' section in the PR's body before the '# Checklist' section."
+              exit 1
           fi

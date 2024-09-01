@@ -1,6 +1,6 @@
 {
   "name": "create-fuels",
-  "version": "0.89.1",
+  "version": "0.94.3",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -11,17 +11,17 @@
     "templates"
   ],
   "engines": {
-    "node": "^18.18.2 || ^20.0.0"
+    "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },
   "license": "Apache-2.0",
   "scripts": {
-    "build": "tsup",
-    "prepublishOnly": "cp -r ../../templates . && tsx ./scripts/rewriteTemplateFiles.ts"
+    "build": "tsup && tsc --noEmit",
+    "prepublishOnly": "tsx ./scripts/prepublish.ts"
   },
   "dependencies": {
     "@iarna/toml": "^2.2.5",
     "chalk": "4",
-    "commander": "^9.4.1",
+    "commander": "12.1.0",
     "ora": "5.4.1",
     "prompts": "^2.4.2"
   },

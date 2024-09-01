@@ -20,7 +20,7 @@ export class VecCoder<TCoder extends Coder> extends Coder<
   #hasNestedOption: boolean;
 
   constructor(coder: TCoder) {
-    super('struct', `struct Vec`, coder.encodedLength + WORD_SIZE);
+    super('struct', `struct Vec`, WORD_SIZE);
     this.coder = coder;
     this.#hasNestedOption = hasNestedOption([coder]);
   }
