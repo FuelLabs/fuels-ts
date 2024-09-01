@@ -77,11 +77,11 @@
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
     "bundle-require": "^5.0.0",
-    "chalk": "4",
-    "chokidar": "^3.5.3",
+    "chalk": "5",
+    "chokidar": "^3.6.0",
     "commander": "12.1.0",
-    "esbuild": "^0.22.0",
-    "glob": "^10.2.6",
+    "esbuild": "^0.23.1",
+    "glob": "^11.0.0",
     "handlebars": "^4.7.8",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
@@ -92,7 +92,7 @@
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.9",
-    "@types/rimraf": "^3.0.2",
+    "@types/rimraf": "^4.0.5",
     "vite": "^5.4.2"
   },
   "keywords": [
