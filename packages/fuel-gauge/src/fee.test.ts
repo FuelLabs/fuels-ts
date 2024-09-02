@@ -1,6 +1,14 @@
-import { ContractFactory, ScriptTransactionRequest, Wallet, getRandomB256 } from 'fuels';
+import {
+  ContractFactory,
+  InputMessageCoder,
+  ScriptTransactionRequest,
+  Wallet,
+  getRandomB256,
+  hexlify,
+  isCoin,
+} from 'fuels';
 import type { BN } from 'fuels';
-import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange } from 'fuels/test-utils';
+import { launchTestNode, ASSET_A, ASSET_B, expectToBeInRange, TestMessage } from 'fuels/test-utils';
 
 import {
   CallTestContractFactory,
@@ -331,6 +339,97 @@ describe('Fee', () => {
       value: fee.toNumber(),
       min: balanceDiff - 20,
       max: balanceDiff + 20,
+    });
+  });
+
+  describe('Estimation with Message containing data within TX request inputs', () => {
+    // Message with data and amount
+    const testMessage1 = new TestMessage({
+      data: hexlify(InputMessageCoder.encodeData('0x09')),
+      amount: 100_000_000,
+    });
+
+    // Message with data and without amount
+    const testMessage2 = new TestMessage({
+      data: hexlify(InputMessageCoder.encodeData('0x10')),
+      amount: 0,
+    });
+
+    it('should not fail [W/ UTXO within inputs]', async () => {
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            factory: CallTestContractFactory,
+          },
+        ],
+        walletsConfig: {
+          count: 2,
+          messages: [testMessage1, testMessage2],
+        },
+      });
+
+      const {
+        provider,
+        contracts: [contract],
+        wallets: [fundedWallet],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+
+      const {
+        messages: [message1, message2],
+      } = await fundedWallet.getMessages();
+
+      const request = await contract.functions.foo(10).getTransactionRequest();
+
+      const resources = await fundedWallet.getResourcesToSpend([[1000, baseAssetId]]);
+
+      // Should include only UTXOs resources
+      expect(resources.every(isCoin)).toBeTruthy();
+
+      request.addMessageInput(message1);
+      request.addMessageInput(message2);
+      request.addResources(resources);
+
+      const cost = await fundedWallet.getTransactionCost(request);
+
+      expect(cost.dryRunStatus?.type).toBe('DryRunSuccessStatus');
+    });
+
+    it('should not fail [W/out UTXO within inputs]', async () => {
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            factory: CallTestContractFactory,
+          },
+        ],
+        walletsConfig: {
+          count: 2,
+          messages: [testMessage1, testMessage2],
+        },
+      });
+
+      const {
+        provider,
+        contracts: [contract],
+        wallets: [fundedWallet],
+      } = launched;
+
+      const baseAssetId = provider.getBaseAssetId();
+
+      const {
+        messages: [message1, message2],
+      } = await fundedWallet.getMessages();
+
+      const request = await contract.functions.foo(10).getTransactionRequest();
+
+      request.addCoinOutput(fundedWallet.address, 1000, baseAssetId);
+      request.addMessageInput(message1);
+      request.addMessageInput(message2);
+
+      const cost = await fundedWallet.getTransactionCost(request);
+
+      expect(cost.dryRunStatus?.type).toBe('DryRunSuccessStatus');
     });
   });
 });
