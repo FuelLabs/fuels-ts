@@ -387,7 +387,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     // adds the three values together, but only first param value is supplied
     const { waitForResult } = await contractInstance.functions
-      .echo_option_three_u8(INPUT, undefined, undefined)
+      .echo_option_three_u8(INPUT)
       .call();
     const { value: Some } = await waitForResult();
 
