@@ -60,6 +60,47 @@ const getCustomFetch =
  * @group node
  */
 describe('Provider', () => {
+  it('supports basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const authUrl = `http://${usernameAndPassword}@${parsedUrl.host}${parsedUrl.pathname}`;
+    const provider = await Provider.create(authUrl);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const expectedAuthToken = `Basic ${btoa(usernameAndPassword)}`;
+    const [requestUrl, request] = fetchSpy.mock.calls[0];
+    expect(requestUrl).toEqual(url);
+    expect(request?.headers).toMatchObject({
+      Authorization: expectedAuthToken,
+    });
+  });
+
+  it('custom requestMiddleware is not overwritten by basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const authUrl = `http://${usernameAndPassword}@${parsedUrl.host}${parsedUrl.pathname}`;
+
+    const requestMiddleware = vi.fn();
+    await Provider.create(authUrl, {
+      requestMiddleware,
+    });
+
+    expect(requestMiddleware).toHaveBeenCalled();
+  });
+
   it('should throw an error when retrieving a transaction with an unknown transaction type', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
