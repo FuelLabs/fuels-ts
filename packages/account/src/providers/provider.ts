@@ -610,11 +610,7 @@ Supported fuel-core version: ${supportedVersion}.`
       getBlobs(variables: { blobIds: string[] }) {
         const queryParams = variables.blobIds.map((_, i) => `$blobId${i}: BlobId!`).join(', ');
         const blobParams = variables.blobIds
-          .map(
-            (_, i) => `blob${i}: blob(id: $blobId${i}) {
-                        id
-                      }`
-          )
+          .map((_, i) => `blob${i}: blob(id: $blobId${i}) { id }`)
           .join('\n');
 
         const updatedVariables = variables.blobIds.reduce(
