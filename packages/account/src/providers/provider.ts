@@ -369,13 +369,19 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
+type SdkOperations = Omit<
+  Operations,
+  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
+> & {
   submitAndAwait: (
     ...args: Parameters<Operations['submitAndAwait']>
   ) => Promise<ReturnType<Operations['submitAndAwait']>>;
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
+  submitAndAwaitStatus: (
+    ...args: Parameters<Operations['submitAndAwaitStatus']>
+  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
 };
 
 /**
@@ -761,7 +767,7 @@ Supported fuel-core version: ${supportedVersion}.`
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
-    const subscription = await this.operations.submitAndAwait({ encodedTransaction });
+    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction });
 
     this.#cacheInputs(
       transactionRequest.inputs,
