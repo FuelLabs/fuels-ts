@@ -35,6 +35,7 @@ import { getMaxGas, getMinGas } from '../utils/gas';
 import { NoWitnessAtIndexError } from './errors';
 import {
   getRequestInputResourceOwner,
+  isRequestInputCoinOrMessage,
   isRequestInputResource,
   isRequestInputResourceFromOwner,
 } from './helpers';
@@ -677,7 +678,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
-    const inputsToExtractGasUsed = inputs.filter(isRequestInputResource);
+    const inputsToExtractGasUsed = inputs.filter(isRequestInputCoinOrMessage);
 
     this.inputs.filter(isRequestInputResource).forEach((i) => {
       const owner = getRequestInputResourceOwner(i);
