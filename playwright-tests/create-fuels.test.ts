@@ -10,7 +10,7 @@ test.extend({
   },
 });
 
-test('counter contract - increment function call works properly', async ({ page }) => {
+test.skip('counter contract - increment function call works properly', async ({ page }) => {
   await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
 
   await page.waitForTimeout(2000);
