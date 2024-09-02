@@ -257,16 +257,20 @@ describe('transactionRequestify', () => {
       bytecodeWitnessIndex: 0,
       upgradePurpose: {
         type: UpgradePurposeTypeEnum.ConsensusParameters,
-        data: '0x0000ff01ff01ff0180c2d72f80801080020080a00680a00680a00680c2d72f0080a00680a00600808010e00d005c3f00030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000000010000f8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad0780c2d72f8c7267272d7007b6c1c7cfc2a04e7aadc9faebad2488289a390e6769f3360bb1',
+        checksum: ZeroBytes32,
       },
     };
 
     const txRequest = transactionRequestify(txRequestLike);
 
-    if (txRequest.type === TransactionType.Upgrade) {
+    if (
+      txRequest.type === TransactionType.Upgrade &&
+      txRequest.upgradePurpose.type === UpgradePurposeTypeEnum.ConsensusParameters &&
+      txRequestLike.upgradePurpose?.type === UpgradePurposeTypeEnum.ConsensusParameters
+    ) {
       expect(txRequest.upgradePurpose).toEqual(txRequestLike.upgradePurpose);
       expect(txRequest.bytecodeWitnessIndex).toEqual(0);
-      expect(txRequest.upgradePurpose.data).toEqual(txRequestLike.upgradePurpose!.data);
+      expect(txRequest.upgradePurpose.checksum).toEqual(txRequestLike.upgradePurpose!.checksum);
     }
 
     expect(txRequest.type).toEqual(txRequestLike.type);

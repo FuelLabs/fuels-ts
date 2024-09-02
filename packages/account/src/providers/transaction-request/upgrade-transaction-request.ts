@@ -19,7 +19,7 @@ import { BaseTransactionRequest, type BaseTransactionRequestLike } from './trans
 export type UpgradePurposeRequest =
   | {
       type: UpgradePurposeTypeEnum.ConsensusParameters;
-      data: BytesLike;
+      checksum: string;
     }
   | {
       type: UpgradePurposeTypeEnum.StateTransition;
@@ -67,7 +67,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     this.bytecodeWitnessIndex = this.addWitness(consensus);
     this.upgradePurpose = {
       type: UpgradePurposeTypeEnum.ConsensusParameters,
-      data: hexlify(consensus),
+      checksum: hash(consensus),
     };
     return this;
   }
@@ -80,13 +80,13 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
-  addUpgradePurpose(purpose: UpgradePurposeRequest) {
-    if (purpose.type === UpgradePurposeTypeEnum.ConsensusParameters) {
-      this.addConsensusParametersUpgradePurpose(purpose.data);
+  addUpgradePurpose(type: UpgradePurposeTypeEnum, data: BytesLike) {
+    if (type === UpgradePurposeTypeEnum.ConsensusParameters) {
+      this.addConsensusParametersUpgradePurpose(data);
     }
 
-    if (purpose.type === UpgradePurposeTypeEnum.StateTransition) {
-      this.addStateTransitionUpgradePurpose(purpose.data);
+    if (type === UpgradePurposeTypeEnum.StateTransition) {
+      this.addStateTransitionUpgradePurpose(data);
     }
 
     return this;
@@ -100,7 +100,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
         type: UpgradePurposeTypeEnum.ConsensusParameters,
         data: {
           witnessIndex: this.bytecodeWitnessIndex,
-          checksum: hash(this.upgradePurpose.data),
+          checksum: this.upgradePurpose.checksum,
         },
       };
     } else if (this.upgradePurpose.type === UpgradePurposeTypeEnum.StateTransition) {
