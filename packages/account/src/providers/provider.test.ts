@@ -68,7 +68,8 @@ describe('Provider', () => {
 
     const usernameAndPassword = 'securest:ofpasswords';
     const parsedUrl = new URL(url);
-    const authUrl = `http://${usernameAndPassword}@${parsedUrl.host}${parsedUrl.pathname}`;
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
     const provider = await Provider.create(authUrl);
 
     const fetchSpy = vi.spyOn(global, 'fetch');
@@ -91,7 +92,8 @@ describe('Provider', () => {
 
     const usernameAndPassword = 'securest:ofpasswords';
     const parsedUrl = new URL(url);
-    const authUrl = `http://${usernameAndPassword}@${parsedUrl.host}${parsedUrl.pathname}`;
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
 
     const requestMiddleware = vi.fn();
     await Provider.create(authUrl, {
