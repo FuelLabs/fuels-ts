@@ -271,7 +271,7 @@ export class Account extends AbstractAccount {
       });
 
       const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
-        request.inputs,
+        request.inputs.filter(isRequestInputResource),
         baseAssetId,
         baseAssetId
       );
