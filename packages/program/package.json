@@ -37,6 +37,6 @@
     "@fuels/vm-asm": "0.56.0"
   },
   "devDependencies": {
-    "@types/ramda": "^0.30.1"
+    "@types/ramda": "^0.30.2"
   }
 }
