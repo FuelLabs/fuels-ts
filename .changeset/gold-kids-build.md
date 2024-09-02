@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: estimation for `InputMessage` containing data
+fix: TX estimation when `InputMessage` contains data
