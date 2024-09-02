@@ -6,6 +6,7 @@ import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { InputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -542,13 +543,15 @@ export class Account extends AbstractAccount {
 
     const findAssetInput = (assetId: string) =>
       txRequestClone.inputs.find((input) => {
-        if ('assetId' in input) {
+        if (input.type === InputType.Coin) {
           return input.assetId === assetId;
         }
-        if ('recipient' in input) {
+
+        // We only consider the message input if it has no data.
+        // Messages with `data` cannot fund the gas of a transaction.
+        if (input.type === InputType.Message && bn(input.data).isZero()) {
           return baseAssetId === assetId;
         }
-
         return false;
       });
 
