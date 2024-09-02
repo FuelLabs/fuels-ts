@@ -42,6 +42,7 @@ import {
   cacheRequestInputsResourcesFromOwner,
   getAssetAmountInRequestInputs,
   isRequestInputCoin,
+  isRequestInputMessageWithoutData,
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
@@ -549,7 +550,7 @@ export class Account extends AbstractAccount {
 
         // We only consider the message input if it has no data.
         // Messages with `data` cannot fund the gas of a transaction.
-        if (input.type === InputType.Message && bn(input.data).isZero()) {
+        if (isRequestInputMessageWithoutData(input)) {
           return baseAssetId === assetId;
         }
         return false;
