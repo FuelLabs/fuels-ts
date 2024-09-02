@@ -29,7 +29,36 @@ export enum TransactionType /* u8 */ {
   Blob = 5,
 }
 
-export type TransactionScript = {
+/** @hidden */
+export type BaseTransactionType = {
+  /** The type of the transaction */
+  type: TransactionType;
+  /** List of witnesses (Witness[]) */
+  witnesses: Witness[];
+
+  /** Number of witnesses (u16) */
+  witnessesCount: number;
+
+  /** List of outputs (Output[]) */
+  outputs: Output[];
+
+  /** List of inputs (Input[]) */
+  inputs: Input[];
+
+  /** List of policies. */
+  policies: Policy[];
+
+  /** Bitfield of used policy types (u32) */
+  policyTypes: number;
+
+  /** Number of inputs (u16) */
+  inputsCount: number;
+
+  /** Number of outputs (u16) */
+  outputsCount: number;
+};
+
+export type TransactionScript = BaseTransactionType & {
   type: TransactionType.Script;
 
   /** Gas limit for transaction (u64) */
@@ -44,35 +73,11 @@ export type TransactionScript = {
   /** Length of script input data, in bytes (u64) */
   scriptDataLength: BN;
 
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
   /** Script to execute (byte[]) */
   script: string;
 
   /** Script input data (parameters) (byte[]) */
   scriptData: string;
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionScriptCoder extends Coder<TransactionScript, TransactionScript> {
@@ -156,7 +161,7 @@ export class TransactionScriptCoder extends Coder<TransactionScript, Transaction
   }
 }
 
-export type TransactionCreate = {
+export type TransactionCreate = BaseTransactionType & {
   type: TransactionType.Create;
 
   /** Witness index of contract bytecode to create (u8) */
@@ -168,32 +173,8 @@ export type TransactionCreate = {
   /** Number of storage slots to initialize (u16) */
   storageSlotsCount: BN;
 
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
   /** List of inputs (StorageSlot[]) */
   storageSlots: StorageSlot[];
-
-  /** List of policies. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionCreateCoder extends Coder<TransactionCreate, TransactionCreate> {
@@ -348,35 +329,11 @@ export class TransactionMintCoder extends Coder<TransactionMint, TransactionMint
   }
 }
 
-export type TransactionUpgrade = {
+export type TransactionUpgrade = BaseTransactionType & {
   type: TransactionType.Upgrade;
 
   /** The purpose of the upgrade. */
   upgradePurpose: UpgradePurpose;
-
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, TransactionUpgrade> {
@@ -441,7 +398,7 @@ export class TransactionUpgradeCoder extends Coder<TransactionUpgrade, Transacti
   }
 }
 
-export type TransactionUpload = {
+export type TransactionUpload = BaseTransactionType & {
   type: TransactionType.Upload;
 
   /** The root of the Merkle tree is created over the bytecode. (b256) */
@@ -459,32 +416,8 @@ export type TransactionUpload = {
   /** Number of Merkle nodes in the proof. (u16) */
   proofSetCount: number;
 
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
-  /** The proof set of Merkle nodes to verify the connection of the subsection to the root. (b256[]) */
+  /** List of proof nodes (b256[]) */
   proofSet: string[];
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionUploadCoder extends Coder<TransactionUpload, TransactionUpload> {
@@ -569,7 +502,7 @@ export class TransactionUploadCoder extends Coder<TransactionUpload, Transaction
   }
 }
 
-export type TransactionBlob = {
+export type TransactionBlob = BaseTransactionType & {
   type: TransactionType.Blob;
 
   /** Hash of the bytecode. (b256) */
@@ -577,30 +510,6 @@ export type TransactionBlob = {
 
   /** Witness index of contract bytecode (u16) */
   witnessIndex: number;
-
-  /** Bitfield of used policy types (u32) */
-  policyTypes: number;
-
-  /** Number of inputs (u16) */
-  inputsCount: number;
-
-  /** Number of outputs (u16) */
-  outputsCount: number;
-
-  /** Number of witnesses (u16) */
-  witnessesCount: number;
-
-  /** List of policies, sorted by PolicyType. */
-  policies: Policy[];
-
-  /** List of inputs (Input[]) */
-  inputs: Input[];
-
-  /** List of outputs (Output[]) */
-  outputs: Output[];
-
-  /** List of witnesses (Witness[]) */
-  witnesses: Witness[];
 };
 
 export class TransactionBlobCoder extends Coder<TransactionBlob, TransactionBlob> {

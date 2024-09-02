@@ -1,5 +1,17 @@
 # Change Log
 
+## 0.94.3
+
+### Patch Changes
+
+- 2b45e8d: fix: remove `u64` from `NumberCoderType`
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/utils@0.94.3
+  - @fuel-ts/crypto@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/hasher@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
 ## 0.94.2
 
 ### Patch Changes

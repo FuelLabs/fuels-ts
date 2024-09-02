@@ -318,6 +318,7 @@ BigNumber
 Gwei
 onchain
 Vercel
+vercel
 hardcoded
 differentiators
 updatable

@@ -402,6 +402,10 @@ export default defineConfig({
                 text: 'GraphQL Integration',
                 link: '/guide/cookbook/graphql-integration',
               },
+              {
+                text: 'Resubmitting Failed Transactions',
+                link: '/guide/cookbook/resubmitting-failed-transactions',
+              },
             ],
           },
           {
