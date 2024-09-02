@@ -752,9 +752,9 @@ describe('TransactionSummary', () => {
       const { operations } = result;
 
       expect(operations[0].name).toEqual(OperationName.withdrawFromFuel);
-      expect(operations[0].from?.type).toEqual(1);
+      expect(operations[0].from?.type).toEqual(AddressType.account);
       expect(operations[0].from?.address).toEqual(sender.address.toB256());
-      expect(operations[0].to?.type).toEqual(1);
+      expect(operations[0].to?.type).toEqual(AddressType.account);
       expect(operations[0].to?.address).toEqual(recipient.toB256());
       expect(operations[0].to?.chain).toEqual(ChainName.ethereum);
       expect(operations[0].assetsSent).toHaveLength(1);
