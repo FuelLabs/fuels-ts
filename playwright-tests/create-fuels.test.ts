@@ -17,7 +17,7 @@ test('counter contract - increment function call works properly', async ({ page 
 
   await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
 
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(5000);
 
   const topUpWalletButton = page.getByText('Top-up Wallet');
   await topUpWalletButton.click();
