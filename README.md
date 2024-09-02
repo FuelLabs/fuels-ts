@@ -15,7 +15,6 @@
 The [documentation](https://docs.fuel.network/docs/fuels-ts/) site is your main stop for resources.
 
 - [Quickstart](https://docs.fuel.network/docs/intro/quickstart-contract/)
-- [Documentation](https://docs.fuel.network/docs/fuels-ts/)
   - [Wallets](https://docs.fuel.network/docs/fuels-ts/wallets/)
   - [Contracts](https://docs.fuel.network/docs/fuels-ts/contracts/)
   - [Scripts](https://docs.fuel.network/docs/fuels-ts/scripts/)
