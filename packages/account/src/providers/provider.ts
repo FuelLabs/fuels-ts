@@ -451,6 +451,29 @@ export default class Provider {
     }
   }
 
+  private static handleBasicAuth(url: string): [string, ProviderOptions['requestMiddleware']] {
+    const parsedUrl = new URL(url);
+
+    const username = parsedUrl.username;
+    const password = parsedUrl.password;
+    const urlNoBasicAuth = `${parsedUrl.origin}${parsedUrl.pathname}`;
+    if (!(username && password)) {
+      return [url, undefined];
+    }
+
+    const auth = `Basic ${btoa(`${username}:${password}`)}`;
+
+    return [
+      urlNoBasicAuth,
+      (request) => {
+        request.headers ??= {};
+        (request.headers as Record<string, unknown>).Authorization = auth;
+
+        return request;
+      },
+    ];
+  }
+
   /**
    * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
    *
@@ -460,8 +483,17 @@ export default class Provider {
    * @returns A promise that resolves to a Provider instance.
    */
   static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    const provider = new Provider(url, options);
+    const [urlToUse, addBasicAuth] = this.handleBasicAuth(url);
+    const provider = new Provider(urlToUse, {
+      ...options,
+      requestMiddleware: async (request) => {
+        await addBasicAuth?.(request);
+        return options.requestMiddleware?.(request) ?? request;
+      },
+    });
+
     await provider.fetchChainAndNodeInfo();
+
     return provider;
   }
 
