@@ -744,7 +744,9 @@ describe('TransactionSummary', () => {
         '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
       );
 
-      const tx = await sender.withdrawToBaseLayer(recipient, 10);
+      const amountToWithdraw = 10;
+
+      const tx = await sender.withdrawToBaseLayer(recipient, amountToWithdraw);
       const result = await tx.waitForResult();
 
       const { operations } = result;
@@ -756,7 +758,7 @@ describe('TransactionSummary', () => {
       expect(operations[0].to?.address).toEqual(recipient.toB256());
       expect(operations[0].to?.chain).toEqual(ChainName.ethereum);
       expect(operations[0].assetsSent).toHaveLength(1);
-      expect(operations[0].assetsSent?.[0].amount).toEqual(bn('10'));
+      expect(operations[0].assetsSent?.[0].amount).toEqual(bn(amountToWithdraw));
       expect(operations[0].assetsSent?.[0].assetId).toEqual(provider.getBaseAssetId());
     });
 
@@ -772,9 +774,9 @@ describe('TransactionSummary', () => {
 
       expect(result.transactionResult.operations).toHaveLength(1);
       expect(result.transactionResult.operations[0].name).toEqual(OperationName.contractCreated);
-      expect(result.transactionResult.operations[0].from?.type).toEqual(1);
+      expect(result.transactionResult.operations[0].from?.type).toEqual(AddressType.account);
       expect(result.transactionResult.operations[0].from?.address).toEqual(wallet.address.toB256());
-      expect(result.transactionResult.operations[0].to?.type).toEqual(0);
+      expect(result.transactionResult.operations[0].to?.type).toEqual(AddressType.contract);
       expect(result.transactionResult.isTypeCreate).toEqual(true);
     });
 
@@ -797,10 +799,10 @@ describe('TransactionSummary', () => {
 
       expect(result.transactionResult.operations).toHaveLength(1);
       expect(result.transactionResult.operations[0].name).toEqual(OperationName.contractCall);
-      expect(result.transactionResult.operations[0].from?.type).toEqual(1);
+      expect(result.transactionResult.operations[0].from?.type).toEqual(AddressType.account);
       expect(result.transactionResult.operations[0].from?.address).toEqual(wallet.address.toB256());
       expect(result.transactionResult.operations[0].to?.address).toEqual(contract.id.toB256());
-      expect(result.transactionResult.operations[0].to?.type).toEqual(0);
+      expect(result.transactionResult.operations[0].to?.type).toEqual(AddressType.contract);
       expect(result.transactionResult.operations[0].assetsSent).toBeUndefined();
     });
   });
