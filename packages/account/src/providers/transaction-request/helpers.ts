@@ -23,6 +23,11 @@ export const isRequestInputMessageWithoutData = (
 ): input is MessageTransactionRequestInput =>
   input.type === InputType.Message && bn(input.data).isZero();
 
+export const isRequestInputCoinOrMessage = (
+  input: TransactionRequestInput
+): input is CoinTransactionRequestInput | MessageTransactionRequestInput =>
+  isRequestInputCoin(input) || isRequestInputMessage(input);
+
 export const isRequestInputResource = (
   input: TransactionRequestInput
 ): input is CoinTransactionRequestInput | MessageTransactionRequestInput =>
