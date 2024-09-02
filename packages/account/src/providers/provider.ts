@@ -1374,7 +1374,7 @@ Supported fuel-core version: ${supportedVersion}.`
       blobs.push(val?.id ?? null);
     });
 
-    return blobs.filter((v) => v);
+    return blobs.filter((v) => v) as string[];
   }
 
   /**
