@@ -173,6 +173,25 @@ export function calculateMetadataGasForTxBlob({
   return txId.add(blobLen);
 }
 
+export function calculateMetadataGasForTxUpgrade({
+  gasCosts,
+  txBytesSize,
+  consensusSize,
+}: {
+  gasCosts: GasCosts;
+  txBytesSize: number;
+  consensusSize?: number;
+}) {
+  const txId = resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+
+  if (consensusSize) {
+    const consensusLen = resolveGasDependentCosts(consensusSize, gasCosts.s256);
+    txId.add(consensusLen);
+  }
+
+  return txId;
+}
+
 export interface CalculateGasFeeParams {
   tip?: BN;
   gas: BN;

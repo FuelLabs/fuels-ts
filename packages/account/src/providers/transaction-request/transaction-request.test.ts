@@ -2,7 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { bn, toNumber } from '@fuel-ts/math';
-import { TransactionType } from '@fuel-ts/transactions';
+import { TransactionType, UpgradePurposeTypeEnum } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
@@ -247,5 +247,28 @@ describe('transactionRequestify', () => {
     expect(txRequest.inputs).toEqual(txRequestLike.inputs);
     expect(txRequest.outputs).toEqual(txRequestLike.outputs);
     expect(txRequest.witnesses).toEqual(txRequestLike.witnesses);
+  });
+
+  it('should keep data from input in transaction request created [upgrade]', () => {
+    const txRequestLike: TransactionRequestLike = {
+      type: TransactionType.Upgrade,
+      inputs: [],
+      outputs: [],
+      bytecodeWitnessIndex: 0,
+      upgradePurpose: {
+        type: UpgradePurposeTypeEnum.ConsensusParameters,
+        data: '0x0000ff01ff01ff0180c2d72f80801080020080a00680a00680a00680c2d72f0080a00680a00600808010e00d005c3f00030000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000001000000010000f8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad0780c2d72f8c7267272d7007b6c1c7cfc2a04e7aadc9faebad2488289a390e6769f3360bb1',
+      },
+    };
+
+    const txRequest = transactionRequestify(txRequestLike);
+
+    if (txRequest.type === TransactionType.Upgrade) {
+      expect(txRequest.upgradePurpose).toEqual(txRequestLike.upgradePurpose);
+      expect(txRequest.bytecodeWitnessIndex).toEqual(0);
+      expect(txRequest.upgradePurpose.data).toEqual(txRequestLike.upgradePurpose!.data);
+    }
+
+    expect(txRequest.type).toEqual(txRequestLike.type);
   });
 });
