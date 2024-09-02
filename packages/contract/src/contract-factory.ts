@@ -282,14 +282,9 @@ export default class ContractFactory {
     });
 
     // BlobIDs only need to be uploaded once and we can check if they exist on chain
-    const blobsToUpload = [...new Set(blobIds)];
-    for (const [index, blobId] of blobsToUpload.entries()) {
-      // Todo: refactor to a single call
-      const id = await account.provider.getBlob(blobId);
-      if (id) {
-        blobsToUpload.splice(index, 1);
-      }
-    }
+    const uniqueBlobIds = [...new Set(blobIds)];
+    const uploadedBlobIds = await account.provider.getBlobs(uniqueBlobIds);
+    const blobIdsToUpload = uniqueBlobIds.filter((id) => !uploadedBlobIds.includes(id));
 
     // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
@@ -298,7 +293,7 @@ export default class ContractFactory {
     const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
 
     for (const { transactionRequest, blobId } of chunks) {
-      if (blobsToUpload.includes(blobId)) {
+      if (blobIdsToUpload.includes(blobId)) {
         const minGas = transactionRequest.calculateMinGas(chainInfo);
         const minFee = calculateGasFee({
           gasPrice,
@@ -333,7 +328,7 @@ export default class ContractFactory {
       const uploadedBlobs: string[] = [];
       // Deploy the chunks as blob txs
       for (const { blobId, transactionRequest } of chunks) {
-        if (!uploadedBlobs.includes(blobId) && blobsToUpload.includes(blobId)) {
+        if (!uploadedBlobs.includes(blobId) && blobIdsToUpload.includes(blobId)) {
           const fundedBlobRequest = await this.fundTransactionRequest(
             transactionRequest,
             deployOptions

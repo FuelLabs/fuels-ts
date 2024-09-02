@@ -378,7 +378,7 @@ type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
-  getBlobCustom: (variables: { blobId: string }) => Promise<{ blob?: { id: string } | null }>;
+  getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
 /**
@@ -607,16 +607,31 @@ Supported fuel-core version: ${supportedVersion}.`
     };
 
     const customOperations = (requester: Requester) => ({
-      getBlobCustom(variables: { blobId: string }) {
+      getBlobs(variables: { blobIds: string[] }) {
+        const queryParams = variables.blobIds.map((_, i) => `$blobId${i}: BlobId!`).join(', ');
+        const blobParams = variables.blobIds
+          .map(
+            (_, i) => `blob${i}: blob(id: $blobId${i}) {
+                        id
+                      }`
+          )
+          .join('\n');
+
+        const updatedVariables = variables.blobIds.reduce(
+          (acc, blobId, i) => {
+            acc[`blobId${i}`] = blobId;
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+
         const document = gql`
-          query getBlob($blobId: BlobId!) {
-            blob(id: $blobId) {
-              id
-            }
+          query getBlobs(${queryParams}) {
+            ${blobParams}
           }
         `;
 
-        return requester(document, variables);
+        return requester(document, updatedVariables);
       },
     });
 
@@ -1348,14 +1363,22 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Returns a blob ID if it exists.
+   * Returns an array of blobIds if they exist on chain, for a given array of blobIds.
    *
-   * @param blobId - the blob ID to check.
-   * @returns A promise that resolves to the blob ID or null.
+   * @param blobIds - blobIds to check.
+   * @returns - A promise that resolves to an array of blobIds that exist on chain.
    */
-  async getBlob(blobId: string): Promise<string | null> {
-    const { blob } = await this.operations.getBlobCustom({ blobId });
-    return blob?.id ?? null;
+  async getBlobs(blobIds: string[]): Promise<(string | null)[]> {
+    const res = await this.operations.getBlobs({ blobIds });
+    const blobs: (string | null)[] = [];
+
+    Object.keys(res).forEach((key) => {
+      // @ts-expect-error keys are strings
+      const val = res[key];
+      blobs.push(val?.id ?? null);
+    });
+
+    return blobs.filter((v) => v);
   }
 
   /**
