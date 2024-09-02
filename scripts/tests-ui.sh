@@ -15,7 +15,7 @@ pnpm exec playwright install --with-deps  > /dev/null 2>&1
 pnpm exec playwright test
 TEST_RESULT=$?
 
-pkill next-server
+pkill vite
 pkill fuel-core
 
 exit $TEST_RESULT
