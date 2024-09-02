@@ -739,12 +739,12 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param sendTransactionParams - The provider send transaction parameters (optional).
    * @returns A promise that resolves to the transaction response object.
    */
-  // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    // #region Provider-sendTransaction
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
@@ -1435,13 +1435,24 @@ Supported fuel-core version: ${supportedVersion}.`
     transactionId: string
   ): Promise<Transaction<TTransactionType> | null> {
     const { transaction } = await this.operations.getTransaction({ transactionId });
+
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder().decode(
-      arrayify(transaction.rawPayload),
-      0
-    )?.[0] as Transaction<TTransactionType>;
+
+    try {
+      return new TransactionCoder().decode(
+        arrayify(transaction.rawPayload),
+        0
+      )?.[0] as Transaction<TTransactionType>;
+    } catch (error) {
+      if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+        // eslint-disable-next-line no-console
+        console.warn('Unsupported transaction type encountered');
+        return null;
+      }
+      throw error;
+    }
   }
 
   /**
@@ -1455,9 +1466,20 @@ Supported fuel-core version: ${supportedVersion}.`
     } = await this.operations.getTransactions(paginationArgs);
 
     const coder = new TransactionCoder();
-    const transactions = edges.map(
-      ({ node: { rawPayload } }) => coder.decode(arrayify(rawPayload), 0)[0]
-    );
+    const transactions = edges
+      .map(({ node: { rawPayload } }) => {
+        try {
+          return coder.decode(arrayify(rawPayload), 0)[0];
+        } catch (error) {
+          if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+            // eslint-disable-next-line no-console
+            console.warn('Unsupported transaction type encountered');
+            return null;
+          }
+          throw error;
+        }
+      })
+      .filter((tx): tx is Transaction => tx !== null);
 
     return { transactions, pageInfo };
   }

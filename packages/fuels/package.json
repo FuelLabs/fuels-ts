@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.94.1",
+  "version": "0.94.3",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
