@@ -52,7 +52,7 @@ export const getAssetAmountInRequestInputs = (
       return acc.add(input.amount);
     }
 
-    if (isRequestInputMessageWithoutData(input) && assetId === baseAsset) {
+    if (isRequestInputMessage(input) && assetId === baseAsset) {
       return acc.add(input.amount);
     }
 
