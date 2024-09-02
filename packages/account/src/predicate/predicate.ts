@@ -117,6 +117,7 @@ export class Predicate<
    */
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 
