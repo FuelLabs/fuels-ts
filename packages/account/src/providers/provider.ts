@@ -1359,12 +1359,12 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
-   * Returns an array of blobIds if they exist on chain, for a given array of blobIds.
+   * Returns an array of blobIds that exist on chain, for a given array of blobIds.
    *
    * @param blobIds - blobIds to check.
    * @returns - A promise that resolves to an array of blobIds that exist on chain.
    */
-  async getBlobs(blobIds: string[]): Promise<(string | null)[]> {
+  async getBlobs(blobIds: string[]): Promise<string[]> {
     const res = await this.operations.getBlobs({ blobIds });
     const blobs: (string | null)[] = [];
 
