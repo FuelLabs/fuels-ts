@@ -40,9 +40,9 @@ export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike
 export class ScriptTransactionRequest extends BaseTransactionRequest {
   static from(obj: ScriptTransactionRequestLike) {
     if (obj instanceof this) {
-      return obj;
+      return structuredClone(obj);
     }
-    return new this(obj);
+    return structuredClone(obj);
   }
 
   /** Type of the transaction */
