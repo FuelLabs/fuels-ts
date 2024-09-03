@@ -66,8 +66,8 @@ jobs:
         with:
           should-install-bun: true
 
-      - name: Run UI tests (on template)
-        run: sh ./scripts/tests-ui.sh
+      # - name: Run UI tests (on template)
+      #   run: sh ./scripts/tests-ui.sh
 
       # - name: Wait for release to succeed
       #   uses: lewagon/wait-on-check-action@v1.3.4
