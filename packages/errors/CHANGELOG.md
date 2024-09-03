@@ -1,5 +1,25 @@
 # @fuel-ts/errors
 
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [b67ded2]
+  - @fuel-ts/versions@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [ccd94fc]
+  - @fuel-ts/versions@0.94.2
+
+## 0.94.1
+
+### Patch Changes
+
+- @fuel-ts/versions@0.94.1
+
 ## 0.94.0
 
 ### Minor Changes

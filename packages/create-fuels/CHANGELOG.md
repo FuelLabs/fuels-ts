@@ -1,5 +1,30 @@
 # create-fuels
 
+## 0.94.3
+
+### Patch Changes
+
+- b67ded2: chore: upgraded forc to `0.63.3`
+- e87b51b: feat: add missing connectors to `create fuels` template
+- 08aa4ae: feat: embed testnet faucet in `create-fuels` template
+- e04947a: feat: make `create-fuels` template app responsive
+
+## 0.94.2
+
+### Patch Changes
+
+- fcfbdf1: build(deps): bump the deps-patch group across 1 directory
+- 8c47dc5: chore: upgrade connectors
+- 362ea33: fix: added missing dependencies for templates
+- 50d548c: fix: UI integration tests
+
+## 0.94.1
+
+### Patch Changes
+
+- c57f30a: chore: make `nextjs` the default `create fuels` template
+- c2fa2a5: feat: add vite template to `create-fuels`
+
 ## 0.94.0
 
 ### Minor Changes

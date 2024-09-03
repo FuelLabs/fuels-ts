@@ -16,6 +16,10 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
+import {
+  MOCK_TX_UNKNOWN_RAW_PAYLOAD,
+  MOCK_TX_SCRIPT_RAW_PAYLOAD,
+} from '../../test/fixtures/transaction-summary';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
 import type { Coin } from './coin';
@@ -56,13 +60,133 @@ const getCustomFetch =
  * @group node
  */
 describe('Provider', () => {
+  it('supports basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
+    const provider = await Provider.create(authUrl);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const expectedAuthToken = `Basic ${btoa(usernameAndPassword)}`;
+    const [requestUrl, request] = fetchSpy.mock.calls[0];
+    expect(requestUrl).toEqual(url);
+    expect(request?.headers).toMatchObject({
+      Authorization: expectedAuthToken,
+    });
+  });
+
+  it('custom requestMiddleware is not overwritten by basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
+
+    const requestMiddleware = vi.fn();
+    await Provider.create(authUrl, {
+      requestMiddleware,
+    });
+
+    expect(requestMiddleware).toHaveBeenCalled();
+  });
+
+  it('should throw an error when retrieving a transaction with an unknown transaction type', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    const mockProvider = await Provider.create(provider.url, {
+      fetch: getCustomFetch('getTransaction', {
+        transaction: {
+          id: '0x1234567890abcdef',
+          rawPayload: MOCK_TX_UNKNOWN_RAW_PAYLOAD, // Unknown transaction type
+        },
+      }),
+    });
+
+    // Spy on console.warn
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    // Verify that only one transaction was returned (the known type)
+    const transaction = await mockProvider.getTransaction('0x1234567890abcdef');
+
+    expect(transaction).toBeNull();
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Unsupported transaction type encountered')
+    );
+
+    // Clean up
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('should log a warning when retrieving batch transactions with an unknown transaction type', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
+    // Create a mock provider with custom getTransactions operation
+    const mockProvider = await Provider.create(nodeProvider.url, {
+      fetch: getCustomFetch('getTransactions', {
+        transactions: {
+          edges: [
+            {
+              node: {
+                id: '0x1234567890abcdef',
+                rawPayload: MOCK_TX_UNKNOWN_RAW_PAYLOAD,
+              },
+            },
+            {
+              node: {
+                id: '0xabcdef1234567890',
+                rawPayload: MOCK_TX_SCRIPT_RAW_PAYLOAD,
+              },
+            },
+          ],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+        },
+      }),
+    });
+
+    // Spy on console.warn
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    // Verify that only one transaction was returned (the known type)
+    const { transactions } = await mockProvider.getTransactions();
+    expect(transactions.length).toBe(1);
+
+    // Check if warning was logged
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Unsupported transaction type encountered')
+    );
+
+    // Clean up
+    consoleWarnSpy.mockRestore();
+  });
+
   it('can getVersion()', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.33.0');
+    expect(version).toEqual('0.34.0');
   });
 
   it('can call()', async () => {
@@ -121,7 +245,7 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(107),
+        gasUsed: bn(159),
       },
     ];
 
@@ -407,7 +531,7 @@ describe('Provider', () => {
   });
 
   it('should cache resources only when TX is successfully submitted', async () => {
-    const resourceAmount = 50_000;
+    const resourceAmount = 5_000;
     const utxosAmount = 2;
 
     const testMessage = new TestMessage({ amount: resourceAmount });
@@ -416,6 +540,7 @@ describe('Provider', () => {
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
+      // 3 resources with a total of 15_000
       walletsConfig: {
         coinsPerAsset: utxosAmount,
         amountPerCoin: resourceAmount,
@@ -432,6 +557,7 @@ describe('Provider', () => {
 
     expect(coins.length).toBe(utxosAmount);
 
+    // Tx will cost 10_000 for the transfer + 1 for fee. All resources will be used
     const EXPECTED = {
       utxos: coins.map((coin) => coin.id),
       messages: [testMessage.nonce],

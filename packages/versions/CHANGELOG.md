@@ -1,5 +1,19 @@
 # @fuel-ts/versions
 
+## 0.94.3
+
+### Patch Changes
+
+- b67ded2: chore: upgraded forc to `0.63.3`
+
+## 0.94.2
+
+### Patch Changes
+
+- ccd94fc: chore: upgrade `fuel-core@0.34.0`
+
+## 0.94.1
+
 ## 0.94.0
 
 ### Minor Changes
