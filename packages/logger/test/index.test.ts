@@ -1,14 +1,17 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import debug from 'debug';
+import type { MockInstance } from 'vitest';
 
 import { logger, prefixLogger, defaultLogger } from '../src/index';
+
+type Debug = typeof debug;
 
 /**
  * @group node
  */
 describe('Logger Tests', () => {
-  let debugSpy;
+  let debugSpy: MockInstance<Parameters<Debug['log']>, ReturnType<Debug['log']>>;
 
   beforeEach(() => {
     debug.enable('test');
