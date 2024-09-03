@@ -442,7 +442,7 @@ describe('Provider', () => {
       }));
       expect(producedBlocks).toEqual(expectedBlocks);
     },
-    { repeats: 5 }
+    { repeats: 10 }
   );
 
   it('can set cache ttl', async () => {
