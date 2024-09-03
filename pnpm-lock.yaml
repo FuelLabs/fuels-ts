@@ -611,6 +611,8 @@ importers:
 
   internal/tsup: {}
 
+  packages/abi: {}
+
   packages/abi-coder:
     dependencies:
       '@fuel-ts/crypto':
