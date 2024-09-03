@@ -41,6 +41,7 @@ export type LaunchNodeOptions = {
    * Passing in a snapshot configuration path via the `--snapshot` flag in `args` will override this.
    * */
   snapshotConfig?: SnapshotConfigs;
+  delay?: number;
 };
 
 export type LaunchNodeResult = Promise<{
@@ -115,6 +116,7 @@ export const launchNode = async ({
   loggingEnabled = true,
   basePath,
   snapshotConfig = defaultSnapshotConfigs,
+  delay,
 }: LaunchNodeOptions = {}): LaunchNodeResult =>
   // eslint-disable-next-line no-async-promise-executor
   new Promise(async (resolve, reject) => {
@@ -265,8 +267,6 @@ export const launchNode = async ({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
 
-        // TODO: Remove delay after fuel-core issue is fixed
-        // https://github.com/FuelLabs/fuel-core/issues/2107
         setTimeout(
           () =>
             // Resolve with the cleanup method.
@@ -278,7 +278,7 @@ export const launchNode = async ({
               snapshotDir: snapshotDirToUse as string,
               pid: child.pid as number,
             }),
-          500
+          delay ?? 0
         );
       }
       if (/error/i.test(text)) {

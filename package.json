@@ -32,8 +32,6 @@
     "test:e2e": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --e2e)",
     "bench:node": "vitest bench --run --config vitest.node.config.mts $(scripts/tests-find.sh)",
     "bench:node:filter": "vitest bench --run --config vitest.node.config.mts",
-    "bench:browser": "vitest bench --run --config vitest.browser.config.mts $(scripts/tests-find.sh --browser)",
-    "bench:browser:filter": "vitest bench --run --config --coverage vite.browser.config.mts",
     "clinic:flame": "clinic flame --autocannon [ / ] -- node packages/${npm_config_package_name}/dist/profile.js",
     "clinic:bubble": "clinic bubbleprof --autocannon [ -c 5 -a 500 / ] -- node packages/${npm_config_package_name}/dist/profile.js",
     "clinic:doctor": "clinic doctor --autocannon [ / ] -- node packages/${npm_config_package_name}/dist/profile.js",
