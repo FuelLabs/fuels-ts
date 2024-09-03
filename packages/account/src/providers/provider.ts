@@ -10,6 +10,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
+import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -27,6 +28,7 @@ import type {
   GqlPageInfo,
   GqlRelayedTransactionFailed,
   GqlMessage,
+  Requester,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -59,6 +61,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
 
 const MAX_RETRIES = 10;
 
@@ -376,6 +379,7 @@ type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
+  getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
 /**
@@ -602,11 +606,11 @@ Supported fuel-core version: ${supportedVersion}.`
       responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
+
           if (Array.isArray(graphQlResponse?.errors)) {
-            throw new FuelError(
-              FuelError.CODES.INVALID_REQUEST,
-              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
-            );
+            for (const error of graphQlResponse.errors) {
+              handleGqlErrorMessage(error.message, error);
+            }
           }
         }
       },
@@ -629,8 +633,33 @@ Supported fuel-core version: ${supportedVersion}.`
       return gqlClient.request(query, vars);
     };
 
+    const customOperations = (requester: Requester) => ({
+      getBlobs(variables: { blobIds: string[] }) {
+        const queryParams = variables.blobIds.map((_, i) => `$blobId${i}: BlobId!`).join(', ');
+        const blobParams = variables.blobIds
+          .map((_, i) => `blob${i}: blob(id: $blobId${i}) { id }`)
+          .join('\n');
+
+        const updatedVariables = variables.blobIds.reduce(
+          (acc, blobId, i) => {
+            acc[`blobId${i}`] = blobId;
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+
+        const document = gql`
+          query getBlobs(${queryParams}) {
+            ${blobParams}
+          }
+        `;
+
+        return requester(document, updatedVariables);
+      },
+    });
+
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
-    return getOperationsSdk(executeQuery);
+    return { ...getOperationsSdk(executeQuery), ...customOperations(executeQuery) };
   }
 
   /**
@@ -1354,6 +1383,25 @@ Supported fuel-core version: ${supportedVersion}.`
       .filter((v) => !!v) as Array<Resource>;
 
     return coins;
+  }
+
+  /**
+   * Returns an array of blobIds that exist on chain, for a given array of blobIds.
+   *
+   * @param blobIds - blobIds to check.
+   * @returns - A promise that resolves to an array of blobIds that exist on chain.
+   */
+  async getBlobs(blobIds: string[]): Promise<string[]> {
+    const res = await this.operations.getBlobs({ blobIds });
+    const blobs: (string | null)[] = [];
+
+    Object.keys(res).forEach((key) => {
+      // @ts-expect-error keys are strings
+      const val = res[key];
+      blobs.push(val?.id ?? null);
+    });
+
+    return blobs.filter((v) => v) as string[];
   }
 
   /**
