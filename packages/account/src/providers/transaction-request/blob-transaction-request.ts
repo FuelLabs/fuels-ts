@@ -1,5 +1,6 @@
 import type { BN } from '@fuel-ts/math';
 import type { TransactionBlob } from '@fuel-ts/transactions';
+import { clone } from 'ramda';
 
 import type { GasCosts } from '../provider';
 import { calculateMetadataGasForTxBlob } from '../utils';
@@ -17,7 +18,7 @@ export interface BlobTransactionRequestLike extends BaseTransactionRequestLike {
 
 export class BlobTransactionRequest extends BaseTransactionRequest {
   static from(obj: BlobTransactionRequestLike) {
-    return new this(structuredClone(obj));
+    return new this(clone(obj));
   }
 
   /** Type of the transaction */

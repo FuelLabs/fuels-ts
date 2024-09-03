@@ -8,6 +8,7 @@ import type { BN, BigNumberish } from '@fuel-ts/math';
 import type { TransactionScript } from '@fuel-ts/transactions';
 import { InputType, OutputType, TransactionType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
+import { clone } from 'ramda';
 
 import type { ChainInfo, GasCosts } from '../provider';
 import { calculateMetadataGasForTxScript, getMaxGas } from '../utils/gas';
@@ -39,7 +40,7 @@ export interface ScriptTransactionRequestLike extends BaseTransactionRequestLike
  */
 export class ScriptTransactionRequest extends BaseTransactionRequest {
   static from(obj: ScriptTransactionRequestLike) {
-    return new this(structuredClone(obj));
+    return new this(clone(obj));
   }
 
   /** Type of the transaction */
