@@ -5,7 +5,7 @@ import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
-import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, ReceiptType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
@@ -398,48 +398,52 @@ describe('Provider', () => {
   // TODO: Add back support for producing blocks with intervals by supporting the new
   // `block_production` config option for `fuel_core`.
   // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
-  it.skip('can force-produce blocks with custom timestamps', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
+  it(
+    'can force-produce blocks with custom timestamps',
+    async () => {
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
 
-    const block = await provider.getBlock('latest');
-    if (!block) {
-      throw new Error('No latest block');
-    }
-    const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
-      block;
-    const latestBlockUnixTimestampBeforeProduce = DateTime.fromTai64(
-      latestBlockTimestampBeforeProduce
-    ).toUnixMilliseconds();
+      const block = await provider.getBlock('latest');
+      if (!block) {
+        throw new Error('No latest block');
+      }
+      const { time: latestBlockTimestampBeforeProduce, height: latestBlockNumberBeforeProduce } =
+        block;
+      const latestBlockUnixTimestampBeforeProduce = DateTime.fromTai64(
+        latestBlockTimestampBeforeProduce
+      ).toUnixMilliseconds();
 
-    const amountOfBlocksToProduce = 3;
-    const blockTimeInterval = 100; // 100ms
-    const startTime = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000; // 1s after the latest block
+      const amountOfBlocksToProduce = 3;
+      const blockTimeInterval = 100; // 100ms
+      const startTime = new Date(latestBlockUnixTimestampBeforeProduce).getTime() + 1000; // 1s after the latest block
 
-    const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, startTime);
+      const latestBlockNumber = await provider.produceBlocks(amountOfBlocksToProduce, startTime);
 
-    // Verify that the latest block number is the expected one
-    expect(latestBlockNumber.toString(10)).toEqual(
-      latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toString(10)
-    );
+      // Verify that the latest block number is the expected one
+      expect(latestBlockNumber.toString(10)).toEqual(
+        latestBlockNumberBeforeProduce.add(amountOfBlocksToProduce).toString(10)
+      );
 
-    // Verify that the produced blocks have the expected timestamps and block numbers
-    const producedBlocks = (
-      await Promise.all(
-        Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
-          provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
+      // Verify that the produced blocks have the expected timestamps and block numbers
+      const producedBlocks = (
+        await Promise.all(
+          Array.from({ length: amountOfBlocksToProduce }, (_, i) =>
+            provider.getBlock(latestBlockNumberBeforeProduce.add(i + 1).toNumber())
+          )
         )
-      )
-    ).map((producedBlock) => ({
-      height: producedBlock?.height.toString(10),
-      time: producedBlock?.time,
-    }));
-    const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
-      height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
-      time: DateTime.fromUnixMilliseconds(startTime + i * blockTimeInterval).toTai64(),
-    }));
-    expect(producedBlocks).toEqual(expectedBlocks);
-  });
+      ).map((producedBlock) => ({
+        height: producedBlock?.height.toString(10),
+        time: producedBlock?.time,
+      }));
+      const expectedBlocks = Array.from({ length: amountOfBlocksToProduce }, (_, i) => ({
+        height: latestBlockNumberBeforeProduce.add(i + 1).toString(10),
+        time: DateTime.fromUnixMilliseconds(startTime + i * blockTimeInterval).toTai64(),
+      }));
+      expect(producedBlocks).toEqual(expectedBlocks);
+    },
+    { repeats: 5 }
+  );
 
   it('can set cache ttl', async () => {
     const ttl = 10000;
