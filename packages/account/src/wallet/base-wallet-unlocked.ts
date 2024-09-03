@@ -5,13 +5,13 @@ import { hexlify } from '@fuel-ts/utils';
 import { Account } from '../account';
 import { transactionRequestify } from '../providers';
 import type {
-  TransactionResponse,
   TransactionRequestLike,
   CallResult,
   Provider,
   ProviderSendTxParams,
   EstimateTransactionParams,
   TransactionRequest,
+  TransactionResponse,
 } from '../providers';
 import { Signer } from '../signer';
 

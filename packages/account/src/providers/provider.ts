@@ -10,6 +10,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
+import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -27,6 +28,7 @@ import type {
   GqlPageInfo,
   GqlRelayedTransactionFailed,
   GqlMessage,
+  Requester,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -377,6 +379,7 @@ type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
+  getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
 /**
@@ -452,6 +455,20 @@ export default class Provider {
     }
   }
 
+  private static extractBasicAuth(url: string): { url: string; auth: string | undefined } {
+    const parsedUrl = new URL(url);
+
+    const username = parsedUrl.username;
+    const password = parsedUrl.password;
+    const urlNoBasicAuth = `${parsedUrl.origin}${parsedUrl.pathname}`;
+    if (!(username && password)) {
+      return { url, auth: undefined };
+    }
+
+    const auth = `Basic ${btoa(`${username}:${password}`)}`;
+    return { url: urlNoBasicAuth, auth };
+  }
+
   /**
    * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
    *
@@ -461,8 +478,20 @@ export default class Provider {
    * @returns A promise that resolves to a Provider instance.
    */
   static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    const provider = new Provider(url, options);
+    const { url: urlToUse, auth } = this.extractBasicAuth(url);
+    const provider = new Provider(urlToUse, {
+      ...options,
+      requestMiddleware: async (request) => {
+        if (auth) {
+          request.headers ??= {};
+          (request.headers as Record<string, string>).Authorization = auth;
+        }
+        return options.requestMiddleware?.(request) ?? request;
+      },
+    });
+
     await provider.fetchChainAndNodeInfo();
+
     return provider;
   }
 
@@ -604,8 +633,33 @@ Supported fuel-core version: ${supportedVersion}.`
       return gqlClient.request(query, vars);
     };
 
+    const customOperations = (requester: Requester) => ({
+      getBlobs(variables: { blobIds: string[] }) {
+        const queryParams = variables.blobIds.map((_, i) => `$blobId${i}: BlobId!`).join(', ');
+        const blobParams = variables.blobIds
+          .map((_, i) => `blob${i}: blob(id: $blobId${i}) { id }`)
+          .join('\n');
+
+        const updatedVariables = variables.blobIds.reduce(
+          (acc, blobId, i) => {
+            acc[`blobId${i}`] = blobId;
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+
+        const document = gql`
+          query getBlobs(${queryParams}) {
+            ${blobParams}
+          }
+        `;
+
+        return requester(document, updatedVariables);
+      },
+    });
+
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
-    return getOperationsSdk(executeQuery);
+    return { ...getOperationsSdk(executeQuery), ...customOperations(executeQuery) };
   }
 
   /**
@@ -740,12 +794,12 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param sendTransactionParams - The provider send transaction parameters (optional).
    * @returns A promise that resolves to the transaction response object.
    */
-  // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    // #region Provider-sendTransaction
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
@@ -1332,6 +1386,25 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * Returns an array of blobIds that exist on chain, for a given array of blobIds.
+   *
+   * @param blobIds - blobIds to check.
+   * @returns - A promise that resolves to an array of blobIds that exist on chain.
+   */
+  async getBlobs(blobIds: string[]): Promise<string[]> {
+    const res = await this.operations.getBlobs({ blobIds });
+    const blobs: (string | null)[] = [];
+
+    Object.keys(res).forEach((key) => {
+      // @ts-expect-error keys are strings
+      const val = res[key];
+      blobs.push(val?.id ?? null);
+    });
+
+    return blobs.filter((v) => v) as string[];
+  }
+
+  /**
    * Returns block matching the given ID or height.
    *
    * @param idOrHeight - ID or height of the block.
@@ -1435,13 +1508,24 @@ Supported fuel-core version: ${supportedVersion}.`
     transactionId: string
   ): Promise<Transaction<TTransactionType> | null> {
     const { transaction } = await this.operations.getTransaction({ transactionId });
+
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder().decode(
-      arrayify(transaction.rawPayload),
-      0
-    )?.[0] as Transaction<TTransactionType>;
+
+    try {
+      return new TransactionCoder().decode(
+        arrayify(transaction.rawPayload),
+        0
+      )?.[0] as Transaction<TTransactionType>;
+    } catch (error) {
+      if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+        // eslint-disable-next-line no-console
+        console.warn('Unsupported transaction type encountered');
+        return null;
+      }
+      throw error;
+    }
   }
 
   /**
@@ -1455,9 +1539,20 @@ Supported fuel-core version: ${supportedVersion}.`
     } = await this.operations.getTransactions(paginationArgs);
 
     const coder = new TransactionCoder();
-    const transactions = edges.map(
-      ({ node: { rawPayload } }) => coder.decode(arrayify(rawPayload), 0)[0]
-    );
+    const transactions = edges
+      .map(({ node: { rawPayload } }) => {
+        try {
+          return coder.decode(arrayify(rawPayload), 0)[0];
+        } catch (error) {
+          if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+            // eslint-disable-next-line no-console
+            console.warn('Unsupported transaction type encountered');
+            return null;
+          }
+          throw error;
+        }
+      })
+      .filter((tx): tx is Transaction => tx !== null);
 
     return { transactions, pageInfo };
   }
