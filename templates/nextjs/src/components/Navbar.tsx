@@ -79,14 +79,7 @@ export const Navbar: FC = () => {
       <nav className="hidden md:flex justify-between items-center p-4 bg-black text-white gap-6">
         <Link href="/">Home</Link>
 
-        <Link
-          href={
-            CURRENT_ENVIRONMENT === "local" ? "/faucet" : TESTNET_FAUCET_LINK
-          }
-          target={CURRENT_ENVIRONMENT === "local" ? "_self" : "_blank"}
-        >
-          Faucet
-        </Link>
+        <Link href="/faucet">Faucet</Link>
 
         {isBrowserWalletConnected && (
           <Button onClick={disconnect}>Disconnect Wallet</Button>
@@ -123,16 +116,7 @@ export const Navbar: FC = () => {
           <>
             <Link href="/">Home</Link>
 
-            <Link
-              href={
-                CURRENT_ENVIRONMENT === "local"
-                  ? "/faucet"
-                  : TESTNET_FAUCET_LINK
-              }
-              target={CURRENT_ENVIRONMENT === "local" ? "_self" : "_blank"}
-            >
-              Faucet
-            </Link>
+            <Link href="/faucet">Faucet</Link>
 
             {isBrowserWalletConnected && (
               <Button onClick={disconnect}>Disconnect Wallet</Button>

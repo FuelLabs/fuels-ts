@@ -1,6 +1,6 @@
 import type { BigNumberish } from 'fuels';
-import { toNumber, Script, Predicate, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { toNumber, Script, Predicate, Wallet, FuelError, ErrorCode } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { PredicateMainArgsStruct, ScriptMainArgs } from '../../test/typegen';
 import type { Validation } from '../types/predicate';
@@ -33,8 +33,12 @@ describe('Predicate', () => {
       const scriptInput = 1;
       scriptInstance.account = receiver;
 
-      await expect(scriptInstance.functions.main(scriptInput).call()).rejects.toThrow(
-        /not enough coins to fit the target/
+      await expectToThrowFuelError(
+        () => scriptInstance.functions.main(scriptInput).call(),
+        new FuelError(
+          ErrorCode.NOT_ENOUGH_FUNDS,
+          `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+        )
       );
 
       // setup predicate
