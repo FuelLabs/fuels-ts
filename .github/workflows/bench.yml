@@ -1,0 +1,38 @@
+name: Benchmarks
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+
+jobs:
+  benchmark:
+    name: Performance regression check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+       uses: actions/checkout@v4
+
+      - name: CI Setup
+        uses: ./.github/actions/test-setup
+
+      # Run benchmark and stores the output to a file
+      - name: Run benchmark
+        run: pnpm node:bench | tee benchmark_results.txt
+
+      # Process the output to check for performance regression
+      - name: Process benchmark results
+        id: benchmark
+        run: |
+          RESULTS=$(cat benchmark_results.txt | sed 's/$/\\n/' | tr -d '\n')
+          echo "results<<EOF" >> $GITHUB_OUTPUT
+          echo "$RESULTS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          body: |
+            # Benchmark results
+            ${{ steps.benchmark.outputs.results }}
