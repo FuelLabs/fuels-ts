@@ -579,6 +579,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param quantities - CoinQuantity Array.
    * @param baseAssetId - The base asset to fund the transaction.
+   * @deprecated - This method is deprecated and will be removed in future versions.
+   * Please use `Account.generateFakeResources` along with `this.addResources` instead.
    */
   fundWithFakeUtxos(
     quantities: CoinQuantity[],
