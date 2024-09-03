@@ -33,6 +33,6 @@
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "type-fest": "^4.24.0"
+    "type-fest": "^4.26.0"
   }
 }
