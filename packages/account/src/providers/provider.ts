@@ -61,6 +61,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
 
 const MAX_RETRIES = 10;
 
@@ -605,11 +606,11 @@ Supported fuel-core version: ${supportedVersion}.`
       responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
+
           if (Array.isArray(graphQlResponse?.errors)) {
-            throw new FuelError(
-              FuelError.CODES.INVALID_REQUEST,
-              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
-            );
+            for (const error of graphQlResponse.errors) {
+              handleGqlErrorMessage(error.message, error);
+            }
           }
         }
       },

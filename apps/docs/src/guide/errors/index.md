@@ -264,6 +264,12 @@ When the Fuel Node info cache is empty; This is usually caused by not being conn
 
 Ensure that the provider has connected to a Fuel Node successfully.
 
+### `NOT_ENOUGH_FUNDS`
+
+When the account sending the transaction does not have enough funds to cover the fee.
+
+Ensure that the account creating the transaction has been funded appropriately.
+
 ### `TIMEOUT_EXCEEDED`
 
 When the timeout has been exceeded for a given operation.
