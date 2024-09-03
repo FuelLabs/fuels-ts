@@ -17,10 +17,7 @@ export interface BlobTransactionRequestLike extends BaseTransactionRequestLike {
 
 export class BlobTransactionRequest extends BaseTransactionRequest {
   static from(obj: BlobTransactionRequestLike) {
-    if (obj instanceof this) {
-      return structuredClone(obj);
-    }
-    return structuredClone(obj);
+    return new this(structuredClone(obj));
   }
 
   /** Type of the transaction */

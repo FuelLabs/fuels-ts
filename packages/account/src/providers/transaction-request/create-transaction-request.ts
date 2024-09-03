@@ -32,10 +32,7 @@ export interface CreateTransactionRequestLike extends BaseTransactionRequestLike
  */
 export class CreateTransactionRequest extends BaseTransactionRequest {
   static from(obj: CreateTransactionRequestLike) {
-    if (obj instanceof this) {
-      return structuredClone(obj);
-    }
-    return structuredClone(obj);
+    return new this(structuredClone(obj));
   }
 
   /** Type of the transaction */
