@@ -58,6 +58,7 @@ describe('Arrays Types', () => {
       contracts: [contract],
     } = launched;
     try {
+      // @ts-expect-error Will throw error because the array length is not 2
       // #region arrays-3
       // will throw error because the array length is not 2
       await contract.functions.echo_u64_array([10000000]).simulate();

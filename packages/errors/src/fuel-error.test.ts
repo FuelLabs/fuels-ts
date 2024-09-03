@@ -57,6 +57,6 @@ it('converts error to plain object', () => {
     message,
     VERSIONS: err.VERSIONS,
     metadata,
-    rawError: {},
+    rawError: null,
   });
 });
