@@ -469,8 +469,8 @@ export default class ContractFactory {
       );
     }
 
-    const { provider } = this.getAccount();
-    const { consensusParameters } = provider.getChain();
+    const account = this.getAccount();
+    const { consensusParameters } = account.provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize.toNumber();
     const transactionSizeLimit = consensusParameters.txParameters.maxSize.toNumber();
     const maxLimit = 64000;
@@ -479,10 +479,13 @@ export default class ContractFactory {
     const sizeLimit = chainLimit < maxLimit ? chainLimit : maxLimit;
 
     // Get an estimate base tx length
+
     const blobTx = this.blobTransactionRequest({
       ...deployOptions,
       bytecode: randomBytes(32),
-    }).fundWithFakeUtxos([], provider.getBaseAssetId());
+    }).addResources(
+      account.generateFakeResources([{ assetId: account.provider.getBaseAssetId(), amount: bn(1) }])
+    );
     // Given above, calculate the maximum chunk size
     const maxChunkSize = (sizeLimit - blobTx.byteLength() - WORD_SIZE) * chunkSizeMultiplier;
 
