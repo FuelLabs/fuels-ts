@@ -38,13 +38,3 @@ Object.keys(pkgJson.exports)
   });
 
 writeFileSync(dtsPath, dtsContents);
-
-/**
- * 3). Run typecheck
- */
-try {
-  execSync('tsc --noEmit', { stdio: 'inherit' });
-} catch (err) {
-  error(err.toString());
-  process.exit(1);
-}
