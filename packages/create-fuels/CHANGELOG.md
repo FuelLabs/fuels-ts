@@ -1,5 +1,14 @@
 # create-fuels
 
+## 0.94.3
+
+### Patch Changes
+
+- b67ded2: chore: upgraded forc to `0.63.3`
+- e87b51b: feat: add missing connectors to `create fuels` template
+- 08aa4ae: feat: embed testnet faucet in `create-fuels` template
+- e04947a: feat: make `create-fuels` template app responsive
+
 ## 0.94.2
 
 ### Patch Changes
