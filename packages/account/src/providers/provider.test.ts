@@ -845,6 +845,29 @@ describe('Provider', () => {
     );
   });
 
+  it('can getBlock', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+    await provider.produceBlocks(1);
+    const block = await provider.getBlock('latest');
+    expect(block).toStrictEqual({
+      id: expect.any(String),
+      height: expect.any(BN),
+      time: expect.any(String),
+      header: {
+        applicationHash: expect.any(String),
+        daHeight: expect.any(BN),
+        eventInboxRoot: expect.any(String),
+        messageOutboxRoot: expect.any(String),
+        prevRoot: expect.any(String),
+        stateTransitionBytecodeVersion: expect.any(String),
+        transactionsCount: expect.any(String),
+        transactionsRoot: expect.any(String),
+      },
+      transactionIds: expect.any(Array<string>),
+    });
+  });
+
   it('can getBlocks', async () => {
     using launched = await setupTestProviderAndWallets();
     const blocksLenght = 5;
@@ -856,14 +879,47 @@ describe('Provider', () => {
     });
     expect(blocks.length).toBe(blocksLenght);
     blocks.forEach((block) => {
-      expect(block).toEqual(
-        expect.objectContaining({
-          id: expect.any(String),
-          height: expect.any(BN),
-          time: expect.any(String),
-          transactionIds: expect.any(Array<string>),
-        })
-      );
+      expect(block).toStrictEqual({
+        id: expect.any(String),
+        height: expect.any(BN),
+        time: expect.any(String),
+        header: {
+          applicationHash: expect.any(String),
+          daHeight: expect.any(BN),
+          eventInboxRoot: expect.any(String),
+          messageOutboxRoot: expect.any(String),
+          prevRoot: expect.any(String),
+          stateTransitionBytecodeVersion: expect.any(String),
+          transactionsCount: expect.any(String),
+          transactionsRoot: expect.any(String),
+        },
+        transactionIds: expect.any(Array<string>),
+      });
+    });
+  });
+
+  it('can getBlockWithTransactions', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+    await provider.produceBlocks(1);
+    const block = await provider.getBlockWithTransactions('latest');
+    const { transactions } = await provider.getTransactions({ first: 100 });
+    expect(block).toStrictEqual({
+      id: expect.any(String),
+      height: expect.any(BN),
+      time: expect.any(String),
+      header: {
+        applicationHash: expect.any(String),
+        daHeight: expect.any(BN),
+        eventInboxRoot: expect.any(String),
+        messageOutboxRoot: expect.any(String),
+        prevRoot: expect.any(String),
+        stateTransitionBytecodeVersion: expect.any(String),
+        transactionsCount: expect.any(String),
+        transactionsRoot: expect.any(String),
+      },
+      transactionIds: expect.any(Array<string>),
+      transactions,
     });
   });
 
