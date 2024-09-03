@@ -16,7 +16,8 @@ pnpm exec playwright test
 TEST_RESULT=$?
 
 pkill vite
+lsof -t -i tcp:5173 | xargs kill
 pkill fuel-core
-pnpm node:clean
+lsof -t -i tcp:4000 | xargs kill
 
 exit $TEST_RESULT
