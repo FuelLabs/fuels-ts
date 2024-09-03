@@ -2,6 +2,10 @@ import { log } from 'console';
 
 import { AbiProjectsEnum, getAbiForcProject } from '../../test/fixtures/forc-projects';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('AbiGen', () => {
   test('contract', () => {
     const { abiContents } = getAbiForcProject(AbiProjectsEnum.ABI_CONTRACT);
