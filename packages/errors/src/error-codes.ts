@@ -60,6 +60,8 @@ export enum ErrorCode {
 
   // crypto
   INVALID_CREDENTIALS = 'invalid-credentials',
+
+  /** @deprecated This error code is no longer used */
   HASHER_LOCKED = 'hasher-locked',
 
   // transaction
