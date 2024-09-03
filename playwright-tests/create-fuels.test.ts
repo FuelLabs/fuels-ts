@@ -11,10 +11,6 @@ test.extend({
 });
 
 test('counter contract - increment function call works properly', async ({ page }) => {
-  // make a get request to localhost:4000/v1/playground to check if the node is running
-  const response = await fetch('http://localhost:4000/v1/playground');
-  expect(response.status).toBe(200);
-
   await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
 
   await page.waitForTimeout(5000);
