@@ -1,7 +1,7 @@
-import { useEffect, useState, createContext, useContext, useMemo } from "react";
+import { useEffect, useState, createContext, useContext } from "react";
 import { useBrowserWallet } from "./useBrowserWallet";
 import { useBurnerWallet } from "./useBurnerWallet";
-import { AppWallet } from "@/lib";
+import { AppWallet } from "../lib";
 
 /**
  * burner -> a burner wallet embedded inside of the template app and stored in local storage
