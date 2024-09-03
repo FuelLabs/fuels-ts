@@ -6,6 +6,7 @@ import { AbstractAccount } from '@fuel-ts/interfaces';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BigNumberish, BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { InputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify, isDefined } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
@@ -41,6 +42,7 @@ import {
   cacheRequestInputsResourcesFromOwner,
   getAssetAmountInRequestInputs,
   isRequestInputCoin,
+  isRequestInputMessageWithoutData,
   isRequestInputResource,
 } from './providers/transaction-request/helpers';
 import { mergeQuantities } from './providers/utils/merge-quantities';
@@ -270,7 +272,7 @@ export class Account extends AbstractAccount {
       });
 
       const totalBaseAssetOnInputs = getAssetAmountInRequestInputs(
-        request.inputs,
+        request.inputs.filter(isRequestInputResource),
         baseAssetId,
         baseAssetId
       );
@@ -542,13 +544,15 @@ export class Account extends AbstractAccount {
 
     const findAssetInput = (assetId: string) =>
       txRequestClone.inputs.find((input) => {
-        if ('assetId' in input) {
+        if (input.type === InputType.Coin) {
           return input.assetId === assetId;
         }
-        if ('recipient' in input) {
+
+        // We only consider the message input if it has no data.
+        // Messages with `data` cannot fund the gas of a transaction.
+        if (isRequestInputMessageWithoutData(input)) {
           return baseAssetId === assetId;
         }
-
         return false;
       });
 
