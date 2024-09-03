@@ -91,6 +91,16 @@ export type Block = {
   height: BN;
   time: string;
   transactionIds: string[];
+  header: {
+    daHeight: BN;
+    stateTransitionBytecodeVersion: string;
+    transactionsCount: string;
+    transactionsRoot: string;
+    messageOutboxRoot: string;
+    eventInboxRoot: string;
+    prevRoot: string;
+    applicationHash: string;
+  };
 };
 
 export type GetCoinsResponse = {
