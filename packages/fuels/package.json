@@ -89,7 +89,7 @@
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
     "toml": "^3.0.0",
-    "uglify-js": "^3.19.2",
+    "uglify-js": "^3.19.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {
