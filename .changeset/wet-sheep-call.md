@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-feat: add ui tests to `create-fuels` template
+feat: add UI tests to `create-fuels` template
