@@ -1,24 +1,42 @@
-import type { Abi } from './abi-parser-types';
-import type { JsonAbi_V1 } from './specifications/v1/abi-specification-v1';
-import { AbiV1 } from './specifications/v1/abi-v1';
+import type { Abi } from './abi';
+import { transpileV1, AbiSpecificationV1 } from './specifications';
 
 /**
  * A typed ABI object or a stringified json of a Sway program's ABI
  */
-export type ParsableJsonAbi = string | JsonAbi_V1;
+export type AbiSpecification = AbiSpecificationV1;
 
-/**
- * Parses an ABI in JSON format.
- *
- * @param abi a JSON ABI of a Sway program
- * @returns a parsed ABI
- */
-export function parseJsonAbi(abi: ParsableJsonAbi): Abi {
-  const theAbi = typeof abi === 'string' ? (JSON.parse(abi) as { specVersion: string }) : abi;
-  switch (theAbi.specVersion) {
-    case '1':
-      return new AbiV1(abi as JsonAbi_V1);
-    default:
-      throw new Error('unsupported abi specification version');
+export class AbiParser {
+  /**
+   * ABI specifications transpilers
+   */
+  private static specifications = {
+    '1': transpileV1,
+  } as const;
+
+  /**
+   * Parses an ABI in JSON format.
+   *
+   * @param opts
+   * @param opts.abi - a JSON ABI of a Sway program
+   * @returns an public interface for the Abi
+   */
+  static parse({ abi }: { abi: AbiSpecification }): Abi {
+    if (typeof abi !== 'object' || abi === null) {
+      throw new Error('Invalid ABI: not an object');
+    }
+
+    if (typeof abi.specVersion !== 'string') {
+      // TODO: change to FuelError
+      throw new Error('Invalid ABI: specVersion is not a string');
+    }
+
+    const transpiler = AbiParser.specifications[abi.specVersion];
+    if (!transpiler) {
+      // TODO: change to FuelError
+      throw new Error(`Unsupported ABI specVersion: ${abi.specVersion}`);
+    }
+
+    return transpiler(abi);
   }
 }
