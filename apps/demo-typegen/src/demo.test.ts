@@ -1,6 +1,6 @@
 // #region Testing-in-ts-ts
-import { toHex, Address, Wallet } from 'fuels';
-import { launchTestNode, safeExec } from 'fuels/test-utils';
+import { toHex, Address, Wallet, FuelError, ErrorCode } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import storageSlots from '../demo-contract/out/release/demo-contract-storage_slots.json';
 
@@ -105,9 +105,13 @@ it('should throw when simulating via contract factory with wallet with no resour
   const { contract } = await waitForResult();
   const contractInstance = new DemoContract(contract.id, unfundedWallet);
 
-  const { error } = await safeExec(() => contractInstance.functions.return_input(1337).simulate());
-
-  expect((<Error>error).message).toMatch('not enough coins to fit the target');
+  await expectToThrowFuelError(
+    () => contractInstance.functions.return_input(1337).simulate(),
+    new FuelError(
+      ErrorCode.NOT_ENOUGH_FUNDS,
+      `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+    )
+  );
 });
 
 it('should not throw when dry running via contract factory with wallet with no resources', async () => {
