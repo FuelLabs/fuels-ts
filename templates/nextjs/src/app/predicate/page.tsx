@@ -146,10 +146,10 @@ export default function PredicateExample() {
 
       <Button
         onClick={async () =>
-          await transferFundsToPredicate(bn.parseUnits("0.1"))
+          await transferFundsToPredicate(bn.parseUnits("0.002"))
         }
       >
-        Transfer 0.1 ETH to Predicate
+        Transfer 0.002 ETH to Predicate
       </Button>
 
       <Input
@@ -161,17 +161,17 @@ export default function PredicateExample() {
 
       <Button
         onClick={async () =>
-          await unlockPredicateAndTransferFundsBack(bn.parseUnits("0.09"))
+          await unlockPredicateAndTransferFundsBack(bn.parseUnits("0.001"))
         }
       >
-        Unlock Predicate and Transfer 0.09 ETH back to Wallet
+        Unlock Predicate and Transfer 0.001 ETH back to Wallet
       </Button>
 
       <span className="mt-8 w-[400px] text-gray-400">
         Do note that when you 'unlock' a predicate, the predicate also pays for
         the gas of the transaction. <br />
         This is why you will notice that the balance of the predicate gets
-        reduced by 0.09 ETH + a nominal gas fee.
+        reduced by 0.001 ETH + a nominal gas fee.
       </span>
 
       <Link
