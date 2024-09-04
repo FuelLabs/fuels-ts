@@ -4,7 +4,6 @@ import { AbiProjectsEnum, getAbiForcProject } from './utils';
 
 /**
  * @group node
- * @group browser
  */
 describe('AbiGen', () => {
   test('contract', () => {
