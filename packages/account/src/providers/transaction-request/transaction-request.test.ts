@@ -275,4 +275,28 @@ describe('transactionRequestify', () => {
 
     expect(txRequest.type).toEqual(txRequestLike.type);
   });
+
+  it('should keep data from input in transaction request created [upload]', () => {
+    const txRequestLike: TransactionRequestLike = {
+      type: TransactionType.Upload,
+      inputs: [],
+      outputs: [],
+      witnessIndex: 0,
+      subsection: {
+        root: ZeroBytes32,
+        subsectionIndex: 0,
+        subsectionsNumber: 1,
+        proofSet: [],
+      },
+    };
+
+    const txRequest = transactionRequestify(txRequestLike);
+
+    if (txRequest.type === TransactionType.Upload) {
+      expect(txRequest.subsection).toEqual(txRequestLike.subsection);
+      expect(txRequest.witnessIndex).toEqual(txRequestLike.witnessIndex);
+    }
+
+    expect(txRequest.type).toEqual(txRequestLike.type);
+  });
 });

@@ -6,6 +6,7 @@ import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './types';
 import { UpgradeTransactionRequest } from './upgrade-transaction-request';
+import { UploadTransactionRequest } from './upload-transaction-request';
 
 /** @hidden */
 export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {
@@ -13,7 +14,8 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
     obj instanceof ScriptTransactionRequest ||
     obj instanceof CreateTransactionRequest ||
     obj instanceof BlobTransactionRequest ||
-    obj instanceof UpgradeTransactionRequest
+    obj instanceof UpgradeTransactionRequest ||
+    obj instanceof UploadTransactionRequest
   ) {
     return obj;
   }
@@ -32,6 +34,9 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
     }
     case TransactionType.Upgrade: {
       return UpgradeTransactionRequest.from(obj);
+    }
+    case TransactionType.Upload: {
+      return UploadTransactionRequest.from(obj);
     }
     default: {
       throw new FuelError(

@@ -192,6 +192,28 @@ export function calculateMetadataGasForTxUpgrade({
   return txId;
 }
 
+export function calculateMetadataGasForTxUpload({
+  gasCosts,
+  txBytesSize,
+  subsectionSize,
+  subsectionsSize,
+}: {
+  gasCosts: GasCosts;
+  txBytesSize: number;
+  subsectionSize: number;
+  subsectionsSize: number;
+}) {
+  const txId = resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+
+  const subsectionLen = resolveGasDependentCosts(subsectionSize, gasCosts.s256);
+  txId.add(subsectionLen);
+
+  const subsectionsLen = resolveGasDependentCosts(subsectionsSize, gasCosts.stateRoot);
+  txId.add(subsectionsLen);
+
+  return txId;
+}
+
 export interface CalculateGasFeeParams {
   tip?: BN;
   gas: BN;
