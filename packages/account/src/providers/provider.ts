@@ -27,7 +27,6 @@ import type {
   GqlTxParameters as TxParameters,
   GqlPageInfo,
   GqlRelayedTransactionFailed,
-  GqlMessage,
   Requester,
 } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -1906,12 +1905,28 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param nonce - The nonce of the message to retrieve.
    * @returns A promise that resolves to the Message object or null.
    */
-  async getMessageByNonce(nonce: string): Promise<GqlMessage | null> {
-    const { message } = await this.operations.getMessageByNonce({ nonce });
+  async getMessageByNonce(nonce: string): Promise<Message | null> {
+    const { message: rawMessage } = await this.operations.getMessageByNonce({ nonce });
 
-    if (!message) {
+    if (!rawMessage) {
       return null;
     }
+
+    const message: Message = {
+      messageId: InputMessageCoder.getMessageId({
+        sender: rawMessage.sender,
+        recipient: rawMessage.recipient,
+        nonce: rawMessage.nonce,
+        amount: bn(rawMessage.amount),
+        data: rawMessage.data,
+      }),
+      sender: Address.fromAddressOrString(rawMessage.sender),
+      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      nonce: rawMessage.nonce,
+      amount: bn(rawMessage.amount),
+      data: InputMessageCoder.decodeData(rawMessage.data),
+      daHeight: bn(rawMessage.daHeight),
+    };
 
     return message;
   }

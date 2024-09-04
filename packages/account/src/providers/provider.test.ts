@@ -1790,8 +1790,15 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
     const message = await provider.getMessageByNonce(nonce);
 
-    expect(message).toBeDefined();
-    expect(message?.nonce).toEqual(nonce);
+    expect(message).toStrictEqual({
+      messageId: expect.any(String),
+      sender: expect.any(Address),
+      recipient: expect.any(Address),
+      nonce: expect.any(String),
+      amount: expect.any(BN),
+      data: expect.any(Uint8Array),
+      daHeight: expect.any(BN),
+    });
   });
 
   describe('paginated methods', () => {
