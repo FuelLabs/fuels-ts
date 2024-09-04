@@ -44,7 +44,6 @@ Here's an example demonstrating how to use `transferToContract`:
 
 Always remember to call the `waitForResult()` function on the transaction response. That ensures the transaction has been mined successfully before proceeding.
 
-
 ## Transferring Assets To Multiple Wallets
 
 To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
@@ -53,9 +52,8 @@ To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
 
 This section demonstrates additional examples of transferring assets between wallets and to contracts.
 
-
 ## Checking Balances
 
-Before transferring assets, ensure your wallet has sufficient funds. Attempting a transfer without enough funds will result in an error: `not enough coins to fit the target`.
+Before you transfer assets, please make sure your wallet has enough funds. Attempting a transfer without enough funds will result in the error: `The transaction does not have enough funds to cover its execution.`
 
 You can see how to check your balance at the [`checking-balances`](./checking-balances.md) page.

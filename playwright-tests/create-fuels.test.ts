@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const WEB_SERVER_URL = 'http://127.0.0.1:3000';
+const WEB_SERVER_URL = 'http://localhost:5173';
 const FAUCET_URL = `${WEB_SERVER_URL}/faucet`;
 
 test.extend({
@@ -13,7 +13,7 @@ test.extend({
 test('counter contract - increment function call works properly', async ({ page }) => {
   await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
 
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(5000);
 
   const topUpWalletButton = page.getByText('Top-up Wallet');
   await topUpWalletButton.click();
