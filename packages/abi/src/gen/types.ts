@@ -1,31 +1,14 @@
 /* eslint-disable @typescript-eslint/no-misused-new */
 
-import type { ProgramRenderables } from './renderables';
-
 /**
  * Generation
  */
-export interface AbiGen {
-  new (opts: { inputs: AbiGenInput[]; output: AbiGenOutput }): AbiGen;
-
-  /**
-   * Loops over all the inputs and runs the associated
-   *
-   * @returns
-   */
-  generate: () => void;
-}
 
 export interface AbiGenFile {
   path: string;
   contents: string;
 }
 
-/**
- * Contains all the inputs that is passed around
- *
- *
- */
 export interface AbiGenInput {
   // Just here for future reference
   abiContents: AbiGenFile;
@@ -34,6 +17,7 @@ export interface AbiGenInput {
 
   // TODO: maybe we should delay the loading of the contents + (abi) until we want to use it.
   abi: {
+    programType: 'contract';
     capitalizedName: string;
   };
 
@@ -58,21 +42,14 @@ export interface AbiGenInput {
 }
 
 export interface AbiGenOutput {
-  type: 'ts' | 'js';
+  type: 'typescript' | 'javascript';
   // Do we need to handle different module types (ESM, CJS)?
-  // module: 'esm' | 'cjs';
-
-  programRenderables: ProgramRenderables;
-
-  new (): AbiGenOutput;
-
-  /**
-   * For the given input, we will grab the program renderables for the ABI program type
-   */
-  generate: (opts: { input: AbiGenInput; outputDir: string }) => AbiGenFile[];
+  module: 'esm' | 'cjs';
+  outputDir: string;
+  fileExtension: 'ts' | 'js';
 }
 
 export interface AbiGenRenderable {
   //
-  (opts: { input: AbiGenInput }): AbiGenFile[];
+  (opts: { input: AbiGenInput; output: AbiGenOutput }): AbiGenFile[];
 }
