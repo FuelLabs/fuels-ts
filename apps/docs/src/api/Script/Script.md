@@ -1,4 +1,4 @@
-[**@fuel-ts/script v0.94.3**](../index.md) • **Docs**
+[**@fuel-ts/script v0.94.4**](../index.md) • **Docs**
 
 ***
 
@@ -48,7 +48,7 @@ The account associated with the script.
 
 #### Defined in
 
-[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L70)
+[script.ts:70](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L70)
 
 ## Properties
 
@@ -64,7 +64,7 @@ The account associated with the script.
 
 #### Defined in
 
-[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L46)
+[script.ts:46](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L46)
 
 ***
 
@@ -80,7 +80,7 @@ The compiled bytecode of the script.
 
 #### Defined in
 
-[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L36)
+[script.ts:36](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L36)
 
 ***
 
@@ -96,7 +96,7 @@ Functions that can be invoked within the script.
 
 #### Defined in
 
-[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L61)
+[script.ts:61](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L61)
 
 ***
 
@@ -112,7 +112,7 @@ The ABI interface for the script.
 
 #### Defined in
 
-[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L41)
+[script.ts:41](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L41)
 
 ***
 
@@ -128,7 +128,7 @@ The provider used for interacting with the network.
 
 #### Defined in
 
-[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L56)
+[script.ts:56](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L56)
 
 ***
 
@@ -140,7 +140,7 @@ The script request object.
 
 #### Defined in
 
-[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L51)
+[script.ts:51](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L51)
 
 ## Methods
 
@@ -168,4 +168,4 @@ Will throw an error if the script has no configurable constants to be set or if 
 
 #### Defined in
 
-[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/cc962ddd723eecfdc3547cbf3cf6ebcfd052d837/packages/script/src/script.ts#L91)
+[script.ts:91](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/script/src/script.ts#L91)
