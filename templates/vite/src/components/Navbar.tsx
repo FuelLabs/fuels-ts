@@ -1,6 +1,11 @@
 import { FC, useState } from "react";
 import { Link } from "./Link";
-import { CURRENT_ENVIRONMENT, NODE_URL, TESTNET_FAUCET_LINK } from "../lib";
+import {
+  CURRENT_ENVIRONMENT,
+  DOCS_URL,
+  NODE_URL,
+  TESTNET_FAUCET_LINK,
+} from "../lib";
 import { useConnectUI, useDisconnect } from "@fuels/react";
 import { useBrowserWallet } from "../hooks/useBrowserWallet";
 import { useActiveWallet } from "../hooks/useActiveWallet";
@@ -79,6 +84,10 @@ export const Navbar: FC = () => {
       <nav className="hidden md:flex justify-between items-center p-4 bg-black text-white gap-6">
         <Link href="/">Home</Link>
 
+        <Link href={DOCS_URL} target="_blank">
+          Docs
+        </Link>
+
         <Link href="/faucet">Faucet</Link>
 
         {isBrowserWalletConnected && (
@@ -115,6 +124,10 @@ export const Navbar: FC = () => {
         {isMobileMenuOpen && (
           <>
             <Link href="/">Home</Link>
+
+            <Link href={DOCS_URL} target="_blank">
+              Docs
+            </Link>
 
             <Link href="/faucet">Faucet</Link>
 

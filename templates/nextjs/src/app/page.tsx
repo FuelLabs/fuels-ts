@@ -112,9 +112,6 @@ export default function Home() {
       <Link href="/script" className="mt-4">
         Script Example
       </Link>
-      <Link href={DOCS_URL} target="_blank" className="mt-12">
-        Fuel Docs
-      </Link>
     </>
   );
 }
