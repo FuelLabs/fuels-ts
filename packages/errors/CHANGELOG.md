@@ -1,5 +1,14 @@
 # @fuel-ts/errors
 
+## 0.94.4
+
+### Patch Changes
+
+- a059ea1: feat: map 'not enough coins' error
+- 482bbf0: chore: removed redundant crypto functionality
+- Updated dependencies [b00fd02]
+  - @fuel-ts/versions@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes
