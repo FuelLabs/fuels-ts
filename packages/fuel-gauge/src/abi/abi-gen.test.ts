@@ -1,6 +1,6 @@
 import { log } from 'console';
 
-import { AbiProjectsEnum, getAbiForcProject } from '../../test/fixtures/forc-projects';
+import { AbiProjectsEnum, getAbiForcProject } from './utils';
 
 /**
  * @group node
