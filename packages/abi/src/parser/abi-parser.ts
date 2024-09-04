@@ -10,7 +10,7 @@ export type ParsableJsonAbi = string | JsonAbi_V1;
 /**
  * Parses an ABI in JSON format.
  *
- * @param abi a JSON ABI of a Sway program
+ * @param abi - a JSON ABI of a Sway program
  * @returns a parsed ABI
  */
 export function parseJsonAbi(abi: ParsableJsonAbi): Abi {
