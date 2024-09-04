@@ -2,4 +2,3 @@
 authors = ["Fuel Labs <contact@fuel.sh>"]
 license = "Apache-2.0"
 name = "abi-predicate"
-
