@@ -1,14 +1,17 @@
-"use client";
-
-import { Button } from "@/components/Button";
-import { Input } from "@/components/Input";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { useFaucet } from "@/hooks/useFaucet";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
+import { useActiveWallet } from "../hooks/useActiveWallet";
+import { useFaucet } from "../hooks/useFaucet";
 import { bn } from "fuels";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-export default function Faucet() {
+export const Route = createLazyFileRoute("/faucet")({
+  component: Index,
+});
+
+function Index() {
   // Get the faucet wallet instance from the useFaucet hook
   const { faucetWallet } = useFaucet();
 

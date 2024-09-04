@@ -1,17 +1,21 @@
-"use client";
-
-import { Button } from "@/components/Button";
-import { FuelLogo } from "@/components/FuelLogo";
-import { Input } from "@/components/Input";
-import { Link } from "@/components/Link";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { TestScript } from "@/sway-api";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { Button } from "../components/Button";
+import { FuelLogo } from "../components/FuelLogo";
+import { Input } from "../components/Input";
+import { Link } from "../components/Link";
+import { useActiveWallet } from "../hooks/useActiveWallet";
+import { TestScript } from "../sway-api";
+import { FAUCET_LINK } from "../lib";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
-export default function ScriptExample() {
+export const Route = createLazyFileRoute("/script")({
+  component: Index,
+});
+
+function Index() {
   const { wallet } = useActiveWallet();
 
   const [script, setScript] = useState<Script<[input: BigNumberish], BN>>();
@@ -42,7 +46,10 @@ export default function ScriptExample() {
       toast.error(
         <span>
           Error running script. Please make sure your wallet has enough funds.
-          You can top it up using the <Link href="/faucet">faucet.</Link>
+          You can top it up using the{" "}
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
         </span>,
       );
     }

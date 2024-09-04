@@ -2,6 +2,11 @@ import { Address } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { InputOutputTypesFactory } from '../../../test/typegen';
+import type {
+  IdentityOutput,
+  AddressOutput,
+  ContractIdOutput,
+} from '../../../test/typegen/contracts/InputOutputTypes';
 
 /**
  * @group node
@@ -87,9 +92,9 @@ describe('Contract Types', () => {
 
     // #region identity-address-output
     // #import { Address };
-    const identityFromOutput1 = callResponse1.value;
-    const addressStringFromOutput = identityFromOutput1.Address.bits;
-    const addressFromOutput: Address = Address.fromB256(addressStringFromOutput);
+    const identityFromOutput1: IdentityOutput = callResponse1.value;
+    const addressStringFromOutput: AddressOutput = identityFromOutput1.Address as AddressOutput;
+    const addressFromOutput: Address = Address.fromB256(addressStringFromOutput.bits);
     // #endregion identity-address-output
 
     // #region identity-contract-input
@@ -100,8 +105,9 @@ describe('Contract Types', () => {
     const callResponse2 = await contract.functions.identity(contractIdentityInput).simulate();
 
     // #region identity-contract-output
-    const identityFromOutput2 = callResponse2.value;
-    const contractIdFromOutput: string = identityFromOutput2.ContractId.bits;
+    const identityFromOutput2: IdentityOutput = callResponse2.value;
+    const contractIdOutput: ContractIdOutput = identityFromOutput2.ContractId as ContractIdOutput;
+    const contractIdFromOutput: string = contractIdOutput.bits;
     // #endregion identity-contract-output
 
     expect(addressFromOutput).toEqual(address);

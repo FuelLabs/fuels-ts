@@ -1,13 +1,12 @@
 import toast, { Toaster } from "react-hot-toast";
 import { Link } from "./Link";
 import { Button } from "./Button";
-import { CURRENT_ENVIRONMENT, NODE_URL, TESTNET_FAUCET_LINK } from "@/lib";
+import { CURRENT_ENVIRONMENT, NODE_URL, TESTNET_FAUCET_LINK } from "../lib";
 import { useConnectUI, useDisconnect } from "@fuels/react";
 import { WalletDisplay } from "./WalletDisplay";
-import { useBrowserWallet } from "@/hooks/useBrowserWallet";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { useFaucet } from "@/hooks/useFaucet";
-import Head from "next/head";
+import { useBrowserWallet } from "../hooks/useBrowserWallet";
+import { useActiveWallet } from "../hooks/useActiveWallet";
+import { useFaucet } from "../hooks/useFaucet";
 import { bn } from "fuels";
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -73,12 +72,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <Head>
-        <title>Fuel App</title>
-        <link rel="icon" href="/fuel.ico" />
-      </Head>
       <Toaster />
-      <div className="flex flex-col">
+      <div className="flex flex-col bg-black text-white">
         <nav className="flex justify-between items-center p-4 bg-black text-white gap-6">
           <Link href="/">Home</Link>
 
