@@ -5,7 +5,7 @@ import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
-import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, ReceiptType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
@@ -60,6 +60,49 @@ const getCustomFetch =
  * @group node
  */
 describe('Provider', () => {
+  it('supports basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
+    const provider = await Provider.create(authUrl);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const expectedAuthToken = `Basic ${btoa(usernameAndPassword)}`;
+    const [requestUrl, request] = fetchSpy.mock.calls[0];
+    expect(requestUrl).toEqual(url);
+    expect(request?.headers).toMatchObject({
+      Authorization: expectedAuthToken,
+    });
+  });
+
+  it('custom requestMiddleware is not overwritten by basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
+
+    const requestMiddleware = vi.fn();
+    await Provider.create(authUrl, {
+      requestMiddleware,
+    });
+
+    expect(requestMiddleware).toHaveBeenCalled();
+  });
+
   it('should throw an error when retrieving a transaction with an unknown transaction type', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -209,58 +252,6 @@ describe('Provider', () => {
     expect(callResult.receipts).toStrictEqual(expectedReceipts);
   });
 
-  // TODO: Add tests to provider sendTransaction
-  // sendTransaction can't be tested without a valid signature
-  // importing and testing it here can generate cycle dependency
-  // as we test this in other modules like call contract its ok to
-  // skip for now
-  it.skip('can sendTransaction()', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    const response = await provider.sendTransaction({
-      type: TransactionType.Script,
-      tip: 0,
-      gasLimit: 1000000,
-      script:
-        /*
-          Opcode::ADDI(0x10, REG_ZERO, 0xCA)
-          Opcode::ADDI(0x11, REG_ZERO, 0xBA)
-          Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
-          Opcode::RET(REG_ONE)
-        */
-        arrayify('0x504000ca504400ba3341100024040000'),
-      scriptData: randomBytes(32),
-    });
-
-    const result = await response.wait();
-
-    expect(result.receipts).toEqual([
-      {
-        type: ReceiptType.Log,
-        id: ZeroBytes32,
-        val0: bn(202),
-        val1: bn(186),
-        val2: bn(0),
-        val3: bn(0),
-        pc: bn(0x2878),
-        is: bn(0x2870),
-      },
-      {
-        type: ReceiptType.Return,
-        id: ZeroBytes32,
-        val: bn(1),
-        pc: bn(0x287c),
-        is: bn(0x2870),
-      },
-      {
-        type: ReceiptType.ScriptResult,
-        result: bn(0),
-        gasUsed: bn(0x2c),
-      },
-    ]);
-  });
-
   it('can get all chain info', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
@@ -404,10 +395,7 @@ describe('Provider', () => {
     expect(newest >= oldest).toBeTruthy();
   });
 
-  // TODO: Add back support for producing blocks with intervals by supporting the new
-  // `block_production` config option for `fuel_core`.
-  // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
-  it.skip('can force-produce blocks with custom timestamps', async () => {
+  it('can force-produce blocks with custom timestamps', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
@@ -802,6 +790,29 @@ describe('Provider', () => {
     );
   });
 
+  it('can getBlock', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+    await provider.produceBlocks(1);
+    const block = await provider.getBlock('latest');
+    expect(block).toStrictEqual({
+      id: expect.any(String),
+      height: expect.any(BN),
+      time: expect.any(String),
+      header: {
+        applicationHash: expect.any(String),
+        daHeight: expect.any(BN),
+        eventInboxRoot: expect.any(String),
+        messageOutboxRoot: expect.any(String),
+        prevRoot: expect.any(String),
+        stateTransitionBytecodeVersion: expect.any(String),
+        transactionsCount: expect.any(String),
+        transactionsRoot: expect.any(String),
+      },
+      transactionIds: expect.any(Array<string>),
+    });
+  });
+
   it('can getBlocks', async () => {
     using launched = await setupTestProviderAndWallets();
     const blocksLenght = 5;
@@ -813,14 +824,47 @@ describe('Provider', () => {
     });
     expect(blocks.length).toBe(blocksLenght);
     blocks.forEach((block) => {
-      expect(block).toEqual(
-        expect.objectContaining({
-          id: expect.any(String),
-          height: expect.any(BN),
-          time: expect.any(String),
-          transactionIds: expect.any(Array<string>),
-        })
-      );
+      expect(block).toStrictEqual({
+        id: expect.any(String),
+        height: expect.any(BN),
+        time: expect.any(String),
+        header: {
+          applicationHash: expect.any(String),
+          daHeight: expect.any(BN),
+          eventInboxRoot: expect.any(String),
+          messageOutboxRoot: expect.any(String),
+          prevRoot: expect.any(String),
+          stateTransitionBytecodeVersion: expect.any(String),
+          transactionsCount: expect.any(String),
+          transactionsRoot: expect.any(String),
+        },
+        transactionIds: expect.any(Array<string>),
+      });
+    });
+  });
+
+  it('can getBlockWithTransactions', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+    await provider.produceBlocks(1);
+    const block = await provider.getBlockWithTransactions('latest');
+    const { transactions } = await provider.getTransactions({ first: 100 });
+    expect(block).toStrictEqual({
+      id: expect.any(String),
+      height: expect.any(BN),
+      time: expect.any(String),
+      header: {
+        applicationHash: expect.any(String),
+        daHeight: expect.any(BN),
+        eventInboxRoot: expect.any(String),
+        messageOutboxRoot: expect.any(String),
+        prevRoot: expect.any(String),
+        stateTransitionBytecodeVersion: expect.any(String),
+        transactionsCount: expect.any(String),
+        transactionsRoot: expect.any(String),
+      },
+      transactionIds: expect.any(Array<string>),
+      transactions,
     });
   });
 
@@ -1691,8 +1735,15 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
     const message = await provider.getMessageByNonce(nonce);
 
-    expect(message).toBeDefined();
-    expect(message?.nonce).toEqual(nonce);
+    expect(message).toStrictEqual({
+      messageId: expect.any(String),
+      sender: expect.any(Address),
+      recipient: expect.any(Address),
+      nonce: expect.any(String),
+      amount: expect.any(BN),
+      data: expect.any(Uint8Array),
+      daHeight: expect.any(BN),
+    });
   });
 
   describe('paginated methods', () => {

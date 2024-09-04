@@ -1,25 +1,34 @@
-"use client";
-
-import { TestContract } from "@/sway-api";
-import contractIds from "@/sway-api/contract-ids.json";
-import { FuelLogo } from "@/components/FuelLogo";
+import { createLazyFileRoute } from "@tanstack/react-router";
+import { TestContract } from "../sway-api";
+import contractIds from "../sway-api/contract-ids.json";
+import { FuelLogo } from "../components/FuelLogo";
 import { bn } from "fuels";
 import { useState } from "react";
-import { Link } from "@/components/Link";
-import { Button } from "@/components/Button";
+import { Link } from "../components/Link";
+import { Button } from "../components/Button";
 import toast from "react-hot-toast";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useActiveWallet } from "../hooks/useActiveWallet";
 import useAsync from "react-use/lib/useAsync";
-import { CURRENT_ENVIRONMENT, DOCS_URL, Environments, FAUCET_LINK } from "@/lib";
+import {
+  CURRENT_ENVIRONMENT,
+  DOCS_URL,
+  Environments,
+  FAUCET_LINK,
+  TESTNET_CONTRACT_ID,
+} from "../lib";
+
+export const Route = createLazyFileRoute("/")({
+  component: Index,
+});
 
 // #region deploying-dapp-to-testnet-frontend-contract-id
 const contractId =
   CURRENT_ENVIRONMENT === Environments.LOCAL
     ? contractIds.testContract
-    : (process.env.NEXT_PUBLIC_TESTNET_CONTRACT_ID as string); // Testnet Contract ID
+    : TESTNET_CONTRACT_ID; // Testnet Contract ID
 // #endregion deploying-dapp-to-testnet-frontend-contract-id
 
-export default function Home() {
+function Index() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
@@ -40,7 +49,6 @@ export default function Home() {
     }
   }, [wallet]);
 
-  // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
     if (!contract) {
       return toast.error("Contract not loaded");
@@ -50,16 +58,21 @@ export default function Home() {
       return toast.error(
         <span>
           Your wallet does not have enough funds. Please top it up using the{" "}
-          <Link href={FAUCET_LINK} target='_blank'>faucet.</Link>
+          <Link href={FAUCET_LINK} target="_blank">
+            faucet.
+          </Link>
         </span>,
       );
     }
 
     // Call the increment_counter function on the contract
-    const { waitForResult } = await contract.functions.increment_counter(bn(1)).call();
+    const { waitForResult } = await contract.functions
+      .increment_counter(bn(1))
+      .call();
 
     // Wait for the transaction to be mined, and then read the value returned
     const { value } = await waitForResult();
+
     setCounter(value.toNumber());
 
     await refreshWalletBalance?.();
@@ -88,6 +101,7 @@ export default function Home() {
     await refreshWalletBalance?.();
   };
   // #endregion create-fuels-counter-guide-on-decrement-react-function
+
 
   return (
     <>

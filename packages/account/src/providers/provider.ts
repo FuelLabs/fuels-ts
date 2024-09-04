@@ -10,6 +10,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
+import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -26,7 +27,7 @@ import type {
   GqlTxParameters as TxParameters,
   GqlPageInfo,
   GqlRelayedTransactionFailed,
-  GqlMessage,
+  Requester,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -59,6 +60,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
 
 const MAX_RETRIES = 10;
 
@@ -89,6 +91,16 @@ export type Block = {
   height: BN;
   time: string;
   transactionIds: string[];
+  header: {
+    daHeight: BN;
+    stateTransitionBytecodeVersion: string;
+    transactionsCount: string;
+    transactionsRoot: string;
+    messageOutboxRoot: string;
+    eventInboxRoot: string;
+    prevRoot: string;
+    applicationHash: string;
+  };
 };
 
 export type GetCoinsResponse = {
@@ -382,6 +394,7 @@ type SdkOperations = Omit<
   submitAndAwaitStatus: (
     ...args: Parameters<Operations['submitAndAwaitStatus']>
   ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
+  getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
 /**
@@ -457,6 +470,20 @@ export default class Provider {
     }
   }
 
+  private static extractBasicAuth(url: string): { url: string; auth: string | undefined } {
+    const parsedUrl = new URL(url);
+
+    const username = parsedUrl.username;
+    const password = parsedUrl.password;
+    const urlNoBasicAuth = `${parsedUrl.origin}${parsedUrl.pathname}`;
+    if (!(username && password)) {
+      return { url, auth: undefined };
+    }
+
+    const auth = `Basic ${btoa(`${username}:${password}`)}`;
+    return { url: urlNoBasicAuth, auth };
+  }
+
   /**
    * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
    *
@@ -466,8 +493,20 @@ export default class Provider {
    * @returns A promise that resolves to a Provider instance.
    */
   static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    const provider = new Provider(url, options);
+    const { url: urlToUse, auth } = this.extractBasicAuth(url);
+    const provider = new Provider(urlToUse, {
+      ...options,
+      requestMiddleware: async (request) => {
+        if (auth) {
+          request.headers ??= {};
+          (request.headers as Record<string, string>).Authorization = auth;
+        }
+        return options.requestMiddleware?.(request) ?? request;
+      },
+    });
+
     await provider.fetchChainAndNodeInfo();
+
     return provider;
   }
 
@@ -582,11 +621,11 @@ Supported fuel-core version: ${supportedVersion}.`
       responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
+
           if (Array.isArray(graphQlResponse?.errors)) {
-            throw new FuelError(
-              FuelError.CODES.INVALID_REQUEST,
-              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
-            );
+            for (const error of graphQlResponse.errors) {
+              handleGqlErrorMessage(error.message, error);
+            }
           }
         }
       },
@@ -609,8 +648,33 @@ Supported fuel-core version: ${supportedVersion}.`
       return gqlClient.request(query, vars);
     };
 
+    const customOperations = (requester: Requester) => ({
+      getBlobs(variables: { blobIds: string[] }) {
+        const queryParams = variables.blobIds.map((_, i) => `$blobId${i}: BlobId!`).join(', ');
+        const blobParams = variables.blobIds
+          .map((_, i) => `blob${i}: blob(id: $blobId${i}) { id }`)
+          .join('\n');
+
+        const updatedVariables = variables.blobIds.reduce(
+          (acc, blobId, i) => {
+            acc[`blobId${i}`] = blobId;
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+
+        const document = gql`
+          query getBlobs(${queryParams}) {
+            ${blobParams}
+          }
+        `;
+
+        return requester(document, updatedVariables);
+      },
+    });
+
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
-    return getOperationsSdk(executeQuery);
+    return { ...getOperationsSdk(executeQuery), ...customOperations(executeQuery) };
   }
 
   /**
@@ -1338,6 +1402,25 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * Returns an array of blobIds that exist on chain, for a given array of blobIds.
+   *
+   * @param blobIds - blobIds to check.
+   * @returns - A promise that resolves to an array of blobIds that exist on chain.
+   */
+  async getBlobs(blobIds: string[]): Promise<string[]> {
+    const res = await this.operations.getBlobs({ blobIds });
+    const blobs: (string | null)[] = [];
+
+    Object.keys(res).forEach((key) => {
+      // @ts-expect-error keys are strings
+      const val = res[key];
+      blobs.push(val?.id ?? null);
+    });
+
+    return blobs.filter((v) => v) as string[];
+  }
+
+  /**
    * Returns block matching the given ID or height.
    *
    * @param idOrHeight - ID or height of the block.
@@ -1361,11 +1444,23 @@ Supported fuel-core version: ${supportedVersion}.`
       return null;
     }
 
+    const { header, height, id, transactions } = block;
+
     return {
-      id: block.id,
-      height: bn(block.height),
-      time: block.header.time,
-      transactionIds: block.transactions.map((tx) => tx.id),
+      id,
+      height: bn(height),
+      time: header.time,
+      header: {
+        applicationHash: header.applicationHash,
+        daHeight: bn(header.daHeight),
+        eventInboxRoot: header.eventInboxRoot,
+        messageOutboxRoot: header.messageOutboxRoot,
+        prevRoot: header.prevRoot,
+        stateTransitionBytecodeVersion: header.stateTransitionBytecodeVersion,
+        transactionsCount: header.transactionsCount,
+        transactionsRoot: header.transactionsRoot,
+      },
+      transactionIds: transactions.map((tx) => tx.id),
     };
   }
 
@@ -1389,6 +1484,16 @@ Supported fuel-core version: ${supportedVersion}.`
       id: block.id,
       height: bn(block.height),
       time: block.header.time,
+      header: {
+        applicationHash: block.header.applicationHash,
+        daHeight: bn(block.header.daHeight),
+        eventInboxRoot: block.header.eventInboxRoot,
+        messageOutboxRoot: block.header.messageOutboxRoot,
+        prevRoot: block.header.prevRoot,
+        stateTransitionBytecodeVersion: block.header.stateTransitionBytecodeVersion,
+        transactionsCount: block.header.transactionsCount,
+        transactionsRoot: block.header.transactionsRoot,
+      },
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
 
@@ -1424,6 +1529,16 @@ Supported fuel-core version: ${supportedVersion}.`
       id: block.id,
       height: bn(block.height, 10),
       time: block.header.time,
+      header: {
+        applicationHash: block.header.applicationHash,
+        daHeight: bn(block.header.daHeight),
+        eventInboxRoot: block.header.eventInboxRoot,
+        messageOutboxRoot: block.header.messageOutboxRoot,
+        prevRoot: block.header.prevRoot,
+        stateTransitionBytecodeVersion: block.header.stateTransitionBytecodeVersion,
+        transactionsCount: block.header.transactionsCount,
+        transactionsRoot: block.header.transactionsRoot,
+      },
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
         (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
@@ -1797,12 +1912,28 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param nonce - The nonce of the message to retrieve.
    * @returns A promise that resolves to the Message object or null.
    */
-  async getMessageByNonce(nonce: string): Promise<GqlMessage | null> {
-    const { message } = await this.operations.getMessageByNonce({ nonce });
+  async getMessageByNonce(nonce: string): Promise<Message | null> {
+    const { message: rawMessage } = await this.operations.getMessageByNonce({ nonce });
 
-    if (!message) {
+    if (!rawMessage) {
       return null;
     }
+
+    const message: Message = {
+      messageId: InputMessageCoder.getMessageId({
+        sender: rawMessage.sender,
+        recipient: rawMessage.recipient,
+        nonce: rawMessage.nonce,
+        amount: bn(rawMessage.amount),
+        data: rawMessage.data,
+      }),
+      sender: Address.fromAddressOrString(rawMessage.sender),
+      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      nonce: rawMessage.nonce,
+      amount: bn(rawMessage.amount),
+      data: InputMessageCoder.decodeData(rawMessage.data),
+      daHeight: bn(rawMessage.daHeight),
+    };
 
     return message;
   }
