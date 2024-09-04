@@ -14,8 +14,8 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
 } from '@fuel-ts/transactions';
-import { ReceiptBurnCoder, ReceiptMessageOutCoder, ReceiptType } from '@fuel-ts/transactions';
-import { arrayify } from '@fuel-ts/utils';
+import { getMintedAssetId, InputMessageCoder, ReceiptType } from '@fuel-ts/transactions';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import {
   MOCK_GQL_RECEIPT_FRAGMENT,
@@ -219,12 +219,12 @@ describe('assembleReceiptByType', () => {
     const data = arrayify(MOCK_GQL_RECEIPT_FRAGMENT.data || '');
     const digest = MOCK_GQL_RECEIPT_FRAGMENT.digest;
 
-    const messageId = ReceiptMessageOutCoder.getMessageId({
+    const messageId = InputMessageCoder.getMessageId({
       sender,
       recipient,
       nonce,
       amount,
-      data,
+      data: hexlify(data),
     });
 
     expect(receipt.type).toBe(ReceiptType.MessageOut);
@@ -240,7 +240,7 @@ describe('assembleReceiptByType', () => {
   it('should return a ReceiptMint when GqlReceiptType.Mint is provided', () => {
     const contractId = MOCK_GQL_RECEIPT_FRAGMENT.id || '';
     const subId = MOCK_GQL_RECEIPT_FRAGMENT.subId || '';
-    const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
+    const assetId = getMintedAssetId(contractId, subId);
 
     const receipt = assembleReceiptByType({
       ...MOCK_GQL_RECEIPT_FRAGMENT,
@@ -259,7 +259,7 @@ describe('assembleReceiptByType', () => {
   it('should return a ReceiptBurn when GqlReceiptType.Burn is provided', () => {
     const contractId = MOCK_GQL_RECEIPT_FRAGMENT.id || '';
     const subId = MOCK_GQL_RECEIPT_FRAGMENT.subId || '';
-    const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
+    const assetId = getMintedAssetId(contractId, subId);
 
     const receipt = assembleReceiptByType({
       ...MOCK_GQL_RECEIPT_FRAGMENT,
