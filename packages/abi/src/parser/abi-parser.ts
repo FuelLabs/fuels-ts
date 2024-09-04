@@ -1,5 +1,6 @@
 import type { Abi } from './abi';
-import { transpileV1, AbiSpecificationV1 } from './specifications';
+import type { AbiSpecificationV1 } from './specifications';
+import { transpileV1 } from './specifications';
 
 /**
  * A typed ABI object or a stringified json of a Sway program's ABI
@@ -21,7 +22,7 @@ export class AbiParser {
    * @param opts.abi - a JSON ABI of a Sway program
    * @returns an public interface for the Abi
    */
-  static parse({ abi }: { abi: AbiSpecification }): Abi {
+  static parse(abi: AbiSpecification, opts = {}): Abi {
     if (typeof abi !== 'object' || abi === null) {
       throw new Error('Invalid ABI: not an object');
     }

@@ -1,3 +1,5 @@
 export { AbiParser } from './abi-parser';
 export * from './abi';
-export { AbiSpecificationV1 } from './specifications';
+
+export type { AbiSpecification } from './abi-parser';
+export type { AbiSpecificationV1 } from './specifications';
