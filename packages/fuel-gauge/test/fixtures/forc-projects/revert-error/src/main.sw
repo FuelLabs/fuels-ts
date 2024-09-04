@@ -23,9 +23,15 @@ pub struct ValidInputsEvent {
 
 impl RevertError for Contract {
     fn validate_inputs(token_id: u64, price: u64) {
+        log(1u8);
+        log("FOO");
         require(price != 0, InputError::PriceCantBeZero);
+        log("BAR");
         require(token_id != 0, AccessError::TokenIdCantBeZero);
+        log("BAZ");
+        log(99u8);
         require(token_id == 100u64, AccessError::InvalidTokenId);
+        log(100u8);
 
         assert(price != token_id);
 
@@ -62,11 +68,15 @@ impl RevertError for Contract {
     }
 
     fn assert_value_eq_10(value: u8) {
+        log("FOO");
         assert_eq(value, 10);
     }
 
     fn assert_value_ne_5(value: u8) {
+        log("BAZ");
+        log(10u8);
         assert_ne(value, 5);
+        log(27u8);
     }
 
     fn revert_with_0() {

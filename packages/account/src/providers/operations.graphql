@@ -221,6 +221,14 @@ fragment blockFragment on Block {
   height
   header {
     time
+    daHeight
+    stateTransitionBytecodeVersion
+    transactionsCount
+    transactionsRoot
+    messageOutboxRoot
+    eventInboxRoot
+    prevRoot
+    applicationHash
   }
   transactions {
     id
