@@ -98,6 +98,7 @@ describe('Enums Types', () => {
     const emumValue: number = 1;
 
     await expectToThrowFuelError(
+      // @ts-expect-error number is not a valid type
       () => contract.functions.echo_state_error_enum(emumValue).simulate(),
       new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
     );
@@ -122,6 +123,7 @@ describe('Enums Types', () => {
     const emumValue = 'NotStateEnumValue';
 
     await expectToThrowFuelError(
+      // @ts-expect-error NotStateEnumValue is not a valid value
       () => contract.functions.echo_state_error_enum(emumValue).simulate(),
       new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'Only one field must be provided.')
     );
@@ -146,6 +148,7 @@ describe('Enums Types', () => {
     const enumParam = { UnknownKey: 'Completed' };
 
     await expectToThrowFuelError(
+      // @ts-expect-error UnknownKey is not a valid key
       () => contract.functions.echo_error_enum(enumParam).simulate(),
       new FuelError(
         FuelError.CODES.INVALID_DECODE_VALUE,

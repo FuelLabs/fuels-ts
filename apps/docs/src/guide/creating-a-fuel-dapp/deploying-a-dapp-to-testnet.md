@@ -45,15 +45,15 @@ Copy the contract ID and save it for later use.
 
 Let's now prepare our frontend so that we can deploy it to the cloud.
 
-Go to your `.env.local` file and add a new variable named `NEXT_PUBLIC_TESTNET_CONTRACT_ID`. Set its value to the contract ID you had copied earlier after deploying your contract.
+Go to your `.env.local` file and add a new variable named `VITE_TESTNET_CONTRACT_ID`. Set its value to the contract ID you had copied earlier after deploying your contract.
 
 ```md
-NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
+VITE_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 ```
 
-If you are curious, this environment variable is used here in the `src/app/page.tsx` file to set the contract ID:
+If you are curious, this environment variable is used here in the `src/routes/index.lazy.tsx` file to set the contract ID:
 
-<<< @/../../create-fuels-counter-guide/src/app/page.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/routes/index.lazy.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
 
 You will notice that this piece of code is getting the contract ID depending on the current environment. If the environment is `local`, it will use the contract ID from the auto-generated `contract-ids.json` file. Otherwise, for a testnet deployment, it will use the contract ID provided by you.
 
@@ -61,16 +61,16 @@ The `CURRENT_ENVIRONMENT` variable is defined in the `lib.ts` file:
 
 <<< @/../../create-fuels-counter-guide/src/lib.ts#deploying-dapp-to-testnet-lib-current-environment{ts:line-numbers}
 
-As you can see, it depends on the `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment variable. If you go to your `.env.local` file, you will see that it is set to `local` by default. If you change this value to `testnet`, the frontend will now be connected to the testnet instead of your local node.
+As you can see, it depends on the `VITE_DAPP_ENVIRONMENT` environment variable. If you go to your `.env.local` file, you will see that it is set to `local` by default. If you change this value to `testnet`, the frontend will now be connected to the testnet instead of your local node.
 
-Go ahead and change the `NEXT_PUBLIC_DAPP_ENVIRONMENT` value to `testnet` in your `.env.local` file.
+Go ahead and change the `VITE_DAPP_ENVIRONMENT` value to `testnet` in your `.env.local` file.
 If you run your frontend now, you should be able to interact with your contract on the testnet.
 
 To deploy your frontend to the cloud, you can use any service like [Vercel](https://vercel.com/). Make sure that you setup your environment variables correctly and that your contract ID is correct. Your environment variables should look something like this:
 
 ```md
-NEXT_PUBLIC_DAPP_ENVIRONMENT=testnet
-NEXT_PUBLIC_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
+VITE_DAPP_ENVIRONMENT=testnet
+VITE_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 
 (the rest of the environment variables are optional)
 ```
@@ -82,5 +82,5 @@ Congratulations! You have successfully deployed your Fuel dApp to the testnet.
 To recap, to deploy your dApp to the testnet, you need to:
 
 1. Deploy your contract to the testnet using `forc deploy --testnet`.
-2. Specify this contract ID in your frontend code in `src/app/page.tsx`.
-3. Set the `NEXT_PUBLIC_DAPP_ENVIRONMENT` environment variable to `testnet`.
+2. Specify this contract ID in your frontend code in `src/routes/index.lazy.tsx`.
+3. Set the `VITE_DAPP_ENVIRONMENT` environment variable to `testnet`.
