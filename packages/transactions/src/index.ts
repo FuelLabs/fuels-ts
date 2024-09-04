@@ -8,3 +8,4 @@ export * from './coders/witness';
 export * from './coders/tx-pointer';
 export * from './coders/utxo-id';
 export * from './coders/byte-array';
+export * from './receipts';
