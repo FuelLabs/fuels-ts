@@ -195,9 +195,15 @@ Whenever you want to add a new feature to your dApp and quickly prototype things
 
 Testing the integration with your smart contract isn't essential, but it's good practice to ensure that your application is working as expected. It also gives you the ability to test your application in a controlled environment against a local node.
 
-We've provided some examples for each program type in the `./test` directory of your project. But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
+We've provided some examples for each program type in the `./test` directory of your project, and in the `.sw` source files as well.
+
+But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
 
 <<< @/../../docs-snippets/src/guide/create-fuels/decrement_counter.test.ts#decrement-counter{ts:line-numbers}
+
+And a test for the decrement function in the `./sway-programs/contract/src/main.sw` file:
+
+<<< @/../../create-fuels-counter-guide/sway-programs/contract/src/main.sw#create-fuels-counter-guide-sway-test{rust:line-numbers}
 
 ## Next Steps
 

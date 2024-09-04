@@ -45,3 +45,16 @@ impl Counter for Contract {
     }
 }
 // #endregion create-fuels-counter-guide-impl
+
+
+// #region create-fuels-counter-guide-sway-test
+#[test]
+fn test_decrement_counter() {
+    let contract_instance = abi(Counter, CONTRACT_ID);
+    let _ = contract_instance.increment_counter(5);
+
+    let count_before = contract_instance.get_count();
+    let count_after = contract_instance.decrement_counter(1);
+    assert(count_after == count_before - 1);
+}
+// #endregion create-fuels-counter-guide-sway-test
