@@ -22,7 +22,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "postbuild": "tsx ../../scripts/postbuild.ts"
   },
   "dependencies": {},
   "devDependencies": {}
