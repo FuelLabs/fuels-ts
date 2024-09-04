@@ -9,7 +9,9 @@
     "build": "pnpm run xprebuild && tsc -b && vite build",
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
-    "test": "vitest"
+    "test": "run-s test:*",
+    "test:e2e": "vitest",
+    "test:unit": "cd sway-programs && forc test"
   },
   "dependencies": {
     "@fuels/connectors": "^0.26.0",
