@@ -180,10 +180,6 @@ export default function PredicateExample() {
       >
         Learn more about Predicates
       </Link>
-
-      <Link href="/" className="mt-12">
-        Back to Home
-      </Link>
     </>
   );
 }

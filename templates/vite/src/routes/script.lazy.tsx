@@ -89,10 +89,6 @@ function Index() {
       >
         Learn more about Scripts
       </Link>
-
-      <Link href="/" className="mt-12">
-        Back to home
-      </Link>
     </>
   );
 }
