@@ -2,10 +2,8 @@
 
 ROOT=$(cd "$(dirname "$0")/.."; pwd)
 
-FILES=$(find $ROOT/{apps,packages,internal} -name '*.test.ts')
-
 # ignore files in apps/create-fuels-counter-guide/test/ui
-FILES=$(echo $FILES | grep -v "apps/create-fuels-counter-guide/test/ui")
+FILES=$(find $ROOT/{apps,packages,internal} -name '*.test.ts' | grep -v "apps/create-fuels-counter-guide/test/ui")
 
 INVALID_FILES=$(grep -LE "@group\s+(node|browser|e2e|integration)" $FILES)
 
