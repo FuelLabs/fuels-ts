@@ -392,7 +392,15 @@ type Operations = {
     : Ops[K];
 };
 
-type SdkOperations = Operations & {
+type SdkOperations = Omit<Operations, 'submitAndAwait'> & {
+  /**
+   * This method is DEPRECATED and will be REMOVED in v1.
+   *
+   * This method will hang until the transaction is fully processed, as described in https://github.com/FuelLabs/fuel-core/issues/2108.
+   *
+   * Please use the `submitAndAwaitStatus` method instead.
+   */
+  submitAndAwait: PromisifyReturn<Operations['submitAndAwait']>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
