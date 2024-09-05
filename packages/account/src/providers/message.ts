@@ -15,6 +15,8 @@ export type Message = {
   amount: BN;
   data: BytesLike;
   daHeight: BN;
+  predicate?: BytesLike;
+  predicateData?: BytesLike;
 };
 // #endregion Message-shape
 
@@ -71,3 +73,6 @@ export type MessageProof = {
 export type MessageStatus = {
   state: GqlMessageState;
 };
+
+export const isMessageCoin = (message: Message | MessageCoin): message is MessageCoin =>
+  !('data' in message);
