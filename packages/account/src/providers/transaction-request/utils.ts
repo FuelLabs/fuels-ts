@@ -66,3 +66,8 @@ export const isTransactionTypeBlob = (
 export const isTransactionTypeUpgrade = (
   request: TransactionRequestLike
 ): request is UpgradeTransactionRequest => request.type === TransactionType.Upgrade;
+
+/** @hidden */
+export const isTransactionTypeUpload = (
+  request: TransactionRequestLike
+): request is UpgradeTransactionRequest => request.type === TransactionType.Upload;
