@@ -32,6 +32,9 @@ importers:
       '@changesets/types':
         specifier: ^6.0.0
         version: 6.0.0
+      '@codspeed/vitest-plugin':
+        specifier: ^3.1.1
+        version: 3.1.1(vite@5.4.2(@types/node@22.2.0)(terser@5.31.6))(vitest@1.6.0(@types/node@22.2.0)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6))
       '@elasticpath/textlint-rule-no-dead-relative-link':
         specifier: ^1.1.1
         version: 1.1.1
@@ -103,7 +106,7 @@ importers:
         version: 3.2.0(eslint@8.57.0)
       eslint-plugin-import:
         specifier: ^2.29.1
-        version: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
+        version: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
       eslint-plugin-jsdoc:
         specifier: ^46.8.2
         version: 46.8.2(eslint@8.57.0)
@@ -545,10 +548,10 @@ importers:
         version: 6.0.0(typedoc@0.26.6(typescript@5.4.5))
       vitepress:
         specifier: 1.3.4
-        version: 1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5)
+        version: 1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(axios@1.7.7)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5)
       vitepress-plugin-search:
         specifier: 1.0.4-alpha.22
-        version: 1.0.4-alpha.22(flexsearch@0.7.43)(vitepress@1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5))(vue@3.4.38(typescript@5.4.5))
+        version: 1.0.4-alpha.22(flexsearch@0.7.43)(vitepress@1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(axios@1.7.7)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5))(vue@3.4.38(typescript@5.4.5))
       vue:
         specifier: ^3.4.38
         version: 3.4.38(typescript@5.4.5)
@@ -2877,6 +2880,15 @@ packages:
 
   '@clinic/trace-events-parser@2.0.0':
     resolution: {integrity: sha512-hXpT4xJED7kW0+BNCSNSFNlYZO0xMYIBbx/lM8kbyW50SemOCk7JP0wEbmYpHNiW1wKT6ICuFaOK742R/w0vTQ==}
+
+  '@codspeed/core@3.1.1':
+    resolution: {integrity: sha512-ONhERVDAtkm0nc+FYPivDozoMOlNUP2BWRBFDJYATGA18Iap5Kd2mZ1/Lwz54RB5+g+3YDOpsvotHa4hd3Q+7Q==}
+
+  '@codspeed/vitest-plugin@3.1.1':
+    resolution: {integrity: sha512-/PJUgxIfuRqpBSbaD8bgWXtbXxCqgnW89dzr3220fMkx/LA6z6oUb4tJGjeVsOWAzAgu0VBdSA+8hC+7D9BIuQ==}
+    peerDependencies:
+      vite: ^4.2.0 || ^5.0.0
+      vitest: '>=1.2.2'
 
   '@coinbase/wallet-sdk@3.9.3':
     resolution: {integrity: sha512-N/A2DRIf0Y3PHc1XAMvbBUu4zisna6qAdqABMZwBMNEfWrXpAwx16pZGkYCLGE+Rvv1edbcB2LYDRnACNcmCiw==}
@@ -7091,6 +7103,9 @@ packages:
     resolution: {integrity: sha512-QbUdXJVTpvUTHU7871ppZkdOLBeGUKBQWHkHrvN2V9IQWGMt61zf3B45BtzjxEJzYuj0JBjBZP/hmYS/R9pmAw==}
     engines: {node: '>=4'}
 
+  axios@1.7.7:
+    resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
+
   axobject-query@2.2.0:
     resolution: {integrity: sha512-Td525n+iPOOyUQIeBfcASuG6uJsDOITl7Mds5gFyerkWiX7qhUTdYUBlSgNMyVqtSJqwpt1kXGLdUt6SykLMRA==}
 
@@ -7433,6 +7448,7 @@ packages:
 
   bun@1.1.26:
     resolution: {integrity: sha512-dWSewAqE7sVbYmflJxgG47dW4vmsbar7VAnQ4ao45y3ulr3n7CwdsMLFnzd28jhPRtF+rsaVK2y4OLIkP3OD4A==}
+    cpu: [arm64, x64]
     os: [darwin, linux, win32]
     hasBin: true
 
@@ -9508,6 +9524,10 @@ packages:
     resolution: {integrity: sha512-78/PXT1wlLLDgTzDs7sjq9hzz0vXD+zn+7wypEe4fXQxCmdmqfGsEPQxmiCSQI3ajFV91bVSsvNtrJRiW6nGng==}
     engines: {node: '>=10'}
 
+  find-up@6.3.0:
+    resolution: {integrity: sha512-v2ZsoEuVHYy8ZIlYqwPe/39Cy+cFDzp4dXPaxNvkEuouymu+2Jbz0PxpKarJHYJTmv2HWT3O382qY8l4jMWthw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
   find-yarn-workspace-root2@1.2.16:
     resolution: {integrity: sha512-hr6hb1w8ePMpPVUK39S4RlwJzi+xPLuVuG8XlwXU3KD5Yn3qgBWVfy3AzNlDhWvE1EORCE65/Qm26rFQt3VLVA==}
 
@@ -9546,6 +9566,15 @@ packages:
 
   follow-redirects@1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
+  follow-redirects@1.15.8:
+    resolution: {integrity: sha512-xgrmBhBToVKay1q2Tao5LI26B83UhrB/vM1avwVSDzt8rx3rO6AizBAaF46EgksTVr+rFTQaqZZ9MVBfUe4nig==}
     engines: {node: '>=4.0'}
     peerDependencies:
       debug: '*'
@@ -11348,6 +11377,10 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
+  locate-path@7.2.0:
+    resolution: {integrity: sha512-gvVijfZvn7R+2qyPX8mAuKcFGDf6Nc61GdvGafQsHL0sBIxfKzA+usWn4GFC/bk+QdwPUD4kWFJLhElipq+0VA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
 
@@ -12423,6 +12456,10 @@ packages:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
     engines: {node: '>=10'}
 
+  p-limit@4.0.0:
+    resolution: {integrity: sha512-5b0R4txpzjPWVw/cXXUResoD4hb6U/x9BH08L7nw+GN1sezDzPdxeRvpc9c433fZhBan/wusjbCsqwqm4EIBIQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+
   p-limit@5.0.0:
     resolution: {integrity: sha512-/Eaoq+QyLSiXQ4lyYV23f14mZRQcXnxfHrN0vCai+ak9G0pp9iEQukIIZq5NccEvwRB8PUnZT0KsOoDCINS1qQ==}
     engines: {node: '>=18'}
@@ -12442,6 +12479,10 @@ packages:
   p-locate@5.0.0:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
+
+  p-locate@6.0.0:
+    resolution: {integrity: sha512-wPrq66Llhl7/4AGC6I+cqxT07LhXvWL08LNXz1fENOw0Ap4sRZZ/gZpTTJ5jpurzzzfS2W/Ge9BY3LgLjCShcw==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   p-map@2.1.0:
     resolution: {integrity: sha512-y3b8Kpd8OAN444hxfBbFfj1FY/RjtTd8tzYwhUqNYXx0fXx2iX4maP4Qr6qhIKbQXI02wTLAda4fYUbDagTUFw==}
@@ -12557,6 +12598,10 @@ packages:
   path-exists@4.0.0:
     resolution: {integrity: sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w==}
     engines: {node: '>=8'}
+
+  path-exists@5.0.0:
+    resolution: {integrity: sha512-RjhtfwJOxzcFmNOi6ltcbcu4Iu+FL3zEj83dk4kAS+fVpTxXLO1b38RvJgT/0QwvV/L3aY9TAnyv0EOqW4GoMQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
   path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
@@ -13422,6 +13467,7 @@ packages:
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
     deprecated: |-
       You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
   qr-code-styling@1.6.0-rc.1:
@@ -19371,6 +19417,23 @@ snapshots:
     dependencies:
       turbo-json-parse: 2.3.0
 
+  '@codspeed/core@3.1.1':
+    dependencies:
+      axios: 1.7.7
+      find-up: 6.3.0
+      form-data: 4.0.0
+      node-gyp-build: 4.8.1
+    transitivePeerDependencies:
+      - debug
+
+  '@codspeed/vitest-plugin@3.1.1(vite@5.4.2(@types/node@22.2.0)(terser@5.31.6))(vitest@1.6.0(@types/node@22.2.0)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6))':
+    dependencies:
+      '@codspeed/core': 3.1.1
+      vite: 5.4.2(@types/node@22.2.0)(terser@5.31.6)
+      vitest: 1.6.0(@types/node@22.2.0)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6)
+    transitivePeerDependencies:
+      - debug
+
   '@coinbase/wallet-sdk@3.9.3':
     dependencies:
       bn.js: 5.2.1
@@ -23423,7 +23486,7 @@ snapshots:
       '@vitest/utils': 1.6.0
       magic-string: 0.30.5
       sirv: 2.0.4
-      vitest: 1.6.0(@types/node@22.5.2)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6)
+      vitest: 1.6.0(@types/node@22.2.0)(@vitest/browser@1.6.0)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6)
     optionalDependencies:
       playwright: 1.46.1
       webdriverio: 8.40.2(bufferutil@4.0.8)(utf-8-validate@6.0.4)
@@ -23556,12 +23619,13 @@ snapshots:
       - '@vue/composition-api'
       - vue
 
-  '@vueuse/integrations@11.0.0(focus-trap@7.5.4)(idb-keyval@6.2.1)(qrcode@1.5.3)(vue@3.4.38(typescript@5.4.5))':
+  '@vueuse/integrations@11.0.0(axios@1.7.7)(focus-trap@7.5.4)(idb-keyval@6.2.1)(qrcode@1.5.3)(vue@3.4.38(typescript@5.4.5))':
     dependencies:
       '@vueuse/core': 11.0.0(vue@3.4.38(typescript@5.4.5))
       '@vueuse/shared': 11.0.0(vue@3.4.38(typescript@5.4.5))
       vue-demi: 0.14.10(vue@3.4.38(typescript@5.4.5))
     optionalDependencies:
+      axios: 1.7.7
       focus-trap: 7.5.4
       idb-keyval: 6.2.1
       qrcode: 1.5.3
@@ -25387,6 +25451,14 @@ snapshots:
   axe-core@4.7.2: {}
 
   axe-core@4.9.1: {}
+
+  axios@1.7.7:
+    dependencies:
+      follow-redirects: 1.15.8
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
 
   axobject-query@2.2.0: {}
 
@@ -27851,8 +27923,8 @@ snapshots:
       '@typescript-eslint/parser': 6.21.0(eslint@8.57.0)(typescript@5.4.5)
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
+      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-jsx-a11y: 6.9.0(eslint@8.57.0)
       eslint-plugin-react: 7.35.0(eslint@8.57.0)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.0)
@@ -27907,25 +27979,7 @@ snapshots:
       enhanced-resolve: 5.17.1
       eslint: 8.57.0
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
-      fast-glob: 3.3.2
-      get-tsconfig: 4.7.6
-      is-core-module: 2.15.0
-      is-glob: 4.0.3
-    transitivePeerDependencies:
-      - '@typescript-eslint/parser'
-      - eslint-import-resolver-node
-      - eslint-import-resolver-webpack
-      - supports-color
-    optional: true
-
-  eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0):
-    dependencies:
-      debug: 4.3.6
-      enhanced-resolve: 5.17.1
-      eslint: 8.57.0
-      eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0)
-      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)
+      eslint-plugin-import: 2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0))(eslint@8.57.0)
       fast-glob: 3.3.2
       get-tsconfig: 4.7.6
       is-core-module: 2.15.0
@@ -27954,17 +28008,6 @@ snapshots:
       eslint: 8.57.0
       eslint-import-resolver-node: 0.3.9
       eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0))(eslint@8.57.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  eslint-module-utils@2.8.0(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0))(eslint@8.57.0):
-    dependencies:
-      debug: 3.2.7
-    optionalDependencies:
-      '@typescript-eslint/parser': 6.21.0(eslint@8.57.0)(typescript@5.4.5)
-      eslint: 8.57.0
-      eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.6.1(@typescript-eslint/parser@6.21.0(eslint@8.57.0)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.29.1)(eslint@8.57.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -28689,6 +28732,11 @@ snapshots:
       locate-path: 6.0.0
       path-exists: 4.0.0
 
+  find-up@6.3.0:
+    dependencies:
+      locate-path: 7.2.0
+      path-exists: 5.0.0
+
   find-yarn-workspace-root2@1.2.16:
     dependencies:
       micromatch: 4.0.8
@@ -28726,6 +28774,8 @@ snapshots:
       tabbable: 6.2.0
 
   follow-redirects@1.15.2: {}
+
+  follow-redirects@1.15.8: {}
 
   for-each@0.3.3:
     dependencies:
@@ -31055,6 +31105,10 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
+  locate-path@7.2.0:
+    dependencies:
+      p-locate: 6.0.0
+
   lodash.camelcase@4.3.0: {}
 
   lodash.chunk@4.2.0: {}
@@ -32413,6 +32467,10 @@ snapshots:
     dependencies:
       yocto-queue: 0.1.0
 
+  p-limit@4.0.0:
+    dependencies:
+      yocto-queue: 1.1.1
+
   p-limit@5.0.0:
     dependencies:
       yocto-queue: 1.1.1
@@ -32432,6 +32490,10 @@ snapshots:
   p-locate@5.0.0:
     dependencies:
       p-limit: 3.1.0
+
+  p-locate@6.0.0:
+    dependencies:
+      p-limit: 4.0.0
 
   p-map@2.1.0: {}
 
@@ -32573,6 +32635,8 @@ snapshots:
   path-exists@3.0.0: {}
 
   path-exists@4.0.0: {}
+
+  path-exists@5.0.0: {}
 
   path-is-absolute@1.0.1: {}
 
@@ -36434,17 +36498,17 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.31.6
 
-  vitepress-plugin-search@1.0.4-alpha.22(flexsearch@0.7.43)(vitepress@1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5))(vue@3.4.38(typescript@5.4.5)):
+  vitepress-plugin-search@1.0.4-alpha.22(flexsearch@0.7.43)(vitepress@1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(axios@1.7.7)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5))(vue@3.4.38(typescript@5.4.5)):
     dependencies:
       '@types/flexsearch': 0.7.3
       '@types/markdown-it': 12.2.3
       flexsearch: 0.7.43
       glob-to-regexp: 0.4.1
       markdown-it: 13.0.1
-      vitepress: 1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5)
+      vitepress: 1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(axios@1.7.7)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5)
       vue: 3.4.38(typescript@5.4.5)
 
-  vitepress@1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5):
+  vitepress@1.3.4(@algolia/client-search@4.22.1)(@types/node@22.5.2)(@types/react@18.3.5)(axios@1.7.7)(idb-keyval@6.2.1)(postcss@8.4.41)(qrcode@1.5.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)(terser@5.31.6)(typescript@5.4.5):
     dependencies:
       '@docsearch/css': 3.6.1
       '@docsearch/js': 3.6.1(@algolia/client-search@4.22.1)(@types/react@18.3.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(search-insights@2.11.0)
@@ -36455,7 +36519,7 @@ snapshots:
       '@vue/devtools-api': 7.3.8
       '@vue/shared': 3.4.38
       '@vueuse/core': 11.0.0(vue@3.4.38(typescript@5.4.5))
-      '@vueuse/integrations': 11.0.0(focus-trap@7.5.4)(idb-keyval@6.2.1)(qrcode@1.5.3)(vue@3.4.38(typescript@5.4.5))
+      '@vueuse/integrations': 11.0.0(axios@1.7.7)(focus-trap@7.5.4)(idb-keyval@6.2.1)(qrcode@1.5.3)(vue@3.4.38(typescript@5.4.5))
       focus-trap: 7.5.4
       mark.js: 8.11.1
       minisearch: 7.1.0

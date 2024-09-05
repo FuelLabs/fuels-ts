@@ -77,6 +77,7 @@
     "@changesets/get-github-info": "^0.6.0",
     "@changesets/read": "^0.6.0",
     "@changesets/types": "^6.0.0",
+    "@codspeed/vitest-plugin": "^3.1.1",
     "@elasticpath/textlint-rule-no-dead-relative-link": "^1.1.1",
     "@fuel-ts/utils": "workspace:*",
     "@internal/forc": "workspace:*",
@@ -116,6 +117,7 @@
     "open": "^8.4.2",
     "prettier": "^3.3.3",
     "rimraf": "^5.0.8",
+    "syncpack": "12.3.3",
     "textlint": "^13.3.2",
     "textlint-rule-no-dead-link": "^5.2.0",
     "ts-generator": "^0.1.1",
@@ -128,8 +130,7 @@
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-plugin-plain-text": "^1.4.2",
     "vitest": "^1.6.0",
-    "webdriverio": "^8.40.2",
-    "syncpack": "12.3.3"
+    "webdriverio": "^8.40.2"
   },
   "pnpm": {
     "overrides": {
