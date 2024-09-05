@@ -379,20 +379,12 @@ type ChainInfoCache = Record<string, ChainInfo>;
  */
 type NodeInfoCache = Record<string, NodeInfo>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type PromisifyReturn<OfFn extends (...args: any) => any> = (
-  ...args: Parameters<OfFn>
-) => Promise<ReturnType<OfFn>>;
+type Operations = ReturnType<typeof getOperationsSdk>;
 
-type Ops = ReturnType<typeof getOperationsSdk>;
-
-type Operations = {
-  [K in keyof Ops]: ReturnType<Ops[K]> extends AsyncIterable<unknown>
-    ? PromisifyReturn<Ops[K]> // Wrap subscriptions in a promise to match return of `FuelGraphqlSubscriber`
-    : Ops[K];
-};
-
-type SdkOperations = Omit<Operations, 'submitAndAwait'> & {
+type SdkOperations = Omit<
+  Operations,
+  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
+> & {
   /**
    * This method is DEPRECATED and will be REMOVED in v1.
    *
@@ -400,7 +392,15 @@ type SdkOperations = Omit<Operations, 'submitAndAwait'> & {
    *
    * Please use the `submitAndAwaitStatus` method instead.
    */
-  submitAndAwait: PromisifyReturn<Operations['submitAndAwait']>;
+  submitAndAwait: (
+    ...args: Parameters<Operations['submitAndAwait']>
+  ) => Promise<ReturnType<Operations['submitAndAwait']>>;
+  statusChange: (
+    ...args: Parameters<Operations['statusChange']>
+  ) => Promise<ReturnType<Operations['statusChange']>>;
+  submitAndAwaitStatus: (
+    ...args: Parameters<Operations['submitAndAwaitStatus']>
+  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
