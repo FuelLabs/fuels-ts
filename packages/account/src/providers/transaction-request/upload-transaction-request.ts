@@ -1,4 +1,4 @@
-import { ZeroBytes32 } from '@fuel-ts/address/dist/configs';
+import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { type TransactionUpload, TransactionType } from '@fuel-ts/transactions';
