@@ -30,15 +30,14 @@ describe('Revert Error Testing', () => {
       .call();
 
     const { logs } = await waitForResult();
+    const lastLog = logs[logs.length - 1];
 
-    expect(
-      logs.map((d) => ({ token_id: d.token_id?.toString(), price: d.price?.toString() }))
-    ).toEqual([
-      {
-        token_id: INPUT_TOKEN_ID.toString(),
-        price: INPUT_PRICE.toString(),
-      },
-    ]);
+    expect(JSON.stringify(lastLog)).toEqual(
+      JSON.stringify({
+        token_id: INPUT_TOKEN_ID,
+        price: INPUT_PRICE,
+      })
+    );
   });
 
   it('should throw for "require" revert TX [PriceCantBeZero]', async () => {
@@ -53,7 +52,7 @@ describe('Revert Error Testing', () => {
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because a "require" statement has thrown "PriceCantBeZero".`,
         {
-          logs: ['PriceCantBeZero'],
+          logs: [1, 'FOO', 'PriceCantBeZero'],
           receipts: expect.any(Array<TransactionResultReceipt>),
           reason: 'require',
           panic: false,
@@ -80,7 +79,7 @@ describe('Revert Error Testing', () => {
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because a "require" statement has thrown "InvalidTokenId".`,
         {
-          logs: ['InvalidTokenId'],
+          logs: [1, 'FOO', 'BAR', 'BAZ', 99, 'InvalidTokenId'],
           receipts: expect.any(Array<TransactionResultReceipt>),
           reason: 'require',
           panic: false,
@@ -121,7 +120,7 @@ describe('Revert Error Testing', () => {
         ErrorCode.SCRIPT_REVERTED,
         'The transaction reverted because an "assert" statement failed to evaluate to true.',
         {
-          logs: [],
+          logs: [1, 'FOO', 'BAR', 'BAZ', 99, 100],
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
@@ -159,7 +158,7 @@ describe('Revert Error Testing', () => {
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_eq" statement comparing 10 and 9.`,
         {
-          logs: [9, 10],
+          logs: ['FOO', 9, 10],
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
@@ -178,7 +177,7 @@ describe('Revert Error Testing', () => {
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
         {
-          logs: [5, 5],
+          logs: ['BAZ', 10, 5, 5],
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
@@ -263,7 +262,7 @@ describe('Revert Error Testing', () => {
         ErrorCode.SCRIPT_REVERTED,
         `The transaction reverted because of an "assert_ne" statement comparing 5 and 5.`,
         {
-          logs: [5, 5],
+          logs: ['BAZ', 10, 5, 5],
           receipts: expect.any(Array<TransactionResultReceipt>),
           panic: false,
           revert: true,
