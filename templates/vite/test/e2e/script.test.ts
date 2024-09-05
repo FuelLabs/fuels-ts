@@ -7,7 +7,7 @@ import { describe, test, expect } from 'vitest';
  *
  * Can't find these imports? Make sure you've run `fuels build` to generate these with typegen.
  */
-import { TestScript } from '../src/sway-api';
+import { TestScript } from '../../src/sway-api';
 
 /**
  * @group node
