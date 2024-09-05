@@ -16,6 +16,9 @@ import { calculateMetadataGasForTxUpgrade } from '../utils';
 import { hashTransaction } from './hash-transaction';
 import { BaseTransactionRequest, type BaseTransactionRequestLike } from './transaction-request';
 
+/**
+ * @hidden
+ */
 export type UpgradePurposeRequest =
   | {
       type: UpgradePurposeTypeEnum.ConsensusParameters;
@@ -44,15 +47,18 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     return new UpgradeTransactionRequest(obj);
   }
 
-  /** The type of transaction. */
+  /** The type of transaction */
   type = TransactionType.Upgrade as const;
-
-  /** The upgrade purpose. */
+  /** The upgrade purpose */
   upgradePurpose: UpgradePurposeRequest;
-
-  /** Witness index */
+  /** Witness index of consensus */
   bytecodeWitnessIndex: number;
 
+  /**
+   * Creates an instance `UpgradeTransactionRequest`.
+   *
+   * @param upgradeTransactionRequestLike - The initial values for the instance
+   */
   constructor({
     upgradePurpose,
     bytecodeWitnessIndex,
@@ -63,6 +69,13 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     this.bytecodeWitnessIndex = bytecodeWitnessIndex ?? 0;
   }
 
+  /**
+   * Adds a consensus parameters upgrade purpose.
+   *
+   * @param consensus - The consensus bytecode.
+   *
+   * @returns - The current instance of `UpgradeTransactionRequest`.
+   */
   addConsensusParametersUpgradePurpose(consensus: BytesLike) {
     this.bytecodeWitnessIndex = this.addWitness(consensus);
     this.upgradePurpose = {
@@ -72,6 +85,13 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
+  /**
+   * Adds a state transition upgrade purpose.
+   *
+   * @param bytecodeRoot - The Merkle root of the state transition.
+   *
+   * @returns - The current instance of `UpgradeTransactionRequest`.
+   */
   addStateTransitionUpgradePurpose(bytecodeRoot: BytesLike) {
     this.upgradePurpose = {
       type: UpgradePurposeTypeEnum.StateTransition,
@@ -80,6 +100,14 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
+  /**
+   * Adds an upgrade purpose.
+   *
+   * @param type - The upgrade purpose type.
+   * @param data - The bytecode or merkle root of upgrade purpose
+   *
+   * @returns - The current instance of `UpgradeTransactionRequest`.
+   */
   addUpgradePurpose(type: UpgradePurposeTypeEnum, data: BytesLike) {
     if (type === UpgradePurposeTypeEnum.ConsensusParameters) {
       this.addConsensusParametersUpgradePurpose(data);
@@ -92,6 +120,11 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     return this;
   }
 
+  /**
+   * Converts the transaction request to a `TransactionUpgrade`.
+   *
+   * @returns The transaction create object.
+   */
   toTransaction(): TransactionUpgrade {
     let upgradePurpose: UpgradePurpose;
 
@@ -115,16 +148,30 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     }
 
     return {
+      type: TransactionType.Upgrade,
       ...super.getBaseTransaction(),
       upgradePurpose,
-      type: TransactionType.Upgrade,
     };
   }
 
+  /**
+   * Gets the Transaction Request by hashing the transaction.
+   *
+   * @param chainId - The chain ID.
+   *
+   * @returns - A hash of the transaction, which is the transaction ID.
+   */
   getTransactionId(chainId: number): string {
     return hashTransaction(this, chainId);
   }
 
+  /**
+   * Calculates the metadata gas cost for an upgrade transaction.
+   *
+   * @param gasCosts - gas costs passed from the chain.
+   *
+   * @returns metadata gas cost for the upgrade transaction.
+   */
   metadataGas(gasCosts: GqlGasCosts): BN {
     const txBytesSize = this.byteSize();
 
@@ -145,6 +192,6 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
       });
     }
 
-    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Not implemented');
+    throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Invalid upgrade purpose');
   }
 }

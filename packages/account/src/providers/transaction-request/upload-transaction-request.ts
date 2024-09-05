@@ -9,6 +9,9 @@ import { calculateMetadataGasForTxUpload } from '../utils';
 import { hashTransaction } from './hash-transaction';
 import { type BaseTransactionRequestLike, BaseTransactionRequest } from './transaction-request';
 
+/**
+ * @hidden
+ */
 export interface UploadSubsectionRequest {
   /** The root of the Merkle tree is created over the bytecode. */
   root: BytesLike;
@@ -47,29 +50,49 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
 
   /** Type of the transaction */
   type = TransactionType.Upload as const;
-
   /** The witness index of the subsection of the bytecode. */
   witnessIndex: number;
-
   /** The subsection data. */
   subsection: Omit<UploadSubsectionRequest, 'subsection'>;
 
+  /**
+   * Creates an instance `UploadTransactionRequest`.
+   *
+   * @param uploadTransactionRequestLike - The initial values for the instance
+   */
   constructor({ witnessIndex, subsection, ...rest }: UploadTransactionRequestLike = {}) {
     super(rest);
     this.witnessIndex = witnessIndex ?? 0;
     this.subsection = subsection!;
   }
 
+  /**
+   * Adds the subsection.
+   *
+   * @param subsection - The subsection data.
+   */
   addSubsection(subsection: UploadSubsectionRequest) {
     const { subsection: subsectionBytecode, ...rest } = subsection;
     this.subsection = rest;
     this.witnessIndex = this.addWitness(subsectionBytecode);
   }
 
+  /**
+   * Gets the Transaction Request by hashing the transaction.
+   *
+   * @param chainId - The chain ID.
+   *
+   * @returns - A hash of the transaction, which is the transaction ID.
+   */
   getTransactionId(chainId: number): string {
     return hashTransaction(this, chainId);
   }
 
+  /**
+   * Converts the transaction request to a `TransactionUpload`.
+   *
+   * @returns The transaction create object.
+   */
   toTransaction(): TransactionUpload {
     const baseTransaction = this.getBaseTransaction();
     const { subsectionIndex, subsectionsNumber, root, proofSet } = this.subsection;
@@ -85,6 +108,13 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
     };
   }
 
+  /**
+   * Calculates the metadata gas cost for an upload transaction.
+   *
+   * @param gasCosts - gas costs passed from the chain.
+   *
+   * @returns metadata gas cost for the upload transaction.
+   */
   metadataGas(gasCosts: GqlGasCosts): BN {
     return calculateMetadataGasForTxUpload({
       gasCosts,
