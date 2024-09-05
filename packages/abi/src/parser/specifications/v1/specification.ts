@@ -7,22 +7,22 @@ export interface AbiSpecificationV1 {
   readonly specVersion: '1';
   readonly encodingVersion: string;
   readonly programType: string;
-  readonly concreteTypes: readonly ConcreteTypeV1[];
-  readonly metadataTypes: readonly MetadataTypeV1[];
+  readonly concreteTypes: readonly AbiConcreteTypeV1[];
+  readonly metadataTypes: readonly AbiMetadataTypeV1[];
   readonly functions: readonly AbiFunctionV1[];
-  readonly loggedTypes: readonly LoggedTypeV1[];
-  readonly messagesTypes: readonly MessageTypeV1[];
-  readonly configurables: readonly ConfigurableV1[];
+  readonly loggedTypes: readonly AbiLoggedTypeV1[];
+  readonly messagesTypes: readonly AbiMessageTypeV1[];
+  readonly configurables: readonly AbiConfigurableV1[];
 }
 
-export interface ConcreteTypeV1 {
+export interface AbiConcreteTypeV1 {
   readonly type: string;
   readonly concreteTypeId: string;
   readonly metadataTypeId?: number;
   readonly typeArguments?: readonly string[];
 }
 
-export interface MetadataTypeV1 {
+export interface AbiMetadataTypeV1 {
   readonly type: string;
   readonly metadataTypeId: number;
   readonly components?: readonly ComponentV1[];
@@ -50,17 +50,17 @@ export interface AbiFunctionInputV1 {
   readonly concreteTypeId: string;
 }
 
-export interface LoggedTypeV1 {
+export interface AbiLoggedTypeV1 {
   readonly logId: string;
   // the _type concrete declaration_ hash based ID of the value being logged.
   readonly concreteTypeId: string;
 }
 
-export interface MessageTypeV1 {
+export interface AbiMessageTypeV1 {
   readonly messageId: string;
   readonly concreteTypeId: string;
 }
-export interface ConfigurableV1 {
+export interface AbiConfigurableV1 {
   readonly name: string;
   readonly concreteTypeId: string;
   readonly offset: number;
