@@ -2,7 +2,6 @@ import {
   ErrorCode,
   FuelError,
   hexlify,
-  ScriptTransactionRequest,
   TransactionResponse,
   Wallet,
   WalletUnlocked,
