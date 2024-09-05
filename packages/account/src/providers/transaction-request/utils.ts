@@ -70,4 +70,4 @@ export const isTransactionTypeUpgrade = (
 /** @hidden */
 export const isTransactionTypeUpload = (
   request: TransactionRequestLike
-): request is UpgradeTransactionRequest => request.type === TransactionType.Upload;
+): request is UploadTransactionRequest => request.type === TransactionType.Upload;
