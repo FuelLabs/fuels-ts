@@ -379,21 +379,20 @@ type ChainInfoCache = Record<string, ChainInfo>;
  */
 type NodeInfoCache = Record<string, NodeInfo>;
 
-type Operations = ReturnType<typeof getOperationsSdk>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type PromisifyReturn<OfFn extends (...args: any) => any> = (
+  ...args: Parameters<OfFn>
+) => Promise<ReturnType<OfFn>>;
 
-type SdkOperations = Omit<
-  Operations,
-  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
-> & {
-  submitAndAwait: (
-    ...args: Parameters<Operations['submitAndAwait']>
-  ) => Promise<ReturnType<Operations['submitAndAwait']>>;
-  statusChange: (
-    ...args: Parameters<Operations['statusChange']>
-  ) => Promise<ReturnType<Operations['statusChange']>>;
-  submitAndAwaitStatus: (
-    ...args: Parameters<Operations['submitAndAwaitStatus']>
-  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
+type Ops = ReturnType<typeof getOperationsSdk>;
+
+type Operations = {
+  [K in keyof Ops]: ReturnType<Ops[K]> extends AsyncIterable<unknown>
+    ? PromisifyReturn<Ops[K]> // Wrap subscriptions in a promise to match return of `FuelGraphqlSubscriber`
+    : Ops[K];
+};
+
+type SdkOperations = Operations & {
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
