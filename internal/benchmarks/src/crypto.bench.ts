@@ -1,8 +1,7 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable import/no-extraneous-dependencies */
+import type { Keystore } from '@fuel-ts/crypto';
+import { bufferFromString, pbkdf2, computeHmac, encrypt, decrypt } from '@fuel-ts/crypto';
 import { bench } from 'vitest';
-
-import type { Keystore } from '..';
-import { bufferFromString, pbkdf2, computeHmac, encrypt, decrypt } from '..';
 
 /**
  * @group node

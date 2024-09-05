@@ -1,7 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import { Wallet } from 'fuels';
 import type { TransferParams } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { bench } from 'vitest';
 
 /**

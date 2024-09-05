@@ -1,7 +1,8 @@
+/* eslint-disable import/no-extraneous-dependencies */
+
 import type { TransferParams } from 'fuels';
 import { ScriptTransactionRequest, Wallet } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { bench } from 'vitest';
 
 import { CallTestContractFactory } from '../test/typegen/contracts';

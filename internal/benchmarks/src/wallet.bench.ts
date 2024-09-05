@@ -1,10 +1,8 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+/* eslint-disable import/no-extraneous-dependencies */
+
+import { WalletLocked, WalletUnlocked, Wallet } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 import { bench } from 'vitest';
-
-import { setupTestProviderAndWallets } from '../test-utils';
-
-import { Wallet } from './wallet';
-import { WalletLocked, WalletUnlocked } from './wallets';
 
 const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
 const expectedPublicKey =
@@ -17,7 +15,7 @@ const expectedLockedAddress = 'fuel1tac0aml37g57f227zptw3dxcp59jfdt9vayxpnpp80ds
  */
 describe('Wallet Benchmarks', () => {
   bench('Instantiate a new Unlocked wallet', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await launchTestNode();
     const { provider } = launched;
 
     const unlockedWallet = new WalletUnlocked(expectedPrivateKey, provider);
@@ -27,7 +25,7 @@ describe('Wallet Benchmarks', () => {
   });
 
   bench('Instantiate from a constructor', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await launchTestNode();
     const { provider } = launched;
     const lockedWallet = new WalletLocked(expectedPrivateKey, provider);
 
@@ -35,7 +33,7 @@ describe('Wallet Benchmarks', () => {
   });
 
   bench('Instantiate from an address', async () => {
-    using launched = await setupTestProviderAndWallets();
+    using launched = await launchTestNode();
     const { provider } = launched;
     const lockedWallet = Wallet.fromAddress(expectedAddress, provider);
 
