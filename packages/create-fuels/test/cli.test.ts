@@ -53,7 +53,9 @@ describe('CLI', { timeout: 15_000 }, () => {
     let originalTemplateFiles = await getAllFiles(paths.templateSource);
     originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles);
 
-    const testProjectFiles = await getAllFiles(paths.projectRoot);
+    const testProjectFiles = (await getAllFiles(paths.projectRoot)).filter(
+      (filename) => !filename.includes('dist')
+    );
 
     expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
   });

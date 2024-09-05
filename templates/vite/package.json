@@ -6,7 +6,7 @@
   "scripts": {
     "xprebuild": "fuels build",
     "dev": "vite",
-    "build": "pnpm xprebuild && tsc -b && vite build",
+    "build": "pnpm run xprebuild && tsc -b && vite build",
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
     "test": "vitest"
@@ -16,7 +16,7 @@
     "@fuels/react": "^0.26.0",
     "@tanstack/react-query": "^5.52.1",
     "@tanstack/react-router": "^1.48.1",
-    "@wagmi/connectors": "^5.1.7",
+    "@wagmi/connectors": "^5.1.8",
     "@wagmi/core": "^2.13.4",
     "dotenv": "^16.4.5",
     "fuels": "workspace:*",
@@ -28,7 +28,7 @@
   "devDependencies": {
     "@eslint/js": "^9.9.1",
     "@tanstack/router-plugin": "^1.47.0",
-    "@types/react": "^18.3.4",
+    "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",

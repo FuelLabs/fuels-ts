@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.94.4
+
+### Patch Changes
+
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+
 ## 0.94.3
 
 ### Patch Changes

@@ -27,7 +27,7 @@ import type { Account } from '../../account';
 import type { Coin } from '../coin';
 import type { CoinQuantity, CoinQuantityLike } from '../coin-quantity';
 import { coinQuantityfy } from '../coin-quantity';
-import type { MessageCoin } from '../message';
+import { isMessageCoin, type Message, type MessageCoin } from '../message';
 import type { ChainInfo, GasCosts } from '../provider';
 import type { Resource } from '../resource';
 import { isCoin } from '../resource';
@@ -37,6 +37,7 @@ import { getMaxGas, getMinGas } from '../utils/gas';
 import { NoWitnessAtIndexError } from './errors';
 import {
   getRequestInputResourceOwner,
+  isRequestInputCoinOrMessage,
   isRequestInputResource,
   isRequestInputResourceFromOwner,
 } from './helpers';
@@ -405,8 +406,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param message - Message resource.
    */
-  addMessageInput(message: MessageCoin) {
-    const { recipient, sender, amount, predicate, nonce, assetId, predicateData } = message;
+  addMessageInput(message: Message | MessageCoin) {
+    const { recipient, sender, amount, predicate, nonce, predicateData } = message;
 
     let witnessIndex;
 
@@ -426,6 +427,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
       type: InputType.Message,
       sender: sender.toB256(),
       recipient: recipient.toB256(),
+      data: isMessageCoin(message) ? '0x' : message.data,
       amount,
       witnessIndex,
       predicate,
@@ -436,7 +438,9 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
     this.pushInput(input);
 
     // Insert a ChangeOutput if it does not exist
-    this.addChangeOutput(recipient, assetId);
+    if (isMessageCoin(message)) {
+      this.addChangeOutput(recipient, message.assetId);
+    }
   }
 
   /**
@@ -586,6 +590,8 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
    *
    * @param quantities - CoinQuantity Array.
    * @param baseAssetId - The base asset to fund the transaction.
+   * @deprecated - This method is deprecated and will be removed in future versions.
+   * Please use `Account.generateFakeResources` along with `this.addResources` instead.
    */
   fundWithFakeUtxos(
     quantities: CoinQuantity[],
@@ -681,7 +687,7 @@ export abstract class BaseTransactionRequest implements BaseTransactionRequestLi
   }
 
   updatePredicateGasUsed(inputs: TransactionRequestInput[]) {
-    const inputsToExtractGasUsed = inputs.filter(isRequestInputResource);
+    const inputsToExtractGasUsed = inputs.filter(isRequestInputCoinOrMessage);
 
     this.inputs.filter(isRequestInputResource).forEach((i) => {
       const owner = getRequestInputResourceOwner(i);

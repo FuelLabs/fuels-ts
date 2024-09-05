@@ -1,3 +1,5 @@
+import { Link as ReactRouterLink } from "@tanstack/react-router";
+
 export const Link = ({
   href,
   children,
@@ -10,12 +12,12 @@ export const Link = ({
   target?: string;
 }) => {
   return (
-    <a
-      href={href}
+    <ReactRouterLink
+      to={href}
       className={`text-fuel-green hover:underline ${className}`}
       target={target}
     >
       {children}
-    </a>
+    </ReactRouterLink>
   );
 };

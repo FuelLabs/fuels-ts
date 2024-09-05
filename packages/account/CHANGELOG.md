@@ -1,5 +1,35 @@
 # Change Log
 
+## 0.94.4
+
+### Patch Changes
+
+- 7fc8d24: feat: return deep clone on transaction request `from` method
+- 24d4d03: ci: revert gas price estimation test flakiness
+- 121eca3: feat: add block header to responses in block-related queries
+- be1c43f: chore: deprecate `BaseTransactionRequest.fundWithFakeUtxos`
+- 7d74c8c: fix: TX estimation when `InputMessage` contains data
+- 6bef838: feat: validate blob IDs against chain in chunk deploys
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+- a059ea1: feat: map 'not enough coins' error
+- 90a1d0f: feat: support basic auth
+- 1b4db70: fix: assemble of transaction revert error message
+- 4cbba82: feat: parse message response from `getMessageByNonce`
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/versions@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/crypto@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/abi-coder@0.94.4
+  - @fuel-ts/address@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/transactions@0.94.4
+  - @fuel-ts/hasher@0.94.4
+  - @fuel-ts/merkle@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes

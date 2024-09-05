@@ -18,10 +18,20 @@ export const isRequestInputMessage = (
   input: TransactionRequestInput
 ): input is MessageTransactionRequestInput => input.type === InputType.Message;
 
-export const isRequestInputResource = (
+export const isRequestInputMessageWithoutData = (
+  input: TransactionRequestInput
+): input is MessageTransactionRequestInput =>
+  input.type === InputType.Message && bn(input.data).isZero();
+
+export const isRequestInputCoinOrMessage = (
   input: TransactionRequestInput
 ): input is CoinTransactionRequestInput | MessageTransactionRequestInput =>
   isRequestInputCoin(input) || isRequestInputMessage(input);
+
+export const isRequestInputResource = (
+  input: TransactionRequestInput
+): input is CoinTransactionRequestInput | MessageTransactionRequestInput =>
+  isRequestInputCoin(input) || isRequestInputMessageWithoutData(input);
 
 export const getRequestInputResourceOwner = (
   input: CoinTransactionRequestInput | MessageTransactionRequestInput
