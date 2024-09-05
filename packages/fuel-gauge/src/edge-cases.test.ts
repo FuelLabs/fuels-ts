@@ -1,6 +1,7 @@
 import {
   ErrorCode,
   FuelError,
+  hexlify,
   ScriptTransactionRequest,
   TransactionResponse,
   Wallet,
@@ -62,7 +63,7 @@ describe('Edge Cases', () => {
     }
   });
 
-  test('Sending a failing transaction throws immediately', async () => {
+  test('Submitting a failing transaction via submitAndAwaitStatus subscription throws immediately', async () => {
     using launched = await launchTestNode();
     const {
       wallets: [funder],
@@ -74,7 +75,10 @@ describe('Edge Cases', () => {
     const transferTx = await predicate.createTransfer(WalletUnlocked.generate().address, 1);
 
     await expectToThrowFuelError(
-      () => launched.provider.sendTransaction(transferTx),
+      () =>
+        launched.provider.operations.submitAndAwaitStatus({
+          encodedTransaction: hexlify(transferTx.toTransactionBytes()),
+        }),
       new FuelError(
         ErrorCode.INVALID_REQUEST,
         'Invalid transaction data: PredicateVerificationFailed(Panic(PredicateReturnedNonOne))'
