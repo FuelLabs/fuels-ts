@@ -1,11 +1,4 @@
-import {
-  ErrorCode,
-  FuelError,
-  hexlify,
-  TransactionResponse,
-  Wallet,
-  WalletUnlocked,
-} from 'fuels';
+import { ErrorCode, FuelError, hexlify, TransactionResponse, Wallet, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { PredicateFalse } from '../test/typegen';
