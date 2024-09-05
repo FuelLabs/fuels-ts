@@ -33,6 +33,7 @@ export type UpgradePurposeRequest =
  * @hidden
  */
 export interface UpgradeTransactionRequestLike extends BaseTransactionRequestLike {
+  /** The upgrade purpose */
   upgradePurpose?: UpgradePurposeRequest;
 
   /** Witness index */
