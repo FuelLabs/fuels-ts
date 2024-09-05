@@ -19,14 +19,13 @@ test('counter contract - increment function call works properly', async ({ page 
 
   await page.waitForTimeout(2000);
 
-  const initialCounterValue = page.getByTestId('counter');
-  await expect(initialCounterValue).toHaveText('0');
+  const initialCounterValue = +page.getByTestId('counter').textContent;
 
   const incrementButton = page.getByText('Increment Counter');
   await incrementButton.click();
 
   await page.waitForTimeout(2000);
 
-  const counterValueAfterIncrement = page.getByTestId('counter');
-  await expect(counterValueAfterIncrement).toHaveText('1');
+  const counterValueAfterIncrement = +page.getByTestId('counter').textContent;
+  expect(counterValueAfterIncrement).toEqual(initialCounterValue + 1);
 });
