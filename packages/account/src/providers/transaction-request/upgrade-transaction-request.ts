@@ -3,9 +3,9 @@ import { hash } from '@fuel-ts/hasher';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import {
+  TransactionType,
   type TransactionUpgrade,
   type UpgradePurpose,
-  TransactionType,
   UpgradePurposeTypeEnum,
 } from '@fuel-ts/transactions';
 import { hexlify } from '@fuel-ts/utils';
@@ -66,8 +66,11 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     ...rest
   }: UpgradeTransactionRequestLike = {}) {
     super(rest);
-    this.upgradePurpose = upgradePurpose!;
     this.bytecodeWitnessIndex = bytecodeWitnessIndex ?? 0;
+    this.upgradePurpose = upgradePurpose ?? {
+      type: UpgradePurposeTypeEnum.ConsensusParameters,
+      checksum: '0x',
+    };
   }
 
   /**

@@ -270,7 +270,7 @@ describe('transactionRequestify', () => {
     ) {
       expect(txRequest.upgradePurpose).toEqual(txRequestLike.upgradePurpose);
       expect(txRequest.bytecodeWitnessIndex).toEqual(0);
-      expect(txRequest.upgradePurpose.checksum).toEqual(txRequestLike.upgradePurpose!.checksum);
+      expect(txRequest.upgradePurpose.checksum).toEqual(txRequestLike.upgradePurpose?.checksum);
     }
 
     expect(txRequest.type).toEqual(txRequestLike.type);

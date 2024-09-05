@@ -1,3 +1,4 @@
+import { ZeroBytes32 } from '@fuel-ts/address/dist/configs';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { type TransactionUpload, TransactionType } from '@fuel-ts/transactions';
@@ -63,7 +64,12 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
   constructor({ witnessIndex, subsection, ...rest }: UploadTransactionRequestLike = {}) {
     super(rest);
     this.witnessIndex = witnessIndex ?? 0;
-    this.subsection = subsection!;
+    this.subsection = subsection ?? {
+      proofSet: [],
+      root: ZeroBytes32,
+      subsectionIndex: 0,
+      subsectionsNumber: 0,
+    };
   }
 
   /**
