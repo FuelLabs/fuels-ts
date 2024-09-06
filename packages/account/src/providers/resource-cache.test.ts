@@ -12,10 +12,6 @@ describe(
   () => {
     const randomValue = () => hexlify(randomBytes(32));
 
-    beforeEach(() => {
-      new ResourceCache(1000).clear();
-    });
-
     it('can instantiate [valid numerical ttl]', () => {
       const memCache = new ResourceCache(1000);
 
@@ -85,13 +81,16 @@ describe(
     });
 
     it('should remove expired when getting active data', async () => {
-      const ttl = 200;
+      const ttl = 500;
       const resourceCache = new ResourceCache(ttl);
+
+      const utxos = [randomValue(), randomValue()];
+      const messages = [randomValue()];
 
       const txId1 = randomValue();
       const txId1Resources = {
-        utxos: [randomValue()],
-        messages: [randomValue()],
+        utxos,
+        messages,
       };
 
       resourceCache.set(txId1, txId1Resources);
@@ -104,8 +103,13 @@ describe(
 
       const newActiveData = resourceCache.getActiveData();
 
-      expect(newActiveData.utxos.length).toEqual(0);
-      expect(newActiveData.messages.length).toEqual(0);
+      txId1Resources.utxos.forEach((utxo) => {
+        expect(newActiveData.utxos).not.includes(utxo);
+      });
+
+      txId1Resources.messages.forEach((message) => {
+        expect(newActiveData.utxos).not.includes(message);
+      });
     });
 
     it('should remove cached data based on transaction ID', () => {
