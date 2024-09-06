@@ -11,7 +11,7 @@ import {
 import { hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import { calculateMetadataGasForTxUpgrade } from '../utils';
 
 import { hashTransaction } from './hash-transaction';
@@ -177,7 +177,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
    *
    * @returns metadata gas cost for the upgrade transaction.
    */
-  metadataGas(gasCosts: GqlGasCosts): BN {
+  metadataGas(gasCosts: GasCosts): BN {
     const txBytesSize = this.byteSize();
 
     if (this.upgradePurpose.type === UpgradePurposeTypeEnum.ConsensusParameters) {
