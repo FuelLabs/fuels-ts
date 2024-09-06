@@ -103,7 +103,7 @@ describe('Resource Cache', () => {
   });
 
   it('should remove cached data based on transaction ID', () => {
-    const ttl = 1000;
+    const ttl = 200;
     const resourceCache = new ResourceCache(ttl);
 
     const txId1 = randomValue();
