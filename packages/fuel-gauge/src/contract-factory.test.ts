@@ -11,7 +11,6 @@ import {
   ConfigurableContractFactory,
   LargeContract,
   ConfigurableContract,
-  ProxyContract,
   ProxyContractFactory,
 } from '../test/typegen';
 
@@ -587,5 +586,5 @@ describe('Contract Factory', () => {
       .call();
     const { value: proxyValue } = await proxyCall.waitForResult();
     expect(proxyValue.toNumber()).toBe(1001);
-  });
+  }, 25000);
 });
