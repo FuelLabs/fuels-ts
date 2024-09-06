@@ -13,6 +13,7 @@ import {
   FuelWalletDevelopmentConnector,
   FueletWalletConnector,
   WalletConnectConnector,
+  SolanaConnector,
 } from "@fuels/connectors";
 import { NODE_URL } from "@/lib";
 import { ActiveWalletProvider } from "@/hooks/useActiveWallet";
@@ -70,6 +71,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   new BakoSafeConnector(),
                   new FueletWalletConnector(),
                   new FuelWalletDevelopmentConnector(),
+                  new SolanaConnector({
+                    fuelProvider: providerToUse,
+                  }),
                 ],
               }}
             >

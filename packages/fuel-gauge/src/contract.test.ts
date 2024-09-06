@@ -911,14 +911,19 @@ describe('Contract', () => {
 
     contract.account = Wallet.generate({ provider: contract.provider });
 
-    await expect(
-      contract.functions
-        .return_context_amount()
-        .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
-        })
-        .simulate()
-    ).rejects.toThrowError('not enough coins to fit the target');
+    await expectToThrowFuelError(
+      () =>
+        contract.functions
+          .return_context_amount()
+          .callParams({
+            forward: [100, contract.provider.getBaseAssetId()],
+          })
+          .simulate(),
+      new FuelError(
+        ErrorCode.NOT_ENOUGH_FUNDS,
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+      )
+    );
   });
 
   it('should throw when using "simulate" without a wallet', async () => {

@@ -318,6 +318,7 @@ BigNumber
 Gwei
 onchain
 Vercel
+vercel
 hardcoded
 differentiators
 updatable
@@ -332,3 +333,4 @@ incentivise
 URI
 walletsConfig
 reuploaded
+Vite
