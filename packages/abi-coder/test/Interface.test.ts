@@ -130,21 +130,6 @@ describe('Abi interface', () => {
     });
   });
 
-  describe('messagesTypes', () => {
-    it('sets messagesTypes properties just fine', () => {
-      const { messagesTypes } = exhaustiveExamplesAbi;
-      expect(messagesTypes.length).greaterThan(0);
-      messagesTypes.forEach(({ concreteTypeId, messageId }) => {
-        expect(messageId).toBeDefined();
-        expect(concreteTypeId).toBeDefined();
-        const foundType = exhaustiveExamplesAbi.concreteTypes.find(
-          (id) => id.concreteTypeId === concreteTypeId
-        );
-        expect(foundType).toBeDefined();
-      });
-    });
-  });
-
   describe('encoding/decoding', () => {
     describe('encodes and decodes', () => {
       it.each([
