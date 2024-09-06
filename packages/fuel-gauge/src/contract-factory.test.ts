@@ -292,33 +292,37 @@ describe('Contract Factory', () => {
     expect(value.toNumber()).toBe(1001);
   }, 15000);
 
-  it('deploys large contracts via blobs and awaits transaction id', async () => {
-    using launched = await launchTestNode({
-      nodeOptions: {
-        args: ['--tx-pool-ttl', '1s'],
-      },
-      providerOptions: {
-        resourceCacheTTL: -1,
-      },
-    });
+  it(
+    'deploys large contracts via blobs and awaits transaction id',
+    { timeout: 15000 },
+    async () => {
+      using launched = await launchTestNode({
+        nodeOptions: {
+          args: ['--tx-pool-ttl', '1s'],
+        },
+        providerOptions: {
+          resourceCacheTTL: -1,
+        },
+      });
 
-    const {
-      wallets: [wallet],
-    } = launched;
+      const {
+        wallets: [wallet],
+      } = launched;
 
-    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
-    const deploy = await factory.deployAsBlobTx<LargeContract>();
-    const initTxId = deploy.waitForTransactionId();
-    expect(initTxId).toStrictEqual(new Promise(() => {}));
-    const { contract } = await deploy.waitForResult();
-    expect(contract.id).toBeDefined();
-    const awaitTxId = await deploy.waitForTransactionId();
-    expect(awaitTxId).toBeTruthy();
+      const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
+      const deploy = await factory.deployAsBlobTx<LargeContract>();
+      const initTxId = deploy.waitForTransactionId();
+      expect(initTxId).toStrictEqual(new Promise(() => {}));
+      const { contract } = await deploy.waitForResult();
+      expect(contract.id).toBeDefined();
+      const awaitTxId = await deploy.waitForTransactionId();
+      expect(awaitTxId).toBeTruthy();
 
-    const call = await contract.functions.something().call();
-    const { value } = await call.waitForResult();
-    expect(value.toNumber()).toBe(1001);
-  });
+      const call = await contract.functions.something().call();
+      const { value } = await call.waitForResult();
+      expect(value.toNumber()).toBe(1001);
+    }
+  );
 
   it('deploys large contracts via blobs [padded]', async () => {
     using launched = await launchTestNode({
@@ -518,4 +522,35 @@ describe('Contract Factory', () => {
       })
     );
   });
+
+  it('deploys large contract via blobs twice and only uploads blobs once', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const sendTransactionSpy = vi.spyOn(wallet, 'sendTransaction');
+    const factory = new ContractFactory(LargeContractFactory.bytecode, LargeContract.abi, wallet);
+
+    const firstDeploy = await factory.deployAsBlobTx<LargeContract>({
+      salt: concat(['0x01', new Uint8Array(31)]),
+    });
+    const { contract: firstContract } = await firstDeploy.waitForResult();
+    const firstDeployCalls = sendTransactionSpy.mock.calls.length;
+    const secondDeploy = await factory.deployAsBlobTx<LargeContract>({
+      salt: concat(['0x02', new Uint8Array(31)]),
+    });
+    const { contract: secondContract } = await secondDeploy.waitForResult();
+    const secondDeployCalls = sendTransactionSpy.mock.calls.length;
+    expect(secondDeployCalls - firstDeployCalls).toBeLessThan(firstDeployCalls);
+
+    const firstCall = await firstContract.functions.something().call();
+    const { value: firstValue } = await firstCall.waitForResult();
+    expect(firstValue.toNumber()).toBe(1001);
+
+    const secondCall = await secondContract.functions.something().call();
+    const { value: secondValue } = await secondCall.waitForResult();
+    expect(secondValue.toNumber()).toBe(1001);
+  }, 25000);
 });

@@ -1,5 +1,23 @@
 # create-fuels
 
+## 0.94.4
+
+### Patch Changes
+
+- 96140a2: fix: faucet link in `create-fuels` navbar
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+- a0bb25f: feat: make vite the default `create-fuels` template
+- cc1aa12: build(deps): bump the deps-patch group with 9 updates
+
+## 0.94.3
+
+### Patch Changes
+
+- b67ded2: chore: upgraded forc to `0.63.3`
+- e87b51b: feat: add missing connectors to `create fuels` template
+- 08aa4ae: feat: embed testnet faucet in `create-fuels` template
+- e04947a: feat: make `create-fuels` template app responsive
+
 ## 0.94.2
 
 ### Patch Changes

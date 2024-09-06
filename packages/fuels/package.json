@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.94.2",
+  "version": "0.94.4",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -55,7 +55,9 @@
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
     "build:minified": "pnpm uglifyjs --compress --mangle --output dist/browser.min.mjs -- dist/browser.mjs",
-    "postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
+    "postbuild": "run-s type:declarations type:check",
+    "type:declarations": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
+    "type:check": "tsc --noEmit",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "license": "Apache-2.0",
@@ -87,7 +89,7 @@
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
     "toml": "^3.0.0",
-    "uglify-js": "^3.19.2",
+    "uglify-js": "^3.19.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {
