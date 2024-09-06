@@ -12,7 +12,9 @@ describe(
   () => {
     const randomValue = () => hexlify(randomBytes(32));
 
-    afterEach(new ResourceCache(1000).clear);
+    afterEach(() => {
+      new ResourceCache(1000).clear();
+    });
 
     it('can instantiate [valid numerical ttl]', () => {
       const memCache = new ResourceCache(1000);
@@ -93,17 +95,17 @@ describe(
       };
 
       resourceCache.set(txId1, txId1Resources);
-      let activeData = resourceCache.getActiveData();
+      const oldActiveData = resourceCache.getActiveData();
 
-      expect(activeData.utxos).containSubset(txId1Resources.utxos);
-      expect(activeData.messages).containSubset(txId1Resources.messages);
+      expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
+      expect(oldActiveData.messages).containSubset(txId1Resources.messages);
 
       await sleep(ttl);
 
-      activeData = resourceCache.getActiveData();
+      const newActiveData = resourceCache.getActiveData();
 
-      expect(activeData.utxos.length).toEqual(0);
-      expect(activeData.messages.length).toEqual(0);
+      expect(newActiveData.utxos.length).toEqual(0);
+      expect(newActiveData.messages.length).toEqual(0);
     });
 
     it('should remove cached data based on transaction ID', () => {
