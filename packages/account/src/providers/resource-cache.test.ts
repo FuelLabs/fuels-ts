@@ -10,6 +10,8 @@ import { ResourceCache } from './resource-cache';
 describe('Resource Cache', () => {
   const randomValue = () => hexlify(randomBytes(32));
 
+  afterEach(new ResourceCache(1000).clear);
+
   it('can instantiate [valid numerical ttl]', () => {
     const memCache = new ResourceCache(1000);
 
