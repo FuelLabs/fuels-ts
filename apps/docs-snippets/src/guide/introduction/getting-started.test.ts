@@ -1,4 +1,4 @@
-import {, Provider, Wallet, WalletUnlocked } from 'fuels';
+import { Provider, Wallet, WalletUnlocked } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**
