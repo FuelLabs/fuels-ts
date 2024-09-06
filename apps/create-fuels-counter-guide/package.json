@@ -4,7 +4,6 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "test": "run-s test:*",
     "test:ui": "./test/ui/test-ui.sh",
     "original:dev": "vite",
     "original:build": "tsc -b && vite build",
