@@ -381,13 +381,26 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
+type SdkOperations = Omit<
+  Operations,
+  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
+> & {
+  /**
+   * This method is DEPRECATED and will be REMOVED in v1.
+   *
+   * This method will hang until the transaction is fully processed, as described in https://github.com/FuelLabs/fuel-core/issues/2108.
+   *
+   * Please use the `submitAndAwaitStatus` method instead.
+   */
   submitAndAwait: (
     ...args: Parameters<Operations['submitAndAwait']>
   ) => Promise<ReturnType<Operations['submitAndAwait']>>;
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
+  submitAndAwaitStatus: (
+    ...args: Parameters<Operations['submitAndAwaitStatus']>
+  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
@@ -491,7 +504,7 @@ export default class Provider {
     const provider = new Provider(urlToUse, {
       ...options,
       requestMiddleware: async (request) => {
-        if (auth) {
+        if (auth && request) {
           request.headers ??= {};
           (request.headers as Record<string, string>).Authorization = auth;
         }
@@ -825,13 +838,14 @@ Supported fuel-core version: ${supportedVersion}.`
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
+    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction });
 
-    const {
-      submit: { id: transactionId },
-    } = await this.operations.submit({ encodedTransaction });
-    this.#cacheInputs(transactionRequest.inputs, transactionId);
+    this.#cacheInputs(
+      transactionRequest.inputs,
+      transactionRequest.getTransactionId(this.getChainId())
+    );
 
-    return new TransactionResponse(transactionRequest, this, abis);
+    return new TransactionResponse(transactionRequest, this, abis, subscription);
   }
 
   /**
