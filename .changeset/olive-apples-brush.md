@@ -3,4 +3,4 @@
 "@fuel-ts/account": patch
 ---
 
-chore: remove all receipt coders
+chore: deprecate all receipt coders
