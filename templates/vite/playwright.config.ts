@@ -27,4 +27,16 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
+  webServer: [
+    {
+      command: 'pnpm run dev',
+      port: 5173,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'pnpm run fuels:dev',
+      port: 4000,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });
