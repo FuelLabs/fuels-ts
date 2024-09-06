@@ -12,7 +12,7 @@ describe(
   () => {
     const randomValue = () => hexlify(randomBytes(32));
 
-    afterEach(() => {
+    beforeEach(() => {
       new ResourceCache(1000).clear();
     });
 
@@ -96,17 +96,12 @@ describe(
 
       resourceCache.set(txId1, txId1Resources);
       const oldActiveData = resourceCache.getActiveData();
-      console.time('set');
 
       expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
       expect(oldActiveData.messages).containSubset(txId1Resources.messages);
 
-      console.time('sleep');
-
       await sleep(ttl);
 
-      console.timeEnd('sleep');
-      console.timeEnd('set');
       const newActiveData = resourceCache.getActiveData();
 
       expect(newActiveData.utxos.length).toEqual(0);
