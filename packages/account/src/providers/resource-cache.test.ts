@@ -85,7 +85,7 @@ describe(
     });
 
     it('should remove expired when getting active data', async () => {
-      const ttl = 500;
+      const ttl = 200;
       const resourceCache = new ResourceCache(ttl);
 
       const txId1 = randomValue();
