@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
+    "test:unit": "cd sway-programs && forc test",
     "original:dev": "vite",
     "original:build": "tsc -b && vite build",
     "original:start": "next start",

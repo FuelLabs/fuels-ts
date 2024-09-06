@@ -9,8 +9,7 @@
     "build": "pnpm run xprebuild && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "run-s test:*",
-    "test:e2e": "vitest",
+    "test": "vitest",
     "test:unit": "cd sway-programs && forc test"
   },
   "dependencies": {
