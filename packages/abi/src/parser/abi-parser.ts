@@ -32,12 +32,12 @@ export class AbiParser {
       throw new Error('Invalid ABI: specVersion is not a string');
     }
 
-    const transpiler = AbiParser.specifications[abi.specVersion];
-    if (!transpiler) {
+    const parse = AbiParser.specifications[abi.specVersion];
+    if (!parse) {
       // TODO: change to FuelError
       throw new Error(`Unsupported ABI specVersion: ${abi.specVersion}`);
     }
 
-    return transpiler(abi);
+    return parse(abi);
   }
 }

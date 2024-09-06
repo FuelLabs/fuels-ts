@@ -1,2 +1,2 @@
-export * from './v1/transpile';
+export * from './v1/parser';
 export * from './v1/specification';

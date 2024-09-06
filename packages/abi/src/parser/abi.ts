@@ -16,11 +16,17 @@ export interface AbiType {
   // Fallback to concrete type when no metadata type is referenced (i.e. for built in types)
   swayType: string;
   components?: AbiTypeComponent[];
+
+  // For debugging purposes
+  [key: string]: unknown;
 }
 
 export interface AbiTypeComponent {
   name: string;
   type: AbiType;
+
+  // For debugging purposes
+  [key: string]: unknown;
 }
 
 export interface AbiFunctionInput {
