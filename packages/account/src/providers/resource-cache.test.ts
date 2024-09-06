@@ -206,5 +206,5 @@ describe(
       expect(activeData.messages).containSubset([...oldCache.messages, ...newCache.messages]);
     });
   },
-  { repeats: 20 }
+  { repeats: 50 }
 );
