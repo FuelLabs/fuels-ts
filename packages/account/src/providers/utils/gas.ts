@@ -214,6 +214,23 @@ export function calculateMetadataGasForTxUpload({
   return txId;
 }
 
+export function calculateMinGasForTxUpload({
+  gasCosts,
+  baseMinGas,
+  subsectionSize,
+}: {
+  gasCosts: GasCosts;
+  baseMinGas: number;
+  subsectionSize: number;
+}) {
+  // Since the `Upload` transaction occupies much of the storage, we want to
+  // discourage people from using it too much. For that, we charge additional gas
+  // for the storage.
+  // https://github.com/FuelLabs/fuel-vm/blob/6e137db6387bd291b9505d17e15e0f2edda7957e/fuel-tx/src/transaction/types/upload.rs#L135-L150
+  const additionalStoragePerByte = bn(gasCosts.newStoragePerByte).mul(subsectionSize);
+  return bn(baseMinGas).add(additionalStoragePerByte);
+}
+
 export interface CalculateGasFeeParams {
   tip?: BN;
   gas: BN;

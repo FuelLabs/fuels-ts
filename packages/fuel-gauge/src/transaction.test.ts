@@ -9,10 +9,13 @@ import {
   TransactionType,
   UpgradeTransactionRequest,
   Wallet,
+  UploadTransactionRequest,
 } from 'fuels';
 import { launchTestNode, TestMessage } from 'fuels/test-utils';
 
 import { CallTestContractFactory } from '../test/typegen';
+
+import { subsectionFromBytecode } from './utils';
 
 /**
  * @group node
@@ -258,4 +261,60 @@ describe('Transaction upgrade chain', () => {
 
     expect(consensusBeforeUpgrade.gasCosts).not.toEqual(consensusAfterUpgrade.gasCosts);
   });
+
+  it(
+    'should load bytecode in subsections slowly',
+    async () => {
+      using launched = await setupTestNode();
+      const { privileged, provider } = launched;
+
+      const { subsections, merkleRoot } = subsectionFromBytecode();
+      const requests = subsections.map((subsection) => {
+        const request = UploadTransactionRequest.from({});
+        request.addSubsection({
+          proofSet: subsection.proofSet,
+          subsection: subsection.subsection,
+          root: subsection.root,
+          subsectionsNumber: subsection.subsectionsNumber,
+          subsectionIndex: subsection.subsectionIndex,
+        });
+        return request;
+      });
+
+      // Upload the subsections
+      for (const request of requests) {
+        const cost = await privileged.getTransactionCost(request);
+        request.maxFee = cost.maxFee;
+        await privileged.fund(request, cost);
+        const response = await privileged.sendTransaction(request);
+        const { isTypeUpload, isStatusSuccess } = await response.waitForResult();
+        expect(isTypeUpload).toBeTruthy();
+        expect(isStatusSuccess).toBeTruthy();
+      }
+
+      // Upgrade the chain with the root
+      const request = new UpgradeTransactionRequest();
+      request.addStateTransitionUpgradePurpose(merkleRoot);
+
+      const cost = await privileged.getTransactionCost(request);
+      request.maxFee = cost.maxFee;
+      await privileged.fund(request, cost);
+
+      const response = await privileged.sendTransaction(request);
+      const { isTypeUpgrade, isStatusSuccess, blockId } = await response.waitForResult();
+      expect(isTypeUpgrade).toBeTruthy();
+      expect(isStatusSuccess).toBeTruthy();
+
+      // Check the bytecode version has changed
+      const block = await provider.getBlock(blockId as string);
+      await provider.produceBlocks(1);
+      const nextBlock = await provider.getBlock('latest');
+
+      const versionBeforeUpgrade = block?.header.stateTransitionBytecodeVersion;
+      const versionAfterUpgrade = nextBlock?.header.stateTransitionBytecodeVersion;
+
+      expect(versionBeforeUpgrade).not.toEqual(versionAfterUpgrade);
+    },
+    1000 * 60 * 1
+  );
 });

@@ -5,7 +5,8 @@ import { type TransactionUpload, TransactionType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { GqlGasCosts } from '../__generated__/operations';
-import { calculateMetadataGasForTxUpload } from '../utils';
+import type { ChainInfo } from '../provider';
+import { calculateMetadataGasForTxUpload, calculateMinGasForTxUpload } from '../utils';
 
 import { hashTransaction } from './hash-transaction';
 import { type BaseTransactionRequestLike, BaseTransactionRequest } from './transaction-request';
@@ -127,6 +128,24 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
       txBytesSize: this.byteSize(),
       subsectionSize: arrayify(this.witnesses[this.witnessIndex]).length,
       subsectionsSize: this.subsection.subsectionsNumber,
+    });
+  }
+
+  /**
+   * Calculates the minimum gas for an upload transaction.
+   *
+   * @param chainInfo - The chain information.
+   *
+   * @returns the minimum gas for the upload transaction
+   */
+  calculateMinGas(chainInfo: ChainInfo): BN {
+    const minGas = super.calculateMinGas(chainInfo);
+    const { gasCosts } = chainInfo.consensusParameters;
+    const bytecode = this.witnesses[this.witnessIndex] ?? ZeroBytes32;
+    return calculateMinGasForTxUpload({
+      gasCosts,
+      baseMinGas: minGas.toNumber(),
+      subsectionSize: arrayify(bytecode).length,
     });
   }
 }
