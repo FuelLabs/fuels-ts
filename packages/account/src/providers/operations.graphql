@@ -911,6 +911,12 @@ subscription submitAndAwait($encodedTransaction: HexString!) {
   }
 }
 
+subscription submitAndAwaitStatus($encodedTransaction: HexString!) {
+  submitAndAwaitStatus(tx: $encodedTransaction) {
+    ...transactionStatusSubscriptionFragment
+  }
+}
+
 subscription statusChange($transactionId: TransactionId!) {
   statusChange(id: $transactionId) {
     ...transactionStatusSubscriptionFragment
