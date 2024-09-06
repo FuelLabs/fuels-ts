@@ -504,7 +504,7 @@ export default class Provider {
     const provider = new Provider(urlToUse, {
       ...options,
       requestMiddleware: async (request) => {
-        if (auth) {
+        if (auth && request) {
           request.headers ??= {};
           (request.headers as Record<string, string>).Authorization = auth;
         }
