@@ -19,7 +19,7 @@ describe('Predicate Custom Transactions', () => {
     const SENDER_PVT_KEY = testSender.privateKey;
     const RECEIVER_ADDRESS = testReceiver.address;
 
-    const TESTNET_NETWORK_URL = testProvider.url;
+    const providerUrl = testProvider.url;
 
     const initialRecieverBalance = await testReceiver.getBalance(testProvider.getBaseAssetId());
 
@@ -30,7 +30,7 @@ describe('Predicate Custom Transactions', () => {
     // #context import { SENDER_PVT_KEY, RECEIVER_ADDRESS } from 'path/to/my/env/file';
 
     // Setup
-    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const provider = await Provider.create(providerUrl);
     const sender = Wallet.fromPrivateKey(SENDER_PVT_KEY, provider);
     const receiver = Wallet.fromAddress(RECEIVER_ADDRESS, provider);
     const assetId = provider.getBaseAssetId();

@@ -12,12 +12,12 @@ describe('Deploying Contracts', () => {
     using launched = await launchTestNode();
 
     const { provider: testProvider } = launched;
-    const TESTNET_NETWORK_URL = testProvider.url;
+    const providerUrl = testProvider.url;
 
     // #region get-contract-max-size
     // #import { Provider };
 
-    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const provider = await Provider.create(providerUrl);
     const { consensusParameters } = provider.getChain();
     const contractSizeLimit = consensusParameters.contractParameters.contractMaxSize;
     // #endregion get-contract-max-size
@@ -31,7 +31,7 @@ describe('Deploying Contracts', () => {
       provider: testProvider,
       wallets: [testWallet],
     } = launched;
-    const TESTNET_NETWORK_URL = testProvider.url;
+    const providerUrl = testProvider.url;
     const WALLET_PVT_KEY = testWallet.privateKey;
     const bytecode = TypegenFactory.bytecode;
 
@@ -40,7 +40,7 @@ describe('Deploying Contracts', () => {
     // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
     // #context import { TypegenFactory } from 'path/to/typegen/outputs';
 
-    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const provider = await Provider.create(providerUrl);
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
     const factory = new TypegenFactory(wallet);
     // #endregion setup
@@ -75,7 +75,7 @@ describe('Deploying Contracts', () => {
       provider: testProvider,
       wallets: [testWallet],
     } = launched;
-    const TESTNET_NETWORK_URL = testProvider.url;
+    const providerUrl = testProvider.url;
     const WALLET_PVT_KEY = testWallet.privateKey;
     const abi = EchoValues.abi;
     const bytecode = TypegenFactory.bytecode;
@@ -85,7 +85,7 @@ describe('Deploying Contracts', () => {
     // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
     // #context import { bytecode, abi } from 'path/to/typegen/outputs';
 
-    const provider = await Provider.create(TESTNET_NETWORK_URL);
+    const provider = await Provider.create(providerUrl);
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
     const factory = new ContractFactory(bytecode, abi, wallet);
 
