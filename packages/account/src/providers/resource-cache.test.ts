@@ -83,7 +83,7 @@ describe(
     });
 
     it('should remove expired when getting active data', async () => {
-      const ttl = 1000;
+      const ttl = 500;
       const resourceCache = new ResourceCache(ttl);
 
       const txId1 = randomValue();
@@ -107,7 +107,8 @@ describe(
     });
 
     it('should remove cached data based on transaction ID', () => {
-      const ttl = 200;
+      // use long ttl to avoid cache expiration
+      const ttl = 10_000;
       const resourceCache = new ResourceCache(ttl);
 
       const txId1 = randomValue();
@@ -146,7 +147,8 @@ describe(
     });
 
     it('can clear cache', () => {
-      const resourceCache = new ResourceCache(1000);
+      // use long ttl to avoid cache expiration
+      const resourceCache = new ResourceCache(10_000);
 
       const txId1 = randomValue();
       const txId2 = randomValue();
