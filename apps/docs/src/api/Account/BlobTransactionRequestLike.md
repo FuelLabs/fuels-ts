@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.4**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.5**](../index.md) • **Docs**
 
 ***
 
@@ -18,7 +18,7 @@ Blob ID
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:14](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L14)
+[packages/account/src/providers/transaction-request/blob-transaction-request.ts:14](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L14)
 
 ***
 
@@ -34,7 +34,7 @@ List of inputs
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:80](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/transaction-request.ts#L80)
+[packages/account/src/providers/transaction-request/transaction-request.ts:80](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/transaction-request.ts#L80)
 
 ***
 
@@ -50,7 +50,7 @@ Block until which tx cannot be included
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:74](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/transaction-request.ts#L74)
+[packages/account/src/providers/transaction-request/transaction-request.ts:74](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/transaction-request.ts#L74)
 
 ***
 
@@ -66,7 +66,7 @@ The maximum fee payable by this transaction using BASE_ASSET.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:76](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/transaction-request.ts#L76)
+[packages/account/src/providers/transaction-request/transaction-request.ts:76](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/transaction-request.ts#L76)
 
 ***
 
@@ -82,7 +82,7 @@ List of outputs
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:82](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/transaction-request.ts#L82)
+[packages/account/src/providers/transaction-request/transaction-request.ts:82](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/transaction-request.ts#L82)
 
 ***
 
@@ -98,7 +98,7 @@ Gas price for transaction
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:72](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/transaction-request.ts#L72)
+[packages/account/src/providers/transaction-request/transaction-request.ts:72](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/transaction-request.ts#L72)
 
 ***
 
@@ -110,7 +110,7 @@ Witness index of contract bytecode to create
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:16](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L16)
+[packages/account/src/providers/transaction-request/blob-transaction-request.ts:16](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L16)
 
 ***
 
@@ -126,7 +126,7 @@ The maximum amount of witness data allowed for the transaction
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:78](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/transaction-request.ts#L78)
+[packages/account/src/providers/transaction-request/transaction-request.ts:78](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/transaction-request.ts#L78)
 
 ***
 
@@ -142,4 +142,4 @@ List of witnesses
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/providers/transaction-request/transaction-request.ts#L84)
+[packages/account/src/providers/transaction-request/transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/providers/transaction-request/transaction-request.ts#L84)

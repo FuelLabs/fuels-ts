@@ -1,4 +1,4 @@
-[**@fuel-ts/utils v0.94.4**](../index.md) • **Docs**
+[**@fuel-ts/utils v0.94.5**](../index.md) • **Docs**
 
 ***
 
@@ -47,7 +47,7 @@ now.getTime(); // 1681391398000
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/utils/src/utils/date-time.ts#L99)
+[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L99)
 
 ## Methods
 
@@ -1505,7 +1505,7 @@ the Tai64 timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/utils/src/utils/date-time.ts#L139)
+[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L139)
 
 ***
 
@@ -1569,7 +1569,7 @@ the unix milliseconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/utils/src/utils/date-time.ts#L146)
+[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L146)
 
 ***
 
@@ -1585,7 +1585,7 @@ the unix seconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/utils/src/utils/date-time.ts#L153)
+[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L153)
 
 ***
 
@@ -1733,7 +1733,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/utils/src/utils/date-time.ts#L107)
+[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L107)
 
 ***
 
@@ -1755,7 +1755,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/utils/src/utils/date-time.ts#L115)
+[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L115)
 
 ***
 
@@ -1777,7 +1777,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/utils/src/utils/date-time.ts#L123)
+[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L123)
 
 ***
 

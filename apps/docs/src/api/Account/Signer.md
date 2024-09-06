@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.4**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.5**](../index.md) • **Docs**
 
 ***
 
@@ -26,7 +26,7 @@ A new Signer instance
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:24](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L24)
+[packages/account/src/signer/signer.ts:24](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L24)
 
 ## Properties
 
@@ -36,7 +36,7 @@ A new Signer instance
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:10](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L10)
+[packages/account/src/signer/signer.ts:10](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L10)
 
 ***
 
@@ -46,7 +46,7 @@ A new Signer instance
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:14](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L14)
+[packages/account/src/signer/signer.ts:14](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L14)
 
 ***
 
@@ -56,7 +56,7 @@ A new Signer instance
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:16](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L16)
+[packages/account/src/signer/signer.ts:16](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L16)
 
 ***
 
@@ -66,7 +66,7 @@ A new Signer instance
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:12](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L12)
+[packages/account/src/signer/signer.ts:12](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L12)
 
 ## Methods
 
@@ -90,7 +90,7 @@ compressed point on the curve
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:72](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L72)
+[packages/account/src/signer/signer.ts:72](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L72)
 
 ***
 
@@ -114,7 +114,7 @@ extended publicKey
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:130](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L130)
+[packages/account/src/signer/signer.ts:130](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L130)
 
 ***
 
@@ -138,7 +138,7 @@ random 32-byte hashed
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:120](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L120)
+[packages/account/src/signer/signer.ts:120](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L120)
 
 ***
 
@@ -166,7 +166,7 @@ Address from signature
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:110](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L110)
+[packages/account/src/signer/signer.ts:110](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L110)
 
 ***
 
@@ -194,4 +194,4 @@ public key from signature from the
 
 #### Defined in
 
-[packages/account/src/signer/signer.ts:86](https://github.com/FuelLabs/fuels-ts/blob/1179e6c5f7a6085ce05c50d65a6afd87ec8d264f/packages/account/src/signer/signer.ts#L86)
+[packages/account/src/signer/signer.ts:86](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/signer/signer.ts#L86)
