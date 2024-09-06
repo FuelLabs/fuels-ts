@@ -9,6 +9,7 @@ import {
   UpgradePurposeTypeEnum,
 } from '@fuel-ts/transactions';
 import { hexlify } from '@fuel-ts/utils';
+import { clone } from 'ramda';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import { calculateMetadataGasForTxUpgrade } from '../utils';
@@ -45,7 +46,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
     if (obj instanceof UpgradeTransactionRequest) {
       return obj;
     }
-    return new UpgradeTransactionRequest(obj);
+    return new this(clone(obj));
   }
 
   /** The type of transaction */
@@ -148,7 +149,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
         },
       };
     } else {
-      throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Not implemented');
+      throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Invalid upgrade purpose');
     }
 
     return {
@@ -159,7 +160,7 @@ export class UpgradeTransactionRequest extends BaseTransactionRequest {
   }
 
   /**
-   * Gets the Transaction Request by hashing the transaction.
+   * Gets the Transaction ID by hashing the transaction
    *
    * @param chainId - The chain ID.
    *

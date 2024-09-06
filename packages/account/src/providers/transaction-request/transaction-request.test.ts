@@ -14,6 +14,8 @@ import Provider from '../provider';
 import type { CoinTransactionRequestInput } from './input';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike } from './types';
+import type { UpgradeTransactionRequest } from './upgrade-transaction-request';
+import type { UploadTransactionRequest } from './upload-transaction-request';
 import { transactionRequestify } from './utils';
 
 /**
@@ -261,18 +263,11 @@ describe('transactionRequestify', () => {
       },
     };
 
-    const txRequest = transactionRequestify(txRequestLike);
+    const txRequest = transactionRequestify(txRequestLike) as UpgradeTransactionRequest;
 
-    if (
-      txRequest.type === TransactionType.Upgrade &&
-      txRequest.upgradePurpose.type === UpgradePurposeTypeEnum.ConsensusParameters &&
-      txRequestLike.upgradePurpose?.type === UpgradePurposeTypeEnum.ConsensusParameters
-    ) {
-      expect(txRequest.upgradePurpose).toEqual(txRequestLike.upgradePurpose);
-      expect(txRequest.bytecodeWitnessIndex).toEqual(0);
-      expect(txRequest.upgradePurpose.checksum).toEqual(txRequestLike.upgradePurpose?.checksum);
-    }
-
+    expect(txRequest.upgradePurpose).toEqual(txRequestLike.upgradePurpose);
+    expect(txRequest.bytecodeWitnessIndex).toEqual(txRequestLike.bytecodeWitnessIndex);
+    expect(txRequest.upgradePurpose.type).toEqual(txRequestLike.upgradePurpose?.type);
     expect(txRequest.type).toEqual(txRequestLike.type);
   });
 
@@ -290,13 +285,10 @@ describe('transactionRequestify', () => {
       },
     };
 
-    const txRequest = transactionRequestify(txRequestLike);
+    const txRequest = transactionRequestify(txRequestLike) as UploadTransactionRequest;
 
-    if (txRequest.type === TransactionType.Upload) {
-      expect(txRequest.subsection).toEqual(txRequestLike.subsection);
-      expect(txRequest.witnessIndex).toEqual(txRequestLike.witnessIndex);
-    }
-
+    expect(txRequest.subsection).toEqual(txRequestLike.subsection);
+    expect(txRequest.witnessIndex).toEqual(txRequestLike.witnessIndex);
     expect(txRequest.type).toEqual(txRequestLike.type);
   });
 });

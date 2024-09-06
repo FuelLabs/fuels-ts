@@ -3,6 +3,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { type TransactionUpload, TransactionType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
+import { clone } from 'ramda';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import type { ChainInfo } from '../provider';
@@ -47,7 +48,7 @@ export class UploadTransactionRequest extends BaseTransactionRequest {
     if (obj instanceof UploadTransactionRequest) {
       return obj;
     }
-    return new UploadTransactionRequest(obj);
+    return new this(clone(obj));
   }
 
   /** Type of the transaction */
