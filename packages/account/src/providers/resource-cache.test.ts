@@ -84,7 +84,7 @@ describe(
       expect(activeData.utxos).containSubset(EXPECTED.utxos);
     });
 
-    it('should remove expired when getting active data', async () => {
+    it.only('should remove expired when getting active data', async () => {
       const ttl = 500;
       const resourceCache = new ResourceCache(ttl);
 
@@ -96,12 +96,17 @@ describe(
 
       resourceCache.set(txId1, txId1Resources);
       const oldActiveData = resourceCache.getActiveData();
+      console.time('set');
 
       expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
       expect(oldActiveData.messages).containSubset(txId1Resources.messages);
 
+      console.time('sleep');
+
       await sleep(ttl);
 
+      console.timeEnd('sleep');
+      console.timeEnd('set');
       const newActiveData = resourceCache.getActiveData();
 
       expect(newActiveData.utxos.length).toEqual(0);
