@@ -11,6 +11,7 @@ import {
   ConfigurableContractFactory,
   LargeContract,
   ConfigurableContract,
+  ProxyContractFactory,
 } from '../test/typegen';
 
 import { launchTestContract } from './utils';
@@ -552,5 +553,38 @@ describe('Contract Factory', () => {
     const secondCall = await secondContract.functions.something().call();
     const { value: secondValue } = await secondCall.waitForResult();
     expect(secondValue.toNumber()).toBe(1001);
+  }, 25000);
+
+  it('deploys large contract and calls via a proxy', async () => {
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    const largeContractDeploy = await LargeContractFactory.deploy(wallet);
+    const { contract: largeContract } = await largeContractDeploy.waitForResult();
+    expect(largeContract.id).toBeDefined();
+
+    const largeContractCall = await largeContract.functions.something().call();
+    const { value: largeContractValue } = await largeContractCall.waitForResult();
+    expect(largeContractValue.toNumber()).toBe(1001);
+
+    const proxyContractDeploy = await ProxyContractFactory.deploy(wallet);
+    const { contract: proxyContract } = await proxyContractDeploy.waitForResult();
+    expect(proxyContract.id).toBeDefined();
+
+    const setTargetCall = await proxyContract.functions
+      .set_target_contract({ bits: largeContract.id.toB256() })
+      .call();
+    const setTargetResult = await setTargetCall.waitForResult();
+    expect(setTargetResult.transactionResult.isStatusSuccess).toBe(true);
+
+    const proxyCall = await proxyContract.functions
+      .something()
+      .addContracts([largeContract])
+      .call();
+    const { value: proxyValue } = await proxyCall.waitForResult();
+    expect(proxyValue.toNumber()).toBe(1001);
   }, 25000);
 });
