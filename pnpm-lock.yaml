@@ -679,9 +679,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
-      restify:
-        specifier: ^11.1.0
-        version: 11.1.0
       type-fest:
         specifier: ^4.24.0
         version: 4.24.0
