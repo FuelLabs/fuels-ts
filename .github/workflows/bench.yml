@@ -16,6 +16,9 @@ jobs:
       - name: CI Setup
         uses: ./.github/actions/test-setup
 
+      - name: Pretest
+        run: pnpm pretest
+
       - name: Run benchmarks
         uses: CodSpeedHQ/action@v3
         with:
