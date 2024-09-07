@@ -77,8 +77,6 @@
     "@graphql-codegen/typescript": "^4.0.9",
     "@graphql-codegen/typescript-generic-sdk": "^4.0.1",
     "@graphql-codegen/typescript-operations": "^4.2.3",
-    "restify": "^11.1.0",
-    "@types/restify": "^8.5.12",
     "@types/ramda": "^0.30.2",
     "get-graphql-schema": "^2.1.2"
   }

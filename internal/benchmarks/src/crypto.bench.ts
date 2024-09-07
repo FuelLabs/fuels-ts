@@ -51,9 +51,6 @@ describe('crypto bench', () => {
 
   bench('Decrypt via aes-ctr', async () => {
     const password = '0b540281-f87b-49ca-be37-2264c7f260f7';
-    const data = {
-      name: 'test',
-    };
     const encryptedResult: Keystore = {
       data: 'vj1/JyHR+NiIaWXTpl5T',
       iv: '0/lqnRVK5HE/5b1cQAHfqg==',
