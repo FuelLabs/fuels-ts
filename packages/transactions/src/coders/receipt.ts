@@ -184,6 +184,8 @@ export type ReceiptReturnData = {
   digest: string;
   /** Value of register $pc (u64) */
   pc: BN;
+  /** Value of the memory range MEM[$rA, $rB]. */
+  data: string;
   /** Value of register $is (u64) */
   is: BN;
 };
