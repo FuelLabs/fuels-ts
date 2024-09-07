@@ -740,6 +740,8 @@ export type ReceiptMessageOut = {
   amount: BN;
   /** Hexadecimal string representation of the 256-bit (32-byte) message nonce */
   nonce: string;
+  /** Decimal string representation of a 16-bit unsigned integer; value of register $rC. */
+  len: number;
   /** Hexadecimal string representation of 256-bit (32-byte), hash of MEM[$rA + 32, $rB] */
   digest: string;
   /** Hexadecimal string representation of the value of the memory range MEM[$rA + 32, $rB] */
@@ -814,6 +816,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
       recipient,
       amount,
       nonce,
+      len,
       digest,
       data: messageData,
     };
