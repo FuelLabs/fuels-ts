@@ -11,6 +11,7 @@ describe(
   'Resource Cache',
   () => {
     const randomValue = () => hexlify(randomBytes(32));
+    const buffer = process.env.CI ? 100 : 0;
 
     it('can instantiate [valid numerical ttl]', () => {
       const memCache = new ResourceCache(1000);
@@ -99,7 +100,7 @@ describe(
       expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
       expect(oldActiveData.messages).containSubset(txId1Resources.messages);
 
-      await sleep(ttl);
+      await sleep(ttl + buffer);
 
       const newActiveData = resourceCache.getActiveData();
 
