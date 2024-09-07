@@ -464,6 +464,8 @@ export type ReceiptLogData = {
   len: BN;
   /** Hash of MEM[$rC, $rD] (b256) */
   digest: string;
+  /** Value of the memory range MEM[$rC, $rD]. */
+  data: string;
   /** Value of register $pc (u64) */
   pc: BN;
   /** Value of register $is (u64) */
