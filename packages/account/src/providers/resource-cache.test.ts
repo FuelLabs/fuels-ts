@@ -117,6 +117,8 @@ describe(
       txId1Resources.messages.forEach((message) => {
         expect(newActiveData.utxos).not.includes(message);
       });
+
+      vi.resetAllMocks();
     });
 
     it('should remove cached data based on transaction ID', () => {
