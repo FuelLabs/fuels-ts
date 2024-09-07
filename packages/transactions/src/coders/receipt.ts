@@ -209,6 +209,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new BigNumberCoder('u64').encode(value.pc));
     parts.push(new BigNumberCoder('u64').encode(value.is));
+    parts.push(new ByteArrayCoder(value.len.toNumber()).encode(value.data));
 
     return concat(parts);
   }
@@ -229,6 +230,8 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
+    [decoded, o] = new ByteArrayCoder(len.toNumber()).decode(data, o);
+    const returnData = decoded;
 
     return [
       {
@@ -239,6 +242,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
         digest,
         pc,
         is,
+        data: returnData,
       },
       o,
     ];
