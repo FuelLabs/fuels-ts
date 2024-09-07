@@ -118,7 +118,7 @@ describe(
         expect(newActiveData.utxos).not.includes(message);
       });
 
-      vi.resetAllMocks();
+      vi.restoreAllMocks();
     });
 
     it('should remove cached data based on transaction ID', () => {
@@ -219,5 +219,5 @@ describe(
       expect(activeData.messages).containSubset([...oldCache.messages, ...newCache.messages]);
     });
   },
-  { repeats: 50 }
+  { repeats: 100 }
 );
