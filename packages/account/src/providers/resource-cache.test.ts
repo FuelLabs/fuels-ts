@@ -11,7 +11,6 @@ describe(
   'Resource Cache',
   () => {
     const randomValue = () => hexlify(randomBytes(32));
-    const buffer = process.env.CI ? 100 : 0;
 
     it('can instantiate [valid numerical ttl]', () => {
       const memCache = new ResourceCache(1000);
@@ -81,7 +80,7 @@ describe(
       expect(activeData.utxos).containSubset(EXPECTED.utxos);
     });
 
-    it('should remove expired when getting active data', async () => {
+    it('should remove expired when getting active data', () => {
       const ttl = 500;
       const resourceCache = new ResourceCache(ttl);
 
@@ -94,13 +93,20 @@ describe(
         messages,
       };
 
+      const originalTimeStamp = 946684800;
+      let dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => originalTimeStamp);
+
       resourceCache.set(txId1, txId1Resources);
       const oldActiveData = resourceCache.getActiveData();
 
+      expect(dateSpy).toHaveBeenCalled();
+
       expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
       expect(oldActiveData.messages).containSubset(txId1Resources.messages);
+      expect(oldActiveData.messages).containSubset(txId1Resources.messages);
 
-      await sleep(ttl + buffer);
+      const expiredTimeStamp = originalTimeStamp + ttl;
+      dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => expiredTimeStamp);
 
       const newActiveData = resourceCache.getActiveData();
 
