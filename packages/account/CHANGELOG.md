@@ -1,5 +1,27 @@
 # Change Log
 
+## 0.94.5
+
+### Patch Changes
+
+- 309b8d5: feat: use `submitAndAwaitStatus` to submit transactions
+- 2ce9ce5: fix: error handling in `Provider` for when a node is offline
+- 37eab14: chore: deprecate all receipt coders
+- Updated dependencies [942b56b]
+- Updated dependencies [37eab14]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/transactions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/abi-coder@0.94.5
+  - @fuel-ts/address@0.94.5
+  - @fuel-ts/crypto@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/hasher@0.94.5
+  - @fuel-ts/merkle@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
 ## 0.94.4
 
 ### Patch Changes
