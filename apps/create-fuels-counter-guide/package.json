@@ -15,8 +15,8 @@
     "postbuild": "run-s fuels:build original:build"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.26.0",
-    "@fuels/react": "^0.26.0",
+    "@fuels/connectors": "^0.27.1",
+    "@fuels/react": "^0.27.1",
     "@tanstack/react-query": "^5.52.1",
     "@tanstack/react-router": "^1.48.1",
     "fuels": "workspace:*",
