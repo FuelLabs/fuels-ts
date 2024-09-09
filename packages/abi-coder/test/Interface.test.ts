@@ -782,11 +782,9 @@ describe('Abi interface', () => {
           error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.'),
         },
       ])('$title', async ({ fn, value, error }) => {
-        const expectedError = error ?? new FuelError(FuelError.CODES.UNKNOWN, 'Unknown error');
-
         await expectToThrowFuelError(
           () => (Array.isArray(value) ? fn.encodeArguments(value) : fn.encodeArguments([value])),
-          expectedError
+          error
         );
       });
     });
