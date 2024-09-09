@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.94.5
+
+### Patch Changes
+
+- 37eab14: chore: deprecate all receipt coders
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/abi-coder@0.94.5
+  - @fuel-ts/address@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/hasher@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
 ## 0.94.4
 
 ### Patch Changes
