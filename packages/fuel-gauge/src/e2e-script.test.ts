@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
 import { Provider, TransactionType, WalletUnlocked, CHAIN_IDS, rawAssets, assets } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
@@ -21,7 +22,7 @@ type ConfiguredNetwork = {
 
 const configuredNetworks = {
   [Networks.DEVNET]: {
-    networkUrl: 'https://devnet.fuel.network/v1/graphql',
+    networkUrl: DEVNET_NETWORK_URL,
     privateKey: process.env.DEVNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-devnet.fuel.network/`,
     txIds: {
@@ -32,7 +33,7 @@ const configuredNetworks = {
     },
   } as ConfiguredNetwork,
   [Networks.TESTNET]: {
-    networkUrl: 'https://testnet.fuel.network/v1/graphql',
+    networkUrl: TESTNET_NETWORK_URL,
     privateKey: process.env.TESTNET_WALLET_PVT_KEY,
     faucetUrl: `https://faucet-testnet.fuel.network/`,
     txIds: {
