@@ -153,9 +153,10 @@ describe('Transaction upgrade state transition', () => {
       return request;
     });
 
+    const cost = await privileged.getTransactionCost(requests[0]);
+
     // Upload the subsections
     for (const request of requests) {
-      const cost = await privileged.getTransactionCost(request);
       request.maxFee = cost.maxFee;
       await privileged.fund(request, cost);
       request.maxFee = cost.maxFee.add(1);
