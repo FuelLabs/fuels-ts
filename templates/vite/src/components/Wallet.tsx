@@ -1,11 +1,11 @@
 import { bn, WalletUnlocked } from "fuels";
-import Button from "./button";
+import Button from "./Button";
 import { useDisconnect, useWallet, useBalance } from "@fuels/react";
 import { useEffect } from "react";
 import { useProvider } from "../hooks/useProvider";
 import { useEnvironment } from "../hooks/useEnvironment";
 
-export function Account() {
+export default function Wallet() {
   const { disconnect } = useDisconnect();
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";

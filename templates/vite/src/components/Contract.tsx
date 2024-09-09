@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useWallet } from "@fuels/react";
 
-import Button from "./button";
+import Button from "./Button";
 import { useEnvironment } from "../hooks/useEnvironment";
 import { TestContract } from "../sway-api";
 

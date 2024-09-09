@@ -1,10 +1,9 @@
 import { useConnectUI, useIsConnected } from "@fuels/react";
-
-import Button from "./components/button";
 import { useEffect, useState } from "react";
 
+import Button from "./components/Button";
 import Info from "./components/Info";
-import { Account } from "./components/Wallet";
+import Wallet from "./components/Wallet";
 import Contract from "./components/Contract";
 
 function App() {
@@ -82,7 +81,7 @@ function App() {
                         </Button>
                       </div>
 
-                      {tab === "wallet" && <Account />}
+                      {tab === "wallet" && <Wallet />}
                       {tab === "contract" && <Contract />}
                       {/* {tab === "predicate" && <Predicate />}
                       {tab === "script" && <Script />} */}
