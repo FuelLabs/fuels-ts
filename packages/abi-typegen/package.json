@@ -65,7 +65,6 @@
   },
   "devDependencies": {
     "@internal/forc": "workspace:*",
-    "@types/mkdirp": "^2.0.0",
     "@types/ramda": "^0.30.2",
     "@types/rimraf": "^3.0.2"
   }
