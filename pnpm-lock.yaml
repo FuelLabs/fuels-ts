@@ -635,7 +635,11 @@ importers:
 
   internal/tsup: {}
 
-  internal/utils: {}
+  internal/utils:
+    devDependencies:
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:../tsup
 
   packages/abi-coder:
     dependencies:

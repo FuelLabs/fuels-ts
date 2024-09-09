@@ -1,9 +1,3 @@
-export default {
-  clean: true,
-  dts: false,
-  format: ['cjs', 'esm', 'iife'],
-  minify: false,
-  sourcemap: true,
-  splitting: false,
-  entry: ['src/index.ts'],
-};
+import { index } from '@internal/tsup';
+
+export default index;
