@@ -1,4 +1,4 @@
-import { toHex, ContractFactory, hexlify, ZeroBytes32 } from 'fuels';
+import { toHex, ContractFactory, ZeroBytes32 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { StorageTestContract, StorageTestContractFactory } from '../test/typegen';
@@ -129,7 +129,7 @@ describe('StorageTestContract', () => {
 
   it('should allow for overriding storage slots', async () => {
     const { storageSlots } = StorageTestContract;
-    const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
+    const expectedStorageSlots = storageSlots.map(({ key }) => ({
       key: `0x${key}`,
       value: ZeroBytes32,
     }));
