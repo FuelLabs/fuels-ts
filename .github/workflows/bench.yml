@@ -19,8 +19,14 @@ jobs:
       - name: Pretest
         run: pnpm pretest
 
-      - name: Run benchmarks
+      - name: Run Node benchmarks
         uses: CodSpeedHQ/action@v3
         with:
           run: pnpm bench:node
+          token: ${{ secrets.CODSPEED_TOKEN }}
+
+      - name: Run Browser benchmarks
+        uses: CodSpeedHQ/action@v3
+        with:
+          run: pnpm bench:browser
           token: ${{ secrets.CODSPEED_TOKEN }}

@@ -1,31 +1,38 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import type { TransferParams } from 'fuels';
+import type { TransferParams, Provider } from 'fuels';
 import { ScriptTransactionRequest, Wallet } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
 
+import type { CallTestContract } from '../test/typegen/contracts';
 import { CallTestContractFactory } from '../test/typegen/contracts';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Cost Estimation Benchmarks', () => {
+  let contract: CallTestContract;
+  let provider: Provider;
+  let cleanup: () => void;
+  beforeEach(async () => {
+    const launched = await launchTestNode({
+      contractsConfigs: [{ factory: CallTestContractFactory }],
+    });
+
+    cleanup = launched.cleanup;
+    contract = launched.contracts[0];
+    provider = contract.provider;
+  });
+
+  afterEach(() => {
+    cleanup();
+  });
+
   bench(
     'should successfully get transaction cost estimate for a single contract call',
     async () => {
-      using launched = await launchTestNode({
-        contractsConfigs: [
-          {
-            factory: CallTestContractFactory,
-          },
-        ],
-      });
-
-      const {
-        contracts: [contract],
-      } = launched;
-
       const cost = await contract.functions
         .return_context_amount()
         .callParams({
@@ -42,14 +49,6 @@ describe('Cost Estimation Benchmarks', () => {
   );
 
   bench('should successfully get transaction cost estimate for multi contract calls', async () => {
-    using launched = await launchTestNode({
-      contractsConfigs: [{ factory: CallTestContractFactory }],
-    });
-
-    const {
-      contracts: [contract],
-    } = launched;
-
     const invocationScope = contract.multiCall([
       contract.functions.return_context_amount().callParams({
         forward: [100, contract.provider.getBaseAssetId()],
@@ -69,13 +68,6 @@ describe('Cost Estimation Benchmarks', () => {
   });
 
   bench('should successfully get transaction cost estimate for a single transfer', async () => {
-    using launched = await launchTestNode({
-      // Only deploying the contract so that we have the same config for both benchmarks
-      contractsConfigs: [{ factory: CallTestContractFactory }],
-    });
-
-    const { provider } = launched;
-
     const request = new ScriptTransactionRequest({ gasLimit: 1000000 });
 
     const recipient = Wallet.generate({
@@ -98,15 +90,6 @@ describe('Cost Estimation Benchmarks', () => {
   });
 
   bench('should successfully get transaction cost estimate for a batch transfer', async () => {
-    using launched = await launchTestNode({
-      contractsConfigs: [{ factory: CallTestContractFactory }],
-    });
-
-    const {
-      provider,
-      contracts: [contract],
-    } = launched;
-
     const receiver1 = Wallet.generate({ provider });
     const receiver2 = Wallet.generate({ provider });
     const receiver3 = Wallet.generate({ provider });
@@ -129,6 +112,18 @@ describe('Cost Estimation Benchmarks', () => {
       .sum(40, 50)
       .addBatchTransfer(transferParams)
       .getTransactionCost();
+
+    expect(cost.minFee).toBeDefined();
+    expect(cost.maxFee).toBeDefined();
+    expect(cost.gasPrice).toBeDefined();
+    expect(cost.gasUsed).toBeDefined();
+    expect(cost.gasPrice).toBeDefined();
+  });
+
+  it('should successfully get transaction cost estimate for a mint', async () => {
+    const subId = '0x4a778acfad1abc155a009dc976d2cf0db6197d3d360194d74b1fb92b96986b00';
+
+    const cost = await contract.functions.mint_coins(subId, 1_000).getTransactionCost();
 
     expect(cost.minFee).toBeDefined();
     expect(cost.maxFee).toBeDefined();

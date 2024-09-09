@@ -1,22 +1,32 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import { Wallet } from 'fuels';
-import type { TransferParams } from 'fuels';
+import type { WalletUnlocked, TransferParams, Provider } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
 
 /**
  * @group node
+ * @group browser
  */
 describe('Transaction Submission Benchmarks', () => {
+  let provider: Provider;
+  let wallet: WalletUnlocked;
+  let walletA: WalletUnlocked;
+  let cleanup: () => void;
+  beforeEach(async () => {
+    const launched = await launchTestNode();
+
+    cleanup = launched.cleanup;
+    provider = launched.provider;
+    walletA = launched.wallets[0];
+    wallet = launched.wallets[1];
+  });
+
+  afterEach(() => {
+    cleanup();
+  });
   bench('should successfully transfer a single asset between wallets', async () => {
-    using launched = await launchTestNode();
-
-    const {
-      provider,
-      wallets: [walletA],
-    } = launched;
-
     const receiver = Wallet.generate({ provider });
 
     const tx = await walletA.transfer(receiver.address, 100, provider.getBaseAssetId());
@@ -27,13 +37,6 @@ describe('Transaction Submission Benchmarks', () => {
   });
 
   bench('should successfully conduct a custom transfer between wallets', async () => {
-    using launched = await launchTestNode();
-
-    const {
-      provider,
-      wallets: [wallet],
-    } = launched;
-
     const receiver = Wallet.generate({ provider });
 
     const txParams = {
@@ -55,13 +58,6 @@ describe('Transaction Submission Benchmarks', () => {
   });
 
   bench('should successfully perform a batch transfer', async () => {
-    using launched = await launchTestNode();
-
-    const {
-      provider,
-      wallets: [wallet],
-    } = launched;
-
     const receiver1 = Wallet.generate({ provider });
     const receiver2 = Wallet.generate({ provider });
     const receiver3 = Wallet.generate({ provider });
@@ -88,13 +84,6 @@ describe('Transaction Submission Benchmarks', () => {
   });
 
   bench('should successfully withdraw to the base layer', async () => {
-    using launched = await launchTestNode();
-
-    const {
-      provider,
-      wallets: [wallet],
-    } = launched;
-
     const receiver = Wallet.generate({ provider });
 
     const txParams = {

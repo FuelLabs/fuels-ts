@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import type { Keystore } from '@fuel-ts/crypto';
-import { bufferFromString, pbkdf2, computeHmac, encrypt, decrypt } from '@fuel-ts/crypto';
+import type { Keystore } from 'fuels';
+import { bufferFromString, pbkdf2, computeHmac, encrypt, decrypt } from 'fuels';
 import { bench } from 'vitest';
 
 /**

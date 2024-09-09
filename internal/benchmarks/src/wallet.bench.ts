@@ -12,6 +12,7 @@ const expectedLockedAddress = 'fuel1tac0aml37g57f227zptw3dxcp59jfdt9vayxpnpp80ds
 
 /**
  * @group node
+ * @group browser
  */
 describe('Wallet Benchmarks', () => {
   bench('Instantiate a new Unlocked wallet', async () => {

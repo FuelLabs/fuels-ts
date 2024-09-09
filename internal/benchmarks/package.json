@@ -11,8 +11,6 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@fuel-ts/crypto": "workspace:*",
-    "@fuel-ts/account": "workspace:*",
     "fuels": "workspace:*"
   },
   "version": "1.0.0"
