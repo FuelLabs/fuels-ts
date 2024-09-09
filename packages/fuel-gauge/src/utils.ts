@@ -18,7 +18,7 @@ export async function launchTestContract<T extends DeployContractConfig>(config:
 }
 
 export function subsectionFromBytecode() {
-  const subsectionSize = 64 * 1024;
+  const subsectionSize = 192 * 1024;
   const subsectionsChunk = chunkAndPadBytes(
     arrayify(STATE_TRANSITION_WASM_BYTECODE),
     subsectionSize
