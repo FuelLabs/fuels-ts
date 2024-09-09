@@ -1,4 +1,4 @@
-import { toHex, ContractFactory } from 'fuels';
+import { toHex, ContractFactory, hexlify, ZeroBytes32 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { StorageTestContract, StorageTestContractFactory } from '../test/typegen';
@@ -98,5 +98,63 @@ describe('StorageTestContract', () => {
 
     const { value: count } = await contract.functions.counter().simulate();
     expect(count.toHex()).toEqual(toHex(1337));
+  });
+
+  it('should automatically load storage slots', async () => {
+    const { storageSlots } = StorageTestContract;
+    const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
+      key: `0x${key}`,
+      value: `0x${value}`,
+    }));
+
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    // via constructor
+    const storageContractFactory = new StorageTestContractFactory(wallet);
+    const deployConstructor = await storageContractFactory.deploy();
+    const { transactionResult: transactionResultConstructor } =
+      await deployConstructor.waitForResult();
+    expect(transactionResultConstructor.transaction.storageSlots).toEqual(expectedStorageSlots);
+
+    // via static deploy
+    const deployStatically = await StorageTestContractFactory.deploy(wallet);
+    const { transactionResult: transactionResultStatically } =
+      await deployStatically.waitForResult();
+    expect(transactionResultStatically.transaction.storageSlots).toEqual(expectedStorageSlots);
+  });
+
+  it('should allow for overriding storage slots', async () => {
+    const { storageSlots } = StorageTestContract;
+    const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
+      key: `0x${key}`,
+      value: ZeroBytes32,
+    }));
+
+    using launched = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launched;
+
+    // via constructor
+    const storageContractFactory = new StorageTestContractFactory(wallet);
+    const deployConstructor = await storageContractFactory.deploy({
+      storageSlots: expectedStorageSlots,
+    });
+    const { transactionResult: transactionResultConstructor } =
+      await deployConstructor.waitForResult();
+    expect(transactionResultConstructor.transaction.storageSlots).toEqual(expectedStorageSlots);
+
+    // via static deploy
+    const deployStatically = await StorageTestContractFactory.deploy(wallet, {
+      storageSlots: expectedStorageSlots,
+    });
+    const { transactionResult: transactionResultStatically } =
+      await deployStatically.waitForResult();
+    expect(transactionResultStatically.transaction.storageSlots).toEqual(expectedStorageSlots);
   });
 });
