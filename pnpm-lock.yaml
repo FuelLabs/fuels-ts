@@ -579,12 +579,6 @@ importers:
 
   internal/benchmarks:
     dependencies:
-      '@fuel-ts/account':
-        specifier: workspace:*
-        version: link:../../packages/account
-      '@fuel-ts/crypto':
-        specifier: workspace:*
-        version: link:../../packages/crypto
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
