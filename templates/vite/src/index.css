@@ -21,6 +21,10 @@ body {
   @apply cursor-not-allowed border border-zinc-400/25 bg-zinc-950 text-zinc-400;
 }
 
+.btn-inactive {
+  @apply border border-zinc-400/25 bg-zinc-950 text-zinc-400 hover:border-zinc-400/40 hover:bg-zinc-900;
+}
+
 .btn-secondary {
   @apply border border-indigo-400/10 bg-indigo-950 text-indigo-400 hover:border-indigo-400/25;
 }

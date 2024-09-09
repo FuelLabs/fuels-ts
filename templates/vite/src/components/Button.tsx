@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 
 export type Props = {
-  color?: "primary" | "secondary";
+  color?: "primary" | "secondary" | "inactive";
 } & React.ComponentProps<"button">;
 
 export default function Button(props: Props) {
@@ -15,6 +15,7 @@ export default function Button(props: Props) {
         "btn",
         color === "primary" && "btn-primary",
         color === "secondary" && "btn-secondary",
+        color === "inactive" && "btn-inactive",
         className,
       )}
       disabled={disabled}

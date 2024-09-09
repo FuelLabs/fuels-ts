@@ -3,22 +3,20 @@ import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BurnerWalletConnector, defaultConnectors } from "@fuels/connectors";
 import { FuelProvider } from "@fuels/react";
+import { Provider } from "fuels";
 
+import { useEnvironment } from "./hooks/useEnvironment";
 import App from "./App.tsx";
 import "./index.css";
-import { CURRENT_ENVIRONMENT, Environments, NODE_URL } from "./lib.ts";
-import { Provider } from "fuels";
+
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const { isLocal: isLocalEnvironment, providerUrl } = useEnvironment();
 
 const queryClient = new QueryClient();
 
-const connectors =
-  CURRENT_ENVIRONMENT === Environments.LOCAL
-    ? [
-        new BurnerWalletConnector({
-          fuelProvider: Provider.create(NODE_URL),
-        }),
-      ]
-    : defaultConnectors({ devMode: true });
+const connectors = isLocalEnvironment
+  ? [new BurnerWalletConnector({ fuelProvider: Provider.create(providerUrl) })]
+  : defaultConnectors({ devMode: true });
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
