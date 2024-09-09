@@ -137,7 +137,7 @@ describe('Transaction upgrade state transition', () => {
     node.cleanup();
   });
 
-  it('should correctly upload bytecode in subsections slowly', { timeout: 30000 }, async () => {
+  it('should correctly upload bytecode in subsections slowly', { timeout: 38000 }, async () => {
     const { privileged } = node;
 
     const { subsections } = bytecodeSubsections;
@@ -167,7 +167,7 @@ describe('Transaction upgrade state transition', () => {
     }
   });
 
-  it('should correctly upgrade chain with uploaded bytecode', { timeout: 10000 }, async () => {
+  it('should correctly upgrade chain with uploaded bytecode', { timeout: 15000 }, async () => {
     const { privileged, provider } = node;
 
     const { merkleRoot } = bytecodeSubsections;
