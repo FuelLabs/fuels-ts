@@ -136,6 +136,28 @@ pnpm test:filter packages/my-desired-package/src/my.test.ts
 pnpm test -- --coverage --my-other-flag
 ```
 
+# Benchmarking
+
+We currently use `vitest` 's [bench utility](https://vitest.dev/api/#bench) to run benchmarks. You can run them in both the browser and node environments.
+
+```sh
+pnpm bench:node
+```
+
+```sh
+# run benchmarks for a specific package
+pnpm bench:node packages/my-desired-package
+```
+
+# Profiling
+
+We currently use [`clinic`](https://clinicjs.org/) to profile and debug our tooling. For instance you can run clinic's flame command to create a flamegraph for a specific package:
+
+```sh
+# creates a flamegraph for a specific package
+pm_config_package_name=account pnpm clinic:flame  // runs flame against the account package
+```
+
 ### CI Test
 
 During the CI process an automated end-to-end (e2e) test is executed. This test is crucial as it simulates real-world scenarios on the current test-net, ensuring that the changeset maintains the expected functionality and stability.
