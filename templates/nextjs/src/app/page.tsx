@@ -9,6 +9,7 @@ import { Link } from "@/components/Link";
 import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
+import { useIsConnected } from "@fuels/react";
 import useAsync from "react-use/lib/useAsync";
 import {
   CURRENT_ENVIRONMENT,
@@ -24,9 +25,11 @@ const contractId =
 
 export default function Home() {
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
+  const { isConnected } = useIsConnected();
+
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   /**
    * useAsync is a wrapper around useEffect that allows us to run asynchronous code
    * See: https://github.com/streamich/react-use/blob/master/docs/useAsync.md
@@ -45,6 +48,9 @@ export default function Home() {
 
   // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
+    if (!isConnected) {
+      return toast.error("Please connect your wallet to increment the counter");
+    }
     if (!contract) {
       return toast.error("Contract not loaded");
     }
@@ -59,18 +65,36 @@ export default function Home() {
         </span>,
       );
     }
+    try {
+      setIsLoading(true);
+      // Call the increment_counter function on the contract
+      const { waitForResult } = await contract.functions
+        .increment_counter(bn(1))
+        .call();
 
-    // Call the increment_counter function on the contract
-    const { waitForResult } = await contract.functions
-      .increment_counter(bn(1))
-      .call();
+      // Wait for the transaction to be mined, and then read the value returned
+      const { value, transactionId } = await waitForResult();
+      toast.success(() => (
+        <span>
+          Counter Incremented! View it on the
+          <a
+            target="_blank"
+            className="pl-1 underline"
+            href={`https://app.fuel.network/tx/${transactionId}`}
+          >
+            block explorer
+          </a>
+        </span>
+      ));
+      setCounter(value.toNumber());
 
-    // Wait for the transaction to be mined, and then read the value returned
-    const { value } = await waitForResult();
-
-    setCounter(value.toNumber());
-
-    await refreshWalletBalance?.();
+      await refreshWalletBalance?.();
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while incrementing the counter.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -100,8 +124,17 @@ export default function Home() {
           {counter}
         </span>
 
-        <Button onClick={onIncrementPressed} className="mt-6">
-          Increment Counter
+        <Button
+          onClick={onIncrementPressed}
+          className={`mt-6 ${
+            isLoading
+              ? "bg-transparent border border-gray-400 pointer-events-none"
+              : !isConnected
+                ? "bg-gray-500"
+                : ""
+          }`}
+        >
+          {isLoading ? "Incrementing..." : "Increment Counter"}
         </Button>
       </>
 

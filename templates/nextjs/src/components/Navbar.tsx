@@ -14,11 +14,14 @@ import { WalletDisplay } from "./WalletDisplay";
 import { bn } from "fuels";
 import { useFaucet } from "@/hooks/useFaucet";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export const Navbar: FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { faucetWallet } = useFaucet();
+
+  const router = useRouter();
 
   const {
     wallet: browserWallet,
@@ -31,41 +34,7 @@ export const Navbar: FC = () => {
 
   const { wallet, refreshWalletBalance, walletBalance } = useActiveWallet();
 
-  const topUpWallet = async () => {
-    if (!wallet) {
-      return console.error("Unable to topup wallet because wallet is not set.");
-    }
-
-    /**
-     * If the current environment is local, transfer 5 ETH to the wallet
-     * from the local faucet wallet
-     */
-    if (CURRENT_ENVIRONMENT === "local") {
-      if (!faucetWallet) {
-        return toast.error("Faucet wallet not found.");
-      }
-
-      const tx = await faucetWallet?.transfer(
-        wallet.address,
-        bn.parseUnits("5"),
-      );
-      await tx?.waitForResult();
-
-      toast.success("Wallet topped up!");
-
-      return await refreshWalletBalance?.();
-    }
-
-    // If the current environment is testnet, open the testnet faucet link in a new tab
-    if (CURRENT_ENVIRONMENT === "testnet") {
-      return window.open(
-        `${TESTNET_FAUCET_LINK}?address=${wallet.address.toAddress()}`,
-        "_blank",
-      );
-    }
-  };
-
-  const showTopUpButton = walletBalance?.lt(bn.parseUnits("5"));
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   const showAddNetworkButton =
     browserWallet &&
@@ -98,9 +67,32 @@ export const Navbar: FC = () => {
           <WalletDisplay />
         </div>
 
-        {showTopUpButton && (
-          <Button onClick={() => topUpWallet()}>Top-up Wallet</Button>
+        {isBrowserWalletConnected && (
+          <Button
+            className="bg-gray-500"
+            onClick={() => {
+              if (isSafari && wallet) {
+                const redirectUrl = new URL(
+                  "https://faucet-testnet.fuel.network/",
+                );
+                redirectUrl.searchParams.append(
+                  "address",
+                  wallet.address.toString(),
+                );
+                redirectUrl.searchParams.append(
+                  "redirectUrl",
+                  window.location.href,
+                );
+                window.location.href = redirectUrl.href;
+              } else {
+                router.push("/faucet");
+              }
+            }}
+          >
+            Faucet
+          </Button>
         )}
+
         {isBrowserWalletConnected && (
           <Button className="bg-red-600" onClick={disconnect}>
             Disconnect
@@ -128,8 +120,27 @@ export const Navbar: FC = () => {
               Docs
             </Link>
 
-            <Link href="/faucet">Faucet</Link>
-
+            {isBrowserWalletConnected && wallet && (
+              <Button
+                className="bg-gray-500"
+                onClick={() => {
+                  const redirectUrl = new URL(
+                    "https://faucet-testnet.fuel.network/",
+                  );
+                  redirectUrl.searchParams.append(
+                    "address",
+                    wallet.address.toString(),
+                  );
+                  redirectUrl.searchParams.append(
+                    "redirectUrl",
+                    window.location.href,
+                  );
+                  window.location.href = redirectUrl.href;
+                }}
+              >
+                Faucet
+              </Button>
+            )}
             {isBrowserWalletConnected && (
               <Button onClick={disconnect}>Disconnect Wallet</Button>
             )}
@@ -146,10 +157,6 @@ export const Navbar: FC = () => {
             <div>
               <WalletDisplay />
             </div>
-
-            {showTopUpButton && (
-              <Button onClick={() => topUpWallet()}>Top-up Wallet</Button>
-            )}
           </>
         )}
       </nav>

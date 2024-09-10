@@ -10,6 +10,7 @@ import { FAUCET_LINK } from "@/lib";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
+import { useIsConnected } from "@fuels/react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
@@ -18,11 +19,17 @@ export default function PredicateExample() {
 
   const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
 
+  const { isConnected } = useIsConnected();
+
   const [predicate, setPredicate] = useState<Predicate<InputValue[]>>();
 
   const [predicateBalance, setPredicateBalance] = useState<BN>();
 
   const [pin, setPin] = useState<string>();
+
+  const [isLoadingTransfer, setIsLoadingTransfer] = useState<boolean>(false);
+
+  const [isLoadingUnlock, setIsLoadingUnlock] = useState<boolean>(false);
 
   useAsync(async () => {
     if (wallet) {
@@ -43,6 +50,11 @@ export default function PredicateExample() {
 
   const transferFundsToPredicate = async (amount: BN) => {
     try {
+      if (!isConnected) {
+        return toast.error(
+          "Please connect your wallet to transfer funds to Predicate",
+        );
+      }
       if (!predicate) {
         return toast.error("Predicate not loaded");
       }
@@ -51,13 +63,37 @@ export default function PredicateExample() {
         return toast.error("Wallet not loaded");
       }
 
-      await wallet.transfer(predicate.address, amount, baseAssetId, {
+      if (walletBalance?.lt(bn.parseUnits("0.002"))) {
+        return toast.error(
+          <span>
+            Your wallet does not have enough funds. Please top it up using the{" "}
+            <Link href={FAUCET_LINK} target="_blank">
+              faucet.
+            </Link>
+          </span>,
+        );
+      }
+
+      setIsLoadingTransfer(true);
+
+      const tx = await wallet.transfer(predicate.address, amount, baseAssetId, {
         gasLimit: 10_000,
       });
 
       await refreshBalances();
 
-      return toast.success("Funds transferred to predicate.");
+      return toast.success(() => (
+        <span>
+          Funds transferred to predicate! View it on the
+          <a
+            className="pl-1 underline"
+            target="_blank"
+            href={`https://app.fuel.network/tx/${tx?.id}`}
+          >
+            block explorer
+          </a>
+        </span>
+      ));
     } catch (e) {
       console.error(e);
       toast.error(
@@ -69,15 +105,36 @@ export default function PredicateExample() {
           </Link>
         </span>,
       );
+    } finally {
+      setIsLoadingTransfer(false);
     }
   };
 
   const unlockPredicateAndTransferFundsBack = async (amount: BN) => {
     try {
+      if (!isConnected) {
+        return toast.error(
+          "Please connect your wallet to transfer funds back from Predicate",
+        );
+      }
+
       if (!wallet) {
         return toast.error("Wallet not loaded");
       }
-
+      if (walletBalance?.eq(0)) {
+        return toast.error(
+          <span>
+            Your wallet does not have enough funds. Please top it up using the{" "}
+            <Link href={FAUCET_LINK} target="_blank">
+              faucet.
+            </Link>
+          </span>,
+        );
+      }
+      if (!predicateBalance || predicateBalance.lt(bn.parseUnits("0.001"))) {
+        return toast.error("Predicate balance is less than 0.001 ETH");
+      }
+      setIsLoadingUnlock(true);
       // Initialize a new predicate instance with the entered pin
       const reInitializePredicate = new TestPredicate({
         provider: wallet.provider,
@@ -105,7 +162,18 @@ export default function PredicateExample() {
       }
 
       if (isStatusSuccess) {
-        toast.success("Predicate unlocked");
+        toast.success(() => (
+          <span>
+            Funds transferred from predicate! View it on the
+            <a
+              className="pl-1 underline"
+              target="_blank"
+              href={`https://app.fuel.network/tx/${tx?.id}`}
+            >
+              block explorer
+            </a>
+          </span>
+        ));
       }
 
       await refreshBalances();
@@ -114,8 +182,14 @@ export default function PredicateExample() {
       toast.error(
         "Failed to unlock predicate. You probably entered the wrong pin, or the predicate does not have enough balance. Try again.",
       );
+    } finally {
+      setIsLoadingUnlock(false);
     }
   };
+  const isPredicateWithdrawButtonDisabled =
+    !isConnected ||
+    !predicateBalance ||
+    predicateBalance.lt(bn.parseUnits("0.001"));
 
   return (
     <>
@@ -145,11 +219,20 @@ export default function PredicateExample() {
       </div>
 
       <Button
+        className={`${
+          isLoadingTransfer
+            ? "bg-transparent border border-gray-400 pointer-events-none"
+            : !isConnected
+              ? "bg-gray-500"
+              : ""
+        }`}
         onClick={async () =>
           await transferFundsToPredicate(bn.parseUnits("0.002"))
         }
       >
-        Transfer 0.002 ETH to Predicate
+        {isLoadingTransfer
+          ? "Transferring to Predicate..."
+          : "Transfer 0.002 ETH to Predicate"}
       </Button>
 
       <Input
@@ -160,12 +243,20 @@ export default function PredicateExample() {
       />
 
       <Button
-        className={`w-11/12 md:w-fit`}
+        className={`w-11/12 sm:w-fit ${
+          isLoadingUnlock
+            ? "bg-transparent border border-gray-400 pointer-events-none"
+            : isPredicateWithdrawButtonDisabled
+              ? "bg-gray-500"
+              : ""
+        }`}
         onClick={async () =>
           await unlockPredicateAndTransferFundsBack(bn.parseUnits("0.001"))
         }
       >
-        Unlock Predicate and Transfer 0.001 ETH back to Wallet
+        {isLoadingUnlock
+          ? "Unlocking Predicate and Transferring to Wallet..."
+          : "Unlock Predicate and Transfer 0.001 ETH back to Wallet"}
       </Button>
 
       <span className="mt-8 w-[360px] md:w-[400px] text-center text-gray-400">

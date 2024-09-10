@@ -8,6 +8,7 @@ import { TestScript } from "../sway-api";
 import { FAUCET_LINK } from "../lib";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
+import { useIsConnected } from "@fuels/react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
@@ -16,11 +17,13 @@ export const Route = createLazyFileRoute("/script")({
 });
 
 function Index() {
-  const { wallet } = useActiveWallet();
+  const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
+  const { isConnected } = useIsConnected();
 
   const [script, setScript] = useState<Script<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<string>();
   const [result, setResult] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useAsync(async () => {
     if (wallet) {
@@ -32,15 +35,42 @@ function Index() {
 
   const runScript = async () => {
     try {
+      if (!isConnected) {
+        return toast.error("Please connect your wallet to run the script");
+      }
       if (!script) {
         return toast.error("Script not loaded");
       }
+      if (walletBalance?.eq(0)) {
+        return toast.error(
+          <span>
+            Your wallet does not have enough funds. Please top it up using the{" "}
+            <Link href={FAUCET_LINK} target="_blank">
+              faucet.
+            </Link>
+          </span>,
+        );
+      }
+      setIsLoading(true);
 
       // Call the script with the input value
       const { waitForResult } = await script.functions.main(bn(input)).call();
-      const { value } = await waitForResult();
+      const { value, transactionId } = await waitForResult();
 
       setResult(value.toString());
+      await refreshWalletBalance?.();
+      toast.success(() => (
+        <span>
+          Transaction Success! View it on the
+          <a
+            className="pl-1 underline"
+            target="_blank"
+            href={`https://app.fuel.network/tx/${transactionId}`}
+          >
+            block explorer
+          </a>
+        </span>
+      ));
     } catch (error) {
       console.error(error);
       toast.error(
@@ -52,6 +82,8 @@ function Index() {
           </Link>
         </span>,
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -70,7 +102,18 @@ function Index() {
         type="number"
       />
 
-      <Button onClick={runScript}>Run Script</Button>
+      <Button
+        className={`${
+          isLoading
+            ? "bg-transparent border border-gray-400 pointer-events-none"
+            : !isConnected
+              ? "bg-gray-500"
+              : ""
+        }`}
+        onClick={runScript}
+      >
+        {isLoading ? "Running..." : "Run Script"}
+      </Button>
 
       {result && (
         <div className="flex gap-4 align-baseline">
