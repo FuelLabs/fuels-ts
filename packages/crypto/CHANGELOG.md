@@ -1,5 +1,26 @@
 # Change Log
 
+## 0.94.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.5
+- @fuel-ts/utils@0.94.5
+- @fuel-ts/math@0.94.5
+- @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- 482bbf0: chore: removed redundant crypto functionality
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes
