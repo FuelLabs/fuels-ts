@@ -8,6 +8,10 @@ function verifyOtherMatchersDontMatch(type: keyof typeof swayTypeMatchers, value
     });
 }
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('sway type matchers', () => {
   test('empty', () => {
     const key = 'empty';
