@@ -25,7 +25,7 @@ describe('Logger Tests', () => {
     const message = 'This is a message';
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`\u001b[38;5;26;1mtest \u001b[0m${message}`);
+    expect(callArgs).toContain(`test ${message}`);
   });
 
   it('should format a b256 string correctly', () => {
@@ -53,7 +53,7 @@ describe('Logger Tests', () => {
 
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`\u001b[38;5;43;1m${prefix}:${component} \u001b[0m${message}`);
+    expect(callArgs).toContain(`${prefix}:${component} ${message}`);
   });
 
   it('should create a default logger and log messages correctly', () => {
@@ -65,7 +65,7 @@ describe('Logger Tests', () => {
     log(message);
 
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`\u001b[38;5;204;1mtest-component \u001b[0m${message}`);
+    expect(callArgs).toContain(`test-component ${message}`);
   });
 
   it('should format BN values with commas correctly using formatter a', () => {
