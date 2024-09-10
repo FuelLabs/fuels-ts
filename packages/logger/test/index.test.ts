@@ -5,13 +5,11 @@ import type { MockInstance } from 'vitest';
 
 import { logger, prefixLogger, defaultLogger } from '../src/index';
 
-type Debug = typeof debug;
-
 /**
  * @group node
  */
 describe('Logger Tests', () => {
-  let debugSpy: MockInstance<Parameters<Debug['log']>, ReturnType<Debug['log']>>;
+  let debugSpy: MockInstance;
 
   beforeEach(() => {
     debug.enable('test');
@@ -27,7 +25,7 @@ describe('Logger Tests', () => {
     const message = 'This is a message';
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`test ${message}`);
+    expect(callArgs).toContain(`\u001b[38;5;26;1mtest \u001b[0m${message}`);
   });
 
   it('should format a b256 string correctly', () => {
@@ -55,7 +53,7 @@ describe('Logger Tests', () => {
 
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`${prefix}:${component} ${message}`);
+    expect(callArgs).toContain(`\u001b[38;5;43;1m${prefix}:${component} \u001b[0m${message}`);
   });
 
   it('should create a default logger and log messages correctly', () => {
@@ -67,7 +65,7 @@ describe('Logger Tests', () => {
     log(message);
 
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`test-component ${message}`);
+    expect(callArgs).toContain(`\u001b[38;5;204;1mtest-component \u001b[0m${message}`);
   });
 
   it('should format BN values with commas correctly using formatter a', () => {
