@@ -34,10 +34,18 @@ const u32: Matcher = (type) => type === 'u32';
 const u64: Matcher = (type) => type === 'u64';
 const u256: Matcher = (type) => type === 'u256';
 const b256: Matcher = (type) => type === 'b256';
-const generic: Matcher = (type) => /^generic ([^\s]+)$/m.test(type);
-const string: Matcher = (type) => /^str\[(.+)\]$/m.test(type);
-const tuple: Matcher = (type) => /^\([_,\s]+\)$/m.test(type);
-const array: Matcher = (type) => /^\[_; ([0-9]+)\]$/m.test(type);
+
+export const genericRegEx = /^generic ([^\s]+)$/m;
+const generic: Matcher = (type) => genericRegEx.test(type);
+
+export const stringRegEx = /^str\[(.+)\]$/m;
+const string: Matcher = (type) => stringRegEx.test(type);
+
+export const tupleRegEx = /^\([_,\s]+\)$/m;
+const tuple: Matcher = (type) => tupleRegEx.test(type);
+
+export const arrayRegEx = /^\[_; ([0-9]+)\]$/m;
+const array: Matcher = (type) => arrayRegEx.test(type);
 
 const struct: Matcher = (type) =>
   /^struct (.+::)?(.+)$/m.test(type) &&
