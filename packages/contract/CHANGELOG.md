@@ -1,5 +1,59 @@
 # Change Log
 
+## 0.94.5
+
+### Patch Changes
+
+- e9ad8d0: fix: loader contract being called via proxy
+- Updated dependencies [309b8d5]
+- Updated dependencies [2ce9ce5]
+- Updated dependencies [942b56b]
+- Updated dependencies [37eab14]
+- Updated dependencies [cffa075]
+  - @fuel-ts/account@0.94.5
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/transactions@0.94.5
+  - @fuel-ts/program@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/abi-coder@0.94.5
+  - @fuel-ts/crypto@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/hasher@0.94.5
+  - @fuel-ts/merkle@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- be1c43f: chore: deprecate `BaseTransactionRequest.fundWithFakeUtxos`
+- 6bef838: feat: validate blob IDs against chain in chunk deploys
+- Updated dependencies [7fc8d24]
+- Updated dependencies [24d4d03]
+- Updated dependencies [121eca3]
+- Updated dependencies [be1c43f]
+- Updated dependencies [7d74c8c]
+- Updated dependencies [6bef838]
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [90a1d0f]
+- Updated dependencies [1b4db70]
+- Updated dependencies [4cbba82]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/account@0.94.4
+  - @fuel-ts/versions@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/crypto@0.94.4
+  - @fuel-ts/program@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/abi-coder@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/transactions@0.94.4
+  - @fuel-ts/hasher@0.94.4
+  - @fuel-ts/merkle@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes

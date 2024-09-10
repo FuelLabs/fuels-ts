@@ -76,32 +76,50 @@ describe('Resource Cache', () => {
     expect(activeData.utxos).containSubset(EXPECTED.utxos);
   });
 
-  it('should remove expired when getting active data', async () => {
-    const ttl = 1000;
+  it('should remove expired when getting active data', () => {
+    const ttl = 500;
     const resourceCache = new ResourceCache(ttl);
+
+    const utxos = [randomValue(), randomValue()];
+    const messages = [randomValue()];
 
     const txId1 = randomValue();
     const txId1Resources = {
-      utxos: [randomValue()],
-      messages: [randomValue()],
+      utxos,
+      messages,
     };
 
+    const originalTimeStamp = 946684800;
+    let dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => originalTimeStamp);
+
     resourceCache.set(txId1, txId1Resources);
-    let activeData = resourceCache.getActiveData();
+    const oldActiveData = resourceCache.getActiveData();
 
-    expect(activeData.utxos).containSubset(txId1Resources.utxos);
-    expect(activeData.messages).containSubset(txId1Resources.messages);
+    expect(dateSpy).toHaveBeenCalled();
 
-    await sleep(ttl);
+    expect(oldActiveData.utxos).containSubset(txId1Resources.utxos);
+    expect(oldActiveData.messages).containSubset(txId1Resources.messages);
+    expect(oldActiveData.messages).containSubset(txId1Resources.messages);
 
-    activeData = resourceCache.getActiveData();
+    const expiredTimeStamp = originalTimeStamp + ttl;
+    dateSpy = vi.spyOn(Date, 'now').mockImplementation(() => expiredTimeStamp);
 
-    expect(activeData.utxos.length).toEqual(0);
-    expect(activeData.messages.length).toEqual(0);
+    const newActiveData = resourceCache.getActiveData();
+
+    txId1Resources.utxos.forEach((utxo) => {
+      expect(newActiveData.utxos).not.includes(utxo);
+    });
+
+    txId1Resources.messages.forEach((message) => {
+      expect(newActiveData.utxos).not.includes(message);
+    });
+
+    vi.restoreAllMocks();
   });
 
   it('should remove cached data based on transaction ID', () => {
-    const ttl = 1000;
+    // use long ttl to avoid cache expiration
+    const ttl = 10_000;
     const resourceCache = new ResourceCache(ttl);
 
     const txId1 = randomValue();
@@ -140,7 +158,8 @@ describe('Resource Cache', () => {
   });
 
   it('can clear cache', () => {
-    const resourceCache = new ResourceCache(1000);
+    // use long ttl to avoid cache expiration
+    const resourceCache = new ResourceCache(10_000);
 
     const txId1 = randomValue();
     const txId2 = randomValue();
