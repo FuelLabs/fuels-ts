@@ -16,6 +16,7 @@ export default function Predicate() {
     address: predicateAddress,
   });
   const [predicatePin, setPredicatePin] = useState<string>();
+
   useEffect(() => {
     if (wallet) {
       const testPredicate = new TestPredicate(wallet);

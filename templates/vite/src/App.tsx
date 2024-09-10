@@ -6,6 +6,7 @@ import Info from "./components/Info";
 import Wallet from "./components/Wallet";
 import Contract from "./components/Contract";
 import Predicate from "./components/Predicate";
+import Script from "./components/Script";
 
 function App() {
   const { connect } = useConnectUI();
@@ -66,7 +67,7 @@ function App() {
                       {tab === "Wallet" && <Wallet />}
                       {tab === "Contract" && <Contract />}
                       {tab === "Predicate" && <Predicate />}
-                      {tab === "Script" && <Wallet />}
+                      {tab === "Script" && <Script />}
                     </section>
                   )}
                 </div>
