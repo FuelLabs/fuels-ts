@@ -1,5 +1,16 @@
 # create-fuels
 
+## 0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- 96140a2: fix: faucet link in `create-fuels` navbar
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+- a0bb25f: feat: make vite the default `create-fuels` template
+- cc1aa12: build(deps): bump the deps-patch group with 9 updates
+
 ## 0.94.3
 
 ### Patch Changes

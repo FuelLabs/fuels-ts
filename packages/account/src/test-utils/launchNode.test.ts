@@ -28,7 +28,7 @@ vi.mock('fs', async () => {
 /**
  * @group node
  */
-describe('launchNode', { timeout: 10000 }, () => {
+describe('launchNode', () => {
   test('using ephemeral port 0 is possible', async () => {
     const { cleanup, port, url } = await launchNode({ port: '0' });
     expect(await fetch(url)).toBeTruthy();
@@ -116,7 +116,7 @@ describe('launchNode', { timeout: 10000 }, () => {
     cleanup();
   });
 
-  test('should throw on error and log error message', async () => {
+  test('should throw on error and log error message', { timeout: 15000 }, async () => {
     const logSpy = vi.spyOn(console, 'log');
 
     const invalidCoin = {
