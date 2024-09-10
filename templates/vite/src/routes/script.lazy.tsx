@@ -85,6 +85,7 @@ function Index() {
 
       <Link
         href="https://docs.fuel.network/docs/fuels-ts/scripts"
+        target="_blank"
         className="mt-4"
       >
         Learn more about Scripts

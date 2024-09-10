@@ -8,7 +8,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <div className="flex flex-col bg-black text-white">
         <Navbar />
 
-        <div className="min-h-screen items-center p-24 flex flex-col gap-6">
+        <div className="min-h-screen items-center p-0 md:p-24 flex flex-col gap-6">
           {children}
         </div>
       </div>

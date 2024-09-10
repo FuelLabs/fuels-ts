@@ -83,12 +83,12 @@ function Index() {
         <h1 className="text-2xl font-semibold ali">Welcome to Fuel</h1>
       </div>
 
-      <span className="text-gray-400">
+      <span className="text-gray-400 text-center">
         Get started by editing <i>sway-programs/contract/main.sw</i> or{" "}
         <i>src/pages/index.tsx</i>.
       </span>
 
-      <span className="text-gray-400">
+      <span className="text-gray-400 text-center">
         This template uses the new{" "}
         <Link href={`${DOCS_URL}/docs/fuels-ts/fuels/#fuels-cli`}>
           Fuels CLI
@@ -108,13 +108,9 @@ function Index() {
         </Button>
       </>
 
-      <Link href="/predicate" className="mt-4">
-        Predicate Example
-      </Link>
+      <Link href="/predicate">Predicate Example</Link>
 
-      <Link href="/script" className="mt-4">
-        Script Example
-      </Link>
+      <Link href="/script">Script Example</Link>
     </>
   );
 }

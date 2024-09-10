@@ -14,11 +14,13 @@ import { WalletDisplay } from "./WalletDisplay";
 import { bn } from "fuels";
 import { useFaucet } from "../hooks/useFaucet";
 import toast from "react-hot-toast";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Navbar: FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const { faucetWallet } = useFaucet();
+  const navigate = useNavigate();
 
   const {
     wallet: browserWallet,
@@ -88,15 +90,6 @@ export const Navbar: FC = () => {
           Docs
         </Link>
 
-        <Link href="/faucet">Faucet</Link>
-
-        {isBrowserWalletConnected && (
-          <Button onClick={disconnect}>Disconnect Wallet</Button>
-        )}
-        {!isBrowserWalletConnected && (
-          <Button onClick={connect}>Connect Wallet</Button>
-        )}
-
         {showAddNetworkButton && (
           <Button onClick={tryToAddNetwork} className="bg-red-500">
             Wrong Network
@@ -108,7 +101,24 @@ export const Navbar: FC = () => {
         </div>
 
         {showTopUpButton && (
-          <Button onClick={() => topUpWallet()}>Top-up Wallet</Button>
+          <Button
+            className="bg-gray-500"
+            onClick={() => {
+              navigate({ to: "/faucet" });
+            }}
+          >
+            Faucet
+          </Button>
+        )}
+
+        {isBrowserWalletConnected && (
+          <Button className="bg-red-600" onClick={disconnect}>
+            Disconnect
+          </Button>
+        )}
+
+        {!isBrowserWalletConnected && (
+          <Button onClick={connect}>Connect Wallet</Button>
         )}
       </nav>
 
