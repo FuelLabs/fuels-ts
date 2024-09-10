@@ -71,11 +71,11 @@ export default function Contract() {
           </a>
           .
         </p>
-        <p className="pt-4">
+        <p className="pt-2">
           This is a simple counter contract which you can edit at{" "}
           <code>sway-programs/contract/src/main.sw</code>.
         </p>
-        <p className="pt-4">
+        <p className="pt-2">
           Extend this example by adding decrement functionality by working
           through{" "}
           <a

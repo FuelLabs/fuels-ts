@@ -5,13 +5,14 @@ import Button from "./components/Button";
 import Info from "./components/Info";
 import Wallet from "./components/Wallet";
 import Contract from "./components/Contract";
+import Predicate from "./components/Predicate";
 
 function App() {
   const { connect } = useConnectUI();
   const { isConnected, refetch } = useIsConnected();
-  const [tab, setTab] = useState<
-    "wallet" | "contract" | "predicate" | "script"
-  >("wallet");
+
+  const tabs: string[] = ["Wallet", "Contract", "Predicate", "Script"];
+  const [tab, setTab] = useState<string>("Wallet");
 
   useEffect(() => {
     refetch();
@@ -39,7 +40,6 @@ function App() {
               className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-12"
             >
               <Info />
-
               <div className="col-span-4">
                 <div className="gradient-border h-full rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950/80">
                   {!isConnected && (
@@ -51,40 +51,22 @@ function App() {
                   {isConnected && (
                     <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8 ">
                       <div className="flex flex-col sm:flex-row gap-4">
-                        <Button
-                          className="w-full sm:flex-1"
-                          color={tab === "wallet" ? "primary" : "inactive"}
-                          onClick={() => setTab("wallet")}
-                        >
-                          Wallet
-                        </Button>
-                        <Button
-                          className="w-full sm:flex-1"
-                          color={tab === "contract" ? "primary" : "inactive"}
-                          onClick={() => setTab("contract")}
-                        >
-                          Contract
-                        </Button>
-                        <Button
-                          className="w-full sm:flex-1"
-                          color={tab === "predicate" ? "primary" : "inactive"}
-                          onClick={() => setTab("predicate")}
-                        >
-                          Predicate
-                        </Button>
-                        <Button
-                          className="w-full sm:flex-1"
-                          color={tab === "script" ? "primary" : "inactive"}
-                          onClick={() => setTab("script")}
-                        >
-                          Script
-                        </Button>
+                        {tabs.map((tabName) => (
+                          <Button
+                            key={tabName}
+                            className="w-full sm:flex-1"
+                            color={tab === tabName ? "primary" : "inactive"}
+                            onClick={() => setTab(tabName)}
+                          >
+                            {tabName}
+                          </Button>
+                        ))}
                       </div>
 
-                      {tab === "wallet" && <Wallet />}
-                      {tab === "contract" && <Contract />}
-                      {/* {tab === "predicate" && <Predicate />}
-                      {tab === "script" && <Script />} */}
+                      {tab === "Wallet" && <Wallet />}
+                      {tab === "Contract" && <Contract />}
+                      {tab === "Predicate" && <Predicate />}
+                      {tab === "Script" && <Wallet />}
                     </section>
                   )}
                 </div>
