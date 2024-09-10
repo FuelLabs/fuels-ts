@@ -1,11 +1,11 @@
-import type {
-  MetadataType,
-  Component,
-  TypeArgument,
-  ConcreteType,
-  JsonAbi_V1,
-} from './abi-specification-v1';
 import { ResolvedType } from './resolved-type';
+import type {
+  AbiComponentV1,
+  AbiConcreteTypeV1,
+  AbiMetadataTypeV1,
+  AbiSpecificationV1,
+  AbiTypeArgumentV1,
+} from './specification';
 
 export function isVector(type: string) {
   const MATCH_REGEX: RegExp = /^struct (std::vec::)?Vec/m;
@@ -22,18 +22,18 @@ interface ResolvableComponent {
 }
 
 export class ResolvableType {
-  private metadataType: MetadataType;
+  private metadataType: AbiMetadataTypeV1;
   type: string;
   components: ResolvableComponent[] | undefined;
 
   constructor(
-    abi: JsonAbi_V1,
+    abi: AbiSpecificationV1,
     public metadataTypeId: number,
     public typeParamsArgsMap: Array<[number, ResolvedType | ResolvableType]> | undefined
   ) {
     const metadataType = abi.metadataTypes.find(
       (tm) => tm.metadataTypeId === metadataTypeId
-    ) as MetadataType;
+    ) as AbiMetadataTypeV1;
 
     this.metadataType = metadataType;
     this.type = metadataType.type;
@@ -52,15 +52,15 @@ export class ResolvableType {
           return c.typeArguments?.[0];
         }
         return c;
-      }) as Component[];
+      }) as AbiComponentV1[];
     }
 
     this.components = components?.map((c) => ResolvableType.handleComponent(abi, c));
   }
 
   private static mapTypeParametersAndArgs(
-    abi: JsonAbi_V1,
-    metadataType: MetadataType,
+    abi: AbiSpecificationV1,
+    metadataType: AbiMetadataTypeV1,
     args: (ResolvableType | ResolvedType)[] | undefined
   ): Array<[number, ResolvedType | ResolvableType]> | undefined {
     if (!args) {
@@ -74,22 +74,22 @@ export class ResolvableType {
   }
 
   private static handleComponent(
-    abi: JsonAbi_V1,
-    c: Component | TypeArgument
+    abi: AbiSpecificationV1,
+    c: AbiComponentV1 | AbiTypeArgumentV1
   ): ResolvableComponent {
-    const name = (c as Component).name;
+    const name = (c as AbiComponentV1).name;
 
     if (typeof c.typeId === 'string') {
       const concreteType = abi.concreteTypes.find(
         (ct) => ct.concreteTypeId === c.typeId
-      ) as ConcreteType;
+      ) as AbiConcreteTypeV1;
       return {
         name,
         type: ResolvableType.resolveConcreteType(abi, concreteType),
       };
     }
 
-    const mt = abi.metadataTypes.find((tm) => tm.metadataTypeId === c.typeId) as MetadataType;
+    const mt = abi.metadataTypes.find((tm) => tm.metadataTypeId === c.typeId) as AbiMetadataTypeV1;
 
     return {
       name,
@@ -97,7 +97,10 @@ export class ResolvableType {
     };
   }
 
-  private static resolveConcreteType(abi: JsonAbi_V1, type: ConcreteType): ResolvedType {
+  private static resolveConcreteType(
+    abi: AbiSpecificationV1,
+    type: AbiConcreteTypeV1
+  ): ResolvedType {
     const concreteType = type;
     if (concreteType.metadataTypeId === undefined) {
       return new ResolvedType(concreteType.type, concreteType.concreteTypeId, undefined, undefined);
@@ -112,12 +115,12 @@ export class ResolvableType {
 
     const metadataType = abi.metadataTypes.find(
       (mt) => mt.metadataTypeId === concreteType.metadataTypeId
-    ) as MetadataType;
+    ) as AbiMetadataTypeV1;
 
     const concreteTypeArgs = concreteType.typeArguments.map((ta) => {
       const concreteTypeArg = abi.concreteTypes.find(
         (ct) => ct.concreteTypeId === ta
-      ) as ConcreteType;
+      ) as AbiConcreteTypeV1;
       return this.resolveConcreteType(abi, concreteTypeArg);
     });
 
@@ -129,9 +132,9 @@ export class ResolvableType {
   }
 
   private static handleMetadataType(
-    abi: JsonAbi_V1,
-    mt: MetadataType,
-    typeArguments: Component['typeArguments']
+    abi: AbiSpecificationV1,
+    mt: AbiMetadataTypeV1,
+    typeArguments: AbiComponentV1['typeArguments']
   ): ResolvableType | ResolvedType {
     if (genericRegEx.test(mt.type)) {
       return new ResolvableType(abi, mt.metadataTypeId, undefined);
@@ -209,11 +212,11 @@ export class ResolvableType {
         });
   }
 
-  public resolve(abi: JsonAbi_V1, concreteType: ConcreteType) {
+  public resolve(abi: AbiSpecificationV1, concreteType: AbiConcreteTypeV1) {
     const concreteTypeArgs = concreteType.typeArguments?.map((ta) => {
       const concreteTypeArg = abi.concreteTypes.find(
         (ct) => ct.concreteTypeId === ta
-      ) as ConcreteType;
+      ) as AbiConcreteTypeV1;
       return ResolvableType.resolveConcreteType(abi, concreteTypeArg);
     });
 

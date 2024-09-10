@@ -1,9 +1,10 @@
 import type { Abi } from '../parser';
-import { parseJsonAbi, type ParsableJsonAbi } from '../parser/abi-parser';
+import type { AbiSpecification } from '../parser/abi-parser';
+import { AbiParser } from '../parser/abi-parser';
 
 export class AbiGen {
   private abi: Abi;
-  constructor(parsableAbi: ParsableJsonAbi) {
-    this.abi = parseJsonAbi(parsableAbi);
+  constructor(parsableAbi: AbiSpecification) {
+    this.abi = AbiParser.parse(parsableAbi);
   }
 }

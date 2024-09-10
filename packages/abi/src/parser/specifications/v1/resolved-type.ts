@@ -1,4 +1,4 @@
-import type { AbiType } from '../../abi-parser-types';
+import type { AbiType } from '../../abi';
 
 export interface ResolvedComponent {
   name: string;
