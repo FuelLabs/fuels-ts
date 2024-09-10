@@ -6,5 +6,5 @@
     "rootDir": "./",
     "baseUrl": "./"
   },
-  "include": ["src", "test"]
+  "include": ["src", "test", "scripts"]
 }
