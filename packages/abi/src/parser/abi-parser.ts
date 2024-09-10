@@ -1,6 +1,6 @@
 import type { Abi } from './abi';
 import type { AbiSpecificationV1 } from './specifications';
-import { ParserV1 } from './specifications';
+import { AbiParserV1 } from './specifications';
 
 /**
  * A typed ABI object or a stringified json of a Sway program's ABI
@@ -12,7 +12,7 @@ export class AbiParser {
    * ABI specifications transpilers
    */
   private static specifications = {
-    '1': ParserV1.parse,
+    '1': AbiParserV1.parse,
   } as const;
 
   /**

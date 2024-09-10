@@ -21,8 +21,6 @@ import type {
   TypeArgumentV1,
 } from './specification';
 
-type ComponentArgumentV1 = [number, string | TypeArgumentV1];
-
 class TypeRepository {
   private concreteTypes: Map<string, AbiConcreteTypeV1> = new Map();
   private metadataTypes: Map<number, AbiMetadataTypeV1> = new Map();
@@ -36,33 +34,15 @@ class TypeRepository {
     });
   }
 
-  public getTypeByTypeId(
-    typeId: number | string,
-    parentComponentArguments: ComponentArgumentV1[] = []
-  ): AbiType {
-    const { concreteType, metadataType } = this.getTypesByTypeId(typeId);
-
-    const componentArguments = this.getComponentArguments(
-      metadataType?.typeParameters,
-      concreteType?.typeArguments
-    );
-
-    return {
-      typeId: concreteType?.concreteTypeId ?? 'unknown',
-      swayType: metadataType?.type ?? concreteType?.type ?? 'unknown',
-
-      metadataTypeId: metadataType?.metadataTypeId,
-      metadataType: metadataType?.type,
-
-      componentArguments,
-      components: metadataType?.components?.map((component) => ({
-        name: component.name,
-        type: this.getTypeByTypeId(component.typeId, componentArguments),
-      })),
-    };
+  public getConcreteTypeById(concreteTypeId: string): AbiConcreteTypeV1 | undefined {
+    return this.concreteTypes.get(concreteTypeId);
   }
 
-  private getTypesByTypeId(typeId: number | string): {
+  public getMetadataTypeById(metadataTypeId: number): AbiMetadataTypeV1 | undefined {
+    return this.metadataTypes.get(metadataTypeId);
+  }
+
+  public getTypesByTypeId(typeId: number | string): {
     concreteType?: AbiConcreteTypeV1;
     metadataType?: AbiMetadataTypeV1;
   } {
@@ -74,33 +54,95 @@ class TypeRepository {
 
     return { concreteType, metadataType };
   }
+}
 
-  private getComponentArguments(
-    typeParameters?: readonly number[],
-    typeArguments?: readonly (string | TypeArgumentV1)[]
-  ): ComponentArgumentV1[] {
-    if (!typeParameters || !typeArguments) {
-      return [];
+export class TypeFactory {
+  public constructor(private typesRepository: TypeRepository) {}
+
+  public createFromConcreteId(concreteTypeId: string): AbiType {
+    const concreteType = this.typesRepository.getConcreteTypeById(concreteTypeId);
+    if (!concreteType) {
+      throw new Error(`Unable to find concrete type with id "${concreteTypeId}"`);
     }
 
-    return typeParameters.map((typeParameterId, index) => {
-      const typeArgument = typeArguments[index];
-      return [typeParameterId, typeArgument];
-    });
+    let components: AbiTypeComponent[] | undefined;
+
+    if (concreteType.metadataTypeId) {
+      const metadataType = this.typesRepository.getMetadataTypeById(concreteType.metadataTypeId);
+      components = this.createComponents(
+        metadataType?.components,
+        metadataType?.typeParameters,
+        concreteType.typeArguments
+      );
+    }
+
+    return {
+      swayType: concreteType.type,
+      typeId: concreteType.concreteTypeId,
+      components,
+    };
+  }
+
+  private createComponents(
+    components?: readonly ComponentV1[],
+    typeParameters?: readonly number[],
+    typeArguments?: readonly string[]
+  ): AbiTypeComponent[] | undefined {
+    // There are no components, therefore nothing to do.
+    if (!components) {
+      return undefined;
+    }
+
+    // We take the name off the component to leave us with just the TypeArgumentV1.
+    return components.map(
+      ({ name, ...component }: ComponentV1): AbiTypeComponent => ({
+        name,
+        type: this.createComponentType(component, typeParameters, typeArguments),
+      })
+    );
+  }
+
+  private createComponentType(
+    { typeId, typeArguments: componentTypeArguments }: TypeArgumentV1,
+    typeParameters: readonly number[] | undefined,
+    typeArguments: readonly string[] | undefined
+  ): AbiType {
+    // const typeParameterIndex = typeParameters?.findIndex(typeId);
+
+    const { concreteType, metadataType } = this.typesRepository.getTypesByTypeId(typeId);
+    const resolvedComponentTypeArguments = componentTypeArguments?.map((componentTypeArgument) =>
+      this.createComponentType(componentTypeArgument, typeParameters, typeArguments)
+    );
+
+    return {
+      swayType: metadataType?.type ?? '',
+      // type: metadataType?.type,
+      typeId: concreteType?.concreteTypeId ?? '',
+      // metadataTypeId: concreteType?.metadataTypeId ?? undefined,
+      // componentTypeArguments,
+      // resolvedComponentTypeArguments,
+      components: this.createComponents(
+        metadataType?.components,
+        metadataType?.typeParameters,
+        typeArguments
+      ),
+    };
   }
 }
 
-export class ParserV1 {
+export class AbiParserV1 {
   private typesRepository: TypeRepository;
+  private typeFactory: TypeFactory;
 
   public constructor(abi: AbiSpecificationV1) {
     this.typesRepository = new TypeRepository(abi);
+    this.typeFactory = new TypeFactory(this.typesRepository);
   }
 
   public static parse(abi: AbiSpecificationV1): Abi {
     const { specVersion, encodingVersion, programType } = abi;
 
-    const parser = new ParserV1(abi);
+    const parser = new AbiParserV1(abi);
     const { functions, loggedTypes, messagesTypes, configurables } = abi;
 
     return {
@@ -116,7 +158,7 @@ export class ParserV1 {
   }
 
   private parseType(concreteTypeId: string): AbiType {
-    return this.typesRepository.getTypeByTypeId(concreteTypeId);
+    return this.typeFactory.createFromConcreteId(concreteTypeId);
   }
 
   private parseFunction = (func: AbiFunctionV1): AbiFunction => ({

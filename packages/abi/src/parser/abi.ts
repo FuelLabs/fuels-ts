@@ -24,9 +24,6 @@ export interface AbiType {
 export interface AbiTypeComponent {
   name: string;
   type: AbiType;
-
-  // For debugging purposes
-  [key: string]: unknown;
 }
 
 export interface AbiFunctionInput {
