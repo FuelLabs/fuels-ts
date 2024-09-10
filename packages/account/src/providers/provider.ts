@@ -27,7 +27,6 @@ import type {
   GqlTxParameters as TxParameters,
   GqlPageInfo,
   GqlRelayedTransactionFailed,
-  GqlMessage,
   Requester,
 } from './__generated__/operations';
 import type { Coin } from './coin';
@@ -92,6 +91,16 @@ export type Block = {
   height: BN;
   time: string;
   transactionIds: string[];
+  header: {
+    daHeight: BN;
+    stateTransitionBytecodeVersion: string;
+    transactionsCount: string;
+    transactionsRoot: string;
+    messageOutboxRoot: string;
+    eventInboxRoot: string;
+    prevRoot: string;
+    applicationHash: string;
+  };
 };
 
 export type GetCoinsResponse = {
@@ -372,13 +381,26 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
+type SdkOperations = Omit<
+  Operations,
+  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
+> & {
+  /**
+   * This method is DEPRECATED and will be REMOVED in v1.
+   *
+   * This method will hang until the transaction is fully processed, as described in https://github.com/FuelLabs/fuel-core/issues/2108.
+   *
+   * Please use the `submitAndAwaitStatus` method instead.
+   */
   submitAndAwait: (
     ...args: Parameters<Operations['submitAndAwait']>
   ) => Promise<ReturnType<Operations['submitAndAwait']>>;
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
+  submitAndAwaitStatus: (
+    ...args: Parameters<Operations['submitAndAwaitStatus']>
+  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
   getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
@@ -482,7 +504,7 @@ export default class Provider {
     const provider = new Provider(urlToUse, {
       ...options,
       requestMiddleware: async (request) => {
-        if (auth) {
+        if (auth && request) {
           request.headers ??= {};
           (request.headers as Record<string, string>).Authorization = auth;
         }
@@ -816,13 +838,14 @@ Supported fuel-core version: ${supportedVersion}.`
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
+    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction });
 
-    const {
-      submit: { id: transactionId },
-    } = await this.operations.submit({ encodedTransaction });
-    this.#cacheInputs(transactionRequest.inputs, transactionId);
+    this.#cacheInputs(
+      transactionRequest.inputs,
+      transactionRequest.getTransactionId(this.getChainId())
+    );
 
-    return new TransactionResponse(transactionRequest, this, abis);
+    return new TransactionResponse(transactionRequest, this, abis, subscription);
   }
 
   /**
@@ -1428,11 +1451,23 @@ Supported fuel-core version: ${supportedVersion}.`
       return null;
     }
 
+    const { header, height, id, transactions } = block;
+
     return {
-      id: block.id,
-      height: bn(block.height),
-      time: block.header.time,
-      transactionIds: block.transactions.map((tx) => tx.id),
+      id,
+      height: bn(height),
+      time: header.time,
+      header: {
+        applicationHash: header.applicationHash,
+        daHeight: bn(header.daHeight),
+        eventInboxRoot: header.eventInboxRoot,
+        messageOutboxRoot: header.messageOutboxRoot,
+        prevRoot: header.prevRoot,
+        stateTransitionBytecodeVersion: header.stateTransitionBytecodeVersion,
+        transactionsCount: header.transactionsCount,
+        transactionsRoot: header.transactionsRoot,
+      },
+      transactionIds: transactions.map((tx) => tx.id),
     };
   }
 
@@ -1456,6 +1491,16 @@ Supported fuel-core version: ${supportedVersion}.`
       id: block.id,
       height: bn(block.height),
       time: block.header.time,
+      header: {
+        applicationHash: block.header.applicationHash,
+        daHeight: bn(block.header.daHeight),
+        eventInboxRoot: block.header.eventInboxRoot,
+        messageOutboxRoot: block.header.messageOutboxRoot,
+        prevRoot: block.header.prevRoot,
+        stateTransitionBytecodeVersion: block.header.stateTransitionBytecodeVersion,
+        transactionsCount: block.header.transactionsCount,
+        transactionsRoot: block.header.transactionsRoot,
+      },
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
 
@@ -1491,6 +1536,16 @@ Supported fuel-core version: ${supportedVersion}.`
       id: block.id,
       height: bn(block.height, 10),
       time: block.header.time,
+      header: {
+        applicationHash: block.header.applicationHash,
+        daHeight: bn(block.header.daHeight),
+        eventInboxRoot: block.header.eventInboxRoot,
+        messageOutboxRoot: block.header.messageOutboxRoot,
+        prevRoot: block.header.prevRoot,
+        stateTransitionBytecodeVersion: block.header.stateTransitionBytecodeVersion,
+        transactionsCount: block.header.transactionsCount,
+        transactionsRoot: block.header.transactionsRoot,
+      },
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
         (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
@@ -1864,12 +1919,28 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param nonce - The nonce of the message to retrieve.
    * @returns A promise that resolves to the Message object or null.
    */
-  async getMessageByNonce(nonce: string): Promise<GqlMessage | null> {
-    const { message } = await this.operations.getMessageByNonce({ nonce });
+  async getMessageByNonce(nonce: string): Promise<Message | null> {
+    const { message: rawMessage } = await this.operations.getMessageByNonce({ nonce });
 
-    if (!message) {
+    if (!rawMessage) {
       return null;
     }
+
+    const message: Message = {
+      messageId: InputMessageCoder.getMessageId({
+        sender: rawMessage.sender,
+        recipient: rawMessage.recipient,
+        nonce: rawMessage.nonce,
+        amount: bn(rawMessage.amount),
+        data: rawMessage.data,
+      }),
+      sender: Address.fromAddressOrString(rawMessage.sender),
+      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      nonce: rawMessage.nonce,
+      amount: bn(rawMessage.amount),
+      data: InputMessageCoder.decodeData(rawMessage.data),
+      daHeight: bn(rawMessage.daHeight),
+    };
 
     return message;
   }
