@@ -38,7 +38,6 @@
     "clinic:bubble": "clinic bubbleprof --autocannon [ -c 5 -a 500 / ] -- node packages/${npm_config_package_name}/dist/profile.js",
     "clinic:doctor": "clinic doctor --autocannon [ / ] -- node packages/${npm_config_package_name}/dist/profile.js",
     "clinic:heap": "clinic heapprofiler --autocannon [ / ] -- node packages/${npm_config_package_name}/dist/profile.js",
-    "0x": "0x -o -P 'autocannon localhost:$PORT' -- node packages/${npm_config_package_name}/dist/profile.js",
     "test:integration": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --integration)",
     "lint": "run-s type:check-tests lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --max-warnings 0",
@@ -72,7 +71,6 @@
   },
   "homepage": "https://github.com/FuelLabs/fuels-ts#readme",
   "devDependencies": {
-    "0x": "^5.7.0",
     "@actions/core": "^1.10.1",
     "@actions/github": "^6.0.0",
     "@changesets/cli": "^2.27.7",

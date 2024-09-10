@@ -155,7 +155,7 @@ We currently use [`clinic`](https://clinicjs.org/) to profile and debug our tool
 
 ```sh
 # creates a flamegraph for a specific package
-pm_config_package_name=account pnpm clinic:flame  // runs flame against the account package
+npm_config_package_name=account pnpm clinic:flame  // runs flame against the account package
 ```
 
 ### CI Test

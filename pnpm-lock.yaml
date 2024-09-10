@@ -11,9 +11,6 @@ importers:
 
   .:
     devDependencies:
-      0x:
-        specifier: ^5.7.0
-        version: 5.7.0
       '@actions/core':
         specifier: ^1.10.1
         version: 1.10.1
