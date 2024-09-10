@@ -35,7 +35,7 @@ const u64: Matcher = (type) => type === 'u64';
 const u256: Matcher = (type) => type === 'u256';
 const b256: Matcher = (type) => type === 'b256';
 
-export const genericRegEx = /^generic.+$/;
+export const genericRegEx = /^generic ([^\s]+)$/m;
 const generic: Matcher = (type) => genericRegEx.test(type);
 
 export const stringRegEx = /str\[(?<length>[0-9]+)\]/;
