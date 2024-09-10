@@ -21,7 +21,7 @@ export const wrapSnippet = (filepath: string) => {
   let imports = snippetContents.match(importsReg)?.toString() ?? '';
   const snippetsNoImports = imports.length ? snippetContents.split(imports)[1] : snippetContents;
 
-  // checks this before resetting .env imports
+  // Does the snippet requires node launcher?
   const requiresNodeLauncher = /NETWORK_URL/.test(imports);
 
   /*
