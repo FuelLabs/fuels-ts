@@ -1,4 +1,5 @@
 import type { swayTypeMatchers } from '../../../matchers/sway-type-matchers';
+import { swayTypeMatcherEntries } from '../../../matchers/sway-type-matchers';
 
 import { EmptyCoder } from './coders/empty-coder';
 import { EnumCoder } from './coders/enum-coder';
@@ -33,3 +34,13 @@ export const coderMatcher: Record<keyof typeof swayTypeMatchers, Coder | undefin
   rawUntypedPtr: undefined,
   rawUntypedSlice: undefined,
 };
+
+export function getCoder(type: string) {
+  for (const [key, matcher] of swayTypeMatcherEntries) {
+    if (matcher(type)) {
+      return coderMatcher[key as keyof typeof coderMatcher];
+    }
+  }
+
+  throw new Error("couldn't find the coder");
+}

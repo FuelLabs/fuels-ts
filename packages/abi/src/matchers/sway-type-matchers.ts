@@ -87,3 +87,5 @@ export const swayTypeMatchers: Record<SwayType, Matcher> = {
   rawUntypedPtr,
   rawUntypedSlice,
 };
+
+export const swayTypeMatcherEntries = Object.entries(swayTypeMatchers);

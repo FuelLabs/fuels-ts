@@ -1,4 +1,4 @@
-import type { swayTypeMatchers } from '../matchers/sway-type-matchers';
+import { swayTypeMatcherEntries, type swayTypeMatchers } from '../matchers/sway-type-matchers';
 
 import { EmptyTyper } from './typers/empty-typer';
 import { EnumTyper } from './typers/enum-typer';
@@ -7,7 +7,7 @@ import { ResultTyper } from './typers/result-typer';
 import type { Typer } from './typers/types';
 import { U8Typer } from './typers/u8-typer';
 
-export const coderMatcher: Record<keyof typeof swayTypeMatchers, Typer | undefined> = {
+export const typerMatcher: Record<keyof typeof swayTypeMatchers, Typer | undefined> = {
   empty: EmptyTyper,
   u8: U8Typer,
   enum: EnumTyper,
@@ -33,3 +33,13 @@ export const coderMatcher: Record<keyof typeof swayTypeMatchers, Typer | undefin
   rawUntypedPtr: undefined,
   rawUntypedSlice: undefined,
 };
+
+export function getTyper(type: string) {
+  for (const [key, matcher] of swayTypeMatcherEntries) {
+    if (matcher(type)) {
+      return typerMatcher[key as keyof typeof typerMatcher];
+    }
+  }
+
+  throw new Error("couldn't find the coder");
+}
