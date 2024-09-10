@@ -10,6 +10,8 @@ const wrapperFnContents = readFileSync(wrapperFnFilepath, 'utf-8');
  * @param filepath - Snippet filepath
  */
 export const wrapSnippet = (filepath: string) => {
+  console.log('-----');
+
   const snippetContents = readFileSync(filepath, 'utf8');
 
   /*
@@ -18,6 +20,9 @@ export const wrapSnippet = (filepath: string) => {
   const importsReg = /^[\s\S]+from.+['"];/gm;
   let imports = snippetContents.match(importsReg)?.toString() ?? '';
   const snippetsNoImports = imports.length ? snippetContents.split(imports)[1] : snippetContents;
+
+  // checks this before resetting .env imports
+  const requiresNodeLauncher = /NETWORK_URL/.test(imports);
 
   /*
     Removes .env file import
@@ -33,20 +38,15 @@ export const wrapSnippet = (filepath: string) => {
     Inject node launcher & friends
   */
   let nodeLauncher = '';
-  const localNetworkReg = /,?\s+LOCAL_NETWORK_URL(\s*,)?/;
-  if (localNetworkReg.test(imports)) {
-    /*
-      Removes `LOCAL_NETWORK_URL` from `fuels` import members
-    */
-    imports = imports.replace(localNetworkReg, '$1');
 
+  if (requiresNodeLauncher) {
     /*
-     Adds launchNode import
+     Adds `launchTestNode` import
    */
     imports += `\nimport { launchTestNode } from 'fuels/test-utils'`;
 
     /*
-      Injects launched node and env constants
+      Injects launched code snippet and populates env constants
     */
     nodeLauncher = readFileSync(join(__dirname, 'launcher.ts'), 'utf-8')
       .replace(/import.*$/gm, '') // ignore file imports

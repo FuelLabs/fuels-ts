@@ -1,12 +1,12 @@
 // #region full
 import type { TxParams } from 'fuels';
-import { bn, LOCAL_NETWORK_URL, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+import { bn, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
-import { WALLET_PVT_KEY } from '../env';
+import { NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { CounterFactory } from '../typegend';
 import { ScriptSum } from '../typegend/scripts';
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
+const provider = await Provider.create(NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deploy = await CounterFactory.deploy(wallet);

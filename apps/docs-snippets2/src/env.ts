@@ -1,3 +1,5 @@
+export const NETWORK_URL = '<overriden-by-wrapper>';
+
 export const WALLET_ADDRESS = '<overriden-by-wrapper>';
 export const WALLET_PVT_KEY = '<overriden-by-wrapper>';
 
