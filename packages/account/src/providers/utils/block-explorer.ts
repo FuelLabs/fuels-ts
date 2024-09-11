@@ -1,7 +1,5 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-import { CHAIN_IDS } from '../chains';
-
 const DEFAULT_BLOCK_EXPLORER_URL = 'https://app.fuel.network';
 
 /** @hidden */
