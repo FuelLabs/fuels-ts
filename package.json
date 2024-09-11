@@ -11,7 +11,7 @@
   "packageManager": "pnpm@9.4.0",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
-    "build": "turbo run build --cache-dir=.turbo",
+    "buil d": "turbo run build --cache-dir=.turbo",
     "build:packages": "turbo run build --filter=!docs --filter=!template-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
@@ -31,6 +31,7 @@
     "test:browser:filter": "vitest --run --coverage false --config vitest.browser.config.mts",
     "test:e2e": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --e2e)",
     "test:integration": "vitest --run --config vitest.node.config.mts $(scripts/tests-find.sh --integration)",
+    "test:templates": "./scripts/tests-template.sh",
     "lint": "run-s type:check-tests lint:check prettier:check",
     "lint:check": "eslint . --ext .ts --max-warnings 0",
     "lint:fix": "pnpm lint:check --fix",

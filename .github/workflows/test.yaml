@@ -110,6 +110,21 @@ jobs:
           # uncomment the below line to test against devnet
           # DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
 
+  templates:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test Setup
+        uses: ./.github/actions/test-setup
+
+      - name: Pretest
+        run: pnpm pretest
+
+      - name: Run Template Tests
+        run: pnpm test:templates
+
   test:
     if: github.base_ref == 'master' || github.ref_name == 'master'
     runs-on: ubuntu-latest
