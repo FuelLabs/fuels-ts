@@ -1,6 +1,8 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
+import { CHAIN_IDS } from '../chains';
+
+const DEFAULT_BLOCK_EXPLORER_URL = 'https://app.fuel.network';
 
 /** @hidden */
 const getPathFromInput = (
@@ -34,6 +36,7 @@ export const buildBlockExplorerUrl = (
   } = {}
 ) => {
   const { blockExplorerUrl, path, providerUrl, address, txId, blockNumber } = options;
+
   const explorerUrl = blockExplorerUrl || DEFAULT_BLOCK_EXPLORER_URL;
 
   // make sure that only ONE or none of the following is defined: address, txId, blockNumber
