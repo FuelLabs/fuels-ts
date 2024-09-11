@@ -500,7 +500,12 @@ export default class Provider {
     urlWithoutAuth: string;
     headers: ProviderOptions['headers'];
   } {
-    const parsedUrl = new URL(url);
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url);
+    } catch (error) {
+      throw new FuelError(FuelError.CODES.INVALID_URL, 'Invalid URL provided.', { url }, error);
+    }
 
     const username = parsedUrl.username;
     const password = parsedUrl.password;

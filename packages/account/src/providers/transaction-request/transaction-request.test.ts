@@ -129,7 +129,7 @@ describe('TransactionRequest', () => {
       }
     }
 
-    const provider = await ProviderCustom.create('nope');
+    const provider = await ProviderCustom.create('http://example.com');
     const signer = WalletUnlocked.generate({ provider });
     const txRequest = new ScriptTransactionRequest();
 

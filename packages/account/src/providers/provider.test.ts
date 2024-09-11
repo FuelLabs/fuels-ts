@@ -206,6 +206,15 @@ describe('Provider', () => {
     expect(request?.headers).toMatchObject(customHeaders);
   });
 
+  it('should throw an error if the URL is no in the correct format', async () => {
+    const url = 'immanotavalidurl';
+
+    await expectToThrowFuelError(
+      async () => Provider.create(url),
+      new FuelError(ErrorCode.INVALID_URL, 'Invalid URL provided.')
+    );
+  });
+
   it('should throw an error when retrieving a transaction with an unknown transaction type', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
