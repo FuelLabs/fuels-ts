@@ -11,7 +11,7 @@
   "packageManager": "pnpm@9.4.0",
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
-    "buil d": "turbo run build --cache-dir=.turbo",
+    "build": "turbo run build --cache-dir=.turbo",
     "build:packages": "turbo run build --filter=!docs --filter=!template-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
