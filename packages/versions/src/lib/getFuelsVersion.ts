@@ -13,7 +13,7 @@ export function findUserPackageJson() {
     if (fs.existsSync(packageJsonPath)) {
       return packageJsonPath;
     }
-    currentDir = path.dirname(currentDir); // Move up one directory level
+    currentDir = path.dirname(currentDir);
   }
 
   return null;
