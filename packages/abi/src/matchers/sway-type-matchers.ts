@@ -95,4 +95,18 @@ export const swayTypeMatchers: Record<SwayType, Matcher> = {
   rawUntypedSlice,
 };
 
-export const swayTypeMatcherEntries = Object.entries(swayTypeMatchers);
+const swayTypeMatcherEntries = Object.entries(swayTypeMatchers);
+
+export function createMatcher<T>(mappings: Record<SwayType, T>) {
+  return (opts: { swayType: string }): T => {
+    const { swayType } = opts;
+
+    for (const [key, matcher] of swayTypeMatcherEntries) {
+      if (matcher(swayType)) {
+        return mappings[key as SwayType];
+      }
+    }
+
+    throw new Error(`Matcher not found for ${swayType}`);
+  };
+}
