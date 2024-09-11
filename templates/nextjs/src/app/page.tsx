@@ -9,7 +9,6 @@ import { Link } from "@/components/Link";
 import { Button } from "@/components/Button";
 import toast from "react-hot-toast";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
-import { useIsConnected } from "@fuels/react";
 import useAsync from "react-use/lib/useAsync";
 import {
   CURRENT_ENVIRONMENT,
@@ -24,8 +23,8 @@ const contractId =
     : (process.env.NEXT_PUBLIC_TESTNET_CONTRACT_ID as string); // Testnet Contract ID
 
 export default function Home() {
-  const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
-  const { isConnected } = useIsConnected();
+  const { wallet, walletBalance, refreshWalletBalance, isConnected } =
+    useActiveWallet();
 
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();

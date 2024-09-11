@@ -7,7 +7,6 @@ import {
   TESTNET_FAUCET_LINK,
 } from "@/lib";
 import { useConnectUI, useDisconnect } from "@fuels/react";
-import { useBrowserWallet } from "@/hooks/useBrowserWallet";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { Button } from "./Button";
 import { WalletDisplay } from "./WalletDisplay";
@@ -23,23 +22,14 @@ export const Navbar: FC = () => {
 
   const router = useRouter();
 
-  const {
-    wallet: browserWallet,
-    isConnected: isBrowserWalletConnected,
-    network: browserWalletNetwork,
-  } = useBrowserWallet();
-
   const { connect } = useConnectUI();
   const { disconnect } = useDisconnect();
 
-  const { wallet, refreshWalletBalance, walletBalance } = useActiveWallet();
+  const { wallet, network, isConnected } = useActiveWallet();
 
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-  const showAddNetworkButton =
-    browserWallet &&
-    browserWalletNetwork &&
-    browserWalletNetwork?.url !== NODE_URL;
+  const showAddNetworkButton = wallet && network && network?.url !== NODE_URL;
 
   const tryToAddNetwork = () => {
     return alert(
@@ -67,7 +57,7 @@ export const Navbar: FC = () => {
           <WalletDisplay />
         </div>
 
-        {isBrowserWalletConnected && (
+        {isConnected && (
           <Button
             className="bg-gray-500"
             onClick={() => {
@@ -93,14 +83,12 @@ export const Navbar: FC = () => {
           </Button>
         )}
 
-        {isBrowserWalletConnected && (
+        {isConnected && (
           <Button className="bg-red-600" onClick={disconnect}>
             Disconnect
           </Button>
         )}
-        {!isBrowserWalletConnected && (
-          <Button onClick={connect}>Connect Wallet</Button>
-        )}
+        {!isConnected && <Button onClick={connect}>Connect Wallet</Button>}
       </nav>
 
       {/* Mobile. Should be a hamburger menu */}
@@ -120,7 +108,7 @@ export const Navbar: FC = () => {
               Docs
             </Link>
 
-            {isBrowserWalletConnected && wallet && (
+            {isConnected && wallet && (
               <Button
                 className="bg-gray-500"
                 onClick={() => {
@@ -141,12 +129,10 @@ export const Navbar: FC = () => {
                 Faucet
               </Button>
             )}
-            {isBrowserWalletConnected && (
+            {isConnected && (
               <Button onClick={disconnect}>Disconnect Wallet</Button>
             )}
-            {!isBrowserWalletConnected && (
-              <Button onClick={connect}>Connect Wallet</Button>
-            )}
+            {!isConnected && <Button onClick={connect}>Connect Wallet</Button>}
 
             {showAddNetworkButton && (
               <Button onClick={() => toast.success("Adding network")}>

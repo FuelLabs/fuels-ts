@@ -4,9 +4,10 @@ import { Input } from "../components/Input";
 import { useActiveWallet } from "../hooks/useActiveWallet";
 import { useFaucet } from "../hooks/useFaucet";
 import { bn } from "fuels";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
 import { CURRENT_ENVIRONMENT, Environments, TESTNET_FAUCET_LINK } from "../lib";
+import { useNavigate } from "@tanstack/react-router";
 
 export const Route = createLazyFileRoute("/faucet")({
   component: Index,
@@ -16,7 +17,10 @@ function Index() {
   // Get the faucet wallet instance from the useFaucet hook
   const { faucetWallet } = useFaucet();
 
-  const { wallet, refreshWalletBalance } = useActiveWallet();
+  const { wallet, refreshWalletBalance, walletBalance } = useActiveWallet();
+
+  const navigate = useNavigate();
+  const previousBalanceRef = useRef(walletBalance);
 
   const [receiverAddress, setReceiverAddress] = useState<string>("");
   const [amountToSend, setAmountToSend] = useState<string>("5");
@@ -26,6 +30,25 @@ function Index() {
       setReceiverAddress(wallet.address.toB256());
     }
   }, [wallet]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await refreshWalletBalance?.();
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (
+      previousBalanceRef.current &&
+      walletBalance &&
+      walletBalance.gt(previousBalanceRef.current)
+    ) {
+      toast.success("Funds received! Navigating back to home page.");
+      navigate({ to: "/" });
+    }
+    previousBalanceRef.current = walletBalance;
+  }, [walletBalance, navigate]);
 
   const sendFunds = async () => {
     if (!faucetWallet) {
@@ -46,8 +69,6 @@ function Index() {
       bn.parseUnits(amountToSend.toString()),
     );
     await tx.waitForResult();
-
-    toast.success("Funds sent!");
 
     await refreshWalletBalance?.();
   };

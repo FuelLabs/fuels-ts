@@ -16,7 +16,6 @@ import {
   SolanaConnector,
 } from "@fuels/connectors";
 import { NODE_URL } from "@/lib";
-import { ActiveWalletProvider } from "@/hooks/useActiveWallet";
 
 /**
  * react-query is a peer dependency of @fuels/react, so we set it up here.
@@ -77,9 +76,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 ],
               }}
             >
-              <ActiveWalletProvider>
-                <Layout>{children}</Layout>
-              </ActiveWalletProvider>
+              <Layout>{children}</Layout>
             </FuelProvider>
           </QueryClientProvider>
         </React.StrictMode>

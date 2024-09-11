@@ -9,13 +9,12 @@ import { TestScript } from "@/sway-api";
 import { FAUCET_LINK } from "@/lib";
 import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
-import { useIsConnected } from "@fuels/react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
 export default function ScriptExample() {
-  const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
-  const { isConnected } = useIsConnected();
+  const { wallet, walletBalance, refreshWalletBalance, isConnected } =
+    useActiveWallet();
 
   const [script, setScript] = useState<Script<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<string>();

@@ -6,14 +6,19 @@ import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { useFaucet } from "@/hooks/useFaucet";
 import { CURRENT_ENVIRONMENT, Environments, TESTNET_FAUCET_LINK } from "@/lib";
 import { bn } from "fuels";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function Faucet() {
   // Get the faucet wallet instance from the useFaucet hook
   const { faucetWallet } = useFaucet();
 
-  const { wallet, refreshWalletBalance } = useActiveWallet();
+  const { wallet, refreshWalletBalance, walletBalance } = useActiveWallet();
+
+  const router = useRouter();
+
+  const previousBalanceRef = useRef(walletBalance);
 
   const [receiverAddress, setReceiverAddress] = useState<string>("");
   const [amountToSend, setAmountToSend] = useState<string>("5");
@@ -23,6 +28,25 @@ export default function Faucet() {
       setReceiverAddress(wallet.address.toB256());
     }
   }, [wallet]);
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await refreshWalletBalance?.();
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (
+      previousBalanceRef.current &&
+      walletBalance &&
+      walletBalance.gt(previousBalanceRef.current)
+    ) {
+      toast.success("Funds received! Navigating back to home page.");
+      router.push("/");
+    }
+    previousBalanceRef.current = walletBalance;
+  }, [walletBalance, router]);
 
   const sendFunds = async () => {
     if (!faucetWallet) {
@@ -43,8 +67,6 @@ export default function Faucet() {
       bn.parseUnits(amountToSend.toString()),
     );
     await tx.waitForResult();
-
-    toast.success("Funds sent!");
 
     await refreshWalletBalance?.();
   };

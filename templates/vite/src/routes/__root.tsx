@@ -15,7 +15,6 @@ import {
   WalletConnectConnector,
   SolanaConnector,
 } from "@fuels/connectors";
-import { ActiveWalletProvider } from "../hooks/useActiveWallet";
 
 /**
  * react-query is a peer dependency of @fuels/react, so we set it up here.
@@ -67,11 +66,9 @@ export const Route = createRootRoute({
               ],
             }}
           >
-            <ActiveWalletProvider>
-              <Layout>
-                <Outlet />
-              </Layout>
-            </ActiveWalletProvider>
+            <Layout>
+              <Outlet />
+            </Layout>
           </FuelProvider>
         </QueryClientProvider>
       </>

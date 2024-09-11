@@ -10,16 +10,14 @@ import { FAUCET_LINK } from "@/lib";
 import { BN, InputValue, Predicate } from "fuels";
 import { bn } from "fuels";
 import { useState } from "react";
-import { useIsConnected } from "@fuels/react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
 
 export default function PredicateExample() {
   let baseAssetId: string;
 
-  const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
-
-  const { isConnected } = useIsConnected();
+  const { wallet, walletBalance, refreshWalletBalance, isConnected } =
+    useActiveWallet();
 
   const [predicate, setPredicate] = useState<Predicate<InputValue[]>>();
 
