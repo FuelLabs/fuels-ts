@@ -31,6 +31,8 @@ export default function Wallet() {
     await tx.waitForResult();
   }
 
+  //
+
   return (
     <>
       <div>
@@ -67,6 +69,21 @@ export default function Wallet() {
             Faucet
           </Button>
         </div>
+      </div>
+      <div>
+        <p>
+          Fuel supports a range of wallets. This dApp utilizes wallet connectors
+          to provide simple wallet integration. You can read more about them{" "}
+          <a
+            href="https://docs.fuel.network/docs/wallet/dev/connectors/"
+            className="text-green-500/80 transition-colors hover:text-green-500"
+            target="_blank"
+            rel="noreferrer"
+          >
+            here
+          </a>
+          .
+        </p>
       </div>
       {isLocal && (
         <>
