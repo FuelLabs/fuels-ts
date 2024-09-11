@@ -36,7 +36,6 @@ export const buildBlockExplorerUrl = (
   } = {}
 ) => {
   const { blockExplorerUrl, path, providerUrl, address, txId, blockNumber } = options;
-
   const explorerUrl = blockExplorerUrl || DEFAULT_BLOCK_EXPLORER_URL;
 
   // make sure that only ONE or none of the following is defined: address, txId, blockNumber
