@@ -37,7 +37,7 @@ export default function Predicate() {
   const transferToPredicate = async () => {
     if (!wallet || !predicate) return;
     try {
-      const tx = await wallet.transfer(predicate.address, bn(100_000));
+      const tx = await wallet.transfer(predicate.address, bn(1_000_000));
       await tx.waitForResult();
     } catch (error) {
       console.error(error);
@@ -52,7 +52,7 @@ export default function Predicate() {
         data: [bn(predicatePin)],
       });
 
-      const tx = await newPredicate.transfer(wallet.address, bn(100_000));
+      const tx = await newPredicate.transfer(wallet.address, bn(1_000_000));
       await tx.waitForResult();
     } catch (error) {
       console.error(error);
@@ -77,9 +77,10 @@ export default function Predicate() {
           .
         </p>
         <p className="pt-2">
-          In the below example, we can transfer funds to the predicate but need
-          to pass a pin to unlock the predicate and transfer the funds back to
-          us.
+          In the below example, we transfer{" "}
+          <span className="font-mono font-bold">0.001 ETH</span> to the
+          predicate but need to pass a pin to unlock the predicate and transfer
+          the funds back to us.
         </p>
         <p className="pt-2">
           You can alter the logic in the predicate at{" "}
