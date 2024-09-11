@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export function findUserPackageJson() {
+export function getFuelsVersion() {
   if (!require.main) {
     return null;
   }
