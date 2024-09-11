@@ -16,10 +16,10 @@ export * from './lib/getBuiltinVersions';
 
 export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
 
-export function runVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
+export async function runVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
   const { error, info } = console;
 
-  const fuelsVersion = getFuelsVersion();
+  const fuelsVersion = await getFuelsVersion();
 
   info(`\nFuels version: ${fuelsVersion}`);
 
