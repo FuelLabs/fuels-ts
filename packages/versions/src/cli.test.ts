@@ -205,4 +205,50 @@ describe('cli.js', () => {
     expect(eitherOr('a', 'b')).toEqual('a');
     expect(eitherOr(null, 'b')).toEqual('b');
   });
+
+  test('should notify about newer npm version', async () => {
+    // mocks
+    const { info } = mockAllDeps({
+      systemForcVersion: '1.1.1',
+      systemFuelCoreVersion: '1.1.1',
+      systemFuelCoreIsGt: true,
+      systemFuelCoreIsEq: false,
+      systemFuelCoreIsLt: false,
+      systemForcIsGt: true,
+      systemForcIsEq: false,
+      systemForcIsLt: false,
+      systemVersionsError: null,
+      userFuelsVersion: '1.0.0',
+      latestFuelsVersion: '1.0.1',
+    });
+
+    // executing
+    await runVersions();
+
+    expect(info).toHaveBeenCalledWith(
+      '\nThere is a newer version of fuels available: 1.0.1. Your version is: 1.0.0'
+    );
+  });
+
+  test('should log proper message when npm version is the same as the latest', async () => {
+    // mocks
+    const { info } = mockAllDeps({
+      systemForcVersion: '1.1.1',
+      systemFuelCoreVersion: '1.1.1',
+      systemFuelCoreIsGt: false,
+      systemFuelCoreIsEq: true,
+      systemFuelCoreIsLt: false,
+      systemForcIsGt: false,
+      systemForcIsEq: true,
+      systemForcIsLt: false,
+      systemVersionsError: null,
+      userFuelsVersion: '1.1.1',
+      latestFuelsVersion: '1.1.1',
+    });
+
+    // executing
+    await runVersions();
+
+    expect(info).toHaveBeenCalledWith('\nYour fuels version is up to date: 1.1.1');
+  });
 });
