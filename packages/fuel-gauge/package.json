@@ -18,6 +18,7 @@
     "@fuel-ts/account": "workspace:*",
     "@internal/forc": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuel-ts/errors": "workspace:*"
+    "@fuel-ts/errors": "workspace:*",
+    "@internal/utils": "workspace:*"
   }
 }
