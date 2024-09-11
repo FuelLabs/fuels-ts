@@ -2,7 +2,7 @@ import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
 import { randomBytes } from '@fuel-ts/crypto';
 import { bn, toNumber } from '@fuel-ts/math';
-import { TransactionType } from '@fuel-ts/transactions';
+import { TransactionType, UpgradePurposeTypeEnum } from '@fuel-ts/transactions';
 import { concat, hexlify } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 
@@ -14,6 +14,8 @@ import Provider from '../provider';
 import type { CoinTransactionRequestInput } from './input';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike } from './types';
+import type { UpgradeTransactionRequest } from './upgrade-transaction-request';
+import type { UploadTransactionRequest } from './upload-transaction-request';
 import { transactionRequestify } from './utils';
 
 /**
@@ -247,5 +249,46 @@ describe('transactionRequestify', () => {
     expect(txRequest.inputs).toEqual(txRequestLike.inputs);
     expect(txRequest.outputs).toEqual(txRequestLike.outputs);
     expect(txRequest.witnesses).toEqual(txRequestLike.witnesses);
+  });
+
+  it('should keep data from input in transaction request created [upgrade]', () => {
+    const txRequestLike: TransactionRequestLike = {
+      type: TransactionType.Upgrade,
+      inputs: [],
+      outputs: [],
+      bytecodeWitnessIndex: 0,
+      upgradePurpose: {
+        type: UpgradePurposeTypeEnum.ConsensusParameters,
+        checksum: ZeroBytes32,
+      },
+    };
+
+    const txRequest = transactionRequestify(txRequestLike) as UpgradeTransactionRequest;
+
+    expect(txRequest.upgradePurpose).toEqual(txRequestLike.upgradePurpose);
+    expect(txRequest.bytecodeWitnessIndex).toEqual(txRequestLike.bytecodeWitnessIndex);
+    expect(txRequest.upgradePurpose.type).toEqual(txRequestLike.upgradePurpose?.type);
+    expect(txRequest.type).toEqual(txRequestLike.type);
+  });
+
+  it('should keep data from input in transaction request created [upload]', () => {
+    const txRequestLike: TransactionRequestLike = {
+      type: TransactionType.Upload,
+      inputs: [],
+      outputs: [],
+      witnessIndex: 0,
+      subsection: {
+        root: ZeroBytes32,
+        subsectionIndex: 0,
+        subsectionsNumber: 1,
+        proofSet: [],
+      },
+    };
+
+    const txRequest = transactionRequestify(txRequestLike) as UploadTransactionRequest;
+
+    expect(txRequest.subsection).toEqual(txRequestLike.subsection);
+    expect(txRequest.witnessIndex).toEqual(txRequestLike.witnessIndex);
+    expect(txRequest.type).toEqual(txRequestLike.type);
   });
 });
