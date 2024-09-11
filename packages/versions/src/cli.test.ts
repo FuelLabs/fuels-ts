@@ -2,6 +2,7 @@ import { eitherOr, runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareSystemVersionsMod from './lib/compareSystemVersions';
 import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
+import * as getFuelsVersionMod from './lib/getFuelsVersion';
 import * as getSystemVersionsMod from './lib/getSystemVersions';
 
 /**
@@ -30,6 +31,8 @@ describe('cli.js', () => {
     systemForcVersion: string;
     systemFuelCoreVersion: string;
     systemVersionsError: Error | null;
+    userFuelsVersion: string;
+    latestFuelsVersion: string;
   }) {
     const {
       systemForcVersion,
@@ -41,6 +44,8 @@ describe('cli.js', () => {
       systemForcIsEq,
       systemForcIsLt,
       systemVersionsError,
+      userFuelsVersion,
+      latestFuelsVersion,
     } = params;
 
     const error = vi.spyOn(console, 'error').mockImplementation(() => []);
@@ -74,6 +79,11 @@ describe('cli.js', () => {
       FUELS: '1.0.0',
     }));
 
+    vi.spyOn(getFuelsVersionMod, 'getUserFuelsVersion').mockReturnValue(userFuelsVersion);
+    vi.spyOn(getFuelsVersionMod, 'getLatestFuelsVersion').mockReturnValue(
+      Promise.resolve(latestFuelsVersion)
+    );
+
     return {
       error,
       info,
@@ -96,13 +106,15 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError: null,
+      userFuelsVersion: '1.0.0',
+      latestFuelsVersion: '1.0.1',
     });
 
     // executing
     await runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(2);
+    expect(info).toHaveBeenCalledTimes(3);
     expect(exit).toHaveBeenCalledWith(0);
     expect(error).toHaveBeenCalledTimes(0);
   });
@@ -119,13 +131,15 @@ describe('cli.js', () => {
       systemForcIsEq: true,
       systemForcIsLt: false,
       systemVersionsError: null,
+      userFuelsVersion: '1.0.0',
+      latestFuelsVersion: '1.0.0',
     });
 
     // executing
     await runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(2);
+    expect(info).toHaveBeenCalledTimes(3);
     expect(exit).toHaveBeenCalledWith(0);
     expect(error).toHaveBeenCalledTimes(0);
   });
@@ -142,13 +156,15 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: true,
       systemVersionsError: null,
+      userFuelsVersion: '1.0.0',
+      latestFuelsVersion: '1.0.1',
     });
 
     // executing
     await runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(0);
+    expect(info).toHaveBeenCalledTimes(1);
     expect(exit).toHaveBeenCalledWith(1);
     expect(error).toHaveBeenCalledTimes(3);
   });
@@ -167,13 +183,15 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError,
+      userFuelsVersion: '1.0.0',
+      latestFuelsVersion: '1.0.1',
     });
 
     // executing
     await runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(0);
+    expect(info).toHaveBeenCalledTimes(1);
     expect(exit).toHaveBeenCalledWith(1);
     expect(error).toHaveBeenCalledTimes(4);
 

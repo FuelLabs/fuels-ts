@@ -1,8 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-import { gt } from './semver';
-
 const findUserPackageJson = () => {
   if (!require.main) {
     return null;
@@ -22,13 +20,12 @@ const findUserPackageJson = () => {
 };
 
 export const getLatestFuelsVersion = async () => {
-  // get the latest version from the npm registry
   const response = await fetch('https://registry.npmjs.org/fuels/latest');
   const data = await response.json();
   return data.version;
 };
 
-export function getFuelsVersion() {
+export function getUserFuelsVersion() {
   const packageJsonPath = findUserPackageJson();
   if (!packageJsonPath) {
     return null;
@@ -36,9 +33,3 @@ export function getFuelsVersion() {
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
   return packageJson.version;
 }
-
-export const checkIfFuelsVersionIsLatest = async () => {
-  const fuelsVersion = getFuelsVersion();
-  const latestFuelsVersion = await getLatestFuelsVersion();
-  return gt(latestFuelsVersion, fuelsVersion);
-};

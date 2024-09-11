@@ -5,7 +5,7 @@ import { colorizeUserVersion } from './lib/colorizeUserVersion';
 import { compareSystemVersions } from './lib/compareSystemVersions';
 import { fuelUpLink } from './lib/fuelUpLink';
 import { getBuiltinVersions } from './lib/getBuiltinVersions';
-import { getFuelsVersion, getLatestFuelsVersion } from './lib/getFuelsVersion';
+import { getUserFuelsVersion, getLatestFuelsVersion } from './lib/getFuelsVersion';
 import { getSystemVersions } from './lib/getSystemVersions';
 import { gt } from './lib/semver';
 
@@ -20,7 +20,7 @@ export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
 export async function runVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
   const { error, info } = console;
 
-  const userFuelsVersion = getFuelsVersion();
+  const userFuelsVersion = getUserFuelsVersion();
   const latestFuelsVersion = await getLatestFuelsVersion();
   const isFuelsVersionOutdated = gt(latestFuelsVersion, userFuelsVersion);
 
