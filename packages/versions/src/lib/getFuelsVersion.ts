@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export function getFuelsVersion() {
+const findUserPackageJson = () => {
   if (!require.main) {
     return null;
   }
@@ -17,4 +17,13 @@ export function getFuelsVersion() {
   }
 
   return null;
+};
+
+export function getFuelsVersion() {
+  const packageJsonPath = findUserPackageJson();
+  if (!packageJsonPath) {
+    return null;
+  }
+  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
+  return packageJson.version;
 }
