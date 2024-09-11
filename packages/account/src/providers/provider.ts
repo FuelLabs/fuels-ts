@@ -321,6 +321,10 @@ export type ProviderOptions = {
    */
   retryOptions?: RetryOptions;
   /**
+   * Custom headers to include in the request.
+   */
+  headers?: RequestInit['headers'];
+  /**
    * Middleware to modify the request before it is sent.
    * This can be used to add headers, modify the body, etc.
    */
@@ -418,6 +422,10 @@ export default class Provider {
   }
 
   /** @hidden */
+  public url: string;
+  /** @hidden */
+  private urlWithoutAuth: string;
+  /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
@@ -427,20 +435,25 @@ export default class Provider {
     resourceCacheTTL: undefined,
     fetch: undefined,
     retryOptions: undefined,
+    headers: undefined,
   };
 
   /**
    * @hidden
    */
   private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
-    const { retryOptions, timeout } = options;
+    const { retryOptions, timeout, headers } = options;
 
     return autoRetryFetch(async (...args) => {
       const url = args[0];
       const request = args[1];
       const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
 
-      let fullRequest: RequestInit = { ...request, signal };
+      let fullRequest: RequestInit = {
+        ...request,
+        signal,
+        headers: { ...request?.headers, ...headers },
+      };
 
       if (options.requestMiddleware) {
         fullRequest = await options.requestMiddleware(fullRequest);
@@ -457,14 +470,19 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @hidden
    */
-  protected constructor(
-    public url: string,
-    options: ProviderOptions = {}
-  ) {
+  protected constructor(url: string, options: ProviderOptions = {}) {
+    const { url: rawUrl, urlWithoutAuth, headers } = Provider.extractBasicAuth(url);
+
+    this.url = rawUrl;
+    this.urlWithoutAuth = urlWithoutAuth;
     this.options = { ...this.options, ...options };
     this.url = url;
-    this.operations = this.createOperations();
 
+    if (headers) {
+      this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
+    }
+
+    this.operations = this.createOperations();
     const { resourceCacheTTL } = this.options;
     if (isDefined(resourceCacheTTL)) {
       if (resourceCacheTTL !== -1) {
@@ -477,18 +495,25 @@ export default class Provider {
     }
   }
 
-  private static extractBasicAuth(url: string): { url: string; auth: string | undefined } {
+  private static extractBasicAuth(url: string): {
+    url: string;
+    urlWithoutAuth: string;
+    headers: ProviderOptions['headers'];
+  } {
     const parsedUrl = new URL(url);
 
     const username = parsedUrl.username;
     const password = parsedUrl.password;
-    const urlNoBasicAuth = `${parsedUrl.origin}${parsedUrl.pathname}`;
+    const urlWithoutAuth = `${parsedUrl.origin}${parsedUrl.pathname}`;
     if (!(username && password)) {
-      return { url, auth: undefined };
+      return { url, urlWithoutAuth: url, headers: undefined };
     }
 
-    const auth = `Basic ${btoa(`${username}:${password}`)}`;
-    return { url: urlNoBasicAuth, auth };
+    return {
+      url,
+      urlWithoutAuth,
+      headers: { Authorization: `Basic ${btoa(`${username}:${password}`)}` },
+    };
   }
 
   /**
@@ -500,17 +525,7 @@ export default class Provider {
    * @returns A promise that resolves to a Provider instance.
    */
   static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
-    const { url: urlToUse, auth } = this.extractBasicAuth(url);
-    const provider = new Provider(urlToUse, {
-      ...options,
-      requestMiddleware: async (request) => {
-        if (auth && request) {
-          request.headers ??= {};
-          (request.headers as Record<string, string>).Authorization = auth;
-        }
-        return options.requestMiddleware?.(request) ?? request;
-      },
-    });
+    const provider = new Provider(url, options);
 
     await provider.fetchChainAndNodeInfo();
 
@@ -523,7 +538,7 @@ export default class Provider {
    * @returns the chain information configuration.
    */
   getChain(): ChainInfo {
-    const chain = Provider.chainInfoCache[this.url];
+    const chain = Provider.chainInfoCache[this.urlWithoutAuth];
     if (!chain) {
       throw new FuelError(
         ErrorCode.CHAIN_INFO_CACHE_EMPTY,
@@ -539,7 +554,7 @@ export default class Provider {
    * @returns the node information configuration.
    */
   getNode(): NodeInfo {
-    const node = Provider.nodeInfoCache[this.url];
+    const node = Provider.nodeInfoCache[this.urlWithoutAuth];
     if (!node) {
       throw new FuelError(
         ErrorCode.NODE_INFO_CACHE_EMPTY,
@@ -575,8 +590,13 @@ export default class Provider {
    * @param options - Additional options for the provider.
    */
   async connect(url: string, options?: ProviderOptions): Promise<void> {
-    this.url = url;
+    const { url: rawUrl, urlWithoutAuth, headers } = Provider.extractBasicAuth(url);
+
+    this.url = rawUrl;
+    this.urlWithoutAuth = urlWithoutAuth;
     this.options = options ?? this.options;
+    this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
+
     this.operations = this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
@@ -623,7 +643,7 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   private createOperations(): SdkOperations {
     const fetchFn = Provider.getFetchFn(this.options);
-    const gqlClient = new GraphQLClient(this.url, {
+    const gqlClient = new GraphQLClient(this.urlWithoutAuth, {
       fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
       responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
         if ('response' in response) {
@@ -646,7 +666,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
       if (isSubscription) {
         return FuelGraphqlSubscriber.create({
-          url: this.url,
+          url: this.urlWithoutAuth,
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
@@ -722,7 +742,7 @@ Supported fuel-core version: ${supportedVersion}.`
       vmBacktrace: nodeInfo.vmBacktrace,
     };
 
-    Provider.nodeInfoCache[this.url] = processedNodeInfo;
+    Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
     return processedNodeInfo;
   }
@@ -737,7 +757,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const processedChain = processGqlChain(chain);
 
-    Provider.chainInfoCache[this.url] = processedChain;
+    Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
 
     return processedChain;
   }
