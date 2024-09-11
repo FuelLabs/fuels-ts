@@ -1,5 +1,5 @@
 export type SwayType =
-  | 'empty'
+  | 'void'
   | 'bool'
   | 'u8'
   | 'u16'
@@ -26,7 +26,7 @@ export type SwayType =
 
 type Matcher = (type: string) => boolean;
 
-const empty: Matcher = (type) => type === '()';
+const voidMatcher: Matcher = (type) => type === '()';
 const bool: Matcher = (type) => type === 'bool';
 const u8: Matcher = (type) => type === 'u8';
 const u16: Matcher = (type) => type === 'u16';
@@ -65,7 +65,7 @@ const rawUntypedPtr: Matcher = (type) => type === 'raw untyped ptr';
 const rawUntypedSlice: Matcher = (type) => type === 'raw untyped slice';
 
 export const swayTypeMatchers: Record<SwayType, Matcher> = {
-  empty,
+  void: voidMatcher,
   generic,
   bool,
   u8,

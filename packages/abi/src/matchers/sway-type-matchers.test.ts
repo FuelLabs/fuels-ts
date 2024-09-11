@@ -3,7 +3,7 @@ import { createMatcher } from './sway-type-matchers';
 
 const testMappings: Record<keyof typeof swayTypeMatchers, `${string}-matched`> = {
   string: 'string-matched',
-  empty: 'empty-matched',
+  void: 'void-matched',
   bool: 'bool-matched',
   u8: 'u8-matched',
   u16: 'u16-matched',
@@ -45,8 +45,8 @@ function verifyOtherMatchersDontMatch(key: keyof typeof testMappings, swayType: 
  * @group browser
  */
 describe('sway type matchers', () => {
-  test('empty', () => {
-    const key = 'empty';
+  test('void', () => {
+    const key = 'void';
     const swayType = '()';
 
     expect(matcher({ swayType })).toEqual(`${key}-matched`);
