@@ -15,16 +15,18 @@ export const WalletDisplay = () => {
 
   return (
     wallet && (
-      <div className="flex gap-4 items-center">
-        <span className="text-gray-400">
-          {getTruncatedAddress(wallet.address.toB256() as string)}
-        </span>
-        <img
-          src="/copy.svg"
-          alt="copy"
-          className="cursor-pointer h-5 hover:opacity-80 active:scale-[90%]"
-          onClick={() => copyToClipboard(wallet.address.toB256() as string)}
-        />
+      <div className="flex flex-col md:flex-row gap-4 items-center">
+        <div className="flex gap-4">
+          <span className="text-gray-400">
+            {getTruncatedAddress(wallet.address.toB256() as string)}
+          </span>
+          <img
+            src="/copy.svg"
+            alt="copy"
+            className="cursor-pointer h-5 hover:opacity-80 active:scale-[90%]"
+            onClick={() => copyToClipboard(wallet.address.toB256() as string)}
+          />
+        </div>
         <span data-testid="wallet-balance" className="text-gray-400">
           Balance:{" "}
           {walletBalance?.format({

@@ -92,7 +92,7 @@ export const Navbar: FC = () => {
       </nav>
 
       {/* Mobile. Should be a hamburger menu */}
-      <nav className="flex flex-col md:hidden p-4 bg-black text-white items-center gap-4">
+      <div className="min-h-screen items-center px-0 py-12 md:p-24 flex flex-col gap-6">
         <img
           src={isMobileMenuOpen ? "/close.svg" : "/hamburger.svg"}
           alt="menu"
