@@ -221,6 +221,14 @@ fragment blockFragment on Block {
   height
   header {
     time
+    daHeight
+    stateTransitionBytecodeVersion
+    transactionsCount
+    transactionsRoot
+    messageOutboxRoot
+    eventInboxRoot
+    prevRoot
+    applicationHash
   }
   transactions {
     id
@@ -899,6 +907,12 @@ query getMessageByNonce($nonce: Nonce!) {
 
 subscription submitAndAwait($encodedTransaction: HexString!) {
   submitAndAwait(tx: $encodedTransaction) {
+    ...transactionStatusSubscriptionFragment
+  }
+}
+
+subscription submitAndAwaitStatus($encodedTransaction: HexString!) {
+  submitAndAwaitStatus(tx: $encodedTransaction) {
     ...transactionStatusSubscriptionFragment
   }
 }
