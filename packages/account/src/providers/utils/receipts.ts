@@ -16,14 +16,9 @@ import type {
   ReceiptTransfer,
   ReceiptTransferOut,
 } from '@fuel-ts/transactions';
-import {
-  ReceiptBurnCoder,
-  ReceiptMessageOutCoder,
-  ReceiptMintCoder,
-  ReceiptType,
-} from '@fuel-ts/transactions';
+import { getMintedAssetId, InputMessageCoder, ReceiptType } from '@fuel-ts/transactions';
 import { FAILED_TRANSFER_TO_ADDRESS_SIGNAL } from '@fuel-ts/transactions/configs';
-import { arrayify } from '@fuel-ts/utils';
+import { arrayify, hexlify } from '@fuel-ts/utils';
 
 import type { GqlReceiptFragment } from '../__generated__/operations';
 import { GqlReceiptType } from '../__generated__/operations';
@@ -212,12 +207,12 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
       const data = receipt.data ? arrayify(receipt.data) : Uint8Array.from([]);
       const digest = hexOrZero(receipt.digest);
 
-      const messageId = ReceiptMessageOutCoder.getMessageId({
+      const messageId = InputMessageCoder.getMessageId({
         sender,
         recipient,
         nonce,
         amount,
-        data,
+        data: hexlify(data),
       });
 
       const receiptMessageOut: ReceiptMessageOut = {
@@ -237,7 +232,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
     case GqlReceiptType.Mint: {
       const contractId = hexOrZero(receipt.id || receipt.contractId);
       const subId = hexOrZero(receipt.subId);
-      const assetId = ReceiptMintCoder.getAssetId(contractId, subId);
+      const assetId = getMintedAssetId(contractId, subId);
 
       const mintReceipt: ReceiptMint = {
         type: ReceiptType.Mint,
@@ -255,7 +250,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
     case GqlReceiptType.Burn: {
       const contractId = hexOrZero(receipt.id || receipt.contractId);
       const subId = hexOrZero(receipt.subId);
-      const assetId = ReceiptBurnCoder.getAssetId(contractId, subId);
+      const assetId = getMintedAssetId(contractId, subId);
 
       const burnReceipt: ReceiptBurn = {
         type: ReceiptType.Burn,
