@@ -19,8 +19,5 @@
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
-  "license": "Apache-2.0",
-  "devDependencies": {
-    "@internal/tsup": "workspace:*"
-  }
+  "license": "Apache-2.0"
 }
