@@ -35,6 +35,7 @@ export enum ErrorCode {
   MISSING_PROVIDER = 'missing-provider',
   INVALID_PROVIDER = 'invalid-provider',
   CONNECTION_REFUSED = 'connection-refused',
+  INVALID_URL = 'invalid-url',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
