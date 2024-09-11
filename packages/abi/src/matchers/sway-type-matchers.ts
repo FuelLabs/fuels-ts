@@ -1,4 +1,4 @@
-type SwayType =
+export type SwayType =
   | 'empty'
   | 'bool'
   | 'u8'
@@ -103,10 +103,14 @@ export function createMatcher<T>(mappings: Record<SwayType, T>) {
 
     for (const [key, matcher] of swayTypeMatcherEntries) {
       if (matcher(swayType)) {
-        return mappings[key as SwayType];
+        const mapping = mappings[key as SwayType];
+        if (mapping) {
+          return mapping;
+        }
+        break;
       }
     }
 
-    throw new Error(`Matcher not found for ${swayType}`);
+    throw new Error(`Matcher not found for sway type ${swayType}.`);
   };
 }
