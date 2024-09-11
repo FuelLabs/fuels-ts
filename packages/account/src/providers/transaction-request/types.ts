@@ -13,15 +13,27 @@ import type {
   ScriptTransactionRequest,
   ScriptTransactionRequestLike,
 } from './script-transaction-request';
+import type {
+  UpgradeTransactionRequest,
+  UpgradeTransactionRequestLike,
+} from './upgrade-transaction-request';
+import type {
+  UploadTransactionRequest,
+  UploadTransactionRequestLike,
+} from './upload-transaction-request';
 
 export type TransactionRequest =
   | ScriptTransactionRequest
   | CreateTransactionRequest
-  | BlobTransactionRequest;
+  | BlobTransactionRequest
+  | UpgradeTransactionRequest
+  | UploadTransactionRequest;
 export type TransactionRequestLike =
   | ({ type: TransactionType.Script } & ScriptTransactionRequestLike)
   | ({ type: TransactionType.Create } & CreateTransactionRequestLike)
-  | ({ type: TransactionType.Blob } & BlobTransactionRequestLike);
+  | ({ type: TransactionType.Blob } & BlobTransactionRequestLike)
+  | ({ type: TransactionType.Upgrade } & UpgradeTransactionRequestLike)
+  | ({ type: TransactionType.Upload } & UploadTransactionRequestLike);
 
 export type JsonAbisFromAllCalls = {
   main: JsonAbi;
