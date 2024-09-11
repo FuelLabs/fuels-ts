@@ -25,7 +25,7 @@ import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-ut
 import type { Coin } from './coin';
 import { coinQuantityfy } from './coin-quantity';
 import type { Message } from './message';
-import type { ChainInfo, CursorPaginationArgs, NodeInfo, ProviderOptions } from './provider';
+import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
   DEFAULT_RESOURCE_CACHE_TTL,
