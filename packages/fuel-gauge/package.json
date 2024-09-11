@@ -19,6 +19,7 @@
     "@internal/forc": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/merkle": "workspace:*",
     "@internal/utils": "workspace:*"
   }
 }
