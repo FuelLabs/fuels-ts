@@ -34,3 +34,4 @@ sway-programs/**/out
 .turbo
 
 test-results
+playwright-report
