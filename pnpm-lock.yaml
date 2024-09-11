@@ -635,6 +635,12 @@ importers:
 
   internal/tsup: {}
 
+  internal/utils:
+    devDependencies:
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:../tsup
+
   packages/abi-coder:
     dependencies:
       '@fuel-ts/crypto':
@@ -777,6 +783,9 @@ importers:
       '@graphql-codegen/typescript-operations':
         specifier: ^4.2.3
         version: 4.2.3(graphql@16.9.0)
+      '@internal/utils':
+        specifier: workspace:*
+        version: link:../../internal/utils
       '@types/ramda':
         specifier: ^0.30.2
         version: 0.30.2
@@ -936,6 +945,9 @@ importers:
       '@internal/forc':
         specifier: workspace:*
         version: link:../../internal/forc
+      '@internal/utils':
+        specifier: workspace:*
+        version: link:../../internal/utils
 
   packages/fuels:
     dependencies:
