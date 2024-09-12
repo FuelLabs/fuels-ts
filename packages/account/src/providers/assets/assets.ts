@@ -20,6 +20,11 @@ export const rawAssets: Assets = [
         decimals: 18,
       },
       {
+        type: 'ethereum',
+        chainId: CHAIN_IDS.eth.mainnet,
+        decimals: 18,
+      },
+      {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.devnet,
         decimals: 9,
