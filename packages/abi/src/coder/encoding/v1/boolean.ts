@@ -3,8 +3,8 @@ import { bn, toBytes } from '@fuel-ts/math';
 import type { Coder } from '../encoding.types';
 
 export const bool: Coder<boolean> = {
-  length: 1,
-  encode: (value: boolean): Uint8Array => toBytes(value ? 1 : 0, bool.length),
+  encodedLength: 1,
+  encode: (value: boolean): Uint8Array => toBytes(value ? 1 : 0, bool.encodedLength),
   decode: (data: Uint8Array): boolean => {
     const decoded = bn(data).toNumber();
 

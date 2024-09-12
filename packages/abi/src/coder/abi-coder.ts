@@ -4,7 +4,7 @@ import type { Abi, AbiFunction, AbiSpecification, AbiType, AbiTypeComponent } fr
 import { AbiParser } from '../parser';
 
 import type { AbiCoderFunction, InputValue } from './abi-coder-types';
-import type { Coder } from './encoding';
+import type { Coder, CoderFactory } from './encoding';
 import { v1 } from './encoding';
 import type { EncodingV1 } from './encoding/v1';
 
@@ -37,26 +37,21 @@ class EncodingRepository {
   public getCoder(opts: { name?: string; type: AbiType }): Coder {
     const { name, type } = opts;
 
-    console.log(name, type.swayType);
-
     // Highly rudimentary type matching
     const coder = this.coders[type.swayType as keyof EncodingV1];
     if (typeof coder === 'object') {
       return coder as Coder;
     }
 
-    const tupleMatch = tupleRegEx.exec(type.swayType);
-    console.log('isTuple', !!tupleMatch, type.swayType);
-    if (tupleMatch) {
-      const components = type.components ?? [];
-      const coders = components.map((component: AbiTypeComponent) => this.getCoder(component));
-      return this.coders.tuple(coders) as Coder;
+    if (typeof coder === 'function') {
+      const makeCoder = coder as CoderFactory;
+      return makeCoder(opts, this.getCoder);
     }
 
     // A not implemented coder (to avoid compile time errors)
     // TODO: throw a coder not found error here
     return {
-      length: 0,
+      encodedLength: 0,
       encode: () => {
         throw new Error('Not implemented');
       },
@@ -83,9 +78,7 @@ export class AbiCoder {
     this.encoding = EncodingRepository.fromAbi(this.abi);
 
     this.functions = Object.fromEntries(
-      this.abi.functions
-        .filter(({ name }) => name === 'tuple_as_param')
-        .map((fn) => [fn.name, this.fromFunction(fn)])
+      this.abi.functions.map((fn) => [fn.name, this.fromFunction(fn)])
     );
 
     // this.configurable = Object.fromEntries(

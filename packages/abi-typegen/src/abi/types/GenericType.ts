@@ -33,3 +33,12 @@ export class GenericType extends AType implements IType {
     return this.attributes;
   }
 }
+
+interface TypeBuilder {
+  addTypeInfo: (params: {}) => TypeBuilder;
+  build: () => void;
+}
+
+interface Typer {
+  generate: (params: { builder: TypeBuilder }) => void;
+}

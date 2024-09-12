@@ -18,11 +18,8 @@ export class RawSliceCoder extends Coder<number[], number[]> {
       throw new FuelError(ErrorCode.ENCODE_ERROR, `Expected array value.`);
     }
 
-    const internalCoder = new ArrayCoder(new NumberCoder('u8'), value.length);
-    const bytes = internalCoder.encode(value);
-    const lengthBytes = new BigNumberCoder('u64').encode(bytes.length);
-
-    return new Uint8Array([...lengthBytes, ...bytes]);
+    const lengthBytes = new BigNumberCoder('u64').encode(value.length);
+    return new Uint8Array([...lengthBytes, ...value]);
   }
 
   decode(data: Uint8Array, offset: number): [number[], number] {
@@ -39,9 +36,6 @@ export class RawSliceCoder extends Coder<number[], number[]> {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid raw slice byte data size.`);
     }
 
-    const internalCoder = new ArrayCoder(new NumberCoder('u8'), length);
-    const [decodedValue] = internalCoder.decode(dataBytes, 0);
-
-    return [decodedValue, offsetAndLength + length];
+    return [[...dataBytes], offsetAndLength + length];
   }
 }

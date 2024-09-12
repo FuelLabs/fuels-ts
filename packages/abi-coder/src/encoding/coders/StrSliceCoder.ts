@@ -8,7 +8,6 @@ import { Coder } from './AbstractCoder';
 import { BigNumberCoder } from './BigNumberCoder';
 
 export class StrSliceCoder extends Coder<string, string> {
-  static memorySize = 1;
   constructor() {
     super('strSlice', 'str', WORD_SIZE);
   }
@@ -28,12 +27,13 @@ export class StrSliceCoder extends Coder<string, string> {
     const offsetAndLength = offset + WORD_SIZE;
     const lengthBytes = data.slice(offset, offsetAndLength);
     const length = bn(new BigNumberCoder('u64').decode(lengthBytes, 0)[0]).toNumber();
-    const bytes = data.slice(offsetAndLength, offsetAndLength + length);
 
-    if (bytes.length !== length) {
+    const dataBytes = data.slice(offsetAndLength, offsetAndLength + length);
+
+    if (dataBytes.length !== length) {
       throw new FuelError(ErrorCode.DECODE_ERROR, `Invalid string slice byte data size.`);
     }
 
-    return [toUtf8String(bytes), offsetAndLength + length];
+    return [toUtf8String(dataBytes), offsetAndLength + length];
   }
 }

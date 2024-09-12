@@ -579,10 +579,10 @@ describe('Abi interface', () => {
       ])(
         '$title: $value',
         ({ fn, title: _title, value, encodedValue, decodedTransformer, offset, run }) => {
-          const shouldRun = run === true;
-          if (!shouldRun) {
-            return;
-          }
+          // const shouldRun = run === true;
+          // if (!shouldRun) {
+          //   return;
+          // }
           /**
            * Testing encoding of arguments
            */
