@@ -1,12 +1,10 @@
 import Button from "./Button";
 import { useDisconnect, useWallet, useBalance } from "@fuels/react";
 import { useEffect } from "react";
+import { useRouter } from "../hooks/useRouter";
 
-export default function Wallet({
-  updateTabAndUrl,
-}: {
-  updateTabAndUrl: (newTab: string) => void;
-}) {
+export default function Wallet() {
+  const { setRoute } = useRouter();
   const { disconnect } = useDisconnect();
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
@@ -16,8 +14,6 @@ export default function Wallet({
     const interval = setInterval(() => refetch(), 1000);
     return () => clearInterval(interval);
   }, [refetch]);
-
-  //
 
   return (
     <>
@@ -48,7 +44,7 @@ export default function Wallet({
             className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
-          <Button onClick={() => updateTabAndUrl("Faucet")} className="w-1/3">
+          <Button onClick={() => setRoute("faucet")} className="w-1/3">
             Faucet
           </Button>
         </div>

@@ -1,6 +1,7 @@
 import { useConnectUI, useIsConnected } from "@fuels/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
+import { useRouter } from "./hooks/useRouter";
 import Button from "./components/Button";
 import Info from "./components/Info";
 import Wallet from "./components/Wallet";
@@ -13,34 +14,7 @@ import { LocalFaucet } from "./components/LocalFaucet";
 function App() {
   const { connect } = useConnectUI();
   const { isConnected, refetch } = useIsConnected();
-
-  const tabs: string[] = [
-    "wallet",
-    "contract",
-    "predicate",
-    "script",
-    "faucet",
-  ];
-  const [tab, setTab] = useState<string>("wallet");
-
-  const getTabFromUrl = () => {
-    const url = new URL(window.location.href);
-    return url.searchParams.get("t");
-  };
-
-  const updateTabAndUrl = (newTab: string) => {
-    const url = new URL(window.location.href);
-    setTab(newTab);
-    url.searchParams.set("t", newTab);
-    window.history.pushState({}, "", url);
-  };
-
-  useEffect(() => {
-    const tabFromUrl = getTabFromUrl();
-    if (tabFromUrl) {
-      setTab(tabFromUrl);
-    }
-  }, []);
+  const { view, views, setRoute } = useRouter();
 
   useEffect(() => {
     refetch();
@@ -79,25 +53,23 @@ function App() {
                   {isConnected && (
                     <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8 ">
                       <div className="flex flex-col sm:flex-row gap-4">
-                        {tabs.map((tabName) => (
+                        {views.map((viewName) => (
                           <Button
-                            key={tabName}
+                            key={viewName}
                             className="w-full sm:flex-1 capitalize"
-                            color={tab === tabName ? "primary" : "inactive"}
-                            onClick={() => updateTabAndUrl(tabName)}
+                            color={view === viewName ? "primary" : "inactive"}
+                            onClick={() => setRoute(viewName)}
                           >
-                            {tabName}
+                            {viewName}
                           </Button>
                         ))}
                       </div>
 
-                      {tab === "wallet" && (
-                        <Wallet updateTabAndUrl={updateTabAndUrl} />
-                      )}
-                      {tab === "contract" && <Contract />}
-                      {tab === "predicate" && <Predicate />}
-                      {tab === "script" && <Script />}
-                      {tab === "faucet" && <Faucet />}
+                      {view === "wallet" && <Wallet />}
+                      {view === "contract" && <Contract />}
+                      {view === "predicate" && <Predicate />}
+                      {view === "script" && <Script />}
+                      {view === "faucet" && <Faucet />}
 
                       <LocalFaucet />
                     </section>
