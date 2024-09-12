@@ -4,7 +4,15 @@ import { InputType } from '@fuel-ts/transactions';
 import { BlobTransactionRequest } from './blob-transaction-request';
 import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
-import { isTransactionTypeBlob, isTransactionTypeCreate, isTransactionTypeScript } from './utils';
+import { UpgradeTransactionRequest } from './upgrade-transaction-request';
+import { UploadTransactionRequest } from './upload-transaction-request';
+import {
+  isTransactionTypeBlob,
+  isTransactionTypeCreate,
+  isTransactionTypeScript,
+  isTransactionTypeUpgrade,
+  isTransactionTypeUpload,
+} from './utils';
 
 /**
  * @group node
@@ -43,6 +51,30 @@ describe('isTransactionTypeBlob', () => {
   it('should return false if the request is not a blob transaction', () => {
     const request = new ScriptTransactionRequest();
     expect(isTransactionTypeCreate(request)).toBe(false);
+  });
+});
+
+describe('isTransactionTypeUpload', () => {
+  it('should return true if the request is a upload transaction', () => {
+    const request = new UploadTransactionRequest();
+    expect(isTransactionTypeUpload(request)).toBe(true);
+  });
+
+  it('should return false if the request is not a upload transaction', () => {
+    const request = new ScriptTransactionRequest();
+    expect(isTransactionTypeUpload(request)).toBe(false);
+  });
+});
+
+describe('isTransactionTypeUpgrade', () => {
+  it('should return true if the request is a upgrade transaction', () => {
+    const request = new UpgradeTransactionRequest();
+    expect(isTransactionTypeUpgrade(request)).toBe(true);
+  });
+
+  it('should return false if the request is not a upgrade transaction', () => {
+    const request = new ScriptTransactionRequest();
+    expect(isTransactionTypeUpgrade(request)).toBe(false);
   });
 });
 
