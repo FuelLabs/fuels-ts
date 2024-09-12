@@ -9,12 +9,12 @@ export const useRouter = () => {
 
   const getViewFromUrl = () => {
     const url = new URL(window.location.href);
-    return url.searchParams.get('t');
+    return url.searchParams.get('v');
   };
 
   const setRoute = (newView: string) => {
     const url = new URL(window.location.href);
-    url.searchParams.set('t', newView);
+    url.searchParams.set('v', newView);
     window.history.pushState({}, '', url);
     setView(newView);
   };
