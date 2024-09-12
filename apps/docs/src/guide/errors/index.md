@@ -228,6 +228,12 @@ When the word list length is not equal to 2048.
 
 The word list provided to the mnemonic length should be equal to 2048.
 
+### `INVALID_URL`
+
+When the URL provided is invalid.
+
+Ensure that the URL is valid.
+
 ### `JSON_ABI_ERROR`
 
 When an ABI type does not conform to the correct format.
