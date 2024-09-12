@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat: Add new supported assets
+chore: add new supported assets
