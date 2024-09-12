@@ -1,15 +1,11 @@
-import Button from "./Button";
-import { useDisconnect, useWallet, useBalance } from "@fuels/react";
+import { useBalance, useWallet } from "@fuels/react";
+import { useEnvironment } from "../hooks/useEnvironment";
 import { useEffect } from "react";
 
-export default function Wallet({
-  updateTabAndUrl,
-}: {
-  updateTabAndUrl: (newTab: string) => void;
-}) {
-  const { disconnect } = useDisconnect();
+export default function Faucet() {
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
+
   const { balance, refetch } = useBalance({ address });
 
   useEffect(() => {
@@ -17,7 +13,7 @@ export default function Wallet({
     return () => clearInterval(interval);
   }, [refetch]);
 
-  //
+  const { testnetFaucetUrl } = useEnvironment();
 
   return (
     <>
@@ -29,14 +25,12 @@ export default function Wallet({
           <input
             type="text"
             value={address}
-            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
-          <Button onClick={() => disconnect()} className="w-1/3">
-            Disconnect
-          </Button>
         </div>
       </div>
+
       <div>
         <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
           Balance
@@ -45,28 +39,22 @@ export default function Wallet({
           <input
             type="text"
             value={balance ? `${balance?.format()} ETH` : ""}
-            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
-          <Button onClick={() => updateTabAndUrl("Faucet")} className="w-1/3">
-            Faucet
-          </Button>
         </div>
       </div>
+
       <div>
-        <p>
-          Fuel supports a range of wallets. This dApp utilizes wallet connectors
-          to provide simple wallet integration. You can read more about them{" "}
-          <a
-            href="https://docs.fuel.network/docs/wallet/dev/connectors/"
-            className="text-green-500/80 transition-colors hover:text-green-500"
-            target="_blank"
-            rel="noreferrer"
-          >
-            here
-          </a>
-          .
-        </p>
+        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+          Testnet Faucet
+        </h3>
+
+        <iframe
+          src={`${testnetFaucetUrl}?address=${address}`}
+          title="Faucet"
+          className="w-full max-h-screen min-h-[500px] border-0 rounded-md mt-1"
+        />
       </div>
     </>
   );

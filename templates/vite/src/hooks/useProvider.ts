@@ -17,7 +17,7 @@ export const useProvider = () => {
     };
 
     initProvider();
-  }, []);
+  }, [providerUrl]);
 
   return {
     provider,

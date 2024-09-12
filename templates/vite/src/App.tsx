@@ -7,13 +7,40 @@ import Wallet from "./components/Wallet";
 import Contract from "./components/Contract";
 import Predicate from "./components/Predicate";
 import Script from "./components/Script";
+import Faucet from "./components/Faucet";
+import { LocalFaucet } from "./components/LocalFaucet";
 
 function App() {
   const { connect } = useConnectUI();
   const { isConnected, refetch } = useIsConnected();
 
-  const tabs: string[] = ["Wallet", "Contract", "Predicate", "Script"];
-  const [tab, setTab] = useState<string>("Wallet");
+  const tabs: string[] = [
+    "wallet",
+    "contract",
+    "predicate",
+    "script",
+    "faucet",
+  ];
+  const [tab, setTab] = useState<string>("wallet");
+
+  const getTabFromUrl = () => {
+    const url = new URL(window.location.href);
+    return url.searchParams.get("t");
+  };
+
+  const updateTabAndUrl = (newTab: string) => {
+    const url = new URL(window.location.href);
+    setTab(newTab);
+    url.searchParams.set("t", newTab);
+    window.history.pushState({}, "", url);
+  };
+
+  useEffect(() => {
+    const tabFromUrl = getTabFromUrl();
+    if (tabFromUrl) {
+      setTab(tabFromUrl);
+    }
+  }, []);
 
   useEffect(() => {
     refetch();
@@ -24,7 +51,7 @@ function App() {
       data-theme="dark"
       className="flex items-center justify-center lg:pt-6 dark:text-zinc-50/90"
     >
-      <div id="container" className="mx-8 mb-32 w-full max-w-5xl lg:mb-0">
+      <div id="container" className="mx-8 mb-32 w-full max-w-7xl lg:mb-0">
         <nav
           id="nav"
           className="flex items-center justify-center py-6 lg:pb-10 lg:pt-0"
@@ -55,19 +82,24 @@ function App() {
                         {tabs.map((tabName) => (
                           <Button
                             key={tabName}
-                            className="w-full sm:flex-1"
+                            className="w-full sm:flex-1 capitalize"
                             color={tab === tabName ? "primary" : "inactive"}
-                            onClick={() => setTab(tabName)}
+                            onClick={() => updateTabAndUrl(tabName)}
                           >
                             {tabName}
                           </Button>
                         ))}
                       </div>
 
-                      {tab === "Wallet" && <Wallet />}
-                      {tab === "Contract" && <Contract />}
-                      {tab === "Predicate" && <Predicate />}
-                      {tab === "Script" && <Script />}
+                      {tab === "wallet" && (
+                        <Wallet updateTabAndUrl={updateTabAndUrl} />
+                      )}
+                      {tab === "contract" && <Contract />}
+                      {tab === "predicate" && <Predicate />}
+                      {tab === "script" && <Script />}
+                      {tab === "faucet" && <Faucet />}
+
+                      <LocalFaucet />
                     </section>
                   )}
                 </div>
