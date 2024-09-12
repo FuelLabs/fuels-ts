@@ -51,7 +51,7 @@ function App() {
       data-theme="dark"
       className="flex items-center justify-center lg:pt-6 dark:text-zinc-50/90"
     >
-      <div id="container" className="mx-8 mb-32 w-full max-w-7xl lg:mb-0">
+      <div id="container" className="mx-8 mb-32 w-full max-w-5xl lg:mb-0">
         <nav
           id="nav"
           className="flex items-center justify-center py-6 lg:pb-10 lg:pt-0"
