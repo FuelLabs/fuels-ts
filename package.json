@@ -109,7 +109,7 @@
     "textlint": "^14.2.0",
     "textlint-rule-no-dead-link": "^5.2.0",
     "ts-generator": "^0.1.1",
-    "tsup": "^8.2.4",
+    "tsup": "^6.7.0",
     "tsx": "^4.19.0",
     "turbo": "^2.1.1",
     "typescript": "~5.5.4",
