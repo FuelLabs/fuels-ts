@@ -1,4 +1,4 @@
-import { Account, BN, TESTNET_NETWORK_URL } from 'fuels';
+import { Account, BN } from 'fuels';
 
 // The two environments for the dapp are local and testnet.
 export const Environments = {
@@ -19,7 +19,7 @@ export const CURRENT_ENVIRONMENT: Environment =
 export const NODE_URL =
   CURRENT_ENVIRONMENT === Environments.LOCAL
     ? `http://127.0.0.1:${process.env.VITE_FUEL_NODE_PORT || 4000}/v1/graphql`
-    : TESTNET_NETWORK_URL;
+    : 'https://testnet.fuel.network/v1/graphql';
 
 export interface AppWallet {
   wallet?: Account;
