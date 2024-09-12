@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cd templates/vite && pnpm run test:all
-cd templates/nextjs && pnpm run test:all
-cd apps/create-fuels-counter-guide && pnpm run test:all
+cd templates/vite/sway-programs && pnpm forc test
+cd templates/nextjs/sway-programs && pnpm forc test
+cd apps/create-fuels-counter-guide/sway-programs && pnpm forc test
