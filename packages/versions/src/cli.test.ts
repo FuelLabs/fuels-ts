@@ -2,7 +2,7 @@ import { eitherOr, runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareSystemVersionsMod from './lib/compareSystemVersions';
 import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
-import * as getFuelsVersionMod from './lib/getFuelsVersion';
+import * as getFuelsVersionMod from './lib/getLatestFuelsVersion';
 import * as getSystemVersionsMod from './lib/getSystemVersions';
 
 /**
@@ -31,7 +31,6 @@ describe('cli.js', () => {
     systemForcVersion: string;
     systemFuelCoreVersion: string;
     systemVersionsError: Error | null;
-    userFuelsVersion: string;
     latestFuelsVersion: string;
   }) {
     const {
@@ -44,7 +43,6 @@ describe('cli.js', () => {
       systemForcIsEq,
       systemForcIsLt,
       systemVersionsError,
-      userFuelsVersion,
       latestFuelsVersion,
     } = params;
 
@@ -79,7 +77,6 @@ describe('cli.js', () => {
       FUELS: '1.0.0',
     }));
 
-    vi.spyOn(getFuelsVersionMod, 'getUserFuelsVersion').mockReturnValue(userFuelsVersion);
     vi.spyOn(getFuelsVersionMod, 'getLatestFuelsVersion').mockReturnValue(
       Promise.resolve(latestFuelsVersion)
     );
@@ -106,7 +103,6 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError: null,
-      userFuelsVersion: '1.0.0',
       latestFuelsVersion: '1.0.1',
     });
 
@@ -131,7 +127,6 @@ describe('cli.js', () => {
       systemForcIsEq: true,
       systemForcIsLt: false,
       systemVersionsError: null,
-      userFuelsVersion: '1.0.0',
       latestFuelsVersion: '1.0.0',
     });
 
@@ -156,7 +151,6 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: true,
       systemVersionsError: null,
-      userFuelsVersion: '1.0.0',
       latestFuelsVersion: '1.0.1',
     });
 
@@ -183,7 +177,6 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError,
-      userFuelsVersion: '1.0.0',
       latestFuelsVersion: '1.0.1',
     });
 
@@ -218,7 +211,6 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError: null,
-      userFuelsVersion: '1.0.0',
       latestFuelsVersion: '1.0.1',
     });
 
@@ -242,7 +234,6 @@ describe('cli.js', () => {
       systemForcIsEq: true,
       systemForcIsLt: false,
       systemVersionsError: null,
-      userFuelsVersion: '1.1.1',
       latestFuelsVersion: '1.1.1',
     });
 
