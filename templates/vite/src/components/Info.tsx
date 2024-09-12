@@ -31,18 +31,18 @@ export default function Info() {
       <a
         href="https://docs.fuel.network/docs"
         target="_blank"
-        className="inline-block pt-8 text-green-500/80 transition-colors hover:text-green-500"
+        className="inline-block pt-8 text-green-500/80 transition-colors hover:text-green-500 w-full"
         rel="noreferrer"
       >
-        Check out the Fuel Docs
+        Fuel Docs
       </a>
       <a
         href={playgroundUrl}
         target="_blank"
-        className="inline-block text-green-500/80 transition-colors hover:text-green-500"
+        className="inline-block text-green-500/80 transition-colors hover:text-green-500 w-full"
         rel="noreferrer"
       >
-        Check out the GraphQL Playground
+        GraphQL Playground
       </a>
     </div>
   );

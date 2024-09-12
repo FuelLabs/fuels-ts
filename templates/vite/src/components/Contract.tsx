@@ -3,6 +3,7 @@ import { useWallet } from "@fuels/react";
 
 import Button from "./Button";
 import { useEnvironment } from "../hooks/useEnvironment";
+import LocalFaucet from "./LocalFaucet";
 import { TestContract } from "../sway-api";
 
 export default function Contract() {
@@ -89,6 +90,7 @@ export default function Contract() {
           .
         </p>
       </div>
+      <LocalFaucet />
     </>
   );
 }

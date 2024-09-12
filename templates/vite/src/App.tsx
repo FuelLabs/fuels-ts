@@ -9,7 +9,6 @@ import Contract from "./components/Contract";
 import Predicate from "./components/Predicate";
 import Script from "./components/Script";
 import Faucet from "./components/Faucet";
-import { LocalFaucet } from "./components/LocalFaucet";
 
 function App() {
   const { connect } = useConnectUI();
@@ -25,7 +24,7 @@ function App() {
       data-theme="dark"
       className="flex items-center justify-center lg:pt-6 dark:text-zinc-50/90"
     >
-      <div id="container" className="mx-8 mb-32 w-full max-w-5xl lg:mb-0">
+      <div id="container" className="mx-8 mb-32 w-full max-w-6xl lg:mb-0">
         <nav
           id="nav"
           className="flex items-center justify-center py-6 lg:pb-10 lg:pt-0"
@@ -52,7 +51,7 @@ function App() {
 
                   {isConnected && (
                     <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8 ">
-                      <div className="flex flex-col sm:flex-row gap-4">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         {views.map((viewName) => (
                           <Button
                             key={viewName}
@@ -70,8 +69,6 @@ function App() {
                       {view === "predicate" && <Predicate />}
                       {view === "script" && <Script />}
                       {view === "faucet" && <Faucet />}
-
-                      <LocalFaucet />
                     </section>
                   )}
                 </div>

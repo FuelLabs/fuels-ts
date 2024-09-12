@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
+import LocalFaucet from "./LocalFaucet";
 
 export default function Predicate() {
   const { wallet } = useWallet();
@@ -128,6 +129,7 @@ export default function Predicate() {
           Unlock and Transfer
         </Button>
       </div>
+      <LocalFaucet />
     </>
   );
 }

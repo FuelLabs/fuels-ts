@@ -2,6 +2,7 @@ import Button from "./Button";
 import { useDisconnect, useWallet, useBalance } from "@fuels/react";
 import { useEffect } from "react";
 import { useRouter } from "../hooks/useRouter";
+import LocalFaucet from "./LocalFaucet";
 
 export default function Wallet() {
   const { setRoute } = useRouter();
@@ -64,6 +65,7 @@ export default function Wallet() {
           .
         </p>
       </div>
+      <LocalFaucet />
     </>
   );
 }

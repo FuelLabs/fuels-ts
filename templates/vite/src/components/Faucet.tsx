@@ -1,6 +1,7 @@
 import { useBalance, useWallet } from "@fuels/react";
 import { useEnvironment } from "../hooks/useEnvironment";
 import { useEffect } from "react";
+import LocalFaucet from "./LocalFaucet";
 
 export default function Faucet() {
   const { wallet } = useWallet();
@@ -8,12 +9,13 @@ export default function Faucet() {
 
   const { balance, refetch } = useBalance({ address });
 
+  const { isLocal, testnetFaucetUrl } = useEnvironment();
+  const faucetTitle = isLocal ? "Local Faucet" : "Testnet Faucet";
+
   useEffect(() => {
     const interval = setInterval(() => refetch(), 1000);
     return () => clearInterval(interval);
   }, [refetch]);
-
-  const { testnetFaucetUrl } = useEnvironment();
 
   return (
     <>
@@ -46,16 +48,35 @@ export default function Faucet() {
       </div>
 
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
-          Testnet Faucet
-        </h3>
-
-        <iframe
-          src={`${testnetFaucetUrl}?address=${address}`}
-          title="Faucet"
-          className="w-full max-h-screen min-h-[500px] border-0 rounded-md mt-1"
-        />
+        {!isLocal && (
+          <>
+            <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+              Testnet Faucet
+            </h3>
+            <iframe
+              src={`${testnetFaucetUrl}?address=${address}`}
+              title="Faucet"
+              className="w-full max-h-screen min-h-[500px] border-0 rounded-md mt-1"
+            />
+          </>
+        )}
       </div>
+      {isLocal && (
+        <>
+          <LocalFaucet />
+          <p className="w-full px-2 py-1 mr-3 font-mono text-xs">
+            If you would like to visit the testnet faucet, you can do so{" "}
+            <a
+              href={`${testnetFaucetUrl}?address=${address}&autoClose&redirectUrl=${window.location.href}`}
+              target="_blank"
+              className="text-green-500/80 transition-colors hover:text-green-500"
+            >
+              here
+            </a>
+            .
+          </p>
+        </>
+      )}
     </>
   );
 }

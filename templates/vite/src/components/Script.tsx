@@ -3,6 +3,7 @@ import { BigNumberish, BN, Script as FuelScript } from "fuels";
 import { useEffect, useState } from "react";
 import { TestScript } from "../sway-api";
 import Button from "./Button";
+import LocalFaucet from "./LocalFaucet";
 
 export default function Script() {
   const { wallet } = useWallet();
@@ -88,6 +89,7 @@ export default function Script() {
           Submit
         </Button>
       </div>
+      <LocalFaucet />
     </>
   );
 }
