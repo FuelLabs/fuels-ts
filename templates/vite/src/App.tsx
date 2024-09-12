@@ -15,23 +15,23 @@ function App() {
   const { isConnected, refetch } = useIsConnected();
 
   const tabs: string[] = [
-    "Wallet",
-    "Contract",
-    "Predicate",
-    "Script",
-    "Faucet",
+    "wallet",
+    "contract",
+    "predicate",
+    "script",
+    "faucet",
   ];
-  const [tab, setTab] = useState<string>("Wallet");
+  const [tab, setTab] = useState<string>("wallet");
 
   const getTabFromUrl = () => {
     const url = new URL(window.location.href);
-    return url.searchParams.get("tab");
+    return url.searchParams.get("t");
   };
 
   const updateTabAndUrl = (newTab: string) => {
     const url = new URL(window.location.href);
     setTab(newTab);
-    url.searchParams.set("tab", newTab);
+    url.searchParams.set("t", newTab);
     window.history.pushState({}, "", url);
   };
 
@@ -82,7 +82,7 @@ function App() {
                         {tabs.map((tabName) => (
                           <Button
                             key={tabName}
-                            className="w-full sm:flex-1"
+                            className="w-full sm:flex-1 capitalize"
                             color={tab === tabName ? "primary" : "inactive"}
                             onClick={() => updateTabAndUrl(tabName)}
                           >
@@ -91,13 +91,13 @@ function App() {
                         ))}
                       </div>
 
-                      {tab === "Wallet" && (
+                      {tab === "wallet" && (
                         <Wallet updateTabAndUrl={updateTabAndUrl} />
                       )}
-                      {tab === "Contract" && <Contract />}
-                      {tab === "Predicate" && <Predicate />}
-                      {tab === "Script" && <Script />}
-                      {tab === "Faucet" && <Faucet />}
+                      {tab === "contract" && <Contract />}
+                      {tab === "predicate" && <Predicate />}
+                      {tab === "script" && <Script />}
+                      {tab === "faucet" && <Faucet />}
 
                       <LocalFaucet />
                     </section>
