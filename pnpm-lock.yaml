@@ -225,6 +225,9 @@ importers:
       '@eslint/js':
         specifier: ^9.9.1
         version: 9.9.1
+      '@playwright/test':
+        specifier: ^1.46.1
+        version: 1.46.1
       '@tanstack/router-plugin':
         specifier: ^1.47.0
         version: 1.48.6(vite@5.4.2(@types/node@22.5.0)(terser@5.31.6))
@@ -635,6 +638,12 @@ importers:
 
   internal/tsup: {}
 
+  internal/utils:
+    devDependencies:
+      '@internal/tsup':
+        specifier: workspace:*
+        version: link:../tsup
+
   packages/abi:
     dependencies:
       '@fuel-ts/math':
@@ -786,6 +795,9 @@ importers:
       '@graphql-codegen/typescript-operations':
         specifier: ^4.2.3
         version: 4.2.3(graphql@16.9.0)
+      '@internal/utils':
+        specifier: workspace:*
+        version: link:../../internal/utils
       '@types/ramda':
         specifier: ^0.30.2
         version: 0.30.2
@@ -939,12 +951,18 @@ importers:
       '@fuel-ts/errors':
         specifier: workspace:*
         version: link:../errors
+      '@fuel-ts/merkle':
+        specifier: workspace:*
+        version: link:../merkle
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
       '@internal/forc':
         specifier: workspace:*
         version: link:../../internal/forc
+      '@internal/utils':
+        specifier: workspace:*
+        version: link:../../internal/utils
 
   packages/fuels:
     dependencies:
@@ -1268,6 +1286,9 @@ importers:
         specifier: ^17.5.1
         version: 17.5.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
     devDependencies:
+      '@playwright/test':
+        specifier: ^1.46.1
+        version: 1.46.1
       '@types/node':
         specifier: ^22.2.0
         version: 22.2.0
@@ -1341,6 +1362,9 @@ importers:
       '@eslint/js':
         specifier: ^9.9.1
         version: 9.9.1
+      '@playwright/test':
+        specifier: ^1.46.1
+        version: 1.46.1
       '@tanstack/router-plugin':
         specifier: ^1.47.0
         version: 1.48.6(vite@5.4.2(@types/node@22.5.0)(terser@5.31.6))
