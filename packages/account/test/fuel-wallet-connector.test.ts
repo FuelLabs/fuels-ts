@@ -5,6 +5,7 @@ import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { AbstractAddress, BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import { bn } from '@fuel-ts/math';
+import { TESTNET_NETWORK_URL } from '@internal/utils';
 import { EventEmitter } from 'events';
 
 import type { ProviderOptions } from '../src';
@@ -180,7 +181,7 @@ describe('Fuel Connector', () => {
       storage: null,
       connectors: [new MockConnector()],
     }).init();
-    const networkUrl = 'https://testnet.fuel.network';
+    const networkUrl = TESTNET_NETWORK_URL;
     const newNetwork = {
       url: networkUrl,
       chainId: 0,
@@ -208,7 +209,7 @@ describe('Fuel Connector', () => {
       connectors: [new MockConnector()],
     }).init();
     const newNetwork = {
-      url: 'https://testnet.fuel.network/',
+      url: TESTNET_NETWORK_URL,
       chainId: 0,
     };
 

@@ -204,6 +204,9 @@ But let's also add a test for our new `decrement_counter` function in the `./tes
 And a test for the decrement function in the `./sway-programs/contract/src/main.sw` file:
 
 <<< @/../../create-fuels-counter-guide/sway-programs/contract/src/main.sw#create-fuels-counter-guide-sway-test{rust:line-numbers}
+The template also comes with a UI testing setup using [Playwright](https://playwright.dev/). We can add a test for our new `decrement_counter` function in the `./test/ui/ui.test.ts` file:
+
+<<< @/../../create-fuels-counter-guide/test/ui/ui.test.ts#decrement-counter-ui-test{ts:line-numbers}
 
 ## Next Steps
 
