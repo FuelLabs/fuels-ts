@@ -9,7 +9,8 @@
     "build": "pnpm run xprebuild && tsc -b && vite build",
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ui": "./test/ui/test-ui.sh"
   },
   "dependencies": {
     "@fuels/connectors": "^0.27.1",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@eslint/js": "^9.10.0",
     "@tanstack/router-plugin": "^1.56.4",
+    "@playwright/test": "^1.46.1",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3",
     "@vitejs/plugin-react-swc": "^3.7.0",

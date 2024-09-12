@@ -199,6 +199,10 @@ We've provided some examples for each program type in the `./test` directory of 
 
 <<< @/../../docs-snippets/src/guide/create-fuels/decrement_counter.test.ts#decrement-counter{ts:line-numbers}
 
+The template also comes with a UI testing setup using [Playwright](https://playwright.dev/). We can add a test for our new `decrement_counter` function in the `./test/ui/ui.test.ts` file:
+
+<<< @/../../create-fuels-counter-guide/test/ui/ui.test.ts#decrement-counter-ui-test{ts:line-numbers}
+
 ## Next Steps
 
 - Now that you have a basic counter dApp running and have the `npm create fuels` workflow powering you, you can start building more complex dApps using the Fuel Stack. A good place to start for ideas and reference code is the [Sway Applications Repo](https://github.com/FuelLabs/sway-applications).

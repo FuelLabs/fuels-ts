@@ -9,7 +9,8 @@
     "build": "pnpm run xprebuild && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ui": "./test/ui/test-ui.sh"
   },
   "dependencies": {
     "@fuels/connectors": "^0.27.1",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.5.4",
+    "@playwright/test": "^1.46.1",
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3",
     "autoprefixer": "^10.4.20",
