@@ -1,12 +1,17 @@
 import { useBalance, useWallet } from "@fuels/react";
 import { useEnvironment } from "../hooks/useEnvironment";
-import Button from "./Button";
+import { useEffect } from "react";
 
 export default function Faucet() {
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
 
   const { balance, refetch } = useBalance({ address });
+
+  useEffect(() => {
+    const interval = setInterval(() => refetch(), 1000);
+    return () => clearInterval(interval);
+  }, [refetch]);
 
   const { testnetFaucetUrl } = useEnvironment();
 
@@ -37,9 +42,6 @@ export default function Faucet() {
             className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
-          <Button onClick={() => refetch()} className="w-1/3">
-            Refetch
-          </Button>
         </div>
       </div>
 
