@@ -123,7 +123,9 @@ export const Navbar: FC = () => {
             )}
 
             {isConnected && (
-              <Button onClick={disconnect}>Disconnect Wallet</Button>
+              <Button className="bg-red-600" onClick={disconnect}>
+                Disconnect
+              </Button>
             )}
             {!isConnected && <Button onClick={connect}>Connect Wallet</Button>}
 
