@@ -1,4 +1,4 @@
-[**@fuel-ts/program v0.94.5**](../index.md) • **Docs**
+[**@fuel-ts/program v0.94.6**](../index.md) • **Docs**
 
 ***
 
@@ -44,7 +44,7 @@ The script result decoder function.
 
 #### Defined in
 
-[script-request.ts:205](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L205)
+[script-request.ts:205](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L205)
 
 ## Properties
 
@@ -56,7 +56,7 @@ The bytes of the script.
 
 #### Defined in
 
-[script-request.ts:186](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L186)
+[script-request.ts:186](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L186)
 
 ***
 
@@ -76,7 +76,7 @@ A function to encode the script data.
 
 #### Defined in
 
-[script-request.ts:191](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L191)
+[script-request.ts:191](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L191)
 
 ***
 
@@ -96,7 +96,7 @@ A function to decode the script result.
 
 #### Defined in
 
-[script-request.ts:196](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L196)
+[script-request.ts:196](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L196)
 
 ## Methods
 
@@ -124,7 +124,7 @@ The decoded result.
 
 #### Defined in
 
-[script-request.ts:262](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L262)
+[script-request.ts:262](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L262)
 
 ***
 
@@ -148,7 +148,7 @@ The encoded data.
 
 #### Defined in
 
-[script-request.ts:243](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L243)
+[script-request.ts:243](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L243)
 
 ***
 
@@ -172,7 +172,7 @@ The script data offset.
 
 #### Defined in
 
-[script-request.ts:233](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L233)
+[script-request.ts:233](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L233)
 
 ***
 
@@ -200,4 +200,4 @@ The script data offset.
 
 #### Defined in
 
-[script-request.ts:222](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/program/src/script-request.ts#L222)
+[script-request.ts:222](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/program/src/script-request.ts#L222)

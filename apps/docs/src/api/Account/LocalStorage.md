@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.5**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.6**](../index.md) • **Docs**
 
 ***
 
@@ -24,7 +24,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:7](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/connectors/types/local-storage.ts#L7)
+[packages/account/src/connectors/types/local-storage.ts:7](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/types/local-storage.ts#L7)
 
 ## Methods
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:23](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/connectors/types/local-storage.ts#L23)
+[packages/account/src/connectors/types/local-storage.ts:23](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/types/local-storage.ts#L23)
 
 ***
 
@@ -64,7 +64,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/connectors/types/local-storage.ts#L15)
+[packages/account/src/connectors/types/local-storage.ts:15](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/types/local-storage.ts#L15)
 
 ***
 
@@ -86,7 +86,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/connectors/types/local-storage.ts#L19)
+[packages/account/src/connectors/types/local-storage.ts:19](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/types/local-storage.ts#L19)
 
 ***
 
@@ -110,4 +110,4 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/local-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/account/src/connectors/types/local-storage.ts#L11)
+[packages/account/src/connectors/types/local-storage.ts:11](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/types/local-storage.ts#L11)

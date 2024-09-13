@@ -1,4 +1,4 @@
-[**@fuel-ts/utils v0.94.5**](../index.md) • **Docs**
+[**@fuel-ts/utils v0.94.6**](../index.md) • **Docs**
 
 ***
 
@@ -47,7 +47,7 @@ now.getTime(); // 1681391398000
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L99)
+[packages/utils/src/utils/date-time.ts:99](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/date-time.ts#L99)
 
 ## Methods
 
@@ -77,7 +77,7 @@ Converts a Date object to a string.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:116
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:116
 
 #### \[toPrimitive\](hint)
 
@@ -103,7 +103,7 @@ Converts a Date object to a string.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:120
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:120
 
 #### \[toPrimitive\](hint)
 
@@ -129,7 +129,7 @@ Converts a Date object to a number.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:124
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:124
 
 #### \[toPrimitive\](hint)
 
@@ -163,7 +163,7 @@ If 'hint' was given something other than "number", "string", or "default".
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:133
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:133
 
 ***
 
@@ -187,7 +187,7 @@ Gets the day-of-the-month, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:798
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:798
 
 ***
 
@@ -211,7 +211,7 @@ Gets the day of the week, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:802
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:802
 
 ***
 
@@ -235,7 +235,7 @@ Gets the year, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:790
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:790
 
 ***
 
@@ -259,7 +259,7 @@ Gets the hours in a date, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:806
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:806
 
 ***
 
@@ -283,7 +283,7 @@ Gets the milliseconds of a Date, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:818
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:818
 
 ***
 
@@ -307,7 +307,7 @@ Gets the minutes of a Date object, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:810
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:810
 
 ***
 
@@ -331,7 +331,7 @@ Gets the month, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:794
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:794
 
 ***
 
@@ -355,7 +355,7 @@ Gets the seconds of a Date object, using local time.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:814
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:814
 
 ***
 
@@ -379,7 +379,7 @@ Returns the stored time value in milliseconds since midnight, January 1, 1970 UT
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:788
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:788
 
 ***
 
@@ -387,7 +387,7 @@ node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:7
 
 > **getTimezoneOffset**(): `number`
 
-Gets the difference in minutes between the time on the local computer and Universal Coordinated Time (UTC).
+Gets the difference in minutes between Universal Coordinated Time (UTC) and the time on the local computer.
 
 #### Returns
 
@@ -403,7 +403,7 @@ Gets the difference in minutes between the time on the local computer and Univer
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:822
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:822
 
 ***
 
@@ -427,7 +427,7 @@ Gets the day-of-the-month, using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:800
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:800
 
 ***
 
@@ -451,7 +451,7 @@ Gets the day of the week using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:804
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:804
 
 ***
 
@@ -475,7 +475,7 @@ Gets the year using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:792
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:792
 
 ***
 
@@ -499,7 +499,7 @@ Gets the hours value in a Date object using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:808
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:808
 
 ***
 
@@ -523,7 +523,7 @@ Gets the milliseconds of a Date object using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:820
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:820
 
 ***
 
@@ -547,7 +547,7 @@ Gets the minutes of a Date object using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:812
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:812
 
 ***
 
@@ -571,7 +571,7 @@ Gets the month of a Date object using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:796
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:796
 
 ***
 
@@ -595,7 +595,7 @@ Gets the seconds of a Date object using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:816
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:816
 
 ***
 
@@ -625,7 +625,7 @@ A numeric value equal to the day of the month.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:885
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:885
 
 ***
 
@@ -663,7 +663,7 @@ A numeric value equal for the day of the month.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:909
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:909
 
 ***
 
@@ -705,7 +705,7 @@ A numeric value equal to the milliseconds value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:872
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:872
 
 ***
 
@@ -735,7 +735,7 @@ A numeric value equal to the millisecond value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:832
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:832
 
 ***
 
@@ -773,7 +773,7 @@ A numeric value equal to the milliseconds value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:857
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:857
 
 ***
 
@@ -807,7 +807,7 @@ A numeric value representing the day of the month. If this value is not supplied
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:896
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:896
 
 ***
 
@@ -841,7 +841,7 @@ A numeric value equal to the milliseconds value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:844
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:844
 
 ***
 
@@ -871,7 +871,7 @@ A numeric value representing the number of elapsed milliseconds since midnight, 
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:827
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:827
 
 ***
 
@@ -901,7 +901,7 @@ A numeric value equal to the day of the month.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:890
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:890
 
 ***
 
@@ -939,7 +939,7 @@ A numeric value equal to the day of the month.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:916
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:916
 
 ***
 
@@ -981,7 +981,7 @@ A numeric value equal to the milliseconds value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:880
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:880
 
 ***
 
@@ -1011,7 +1011,7 @@ A numeric value equal to the millisecond value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:837
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:837
 
 ***
 
@@ -1049,7 +1049,7 @@ A numeric value equal to the milliseconds value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:864
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:864
 
 ***
 
@@ -1083,7 +1083,7 @@ A numeric value representing the day of the month. If it is not supplied, the va
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:902
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:902
 
 ***
 
@@ -1117,7 +1117,7 @@ A numeric value equal to the milliseconds value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:850
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:850
 
 ***
 
@@ -1141,7 +1141,7 @@ Returns a date as a string value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:776
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:776
 
 ***
 
@@ -1165,7 +1165,7 @@ Returns a date as a string value in ISO format.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:920
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:920
 
 ***
 
@@ -1193,7 +1193,7 @@ Used by the JSON.stringify method to enable the transformation of an object's da
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:922
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:922
 
 ***
 
@@ -1219,7 +1219,7 @@ Returns a date as a string value appropriate to the host environment's current l
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:782
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:782
 
 #### toLocaleDateString(locales, options)
 
@@ -1251,7 +1251,7 @@ An object that contains one or more properties that specify comparison options.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:4555
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:4577
 
 #### toLocaleDateString(locales, options)
 
@@ -1283,7 +1283,7 @@ An object that contains one or more properties that specify comparison options.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2020.date.d.ts:34
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2020.date.d.ts:34
 
 ***
 
@@ -1309,7 +1309,7 @@ Returns a value as a string value appropriate to the host environment's current 
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:780
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:780
 
 #### toLocaleString(locales, options)
 
@@ -1341,7 +1341,7 @@ An object that contains one or more properties that specify comparison options.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:4549
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:4571
 
 #### toLocaleString(locales, options)
 
@@ -1373,7 +1373,7 @@ An object that contains one or more properties that specify comparison options.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2020.date.d.ts:27
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2020.date.d.ts:27
 
 ***
 
@@ -1399,7 +1399,7 @@ Returns a time as a string value appropriate to the host environment's current l
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:784
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:784
 
 #### toLocaleTimeString(locales, options)
 
@@ -1431,7 +1431,7 @@ An object that contains one or more properties that specify comparison options.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:4562
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:4584
 
 #### toLocaleTimeString(locales, options)
 
@@ -1463,7 +1463,7 @@ An object that contains one or more properties that specify comparison options.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2020.date.d.ts:41
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2020.date.d.ts:41
 
 ***
 
@@ -1487,7 +1487,7 @@ Returns a string representation of a date. The format of the string depends on t
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:774
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:774
 
 ***
 
@@ -1505,7 +1505,7 @@ the Tai64 timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L139)
+[packages/utils/src/utils/date-time.ts:139](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/date-time.ts#L139)
 
 ***
 
@@ -1529,7 +1529,7 @@ Returns a time as a string value.
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:778
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:778
 
 ***
 
@@ -1553,7 +1553,7 @@ Returns a date converted to a string using Universal Coordinated Time (UTC).
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:918
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:918
 
 ***
 
@@ -1569,7 +1569,7 @@ the unix milliseconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L146)
+[packages/utils/src/utils/date-time.ts:146](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/date-time.ts#L146)
 
 ***
 
@@ -1585,7 +1585,7 @@ the unix seconds timestamp
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L153)
+[packages/utils/src/utils/date-time.ts:153](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/date-time.ts#L153)
 
 ***
 
@@ -1609,7 +1609,7 @@ Returns the stored time value in milliseconds since midnight, January 1, 1970 UT
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:786
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:786
 
 ***
 
@@ -1661,7 +1661,7 @@ A number from 0 to 999 that specifies the milliseconds.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:956
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:956
 
 #### UTC(year, monthIndex, date, hours, minutes, seconds, ms)
 
@@ -1709,7 +1709,7 @@ A number from 0 to 999 that specifies the milliseconds.
 
 ##### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es2017.date.d.ts:30
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es2017.date.d.ts:30
 
 ***
 
@@ -1733,7 +1733,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L107)
+[packages/utils/src/utils/date-time.ts:107](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/date-time.ts#L107)
 
 ***
 
@@ -1755,7 +1755,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L115)
+[packages/utils/src/utils/date-time.ts:115](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/date-time.ts#L115)
 
 ***
 
@@ -1777,7 +1777,7 @@ a new DateTime instance
 
 #### Defined in
 
-[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/utils/src/utils/date-time.ts#L123)
+[packages/utils/src/utils/date-time.ts:123](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/date-time.ts#L123)
 
 ***
 
@@ -1797,7 +1797,7 @@ Returns the number of milliseconds elapsed since midnight, January 1, 1970 Unive
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:958
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:958
 
 ***
 
@@ -1823,4 +1823,4 @@ A date string
 
 #### Defined in
 
-node\_modules/.pnpm/typescript@5.4.5/node\_modules/typescript/lib/lib.es5.d.ts:945
+node\_modules/.pnpm/typescript@5.6.2/node\_modules/typescript/lib/lib.es5.d.ts:945

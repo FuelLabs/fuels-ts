@@ -1,4 +1,4 @@
-**@fuel-ts/interfaces v0.94.5** • [**Docs**](index.md)
+**@fuel-ts/interfaces v0.94.6** • [**Docs**](index.md)
 
 ***
 
@@ -14,7 +14,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:96](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L96)
+[index.ts:96](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L96)
 
 ***
 
@@ -30,7 +30,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:33](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L33)
+[index.ts:33](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L33)
 
 ***
 
@@ -40,7 +40,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L13)
+[index.ts:13](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L13)
 
 ***
 
@@ -50,7 +50,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L15)
+[index.ts:15](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L15)
 
 ***
 
@@ -60,7 +60,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L11)
+[index.ts:11](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L11)
 
 ***
 
@@ -70,7 +70,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L17)
+[index.ts:17](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L17)
 
 ***
 
@@ -80,7 +80,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L21)
+[index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L21)
 
 ***
 
@@ -90,7 +90,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:98](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L98)
+[index.ts:98](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L98)
 
 ***
 
@@ -106,7 +106,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:26](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L26)
+[index.ts:26](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L26)
 
 ***
 
@@ -116,7 +116,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L19)
+[index.ts:19](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L19)
 
 ***
 
@@ -126,7 +126,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:37](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L37)
+[index.ts:37](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L37)
 
 ***
 
@@ -136,7 +136,7 @@ A simple type alias defined using the `type` keyword.
 
 #### Defined in
 
-[index.ts:38](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packag./src/index.ts#L38)
+[index.ts:38](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packag./src/index.ts#L38)
 
 ## Classes
 

@@ -1,4 +1,4 @@
-[**@fuel-ts/contract v0.94.5**](../index.md) • **Docs**
+[**@fuel-ts/contract v0.94.6**](../index.md) • **Docs**
 
 ***
 
@@ -34,7 +34,7 @@ An account or provider to be associated with the factory.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:68](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L68)
+[packages/contract/src/contract-factory.ts:68](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L68)
 
 ## Properties
 
@@ -44,7 +44,7 @@ An account or provider to be associated with the factory.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:59](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L59)
+[packages/contract/src/contract-factory.ts:59](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L59)
 
 ***
 
@@ -54,7 +54,7 @@ An account or provider to be associated with the factory.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:56](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L56)
+[packages/contract/src/contract-factory.ts:56](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L56)
 
 ***
 
@@ -64,7 +64,7 @@ An account or provider to be associated with the factory.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:57](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L57)
+[packages/contract/src/contract-factory.ts:57](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L57)
 
 ***
 
@@ -74,7 +74,7 @@ An account or provider to be associated with the factory.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:58](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L58)
+[packages/contract/src/contract-factory.ts:58](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L58)
 
 ## Methods
 
@@ -98,7 +98,7 @@ A new ContractFactory instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:110](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L110)
+[packages/contract/src/contract-factory.ts:110](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L110)
 
 ***
 
@@ -130,7 +130,7 @@ The CreateTransactionRequest object for deploying the contract.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:120](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L120)
+[packages/contract/src/contract-factory.ts:120](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L120)
 
 ***
 
@@ -158,7 +158,7 @@ A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:195](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L195)
+[packages/contract/src/contract-factory.ts:195](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L195)
 
 ***
 
@@ -186,7 +186,7 @@ A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:251](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L251)
+[packages/contract/src/contract-factory.ts:251](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L251)
 
 ***
 
@@ -214,7 +214,7 @@ A promise that resolves to the deployed contract instance.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:213](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L213)
+[packages/contract/src/contract-factory.ts:213](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L213)
 
 ***
 
@@ -236,4 +236,4 @@ An object containing configurable names and their values.
 
 #### Defined in
 
-[packages/contract/src/contract-factory.ts:381](https://github.com/FuelLabs/fuels-ts/blob/26e9ebed3aac7c894878eda94559482cc10c369f/packages/contract/src/contract-factory.ts#L381)
+[packages/contract/src/contract-factory.ts:381](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/contract/src/contract-factory.ts#L381)

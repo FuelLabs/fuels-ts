@@ -2,7 +2,7 @@
 
 ***
 
-# Class: BlobTransactionRequest
+# Class: UploadTransactionRequest
 
 Abstract class to define the functionalities of a transaction request transaction request.
 
@@ -12,21 +12,21 @@ Abstract class to define the functionalities of a transaction request transactio
 
 ## Constructors
 
-### new BlobTransactionRequest()
+### new UploadTransactionRequest()
 
-> **new BlobTransactionRequest**(`blobTransactionRequestLike`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **new UploadTransactionRequest**(`uploadTransactionRequestLike`): [`UploadTransactionRequest`](UploadTransactionRequest.md)
 
-Creates an instance `BlobTransactionRequest`.
+Creates an instance `UploadTransactionRequest`.
 
 #### Parameters
 
-• **blobTransactionRequestLike**: [`BlobTransactionRequestLike`](./BlobTransactionRequestLike.md)
+• **uploadTransactionRequestLike**: `UploadTransactionRequestLike` = `{}`
 
 The initial values for the instance
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 #### Overrides
 
@@ -34,21 +34,9 @@ The initial values for the instance
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:36](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L36)
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:66](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L66)
 
 ## Properties
-
-### blobId
-
-> **blobId**: `string`
-
-Blob ID
-
-#### Defined in
-
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:27](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L27)
-
-***
 
 ### inputs
 
@@ -114,6 +102,18 @@ List of outputs
 
 ***
 
+### subsection
+
+> **subsection**: `Omit`\&lt;`UploadSubsectionRequest`, `"subsection"`\>
+
+The subsection data.
+
+#### Defined in
+
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:59](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L59)
+
+***
+
 ### tip?
 
 > `optional` **tip**: `BN`
@@ -132,7 +132,7 @@ Gas price for transaction
 
 ### type
 
-> **type**: [`Blob`](./TransactionType.md#blob)
+> **type**: [`Upload`](./TransactionType.md#upload)
 
 Type of the transaction
 
@@ -142,7 +142,7 @@ Type of the transaction
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:25](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L25)
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:55](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L55)
 
 ***
 
@@ -150,11 +150,11 @@ Type of the transaction
 
 > **witnessIndex**: `number`
 
-Witness index of contract bytecode to create
+The witness index of the subsection of the bytecode.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:29](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L29)
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:57](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L57)
 
 ***
 
@@ -192,7 +192,7 @@ List of witnesses
 
 ### addAccountWitnesses()
 
-> **addAccountWitnesses**(`account`): `Promise`\&lt;[`BlobTransactionRequest`](BlobTransactionRequest.md)\>
+> **addAccountWitnesses**(`account`): `Promise`\&lt;[`UploadTransactionRequest`](UploadTransactionRequest.md)\>
 
 Helper function to add an external signature to the transaction.
 
@@ -204,7 +204,7 @@ The account/s to sign to the transaction.
 
 #### Returns
 
-`Promise`\&lt;[`BlobTransactionRequest`](BlobTransactionRequest.md)\>
+`Promise`\&lt;[`UploadTransactionRequest`](UploadTransactionRequest.md)\>
 
 The transaction with the signature witness added.
 
@@ -277,7 +277,7 @@ Coin resource.
 
 ### addCoinOutput()
 
-> **addCoinOutput**(`to`, `amount`, `assetId`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addCoinOutput**(`to`, `amount`, `assetId`): [`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 Adds a coin output to the transaction.
 
@@ -297,7 +297,7 @@ Asset ID of coin.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 #### Inherited from
 
@@ -311,7 +311,7 @@ Asset ID of coin.
 
 ### addCoinOutputs()
 
-> **addCoinOutputs**(`to`, `quantities`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addCoinOutputs**(`to`, `quantities`): [`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 Adds multiple coin outputs to the transaction.
 
@@ -327,7 +327,7 @@ Quantities of coins.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 #### Inherited from
 
@@ -368,7 +368,7 @@ Message resource.
 
 ### addResource()
 
-> **addResource**(`resource`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addResource**(`resource`): [`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 Adds a single resource to the transaction by adding a coin/message input and a
 change output for the related assetId, if one it was not added yet.
@@ -381,7 +381,7 @@ The resource to add.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 This transaction.
 
@@ -397,7 +397,7 @@ This transaction.
 
 ### addResources()
 
-> **addResources**(`resources`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addResources**(`resources`): [`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 Adds multiple resources to the transaction by adding coin/message inputs and change
 outputs from the related assetIds.
@@ -410,7 +410,7 @@ The resources to add.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 This transaction.
 
@@ -421,6 +421,28 @@ This transaction.
 #### Defined in
 
 [packages/account/src/providers/transaction-request/transaction-request.ts:470](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/transaction-request.ts#L470)
+
+***
+
+### addSubsection()
+
+> **addSubsection**(`subsection`): `void`
+
+Adds the subsection.
+
+#### Parameters
+
+• **subsection**: `UploadSubsectionRequest`
+
+The subsection data.
+
+#### Returns
+
+`void`
+
+#### Defined in
+
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:82](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L82)
 
 ***
 
@@ -466,9 +488,37 @@ This transaction.
 
 ***
 
+### calculateMinGas()
+
+> **calculateMinGas**(`chainInfo`): `BN`
+
+Calculates the minimum gas for an upload transaction.
+
+#### Parameters
+
+• **chainInfo**: [`ChainInfo`](../index.md#chaininfo)
+
+The chain information.
+
+#### Returns
+
+`BN`
+
+the minimum gas for the upload transaction
+
+#### Overrides
+
+`BaseTransactionRequest.calculateMinGas`
+
+#### Defined in
+
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:142](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L142)
+
+***
+
 ### ~~fundWithFakeUtxos()~~
 
-> **fundWithFakeUtxos**(`quantities`, `baseAssetId`, `resourcesOwner`?): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **fundWithFakeUtxos**(`quantities`, `baseAssetId`, `resourcesOwner`?): [`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 Funds the transaction with fake UTXOs for each assetId and amount in the
 quantities array.
@@ -487,7 +537,7 @@ The base asset to fund the transaction.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 #### Deprecated
 
@@ -639,7 +689,7 @@ The chain ID.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:65](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L65)
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:95](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L95)
 
 ***
 
@@ -647,7 +697,7 @@ The chain ID.
 
 > **metadataGas**(`gasCosts`): `BN`
 
-Calculates the metadata gas cost for a blob transaction.
+Calculates the metadata gas cost for an upload transaction.
 
 #### Parameters
 
@@ -659,7 +709,7 @@ gas costs passed from the chain.
 
 `BN`
 
-metadata gas cost for the blob transaction.
+metadata gas cost for the upload transaction.
 
 #### Overrides
 
@@ -667,7 +717,7 @@ metadata gas cost for the blob transaction.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:75](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L75)
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:126](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L126)
 
 ***
 
@@ -718,13 +768,13 @@ The transaction as a JSON object.
 
 ### toTransaction()
 
-> **toTransaction**(): `TransactionBlob`
+> **toTransaction**(): `TransactionUpload`
 
-Converts the transaction request to a `TransactionBlob`.
+Converts the transaction request to a `TransactionUpload`.
 
 #### Returns
 
-`TransactionBlob`
+`TransactionUpload`
 
 The transaction create object.
 
@@ -734,7 +784,7 @@ The transaction create object.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:47](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L47)
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:104](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L104)
 
 ***
 
@@ -848,19 +898,19 @@ The signature to update the witness with.
 
 ### from()
 
-> `static` **from**(`obj`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> `static` **from**(`obj`): [`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 #### Parameters
 
-• **obj**: [`BlobTransactionRequestLike`](./BlobTransactionRequestLike.md)
+• **obj**: `UploadTransactionRequestLike`
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UploadTransactionRequest`](UploadTransactionRequest.md)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:20](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L20)
+[packages/account/src/providers/transaction-request/upload-transaction-request.ts:47](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upload-transaction-request.ts#L47)
 
 ***
 

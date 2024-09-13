@@ -2,7 +2,7 @@
 
 ***
 
-# Class: BlobTransactionRequest
+# Class: UpgradeTransactionRequest
 
 Abstract class to define the functionalities of a transaction request transaction request.
 
@@ -12,21 +12,21 @@ Abstract class to define the functionalities of a transaction request transactio
 
 ## Constructors
 
-### new BlobTransactionRequest()
+### new UpgradeTransactionRequest()
 
-> **new BlobTransactionRequest**(`blobTransactionRequestLike`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **new UpgradeTransactionRequest**(`upgradeTransactionRequestLike`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
-Creates an instance `BlobTransactionRequest`.
+Creates an instance `UpgradeTransactionRequest`.
 
 #### Parameters
 
-• **blobTransactionRequestLike**: [`BlobTransactionRequestLike`](./BlobTransactionRequestLike.md)
+• **upgradeTransactionRequestLike**: `UpgradeTransactionRequestLike` = `{}`
 
 The initial values for the instance
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 #### Overrides
 
@@ -34,19 +34,19 @@ The initial values for the instance
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:36](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L36)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:64](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L64)
 
 ## Properties
 
-### blobId
+### bytecodeWitnessIndex
 
-> **blobId**: `string`
+> **bytecodeWitnessIndex**: `number`
 
-Blob ID
+Witness index of consensus
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:27](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L27)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:57](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L57)
 
 ***
 
@@ -132,9 +132,9 @@ Gas price for transaction
 
 ### type
 
-> **type**: [`Blob`](./TransactionType.md#blob)
+> **type**: [`Upgrade`](./TransactionType.md#upgrade)
 
-Type of the transaction
+The type of transaction
 
 #### Overrides
 
@@ -142,19 +142,19 @@ Type of the transaction
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:25](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L25)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:53](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L53)
 
 ***
 
-### witnessIndex
+### upgradePurpose
 
-> **witnessIndex**: `number`
+> **upgradePurpose**: `UpgradePurposeRequest`
 
-Witness index of contract bytecode to create
+The upgrade purpose
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:29](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L29)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:55](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L55)
 
 ***
 
@@ -192,7 +192,7 @@ List of witnesses
 
 ### addAccountWitnesses()
 
-> **addAccountWitnesses**(`account`): `Promise`\&lt;[`BlobTransactionRequest`](BlobTransactionRequest.md)\>
+> **addAccountWitnesses**(`account`): `Promise`\&lt;[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)\>
 
 Helper function to add an external signature to the transaction.
 
@@ -204,7 +204,7 @@ The account/s to sign to the transaction.
 
 #### Returns
 
-`Promise`\&lt;[`BlobTransactionRequest`](BlobTransactionRequest.md)\>
+`Promise`\&lt;[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)\>
 
 The transaction with the signature witness added.
 
@@ -277,7 +277,7 @@ Coin resource.
 
 ### addCoinOutput()
 
-> **addCoinOutput**(`to`, `amount`, `assetId`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addCoinOutput**(`to`, `amount`, `assetId`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 Adds a coin output to the transaction.
 
@@ -297,7 +297,7 @@ Asset ID of coin.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 #### Inherited from
 
@@ -311,7 +311,7 @@ Asset ID of coin.
 
 ### addCoinOutputs()
 
-> **addCoinOutputs**(`to`, `quantities`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addCoinOutputs**(`to`, `quantities`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 Adds multiple coin outputs to the transaction.
 
@@ -327,7 +327,7 @@ Quantities of coins.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 #### Inherited from
 
@@ -336,6 +336,30 @@ Quantities of coins.
 #### Defined in
 
 [packages/account/src/providers/transaction-request/transaction-request.ts:500](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/transaction-request.ts#L500)
+
+***
+
+### addConsensusParametersUpgradePurpose()
+
+> **addConsensusParametersUpgradePurpose**(`consensus`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
+
+Adds a consensus parameters upgrade purpose.
+
+#### Parameters
+
+• **consensus**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The consensus bytecode.
+
+#### Returns
+
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
+
+- The current instance of `UpgradeTransactionRequest`.
+
+#### Defined in
+
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:84](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L84)
 
 ***
 
@@ -368,7 +392,7 @@ Message resource.
 
 ### addResource()
 
-> **addResource**(`resource`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addResource**(`resource`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 Adds a single resource to the transaction by adding a coin/message input and a
 change output for the related assetId, if one it was not added yet.
@@ -381,7 +405,7 @@ The resource to add.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 This transaction.
 
@@ -397,7 +421,7 @@ This transaction.
 
 ### addResources()
 
-> **addResources**(`resources`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **addResources**(`resources`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 Adds multiple resources to the transaction by adding coin/message inputs and change
 outputs from the related assetIds.
@@ -410,7 +434,7 @@ The resources to add.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 This transaction.
 
@@ -421,6 +445,58 @@ This transaction.
 #### Defined in
 
 [packages/account/src/providers/transaction-request/transaction-request.ts:470](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/transaction-request.ts#L470)
+
+***
+
+### addStateTransitionUpgradePurpose()
+
+> **addStateTransitionUpgradePurpose**(`bytecodeRoot`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
+
+Adds a state transition upgrade purpose.
+
+#### Parameters
+
+• **bytecodeRoot**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The Merkle root of the state transition.
+
+#### Returns
+
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
+
+- The current instance of `UpgradeTransactionRequest`.
+
+#### Defined in
+
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:100](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L100)
+
+***
+
+### addUpgradePurpose()
+
+> **addUpgradePurpose**(`type`, `data`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
+
+Adds an upgrade purpose.
+
+#### Parameters
+
+• **type**: `UpgradePurposeTypeEnum`
+
+The upgrade purpose type.
+
+• **data**: [`BytesLike`](../Interfaces/index.md#byteslike)
+
+The bytecode or merkle root of upgrade purpose
+
+#### Returns
+
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
+
+- The current instance of `UpgradeTransactionRequest`.
+
+#### Defined in
+
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:116](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L116)
 
 ***
 
@@ -468,7 +544,7 @@ This transaction.
 
 ### ~~fundWithFakeUtxos()~~
 
-> **fundWithFakeUtxos**(`quantities`, `baseAssetId`, `resourcesOwner`?): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> **fundWithFakeUtxos**(`quantities`, `baseAssetId`, `resourcesOwner`?): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 Funds the transaction with fake UTXOs for each assetId and amount in the
 quantities array.
@@ -487,7 +563,7 @@ The base asset to fund the transaction.
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 #### Deprecated
 
@@ -619,7 +695,7 @@ CoinQuantity array.
 
 > **getTransactionId**(`chainId`): `string`
 
-Gets the Transaction Request by hashing the transaction.
+Gets the Transaction ID by hashing the transaction
 
 #### Parameters
 
@@ -639,7 +715,7 @@ The chain ID.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:65](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L65)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:169](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L169)
 
 ***
 
@@ -647,7 +723,7 @@ The chain ID.
 
 > **metadataGas**(`gasCosts`): `BN`
 
-Calculates the metadata gas cost for a blob transaction.
+Calculates the metadata gas cost for an upgrade transaction.
 
 #### Parameters
 
@@ -659,7 +735,7 @@ gas costs passed from the chain.
 
 `BN`
 
-metadata gas cost for the blob transaction.
+metadata gas cost for the upgrade transaction.
 
 #### Overrides
 
@@ -667,7 +743,7 @@ metadata gas cost for the blob transaction.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:75](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L75)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:180](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L180)
 
 ***
 
@@ -718,13 +794,13 @@ The transaction as a JSON object.
 
 ### toTransaction()
 
-> **toTransaction**(): `TransactionBlob`
+> **toTransaction**(): `TransactionUpgrade`
 
-Converts the transaction request to a `TransactionBlob`.
+Converts the transaction request to a `TransactionUpgrade`.
 
 #### Returns
 
-`TransactionBlob`
+`TransactionUpgrade`
 
 The transaction create object.
 
@@ -734,7 +810,7 @@ The transaction create object.
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:47](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L47)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:133](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L133)
 
 ***
 
@@ -848,19 +924,19 @@ The signature to update the witness with.
 
 ### from()
 
-> `static` **from**(`obj`): [`BlobTransactionRequest`](BlobTransactionRequest.md)
+> `static` **from**(`obj`): [`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 #### Parameters
 
-• **obj**: [`BlobTransactionRequestLike`](./BlobTransactionRequestLike.md)
+• **obj**: `UpgradeTransactionRequestLike`
 
 #### Returns
 
-[`BlobTransactionRequest`](BlobTransactionRequest.md)
+[`UpgradeTransactionRequest`](UpgradeTransactionRequest.md)
 
 #### Defined in
 
-[packages/account/src/providers/transaction-request/blob-transaction-request.ts:20](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/blob-transaction-request.ts#L20)
+[packages/account/src/providers/transaction-request/upgrade-transaction-request.ts:45](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/transaction-request/upgrade-transaction-request.ts#L45)
 
 ***
 
