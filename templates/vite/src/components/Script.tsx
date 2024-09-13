@@ -3,10 +3,10 @@ import { BigNumberish, BN, Script as FuelScript } from "fuels";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
-import { useEnvironment } from "../hooks/useEnvironment";
 import { TestScript } from "../sway-api";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
+import { isLocal } from "../lib";
 
 export default function Script() {
   const [script, setScript] = useState<FuelScript<[input: BigNumberish], BN>>();
@@ -15,7 +15,6 @@ export default function Script() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { wallet, refetch } = useWallet();
-  const { isLocal } = useEnvironment();
 
   useEffect(() => {
     if (wallet) {

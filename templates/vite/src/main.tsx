@@ -6,14 +6,11 @@ import { createRoot } from "react-dom/client";
 import { ToastContainer } from "react-toastify";
 import { Provider } from "fuels";
 
-import { useEnvironment } from "./hooks/useEnvironment";
 import App from "./App.tsx";
+import { providerUrl } from "./lib";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
-
-// eslint-disable-next-line react-hooks/rules-of-hooks
-const { providerUrl } = useEnvironment();
 
 const queryClient = new QueryClient();
 

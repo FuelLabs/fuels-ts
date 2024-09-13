@@ -2,15 +2,14 @@ import { useBalance, useWallet } from "@fuels/react";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-import { useEnvironment } from "../hooks/useEnvironment";
 import LocalFaucet from "./LocalFaucet";
 import Button from "./Button";
+import { isLocal, testnetFaucetUrl } from "../lib";
 
 export default function Faucet() {
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
   const { balance, refetch } = useBalance({ address });
-  const { isLocal, testnetFaucetUrl } = useEnvironment();
 
   useEffect(() => {
     refetch();

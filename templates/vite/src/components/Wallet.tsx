@@ -3,10 +3,9 @@ import { useEffect } from "react";
 
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-import { useEnvironment } from "../hooks/useEnvironment";
+import { isLocal } from "../lib";
 
 export default function Wallet() {
-  const { isLocal } = useEnvironment();
   const { disconnect } = useDisconnect();
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";

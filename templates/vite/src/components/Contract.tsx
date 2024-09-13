@@ -2,17 +2,16 @@ import { useEffect, useState } from "react";
 import { useWallet } from "@fuels/react";
 import { toast } from "react-toastify";
 
-import { useEnvironment } from "../hooks/useEnvironment";
 import LocalFaucet from "./LocalFaucet";
 import { TestContract } from "../sway-api";
 import Button from "./Button";
+import { isLocal, contractId } from "../lib";
 
 export default function Contract() {
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { contractId, isLocal } = useEnvironment();
   const { wallet, refetch } = useWallet();
 
   useEffect(() => {
@@ -29,7 +28,7 @@ export default function Contract() {
         getCount();
       }
     }
-  }, [wallet, contract, contractId]);
+  }, [wallet, contract]);
 
   async function incrementCounter() {
     if (!wallet || !contract) return;

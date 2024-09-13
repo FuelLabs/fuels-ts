@@ -1,8 +1,6 @@
-import { useEnvironment } from "../hooks/useEnvironment";
+import { providerUrl, playgroundUrl } from "../lib";
 
 export default function Info() {
-  const { providerUrl, playgroundUrl } = useEnvironment();
-
   return (
     <div id="text" className="col-span-3 px-4 py-8">
       <h1 className="pb-1 pt-6 text-3xl font-medium">Welcome to Fuel</h1>

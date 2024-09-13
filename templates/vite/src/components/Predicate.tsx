@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
 import { toast } from "react-toastify";
 
-import { useEnvironment } from "../hooks/useEnvironment";
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-
+import { isLocal } from "../lib";
 export default function Predicate() {
   const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
   const [predicatePin, setPredicatePin] = useState<string>();
@@ -22,7 +21,6 @@ export default function Predicate() {
   const { balance: predicateBalance, refetch: refetchPredicate } = useBalance({
     address: predicateAddress,
   });
-  const { isLocal } = useEnvironment();
 
   useEffect(() => {
     if (wallet) {
