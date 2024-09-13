@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 
 import { setTimeout } from 'timers/promises';
-import type { NonEmptyObject, RequireAtLeastOne } from 'type-fest';
 
 import type {
   TransactionRequestLike,
