@@ -51,4 +51,14 @@ describe('checkForAndDisplayUpdates', () => {
     await checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates();
     expect(log).toHaveBeenCalledWith('\n✅ Your fuels version is up to date: 1.0.0\n');
   });
+
+  test('should handle fetch timing out', async () => {
+    vi.spyOn(global, 'fetch').mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(resolve, 5000);
+        })
+    );
+    await expect(checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates()).resolves.not.toThrow();
+  });
 });
