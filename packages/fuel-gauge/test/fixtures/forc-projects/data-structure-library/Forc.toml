@@ -1,7 +1,6 @@
 [project]
 authors = ["Fuel Labs <contact@fuel.sh>"]
 license = "Apache-2.0"
-name = "coverage-contract"
+name = "data-structure-library"
 
 [dependencies]
-data-structure-library = { path = "../data-structure-library" }
