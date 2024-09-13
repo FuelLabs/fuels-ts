@@ -102,7 +102,7 @@ describe('cli.js', () => {
     runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(3);
+    expect(info).toHaveBeenCalledTimes(2);
     expect(exit).toHaveBeenCalledWith(0);
     expect(error).toHaveBeenCalledTimes(0);
   });
@@ -125,7 +125,7 @@ describe('cli.js', () => {
     runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(3);
+    expect(info).toHaveBeenCalledTimes(2);
     expect(exit).toHaveBeenCalledWith(0);
     expect(error).toHaveBeenCalledTimes(0);
   });
@@ -148,7 +148,7 @@ describe('cli.js', () => {
     runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(1);
+    expect(info).toHaveBeenCalledTimes(0);
     expect(exit).toHaveBeenCalledWith(1);
     expect(error).toHaveBeenCalledTimes(3);
   });
@@ -173,7 +173,7 @@ describe('cli.js', () => {
     runVersions();
 
     // validating
-    expect(info).toHaveBeenCalledTimes(1);
+    expect(info).toHaveBeenCalledTimes(0);
     expect(exit).toHaveBeenCalledWith(1);
     expect(error).toHaveBeenCalledTimes(4);
 
