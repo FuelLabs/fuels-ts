@@ -5,9 +5,7 @@ import { colorizeUserVersion } from './lib/colorizeUserVersion';
 import { compareSystemVersions } from './lib/compareSystemVersions';
 import { fuelUpLink } from './lib/fuelUpLink';
 import { getBuiltinVersions } from './lib/getBuiltinVersions';
-import { getLatestFuelsVersion } from './lib/getLatestFuelsVersion';
 import { getSystemVersions } from './lib/getSystemVersions';
-import { gt } from './lib/semver';
 
 export * from './lib/compareSystemVersions';
 export * from './lib/fuelUpLink';
@@ -17,20 +15,8 @@ export * from './lib/getBuiltinVersions';
 
 export const eitherOr = (val1: string | null, val2: string) => val1 ?? val2;
 
-export async function runVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
+export function runVersions(params: { forcPath?: string; fuelCorePath?: string } = {}) {
   const { error, info } = console;
-
-  const { FUELS: userFuelsVersion } = getBuiltinVersions();
-  const latestFuelsVersion = await getLatestFuelsVersion();
-  const isFuelsVersionOutdated = gt(latestFuelsVersion, userFuelsVersion);
-
-  if (isFuelsVersionOutdated) {
-    info(
-      `\nThere is a newer version of fuels available: ${latestFuelsVersion}. Your version is: ${userFuelsVersion}`
-    );
-  } else {
-    info(`\nYour fuels version is up to date: ${userFuelsVersion}`);
-  }
 
   const supportedVersions = getBuiltinVersions();
 

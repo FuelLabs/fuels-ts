@@ -2,7 +2,6 @@ import { eitherOr, runVersions } from './cli';
 import * as colorizeUserVersionMod from './lib/colorizeUserVersion';
 import * as compareSystemVersionsMod from './lib/compareSystemVersions';
 import * as getBuiltinVersionsMod from './lib/getBuiltinVersions';
-import * as getFuelsVersionMod from './lib/getLatestFuelsVersion';
 import * as getSystemVersionsMod from './lib/getSystemVersions';
 
 /**
@@ -31,7 +30,6 @@ describe('cli.js', () => {
     systemForcVersion: string;
     systemFuelCoreVersion: string;
     systemVersionsError: Error | null;
-    latestFuelsVersion: string;
   }) {
     const {
       systemForcVersion,
@@ -43,7 +41,6 @@ describe('cli.js', () => {
       systemForcIsEq,
       systemForcIsLt,
       systemVersionsError,
-      latestFuelsVersion,
     } = params;
 
     const error = vi.spyOn(console, 'error').mockImplementation(() => []);
@@ -77,10 +74,6 @@ describe('cli.js', () => {
       FUELS: '1.0.0',
     }));
 
-    vi.spyOn(getFuelsVersionMod, 'getLatestFuelsVersion').mockReturnValue(
-      Promise.resolve(latestFuelsVersion)
-    );
-
     return {
       error,
       info,
@@ -91,7 +84,7 @@ describe('cli.js', () => {
   /*
     Tests
   */
-  test('should inform about newer versions', async () => {
+  test('should inform about newer versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '1.1.1',
@@ -103,11 +96,10 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError: null,
-      latestFuelsVersion: '1.0.1',
     });
 
     // executing
-    await runVersions();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(3);
@@ -115,7 +107,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should inform about exact versions', async () => {
+  test('should inform about exact versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '1.0.0',
@@ -127,11 +119,10 @@ describe('cli.js', () => {
       systemForcIsEq: true,
       systemForcIsLt: false,
       systemVersionsError: null,
-      latestFuelsVersion: '1.0.0',
     });
 
     // executing
-    await runVersions();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(3);
@@ -139,7 +130,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(0);
   });
 
-  test('should warn about older versions', async () => {
+  test('should warn about older versions', () => {
     // mocks
     const { error, info, exit } = mockAllDeps({
       systemForcVersion: '0.0.1',
@@ -151,11 +142,10 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: true,
       systemVersionsError: null,
-      latestFuelsVersion: '1.0.1',
     });
 
     // executing
-    await runVersions();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(1);
@@ -163,7 +153,7 @@ describe('cli.js', () => {
     expect(error).toHaveBeenCalledTimes(3);
   });
 
-  test('should warn about fuelup exception', async () => {
+  test('should warn about fuelup exception', () => {
     // mocks
     const systemVersionsError = new Error('fuelup exception');
 
@@ -177,11 +167,10 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError,
-      latestFuelsVersion: '1.0.1',
     });
 
     // executing
-    await runVersions();
+    runVersions();
 
     // validating
     expect(info).toHaveBeenCalledTimes(1);
@@ -199,7 +188,7 @@ describe('cli.js', () => {
     expect(eitherOr(null, 'b')).toEqual('b');
   });
 
-  test('should notify about newer npm version', async () => {
+  test('should notify about newer npm version', () => {
     // mocks
     const { info } = mockAllDeps({
       systemForcVersion: '1.1.1',
@@ -211,18 +200,17 @@ describe('cli.js', () => {
       systemForcIsEq: false,
       systemForcIsLt: false,
       systemVersionsError: null,
-      latestFuelsVersion: '1.0.1',
     });
 
     // executing
-    await runVersions();
+    runVersions();
 
     expect(info).toHaveBeenCalledWith(
       '\nThere is a newer version of fuels available: 1.0.1. Your version is: 1.0.0'
     );
   });
 
-  test('should log proper message when npm version is the same as the latest', async () => {
+  test('should log proper message when npm version is the same as the latest', () => {
     // mocks
     const { info } = mockAllDeps({
       systemForcVersion: '1.1.1',
@@ -234,11 +222,10 @@ describe('cli.js', () => {
       systemForcIsEq: true,
       systemForcIsLt: false,
       systemVersionsError: null,
-      latestFuelsVersion: '1.1.1',
     });
 
     // executing
-    await runVersions();
+    runVersions();
 
     expect(info).toHaveBeenCalledWith('\nYour fuels version is up to date: 1.1.1');
   });
