@@ -2,7 +2,7 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import { versions as builtinVersions, type BinaryVersions } from '@fuel-ts/versions';
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
-import mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp';
 import { basename } from 'path';
 import { rimrafSync } from 'rimraf';
 

@@ -1,5 +1,6 @@
 export const CHAIN_IDS = {
   eth: {
+    mainnet: 1,
     sepolia: 11155111,
     foundry: 31337,
   },
