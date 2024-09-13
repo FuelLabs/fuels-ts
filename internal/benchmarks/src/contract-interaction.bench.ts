@@ -1,12 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import type { WalletUnlocked } from 'fuels';
-import { bn } from 'fuels';
+import { WalletUnlocked, bn, Provider } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
 
 import type { CounterContract, CallTestContract } from '../test/typegen/contracts';
 import { CounterContractFactory, CallTestContractFactory } from '../test/typegen/contracts';
+
+import { DEVNET_CONFIG } from './config';
 /**
  * @group node
  * @group browser
@@ -16,20 +17,32 @@ describe('Contract Interaction Benchmarks', () => {
   let callTestContract: CallTestContract;
   let wallet: WalletUnlocked;
   let cleanup: () => void;
-  beforeEach(async () => {
-    const launched = await launchTestNode({
-      contractsConfigs: [{ factory: CounterContractFactory }, { factory: CallTestContractFactory }],
+
+  if (process.env.DEVNET_WALLET_PVT_KEY !== undefined) {
+    beforeAll(async () => {
+      const { networkUrl } = DEVNET_CONFIG;
+      const provider = await Provider.create(networkUrl);
+      wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
+    });
+  } else {
+    beforeEach(async () => {
+      const launched = await launchTestNode({
+        contractsConfigs: [
+          { factory: CounterContractFactory },
+          { factory: CallTestContractFactory },
+        ],
+      });
+
+      cleanup = launched.cleanup;
+      contract = launched.contracts[0];
+      callTestContract = launched.contracts[1];
+      wallet = launched.wallets[0];
     });
 
-    cleanup = launched.cleanup;
-    contract = launched.contracts[0];
-    callTestContract = launched.contracts[1];
-    wallet = launched.wallets[0];
-  });
-
-  afterEach(() => {
-    cleanup();
-  });
+    afterEach(() => {
+      cleanup();
+    });
+  }
 
   bench('should successfully execute a contract read function', async () => {
     const tx = await contract.functions.get_count().call();

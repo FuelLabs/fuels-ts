@@ -1,11 +1,14 @@
-name: Benchmarks
+name: "Bench Devnet"
+
 on:
+  # Remove this before merging, we only want devnet tests on master
   pull_request:
     branches:
       - master
   push:
-    branches-ignore:
+    branches:
       - master
+      - release/*
 
 jobs:
   benchmarks:
@@ -25,3 +28,5 @@ jobs:
         with:
           run: pnpm bench:node
           token: ${{ secrets.CODSPEED_TOKEN }}
+        env:
+          DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}

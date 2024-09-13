@@ -1,8 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { WalletLocked, WalletUnlocked, Wallet } from 'fuels';
+import { Provider, WalletLocked, WalletUnlocked, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 import { bench } from 'vitest';
+
+import { DEVNET_CONFIG } from './config';
 
 const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
 const expectedPublicKey =
@@ -15,30 +17,49 @@ const expectedLockedAddress = 'fuel1tac0aml37g57f227zptw3dxcp59jfdt9vayxpnpp80ds
  * @group browser
  */
 describe('Wallet Benchmarks', () => {
-  bench('Instantiate a new Unlocked wallet', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
+  let cleanup: () => void;
+  let provider: Provider;
 
-    const unlockedWallet = new WalletUnlocked(expectedPrivateKey, provider);
+  if (process.env.DEVNET_WALLET_PVT_KEY !== undefined) {
+    beforeAll(async () => {
+      provider = await Provider.create(DEVNET_CONFIG.networkUrl);
+    });
+  } else {
+    beforeEach(async () => {
+      const launched = await launchTestNode();
 
-    expect(unlockedWallet.publicKey).toEqual(expectedPublicKey);
-    expect(unlockedWallet.address.toAddress()).toEqual(expectedAddress);
+      cleanup = launched.cleanup;
+      provider = launched.provider;
+    });
+
+    afterEach(() => {
+      cleanup();
+    });
+  }
+
+  bench('Instantiate a new Unlocked wallet', () => {
+    for (let i = 0; i < 10; i++) {
+      const unlockedWallet = new WalletUnlocked(expectedPrivateKey, provider);
+
+      expect(unlockedWallet.publicKey).toEqual(expectedPublicKey);
+      expect(unlockedWallet.address.toAddress()).toEqual(expectedAddress);
+    }
   });
 
-  bench('Instantiate from a constructor', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
-    const lockedWallet = new WalletLocked(expectedPrivateKey, provider);
+  bench('Instantiate a new Locked wallet from a constructor 10 times', () => {
+    for (let i = 0; i < 10; i++) {
+      const lockedWallet = new WalletLocked(expectedPrivateKey, provider);
 
-    expect(lockedWallet.address.toAddress()).toEqual(expectedLockedAddress);
+      expect(lockedWallet.address.toAddress()).toEqual(expectedLockedAddress);
+    }
   });
 
-  bench('Instantiate from an address', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
-    const lockedWallet = Wallet.fromAddress(expectedAddress, provider);
+  bench('Instantiate from an address', () => {
+    for (let i = 0; i < 10; i++) {
+      const lockedWallet = Wallet.fromAddress(expectedAddress, provider);
 
-    expect(lockedWallet.address.toAddress()).toEqual(expectedAddress);
-    expect(lockedWallet).toBeInstanceOf(WalletLocked);
+      expect(lockedWallet.address.toAddress()).toEqual(expectedAddress);
+      expect(lockedWallet).toBeInstanceOf(WalletLocked);
+    }
   });
 });

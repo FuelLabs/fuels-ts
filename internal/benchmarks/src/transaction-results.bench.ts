@@ -1,9 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { Wallet } from 'fuels';
-import type { WalletUnlocked, TransferParams, Provider } from 'fuels';
+import { Wallet, Provider } from 'fuels';
+import type { WalletUnlocked, TransferParams } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
+
+import { DEVNET_CONFIG } from './config';
 
 /**
  * @group node
@@ -12,33 +14,46 @@ import { bench } from 'vitest';
 describe('Transaction Submission Benchmarks', () => {
   let provider: Provider;
   let wallet: WalletUnlocked;
-  let walletA: WalletUnlocked;
+  let receiver1: WalletUnlocked;
+  let receiver2: WalletUnlocked;
+  let receiver3: WalletUnlocked;
   let cleanup: () => void;
-  beforeEach(async () => {
-    const launched = await launchTestNode();
 
-    cleanup = launched.cleanup;
-    provider = launched.provider;
-    walletA = launched.wallets[0];
-    wallet = launched.wallets[1];
-  });
+  if (process.env.DEVNET_WALLET_PVT_KEY !== undefined) {
+    beforeAll(async () => {
+      const { networkUrl } = DEVNET_CONFIG;
+      provider = await Provider.create(networkUrl);
+      wallet = Wallet.fromPrivateKey(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
+      receiver1 = Wallet.generate({ provider });
+      receiver2 = Wallet.generate({ provider });
+      receiver3 = Wallet.generate({ provider });
+    });
+  } else {
+    beforeEach(async () => {
+      const launched = await launchTestNode();
 
-  afterEach(() => {
-    cleanup();
-  });
-  bench('should successfully transfer a single asset between wallets', async () => {
-    const receiver = Wallet.generate({ provider });
+      cleanup = launched.cleanup;
+      provider = launched.provider;
+      wallet = launched.wallets[1];
+      receiver1 = Wallet.generate({ provider });
+      receiver2 = Wallet.generate({ provider });
+      receiver3 = Wallet.generate({ provider });
+    });
 
-    const tx = await walletA.transfer(receiver.address, 100, provider.getBaseAssetId());
+    afterEach(() => {
+      cleanup();
+    });
+  }
+
+  const transfer = async () => {
+    const tx = await wallet.transfer(receiver1.address, 100, provider.getBaseAssetId());
 
     const { isStatusSuccess } = await tx.waitForResult();
 
     expect(isStatusSuccess).toBeTruthy();
-  });
+  };
 
-  bench('should successfully conduct a custom transfer between wallets', async () => {
-    const receiver = Wallet.generate({ provider });
-
+  const customTransfer = async () => {
     const txParams = {
       tip: 4,
       witnessLimit: 800,
@@ -46,7 +61,7 @@ describe('Transaction Submission Benchmarks', () => {
     };
 
     const pendingTx = await wallet.transfer(
-      receiver.address,
+      receiver1.address,
       500,
       provider.getBaseAssetId(),
       txParams
@@ -55,13 +70,21 @@ describe('Transaction Submission Benchmarks', () => {
     const { transaction } = await pendingTx.waitForResult();
 
     expect(transaction).toBeDefined();
+  };
+
+  bench('should successfully transfer a single asset between wallets 10 times', async () => {
+    for (let i = 0; i < 10; i++) {
+      await transfer();
+    }
+  });
+
+  bench('should successfully conduct a custom transfer between wallets 10 times', async () => {
+    for (let i = 0; i < 10; i++) {
+      await customTransfer();
+    }
   });
 
   bench('should successfully perform a batch transfer', async () => {
-    const receiver1 = Wallet.generate({ provider });
-    const receiver2 = Wallet.generate({ provider });
-    const receiver3 = Wallet.generate({ provider });
-
     const amountToTransfer1 = 989;
     const amountToTransfer2 = 699;
     const amountToTransfer3 = 122;
@@ -84,14 +107,12 @@ describe('Transaction Submission Benchmarks', () => {
   });
 
   bench('should successfully withdraw to the base layer', async () => {
-    const receiver = Wallet.generate({ provider });
-
     const txParams = {
       witnessLimit: 800,
       maxFee: 100_000,
     };
 
-    const pendingTx = await wallet.withdrawToBaseLayer(receiver.address, 500, txParams);
+    const pendingTx = await wallet.withdrawToBaseLayer(receiver1.address, 500, txParams);
     const { transaction } = await pendingTx.waitForResult();
 
     expect(transaction).toBeDefined();
