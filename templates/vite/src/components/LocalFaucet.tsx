@@ -1,15 +1,19 @@
-import { bn, WalletUnlocked } from "fuels";
+import { bn, sleep, WalletUnlocked } from "fuels";
 import Button from "./Button";
 import { useWallet } from "@fuels/react";
 import { useProvider } from "../hooks/useProvider";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 export default function LocalFaucet() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const { wallet } = useWallet();
   const { provider } = useProvider();
 
   async function localTransfer() {
     if (!wallet) return;
+    setIsLoading(true);
     try {
       const genesis = new WalletUnlocked(
         process.env.VITE_GENESIS_WALLET_PRIVATE_KEY as string,
@@ -23,6 +27,7 @@ export default function LocalFaucet() {
       console.error(error);
       toast.error("Error transferring funds");
     }
+    setIsLoading(false);
   }
 
   return (
@@ -34,7 +39,11 @@ export default function LocalFaucet() {
             As the dApp is running locally, you can transfer 5 ETH to your
             address via the genesis wallet.
           </p>
-          <Button onClick={localTransfer} className="w-1/3">
+          <Button
+            onClick={localTransfer}
+            className="w-1/3"
+            disabled={isLoading}
+          >
             Transfer 5 ETH
           </Button>
         </div>

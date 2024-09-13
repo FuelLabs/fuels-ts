@@ -12,6 +12,7 @@ export default function Script() {
   const [script, setScript] = useState<FuelScript<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<number>();
   const [result, setResult] = useState<number>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (wallet) {
@@ -22,6 +23,7 @@ export default function Script() {
 
   const submit = async () => {
     if (!script || !input) return;
+    setIsLoading(true);
     try {
       const tx = await script.functions.main(input).call();
       toast.info(`Transaction submitted: ${tx.transactionId}`);
@@ -34,6 +36,7 @@ export default function Script() {
         "Error running script. Please make sure your wallet has enough funds. You can top it up using the faucet.",
       );
     }
+    setIsLoading(false);
   };
 
   return (
@@ -91,7 +94,7 @@ export default function Script() {
         </div>
       </div>
       <div className="flex justify-center">
-        <Button className="w-full" onClick={submit}>
+        <Button className="w-full" onClick={submit} disabled={isLoading}>
           Submit
         </Button>
       </div>

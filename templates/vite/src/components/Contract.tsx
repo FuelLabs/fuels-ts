@@ -12,6 +12,7 @@ export default function Contract() {
   const { wallet } = useWallet();
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (wallet) {
@@ -31,6 +32,7 @@ export default function Contract() {
 
   async function incrementCounter() {
     if (!wallet || !contract) return;
+    setIsLoading(true);
 
     try {
       const call = await contract.functions.increment_counter(1).call();
@@ -42,6 +44,7 @@ export default function Contract() {
       console.error(error);
       toast.error("Error incrementing counter");
     }
+    setIsLoading(false);
   }
 
   return (
@@ -57,7 +60,11 @@ export default function Contract() {
             className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
-          <Button onClick={incrementCounter} className="w-1/3">
+          <Button
+            onClick={incrementCounter}
+            className="w-1/3"
+            disabled={isLoading}
+          >
             Increment
           </Button>
         </div>

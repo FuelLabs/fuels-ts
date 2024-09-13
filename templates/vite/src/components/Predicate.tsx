@@ -18,6 +18,7 @@ export default function Predicate() {
     address: predicateAddress,
   });
   const [predicatePin, setPredicatePin] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (wallet) {
@@ -38,6 +39,8 @@ export default function Predicate() {
 
   const transferToPredicate = async () => {
     if (!wallet || !predicate) return;
+    setIsLoading(true);
+
     try {
       const tx = await wallet.transfer(predicate.address, bn(1_000_000));
       toast.info(`Transaction submitted: ${tx.id}`);
@@ -47,10 +50,13 @@ export default function Predicate() {
       console.error(error);
       toast.error("Error transferring funds");
     }
+    setIsLoading(false);
   };
 
   const transferToWallet = async () => {
     if (!wallet || !predicate) return;
+    setIsLoading(true);
+
     try {
       const newPredicate = new TestPredicate({
         provider: wallet.provider,
@@ -65,6 +71,7 @@ export default function Predicate() {
       console.error(error);
       toast.error("Error transferring funds");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -106,7 +113,11 @@ export default function Predicate() {
             className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
-          <Button onClick={transferToPredicate} className="w-1/3">
+          <Button
+            onClick={transferToPredicate}
+            className="w-1/3"
+            disabled={isLoading}
+          >
             Transfer
           </Button>
         </div>
@@ -132,7 +143,11 @@ export default function Predicate() {
         </div>
       </div>
       <div>
-        <Button onClick={transferToWallet} className="w-full">
+        <Button
+          onClick={transferToWallet}
+          className="w-full"
+          disabled={isLoading}
+        >
           Unlock and Transfer
         </Button>
       </div>
