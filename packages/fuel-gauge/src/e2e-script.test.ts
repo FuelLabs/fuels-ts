@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
-import { Provider, TransactionType, WalletUnlocked, CHAIN_IDS, rawAssets, assets } from 'fuels';
+import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
 
