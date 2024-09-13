@@ -10,7 +10,6 @@ export default function Faucet() {
   const { balance, refetch } = useBalance({ address });
 
   const { isLocal, testnetFaucetUrl } = useEnvironment();
-  const faucetTitle = isLocal ? "Local Faucet" : "Testnet Faucet";
 
   useEffect(() => {
     const interval = setInterval(() => refetch(), 1000);
