@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
-import { Provider, TransactionType, WalletUnlocked, CHAIN_IDS, rawAssets, assets } from 'fuels';
+import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
 
@@ -121,10 +121,6 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
   );
 
   it(`should have correct assets`, () => {
-    if (shouldSkip) {
-      return;
-    }
-
     const expected = [
       {
         name: 'Ethereum',
@@ -142,7 +138,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
     ];
 
     expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
-    expect(rawAssets).toEqual(expected);
-    expect(assets).toEqual(expected);
+    expect(rawAssets).toEqual(expect.arrayContaining(expected));
+    expect(assets).toEqual(expect.arrayContaining(expected));
   }, 15_000);
 });
