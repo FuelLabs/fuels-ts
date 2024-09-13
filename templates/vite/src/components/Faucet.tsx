@@ -15,6 +15,11 @@ export default function Faucet() {
     refetch();
   }, [refetch]);
 
+  useEffect(() => {
+    const interval = setInterval(() => refetch(), 5000);
+    return () => clearInterval(interval);
+  }, [refetch]);
+
   const copyAddress = () => {
     navigator.clipboard.writeText(address);
     toast.success("Address copied to clipboard");

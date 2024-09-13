@@ -15,6 +15,11 @@ export default function Wallet() {
     refetch();
   }, [refetch]);
 
+  useEffect(() => {
+    const interval = setInterval(() => refetch(), 5000);
+    return () => clearInterval(interval);
+  }, [refetch]);
+
   return (
     <>
       <div>
