@@ -1,8 +1,8 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { globSync } from 'glob';
-import { join } from 'path';
+import { join, basename } from 'path';
 
-const wrapperFnFilepath = join(__dirname, 'wrapper-fn.ts');
+const wrapperFnFilepath = join(__dirname, 'test-template.ts');
 const wrapperFnContents = readFileSync(wrapperFnFilepath, 'utf-8');
 
 /**
@@ -10,15 +10,15 @@ const wrapperFnContents = readFileSync(wrapperFnFilepath, 'utf-8');
  * @param filepath - Snippet filepath
  */
 export const wrapSnippet = (filepath: string) => {
-  console.log('-----');
-
   const snippetContents = readFileSync(filepath, 'utf8');
 
   /*
     Filter all imports from file.
   */
   const importsReg = /^[\s\S]+from.+['"];/gm;
+
   let imports = snippetContents.match(importsReg)?.toString() ?? '';
+
   const snippetsNoImports = imports.length ? snippetContents.split(imports)[1] : snippetContents;
 
   // Does the snippet requires node launcher?
@@ -27,7 +27,7 @@ export const wrapSnippet = (filepath: string) => {
   /*
     Removes .env file import
   */
-  const envImportReg = /import.+\{.+([\s\S]+).+\}.+from.+'\.\.\/env';/gm;
+  const envImportReg = /\nimport.+\{.+([\s\S]+).+\}.+from.+'\.\.\/env';/gm;
   if (envImportReg.test(imports)) {
     const allImports = imports.match(envImportReg)?.[0];
     const envImport = `import ${allImports?.split('import ').pop()}`;
@@ -41,14 +41,24 @@ export const wrapSnippet = (filepath: string) => {
 
   if (requiresNodeLauncher) {
     /*
-     Adds `launchTestNode` import
+     Adds `launchTestNode` import, always right below the last `fuels` import
+     and before the next relative one.
    */
-    imports += `\nimport { launchTestNode } from 'fuels/test-utils'`;
+    const launchImport = `import { launchTestNode } from 'fuels/test-utils';`;
+
+    const searchStr = `from 'fuels';`;
+    const lastIndexStart = imports.lastIndexOf(searchStr);
+    const lastIndexEnd = lastIndexStart + searchStr.length;
+
+    const prefix = imports.slice(0, lastIndexEnd).trim();
+    const suffix = imports.slice(lastIndexEnd).trim();
+
+    imports = `${prefix}\n${launchImport}\n\n${suffix}`;
 
     /*
       Injects launched code snippet and populates env constants
     */
-    nodeLauncher = readFileSync(join(__dirname, 'launcher.ts'), 'utf-8')
+    nodeLauncher = readFileSync(join(__dirname, 'launcher-snippet.ts'), 'utf-8')
       .replace(/import.*$/gm, '') // ignore file imports
       .replace(/export /g, '') // remove export keywords
       .trim() // zip
@@ -58,16 +68,22 @@ export const wrapSnippet = (filepath: string) => {
   /*
     Format indentation
   */
-  const indented = snippetsNoImports.replace(/^/gm, '    ').trim();
+  const indented = snippetsNoImports.replace(/^/gm, '  ').trim();
+
   const formatted = wrapperFnContents
+    .replace('%NAME%', basename(filepath))
     .replace('// %SNIPPET%', indented)
-    .replace('// %NODE_LAUNCHER%', nodeLauncher);
+    .replace('// %NODE_LAUNCHER%', nodeLauncher)
+    .replace(/^.*#(end)?region.+$/gm, '')
+    .replace(/^[\s]*$/gm, '') // trailing spaces
+    .replace(/^([\s\S]]*\n){2,}/, '') // multiple empty lines
+    .trim();
 
   /*
-    Write wrapped snippet to disk
+    Write snippet wrapped in an test to disk
   */
-  const wrappedPath = filepath.replace('.ts', '.wrapped.ts');
-  const wrappedSnippet = [imports, '\n', formatted].join('');
+  const wrappedPath = filepath.replace('.ts', '.test.ts');
+  const wrappedSnippet = [imports, '\n\n', formatted].join('');
 
   writeFileSync(wrappedPath, wrappedSnippet);
 };

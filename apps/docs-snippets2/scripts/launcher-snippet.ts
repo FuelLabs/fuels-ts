@@ -20,3 +20,21 @@ export const WALLET_PVT_KEY_4 = w4.privateKey;
 
 export const WALLET_ADDRESS_5 = w5.address;
 export const WALLET_PVT_KEY_5 = w5.privateKey;
+
+const all = [
+  WALLET_ADDRESS,
+  WALLET_PVT_KEY,
+  WALLET_ADDRESS_2,
+  WALLET_PVT_KEY_2,
+  WALLET_ADDRESS_3,
+  WALLET_PVT_KEY_3,
+  WALLET_ADDRESS_4,
+  WALLET_PVT_KEY_4,
+  WALLET_ADDRESS_5,
+  WALLET_PVT_KEY_5,
+];
+
+console.assert(
+  all.every((x) => !!x),
+  `All constants should be truthy.`
+);

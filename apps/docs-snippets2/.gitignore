@@ -1,2 +1,2 @@
 src/typegend
-*.wrapped.ts
+src/**/*.test.ts
