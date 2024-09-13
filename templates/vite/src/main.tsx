@@ -8,6 +8,7 @@ import { Provider } from "fuels";
 import { useEnvironment } from "./hooks/useEnvironment";
 import App from "./App.tsx";
 import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const { isLocal: isLocalEnvironment, providerUrl } = useEnvironment();

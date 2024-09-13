@@ -1,6 +1,7 @@
 import { useBalance, useWallet } from "@fuels/react";
 import { useEffect, useState } from "react";
 import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
+import { toast } from "react-toastify";
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
@@ -39,9 +40,12 @@ export default function Predicate() {
     if (!wallet || !predicate) return;
     try {
       const tx = await wallet.transfer(predicate.address, bn(1_000_000));
+      toast.info(`Transaction submitted: ${tx.id}`);
       await tx.waitForResult();
+      toast.success(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
+      toast.error("Error transferring funds");
     }
   };
 
@@ -54,9 +58,12 @@ export default function Predicate() {
       });
 
       const tx = await newPredicate.transfer(wallet.address, bn(1_000_000));
+      toast.info(`Transaction submitted: ${tx.id}`);
       await tx.waitForResult();
+      toast.success(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
+      toast.error("Error transferring funds");
     }
   };
 

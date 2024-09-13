@@ -1,5 +1,6 @@
 import { useWallet } from "@fuels/react";
 import { BigNumberish, BN, Script as FuelScript } from "fuels";
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { TestScript } from "../sway-api";
 import Button from "./Button";
@@ -22,11 +23,16 @@ export default function Script() {
   const submit = async () => {
     if (!script || !input) return;
     try {
-      const call = await script.functions.main(input).call();
-      const { value } = await call.waitForResult();
-      setResult(value.toNumber());
+      const tx = await script.functions.main(input).call();
+      toast.info(`Transaction submitted: ${tx.transactionId}`);
+      const result = await tx.waitForResult();
+      toast.success(`Transaction successful: ${result.transactionId}`);
+      setResult(result.value.toNumber());
     } catch (error) {
       console.error(error);
+      toast.error(
+        "Error running script. Please make sure your wallet has enough funds. You can top it up using the faucet.",
+      );
     }
   };
 

@@ -2,6 +2,7 @@ import { bn, WalletUnlocked } from "fuels";
 import Button from "./Button";
 import { useWallet } from "@fuels/react";
 import { useProvider } from "../hooks/useProvider";
+import { toast } from "react-toastify";
 
 export default function LocalFaucet() {
   const { wallet } = useWallet();
@@ -9,13 +10,19 @@ export default function LocalFaucet() {
 
   async function localTransfer() {
     if (!wallet) return;
-
-    const genesis = new WalletUnlocked(
-      process.env.VITE_GENESIS_WALLET_PRIVATE_KEY as string,
-      provider,
-    );
-    const tx = await genesis.transfer(wallet.address, bn(5_000_000_000));
-    await tx.waitForResult();
+    try {
+      const genesis = new WalletUnlocked(
+        process.env.VITE_GENESIS_WALLET_PRIVATE_KEY as string,
+        provider,
+      );
+      const tx = await genesis.transfer(wallet.address, bn(5_000_000_000));
+      toast.info(`Transaction submitted: ${tx.id}`);
+      await tx.waitForResult();
+      toast.success(`Transfer successful: ${tx.id}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("Error transferring funds");
+    }
   }
 
   return (

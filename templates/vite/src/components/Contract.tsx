@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useWallet } from "@fuels/react";
+import { toast } from "react-toastify";
 
 import Button from "./Button";
 import { useEnvironment } from "../hooks/useEnvironment";
@@ -33,10 +34,13 @@ export default function Contract() {
 
     try {
       const call = await contract.functions.increment_counter(1).call();
+      toast.info(`Transaction submitted: ${call.transactionId}`);
       const result = await call.waitForResult();
+      toast.success(`Transaction successful: ${result.transactionId}`);
       setCounter(result.value.toNumber());
     } catch (error) {
       console.error(error);
+      toast.error("Error incrementing counter");
     }
   }
 
