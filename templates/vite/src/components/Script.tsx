@@ -8,7 +8,7 @@ import LocalFaucet from "./LocalFaucet";
 import { useEnvironment } from "../hooks/useEnvironment";
 
 export default function Script() {
-  const { wallet } = useWallet();
+  const { wallet, refetch } = useWallet();
   const { isLocal } = useEnvironment();
 
   const [script, setScript] = useState<FuelScript<[input: BigNumberish], BN>>();
@@ -100,7 +100,7 @@ export default function Script() {
           Submit
         </Button>
       </div>
-      {isLocal && <LocalFaucet />}
+      {isLocal && <LocalFaucet refetch={refetch} />}
     </>
   );
 }

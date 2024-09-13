@@ -2,6 +2,8 @@ import { useBalance, useWallet } from "@fuels/react";
 import { useEnvironment } from "../hooks/useEnvironment";
 import { useEffect } from "react";
 import LocalFaucet from "./LocalFaucet";
+import Button from "./Button";
+import { toast } from "react-toastify";
 
 export default function Faucet() {
   const { wallet } = useWallet();
@@ -12,9 +14,13 @@ export default function Faucet() {
   const { isLocal, testnetFaucetUrl } = useEnvironment();
 
   useEffect(() => {
-    const interval = setInterval(() => refetch(), 1000);
-    return () => clearInterval(interval);
+    refetch();
   }, [refetch]);
+
+  const copyAddress = () => {
+    navigator.clipboard.writeText(address);
+    toast.success("Address copied to clipboard");
+  };
 
   return (
     <>
@@ -26,9 +32,12 @@ export default function Faucet() {
           <input
             type="text"
             value={address}
-            className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
+          <Button className="w-1/3" onClick={copyAddress}>
+            Copy
+          </Button>
         </div>
       </div>
 
@@ -40,9 +49,12 @@ export default function Faucet() {
           <input
             type="text"
             value={balance ? `${balance?.format()} ETH` : ""}
-            className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
+          <Button className="w-1/3" onClick={() => refetch()}>
+            Refresh
+          </Button>
         </div>
       </div>
 
@@ -62,7 +74,7 @@ export default function Faucet() {
       </div>
       {isLocal && (
         <>
-          <LocalFaucet />
+          <LocalFaucet refetch={refetch} />
           <p className="w-full px-2 py-1 mr-3 font-mono text-xs">
             If you would like to visit the testnet faucet, you can do so{" "}
             <a

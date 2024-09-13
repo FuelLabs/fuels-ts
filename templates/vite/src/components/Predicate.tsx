@@ -29,15 +29,10 @@ export default function Predicate() {
     }
   }, [wallet]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      refetchWallet();
-      refetchPredicate();
-    }, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [refetchWallet, refetchPredicate]);
+  const refetch = () => {
+    refetchWallet();
+    refetchPredicate();
+  };
 
   const transferToPredicate = async () => {
     if (!wallet || !predicate) return;
@@ -50,9 +45,10 @@ export default function Predicate() {
       toast.success(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error("Error transferring funds");
+      toast.error("Error transferring funds.");
     }
     setIsLoading(false);
+    refetch();
   };
 
   const transferToWallet = async () => {
@@ -71,9 +67,10 @@ export default function Predicate() {
       toast.success(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error("Error transferring funds");
+      toast.error("Error transferring funds. Check that ");
     }
     setIsLoading(false);
+    refetch();
   };
 
   return (
@@ -153,7 +150,7 @@ export default function Predicate() {
           Unlock and Transfer
         </Button>
       </div>
-      {isLocal && <LocalFaucet />}
+      {isLocal && <LocalFaucet refetch={refetch} />}
     </>
   );
 }

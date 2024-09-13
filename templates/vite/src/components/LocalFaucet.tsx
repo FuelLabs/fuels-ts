@@ -5,7 +5,11 @@ import { useProvider } from "../hooks/useProvider";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-export default function LocalFaucet() {
+type Props = {
+  refetch: () => void;
+};
+
+export default function LocalFaucet({ refetch }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { wallet } = useWallet();
@@ -28,6 +32,7 @@ export default function LocalFaucet() {
       toast.error("Error transferring funds");
     }
     setIsLoading(false);
+    refetch();
   }
 
   return (
