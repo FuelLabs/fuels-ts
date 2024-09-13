@@ -3,6 +3,9 @@ import * as versionsMod from '@fuel-ts/versions';
 import * as checkForAndDisplayUpdatesMod from './checkForAndDisplayUpdates';
 import * as loggerMod from './logger';
 
+/**
+ * @group node
+ */
 describe('checkForAndDisplayUpdates', () => {
   beforeEach(() => {
     vi.resetAllMocks();
