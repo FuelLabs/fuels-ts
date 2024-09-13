@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 
 import { setTimeout } from 'timers/promises';
+import type { NonEmptyObject, RequireAtLeastOne } from 'type-fest';
 
 import type {
   TransactionRequestLike,
@@ -8,6 +9,7 @@ import type {
   FuelABI,
   ConnectorMetadata,
   Network,
+  SelectNetworkArguments,
 } from '../../src';
 import { FuelConnector } from '../../src/connectors/fuel-connector';
 import { FuelConnectorEventTypes } from '../../src/connectors/types';
@@ -140,7 +142,7 @@ export class MockConnector extends FuelConnector {
     return true;
   }
 
-  async selectNetwork(_network: Network) {
+  async selectNetwork(_network: SelectNetworkArguments) {
     this.emit(FuelConnectorEventTypes.currentNetwork, _network);
     return true;
   }
