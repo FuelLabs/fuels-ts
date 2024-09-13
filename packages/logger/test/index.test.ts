@@ -5,13 +5,11 @@ import type { MockInstance } from 'vitest';
 
 import { logger, prefixLogger, defaultLogger } from '../src/index';
 
-type Debug = typeof debug;
-
 /**
  * @group node
  */
 describe('Logger Tests', () => {
-  let debugSpy: MockInstance<Parameters<Debug['log']>, ReturnType<Debug['log']>>;
+  let debugSpy: MockInstance;
 
   beforeEach(() => {
     debug.enable('test');
