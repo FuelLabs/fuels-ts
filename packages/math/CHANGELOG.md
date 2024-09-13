@@ -1,5 +1,12 @@
 # Change Log
 
+## 0.94.6
+
+### Patch Changes
+
+- Updated dependencies [aef7282]
+  - @fuel-ts/errors@0.94.6
+
 ## 0.94.5
 
 ### Patch Changes
