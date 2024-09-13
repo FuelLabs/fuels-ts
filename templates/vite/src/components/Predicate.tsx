@@ -2,24 +2,26 @@ import { useBalance, useWallet } from "@fuels/react";
 import { useEffect, useState } from "react";
 import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
 import { toast } from "react-toastify";
+
+import { useEnvironment } from "../hooks/useEnvironment";
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-import { useEnvironment } from "../hooks/useEnvironment";
 
 export default function Predicate() {
+  const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
+  const [predicatePin, setPredicatePin] = useState<string>();
+  const [isLoading, setIsLoading] = useState(false);
+
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
   const { balance: walletBalance, refetch: refetchWallet } = useBalance({
     address,
   });
-  const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
   const predicateAddress = predicate?.address?.toB256();
   const { balance: predicateBalance, refetch: refetchPredicate } = useBalance({
     address: predicateAddress,
   });
-  const [predicatePin, setPredicatePin] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false);
   const { isLocal } = useEnvironment();
 
   useEffect(() => {
@@ -102,10 +104,10 @@ export default function Predicate() {
         </p>
       </div>
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Wallet Balance
         </h3>
-        <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+        <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
             value={walletBalance ? `${walletBalance?.format()} ETH` : ""}
@@ -122,10 +124,10 @@ export default function Predicate() {
         </div>
       </div>
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Predicate Balance & Pin
         </h3>
-        <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+        <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
             value={predicateBalance ? `${predicateBalance?.format()} ETH` : ""}

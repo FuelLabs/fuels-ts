@@ -1,6 +1,7 @@
-import Button from "./Button";
 import { useDisconnect, useWallet, useBalance } from "@fuels/react";
 import { useEffect } from "react";
+
+import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
 import { useEnvironment } from "../hooks/useEnvironment";
 
@@ -18,10 +19,10 @@ export default function Wallet() {
   return (
     <>
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Address
         </h3>
-        <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+        <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
             value={address}
@@ -34,10 +35,10 @@ export default function Wallet() {
         </div>
       </div>
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Balance
         </h3>
-        <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+        <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
             value={balance ? `${balance?.format()} ETH` : ""}

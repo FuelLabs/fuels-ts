@@ -1,16 +1,15 @@
 import { useBalance, useWallet } from "@fuels/react";
-import { useEnvironment } from "../hooks/useEnvironment";
+import { toast } from "react-toastify";
 import { useEffect } from "react";
+
+import { useEnvironment } from "../hooks/useEnvironment";
 import LocalFaucet from "./LocalFaucet";
 import Button from "./Button";
-import { toast } from "react-toastify";
 
 export default function Faucet() {
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
-
   const { balance, refetch } = useBalance({ address });
-
   const { isLocal, testnetFaucetUrl } = useEnvironment();
 
   useEffect(() => {
@@ -25,10 +24,10 @@ export default function Faucet() {
   return (
     <>
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Address
         </h3>
-        <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+        <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
             value={address}
@@ -42,10 +41,10 @@ export default function Faucet() {
       </div>
 
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Balance
         </h3>
-        <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+        <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
             value={balance ? `${balance?.format()} ETH` : ""}
@@ -61,7 +60,7 @@ export default function Faucet() {
       <div>
         {!isLocal && (
           <>
-            <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+            <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
               Testnet Faucet
             </h3>
             <iframe

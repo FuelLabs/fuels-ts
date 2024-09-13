@@ -2,17 +2,18 @@ import { useEffect, useState } from "react";
 import { useWallet } from "@fuels/react";
 import { toast } from "react-toastify";
 
-import Button from "./Button";
 import { useEnvironment } from "../hooks/useEnvironment";
 import LocalFaucet from "./LocalFaucet";
 import { TestContract } from "../sway-api";
+import Button from "./Button";
 
 export default function Contract() {
-  const { contractId, isLocal } = useEnvironment();
-  const { wallet } = useWallet();
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
+
+  const { contractId, isLocal } = useEnvironment();
+  const { wallet, refetch } = useWallet();
 
   useEffect(() => {
     if (wallet) {
@@ -50,10 +51,10 @@ export default function Contract() {
   return (
     <>
       <div>
-        <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Counter
         </h3>
-        <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+        <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
             value={counter}
@@ -101,7 +102,7 @@ export default function Contract() {
           .
         </p>
       </div>
-      {isLocal && <LocalFaucet />}
+      {isLocal && <LocalFaucet refetch={refetch} />}
     </>
   );
 }

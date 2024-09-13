@@ -2,19 +2,20 @@ import { useWallet } from "@fuels/react";
 import { BigNumberish, BN, Script as FuelScript } from "fuels";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
+
+import { useEnvironment } from "../hooks/useEnvironment";
 import { TestScript } from "../sway-api";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-import { useEnvironment } from "../hooks/useEnvironment";
 
 export default function Script() {
-  const { wallet, refetch } = useWallet();
-  const { isLocal } = useEnvironment();
-
   const [script, setScript] = useState<FuelScript<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<number>();
   const [result, setResult] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
+
+  const { wallet, refetch } = useWallet();
+  const { isLocal } = useEnvironment();
 
   useEffect(() => {
     if (wallet) {
@@ -68,10 +69,10 @@ export default function Script() {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+          <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
             Script Input
           </h3>
-          <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+          <div className="flex items-center justify-between text-base dark:text-zinc-50">
             <input
               type="number"
               value={input}
@@ -82,10 +83,10 @@ export default function Script() {
           </div>
         </div>
         <div>
-          <h3 className="mb-1 text-sm font-medium md:mb-0 dark:text-zinc-300/70">
+          <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
             Script Output
           </h3>
-          <div className="flex items-center justify-between text-base md:text-[17px] dark:text-zinc-50">
+          <div className="flex items-center justify-between text-base dark:text-zinc-50">
             <input
               type="number"
               value={result}

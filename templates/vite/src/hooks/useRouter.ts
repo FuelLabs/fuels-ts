@@ -6,15 +6,16 @@ import { useEffect, useState } from 'react';
 export const useRouter = () => {
   const views = ['wallet', 'contract', 'predicate', 'script', 'faucet'];
   const [view, setView] = useState<string>('wallet');
+  const queryParam = 'v';
 
   const getViewFromUrl = () => {
     const url = new URL(window.location.href);
-    return url.searchParams.get('v');
+    return url.searchParams.get(queryParam);
   };
 
   const setRoute = (newView: string) => {
     const url = new URL(window.location.href);
-    url.searchParams.set('v', newView);
+    url.searchParams.set(queryParam, newView);
     window.history.pushState({}, '', url);
     setView(newView);
   };
