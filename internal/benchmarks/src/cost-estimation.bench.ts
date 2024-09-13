@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import type { TransferParams, WalletUnlocked } from 'fuels';
+import type { TransferParams, WalletUnlocked, BytesLike } from 'fuels';
 import { Wallet, Provider, ScriptTransactionRequest } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
@@ -51,8 +51,17 @@ describe('Cost Estimation Benchmarks', () => {
     beforeAll(async () => {
       const { networkUrl } = DEVNET_CONFIG;
       provider = await Provider.create(networkUrl);
+      const wallet = Wallet.fromPrivateKey(
+        process.env.DEVNET_WALLET_PVT_KEY as BytesLike,
+        provider
+      );
 
       setup(provider);
+
+      const contractFactory = new CallTestContractFactory(wallet);
+      const { waitForResult } = await contractFactory.deploy<CallTestContract>();
+      const { contract: deployedContract } = await waitForResult();
+      contract = deployedContract;
     });
   } else {
     beforeEach(async () => {

@@ -84,37 +84,41 @@ describe('Transaction Submission Benchmarks', () => {
     }
   });
 
-  bench('should successfully perform a batch transfer', async () => {
-    const amountToTransfer1 = 989;
-    const amountToTransfer2 = 699;
-    const amountToTransfer3 = 122;
+  bench('should successfully perform a batch transfer 10 times', async () => {
+    for (let i = 0; i < 10; i++) {
+      const amountToTransfer1 = 989;
+      const amountToTransfer2 = 699;
+      const amountToTransfer3 = 122;
 
-    const transferParams: TransferParams[] = [
-      {
-        destination: receiver1.address,
-        amount: amountToTransfer1,
-        assetId: provider.getBaseAssetId(),
-      },
-      { destination: receiver2.address, amount: amountToTransfer2, assetId: TestAssetId.A.value },
-      { destination: receiver3.address, amount: amountToTransfer3, assetId: TestAssetId.B.value },
-    ];
+      const transferParams: TransferParams[] = [
+        {
+          destination: receiver1.address,
+          amount: amountToTransfer1,
+          assetId: provider.getBaseAssetId(),
+        },
+        { destination: receiver2.address, amount: amountToTransfer2, assetId: TestAssetId.A.value },
+        { destination: receiver3.address, amount: amountToTransfer3, assetId: TestAssetId.B.value },
+      ];
 
-    const tx = await wallet.batchTransfer(transferParams);
+      const tx = await wallet.batchTransfer(transferParams);
 
-    const { isStatusSuccess } = await tx.waitForResult();
+      const { isStatusSuccess } = await tx.waitForResult();
 
-    expect(isStatusSuccess).toBeTruthy();
+      expect(isStatusSuccess).toBeTruthy();
+    }
   });
 
-  bench('should successfully withdraw to the base layer', async () => {
-    const txParams = {
-      witnessLimit: 800,
-      maxFee: 100_000,
-    };
+  bench('should successfully withdraw to the base layer 10 times', async () => {
+    for (let i = 0; i < 10; i++) {
+      const txParams = {
+        witnessLimit: 800,
+        maxFee: 100_000,
+      };
 
-    const pendingTx = await wallet.withdrawToBaseLayer(receiver1.address, 500, txParams);
-    const { transaction } = await pendingTx.waitForResult();
+      const pendingTx = await wallet.withdrawToBaseLayer(receiver1.address, 500, txParams);
+      const { transaction } = await pendingTx.waitForResult();
 
-    expect(transaction).toBeDefined();
+      expect(transaction).toBeDefined();
+    }
   });
 });

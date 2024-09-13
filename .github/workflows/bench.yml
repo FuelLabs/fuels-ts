@@ -1,27 +1,28 @@
-name: Benchmarks
-on:
-  pull_request:
-    branches:
-      - master
-  push:
-    branches-ignore:
-      - master
+# Uncomment this when we want to run benchmarks on PRs
+# name: Benchmarks
+# on:
+#   pull_request:
+#     branches:
+#       - master
+#   push:
+#     branches-ignore:
+#       - master
 
-jobs:
-  benchmarks:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+# jobs:
+#   benchmarks:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v4
 
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
+#       - name: CI Setup
+#         uses: ./.github/actions/test-setup
 
-      - name: Pretest
-        run: pnpm pretest
+#       - name: Pretest
+#         run: pnpm pretest
 
-      - name: Run Node benchmarks
-        uses: CodSpeedHQ/action@v3
-        with:
-          run: pnpm bench:node
-          token: ${{ secrets.CODSPEED_TOKEN }}
+#       - name: Run Node benchmarks
+#         uses: CodSpeedHQ/action@v3
+#         with:
+#           run: pnpm bench:node
+#           token: ${{ secrets.CODSPEED_TOKEN }}
