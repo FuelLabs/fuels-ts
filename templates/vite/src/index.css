@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --toastify-color-dark: #121212;
+  --toastify-color-info: #3f3f46;
+  --toastify-color-success: rgb(74 222 128);
+  --toastify-color-error: #e74c3c;
+
+  --toastify-icon-color-info: var(--toastify-color-info);
+  --toastify-icon-color-success: rgb(74 222 128);
+  --toastify-icon-color-error: var(--toastify-color-error);
+}
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

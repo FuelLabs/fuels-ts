@@ -4,11 +4,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BurnerWalletConnector, defaultConnectors } from "@fuels/connectors";
 import { FuelProvider } from "@fuels/react";
 import { Provider } from "fuels";
+import { ToastContainer } from "react-toastify";
 
 import { useEnvironment } from "./hooks/useEnvironment";
 import App from "./App.tsx";
-import "./index.css";
+
 import "react-toastify/dist/ReactToastify.css";
+import "./index.css";
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const { isLocal: isLocalEnvironment, providerUrl } = useEnvironment();
@@ -29,6 +31,7 @@ createRoot(document.getElementById("root")!).render(
         }}
       >
         <App />
+        <ToastContainer theme="dark" />
       </FuelProvider>
     </QueryClientProvider>
   </StrictMode>,

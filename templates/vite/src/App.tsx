@@ -9,7 +9,6 @@ import Contract from "./components/Contract";
 import Predicate from "./components/Predicate";
 import Script from "./components/Script";
 import Faucet from "./components/Faucet";
-import { ToastContainer } from "react-toastify";
 
 function App() {
   const { connect } = useConnectUI();
@@ -78,7 +77,6 @@ function App() {
           </div>
         </div>
       </div>
-      <ToastContainer theme="dark" />
     </main>
   );
 }
