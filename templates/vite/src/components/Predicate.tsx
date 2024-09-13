@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
+import { useEnvironment } from "../hooks/useEnvironment";
 
 export default function Predicate() {
   const { wallet } = useWallet();
@@ -19,6 +20,7 @@ export default function Predicate() {
   });
   const [predicatePin, setPredicatePin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
+  const { isLocal } = useEnvironment();
 
   useEffect(() => {
     if (wallet) {
@@ -151,7 +153,7 @@ export default function Predicate() {
           Unlock and Transfer
         </Button>
       </div>
-      <LocalFaucet />
+      {isLocal && <LocalFaucet />}
     </>
   );
 }

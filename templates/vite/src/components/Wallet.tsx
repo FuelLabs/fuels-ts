@@ -3,8 +3,10 @@ import { useDisconnect, useWallet, useBalance } from "@fuels/react";
 import { useEffect } from "react";
 import { useRouter } from "../hooks/useRouter";
 import LocalFaucet from "./LocalFaucet";
+import { useEnvironment } from "../hooks/useEnvironment";
 
 export default function Wallet() {
+  const { isLocal } = useEnvironment();
   const { setRoute } = useRouter();
   const { disconnect } = useDisconnect();
   const { wallet } = useWallet();
@@ -65,7 +67,7 @@ export default function Wallet() {
           .
         </p>
       </div>
-      <LocalFaucet />
+      {isLocal && <LocalFaucet />}
     </>
   );
 }

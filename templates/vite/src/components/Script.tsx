@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { TestScript } from "../sway-api";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
+import { useEnvironment } from "../hooks/useEnvironment";
 
 export default function Script() {
   const { wallet } = useWallet();
+  const { isLocal } = useEnvironment();
 
   const [script, setScript] = useState<FuelScript<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<number>();
@@ -98,7 +100,7 @@ export default function Script() {
           Submit
         </Button>
       </div>
-      <LocalFaucet />
+      {isLocal && <LocalFaucet />}
     </>
   );
 }

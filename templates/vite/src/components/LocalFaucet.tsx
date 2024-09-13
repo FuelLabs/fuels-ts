@@ -1,4 +1,4 @@
-import { bn, sleep, WalletUnlocked } from "fuels";
+import { bn, WalletUnlocked } from "fuels";
 import Button from "./Button";
 import { useWallet } from "@fuels/react";
 import { useProvider } from "../hooks/useProvider";

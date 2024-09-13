@@ -8,7 +8,7 @@ import LocalFaucet from "./LocalFaucet";
 import { TestContract } from "../sway-api";
 
 export default function Contract() {
-  const { contractId } = useEnvironment();
+  const { contractId, isLocal } = useEnvironment();
   const { wallet } = useWallet();
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
@@ -28,7 +28,7 @@ export default function Contract() {
         getCount();
       }
     }
-  }, [wallet]);
+  }, [wallet, contract, contractId]);
 
   async function incrementCounter() {
     if (!wallet || !contract) return;
@@ -101,7 +101,7 @@ export default function Contract() {
           .
         </p>
       </div>
-      <LocalFaucet />
+      {isLocal && <LocalFaucet />}
     </>
   );
 }
