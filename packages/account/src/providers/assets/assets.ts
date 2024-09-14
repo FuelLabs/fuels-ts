@@ -469,9 +469,10 @@ export const rawAssets: Assets = [
       {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.testnet,
-        contractId: '0xC6387efAD0F184a90B34f397C3d6Fd63135ef790',
+        contractId:
+          '0xd02112ef9c39f1cea7c8527c26242ca1f5d26bcfe8d1564bee054d3b04175471',
         assetId:
-          '0xf5c6d72d0f2c782fa47d8e228c198a08654e9fc66ca60ad85902b1d09046a7ab',
+          '0x86a1beb50c844f5eff9afd21af514a13327c93f76edb89333af862f70040b107',
         decimals: 18,
       },
     ],
@@ -505,9 +506,10 @@ export const rawAssets: Assets = [
       {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.testnet,
-        contractId: '0xC6387efAD0F184a90B34f397C3d6Fd63135ef790',
+        contractId:
+          '0xd02112ef9c39f1cea7c8527c26242ca1f5d26bcfe8d1564bee054d3b04175471',
         assetId:
-          '0xa86e37d385c08beddbb02c8260f9ec535d484c8ea908fc19d4e6dc8d5141fb2e',
+          '0xd2886b34454e2e0de47a82d8e6314b26e1e1312519247e8e2ef137672a909aeb',
         decimals: 18,
       },
     ],
@@ -563,9 +565,10 @@ export const rawAssets: Assets = [
       {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.testnet,
-        contractId: '0xC6387efAD0F184a90B34f397C3d6Fd63135ef790',
+        contractId:
+          '0xd02112ef9c39f1cea7c8527c26242ca1f5d26bcfe8d1564bee054d3b04175471',
         assetId:
-          '0x4c467e3fd4f32179e1aad3b92ebbdaa6ff6aeda5b8da5f8e64e96405eb52a7f5',
+          '0xb42cd9ddf61898da1701adb3a003b0cf4ca6df7b5fe490ec2c295b1ca43b33c8',
         decimals: 18,
       },
     ],
@@ -659,4 +662,5 @@ export const rawAssets: Assets = [
     ],
   },
 ];
+
 export const assets = resolveIconPaths(rawAssets, fuelAssetsBaseUrl);
