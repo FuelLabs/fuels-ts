@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: assetId and contractId of assets from sepolia network
+fix: some assets got assetId, contractId and decimals incorrect, for sepolia and for fuel network
