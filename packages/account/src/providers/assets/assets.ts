@@ -452,27 +452,12 @@ export const rawAssets: Assets = [
         decimals: 18,
       },
       {
-        type: 'ethereum',
-        chainId: CHAIN_IDS.eth.sepolia,
-        address: '0xc6387efad0f184a90b34f397c3d6fd63135ef790',
-        decimals: 18,
-      },
-      {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.mainnet,
         contractId:
           '0x4ea6ccef1215d9479f1024dff70fc055ca538215d2c8c348beddffd54583d0e8',
         assetId:
           '0xb6133b2ef9f6153eb869125d23dcf20d1e735331b5e41b15a6a7a6cec70e8651',
-        decimals: 9,
-      },
-      {
-        type: 'fuel',
-        chainId: CHAIN_IDS.fuel.testnet,
-        contractId:
-          '0xd02112ef9c39f1cea7c8527c26242ca1f5d26bcfe8d1564bee054d3b04175471',
-        assetId:
-          '0x86a1beb50c844f5eff9afd21af514a13327c93f76edb89333af862f70040b107',
         decimals: 9,
       },
     ],
@@ -489,27 +474,12 @@ export const rawAssets: Assets = [
         decimals: 18,
       },
       {
-        type: 'ethereum',
-        chainId: CHAIN_IDS.eth.sepolia,
-        address: '0xb8f4f4eafc1d2a3c0a4d519bbf1114c311cc9b1b',
-        decimals: 18,
-      },
-      {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.mainnet,
         contractId:
           '0x4ea6ccef1215d9479f1024dff70fc055ca538215d2c8c348beddffd54583d0e8',
         assetId:
           '0xd05563025104fc36496c15c7021ad6b31034b0e89a356f4f818045d1f48808bc',
-        decimals: 9,
-      },
-      {
-        type: 'fuel',
-        chainId: CHAIN_IDS.fuel.testnet,
-        contractId:
-          '0xd02112ef9c39f1cea7c8527c26242ca1f5d26bcfe8d1564bee054d3b04175471',
-        assetId:
-          '0xd2886b34454e2e0de47a82d8e6314b26e1e1312519247e8e2ef137672a909aeb',
         decimals: 9,
       },
     ],
@@ -548,27 +518,12 @@ export const rawAssets: Assets = [
         decimals: 18,
       },
       {
-        type: 'ethereum',
-        chainId: CHAIN_IDS.eth.sepolia,
-        address: '0xB82381A3fBD3FaFA77B3a7bE693342618240067b',
-        decimals: 18,
-      },
-      {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.mainnet,
         contractId:
           '0x4ea6ccef1215d9479f1024dff70fc055ca538215d2c8c348beddffd54583d0e8',
         assetId:
           '0x1a7815cc9f75db5c24a5b0814bfb706bb9fe485333e98254015de8f48f84c67b',
-        decimals: 9,
-      },
-      {
-        type: 'fuel',
-        chainId: CHAIN_IDS.fuel.testnet,
-        contractId:
-          '0xd02112ef9c39f1cea7c8527c26242ca1f5d26bcfe8d1564bee054d3b04175471',
-        assetId:
-          '0xb42cd9ddf61898da1701adb3a003b0cf4ca6df7b5fe490ec2c295b1ca43b33c8',
         decimals: 9,
       },
     ],
