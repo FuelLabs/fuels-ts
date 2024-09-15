@@ -1,71 +1,77 @@
-import type { Coder } from '../encoding.types';
+import { createMatcher } from '../../../matchers/sway-type-matchers';
+import type { Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
 
-import { bool } from './boolean';
-import { u16, u32, u8, u64, u256 } from './number';
-import { tuple } from './tuple';
+import { arrayCoder } from './array';
+import { voidCoder, u16, u32, u8, u64, u256, b256, b512, bool, string } from './fixed';
+import { tupleCoder } from './tuple';
+import type { CoderTypeV1, SupportedCodersV1 } from './types';
 
-export interface EncodingV1 {
-  u8: typeof u8;
-  u16: typeof u16;
-  u32: typeof u32;
-  u64: typeof u64;
-  u256: typeof u256;
-  bool: typeof bool;
-
-  tuple: typeof tuple;
-}
-
-export const encoding: EncodingV1 = {
+const coders: SupportedCodersV1 = {
+  void: voidCoder,
   u8,
   u16,
   u32,
   u64,
-  // raw untyped ptr
   u256,
-  // raw untyped slice,
-  // str,
-  // (),
-  // b512,
-  // b256,
-
   bool,
+  b256,
+  b512,
+  string,
+  array: arrayCoder,
+  tuple: tupleCoder,
+};
 
-  tuple,
+const match = createMatcher<CoderTypeV1 | undefined>({
+  u8: coders.u8,
+  u16: coders.u16,
+  u32: coders.u32,
+  u64: coders.u64,
+  rawUntypedPtr: coders.u64,
+  u256: coders.u256,
+  rawUntypedSlice: coders.u256,
+  b256: coders.b256,
+  b512: coders.b512,
+  bool: coders.bool,
+  void: coders.void,
 
-  // Notes on matching
-  //
-  // These are simple matches ("type": coder)
-  // u64, // (BigNumberCoder)
-  // raw untyped ptr (same as u64)
-  // u256, (BigNumberCoder)
-  // raw untyped slice, (RawSliceCoder)
-  // str, (StrSliceCoder)
-  // (), (VoidCoder)
-  // b512, (B512Coder)
-  // b256, (B256Coder)
-  //
-  // Equality based ("type": coder)
-  // struct std::bytes::Bytes, (ByteCoder)
-  // struct std::string::String, (StdStringCoder)
-  //
-  // Regex based + dynamic length
-  // string, (StringCoder)
-  //
-  // Regex based + dynamic length + components
-  // array, (ArrayCoder)
-  //
-  // Equality based + components + (using the buf)
-  // struct std::vec::Vec, (VecCoder)
-  //
-  // Regex based + components
-  // struct, (StructCoder)
-  //
-  // Equality based + components
-  // enum std::option::Option, (OptionCoder)
-  //
-  // Regex based + components
-  // enum, (EnumCoder)
-  //
-  // Regex based + components
-  // tuple,
-} as const;
+  string,
+  array: coders.array,
+  tuple: coders.tuple,
+  bytes: undefined,
+  stdString: undefined,
+  // str
+  // raw slice
+  vector: undefined,
+  struct: undefined,
+  enum: undefined,
+  option: undefined,
+
+  // Unmatchable
+  generic: undefined,
+  assetId: undefined,
+  evmAddress: undefined,
+  result: undefined,
+});
+
+const getCoder: GetCoderFn = (opts: GetCoderParams): Coder => {
+  const coder = match(opts.type);
+  if (!coder) {
+    throw new Error(`Unsupported coder type "${opts.type}" for element "${opts.name}"`);
+  }
+
+  if (typeof coder === 'object') {
+    return coder as Coder;
+  }
+
+  if (typeof coder === 'function') {
+    return coder.fromAbi(opts, getCoder) as Coder;
+  }
+
+  return coder;
+};
+
+export const v1 = {
+  coders,
+  match,
+  getCoder,
+};

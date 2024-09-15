@@ -1,9 +1,7 @@
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 
-import type { AbiConfigurable, AbiFunction } from '../parser';
-
-import type { DecodeFn, EncodeFn } from './encoding';
+import type { AbiConfigurable, AbiFunction, AbiType } from '../parser';
 
 export type Primitive = string | number | boolean;
 
@@ -21,19 +19,24 @@ export type InputValue<T = void> =
   | { [key: string]: InputValue<T> }
   | Record<string, Primitive | BytesLike>;
 
+export type TypesOfCoder<TCoder> =
+  TCoder extends Coder<infer TInput, infer TDecoded> ? { Input: TInput; Decoded: TDecoded } : never;
+
+export interface Coder<TEncode = unknown, TDecode = TEncode> {
+  encodedLength: number;
+  encode: (value: TEncode) => Uint8Array;
+  decode: (value: Uint8Array) => TDecode;
+}
+
+export type GetCoderParams = { name?: string; type: AbiType };
+export type GetCoderFn = (params: GetCoderParams) => Coder;
 export interface AbiCoderFunction {
   name: AbiFunction['name'];
-  arguments: {
-    encode: EncodeFn<unknown[]>;
-    decode: DecodeFn<unknown[]>;
-  };
-  output: {
-    decode: DecodeFn;
-  };
+  arguments: Coder<unknown[]>;
+  output: Coder<unknown>;
 }
 
 export interface AbiCoderConfigurable {
   name: AbiConfigurable['name'];
-  encode: EncodeFn;
-  decode: DecodeFn;
+  output: Coder<unknown>;
 }

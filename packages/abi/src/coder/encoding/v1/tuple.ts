@@ -1,36 +1,45 @@
 import { concatBytes } from '@fuel-ts/utils';
 
-import type { AbiType } from '../../../parser';
-import type { Coder } from '../encoding.types';
+import type { AbiTypeComponent } from '../../../parser';
+import type { Coder, GetCoderFn, GetCoderParams, TypesOfCoder } from '../../abi-coder-types';
 
-type ValueOf<TCoders extends Coder[] = Coder[]> = {
-  [P in keyof TCoders]: TCoders[P] extends Coder<infer T> ? T : never;
+/**
+ * Tuple coder
+ */
+type TupleEncodeValue<TCoders extends Coder[]> = {
+  [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Input'];
+};
+type TupleDecodeValue<TCoders extends Coder[]> = {
+  [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
-const tupleCoder = <TCoders extends Coder[] = Coder[]>(
-  coders: TCoders
-): Coder<ValueOf<TCoders>> => ({
+export const tupleCoder = <TCoders extends Coder[] = Coder[]>({
+  coders,
+}: {
+  coders: TCoders;
+}): Coder<TupleEncodeValue<TCoders>, TupleDecodeValue<TCoders>> => ({
   encodedLength: coders.reduce((acc, coder) => acc + coder.encodedLength, 0),
-  encode: (value: ValueOf<TCoders>): Uint8Array =>
-    concatBytes(coders.map((coder, i) => coder.encode(value[i]))),
-  decode: (value: Uint8Array): ValueOf<TCoders> => {
-    const offset = 0;
-    const decodedValue = coders.map((coder) => {
-      const newOffset = offset + coder.encodedLength;
-      const data = value.slice(offset, newOffset);
-      return coder.decode(data);
-    });
-    return decodedValue as ValueOf<TCoders>;
+  encode: (value: TupleEncodeValue<TCoders>): Uint8Array => {
+    const result = concatBytes(coders.map((coder, i) => coder.encode(value[i])));
+    return result;
+  },
+  decode: (_data: Uint8Array): TupleDecodeValue<TCoders> => {
+    throw new Error('Not implemented');
+    // let newOffset = offset;
+    // const decodedValue = coders.map((coder) => {
+    //   let decoded;
+    //   [decoded, newOffset] = coder.decode(data, newOffset);
+    //   return decoded;
+    // });
+    // return [decodedValue as TupleValue<TCoders>, newOffset];
   },
 });
 
-type CoderFactory = (opts: { name?: string; type: AbiType }, make: CoderFactory) => Coder;
+tupleCoder.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+  if (!components) {
+    throw new Error(`The provided Tuple type is missing an item of 'components'.`);
+  }
 
-export const tuple: CoderFactory = (
-  opts: { name?: string; type: AbiType },
-  makeCoder: CoderFactory
-): Coder => {
-  const components = opts.type.components ?? [];
-  const coders = components.map((component) => makeCoder(component, makeCoder));
-  return tupleCoder(coders) as Coder;
+  const coders = components.map((component: AbiTypeComponent) => getCoder(component));
+  return tupleCoder({ coders });
 };
