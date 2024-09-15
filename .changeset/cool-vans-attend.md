@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-fix: some assets got assetId, contractId and decimals incorrect
+fix(assets): removed sepolia assets and fixed some incorrect decimals config
