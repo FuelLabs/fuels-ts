@@ -839,15 +839,4 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     expect(results).toStrictEqual([1, 2, SmallEnumInput.Empty, INPUT_B, INPUT_A]);
   });
-
-  it('should handle an enum from a library', async () => {
-    using contractInstance = await setupContract();
-
-    const { waitForResult } = await contractInstance.functions
-      .echo_enum_namespaced({ GameOver: 1 })
-      .call();
-
-    const { value } = await waitForResult();
-    expect(value).toStrictEqual({ GameOver: 1 });
-  });
 });

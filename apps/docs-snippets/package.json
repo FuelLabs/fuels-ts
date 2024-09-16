@@ -14,7 +14,7 @@
     "@fuel-ts/utils": "workspace:*",
     "ethers": "^6.13.2",
     "fuels": "workspace:*",
-    "vitest": "^2.0.5"
+    "vitest": "^1.6.0"
   },
   "keywords": [],
   "author": "",

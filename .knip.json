@@ -9,7 +9,6 @@
     "apps/create-fuels-counter-guide/**"
   ],
   "ignoreDependencies": [
-    "autocannon",
     "bun",
     "@/sway-api/*",
     "@fuel-ts/*",

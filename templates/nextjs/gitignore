@@ -42,6 +42,3 @@ src/sway-api/index.ts
 
 sway-programs/**/out
 .turbo
-
-test-results
-playwright-report

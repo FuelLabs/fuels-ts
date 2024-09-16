@@ -13,22 +13,23 @@ test.extend({
 test('counter contract - increment function call works properly', async ({ page }) => {
   await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
 
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(5000);
 
   const topUpWalletButton = page.getByText('Top-up Wallet');
   await topUpWalletButton.click();
 
-  await page.waitForTimeout(2000);
+  const welcomeToFuelText = page.getByText('Welcome to Fuel');
+  await expect(welcomeToFuelText).toBeVisible();
 
-  const initialCounterValue = +page.getByTestId('counter').textContent;
+  await page.waitForTimeout(4000);
 
   const incrementButton = page.getByText('Increment Counter');
   await incrementButton.click();
 
   await page.waitForTimeout(2000);
 
-  const counterValueAfterIncrement = +page.getByTestId('counter').textContent;
-  expect(counterValueAfterIncrement).toEqual(initialCounterValue + 1);
+  const counter = page.getByTestId('counter');
+  await expect(counter).toBeVisible();
 });
 
 test('top-up wallet button', async ({ page }) => {

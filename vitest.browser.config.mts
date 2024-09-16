@@ -43,7 +43,6 @@ const config: UserConfig = {
       reportsDirectory: "coverage/environments/browser",
     },
     browser: {
-      provider: "webdriverio",
       headless: true,
       enabled: true,
       name: "chrome",

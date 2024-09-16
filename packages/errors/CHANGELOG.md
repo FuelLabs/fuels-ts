@@ -1,12 +1,5 @@
 # @fuel-ts/errors
 
-## 0.94.6
-
-### Patch Changes
-
-- aef7282: feat: `provider.url` now returns auth url
-  - @fuel-ts/versions@0.94.6
-
 ## 0.94.5
 
 ### Patch Changes

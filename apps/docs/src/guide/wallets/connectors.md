@@ -268,8 +268,6 @@ It requires a single argument:
 
 - `network` ([`Network`](../../api/Account/index.md#network))
 
-You call this method with either the `providerUrl` or `chainId` to select the network.
-
 It will return a promise that resolves to `true` if the network is successfully selected; otherwise, it will return `false`.
 
 It should throw an error if the network is not available or the network does _not_ exist.

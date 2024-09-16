@@ -1,6 +1,6 @@
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 
-const DEFAULT_BLOCK_EXPLORER_URL = 'https://app.fuel.network';
+const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
 
 /** @hidden */
 const getPathFromInput = (

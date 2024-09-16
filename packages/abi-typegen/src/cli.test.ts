@@ -20,7 +20,7 @@ describe('cli.ts', () => {
       }
     });
 
-    const exit = vi.spyOn(process, 'exit').mockImplementation(vi.fn() as never);
+    const exit = vi.spyOn(process, 'exit').mockImplementation(vi.fn());
     const err = vi.spyOn(stderr, 'write').mockResolvedValue(true);
 
     return { exit, err, runTypegen };

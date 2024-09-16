@@ -4,8 +4,6 @@ export * from './transaction-request';
 export * from './blob-transaction-request';
 export * from './create-transaction-request';
 export * from './script-transaction-request';
-export * from './upgrade-transaction-request';
-export * from './upload-transaction-request';
 export * from './errors';
 export * from './scripts';
 export * from './types';

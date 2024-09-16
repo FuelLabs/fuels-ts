@@ -45,7 +45,7 @@ describe('cli.js', () => {
 
     const error = vi.spyOn(console, 'error').mockImplementation(() => []);
     const info = vi.spyOn(console, 'info').mockImplementation(() => []);
-    const exit = vi.spyOn(process, 'exit').mockImplementation(vi.fn() as never);
+    const exit = vi.spyOn(process, 'exit').mockImplementation(vi.fn());
 
     vi.spyOn(colorizeUserVersionMod, 'colorizeUserVersion').mockImplementation(
       ({ version }) => version

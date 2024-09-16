@@ -1,4 +1,4 @@
-import { Provider, Wallet, WalletUnlocked } from 'fuels';
+import { TESTNET_NETWORK_URL, Provider, Wallet, WalletUnlocked } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -37,10 +37,10 @@ describe('Getting started', () => {
     vi.spyOn(Provider, 'create').mockResolvedValueOnce(mockedProvider);
 
     // #region connecting-to-the-testnet
-    // #import { Provider, Wallet };
+    // #import { Provider, Wallet, TESTNET_NETWORK_URL };
 
     // Create a provider, with the Latest Testnet URL.
-    const provider = await Provider.create('https://testnet.fuel.network/v1/graphql');
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
 
     // Create our wallet (with a private key).
     const PRIVATE_KEY = 'a1447cd75accc6b71a976fd3401a1f6ce318d27ba660b0315ee6ac347bf39568';

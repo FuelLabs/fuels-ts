@@ -1,6 +1,6 @@
 import { buildBlockExplorerUrl } from './block-explorer';
 
-const DEFAULT_BLOCK_EXPLORER_URL = 'https://app.fuel.network';
+const DEFAULT_BLOCK_EXPLORER_URL = 'https://fuellabs.github.io/block-explorer-v2';
 const trimSlashes = /^\/|\/$/gm;
 
 const testBlockExplorerUrlWithInputs = ({

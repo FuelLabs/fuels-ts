@@ -1,6 +1,6 @@
 import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import { randomBytes, randomUUID } from '@fuel-ts/crypto';
+import { randomBytes } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
@@ -56,163 +56,51 @@ const getCustomFetch =
     return fetch(url, options);
   };
 
-const createBasicAuth = (launchNodeUrl: string) => {
-  const username: string = randomUUID();
-  const password: string = randomUUID();
-  const usernameAndPassword = `${username}:${password}`;
-
-  const parsedUrl = new URL(launchNodeUrl);
-  const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
-  const urlWithAuth = `http://${usernameAndPassword}@${hostAndPath}`;
-
-  return {
-    urlWithAuth,
-    urlWithoutAuth: launchNodeUrl,
-    usernameAndPassword,
-    expectedHeaders: {
-      Authorization: `Basic ${btoa(usernameAndPassword)}`,
-    },
-  };
-};
-
 /**
  * @group node
  */
 describe('Provider', () => {
-  it('should ensure supports basic auth', async () => {
+  it('supports basic auth', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider: { url },
     } = launched;
 
-    const { urlWithAuth, expectedHeaders } = createBasicAuth(url);
-    const provider = await Provider.create(urlWithAuth);
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
+    const provider = await Provider.create(authUrl);
 
     const fetchSpy = vi.spyOn(global, 'fetch');
 
     await provider.operations.getChain();
 
+    const expectedAuthToken = `Basic ${btoa(usernameAndPassword)}`;
     const [requestUrl, request] = fetchSpy.mock.calls[0];
     expect(requestUrl).toEqual(url);
-    expect(request?.headers).toMatchObject(expectedHeaders);
+    expect(request?.headers).toMatchObject({
+      Authorization: expectedAuthToken,
+    });
   });
 
-  it('should ensure we can reuse provider URL to connect to a authenticated endpoint', async () => {
+  it('custom requestMiddleware is not overwritten by basic auth', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
       provider: { url },
     } = launched;
 
-    const { urlWithAuth, expectedHeaders } = createBasicAuth(url);
-    const provider = await Provider.create(urlWithAuth);
+    const usernameAndPassword = 'securest:ofpasswords';
+    const parsedUrl = new URL(url);
+    const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+    const authUrl = `http://${usernameAndPassword}@${hostAndPath}`;
 
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    await provider.operations.getChain();
-
-    const [requestUrlA, requestA] = fetchSpy.mock.calls[0];
-    expect(requestUrlA).toEqual(url);
-    expect(requestA?.headers).toMatchObject(expectedHeaders);
-
-    // Reuse the provider URL to connect to an authenticated endpoint
-    const newProvider = await Provider.create(provider.url);
-
-    fetchSpy.mockClear();
-
-    await newProvider.operations.getChain();
-    const [requestUrl, request] = fetchSpy.mock.calls[0];
-    expect(requestUrl).toEqual(url);
-    expect(request?.headers).toMatchObject(expectedHeaders);
-  });
-
-  it('should ensure that custom requestMiddleware is not overwritten by basic auth', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const {
-      provider: { url },
-    } = launched;
-
-    const { urlWithAuth } = createBasicAuth(url);
-
-    const requestMiddleware = vi.fn().mockImplementation((options) => options);
-
-    await Provider.create(urlWithAuth, {
+    const requestMiddleware = vi.fn();
+    await Provider.create(authUrl, {
       requestMiddleware,
     });
 
     expect(requestMiddleware).toHaveBeenCalled();
-  });
-
-  it('should ensure that we can connect to a new entrypoint with basic auth', async () => {
-    using launchedA = await setupTestProviderAndWallets();
-    using launchedB = await setupTestProviderAndWallets();
-    const {
-      provider: { url: urlA },
-    } = launchedA;
-    const {
-      provider: { url: urlB },
-    } = launchedB;
-
-    // Should enable connection via `create` method
-    const basicAuthA = createBasicAuth(urlA);
-    const provider = await Provider.create(basicAuthA.urlWithAuth);
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-
-    await provider.operations.getChain();
-
-    const [requestUrlA, requestA] = fetchSpy.mock.calls[0];
-    expect(requestUrlA, 'expect to request with the unauthenticated URL').toEqual(urlA);
-    expect(requestA?.headers).toMatchObject({
-      Authorization: basicAuthA.expectedHeaders.Authorization,
-    });
-    expect(provider.url).toEqual(basicAuthA.urlWithAuth);
-
-    fetchSpy.mockClear();
-
-    // Should enable reconnection
-    const basicAuthB = createBasicAuth(urlB);
-
-    await provider.connect(basicAuthB.urlWithAuth);
-    await provider.operations.getChain();
-
-    const [requestUrlB, requestB] = fetchSpy.mock.calls[0];
-    expect(requestUrlB, 'expect to request with the unauthenticated URL').toEqual(urlB);
-    expect(requestB?.headers).toMatchObject(
-      expect.objectContaining({
-        Authorization: basicAuthB.expectedHeaders.Authorization,
-      })
-    );
-    expect(provider.url).toEqual(basicAuthB.urlWithAuth);
-  });
-
-  it('should ensure that custom headers can be passed', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const {
-      provider: { url },
-    } = launched;
-
-    const customHeaders = {
-      'X-Custom-Header': 'custom-value',
-    };
-
-    const provider = await Provider.create(url, {
-      headers: customHeaders,
-    });
-
-    const fetchSpy = vi.spyOn(global, 'fetch');
-    await provider.operations.getChain();
-
-    const [, request] = fetchSpy.mock.calls[0];
-    expect(request?.headers).toMatchObject(customHeaders);
-  });
-
-  it('should throw an error if the URL is no in the correct format', async () => {
-    const url = 'immanotavalidurl';
-
-    await expectToThrowFuelError(
-      async () => Provider.create(url),
-      new FuelError(ErrorCode.INVALID_URL, 'Invalid URL provided.')
-    );
   });
 
   it('should throw an error when retrieving a transaction with an unknown transaction type', async () => {

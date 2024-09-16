@@ -10,7 +10,7 @@
   Fuel-Core version: 33.33.33
 */
 
-import { Contract, ContractFactory, decompressBytecode } from "fuels";
+import { ContractFactory, decompressBytecode } from "fuels";
 import type { Provider, Account, DeployContractOptions, DeployContractResult } from "fuels";
 
 import { MyContract } from "./MyContract";
@@ -25,20 +25,15 @@ export class MyContractFactory extends ContractFactory {
     super(bytecode, MyContract.abi, accountOrProvider);
   }
 
-  deploy<TContract extends Contract = Contract>(
-    deployOptions?: DeployContractOptions
-  ): Promise<DeployContractResult<TContract>> {
-    return super.deploy({
-      storageSlots: MyContract.storageSlots,
-      ...deployOptions,
-    });
-  }
-
   static async deploy (
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<DeployContractResult<MyContract>> {
     const factory = new MyContractFactory(wallet);
-    return factory.deploy(options);
+
+    return factory.deploy({
+      storageSlots: MyContract.storageSlots,
+      ...options,
+    });
   }
 }

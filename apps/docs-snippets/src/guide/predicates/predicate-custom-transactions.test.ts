@@ -1,4 +1,5 @@
-import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Provider, ScriptTransactionRequest, Wallet, TESTNET_NETWORK_URL } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ConfigurablePin as PredicateFactory } from '../../../test/typegen';
@@ -18,19 +19,19 @@ describe('Predicate Custom Transactions', () => {
 
     const SENDER_PVT_KEY = testSender.privateKey;
     const RECEIVER_ADDRESS = testReceiver.address;
-
-    const providerUrl = testProvider.url;
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const TESTNET_NETWORK_URL = testProvider.url;
 
     const initialRecieverBalance = await testReceiver.getBalance(testProvider.getBaseAssetId());
 
     // #region predicate-custom-transaction
-    // #import { Provider, ScriptTransactionRequest, Wallet };
+    // #import { Provider, ScriptTransactionRequest, TESTNET_NETWORK_URL, Wallet };
     // #context import { PredicateFactory } from 'path/to/typegen/outputs';
     // #context import type { PredicateInputs } from 'path/to/typegen/outputs';
     // #context import { SENDER_PVT_KEY, RECEIVER_ADDRESS } from 'path/to/my/env/file';
 
     // Setup
-    const provider = await Provider.create(providerUrl);
+    const provider = await Provider.create(TESTNET_NETWORK_URL);
     const sender = Wallet.fromPrivateKey(SENDER_PVT_KEY, provider);
     const receiver = Wallet.fromAddress(RECEIVER_ADDRESS, provider);
     const assetId = provider.getBaseAssetId();

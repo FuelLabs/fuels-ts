@@ -1,6 +1,6 @@
 {{header}}
 
-import { Contract, ContractFactory, decompressBytecode } from "fuels";
+import { ContractFactory, decompressBytecode } from "fuels";
 import type { Provider, Account, DeployContractOptions, DeployContractResult } from "fuels";
 
 import { {{capitalizedName}} } from "./{{capitalizedName}}";
@@ -15,20 +15,15 @@ export class {{capitalizedName}}Factory extends ContractFactory {
     super(bytecode, {{capitalizedName}}.abi, accountOrProvider);
   }
 
-  deploy<TContract extends Contract = Contract>(
-    deployOptions?: DeployContractOptions
-  ): Promise<DeployContractResult<TContract>> {
-    return super.deploy({
-      storageSlots: {{capitalizedName}}.storageSlots,
-      ...deployOptions,
-    });
-  }
-
   static async deploy (
     wallet: Account,
     options: DeployContractOptions = {}
   ): Promise<DeployContractResult<{{capitalizedName}}>> {
     const factory = new {{capitalizedName}}Factory(wallet);
-    return factory.deploy(options);
+
+    return factory.deploy({
+      storageSlots: {{capitalizedName}}.storageSlots,
+      ...options,
+    });
   }
 }

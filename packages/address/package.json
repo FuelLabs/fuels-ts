@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/address",
-  "version": "0.94.6",
+  "version": "0.94.5",
   "description": "Utilities for encoding and decoding addresses",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -41,7 +41,7 @@
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/interfaces": "workspace:*",
     "@fuel-ts/utils": "workspace:^",
-    "@noble/hashes": "^1.5.0",
+    "@noble/hashes": "^1.3.3",
     "bech32": "^2.0.0"
   }
 }

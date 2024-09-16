@@ -1,34 +1,5 @@
 # Change Log
 
-## 0.94.6
-
-### Patch Changes
-
-- 99d39e9: feat: introduce upload and upgrade transaction request
-- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
-- 5efe23d: chore: Include Ethereum asset in ETH Mainnet network
-- aef7282: feat: `provider.url` now returns auth url
-- c98461f: chore: deprecate network URLs, add asset ID and chain ID for mainnet
-- 6a920ee: chore: add new supported assets
-- c968ac0: chore: revert add `signTransaction` to `FuelConnectorMethods` enum
-- c21096c: chore: made `selectNetwork` arguments more flexible
-- 4bb8625: chore: update block explorer url
-- Updated dependencies [99d39e9]
-- Updated dependencies [a9f31ca]
-- Updated dependencies [9719c1b]
-- Updated dependencies [aef7282]
-  - @fuel-ts/transactions@0.94.6
-  - @fuel-ts/abi-coder@0.94.6
-  - @fuel-ts/address@0.94.6
-  - @fuel-ts/crypto@0.94.6
-  - @fuel-ts/hasher@0.94.6
-  - @fuel-ts/errors@0.94.6
-  - @fuel-ts/merkle@0.94.6
-  - @fuel-ts/math@0.94.6
-  - @fuel-ts/utils@0.94.6
-  - @fuel-ts/interfaces@0.94.6
-  - @fuel-ts/versions@0.94.6
-
 ## 0.94.5
 
 ### Patch Changes

@@ -30,7 +30,12 @@ async function verifyKeepAliveMessageWasSent(subscriptionStream: ReadableStream<
 }
 
 function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<Uint8Array> }) {
-  function getFetchMock(fetchSpy: MockInstance) {
+  function getFetchMock(
+    fetchSpy: MockInstance<
+      [input: RequestInfo | URL, init?: RequestInit | undefined],
+      Promise<Response>
+    >
+  ) {
     return async (...args: Parameters<typeof fetch>) => {
       /**
        * We need to restore the original fetch implementation so that fetching is possible

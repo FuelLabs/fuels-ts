@@ -14,7 +14,6 @@ members = [
   "complex-script",
   "configurable-contract",
   "coverage-contract",
-  "data-structure-library",
   "generic-types-contract",
   "large-contract",
   "multi-token-contract",
