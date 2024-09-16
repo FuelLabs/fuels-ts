@@ -1,4 +1,7 @@
 ---
+"create-fuels": patch
+"@fuel-ts/abi-typegen": patch
+"@fuel-ts/math": patch
 ---
 
-build(deps): bump the deps-patch group across 1 directory with 23 updates
+build(deps): bump the deps-patch group
