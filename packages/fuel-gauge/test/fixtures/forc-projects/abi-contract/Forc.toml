@@ -2,3 +2,6 @@
 authors = ["Fuel Labs <contact@fuel.sh>"]
 license = "Apache-2.0"
 name = "abi-contract"
+
+[dependencies]
+abi-library = { path = "../abi-library" }
