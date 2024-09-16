@@ -25,11 +25,6 @@ dist-ssr
 
 .fuels
 
-src/sway-api/contracts
-src/sway-api/predicates
-src/sway-api/scripts
-src/sway-api/index.ts
-
 sway-programs/**/out
 .turbo
 
