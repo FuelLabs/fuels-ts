@@ -23,9 +23,10 @@ export type TypesOfCoder<TCoder> =
   TCoder extends Coder<infer TInput, infer TDecoded> ? { Input: TInput; Decoded: TDecoded } : never;
 
 export interface Coder<TEncode = unknown, TDecode = TEncode> {
-  encodedLength: number;
+  type: string;
   encode: (value: TEncode) => Uint8Array;
   decode: (value: Uint8Array) => TDecode;
+  encodedLength: (data: Uint8Array) => number;
 }
 
 export type GetCoderParams = { name?: string; type: AbiType };

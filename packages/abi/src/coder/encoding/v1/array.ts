@@ -19,17 +19,18 @@ export const arrayCoder = <TCoder extends Coder<any, any>>(opts: {
   size: number;
 }): Coder<ArrayEncodeValue<TCoder>, ArrayDecodeValue<TCoder>> => {
   const { coder, size } = opts;
-  const encodedLength = coder.encodedLength * size;
   return {
-    encodedLength,
+    type: `array`,
+    encodedLength: (data: Uint8Array) => coder.encodedLength(data) * size,
     encode: (value: ArrayEncodeValue<TCoder>): Uint8Array =>
       concat(value.map((v) => coder.encode(v))),
     decode: (data: Uint8Array): ArrayDecodeValue<TCoder> => {
       let offset = 0;
+      const elementEncodedLength = coder.encodedLength(data);
       const decodedValue = Array(size)
         .fill(0)
         .map(() => {
-          const newOffset = offset + coder.encodedLength;
+          const newOffset = offset + elementEncodedLength;
           const dataValue = data.slice(offset, newOffset);
           const decoded = coder.decode(dataValue);
           offset = newOffset;

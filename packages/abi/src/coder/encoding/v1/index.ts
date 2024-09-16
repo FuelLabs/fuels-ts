@@ -5,6 +5,7 @@ import { arrayCoder } from './array';
 import { voidCoder, u16, u32, u8, u64, u256, b256, b512, bool, string } from './fixed';
 import { tupleCoder } from './tuple';
 import type { CoderTypeV1, SupportedCodersV1 } from './types';
+import { vecCoder } from './vec';
 
 const coders: SupportedCodersV1 = {
   void: voidCoder,
@@ -19,6 +20,7 @@ const coders: SupportedCodersV1 = {
   string,
   array: arrayCoder,
   tuple: tupleCoder,
+  vector: vecCoder,
 };
 
 const match = createMatcher<CoderTypeV1 | undefined>({
@@ -37,12 +39,12 @@ const match = createMatcher<CoderTypeV1 | undefined>({
   string,
   array: coders.array,
   tuple: coders.tuple,
+  vector: coders.vector,
+  struct: undefined,
   bytes: undefined,
   stdString: undefined,
   // str
   // raw slice
-  vector: undefined,
-  struct: undefined,
   enum: undefined,
   option: undefined,
 

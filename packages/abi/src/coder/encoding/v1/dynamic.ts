@@ -10,24 +10,28 @@ export const DYNAMIC_WORD_LENGTH = 8;
  * This will be used to encode and decode dynamic length.
  */
 export const dynamicLengthCoder: Coder<number> = {
-  encodedLength: DYNAMIC_WORD_LENGTH,
+  type: `dynamic_length`,
+  encodedLength: (data: Uint8Array) => DYNAMIC_WORD_LENGTH + dynamicLengthCoder.decode(data),
   encode: (lengthOfData: number): Uint8Array => u64.encode(lengthOfData),
-  decode: (data: Uint8Array): number => u64.decode(data).toNumber(),
+  decode: (data: Uint8Array): number => {
+    const encodedLengthBytes = data.slice(0, DYNAMIC_WORD_LENGTH);
+    return u64.decode(encodedLengthBytes).toNumber();
+  },
 };
 
 /**
  * `byte` coder.
  */
 export const byteCoder: Coder<Uint8Array> = {
-  encodedLength: DYNAMIC_WORD_LENGTH, // TODO REMOVE
+  type: `byte`,
+  encodedLength: dynamicLengthCoder.encodedLength,
   encode: (value: Uint8Array): Uint8Array => {
     const lengthBytes = dynamicLengthCoder.encode(value.length);
     return concat([lengthBytes, value]);
   },
   decode: (data: Uint8Array): Uint8Array => {
-    const dataLength = dynamicLengthCoder.decode(data.slice(0, DYNAMIC_WORD_LENGTH));
-    const dataBytes = data.slice(DYNAMIC_WORD_LENGTH, DYNAMIC_WORD_LENGTH + dataLength);
-    return dataBytes;
+    const dataLength = dynamicLengthCoder.decode(data);
+    return data.slice(DYNAMIC_WORD_LENGTH, DYNAMIC_WORD_LENGTH + dataLength);
   },
 };
 

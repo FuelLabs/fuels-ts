@@ -3,6 +3,7 @@ import { AbiParser } from '../parser';
 
 import type { AbiCoderFunction } from './abi-coder-types';
 import { v1 } from './encoding';
+import { withValidation } from './encoding/utils/withValidation';
 
 export class AbiCoder {
   private supportedEncodings = {
@@ -32,9 +33,11 @@ export class AbiCoder {
   private fromFunction(fn: AbiFunction): AbiCoderFunction {
     return {
       name: fn.name,
-      arguments: this.encoding.coders.tuple({
-        coders: fn.inputs.map((input) => this.encoding.getCoder(input)),
-      }),
+      arguments: withValidation(
+        this.encoding.coders.tuple({
+          coders: fn.inputs.map((input) => this.encoding.getCoder(input)),
+        })
+      ),
       output: this.encoding.getCoder({ type: fn.output }),
     };
   }

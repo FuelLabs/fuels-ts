@@ -18,20 +18,19 @@ export const tupleCoder = <TCoders extends Coder[] = Coder[]>({
 }: {
   coders: TCoders;
 }): Coder<TupleEncodeValue<TCoders>, TupleDecodeValue<TCoders>> => ({
-  encodedLength: coders.reduce((acc, coder) => acc + coder.encodedLength, 0),
-  encode: (value: TupleEncodeValue<TCoders>): Uint8Array => {
-    const result = concatBytes(coders.map((coder, i) => coder.encode(value[i])));
-    return result;
-  },
-  decode: (_data: Uint8Array): TupleDecodeValue<TCoders> => {
-    throw new Error('Not implemented');
-    // let newOffset = offset;
-    // const decodedValue = coders.map((coder) => {
-    //   let decoded;
-    //   [decoded, newOffset] = coder.decode(data, newOffset);
-    //   return decoded;
-    // });
-    // return [decodedValue as TupleValue<TCoders>, newOffset];
+  type: 'tuple',
+  encodedLength: (data: Uint8Array) =>
+    coders.reduce((acc, coder) => acc + coder.encodedLength(data), 0),
+  encode: (value: TupleEncodeValue<TCoders>): Uint8Array =>
+    concatBytes(coders.map((coder, i) => coder.encode(value[i]))),
+  decode: (data: Uint8Array): TupleDecodeValue<TCoders> => {
+    let newOffset = 0;
+    const decodedValue = coders.map((coder) => {
+      const encodedLength = coder.encodedLength(data);
+      const dataSlice = data.slice(newOffset, (newOffset += encodedLength));
+      return coder.decode(dataSlice);
+    });
+    return decodedValue as TupleDecodeValue<TCoders>;
   },
 });
 

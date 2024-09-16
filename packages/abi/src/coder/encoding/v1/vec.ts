@@ -12,34 +12,38 @@ type VecValue<TCoder extends Coder = Coder> = ReturnType<TCoder['decode']>[];
 export const vecCoder = <TCoder extends Coder>(opts: {
   coder: TCoder;
 }): Coder<VecValue<TCoder>> => ({
-  encodedLength: DYNAMIC_WORD_LENGTH, // TODO REMOVE
+  type: `vec`,
   encode: (value: VecValue<TCoder>): Uint8Array => {
     const lengthBytes = dynamicLengthCoder.encode(value.length);
     const encodedBytes = value.map((v) => opts.coder.encode(v));
     return concat([lengthBytes, ...encodedBytes]);
   },
+  /**
+   * The total length of the entire encoded data ([length, ...data]).
+   */
+  encodedLength: (data: Uint8Array) => {
+    const encodedElementLength = dynamicLengthCoder.decode(data);
+    return DYNAMIC_WORD_LENGTH + encodedElementLength;
+  },
   decode: (data: Uint8Array): VecValue<TCoder> => {
-    const dataLength = dynamicLengthCoder.decode(data.slice(0, DYNAMIC_WORD_LENGTH));
-    const dataOffset = DYNAMIC_WORD_LENGTH + dataLength;
+    const dataLength = dynamicLengthCoder.decode(data);
 
+    const dataBytes = data.slice(DYNAMIC_WORD_LENGTH);
+    const dataElementOffset = dataBytes.length / dataLength;
+
+    let offset = 0;
     const decodedValue = Array(dataLength)
       .fill(0)
-      .map(() =>
-        // const decodedValue = Array(dataLength)
-        //   .fill(0)
-        //   .map(() => {
-        //     let value;
-        //     [value, newOffset] = coder.decode(data);
-        //     return value;
-        //   });
-        opts.coder.decode(data)
-      );
+      .map(() => {
+        const elementBytes = dataBytes.slice(offset, (offset += dataElementOffset));
+        return opts.coder.decode(elementBytes);
+      });
 
     return decodedValue as VecValue<TCoder>;
   },
 });
 
-vecCoder.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+vecCoder.fromAbi = ({ name, type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
     throw new Error(`The provided Vec type is missing an item of 'components'.`);
   }
