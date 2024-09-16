@@ -20,6 +20,7 @@ export const checkForAndDisplayUpdates = async () => {
     ]);
 
     if (!latestFuelsVersion) {
+      log(`\n Unable to fetch latest fuels version. Skipping...\n`);
       return;
     }
 

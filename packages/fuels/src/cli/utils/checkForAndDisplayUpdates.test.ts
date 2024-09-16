@@ -62,5 +62,7 @@ describe('checkForAndDisplayUpdates', () => {
         })
     );
     await expect(checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates()).resolves.not.toThrow();
+    const log = vi.spyOn(loggerMod, 'log');
+    expect(log).toHaveBeenCalledWith('\n Unable to fetch latest fuels version. Skipping...\n');
   });
 });
