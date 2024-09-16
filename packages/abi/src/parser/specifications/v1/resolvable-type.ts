@@ -49,7 +49,10 @@ export class ResolvableType {
     if (isVector(metadataType.type)) {
       components = components?.map((c) => {
         if (c.name === 'buf') {
-          return c.typeArguments?.[0];
+          return {
+            ...c.typeArguments?.[0],
+            name: c.name,
+          };
         }
         return c;
       }) as AbiComponentV1[];
