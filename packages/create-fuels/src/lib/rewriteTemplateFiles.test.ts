@@ -65,7 +65,7 @@ describe('rewriteTemplateFiles', () => {
   });
 
   it('should rewrite the test files', () => {
-    const testDir = join(paths.templateRoot, 'test');
+    const testDir = join(paths.templateRoot, 'test', 'integration');
     const programs = [
       {
         program: 'contract',

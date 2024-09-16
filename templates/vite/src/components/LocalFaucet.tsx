@@ -28,7 +28,7 @@ export default function LocalFaucet({ refetch }: Props) {
       toast.success(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error("Error transferring funds");
+      toast.error("Error transferring funds.");
     }
     setIsLoading(false);
     refetch();

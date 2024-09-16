@@ -45,7 +45,7 @@ export default function Predicate() {
       toast.success(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error("Error transferring funds.");
+      toast.error("Error transferring funds. Check your wallet balance.");
     }
     setIsLoading(false);
     refetch();
@@ -67,7 +67,9 @@ export default function Predicate() {
       toast.success(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error("Error transferring funds. Check that ");
+      toast.error(
+        "Error transferring funds. Check the predicate balance and that you are using the correct pin.",
+      );
     }
     setIsLoading(false);
     refetch();

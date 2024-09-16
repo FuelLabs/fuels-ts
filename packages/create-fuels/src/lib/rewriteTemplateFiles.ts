@@ -19,7 +19,7 @@ export const rewriteTemplateFiles = (templateDir: string) => {
   writeFileSync(fuelsConfigFilePath, contents);
 
   // tests
-  const testDir = join(templateDir, 'test');
+  const testDir = join(templateDir, 'test', 'integration');
   const programs = ['contract', 'predicate', 'script'];
   programs.forEach((program) => {
     const testFilePath = join(testDir, `${program}.test.ts`);
