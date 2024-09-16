@@ -37,6 +37,6 @@ export const checkForAndDisplayUpdates = async () => {
       log(`\n✅ Your fuels version is up to date: ${userFuelsVersion}\n`);
     }
   } catch {
-    /* Fail gracefully */
+    log(`\n Unable to fetch latest fuels version. Skipping...\n`);
   }
 };

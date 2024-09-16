@@ -35,7 +35,9 @@ describe('checkForAndDisplayUpdates', () => {
     vi.spyOn(global, 'fetch').mockImplementation(() =>
       Promise.reject(new Error('Failed to fetch'))
     );
+    const log = vi.spyOn(loggerMod, 'log');
     await expect(checkForAndDisplayUpdatesMod.checkForAndDisplayUpdates()).resolves.not.toThrow();
+    expect(log).toHaveBeenCalledWith('\n Unable to fetch latest fuels version. Skipping...\n');
   });
 
   test('should log a warning if the version is outdated', async () => {
