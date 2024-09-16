@@ -1,120 +1,83 @@
 "use client";
 
-import { TestContract } from "@/sway-api";
-import contractIds from "@/sway-api/contract-ids.json";
-import { FuelLogo } from "@/components/FuelLogo";
-import { bn } from "fuels";
-import { useState } from "react";
-import { Link } from "@/components/Link";
-import { Button } from "@/components/Button";
-import toast from "react-hot-toast";
-import { useActiveWallet } from "@/hooks/useActiveWallet";
-import useAsync from "react-use/lib/useAsync";
-import {
-  CURRENT_ENVIRONMENT,
-  DOCS_URL,
-  Environments,
-  FAUCET_LINK,
-} from "@/lib";
+import { useConnectUI, useIsConnected } from "@fuels/react";
+import { useEffect } from "react";
 
-const contractId =
-  CURRENT_ENVIRONMENT === Environments.LOCAL
-    ? contractIds.testContract
-    : (process.env.NEXT_PUBLIC_TESTNET_CONTRACT_ID as string); // Testnet Contract ID
+import { useRouter } from "../hooks/useRouter";
+import Button from "../components/Button";
+import Info from "../components/Info";
+import Wallet from "../components/Wallet";
+import Contract from "../components/Contract";
+import Predicate from "../components/Predicate";
+import Script from "../components/Script";
+import Faucet from "../components/Faucet";
 
-export default function Home() {
-  const { wallet, walletBalance, refreshWalletBalance } = useActiveWallet();
-  const [contract, setContract] = useState<TestContract>();
-  const [counter, setCounter] = useState<number>();
+function App() {
+  const { connect } = useConnectUI();
+  const { isConnected, refetch } = useIsConnected();
+  const { view, views, setRoute } = useRouter();
 
-  /**
-   * useAsync is a wrapper around useEffect that allows us to run asynchronous code
-   * See: https://github.com/streamich/react-use/blob/master/docs/useAsync.md
-   */
-  useAsync(async () => {
-    if (wallet) {
-      // Create a new instance of the contract
-      const testContract = new TestContract(contractId, wallet);
-      setContract(testContract);
-
-      // Read the current value of the counter
-      const { value } = await testContract.functions.get_count().get();
-      setCounter(value.toNumber());
-    }
-  }, [wallet]);
-
-  // eslint-disable-next-line consistent-return
-  const onIncrementPressed = async () => {
-    if (!contract) {
-      return toast.error("Contract not loaded");
-    }
-
-    if (walletBalance?.eq(0)) {
-      return toast.error(
-        <span>
-          Your wallet does not have enough funds. Please top it up using the{" "}
-          <Link href={FAUCET_LINK} target="_blank">
-            faucet.
-          </Link>
-        </span>,
-      );
-    }
-
-    // Call the increment_counter function on the contract
-    const { waitForResult } = await contract.functions
-      .increment_counter(bn(1))
-      .call();
-
-    // Wait for the transaction to be mined, and then read the value returned
-    const { value } = await waitForResult();
-
-    setCounter(value.toNumber());
-
-    await refreshWalletBalance?.();
-  };
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   return (
-    <>
-      <div className="flex gap-4 items-center">
-        <FuelLogo />
-        <h1 className="text-2xl font-semibold ali">Welcome to Fuel</h1>
+    <main
+      data-theme="dark"
+      className="flex items-center justify-center lg:pt-6 dark:text-zinc-50/90"
+    >
+      <div id="container" className="mx-8 mb-32 w-full max-w-6xl">
+        <nav id="nav" className="flex items-center justify-center py-6">
+          <a href="https://fuel.network/" target="_blank" rel="noreferrer">
+            <img src="./logo_white.png" alt="Fuel Logo" className="w-[124px]" />
+          </a>
+        </nav>
+
+        <div className="gradient-border rounded-2xl">
+          <div className="grain rounded-2xl p-1.5 drop-shadow-xl">
+            <div
+              id="grid"
+              className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-12"
+            >
+              <Info />
+              <div className="col-span-4">
+                <div className="gradient-border h-full rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950/80">
+                  {!isConnected && (
+                    <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8 ">
+                      <Button onClick={() => connect()}>Connect Wallet</Button>
+                    </section>
+                  )}
+
+                  {isConnected && (
+                    <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8">
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        {views.map((viewName) => (
+                          <Button
+                            key={viewName}
+                            className="w-full sm:flex-1 capitalize"
+                            color={view === viewName ? "primary" : "inactive"}
+                            onClick={() => setRoute(viewName)}
+                          >
+                            {viewName}
+                          </Button>
+                        ))}
+                      </div>
+
+                      {view === "wallet" && <Wallet />}
+                      {view === "contract" && <Contract />}
+                      {view === "predicate" && <Predicate />}
+                      {view === "script" && <Script />}
+                      {view === "faucet" && <Faucet />}
+                    </section>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <span className="text-gray-400">
-        Get started by editing <i>sway-programs/contract/main.sw</i> or{" "}
-        <i>src/pages/index.tsx</i>.
-      </span>
-
-      <span className="text-gray-400">
-        This template uses the new{" "}
-        <Link href={`${DOCS_URL}/docs/fuels-ts/fuels/#fuels-cli`}>
-          Fuels CLI
-        </Link>{" "}
-        to enable type-safe hot-reloading for your Sway programs.
-      </span>
-
-      <>
-        <h3 className="text-xl font-semibold">Counter</h3>
-
-        <span data-testid="counter" className="text-gray-400 text-6xl">
-          {counter}
-        </span>
-
-        <Button onClick={onIncrementPressed} className="mt-6">
-          Increment Counter
-        </Button>
-      </>
-
-      <Link href="/predicate" className="mt-4">
-        Predicate Example
-      </Link>
-
-      <Link href="/script" className="mt-4">
-        Script Example
-      </Link>
-      <Link href={DOCS_URL} target="_blank" className="mt-12">
-        Fuel Docs
-      </Link>
-    </>
+    </main>
   );
 }
+
+export default App;
