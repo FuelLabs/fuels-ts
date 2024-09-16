@@ -1,5 +1,28 @@
 # @fuel-ts/abi-typegen
 
+## 0.94.6
+
+### Patch Changes
+
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- ccfa699: fix: storage slots auto-load from typegen
+- Updated dependencies [aef7282]
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- Updated dependencies [942b56b]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
 ## 0.94.4
 
 ### Patch Changes

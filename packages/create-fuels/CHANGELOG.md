@@ -1,5 +1,17 @@
 # create-fuels
 
+## 0.94.6
+
+### Patch Changes
+
+- 3409c10: chore: downgrade ora from `8.1.0` to `5.4.1`
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- c98461f: chore: deprecate network URLs, add asset ID and chain ID for mainnet
+- 41ea8d0: chore: bump connectors package version
+- 11d4f8b: feat: add UI tests to `create fuels` template
+
+## 0.94.5
+
 ## 0.94.4
 
 ### Patch Changes

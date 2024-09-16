@@ -5,13 +5,17 @@ import { BlobTransactionRequest } from './blob-transaction-request';
 import { CreateTransactionRequest } from './create-transaction-request';
 import { ScriptTransactionRequest } from './script-transaction-request';
 import type { TransactionRequestLike, TransactionRequest } from './types';
+import { UpgradeTransactionRequest } from './upgrade-transaction-request';
+import { UploadTransactionRequest } from './upload-transaction-request';
 
 /** @hidden */
 export const transactionRequestify = (obj: TransactionRequestLike): TransactionRequest => {
   if (
     obj instanceof ScriptTransactionRequest ||
     obj instanceof CreateTransactionRequest ||
-    obj instanceof BlobTransactionRequest
+    obj instanceof BlobTransactionRequest ||
+    obj instanceof UpgradeTransactionRequest ||
+    obj instanceof UploadTransactionRequest
   ) {
     return obj;
   }
@@ -27,6 +31,12 @@ export const transactionRequestify = (obj: TransactionRequestLike): TransactionR
     }
     case TransactionType.Blob: {
       return BlobTransactionRequest.from(obj);
+    }
+    case TransactionType.Upgrade: {
+      return UpgradeTransactionRequest.from(obj);
+    }
+    case TransactionType.Upload: {
+      return UploadTransactionRequest.from(obj);
     }
     default: {
       throw new FuelError(
@@ -51,3 +61,13 @@ export const isTransactionTypeCreate = (
 export const isTransactionTypeBlob = (
   request: TransactionRequestLike
 ): request is BlobTransactionRequest => request.type === TransactionType.Blob;
+
+/** @hidden */
+export const isTransactionTypeUpgrade = (
+  request: TransactionRequestLike
+): request is UpgradeTransactionRequest => request.type === TransactionType.Upgrade;
+
+/** @hidden */
+export const isTransactionTypeUpload = (
+  request: TransactionRequestLike
+): request is UploadTransactionRequest => request.type === TransactionType.Upload;
