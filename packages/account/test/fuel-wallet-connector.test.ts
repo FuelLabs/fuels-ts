@@ -8,7 +8,7 @@ import { bn } from '@fuel-ts/math';
 import { TESTNET_NETWORK_URL } from '@internal/utils';
 import { EventEmitter } from 'events';
 
-import type { ProviderOptions } from '../src';
+import type { Network, ProviderOptions, SelectNetworkArguments } from '../src';
 import { Fuel } from '../src/connectors/fuel';
 import { FuelConnectorEventType } from '../src/connectors/types';
 import { Provider, TransactionStatus } from '../src/providers';
@@ -182,7 +182,7 @@ describe('Fuel Connector', () => {
       connectors: [new MockConnector()],
     }).init();
     const networkUrl = TESTNET_NETWORK_URL;
-    const newNetwork = {
+    const newNetwork: Network = {
       url: networkUrl,
       chainId: 0,
     };
@@ -208,7 +208,7 @@ describe('Fuel Connector', () => {
       storage: null,
       connectors: [new MockConnector()],
     }).init();
-    const newNetwork = {
+    const network: SelectNetworkArguments = {
       url: TESTNET_NETWORK_URL,
       chainId: 0,
     };
@@ -217,10 +217,48 @@ describe('Fuel Connector', () => {
     const onCurrentNetwork = vi.fn();
     fuel.on(fuel.events.currentNetwork, onCurrentNetwork);
 
-    const networkHasSwitch = await fuel.selectNetwork(newNetwork);
+    const networkHasSwitch = await fuel.selectNetwork(network);
     expect(networkHasSwitch).toEqual(true);
     expect(onCurrentNetwork).toBeCalledTimes(1);
-    expect(onCurrentNetwork).toBeCalledWith(newNetwork);
+    expect(onCurrentNetwork).toBeCalledWith(network);
+  });
+
+  it('should ensure selectNetwork works just fine [only url]', async () => {
+    const fuel = await new Fuel({
+      storage: null,
+      connectors: [new MockConnector()],
+    }).init();
+    const network: SelectNetworkArguments = {
+      url: TESTNET_NETWORK_URL,
+    };
+
+    // listen to connection event
+    const onCurrentNetwork = vi.fn();
+    fuel.on(fuel.events.currentNetwork, onCurrentNetwork);
+
+    const networkHasSwitch = await fuel.selectNetwork(network);
+    expect(networkHasSwitch).toEqual(true);
+    expect(onCurrentNetwork).toBeCalledTimes(1);
+    expect(onCurrentNetwork).toBeCalledWith(network);
+  });
+
+  it('should ensure selectNetwork works just fine [only chainId]', async () => {
+    const fuel = await new Fuel({
+      storage: null,
+      connectors: [new MockConnector()],
+    }).init();
+    const network: SelectNetworkArguments = {
+      chainId: 123,
+    };
+
+    // listen to connection event
+    const onCurrentNetwork = vi.fn();
+    fuel.on(fuel.events.currentNetwork, onCurrentNetwork);
+
+    const networkHasSwitch = await fuel.selectNetwork(network);
+    expect(networkHasSwitch).toEqual(true);
+    expect(onCurrentNetwork).toBeCalledTimes(1);
+    expect(onCurrentNetwork).toBeCalledWith(network);
   });
 
   it('should ensure addAsset works just fine', async () => {

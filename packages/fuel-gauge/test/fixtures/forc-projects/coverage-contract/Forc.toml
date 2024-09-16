@@ -4,3 +4,4 @@ license = "Apache-2.0"
 name = "coverage-contract"
 
 [dependencies]
+data-structure-library = { path = "../data-structure-library" }
