@@ -23,7 +23,7 @@ const createHeapType = <T extends { length: number }>(opts: HeapCoder<T>): Coder
   decode: (data: Uint8Array): T => {
     const encodedLength = data.slice(0, DYNAMIC_WORD_LENGTH);
     const length = u64.decode(encodedLength).toNumber();
-    const payload = data.slice(DYNAMIC_WORD_LENGTH, DYNAMIC_WORD_LENGTH + length);
+    const payload = data.slice(DYNAMIC_WORD_LENGTH, data.length);
     return opts.decode(payload, length);
   },
 });
@@ -42,7 +42,7 @@ export const byte = createHeapType<Uint8Array>({
  */
 export const rawSlice = createHeapType<number[]>({
   type: 'raw_slice',
-  encode: (value: number[]) => new Uint8Array(value),
+  encode: (value: number[]) => new Uint8Array([...value]),
   decode: (data: Uint8Array) => [...data],
 });
 
