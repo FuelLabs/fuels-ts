@@ -1,16 +1,17 @@
 {
   "name": "create-fuels-counter-guide",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "prebuild": "fuels build",
-    "dev": "vite",
-    "build": "npm run prebuild && tsc -b && vite build",
-    "lint": "eslint .",
+    "test:ui": "./test/ui/test-ui.sh",
+    "original:dev": "vite",
+    "original:build": "tsc -b && vite build",
+    "original:start": "next start",
+    "original:lint": "eslint .",
+    "fuels:build": "fuels build",
     "fuels:dev": "fuels dev",
-    "test": "vitest",
-    "test:ui": "./test/ui/test-ui.sh"
+    "postbuild": "run-s fuels:build original:build"
   },
   "dependencies": {
     "@fuels/connectors": "^0.27.1",
