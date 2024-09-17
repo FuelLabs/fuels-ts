@@ -1,8 +1,9 @@
 {
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "noEmit": true
+    "noEmit": true,
+    "types": ["./vitest.d.ts"]
   },
-  "include": ["**/*.test.ts"],
+  "include": ["**/*.test.ts", "vitest.**/*.ts"],
   "exclude": ["node_modules"]
 }
