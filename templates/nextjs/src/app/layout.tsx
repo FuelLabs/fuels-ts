@@ -1,14 +1,16 @@
 "use client";
 
-import "@/styles/globals.css";
 import { FuelProvider } from "@fuels/react";
 import React, { ReactNode, useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 import { Provider } from "fuels";
 import { defaultConnectors } from "@fuels/connectors";
+
 import { providerUrl } from "../lib";
-import { ToastContainer } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
+import "@/styles/globals.css";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   if (!isMounted) return null;
 
   return (
-    <html lang="en" className="bg-black text-white">
+    <html lang="en">
       <head>
         <link rel="icon" href="/fuel.ico" />
         <title>Fuel dApp</title>
@@ -42,7 +44,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <QueryClientProvider client={queryClient}>
             <FuelProvider theme="dark" fuelConfig={{ connectors }}>
               <ToastContainer theme="dark" />
-              {children}
+              <>{children}</>
             </FuelProvider>
           </QueryClientProvider>
         </React.StrictMode>

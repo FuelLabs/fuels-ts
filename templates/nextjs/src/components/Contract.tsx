@@ -18,17 +18,19 @@ export default function Contract() {
     if (wallet) {
       const testContract = new TestContract(contractId, wallet);
       setContract(testContract);
-
-      if (contract) {
-        const getCount = async () => {
-          const { value } = await contract.functions.get_count().get();
-          setCounter(value.toNumber());
-        };
-
-        getCount();
-      }
     }
-  }, [wallet, contract]);
+  }, [wallet]);
+
+  useEffect(() => {
+    if (contract && !counter) {
+      const getCount = async () => {
+        const { value } = await contract.functions.get_count().get();
+        setCounter(value.toNumber());
+      };
+
+      getCount();
+    }
+  }, [contract, counter]);
 
   async function incrementCounter() {
     if (!wallet || !contract) return;
