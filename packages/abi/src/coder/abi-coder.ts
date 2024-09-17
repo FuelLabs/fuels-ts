@@ -1,26 +1,20 @@
-import type { Abi, AbiFunction, AbiSpecification } from '../parser';
+import type { Abi, AbiConfigurable, AbiFunction, AbiLoggedType, AbiSpecification } from '../parser';
 import { AbiParser } from '../parser';
 
-import type { AbiCoderFunction } from './abi-coder-types';
-import { v1 } from './encoding';
-import { withValidation } from './encoding/utils/withValidation';
+import type { AbiCoderConfigurable, AbiCoderFunction } from './abi-coder-types';
+import { AbiEncoding } from './encoding/encoding';
 
 export class AbiCoder {
-  private supportedEncodings = {
-    '1': v1,
-  } as const;
-
   // Internal properties
   private abi: Abi;
-  private encoding: (typeof this.supportedEncodings)[keyof typeof this.supportedEncodings];
+  private encoding: AbiEncoding;
 
   // Exposed properties
   public readonly functions: Record<string, AbiCoderFunction>;
 
   private constructor(abi: AbiSpecification) {
     this.abi = AbiParser.parse(abi);
-    this.encoding =
-      this.supportedEncodings[this.abi.specVersion as keyof typeof this.supportedEncodings];
+    this.encoding = AbiEncoding.from(this.abi.encodingVersion);
     this.functions = Object.fromEntries(
       this.abi.functions.map((fn) => [fn.name, this.fromFunction(fn)])
     );
@@ -33,12 +27,28 @@ export class AbiCoder {
   private fromFunction(fn: AbiFunction): AbiCoderFunction {
     return {
       name: fn.name,
-      arguments: withValidation(
-        this.encoding.coders.tuple({
-          coders: fn.inputs.map((input) => this.encoding.getCoder(input)),
-        })
-      ),
+      arguments: this.encoding.coders.tuple({
+        coders: fn.inputs.map((input) => this.encoding.getCoder(input)),
+      }),
       output: this.encoding.getCoder({ type: fn.output }),
+    };
+  }
+
+  private fromConfigurable(configurable: AbiConfigurable): AbiCoderConfigurable {
+    // @TODO find out what this offset is used for...
+    const offset = configurable.offset;
+
+    const configurableCoder = this.encoding.getCoder(configurable);
+    return {
+      name: configurable.name,
+      value: configurableCoder,
+    };
+  }
+
+  private fromLogged(logged: AbiLoggedType) {
+    return {
+      logId: logged.logId,
+      type: this.encoding.getCoder({ name: logged.logId, type: logged.type }),
     };
   }
 }

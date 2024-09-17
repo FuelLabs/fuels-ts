@@ -31,6 +31,7 @@ export interface Coder<TEncode = unknown, TDecode = TEncode> {
 
 export type GetCoderParams = { name?: string; type: AbiType };
 export type GetCoderFn = (params: GetCoderParams) => Coder;
+
 export interface AbiCoderFunction {
   name: AbiFunction['name'];
   arguments: Coder<unknown[]>;
@@ -39,5 +40,5 @@ export interface AbiCoderFunction {
 
 export interface AbiCoderConfigurable {
   name: AbiConfigurable['name'];
-  output: Coder<unknown>;
+  value: Coder<unknown>;
 }

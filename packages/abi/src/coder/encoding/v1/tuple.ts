@@ -13,7 +13,7 @@ type TupleDecodeValue<TCoders extends Coder[]> = {
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 };
 
-export const tupleCoder = <TCoders extends Coder[] = Coder[]>({
+export const tuple = <TCoders extends Coder[] = Coder[]>({
   coders,
 }: {
   coders: TCoders;
@@ -34,11 +34,11 @@ export const tupleCoder = <TCoders extends Coder[] = Coder[]>({
   },
 });
 
-tupleCoder.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
+tuple.fromAbi = ({ type: { components } }: GetCoderParams, getCoder: GetCoderFn) => {
   if (!components) {
     throw new Error(`The provided Tuple type is missing an item of 'components'.`);
   }
 
   const coders = components.map((component: AbiTypeComponent) => getCoder(component));
-  return tupleCoder({ coders });
+  return tuple({ coders });
 };
