@@ -1,12 +1,13 @@
 import { useBalance, useWallet } from "@fuels/react";
-import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 import LocalFaucet from "./LocalFaucet";
 import Button from "./Button";
 import { isLocal, testnetFaucetUrl } from "../lib";
+import { useNotification } from "../hooks/useNotification";
 
 export default function Faucet() {
+  const { successNotification } = useNotification();
   const { wallet } = useWallet();
   const address = wallet?.address.toB256() || "";
   const { balance, refetch } = useBalance({ address });
@@ -22,7 +23,7 @@ export default function Faucet() {
 
   const copyAddress = () => {
     navigator.clipboard.writeText(address);
-    toast.success("Address copied to clipboard");
+    successNotification("Address copied to clipboard");
   };
 
   return (

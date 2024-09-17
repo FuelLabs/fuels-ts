@@ -1,13 +1,16 @@
 import { useBalance, useWallet } from "@fuels/react";
 import { useEffect, useState } from "react";
 import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
-import { toast } from "react-toastify";
 
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
 import { isLocal } from "../lib";
+import { useNotification } from "../hooks/useNotification";
+
 export default function Predicate() {
+  const { infoNotification, successNotification, errorNotification } =
+    useNotification();
   const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
   const [predicatePin, setPredicatePin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -40,12 +43,12 @@ export default function Predicate() {
 
     try {
       const tx = await wallet.transfer(predicate.address, bn(2_000_000));
-      toast.info(`Transaction submitted: ${tx.id}`);
+      infoNotification(`Transaction submitted: ${tx.id}`);
       await tx.waitForResult();
-      toast.success(`Transfer successful: ${tx.id}`);
+      successNotification(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error("Error transferring funds. Check your wallet balance.");
+      errorNotification("Error transferring funds. Check your wallet balance.");
     }
     setIsLoading(false);
     refetch();
@@ -62,12 +65,12 @@ export default function Predicate() {
       });
 
       const tx = await newPredicate.transfer(wallet.address, bn(1_000_000));
-      toast.info(`Transaction submitted: ${tx.id}`);
+      infoNotification(`Transaction submitted: ${tx.id}`);
       await tx.waitForResult();
-      toast.success(`Transfer successful: ${tx.id}`);
+      successNotification(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error(
+      errorNotification(
         "Error transferring funds. Check the predicate balance and that you are using the correct pin.",
       );
     }

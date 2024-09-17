@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useWallet } from "@fuels/react";
-import { toast } from "react-toastify";
 
 import LocalFaucet from "./LocalFaucet";
 import { TestContract } from "../sway-api";
 import Button from "./Button";
 import { isLocal, contractId } from "../lib";
+import { useNotification } from "../hooks/useNotification";
 
 export default function Contract() {
+  const { infoNotification, successNotification, errorNotification } =
+    useNotification();
   const [contract, setContract] = useState<TestContract>();
   const [counter, setCounter] = useState<number>();
   const [isLoading, setIsLoading] = useState(false);
@@ -38,13 +40,13 @@ export default function Contract() {
 
     try {
       const call = await contract.functions.increment_counter(1).call();
-      toast.info(`Transaction submitted: ${call.transactionId}`);
+      infoNotification(`Transaction submitted: ${call.transactionId}`);
       const result = await call.waitForResult();
-      toast.success(`Transaction successful: ${result.transactionId}`);
+      successNotification(`Transaction successful: ${result.transactionId}`);
       setCounter(result.value.toNumber());
     } catch (error) {
       console.error(error);
-      toast.error("Error incrementing counter");
+      errorNotification("Error incrementing counter");
     }
     setIsLoading(false);
   }

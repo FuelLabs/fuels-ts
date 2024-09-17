@@ -1,9 +1,9 @@
 import { bn, WalletUnlocked } from "fuels";
 import { useWallet } from "@fuels/react";
-import { toast } from "react-toastify";
 import { useState } from "react";
 
 import Button from "./Button";
+import { useNotification } from "../hooks/useNotification";
 
 type Props = {
   refetch: () => void;
@@ -11,6 +11,8 @@ type Props = {
 
 export default function LocalFaucet({ refetch }: Props) {
   const [isLoading, setIsLoading] = useState(false);
+  const { infoNotification, successNotification, errorNotification } =
+    useNotification();
 
   const { wallet } = useWallet();
 
@@ -23,12 +25,12 @@ export default function LocalFaucet({ refetch }: Props) {
         wallet.provider,
       );
       const tx = await genesis.transfer(wallet.address, bn(5_000_000_000));
-      toast.info(`Transaction submitted: ${tx.id}`);
+      infoNotification(`Transaction submitted: ${tx.id}`);
       await tx.waitForResult();
-      toast.success(`Transfer successful: ${tx.id}`);
+      successNotification(`Transfer successful: ${tx.id}`);
     } catch (error) {
       console.error(error);
-      toast.error("Error transferring funds.");
+      errorNotification("Error transferring funds.");
     }
     setIsLoading(false);
     refetch();
