@@ -184,6 +184,8 @@ export type ReceiptReturnData = {
   digest: string;
   /** Value of register $pc (u64) */
   pc: BN;
+  /** Value of the memory range MEM[$rA, $rB]. */
+  data: string;
   /** Value of register $is (u64) */
   is: BN;
 };
@@ -207,6 +209,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new BigNumberCoder('u64').encode(value.pc));
     parts.push(new BigNumberCoder('u64').encode(value.is));
+    parts.push(new ByteArrayCoder(value.len.toNumber()).encode(value.data));
 
     return concat(parts);
   }
@@ -227,6 +230,8 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
+    [decoded, o] = new ByteArrayCoder(len.toNumber()).decode(data, o);
+    const returnData = decoded;
 
     return [
       {
@@ -237,6 +242,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
         digest,
         pc,
         is,
+        data: returnData,
       },
       o,
     ];
@@ -458,6 +464,8 @@ export type ReceiptLogData = {
   len: BN;
   /** Hash of MEM[$rC, $rD] (b256) */
   digest: string;
+  /** Value of the memory range MEM[$rC, $rD]. */
+  data: string;
   /** Value of register $pc (u64) */
   pc: BN;
   /** Value of register $is (u64) */
@@ -485,6 +493,7 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new BigNumberCoder('u64').encode(value.pc));
     parts.push(new BigNumberCoder('u64').encode(value.is));
+    parts.push(new ByteArrayCoder(value.len.toNumber()).encode(value.data));
 
     return concat(parts);
   }
@@ -509,6 +518,8 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
+    [decoded, o] = new ByteArrayCoder(len.toNumber()).decode(data, o);
+    const logData = decoded;
 
     return [
       {
@@ -521,6 +532,7 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
         digest,
         pc,
         is,
+        data: logData,
       },
       o,
     ];
@@ -728,6 +740,8 @@ export type ReceiptMessageOut = {
   amount: BN;
   /** Hexadecimal string representation of the 256-bit (32-byte) message nonce */
   nonce: string;
+  /** Decimal string representation of a 16-bit unsigned integer; value of register $rC. */
+  len: number;
   /** Hexadecimal string representation of 256-bit (32-byte), hash of MEM[$rA + 32, $rB] */
   digest: string;
   /** Hexadecimal string representation of the value of the memory range MEM[$rA + 32, $rB] */
@@ -802,6 +816,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
       recipient,
       amount,
       nonce,
+      len,
       digest,
       data: messageData,
     };
