@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import type { TransferParams, WalletUnlocked, BytesLike } from 'fuels';
-import { Wallet, Provider, ScriptTransactionRequest } from 'fuels';
+import type { TransferParams } from 'fuels';
+import { Wallet, Provider, ScriptTransactionRequest, WalletUnlocked } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
 
@@ -51,10 +51,7 @@ describe('Cost Estimation Benchmarks', () => {
     beforeAll(async () => {
       const { networkUrl } = DEVNET_CONFIG;
       provider = await Provider.create(networkUrl);
-      const wallet = Wallet.fromPrivateKey(
-        process.env.DEVNET_WALLET_PVT_KEY as BytesLike,
-        provider
-      );
+      const wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
 
       setup(provider);
 
@@ -101,69 +98,86 @@ describe('Cost Estimation Benchmarks', () => {
     }
   );
 
-  bench('should successfully get transaction cost estimate for multi contract calls', async () => {
-    for (let i = 0; i < 10; i++) {
-      const invocationScope = contract.multiCall([
-        contract.functions.return_context_amount().callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
-        }),
-        contract.functions.return_context_amount().callParams({
-          forward: [200, TestAssetId.A.value],
-        }),
-      ]);
+  bench(
+    'should successfully get transaction cost estimate for multi contract calls 10 times',
+    async () => {
+      for (let i = 0; i < 10; i++) {
+        const invocationScope = contract.multiCall([
+          contract.functions.return_context_amount().callParams({
+            forward: [100, contract.provider.getBaseAssetId()],
+          }),
+          contract.functions.return_context_amount().callParams({
+            forward: [200, TestAssetId.A.value],
+          }),
+        ]);
 
-      const cost = await invocationScope.getTransactionCost();
+        const cost = await invocationScope.getTransactionCost();
 
-      expect(cost.minFee).toBeDefined();
-      expect(cost.maxFee).toBeDefined();
-      expect(cost.gasPrice).toBeDefined();
-      expect(cost.gasUsed).toBeDefined();
-      expect(cost.gasPrice).toBeDefined();
+        expect(cost.minFee).toBeDefined();
+        expect(cost.maxFee).toBeDefined();
+        expect(cost.gasPrice).toBeDefined();
+        expect(cost.gasUsed).toBeDefined();
+        expect(cost.gasPrice).toBeDefined();
+      }
     }
-  });
+  );
 
-  bench('should successfully get transaction cost estimate for a single transfer', async () => {
-    for (let i = 0; i < 10; i++) {
-      request.addCoinOutput(recipient.address, 10, provider.getBaseAssetId());
+  bench(
+    'should successfully get transaction cost estimate for a single transfer 10 times',
+    async () => {
+      for (let i = 0; i < 10; i++) {
+        request.addCoinOutput(recipient.address, 10, provider.getBaseAssetId());
 
-      const cost = await sender.getTransactionCost(request);
+        const cost = await sender.getTransactionCost(request);
 
-      expect(cost.minFee).toBeDefined();
-      expect(cost.maxFee).toBeDefined();
-      expect(cost.gasPrice).toBeDefined();
-      expect(cost.gasUsed).toBeDefined();
-      expect(cost.gasPrice).toBeDefined();
+        expect(cost.minFee).toBeDefined();
+        expect(cost.maxFee).toBeDefined();
+        expect(cost.gasPrice).toBeDefined();
+        expect(cost.gasUsed).toBeDefined();
+        expect(cost.gasPrice).toBeDefined();
+      }
     }
-  });
+  );
 
-  bench('should successfully get transaction cost estimate for a batch transfer', async () => {
-    for (let i = 0; i < 10; i++) {
-      const amountToTransfer1 = 989;
-      const amountToTransfer2 = 699;
-      const amountToTransfer3 = 122;
+  bench(
+    'should successfully get transaction cost estimate for a batch transfer 10 times',
+    async () => {
+      for (let i = 0; i < 10; i++) {
+        const amountToTransfer1 = 989;
+        const amountToTransfer2 = 699;
+        const amountToTransfer3 = 122;
 
-      const transferParams: TransferParams[] = [
-        {
-          destination: receiver1.address,
-          amount: amountToTransfer1,
-          assetId: provider.getBaseAssetId(),
-        },
-        { destination: receiver2.address, amount: amountToTransfer2, assetId: TestAssetId.A.value },
-        { destination: receiver3.address, amount: amountToTransfer3, assetId: TestAssetId.B.value },
-      ];
+        const transferParams: TransferParams[] = [
+          {
+            destination: receiver1.address,
+            amount: amountToTransfer1,
+            assetId: provider.getBaseAssetId(),
+          },
+          {
+            destination: receiver2.address,
+            amount: amountToTransfer2,
+            assetId: TestAssetId.A.value,
+          },
+          {
+            destination: receiver3.address,
+            amount: amountToTransfer3,
+            assetId: TestAssetId.B.value,
+          },
+        ];
 
-      const cost = await contract.functions
-        .sum(40, 50)
-        .addBatchTransfer(transferParams)
-        .getTransactionCost();
+        const cost = await contract.functions
+          .sum(40, 50)
+          .addBatchTransfer(transferParams)
+          .getTransactionCost();
 
-      expect(cost.minFee).toBeDefined();
-      expect(cost.maxFee).toBeDefined();
-      expect(cost.gasPrice).toBeDefined();
-      expect(cost.gasUsed).toBeDefined();
-      expect(cost.gasPrice).toBeDefined();
+        expect(cost.minFee).toBeDefined();
+        expect(cost.maxFee).toBeDefined();
+        expect(cost.gasPrice).toBeDefined();
+        expect(cost.gasUsed).toBeDefined();
+        expect(cost.gasPrice).toBeDefined();
+      }
     }
-  });
+  );
 
   it('should successfully get transaction cost estimate for a mint 10 times', async () => {
     for (let i = 0; i < 10; i++) {

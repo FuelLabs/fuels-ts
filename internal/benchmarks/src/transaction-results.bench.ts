@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { Wallet, Provider } from 'fuels';
-import type { WalletUnlocked, TransferParams } from 'fuels';
+import { Wallet, Provider, WalletUnlocked, TransferParams } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
 
@@ -23,7 +22,7 @@ describe('Transaction Submission Benchmarks', () => {
     beforeAll(async () => {
       const { networkUrl } = DEVNET_CONFIG;
       provider = await Provider.create(networkUrl);
-      wallet = Wallet.fromPrivateKey(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
+      wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
       receiver1 = Wallet.generate({ provider });
       receiver2 = Wallet.generate({ provider });
       receiver3 = Wallet.generate({ provider });
