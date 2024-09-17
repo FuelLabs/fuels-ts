@@ -1,7 +1,7 @@
 // #region fuels-config-file-env
 import { createConfig } from 'fuels';
 import dotenv from 'dotenv';
-import { NODE_URL } from './src/lib';
+import { providerUrl } from './src/lib';
 
 dotenv.config({
   path: ['.env.local', '.env'],
@@ -14,8 +14,6 @@ export default createConfig({
   workspace: './sway-programs', // Path to your Sway workspace
   output: './src/sway-api', // Where your generated types will be saved
   fuelCorePort,
-  providerUrl: NODE_URL,
-  fuelCorePath: 'fuels-core',
-  forcPath: 'fuels-forc',
+  providerUrl,
 });
 // #endregion fuels-config-file-env

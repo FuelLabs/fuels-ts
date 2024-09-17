@@ -96,6 +96,10 @@ This is where our Sway contract lives. Out of the box, it is a simple counter co
 
 This file contains the source code for the frontend of our dApp.
 
+### `./src/components/Contract.tsx`
+
+This file contains the source code for the 'Contract' tab in the UI. This file is where the contract calling logic is implemented.
+
 ### Dev Environment Setup
 
 Now that we have our project scaffolded, let's set up our development environment.
@@ -144,11 +148,9 @@ Now, you can try changing the contents of the `./sway-programs/contract/src/main
 
 **Note:** You may wish to learn more about how you could create a Fuel dApp that uses predicates, check out our [Working with Predicates](./working-with-predicates.md) guide.
 
----
-
 ## Adding Decrement Functionality
 
-To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/routes/App.tsx` file to add a button that calls this function.
+To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/components/Contract.tsx` file to add a button that calls this function.
 
 ### 1. Modifying the Sway Contract
 
@@ -170,11 +172,11 @@ We will add the implementation of the `decrement_counter` function right below t
 
 We will now add a new button to the frontend that will call the `decrement_counter` function when clicked. To do this, we will modify the `./src/App.tsx` file.
 
-First, we will add a function called `onDecrementPressed` similar to the `onIncrementPressed` function:
+First, we will add a function called `decrementCounter` similar to the `incrementCounter` function:
 
-<<< @/../../create-fuels-counter-guide/src/routes/index.lazy.tsx#create-fuels-counter-guide-on-decrement-react-function{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/components/Contract.tsx#create-fuels-counter-guide-on-decrement-react-function{ts:line-numbers}
 
-Second, we will add a new button to the UI that will call the `onDecrementPressed` function when clicked:
+Second, we will add a new button to the UI that will call the `decrementCounter` function when clicked:
 
 <!-- TODO: our docs engine currently does not detect comments in JSX -->
 
