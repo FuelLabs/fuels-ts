@@ -39,7 +39,7 @@ export default function Predicate() {
     setIsLoading(true);
 
     try {
-      const tx = await wallet.transfer(predicate.address, bn(1_000_000));
+      const tx = await wallet.transfer(predicate.address, bn(2_000_000));
       toast.info(`Transaction submitted: ${tx.id}`);
       await tx.waitForResult();
       toast.success(`Transfer successful: ${tx.id}`);
@@ -94,9 +94,9 @@ export default function Predicate() {
         </p>
         <p className="pt-2">
           In the below example, we transfer{" "}
-          <span className="font-mono font-bold">0.001 ETH</span> to the
+          <span className="font-mono font-bold">0.002 ETH</span> to the
           predicate but need to pass a pin to unlock the predicate and transfer
-          the funds back to us.
+          <span className="font-mono font-bold">0.001 ETH</span> back to us.
         </p>
         <p className="pt-2">
           You can alter the logic in the predicate at{" "}
