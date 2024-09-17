@@ -12,11 +12,14 @@ updates:
       prefix: "build(deps):"
     versioning-strategy: "increase"
     groups:
-      deps:
+      deps-major:
         applies-to: "version-updates"
         update-types:
           - "major"
-          - "minor"
+      deps-minor:
+        applies-to: "version-updates"
+        update-types:
+          - "patch"
       deps-patch:
         applies-to: "version-updates"
         update-types:
