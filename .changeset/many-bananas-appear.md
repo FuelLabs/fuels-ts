@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-feat: `create fuels` template improvements
+feat: `create fuels` template optimisations
