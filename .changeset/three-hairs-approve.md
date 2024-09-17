@@ -3,4 +3,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat: introduce upload and upgrade transaction request
+fix: add missing receipts properties

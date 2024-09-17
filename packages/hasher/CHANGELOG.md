@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.94.6
+
+### Patch Changes
+
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- Updated dependencies [a9f31ca]
+  - @fuel-ts/crypto@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+
 ## 0.94.5
 
 ### Patch Changes
