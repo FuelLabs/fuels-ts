@@ -27,9 +27,12 @@ describe('Contract Interaction Benchmarks', () => {
       const { networkUrl } = DEVNET_CONFIG;
       const provider = await Provider.create(networkUrl);
       wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
+      console.log('instantiated provider', provider.url);
+      console.log('instantiated wallet', wallet.address.toString());
 
       const { waitForResult } = await new CounterContractFactory(wallet).deploy<CounterContract>();
       const { contract: contractDeployed } = await waitForResult();
+      console.log('instantiated contract', contractDeployed.id);
 
       contract = contractDeployed;
 
@@ -37,7 +40,7 @@ describe('Contract Interaction Benchmarks', () => {
         wallet
       ).deploy<CallTestContract>();
       const { contract: callTestContractDeployed } = await waitForResultCallTestContract();
-
+      console.log('instantiated callTestContract', callTestContractDeployed.id);
       callTestContract = callTestContractDeployed;
     });
   } else {

@@ -24,6 +24,8 @@ describe('Transaction Submission Benchmarks', () => {
       const { networkUrl } = DEVNET_CONFIG;
       provider = await Provider.create(networkUrl);
       wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
+      console.log('instantiated provider', provider.url);
+
       console.log('instantiated wallet', wallet.address.toString());
       receiver1 = Wallet.generate({ provider });
       console.log('instantiated receiver1', receiver1.address.toString());
