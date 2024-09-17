@@ -1,6 +1,5 @@
 import { createConfig } from 'fuels';
 import dotenv from 'dotenv';
-
 import { providerUrl } from './src/lib';
 
 dotenv.config({
