@@ -37,11 +37,16 @@ export const enumCoder = <TCoders extends Record<string, Coder>>(opts: { coders:
   },
   decode: (data: Uint8Array): EnumDecodeValue<TCoders> => {
     // Decode the case index
-    const caseIndex = u64.decode(data).toNumber();
+    const caseBytesLength = u64.encodedLength(data);
+    const caseBytes = data.slice(0, caseBytesLength);
+    const caseIndex = u64.decode(caseBytes).toNumber();
     const caseKey = Object.keys(opts.coders)[caseIndex];
-    const valueCoder = opts.coders[caseKey];
-    const decoded = valueCoder.decode(data);
-    return { [caseKey]: decoded } as EnumDecodeValue<TCoders>;
+
+    // Decode the case value
+    const caseValueCoder = opts.coders[caseKey];
+    const caseValueBytes = data.slice(caseBytesLength, data.length);
+    const caseValue = caseValueCoder.decode(caseValueBytes);
+    return { [caseKey]: caseValue } as EnumDecodeValue<TCoders>;
   },
 });
 
