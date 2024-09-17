@@ -30,15 +30,14 @@ describe('Contract Interaction Benchmarks', () => {
       console.log('instantiated provider', provider.url);
       console.log('instantiated wallet', wallet.address.toString());
 
-      const { waitForResult } = await new CounterContractFactory(wallet).deploy<CounterContract>();
+      const { waitForResult } = await CounterContractFactory.deploy(wallet);
       const { contract: contractDeployed } = await waitForResult();
       console.log('instantiated contract', contractDeployed.id);
 
       contract = contractDeployed;
 
-      const { waitForResult: waitForResultCallTestContract } = await new CallTestContractFactory(
-        wallet
-      ).deploy<CallTestContract>();
+      const { waitForResult: waitForResultCallTestContract } =
+        await CallTestContractFactory.deploy(wallet);
       const { contract: callTestContractDeployed } = await waitForResultCallTestContract();
       console.log('instantiated callTestContract', callTestContractDeployed.id);
       callTestContract = callTestContractDeployed;
