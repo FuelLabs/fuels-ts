@@ -1,24 +1,17 @@
 import { FC, useState } from "react";
 import { Link } from "./Link";
-import {
-  CURRENT_ENVIRONMENT,
-  DOCS_URL,
-  NODE_URL,
-  TESTNET_FAUCET_LINK,
-} from "@/lib";
-import { useConnectUI, useDisconnect } from "@fuels/react";
+import { DOCS_URL, NODE_URL } from "@/lib";
+import { useAddNetwork, useConnectUI, useDisconnect } from "@fuels/react";
 import { useActiveWallet } from "@/hooks/useActiveWallet";
 import { Button } from "./Button";
 import { WalletDisplay } from "./WalletDisplay";
-import { bn } from "fuels";
-import { useFaucet } from "@/hooks/useFaucet";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 export const Navbar: FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const { faucetWallet } = useFaucet();
+  const { addNetworkAsync } = useAddNetwork();
 
   const router = useRouter();
 
@@ -31,10 +24,18 @@ export const Navbar: FC = () => {
 
   const showAddNetworkButton = wallet && network && network?.url !== NODE_URL;
 
-  const tryToAddNetwork = () => {
-    return alert(
-      `Please add the network ${NODE_URL} to your Fuel wallet, or swtich to it if you have it already, and refresh the page.`,
-    );
+  const tryToAddNetwork = async () => {
+    const errorMessage = `Unable to add network automatically. Please add the network ${NODE_URL} to your wallet, or switch to it if you have it already, and refresh the page.`;
+    try {
+      const added = await addNetworkAsync(NODE_URL);
+      if (added) {
+        toast.success("Network added successfully");
+      } else {
+        toast.error(errorMessage);
+      }
+    } catch {
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -137,9 +138,7 @@ export const Navbar: FC = () => {
             {!isConnected && <Button onClick={connect}>Connect Wallet</Button>}
 
             {showAddNetworkButton && (
-              <Button onClick={() => toast.success("Adding network")}>
-                Add Network
-              </Button>
+              <Button onClick={tryToAddNetwork}>Add Network</Button>
             )}
 
             <div>

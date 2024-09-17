@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { Link } from "./Link";
 import { DOCS_URL, NODE_URL } from "../lib";
-import { useConnectUI, useDisconnect } from "@fuels/react";
+import { useAddNetwork, useConnectUI, useDisconnect } from "@fuels/react";
 import { useActiveWallet } from "../hooks/useActiveWallet";
 import { Button } from "./Button";
 import { WalletDisplay } from "./WalletDisplay";
@@ -18,14 +18,24 @@ export const Navbar: FC = () => {
 
   const { wallet, network, isConnected } = useActiveWallet();
 
+  const { addNetworkAsync } = useAddNetwork();
+
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
   const showAddNetworkButton = wallet && network && network?.url !== NODE_URL;
 
-  const tryToAddNetwork = () => {
-    return alert(
-      `Please add the network ${NODE_URL} to your Fuel wallet, or swtich to it if you have it already, and refresh the page.`,
-    );
+  const tryToAddNetwork = async () => {
+    const errorMessage = `Unable to add network automatically. Please add the network ${NODE_URL} to your wallet, or switch to it if you have it already, and refresh the page.`;
+    try {
+      const added = await addNetworkAsync(NODE_URL);
+      if (added) {
+        toast.success("Network added successfully");
+      } else {
+        toast.error(errorMessage);
+      }
+    } catch {
+      toast.error(errorMessage);
+    }
   };
 
   return (
@@ -130,9 +140,7 @@ export const Navbar: FC = () => {
             {!isConnected && <Button onClick={connect}>Connect Wallet</Button>}
 
             {showAddNetworkButton && (
-              <Button onClick={() => toast.success("Adding network")}>
-                Add Network
-              </Button>
+              <Button onClick={tryToAddNetwork}>Add Network</Button>
             )}
 
             <div>

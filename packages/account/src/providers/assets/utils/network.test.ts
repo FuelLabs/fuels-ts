@@ -1,6 +1,6 @@
-import { Asset } from '../types'
+import { Asset } from '../types';
 import { getAssetEth, getAssetFuel, getAssetWithNetwork, getDefaultChainId } from '../utils/network';
-import { CHAIN_IDS } from '../../chains'
+import { CHAIN_IDS } from '../../chains';
 import { assets } from '../assets';
 
 /**
