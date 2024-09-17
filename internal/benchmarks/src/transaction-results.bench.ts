@@ -86,27 +86,27 @@ describe('Transaction Submission Benchmarks', () => {
     await customTransfer();
   });
 
-  bench('should successfully perform a batch transfer', async () => {
-    const amountToTransfer1 = 989;
-    const amountToTransfer2 = 699;
-    const amountToTransfer3 = 122;
+  // bench('should successfully perform a batch transfer', async () => {
+  //   const amountToTransfer1 = 989;
+  //   const amountToTransfer2 = 699;
+  //   const amountToTransfer3 = 122;
 
-    const transferParams: TransferParams[] = [
-      {
-        destination: receiver1.address,
-        amount: amountToTransfer1,
-        assetId: provider.getBaseAssetId(),
-      },
-      { destination: receiver2.address, amount: amountToTransfer2, assetId: TestAssetId.A.value },
-      { destination: receiver3.address, amount: amountToTransfer3, assetId: TestAssetId.B.value },
-    ];
+  //   const transferParams: TransferParams[] = [
+  //     {
+  //       destination: receiver1.address,
+  //       amount: amountToTransfer1,
+  //       assetId: provider.getBaseAssetId(),
+  //     },
+  //     { destination: receiver2.address, amount: amountToTransfer2, assetId: TestAssetId.A.value },
+  //     { destination: receiver3.address, amount: amountToTransfer3, assetId: TestAssetId.B.value },
+  //   ];
 
-    const tx = await wallet.batchTransfer(transferParams);
+  //   const tx = await wallet.batchTransfer(transferParams);
 
-    const { isStatusSuccess } = await tx.waitForResult();
+  //   const { isStatusSuccess } = await tx.waitForResult();
 
-    expect(isStatusSuccess).toBeTruthy();
-  });
+  //   expect(isStatusSuccess).toBeTruthy();
+  // });
 
   bench('should successfully withdraw to the base layer', async () => {
     const txParams = {

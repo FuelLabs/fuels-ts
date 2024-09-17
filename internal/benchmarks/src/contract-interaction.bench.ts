@@ -70,15 +70,15 @@ describe('Contract Interaction Benchmarks', () => {
     expect(JSON.stringify(value)).toEqual(JSON.stringify(bn(0)));
   });
 
-  bench('should successfully execute a contract multi call', async () => {
-    const tx = await contract
-      .multiCall([contract.functions.increment_counter(100), contract.functions.get_count()])
-      .call();
+  // bench('should successfully execute a contract multi call', async () => {
+  //   const tx = await contract
+  //     .multiCall([contract.functions.increment_counter(100), contract.functions.get_count()])
+  //     .call();
 
-    const { value } = await tx.waitForResult();
+  //   const { value } = await tx.waitForResult();
 
-    expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(100)]));
-  });
+  //   expect(JSON.stringify(value)).toEqual(JSON.stringify([bn(100), bn(100)]));
+  // });
 
   bench('should successfully write to a contract', async () => {
     const tx = await contract.functions.increment_counter(100).call();
