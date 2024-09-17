@@ -37,7 +37,7 @@ describe('Wallet Benchmarks', () => {
     });
   }
 
-  bench('Instantiate a new Unlocked wallet', () => {
+  bench('Instantiate a new Unlocked wallet 10 times', () => {
     for (let i = 0; i < 10; i++) {
       const unlockedWallet = new WalletUnlocked(expectedPrivateKey, provider);
 
@@ -54,7 +54,7 @@ describe('Wallet Benchmarks', () => {
     }
   });
 
-  bench('Instantiate from an address', () => {
+  bench('Instantiate from an address 10 times', () => {
     for (let i = 0; i < 10; i++) {
       const lockedWallet = Wallet.fromAddress(expectedAddress, provider);
 
