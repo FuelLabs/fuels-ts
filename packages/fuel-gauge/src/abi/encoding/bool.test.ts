@@ -3,7 +3,6 @@ import { AbiCoder } from '@fuel-ts/abi';
 import { FuelError, toBytes } from 'fuels';
 import { expectToThrowFuelError } from 'fuels/test-utils';
 
-import { U8_MAX, U8_MAX_ENCODED, U8_MIN, U8_MIN_ENCODED } from '../constants';
 import { AbiProjectsEnum, getAbiForcProject } from '../utils';
 
 const { abiContents: contractAbi } = getAbiForcProject(AbiProjectsEnum.ABI_CONTRACT);
@@ -17,18 +16,18 @@ describe('types_bool', () => {
       const value = true;
       const expected = new Uint8Array([1]);
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it('should encode value [false]', () => {
       const value = false;
       const expected = new Uint8Array([0]);
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it.todo('should fail to encode value [max + 1]', async () => {
@@ -51,22 +50,22 @@ describe('types_bool', () => {
   });
 
   describe('decode', () => {
-    it('should decode [true]', () => {
+    it('should decode value [true]', () => {
       const value = new Uint8Array([1]);
       const expected = true;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
-    it('should decode [false]', () => {
+    it('should decode value [false]', () => {
       const value = new Uint8Array([0]);
       const expected = false;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it.todo('should fail to decode value [max + 1]', async () => {

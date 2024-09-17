@@ -33,45 +33,45 @@ describe('types_u64', () => {
       const value = U64_MIN;
       const expected = U64_MIN_ENCODED;
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it('should encode value [max]', () => {
       const value = U64_MAX;
       const expected = U64_MAX_ENCODED;
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it('should encode value [u8]', () => {
       const value = U8_MAX;
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]);
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it('should encode value [u16]', () => {
       const value = U16_MAX;
       const expected = new Uint8Array([0, 0, 0, 0, 0, 0, U8_MAX, U8_MAX]);
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it('should encode value [u32]', () => {
       const value = U32_MAX;
       const expected = new Uint8Array([0, 0, 0, 0, U8_MAX, U8_MAX, U8_MAX, U8_MAX]);
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it.todo('should fail to encode value [min - 1]', async () => {
@@ -98,45 +98,45 @@ describe('types_u64', () => {
       const value = U64_MIN_ENCODED;
       const expected = U64_MIN;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expect.toEqualBn(expected));
+      expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
     it('should decode value [max]', () => {
       const value = U64_MAX_ENCODED;
       const expected = U64_MAX;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expect.toEqualBn(expected));
+      expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
     it('should decode value [u8]', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, 0, U8_MAX]);
       const expected = U8_MAX;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expect.toEqualBn(expected));
+      expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
     it('should decode value [u16]', () => {
       const value = new Uint8Array([0, 0, 0, 0, 0, 0, U8_MAX, U8_MAX]);
       const expected = U16_MAX;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expect.toEqualBn(expected));
+      expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
     it('should decode value [u32]', () => {
       const value = new Uint8Array([0, 0, 0, 0, U8_MAX, U8_MAX, U8_MAX, U8_MAX]);
       const expected = U32_MAX;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expect.toEqualBn(expected));
+      expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
     it.todo('should fail to decode value [min - 1]', async () => {

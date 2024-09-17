@@ -25,18 +25,18 @@ describe('types_u256', () => {
       const value = U256_MIN;
       const expected = U256_MIN_ENCODED;
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it('should encode value [max]', () => {
       const value = U256_MAX;
       const expected = U256_MAX_ENCODED;
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it.todo('should fail to encode value [min - 1]', async () => {
@@ -59,22 +59,22 @@ describe('types_u256', () => {
   });
 
   describe('decode', () => {
-    it('should decode [min]', () => {
+    it('should decode value [min]', () => {
       const value = U256_MIN_ENCODED;
       const expected = U256_MIN;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expect.toEqualBn(expected));
+      expect(actual).toStrictEqual(expect.toEqualBn(expected));
     });
 
-    it('should decode [max]', () => {
+    it('should decode value [max]', () => {
       const value = U256_MAX_ENCODED;
       const expected = U256_MAX;
 
-      const decoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(decoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it.todo('should fail to decode value [min - 1]', async () => {

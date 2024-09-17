@@ -17,9 +17,9 @@ describe('types_b256', () => {
       const value = B256_DECODED;
       const expected = B256_ENCODED;
 
-      const encoded = fn.output.encode(value);
+      const actual = fn.output.encode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it.todo('should fail to encode value [too short]', async () => {
@@ -55,9 +55,9 @@ describe('types_b256', () => {
       const value = B256_ENCODED;
       const expected = B256_DECODED;
 
-      const encoded = fn.output.decode(value);
+      const actual = fn.output.decode(value);
 
-      expect(encoded).toStrictEqual(expected);
+      expect(actual).toStrictEqual(expected);
     });
 
     it.todo('should fail to decode value [too short]', async () => {
