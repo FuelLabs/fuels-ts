@@ -915,6 +915,7 @@ describe('operations', () => {
         nonce: '0x66c4d70c08ff30cd2d9dae0b6fd05972997579328529bb0605dd604afedfdf93',
         recipient: '0x000000000000000000000000f39fd6e51aad88f6f4ce6ab8827279cfffb92266',
         sender: '0x4aec2335430f52d0314a03b244d285c675d790dfbf0bc853fd31e39548ad8b7d',
+        len: 0,
         type: 10,
       };
 
