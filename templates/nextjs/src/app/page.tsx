@@ -3,7 +3,7 @@
 import { TestContract } from "@/sway-api";
 import contractIds from "@/sway-api/contract-ids.json";
 import { FuelLogo } from "@/components/FuelLogo";
-import { bn } from "fuels";
+import { bn, Provider } from "fuels";
 import { useState } from "react";
 import { Link } from "@/components/Link";
 import { Button } from "@/components/Button";
@@ -15,6 +15,7 @@ import {
   DOCS_URL,
   Environments,
   FAUCET_LINK,
+  NODE_URL,
 } from "@/lib";
 
 const contractId =
@@ -33,10 +34,20 @@ export default function Home() {
    * useAsync is a wrapper around useEffect that allows us to run asynchronous code
    * See: https://github.com/streamich/react-use/blob/master/docs/useAsync.md
    */
+
   useAsync(async () => {
     if (wallet) {
       // Create a new instance of the contract
       const testContract = new TestContract(contractId, wallet);
+      setContract(testContract);
+
+      // Read the current value of the counter
+      const { value } = await testContract.functions.get_count().get();
+      setCounter(value.toNumber());
+    } else {
+      // Create a new instance of the contract without the wallet
+      const provider = await Provider.create(NODE_URL);
+      const testContract = new TestContract(contractId, provider);
       setContract(testContract);
 
       // Read the current value of the counter
