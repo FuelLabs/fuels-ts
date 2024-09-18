@@ -40,10 +40,7 @@ sway-programs/**/out
 test-results
 playwright-report
 
-# Uncomment the lines below if you don't wish
-# to commit the generated files to git.
-
-# src/sway-api/contracts
-# src/sway-api/predicates
-# src/sway-api/scripts
-# src/sway-api/index.ts
+src/sway-api/contracts
+src/sway-api/predicates
+src/sway-api/scripts
+src/sway-api/index.ts

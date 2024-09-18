@@ -151,6 +151,18 @@ export const runScaffoldCli = async ({
     installDepsSpinner.succeed('Installed dependencies!');
   }
 
+  // Remove typegen files from gitignore
+  const gitignorePath = join(projectPath, '.gitignore');
+  const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
+  const newGitIgnoreContents = gitignoreContents.replace(
+    /(src\/sway-api\/contracts\n)|(src\/sway-api\/predicates\n)|(src\/sway-api\/scripts\n)|(src\/sway-api\/index.ts\n)/gm,
+    ''
+  );
+  writeFileSync(gitignorePath, newGitIgnoreContents);
+
+  // Build types
+  execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+
   log();
   log();
   log(chalk.green(`⚡️ Success! Created a fullstack Fuel dapp at ${projectPath}`));
