@@ -139,6 +139,16 @@ export const runScaffoldCli = async ({
 
   fileCopySpinner.succeed('Copied template files!');
 
+  // Remove typegen files from gitignore
+  const gitignorePath = join('.gitignore');
+  const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
+  const newGitIgnoreContents = gitignoreContents
+    .replace(/src\/sway-api\/contracts\n/g, '')
+    .replace(/src\/sway-api\/predicates\n/g, '')
+    .replace(/src\/sway-api\/scripts\n/g, '')
+    .replace(/src\/sway-api\/index.ts\n/g, '');
+  writeFileSync(gitignorePath, newGitIgnoreContents);
+
   if (opts.install) {
     const installDepsSpinner = ora({
       text: 'Installing dependencies..',
@@ -149,16 +159,6 @@ export const runScaffoldCli = async ({
     execSync('pnpm install', { stdio: verboseEnabled ? 'inherit' : 'pipe' });
     installDepsSpinner.succeed('Installed dependencies!');
   }
-
-  // Remove typegen files from gitignore
-  const gitignorePath = join('.gitignore');
-  const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
-  const newGitIgnoreContents = gitignoreContents
-    .replace(/src\/sway-api\/contracts\n/g, '')
-    .replace(/src\/sway-api\/predicates\n/g, '')
-    .replace(/src\/sway-api\/scripts\n/g, '')
-    .replace(/src\/sway-api\/index.ts\n/g, '');
-  writeFileSync(gitignorePath, newGitIgnoreContents);
 
   // Build types
   execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
