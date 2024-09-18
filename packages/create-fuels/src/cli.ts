@@ -140,7 +140,7 @@ export const runScaffoldCli = async ({
   fileCopySpinner.succeed('Copied template files!');
 
   // Remove typegen files from gitignore
-  const gitignorePath = join('.gitignore');
+  const gitignorePath = join(projectPath, '.gitignore');
   const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
   const newGitIgnoreContents = gitignoreContents
     .replace(/src\/sway-api\/contracts\n/g, '')
