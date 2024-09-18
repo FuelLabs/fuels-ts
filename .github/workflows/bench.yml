@@ -1,10 +1,9 @@
 name: Benchmarks
+
 on:
   pull_request:
-    branches:
-      - master
   push:
-    branches-ignore:
+    branches:
       - master
 
 jobs:

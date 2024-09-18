@@ -1,13 +1,8 @@
 name: "Bench Devnet"
 
 on:
-  # Remove this before merging, we only want devnet tests on master
-  pull_request:
-    branches:
-      - master
   push:
     branches:
-      - master
       - release/*
 
 jobs:

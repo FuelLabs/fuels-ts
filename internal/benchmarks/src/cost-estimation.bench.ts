@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import type { TransferParams } from 'fuels';
+import type { TransferParams, TransactionCost } from 'fuels';
 import { Wallet, Provider, ScriptTransactionRequest, WalletUnlocked } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 import { bench } from 'vitest';
@@ -75,7 +75,7 @@ describe('Cost Estimation Benchmarks', () => {
     });
   };
 
-  const expectCostToBeDefined = (cost: any) => {
+  const expectCostToBeDefined = (cost: TransactionCost) => {
     expect(cost.minFee).toBeDefined();
     expect(cost.maxFee).toBeDefined();
     expect(cost.gasPrice).toBeDefined();
