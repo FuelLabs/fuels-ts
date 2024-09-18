@@ -82,6 +82,7 @@ export default function Contract() {
             value={counter}
             className="w-1/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
+            data-testid="counter"
           />
           <Button
             onClick={incrementCounter}
