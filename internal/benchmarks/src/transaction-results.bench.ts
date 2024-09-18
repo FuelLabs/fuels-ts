@@ -20,39 +20,44 @@ describe('Transaction Submission Benchmarks', () => {
   let cleanup: () => void;
 
   const isDevnet = process.env.DEVNET_WALLET_PVT_KEY !== undefined;
+  const iterations = isDevnet ? 1 : 10;
 
-  if (isDevnet) {
-    beforeAll(async () => {
+  const setupTestEnvironment = async () => {
+    if (isDevnet) {
       const { networkUrl } = DEVNET_CONFIG;
       provider = await Provider.create(networkUrl);
       wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
-
-      receiver1 = Wallet.generate({ provider });
-      receiver2 = Wallet.generate({ provider });
-      receiver3 = Wallet.generate({ provider });
-    });
-  } else {
-    beforeEach(async () => {
+    } else {
       const launched = await launchTestNode();
-
       cleanup = launched.cleanup;
       provider = launched.provider;
       wallet = launched.wallets[1];
-      receiver1 = Wallet.generate({ provider });
-      receiver2 = Wallet.generate({ provider });
-      receiver3 = Wallet.generate({ provider });
-    });
+    }
 
-    afterEach(() => {
+    receiver1 = Wallet.generate({ provider });
+    receiver2 = Wallet.generate({ provider });
+    receiver3 = Wallet.generate({ provider });
+  };
+
+  beforeAll(setupTestEnvironment);
+
+  afterAll(() => {
+    if (!isDevnet && cleanup) {
       cleanup();
+    }
+  });
+
+  const runBenchmark = (name: string, benchmarkFn: () => Promise<void>) => {
+    bench(isDevnet ? name : `${name} (x${iterations} times)`, async () => {
+      for (let i = 0; i < iterations; i++) {
+        await benchmarkFn();
+      }
     });
-  }
+  };
 
   const transfer = async () => {
     const tx = await wallet.transfer(receiver1.address, 100, provider.getBaseAssetId());
-
     const { isStatusSuccess } = await tx.waitForResult();
-
     expect(isStatusSuccess).toBeTruthy();
   };
 
@@ -62,50 +67,21 @@ describe('Transaction Submission Benchmarks', () => {
       witnessLimit: 800,
       maxFee: 70_000,
     };
-
     const pendingTx = await wallet.transfer(
       receiver1.address,
       500,
       provider.getBaseAssetId(),
       txParams
     );
-
     const { transaction } = await pendingTx.waitForResult();
-
     expect(transaction).toBeDefined();
   };
 
-  bench(
-    isDevnet
-      ? 'should successfully transfer a single asset between wallets'
-      : 'should successfully transfer a single asset between wallets 10 times',
-    async () => {
-      if (isDevnet) {
-        await transfer();
-      } else {
-        for (let i = 0; i < 10; i++) {
-          await transfer();
-        }
-      }
-    }
-  );
+  runBenchmark('should successfully transfer a single asset between wallets', transfer);
 
-  bench(
-    isDevnet
-      ? 'should successfully conduct a custom transfer between wallets'
-      : 'should successfully conduct a custom transfer between wallets 10 times',
-    async () => {
-      if (isDevnet) {
-        await customTransfer();
-      } else {
-        for (let i = 0; i < 10; i++) {
-          await customTransfer();
-        }
-      }
-    }
-  );
+  runBenchmark('should successfully conduct a custom transfer between wallets', customTransfer);
 
-  bench('should successfully perform a batch transfer', async () => {
+  runBenchmark('should successfully perform a batch transfer', async () => {
     const amountToTransfer1 = 989;
     const amountToTransfer2 = 699;
     const amountToTransfer3 = 122;
@@ -128,46 +104,18 @@ describe('Transaction Submission Benchmarks', () => {
       },
     ];
 
-    if (isDevnet) {
-      const tx = await wallet.batchTransfer(transferParams);
-
-      const { isStatusSuccess } = await tx.waitForResult();
-
-      expect(isStatusSuccess).toBeTruthy();
-    } else {
-      for (let i = 0; i < 10; i++) {
-        const tx = await wallet.batchTransfer(transferParams);
-
-        const { isStatusSuccess } = await tx.waitForResult();
-
-        expect(isStatusSuccess).toBeTruthy();
-      }
-    }
+    const tx = await wallet.batchTransfer(transferParams);
+    const { isStatusSuccess } = await tx.waitForResult();
+    expect(isStatusSuccess).toBeTruthy();
   });
 
-  bench(
-    isDevnet
-      ? 'should successfully withdraw to the base layer'
-      : 'should successfully withdraw to the base layer 10 times',
-    async () => {
-      const txParams = {
-        witnessLimit: 800,
-        maxFee: 100_000,
-      };
-
-      if (isDevnet) {
-        const pendingTx = await wallet.withdrawToBaseLayer(receiver1.address, 500, txParams);
-        const { transaction } = await pendingTx.waitForResult();
-
-        expect(transaction).toBeDefined();
-      } else {
-        for (let i = 0; i < 10; i++) {
-          const pendingTx = await wallet.withdrawToBaseLayer(receiver1.address, 500, txParams);
-          const { transaction } = await pendingTx.waitForResult();
-
-          expect(transaction).toBeDefined();
-        }
-      }
-    }
-  );
+  runBenchmark('should successfully withdraw to the base layer', async () => {
+    const txParams = {
+      witnessLimit: 800,
+      maxFee: 100_000,
+    };
+    const pendingTx = await wallet.withdrawToBaseLayer(receiver1.address, 500, txParams);
+    const { transaction } = await pendingTx.waitForResult();
+    expect(transaction).toBeDefined();
+  });
 });
