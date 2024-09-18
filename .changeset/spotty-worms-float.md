@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-fix: remove typegen artifacts from create-fuels gitignore
+fix: generate types for `create fuels` users when extracted
