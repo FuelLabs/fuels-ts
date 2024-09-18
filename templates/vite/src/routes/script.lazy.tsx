@@ -10,6 +10,7 @@ import { BN, BigNumberish, Script, bn } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
+import { CURRENT_ENVIRONMENT, Environments } from "../lib";
 
 export const Route = createLazyFileRoute("/script")({
   component: Index,
@@ -31,7 +32,24 @@ function Index() {
       setScript(script);
     }
   }, [wallet]);
-
+  const getScriptSuccessMessage = (transactionId: string) => {
+    if (CURRENT_ENVIRONMENT === Environments.LOCAL) {
+      return "Transaction Success!";
+    } else {
+      return (
+        <span>
+          Transaction Success! View it on the
+          <a
+            className="pl-1 underline"
+            target="_blank"
+            href={`https://app.fuel.network/tx/${transactionId}`}
+          >
+            block explorer
+          </a>
+        </span>
+      );
+    }
+  };
   const runScript = async () => {
     try {
       if (!isConnected) {
@@ -58,18 +76,7 @@ function Index() {
 
       setResult(value.toString());
       await refreshWalletBalance?.();
-      toast.success(() => (
-        <span>
-          Transaction Success! View it on the
-          <a
-            className="pl-1 underline"
-            target="_blank"
-            href={`https://app.fuel.network/tx/${transactionId}`}
-          >
-            block explorer
-          </a>
-        </span>
-      ));
+      toast.success(getScriptSuccessMessage(transactionId));
     } catch (error) {
       console.error(error);
       toast.error(

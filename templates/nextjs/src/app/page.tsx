@@ -56,6 +56,24 @@ export default function Home() {
     }
   }, [wallet]);
 
+  const getCounterIncrementMessage = (transactionId: string) => {
+    if (CURRENT_ENVIRONMENT === Environments.LOCAL) {
+      return "Counter Incremented";
+    } else {
+      return (
+        <span>
+          Counter Incremented! View it on the
+          <a
+            target="_blank"
+            className="pl-1 underline"
+            href={`https://app.fuel.network/tx/${transactionId}`}
+          >
+            block explorer
+          </a>
+        </span>
+      );
+    }
+  };
   // eslint-disable-next-line consistent-return
   const onIncrementPressed = async () => {
     if (!isConnected) {
@@ -84,18 +102,7 @@ export default function Home() {
 
       // Wait for the transaction to be mined, and then read the value returned
       const { value, transactionId } = await waitForResult();
-      toast.success(() => (
-        <span>
-          Counter Incremented! View it on the
-          <a
-            target="_blank"
-            className="pl-1 underline"
-            href={`https://app.fuel.network/tx/${transactionId}`}
-          >
-            block explorer
-          </a>
-        </span>
-      ));
+      toast.success(getCounterIncrementMessage(transactionId));
       setCounter(value.toNumber());
 
       await refreshWalletBalance?.();

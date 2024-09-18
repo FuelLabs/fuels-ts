@@ -80,54 +80,12 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/faucet': typeof FaucetLazyRoute
-  '/predicate': typeof PredicateLazyRoute
-  '/script': typeof ScriptLazyRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/faucet': typeof FaucetLazyRoute
-  '/predicate': typeof PredicateLazyRoute
-  '/script': typeof ScriptLazyRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
-  '/faucet': typeof FaucetLazyRoute
-  '/predicate': typeof PredicateLazyRoute
-  '/script': typeof ScriptLazyRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faucet' | '/predicate' | '/script'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faucet' | '/predicate' | '/script'
-  id: '__root__' | '/' | '/faucet' | '/predicate' | '/script'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  FaucetLazyRoute: typeof FaucetLazyRoute
-  PredicateLazyRoute: typeof PredicateLazyRoute
-  ScriptLazyRoute: typeof ScriptLazyRoute
-}
-
-const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
-  FaucetLazyRoute: FaucetLazyRoute,
-  PredicateLazyRoute: PredicateLazyRoute,
-  ScriptLazyRoute: ScriptLazyRoute,
-}
-
-export const routeTree = rootRoute
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRoute.addChildren({
+  IndexLazyRoute,
+  FaucetLazyRoute,
+  PredicateLazyRoute,
+  ScriptLazyRoute,
+})
 
 /* prettier-ignore-end */
 

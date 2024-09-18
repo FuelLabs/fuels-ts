@@ -32,9 +32,9 @@ export default function Faucet() {
   useEffect(() => {
     const interval = setInterval(async () => {
       await refreshWalletBalance?.();
-    }, 500);
+    }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [wallet, refreshWalletBalance]);
 
   useEffect(() => {
     if (

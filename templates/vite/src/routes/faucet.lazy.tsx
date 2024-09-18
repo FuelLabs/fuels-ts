@@ -34,9 +34,9 @@ function Index() {
   useEffect(() => {
     const interval = setInterval(async () => {
       await refreshWalletBalance?.();
-    }, 500);
+    }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [wallet, refreshWalletBalance]);
 
   useEffect(() => {
     if (

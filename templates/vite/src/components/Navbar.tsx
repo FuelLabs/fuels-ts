@@ -7,6 +7,7 @@ import { Button } from "./Button";
 import { WalletDisplay } from "./WalletDisplay";
 import toast from "react-hot-toast";
 import { useNavigate } from "@tanstack/react-router";
+import { CURRENT_ENVIRONMENT, Environments } from "../lib";
 
 export const Navbar: FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -62,7 +63,11 @@ export const Navbar: FC = () => {
           <Button
             className="bg-gray-500"
             onClick={() => {
-              if (isSafari && wallet) {
+              if (
+                isSafari &&
+                wallet &&
+                CURRENT_ENVIRONMENT !== Environments.LOCAL
+              ) {
                 const redirectUrl = new URL(
                   "https://faucet-testnet.fuel.network/",
                 );
@@ -114,18 +119,22 @@ export const Navbar: FC = () => {
               <Button
                 className="bg-gray-500"
                 onClick={() => {
-                  const redirectUrl = new URL(
-                    "https://faucet-testnet.fuel.network/",
-                  );
-                  redirectUrl.searchParams.append(
-                    "address",
-                    wallet.address.toString(),
-                  );
-                  redirectUrl.searchParams.append(
-                    "redirectUrl",
-                    window.location.href,
-                  );
-                  window.location.href = redirectUrl.href;
+                  if (CURRENT_ENVIRONMENT === Environments.LOCAL) {
+                    navigate({ to: "/faucet" });
+                  } else {
+                    const redirectUrl = new URL(
+                      "https://faucet-testnet.fuel.network/",
+                    );
+                    redirectUrl.searchParams.append(
+                      "address",
+                      wallet.address.toString(),
+                    );
+                    redirectUrl.searchParams.append(
+                      "redirectUrl",
+                      window.location.href,
+                    );
+                    window.location.href = redirectUrl.href;
+                  }
                 }}
               >
                 Faucet

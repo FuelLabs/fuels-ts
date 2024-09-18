@@ -12,6 +12,7 @@ import { bn } from "fuels";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import useAsync from "react-use/lib/useAsync";
+import { CURRENT_ENVIRONMENT, Environments } from "@/lib";
 
 export default function PredicateExample() {
   let baseAssetId: string;
@@ -46,6 +47,24 @@ export default function PredicateExample() {
     setPredicateBalance(await predicate?.getBalance());
   };
 
+  const getTransferSuccessMessage = (transactionId: string, action: string) => {
+    if (CURRENT_ENVIRONMENT === Environments.LOCAL) {
+      return `${action}!`;
+    } else {
+      return (
+        <span>
+          {action}! View it on the
+          <a
+            className="pl-1 underline"
+            target="_blank"
+            href={`https://app.fuel.network/tx/${transactionId}`}
+          >
+            block explorer
+          </a>
+        </span>
+      );
+    }
+  };
   const transferFundsToPredicate = async (amount: BN) => {
     try {
       if (!isConnected) {
@@ -80,18 +99,9 @@ export default function PredicateExample() {
 
       await refreshBalances();
 
-      return toast.success(() => (
-        <span>
-          Funds transferred to predicate! View it on the
-          <a
-            className="pl-1 underline"
-            target="_blank"
-            href={`https://app.fuel.network/tx/${tx?.id}`}
-          >
-            block explorer
-          </a>
-        </span>
-      ));
+      toast.success(
+        getTransferSuccessMessage(tx?.id, "Funds transferred to predicate"),
+      );
     } catch (e) {
       console.error(e);
       toast.error(
@@ -160,18 +170,9 @@ export default function PredicateExample() {
       }
 
       if (isStatusSuccess) {
-        toast.success(() => (
-          <span>
-            Funds transferred from predicate! View it on the
-            <a
-              className="pl-1 underline"
-              target="_blank"
-              href={`https://app.fuel.network/tx/${tx?.id}`}
-            >
-              block explorer
-            </a>
-          </span>
-        ));
+        toast.success(
+          getTransferSuccessMessage(tx?.id, "Funds transferred from predicate"),
+        );
       }
 
       await refreshBalances();
