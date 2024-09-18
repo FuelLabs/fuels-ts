@@ -120,7 +120,9 @@ export class BaseInvocationScope<TReturn = any> {
   protected updateContractInputAndOutput() {
     const calls = this.calls;
     calls.forEach((c) => {
-      if (c.contractId) {
+      if (c.proxyContractId) {
+        this.transactionRequest.addContractInputAndOutput(c.proxyContractId);
+      } else if (c.contractId) {
         this.transactionRequest.addContractInputAndOutput(c.contractId);
       }
       if (c.externalContractsAbis) {
