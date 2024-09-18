@@ -161,6 +161,13 @@ export const runScaffoldCli = async ({
   );
   writeFileSync(gitignorePath, newGitIgnoreContents);
 
+  const fuelsConfigFilePath = join('fuels.config.ts');
+  const fuelsConfigContents = readFileSync(fuelsConfigFilePath, 'utf-8');
+  const newFuelsConfigContents = fuelsConfigContents
+    .replace(/\n\W+forcPath: 'fuels-forc',/g, '')
+    .replace(/\n\W+fuelCorePath: 'fuels-core',/g, '');
+  writeFileSync(fuelsConfigFilePath, newFuelsConfigContents);
+
   // Build types
   execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
 
