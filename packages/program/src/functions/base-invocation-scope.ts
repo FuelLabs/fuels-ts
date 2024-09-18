@@ -44,6 +44,7 @@ function createContractCall(funcScope: InvocationScopeLike): ContractCall {
 
   return {
     contractId: (program as AbstractContract).id,
+    proxyContractId: (program as AbstractContract).proxyContractId,
     fnSelectorBytes: func.selectorBytes,
     data,
     assetId: forward?.assetId,
