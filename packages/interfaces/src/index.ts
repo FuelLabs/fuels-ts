@@ -83,6 +83,7 @@ export abstract class AbstractProgram {
 
 export abstract class AbstractContract extends AbstractProgram {
   abstract id: AbstractAddress;
+  abstract proxyContractId?: AbstractAddress;
 }
 
 /**
