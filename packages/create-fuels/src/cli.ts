@@ -144,29 +144,20 @@ export const runScaffoldCli = async ({
       text: 'Installing dependencies..',
       color: 'green',
     }).start();
-
     process.chdir(projectPath);
-    // execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
-    execSync('pnpm install');
-
+    execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
     installDepsSpinner.succeed('Installed dependencies!');
   }
 
   // Remove typegen files from gitignore
   const gitignorePath = join('.gitignore');
   const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
-  const newGitIgnoreContents = gitignoreContents.replace(
-    /(src\/sway-api\/contracts\n)|(src\/sway-api\/predicates\n)|(src\/sway-api\/scripts\n)|(src\/sway-api\/index.ts\n)/gm,
-    ''
-  );
+  const newGitIgnoreContents = gitignoreContents
+    .replace(/src\/sway-api\/contracts\n/g, '')
+    .replace(/src\/sway-api\/predicates\n/g, '')
+    .replace(/src\/sway-api\/scripts\n/g, '')
+    .replace(/src\/sway-api\/index.ts\n/g, '');
   writeFileSync(gitignorePath, newGitIgnoreContents);
-
-  const fuelsConfigFilePath = join('fuels.config.ts');
-  const fuelsConfigContents = readFileSync(fuelsConfigFilePath, 'utf-8');
-  const newFuelsConfigContents = fuelsConfigContents
-    .replace(/\n\W+forcPath: 'fuels-forc',/g, '')
-    .replace(/\n\W+fuelCorePath: 'fuels-core',/g, '');
-  writeFileSync(fuelsConfigFilePath, newFuelsConfigContents);
 
   // Build types
   execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });

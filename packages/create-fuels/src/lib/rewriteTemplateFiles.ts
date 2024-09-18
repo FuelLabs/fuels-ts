@@ -13,10 +13,10 @@ export const rewriteTemplateFiles = (templateDir: string) => {
   writeFileSync(packageJsonFilePath, contents);
 
   // fuels.config.ts
-  // contents = readFileSync(fuelsConfigFilePath, 'utf-8');
-  // contents = contents.replace(/\n\W+forcPath: 'fuels-forc',/g, '');
-  // contents = contents.replace(/\n\W+fuelCorePath: 'fuels-core',/g, '');
-  // writeFileSync(fuelsConfigFilePath, contents);
+  contents = readFileSync(fuelsConfigFilePath, 'utf-8');
+  contents = contents.replace(/\n\W+forcPath: 'fuels-forc',/g, '');
+  contents = contents.replace(/\n\W+fuelCorePath: 'fuels-core',/g, '');
+  writeFileSync(fuelsConfigFilePath, contents);
 
   // tests
   const testDir = join(templateDir, 'test', 'integration');
