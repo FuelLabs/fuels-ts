@@ -17,6 +17,7 @@ import type { FunctionInvocationScope } from './functions/invocation-scope';
  */
 export type ContractCall = {
   contractId: AbstractAddress;
+  proxyContractId?: AbstractAddress;
   data: BytesLike;
   fnSelectorBytes: Uint8Array;
   amount?: BigNumberish;
