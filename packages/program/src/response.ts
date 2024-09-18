@@ -26,11 +26,12 @@ export const extractInvocationResult = <T>(
   if (functionScopes.length === 1 && mainCallConfig && 'bytes' in mainCallConfig.program) {
     return callResultToInvocationResult<T>({ receipts }, mainCallConfig, logs);
   }
-  const encodedResults = decodeContractCallScriptResult(
-    { receipts },
-    (mainCallConfig?.program as AbstractContract).id,
-    logs
-  );
+
+  const contractId =
+    (mainCallConfig?.program as AbstractContract).proxyContractId ||
+    (mainCallConfig?.program as AbstractContract).id;
+
+  const encodedResults = decodeContractCallScriptResult({ receipts }, contractId, logs);
 
   const decodedResults = encodedResults.map((encodedResult, i) => {
     const { func } = functionScopes[i].getCallConfig();
