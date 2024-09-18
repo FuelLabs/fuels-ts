@@ -160,7 +160,9 @@ export const runScaffoldCli = async ({
   }
 
   // Generate typegen files
-  execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+  if (!process.env.VITEST) {
+    execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+  }
 
   log();
   log();

@@ -15,6 +15,7 @@ import {
   resetFilesystem,
 } from './utils/bootstrapProject';
 import { generateArgv } from './utils/generateArgs';
+import { mockExecSync } from './utils/mockExecSync';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
@@ -28,6 +29,7 @@ describe('CLI', { timeout: 15_000 }, () => {
   beforeEach(() => {
     paths = bootstrapProject(__filename);
     copyTemplate(paths.templateSource, paths.templateRoot);
+    mockExecSync();
   });
 
   afterEach(() => {
