@@ -1,4 +1,4 @@
 ---
 ---
 
-docs: update `create fuels` docs to match the new template
+docs: update `create fuels` docs and ui tests
