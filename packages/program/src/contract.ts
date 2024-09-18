@@ -18,6 +18,11 @@ export default class Contract implements AbstractContract {
   id!: AbstractAddress;
 
   /**
+   * Proxy contract identifier.
+   */
+  proxyContractId?: AbstractAddress;
+
+  /**
    * The provider for interacting with the contract.
    */
   provider!: Provider;
@@ -47,10 +52,14 @@ export default class Contract implements AbstractContract {
   constructor(
     id: string | AbstractAddress,
     abi: JsonAbi | Interface,
-    accountOrProvider: Account | Provider
+    accountOrProvider: Account | Provider,
+    proxyContractId?: string | AbstractAddress
   ) {
     this.interface = abi instanceof Interface ? abi : new Interface(abi);
     this.id = Address.fromAddressOrString(id);
+    if (proxyContractId) {
+      this.proxyContractId = Address.fromAddressOrString(proxyContractId);
+    }
 
     /**
       Instead of using `instanceof` to compare classes, we instead check
