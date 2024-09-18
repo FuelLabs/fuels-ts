@@ -66,10 +66,6 @@ export enum OperationName {
   transfer = 'Transfer asset',
   contractCall = 'Contract call',
   receive = 'Receive asset',
-  mint = 'Mint asset',
-  predicatecall = 'Predicate call',
-  script = 'Script',
-  sent = 'Sent asset',
   withdrawFromFuel = 'Withdraw from Fuel',
 }
 
