@@ -145,7 +145,8 @@ export const runScaffoldCli = async ({
       color: 'green',
     }).start();
     process.chdir(projectPath);
-    execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+    // execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+    execSync('pnpm install', { stdio: verboseEnabled ? 'inherit' : 'pipe' });
     installDepsSpinner.succeed('Installed dependencies!');
   }
 
