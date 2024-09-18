@@ -199,12 +199,14 @@ export const getContractCallScript = (
         const encodedArgs = arrayify(call.data);
         let gasForwardedOffset = 0;
 
+        const contractId = call.proxyContractId || call.contractId;
+
         // 1. Amount
         scriptData.push(new BigNumberCoder('u64').encode(call.amount || 0));
         // 2. Asset ID
         scriptData.push(new B256Coder().encode(call.assetId?.toString() || ZeroBytes32));
         // 3. Contract ID
-        scriptData.push(call.contractId.toBytes());
+        scriptData.push(contractId.toBytes());
         // 4. Function selector offset
         scriptData.push(new BigNumberCoder('u64').encode(encodedSelectorOffset));
         // 5. Encoded argument offset
