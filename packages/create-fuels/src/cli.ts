@@ -146,7 +146,7 @@ export const runScaffoldCli = async ({
     .replace(/src\/sway-api\/contracts\n/g, '')
     .replace(/src\/sway-api\/predicates\n/g, '')
     .replace(/src\/sway-api\/scripts\n/g, '')
-    .replace(/src\/sway-api\/index.ts\n/g, '');
+    .replace(/src\/sway-api\/index.ts/g, '');
   writeFileSync(gitignorePath, newGitIgnoreContents);
 
   if (opts.install) {
