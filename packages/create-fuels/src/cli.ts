@@ -139,17 +139,17 @@ export const runScaffoldCli = async ({
 
   fileCopySpinner.succeed('Copied template files!');
 
-  if (opts.install) {
-    const installDepsSpinner = ora({
-      text: 'Installing dependencies..',
-      color: 'green',
-    }).start();
+  // if (opts.install) {
+  //   const installDepsSpinner = ora({
+  //     text: 'Installing dependencies..',
+  //     color: 'green',
+  //   }).start();
 
-    process.chdir(projectPath);
-    execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+  //   process.chdir(projectPath);
+  //   execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
 
-    installDepsSpinner.succeed('Installed dependencies!');
-  }
+  //   installDepsSpinner.succeed('Installed dependencies!');
+  // }
 
   // Remove typegen files from gitignore
   const gitignorePath = join(projectPath, '.gitignore');
