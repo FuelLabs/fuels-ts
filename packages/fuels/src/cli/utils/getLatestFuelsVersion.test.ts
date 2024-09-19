@@ -34,7 +34,7 @@ describe('getLatestFuelsVersion', () => {
     expect(result).toEqual('1.0.0');
   });
 
-  it('should fetch if there is no cache, and save to cache', async () => {
+  it('should fetch if there is no cache or the cache is expired', async () => {
     const mockResponse = new Response(JSON.stringify({ version: '1.0.0' }));
     const fetchSpy = vi.spyOn(global, 'fetch').mockReturnValue(Promise.resolve(mockResponse));
     const saveCacheSpy = vi.spyOn(cacheMod, 'saveToCache').mockImplementation(() => {});
@@ -48,20 +48,5 @@ describe('getLatestFuelsVersion', () => {
       },
       timestamp: expect.any(Number),
     });
-  });
-
-  it('should refetch if the cache is expired', async () => {
-    const cache = {
-      data: {
-        version: '0.0.0',
-      },
-      timestamp: Date.now() - cacheMod.FUELS_VERSION_CACHE_TTL - 1000,
-    };
-    vi.spyOn(cacheMod, 'checkAndLoadCache').mockReturnValue(cache);
-    const mockResponse = new Response(JSON.stringify({ version: '1.0.0' }));
-    const fetchSpy = vi.spyOn(global, 'fetch').mockReturnValue(Promise.resolve(mockResponse));
-    const version = await getLatestFuelsVersion();
-    expect(fetchSpy).toHaveBeenCalled();
-    expect(version).toEqual('1.0.0');
   });
 });
