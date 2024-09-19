@@ -3,6 +3,7 @@ import { ContractFactory } from '@fuel-ts/contract';
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { existsSync, readFileSync } from 'fs';
 
+import type { ForcToml } from '../../config/forcUtils';
 import { debug } from '../../utils/logger';
 
 export async function deployContract(
@@ -10,7 +11,8 @@ export async function deployContract(
   binaryPath: string,
   abiPath: string,
   storageSlotsPath: string,
-  deployConfig: DeployContractOptions
+  deployConfig: DeployContractOptions,
+  tomlContents: ForcToml
 ) {
   debug(`Deploying contract for ABI: ${abiPath}`);
 
@@ -21,6 +23,10 @@ export async function deployContract(
     // eslint-disable-next-line no-param-reassign
     deployConfig.storageSlots = storageSlots;
   }
+
+  console.log('TOML', tomlContents);
+  // console.log('TOML', tomlContents?.proxy?.enabled);
+  // console.log('TOML', tomlContents?.proxy?.address);
 
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const contractFactory = new ContractFactory(bytecode, abi, wallet);
