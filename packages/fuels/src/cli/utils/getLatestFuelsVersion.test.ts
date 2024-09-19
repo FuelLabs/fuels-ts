@@ -1,6 +1,9 @@
 import * as cacheMod from './fuelsVersionCache';
 import { getLatestFuelsVersion } from './getLatestFuelsVersion';
 
+/**
+ * @group node
+ */
 describe('getLatestFuelsVersion', () => {
   it('should fail if fetch fails', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() =>
