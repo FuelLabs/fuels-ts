@@ -19,6 +19,14 @@ import { mockExecSync } from './utils/mockExecSync';
 import { mockLogger } from './utils/mockLogger';
 import { filterOriginalTemplateFiles, getAllFiles } from './utils/templateFiles';
 
+vi.mock('child_process', async () => {
+  const mod = await vi.importActual('child_process');
+  return {
+    __esModule: true,
+    ...mod,
+  };
+});
+
 /**
  * @group node
  */
