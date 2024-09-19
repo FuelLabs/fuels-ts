@@ -82,5 +82,5 @@ Congratulations! You have successfully deployed your Fuel dApp to the testnet.
 To recap, to deploy your dApp to the testnet, you need to:
 
 1. Deploy your contract to the testnet using `forc deploy --testnet`.
-2. Specify this contract ID in your frontend's environment variables.
+2. Specify this contract ID in your frontend's environment variables. (`VITE_TESTNET_CONTRACT_ID`)
 3. Set the `VITE_DAPP_ENVIRONMENT` environment variable to `testnet`.
