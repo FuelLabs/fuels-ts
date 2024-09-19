@@ -4,7 +4,7 @@ import path from 'path';
 export const FUELS_VERSION_CACHE_FILE = path.join(__dirname, '.fuels-cache.json');
 
 export type FuelsVersionCache = {
-  data: { version: string } | null;
+  version: string;
   timestamp: number;
 };
 

@@ -24,9 +24,7 @@ describe('getLatestFuelsVersion', () => {
 
   it('should return cached version if it exists', async () => {
     const cache = {
-      data: {
-        version: '1.0.0',
-      },
+      version: '1.0.0',
       timestamp: Date.now(),
     };
     vi.spyOn(cacheMod, 'checkAndLoadCache').mockReturnValue(cache);
@@ -43,9 +41,7 @@ describe('getLatestFuelsVersion', () => {
     expect(fetchSpy).toHaveBeenCalled();
     expect(version).toEqual('1.0.0');
     expect(saveCacheSpy).toHaveBeenCalledWith({
-      data: {
-        version: '1.0.0',
-      },
+      version: '1.0.0',
       timestamp: expect.any(Number),
     });
   });
