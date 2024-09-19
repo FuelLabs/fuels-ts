@@ -19,6 +19,10 @@ export type ForcToml = {
   dependencies: {
     [key: string]: string;
   };
+  proxy: {
+    enabled: boolean;
+    address?: string;
+  };
 };
 
 export enum SwayType {
