@@ -11,7 +11,11 @@ const predicatesDir = join(projectPath, 'predicates');
 export const fuelsConfig: FuelsConfig = {
   basePath: projectPath,
   // workspace: '/root/project',
-  contracts: [join(contractsDir, 'foo'), join(contractsDir, 'bar')],
+  contracts: [
+    join(contractsDir, 'foo'),
+    join(contractsDir, 'bar'),
+    join(contractsDir, 'upgradable'),
+  ],
   scripts: [join(scriptsDir, 'script')],
   predicates: [join(predicatesDir, 'predicate')],
   output: '/output',

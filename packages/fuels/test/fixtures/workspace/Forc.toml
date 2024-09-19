@@ -2,6 +2,7 @@
 members = [
   "./contracts/bar",
   "./contracts/foo",
+  "./contracts/upgradable",
   "./scripts/script",
   "./predicates/predicate",
   "./libraries/library",
