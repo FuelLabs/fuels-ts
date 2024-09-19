@@ -98,7 +98,7 @@ This file contains the source code for the frontend of our dApp.
 
 ### `./src/components/Contract.tsx`
 
-This file contains the source code for the 'Contract' tab in the UI. This file is where the contract calling logic is implemented.
+This file contains the source code for the 'Contract' tab in the UI, this is where the contract calling logic is implemented.
 
 ### Dev Environment Setup
 
