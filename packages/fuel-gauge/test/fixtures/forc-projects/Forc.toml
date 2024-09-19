@@ -55,6 +55,7 @@ members = [
   "script-raw-slice",
   "script-std-lib-string",
   "script-str-slice",
+  "proxy-src14-contract",
   "script-with-array",
   "script-with-configurable",
   "script-with-vector",
