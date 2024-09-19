@@ -142,6 +142,8 @@ bun run dev
 
 You should now be able to see the dApp running at `http://localhost:5173`. Go ahead and connect a wallet to the dApp. You can choose the Burner Wallet from the list if you don't want to connect a wallet.
 
+![Available Wallet Connectors](../../public/creating-a-fuel-dapp-wallet-list.png)
+
 Now, you can try changing the contents of the `./sway-programs/contract/src/main.sw` file and see the changes reflected in the 'Contract' tab in the UI without having to restart the server.
 
 ![Fullstack Fuel Dev Workflow](../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
