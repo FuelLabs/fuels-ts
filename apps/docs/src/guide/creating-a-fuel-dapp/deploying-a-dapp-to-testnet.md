@@ -51,9 +51,9 @@ Go to your `.env.local` file and add a new variable named `VITE_TESTNET_CONTRACT
 VITE_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 ```
 
-If you are curious, this environment variable is used here in the `src/routes/index.lazy.tsx` file to set the contract ID:
+If you are curious, this environment variable is used here in the `src/lib.ts` file to set the contract ID:
 
-<<< @/../../create-fuels-counter-guide/src/routes/index.lazy.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/lib.ts#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
 
 You will notice that this piece of code is getting the contract ID depending on the current environment. If the environment is `local`, it will use the contract ID from the auto-generated `contract-ids.json` file. Otherwise, for a testnet deployment, it will use the contract ID provided by you.
 
@@ -82,5 +82,5 @@ Congratulations! You have successfully deployed your Fuel dApp to the testnet.
 To recap, to deploy your dApp to the testnet, you need to:
 
 1. Deploy your contract to the testnet using `forc deploy --testnet`.
-2. Specify this contract ID in your frontend code in `src/routes/index.lazy.tsx`.
+2. Specify this contract ID in your frontend's environment variables. (`VITE_TESTNET_CONTRACT_ID`)
 3. Set the `VITE_DAPP_ENVIRONMENT` environment variable to `testnet`.

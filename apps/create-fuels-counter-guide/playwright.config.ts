@@ -29,7 +29,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'pnpm run original:dev',
+      command: 'pnpm run dev',
       port: 5173,
       reuseExistingServer: !process.env.CI,
     },
@@ -37,6 +37,6 @@ export default defineConfig({
       command: 'pnpm run fuels:dev',
       port: 4000,
       reuseExistingServer: !process.env.CI,
-    }
-  ]
+    },
+  ],
 });

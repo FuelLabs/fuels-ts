@@ -51,6 +51,25 @@ export default function Contract() {
     setIsLoading(false);
   }
 
+  // #region create-fuels-counter-guide-on-decrement-react-function
+  async function decrementCounter() {
+    if (!wallet || !contract) return;
+    setIsLoading(true);
+
+    try {
+      const call = await contract.functions.decrement_counter(1).call();
+      infoNotification(`Transaction submitted: ${call.transactionId}`);
+      const result = await call.waitForResult();
+      successNotification(`Transaction successful: ${result.transactionId}`);
+      setCounter(result.value.toNumber());
+    } catch (error) {
+      console.error(error);
+      errorNotification("Error decrementing counter");
+    }
+    setIsLoading(false);
+  }
+  // #endregion create-fuels-counter-guide-on-decrement-react-function
+
   return (
     <>
       <div>
@@ -61,16 +80,24 @@ export default function Contract() {
           <input
             type="text"
             value={counter}
-            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
-            data-testid="counter"
+            className="w-1/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
+            data-testid="counter"
           />
           <Button
             onClick={incrementCounter}
-            className="w-1/3"
+            className="w-1/3 mr-1"
             disabled={isLoading}
           >
             Increment
+          </Button>
+
+          <Button
+            onClick={decrementCounter}
+            className="w-1/3"
+            disabled={isLoading}
+          >
+            Decrement
           </Button>
         </div>
       </div>

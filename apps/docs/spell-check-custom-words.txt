@@ -334,3 +334,4 @@ URI
 walletsConfig
 reuploaded
 Vite
+frontend's
