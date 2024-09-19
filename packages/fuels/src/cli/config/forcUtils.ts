@@ -103,3 +103,18 @@ export const getStorageSlotsPath = (contractPath: string, { buildMode }: FuelsCo
   const projectName = getContractName(contractPath);
   return join(contractPath, `/out/${buildMode}/${projectName}-storage_slots.json`);
 };
+
+export const getClosestForcTomlDir = (dir: string): string => {
+  if (existsSync(join(dir, 'Forc.toml'))) {
+    return dir;
+  }
+
+  const tomlDirPath = getClosestForcTomlDir(join(dir, '..'));
+
+  if (tomlDirPath === '/') {
+    const msg = `TOML file not found:\n  ${dir}`;
+    throw new FuelError(FuelError.CODES.CONFIG_FILE_NOT_FOUND, msg);
+  }
+
+  return tomlDirPath;
+};
