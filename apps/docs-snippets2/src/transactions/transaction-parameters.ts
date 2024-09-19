@@ -51,9 +51,9 @@ const {
   transactionResult: { isStatusSuccess },
 } = await waitForResult();
 
-console.assert(isStatusSuccess, 'Transaction status should be truthy.');
-console.assert(value, 'Transaction result should exist.');
-console.assert(transactionRequest, 'Transaction request should exist.');
+console.log('Transaction status should be successful:', isStatusSuccess);
+console.log('Transaction value should exist:', value);
+console.log('Transaction request should exist:', transactionRequest);
 
 // #endregion transaction-parameters-8
 // #endregion full

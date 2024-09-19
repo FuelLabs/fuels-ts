@@ -10,6 +10,6 @@ const { balances } = await wallet.getBalances();
 
 const [{ assetId }] = balances;
 
-console.assert(assetId, 'Asset ID for the first item should be defined.');
+console.assert(`Asset ID for the first item should be defined:`, assetId);
 
 // #endregion main

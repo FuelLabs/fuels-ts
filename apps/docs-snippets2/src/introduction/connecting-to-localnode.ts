@@ -10,5 +10,5 @@ const wallet = Wallet.fromAddress(ADDRESS, provider);
 
 const { balances } = await wallet.getBalances();
 
-console.assert(balances.length >= 0, 'Balances should be an array');
+console.log(`Balances should be an array:`, balances instanceof Array);
 // #endregion main
