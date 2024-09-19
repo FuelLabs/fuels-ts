@@ -9,7 +9,7 @@ import type { CounterContract, CallTestContract } from '../test/typegen/contract
 import {
   CounterContractFactory,
   CallTestContractFactory,
-  PythContractFactory,
+  LargeContractFactory,
 } from '../test/typegen/contracts';
 
 import { isDevnet, runBenchmark } from './config';
@@ -94,7 +94,7 @@ describe('Contract Interaction Benchmarks', () => {
   });
 
   bench('should successfully execute a contract deploy as blobs', async () => {
-    const factory = new PythContractFactory(wallet);
+    const factory = new LargeContractFactory(wallet);
     const { waitForResult } = await factory.deployAsBlobTx({
       chunkSizeMultiplier: 0.9,
     });
