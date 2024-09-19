@@ -1,10 +1,10 @@
-import { checkAndLoadCache, FUELS_VERSION_CACHE_TTL, saveToCache } from './fuelsVersionCache';
+import { checkAndLoadCache, saveToCache } from './fuelsVersionCache';
 
 export const getLatestFuelsVersion = async (): Promise<string | undefined> => {
   const now = Date.now();
 
   const cache = checkAndLoadCache();
-  if (cache !== null) {
+  if (cache && cache.data) {
     return cache.data.version;
   }
 
