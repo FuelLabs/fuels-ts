@@ -13,14 +13,19 @@ import {
   Predicate,
   PolicyType,
   buildFunctionResult,
+  ReceiptType,
 } from 'fuels';
-import type { ScriptTransactionRequest, TransferParams } from 'fuels';
+import type { ScriptTransactionRequest, TransactionResultCallReceipt, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
   CallTestContract,
   CallTestContractFactory,
+  CoverageContract,
+  CoverageContractFactory,
+  ProxySrc14Contract,
+  ProxySrc14ContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
 } from '../test/typegen/contracts';
@@ -1110,5 +1115,62 @@ describe('Contract', () => {
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+  });
+
+  it('can proper set a proxy contract and use it to call a target contract', async () => {
+    using launch = await launchTestNode({
+      contractsConfigs: [{ factory: CoverageContractFactory }],
+    });
+
+    const {
+      wallets: [wallet],
+      contracts: [coverageContract],
+    } = launch;
+
+    const proxyFactory = await ProxySrc14ContractFactory.deploy(wallet, {
+      storageSlots: ProxySrc14Contract.storageSlots,
+    });
+
+    const { contract: proxyContract } = await proxyFactory.waitForResult();
+
+    // Setting the contract target at the proxy
+    const call = await proxyContract.functions
+      .set_proxy_target({ bits: coverageContract.id.toB256() })
+      .call();
+
+    await call.waitForResult();
+
+    const proxyId = proxyContract.id;
+    const echoValuesId = coverageContract.id;
+
+    const proxiedConverageContract = new Contract(
+      echoValuesId,
+      CoverageContract.abi,
+      wallet,
+      proxyId
+    );
+
+    const echoAmount = 10;
+
+    const proxiedCall = await proxiedConverageContract.functions
+      .echo_u8(echoAmount)
+      .addContracts([proxyContract])
+      .call();
+
+    const {
+      value,
+      transactionResult: { receipts },
+    } = await proxiedCall.waitForResult();
+
+    const callReceipt = receipts.filter(
+      (receipt) => receipt.type === ReceiptType.Call
+    ) as TransactionResultCallReceipt[];
+
+    // Ensure called contract was the proxy contract
+    expect(callReceipt.length).toBe(1);
+    expect(callReceipt[0].to).toBe(proxyId.toB256());
+
+    // Ensure returned value is the expected one
+    expect(value).toBe(echoAmount);
   });
 });
