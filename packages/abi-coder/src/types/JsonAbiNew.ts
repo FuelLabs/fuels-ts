@@ -91,7 +91,7 @@ export interface LoggedType {
 }
 
 export interface MessageType {
-  readonly message_id: string;
+  readonly messageId: string;
   readonly concreteTypeId: string;
 }
 export interface Configurable {
