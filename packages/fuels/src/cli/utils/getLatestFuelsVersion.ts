@@ -4,7 +4,7 @@ export const getLatestFuelsVersion = async (): Promise<string | undefined> => {
   const now = Date.now();
 
   const cache = checkAndLoadCache();
-  if (cache !== null && cache.data !== null && now - cache.timestamp < FUELS_VERSION_CACHE_TTL) {
+  if (cache !== null) {
     return cache.data.version;
   }
 
