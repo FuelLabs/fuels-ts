@@ -1,6 +1,7 @@
 import * as versionsMod from '@fuel-ts/versions';
 
 import * as checkForAndDisplayUpdatesMod from './checkForAndDisplayUpdates';
+import * as getLatestFuelsVersionMod from './getLatestFuelsVersion';
 import * as loggerMod from './logger';
 
 /**
@@ -17,7 +18,7 @@ describe('checkForAndDisplayUpdates', () => {
 
   const mockDeps = (params: { latestVersion: string; userVersion: string }) => {
     const { latestVersion, userVersion } = params;
-    vi.spyOn(Promise, 'race').mockReturnValue(Promise.resolve(latestVersion));
+    vi.spyOn(getLatestFuelsVersionMod, 'getLatestFuelsVersion').mockResolvedValue(latestVersion);
 
     vi.spyOn(versionsMod, 'versions', 'get').mockReturnValue({
       FUELS: userVersion,
