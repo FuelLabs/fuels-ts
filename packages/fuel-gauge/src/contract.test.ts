@@ -1132,19 +1132,32 @@ describe('Contract', () => {
     const data = [1, 2, 3, 4, 5, 6, 7, 8];
     const baseAssetId = provider.getBaseAssetId();
 
-    const { waitForResult } = await contract.functions
-      .send_typed_message_bytes(recipient.address.toB256(), data, 1)
-      .callParams({ forward: [1, baseAssetId] })
+    const { waitForResult } = await contract
+      .multiCall([
+        contract.functions
+          .send_typed_message_u8(recipient.address.toB256(), 10, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+        contract.functions
+          .send_typed_message_bool(recipient.address.toB256(), true, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+        contract.functions
+          .send_typed_message_bytes(recipient.address.toB256(), data, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+      ])
       .call();
 
     const {
       transactionResult: { receipts },
     } = await waitForResult();
 
-    const messageOutReceipt = receipts.find(
+    const messageOutReceipts = receipts.filter(
       ({ type }) => ReceiptType.MessageOut === type
-    ) as ReceiptMessageOut;
+    ) as ReceiptMessageOut[];
 
-    expect(messageOutReceipt.recipient).toBe(recipient.address.toB256());
+    expect(messageOutReceipts.length).toBe(3);
+
+    messageOutReceipts.forEach((receipt) => {
+      expect(receipt.recipient).toBe(recipient.address.toB256());
+    });
   });
 });
