@@ -2,6 +2,5 @@
 members = [
   "call-test-contract",
   "counter-contract",
-  "pyth-contract",
-  "pyth-interface",
+  "large-contract",
 ]

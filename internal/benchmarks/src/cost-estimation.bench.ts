@@ -1,14 +1,12 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
+import { DEVNET_NETWORK_URL } from '@internal/utils';
 import type { TransferParams, TransactionCost } from 'fuels';
 import { Wallet, Provider, ScriptTransactionRequest, WalletUnlocked } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
-import { bench } from 'vitest';
 
 import type { CallTestContract } from '../test/typegen/contracts';
 import { CallTestContractFactory } from '../test/typegen/contracts';
 
-import { DEVNET_CONFIG } from './config';
+import { isDevnet, runBenchmark } from './config';
 
 /**
  * @group node
@@ -25,13 +23,9 @@ describe('Cost Estimation Benchmarks', () => {
   let sender: WalletUnlocked;
   let cleanup: () => void;
 
-  const isDevnet = process.env.DEVNET_WALLET_PVT_KEY !== undefined;
-  const iterations = isDevnet ? 1 : 10;
-
   const setupTestEnvironment = async () => {
     if (isDevnet) {
-      const { networkUrl } = DEVNET_CONFIG;
-      provider = await Provider.create(networkUrl);
+      provider = await Provider.create(DEVNET_NETWORK_URL);
       const wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
 
       const contractFactory = new CallTestContractFactory(wallet);
@@ -66,14 +60,6 @@ describe('Cost Estimation Benchmarks', () => {
       cleanup();
     }
   });
-
-  const runBenchmark = (name: string, benchmarkFn: () => Promise<void>) => {
-    bench(isDevnet ? name : `${name} (x${iterations} times)`, async () => {
-      for (let i = 0; i < iterations; i++) {
-        await benchmarkFn();
-      }
-    });
-  };
 
   const expectCostToBeDefined = (cost: TransactionCost) => {
     expect(cost.minFee).toBeDefined();

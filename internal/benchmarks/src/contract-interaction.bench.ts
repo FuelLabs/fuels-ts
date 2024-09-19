@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
+import { DEVNET_NETWORK_URL } from '@internal/utils';
 import { WalletUnlocked, bn, Provider } from 'fuels';
 import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 import { bench } from 'vitest';
@@ -11,7 +12,7 @@ import {
   PythContractFactory,
 } from '../test/typegen/contracts';
 
-import { DEVNET_CONFIG } from './config';
+import { isDevnet, runBenchmark } from './config';
 
 /**
  * @group node
@@ -22,13 +23,10 @@ describe('Contract Interaction Benchmarks', () => {
   let callTestContract: CallTestContract;
   let wallet: WalletUnlocked;
   let cleanup: () => void;
-  const isDevnet = process.env.DEVNET_WALLET_PVT_KEY !== undefined;
-  const iterations = isDevnet ? 1 : 10;
 
   const setupTestEnvironment = async () => {
     if (isDevnet) {
-      const { networkUrl } = DEVNET_CONFIG;
-      const provider = await Provider.create(networkUrl);
+      const provider = await Provider.create(DEVNET_NETWORK_URL);
       wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
 
       const { waitForResult } = await CounterContractFactory.deploy(wallet);
@@ -59,14 +57,6 @@ describe('Contract Interaction Benchmarks', () => {
       cleanup();
     }
   });
-
-  const runBenchmark = (name: string, benchmarkFn: () => Promise<void>) => {
-    bench(isDevnet ? name : `${name} (x${iterations} times)`, async () => {
-      for (let i = 0; i < iterations; i++) {
-        await benchmarkFn();
-      }
-    });
-  };
 
   runBenchmark('should successfully execute a contract read function', async () => {
     const tx = await contract.functions.get_count().call();

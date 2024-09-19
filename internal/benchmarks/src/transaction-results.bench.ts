@@ -1,11 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-
+import { DEVNET_NETWORK_URL } from '@internal/utils';
 import type { TransferParams } from 'fuels';
 import { Wallet, Provider, WalletUnlocked } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
-import { bench } from 'vitest';
 
-import { DEVNET_CONFIG } from './config';
+import { isDevnet, runBenchmark } from './config';
 
 /**
  * @group node
@@ -19,13 +17,9 @@ describe('Transaction Submission Benchmarks', () => {
   let receiver3: WalletUnlocked;
   let cleanup: () => void;
 
-  const isDevnet = process.env.DEVNET_WALLET_PVT_KEY !== undefined;
-  const iterations = isDevnet ? 1 : 10;
-
   const setupTestEnvironment = async () => {
     if (isDevnet) {
-      const { networkUrl } = DEVNET_CONFIG;
-      provider = await Provider.create(networkUrl);
+      provider = await Provider.create(DEVNET_NETWORK_URL);
       wallet = new WalletUnlocked(process.env.DEVNET_WALLET_PVT_KEY as string, provider);
     } else {
       const launched = await launchTestNode();
@@ -46,14 +40,6 @@ describe('Transaction Submission Benchmarks', () => {
       cleanup();
     }
   });
-
-  const runBenchmark = (name: string, benchmarkFn: () => Promise<void>) => {
-    bench(isDevnet ? name : `${name} (x${iterations} times)`, async () => {
-      for (let i = 0; i < iterations; i++) {
-        await benchmarkFn();
-      }
-    });
-  };
 
   const transfer = async () => {
     const tx = await wallet.transfer(receiver1.address, 100, provider.getBaseAssetId());

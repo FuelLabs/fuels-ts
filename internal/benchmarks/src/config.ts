@@ -1,11 +1,17 @@
-import { DEVNET_NETWORK_URL } from '@internal/utils';
-import { TransactionType } from 'fuels';
+/* eslint-disable import/no-extraneous-dependencies */
 
-export const DEVNET_CONFIG = {
-  networkUrl: DEVNET_NETWORK_URL,
-  faucetUrl: `https://faucet-devnet.fuel.network/`,
-  txIds: {
-    [TransactionType.Upgrade]: '0xe2c03044fe708e9b112027881baf9f892e6b64a630a629998922c1cab918c094',
-    [TransactionType.Upload]: '0x94bc2a189b8211796c8fe5b9c6b67624fe97d2007e104bf1b30739944f43bd73',
-  },
+import { bench } from 'vitest';
+
+export const isDevnet = process.env.DEVNET_WALLET_PVT_KEY !== undefined;
+
+const iterations = isDevnet ? 1 : 10;
+
+export const runBenchmark = (name: string, benchmarkFn: () => Promise<void>) => {
+  bench(
+    isDevnet ? name : `${name} (x${iterations} times)`,
+    async () => {
+      await benchmarkFn();
+    },
+    { iterations }
+  );
 };

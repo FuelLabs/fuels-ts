@@ -1,8 +1,0 @@
-[project]
-authors = ["Fuel Labs <contact@fuel.sh>"]
-entry = "interface.sw"
-license = "Apache-2.0"
-name = "pyth_interface"
-
-[dependencies]
-standards = { git = "https://github.com/FuelLabs/sway-standards", tag = "v0.4.4" }
