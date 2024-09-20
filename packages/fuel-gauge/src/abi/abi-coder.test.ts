@@ -1032,28 +1032,38 @@ describe('AbiCoder', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 10;
       const inputY = undefined;
-      const expected = undefined;
-
       const { waitForResult } = await contract.functions
         .types_value_then_void(inputX, inputY)
         .call();
 
       const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      expect(value).toBeUndefined();
     });
 
     it('should encode/decode just fine [omitting optional args]', async () => {
       const inputX = 10;
-      const expected = undefined;
 
       const { waitForResult } = await contract.functions.types_value_then_void(inputX).call();
 
       const { value } = await waitForResult();
-      expect(value).toBe(expected);
+      expect(value).toBeUndefined();
     });
   });
-  describe.todo('types_value_then_void_then_value');
-  describe.todo('types_value_then_value_then_void_then_void');
+  describe('types_value_then_void_then_value', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX = 10;
+      const inputY = undefined;
+      const inputZ = 20;
+
+      const { waitForResult } = await contract.functions
+        .types_value_then_void_then_value(inputX, inputY, inputZ)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toBeUndefined();
+    });
+  });
+  describe('types_value_then_value_then_void_then_void', () => {});
 
   /**
    * Multi-arg
