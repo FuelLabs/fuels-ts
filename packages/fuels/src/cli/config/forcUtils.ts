@@ -19,7 +19,7 @@ export type ForcToml = {
   dependencies: {
     [key: string]: string;
   };
-  proxy: {
+  proxy?: {
     enabled: boolean;
     address?: string;
   };
