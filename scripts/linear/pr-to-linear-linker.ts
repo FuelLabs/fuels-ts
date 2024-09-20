@@ -70,14 +70,17 @@ export async function prToLinearLinker(params: {
     }
   }
 
+  closingLinearIssues.sort();
+  relatedLinearIssues.sort();
+
   const closesIssues = closingLinearIssues.join(', ');
   const relatesIssues = relatedLinearIssues.join(', ');
 
   const linearIssuesChanged = !body?.includes(closesIssues) || !body.includes(relatesIssues);
-  const closingIssuesComment = `<!-- LINEAR: closes ${closesIssues} -->`;
-  const relatedIssuesComment = `<!-- LINEAR: relates to ${relatesIssues} -->`;
 
   if (linearIssuesChanged) {
+    const closingIssuesComment = `<!-- LINEAR: closes ${closesIssues} -->`;
+    const relatedIssuesComment = `<!-- LINEAR: relates to ${relatesIssues} -->`;
     const newBody = `${closingIssuesComment}\n${relatedIssuesComment}\n${body}`;
     await octokit.rest.pulls.update({
       owner,
