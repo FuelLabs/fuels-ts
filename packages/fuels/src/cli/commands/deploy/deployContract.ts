@@ -7,7 +7,7 @@ import { existsSync, readFileSync } from 'fs';
 import { setForcTomlProxyAddress, type ForcToml } from '../../config/forcUtils';
 import { debug } from '../../utils/logger';
 
-import { Src14OwnedProxy, Src14OwnedProxyFactory } from './proxy';
+import { Src14OwnedProxy, Src14OwnedProxyFactory } from './proxy/types';
 
 export async function deployContract(
   wallet: WalletUnlocked,
