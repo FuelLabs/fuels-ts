@@ -39,7 +39,7 @@ export async function deploy(config: FuelsConfig) {
       contractPath,
     });
 
-    const deployedContractIds = await deployContract(
+    const contractId = await deployContract(
       wallet,
       binaryPath,
       abiPath,
@@ -49,13 +49,11 @@ export async function deploy(config: FuelsConfig) {
       tomlContents
     );
 
-    deployedContractIds.forEach((contractId) => {
-      debug(`Contract deployed: ${projectName} - ${contractId}`);
+    debug(`Contract deployed: ${projectName} - ${contractId}`);
 
-      contracts.push({
-        name: contractName,
-        contractId,
-      });
+    contracts.push({
+      name: contractName,
+      contractId,
     });
   }
 
