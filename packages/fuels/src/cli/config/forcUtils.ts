@@ -32,8 +32,6 @@ export enum SwayType {
   library = 'library',
 }
 
-export const forcFiles = new Map<string, ForcToml>();
-
 export const swayFiles = new Map<string, SwayType>();
 
 export const getClosestForcTomlDir = (dir: string): string => {
