@@ -13,7 +13,7 @@ describe('Logger Tests', () => {
 
   beforeEach(() => {
     debug.enable('test');
-    debugSpy = vi.spyOn(debug, 'log');
+    debugSpy = vi.spyOn(debug, 'log').mockImplementation(() => ({}));
   });
 
   afterEach(() => {
