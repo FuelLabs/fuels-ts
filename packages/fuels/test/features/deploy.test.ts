@@ -24,6 +24,7 @@ describe('deploy', { timeout: 180000 }, () => {
   });
 
   it('should run `deploy` command', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     using launched = await launchTestNode();
 
     await runInit({
