@@ -15,6 +15,7 @@ apps/demo-typegen/src/predicate-types
 apps/docs/.vitepress/cache/
 apps/create-fuels-counter-guide
 
+packages/fuels/src/cli/commands/deploy/proxy/types
 packages/fuels/test/fixtures/project
 packages/account/src/providers/assets
 
