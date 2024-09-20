@@ -18,8 +18,11 @@ import {
 describe('deploy', { timeout: 180000 }, () => {
   const paths = bootstrapProject(__filename);
 
-  afterEach(() => {
+  afterAll(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
+  });
+
+  afterAll(() => {
     resetDiskAndMocks(paths.root);
   });
 
