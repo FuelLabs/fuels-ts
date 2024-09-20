@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "fuels";
 
 import App from "./App.tsx";
-import { providerUrl } from "./lib";
+import { providerUrl } from "./lib.tsx";
 
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
