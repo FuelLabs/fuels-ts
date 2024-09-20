@@ -35,9 +35,6 @@ export enum SwayType {
 export const swayFiles = new Map<string, SwayType>();
 
 export const getClosestForcTomlDir = (dir: string): string => {
-  if (existsSync(dir)) {
-  }
-
   let forcPath = join(dir, 'Forc.toml');
 
   if (existsSync(forcPath)) {
