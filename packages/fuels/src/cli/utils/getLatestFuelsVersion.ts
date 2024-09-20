@@ -1,11 +1,9 @@
 import { checkAndLoadCache, saveToCache } from './fuelsVersionCache';
 
 export const getLatestFuelsVersion = async (): Promise<string | undefined> => {
-  const now = Date.now();
-
-  const cache = checkAndLoadCache();
-  if (cache) {
-    return cache.version;
+  const cachedVersion = checkAndLoadCache();
+  if (cachedVersion) {
+    return cachedVersion;
   }
 
   const data: { version: string } | null = await Promise.race([
@@ -21,10 +19,7 @@ export const getLatestFuelsVersion = async (): Promise<string | undefined> => {
 
   const version = data.version as string;
 
-  saveToCache({
-    version,
-    timestamp: now,
-  });
+  saveToCache(version);
 
   return version;
 };
