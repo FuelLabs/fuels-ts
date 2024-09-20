@@ -25,7 +25,7 @@ export async function prToLinearLinker(params: {
     ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
   );
 
-  const relatedIssuesRegex = /(relates\sto|related\sto)\s+#(\d+)/gi;
+  const relatedIssuesRegex = /(relates\sto|related\sto|part\sof)\s+#(\d+)/gi;
   const relatedIssues = [...body!.matchAll(relatedIssuesRegex)].map(
     ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
   );

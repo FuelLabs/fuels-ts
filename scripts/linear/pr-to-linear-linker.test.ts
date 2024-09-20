@@ -39,7 +39,7 @@ function mockPr() {
 
   const closingIssues = closingKeywords.map(() => randomInt(10_000));
 
-  let relatedKeywords = ['related to', 'relates to'];
+  let relatedKeywords = ['related to', 'relates to', 'part of'];
 
   relatedKeywords = [
     ...relatedKeywords,
@@ -103,8 +103,14 @@ describe('linear', () => {
 
     await prToLinearLinker({ pullNumber: pr.number, owner, repo, octokit, linearClient });
 
-    const closingLinearIssues = `<!-- LINEAR: closes ${mockClosingIssues.map((i) => i.identifier).join(', ')} -->`;
-    const relatedLinearIssues = `<!-- LINEAR: relates to ${mockRelatedIssues.map((i) => i.identifier).join(', ')} -->`;
+    const closingLinearIssues = `<!-- LINEAR: closes ${mockClosingIssues
+      .map((i) => i.identifier)
+      .sort()
+      .join(', ')} -->`;
+    const relatedLinearIssues = `<!-- LINEAR: relates to ${mockRelatedIssues
+      .map((i) => i.identifier)
+      .sort()
+      .join(', ')} -->`;
     const expectedBody = `${closingLinearIssues}\n${relatedLinearIssues}\n${pr.body}`;
 
     expect(updatePrSpy).toHaveBeenCalledTimes(1);
