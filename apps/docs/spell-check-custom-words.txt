@@ -334,3 +334,7 @@ URI
 walletsConfig
 reuploaded
 Vite
+USDT
+USD
+USDC
+WETH
