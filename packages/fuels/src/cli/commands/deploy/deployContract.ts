@@ -93,13 +93,17 @@ export async function deployContract(
     const { waitForResult: waitForProxyInit } = await proxyContract.functions
       .initialize_proxy()
       .call();
+
     await waitForProxyInit();
 
-    // Write the address of the proxy contract to proxied TOML
-    setForcTomlProxyAddress(contractPath, proxyContract.id.toB256());
+    const proxyContractId = proxyContract.id.toB256();
 
-    return proxyContract.id.toB256();
+    // Write the address of the proxy contract to proxied TOML
+    setForcTomlProxyAddress(contractPath, proxyContractId);
+
+    return proxyContractId;
   }
+
   // If the contract does not have a proxy, we can deploy it as a normal contract
   const contractFactory = new ContractFactory(bytecode, abi, wallet);
 
