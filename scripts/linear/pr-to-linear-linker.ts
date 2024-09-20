@@ -1,6 +1,23 @@
 import type { getOctokit } from '@actions/github';
 import type { LinearClient } from '@linear/sdk';
 
+function parseIssues(params: { prBody: string; owner: string; repo: string; pullNumber: number }) {
+  const { prBody, owner, repo, pullNumber } = params;
+  const closingIssuesRegex =
+    /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)/gi;
+  const closingIssues = [...prBody.matchAll(closingIssuesRegex)].map(
+    ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
+  );
+
+  const relatedIssuesRegex = /(relates\sto|related\sto|part\sof)\s+#(\d+)/gi;
+  const relatedIssues = [...prBody.matchAll(relatedIssuesRegex)].map(
+    ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
+  );
+  const prUrl = `https://github.com/${owner}/${repo}/pull/${pullNumber}`;
+
+  return { closingIssues, relatedIssues, prUrl };
+}
+
 export async function prToLinearLinker(params: {
   pullNumber: number;
   owner: string;
@@ -17,18 +34,10 @@ export async function prToLinearLinker(params: {
     pull_number: pullNumber,
   });
 
-  const prUrl = `https://github.com/${owner}/${repo}/pull/${pullNumber}`;
-
-  const closingIssuesRegex =
-    /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)/gi;
-  const closingIssues = [...body!.matchAll(closingIssuesRegex)].map(
-    ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
-  );
-
-  const relatedIssuesRegex = /(relates\sto|related\sto|part\sof)\s+#(\d+)/gi;
-  const relatedIssues = [...body!.matchAll(relatedIssuesRegex)].map(
-    ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
-  );
+  const { closingIssues, relatedIssues, prUrl } = parseIssues({
+    ...params,
+    prBody: body as string,
+  });
 
   const ghIssuesUrls = closingIssues.concat(relatedIssues);
 
@@ -65,16 +74,14 @@ export async function prToLinearLinker(params: {
     const unlinkedAttachment =
       attachments.every((a) => !ghIssuesUrls.includes(a.url)) &&
       attachments.find((a) => a.url === prUrl);
+
     if (unlinkedAttachment) {
       attachmentsToDelete.push(unlinkedAttachment.id);
     }
   }
 
-  closingLinearIssues.sort();
-  relatedLinearIssues.sort();
-
-  const closesIssues = closingLinearIssues.join(', ');
-  const relatesIssues = relatedLinearIssues.join(', ');
+  const closesIssues = closingLinearIssues.sort().join(', ');
+  const relatesIssues = relatedLinearIssues.sort().join(', ');
 
   const linearIssuesChanged = !body?.includes(closesIssues) || !body.includes(relatesIssues);
 
