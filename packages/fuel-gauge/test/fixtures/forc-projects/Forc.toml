@@ -18,6 +18,7 @@ members = [
   "generic-types-contract",
   "large-contract",
   "multi-token-contract",
+  "smo-contract",
   "options",
   "payable-annotation",
   "predicate-address",
