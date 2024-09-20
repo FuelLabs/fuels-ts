@@ -1,0 +1,4 @@
+---
+---
+
+docs: added assets guide
