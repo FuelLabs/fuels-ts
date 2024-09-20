@@ -367,6 +367,10 @@ export default defineConfig({
                 text: 'Unit conversion',
                 link: '/guide/utilities/unit-conversion',
               },
+              {
+                text: 'Using assets',
+                link: '/guide/utilities/using-assets',
+              },
             ],
           },
           {
