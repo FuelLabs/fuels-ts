@@ -51,15 +51,15 @@ Go to your `.env.local` file and add a new variable named `VITE_TESTNET_CONTRACT
 VITE_TESTNET_CONTRACT_ID=0x8342d413de2a678245d9ee39f020795800c7e6a4ac5ff7daae275f533dc05e08
 ```
 
-If you are curious, this environment variable is used here in the `src/lib.ts` file to set the contract ID:
+If you are curious, this environment variable is used here in the `src/lib.tsx` file to set the contract ID:
 
-<<< @/../../create-fuels-counter-guide/src/lib.ts#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/lib.tsx#deploying-dapp-to-testnet-frontend-contract-id{ts:line-numbers}
 
 You will notice that this piece of code is getting the contract ID depending on the current environment. If the environment is `local`, it will use the contract ID from the auto-generated `contract-ids.json` file. Otherwise, for a testnet deployment, it will use the contract ID provided by you.
 
-The `CURRENT_ENVIRONMENT` variable is defined in the `lib.ts` file:
+The `CURRENT_ENVIRONMENT` variable is defined in the `lib.tsx` file:
 
-<<< @/../../create-fuels-counter-guide/src/lib.ts#deploying-dapp-to-testnet-lib-current-environment{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/lib.tsx#deploying-dapp-to-testnet-lib-current-environment{ts:line-numbers}
 
 As you can see, it depends on the `VITE_DAPP_ENVIRONMENT` environment variable. If you go to your `.env.local` file, you will see that it is set to `local` by default. If you change this value to `testnet`, the frontend will now be connected to the testnet instead of your local node.
 
