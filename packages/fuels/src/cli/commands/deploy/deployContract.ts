@@ -4,7 +4,7 @@ import type { DeployContractOptions } from '@fuel-ts/contract';
 import { Contract } from '@fuel-ts/program';
 import { existsSync, readFileSync } from 'fs';
 
-import type { ForcToml } from '../../config/forcUtils';
+import { setForcTomlProxyAddress, type ForcToml } from '../../config/forcUtils';
 import { debug } from '../../utils/logger';
 
 import { Src14OwnedProxy, Src14OwnedProxyFactory } from './proxy';
@@ -15,6 +15,7 @@ export async function deployContract(
   abiPath: string,
   storageSlotsPath: string,
   deployConfig: DeployContractOptions,
+  contractPath: string,
   tomlContents: ForcToml
 ) {
   debug(`Deploying contract for ABI: ${abiPath}`);
@@ -81,7 +82,7 @@ export async function deployContract(
       await waitForProxyInit();
 
       // Write the address of the proxy contract to proxied TOML
-      // TODO: Toml.write({ address: proxyContract.id.toB256() })
+      setForcTomlProxyAddress(contractPath, proxyContract.id.toB256());
 
       // Return both contract IDs
       deployedContractIds.push(proxyContract.id.toB256());
