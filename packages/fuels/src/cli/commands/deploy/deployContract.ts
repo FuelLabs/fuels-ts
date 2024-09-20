@@ -52,7 +52,7 @@ export async function deployContract(
         .call();
       await waitForProxyUpdate();
 
-      return targetContract.id.toB256();
+      return proxyContract.id.toB256();
     }
     // If the proxy address is not set, we need to deploy the proxy and the proxied contract and
     // set the proxy address in the proxied contracts TOML file
