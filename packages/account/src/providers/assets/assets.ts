@@ -452,12 +452,26 @@ export const rawAssets: Assets = [
         decimals: 18,
       },
       {
+        type: 'ethereum',
+        chainId: CHAIN_IDS.eth.sepolia,
+        address: '0xc6387efad0f184a90b34f397c3d6fd63135ef790',
+        decimals: 18,
+      },
+      {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.mainnet,
         contractId:
           '0x4ea6ccef1215d9479f1024dff70fc055ca538215d2c8c348beddffd54583d0e8',
         assetId:
           '0xb6133b2ef9f6153eb869125d23dcf20d1e735331b5e41b15a6a7a6cec70e8651',
+        decimals: 9,
+      },
+      {
+        type: 'fuel',
+        chainId: CHAIN_IDS.fuel.testnet,
+        contractId: '0xC6387efAD0F184a90B34f397C3d6Fd63135ef790',
+        assetId:
+          '0xf5c6d72d0f2c782fa47d8e228c198a08654e9fc66ca60ad85902b1d09046a7ab',
         decimals: 9,
       },
     ],
@@ -474,6 +488,12 @@ export const rawAssets: Assets = [
         decimals: 18,
       },
       {
+        type: 'ethereum',
+        chainId: CHAIN_IDS.eth.sepolia,
+        address: '0xb8f4f4eafc1d2a3c0a4d519bbf1114c311cc9b1b',
+        decimals: 18,
+      },
+      {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.mainnet,
         contractId:
@@ -481,6 +501,14 @@ export const rawAssets: Assets = [
         assetId:
           '0xd05563025104fc36496c15c7021ad6b31034b0e89a356f4f818045d1f48808bc',
         decimals: 9,
+      },
+      {
+        type: 'fuel',
+        chainId: CHAIN_IDS.fuel.testnet,
+        contractId: '0xC6387efAD0F184a90B34f397C3d6Fd63135ef790',
+        assetId:
+          '0xa86e37d385c08beddbb02c8260f9ec535d484c8ea908fc19d4e6dc8d5141fb2e',
+        decimals: 18,
       },
     ],
   },
@@ -518,6 +546,12 @@ export const rawAssets: Assets = [
         decimals: 18,
       },
       {
+        type: 'ethereum',
+        chainId: CHAIN_IDS.eth.sepolia,
+        address: '0xB82381A3fBD3FaFA77B3a7bE693342618240067b',
+        decimals: 18,
+      },
+      {
         type: 'fuel',
         chainId: CHAIN_IDS.fuel.mainnet,
         contractId:
@@ -525,6 +559,14 @@ export const rawAssets: Assets = [
         assetId:
           '0x1a7815cc9f75db5c24a5b0814bfb706bb9fe485333e98254015de8f48f84c67b',
         decimals: 9,
+      },
+      {
+        type: 'fuel',
+        chainId: CHAIN_IDS.fuel.testnet,
+        contractId: '0xC6387efAD0F184a90B34f397C3d6Fd63135ef790',
+        assetId:
+          '0x4c467e3fd4f32179e1aad3b92ebbdaa6ff6aeda5b8da5f8e64e96405eb52a7f5',
+        decimals: 18,
       },
     ],
   },
