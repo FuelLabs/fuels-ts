@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import LocalFaucet from "./LocalFaucet";
 import Button from "./Button";
 import { isLocal, renderFormattedBalance, testnetFaucetUrl } from "../lib.tsx";
-import { useNotification } from "../hooks/useNotification";
+import { useNotification } from "../hooks/useNotification.tsx";
 
 export default function Faucet() {
   const { successNotification } = useNotification();

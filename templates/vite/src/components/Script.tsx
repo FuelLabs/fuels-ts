@@ -5,12 +5,15 @@ import { useEffect, useState } from "react";
 import { TestScript } from "../sway-api";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-import { isLocal, renderTransactionId } from "../lib.tsx";
-import { useNotification } from "../hooks/useNotification";
+import { isLocal } from "../lib.tsx";
+import { useNotification } from "../hooks/useNotification.tsx";
 
 export default function Script() {
-  const { infoNotification, successNotification, errorNotification } =
-    useNotification();
+  const {
+    errorNotification,
+    transactionSubmitNotification,
+    transactionSuccessNotification,
+  } = useNotification();
   const [script, setScript] = useState<FuelScript<[input: BigNumberish], BN>>();
   const [input, setInput] = useState<number>();
   const [result, setResult] = useState<number>();
@@ -30,9 +33,9 @@ export default function Script() {
     setIsLoading(true);
     try {
       const tx = await script.functions.main(input).call();
-      infoNotification(<span>Transaction submitted: {renderTransactionId(tx.transactionId)}</span>);
+      transactionSubmitNotification(tx.transactionId);
       const result = await tx.waitForResult();
-      successNotification(<span>Transaction successful: {renderTransactionId(result.transactionId)}</span>);
+      transactionSuccessNotification(result.transactionId);
       setResult(result.value.toNumber());
     } catch (error) {
       console.error(error);

@@ -5,12 +5,15 @@ import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-import { isLocal, renderFormattedBalance, renderTransactionId } from "../lib.tsx";
-import { useNotification } from "../hooks/useNotification";
+import { isLocal, renderFormattedBalance } from "../lib.tsx";
+import { useNotification } from "../hooks/useNotification.tsx";
 
 export default function Predicate() {
-  const { infoNotification, successNotification, errorNotification } =
-    useNotification();
+  const {
+    errorNotification,
+    transactionSubmitNotification,
+    transactionSuccessNotification,
+  } = useNotification();
   const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
   const [predicatePin, setPredicatePin] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
@@ -43,9 +46,9 @@ export default function Predicate() {
 
     try {
       const tx = await wallet.transfer(predicate.address, bn(2_000_000));
-      infoNotification(<span>Transaction submitted: {renderTransactionId(tx.id)}</span>);
+      transactionSubmitNotification(tx.id);
       await tx.waitForResult();
-      successNotification(<span>Transfer successful: {renderTransactionId(tx.id)}</span>);
+      transactionSuccessNotification(tx.id);
     } catch (error) {
       console.error(error);
       errorNotification("Error transferring funds. Check your wallet balance.");
@@ -65,9 +68,9 @@ export default function Predicate() {
       });
 
       const tx = await newPredicate.transfer(wallet.address, bn(1_000_000));
-      infoNotification(<span>Transaction submitted: {renderTransactionId(tx.id)}</span>);
+      transactionSubmitNotification(tx.id);
       await tx.waitForResult();
-      successNotification(<span>Transfer successful: {renderTransactionId(tx.id)}</span>);
+      transactionSuccessNotification(tx.id);
     } catch (error) {
       console.error(error);
       errorNotification(
@@ -113,7 +116,11 @@ export default function Predicate() {
         <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
-            value={walletBalance ? `${renderFormattedBalance(walletBalance)} ETH` : ""}
+            value={
+              walletBalance
+                ? `${renderFormattedBalance(walletBalance)} ETH`
+                : ""
+            }
             className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
@@ -133,7 +140,11 @@ export default function Predicate() {
         <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
-            value={predicateBalance ? `${renderFormattedBalance(predicateBalance)} ETH` : ""}
+            value={
+              predicateBalance
+                ? `${renderFormattedBalance(predicateBalance)} ETH`
+                : ""
+            }
             className="w-1/2 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />

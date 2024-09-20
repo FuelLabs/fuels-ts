@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
 import { isLocal, renderFormattedBalance } from "../lib.tsx";
-import { useNotification } from "../hooks/useNotification.ts";
+import { useNotification } from "../hooks/useNotification.tsx";
 
 export default function Wallet() {
   const { disconnect } = useDisconnect();
@@ -40,7 +40,7 @@ export default function Wallet() {
             className="w-full md:w-8/12 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
-          <div className='flex mt-1 md:mt-0 items-center justify-between'>
+          <div className="flex mt-1 md:mt-0 items-center justify-between">
             <Button
               color="inactive"
               className="w-[45px] md:w-[70px] mr-1"

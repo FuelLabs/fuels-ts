@@ -3,7 +3,7 @@ import { useWallet } from "@fuels/react";
 import { useState } from "react";
 
 import Button from "./Button";
-import { useNotification } from "../hooks/useNotification";
+import { useNotification } from "../hooks/useNotification.tsx";
 
 type Props = {
   refetch: () => void;
@@ -11,8 +11,11 @@ type Props = {
 
 export default function LocalFaucet({ refetch }: Props) {
   const [isLoading, setIsLoading] = useState(false);
-  const { infoNotification, successNotification, errorNotification } =
-    useNotification();
+  const {
+    errorNotification,
+    transactionSubmitNotification,
+    transactionSuccessNotification,
+  } = useNotification();
 
   const { wallet } = useWallet();
 
@@ -25,9 +28,9 @@ export default function LocalFaucet({ refetch }: Props) {
         wallet.provider,
       );
       const tx = await genesis.transfer(wallet.address, bn(5_000_000_000));
-      infoNotification(`Transaction submitted: ${tx.id}`);
+      transactionSubmitNotification(tx.id);
       await tx.waitForResult();
-      successNotification(`Transfer successful: ${tx.id}`);
+      transactionSuccessNotification(tx.id);
     } catch (error) {
       console.error(error);
       errorNotification("Error transferring funds.");

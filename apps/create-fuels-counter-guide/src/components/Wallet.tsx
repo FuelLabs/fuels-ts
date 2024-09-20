@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
 import { isLocal, renderFormattedBalance } from "../lib.tsx";
-import { useNotification } from '../hooks/useNotification'
+import { useNotification } from '../hooks/useNotification.tsx'
 
 export default function Wallet() {
   const { disconnect } = useDisconnect();

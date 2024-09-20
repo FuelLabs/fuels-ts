@@ -5,11 +5,11 @@ import { bn, Predicate as FuelPredicate, InputValue } from "fuels";
 import { TestPredicate } from "../sway-api/predicates";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-import { isLocal, renderFormattedBalance, renderTransactionId } from "../lib.tsx";
-import { useNotification } from "../hooks/useNotification";
+import { isLocal, renderFormattedBalance } from "../lib.tsx";
+import { useNotification } from "../hooks/useNotification.tsx";
 
 export default function Predicate() {
-  const { infoNotification, successNotification, errorNotification } =
+  const { errorNotification, transactionSubmitNotification, transactionSuccessNotification } = useNotification();
     useNotification();
   const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
   const [predicatePin, setPredicatePin] = useState<string>();
@@ -43,9 +43,9 @@ export default function Predicate() {
 
     try {
       const tx = await wallet.transfer(predicate.address, bn(2_000_000));
-      infoNotification(<span>Transaction submitted: {renderTransactionId(tx.id)}</span>);
+      transactionSubmitNotification(tx.id);
       await tx.waitForResult();
-      successNotification(<span>Transfer successful: {renderTransactionId(tx.id)}</span>);
+      transactionSuccessNotification(tx.id);
     } catch (error) {
       console.error(error);
       errorNotification("Error transferring funds. Check your wallet balance.");
@@ -65,9 +65,9 @@ export default function Predicate() {
       });
 
       const tx = await newPredicate.transfer(wallet.address, bn(1_000_000));
-      infoNotification(<span>Transaction submitted: {renderTransactionId(tx.id)}</span>);
+      transactionSubmitNotification(tx.id);
       await tx.waitForResult();
-      successNotification(<span>Transfer successful: {renderTransactionId(tx.id)}</span>);
+      transactionSuccessNotification(tx.id);
     } catch (error) {
       console.error(error);
       errorNotification(
@@ -92,9 +92,9 @@ export default function Predicate() {
       });
 
       const tx = await wallet.transfer(newPredicate.address, bn(2_000_000));
-      infoNotification(<span>Transaction submitted: {renderTransactionId(tx.id)}</span>);
+      transactionSubmitNotification(tx.id);
       await tx.waitForResult();
-      successNotification(<span>Pin change successful: {renderTransactionId(tx.id)}</span>);
+      transactionSuccessNotification(tx.id);
     } catch (error) {
       console.error(error);
       errorNotification(
