@@ -7,6 +7,7 @@ import { Coder } from './AbstractCoder';
 import { BigNumberCoder } from './BigNumberCoder';
 
 export class ByteCoder extends Coder<number[], Uint8Array> {
+  static memorySize = 1;
   constructor() {
     super('struct', 'struct Bytes', WORD_SIZE);
   }

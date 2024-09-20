@@ -8,6 +8,7 @@ import { Coder } from './AbstractCoder';
 import { BigNumberCoder } from './BigNumberCoder';
 
 export class StdStringCoder extends Coder<string, string> {
+  static memorySize = 1;
   constructor() {
     super('struct', 'struct String', WORD_SIZE);
   }
