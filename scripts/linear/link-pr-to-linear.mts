@@ -4,7 +4,7 @@ import { LinearClient } from "@linear/sdk";
 
 import { prToLinearLinker } from "./pr-to-linear-linker";
 
-const { GITHUB_REPOSITORY, GITHUB_TOKEN, LINEAR_API_KEY, PULL_NUMBER } =
+const { GITHUB_REPOSITORY, GITHUB_TOKEN, LINEAR_TOKEN, PULL_NUMBER } =
   process.env;
 
 const missingEnvironmentVariables: string[] = [];
@@ -15,8 +15,8 @@ if (GITHUB_REPOSITORY === undefined) {
 if (GITHUB_TOKEN === undefined) {
   missingEnvironmentVariables.push("GITHUB_TOKEN");
 }
-if (LINEAR_API_KEY === undefined) {
-  missingEnvironmentVariables.push("LINEAR_API_KEY");
+if (LINEAR_TOKEN === undefined) {
+  missingEnvironmentVariables.push("LINEAR_TOKEN");
 }
 if (PULL_NUMBER === undefined) {
   missingEnvironmentVariables.push("PULL_NUMBER");
@@ -27,7 +27,7 @@ if (missingEnvironmentVariables.length > 0) {
   );
 }
 const octokit = github.getOctokit(GITHUB_TOKEN!);
-const linearClient = new LinearClient({ apiKey: LINEAR_API_KEY });
+const linearClient = new LinearClient({ apiKey: LINEAR_TOKEN });
 const pullNumber = parseInt(PULL_NUMBER!, 10);
 const [owner, repo] = GITHUB_REPOSITORY!.split("/");
 
