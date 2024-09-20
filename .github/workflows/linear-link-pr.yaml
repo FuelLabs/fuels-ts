@@ -1,0 +1,28 @@
+name: Linear Issue To PR Linker
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  link-pr-to-linear-issues:
+    name: "Link PR to Linear issues"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.client_payload.ref }}
+          persist-credentials: false
+
+      - name: CI Setup
+        uses: ./.github/actions/ci-setup
+
+      - name: Link Issues
+        run: |
+          pnpm linear:link-pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.REPO_TOKEN }}
+          LINEAR_API_KEY: ${{ secrets.LINEAR_API_KEY }}
+          PULL_NUMBER: ${{ github.event.pull_request.number }}
