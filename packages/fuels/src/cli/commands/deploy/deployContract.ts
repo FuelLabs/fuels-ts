@@ -22,10 +22,20 @@ export async function deployContract(
 
   const bytecode = readFileSync(binaryPath);
 
+  /**
+   * Automatically inject `storageSlots` if it's not an empty array.
+   */
   if (existsSync(storageSlotsPath)) {
     const storageSlots = JSON.parse(readFileSync(storageSlotsPath, 'utf-8'));
-    // eslint-disable-next-line no-param-reassign
-    deployConfig.storageSlots = storageSlots;
+    if (storageSlots.length) {
+      // eslint-disable-next-line no-param-reassign
+      deployConfig.storageSlots = storageSlots;
+    } else {
+      // eslint-disable-next-line no-param-reassign
+      deployConfig.storageSlots = undefined;
+      // eslint-disable-next-line no-param-reassign
+      delete deployConfig.storageSlots;
+    }
   }
 
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
@@ -68,9 +78,7 @@ export async function deployContract(
     const { contract: targetContract } = await waitForTarget();
 
     const proxyDeployConfig: DeployContractOptions = {
-      // TODO: fix the config for undefined
-      // salt: deployConfig.salt,
-      // stateRoot: deployConfig.stateRoot,
+      ...deployConfig,
       configurableConstants: {
         INITIAL_TARGET: { bits: targetContract.id.toB256() },
         INITIAL_OWNER: { Initialized: { Address: { bits: wallet.address.toB256() } } },
