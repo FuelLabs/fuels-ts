@@ -4,7 +4,7 @@ import { useWallet } from "@fuels/react";
 import LocalFaucet from "./LocalFaucet";
 import { TestContract } from "../sway-api";
 import Button from "./Button";
-import { isLocal, contractId } from "../lib";
+import { isLocal, contractId, renderTransactionId } from "../lib.tsx";
 import { useNotification } from "../hooks/useNotification";
 
 export default function Contract() {
@@ -40,9 +40,9 @@ export default function Contract() {
 
     try {
       const call = await contract.functions.increment_counter(1).call();
-      infoNotification(`Transaction submitted: ${call.transactionId}`);
+      infoNotification(<span>Transaction submitted: {renderTransactionId(call.transactionId)}</span>);
       const result = await call.waitForResult();
-      successNotification(`Transaction successful: ${result.transactionId}`);
+      successNotification(<span>Transaction successful: {renderTransactionId(result.transactionId)}</span>);
       setCounter(result.value.toNumber());
     } catch (error) {
       console.error(error);

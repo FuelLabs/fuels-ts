@@ -28,6 +28,7 @@ export const renderTransactionId = (transactionId: string) => {
       href={`https://app.fuel.network/tx/${transactionId}/simple`}
       target="_blank"
       rel="noreferrer"
+      className="underline"
     >
       {transactionId}
     </a>

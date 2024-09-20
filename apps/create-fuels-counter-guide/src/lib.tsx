@@ -1,3 +1,4 @@
+import { BN } from 'fuels'
 import contractIds from './sway-api/contract-ids.json';
 
 // #region deploying-dapp-to-testnet-lib-current-environment
@@ -19,3 +20,24 @@ export const contractId = isLocal ? localContractId : testnetContractId;
 // #endregion deploying-dapp-to-testnet-frontend-contract-id
 
 export const testnetFaucetUrl = 'https://faucet-testnet.fuel.network/';
+
+export const renderTransactionId = (transactionId: string) => {
+  if (isLocal) {
+    return transactionId;
+  }
+
+  return (
+    <a
+      href={`https://app.fuel.network/tx/${transactionId}/simple`}
+      target="_blank"
+      rel="noreferrer"
+      className="underline"
+    >
+      {transactionId}
+    </a>
+  )
+}
+
+export const renderFormattedBalance = (balance: BN) => {
+  return balance.format({ precision: 4 });
+}

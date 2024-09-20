@@ -15,5 +15,7 @@ export default createConfig({
   output: './src/sway-api', // Where your generated types will be saved
   fuelCorePort,
   providerUrl,
+  forcPath: 'fuels-forc',
+  fuelCorePath: 'fuels-core',
 });
 // #endregion fuels-config-file-env
