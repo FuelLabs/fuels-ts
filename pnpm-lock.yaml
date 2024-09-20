@@ -670,6 +670,9 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../utils
+      type-fest:
+        specifier: ^4.26.1
+        version: 4.26.1
 
   packages/abi-coder:
     dependencies:

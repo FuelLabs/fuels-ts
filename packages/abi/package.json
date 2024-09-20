@@ -28,7 +28,8 @@
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/math": "workspace:*",
-    "@fuel-ts/utils": "workspace:*"
+    "@fuel-ts/utils": "workspace:*",
+    "type-fest": "^4.26.1"
   },
   "devDependencies": {}
 }
