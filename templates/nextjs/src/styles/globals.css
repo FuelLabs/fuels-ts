@@ -75,3 +75,7 @@ body {
     theme("colors.zinc.800 / 0.9")
   );
 }
+
+input {
+  outline: none !important;
+}

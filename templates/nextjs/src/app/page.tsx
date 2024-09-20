@@ -27,7 +27,7 @@ function App() {
       className="flex items-center justify-center lg:pt-6 dark:text-zinc-50/90"
     >
       <div id="container" className="mx-8 mb-32 w-full max-w-6xl">
-        <nav id="nav" className="flex items-center justify-center py-6">
+        <nav id="nav" className="flex items-center justify-center py-1 md:py-6">
           <a href="https://fuel.network/" target="_blank" rel="noreferrer">
             <img src="./logo_white.png" alt="Fuel Logo" className="w-[124px]" />
           </a>
@@ -50,7 +50,7 @@ function App() {
 
                   {isConnected && (
                     <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8">
-                      <div className="flex flex-col sm:flex-row gap-3">
+                      <div className="flex flex-col sm:flex-row gap-3 overflow-x-scroll overflow-visible">
                         {views.map((viewName) => (
                           <Button
                             key={viewName}

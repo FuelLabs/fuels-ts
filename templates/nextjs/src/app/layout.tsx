@@ -36,7 +36,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/fuel.ico" />
+        <link rel="icon" href="/favicon.ico" />
         <title>Fuel dApp</title>
       </head>
       <body>

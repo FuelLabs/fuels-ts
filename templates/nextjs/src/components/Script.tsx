@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { TestScript } from "../sway-api";
 import Button from "./Button";
 import LocalFaucet from "./LocalFaucet";
-import { isLocal } from "../lib";
+import { isLocal, renderTransactionId } from "../lib";
 import { useNotification } from "../hooks/useNotification";
 
 export default function Script() {
@@ -30,9 +30,17 @@ export default function Script() {
     setIsLoading(true);
     try {
       const tx = await script.functions.main(input).call();
-      infoNotification(`Transaction submitted: ${tx.transactionId}`);
+      infoNotification(
+        <span>
+          Transaction submitted: {renderTransactionId(tx.transactionId)}
+        </span>,
+      );
       const result = await tx.waitForResult();
-      successNotification(`Transaction successful: ${result.transactionId}`);
+      successNotification(
+        <span>
+          Transaction successful: {renderTransactionId(result.transactionId)}
+        </span>,
+      );
       setResult(result.value.toNumber());
     } catch (error) {
       console.error(error);

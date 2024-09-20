@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { ReactNode, useRef } from 'react';
 
 import { toast, Id, TypeOptions } from 'react-toastify';
 
@@ -12,7 +12,7 @@ export const useNotification = () => {
     notification.current = null;
   };
 
-  const showNotification = (render: string, type: TypeOptions) => {
+  const showNotification = (render: string | ReactNode, type: TypeOptions) => {
     if (notification.current) {
       toast.update(notification.current, { render, type, onClose });
     } else {
@@ -21,8 +21,8 @@ export const useNotification = () => {
   };
 
   return {
-    infoNotification: (render: string) => showNotification(render, 'info'),
-    successNotification: (render: string) => showNotification(render, 'success'),
-    errorNotification: (render: string) => showNotification(render, 'error'),
+    infoNotification: (render: string | ReactNode) => showNotification(render, 'info'),
+    successNotification: (render: string | ReactNode) => showNotification(render, 'success'),
+    errorNotification: (render: string | ReactNode) => showNotification(render, 'error'),
   };
 };

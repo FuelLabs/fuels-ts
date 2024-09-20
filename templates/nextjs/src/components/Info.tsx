@@ -3,7 +3,9 @@ import { providerUrl, playgroundUrl } from "../lib";
 export default function Info() {
   return (
     <div id="text" className="col-span-3 px-4 py-8">
-      <h1 className="pb-1 pt-6 text-3xl font-medium">Welcome to Fuel</h1>
+      <h1 className="pb-1 pt-0 md:pt-6 text-3xl font-medium">
+        Welcome to Fuel
+      </h1>
       <p>
         This Next + React template was bootstrapped with the{" "}
         <a
