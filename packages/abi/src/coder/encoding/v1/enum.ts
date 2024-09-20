@@ -16,10 +16,13 @@ export type EnumDecodeValue<TCoders extends Record<string, Coder>> = RequireExac
   [P in keyof TCoders]: TypesOfCoder<TCoders[P]>['Decoded'];
 }>;
 
+export const CASE_KEY_WORD_LENGTH = 8;
+
 export const enumCoder = <TCoders extends Record<string, Coder>>(opts: { coders: TCoders }) => ({
   type: 'enum',
   encodedLength: (data: Uint8Array) => {
-    const caseIndex = u64.decode(data).toNumber();
+    const caseBytes = data.slice(0, CASE_KEY_WORD_LENGTH);
+    const caseIndex = u64.decode(caseBytes).toNumber();
     const caseKey = Object.keys(opts.coders)[caseIndex];
     const valueCoder = opts.coders[caseKey];
     return u64.encodedLength(data) + valueCoder.encodedLength(data);

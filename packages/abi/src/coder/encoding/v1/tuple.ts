@@ -24,11 +24,15 @@ export const tuple = <TCoders extends Coder[] = Coder[]>({
   encode: (value: TupleEncodeValue<TCoders>): Uint8Array =>
     concatBytes(coders.map((coder, i) => coder.encode(value[i]))),
   decode: (data: Uint8Array): TupleDecodeValue<TCoders> => {
-    let newOffset = 0;
+    let offset = 0;
+    let currData = data;
+
     const decodedValue = coders.map((coder) => {
-      const encodedLength = coder.encodedLength(data);
-      const dataSlice = data.slice(newOffset, (newOffset += encodedLength));
-      return coder.decode(dataSlice);
+      currData = data.slice(offset, data.length);
+      const fieldLength = coder.encodedLength(currData);
+      const fieldData = currData.slice(0, fieldLength);
+      offset += fieldLength;
+      return coder.decode(fieldData);
     });
     return decodedValue as TupleDecodeValue<TCoders>;
   },

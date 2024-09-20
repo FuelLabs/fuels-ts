@@ -28,10 +28,14 @@ export const struct = <TCoders extends Record<string, Coder>>(opts: {
   },
   decode: (data: Uint8Array): StructValue<TCoders> => {
     let offset = 0;
+    let currData = data;
+
     const decodedValue = Object.entries(opts.coders).reduce((acc, [caseKey, fieldCoder]) => {
-      const fieldDataLength = fieldCoder.encodedLength(data);
-      const fieldData = data.slice(offset, (offset += fieldDataLength));
+      currData = data.slice(offset, data.length);
+      const fieldLength = fieldCoder.encodedLength(currData);
+      const fieldData = currData.slice(0, fieldLength);
       const decoded = fieldCoder.decode(fieldData) as StructValue<TCoders>[string];
+      offset += fieldLength;
       acc[caseKey as keyof StructValue<TCoders>] = decoded;
       return acc;
     }, {} as StructValue<TCoders>);

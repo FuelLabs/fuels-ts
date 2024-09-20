@@ -1,4 +1,5 @@
 import { concat, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
+import { log } from 'console';
 
 import type { Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
 
@@ -7,15 +8,18 @@ import { u64 } from './fixed';
 export const DYNAMIC_WORD_LENGTH = 8;
 
 interface HeapCoder<T> extends Omit<Coder<T>, 'encodedLength' | 'decode'> {
+  encodedLength?(data: Uint8Array): number;
   decode(data: Uint8Array, length: number): T;
 }
 
 const createHeapType = <T extends { length: number }>(opts: HeapCoder<T>): Coder<T> => ({
   type: opts.type,
-  encodedLength: (data: Uint8Array) => {
-    const encodedLength = data.slice(0, DYNAMIC_WORD_LENGTH);
-    return u64.decode(encodedLength).toNumber();
-  },
+  encodedLength:
+    opts.encodedLength ??
+    ((data: Uint8Array) => {
+      const encodedLength = data.slice(0, DYNAMIC_WORD_LENGTH);
+      return u64.decode(encodedLength).toNumber() + DYNAMIC_WORD_LENGTH;
+    }),
   encode: (value: T) => {
     const encodedLength = u64.encode(value.length);
     return concat([encodedLength, opts.encode(value)]);
@@ -33,7 +37,10 @@ const createHeapType = <T extends { length: number }>(opts: HeapCoder<T>): Coder
  */
 export const byte = createHeapType<Uint8Array>({
   type: 'byte',
-  encode: (value: Uint8Array) => value,
+  encode: (value: Uint8Array) => {
+    const bytes = value instanceof Uint8Array ? value : new Uint8Array(value);
+    return bytes;
+  },
   decode: (data: Uint8Array) => data,
 });
 
@@ -74,6 +81,12 @@ type VecValue<TCoder extends Coder = Coder> = ReturnType<TCoder['decode']>[];
 export const vector = <TCoder extends Coder>(opts: { coder: TCoder }): Coder<VecValue<TCoder>> =>
   createHeapType({
     type: 'vector',
+    encodedLength: (data: Uint8Array) => {
+      const encodedLength = data.slice(0, DYNAMIC_WORD_LENGTH);
+      return (
+        u64.decode(encodedLength).toNumber() * opts.coder.encodedLength(data) + DYNAMIC_WORD_LENGTH
+      );
+    },
     encode: (value: VecValue<TCoder>) => {
       const encodedBytes = value.map((v) => opts.coder.encode(v));
       return concat(encodedBytes);
@@ -86,6 +99,7 @@ export const vector = <TCoder extends Coder>(opts: { coder: TCoder }): Coder<Vec
         .fill(0)
         .map(() => {
           const elementData = data.slice(offset, (offset += elementByteLength));
+
           return opts.coder.decode(elementData);
         });
 
@@ -98,7 +112,7 @@ vector.fromAbi = ({ name, type: { components } }: GetCoderParams, getCoder: GetC
     throw new Error(`The provided Vec type is missing an item of 'components'.`);
   }
 
-  const bufferComponent = components.find((component) => component.name === 'buf');
+  const bufferComponent = components.find((component) => component.name === '');
   if (!bufferComponent) {
     throw new Error(`The Vec type provided is missing or has a malformed 'buf' component.`);
   }

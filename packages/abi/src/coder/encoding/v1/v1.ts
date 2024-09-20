@@ -1,6 +1,3 @@
-import type { Matcher } from '../../../matchers/sway-type-matchers';
-import { createMatcher } from '../../../matchers/sway-type-matchers';
-
 import { arrayCoder } from './array';
 import { enumCoder } from './enum';
 import { voidCoder, u16, u32, u8, u64, u256, b256, b512, bool, string } from './fixed';
