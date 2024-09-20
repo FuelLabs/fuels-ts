@@ -13,7 +13,7 @@ apps/demo-react-cra
 apps/demo-react-vite
 apps/create-fuels-counter-guide
 
-/packages/fuels/src/cli/commands/deploy/proxy/types
+packages/fuels/src/cli/commands/deploy/proxy/types
 packages/fuels/test/fixtures/project
 packages/account/src/providers/__generated__
 packages/account/src/providers/assets
