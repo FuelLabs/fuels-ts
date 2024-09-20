@@ -37,8 +37,10 @@ export async function deployContract(
 
   if (isProxy) {
     if (proxyAddress) {
-      // If the proxy address is already set, we need to deploy the proxied contract and update the address
-      // at the proxy address with the new proxied contract ID
+      /**
+       * If the proxy address is already set, we need to deploy the proxied contract
+       * and update the address at the proxy address with the new proxied contract ID.
+       */
 
       // Deploy the proxied contract
       const targetContractFactory = new ContractFactory(bytecode, abi, wallet);
@@ -54,8 +56,11 @@ export async function deployContract(
 
       return proxyContract.id.toB256();
     }
-    // If the proxy address is not set, we need to deploy the proxy and the proxied contract and
-    // set the proxy address in the proxied contracts TOML file
+
+    /**
+     * If the proxy address is not set, we need to deploy the proxy and the proxied
+     *  contract and set the proxy address in the proxied contracts TOML file.
+     */
 
     // Deploy the proxied contract
     const targetContractFactory = new ContractFactory(bytecode, abi, wallet);
@@ -63,7 +68,7 @@ export async function deployContract(
     const { contract: targetContract } = await waitForTarget();
 
     const proxyDeployConfig: DeployContractOptions = {
-      // Todo: fix the config for undefined
+      // TODO: fix the config for undefined
       // salt: deployConfig.salt,
       // stateRoot: deployConfig.stateRoot,
       configurableConstants: {
