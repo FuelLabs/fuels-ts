@@ -64,15 +64,8 @@ export function readForcToml(contractPath: string) {
     );
   }
 
-  if (!forcFiles.has(forcPath)) {
-    const forcFile = readFileSync(forcPath, 'utf8');
-    const tomlParsed = toml.parse(forcFile);
-    forcFiles.set(forcPath, tomlParsed);
-  }
-
-  const tomlContents = forcFiles.get(forcPath) as ForcToml;
-
-  return tomlContents;
+  const forcFile = readFileSync(forcPath, 'utf8');
+  return toml.parse(forcFile) as ForcToml;
 }
 
 export function setForcTomlProxyAddress(contractPath: string, address: string) {
