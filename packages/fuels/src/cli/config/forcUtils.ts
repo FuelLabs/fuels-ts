@@ -35,6 +35,9 @@ export enum SwayType {
 export const swayFiles = new Map<string, SwayType>();
 
 export const getClosestForcTomlDir = (dir: string): string => {
+  if (existsSync(dir)) {
+  }
+
   let forcPath = join(dir, 'Forc.toml');
 
   if (existsSync(forcPath)) {
@@ -53,6 +56,13 @@ export const getClosestForcTomlDir = (dir: string): string => {
 };
 
 export function readForcToml(contractPath: string) {
+  if (!existsSync(contractPath)) {
+    throw new FuelError(
+      FuelError.CODES.CONFIG_FILE_NOT_FOUND,
+      `TOML file not found:\n  ${contractPath}`
+    );
+  }
+
   const forcPath = getClosestForcTomlDir(contractPath);
 
   if (!existsSync(forcPath)) {
