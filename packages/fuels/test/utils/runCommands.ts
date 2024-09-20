@@ -24,6 +24,7 @@ export type Paths = {
   outputDir: string;
   contractsJsonPath: string;
   fooContractFactoryPath: string;
+  upgradableContractPath: string;
 };
 
 export function bootstrapProject(testFilepath: string) {
@@ -43,6 +44,7 @@ export function bootstrapProject(testFilepath: string) {
   const scriptsDir = join(workspaceDir, 'scripts');
   const predicateDir = join(workspaceDir, 'predicate');
   const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
+  const upgradableContractPath = join(contractsDir, 'upgradable');
 
   const outputDir = join(root, 'output');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
@@ -65,6 +67,7 @@ export function bootstrapProject(testFilepath: string) {
     fooContractFactoryPath,
     forcPath,
     fuelCorePath,
+    upgradableContractPath,
   };
 }
 
