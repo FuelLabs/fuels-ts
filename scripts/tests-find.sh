@@ -1,8 +1,11 @@
 #!/bin/bash
 
-ROOT=$(cd "$(dirname "$0")/.."; pwd)
+ROOT=$(
+  cd "$(dirname "$0")/.."
+  pwd
+)
 
-FILES=$(find $ROOT/{apps,packages,internal,templates} -name '*.test.ts')
+FILES=$(find $ROOT/{apps,packages,internal,templates,scripts} -name '*.test.ts')
 
 if [[ $* == *--all* ]]; then
   grep -lE "\*\s+@group\s+(node|browser|e2e)" $FILES

@@ -10,15 +10,32 @@ const linearClient = new LinearClient({
 });
 const octokit = getOctokit('gh-key');
 
+const owner = 'FuelLabs';
+const repo = 'fuels-ts';
+
 function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-const owner = 'FuelLabs';
-const repo = 'fuels-ts';
+function mockLinearIssue(ghIssueId: number, attachmentType: 'issues' | 'pull') {
+  const attachments = [
+    {
+      id: randomBytes(32).toString('hex'),
+      url: `https://github.com/${owner}/${repo}/${attachmentType}/${ghIssueId}`,
+    },
+  ];
+  return {
+    identifier: `TS-${randomInt(10_000)}`,
+    attachments: () =>
+      Promise.resolve({
+        nodes: attachments,
+      }),
+  } as unknown as Issue;
+}
 
 type PRInfo = Awaited<ReturnType<typeof octokit.rest.pulls.get>>['data'];
-function mockPr() {
+
+function setupMock() {
   let closingKeywords = [
     'close',
     'closes',
@@ -62,39 +79,27 @@ function mockPr() {
 
   // @ts-expect-error this is what we need of the PR
   vi.spyOn(octokit.rest.pulls, 'get').mockImplementation(() => Promise.resolve({ data: pr }));
-  return { pr, closingIssues, relatedIssues };
+
+  const mockClosingIssues = closingIssues.map((i) => mockLinearIssue(i, 'issues'));
+  const mockRelatedIssues = relatedIssues.map((i) => mockLinearIssue(i, 'issues'));
+
+  vi.spyOn(linearClient, 'issues').mockImplementation(() =>
+    Promise.resolve({ nodes: mockClosingIssues.concat(mockRelatedIssues) } as IssueConnection)
+  );
+
+  return { pr, mockClosingIssues, mockRelatedIssues };
 }
 
-function mockLinearIssue(ghIssueId: number, attachmentType: 'issues' | 'pull') {
-  const attachments = [
-    {
-      id: randomBytes(32).toString('hex'),
-      url: `https://github.com/${owner}/${repo}/${attachmentType}/${ghIssueId}`,
-    },
-  ];
-  return {
-    identifier: `TS-${randomInt(10_000)}`,
-    attachments: () =>
-      Promise.resolve({
-        nodes: attachments,
-      }),
-  } as unknown as Issue;
-}
-
+/**
+ * @grosup node
+ */
 describe('linear', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
   test('PR closing or being related to a GH issue is linked to Linear issue', async () => {
-    const { pr, closingIssues, relatedIssues } = mockPr();
-
-    const mockClosingIssues = closingIssues.map((i) => mockLinearIssue(i, 'issues'));
-    const mockRelatedIssues = relatedIssues.map((i) => mockLinearIssue(i, 'issues'));
-
-    vi.spyOn(linearClient, 'issues').mockImplementation(() =>
-      Promise.resolve({ nodes: mockClosingIssues.concat(mockRelatedIssues) } as IssueConnection)
-    );
+    const { pr, mockClosingIssues, mockRelatedIssues } = setupMock();
 
     const updatePrSpy = vi
       .spyOn(octokit.rest.pulls, 'update')
@@ -123,14 +128,7 @@ describe('linear', () => {
   });
 
   test("PR body isn't updated when there are no linear-related changes", async () => {
-    const { pr, closingIssues, relatedIssues } = mockPr();
-
-    const mockClosingIssues = closingIssues.map((i) => mockLinearIssue(i, 'issues'));
-    const mockRelatedIssues = relatedIssues.map((i) => mockLinearIssue(i, 'issues'));
-
-    vi.spyOn(linearClient, 'issues').mockImplementation(() =>
-      Promise.resolve({ nodes: mockClosingIssues.concat(mockRelatedIssues) } as IssueConnection)
-    );
+    const { pr } = setupMock();
 
     const updatePrSpy = vi
       .spyOn(octokit.rest.pulls, 'update')
