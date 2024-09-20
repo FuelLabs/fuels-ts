@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-feat: adding support for upgradable contracts
+feat: adding support for proxy contracts
