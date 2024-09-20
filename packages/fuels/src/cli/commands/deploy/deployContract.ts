@@ -62,14 +62,18 @@ export async function deployContract(
     const { waitForResult: waitForTarget } = await targetContractFactory.deploy(deployConfig);
     const { contract: targetContract } = await waitForTarget();
 
-    // Deploy the SRC14 Compliant Proxy Contract
-    const { waitForResult: waitForProxy } = await proxyFactory.deploy({
-      ...deployConfig,
+    const proxyDeployConfig: DeployContractOptions = {
+      // Todo: fix the config for undefined
+      // salt: deployConfig.salt,
+      // stateRoot: deployConfig.stateRoot,
       configurableConstants: {
         INITIAL_TARGET: { bits: targetContract.id.toB256() },
         INITIAL_OWNER: { Initialized: { Address: { bits: wallet.address.toB256() } } },
       },
-    });
+    };
+
+    // Deploy the SRC14 Compliant Proxy Contract
+    const { waitForResult: waitForProxy } = await proxyFactory.deploy(proxyDeployConfig);
     const { contract: proxyContract } = await waitForProxy();
 
     // Initialize the proxy contract
