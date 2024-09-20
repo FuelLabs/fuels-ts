@@ -26,12 +26,13 @@ export async function deploy(config: FuelsConfig) {
 
   for (let i = 0; i < contractsLen; i++) {
     const contractPath = config.contracts[i];
+    const forcTomlPath = getClosestForcTomlDir(contractPath);
     const binaryPath = getBinaryPath(contractPath, config);
     const abiPath = getABIPath(contractPath, config);
     const storageSlotsPath = getStorageSlotsPath(contractPath, config);
     const projectName = getContractName(contractPath);
     const contractName = getContractCamelCase(contractPath);
-    const tomlContents = readForcToml(getClosestForcTomlDir(contractPath));
+    const tomlContents = readForcToml(forcTomlPath);
     const deployConfig = await getDeployConfig(config.deployConfig, {
       contracts: Array.from(contracts),
       contractName,
@@ -44,6 +45,7 @@ export async function deploy(config: FuelsConfig) {
       abiPath,
       storageSlotsPath,
       deployConfig,
+      contractPath,
       tomlContents
     );
 

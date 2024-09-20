@@ -1,5 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import camelCase from 'lodash.camelcase';
 import { join } from 'path';
 import toml from 'toml';
@@ -36,8 +36,26 @@ export const forcFiles = new Map<string, ForcToml>();
 
 export const swayFiles = new Map<string, SwayType>();
 
-export function readForcToml(path: string) {
-  const forcPath = join(path, './Forc.toml');
+export const getClosestForcTomlDir = (dir: string): string => {
+  let forcPath = join(dir, 'Forc.toml');
+
+  if (existsSync(forcPath)) {
+    return forcPath;
+  }
+
+  const parent = join(dir, '..');
+  forcPath = getClosestForcTomlDir(parent);
+
+  if (parent === '/' && !existsSync(forcPath)) {
+    const msg = `TOML file not found:\n  ${dir}`;
+    throw new FuelError(FuelError.CODES.CONFIG_FILE_NOT_FOUND, msg);
+  }
+
+  return forcPath;
+};
+
+export function readForcToml(contractPath: string) {
+  const forcPath = getClosestForcTomlDir(contractPath);
 
   if (!existsSync(forcPath)) {
     throw new FuelError(
@@ -55,6 +73,29 @@ export function readForcToml(path: string) {
   const tomlContents = forcFiles.get(forcPath) as ForcToml;
 
   return tomlContents;
+}
+
+export function setForcTomlProxyAddress(contractPath: string, address: string) {
+  const forcPath = getClosestForcTomlDir(contractPath);
+  const tomlPristine = readFileSync(forcPath).toString();
+  const tomlJson = readForcToml(forcPath);
+
+  const isProxyEnabled = tomlJson.proxy?.enabled;
+  const hasProxyAddress = tomlJson.proxy?.address;
+
+  // never override address
+  if (isProxyEnabled && hasProxyAddress) {
+    return address;
+  }
+
+  // injects address into toml string
+  const replaceReg = /(\[proxy\][\s\S]+^enabled.+$)/gm;
+  const replaceStr = `$1\naddress = "${address}"`;
+  const modifiedToml = tomlPristine.replace(replaceReg, replaceStr);
+
+  writeFileSync(forcPath, modifiedToml);
+
+  return address;
 }
 
 export function readSwayType(path: string) {
@@ -102,19 +143,4 @@ export function getABIPaths(paths: string[], config: FuelsConfig) {
 export const getStorageSlotsPath = (contractPath: string, { buildMode }: FuelsConfig) => {
   const projectName = getContractName(contractPath);
   return join(contractPath, `/out/${buildMode}/${projectName}-storage_slots.json`);
-};
-
-export const getClosestForcTomlDir = (dir: string): string => {
-  if (existsSync(join(dir, 'Forc.toml'))) {
-    return dir;
-  }
-
-  const tomlDirPath = getClosestForcTomlDir(join(dir, '..'));
-
-  if (tomlDirPath === '/') {
-    const msg = `TOML file not found:\n  ${dir}`;
-    throw new FuelError(FuelError.CODES.CONFIG_FILE_NOT_FOUND, msg);
-  }
-
-  return tomlDirPath;
 };
