@@ -1,6 +1,10 @@
-import type { BN } from 'fuels';
+import { bn } from 'fuels';
+import type { BNInput } from 'fuels';
 
-export const toEqualBn = (received: BN, argument: BN) => {
+export const toEqualBn = (_received: BNInput, _argument: BNInput) => {
+  const received = bn(_received);
+  const argument = bn(_argument);
+
   const pass = received.eq(argument);
 
   if (pass) {

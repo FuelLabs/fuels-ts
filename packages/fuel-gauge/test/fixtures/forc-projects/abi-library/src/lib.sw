@@ -9,3 +9,9 @@ pub enum ExternalEnum {
     A: (),
     B: (),
 }
+
+impl Eq for ExternalStruct {
+    fn eq(self, other: Self) -> bool {
+        self.value == other.value
+    }
+}
