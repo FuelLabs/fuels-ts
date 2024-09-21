@@ -32,14 +32,14 @@ export async function deployContract(
   const proxyAbi = Src14OwnedProxy.abi;
   const proxyFactory = new Src14OwnedProxyFactory(wallet);
 
-  const isProxy = tomlContents?.proxy?.enabled;
+  const isProxyEnabled = tomlContents?.proxy?.enabled;
   const proxyAddress = tomlContents?.proxy?.address;
 
   /**
    * 0. If contract does NOT require a proxy.
    * Deploy as normal contract
    */
-  if (!isProxy) {
+  if (!isProxyEnabled) {
     // a. Deploy the target contract
     const contractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
     const { waitForResult } = await contractFactory.deploy(deployConfig);
