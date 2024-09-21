@@ -1,9 +1,8 @@
 import type { BN, BNInput } from '@fuel-ts/math';
 import { toNumber, toBytes, bn, toHex } from '@fuel-ts/math';
-import { arrayify, toUtf8Bytes, toUtf8String } from '@fuel-ts/utils';
+import { arrayify } from '@fuel-ts/utils';
 
-import { STRING_REGEX } from '../../../matchers/sway-type-matchers';
-import type { Coder, GetCoderFn, GetCoderParams } from '../../abi-coder-types';
+import type { Coder } from '../../abi-coder-types';
 
 const createNumberCoder = (encodedLength: number, type: string): Coder<number> => ({
   type,
@@ -50,26 +49,4 @@ export const bool: Coder<boolean> = {
   encodedLength: u8.encodedLength,
   encode: (value: boolean): Uint8Array => u8.encode(value ? 1 : 0),
   decode: (data: Uint8Array): boolean => Boolean(u8.decode(data)).valueOf(),
-};
-
-/**
- * `string` coder
- *
- * @param encodedLength - The length of the encoded array.
- * @returns
- */
-export const string = ({ encodedLength }: { encodedLength: number }): Coder<string> => ({
-  type: 'string',
-  encodedLength: () => encodedLength,
-  encode: (value: string): Uint8Array => toUtf8Bytes(value),
-  decode: (data: Uint8Array): string => toUtf8String(data),
-});
-
-string.fromAbi = ({ type: { swayType } }: GetCoderParams, _getCoder: GetCoderFn) => {
-  const match = STRING_REGEX.exec(swayType)?.groups;
-  if (!match) {
-    throw new Error(`Unable to parse string length for "${swayType}".`);
-  }
-  const encodedLength = parseInt(match.length, 10);
-  return string({ encodedLength });
 };
