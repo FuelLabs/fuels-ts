@@ -21,9 +21,9 @@ export async function deployContract(
   debug(`Deploying contract for ABI: ${abiPath}`);
 
   if (existsSync(storageSlotsPath)) {
-    const storageSlots = readFileSync(storageSlotsPath, 'utf-8');
+    const storageSlots = JSON.parse(readFileSync(storageSlotsPath, 'utf-8'));
     // eslint-disable-next-line no-param-reassign
-    deployConfig.storageSlots = JSON.parse(storageSlots);
+    deployConfig.storageSlots = storageSlots;
   }
 
   const targetBytecode = readFileSync(binaryPath);
