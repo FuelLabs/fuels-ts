@@ -35,73 +35,76 @@ export async function deployContract(
   const isProxy = tomlContents?.proxy?.enabled;
   const proxyAddress = tomlContents?.proxy?.address;
 
-  if (isProxy) {
-    if (proxyAddress) {
-      /**
-       * If the proxy address is already set, we need to deploy the target contract
-       * and update the address at the proxy address with the new target contract ID.
-       */
+  /**
+   * 0. If contract does NOT require a proxy.
+   * Deploy as normal contract
+   */
+  if (!isProxy) {
+    // a. Deploy the target contract
+    const contractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
+    const { waitForResult } = await contractFactory.deploy(deployConfig);
+    const { contract } = await waitForResult();
+    return contract.id.toB256();
+  }
 
-      // Deploy the target contract
-      const targetContractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
-      const { waitForResult: waitForTarget } = await targetContractFactory.deploy(deployConfig);
-      const { contract: targetContract } = await waitForTarget();
-
-      // Update the contract at the proxy address with the new target contract ID
-      const proxyContract = new Contract(proxyAddress, proxyAbi, wallet);
-      const { waitForResult: waitForProxyUpdate } = await proxyContract.functions
-        .set_proxy_target({ bits: targetContract.id.toB256() })
-        .call();
-
-      await waitForProxyUpdate();
-
-      return proxyAddress;
-    }
-
-    /**
-     * If the proxy address is not set, we need to deploy the proxy and the target
-     *  contract and set the proxy address in the target contracts TOML file.
-     */
-
-    // Deploy the target contract
+  /**
+   * 1. If contract DOES require a proxy and HAVE the `address` property set in their `Forc.Toml` file.
+   * We need to re-deploy the target contract and update its ID in the proxy contract.
+   */
+  if (proxyAddress) {
+    // a. Deploy the target contract
     const targetContractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
     const { waitForResult: waitForTarget } = await targetContractFactory.deploy(deployConfig);
     const { contract: targetContract } = await waitForTarget();
 
-    // Deploy the SR-C14 Compliant / Proxy Contract
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { storageSlots, stateRoot, ...commonDeployConfig } = deployConfig;
-
-    const proxyDeployConfig: DeployContractOptions = {
-      ...commonDeployConfig,
-      configurableConstants: {
-        INITIAL_TARGET: { bits: targetContract.id.toB256() },
-        INITIAL_OWNER: { Initialized: { Address: { bits: wallet.address.toB256() } } },
-      },
-    };
-
-    const { waitForResult: waitForProxy } = await proxyFactory.deploy(proxyDeployConfig);
-    const { contract: proxyContract } = await waitForProxy();
-
-    // Initialize the proxy contract
-    const { waitForResult: waitForProxyInit } = await proxyContract.functions
-      .initialize_proxy()
+    // b. Update proxy contract with the new target contract ID
+    const proxyContract = new Contract(proxyAddress, proxyAbi, wallet);
+    const { waitForResult: waitForProxyUpdate } = await proxyContract.functions
+      .set_proxy_target({ bits: targetContract.id.toB256() })
       .call();
 
-    await waitForProxyInit();
+    await waitForProxyUpdate();
 
-    const proxyContractId = proxyContract.id.toB256();
-
-    // Write the address of the proxy contract to target TOML
-    setForcTomlProxyAddress(contractPath, proxyContractId);
-
-    return proxyContractId;
+    return proxyAddress;
   }
 
-  // If the contract does not have a proxy, we can deploy it as a normal contract
-  const contractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
-  const { waitForResult } = await contractFactory.deploy(deployConfig);
-  const { contract } = await waitForResult();
+  /**
+   * 2. If contract DOES require proxy and the address is NOT set.
+   * We need to deploy the proxy and the target contracts, and update the
+   * [proxy].address property in the users' Forc.Toml file.
+   */
 
-  return contract.id.toB256();
+  // a. Deploy the target contract
+  const targetContractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
+  const { waitForResult: waitForTarget } = await targetContractFactory.deploy(deployConfig);
+  const { contract: targetContract } = await waitForTarget();
+
+  // b. Deploy the SR-C14 Compliant / Proxy Contract
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { storageSlots, stateRoot, ...commonDeployConfig } = deployConfig;
+
+  const proxyDeployConfig: DeployContractOptions = {
+    ...commonDeployConfig,
+    configurableConstants: {
+      INITIAL_TARGET: { bits: targetContract.id.toB256() },
+      INITIAL_OWNER: { Initialized: { Address: { bits: wallet.address.toB256() } } },
+    },
+  };
+
+  const { waitForResult: waitForProxy } = await proxyFactory.deploy(proxyDeployConfig);
+  const { contract: proxyContract } = await waitForProxy();
+
+  // c. Initialize the proxy contract
+  const { waitForResult: waitForProxyInit } = await proxyContract.functions
+    .initialize_proxy()
+    .call();
+
+  await waitForProxyInit();
+
+  const proxyContractId = proxyContract.id.toB256();
+
+  // d. Write the address of the proxy contract to user's Forc.Toml file
+  setForcTomlProxyAddress(contractPath, proxyContractId);
+
+  return proxyContractId;
 }
