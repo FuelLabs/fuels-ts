@@ -58,7 +58,7 @@ describe('deploy', { timeout: 180000 }, () => {
     expect(firstFuelsContents.fooBar).toMatch(/0x/);
   });
 
-  it('should run `deploy` command [with proxy redeploy]', async () => {
+  it('should run `deploy` command [with proxy re-deploy]', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
         port: '4000',
@@ -144,5 +144,9 @@ describe('deploy', { timeout: 180000 }, () => {
      *   Now, calling `test_function` shuld return `false` instead.
      */
     expect(await executeTargetContract()).toBe(false); // FALSE
+  });
+
+  it('should run `deploy` command [with proxy and chunk re-deploy]', async () => {
+    // TODO: Implement test
   });
 });
