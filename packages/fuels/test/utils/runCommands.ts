@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, rmSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join, basename } from 'path';
 
 import { Commands } from '../../src';
@@ -94,6 +94,7 @@ export type InitParams = BaseParams & {
   fuelCorePath?: string;
   autoStartFuelCore?: boolean;
   build?: boolean;
+  privateKey?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -111,6 +112,7 @@ export async function runInit(params: InitParams) {
     forcPath,
     fuelCorePath,
     workspace,
+    privateKey,
   } = params;
 
   const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
@@ -128,7 +130,19 @@ export async function runInit(params: InitParams) {
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
   ].flat();
 
-  return runCommand(Commands.init, flags);
+  const command = await runCommand(Commands.init, flags);
+
+  if (privateKey) {
+    const configPath = join(root, 'fuels.config.ts');
+    const config = readFileSync(configPath, 'utf-8');
+
+    const search = /(^.*fuelCorePath:.*$)/m;
+    const replace = `$1\n  privateKey: '${privateKey}',`;
+
+    writeFileSync(configPath, config.replace(search, replace));
+  }
+
+  return command;
 }
 
 export async function runBuild(params: BuildParams) {
