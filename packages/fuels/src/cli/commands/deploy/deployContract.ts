@@ -78,8 +78,10 @@ export async function deployContract(
     const { contract: targetContract } = await waitForTarget();
 
     // Deploy the SR-C14 Compliant / Proxy Contract
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { storageSlots, stateRoot, ...desiredDeployConfig } = deployConfig;
     const proxyDeployConfig: DeployContractOptions = {
-      ...deployConfig,
+      ...desiredDeployConfig,
       configurableConstants: {
         INITIAL_TARGET: { bits: targetContract.id.toB256() },
         INITIAL_OWNER: { Initialized: { Address: { bits: wallet.address.toB256() } } },
