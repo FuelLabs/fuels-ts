@@ -119,7 +119,7 @@ describe('deploy', { timeout: 180000 }, () => {
     expect(await executeTargetContract()).toBe(true); // TRUE
 
     /**
-     * b) Modify `main.sw` method before second deploy
+     * c) Modify `main.sw` method before second deploy
      *   This will make the method return `false` instead of `true`.
      */
     const mainPath = join(paths.upgradableContractPath, 'src', 'main.sw');
@@ -140,7 +140,7 @@ describe('deploy', { timeout: 180000 }, () => {
     expect(firstFuelsContents.upgradable).toEqual(secondFuelsContents.upgradable);
 
     /**
-     * c) Interact with target contract
+     * d) Interact with target contract
      *   Now, calling `test_function` should return `false` instead.
      */
     expect(await executeTargetContract()).toBe(false); // FALSE
