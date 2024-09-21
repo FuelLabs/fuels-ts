@@ -16,19 +16,20 @@ import {
  * @group node
  */
 describe('deploy', { timeout: 180000 }, () => {
-  const paths = bootstrapProject(__filename);
+  let paths = bootstrapProject(__filename);
 
-  afterAll(() => {
+  beforeEach(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
+    resetDiskAndMocks(paths.root);
+    paths = bootstrapProject(__filename);
   });
 
-  afterAll(() => {
+  afterEach(() => {
     resetDiskAndMocks(paths.root);
   });
 
   // TODO: Unskip test
-  it.skip('should run `deploy` command', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  it('should run `deploy` command', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
         port: '4000',
