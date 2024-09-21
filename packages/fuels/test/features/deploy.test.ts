@@ -1,5 +1,5 @@
 import { Contract } from '@fuel-ts/program';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import { launchTestNode } from '../../src/test-utils';
@@ -78,6 +78,10 @@ describe('deploy', { timeout: 180000 }, () => {
       privateKey: wallet.privateKey,
     });
 
+    /**
+     * 1) First deploy
+     *  Validate if contract's json was written.
+     */
     await runBuild({ root: paths.root });
     await runDeploy({ root: paths.root });
 
@@ -88,23 +92,57 @@ describe('deploy', { timeout: 180000 }, () => {
     expect(firstFuelsContents.fooBar).toMatch(/0x/);
     expect(firstFuelsContents.upgradable).toMatch(/0x/);
 
+    /**
+     * a) Add helper
+     *   For interacting with deployed contract
+     */
+    async function executeTargetContract() {
+      const upgradableContractId = firstFuelsContents.upgradable;
+      const upgradableAbi = JSON.parse(
+        readFileSync(
+          join(paths.upgradableContractPath, 'out', 'debug', 'upgradable-abi.json'),
+          'utf-8'
+        )
+      );
+
+      const targetContract = new Contract(upgradableContractId, upgradableAbi, wallet);
+      const res = await targetContract.functions.test_function().call();
+      const { value } = await res.waitForResult();
+
+      return value;
+    }
+
+    /**
+     * b) Interact with target contract
+     *   Calling `test_function` shuld return `true` for the first execution.
+     */
+    expect(await executeTargetContract()).toBe(true); // TRUE
+
+    /**
+     * b) Modify `main.sw` method before second deploy
+     *   This will make the method return `false` instead of `true`.
+     */
+    const mainPath = join(paths.upgradableContractPath, 'src', 'main.sw');
+    const mainContents = readFileSync(mainPath, 'utf-8');
+
+    writeFileSync(mainPath, mainContents.replace(/true/, 'false'));
+
+    /**
+     * 2) Second deploy
+     *   Validate if contract's json was written and is identical
+     *   to the first run (IDs should not change).
+     */
+    await runBuild({ root: paths.root });
     await runDeploy({ root: paths.root });
 
     const secondFuelsContents = JSON.parse(readFileSync(paths.contractsJsonPath, 'utf-8'));
 
     expect(firstFuelsContents.upgradable).toEqual(secondFuelsContents.upgradable);
 
-    const proxyContractAddress = secondFuelsContents.upgradable;
-    const abi = JSON.parse(
-      readFileSync(
-        join(paths.upgradableContractPath, 'out', 'debug', 'upgradable-abi.json'),
-        'utf-8'
-      )
-    );
-
-    const proxyContract = new Contract(proxyContractAddress, abi, wallet);
-    const { waitForResult } = await proxyContract.functions.test_function().call();
-    const { value } = await waitForResult();
-    expect(value).toBe(true);
+    /**
+     * c) Interact with target contract
+     *   Now, calling `test_function` shuld return `false` instead.
+     */
+    expect(await executeTargetContract()).toBe(false); // FALSE
   });
 });
