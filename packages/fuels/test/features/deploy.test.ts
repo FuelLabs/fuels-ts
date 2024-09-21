@@ -114,7 +114,7 @@ describe('deploy', { timeout: 180000 }, () => {
 
     /**
      * b) Interact with target contract
-     *   Calling `test_function` shuld return `true` for the first execution.
+     *   Calling `test_function` should return `true` for the first execution.
      */
     expect(await executeTargetContract()).toBe(true); // TRUE
 
@@ -141,7 +141,7 @@ describe('deploy', { timeout: 180000 }, () => {
 
     /**
      * c) Interact with target contract
-     *   Now, calling `test_function` shuld return `false` instead.
+     *   Now, calling `test_function` should return `false` instead.
      */
     expect(await executeTargetContract()).toBe(false); // FALSE
   });
