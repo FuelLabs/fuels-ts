@@ -28,7 +28,6 @@ describe('deploy', { timeout: 180000 }, () => {
     resetDiskAndMocks(paths.root);
   });
 
-  // TODO: Unskip test
   it('should run `deploy` command', async () => {
     using launched = await launchTestNode({
       nodeOptions: {
