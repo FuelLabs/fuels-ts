@@ -35,12 +35,17 @@ describe('deploy', { timeout: 180000 }, () => {
       },
     });
 
+    const {
+      wallets: [wallet],
+    } = launched;
+
     await runInit({
       root: paths.root,
       workspace: paths.workspaceDir,
       output: paths.outputDir,
       forcPath: paths.forcPath,
       fuelCorePath: paths.fuelCorePath,
+      privateKey: wallet.privateKey,
     });
 
     await runBuild({ root: paths.root });
@@ -70,6 +75,7 @@ describe('deploy', { timeout: 180000 }, () => {
       output: paths.outputDir,
       forcPath: paths.forcPath,
       fuelCorePath: paths.fuelCorePath,
+      privateKey: wallet.privateKey,
     });
 
     await runBuild({ root: paths.root });
