@@ -20,24 +20,15 @@ export async function deployContract(
 ) {
   debug(`Deploying contract for ABI: ${abiPath}`);
 
-  const bytecode = readFileSync(binaryPath);
-
   if (existsSync(storageSlotsPath)) {
-    const storageSlots = JSON.parse(readFileSync(storageSlotsPath, 'utf-8'));
-    if (storageSlots.length) {
-      // Automatically inject `storageSlots` if it's not an empty array.
-      // eslint-disable-next-line no-param-reassign
-      deployConfig.storageSlots = storageSlots;
-    } else {
-      // Or ensure `storageSlots` is not set
-      // eslint-disable-next-line no-param-reassign
-      deployConfig.storageSlots = undefined;
-      // eslint-disable-next-line no-param-reassign
-      delete deployConfig?.storageSlots;
-    }
+    const storageSlots = readFileSync(storageSlotsPath, 'utf-8');
+    // eslint-disable-next-line no-param-reassign
+    deployConfig.storageSlots = JSON.parse(storageSlots);
   }
 
-  const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
+  const targetBytecode = readFileSync(binaryPath);
+  const targetAbi = JSON.parse(readFileSync(abiPath, 'utf-8'));
+
   const proxyAbi = Src14OwnedProxy.abi;
   const proxyFactory = new Src14OwnedProxyFactory(wallet);
 
@@ -52,7 +43,7 @@ export async function deployContract(
        */
 
       // Deploy the target contract
-      const targetContractFactory = new ContractFactory(bytecode, abi, wallet);
+      const targetContractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
       const { waitForResult: waitForTarget } = await targetContractFactory.deploy(deployConfig);
       const { contract: targetContract } = await waitForTarget();
 
@@ -73,15 +64,16 @@ export async function deployContract(
      */
 
     // Deploy the target contract
-    const targetContractFactory = new ContractFactory(bytecode, abi, wallet);
+    const targetContractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
     const { waitForResult: waitForTarget } = await targetContractFactory.deploy(deployConfig);
     const { contract: targetContract } = await waitForTarget();
 
     // Deploy the SR-C14 Compliant / Proxy Contract
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { storageSlots, stateRoot, ...desiredDeployConfig } = deployConfig;
+    const { storageSlots, stateRoot, ...commonDeployConfig } = deployConfig;
+
     const proxyDeployConfig: DeployContractOptions = {
-      ...desiredDeployConfig,
+      ...commonDeployConfig,
       configurableConstants: {
         INITIAL_TARGET: { bits: targetContract.id.toB256() },
         INITIAL_OWNER: { Initialized: { Address: { bits: wallet.address.toB256() } } },
@@ -107,7 +99,7 @@ export async function deployContract(
   }
 
   // If the contract does not have a proxy, we can deploy it as a normal contract
-  const contractFactory = new ContractFactory(bytecode, abi, wallet);
+  const contractFactory = new ContractFactory(targetBytecode, targetAbi, wallet);
   const { waitForResult } = await contractFactory.deploy(deployConfig);
   const { contract } = await waitForResult();
 
