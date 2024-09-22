@@ -44,4 +44,6 @@ Heap types are types with a dynamic length that we do not know at compile time. 
 
 ## Full Example
 
+Here is the full example of the working with bytes functions:
+
 <<< @/../../docs-snippets2/src/encoding/working-with-bytes.ts#full{ts:line-numbers}

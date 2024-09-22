@@ -1,2 +1,2 @@
 [workspace]
-members = ["counter", "script-sum"]
+members = ["counter", "script-sum", "echo-values"]

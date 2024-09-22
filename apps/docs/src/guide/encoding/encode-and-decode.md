@@ -43,4 +43,6 @@ A similar approach can be taken with [Predicates](../predicates/index.md); howev
 
 ## Full Example
 
+Here is the full example of the encoding and decoding methods:
+
 <<< @/../../docs-snippets2/src/encoding/encode-and-decode.ts#full{ts:line-numbers}
