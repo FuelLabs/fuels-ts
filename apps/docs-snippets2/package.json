@@ -1,6 +1,6 @@
 {
-  "name": "@fuel-ts/docs-snippets2",
-  "version": "0.67.0",
+  "name": "docs-snippets2",
+  "version": "1.0.0",
   "description": "",
   "private": true,
   "scripts": {
