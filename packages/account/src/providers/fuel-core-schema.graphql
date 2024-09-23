@@ -63,6 +63,11 @@ input BalanceFilterInput {
   owner: Address!
 }
 
+type Blob {
+  id: BlobId!
+  bytecode: HexString!
+}
+
 scalar BlobId
 
 type Block {
@@ -220,6 +225,7 @@ type ConsensusParameters {
   feeParams: FeeParameters!
   baseAssetId: AssetId!
   blockGasLimit: U64!
+  blockTransactionSizeLimit: U64!
   chainId: U64!
   gasCosts: GasCosts!
   privilegedAddress: Address!
@@ -942,6 +948,12 @@ type Query {
     last: Int
     before: String
   ): BalanceConnection!
+  blob(
+    """
+    ID of the Blob
+    """
+    id: BlobId!
+  ): Blob
   block(
     """
     ID of the block
@@ -1087,6 +1099,9 @@ type Query {
     """
     id: RelayedTransactionId!
   ): RelayedTransactionStatus
+  consensusParameters(version: Int!): ConsensusParameters!
+  stateTransitionBytecodeByVersion(version: Int!): StateTransitionBytecode
+  stateTransitionBytecodeByRoot(root: HexString!): StateTransitionBytecode!
 }
 
 type Receipt {
@@ -1208,6 +1223,11 @@ type SqueezedOutStatus {
   reason: String!
 }
 
+type StateTransitionBytecode {
+  root: HexString!
+  bytecode: UploadedBytecode!
+}
+
 type StateTransitionPurpose {
   root: Bytes32!
 }
@@ -1242,6 +1262,13 @@ type Subscription {
   Submits transaction to the `TxPool` and await either confirmation or failure.
   """
   submitAndAwait(tx: HexString!): TransactionStatus!
+
+  """
+  Submits the transaction to the `TxPool` and returns a stream of events.
+  Compared to the `submitAndAwait`, the stream also contains `
+  SubmittedStatus` as an intermediate state.
+  """
+  submitAndAwaitStatus(tx: HexString!): TransactionStatus!
 }
 
 type SuccessStatus {
@@ -1363,6 +1390,23 @@ scalar U32
 scalar U64
 
 union UpgradePurpose = ConsensusParametersPurpose | StateTransitionPurpose
+
+type UploadedBytecode {
+  """
+  Combined bytecode of all uploaded subsections.
+  """
+  bytecode: HexString!
+
+  """
+  Number of uploaded subsections (if incomplete).
+  """
+  uploadedSubsectionsNumber: Int
+
+  """
+  Indicates if the bytecode upload is complete.
+  """
+  completed: Boolean!
+}
 
 scalar UtxoId
 

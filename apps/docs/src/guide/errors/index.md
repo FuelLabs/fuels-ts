@@ -228,6 +228,12 @@ When the word list length is not equal to 2048.
 
 The word list provided to the mnemonic length should be equal to 2048.
 
+### `INVALID_URL`
+
+When the URL provided is invalid.
+
+Ensure that the URL is valid.
+
 ### `JSON_ABI_ERROR`
 
 When an ABI type does not conform to the correct format.
@@ -264,6 +270,12 @@ When the Fuel Node info cache is empty; This is usually caused by not being conn
 
 Ensure that the provider has connected to a Fuel Node successfully.
 
+### `NOT_ENOUGH_FUNDS`
+
+When the account sending the transaction does not have enough funds to cover the fee.
+
+Ensure that the account creating the transaction has been funded appropriately.
+
 ### `TIMEOUT_EXCEEDED`
 
 When the timeout has been exceeded for a given operation.
@@ -299,11 +311,6 @@ It could be that the passphrase is incorrect and/or the wallet does _not_ exist 
 When the workspace is not detected in the directory indicated in the message.
 
 Ensure that the workspace is present in the directory specified.
-
-### `HASHER_LOCKED`
-
-The hashing algorithm is currently locked, any subsequent attempts to register a new implementation will throw this error.
-The purpose of the lock function is to provide a way to ensure that the implementation of the specific hashing algorithm cannot be changed once it is locked. This can be useful in scenarios where you want to guarantee the integrity and consistency of the hashing function throughout your application.
 
 ### `UNKNOWN`
 

@@ -1,5 +1,38 @@
 # Change Log
 
+## 0.94.6
+
+### Patch Changes
+
+- Updated dependencies [aef7282]
+  - @fuel-ts/errors@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/errors@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.2
+
 ## 0.94.1
 
 ### Patch Changes

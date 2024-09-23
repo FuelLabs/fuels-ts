@@ -53,7 +53,9 @@ describe('CLI', { timeout: 15_000 }, () => {
     let originalTemplateFiles = await getAllFiles(paths.templateSource);
     originalTemplateFiles = filterOriginalTemplateFiles(originalTemplateFiles);
 
-    const testProjectFiles = await getAllFiles(paths.projectRoot);
+    const testProjectFiles = (await getAllFiles(paths.projectRoot)).filter(
+      (filename) => !filename.includes('dist')
+    );
 
     expect(originalTemplateFiles.sort()).toEqual(testProjectFiles.sort());
   });
@@ -68,7 +70,7 @@ describe('CLI', { timeout: 15_000 }, () => {
       args,
     });
 
-    const fuelToolchainPath = join(paths.projectRoot, 'sway-programs', 'fuel-toolchain.toml');
+    const fuelToolchainPath = join(paths.projectRoot, 'fuel-toolchain.toml');
     const fuelToolchain = readFileSync(fuelToolchainPath, 'utf-8');
     const parsedFuelToolchain = toml.parse(fuelToolchain);
 

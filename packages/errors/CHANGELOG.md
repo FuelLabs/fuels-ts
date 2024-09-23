@@ -1,5 +1,43 @@
 # @fuel-ts/errors
 
+## 0.94.6
+
+### Patch Changes
+
+- aef7282: feat: `provider.url` now returns auth url
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- Updated dependencies [942b56b]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- a059ea1: feat: map 'not enough coins' error
+- 482bbf0: chore: removed redundant crypto functionality
+- Updated dependencies [b00fd02]
+  - @fuel-ts/versions@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [b67ded2]
+  - @fuel-ts/versions@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [ccd94fc]
+  - @fuel-ts/versions@0.94.2
+
 ## 0.94.1
 
 ### Patch Changes

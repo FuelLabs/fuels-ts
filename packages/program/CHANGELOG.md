@@ -1,5 +1,102 @@
 # Change Log
 
+## 0.94.6
+
+### Patch Changes
+
+- Updated dependencies [99d39e9]
+- Updated dependencies [a9f31ca]
+- Updated dependencies [9719c1b]
+- Updated dependencies [5efe23d]
+- Updated dependencies [aef7282]
+- Updated dependencies [c98461f]
+- Updated dependencies [6a920ee]
+- Updated dependencies [c968ac0]
+- Updated dependencies [c21096c]
+- Updated dependencies [4bb8625]
+  - @fuel-ts/transactions@0.94.6
+  - @fuel-ts/account@0.94.6
+  - @fuel-ts/abi-coder@0.94.6
+  - @fuel-ts/address@0.94.6
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/math@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- Updated dependencies [309b8d5]
+- Updated dependencies [2ce9ce5]
+- Updated dependencies [37eab14]
+  - @fuel-ts/account@0.94.5
+  - @fuel-ts/transactions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/abi-coder@0.94.5
+  - @fuel-ts/address@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [7fc8d24]
+- Updated dependencies [24d4d03]
+- Updated dependencies [121eca3]
+- Updated dependencies [be1c43f]
+- Updated dependencies [7d74c8c]
+- Updated dependencies [6bef838]
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [90a1d0f]
+- Updated dependencies [1b4db70]
+- Updated dependencies [4cbba82]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/account@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/abi-coder@0.94.4
+  - @fuel-ts/address@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/transactions@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- Updated dependencies [a36626a]
+- Updated dependencies [2b45e8d]
+- Updated dependencies [e286557]
+  - @fuel-ts/transactions@0.94.3
+  - @fuel-ts/account@0.94.3
+  - @fuel-ts/abi-coder@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/utils@0.94.3
+  - @fuel-ts/address@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [3b59f1f]
+- Updated dependencies [01e2f0e]
+- Updated dependencies [ccd94fc]
+- Updated dependencies [986a247]
+  - @fuel-ts/account@0.94.2
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/abi-coder@0.94.2
+  - @fuel-ts/address@0.94.2
+  - @fuel-ts/transactions@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
 ## 0.94.1
 
 ### Patch Changes

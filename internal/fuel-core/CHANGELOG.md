@@ -1,5 +1,11 @@
 # @internal/fuel-core
 
+## 0.89.1
+
+### Patch Changes
+
+- ccd94fc: chore: upgrade `fuel-core@0.34.0`
+
 ## 0.89.0
 
 ### Minor Changes

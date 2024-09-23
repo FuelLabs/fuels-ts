@@ -9,30 +9,34 @@
     "build": "pnpm run xprebuild && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ui": "./test/ui/test-ui.sh"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.8.1",
-    "@fuels/react": "^0.20.0",
-    "fuels": "workspace:*",
-    "@tanstack/react-query": "^5.51.23",
+    "@fuels/connectors": "^0.27.1",
+    "@fuels/react": "^0.27.1",
+    "@tanstack/react-query": "^5.55.4",
+    "@wagmi/connectors": "^5.1.12",
+    "@wagmi/core": "^2.13.6",
     "dotenv": "^16.4.5",
-    "next": "14.2.5",
+    "fuels": "workspace:*",
+    "next": "14.2.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-use": "^17.5.1"
   },
   "devDependencies": {
-    "@types/node": "^22.2.0",
-    "@types/react": "^18.3.3",
+    "@types/node": "^22.5.5",
+    "@playwright/test": "^1.47.2",
+    "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
-    "eslint-config-next": "14.2.5",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.10",
-    "typescript": "~5.4.5",
-    "vitest": "^1.6.0"
+    "eslint-config-next": "14.2.13",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.12",
+    "typescript": "~5.6.2",
+    "vitest": "^2.0.5"
   }
 }

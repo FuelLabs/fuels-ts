@@ -11,6 +11,7 @@ import {
   transactionRequestify,
   isRequestInputResource,
   isRequestInputResourceFromOwner,
+  isRequestInputCoinOrMessage,
 } from '../providers';
 import type {
   CallResult,
@@ -95,7 +96,7 @@ export class Predicate<
       request.removeWitness(placeholderIndex);
     }
 
-    request.inputs.filter(isRequestInputResource).forEach((input) => {
+    request.inputs.filter(isRequestInputCoinOrMessage).forEach((input) => {
       if (isRequestInputResourceFromOwner(input, this.address)) {
         // eslint-disable-next-line no-param-reassign
         input.predicate = hexlify(this.bytes);
@@ -117,6 +118,7 @@ export class Predicate<
    */
   sendTransaction(transactionRequestLike: TransactionRequestLike): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+
     return super.sendTransaction(transactionRequest, { estimateTxDependencies: false });
   }
 

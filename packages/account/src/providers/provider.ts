@@ -10,6 +10,7 @@ import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
 import type { GraphQLResponse } from 'graphql-request/src/types';
+import gql from 'graphql-tag';
 import { clone } from 'ramda';
 
 import { getSdk as getOperationsSdk } from './__generated__/operations';
@@ -26,7 +27,7 @@ import type {
   GqlTxParameters as TxParameters,
   GqlPageInfo,
   GqlRelayedTransactionFailed,
-  GqlMessage,
+  Requester,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -59,6 +60,7 @@ import {
 } from './utils';
 import type { RetryOptions } from './utils/auto-retry-fetch';
 import { autoRetryFetch } from './utils/auto-retry-fetch';
+import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
 
 const MAX_RETRIES = 10;
 
@@ -89,6 +91,16 @@ export type Block = {
   height: BN;
   time: string;
   transactionIds: string[];
+  header: {
+    daHeight: BN;
+    stateTransitionBytecodeVersion: string;
+    transactionsCount: string;
+    transactionsRoot: string;
+    messageOutboxRoot: string;
+    eventInboxRoot: string;
+    prevRoot: string;
+    applicationHash: string;
+  };
 };
 
 export type GetCoinsResponse = {
@@ -309,6 +321,10 @@ export type ProviderOptions = {
    */
   retryOptions?: RetryOptions;
   /**
+   * Custom headers to include in the request.
+   */
+  headers?: RequestInit['headers'];
+  /**
    * Middleware to modify the request before it is sent.
    * This can be used to add headers, modify the body, etc.
    */
@@ -369,13 +385,27 @@ type NodeInfoCache = Record<string, NodeInfo>;
 
 type Operations = ReturnType<typeof getOperationsSdk>;
 
-type SdkOperations = Omit<Operations, 'submitAndAwait' | 'statusChange'> & {
+type SdkOperations = Omit<
+  Operations,
+  'submitAndAwait' | 'statusChange' | 'submitAndAwaitStatus'
+> & {
+  /**
+   * This method is DEPRECATED and will be REMOVED in v1.
+   *
+   * This method will hang until the transaction is fully processed, as described in https://github.com/FuelLabs/fuel-core/issues/2108.
+   *
+   * Please use the `submitAndAwaitStatus` method instead.
+   */
   submitAndAwait: (
     ...args: Parameters<Operations['submitAndAwait']>
   ) => Promise<ReturnType<Operations['submitAndAwait']>>;
   statusChange: (
     ...args: Parameters<Operations['statusChange']>
   ) => Promise<ReturnType<Operations['statusChange']>>;
+  submitAndAwaitStatus: (
+    ...args: Parameters<Operations['submitAndAwaitStatus']>
+  ) => Promise<ReturnType<Operations['submitAndAwaitStatus']>>;
+  getBlobs: (variables: { blobIds: string[] }) => Promise<{ blob: { id: string } | null }[]>;
 };
 
 /**
@@ -392,6 +422,10 @@ export default class Provider {
   }
 
   /** @hidden */
+  public url: string;
+  /** @hidden */
+  private urlWithoutAuth: string;
+  /** @hidden */
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
@@ -401,20 +435,25 @@ export default class Provider {
     resourceCacheTTL: undefined,
     fetch: undefined,
     retryOptions: undefined,
+    headers: undefined,
   };
 
   /**
    * @hidden
    */
   private static getFetchFn(options: ProviderOptions): NonNullable<ProviderOptions['fetch']> {
-    const { retryOptions, timeout } = options;
+    const { retryOptions, timeout, headers } = options;
 
     return autoRetryFetch(async (...args) => {
       const url = args[0];
       const request = args[1];
       const signal = timeout ? AbortSignal.timeout(timeout) : undefined;
 
-      let fullRequest: RequestInit = { ...request, signal };
+      let fullRequest: RequestInit = {
+        ...request,
+        signal,
+        headers: { ...request?.headers, ...headers },
+      };
 
       if (options.requestMiddleware) {
         fullRequest = await options.requestMiddleware(fullRequest);
@@ -431,14 +470,19 @@ export default class Provider {
    * @param options - Additional options for the provider
    * @hidden
    */
-  protected constructor(
-    public url: string,
-    options: ProviderOptions = {}
-  ) {
+  protected constructor(url: string, options: ProviderOptions = {}) {
+    const { url: rawUrl, urlWithoutAuth, headers } = Provider.extractBasicAuth(url);
+
+    this.url = rawUrl;
+    this.urlWithoutAuth = urlWithoutAuth;
     this.options = { ...this.options, ...options };
     this.url = url;
-    this.operations = this.createOperations();
 
+    if (headers) {
+      this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
+    }
+
+    this.operations = this.createOperations();
     const { resourceCacheTTL } = this.options;
     if (isDefined(resourceCacheTTL)) {
       if (resourceCacheTTL !== -1) {
@@ -451,6 +495,32 @@ export default class Provider {
     }
   }
 
+  private static extractBasicAuth(url: string): {
+    url: string;
+    urlWithoutAuth: string;
+    headers: ProviderOptions['headers'];
+  } {
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url);
+    } catch (error) {
+      throw new FuelError(FuelError.CODES.INVALID_URL, 'Invalid URL provided.', { url }, error);
+    }
+
+    const username = parsedUrl.username;
+    const password = parsedUrl.password;
+    const urlWithoutAuth = `${parsedUrl.origin}${parsedUrl.pathname}`;
+    if (!(username && password)) {
+      return { url, urlWithoutAuth: url, headers: undefined };
+    }
+
+    return {
+      url,
+      urlWithoutAuth,
+      headers: { Authorization: `Basic ${btoa(`${username}:${password}`)}` },
+    };
+  }
+
   /**
    * Creates a new instance of the Provider class. This is the recommended way to initialize a Provider.
    *
@@ -461,7 +531,9 @@ export default class Provider {
    */
   static async create(url: string, options: ProviderOptions = {}): Promise<Provider> {
     const provider = new Provider(url, options);
+
     await provider.fetchChainAndNodeInfo();
+
     return provider;
   }
 
@@ -471,7 +543,7 @@ export default class Provider {
    * @returns the chain information configuration.
    */
   getChain(): ChainInfo {
-    const chain = Provider.chainInfoCache[this.url];
+    const chain = Provider.chainInfoCache[this.urlWithoutAuth];
     if (!chain) {
       throw new FuelError(
         ErrorCode.CHAIN_INFO_CACHE_EMPTY,
@@ -487,7 +559,7 @@ export default class Provider {
    * @returns the node information configuration.
    */
   getNode(): NodeInfo {
-    const node = Provider.nodeInfoCache[this.url];
+    const node = Provider.nodeInfoCache[this.urlWithoutAuth];
     if (!node) {
       throw new FuelError(
         ErrorCode.NODE_INFO_CACHE_EMPTY,
@@ -523,8 +595,13 @@ export default class Provider {
    * @param options - Additional options for the provider.
    */
   async connect(url: string, options?: ProviderOptions): Promise<void> {
-    this.url = url;
+    const { url: rawUrl, urlWithoutAuth, headers } = Provider.extractBasicAuth(url);
+
+    this.url = rawUrl;
+    this.urlWithoutAuth = urlWithoutAuth;
     this.options = options ?? this.options;
+    this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
+
     this.operations = this.createOperations();
     await this.fetchChainAndNodeInfo();
   }
@@ -571,16 +648,16 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   private createOperations(): SdkOperations {
     const fetchFn = Provider.getFetchFn(this.options);
-    const gqlClient = new GraphQLClient(this.url, {
+    const gqlClient = new GraphQLClient(this.urlWithoutAuth, {
       fetch: (url: string, requestInit: RequestInit) => fetchFn(url, requestInit, this.options),
       responseMiddleware: (response: GraphQLResponse<unknown> | Error) => {
         if ('response' in response) {
           const graphQlResponse = response.response as GraphQLResponse;
+
           if (Array.isArray(graphQlResponse?.errors)) {
-            throw new FuelError(
-              FuelError.CODES.INVALID_REQUEST,
-              graphQlResponse.errors.map((err: Error) => err.message).join('\n\n')
-            );
+            for (const error of graphQlResponse.errors) {
+              handleGqlErrorMessage(error.message, error);
+            }
           }
         }
       },
@@ -594,7 +671,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
       if (isSubscription) {
         return FuelGraphqlSubscriber.create({
-          url: this.url,
+          url: this.urlWithoutAuth,
           query,
           fetchFn: (url, requestInit) => fetchFn(url as string, requestInit, this.options),
           variables: vars,
@@ -603,8 +680,33 @@ Supported fuel-core version: ${supportedVersion}.`
       return gqlClient.request(query, vars);
     };
 
+    const customOperations = (requester: Requester) => ({
+      getBlobs(variables: { blobIds: string[] }) {
+        const queryParams = variables.blobIds.map((_, i) => `$blobId${i}: BlobId!`).join(', ');
+        const blobParams = variables.blobIds
+          .map((_, i) => `blob${i}: blob(id: $blobId${i}) { id }`)
+          .join('\n');
+
+        const updatedVariables = variables.blobIds.reduce(
+          (acc, blobId, i) => {
+            acc[`blobId${i}`] = blobId;
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+
+        const document = gql`
+          query getBlobs(${queryParams}) {
+            ${blobParams}
+          }
+        `;
+
+        return requester(document, updatedVariables);
+      },
+    });
+
     // @ts-expect-error This is due to this function being generic. Its type is specified when calling a specific operation via provider.operations.xyz.
-    return getOperationsSdk(executeQuery);
+    return { ...getOperationsSdk(executeQuery), ...customOperations(executeQuery) };
   }
 
   /**
@@ -645,7 +747,7 @@ Supported fuel-core version: ${supportedVersion}.`
       vmBacktrace: nodeInfo.vmBacktrace,
     };
 
-    Provider.nodeInfoCache[this.url] = processedNodeInfo;
+    Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
     return processedNodeInfo;
   }
@@ -660,7 +762,7 @@ Supported fuel-core version: ${supportedVersion}.`
 
     const processedChain = processGqlChain(chain);
 
-    Provider.chainInfoCache[this.url] = processedChain;
+    Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
 
     return processedChain;
   }
@@ -739,12 +841,12 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param sendTransactionParams - The provider send transaction parameters (optional).
    * @returns A promise that resolves to the transaction response object.
    */
-  // #region Provider-sendTransaction
   async sendTransaction(
     transactionRequestLike: TransactionRequestLike,
     { estimateTxDependencies = true }: ProviderSendTxParams = {}
   ): Promise<TransactionResponse> {
     const transactionRequest = transactionRequestify(transactionRequestLike);
+    // #region Provider-sendTransaction
     if (estimateTxDependencies) {
       await this.estimateTxDependencies(transactionRequest);
     }
@@ -761,13 +863,14 @@ Supported fuel-core version: ${supportedVersion}.`
     if (isTransactionTypeScript(transactionRequest)) {
       abis = transactionRequest.abis;
     }
+    const subscription = await this.operations.submitAndAwaitStatus({ encodedTransaction });
 
-    const {
-      submit: { id: transactionId },
-    } = await this.operations.submit({ encodedTransaction });
-    this.#cacheInputs(transactionRequest.inputs, transactionId);
+    this.#cacheInputs(
+      transactionRequest.inputs,
+      transactionRequest.getTransactionId(this.getChainId())
+    );
 
-    return new TransactionResponse(transactionRequest, this, abis);
+    return new TransactionResponse(transactionRequest, this, abis, subscription);
   }
 
   /**
@@ -1331,6 +1434,25 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * Returns an array of blobIds that exist on chain, for a given array of blobIds.
+   *
+   * @param blobIds - blobIds to check.
+   * @returns - A promise that resolves to an array of blobIds that exist on chain.
+   */
+  async getBlobs(blobIds: string[]): Promise<string[]> {
+    const res = await this.operations.getBlobs({ blobIds });
+    const blobs: (string | null)[] = [];
+
+    Object.keys(res).forEach((key) => {
+      // @ts-expect-error keys are strings
+      const val = res[key];
+      blobs.push(val?.id ?? null);
+    });
+
+    return blobs.filter((v) => v) as string[];
+  }
+
+  /**
    * Returns block matching the given ID or height.
    *
    * @param idOrHeight - ID or height of the block.
@@ -1354,11 +1476,23 @@ Supported fuel-core version: ${supportedVersion}.`
       return null;
     }
 
+    const { header, height, id, transactions } = block;
+
     return {
-      id: block.id,
-      height: bn(block.height),
-      time: block.header.time,
-      transactionIds: block.transactions.map((tx) => tx.id),
+      id,
+      height: bn(height),
+      time: header.time,
+      header: {
+        applicationHash: header.applicationHash,
+        daHeight: bn(header.daHeight),
+        eventInboxRoot: header.eventInboxRoot,
+        messageOutboxRoot: header.messageOutboxRoot,
+        prevRoot: header.prevRoot,
+        stateTransitionBytecodeVersion: header.stateTransitionBytecodeVersion,
+        transactionsCount: header.transactionsCount,
+        transactionsRoot: header.transactionsRoot,
+      },
+      transactionIds: transactions.map((tx) => tx.id),
     };
   }
 
@@ -1382,6 +1516,16 @@ Supported fuel-core version: ${supportedVersion}.`
       id: block.id,
       height: bn(block.height),
       time: block.header.time,
+      header: {
+        applicationHash: block.header.applicationHash,
+        daHeight: bn(block.header.daHeight),
+        eventInboxRoot: block.header.eventInboxRoot,
+        messageOutboxRoot: block.header.messageOutboxRoot,
+        prevRoot: block.header.prevRoot,
+        stateTransitionBytecodeVersion: block.header.stateTransitionBytecodeVersion,
+        transactionsCount: block.header.transactionsCount,
+        transactionsRoot: block.header.transactionsRoot,
+      },
       transactionIds: block.transactions.map((tx) => tx.id),
     }));
 
@@ -1417,6 +1561,16 @@ Supported fuel-core version: ${supportedVersion}.`
       id: block.id,
       height: bn(block.height, 10),
       time: block.header.time,
+      header: {
+        applicationHash: block.header.applicationHash,
+        daHeight: bn(block.header.daHeight),
+        eventInboxRoot: block.header.eventInboxRoot,
+        messageOutboxRoot: block.header.messageOutboxRoot,
+        prevRoot: block.header.prevRoot,
+        stateTransitionBytecodeVersion: block.header.stateTransitionBytecodeVersion,
+        transactionsCount: block.header.transactionsCount,
+        transactionsRoot: block.header.transactionsRoot,
+      },
       transactionIds: block.transactions.map((tx) => tx.id),
       transactions: block.transactions.map(
         (tx) => new TransactionCoder().decode(arrayify(tx.rawPayload), 0)?.[0]
@@ -1434,13 +1588,24 @@ Supported fuel-core version: ${supportedVersion}.`
     transactionId: string
   ): Promise<Transaction<TTransactionType> | null> {
     const { transaction } = await this.operations.getTransaction({ transactionId });
+
     if (!transaction) {
       return null;
     }
-    return new TransactionCoder().decode(
-      arrayify(transaction.rawPayload),
-      0
-    )?.[0] as Transaction<TTransactionType>;
+
+    try {
+      return new TransactionCoder().decode(
+        arrayify(transaction.rawPayload),
+        0
+      )?.[0] as Transaction<TTransactionType>;
+    } catch (error) {
+      if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+        // eslint-disable-next-line no-console
+        console.warn('Unsupported transaction type encountered');
+        return null;
+      }
+      throw error;
+    }
   }
 
   /**
@@ -1454,9 +1619,20 @@ Supported fuel-core version: ${supportedVersion}.`
     } = await this.operations.getTransactions(paginationArgs);
 
     const coder = new TransactionCoder();
-    const transactions = edges.map(
-      ({ node: { rawPayload } }) => coder.decode(arrayify(rawPayload), 0)[0]
-    );
+    const transactions = edges
+      .map(({ node: { rawPayload } }) => {
+        try {
+          return coder.decode(arrayify(rawPayload), 0)[0];
+        } catch (error) {
+          if (error instanceof FuelError && error.code === ErrorCode.UNSUPPORTED_TRANSACTION_TYPE) {
+            // eslint-disable-next-line no-console
+            console.warn('Unsupported transaction type encountered');
+            return null;
+          }
+          throw error;
+        }
+      })
+      .filter((tx): tx is Transaction => tx !== null);
 
     return { transactions, pageInfo };
   }
@@ -1768,12 +1944,28 @@ Supported fuel-core version: ${supportedVersion}.`
    * @param nonce - The nonce of the message to retrieve.
    * @returns A promise that resolves to the Message object or null.
    */
-  async getMessageByNonce(nonce: string): Promise<GqlMessage | null> {
-    const { message } = await this.operations.getMessageByNonce({ nonce });
+  async getMessageByNonce(nonce: string): Promise<Message | null> {
+    const { message: rawMessage } = await this.operations.getMessageByNonce({ nonce });
 
-    if (!message) {
+    if (!rawMessage) {
       return null;
     }
+
+    const message: Message = {
+      messageId: InputMessageCoder.getMessageId({
+        sender: rawMessage.sender,
+        recipient: rawMessage.recipient,
+        nonce: rawMessage.nonce,
+        amount: bn(rawMessage.amount),
+        data: rawMessage.data,
+      }),
+      sender: Address.fromAddressOrString(rawMessage.sender),
+      recipient: Address.fromAddressOrString(rawMessage.recipient),
+      nonce: rawMessage.nonce,
+      amount: bn(rawMessage.amount),
+      data: InputMessageCoder.decodeData(rawMessage.data),
+      daHeight: bn(rawMessage.daHeight),
+    };
 
     return message;
   }

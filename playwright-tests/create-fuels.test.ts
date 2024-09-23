@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const WEB_SERVER_URL = 'http://127.0.0.1:3000';
+const WEB_SERVER_URL = 'http://localhost:5173';
 const FAUCET_URL = `${WEB_SERVER_URL}/faucet`;
 
 test.extend({
@@ -18,18 +18,17 @@ test('counter contract - increment function call works properly', async ({ page 
   const topUpWalletButton = page.getByText('Top-up Wallet');
   await topUpWalletButton.click();
 
-  const welcomeToFuelText = page.getByText('Welcome to Fuel');
-  await expect(welcomeToFuelText).toBeVisible();
+  await page.waitForTimeout(2000);
 
-  await page.waitForTimeout(4000);
+  const initialCounterValue = +page.getByTestId('counter').textContent;
 
   const incrementButton = page.getByText('Increment Counter');
   await incrementButton.click();
 
   await page.waitForTimeout(2000);
 
-  const counter = page.getByTestId('counter');
-  await expect(counter).toBeVisible();
+  const counterValueAfterIncrement = +page.getByTestId('counter').textContent;
+  expect(counterValueAfterIncrement).toEqual(initialCounterValue + 1);
 });
 
 test('top-up wallet button', async ({ page }) => {

@@ -1,6 +1,7 @@
 import type { AbstractAddress } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import debug from 'debug';
+import type { MockInstance } from 'vitest';
 
 import { logger, prefixLogger, defaultLogger } from '../src/index';
 
@@ -8,23 +9,30 @@ import { logger, prefixLogger, defaultLogger } from '../src/index';
  * @group node
  */
 describe('Logger Tests', () => {
-  let debugSpy;
+  let debugSpy: MockInstance;
 
   beforeEach(() => {
     debug.enable('test');
-    debugSpy = vi.spyOn(debug, 'log');
+    debugSpy = vi.spyOn(debug, 'log').mockImplementation(() => ({}));
   });
 
   afterEach(() => {
     debugSpy.mockRestore();
   });
 
+  // Removes ANSI color codes from strings
+  function clean(s: string) {
+    // eslint-disable-next-line no-control-regex
+    const reg = /\u001b[^m]*?m/g;
+    return s.replace(reg, '');
+  }
+
   it('should log info messages correctly', () => {
     const log = logger('test');
     const message = 'This is a message';
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`test ${message}`);
+    expect(clean(callArgs)).toContain(`test ${message}`);
   });
 
   it('should format a b256 string correctly', () => {
@@ -38,7 +46,7 @@ describe('Logger Tests', () => {
     log(formattedMessage, mockAddress);
 
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain('0x123456789abcdef');
+    expect(clean(callArgs)).toContain('0x123456789abcdef');
   });
 
   it('should prefix log messages correctly using prefixLogger', () => {
@@ -52,7 +60,7 @@ describe('Logger Tests', () => {
 
     log(message);
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`${prefix}:${component} ${message}`);
+    expect(clean(callArgs)).toContain(`${prefix}:${component} ${message}`);
   });
 
   it('should create a default logger and log messages correctly', () => {
@@ -64,7 +72,7 @@ describe('Logger Tests', () => {
     log(message);
 
     const callArgs = debugSpy.mock.calls[0][0];
-    expect(callArgs).toContain(`test-component ${message}`);
+    expect(clean(callArgs)).toContain(`test-component ${message}`);
   });
 
   it('should format BN values with commas correctly using formatter a', () => {

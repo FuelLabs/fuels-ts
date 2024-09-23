@@ -1,8 +1,10 @@
-import type { BN, Message } from 'fuels';
+import type { BigNumberish, BN, Message } from 'fuels';
 import { arrayify, bn, toHex, Wallet, ScriptTransactionRequest, randomBytes, hexlify } from 'fuels';
 
 import { CoverageContractFactory } from '../test/typegen/contracts';
+import type { MixedNativeEnumInput } from '../test/typegen/contracts/CoverageContract';
 import { SmallEnumInput } from '../test/typegen/contracts/Vectors';
+import type { Vec } from '../test/typegen/contracts/common';
 
 import { launchTestContract } from './utils';
 
@@ -240,7 +242,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test tuple > 8 bytes variable type', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = [bn(RUST_U32_MAX).add(1), bn(RUST_U32_MAX).add(2)];
+    const INPUT: [BigNumberish, BigNumberish] = [bn(RUST_U32_MAX).add(1), bn(RUST_U32_MAX).add(2)];
     const { waitForResult } = await contractInstance.functions.echo_tuple_u64(INPUT).call();
     const { value } = await waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
@@ -249,7 +251,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test tuple mixed variable type', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = [true, bn(RUST_U32_MAX).add(1)];
+    const INPUT: [boolean, BigNumberish] = [true, bn(RUST_U32_MAX).add(1)];
     const { waitForResult } = await contractInstance.functions.echo_tuple_mixed(INPUT).call();
     const { value } = await waitForResult();
     expect(JSON.stringify(value)).toStrictEqual(JSON.stringify(INPUT));
@@ -515,12 +517,12 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
       .echo_struct_vector_last([
         {
           foo: 1,
-          bar: 11337n,
+          bar: bn(11337).toHex(),
           baz: '123456789',
         },
         {
           foo: 2,
-          bar: 21337n,
+          bar: bn(21337).toHex(),
           baz: 'alphabet!',
         },
         last,
@@ -620,7 +622,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     const {
       value: { Ok },
     } = await waitForResult();
-    expect(Ok.toNumber()).toBe(20);
+    expect(Ok?.toNumber()).toBe(20);
 
     const call2 = await contractInstance.functions.types_result({ Ok: 0 }).call();
 
@@ -687,7 +689,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should test mixed native enum [Native->NotNative]', async () => {
     using contractInstance = await setupContract();
 
-    const input = MixedNativeEnum.Native;
+    const input: MixedNativeEnumInput = { Native: undefined };
     const expected = { NotNative: MixedNativeEnum.NotNative };
 
     const { waitForResult } = await contractInstance.functions.mixed_native_enum(input).call();
@@ -715,7 +717,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     const { value } = await waitForResult();
 
-    expect(value.map((v: BN) => v.toHex())).toStrictEqual([
+    expect(value.map((v: BN | undefined) => v?.toHex())).toStrictEqual([
       bn(4).toHex(),
       bn(100).toHex(),
       bn(450).toHex(),
@@ -732,7 +734,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
 
     const { value } = await waitForResult();
 
-    expect(value.map((v: BN) => v.toHex())).toStrictEqual([
+    expect(value.map((v: BN | undefined) => v?.toHex())).toStrictEqual([
       bn(3).toHex(),
       bn(450).toHex(),
       bn(202).toHex(),
@@ -761,7 +763,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   it('should support array in vec', async () => {
     using contractInstance = await setupContract();
 
-    const INPUT = [
+    const INPUT: [Vec<BigNumberish>, Vec<BigNumberish>] = [
       [0, 1, 2],
       [0, 1, 2],
     ];
@@ -836,5 +838,16 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     const { value: results } = await waitForResult();
 
     expect(results).toStrictEqual([1, 2, SmallEnumInput.Empty, INPUT_B, INPUT_A]);
+  });
+
+  it('should handle an enum from a library', async () => {
+    using contractInstance = await setupContract();
+
+    const { waitForResult } = await contractInstance.functions
+      .echo_enum_namespaced({ GameOver: 1 })
+      .call();
+
+    const { value } = await waitForResult();
+    expect(value).toStrictEqual({ GameOver: 1 });
   });
 });

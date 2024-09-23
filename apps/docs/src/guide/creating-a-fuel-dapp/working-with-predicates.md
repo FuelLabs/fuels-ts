@@ -4,6 +4,10 @@ This guide builds on the [Creating a Fuel dApp](./index.md) guide. Once you've g
 
 ![End result of this guide](../../public/working-with-predicates-end-result.png)
 
+You can also check it live, deployed to the Testnet:
+
+- [https://create-fuels-template.vercel.app/](https://create-fuels-template.vercel.app/)
+
 ## Adding a Configurable pin
 
 The current predicate functionality we have is a simple one that checks if the user has a pin. We will modify this predicate to accept a configurable pin. This will allow the user to set their own pin.
@@ -16,11 +20,11 @@ The first step is to modify the predicate contract to accept a configurable pin.
 
 2. Modifying the Frontend
 
-We will now add new button to the frontend that will update the `pin` in the predicate when clicked. To do this, we will modify the `./src/pages/predicate.tsx` file.
+We will now add new button to the frontend that will update the `pin` in the predicate when clicked. To do this, we will modify the `./src/routes/predicate.lazy.tsx` file.
 
 We will add a function called `changePin`, which will use the current pin in state to update the pin in the predicate as well as transfer 1000 to the predicate.
 
-<<< @/../../create-fuels-counter-guide/src/app/predicate/page.tsx#change-pin-react-function{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/routes/predicate.lazy.tsx#change-pin-react-function{ts:line-numbers}
 
 It would also be useful to change the placeholder text to say "Enter a new pin" instead of "Hint - the correct pin is 1337".
 

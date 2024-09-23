@@ -6,16 +6,19 @@
   "scripts": {
     "xprebuild": "fuels build",
     "dev": "vite",
-    "build": "pnpm xprebuild && tsc -b && vite build",
+    "build": "pnpm run xprebuild && tsc -b && vite build",
     "lint": "eslint .",
     "fuels:dev": "fuels dev",
-    "test": "vitest"
+    "test": "vitest",
+    "test:ui": "./test/ui/test-ui.sh"
   },
   "dependencies": {
-    "@fuels/connectors": "^0.8.1",
-    "@fuels/react": "^0.20.0",
-    "@tanstack/react-query": "^5.51.23",
-    "@tanstack/react-router": "^1.48.1",
+    "@fuels/connectors": "^0.27.1",
+    "@fuels/react": "^0.27.1",
+    "@tanstack/react-query": "^5.55.4",
+    "@tanstack/react-router": "^1.56.5",
+    "@wagmi/connectors": "^5.1.12",
+    "@wagmi/core": "^2.13.6",
     "dotenv": "^16.4.5",
     "fuels": "workspace:*",
     "react": "^18.3.1",
@@ -24,21 +27,22 @@
     "react-use": "^17.5.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.8.0",
-    "@tanstack/router-plugin": "^1.47.0",
-    "@types/react": "^18.3.3",
+    "@eslint/js": "^9.10.0",
+    "@tanstack/router-plugin": "^1.56.4",
+    "@playwright/test": "^1.47.2",
+    "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3",
-    "@vitejs/plugin-react-swc": "^3.5.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.9",
+    "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.10",
-    "typescript": "~5.4.5",
-    "typescript-eslint": "^8.0.0",
-    "vite": "^5.4.1",
-    "vitest": "^1.6.0"
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.12",
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.5.0",
+    "vite": "^5.4.7",
+    "vitest": "^2.0.5"
   }
 }

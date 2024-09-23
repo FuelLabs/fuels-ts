@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.94.1",
+  "version": "0.94.6",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -55,7 +55,9 @@
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
     "build:minified": "pnpm uglifyjs --compress --mangle --output dist/browser.min.mjs -- dist/browser.mjs",
-    "postbuild": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
+    "postbuild": "run-s type:declarations type:check",
+    "type:declarations": "tsc --emitDeclarationOnly -p tsconfig.dts.json",
+    "type:check": "tsc --noEmit",
     "prepublishOnly": "cp ../../README.md ./README.md"
   },
   "license": "Apache-2.0",
@@ -78,22 +80,22 @@
     "@fuel-ts/versions": "workspace:*",
     "bundle-require": "^5.0.0",
     "chalk": "4",
-    "chokidar": "^3.5.3",
+    "chokidar": "^3.6.0",
     "commander": "12.1.0",
-    "esbuild": "^0.22.0",
-    "glob": "^10.2.6",
+    "esbuild": "^0.23.1",
+    "glob": "^10.4.5",
     "handlebars": "^4.7.8",
     "joycon": "^3.1.1",
     "lodash.camelcase": "^4.3.0",
     "portfinder": "^1.0.32",
     "toml": "^3.0.0",
-    "uglify-js": "^3.19.2",
+    "uglify-js": "^3.19.3",
     "yup": "^1.4.0"
   },
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.9",
     "@types/rimraf": "^3.0.2",
-    "vite": "^5.4.1"
+    "vite": "^5.4.7"
   },
   "keywords": [
     "ethereum",

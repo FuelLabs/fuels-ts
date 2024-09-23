@@ -1,11 +1,11 @@
 import { Address } from '@fuel-ts/address';
 import { ZeroBytes32 } from '@fuel-ts/address/configs';
-import { randomBytes } from '@fuel-ts/crypto';
+import { randomBytes, randomUUID } from '@fuel-ts/crypto';
 import { FuelError, ErrorCode } from '@fuel-ts/errors';
 import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import { BN, bn } from '@fuel-ts/math';
 import type { Receipt } from '@fuel-ts/transactions';
-import { InputType, ReceiptType, TransactionType } from '@fuel-ts/transactions';
+import { InputType, ReceiptType } from '@fuel-ts/transactions';
 import { DateTime, arrayify, sleep } from '@fuel-ts/utils';
 import { ASSET_A, ASSET_B } from '@fuel-ts/utils/test-utils';
 import { versions } from '@fuel-ts/versions';
@@ -16,6 +16,10 @@ import {
   MESSAGE_PROOF_RAW_RESPONSE,
   MESSAGE_PROOF,
 } from '../../test/fixtures';
+import {
+  MOCK_TX_UNKNOWN_RAW_PAYLOAD,
+  MOCK_TX_SCRIPT_RAW_PAYLOAD,
+} from '../../test/fixtures/transaction-summary';
 import { setupTestProviderAndWallets, launchNode, TestMessage } from '../test-utils';
 
 import type { Coin } from './coin';
@@ -52,17 +56,249 @@ const getCustomFetch =
     return fetch(url, options);
   };
 
+const createBasicAuth = (launchNodeUrl: string) => {
+  const username: string = randomUUID();
+  const password: string = randomUUID();
+  const usernameAndPassword = `${username}:${password}`;
+
+  const parsedUrl = new URL(launchNodeUrl);
+  const hostAndPath = `${parsedUrl.host}${parsedUrl.pathname}`;
+  const urlWithAuth = `http://${usernameAndPassword}@${hostAndPath}`;
+
+  return {
+    urlWithAuth,
+    urlWithoutAuth: launchNodeUrl,
+    usernameAndPassword,
+    expectedHeaders: {
+      Authorization: `Basic ${btoa(usernameAndPassword)}`,
+    },
+  };
+};
+
 /**
  * @group node
  */
 describe('Provider', () => {
+  it('should ensure supports basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const { urlWithAuth, expectedHeaders } = createBasicAuth(url);
+    const provider = await Provider.create(urlWithAuth);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const [requestUrl, request] = fetchSpy.mock.calls[0];
+    expect(requestUrl).toEqual(url);
+    expect(request?.headers).toMatchObject(expectedHeaders);
+  });
+
+  it('should ensure we can reuse provider URL to connect to a authenticated endpoint', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const { urlWithAuth, expectedHeaders } = createBasicAuth(url);
+    const provider = await Provider.create(urlWithAuth);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const [requestUrlA, requestA] = fetchSpy.mock.calls[0];
+    expect(requestUrlA).toEqual(url);
+    expect(requestA?.headers).toMatchObject(expectedHeaders);
+
+    // Reuse the provider URL to connect to an authenticated endpoint
+    const newProvider = await Provider.create(provider.url);
+
+    fetchSpy.mockClear();
+
+    await newProvider.operations.getChain();
+    const [requestUrl, request] = fetchSpy.mock.calls[0];
+    expect(requestUrl).toEqual(url);
+    expect(request?.headers).toMatchObject(expectedHeaders);
+  });
+
+  it('should ensure that custom requestMiddleware is not overwritten by basic auth', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const { urlWithAuth } = createBasicAuth(url);
+
+    const requestMiddleware = vi.fn().mockImplementation((options) => options);
+
+    await Provider.create(urlWithAuth, {
+      requestMiddleware,
+    });
+
+    expect(requestMiddleware).toHaveBeenCalled();
+  });
+
+  it('should ensure that we can connect to a new entrypoint with basic auth', async () => {
+    using launchedA = await setupTestProviderAndWallets();
+    using launchedB = await setupTestProviderAndWallets();
+    const {
+      provider: { url: urlA },
+    } = launchedA;
+    const {
+      provider: { url: urlB },
+    } = launchedB;
+
+    // Should enable connection via `create` method
+    const basicAuthA = createBasicAuth(urlA);
+    const provider = await Provider.create(basicAuthA.urlWithAuth);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const [requestUrlA, requestA] = fetchSpy.mock.calls[0];
+    expect(requestUrlA, 'expect to request with the unauthenticated URL').toEqual(urlA);
+    expect(requestA?.headers).toMatchObject({
+      Authorization: basicAuthA.expectedHeaders.Authorization,
+    });
+    expect(provider.url).toEqual(basicAuthA.urlWithAuth);
+
+    fetchSpy.mockClear();
+
+    // Should enable reconnection
+    const basicAuthB = createBasicAuth(urlB);
+
+    await provider.connect(basicAuthB.urlWithAuth);
+    await provider.operations.getChain();
+
+    const [requestUrlB, requestB] = fetchSpy.mock.calls[0];
+    expect(requestUrlB, 'expect to request with the unauthenticated URL').toEqual(urlB);
+    expect(requestB?.headers).toMatchObject(
+      expect.objectContaining({
+        Authorization: basicAuthB.expectedHeaders.Authorization,
+      })
+    );
+    expect(provider.url).toEqual(basicAuthB.urlWithAuth);
+  });
+
+  it('should ensure that custom headers can be passed', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+
+    const customHeaders = {
+      'X-Custom-Header': 'custom-value',
+    };
+
+    const provider = await Provider.create(url, {
+      headers: customHeaders,
+    });
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+    await provider.operations.getChain();
+
+    const [, request] = fetchSpy.mock.calls[0];
+    expect(request?.headers).toMatchObject(customHeaders);
+  });
+
+  it('should throw an error if the URL is no in the correct format', async () => {
+    const url = 'immanotavalidurl';
+
+    await expectToThrowFuelError(
+      async () => Provider.create(url),
+      new FuelError(ErrorCode.INVALID_URL, 'Invalid URL provided.')
+    );
+  });
+
+  it('should throw an error when retrieving a transaction with an unknown transaction type', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    const mockProvider = await Provider.create(provider.url, {
+      fetch: getCustomFetch('getTransaction', {
+        transaction: {
+          id: '0x1234567890abcdef',
+          rawPayload: MOCK_TX_UNKNOWN_RAW_PAYLOAD, // Unknown transaction type
+        },
+      }),
+    });
+
+    // Spy on console.warn
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    // Verify that only one transaction was returned (the known type)
+    const transaction = await mockProvider.getTransaction('0x1234567890abcdef');
+
+    expect(transaction).toBeNull();
+
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Unsupported transaction type encountered')
+    );
+
+    // Clean up
+    consoleWarnSpy.mockRestore();
+  });
+
+  it('should log a warning when retrieving batch transactions with an unknown transaction type', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider: nodeProvider } = launched;
+
+    // Create a mock provider with custom getTransactions operation
+    const mockProvider = await Provider.create(nodeProvider.url, {
+      fetch: getCustomFetch('getTransactions', {
+        transactions: {
+          edges: [
+            {
+              node: {
+                id: '0x1234567890abcdef',
+                rawPayload: MOCK_TX_UNKNOWN_RAW_PAYLOAD,
+              },
+            },
+            {
+              node: {
+                id: '0xabcdef1234567890',
+                rawPayload: MOCK_TX_SCRIPT_RAW_PAYLOAD,
+              },
+            },
+          ],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+        },
+      }),
+    });
+
+    // Spy on console.warn
+    const consoleWarnSpy = vi.spyOn(console, 'warn');
+
+    // Verify that only one transaction was returned (the known type)
+    const { transactions } = await mockProvider.getTransactions();
+    expect(transactions.length).toBe(1);
+
+    // Check if warning was logged
+    expect(consoleWarnSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Unsupported transaction type encountered')
+    );
+
+    // Clean up
+    consoleWarnSpy.mockRestore();
+  });
+
   it('can getVersion()', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     const version = await provider.getVersion();
 
-    expect(version).toEqual('0.33.0');
+    expect(version).toEqual('0.36.0');
   });
 
   it('can call()', async () => {
@@ -121,63 +357,11 @@ describe('Provider', () => {
       {
         type: ReceiptType.ScriptResult,
         result: bn(0),
-        gasUsed: bn(107),
+        gasUsed: bn(159),
       },
     ];
 
     expect(callResult.receipts).toStrictEqual(expectedReceipts);
-  });
-
-  // TODO: Add tests to provider sendTransaction
-  // sendTransaction can't be tested without a valid signature
-  // importing and testing it here can generate cycle dependency
-  // as we test this in other modules like call contract its ok to
-  // skip for now
-  it.skip('can sendTransaction()', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    const response = await provider.sendTransaction({
-      type: TransactionType.Script,
-      tip: 0,
-      gasLimit: 1000000,
-      script:
-        /*
-          Opcode::ADDI(0x10, REG_ZERO, 0xCA)
-          Opcode::ADDI(0x11, REG_ZERO, 0xBA)
-          Opcode::LOG(0x10, 0x11, REG_ZERO, REG_ZERO)
-          Opcode::RET(REG_ONE)
-        */
-        arrayify('0x504000ca504400ba3341100024040000'),
-      scriptData: randomBytes(32),
-    });
-
-    const result = await response.wait();
-
-    expect(result.receipts).toEqual([
-      {
-        type: ReceiptType.Log,
-        id: ZeroBytes32,
-        val0: bn(202),
-        val1: bn(186),
-        val2: bn(0),
-        val3: bn(0),
-        pc: bn(0x2878),
-        is: bn(0x2870),
-      },
-      {
-        type: ReceiptType.Return,
-        id: ZeroBytes32,
-        val: bn(1),
-        pc: bn(0x287c),
-        is: bn(0x2870),
-      },
-      {
-        type: ReceiptType.ScriptResult,
-        result: bn(0),
-        gasUsed: bn(0x2c),
-      },
-    ]);
   });
 
   it('can get all chain info', async () => {
@@ -323,10 +507,7 @@ describe('Provider', () => {
     expect(newest >= oldest).toBeTruthy();
   });
 
-  // TODO: Add back support for producing blocks with intervals by supporting the new
-  // `block_production` config option for `fuel_core`.
-  // See: https://github.com/FuelLabs/fuel-core/blob/def8878b986aedad8434f2d1abf059c8cbdbb8e2/crates/services/consensus_module/poa/src/config.rs#L20
-  it.skip('can force-produce blocks with custom timestamps', async () => {
+  it('can force-produce blocks with custom timestamps', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
@@ -407,7 +588,7 @@ describe('Provider', () => {
   });
 
   it('should cache resources only when TX is successfully submitted', async () => {
-    const resourceAmount = 50_000;
+    const resourceAmount = 5_000;
     const utxosAmount = 2;
 
     const testMessage = new TestMessage({ amount: resourceAmount });
@@ -416,6 +597,7 @@ describe('Provider', () => {
       nodeOptions: {
         args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       },
+      // 3 resources with a total of 15_000
       walletsConfig: {
         coinsPerAsset: utxosAmount,
         amountPerCoin: resourceAmount,
@@ -432,6 +614,7 @@ describe('Provider', () => {
 
     expect(coins.length).toBe(utxosAmount);
 
+    // Tx will cost 10_000 for the transfer + 1 for fee. All resources will be used
     const EXPECTED = {
       utxos: coins.map((coin) => coin.id),
       messages: [testMessage.nonce],
@@ -719,6 +902,29 @@ describe('Provider', () => {
     );
   });
 
+  it('can getBlock', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+    await provider.produceBlocks(1);
+    const block = await provider.getBlock('latest');
+    expect(block).toStrictEqual({
+      id: expect.any(String),
+      height: expect.any(BN),
+      time: expect.any(String),
+      header: {
+        applicationHash: expect.any(String),
+        daHeight: expect.any(BN),
+        eventInboxRoot: expect.any(String),
+        messageOutboxRoot: expect.any(String),
+        prevRoot: expect.any(String),
+        stateTransitionBytecodeVersion: expect.any(String),
+        transactionsCount: expect.any(String),
+        transactionsRoot: expect.any(String),
+      },
+      transactionIds: expect.any(Array<string>),
+    });
+  });
+
   it('can getBlocks', async () => {
     using launched = await setupTestProviderAndWallets();
     const blocksLenght = 5;
@@ -730,14 +936,47 @@ describe('Provider', () => {
     });
     expect(blocks.length).toBe(blocksLenght);
     blocks.forEach((block) => {
-      expect(block).toEqual(
-        expect.objectContaining({
-          id: expect.any(String),
-          height: expect.any(BN),
-          time: expect.any(String),
-          transactionIds: expect.any(Array<string>),
-        })
-      );
+      expect(block).toStrictEqual({
+        id: expect.any(String),
+        height: expect.any(BN),
+        time: expect.any(String),
+        header: {
+          applicationHash: expect.any(String),
+          daHeight: expect.any(BN),
+          eventInboxRoot: expect.any(String),
+          messageOutboxRoot: expect.any(String),
+          prevRoot: expect.any(String),
+          stateTransitionBytecodeVersion: expect.any(String),
+          transactionsCount: expect.any(String),
+          transactionsRoot: expect.any(String),
+        },
+        transactionIds: expect.any(Array<string>),
+      });
+    });
+  });
+
+  it('can getBlockWithTransactions', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+    await provider.produceBlocks(1);
+    const block = await provider.getBlockWithTransactions('latest');
+    const { transactions } = await provider.getTransactions({ first: 100 });
+    expect(block).toStrictEqual({
+      id: expect.any(String),
+      height: expect.any(BN),
+      time: expect.any(String),
+      header: {
+        applicationHash: expect.any(String),
+        daHeight: expect.any(BN),
+        eventInboxRoot: expect.any(String),
+        messageOutboxRoot: expect.any(String),
+        prevRoot: expect.any(String),
+        stateTransitionBytecodeVersion: expect.any(String),
+        transactionsCount: expect.any(String),
+        transactionsRoot: expect.any(String),
+      },
+      transactionIds: expect.any(Array<string>),
+      transactions,
     });
   });
 
@@ -1608,8 +1847,15 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
     const message = await provider.getMessageByNonce(nonce);
 
-    expect(message).toBeDefined();
-    expect(message?.nonce).toEqual(nonce);
+    expect(message).toStrictEqual({
+      messageId: expect.any(String),
+      sender: expect.any(Address),
+      recipient: expect.any(Address),
+      nonce: expect.any(String),
+      amount: expect.any(BN),
+      data: expect.any(Uint8Array),
+      daHeight: expect.any(BN),
+    });
   });
 
   describe('paginated methods', () => {

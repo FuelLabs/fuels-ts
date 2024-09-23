@@ -20,6 +20,10 @@ The `name` property is simply a `string` on the connector that serves as an iden
 
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-name{ts:line-numbers}
 
+### `external`
+The `external` property is simply a `boolean` that indicates when a connector is external or not.
+Connectors are considered external, or non-native, when they do not support the Fuel Network (e.g. `Solana`, `WalletConnect`).
+
 #### `metadata`
 
 The `metadata` property on the connector provides additional information about the connector. This information will be displayed to the end-user when selecting a connector. The following is the structure of the `metadata` object:
@@ -268,6 +272,8 @@ It requires a single argument:
 
 - `network` ([`Network`](../../api/Account/index.md#network))
 
+You call this method with either the `providerUrl` or `chainId` to select the network.
+
 It will return a promise that resolves to `true` if the network is successfully selected; otherwise, it will return `false`.
 
 It should throw an error if the network is not available or the network does _not_ exist.
@@ -318,6 +324,9 @@ The TS SDK exports the `Fuel` class, which serves as the connectors manager. Thi
 It can be instantiated as follows:
 
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-instantiation-1{ts:line-numbers}
+
+> [!NOTE] Note
+> We recommend initializing the Fuel class with the `init` method to avoid any potential race conditions that may arise from the async nature of instantiating a connector.
 
 ### Options
 

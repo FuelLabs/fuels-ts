@@ -1,5 +1,77 @@
 # Change Log
 
+## 0.94.6
+
+### Patch Changes
+
+- 99d39e9: feat: introduce upload and upgrade transaction request
+- Updated dependencies [a9f31ca]
+- Updated dependencies [9719c1b]
+- Updated dependencies [aef7282]
+  - @fuel-ts/abi-coder@0.94.6
+  - @fuel-ts/address@0.94.6
+  - @fuel-ts/hasher@0.94.6
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/math@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- 37eab14: chore: deprecate all receipt coders
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/abi-coder@0.94.5
+  - @fuel-ts/address@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/hasher@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/abi-coder@0.94.4
+  - @fuel-ts/address@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/hasher@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
+## 0.94.3
+
+### Patch Changes
+
+- a36626a: feat: added support for unknown txn types
+- e286557: fix: `UtxoIdCoder` output index to be `u16`
+- Updated dependencies [2b45e8d]
+  - @fuel-ts/abi-coder@0.94.3
+  - @fuel-ts/errors@0.94.3
+  - @fuel-ts/utils@0.94.3
+  - @fuel-ts/address@0.94.3
+  - @fuel-ts/math@0.94.3
+  - @fuel-ts/hasher@0.94.3
+  - @fuel-ts/interfaces@0.94.3
+
+## 0.94.2
+
+### Patch Changes
+
+- Updated dependencies [01e2f0e]
+- Updated dependencies [986a247]
+  - @fuel-ts/utils@0.94.2
+  - @fuel-ts/abi-coder@0.94.2
+  - @fuel-ts/address@0.94.2
+  - @fuel-ts/hasher@0.94.2
+  - @fuel-ts/errors@0.94.2
+  - @fuel-ts/math@0.94.2
+  - @fuel-ts/interfaces@0.94.2
+
 ## 0.94.1
 
 ### Patch Changes

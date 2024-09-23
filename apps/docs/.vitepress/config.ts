@@ -367,6 +367,10 @@ export default defineConfig({
                 text: 'Unit conversion',
                 link: '/guide/utilities/unit-conversion',
               },
+              {
+                text: 'Using assets',
+                link: '/guide/utilities/using-assets',
+              },
             ],
           },
           {
@@ -401,6 +405,10 @@ export default defineConfig({
               {
                 text: 'GraphQL Integration',
                 link: '/guide/cookbook/graphql-integration',
+              },
+              {
+                text: 'Resubmitting Failed Transactions',
+                link: '/guide/cookbook/resubmitting-failed-transactions',
               },
             ],
           },

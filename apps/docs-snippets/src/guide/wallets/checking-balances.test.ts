@@ -1,4 +1,4 @@
-import type { CoinQuantity, BN } from 'fuels';
+import type { BN } from 'fuels';
 import { Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -37,7 +37,7 @@ describe('Checking balances', () => {
     // #region checking-balances-2
     const myWallet = Wallet.fromPrivateKey(privateKey, provider);
 
-    const balances: CoinQuantity[] = await myWallet.getBalances();
+    const { balances } = await myWallet.getBalances();
     // #endregion checking-balances-2
 
     expect(balances).toBeDefined();

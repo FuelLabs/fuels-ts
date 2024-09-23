@@ -1,5 +1,44 @@
 # create-fuels
 
+## 0.94.6
+
+### Patch Changes
+
+- 3409c10: chore: downgrade ora from `8.1.0` to `5.4.1`
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- c98461f: chore: deprecate network URLs, add asset ID and chain ID for mainnet
+- 41ea8d0: chore: bump connectors package version
+- 11d4f8b: feat: add UI tests to `create fuels` template
+
+## 0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- 96140a2: fix: faucet link in `create-fuels` navbar
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+- a0bb25f: feat: make vite the default `create-fuels` template
+- cc1aa12: build(deps): bump the deps-patch group with 9 updates
+
+## 0.94.3
+
+### Patch Changes
+
+- b67ded2: chore: upgraded forc to `0.63.3`
+- e87b51b: feat: add missing connectors to `create fuels` template
+- 08aa4ae: feat: embed testnet faucet in `create-fuels` template
+- e04947a: feat: make `create-fuels` template app responsive
+
+## 0.94.2
+
+### Patch Changes
+
+- fcfbdf1: build(deps): bump the deps-patch group across 1 directory
+- 8c47dc5: chore: upgrade connectors
+- 362ea33: fix: added missing dependencies for templates
+- 50d548c: fix: UI integration tests
+
 ## 0.94.1
 
 ### Patch Changes

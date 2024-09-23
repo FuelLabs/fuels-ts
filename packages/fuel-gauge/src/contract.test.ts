@@ -12,16 +12,17 @@ import {
   ContractFactory,
   Predicate,
   PolicyType,
-  ZeroBytes32,
   buildFunctionResult,
+  ReceiptType,
 } from 'fuels';
-import type { JsonAbi, ScriptTransactionRequest, TransferParams } from 'fuels';
+import type { ReceiptMessageOut, ScriptTransactionRequest, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
   CallTestContract,
   CallTestContractFactory,
+  SmoContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
 } from '../test/typegen/contracts';
@@ -38,122 +39,6 @@ const contractsConfigs: DeployContractConfig[] = [
   },
 ];
 
-const jsonFragment: JsonAbi = {
-  configurables: [],
-  loggedTypes: [],
-  types: [
-    {
-      typeId: 0,
-      type: '()',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 1,
-      type: 'u64',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 2,
-      type: 'struct MyStruct',
-      components: [
-        {
-          type: 0,
-          name: 'arg_one',
-          typeArguments: null,
-        },
-        {
-          type: 1,
-          name: 'arg_two',
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-  ],
-  functions: [
-    {
-      name: 'entry_one',
-      inputs: [
-        {
-          name: 'arg',
-          type: 1,
-          typeArguments: null,
-        },
-      ],
-      output: {
-        name: '',
-        type: 0,
-        typeArguments: null,
-      },
-      attributes: [],
-    },
-  ],
-  messagesTypes: [],
-};
-
-const complexFragment: JsonAbi = {
-  configurables: [],
-  loggedTypes: [],
-  types: [
-    {
-      typeId: 0,
-      type: '()',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 1,
-      type: 'str[20]',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 2,
-      type: 'b256',
-      components: null,
-      typeParameters: null,
-    },
-    {
-      typeId: 3,
-      type: '(_, _)',
-      components: [
-        {
-          name: '__tuple_element',
-          type: 1,
-          typeArguments: null,
-        },
-        {
-          name: '__tuple_element',
-          type: 2,
-          typeArguments: null,
-        },
-      ],
-      typeParameters: null,
-    },
-  ],
-  functions: [
-    {
-      name: 'tuple_function',
-      inputs: [
-        {
-          name: 'person',
-          type: 2,
-          typeArguments: null,
-        },
-      ],
-      output: {
-        name: '',
-        type: 0,
-        typeArguments: null,
-      },
-      attributes: [],
-    },
-  ],
-  messagesTypes: [],
-};
-
 const txPointer = '0x00000000000000000000000000000000';
 
 const AltToken = '0x0101010101010101010101010101010101010101010101010101010101010101';
@@ -169,54 +54,11 @@ function setupTestContract() {
  * @group browser
  */
 describe('Contract', () => {
-  it('generates function methods on a simple contract', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    const contract = new Contract(ZeroBytes32, jsonFragment, wallet);
-
-    const fragment = contract.interface.getFunction('entry_one');
-    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
-
-    try {
-      await contract.functions.entry_one(42);
-    } catch {
-      // The call will fail, but it doesn't matter
-    }
-
-    expect(interfaceSpy).toHaveBeenCalled();
-  });
-
-  it('generates function methods on a complex contract', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    const contract = new Contract(ZeroBytes32, complexFragment, wallet);
-
-    const fragment = contract.interface.getFunction('tuple_function');
-    const interfaceSpy = vi.spyOn(fragment, 'encodeArguments');
-
-    try {
-      await contract.functions.tuple_function({
-        address: '0xd5579c46dfcc7f18207013e65b44e4cb4e2c2298f4ac457ba8f82743f31e930b',
-        name: 'foo',
-      });
-    } catch {
-      // The call will fail, but it doesn't matter
-    }
-
-    expect(interfaceSpy).toHaveBeenCalled();
-  });
-
   it('assigns a provider if passed', async () => {
     using launched = await launchTestNode();
     const { provider } = launched;
 
-    const contract = new Contract(getRandomB256(), jsonFragment, provider);
+    const contract = new Contract(getRandomB256(), CallTestContract.abi, provider);
 
     expect(contract.provider).toEqual(provider);
   });
@@ -1069,14 +911,19 @@ describe('Contract', () => {
 
     contract.account = Wallet.generate({ provider: contract.provider });
 
-    await expect(
-      contract.functions
-        .return_context_amount()
-        .callParams({
-          forward: [100, contract.provider.getBaseAssetId()],
-        })
-        .simulate()
-    ).rejects.toThrowError('not enough coins to fit the target');
+    await expectToThrowFuelError(
+      () =>
+        contract.functions
+          .return_context_amount()
+          .callParams({
+            forward: [100, contract.provider.getBaseAssetId()],
+          })
+          .simulate(),
+      new FuelError(
+        ErrorCode.NOT_ENOUGH_FUNDS,
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+      )
+    );
   });
 
   it('should throw when using "simulate" without a wallet', async () => {
@@ -1265,5 +1112,52 @@ describe('Contract', () => {
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+  });
+
+  it('can call SMO contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: SmoContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [recipient],
+      contracts: [contract],
+    } = launched;
+
+    const data = [1, 2, 3, 4, 5, 6, 7, 8];
+    const baseAssetId = provider.getBaseAssetId();
+
+    const { waitForResult } = await contract
+      .multiCall([
+        contract.functions
+          .send_typed_message_u8(recipient.address.toB256(), 10, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+        contract.functions
+          .send_typed_message_bool(recipient.address.toB256(), true, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+        contract.functions
+          .send_typed_message_bytes(recipient.address.toB256(), data, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+      ])
+      .call();
+
+    const {
+      transactionResult: { receipts },
+    } = await waitForResult();
+
+    const messageOutReceipts = receipts.filter(
+      ({ type }) => ReceiptType.MessageOut === type
+    ) as ReceiptMessageOut[];
+
+    expect(messageOutReceipts.length).toBe(3);
+
+    messageOutReceipts.forEach((receipt) => {
+      expect(receipt.recipient).toBe(recipient.address.toB256());
+    });
   });
 });
