@@ -18,8 +18,6 @@ const config: UserConfig = {
         "fs",
         "events",
         "timers/promises",
-        "util",
-        "stream",
         "path",
         "fs",
         "os",
