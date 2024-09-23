@@ -47,7 +47,7 @@ function App() {
                   )}
 
                   {isConnected && (
-                    <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8">
+                    <section className="flex h-full flex-col justify-center space-y-6 px-4 py-4">
                       <div className="flex flex-col sm:flex-row gap-3 overflow-x-scroll overflow-visible">
                         {views.map((viewName) => (
                           <Button

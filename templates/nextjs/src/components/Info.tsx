@@ -31,7 +31,7 @@ export default function Info() {
       <a
         href="https://docs.fuel.network/docs"
         target="_blank"
-        className="inline-block pt-8 text-green-500/80 transition-colors hover:text-green-500 w-full"
+        className="inline-block mt-8 text-green-500/80 transition-colors hover:text-green-500 w-full"
         rel="noreferrer"
       >
         Fuel Docs

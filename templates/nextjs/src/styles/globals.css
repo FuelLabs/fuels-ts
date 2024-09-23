@@ -21,7 +21,7 @@ body {
 
 /* Button */
 .btn {
-  @apply rounded-md px-3 py-1.5 font-mono text-sm font-medium transition-all duration-200 md:px-6 md:py-2.5;
+  @apply rounded-md px-1.5 py-1.5 font-mono text-sm font-medium transition-all duration-200;
 }
 
 .btn-primary {

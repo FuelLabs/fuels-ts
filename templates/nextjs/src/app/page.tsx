@@ -43,7 +43,7 @@ function App() {
               <div className="col-span-4">
                 <div className="gradient-border h-full rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950/80">
                   {!isConnected && (
-                    <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8 ">
+                    <section className="flex h-full flex-col justify-center space-y-6 px-4 py-4">
                       <Button onClick={() => connect()}>Connect Wallet</Button>
                     </section>
                   )}
