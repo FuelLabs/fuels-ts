@@ -305,6 +305,8 @@ unwritable
 Unwritable
 updatable
 Updatable
+Upgradability
+Upgradable
 URI
 urql
 USD
