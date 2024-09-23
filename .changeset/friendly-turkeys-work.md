@@ -2,4 +2,4 @@
 "fuels": patch
 ---
 
-feat: adding support for proxy contracts
+feat: adding support for proxy contracts in `fuels deploy`
