@@ -121,7 +121,7 @@ For more info, please check these docs:
 
 - [Proxy Contracts](https://docs.fuel.network/docs/forc/plugins/forc_client/#proxy-contracts)
 - [Sway Libs / Upgradability Library](https://docs.fuel.network/docs/sway-libs/upgradability/#upgradability-library)
-- [Sway Standards / SRC-14 - Simple Upgradeable Proxies](https://docs.fuel.network/docs/sway-standards/src-14-simple-upgradeable-proxies/#src-14-simple-upgradeable-proxies)
+- [Sway Standards / SRC-14 - Simple Upgradable Proxies](https://docs.fuel.network/docs/sway-standards/src-14-simple-upgradeable-proxies/#src-14-simple-upgradeable-proxies)
 
 ## `fuels dev`
 
