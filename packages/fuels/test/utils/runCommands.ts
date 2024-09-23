@@ -45,6 +45,7 @@ export function bootstrapProject(testFilepath: string) {
   const predicateDir = join(workspaceDir, 'predicate');
   const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
   const upgradableContractPath = join(contractsDir, 'upgradable');
+  const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
   const outputDir = join(root, 'output');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
@@ -68,6 +69,7 @@ export function bootstrapProject(testFilepath: string) {
     forcPath,
     fuelCorePath,
     upgradableContractPath,
+    upgradableChunkedContractPath,
   };
 }
 

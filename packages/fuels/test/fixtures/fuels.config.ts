@@ -15,6 +15,7 @@ export const fuelsConfig: FuelsConfig = {
     join(contractsDir, 'foo'),
     join(contractsDir, 'bar'),
     join(contractsDir, 'upgradable'),
+    join(contractsDir, 'upgradable-chunked'),
   ],
   scripts: [join(scriptsDir, 'script')],
   predicates: [join(predicatesDir, 'predicate')],
