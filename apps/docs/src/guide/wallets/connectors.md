@@ -21,7 +21,7 @@ The `name` property is simply a `string` on the connector that serves as an iden
 <<< @/../../docs-snippets/src/guide/wallets/connectors.test.ts#fuel-connector-name{ts:line-numbers}
 
 ### `external`
-The `external` property is simply a `boolean` that indicates when a connector is or external or not.
+The `external` property is simply a `boolean` that indicates when a connector is external or not.
 Connectors are considered external, or non-native, when they do not support the Fuel Network (e.g. `Solana`, `WalletConnect`).
 
 #### `metadata`
