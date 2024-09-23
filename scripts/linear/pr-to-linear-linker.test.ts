@@ -91,7 +91,7 @@ function setupMock() {
 }
 
 /**
- * @grosup node
+ * @group node
  */
 describe('linear', () => {
   afterEach(() => {
