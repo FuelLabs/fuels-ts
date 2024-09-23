@@ -6,7 +6,7 @@
     "@fuels/vm-asm": "0.56.0",
     "@testing-library/react": "^16.0.1",
     "@types/node": "^22.5.5",
-    "@types/react": "^18.3.6",
+    "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3",
     "eslint-config-react-app": "^7.0.1",
     "fuels": "workspace:*",
