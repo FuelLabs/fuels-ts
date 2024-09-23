@@ -42,7 +42,7 @@ describe('buildSwayPrograms', () => {
 
     await buildSwayPrograms(fuelsConfig);
 
-    expect(buildSwayProgram).toHaveBeenCalledTimes(5);
+    expect(buildSwayProgram).toHaveBeenCalledTimes(6);
     expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[0]);
     expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[1]);
     expect(buildSwayProgram).toHaveBeenCalledWith(fuelsConfig, fuelsConfig.contracts[2]);
