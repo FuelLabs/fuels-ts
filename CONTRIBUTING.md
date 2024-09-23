@@ -109,6 +109,48 @@ See also:
 
 - [Developing](#developing)
 
+# Working with Unreleased Forc and Fuel-Core Functionality
+
+When you need to work with unreleased versions of `forc` or `fuel-core`, you can specify a git branch instead of a version number.
+
+## Using Unreleased Forc
+
+To use an unreleased version of `forc`:
+
+1. **Edit the `VERSION` File**
+Open the `packages/forc/VERSION` file and replace the version number (e.g., 0.59.0) with the desired git branch:
+
+    ```bash
+    git:some/branch-name
+    ```
+
+1. **Install and Build**
+To download and build `forc` from the specified branch after updating `VERSION` file, run:
+
+    ```sh
+    pnpm install
+    pnpm build
+    ```
+
+## Using Unreleased Fuel-Core
+
+Similarly, to use an unreleased version of `fuel-core`:
+
+1. **Edit the `VERSION` file:**
+Open the packages/fuel-core/VERSION file and replace the version number with the desired git branch:
+
+    ```bash
+    git:some/branch-name
+    ```
+
+1. **Install and Build**
+To download and build `fuel-core` from the specified branch after updating `VERSION` file, run:
+
+    ```sh
+    pnpm install
+    pnpm build
+    ```
+
 # Testing
 
 In order to run tests locally, you can run the following commands:
