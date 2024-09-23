@@ -1,6 +1,5 @@
 contract;
 
-// TODO: Document Proxy Contracts
 storage {
     value: u8 = 10,
 }

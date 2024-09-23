@@ -92,12 +92,6 @@ Using the `--deploy` flag will additionally:
 npx fuels@{{fuels}} deploy
 ```
 
-> [!NOTE] Note
-> We recommend using the `fuels deploy` command only when you are deploying contracts to a local node.
-> If you are deploying contracts to a live network like the Testnet, we recommend using the [`forc deploy`](https://docs.fuel.network/docs/intro/quickstart-contract/#deploy-to-testnet) command instead.
->
-> Additionally, the maximum contract deployment size supported by the SDK is 100 KB. The SDK will `throw` an [error](../errors/index.md) for contracts larger than this size.
-
 The `fuels deploy` command does two things:
 
 1. Deploy all Sway contracts under `workspace`.
@@ -118,6 +112,16 @@ Use it when instantiating your contracts:
 For a complete example, see:
 
 - [Using Generated Types](./using-generated-types.md)
+
+### Proxy Contracts Deployment
+
+Automatic deployment of proxy contracts can be enabled in `Forc.toml`.
+
+For more info, please check these docs:
+
+- [Proxy Contracts](https://docs.fuel.network/docs/forc/plugins/forc_client/#proxy-contracts)
+- [Sway Libs / Upgradability Library](https://docs.fuel.network/docs/sway-libs/upgradability/#upgradability-library)
+- [Sway Standards / SRC-14 - Simple Upgradeable Proxies](https://docs.fuel.network/docs/sway-standards/src-14-simple-upgradeable-proxies/#src-14-simple-upgradeable-proxies)
 
 ## `fuels dev`
 
