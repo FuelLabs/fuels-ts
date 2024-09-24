@@ -2,7 +2,7 @@
 
 Automatic deployment of proxy contracts can be enabled in `Forc.toml`.
 
-Once that is is place, [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy) will take care of it.
+Once that is in place, [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy) will take care of it.
 
 ## Docs
 
