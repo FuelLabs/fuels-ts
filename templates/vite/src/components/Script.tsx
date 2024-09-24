@@ -50,8 +50,9 @@ export default function Script() {
     <>
       <div>
         <p>
-          Scripts are another core program type. They act as runnable bytecode
-          on chain. You can read more about them{" "}
+          Scripts are runnable bytecode on the chain which execute once to
+          perform some task. Scripts can return a single value of any type. You
+          can read more about them{" "}
           <a
             href="https://docs.fuel.network/docs/fuels-ts/scripts/"
             className="text-green-500/80 transition-colors hover:text-green-500"

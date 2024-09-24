@@ -92,9 +92,9 @@ export default function Predicate() {
     <>
       <div>
         <p>
-          Predicates are another core program type, they function like
-          transactions but with some conditional logic that returns a boolean
-          value. You can read more about them{" "}
+          Predicates are specific types of programs that return a boolean value,
+          meaning they function like rules that a transaction must follow to be
+          valid. You can read more about them{" "}
           <a
             href="https://docs.fuel.network/docs/fuels-ts/predicates/"
             className="text-green-500/80 transition-colors hover:text-green-500"
