@@ -2,7 +2,7 @@ import { launchTestNode } from 'fuels/test-utils';
 
 using node = await launchTestNode({ walletsConfig: { count: 5 } });
 
-export const NETWORK_URL = node.provider.url;
+const LOCAL_NETWORK_URL = node.provider.url;
 
 const [w1, w2, w3, w4, w5] = node.wallets;
 

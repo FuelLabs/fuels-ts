@@ -8,7 +8,5 @@ const wallet = Wallet.fromAddress(ADDRESS, provider);
 
 const { balances } = await wallet.getBalances();
 
-const [{ assetId }] = balances;
-
-console.log(`Asset ID for the first item should be defined:`, assetId);
+console.log(`Balances should be an array`, balances instanceof Array);
 // #endregion main
