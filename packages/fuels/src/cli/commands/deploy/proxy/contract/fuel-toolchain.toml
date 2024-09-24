@@ -2,5 +2,5 @@
 channel = "testnet-2024-09-06"
 
 [components]
-forc = "0.63.5"
+forc = "0.63.6"
 fuel-core = "0.35.0"
