@@ -10,7 +10,7 @@
 // #region bech32-1
 /**
  * @deprecated
- * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+ * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
  */
 export type Bech32Address = `fuel${string}`;
 // #endregion bech32-1

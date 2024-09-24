@@ -25,7 +25,7 @@ To create an [`Address`](../../api/Address/Address.md) from a `Bech32` address, 
 <<< @/../../docs-snippets/src/guide/types/address.test.ts#address-2{ts:line-numbers}
 
 > [!NOTE] Note
-> The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+> `Bech32` addresses like `fuel1..` are now deprecated; please switch to hexadecimals like `0x..`.
 
 ### From a Public Key
 

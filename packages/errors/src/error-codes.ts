@@ -27,7 +27,7 @@ export enum ErrorCode {
   // address
   /**
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    */
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
 

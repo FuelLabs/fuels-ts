@@ -9,7 +9,7 @@ The `contractId` property from the [`Contract`](../../api/Program/Contract.md) c
 The [`Address`](../../api/Address/Address.md) class wraps all methods from the [`AbstractAddress`](../../api/Interfaces/AbstractAddress.md) class and adds a single property: `bech32Address`. This property is a string encoded in [`Bech32`](../types/bech32.md) format, recognizable by the human-readable prefix `fuel` followed by the separator `1`.
 
 > [!NOTE] Note
-> The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+> `Bech32` addresses like `fuel1..` are now deprecated; please switch to hexadecimals like `0x..`.
 
 When you log the `contractId` property of an instantiated Contract using `console.log`, the output appears as follows:
 

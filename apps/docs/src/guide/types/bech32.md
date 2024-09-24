@@ -1,7 +1,7 @@
 # `Bech32`
 
 > [!NOTE] Note
-> The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+> `Bech32` addresses like `fuel1..` are now deprecated; please switch to hexadecimals like `0x..`.
 
 The SDK uses the `Bech32` type as the core property of the [`Address`](../../api/Address/Address.md) class, specifically through the `bech32Address` property.
 

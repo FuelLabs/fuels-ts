@@ -26,7 +26,7 @@ export default class Address extends AbstractAddress {
   // #region address-2
   /**
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    */
   readonly bech32Address: Bech32Address;
   // #endregion address-2
@@ -49,7 +49,7 @@ export default class Address extends AbstractAddress {
   /**
    * Returns the `bech32Address` property
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The `bech32Address` property
    */
   toAddress(): Bech32Address {
@@ -59,7 +59,7 @@ export default class Address extends AbstractAddress {
   /**
    * Converts and returns the `bech32Address` property to a 256 bit hash string
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The `bech32Address` property as a 256 bit hash string
    */
   toB256(): B256Address {
@@ -69,7 +69,7 @@ export default class Address extends AbstractAddress {
   /**
    * Converts and returns the `bech32Address` property to a byte array
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The `bech32Address` property as a byte array
    */
   toBytes(): Uint8Array {
@@ -79,7 +79,7 @@ export default class Address extends AbstractAddress {
   /**
    * Converts
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The `bech32Address` property as a 256 bit hash string
    */
   toHexString(): B256Address {
@@ -98,7 +98,7 @@ export default class Address extends AbstractAddress {
   /**
    * Converts and returns the `bech32Address` property as a string
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The `bech32Address` property as a string
    */
   toJSON(): string {
@@ -108,7 +108,7 @@ export default class Address extends AbstractAddress {
   /**
    * Clears the first 12 bytes of the `bech32Address` property and returns it as a `EvmAddress`
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The `bech32Address` property as an {@link EvmAddress | `EvmAddress`}
    */
   toEvmAddress(): EvmAddress {
@@ -122,7 +122,7 @@ export default class Address extends AbstractAddress {
   /**
    * Wraps the `bech32Address` property and returns as an `AssetId`.
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The `bech32Address` property as an {@link AssetId | `AssetId`}
    */
   toAssetId(): AssetId {
@@ -134,7 +134,7 @@ export default class Address extends AbstractAddress {
   /**
    * Returns the value of the `bech32Address` property
    *@deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @returns The value of `bech32Address` property
    */
   valueOf(): string {
@@ -144,7 +144,7 @@ export default class Address extends AbstractAddress {
   /**
    * Compares this the `bech32Address` property to another for direct equality
    * @deprecated
-   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
    * @param other - Another address to compare against
    * @returns The equality of the comparison
    */
