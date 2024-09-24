@@ -48,7 +48,7 @@ export async function deployContract(
   }
 
   /**
-   * 1. If contract DOES require a proxy and HAVE the `address` property set in their `Forc.Toml` file.
+   * 1. If contract DOES require a proxy and HAS the `address` property set in their `Forc.Toml` file.
    * We need to re-deploy the target contract and update its ID in the proxy contract.
    */
   if (proxyAddress) {
