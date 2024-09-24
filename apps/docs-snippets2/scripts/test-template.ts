@@ -6,6 +6,10 @@ afterAll(() => {
   console = { ...consoleBkp };
 });
 
+/**
+ * @group node
+ * @group browser
+ */
 test('%NAME%', async () => {
   // TEST NODE LAUNCHER ———>>>
   // %NODE_LAUNCHER%
