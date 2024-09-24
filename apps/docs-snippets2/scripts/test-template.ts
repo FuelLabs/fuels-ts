@@ -13,9 +13,9 @@ test('%NAME%', async () => {
 
   console = {
     ...console,
-    assert(isTruthy, errorMsg) {
+    log(logMsg, isTruthy) {
       if (!isTruthy) {
-        throw new Error(errorMsg);
+        throw new Error(logMsg);
       }
     },
   };

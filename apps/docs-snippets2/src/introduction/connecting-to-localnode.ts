@@ -10,5 +10,5 @@ const wallet = Wallet.fromAddress(ADDRESS, provider);
 
 const { balances } = await wallet.getBalances();
 
-console.log(`Balances should be an array:`, balances instanceof Array);
+console.log(`Balances should be an array`, balances instanceof Array);
 // #endregion main
