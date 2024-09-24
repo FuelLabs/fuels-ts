@@ -143,13 +143,7 @@ export const runScaffoldCli = async ({
   const gitignorePath = join(projectPath, '.gitignore');
   const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
   const newGitIgnoreContents = gitignoreContents
-    .replace(
-      /src\/sway-api\/contracts\n/g,
-      "# Uncomment the lines below if you don't wish\n# to commit the generated files to git.\n\n# src/sway-api/contracts\n"
-    )
-    .replace(/src\/sway-api\/predicates\n/g, '# src/sway-api/predicates\n')
-    .replace(/src\/sway-api\/scripts\n/g, '# src/sway-api/scripts\n')
-    .replace(/src\/sway-api\/index.ts/g, '# src/sway-api/index.ts');
+    .replace(/^(src\/sway-api\.+)$/mg, '# $1');
   writeFileSync(gitignorePath, newGitIgnoreContents);
 
   if (opts.install) {
