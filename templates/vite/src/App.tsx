@@ -38,7 +38,7 @@ function App() {
               className="lg:grid lg:grid-cols-7 lg:grid-rows-1 lg:gap-12"
             >
               <Info />
-              <div className="col-span-4">
+              <div className="col-span-5">
                 <div className="gradient-border h-full rounded-xl bg-gradient-to-b from-zinc-900 to-zinc-950/80">
                   {!isConnected && (
                     <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8 ">
@@ -48,7 +48,7 @@ function App() {
 
                   {isConnected && (
                     <section className="flex h-full flex-col justify-center space-y-6 px-4 py-4">
-                      <div className="flex flex-col sm:flex-row gap-3 overflow-x-scroll overflow-visible">
+                      <div className="flex flex-col sm:flex-row gap-3">
                         {views.map((viewName) => (
                           <Button
                             key={viewName}
