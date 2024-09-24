@@ -18,7 +18,7 @@ function parsePr(params: { prBody: string; owner: string; repo: string; pullNumb
   return { closingIssues, relatedIssues, prUrl };
 }
 
-export async function prToLinearLinker(params: {
+export async function linkPrToLinear(params: {
   pullNumber: number;
   owner: string;
   repo: string;

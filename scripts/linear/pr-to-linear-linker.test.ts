@@ -4,7 +4,7 @@ import type { Issue, IssueConnection } from '@linear/sdk';
 import { LinearClient } from '@linear/sdk';
 import { randomBytes, randomInt } from 'crypto';
 
-import { prToLinearLinker } from './pr-to-linear-linker.js';
+import { linkPrToLinear } from './pr-to-linear-linker.js';
 
 const linearClient = new LinearClient({
   apiKey: 'linear-api-key',
@@ -107,7 +107,7 @@ describe('linear', () => {
       // @ts-expect-error dont need the response
       .mockImplementation(() => Promise.resolve());
 
-    await prToLinearLinker({ pullNumber: pr.number, owner, repo, octokit, linearClient });
+    await linkPrToLinear({ pullNumber: pr.number, owner, repo, octokit, linearClient });
 
     const closingLinearIssues = `<!-- LINEAR: closes ${mockClosingIssues
       .map((i) => i.identifier)
@@ -141,11 +141,11 @@ describe('linear', () => {
         return Promise.resolve();
       });
 
-    await prToLinearLinker({ pullNumber: pr.number, owner, repo, octokit, linearClient });
+    await linkPrToLinear({ pullNumber: pr.number, owner, repo, octokit, linearClient });
 
     expect(updatePrSpy).toHaveBeenCalledTimes(1);
 
-    await prToLinearLinker({ pullNumber: pr.number, owner, repo, octokit, linearClient });
+    await linkPrToLinear({ pullNumber: pr.number, owner, repo, octokit, linearClient });
 
     expect(updatePrSpy).toHaveBeenCalledTimes(1);
   });
@@ -177,7 +177,7 @@ describe('linear', () => {
       // @ts-expect-error dont need the response
       .mockImplementation(() => Promise.resolve());
 
-    await prToLinearLinker({ pullNumber: pr.number, owner, repo, octokit, linearClient });
+    await linkPrToLinear({ pullNumber: pr.number, owner, repo, octokit, linearClient });
 
     expect(deleteAttachmentSpy).toHaveBeenCalledTimes(issuesLinkedToPr.length);
 

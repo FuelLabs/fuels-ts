@@ -2,7 +2,7 @@
 import * as github from "@actions/github";
 import { LinearClient } from "@linear/sdk";
 
-import { prToLinearLinker } from "./pr-to-linear-linker";
+import { linkPrToLinear } from "./pr-to-linear-linker";
 
 const { GITHUB_REPOSITORY, GITHUB_TOKEN, LINEAR_TOKEN, PULL_NUMBER } =
   process.env;
@@ -32,4 +32,4 @@ const pullNumber = parseInt(PULL_NUMBER!, 10);
 const [owner, repo] = GITHUB_REPOSITORY!.split("/");
 
 // @ts-expect-error top-level await warning, but we're in a .mts script so it's fine
-await prToLinearLinker({ pullNumber, owner, repo, octokit, linearClient });
+await linkPrToLinear({ pullNumber, owner, repo, octokit, linearClient });
