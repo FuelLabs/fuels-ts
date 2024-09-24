@@ -1,7 +1,7 @@
 import type { getOctokit } from '@actions/github';
 import type { LinearClient } from '@linear/sdk';
 
-function parseIssues(params: { prBody: string; owner: string; repo: string; pullNumber: number }) {
+function parsePr(params: { prBody: string; owner: string; repo: string; pullNumber: number }) {
   const { prBody, owner, repo, pullNumber } = params;
   const closingIssuesRegex =
     /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)/gi;
@@ -34,7 +34,7 @@ export async function prToLinearLinker(params: {
     pull_number: pullNumber,
   });
 
-  const { closingIssues, relatedIssues, prUrl } = parseIssues({
+  const { closingIssues, relatedIssues, prUrl } = parsePr({
     ...params,
     prBody: body as string,
   });
