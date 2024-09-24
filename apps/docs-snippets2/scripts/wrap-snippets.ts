@@ -60,7 +60,6 @@ export const wrapSnippet = (filepath: string) => {
     */
     nodeLauncher = readFileSync(join(__dirname, 'launcher-snippet.ts'), 'utf-8')
       .replace(/import.*$/gm, '') // ignore file imports
-      .replace(/export /g, '') // remove export keywords
       .trim() // zip
       .replace(/\n/g, '\n  '); // indent chunk
   }
