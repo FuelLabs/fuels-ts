@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable no-global-assign */
+
+// %IMPORTS%
+
 const consoleBkp = { ...console };
 
 afterAll(() => {
@@ -27,4 +29,6 @@ test('%NAME%', async () => {
   // SNIPPET ———>>>
   // %SNIPPET%
   // <<<——— SNIPPET
+
+  return Promise.resolve();
 });

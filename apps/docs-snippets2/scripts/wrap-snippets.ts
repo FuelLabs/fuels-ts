@@ -69,20 +69,25 @@ export const wrapSnippet = (filepath: string) => {
   */
   const indented = snippetsNoImports.replace(/^/gm, '  ').trim();
 
-  const formatted = wrapperFnContents
-    .replace('%NAME%', basename(filepath))
-    .replace('// %SNIPPET%', indented)
-    .replace('// %NODE_LAUNCHER%', nodeLauncher)
-    .replace(/^.*#(end)?region.+$/gm, '')
-    .replace(/^[\s]*$/gm, '') // trailing spaces
-    .replace(/^([\s\S]]*\n){2,}/, '') // multiple empty lines
-    .trim();
+  // const eslintDisableRule = '// eslint-disable-next-line eslint-comments/disable-enable-pair\n';
+
+  const wrappedSnippet =
+    // eslintDisableRule +
+    wrapperFnContents
+      .replace('%IMPORTS%', imports)
+      .replace('%NAME%', basename(filepath))
+      .replace('// %SNIPPET%', indented)
+      .replace('// %NODE_LAUNCHER%', nodeLauncher)
+      .replace(/^.*#(end)?region.+$/gm, '')
+      .replace(/^[\s]*$/gm, '') // trailing spaces
+      .replace(/^([\s\S]]*\n){2,}/, '') // multiple empty lines
+      .trim();
 
   /*
     Write snippet wrapped in an test to disk
   */
   const wrappedPath = filepath.replace('.ts', '.test.ts');
-  const wrappedSnippet = [imports, '\n\n', formatted].join('');
+  // const wrappedSnippet = ['\n\n', formatted].join('');
 
   writeFileSync(wrappedPath, wrappedSnippet);
 };
