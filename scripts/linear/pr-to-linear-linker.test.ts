@@ -1,3 +1,4 @@
+/* eslint-disable tsdoc/syntax */
 import { getOctokit } from '@actions/github';
 import type { Issue, IssueConnection } from '@linear/sdk';
 import { LinearClient } from '@linear/sdk';
