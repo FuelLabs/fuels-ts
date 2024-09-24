@@ -1,4 +1,4 @@
-import { useConnectUI, useIsConnected } from "@fuels/react";
+import { useConnectUI, useIsConnected, useNetwork } from "@fuels/react";
 import { useEffect } from "react";
 
 import { useRouter } from "./hooks/useRouter";
@@ -9,11 +9,14 @@ import Contract from "./components/Contract";
 import Predicate from "./components/Predicate";
 import Script from "./components/Script";
 import Faucet from "./components/Faucet";
+import { providerUrl } from "./lib.tsx";
 
 function App() {
   const { connect } = useConnectUI();
   const { isConnected, refetch } = useIsConnected();
+  const { network } = useNetwork();
   const { view, views, setRoute } = useRouter();
+  const isConnectedToCorrectNetwork = network?.url === providerUrl;
 
   useEffect(() => {
     refetch();
@@ -46,7 +49,24 @@ function App() {
                     </section>
                   )}
 
-                  {isConnected && (
+                  {isConnected && !isConnectedToCorrectNetwork && (
+                    <section className="flex h-full flex-col justify-center space-y-6 px-4 py-8 ">
+                      <p className="text-center">
+                        You are connected to the wrong network. Please switch to{" "}
+                        <a
+                          href={providerUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-green-500/80 transition-colors hover:text-green-500"
+                        >
+                          {providerUrl}
+                        </a>
+                        &nbsp;in your wallet.
+                      </p>
+                    </section>
+                  )}
+
+                  {isConnected && isConnectedToCorrectNetwork && (
                     <section className="flex h-full flex-col justify-center space-y-6 px-4 py-4">
                       <div className="flex flex-col sm:flex-row gap-3">
                         {views.map((viewName) => (
