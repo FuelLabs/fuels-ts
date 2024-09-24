@@ -13,6 +13,7 @@ export default function Predicate() {
     errorNotification,
     transactionSubmitNotification,
     transactionSuccessNotification,
+    successNotification,
   } = useNotification();
   const [predicate, setPredicate] = useState<FuelPredicate<InputValue[]>>();
   const [predicatePin, setPredicatePin] = useState<string>();
@@ -81,6 +82,12 @@ export default function Predicate() {
     refetch();
   };
 
+  const copyAddress = () => {
+    if (!predicate) return;
+    navigator.clipboard.writeText(predicate?.address.toB256());
+    successNotification("Address copied to clipboard");
+  };
+
   return (
     <>
       <div>
@@ -109,6 +116,24 @@ export default function Predicate() {
           <code>sway-programs/predicates/src/main.sw</code>.
         </p>
       </div>
+
+      <div>
+        <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
+          Predicate Address
+        </h3>
+        <div className="flex flex-col md:flex-row items-center justify-between text-base dark:text-zinc-50">
+          <input
+            type="text"
+            value={predicate?.address.toB256()}
+            className="w-2/3 bg-gray-800 rounded-md mb-2 md:mb-0 px-2 py-1 mr-3 truncate font-mono"
+            disabled
+          />
+          <Button className="w-1/3" onClick={copyAddress}>
+            Copy
+          </Button>
+        </div>
+      </div>
+
       <div>
         <h3 className="mb-1 text-sm font-medium dark:text-zinc-300/70">
           Wallet Balance
