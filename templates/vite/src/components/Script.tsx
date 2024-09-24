@@ -78,7 +78,6 @@ export default function Script() {
           </h3>
           <div className="flex items-center justify-between text-base dark:text-zinc-50">
             <input
-              type="number"
               value={input}
               onChange={(e) => setInput(Number(e.target.value))}
               className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
