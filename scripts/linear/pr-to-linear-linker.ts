@@ -39,14 +39,14 @@ export async function prToLinearLinker(params: {
     prBody: body as string,
   });
 
-  const ghIssuesUrls = closingIssues.concat(relatedIssues);
+  const allIssues = closingIssues.concat(relatedIssues);
 
-  const ghIssuesAndPr = ghIssuesUrls.concat([prUrl]);
+  const allIssuesAndPr = allIssues.concat([prUrl]);
   const { nodes: linearIssues } = await linearClient.issues({
     filter: {
       attachments: {
         url: {
-          in: ghIssuesAndPr,
+          in: allIssuesAndPr,
         },
       },
     },
@@ -58,7 +58,7 @@ export async function prToLinearLinker(params: {
 
   for (const issue of linearIssues) {
     const { nodes: attachments } = await issue.attachments({
-      filter: { url: { in: ghIssuesAndPr } },
+      filter: { url: { in: allIssuesAndPr } },
     });
     if (attachments.some((a) => closingIssues.includes(a.url))) {
       closingLinearIssues.push(issue.identifier);
@@ -72,7 +72,7 @@ export async function prToLinearLinker(params: {
     }
 
     const unlinkedAttachment =
-      attachments.every((a) => !ghIssuesUrls.includes(a.url)) &&
+      attachments.every((a) => !allIssues.includes(a.url)) &&
       attachments.find((a) => a.url === prUrl);
 
     if (unlinkedAttachment) {
@@ -80,14 +80,14 @@ export async function prToLinearLinker(params: {
     }
   }
 
-  const closesIssues = closingLinearIssues.sort().join(', ');
-  const relatesIssues = relatedLinearIssues.sort().join(', ');
+  const closes = closingLinearIssues.sort().join(', ');
+  const relatesTo = relatedLinearIssues.sort().join(', ');
 
-  const linearIssuesChanged = !body?.includes(closesIssues) || !body.includes(relatesIssues);
+  const linearIssuesChanged = !body?.includes(closes) || !body.includes(relatesTo);
 
   if (linearIssuesChanged) {
-    const closingIssuesComment = `<!-- LINEAR: closes ${closesIssues} -->`;
-    const relatedIssuesComment = `<!-- LINEAR: relates to ${relatesIssues} -->`;
+    const closingIssuesComment = `<!-- LINEAR: closes ${closes} -->`;
+    const relatedIssuesComment = `<!-- LINEAR: relates to ${relatesTo} -->`;
     const newBody = `${closingIssuesComment}\n${relatedIssuesComment}\n${body}`;
     await octokit.rest.pulls.update({
       owner,
