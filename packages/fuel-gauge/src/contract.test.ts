@@ -13,14 +13,16 @@ import {
   Predicate,
   PolicyType,
   buildFunctionResult,
+  ReceiptType,
 } from 'fuels';
-import type { ScriptTransactionRequest, TransferParams } from 'fuels';
+import type { ReceiptMessageOut, ScriptTransactionRequest, TransferParams } from 'fuels';
 import { expectToThrowFuelError, ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
 import type { DeployContractConfig } from 'fuels/test-utils';
 
 import {
   CallTestContract,
   CallTestContractFactory,
+  SmoContractFactory,
   StorageTestContract,
   StorageTestContractFactory,
 } from '../test/typegen/contracts';
@@ -1110,5 +1112,52 @@ describe('Contract', () => {
 
     expect(scriptGasLimit?.toNumber()).toBe(gasLimit);
     expect(bn(maxFeePolicy?.data).toNumber()).toBe(maxFee);
+  });
+
+  it('can call SMO contract', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: SmoContractFactory,
+        },
+      ],
+    });
+
+    const {
+      provider,
+      wallets: [recipient],
+      contracts: [contract],
+    } = launched;
+
+    const data = [1, 2, 3, 4, 5, 6, 7, 8];
+    const baseAssetId = provider.getBaseAssetId();
+
+    const { waitForResult } = await contract
+      .multiCall([
+        contract.functions
+          .send_typed_message_u8(recipient.address.toB256(), 10, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+        contract.functions
+          .send_typed_message_bool(recipient.address.toB256(), true, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+        contract.functions
+          .send_typed_message_bytes(recipient.address.toB256(), data, 1)
+          .callParams({ forward: [1, baseAssetId] }),
+      ])
+      .call();
+
+    const {
+      transactionResult: { receipts },
+    } = await waitForResult();
+
+    const messageOutReceipts = receipts.filter(
+      ({ type }) => ReceiptType.MessageOut === type
+    ) as ReceiptMessageOut[];
+
+    expect(messageOutReceipts.length).toBe(3);
+
+    messageOutReceipts.forEach((receipt) => {
+      expect(receipt.recipient).toBe(recipient.address.toB256());
+    });
   });
 });

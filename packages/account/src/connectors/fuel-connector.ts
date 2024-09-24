@@ -90,6 +90,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   metadata: ConnectorMetadata = {} as ConnectorMetadata;
   connected: boolean = false;
   installed: boolean = false;
+  external: boolean = true;
   events = FuelConnectorEventTypes;
 
   /**
