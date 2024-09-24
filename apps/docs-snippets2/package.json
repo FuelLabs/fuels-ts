@@ -14,7 +14,7 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
-    "glob": "^10.2.6"
+    "glob": "^10.4.5"
   },
   "keywords": [],
   "author": "",
