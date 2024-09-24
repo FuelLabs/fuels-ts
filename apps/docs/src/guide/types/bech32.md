@@ -1,5 +1,8 @@
 # `Bech32`
 
+> [!NOTE] Note
+> The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+
 The SDK uses the `Bech32` type as the core property of the [`Address`](../../api/Address/Address.md) class, specifically through the `bech32Address` property.
 
 Originally designed for Bitcoin, the `Bech32` format offers numerous advantages such as enhanced error detection, simplified integrations, and improved compatibility with future upgrades. Given these benefits, the [`Address`](../../api/Address/Address.md) class is constructed around the `Bech32` type.

@@ -6,6 +6,9 @@ The Fuel Network uses the [`Bech32`](../types/bech32.md) address format for its 
 
 <<< @/../../docs-snippets/src/guide/types/bech32.test.ts#addresses-1{ts:line-numbers}
 
+> [!NOTE] Note
+> The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+
 However, a hexlified [Bits256](../types/bits256.md) (hex) is another common address format; an example can be seen below:
 
 <<< @/../../docs-snippets/src/guide/types/bits256.test.ts#addresses-2{ts:line-numbers}

@@ -23,7 +23,8 @@ export const FUEL_BECH32_HRP_PREFIX = 'fuel';
 
 /**
  * Decodes a Bech32 address string into Decoded
- *
+ * @deprecated
+ * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
  * @hidden
  */
 export function fromBech32(address: Bech32Address): Decoded {
@@ -32,7 +33,8 @@ export function fromBech32(address: Bech32Address): Decoded {
 
 /**
  * Converts a B256 address string into Bech32
- *
+ * @deprecated
+ * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
  * @hidden
  */
 export function toBech32(address: B256Address): Bech32Address {
@@ -44,7 +46,8 @@ export function toBech32(address: B256Address): Bech32Address {
 
 /**
  * Determines if a given string is Bech32 format
- *
+ * @deprecated
+ * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
  * @hidden
  */
 export function isBech32(address: BytesLike): boolean {

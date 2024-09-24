@@ -4,6 +4,9 @@
 
 This module contains the utilities for encoding and decoding address and contract ids between Bech32 and other address formats.
 
+> [!NOTE] Note
+> The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+
 # Table of contents
 
 - [Documentation](#documentation)

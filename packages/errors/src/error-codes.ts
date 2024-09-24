@@ -25,7 +25,12 @@ export enum ErrorCode {
   WORKSPACE_NOT_DETECTED = 'workspace-not-detected',
 
   // address
+  /**
+   * @deprecated
+   * The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+   */
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
+
   INVALID_EVM_ADDRESS = 'invalid-evm-address',
   INVALID_B256_ADDRESS = 'invalid-b256-address',
 

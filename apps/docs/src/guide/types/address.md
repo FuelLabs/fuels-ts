@@ -24,6 +24,9 @@ To create an [`Address`](../../api/Address/Address.md) from a `Bech32` address, 
 
 <<< @/../../docs-snippets/src/guide/types/address.test.ts#address-2{ts:line-numbers}
 
+> [!NOTE] Note
+> The `bech32Address` is now deprecated. Hexadecimal will be the only address format from this point onward.
+
 ### From a Public Key
 
 To create an [`Address`](../../api/Address/Address.md) from a public key, use the following code snippet:
