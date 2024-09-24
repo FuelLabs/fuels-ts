@@ -1,19 +1,21 @@
 import type { getOctokit } from '@actions/github';
 import type { LinearClient } from '@linear/sdk';
 
-function parsePr(params: { prBody: string; owner: string; repo: string; pullNumber: number }) {
-  const { prBody, owner, repo, pullNumber } = params;
-  const closingIssuesRegex =
-    /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+#(\d+)/gi;
-  const closingIssues = [...prBody.matchAll(closingIssuesRegex)].map(
-    ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
-  );
+function parsePr(params: { prBody: string; owner: string; repo: string; prNo: number }) {
+  const { prBody, owner, repo, prNo } = params;
 
-  const relatedIssuesRegex = /(relates\sto|related\sto|part\sof)\s+#(\d+)/gi;
-  const relatedIssues = [...prBody.matchAll(relatedIssuesRegex)].map(
-    ([, , issueNo]) => `https://github.com/${owner}/${repo}/issues/${issueNo}`
-  );
-  const prUrl = `https://github.com/${owner}/${repo}/pull/${pullNumber}`;
+  const prUrl = `https://github.com/${owner}/${repo}/pull/${prNo}`;
+
+  const issueUrl = `https://github.com/${owner}/${repo}/issues/%s`;
+  const closingIssuesRegex = /(close(?:s|d)?|fix(?:es|ed)?|resolve(?:s|d)?)\s#(\d+)/gi;
+
+  const formatIssueUrl = (r: RegExpExecArray) => issueUrl.replace('%s', r[2]);
+
+  const closingIssues = [...prBody.matchAll(closingIssuesRegex)].map(formatIssueUrl);
+
+  const relatedIssuesRegex = /(relate(?:s|d)\sto|part\sof)\s+#(\d+)/gi;
+
+  const relatedIssues = [...prBody.matchAll(relatedIssuesRegex)].map(formatIssueUrl);
 
   return { closingIssues, relatedIssues, prUrl };
 }
@@ -36,6 +38,7 @@ export async function linkPrToLinear(params: {
 
   const { closingIssues, relatedIssues, prUrl } = parsePr({
     ...params,
+    prNo: pullNumber,
     prBody: body as string,
   });
 
