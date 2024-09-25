@@ -39,6 +39,7 @@ sway-programs/**/out
 
 test-results
 playwright-report
+
 # Uncomment the lines below if you don't wish
 # to commit the generated files to git
 
