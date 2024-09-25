@@ -5,6 +5,14 @@ import { getLatestFuelsVersion } from './getLatestFuelsVersion';
  * @group node
  */
 describe('getLatestFuelsVersion', () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should fail if fetch fails', async () => {
     vi.spyOn(global, 'fetch').mockImplementation(() =>
       Promise.reject(new Error('Failed to fetch'))
