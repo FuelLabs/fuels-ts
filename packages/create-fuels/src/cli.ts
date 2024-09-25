@@ -142,8 +142,7 @@ export const runScaffoldCli = async ({
   // Remove typegen files from gitignore
   const gitignorePath = join(projectPath, '.gitignore');
   const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
-  const newGitIgnoreContents = gitignoreContents
-    .replace(/^(src\/sway-api\.+)$/mg, '# $1');
+  const newGitIgnoreContents = gitignoreContents.replace(/^(src\/sway-api\.+)$/gm, '# $1');
   writeFileSync(gitignorePath, newGitIgnoreContents);
 
   if (opts.install) {
