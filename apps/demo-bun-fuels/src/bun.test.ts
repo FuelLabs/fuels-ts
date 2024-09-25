@@ -1,13 +1,5 @@
-/**
- * NOTE: These tests are a copy of the ones at:
- *  - /apps/demo-typegen/src/demo.test.ts
- *
- * It ensures that built code is fully working.
- */
-
 import { ErrorCode, FuelError, toHex, Wallet } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
-
 import { Sample, SampleFactory } from './sway-programs-api';
 
 /**
@@ -15,111 +7,68 @@ import { Sample, SampleFactory } from './sway-programs-api';
  * @group browser
  */
 describe('ExampleContract', () => {
-  it('should return the input', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
+  let launched: Awaited<ReturnType<typeof launchTestNode>>;
+  let wallet: Wallet;
 
-    // Deploy
-    const factory = new SampleFactory(wallet);
-    const { waitForResult } = await factory.deploy();
-    const { contract } = await waitForResult();
+  beforeAll(async () => {
+    launched = await launchTestNode();
+    [wallet] = launched.wallets;
+  });
 
-    // Call
-    const call1 = await contract.functions.return_input(1337).call();
+  afterAll(async () => {
+    await launched.stop();
+  });
 
-    // Wait for result
-    const { value } = await call1.waitForResult();
+  async function deployContract() {
+    const { contract } = await SampleFactory.deploy(wallet).waitForResult();
+    return contract;
+  }
 
-    // Assert
-    expect(value.toHex()).toEqual(toHex(1337));
+  it('should return the input value', async () => {
+    const contract = await deployContract();
+    const input = 1337;
 
-    // You can also make a call using the factory
+    const { value } = await contract.functions.return_input(input).call().waitForResult();
+    expect(value.toHex()).toEqual(toHex(input));
+
     const contractInstance = new Sample(contract.id, wallet);
-    const call2 = await contractInstance.functions.return_input(1337).call();
-
-    // Wait for result
-    const { value: v2 } = await call2.waitForResult();
-    expect(v2.toHex()).toBe(toHex(1337));
+    const { value: v2 } = await contractInstance.functions.return_input(input).call().waitForResult();
+    expect(v2.toHex()).toBe(toHex(input));
   });
 
-  it('deploy method', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
+  it('should work correctly with the deploy method', async () => {
+    const contract = await deployContract();
+    const input = 1337;
 
-    // Deploy
-    const deploy = await SampleFactory.deploy(wallet);
-    const { contract } = await deploy.waitForResult();
-
-    // Call
-    const { waitForResult } = await contract.functions.return_input(1337).call();
-
-    // Wait for result
-    const { value } = await waitForResult();
-
-    // Assert
-    expect(value.toHex()).toEqual(toHex(1337));
+    const { value } = await contract.functions.return_input(input).call().waitForResult();
+    expect(value.toHex()).toEqual(toHex(input));
   });
 
-  it('should throw when simulating via contract factory with wallet with no resources', async () => {
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [fundedWallet],
-    } = launched;
-
-    const unfundedWallet = Wallet.generate({ provider });
-
-    const deploy = await SampleFactory.deploy(fundedWallet);
-    const { contract } = await deploy.waitForResult();
-
+  it('should throw an error when simulating with a wallet without resources', async () => {
+    const contract = await deployContract();
+    const unfundedWallet = Wallet.generate({ provider: launched.provider });
     const contractInstance = new Sample(contract.id, unfundedWallet);
 
     await expectToThrowFuelError(
       () => contractInstance.functions.return_input(1337).simulate(),
-      new FuelError(
-        ErrorCode.NOT_ENOUGH_FUNDS,
-        `The account(s) sending the transaction don't have enough funds to cover the transaction.`
-      )
+      new FuelError(ErrorCode.NOT_ENOUGH_FUNDS, 'The account(s) sending the transaction don\'t have enough funds to cover the transaction.')
     );
   });
 
-  it('should not throw when dry running via contract factory with wallet with no resources', async () => {
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [fundedWallet],
-    } = launched;
-
-    const unfundedWallet = Wallet.generate({ provider });
-
-    const deploy = await SampleFactory.deploy(fundedWallet);
-    const { contract } = await deploy.waitForResult();
-
+  it('should not throw an error during dry run with a wallet without resources', async () => {
+    const contract = await deployContract();
+    const unfundedWallet = Wallet.generate({ provider: launched.provider });
     const contractInstance = new Sample(contract.id, unfundedWallet);
 
     await expect(contractInstance.functions.return_input(1337).dryRun()).resolves.not.toThrow();
   });
 
-  it('should demo how to use generated files just fine', async () => {
-    using launched = await launchTestNode();
-    const {
-      wallets: [wallet],
-    } = launched;
+  it('should demonstrate correct usage of generated files', async () => {
+    const contract = await deployContract();
+    const contractsIds = { sample: contract.id };
 
-    const { waitForResult } = await SampleFactory.deploy(wallet);
-
-    const { contract: depoloyed } = await waitForResult();
-    const contractsIds = {
-      sample: depoloyed.id,
-    };
-
-    const contract = new Sample(contractsIds.sample, wallet);
-
-    const { value } = await contract.functions.return_input(1337).dryRun();
+    const sampleContract = new Sample(contractsIds.sample, wallet);
+    const { value } = await sampleContract.functions.return_input(1337).dryRun();
 
     expect(value.toHex()).toEqual(toHex(1337));
   });
