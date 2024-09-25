@@ -51,7 +51,7 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "tsx scripts/build-proxy-contract.tsx",
+    "prebuild": "tsx scripts/build-proxy-contract.ts",
     "build": "run-s build:package build:browser build:minified",
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
