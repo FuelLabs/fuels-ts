@@ -51,8 +51,8 @@
     "dist"
   ],
   "scripts": {
-    "prebuild": "tsx scripts/build-proxy-contract.ts",
-    "build": "run-s build:package build:browser build:minified",
+    "build": "run-s build:proxy build:package build:browser build:minified",
+    "build:proxy": "tsx scripts/build-proxy-contract.ts",
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
     "build:minified": "pnpm uglifyjs --compress --mangle --output dist/browser.min.mjs -- dist/browser.mjs",
