@@ -168,7 +168,7 @@ The e2e test can be found at:
 The Bech32 address of this wallet is `fuel1x33ajpj0jy5p2wcqqu45e32r75zrwfeh6hwqfv5un670rv4p0mns58enjg`. This address can be funded via the [faucet](https://faucet-testnet.fuel.network/).
 
 > [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated; please switch to hexadecimals like `0x..`.
+> `Bech32` addresses like `fuel1..` are now deprecated; please switch to B256 format, for more details see [here](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256).
 
 If you want to run an e2e test locally, you can provide your own wallet address and private key. For obvious security reasons, the private key should not be shared.
 

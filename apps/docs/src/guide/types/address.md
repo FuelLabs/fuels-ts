@@ -25,7 +25,7 @@ To create an [`Address`](../../api/Address/Address.md) from a `Bech32` address, 
 <<< @/../../docs-snippets/src/guide/types/address.test.ts#address-2{ts:line-numbers}
 
 > [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated; please switch to hexadecimals like `0x..`.
+> `Bech32` addresses like `fuel1..` are now deprecated; please switch to B256 format, for more details see [here](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256).
 
 ### From a Public Key
 

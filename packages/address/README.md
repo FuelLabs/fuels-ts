@@ -5,7 +5,7 @@
 This module contains the utilities for encoding and decoding address and contract ids between Bech32 and other address formats.
 
 > [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated; please switch to hexadecimals like `0x..`.
+> `Bech32` addresses like `fuel1..` are now deprecated; please switch to B256 format, for more details see [here](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256).
 
 # Table of contents
 
