@@ -210,7 +210,7 @@ describe('Transaction Request', () => {
     // #endregion transaction-request-7
 
     expect(transactionId).toBe(
-      '0xf62e682e05fa17455999758d00875449bd6f06cdbe003a6431aa944f2d652642'
+      '0xebefb535f39d996a31dec819ab1b370a72cb8842dff4a9453a85ab53f3a50b45'
     );
   });
 });
