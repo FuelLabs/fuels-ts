@@ -1,14 +1,9 @@
 import { execSync } from "child_process";
 import { readFileSync, writeFileSync } from "fs";
 
-// build contract
+// generate types for pre-built contracts
 execSync(
-  `fuels-forc build --release -p src/cli/commands/deploy/proxy/contract`,
-);
-
-// generate types for it
-execSync(
-  `fuels-typegen -i src/cli/commands/deploy/proxy/contract/out/release/*-abi.json -o src/cli/commands/deploy/proxy/types`,
+  `fuels-typegen -i src/cli/commands/deploy/proxy/contract/*-abi.json -o src/cli/commands/deploy/proxy/types`,
 );
 
 // overrides 'fuels' absolute import paths with relative ones
