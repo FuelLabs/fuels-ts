@@ -51,9 +51,9 @@ const {
   transactionResult: { isStatusSuccess },
 } = await waitForResult();
 
-console.log('Transaction status should be successful:', isStatusSuccess);
-console.log('Transaction value should exist:', value);
-console.log('Transaction request should exist:', transactionRequest);
+console.log('Transaction status', isStatusSuccess);
+console.log('Transaction value', value);
+console.log('Transaction request', transactionRequest);
 
 // #endregion transaction-parameters-8
 // #endregion full
