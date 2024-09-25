@@ -10,5 +10,5 @@ const wallet = Wallet.fromAddress(ADDRESS, provider);
 
 const { balances } = await wallet.getBalances();
 
-console.log(`Balances`, balances);
+console.log('Balances', balances);
 // #endregion main
