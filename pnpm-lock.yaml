@@ -204,8 +204,8 @@ importers:
         specifier: ^5.55.4
         version: 5.55.4(react@18.3.1)
       '@tanstack/react-router':
-        specifier: ^1.56.5
-        version: 1.56.5(@tanstack/router-generator@1.56.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^1.58.3
+        version: 1.58.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@wagmi/connectors':
         specifier: ^5.1.12
         version: 5.1.12(@types/react@18.3.8)(@wagmi/core@2.13.6(@tanstack/query-core@5.55.4)(@types/react@18.3.8)(immer@9.0.21)(react@18.3.1)(typescript@5.6.2)(viem@2.20.1(bufferutil@4.0.8)(typescript@5.6.2)(utf-8-validate@5.0.10)(zod@3.23.8)))(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.1(@babel/core@7.25.2)(@babel/preset-env@7.22.5(@babel/core@7.25.2))(@types/react@18.3.8)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(rollup@4.22.4)(typescript@5.6.2)(utf-8-validate@5.0.10)(viem@2.20.1(bufferutil@4.0.8)(typescript@5.6.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
@@ -1342,8 +1342,8 @@ importers:
         specifier: ^5.55.4
         version: 5.55.4(react@18.3.1)
       '@tanstack/react-router':
-        specifier: ^1.56.5
-        version: 1.56.5(@tanstack/router-generator@1.56.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^1.58.3
+        version: 1.58.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@wagmi/connectors':
         specifier: ^5.1.12
         version: 5.1.12(@types/react@18.3.8)(@wagmi/core@2.13.6(@tanstack/query-core@5.55.4)(@types/react@18.3.8)(immer@9.0.21)(react@18.3.1)(typescript@5.6.2)(viem@2.20.1(bufferutil@4.0.8)(typescript@5.6.2)(utf-8-validate@5.0.10)(zod@3.23.8)))(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.1(@babel/core@7.25.2)(@babel/preset-env@7.22.5(@babel/core@7.25.2))(@types/react@18.3.8)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(rollup@4.22.4)(typescript@5.6.2)(utf-8-validate@5.0.10)(viem@2.20.1(bufferutil@4.0.8)(typescript@5.6.2)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
@@ -5343,8 +5343,8 @@ packages:
     resolution: {integrity: sha512-XIB2XbzHTN6ieIjfIMV9hlVcfPU26s2vafYWQcZHWXHOxiaRZYEDKEwdl129Zyg50+foYV2jCgtrqSA6qNuNSA==}
     engines: {node: '>=6'}
 
-  '@tanstack/history@1.51.7':
-    resolution: {integrity: sha512-y25aH3NDbdUp5Gk6Fnb77LsHTT2JrzVgI44ZiyEOf8i2j14Ma3oJ80fCw7rT/iV4xa4IN2Yex9flAsZQdh1i4A==}
+  '@tanstack/history@1.57.6':
+    resolution: {integrity: sha512-ppAJbnUaHdHmccVmplcd1ivX4GMPHxhStSquuuz0TSAEPEpz0iOVBur4iKfvIuMKm24c40nhvaEwZbKGVfbrGg==}
     engines: {node: '>=12'}
 
   '@tanstack/query-core@5.55.4':
@@ -5355,16 +5355,15 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
-  '@tanstack/react-router@1.56.5':
-    resolution: {integrity: sha512-qCmBgplLlqOSW1eLlKglTTFMv9zlsL8CJZWN0J0+YLkHSmbsdTKQhfA4bFveXL+EwjrJgFT+/GgIfB8fZEp8PQ==}
+  '@tanstack/react-router@1.58.9':
+    resolution: {integrity: sha512-ODKOo8bUo8nIPGZmJHa7zNul9U3XAMmohnwZLl2A/A3suU03Q+0R5oOfhUKw+qArPIdIcec1VtqYpNk6y7qfrQ==}
     engines: {node: '>=12'}
     peerDependencies:
-      '@tanstack/react-generator': '*'
-      '@tanstack/router-generator': 1.56.4
+      '@tanstack/router-generator': 1.58.1
       react: '>=18'
       react-dom: '>=18'
     peerDependenciesMeta:
-      '@tanstack/react-generator':
+      '@tanstack/router-generator':
         optional: true
 
   '@tanstack/react-store@0.5.5':
@@ -21254,7 +21253,7 @@ snapshots:
     dependencies:
       defer-to-connect: 1.1.3
 
-  '@tanstack/history@1.51.7': {}
+  '@tanstack/history@1.57.6': {}
 
   '@tanstack/query-core@5.55.4': {}
 
@@ -21263,11 +21262,10 @@ snapshots:
       '@tanstack/query-core': 5.55.4
       react: 18.3.1
 
-  '@tanstack/react-router@1.56.5(@tanstack/router-generator@1.56.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@tanstack/react-router@1.58.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@tanstack/history': 1.51.7
+      '@tanstack/history': 1.57.6
       '@tanstack/react-store': 0.5.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@tanstack/router-generator': 1.56.4
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       tiny-invariant: 1.3.3
