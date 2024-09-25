@@ -10,7 +10,7 @@
 // #region bech32-1
 /**
  * @deprecated
- * The `bech32Address` is now deprecated. Please migrate to `toB256` as this will be the standard going forward.
+ * The `bech32Address` is now deprecated. Please migrate to B256 format (see https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256 for more details) as this will be the standard going forward.
  */
 export type Bech32Address = `fuel${string}`;
 // #endregion bech32-1

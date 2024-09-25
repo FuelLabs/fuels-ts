@@ -31,7 +31,7 @@ By instantiating an [`Address`](../../api/Address/Address.md), we can validate a
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-5{ts:line-numbers}
 
-Or, if you'd prefer to use utility functions directly for validation and conversion, you can use `isBech32` and `toB256`:
+Or, if you'd prefer to use utility functions directly for validation and conversion, you can use `isBech32` and B256 format (see https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256 for more details):
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-6{ts:line-numbers}
 
@@ -47,7 +47,7 @@ And by using the `isB256` and `toBech32` utilities:
 
 ## Converting a Contract ID
 
-The Contract `id` property has the [`AbstractAddress`](../types/address.md#abstractaddress-class) type. Therefore, it can be converted using the [`Address`](../../api/Address/Address.md) class functions such as `toAddress` and `toB256`:
+The Contract `id` property has the [`AbstractAddress`](../types/address.md#abstractaddress-class) type. Therefore, it can be converted using the [`Address`](../../api/Address/Address.md) class functions such as `toAddress` and B256 format (see https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256 for more details):
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-2{ts:line-numbers}
 
