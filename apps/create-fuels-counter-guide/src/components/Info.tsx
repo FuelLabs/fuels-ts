@@ -2,7 +2,7 @@ import { providerUrl, playgroundUrl } from "../lib.tsx";
 
 export default function Info() {
   return (
-    <div id="text" className="col-span-3 px-4 py-4">
+    <div id="text" className="col-span-2 px-4 py-4">
       <h1 className="pb-1 pt-0 md:pt-6 text-3xl font-medium">Welcome to Fuel</h1>
       <p>
         This Vite + React template was bootstrapped with the{" "}

@@ -1,16 +1,26 @@
 import { useBalance, useWallet } from "@fuels/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import LocalFaucet from "./LocalFaucet";
 import Button from "./Button";
 import { isLocal, renderFormattedBalance, testnetFaucetUrl } from "../lib.tsx";
-import { useNotification } from "../hooks/useNotification.tsx";
 
 export default function Faucet() {
-  const { successNotification } = useNotification();
   const { wallet } = useWallet();
-  const address = wallet?.address.toB256() || "";
-  const { balance, refetch } = useBalance({ address });
+  const connectedWalletAddress = wallet?.address.toB256() || "";
+
+  const [addressToFund, setAddressToFund] = useState("");
+
+  const { balance, refetch } = useBalance({ address: addressToFund });
+
+  const [initialAddressLoaded, setInitialAddressLoaded] = useState(false);
+
+  useEffect(() => {
+    if (connectedWalletAddress && !initialAddressLoaded && !addressToFund) {
+      setAddressToFund(connectedWalletAddress);
+      setInitialAddressLoaded(true);
+    }
+  }, [connectedWalletAddress, addressToFund, initialAddressLoaded]);
 
   useEffect(() => {
     refetch();
@@ -21,11 +31,6 @@ export default function Faucet() {
     return () => clearInterval(interval);
   }, [refetch]);
 
-  const copyAddress = () => {
-    navigator.clipboard.writeText(address);
-    successNotification("Address copied to clipboard");
-  };
-
   return (
     <>
       <div>
@@ -35,13 +40,10 @@ export default function Faucet() {
         <div className="flex items-center justify-between text-base dark:text-zinc-50">
           <input
             type="text"
-            value={address}
-            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
-            disabled
+            value={addressToFund}
+            className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            onChange={(e) => setAddressToFund(e.target.value)}
           />
-          <Button className="w-1/3" onClick={copyAddress}>
-            Copy
-          </Button>
         </div>
       </div>
 
@@ -70,7 +72,7 @@ export default function Faucet() {
               Testnet Faucet
             </h3>
             <iframe
-              src={`${testnetFaucetUrl}?address=${address}`}
+              src={`${testnetFaucetUrl}?address=${connectedWalletAddress}`}
               title="Faucet"
               className="w-full max-h-screen min-h-[500px] border-0 rounded-md mt-1"
             />
@@ -79,11 +81,11 @@ export default function Faucet() {
       </div>
       {isLocal && (
         <>
-          <LocalFaucet refetch={refetch} />
+          <LocalFaucet refetch={refetch} addressToFund={addressToFund} />
           <p className="w-full px-2 py-1 mr-3 font-mono text-xs">
             If you would like to visit the testnet faucet, you can do so{" "}
             <a
-              href={`${testnetFaucetUrl}?address=${address}&autoClose&redirectUrl=${window.location.href}`}
+              href={`${testnetFaucetUrl}?address=${connectedWalletAddress}&autoClose&redirectUrl=${window.location.href}`}
               target="_blank"
               className="text-green-500/80 transition-colors hover:text-green-500"
             >
