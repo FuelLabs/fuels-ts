@@ -87,8 +87,8 @@ describe('Multicalls', () => {
       contracts: [contextContract, echoContract],
       provider,
     } = launched;
-    // #region multicall-3
 
+    // #region multicall-3
     const { waitForResult } = await contextContract
       .multiCall([
         echoContract.functions.echo_u8(10),
