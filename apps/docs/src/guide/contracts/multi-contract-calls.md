@@ -7,7 +7,7 @@ You can execute multiple contract calls in a single transaction, either to the s
 
 <!-- calls:example:end -->
 
-## Same Contract multi calls
+## Same Contract Multi Calls
 
 <!-- This section should explain how make multiple calls with the SDK -->
 <!-- multicall:example:start -->
@@ -18,7 +18,7 @@ Use the `multiCall` method to call multiple functions on the same contract in a 
 
 <<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-1{ts:line-numbers}
 
-## Different contracts multi calls
+## Different Contracts Multi Calls
 
 The `multiCall` method also allows you to execute multiple contract calls to distinct contracts within a single transaction:
 
