@@ -41,7 +41,7 @@ export default function Faucet() {
           <input
             type="text"
             value={addressToFund}
-            className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-full bg-gray-800 rounded-md px-2 py-1 truncate font-mono"
             onChange={(e) => setAddressToFund(e.target.value)}
           />
         </div>

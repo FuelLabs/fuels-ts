@@ -82,7 +82,7 @@ export default function Script() {
             <input
               value={input}
               onChange={(e) => setInput(Number(e.target.value))}
-              className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+              className="w-full bg-gray-800 rounded-md px-2 py-1 truncate font-mono"
               placeholder="Hint: 123"
             />
           </div>
@@ -95,7 +95,7 @@ export default function Script() {
             <input
               type="number"
               value={result}
-              className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+              className="w-full bg-gray-800 rounded-md px-2 py-1 truncate font-mono"
               disabled
             />
           </div>

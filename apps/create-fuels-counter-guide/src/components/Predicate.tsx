@@ -186,14 +186,14 @@ export default function Predicate() {
           <input
             type="text"
             value={predicateBalance ? `${renderFormattedBalance(predicateBalance)} ETH` : ""}
-            className="w-1/2 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-1/2 bg-gray-800 rounded-md px-2 py-1 md:mr-3 truncate font-mono"
             disabled
           />
           <input
             type="text"
             value={predicatePin}
             onChange={(e) => setPredicatePin(e.target.value)}
-            className="w-1/2 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-1/2 bg-gray-800 rounded-md px-2 py-1 truncate font-mono"
             placeholder="Enter current or new pin"
           />
         </div>

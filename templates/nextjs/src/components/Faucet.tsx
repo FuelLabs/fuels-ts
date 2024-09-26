@@ -54,7 +54,7 @@ export default function Faucet() {
           <input
             type="text"
             value={balance ? `${renderFormattedBalance(balance)} ETH` : ""}
-            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 truncate font-mono"
             disabled
             data-testid="balance"
           />
