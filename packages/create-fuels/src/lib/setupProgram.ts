@@ -28,7 +28,6 @@ export const setupProgram = () => {
     .option('--verbose', 'Enable verbose logging')
     .option('--no-install', 'Do not install dependencies')
     .option('--template <template>', 'Specify a template to use', defaultTemplate)
-    .addHelpCommand()
     .showHelpAfterError(true);
   return program;
 };
