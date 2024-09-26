@@ -17,7 +17,10 @@ export const useNotification = () => {
     if (notification.current) {
       toast.update(notification.current, { render, type, onClose });
     } else {
-      notification.current = toast.info(render, { onClose });
+      notification.current =
+        type === "default"
+          ? toast.info(render, { onClose })
+          : toast[type](render, { onClose });
     }
   };
 
