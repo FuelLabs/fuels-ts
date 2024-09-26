@@ -78,7 +78,7 @@ export default function Contract() {
         </div>
       </div>
       <div>
-        <p>
+        <p className="pt-2">
           Contracts are a core program type on the Fuel network. You can read
           more about them{" "}
           <a

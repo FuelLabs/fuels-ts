@@ -3,7 +3,7 @@ import { providerUrl, playgroundUrl } from "../lib.tsx";
 export default function Info() {
   return (
     <div id="text" className="col-span-2 px-4 py-4">
-      <h1 className="pb-1 pt-0 md:pt-6 text-3xl font-medium">
+      <h1 className="pb-1 pt-0 text-3xl font-medium">
         Welcome to Fuel
       </h1>
       <p>
@@ -17,7 +17,7 @@ export default function Info() {
           Fuels CLI
         </a>
       </p>
-      <p className="pt-8">
+      <p className="pt-6">
         You are currently connected to:{" "}
         <a
           href={providerUrl}
@@ -31,7 +31,7 @@ export default function Info() {
       <a
         href="https://docs.fuel.network/docs"
         target="_blank"
-        className="inline-block mt-8 text-green-500/80 transition-colors hover:text-green-500 w-full"
+        className="inline-block mt-6 text-green-500/80 transition-colors hover:text-green-500 w-full"
         rel="noreferrer"
       >
         Fuel Docs
