@@ -1,5 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
 import camelCase from 'lodash.camelcase';
 import { join } from 'path';
 import toml from 'toml';
@@ -19,6 +19,10 @@ export type ForcToml = {
   dependencies: {
     [key: string]: string;
   };
+  proxy?: {
+    enabled: boolean;
+    address?: string;
+  };
 };
 
 export enum SwayType {
@@ -28,12 +32,35 @@ export enum SwayType {
   library = 'library',
 }
 
-export const forcFiles = new Map<string, ForcToml>();
-
 export const swayFiles = new Map<string, SwayType>();
 
-export function readForcToml(path: string) {
-  const forcPath = join(path, './Forc.toml');
+export const getClosestForcTomlDir = (dir: string): string => {
+  let forcPath = join(dir, 'Forc.toml');
+
+  if (existsSync(forcPath)) {
+    return forcPath;
+  }
+
+  const parent = join(dir, '..');
+  forcPath = getClosestForcTomlDir(parent);
+
+  if (parent === '/' && !existsSync(forcPath)) {
+    const msg = `TOML file not found:\n  ${dir}`;
+    throw new FuelError(FuelError.CODES.CONFIG_FILE_NOT_FOUND, msg);
+  }
+
+  return forcPath;
+};
+
+export function readForcToml(contractPath: string) {
+  if (!existsSync(contractPath)) {
+    throw new FuelError(
+      FuelError.CODES.CONFIG_FILE_NOT_FOUND,
+      `TOML file not found:\n  ${contractPath}`
+    );
+  }
+
+  const forcPath = getClosestForcTomlDir(contractPath);
 
   if (!existsSync(forcPath)) {
     throw new FuelError(
@@ -42,15 +69,31 @@ export function readForcToml(path: string) {
     );
   }
 
-  if (!forcFiles.has(forcPath)) {
-    const forcFile = readFileSync(forcPath, 'utf8');
-    const tomlParsed = toml.parse(forcFile);
-    forcFiles.set(forcPath, tomlParsed);
+  const forcFile = readFileSync(forcPath, 'utf8');
+  return toml.parse(forcFile) as ForcToml;
+}
+
+export function setForcTomlProxyAddress(contractPath: string, address: string) {
+  const forcPath = getClosestForcTomlDir(contractPath);
+  const tomlPristine = readFileSync(forcPath).toString();
+  const tomlJson = readForcToml(forcPath);
+
+  const isProxyEnabled = tomlJson.proxy?.enabled;
+  const hasProxyAddress = tomlJson.proxy?.address;
+
+  // never override address
+  if (isProxyEnabled && hasProxyAddress) {
+    return address;
   }
 
-  const tomlContents = forcFiles.get(forcPath) as ForcToml;
+  // injects address into toml string
+  const replaceReg = /(\[proxy\][\s\S]+^enabled.+$)/gm;
+  const replaceStr = `$1\naddress = "${address}"`;
+  const modifiedToml = tomlPristine.replace(replaceReg, replaceStr);
 
-  return tomlContents;
+  writeFileSync(forcPath, modifiedToml);
+
+  return address;
 }
 
 export function readSwayType(path: string) {
