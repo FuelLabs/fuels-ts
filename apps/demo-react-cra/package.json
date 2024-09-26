@@ -3,7 +3,7 @@
   "version": "0.1.29",
   "private": true,
   "dependencies": {
-    "@fuels/vm-asm": "0.56.0",
+    "@fuels/vm-asm": "0.57.0",
     "@testing-library/react": "^16.0.1",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.8",
