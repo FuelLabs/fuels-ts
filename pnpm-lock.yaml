@@ -571,6 +571,16 @@ importers:
         specifier: ~2.0.5
         version: 2.0.5(@types/node@22.5.5)(@vitest/browser@2.0.5)(jsdom@16.7.0(bufferutil@4.0.8)(utf-8-validate@6.0.4))(terser@5.31.6)
 
+  apps/docs-snippets2:
+    dependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
+    devDependencies:
+      glob:
+        specifier: ^10.4.5
+        version: 10.4.5
+
   internal/benchmarks:
     dependencies:
       fuels:
