@@ -51,8 +51,9 @@ export default function Script() {
     <>
       <div>
         <p>
-          Scripts are another core program type. They act as runnable bytecode
-          on chain. You can read more about them{" "}
+          Scripts are runnable bytecode on the chain which execute once to
+          perform some task. Scripts can return a single value of any type. You
+          can read more about them{" "}
           <a
             href="https://docs.fuel.network/docs/fuels-ts/scripts/"
             className="text-green-500/80 transition-colors hover:text-green-500"
@@ -79,7 +80,6 @@ export default function Script() {
           </h3>
           <div className="flex items-center justify-between text-base dark:text-zinc-50">
             <input
-              type="number"
               value={input}
               onChange={(e) => setInput(Number(e.target.value))}
               className="w-full bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"

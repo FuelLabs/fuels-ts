@@ -1,4 +1,4 @@
-import { bn, WalletUnlocked } from "fuels";
+import { Address, bn, WalletUnlocked } from "fuels";
 import { useWallet } from "@fuels/react";
 import { useState } from "react";
 
@@ -7,9 +7,10 @@ import { useNotification } from "../hooks/useNotification";
 
 type Props = {
   refetch: () => void;
+  addressToFund?: string;
 };
 
-export default function LocalFaucet({ refetch }: Props) {
+export default function LocalFaucet({ refetch, addressToFund }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const {
     errorNotification,
@@ -27,7 +28,10 @@ export default function LocalFaucet({ refetch }: Props) {
         process.env.NEXT_PUBLIC_GENESIS_WALLET_PRIVATE_KEY as string,
         wallet.provider,
       );
-      const tx = await genesis.transfer(wallet.address, bn(5_000_000_000));
+      const tx = await genesis.transfer(
+        Address.fromB256(addressToFund || wallet.address.toB256()),
+        bn(5_000_000_000),
+      );
       transactionSubmitNotification(tx.id);
       await tx.waitForResult();
       transactionSuccessNotification(tx.id);

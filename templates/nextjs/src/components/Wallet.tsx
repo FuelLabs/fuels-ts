@@ -30,7 +30,7 @@ export default function Wallet() {
           <input
             type="text"
             value={address}
-            className="w-2/3 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+            className="w-2/3 bg-gray-800 rounded-md mb-2 md:mb-0 px-2 py-1 mr-3 truncate font-mono"
             disabled
           />
           <Button onClick={() => disconnect()} className="w-1/3">
