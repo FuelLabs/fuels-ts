@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.6**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.7**](../index.md) • **Docs**
 
 ***
 
@@ -43,7 +43,7 @@ that should be implemented to be compatible with the Fuel SDK.
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:134
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:134
 
 ## Properties
 
@@ -53,7 +53,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:134
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L91)
+[packages/account/src/connectors/fuel-connector.ts:91](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L91)
 
 ***
 
@@ -63,7 +63,17 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:134
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:93](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L93)
+[packages/account/src/connectors/fuel-connector.ts:94](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L94)
+
+***
+
+### external
+
+> **external**: `boolean` = `true`
+
+#### Defined in
+
+[packages/account/src/connectors/fuel-connector.ts:93](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L93)
 
 ***
 
@@ -73,7 +83,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:134
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:92](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L92)
+[packages/account/src/connectors/fuel-connector.ts:92](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L92)
 
 ***
 
@@ -83,7 +93,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:134
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L90)
+[packages/account/src/connectors/fuel-connector.ts:90](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L90)
 
 ***
 
@@ -93,7 +103,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:134
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L89)
+[packages/account/src/connectors/fuel-connector.ts:89](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L89)
 
 ***
 
@@ -115,7 +125,7 @@ v13.4.0, v12.16.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:452
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:452
 
 ***
 
@@ -137,7 +147,7 @@ v13.4.0, v12.16.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:459
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:459
 
 ***
 
@@ -191,7 +201,7 @@ v0.11.2
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:498
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:498
 
 ***
 
@@ -214,7 +224,7 @@ v13.6.0, v12.17.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:445
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:445
 
 ## Methods
 
@@ -244,7 +254,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:445
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:136
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:136
 
 ***
 
@@ -267,7 +277,7 @@ The accounts addresses strings
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:131](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L131)
+[packages/account/src/connectors/fuel-connector.ts:132](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L132)
 
 ***
 
@@ -295,7 +305,7 @@ Return true if the ABI was added successfully.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:302](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L302)
+[packages/account/src/connectors/fuel-connector.ts:303](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L303)
 
 ***
 
@@ -332,7 +342,7 @@ Error if the asset already exists
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:240](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L240)
+[packages/account/src/connectors/fuel-connector.ts:241](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L241)
 
 ***
 
@@ -369,7 +379,7 @@ Error if the asset already exists
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:225](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L225)
+[packages/account/src/connectors/fuel-connector.ts:226](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L226)
 
 ***
 
@@ -403,7 +413,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:597
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:597
 
 ***
 
@@ -437,7 +447,7 @@ Error if the network already exists
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:261](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L261)
+[packages/account/src/connectors/fuel-connector.ts:262](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L262)
 
 ***
 
@@ -459,7 +469,7 @@ Array of assets metadata from the connector vinculated to the all accounts from 
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:249](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L249)
+[packages/account/src/connectors/fuel-connector.ts:250](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L250)
 
 ***
 
@@ -488,7 +498,7 @@ boolean - connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:144](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L144)
+[packages/account/src/connectors/fuel-connector.ts:145](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L145)
 
 ***
 
@@ -513,7 +523,7 @@ The current account selected otherwise null.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:210](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L210)
+[packages/account/src/connectors/fuel-connector.ts:211](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L211)
 
 ***
 
@@ -535,7 +545,7 @@ Return the current network selected inside the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:291](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L291)
+[packages/account/src/connectors/fuel-connector.ts:292](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L292)
 
 ***
 
@@ -562,7 +572,7 @@ The connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:155](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L155)
+[packages/account/src/connectors/fuel-connector.ts:156](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L156)
 
 ***
 
@@ -632,7 +642,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:859
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:859
 
 ***
 
@@ -671,7 +681,7 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:922
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:922
 
 ***
 
@@ -697,7 +707,7 @@ The ABI if it exists, otherwise return null.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:312](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L312)
+[packages/account/src/connectors/fuel-connector.ts:313](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L313)
 
 ***
 
@@ -722,7 +732,7 @@ v1.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:774
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:774
 
 ***
 
@@ -748,7 +758,7 @@ Returns true if the abi exists or false if not.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:322](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L322)
+[packages/account/src/connectors/fuel-connector.ts:323](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L323)
 
 ***
 
@@ -771,7 +781,7 @@ The connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:121](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L121)
+[packages/account/src/connectors/fuel-connector.ts:122](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L122)
 
 ***
 
@@ -811,7 +821,7 @@ v3.2.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:868
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:868
 
 ***
 
@@ -851,7 +861,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:787
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:787
 
 ***
 
@@ -873,7 +883,7 @@ Return all the networks added to the connector.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:282](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L282)
+[packages/account/src/connectors/fuel-connector.ts:283](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L283)
 
 ***
 
@@ -907,7 +917,7 @@ v10.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:747
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:747
 
 ***
 
@@ -943,7 +953,7 @@ The listener function
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:332](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L332)
+[packages/account/src/connectors/fuel-connector.ts:333](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L333)
 
 ***
 
@@ -1004,7 +1014,7 @@ v0.3.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:659
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:659
 
 ***
 
@@ -1027,7 +1037,7 @@ Always true.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:101](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L101)
+[packages/account/src/connectors/fuel-connector.ts:102](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L102)
 
 ***
 
@@ -1076,7 +1086,7 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:886
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:886
 
 ***
 
@@ -1123,7 +1133,7 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:902
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:902
 
 ***
 
@@ -1181,7 +1191,7 @@ v9.4.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:818
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:818
 
 ***
 
@@ -1215,7 +1225,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:758
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:758
 
 ***
 
@@ -1327,7 +1337,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:742
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:742
 
 ***
 
@@ -1361,7 +1371,7 @@ Error if the network already exists
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:273](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L273)
+[packages/account/src/connectors/fuel-connector.ts:274](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L274)
 
 ***
 
@@ -1394,7 +1404,7 @@ The transaction id
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:198](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L198)
+[packages/account/src/connectors/fuel-connector.ts:199](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L199)
 
 ***
 
@@ -1427,7 +1437,7 @@ v0.3.5
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:768
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:768
 
 ***
 
@@ -1456,7 +1466,7 @@ Message signature
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:168](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L168)
+[packages/account/src/connectors/fuel-connector.ts:169](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L169)
 
 ***
 
@@ -1485,7 +1495,7 @@ Transaction signature
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:181](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L181)
+[packages/account/src/connectors/fuel-connector.ts:182](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L182)
 
 ***
 
@@ -1508,7 +1518,7 @@ boolean - connection status.
 
 #### Defined in
 
-[packages/account/src/connectors/fuel-connector.ts:111](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/connectors/fuel-connector.ts#L111)
+[packages/account/src/connectors/fuel-connector.ts:112](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/fuel-connector.ts#L112)
 
 ***
 
@@ -1570,7 +1580,7 @@ v20.5.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:437
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:437
 
 ***
 
@@ -1623,7 +1633,7 @@ v15.2.0, v14.17.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:358
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:358
 
 ***
 
@@ -1675,7 +1685,7 @@ v19.9.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:387
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:387
 
 ***
 
@@ -1723,7 +1733,7 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:330
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:330
 
 ***
 
@@ -1834,7 +1844,7 @@ v13.6.0, v12.16.0
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:303
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:303
 
 #### on(emitter, eventName, options)
 
@@ -1858,7 +1868,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:303
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:308
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:308
 
 ***
 
@@ -1967,7 +1977,7 @@ v11.13.0, v10.16.0
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:217
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:217
 
 #### once(emitter, eventName, options)
 
@@ -1991,7 +2001,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:217
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:222
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:222
 
 ***
 
@@ -2030,4 +2040,4 @@ v15.4.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:402
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:402

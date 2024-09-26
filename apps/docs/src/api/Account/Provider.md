@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.6**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.7**](../index.md) • **Docs**
 
 ***
 
@@ -14,7 +14,7 @@ A provider for connecting to a node
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:416](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L416)
+[packages/account/src/providers/provider.ts:416](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L416)
 
 ***
 
@@ -24,7 +24,7 @@ A provider for connecting to a node
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:415](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L415)
+[packages/account/src/providers/provider.ts:415](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L415)
 
 ***
 
@@ -34,7 +34,7 @@ A provider for connecting to a node
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:433](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L433)
+[packages/account/src/providers/provider.ts:433](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L433)
 
 ## Methods
 
@@ -60,7 +60,7 @@ Additional options for the provider.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:597](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L597)
+[packages/account/src/providers/provider.ts:597](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L597)
 
 ***
 
@@ -91,7 +91,7 @@ A promise that resolves to the call result object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:886](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L886)
+[packages/account/src/providers/provider.ts:886](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L886)
 
 ***
 
@@ -119,7 +119,7 @@ A promise that resolves to an array of results for each transaction call.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1108](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1108)
+[packages/account/src/providers/provider.ts:1108](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1108)
 
 ***
 
@@ -143,7 +143,7 @@ A promise that resolves to the estimated gas price.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1894](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1894)
+[packages/account/src/providers/provider.ts:1894](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1894)
 
 ***
 
@@ -171,7 +171,7 @@ A promise that resolves to an array of results for each transaction.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1027](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1027)
+[packages/account/src/providers/provider.ts:1027](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1027)
 
 ***
 
@@ -201,7 +201,7 @@ A promise that resolves to the estimated transaction request object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:913](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L913)
+[packages/account/src/providers/provider.ts:913](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L913)
 
 ***
 
@@ -228,7 +228,7 @@ A promise that resolves to the estimate transaction dependencies.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:957](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L957)
+[packages/account/src/providers/provider.ts:957](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L957)
 
 ***
 
@@ -278,7 +278,7 @@ An object containing the estimated minimum gas, minimum fee, maximum gas, and ma
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1134](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1134)
+[packages/account/src/providers/provider.ts:1134](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1134)
 
 ***
 
@@ -296,7 +296,7 @@ a promise that resolves to the chain information.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:760](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L760)
+[packages/account/src/providers/provider.ts:760](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L760)
 
 ***
 
@@ -322,7 +322,7 @@ A promise that resolves to the Chain and NodeInfo.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:614](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L614)
+[packages/account/src/providers/provider.ts:614](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L614)
 
 ***
 
@@ -340,7 +340,7 @@ a promise that resolves to the node information.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:739](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L739)
+[packages/account/src/providers/provider.ts:739](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L739)
 
 ***
 
@@ -368,7 +368,7 @@ A promise that resolves to the balance.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1681](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1681)
+[packages/account/src/providers/provider.ts:1681](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1681)
 
 ***
 
@@ -392,7 +392,7 @@ A promise that resolves to the balances.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1701](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1701)
+[packages/account/src/providers/provider.ts:1701](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1701)
 
 ***
 
@@ -410,7 +410,7 @@ the base asset ID.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:787](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L787)
+[packages/account/src/providers/provider.ts:787](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L787)
 
 ***
 
@@ -434,7 +434,7 @@ blobIds to check.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1442](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1442)
+[packages/account/src/providers/provider.ts:1442](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1442)
 
 ***
 
@@ -458,7 +458,7 @@ A promise that resolves to the block or null.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1461](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1461)
+[packages/account/src/providers/provider.ts:1461](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1461)
 
 ***
 
@@ -476,7 +476,7 @@ A promise that resolves to the latest block number.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:729](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L729)
+[packages/account/src/providers/provider.ts:729](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L729)
 
 ***
 
@@ -500,7 +500,7 @@ A promise that resolves to the block.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1541](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1541)
+[packages/account/src/providers/provider.ts:1541](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1541)
 
 ***
 
@@ -524,7 +524,7 @@ A promise that resolves to the blocks.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1505](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1505)
+[packages/account/src/providers/provider.ts:1505](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1505)
 
 ***
 
@@ -542,7 +542,7 @@ the chain information configuration.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:545](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L545)
+[packages/account/src/providers/provider.ts:545](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L545)
 
 ***
 
@@ -560,7 +560,7 @@ A promise that resolves to the chain ID number.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:775](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L775)
+[packages/account/src/providers/provider.ts:775](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L775)
 
 ***
 
@@ -592,7 +592,7 @@ A promise that resolves to the coins.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1335](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1335)
+[packages/account/src/providers/provider.ts:1335](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1335)
 
 ***
 
@@ -616,7 +616,7 @@ A promise that resolves to the contract.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1646](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1646)
+[packages/account/src/providers/provider.ts:1646](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1646)
 
 ***
 
@@ -644,7 +644,7 @@ A promise that resolves to the balance.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1661](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1661)
+[packages/account/src/providers/provider.ts:1661](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1661)
 
 ***
 
@@ -680,7 +680,7 @@ Returns some helpful parameters related to gas fees.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:575](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L575)
+[packages/account/src/providers/provider.ts:575](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L575)
 
 ***
 
@@ -698,7 +698,7 @@ A promise that resolves to the latest gas price.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1883](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1883)
+[packages/account/src/providers/provider.ts:1883](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1883)
 
 ***
 
@@ -722,7 +722,7 @@ A promise that resolves to the Message object or null.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1947](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1947)
+[packages/account/src/providers/provider.ts:1947](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1947)
 
 ***
 
@@ -756,7 +756,7 @@ A promise that resolves to the message proof.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1773](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1773)
+[packages/account/src/providers/provider.ts:1773](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1773)
 
 ***
 
@@ -780,7 +780,7 @@ A promise that resolves to the message status
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1907](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1907)
+[packages/account/src/providers/provider.ts:1907](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1907)
 
 ***
 
@@ -808,7 +808,7 @@ A promise that resolves to the messages.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1728](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1728)
+[packages/account/src/providers/provider.ts:1728](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1728)
 
 ***
 
@@ -826,7 +826,7 @@ the node information configuration.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:561](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L561)
+[packages/account/src/providers/provider.ts:561](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L561)
 
 ***
 
@@ -850,7 +850,7 @@ A promise that resolves to the relayed transaction.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1979](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1979)
+[packages/account/src/providers/provider.ts:1979](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1979)
 
 ***
 
@@ -882,7 +882,7 @@ A promise that resolves to the resources.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1374](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1374)
+[packages/account/src/providers/provider.ts:1374](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1374)
 
 ***
 
@@ -910,7 +910,7 @@ A promise that resolves to the transaction.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1587](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1587)
+[packages/account/src/providers/provider.ts:1587](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1587)
 
 ***
 
@@ -934,7 +934,7 @@ A promise that resolves to the transaction response.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1937](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1937)
+[packages/account/src/providers/provider.ts:1937](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1937)
 
 ***
 
@@ -958,7 +958,7 @@ A promise that resolves to an object containing the retrieved transactions and p
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1616](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1616)
+[packages/account/src/providers/provider.ts:1616](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1616)
 
 ***
 
@@ -976,7 +976,7 @@ A promise that resolves to the version string.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:717](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L717)
+[packages/account/src/providers/provider.ts:717](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L717)
 
 ***
 
@@ -1004,7 +1004,7 @@ A promise that resolves to the block number of the last produced block.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1922](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1922)
+[packages/account/src/providers/provider.ts:1922](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1922)
 
 ***
 
@@ -1035,7 +1035,7 @@ A promise that resolves to the transaction response object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:844](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L844)
+[packages/account/src/providers/provider.ts:844](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L844)
 
 ***
 
@@ -1067,7 +1067,7 @@ A promise that resolves to the call result object.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:1210](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L1210)
+[packages/account/src/providers/provider.ts:1210](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L1210)
 
 ***
 
@@ -1095,4 +1095,4 @@ A promise that resolves to a Provider instance.
 
 #### Defined in
 
-[packages/account/src/providers/provider.ts:532](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/providers/provider.ts#L532)
+[packages/account/src/providers/provider.ts:532](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/providers/provider.ts#L532)

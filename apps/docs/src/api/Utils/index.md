@@ -1,4 +1,4 @@
-**@fuel-ts/utils v0.94.6** • [**Docs**](index.md)
+**@fuel-ts/utils v0.94.7** • [**Docs**](index.md)
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/utils/src/utils/defaultSnapshotConfigs.ts:12](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/defaultSnapshotConfigs.ts#L12)
+[packages/utils/src/utils/defaultSnapshotConfigs.ts:12](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/defaultSnapshotConfigs.ts#L12)
 
 ***
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/utils/src/utils/defaultSnapshotConfigs.ts:6](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/defaultSnapshotConfigs.ts#L6)
+[packages/utils/src/utils/defaultSnapshotConfigs.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/defaultSnapshotConfigs.ts#L6)
 
 ## Functions
 
@@ -54,7 +54,7 @@ create a copy of the original data (if applicable).
 
 #### Defined in
 
-[packages/utils/src/utils/arrayify.ts:12](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/arrayify.ts#L12)
+[packages/utils/src/utils/arrayify.ts:12](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/arrayify.ts#L12)
 
 ***
 
@@ -74,7 +74,7 @@ Used to verify that a switch statement exhausts all variants.
 
 #### Defined in
 
-[packages/utils/src/index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/index.ts#L21)
+[packages/utils/src/index.ts:21](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/index.ts#L21)
 
 ***
 
@@ -92,7 +92,7 @@ Used to verify that a switch statement exhausts all variants.
 
 #### Defined in
 
-[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/capitalizeString.ts#L1)
+[packages/utils/src/utils/capitalizeString.ts:1](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/capitalizeString.ts#L1)
 
 ***
 
@@ -120,7 +120,7 @@ An array of byte arrays of a specified size
 
 #### Defined in
 
-[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
+[packages/utils/src/utils/chunkAndPadBytes.ts:8](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/chunkAndPadBytes.ts#L8)
 
 ***
 
@@ -138,7 +138,7 @@ An array of byte arrays of a specified size
 
 #### Defined in
 
-[packages/utils/src/utils/bytecode.ts:6](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/bytecode.ts#L6)
+[packages/utils/src/utils/bytecode.ts:6](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/bytecode.ts#L6)
 
 ***
 
@@ -162,7 +162,7 @@ The arrays to concatenate.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/concat.ts#L38)
+[packages/utils/src/utils/concat.ts:38](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/concat.ts#L38)
 
 ***
 
@@ -186,7 +186,7 @@ The arrays to concatenate.
 
 #### Defined in
 
-[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/concat.ts#L11)
+[packages/utils/src/utils/concat.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/concat.ts#L11)
 
 ***
 
@@ -218,7 +218,7 @@ the end offset (default: length of data).
 
 #### Defined in
 
-[packages/utils/src/utils/dataSlice.ts:15](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/dataSlice.ts#L15)
+[packages/utils/src/utils/dataSlice.ts:15](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/dataSlice.ts#L15)
 
 ***
 
@@ -236,7 +236,7 @@ the end offset (default: length of data).
 
 #### Defined in
 
-[packages/utils/src/utils/base58.ts:51](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/base58.ts#L51)
+[packages/utils/src/utils/base58.ts:51](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/base58.ts#L51)
 
 ***
 
@@ -254,7 +254,7 @@ the end offset (default: length of data).
 
 #### Defined in
 
-[packages/utils/src/utils/bytecode.ts:22](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/bytecode.ts#L22)
+[packages/utils/src/utils/bytecode.ts:22](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/bytecode.ts#L22)
 
 ***
 
@@ -274,7 +274,7 @@ Encode value as a Base58-encoded string.
 
 #### Defined in
 
-[packages/utils/src/utils/base58.ts:30](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/base58.ts#L30)
+[packages/utils/src/utils/base58.ts:30](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/base58.ts#L30)
 
 ***
 
@@ -294,7 +294,7 @@ Returns a hex representation of the inputted bytes.
 
 #### Defined in
 
-[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/hexlify.ts#L10)
+[packages/utils/src/utils/hexlify.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/hexlify.ts#L10)
 
 ***
 
@@ -316,7 +316,7 @@ Returns a hex representation of the inputted bytes.
 
 #### Defined in
 
-[packages/utils/src/utils/isDefined.ts:1](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/isDefined.ts#L1)
+[packages/utils/src/utils/isDefined.ts:1](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/isDefined.ts#L1)
 
 ***
 
@@ -341,7 +341,7 @@ Examples:
 
 #### Defined in
 
-[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/normalizeString.ts#L11)
+[packages/utils/src/utils/normalizeString.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/normalizeString.ts#L11)
 
 ***
 
@@ -359,7 +359,7 @@ Examples:
 
 #### Defined in
 
-[packages/utils/src/utils/sleep.ts:1](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/sleep.ts#L1)
+[packages/utils/src/utils/sleep.ts:1](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/sleep.ts#L1)
 
 ***
 
@@ -389,7 +389,7 @@ whether to normalize the string.
 
 #### Defined in
 
-[packages/utils/src/utils/toUtf8Bytes.ts:11](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/toUtf8Bytes.ts#L11)
+[packages/utils/src/utils/toUtf8Bytes.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/toUtf8Bytes.ts#L11)
 
 ***
 
@@ -413,7 +413,7 @@ the string represented by the UTF-8 data bytes
 
 #### Defined in
 
-[packages/utils/src/utils/toUtf8String.ts:179](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/utils/src/utils/toUtf8String.ts#L179)
+[packages/utils/src/utils/toUtf8String.ts:179](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/utils/src/utils/toUtf8String.ts#L179)
 
 ## Classes
 

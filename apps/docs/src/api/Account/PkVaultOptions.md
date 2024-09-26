@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.6**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.7**](../index.md) • **Docs**
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L11)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L11)
 
 ***
 
@@ -22,4 +22,4 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:10](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L10)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L10)

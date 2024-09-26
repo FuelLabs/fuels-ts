@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.6**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.7**](../index.md) • **Docs**
 
 ***
 
@@ -33,7 +33,7 @@ WalletManager is a upper package to manage multiple vaults like mnemonic and pri
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L71)
+[packages/account/src/wallet-manager/wallet-manager.ts:71](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L71)
 
 ## Properties
 
@@ -43,7 +43,7 @@ WalletManager is a upper package to manage multiple vaults like mnemonic and pri
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L64)
+[packages/account/src/wallet-manager/wallet-manager.ts:64](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L64)
 
 ***
 
@@ -57,7 +57,7 @@ Persistent encrypted data. `The default storage works only on memory`.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L62)
+[packages/account/src/wallet-manager/wallet-manager.ts:62](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L62)
 
 ***
 
@@ -74,7 +74,7 @@ Each vault has access to its own state
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L56)
+[packages/account/src/wallet-manager/wallet-manager.ts:56](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L56)
 
 ***
 
@@ -96,7 +96,7 @@ v13.4.0, v12.16.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:452
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:452
 
 ***
 
@@ -118,7 +118,7 @@ v13.4.0, v12.16.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:459
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:459
 
 ***
 
@@ -172,7 +172,7 @@ v0.11.2
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:498
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:498
 
 ***
 
@@ -195,7 +195,7 @@ v13.6.0, v12.17.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:445
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:445
 
 ## Accessors
 
@@ -209,7 +209,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:445
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L76)
+[packages/account/src/wallet-manager/wallet-manager.ts:76](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L76)
 
 ## Methods
 
@@ -239,7 +239,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:445
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:136
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:136
 
 ***
 
@@ -262,7 +262,7 @@ If not vaults are adds it will return error
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L143)
+[packages/account/src/wallet-manager/wallet-manager.ts:143](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L143)
 
 ***
 
@@ -296,7 +296,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:597
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:597
 
 ***
 
@@ -317,7 +317,7 @@ didn't found it will throw.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L170)
+[packages/account/src/wallet-manager/wallet-manager.ts:170](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L170)
 
 ***
 
@@ -387,7 +387,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:859
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:859
 
 ***
 
@@ -426,7 +426,7 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:922
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:922
 
 ***
 
@@ -446,7 +446,7 @@ Export specific account privateKey
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L128)
+[packages/account/src/wallet-manager/wallet-manager.ts:128](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L128)
 
 ***
 
@@ -471,7 +471,7 @@ the format of the return depends on the Vault type.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L84)
+[packages/account/src/wallet-manager/wallet-manager.ts:84](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L84)
 
 ***
 
@@ -487,7 +487,7 @@ List all accounts on the Wallet Manager not vault information is revealed
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L105)
+[packages/account/src/wallet-manager/wallet-manager.ts:105](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L105)
 
 ***
 
@@ -512,7 +512,7 @@ v1.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:774
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:774
 
 ***
 
@@ -528,7 +528,7 @@ List all vaults on the Wallet Manager, this function not return secret's
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L94)
+[packages/account/src/wallet-manager/wallet-manager.ts:94](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L94)
 
 ***
 
@@ -548,7 +548,7 @@ Create a Wallet instance for the specific account
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L115)
+[packages/account/src/wallet-manager/wallet-manager.ts:115](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L115)
 
 ***
 
@@ -588,7 +588,7 @@ v3.2.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:868
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:868
 
 ***
 
@@ -628,7 +628,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:787
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:787
 
 ***
 
@@ -644,7 +644,7 @@ Retrieve and decrypt WalletManager state from storage
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L246)
+[packages/account/src/wallet-manager/wallet-manager.ts:246](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L246)
 
 ***
 
@@ -661,7 +661,7 @@ secrets.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L191)
+[packages/account/src/wallet-manager/wallet-manager.ts:191](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L191)
 
 ***
 
@@ -695,7 +695,7 @@ v10.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:747
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:747
 
 ***
 
@@ -758,7 +758,7 @@ v0.1.101
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:629
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:629
 
 ***
 
@@ -819,7 +819,7 @@ v0.3.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:659
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:659
 
 ***
 
@@ -868,7 +868,7 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:886
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:886
 
 ***
 
@@ -915,7 +915,7 @@ v6.0.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:902
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:902
 
 ***
 
@@ -973,7 +973,7 @@ v9.4.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:818
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:818
 
 ***
 
@@ -1007,7 +1007,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:758
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:758
 
 ***
 
@@ -1119,7 +1119,7 @@ v0.1.26
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:742
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:742
 
 ***
 
@@ -1140,7 +1140,7 @@ created by the vault.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L161)
+[packages/account/src/wallet-manager/wallet-manager.ts:161](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L161)
 
 ***
 
@@ -1173,7 +1173,7 @@ v0.3.5
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:768
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:768
 
 ***
 
@@ -1194,7 +1194,7 @@ Vaults with secrets are not unlocked or instantiated on this moment.
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L205)
+[packages/account/src/wallet-manager/wallet-manager.ts:205](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L205)
 
 ***
 
@@ -1216,7 +1216,7 @@ Update WalletManager encryption passphrase
 
 #### Defined in
 
-[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/edc427a506b3935e5c3045680dbc2670666cb638/packages/account/src/wallet-manager/wallet-manager.ts#L227)
+[packages/account/src/wallet-manager/wallet-manager.ts:227](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/wallet-manager/wallet-manager.ts#L227)
 
 ***
 
@@ -1278,7 +1278,7 @@ v20.5.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:437
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:437
 
 ***
 
@@ -1331,7 +1331,7 @@ v15.2.0, v14.17.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:358
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:358
 
 ***
 
@@ -1383,7 +1383,7 @@ v19.9.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:387
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:387
 
 ***
 
@@ -1431,7 +1431,7 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:330
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:330
 
 ***
 
@@ -1542,7 +1542,7 @@ v13.6.0, v12.16.0
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:303
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:303
 
 #### on(emitter, eventName, options)
 
@@ -1566,7 +1566,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:303
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:308
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:308
 
 ***
 
@@ -1675,7 +1675,7 @@ v11.13.0, v10.16.0
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:217
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:217
 
 #### once(emitter, eventName, options)
 
@@ -1699,7 +1699,7 @@ node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:217
 
 ##### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:222
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:222
 
 ***
 
@@ -1738,4 +1738,4 @@ v15.4.0
 
 #### Defined in
 
-node\_modules/.pnpm/@types+node@22.5.4/node\_modules/@types/node/events.d.ts:402
+node\_modules/.pnpm/@types+node@22.5.5/node\_modules/@types/node/events.d.ts:402
