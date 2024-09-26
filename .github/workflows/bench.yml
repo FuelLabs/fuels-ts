@@ -8,6 +8,8 @@ on:
 jobs:
   benchmarks:
     runs-on: ubuntu-latest
+    # remove if:false after fine-tuning benchmarks
+    if: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4

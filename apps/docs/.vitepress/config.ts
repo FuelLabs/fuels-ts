@@ -257,6 +257,10 @@ export default defineConfig({
                 link: '/guide/contracts/managing-deployed-contracts',
               },
               {
+                text: 'Proxy Contracts',
+                link: '/guide/contracts/proxy-contracts',
+              },
+              {
                 text: 'Understanding the FuelVM Binary File',
                 link: '/guide/contracts/understanding-the-fuelvm-binary-file',
               },
