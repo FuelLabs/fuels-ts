@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-fix: prevent create-fuels running prebuild when deps were not installed
+fix: calling `prebuild` only if deps are installed
