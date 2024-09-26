@@ -20,8 +20,8 @@ describe('Multicalls', () => {
     const {
       contracts: [counterContract],
     } = launched;
-    // #region multicall-1
 
+    // #region multicall-1
     const { waitForResult } = await counterContract
       .multiCall([
         counterContract.functions.get_count(),
@@ -32,12 +32,9 @@ describe('Multicalls', () => {
 
     const { value: results } = await waitForResult();
 
-    const initialValue = new BN(results[0]).toNumber();
-    const incrementedValue1 = new BN(results[1]).toNumber();
-    const incrementedValue2 = new BN(results[2]).toNumber();
-
-    expect(incrementedValue1).toEqual(initialValue + 2);
-    expect(incrementedValue2).toEqual(incrementedValue1 + 4);
+    expect(results[0]).toEqual(0);
+    expect(results[0]).toEqual(2);
+    expect(results[0]).toEqual(6);
     // #endregion multicall-1
   });
 
@@ -56,23 +53,21 @@ describe('Multicalls', () => {
     const {
       contracts: [echoContract, counterContract],
     } = launched;
+
     // #region multicall-2
+    const { waitForResult } = await echoContract
+      .multiCall([
+        echoContract.functions.echo_u8(17),
+        counterContract.functions.get_count(),
+        counterContract.functions.increment_counter(5),
+      ])
+      .call();
 
-    const chain = echoContract.multiCall([
-      echoContract.functions.echo_u8(17),
-      counterContract.functions.get_count(),
-      counterContract.functions.increment_counter(5),
-    ]);
-
-    const { waitForResult } = await chain.call();
     const { value: results } = await waitForResult();
 
-    const echoedValue = results[0];
-    const initialCounterValue = new BN(results[1]).toNumber();
-    const counterIncrementedValue = new BN(results[2]).toNumber();
-
-    expect(echoedValue).toEqual(17);
-    expect(counterIncrementedValue).toEqual(initialCounterValue + 5);
+    expect(results[0]).toEqual(17);
+    expect(results[0]).toEqual(0);
+    expect(results[0]).toEqual(5);
     // #endregion multicall-2
   });
 
