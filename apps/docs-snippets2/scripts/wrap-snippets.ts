@@ -22,7 +22,7 @@ export const wrapSnippet = (filepath: string) => {
   const snippetsNoImports = imports.length ? snippetContents.split(imports)[1] : snippetContents;
 
   // Does the snippet requires node launcher?
-  const requiresNodeLauncher = /LOCAL_NETWORK_URL/.test(imports);
+  const requiresNodeLauncher = /NETWORK_URL/.test(imports);
 
   /*
     Removes .env file import

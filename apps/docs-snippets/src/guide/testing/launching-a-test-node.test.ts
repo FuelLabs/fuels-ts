@@ -30,8 +30,8 @@ describe('launching a test node', () => {
     const launched = await launchTestNode();
 
     /*
-      Do your things, run your tests, and then call
-      `launched.cleanup()` to dispose of everything.
+     * Do your things, run your tests, and then call
+    `launched.cleanup()` to dispose of everything.
     */
 
     launched.cleanup();
