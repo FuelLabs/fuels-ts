@@ -6,26 +6,8 @@ import { assembleReceiptByType } from '../utils';
 
 import type { BurnedAsset, MintedAsset } from './types';
 
-export const processGqlReceipt = (gqlReceipt: GqlReceiptFragment): TransactionResultReceipt => {
-  const receipt = assembleReceiptByType(gqlReceipt);
-
-  switch (receipt.type) {
-    case ReceiptType.ReturnData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data || '0x',
-      };
-    }
-    case ReceiptType.LogData: {
-      return {
-        ...receipt,
-        data: gqlReceipt.data || '0x',
-      };
-    }
-    default:
-      return receipt;
-  }
-};
+export const processGqlReceipt = (gqlReceipt: GqlReceiptFragment): TransactionResultReceipt =>
+  assembleReceiptByType(gqlReceipt);
 
 export const extractMintedAssetsFromReceipts = (
   receipts: Array<TransactionResultReceipt>

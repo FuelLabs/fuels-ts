@@ -1,5 +1,14 @@
 # Change Log
 
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- 600b781: build(deps): bump the deps-patch group
+- Updated dependencies [80df900]
+  - @fuel-ts/errors@0.94.7
+
 ## 0.94.6
 
 ### Patch Changes

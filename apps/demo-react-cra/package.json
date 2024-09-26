@@ -3,10 +3,10 @@
   "version": "0.1.29",
   "private": true,
   "dependencies": {
-    "@fuels/vm-asm": "0.56.0",
+    "@fuels/vm-asm": "0.57.1",
     "@testing-library/react": "^16.0.1",
-    "@types/node": "^22.5.4",
-    "@types/react": "^18.3.5",
+    "@types/node": "^22.5.5",
+    "@types/react": "^18.3.8",
     "@types/react-dom": "^18.3",
     "eslint-config-react-app": "^7.0.1",
     "fuels": "workspace:*",
@@ -42,6 +42,6 @@
     ]
   },
   "devDependencies": {
-    "@types/jest": "^29.5.12"
+    "@types/jest": "^29.5.13"
   }
 }

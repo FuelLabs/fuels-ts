@@ -139,16 +139,23 @@ export const runScaffoldCli = async ({
 
   fileCopySpinner.succeed('Copied template files!');
 
+  // Remove typegen files from gitignore
+  const gitignorePath = join(projectPath, '.gitignore');
+  const gitignoreContents = readFileSync(gitignorePath, 'utf-8');
+  const newGitIgnoreContents = gitignoreContents.replace(/^(src\/sway-api\/.+)$/gm, '# $1');
+  writeFileSync(gitignorePath, newGitIgnoreContents);
+
   if (opts.install) {
     const installDepsSpinner = ora({
       text: 'Installing dependencies..',
       color: 'green',
     }).start();
-
     process.chdir(projectPath);
     execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
-
     installDepsSpinner.succeed('Installed dependencies!');
+
+    // Generate typegen files
+    execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
   }
 
   log();

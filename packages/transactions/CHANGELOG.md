@@ -1,5 +1,22 @@
 # Change Log
 
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- 3668a26: fix: add missing receipts properties
+- Updated dependencies [48db506]
+- Updated dependencies [80df900]
+- Updated dependencies [600b781]
+  - @fuel-ts/abi-coder@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/address@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/hasher@0.94.7
+  - @fuel-ts/utils@0.94.7
+  - @fuel-ts/math@0.94.7
+
 ## 0.94.6
 
 ### Patch Changes
