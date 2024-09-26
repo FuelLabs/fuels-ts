@@ -118,8 +118,6 @@ export const runScaffoldCli = async ({
   const newForcTomlContents = processWorkspaceToml(forcTomlContents);
   writeFileSync(forcTomlPath, newForcTomlContents);
 
-  console.log('packageManager: ', packageManager);
-
   // Rewrite the package.json file
   // Note: `pnpm run xprebuild` -> rewritten to -> `pnpm run prebuild` (on prePublish script)
   const packageJsonPath = join(projectPath, 'package.json');
