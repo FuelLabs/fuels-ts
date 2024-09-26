@@ -107,4 +107,35 @@ describe('Multicalls', () => {
     expect(fowardedValue).toEqual(100);
     // #endregion multicall-3
   });
+
+  it('should successfully submit multiple read-only calls', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+        {
+          factory: EchoValuesFactory,
+        },
+      ],
+    });
+
+    const {
+      contracts: [counterContract, echoValuesContract],
+    } = launched;
+
+    // #region multicall-4
+    const { value: results } = await counterContract
+      .multiCall([
+        counterContract.functions.get_count(),
+        echoValuesContract.functions.echo_u8(10),
+        echoValuesContract.functions.echo_str('Fuel'),
+      ])
+      .get();
+
+    expect(results[0]).toEqual(0);
+    expect(results[1]).toEqual(10);
+    expect(results[2]).toEqual('Fuel');
+    // #endregion multicall-4
+  });
 });
