@@ -118,6 +118,8 @@ export const runScaffoldCli = async ({
   const newForcTomlContents = processWorkspaceToml(forcTomlContents);
   writeFileSync(forcTomlPath, newForcTomlContents);
 
+  console.log('packageManager: ', packageManager);
+
   // Rewrite the package.json file
   // Note: `pnpm run xprebuild` -> rewritten to -> `pnpm run prebuild` (on prePublish script)
   const packageJsonPath = join(projectPath, 'package.json');
@@ -153,10 +155,10 @@ export const runScaffoldCli = async ({
     process.chdir(projectPath);
     execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
     installDepsSpinner.succeed('Installed dependencies!');
-  }
 
-  // Generate typegen files
-  // execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+    // Generate typegen files
+    execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+  }
 
   log();
   log();
