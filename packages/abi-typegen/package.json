@@ -14,19 +14,19 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./cli": {
+      "types": "./dist/cli.d.ts",
       "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+      "import": "./dist/cli.mjs"
     },
     "./runTypegen": {
+      "types": "./dist/runTypegen.d.ts",
       "require": "./dist/runTypegen.js",
-      "import": "./dist/runTypegen.mjs",
-      "types": "./dist/runTypegen.d.ts"
+      "import": "./dist/runTypegen.mjs"
     }
   },
   "typesVersions": {
