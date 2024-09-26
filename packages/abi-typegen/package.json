@@ -1,4 +1,5 @@
 {
+  "types": "dist/index.d.ts",
   "name": "@fuel-ts/abi-typegen",
   "version": "0.94.6",
   "description": "Generates Typescript definitions from Sway ABI Json files",
@@ -8,7 +9,6 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "engines": {
     "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },

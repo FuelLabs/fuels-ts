@@ -1,4 +1,5 @@
 {
+  "types": "dist/index.d.ts",
   "name": "@fuel-ts/versions",
   "version": "0.94.6",
   "description": "Validates supported versions of the Fuel toolchain",
@@ -8,7 +9,6 @@
   },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "engines": {
     "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },

@@ -1,11 +1,11 @@
 {
+  "types": "dist/index.d.ts",
   "name": "@fuel-ts/logger",
   "version": "0.94.6",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "description": "A logger for the Fuel-TS ecosystem",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "bugs": {
     "url": "https://github.com/FuelLabs/fuels-ts/issues"
   },

@@ -1,11 +1,11 @@
 {
+  "types": "dist/index.d.ts",
   "name": "@fuel-ts/crypto",
   "version": "0.94.6",
   "description": "Utilities for encrypting and decrypting data",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
   "engines": {
     "node": "^18.20.3 || ^20.0.0 || ^22.0.0"
   },
