@@ -26,7 +26,7 @@ export default class Address extends AbstractAddress {
   // #region address-2
   /**
    * @deprecated
-   * The `bech32Address` is now deprecated. Please migrate to B256 format (see https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256 for more details) as this will be the standard going forward.
+   * Type `Bech32Address` is now deprecated, as is this property. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
    */
   readonly bech32Address: Bech32Address;
   // #endregion address-2
@@ -49,7 +49,7 @@ export default class Address extends AbstractAddress {
   /**
    * Returns the `bech32Address` property
    * @deprecated
-   * Type `Bech32Address` is now deprecated, as is this property. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+   * Type `Bech32Address` is now deprecated, as is this method. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
    * @returns The `bech32Address` property
    */
   toAddress(): Bech32Address {
@@ -122,7 +122,7 @@ export default class Address extends AbstractAddress {
   /**
    * Returns the value of the `bech32Address` property
    * @deprecated
-   * Type `Bech32Address` is now deprecated, as is this property. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+   * Type `Bech32Address` is now deprecated, as is this method. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
    * @returns The value of `bech32Address` property
    */
   valueOf(): string {
@@ -131,8 +131,6 @@ export default class Address extends AbstractAddress {
 
   /**
    * Compares this the `bech32Address` property to another for direct equality
-   * @deprecated
-   * Type `Bech32Address` is now deprecated, as is this property. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
    * @param other - Another address to compare against
    * @returns The equality of the comparison
    */

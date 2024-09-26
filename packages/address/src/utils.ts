@@ -24,7 +24,7 @@ export const FUEL_BECH32_HRP_PREFIX = 'fuel';
 /**
  * Decodes a Bech32 address string into Decoded
  * @deprecated
- * Type `Bech32Address` is now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+ * Type `Bech32Address` is now deprecated, as is this function. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
  * @hidden
  */
 export function fromBech32(address: Bech32Address): Decoded {
@@ -34,7 +34,7 @@ export function fromBech32(address: Bech32Address): Decoded {
 /**
  * Converts a B256 address string into Bech32
  * @deprecated
- * Type `Bech32Address` is now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+ * Type `Bech32Address` is now deprecated, as is this function. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
  * @hidden
  */
 export function toBech32(address: B256Address): Bech32Address {
@@ -47,7 +47,7 @@ export function toBech32(address: B256Address): Bech32Address {
 /**
  * Determines if a given string is Bech32 format
  * @deprecated
- * Type `Bech32Address` is now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
+ * Type `Bech32Address` is now deprecated, as is this function. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
  * @hidden
  */
 export function isBech32(address: BytesLike): boolean {
