@@ -1,7 +1,7 @@
 # `Bech32`
 
 > [!NOTE] Note
-> `Bech32` addresses like `fuel1..` are now deprecated; please switch to B256 format, for more details see [here](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256).
+> `Bech32` addresses like `fuel1..` are now deprecated. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
 
 The SDK uses the `Bech32` type as the core property of the [`Address`](../../api/Address/Address.md) class, specifically through the `bech32Address` property.
 

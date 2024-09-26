@@ -27,7 +27,7 @@ export enum ErrorCode {
   // address
   /**
    * @deprecated
-   * The `bech32Address` is now deprecated. Please migrate to B256 format (see https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256 for more details) as this will be the standard going forward.
+   * Type `Bech32Address` is now deprecated, as is this constant. Use `B256` addresses instead. ([help](https://docs.fuel.network/docs/specs/abi/argument-encoding/#b256))
    */
   INVALID_BECH32_ADDRESS = 'invalid-bech32-address',
 
