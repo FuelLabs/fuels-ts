@@ -1,4 +1,4 @@
-import { BN } from 'fuels';
+import { bn, BN } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { CounterFactory, EchoValuesFactory, ReturnContextFactory } from '../../../test/typegen';
@@ -32,9 +32,9 @@ describe('Multicalls', () => {
 
     const { value: results } = await waitForResult();
 
-    expect(results[0]).toEqual(0);
-    expect(results[0]).toEqual(2);
-    expect(results[0]).toEqual(6);
+    expect(results[0].toNumber()).toBe(0);
+    expect(results[1].toNumber()).toBe(2);
+    expect(results[2].toNumber()).toBe(6);
     // #endregion multicall-1
   });
 
@@ -66,8 +66,8 @@ describe('Multicalls', () => {
     const { value: results } = await waitForResult();
 
     expect(results[0]).toEqual(17);
-    expect(results[0]).toEqual(0);
-    expect(results[0]).toEqual(5);
+    expect(results[1].toNumber()).toBe(0);
+    expect(results[2].toNumber()).toBe(5);
     // #endregion multicall-2
   });
 
@@ -133,9 +133,9 @@ describe('Multicalls', () => {
       ])
       .get();
 
-    expect(results[0]).toEqual(0);
-    expect(results[1]).toEqual(10);
-    expect(results[2]).toEqual('Fuel');
+    expect(results[0].toNumber()).toBe(bn(0).toNumber());
+    expect(results[1]).toBe(10);
+    expect(results[2]).toBe('Fuel');
     // #endregion multicall-4
   });
 });
