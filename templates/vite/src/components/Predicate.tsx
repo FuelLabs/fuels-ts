@@ -108,7 +108,7 @@ export default function Predicate() {
         <p className="pt-2">
           In the below example, we transfer{" "}
           <span className="font-mono font-bold">0.002 ETH</span> to the
-          predicate but need to pass a pin to unlock the predicate and transfer
+          predicate but need to pass a pin to unlock the predicate and transfer{" "}
           <span className="font-mono font-bold">0.001 ETH</span> back to us.
         </p>
         <p className="pt-2">
