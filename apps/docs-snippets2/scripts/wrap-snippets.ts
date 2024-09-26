@@ -22,7 +22,7 @@ export const wrapSnippet = (filepath: string) => {
   const snippetsNoImports = imports.length ? snippetContents.split(imports)[1] : snippetContents;
 
   // Does the snippet requires node launcher?
-  const requiresNodeLauncher = /NETWORK_URL/.test(imports);
+  const requiresNodeLauncher = /LOCAL_NETWORK_URL/.test(imports);
 
   /*
     Removes .env file import
@@ -60,7 +60,6 @@ export const wrapSnippet = (filepath: string) => {
     */
     nodeLauncher = readFileSync(join(__dirname, 'launcher-snippet.ts'), 'utf-8')
       .replace(/import.*$/gm, '') // ignore file imports
-      .replace(/export /g, '') // remove export keywords
       .trim() // zip
       .replace(/\n/g, '\n  '); // indent chunk
   }
@@ -70,20 +69,25 @@ export const wrapSnippet = (filepath: string) => {
   */
   const indented = snippetsNoImports.replace(/^/gm, '  ').trim();
 
-  const formatted = wrapperFnContents
-    .replace('%NAME%', basename(filepath))
-    .replace('// %SNIPPET%', indented)
-    .replace('// %NODE_LAUNCHER%', nodeLauncher)
-    .replace(/^.*#(end)?region.+$/gm, '')
-    .replace(/^[\s]*$/gm, '') // trailing spaces
-    .replace(/^([\s\S]]*\n){2,}/, '') // multiple empty lines
-    .trim();
+  // const eslintDisableRule = '// eslint-disable-next-line eslint-comments/disable-enable-pair\n';
+
+  const wrappedSnippet =
+    // eslintDisableRule +
+    wrapperFnContents
+      .replace('%IMPORTS%', imports)
+      .replace('%NAME%', basename(filepath))
+      .replace('// %SNIPPET%', indented)
+      .replace('// %NODE_LAUNCHER%', nodeLauncher)
+      .replace(/^.*#(end)?region.+$/gm, '')
+      .replace(/^[\s]*$/gm, '') // trailing spaces
+      .replace(/^([\s\S]]*\n){2,}/, '') // multiple empty lines
+      .trim();
 
   /*
     Write snippet wrapped in an test to disk
   */
   const wrappedPath = filepath.replace('.ts', '.test.ts');
-  const wrappedSnippet = [imports, '\n\n', formatted].join('');
+  // const wrappedSnippet = ['\n\n', formatted].join('');
 
   writeFileSync(wrappedPath, wrappedSnippet);
 };

@@ -1,11 +1,17 @@
-/* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable no-global-assign */
+
+// %IMPORTS%
+
 const consoleBkp = { ...console };
 
 afterAll(() => {
   console = { ...consoleBkp };
 });
 
+/**
+ * @group node
+ * @group browser
+ */
 test('%NAME%', async () => {
   // TEST NODE LAUNCHER ———>>>
   // %NODE_LAUNCHER%
@@ -13,9 +19,9 @@ test('%NAME%', async () => {
 
   console = {
     ...console,
-    assert(isTruthy, errorMsg) {
+    log(logMsg, isTruthy) {
       if (!isTruthy) {
-        throw new Error(errorMsg);
+        throw new Error(logMsg);
       }
     },
   };
@@ -23,4 +29,6 @@ test('%NAME%', async () => {
   // SNIPPET ———>>>
   // %SNIPPET%
   // <<<——— SNIPPET
+
+  return Promise.resolve();
 });

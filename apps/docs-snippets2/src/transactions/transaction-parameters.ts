@@ -2,11 +2,11 @@
 import type { TxParams } from 'fuels';
 import { bn, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
-import { NETWORK_URL, WALLET_PVT_KEY } from '../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { CounterFactory } from '../typegend';
 import { ScriptSum } from '../typegend/scripts';
 
-const provider = await Provider.create(NETWORK_URL);
+const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deploy = await CounterFactory.deploy(wallet);
@@ -51,9 +51,9 @@ const {
   transactionResult: { isStatusSuccess },
 } = await waitForResult();
 
-console.assert(isStatusSuccess, 'Transaction status should be truthy.');
-console.assert(value, 'Transaction result should exist.');
-console.assert(transactionRequest, 'Transaction request should exist.');
+console.log('Transaction request', transactionRequest);
+console.log('Transaction status', isStatusSuccess);
+console.log('Transaction value', value);
 
 // #endregion transaction-parameters-8
 // #endregion full

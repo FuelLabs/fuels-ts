@@ -11,10 +11,10 @@ import {
 } from 'fuels';
 
 // #region encode-and-decode-3
-import { NETWORK_URL, WALLET_PVT_KEY } from '../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { ScriptSum } from '../typegend';
 
-const provider = await Provider.create(NETWORK_URL);
+const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 // First we need to build out the transaction via the script that we want to encode.

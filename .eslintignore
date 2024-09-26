@@ -15,6 +15,7 @@ apps/create-fuels-counter-guide
 apps/docs-snippets2/src/typegend
 apps/docs-snippets2/src/**/*.wrapped.ts
 
+packages/fuels/src/cli/commands/deploy/proxy
 packages/fuels/test/fixtures/project
 packages/account/src/providers/__generated__
 packages/account/src/providers/assets

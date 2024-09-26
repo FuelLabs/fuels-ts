@@ -1,6 +1,6 @@
 {
   "name": "docs-snippets2",
-  "version": "1.0.0",
+  "version": "0.67.0",
   "description": "",
   "private": true,
   "scripts": {
@@ -14,7 +14,7 @@
     "fuels": "workspace:*"
   },
   "devDependencies": {
-    "glob": "^10.2.6"
+    "glob": "^10.4.5"
   },
   "keywords": [],
   "author": "",

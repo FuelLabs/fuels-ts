@@ -1,7 +1,7 @@
 // #region full
 import { BN, DECIMAL_GWEI, DECIMAL_KWEI, bn, Provider, Wallet } from 'fuels';
 
-import { NETWORK_URL, WALLET_PVT_KEY } from '../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { EchoValuesFactory } from '../typegend/contracts/EchoValuesFactory';
 
 // #region instantiation-1
@@ -22,7 +22,7 @@ console.assert(resultTwo === myBigNumberTwo, 'BN is not equal to expected');
 // #region contract-calls-1
 
 // Let's deploy a contract that has a function that takes a u64 as input
-const provider = await Provider.create(NETWORK_URL);
+const provider = await Provider.create(LOCAL_NETWORK_URL);
 
 const wallet = await Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
