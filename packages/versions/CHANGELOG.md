@@ -1,5 +1,15 @@
 # @fuel-ts/versions
 
+## 0.94.7
+
+### Patch Changes
+
+- 47b5cd3: chore: upgrade to forc `0.63.6`
+- 431990d: chore: inform users if their `fuels` version is outdated
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+- 80df900: chore: fix exported types
+- 127ade0: chore: upgrade `forc@0.64.0`
+
 ## 0.94.6
 
 ## 0.94.5
