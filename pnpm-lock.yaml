@@ -317,8 +317,8 @@ importers:
   apps/demo-nextjs:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.56.0
-        version: 0.56.0
+        specifier: 0.57.1
+        version: 0.57.1
       '@types/node':
         specifier: ^22.5.5
         version: 22.5.5
@@ -353,8 +353,8 @@ importers:
   apps/demo-react-cra:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.56.0
-        version: 0.56.0
+        specifier: 0.57.1
+        version: 0.57.1
       '@testing-library/react':
         specifier: ^16.0.1
         version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -396,8 +396,8 @@ importers:
   apps/demo-react-vite:
     dependencies:
       '@fuels/vm-asm':
-        specifier: 0.56.0
-        version: 0.56.0
+        specifier: 0.57.1
+        version: 0.57.1
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -775,8 +775,8 @@ importers:
         specifier: workspace:*
         version: link:../versions
       '@fuels/vm-asm':
-        specifier: 0.56.0
-        version: 0.56.0
+        specifier: 0.57.1
+        version: 0.57.1
       '@noble/curves':
         specifier: ^1.6.0
         version: 1.6.0
@@ -884,8 +884,8 @@ importers:
         specifier: workspace:*
         version: link:../versions
       '@fuels/vm-asm':
-        specifier: 0.56.0
-        version: 0.56.0
+        specifier: 0.57.1
+        version: 0.57.1
       ramda:
         specifier: ^0.30.1
         version: 0.30.1
@@ -1161,8 +1161,8 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@fuels/vm-asm':
-        specifier: 0.56.0
-        version: 0.56.0
+        specifier: 0.57.1
+        version: 0.57.1
       ramda:
         specifier: ^0.30.1
         version: 0.30.1
@@ -3567,8 +3567,8 @@ packages:
       fuels: '>=0.94.0'
       react: ^18.2.0
 
-  '@fuels/vm-asm@0.56.0':
-    resolution: {integrity: sha512-oa9P55qkez/UASB8VNhTg3XflVWLHAC0JTKuCDLKZ+2ivxzLeHHcrIO+3AtJXLvUwTU9kC4rHMNUqXDaKz7HrA==}
+  '@fuels/vm-asm@0.57.1':
+    resolution: {integrity: sha512-+TSJSfamSaHrG4j274NEDW0ndZXLEXfNq5TvgjA4HN4JTnGudm41pFM7+Xgrfi0AxkpxJCaZLBTycGj6SZNmBw==}
 
   '@graphql-codegen/add@5.0.3':
     resolution: {integrity: sha512-SxXPmramkth8XtBlAHu4H4jYcYXM/o3p01+psU+0NADQowA8jtYkK6MW5rV6T+CxkEaNZItfSmZRPgIuypcqnA==}
@@ -18732,7 +18732,7 @@ snapshots:
       - '@types/react-dom'
       - react-dom
 
-  '@fuels/vm-asm@0.56.0': {}
+  '@fuels/vm-asm@0.57.1': {}
 
   '@graphql-codegen/add@5.0.3(graphql@16.9.0)':
     dependencies:

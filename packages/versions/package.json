@@ -14,14 +14,14 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./cli": {
+      "types": "./dist/cli.d.ts",
       "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+      "import": "./dist/cli.mjs"
     }
   },
   "typesVersions": {

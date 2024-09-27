@@ -11,19 +11,19 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./configs": {
+      "types": "./dist/configs.d.ts",
       "require": "./dist/configs.js",
-      "import": "./dist/configs.mjs",
-      "types": "./dist/configs.d.ts"
+      "import": "./dist/configs.mjs"
     },
     "./test-utils": {
+      "types": "./dist/test-utils.d.ts",
       "require": "./dist/test-utils.js",
-      "import": "./dist/test-utils.mjs",
-      "types": "./dist/test-utils.d.ts"
+      "import": "./dist/test-utils.mjs"
     }
   },
   "typesVersions": {
@@ -59,7 +59,7 @@
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "@fuels/vm-asm": "0.56.0",
+    "@fuels/vm-asm": "0.57.1",
     "@noble/curves": "^1.6.0",
     "events": "^3.3.0",
     "graphql": "^16.9.0",
