@@ -1,4 +1,3 @@
-/* eslint-disable no-continue */
 import type { BytesLike } from '@fuel-ts/interfaces';
 
 import { arrayify } from './arrayify';
@@ -47,13 +46,13 @@ function onError(
   reason: Utf8ErrorReason,
   offset: number,
   bytes: Uint8Array,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   output: Array<number>,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   badCodepoint?: number
 ): number {
   // #TODO: Log these as warnings after https://github.com/FuelLabs/fuels-ts/issues/2298 is implemented.
-  // eslint-disable-next-line no-console
+
   console.log(`invalid codepoint at offset ${offset}; ${reason}, bytes: ${bytes}`);
   return offset;
 }
@@ -64,7 +63,7 @@ function helper(codePoints: Array<number>): string {
       if (codePoint <= 0xffff) {
         return String.fromCharCode(codePoint);
       }
-      // eslint-disable-next-line no-param-reassign
+
       codePoint -= 0x10000;
       return String.fromCharCode(
         ((codePoint >> 10) & 0x3ff) + 0xd800,
