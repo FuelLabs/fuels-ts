@@ -23,9 +23,6 @@ describe('deploy', { timeout: 180000 }, () => {
 
   beforeEach(() => {
     mockCheckForUpdates();
-  });
-
-  afterAll(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
     resetDiskAndMocks(paths.root);
     paths = bootstrapProject(__filename);
