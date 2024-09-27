@@ -16,6 +16,7 @@
     "@fuels/connectors": "^0.27.1",
     "@fuels/react": "^0.27.1",
     "@tanstack/react-query": "^5.55.4",
+    "clsx": "2.1.1",
     "@wagmi/connectors": "^5.1.12",
     "@wagmi/core": "^2.13.6",
     "dotenv": "^16.4.5",
@@ -23,7 +24,7 @@
     "next": "14.2.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-hot-toast": "^2.4.1",
+    "react-toastify": "^10.0.5",
     "react-use": "^17.5.1"
   },
   "devDependencies": {
@@ -37,6 +38,6 @@
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.12",
     "typescript": "~5.6.2",
-    "vitest": "^2.0.5"
+    "vitest": "~2.0.5"
   }
 }

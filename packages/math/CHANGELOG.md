@@ -1,5 +1,11 @@
 # Change Log
 
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.8
+
 ## 0.94.7
 
 ### Patch Changes

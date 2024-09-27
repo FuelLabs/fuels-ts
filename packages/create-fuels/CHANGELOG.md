@@ -1,5 +1,11 @@
 # create-fuels
 
+## 0.94.8
+
+### Patch Changes
+
+- f7bacd1: feat: `create fuels` template revamp
+
 ## 0.94.7
 
 ### Patch Changes

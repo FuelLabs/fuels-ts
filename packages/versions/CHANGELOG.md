@@ -1,5 +1,7 @@
 # @fuel-ts/versions
 
+## 0.94.8
+
 ## 0.94.7
 
 ### Patch Changes

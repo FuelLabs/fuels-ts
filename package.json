@@ -90,8 +90,8 @@
     "@types/web": "^0.0.164",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.21.0",
-    "@vitest/browser": "^2.0.5",
-    "@vitest/coverage-istanbul": "^2.0.5",
+    "@vitest/browser": "~2.0.5",
+    "@vitest/coverage-istanbul": "~2.0.5",
     "autocannon": "^7.15.0",
     "clinic": "^13.0.0",
     "compare-versions": "^6.1.1",
@@ -129,7 +129,7 @@
     "vite-plugin-json5": "^1.1.2",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vite-plugin-plain-text": "^1.4.2",
-    "vitest": "^2.0.5",
+    "vitest": "~2.0.5",
     "webdriverio": "^9.0.9"
   },
   "pnpm": {
