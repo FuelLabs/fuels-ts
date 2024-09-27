@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/hasher",
-  "version": "0.94.6",
+  "version": "0.94.8",
   "description": "Sha256 hash utility for Fuel",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",

@@ -37,6 +37,6 @@ export default defineConfig({
       command: 'pnpm run fuels:dev',
       port: 4000,
       reuseExistingServer: !process.env.CI,
-    }
-  ]
+    },
+  ],
 });
