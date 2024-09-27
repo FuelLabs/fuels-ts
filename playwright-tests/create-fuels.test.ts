@@ -1,7 +1,19 @@
+import type { Page } from '@playwright/test';
 import { test, expect } from '@playwright/test';
 
 const WEB_SERVER_URL = 'http://localhost:5173';
-const FAUCET_URL = `${WEB_SERVER_URL}/faucet`;
+
+const setup = async ({ page }: { page: Page }) => {
+  await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
+
+  await page.waitForTimeout(2000);
+
+  const connectWalletButton = page.getByText('Connect Wallet');
+  await connectWalletButton.click();
+
+  const burnerWalletButton = page.getByText('Burner Wallet');
+  await burnerWalletButton.click();
+};
 
 test.extend({
   page: async ({ page }, use) => {
@@ -11,18 +23,19 @@ test.extend({
 });
 
 test('counter contract - increment function call works properly', async ({ page }) => {
-  await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
+  await setup({ page });
 
-  await page.waitForTimeout(2000);
-
-  const topUpWalletButton = page.getByText('Top-up Wallet');
+  const topUpWalletButton = page.getByText('Transfer 5 ETH', { exact: true });
   await topUpWalletButton.click();
 
   await page.waitForTimeout(2000);
 
+  const contractTab = page.getByText('Contract');
+  await contractTab.click();
+
   const initialCounterValue = +page.getByTestId('counter').textContent;
 
-  const incrementButton = page.getByText('Increment Counter');
+  const incrementButton = page.getByText('Increment', { exact: true });
   await incrementButton.click();
 
   await page.waitForTimeout(2000);
@@ -31,48 +44,20 @@ test('counter contract - increment function call works properly', async ({ page 
   expect(counterValueAfterIncrement).toEqual(initialCounterValue + 1);
 });
 
-test('top-up wallet button', async ({ page }) => {
-  await page.goto(WEB_SERVER_URL, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(2000);
-
-  // Check empty balance
-  const walletBalance = page.getByTestId('wallet-balance');
-  await expect(walletBalance).toContainText('Balance: 0.000 ETH');
-
-  // Perform top-up
-  const topUpWalletButton = page.getByText('Top-up Wallet');
-  await topUpWalletButton.click();
-
-  await page.waitForTimeout(1000);
-
-  // Expect the balance to be updated
-  await expect(walletBalance).not.toContainText('Balance: 0.000 ETH');
-});
-
 test('faucet page', async ({ page }) => {
-  await page.goto(FAUCET_URL, { waitUntil: 'networkidle' });
+  await setup({ page });
+
+  const faucetTab = page.getByText('Faucet');
+  await faucetTab.click();
+
+  const balance = page.getByTestId('balance');
+  await expect(balance).toHaveValue('0.000 ETH');
+
+  const transferButton = page.getByText('Transfer 5 ETH', { exact: true });
+  await transferButton.click();
+
   await page.waitForTimeout(2000);
 
-  // Check empty balance
-  const walletBalance = page.getByTestId('wallet-balance');
-  await expect(walletBalance).toContainText('Balance: 0.000 ETH');
-
-  // check if the two fields are pre-filled
-  const receiverAddressInput = page.getByLabel('Receiving address:');
-  await expect(receiverAddressInput).not.toBeEmpty();
-
-  const amountToSendInput = page.getByLabel('Amount (ETH):');
-  await expect(amountToSendInput).toHaveValue('5');
-
-  // click the send funds button
-  const sendFundsButton = page.getByText('Send Funds');
-  await sendFundsButton.click();
-
-  await page.waitForTimeout(500);
-
-  const successToast = page.getByText('Funds sent!');
-  await expect(successToast).toBeVisible();
-
-  // Check balance changed
-  await expect(walletBalance).not.toContainText('Balance: 0.000 ETH');
+  const balanceAfterTransfer = page.getByTestId('balance');
+  await expect(balanceAfterTransfer).toHaveValue('5.000 ETH');
 });
