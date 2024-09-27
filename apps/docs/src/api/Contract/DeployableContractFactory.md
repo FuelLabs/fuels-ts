@@ -1,4 +1,4 @@
-[**@fuel-ts/contract v0.94.7**](../index.md) • **Docs**
+[**@fuel-ts/contract v0.94.8**](../index.md) • **Docs**
 
 ***
 
@@ -22,4 +22,4 @@
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:16](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/contract/src/test-utils/launch-test-node.ts#L16)
+[packages/contract/src/test-utils/launch-test-node.ts:16](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/contract/src/test-utils/launch-test-node.ts#L16)

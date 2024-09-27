@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.7**](../index.md) • **Docs**
+[**@fuel-ts/account v0.94.8**](../index.md) • **Docs**
 
 ***
 
@@ -26,7 +26,7 @@ the event bus should be provided.
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:12](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/types/target-object.ts#L12)
+[packages/account/src/connectors/types/target-object.ts:12](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/account/src/connectors/types/target-object.ts#L12)
 
 ***
 
@@ -46,7 +46,7 @@ the event bus should be provided.
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:11](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/types/target-object.ts#L11)
+[packages/account/src/connectors/types/target-object.ts:11](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/account/src/connectors/types/target-object.ts#L11)
 
 ***
 
@@ -66,7 +66,7 @@ the event bus should be provided.
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:10](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/types/target-object.ts#L10)
+[packages/account/src/connectors/types/target-object.ts:10](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/account/src/connectors/types/target-object.ts#L10)
 
 ***
 
@@ -86,7 +86,7 @@ the event bus should be provided.
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:9](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/types/target-object.ts#L9)
+[packages/account/src/connectors/types/target-object.ts:9](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/account/src/connectors/types/target-object.ts#L9)
 
 ***
 
@@ -104,7 +104,7 @@ the event bus should be provided.
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:14](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/types/target-object.ts#L14)
+[packages/account/src/connectors/types/target-object.ts:14](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/account/src/connectors/types/target-object.ts#L14)
 
 ***
 
@@ -124,4 +124,4 @@ the event bus should be provided.
 
 #### Defined in
 
-[packages/account/src/connectors/types/target-object.ts:13](https://github.com/FuelLabs/fuels-ts/blob/8420c2fcbdf57cb5242e933369ca6c4c5f9d66c9/packages/account/src/connectors/types/target-object.ts#L13)
+[packages/account/src/connectors/types/target-object.ts:13](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/account/src/connectors/types/target-object.ts#L13)
