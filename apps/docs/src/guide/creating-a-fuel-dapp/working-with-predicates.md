@@ -20,30 +20,33 @@ The first step is to modify the predicate contract to accept a configurable pin.
 
 2. Modifying the Frontend
 
-We will now add new button to the frontend that will update the `pin` in the predicate when clicked. To do this, we will modify the `./src/routes/predicate.lazy.tsx` file.
+We will now add new button to the frontend that will update the `pin` in the predicate when clicked. To do this, we will modify the `./src/components/Predicate.tsx` file.
 
 We will add a function called `changePin`, which will use the current pin in state to update the pin in the predicate as well as transfer 1000 to the predicate.
 
-<<< @/../../create-fuels-counter-guide/src/routes/predicate.lazy.tsx#change-pin-react-function{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/components/Predicate.tsx#change-pin-react-function{ts:line-numbers}
 
-It would also be useful to change the placeholder text to say "Enter a new pin" instead of "Hint - the correct pin is 1337".
+It would also be useful to change the placeholder text.
 
 ```tsx
-<Input
-  className="w-[300px] mt-8"
-  value={pin as string}
-  onChange={(e) => setPin(e.target.value)}
-  placeholder="Enter a new pin"
+<input
+  type="text"
+  value={predicatePin}
+  onChange={(e) => setPredicatePin(e.target.value)}
+  className="w-1/2 bg-gray-800 rounded-md px-2 py-1 mr-3 truncate font-mono"
+  placeholder="Enter current or new pin"
 />
 ```
 
 Finally, we will add a button that calls the `changePin` function when clicked.
 
 ```tsx
-<Button onClick={changePin}>Change Pin</Button>
+<Button onClick={changePin} className="w-full" disabled={isLoading}>
+  Change Pin
+</Button>
 ```
 
-Congratulations! That's all. You should now be able to see the modified predicate dApp running at `http://localhost:3000` with our newly added change pin functionality.
+Congratulations! That's all. You should now be able to see the modified predicate dApp running at `http://localhost:5173` with our newly added change pin functionality.
 
 You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 

@@ -9,7 +9,7 @@ abi Counter {
     #[storage(write, read)]
     fn increment_counter(amount: u64) -> u64;
 
-    #[storage(read, write)]
+    #[storage(write, read)]
     fn decrement_counter(amount: u64) -> u64;
 }
 // #endregion create-fuels-counter-guide-abi
@@ -36,8 +36,7 @@ impl Counter for Contract {
         storage.counter.read()
     }
 
-    // The `decrement_counter` function decrements the counter by the given amount.
-    #[storage(read, write)]
+    #[storage(write, read)]
     fn decrement_counter(amount: u64) -> u64 {
         let current = storage.counter.read();
         storage.counter.write(current - amount);

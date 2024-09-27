@@ -1,5 +1,11 @@
 # @internal/fuel-core
 
+## 0.89.2
+
+### Patch Changes
+
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+
 ## 0.89.1
 
 ### Patch Changes
