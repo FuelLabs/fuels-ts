@@ -32,6 +32,6 @@ When using `multiCall`, the contract calls are queued and executed only after in
 
 ## Using `multiCall` for Read-Only Contract Calls
 
-In scenarios where you need to read data from multiple contracts, the `multiCall` method can be used to perform multiple [read-only](./methods.md#get) contract calls in a single transaction. This approach minimizes the number of requests sent to the network and consolidates the retrieval of data, making your Dapp interactions more efficient.
+When you need to read data from multiple contracts, the `multiCall` method can perform multiple [read-only](./methods.md#get) calls in a single transaction. This minimizes the number of requests sent to the network and consolidates data retrieval, making your dApp interactions more efficient.
 
 <<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-4{ts:line-numbers}
