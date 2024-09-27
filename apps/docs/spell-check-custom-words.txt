@@ -309,6 +309,7 @@ Updatable
 Upgradability
 Upgradable
 URI
+frontend's
 urql
 USD
 USDC
