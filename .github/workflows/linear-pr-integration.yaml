@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: FuelLabs/github-actions/linear/link-pr-to-linear-issue@ns/fix/pr-linear-integration
+      - uses: FuelLabs/github-actions/linear/link-pr-to-linear-issue@master
         with:
           pull_number: ${{ github.event.pull_request.number }}
           linear_api_key: ${{ secrets.LINEAR_TOKEN }}
