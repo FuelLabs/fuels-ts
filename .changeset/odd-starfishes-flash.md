@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-chore: favor port `0` over `portfinder` dependency
+fix: reduce flakiness by favoring port `0` over `portfinder` dependency
