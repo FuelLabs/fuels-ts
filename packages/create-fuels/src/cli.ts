@@ -153,10 +153,10 @@ export const runScaffoldCli = async ({
     process.chdir(projectPath);
     execSync(packageManager.install, { stdio: verboseEnabled ? 'inherit' : 'pipe' });
     installDepsSpinner.succeed('Installed dependencies!');
-  }
 
-  // Generate typegen files
-  execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+    // Generate typegen files
+    execSync(packageManager.run('prebuild'), { stdio: verboseEnabled ? 'inherit' : 'pipe' });
+  }
 
   log();
   log();

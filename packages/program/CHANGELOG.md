@@ -1,5 +1,28 @@
 # Change Log
 
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- 3048099: chore: upgrading `@fuels/vm-asm` to `0.57.1`
+- Updated dependencies [f46334d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [48db506]
+- Updated dependencies [80df900]
+- Updated dependencies [3048099]
+- Updated dependencies [b869ee8]
+- Updated dependencies [600b781]
+- Updated dependencies [3668a26]
+  - @fuel-ts/account@0.94.7
+  - @fuel-ts/abi-coder@0.94.7
+  - @fuel-ts/transactions@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/address@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/utils@0.94.7
+  - @fuel-ts/math@0.94.7
+
 ## 0.94.6
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [80df900]
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/crypto@0.94.7
+  - @fuel-ts/utils@0.94.7
+
 ## 0.94.6
 
 ### Patch Changes
