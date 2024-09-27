@@ -34,7 +34,7 @@ import { error } from 'console';
 
     // If they did, add and commit the changes
     if (versionsChanged || proxyChanged) {
-      execSync(`git add ${versionsFilePath}`);
+      execSync(`git add ${versionsFilePath} ${proxyDirPath}`);
       execSync(`git commit -m"ci(scripts): update versions"`);
     }
   } catch (err) {
