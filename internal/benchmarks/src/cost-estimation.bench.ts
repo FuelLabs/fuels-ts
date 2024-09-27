@@ -47,10 +47,7 @@ describe('Cost Estimation Benchmarks', () => {
     receiver1 = Wallet.generate({ provider });
     receiver2 = Wallet.generate({ provider });
     receiver3 = Wallet.generate({ provider });
-    sender = Wallet.fromPrivateKey(
-      '0x30bb0bc68f5d2ec3b523cee5a65503031b40679d9c72280cd8088c2cfbc34e38',
-      provider
-    );
+    sender = Wallet.generate({ provider });
   };
 
   beforeAll(setupTestEnvironment);
