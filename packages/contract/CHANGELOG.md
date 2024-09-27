@@ -1,5 +1,23 @@
 # Change Log
 
+## 0.94.8
+
+### Patch Changes
+
+- Updated dependencies [f02fa88]
+  - @fuel-ts/account@0.94.8
+  - @fuel-ts/program@0.94.8
+  - @fuel-ts/abi-coder@0.94.8
+  - @fuel-ts/crypto@0.94.8
+  - @fuel-ts/errors@0.94.8
+  - @fuel-ts/hasher@0.94.8
+  - @fuel-ts/interfaces@0.94.8
+  - @fuel-ts/math@0.94.8
+  - @fuel-ts/merkle@0.94.8
+  - @fuel-ts/transactions@0.94.8
+  - @fuel-ts/utils@0.94.8
+  - @fuel-ts/versions@0.94.8
+
 ## 0.94.7
 
 ### Patch Changes
