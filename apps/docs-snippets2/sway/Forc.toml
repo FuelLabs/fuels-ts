@@ -1,2 +1,2 @@
 [workspace]
-members = ["counter", "script-sum", "echo-values"]
+members = ["counter", "script-sum", "echo-values", "script-transfer-to-contract"]

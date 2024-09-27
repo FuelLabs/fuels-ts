@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-non-null-assertion */
 // #region full
 // #region produce-blocks
 import { DateTime } from 'fuels';
