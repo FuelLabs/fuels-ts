@@ -1,0 +1,17 @@
+name: Linear Issue To PR Linker
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  link-pr-to-linear-issues:
+    name: "Link PR to Linear issues"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: FuelLabs/github-actions/linear/link-pr-to-linear-issue@master
+        with:
+          pull_number: ${{ github.event.pull_request.number }}
+          linear_api_key: ${{ secrets.LINEAR_TOKEN }}
+          github_token: ${{ secrets.REPO_TOKEN }}

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/program",
-  "version": "0.94.6",
+  "version": "0.94.8",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
@@ -11,9 +11,9 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     }
   },
   "files": [
@@ -34,7 +34,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuels/vm-asm": "0.56.0"
+    "@fuels/vm-asm": "0.57.1"
   },
   "devDependencies": {
     "@types/ramda": "^0.30.2"
