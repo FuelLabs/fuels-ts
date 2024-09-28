@@ -1,5 +1,26 @@
 # create-fuels
 
+## 0.94.8
+
+### Patch Changes
+
+- f7bacd1: feat: `create fuels` template revamp
+
+## 0.94.7
+
+### Patch Changes
+
+- 47b5cd3: chore: upgrade to forc `0.63.6`
+- 7cb3457: chore: fix deprecation on Commander method
+- cab11ef: build(deps): bump the deps-minor group with 14 updates
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+- 327b309: fix: calling `prebuild` only if deps are installed
+- 0c927f7: fix: `create fuels` not respecting toolchain file
+- 127ade0: chore: upgrade `forc@0.64.0`
+- e7c2c30: fix: generate types for `create fuels` users when extracted
+- b6a82bc: build(deps): bump @tanstack/react-router from 1.56.5 to 1.58.3
+- 600b781: build(deps): bump the deps-patch group
+
 ## 0.94.6
 
 ### Patch Changes

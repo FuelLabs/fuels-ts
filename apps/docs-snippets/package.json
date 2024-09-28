@@ -1,5 +1,5 @@
 {
-  "name": "@fuel-ts/docs-snippets",
+  "name": "docs-snippets",
   "version": "0.67.0",
   "description": "",
   "private": true,
@@ -14,7 +14,7 @@
     "@fuel-ts/utils": "workspace:*",
     "ethers": "^6.13.2",
     "fuels": "workspace:*",
-    "vitest": "^2.0.5"
+    "vitest": "~2.0.5"
   },
   "keywords": [],
   "author": "",
