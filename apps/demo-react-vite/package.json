@@ -17,7 +17,7 @@
     "react": "^18.3.1"
   },
   "devDependencies": {
-    "@types/react": "^18.3.8",
+    "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.21.0",
@@ -26,6 +26,6 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.12",
     "typescript": "~5.6.2",
-    "vite": "^5.4.7"
+    "vite": "^5.4.8"
   }
 }
