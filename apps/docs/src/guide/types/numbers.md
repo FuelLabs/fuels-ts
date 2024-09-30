@@ -16,11 +16,11 @@ This guide explains how to create and interact with Sway numbers while using the
 
 When you pass in a `u64` or a `u256` to a Sway program from JavaScript, you must first convert it to a `BigNum` object. This is because these types can have extremely large maximum values (`2^64` and `2^256` respectively), and JavaScript's `Number` type can only hold up to 53 bits of precision (`2^53`).
 
-<<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/numbers.ts#numbers-docs-1{ts:line-numbers}
 
 You can also create a `BigNum` from a string. This is useful when you want to pass in a number that is too large to be represented as a JavaScript number. Here's how you can do that:
 
-<<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/numbers.ts#numbers-docs-2{ts:line-numbers}
 
 ### For `u8`, `u16`, and `u32`
 
@@ -30,14 +30,18 @@ You don't need to do anything special to create these numbers. You can pass in a
 
 ### For `u64` and `u256`
 
-<<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/numbers.ts#numbers-docs-3{ts:line-numbers}
 
 > Note: If a contract call returns a number that is too large to be represented as a JavaScript number, you can convert it to a string using the `.toString()` method instead of `.toNumber()`.
 
 ### For `u8`, `u16`, and `u32`
 
-<<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-4{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/numbers.ts#numbers-docs-4{ts:line-numbers}
 
 ### Using a `BigNum` from `ethers` with `fuels`
 
-<<< @/../../docs-snippets/src/guide/types/numbers.test.ts#numbers-docs-5{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/numbers.ts#numbers-docs-5{ts:line-numbers}
+
+## Full Example
+
+<<< @/../../docs-snippets2/src/types/numbers.ts#full{ts:line-numbers}
