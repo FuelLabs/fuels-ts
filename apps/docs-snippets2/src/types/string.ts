@@ -1,3 +1,4 @@
+// #region full
 import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
@@ -35,3 +36,4 @@ await expect(async () => contract.functions.echo_str_8(shortString).call()).reje
   'Value length mismatch during encode'
 );
 // #endregion string-3
+// #endregion full
