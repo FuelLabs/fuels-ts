@@ -1,5 +1,7 @@
 // #region full
-import { BigNumberish, BN, Provider, Wallet } from 'fuels';
+import type { BigNumberish } from 'fuels';
+import { BN, Provider, Wallet } from 'fuels';
+
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { EchoValuesFactory } from '../typegend';
 
@@ -11,7 +13,7 @@ const boolArray: boolean[] = [true, false, true]; // in Sway: [bool; 3]
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 
-let wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const deploy = await EchoValuesFactory.deploy(wallet);
 
@@ -28,7 +30,7 @@ expect(new BN(value[0]).toNumber()).toEqual(u64Array[0]);
 expect(new BN(value[1]).toNumber()).toEqual(u64Array[1]);
 // #endregion arrays-3
 
-// @ts-expect-error
+// @ts-expect-error ignore snippet error
 // #region arrays-4
 // will throw error because the second element is not of type u64
 await contract.functions.echo_u64_array([10000000]).simulate();

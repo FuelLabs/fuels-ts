@@ -1,16 +1,14 @@
 // #region full
 import { FuelError, Provider, Wallet } from 'fuels';
+import { expectToThrowFuelError } from 'fuels/test-utils';
+
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { EchoEnumFactory } from '../typegend';
 import { StateErrorInput, UserErrorInput } from '../typegend/contracts/EchoEnum';
-import { expectToThrowFuelError } from 'fuels/test-utils';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
-
-let wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
-
+const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await EchoEnumFactory.deploy(wallet);
-
 const { contract } = await deploy.waitForResult();
 
 // #region enums-3

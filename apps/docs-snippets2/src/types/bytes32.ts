@@ -1,6 +1,7 @@
 // #region full
 import { randomBytes } from 'crypto';
-import { arrayify, Bytes, hexlify } from 'fuels';
+import type { Bytes } from 'fuels';
+import { arrayify, hexlify } from 'fuels';
 
 // #region bytes32-1
 // #region bytes32-2

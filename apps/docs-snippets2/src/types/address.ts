@@ -1,5 +1,6 @@
 // #region full
 import { Address, Provider, Wallet } from 'fuels';
+
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 
 // #region address-3
@@ -13,7 +14,7 @@ expect(address.bech32Address).toEqual(ADDRESS_BECH32);
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 
 // #region address-4
-let wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 address = Address.fromPublicKey(wallet.publicKey);
 
