@@ -109,6 +109,9 @@ describe('deploy', { timeout: 180000 }, () => {
       const res = await targetContract.functions.test_function().call();
       const { value } = await res.waitForResult();
 
+      const { value: getCountValue } = await targetContract.functions.get_value().get();
+      expect(getCountValue).toBe(10);
+
       return value;
     }
 
@@ -198,6 +201,9 @@ describe('deploy', { timeout: 180000 }, () => {
         upgradableChunkedAbi,
         wallet
       );
+
+      const { value: getCountValue } = await targetContract.functions.get_value().get();
+      expect(getCountValue).toBe(10);
 
       const res = await targetContract.functions.test_function().call();
       const { value } = await res.waitForResult();
