@@ -1,2 +1,2 @@
 [workspace]
-members = ["counter", "script-sum", "echo-values", "echo-asset-id", "echo-bytes", "echo-enum"]
+members = ["counter", "script-sum", "echo-values", "echo-asset-id", "echo-bytes", "echo-enum", "sum-option-u8"]
