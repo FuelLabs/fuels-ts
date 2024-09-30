@@ -573,6 +573,9 @@ importers:
 
   apps/docs-snippets2:
     dependencies:
+      ethers:
+        specifier: ^6.13.2
+        version: 6.13.2(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
