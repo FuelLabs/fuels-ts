@@ -18,7 +18,7 @@ const { contract } = await deploy.waitForResult();
 // #region bits512-3
 const b512 = wallet.publicKey;
 
-const { value } = await contract.functions.echo_b512(b512).simulate();
+const { value } = await contract.functions.echo_b512(b512).get();
 
 expect(value).toEqual(b512);
 // #endregion bits512-3

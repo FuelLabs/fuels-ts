@@ -13,7 +13,7 @@ const { contract } = await deploy.waitForResult();
 // #region bytes-2
 const bytes: Bytes = [40, 41, 42];
 
-const { value } = await contract.functions.bytes_comparison(bytes).simulate();
+const { value } = await contract.functions.bytes_comparison(bytes).get();
 
 expect(value).toBeTruthy();
 // #endregion bytes-2

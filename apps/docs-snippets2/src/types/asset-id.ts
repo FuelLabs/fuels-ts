@@ -18,7 +18,7 @@ const deploy = await EchoAssetIdFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
 
 // #region asset-id-3
-const { value } = await contract.functions.echo_asset_id_comparison(assetId).simulate();
+const { value } = await contract.functions.echo_asset_id_comparison(assetId).get();
 
 expect(value).toBeTruthy();
 // #endregion asset-id-3

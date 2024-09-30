@@ -23,7 +23,7 @@ const { contract } = await deploy.waitForResult();
 const u64Array: [BigNumberish, BigNumberish] = [10000000, 20000000];
 
 // This expects two arguments
-const { value } = await contract.functions.echo_u64_array(u64Array).simulate();
+const { value } = await contract.functions.echo_u64_array(u64Array).get();
 
 expect(new BN(value[0]).toNumber()).toEqual(u64Array[0]);
 
@@ -33,11 +33,11 @@ expect(new BN(value[1]).toNumber()).toEqual(u64Array[1]);
 // @ts-expect-error ignore snippet error
 // #region arrays-4
 // will throw error because the second element is not of type u64
-await contract.functions.echo_u64_array([10000000]).simulate();
+await contract.functions.echo_u64_array([10000000]).get();
 // #endregion arrays-4
 
 // #region arrays-5
 // will throw error because the second element is not of type u64
-await contract.functions.echo_u64_array([10000000, 'a']).simulate();
+await contract.functions.echo_u64_array([10000000, 'a']).get();
 // #endregion arrays-5
 // #endregion full

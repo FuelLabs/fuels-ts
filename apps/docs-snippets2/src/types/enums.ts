@@ -14,7 +14,7 @@ const { contract } = await deploy.waitForResult();
 // #region enums-3
 const enumParam1 = StateErrorInput.Completed;
 
-const { value: value1 } = await contract.functions.echo_state_error_enum(enumParam1).simulate();
+const { value: value1 } = await contract.functions.echo_state_error_enum(enumParam1).get();
 
 expect(value1).toEqual(enumParam1);
 // #endregion enums-3
@@ -22,7 +22,7 @@ expect(value1).toEqual(enumParam1);
 // #region enums-6
 const enumParam2 = { UserError: UserErrorInput.InsufficientPermissions };
 
-const { value: value2 } = await contract.functions.echo_error_enum(enumParam2).simulate();
+const { value: value2 } = await contract.functions.echo_error_enum(enumParam2).get();
 
 expect(value2).toEqual(enumParam2);
 // #endregion enums-6
@@ -30,7 +30,7 @@ expect(value2).toEqual(enumParam2);
 // #region enums-7
 const enumParam3 = { StateError: StateErrorInput.Completed };
 
-const { value: value3 } = await contract.functions.echo_error_enum(enumParam3).simulate();
+const { value: value3 } = await contract.functions.echo_error_enum(enumParam3).get();
 
 expect(value3).toEqual(enumParam3);
 // #endregion enums-7
@@ -41,7 +41,7 @@ const emumParam4 = 1;
 
 await expectToThrowFuelError(
   // @ts-expect-error number is not a valid type
-  () => contract.functions.echo_state_error_enum(emumParam4).simulate(),
+  () => contract.functions.echo_state_error_enum(emumParam4).get(),
   new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'A field for the case must be provided.')
 );
 // #endregion enums-8
@@ -52,7 +52,7 @@ const emumParam5 = 'NotStateEnumValue';
 
 await expectToThrowFuelError(
   // @ts-expect-error NotStateEnumValue is not a valid value
-  () => contract.functions.echo_state_error_enum(emumParam5).simulate(),
+  () => contract.functions.echo_state_error_enum(emumParam5).get(),
   new FuelError(FuelError.CODES.INVALID_DECODE_VALUE, 'Only one field must be provided.')
 );
 // #endregion enums-9
@@ -63,7 +63,7 @@ const enumParam6 = { UnknownKey: 'Completed' };
 
 await expectToThrowFuelError(
   // @ts-expect-error UnknownKey is not a valid key
-  () => contract.functions.echo_error_enum(enumParam6).simulate(),
+  () => contract.functions.echo_error_enum(enumParam6).get(),
   new FuelError(
     FuelError.CODES.INVALID_DECODE_VALUE,
     `Invalid case 'UnknownKey'. Valid cases: 'StateError', 'UserError'.`
