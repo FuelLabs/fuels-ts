@@ -12,6 +12,20 @@ const wrapperFnContents = readFileSync(wrapperFnFilepath, 'utf-8');
 export const wrapSnippet = (filepath: string) => {
   const snippetContents = readFileSync(filepath, 'utf8');
 
+  /**
+   * Test environment
+   */
+  let testEnvironments = '';
+
+  // Check if the filepath includes '.node' or '.browser'
+  if (filepath.includes('.node')) {
+    testEnvironments = '/**\n * @group node\n */';
+  } else if (filepath.includes('.browser')) {
+    testEnvironments = '/**\n * @group browser\n */';
+  } else {
+    testEnvironments = '/**\n * @group node\n * @group browser\n */';
+  }
+
   /*
     Filter all imports from file.
   */
@@ -74,6 +88,7 @@ export const wrapSnippet = (filepath: string) => {
   const wrappedSnippet =
     // eslintDisableRule +
     wrapperFnContents
+      .replace('// %TEST_ENVIRONMENT%', testEnvironments)
       .replace('%IMPORTS%', imports)
       .replace('%NAME%', basename(filepath))
       .replace('// %SNIPPET%', indented)

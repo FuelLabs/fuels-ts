@@ -8,9 +8,7 @@ afterAll(() => {
   console = { ...consoleBkp };
 });
 
-/**
- * @group node
- */
+// %TEST_ENVIRONMENT%
 test('%NAME%', async () => {
   // TEST NODE LAUNCHER ———>>>
   // %NODE_LAUNCHER%
