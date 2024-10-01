@@ -11,4 +11,5 @@ members = [
   "echo-std-string",
   "bytecode-input",
   "echo-employee-data-vector",
+  "echo-raw-slice",
 ]
