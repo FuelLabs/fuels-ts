@@ -163,7 +163,6 @@ console.assert(
 nodeWithCustomAssetIds.cleanup();
 
 // #region test-messages
-
 const testMessage = new TestMessage({ amount: 1000 });
 
 const nodeWithTestMessages = await launchTestNode({
