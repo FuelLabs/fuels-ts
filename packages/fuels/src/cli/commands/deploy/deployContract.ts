@@ -2,7 +2,6 @@ import type { WalletUnlocked } from '@fuel-ts/account';
 import { ContractFactory } from '@fuel-ts/contract';
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { Contract } from '@fuel-ts/program';
-import { concat } from '@fuel-ts/utils';
 import { existsSync, readFileSync } from 'fs';
 
 import { setForcTomlProxyAddress, type ForcToml } from '../../config/forcUtils';
