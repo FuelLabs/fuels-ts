@@ -5,7 +5,6 @@ import { launchTestNode, TestAssetId, TestMessage } from 'fuels/test-utils';
 import { join } from 'path';
 
 // #region automatic-cleanup
-
 using launched = await launchTestNode();
 
 /*
