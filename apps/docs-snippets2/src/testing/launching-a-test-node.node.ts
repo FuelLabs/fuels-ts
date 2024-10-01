@@ -93,7 +93,6 @@ console.assert(wallet4 instanceof WalletUnlocked, 'Wallet4 is not instance of Wa
 // #endregion advanced-example
 
 // #region custom-fuel-core-args
-
 process.env.DEFAULT_FUEL_CORE_ARGS = `--tx-max-depth 20`;
 
 // `nodeOptions.args` will override the above values if provided.
