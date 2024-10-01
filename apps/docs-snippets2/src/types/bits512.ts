@@ -9,7 +9,7 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 // #region bits512-1
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-console.log(wallet.publicKey);
+console.log('public key', wallet.publicKey);
 // #endregion bits512-1
 
 const deploy = await EchoValuesFactory.deploy(wallet);
