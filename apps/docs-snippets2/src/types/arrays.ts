@@ -1,6 +1,7 @@
 // #region full
 import type { BigNumberish } from 'fuels';
-import { BN, Provider, Wallet } from 'fuels';
+import { BN, ErrorCode, Provider, Wallet } from 'fuels';
+import { expectToThrowFuelError } from 'fuels/test-utils';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { EchoValuesFactory } from '../typegend';
@@ -30,14 +31,26 @@ expect(new BN(value[0]).toNumber()).toEqual(u64Array[0]);
 expect(new BN(value[1]).toNumber()).toEqual(u64Array[1]);
 // #endregion arrays-3
 
-// @ts-expect-error ignore snippet error
-// #region arrays-4
-// will throw error because the second element is not of type u64
-await contract.functions.echo_u64_array([10000000]).get();
-// #endregion arrays-4
+await expectToThrowFuelError(
+  async () =>
+    // @ts-expect-error ignore snippet error
+    // #region arrays-4
+    // will throw error because the second element is not of type u64
+    contract.functions.echo_u64_array([10000000]).get(),
+  // #endregion arrays-4
 
-// #region arrays-5
-// will throw error because the second element is not of type u64
-await contract.functions.echo_u64_array([10000000, 'a']).get();
-// #endregion arrays-5
+  { code: ErrorCode.ENCODE_ERROR }
+);
+
+await expectToThrowFuelError(
+  async () =>
+    // #region arrays-5
+    // will throw error because the second element is not of type u64
+    contract.functions.echo_u64_array([10000000, 'a']).get(),
+  // #endregion arrays-5
+  { code: ErrorCode.ENCODE_ERROR }
+);
 // #endregion full
+
+expect(numberArray).toStrictEqual([1, 2, 3, 4, 5]);
+expect(boolArray).toStrictEqual([true, false, true]);

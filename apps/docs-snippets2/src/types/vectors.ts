@@ -1,4 +1,4 @@
-import { arrayify, getRandomB256, Provider, Wallet } from 'fuels';
+import { arrayify, bn, getRandomB256, Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { BytecodeInputFactory, EchoEmployeeDataVectorFactory } from '../typegend';
@@ -21,7 +21,7 @@ const employees: EmployeeDataInput[] = [
   {
     name: 'John Doe',
     age: 30,
-    salary: 8000,
+    salary: bn(8000),
     idHash: getRandomB256(),
     ratings: [1, 2, 3],
     isActive: true,
@@ -29,7 +29,7 @@ const employees: EmployeeDataInput[] = [
   {
     name: 'Everyman',
     age: 31,
-    salary: 9000,
+    salary: bn(9000),
     idHash: getRandomB256(),
     ratings: [5, 6, 7],
     isActive: true,
@@ -47,3 +47,7 @@ const { waitForResult } = await bytecodeContract.functions
 
 const { value: bytecodeRoot } = await waitForResult();
 // #endregion vector-bytecode-input-ts
+
+expect(basicU8Vector).toStrictEqual([1, 2, 3]);
+expect(JSON.stringify(value)).toEqual(JSON.stringify(employees[1]));
+expect(bytecodeRoot).toEqual('0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20');

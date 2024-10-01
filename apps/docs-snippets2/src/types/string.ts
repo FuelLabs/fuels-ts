@@ -37,3 +37,6 @@ await expect(async () => contract.functions.echo_str_8(shortString).call()).reje
 );
 // #endregion string-3
 // #endregion full
+
+expect(stringSize2).toBe('st');
+expect(stringSize8).toBe('fuel-sdk');
