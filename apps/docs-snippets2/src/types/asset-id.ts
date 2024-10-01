@@ -16,6 +16,7 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await EchoAssetIdFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
+assetId.bits = '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c';
 
 // #region asset-id-3
 const { value } = await contract.functions.echo_asset_id_comparison(assetId).get();
