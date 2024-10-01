@@ -12,4 +12,5 @@ members = [
   "bytecode-input",
   "echo-employee-data-vector",
   "echo-raw-slice",
+  "echo-evm-address",
 ]
