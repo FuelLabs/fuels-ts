@@ -8,6 +8,7 @@ import { EchoValuesFactory } from '../typegend/contracts/EchoValuesFactory';
 const myBigNumberOne = '100000000';
 
 const resultOne = new BN('100000000').toString();
+
 console.assert(resultOne === myBigNumberOne, 'BN is not equal to expected');
 // #endregion instantiation-1
 
