@@ -139,7 +139,6 @@ const nodeWithCustomBaseAssetId = await launchTestNode({
 nodeWithCustomBaseAssetId.cleanup();
 
 // #region asset-ids
-
 const randomAssetIds = TestAssetId.random();
 
 const nodeWithCustomAssetIds = await launchTestNode({
