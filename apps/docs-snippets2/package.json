@@ -1,0 +1,22 @@
+{
+  "name": "docs-snippets2",
+  "version": "0.67.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "run-s wrap:snippets build:forc",
+    "build:forc": "pnpm fuels build",
+    "wrap:snippets": "tsx scripts/wrap-snippets.ts",
+    "pretest": "pnpm build",
+    "test": "cd ../.. && pnpm run test:filter apps/docs-snippets2"
+  },
+  "dependencies": {
+    "fuels": "workspace:*"
+  },
+  "devDependencies": {
+    "glob": "^10.4.5"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

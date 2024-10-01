@@ -102,6 +102,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
         len: bn(receipt.len),
         digest: hexOrZero(receipt.digest),
         pc: bn(receipt.pc),
+        data: hexOrZero(receipt.data),
         is: bn(receipt.is),
       };
 
@@ -157,6 +158,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
         len: bn(receipt.len),
         digest: hexOrZero(receipt.digest),
         pc: bn(receipt.pc),
+        data: hexOrZero(receipt.data),
         is: bn(receipt.is),
       };
       return logDataReceipt;
@@ -206,6 +208,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
       const amount = bn(receipt.amount);
       const data = receipt.data ? arrayify(receipt.data) : Uint8Array.from([]);
       const digest = hexOrZero(receipt.digest);
+      const len = bn(receipt.len).toNumber();
 
       const messageId = InputMessageCoder.getMessageId({
         sender,
@@ -221,6 +224,7 @@ export function assembleReceiptByType(receipt: GqlReceiptFragment) {
         recipient,
         amount,
         nonce,
+        len,
         data,
         digest,
         messageId,

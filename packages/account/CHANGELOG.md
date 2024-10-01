@@ -1,5 +1,52 @@
 # Change Log
 
+## 0.94.8
+
+### Patch Changes
+
+- f02fa88: fix: reduce flakiness by favoring port `0` over `portfinder` dependency
+  - @fuel-ts/abi-coder@0.94.8
+  - @fuel-ts/address@0.94.8
+  - @fuel-ts/crypto@0.94.8
+  - @fuel-ts/errors@0.94.8
+  - @fuel-ts/hasher@0.94.8
+  - @fuel-ts/interfaces@0.94.8
+  - @fuel-ts/math@0.94.8
+  - @fuel-ts/merkle@0.94.8
+  - @fuel-ts/transactions@0.94.8
+  - @fuel-ts/utils@0.94.8
+  - @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- f46334d: fix: removed sepolia assets and adjust decimal config
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+- 80df900: chore: fix exported types
+- 3048099: chore: upgrading `@fuels/vm-asm` to `0.57.1`
+- b869ee8: feat: add flag to indicate if connector is external
+- 3668a26: fix: add missing receipts properties
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [48db506]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+- Updated dependencies [600b781]
+- Updated dependencies [3668a26]
+  - @fuel-ts/versions@0.94.7
+  - @fuel-ts/abi-coder@0.94.7
+  - @fuel-ts/transactions@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/address@0.94.7
+  - @fuel-ts/crypto@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/hasher@0.94.7
+  - @fuel-ts/merkle@0.94.7
+  - @fuel-ts/utils@0.94.7
+  - @fuel-ts/math@0.94.7
+
 ## 0.94.6
 
 ### Patch Changes
