@@ -26,7 +26,6 @@ launchedTestNode.cleanup();
 // #endregion manual-cleanup
 
 // #region options
-
 const customLaunchTestNode = await launchTestNode(/* options */);
 // #endregion options
 
