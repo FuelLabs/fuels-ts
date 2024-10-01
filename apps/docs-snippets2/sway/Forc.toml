@@ -9,4 +9,6 @@ members = [
   "sum-option-u8",
   "employee-data",
   "echo-std-string",
+  "bytecode-input",
+  "echo-employee-data-vector",
 ]
