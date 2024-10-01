@@ -22,7 +22,7 @@ const decrementedValue = 2;
 const { waitForResult: getCountWaitForResult } = await contract.functions.get_count().call();
 const { value: initialGetCountValue } = await getCountWaitForResult();
 console.assert(
-  initValue.toNumber() === initialCount,
+  initialGetCountValue.toNumber() === initialCount,
   'Initial value should be equal to the initial count.'
 );
 
