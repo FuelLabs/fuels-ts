@@ -13,7 +13,7 @@ const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const { waitForResult } = await CounterFactory.deploy(wallet);
 const { contract } = await waitForResult();
 
-// Lets setup some values to use in the test.
+// Lets setup some values to use in our example.
 const initialCount = 0;
 const incrementedValue = 5;
 const decrementedValue = 2;
