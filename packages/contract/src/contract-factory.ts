@@ -344,7 +344,6 @@ export default class ContractFactory {
             // is still valid so we can use this for the loader contract
             if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
               uploadedBlobs.push(blobId);
-              // eslint-disable-next-line no-continue
               continue;
             }
 
