@@ -213,7 +213,6 @@ recipient.provider = providerWithTestMessagesOnChain;
 const {
   messages: [messageOnChain],
 } = await recipient.getMessages();
-// message.nonce === testMessage.nonce
 console.assert(
   messageOnChain.nonce === testMessageOnChain.nonce,
   'Nonce is not testMessageOnChain.nonce'
