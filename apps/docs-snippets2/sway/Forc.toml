@@ -13,4 +13,5 @@ members = [
   "echo-employee-data-vector",
   "echo-raw-slice",
   "echo-evm-address",
+  "input-output-types",
 ]
