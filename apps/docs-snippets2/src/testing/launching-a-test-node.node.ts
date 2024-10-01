@@ -15,7 +15,6 @@ using launched = await launchTestNode();
 // #endregion automatic-cleanup
 
 // #region manual-cleanup
-
 const launchedTestNode = await launchTestNode();
 
 /*
