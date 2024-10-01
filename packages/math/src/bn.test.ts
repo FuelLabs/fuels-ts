@@ -7,6 +7,10 @@ import type { BigNumberish } from './types';
  * @group browser
  */
 describe('Math - BN', () => {
+  it('should format with default configs', () => {
+    expect(bn('1000000000').format({ units: 0, precision: 0 })).toEqual('1,000,000,000');
+  });
+
   it('can execute operations without losing our BN reference', () => {
     let test: BN;
 
@@ -328,7 +332,7 @@ describe('Math - BN', () => {
       bn('1000000000').format({
         minPrecision: 2,
       })
-    ).toEqual('1.00');
+    ).toEqual('1,000,000,000.00');
     expect(
       bn('1000000000').format({
         minPrecision: 2,

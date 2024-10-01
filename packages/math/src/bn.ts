@@ -107,39 +107,34 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   }
 
   format(options?: FormatConfig): string {
-    const {
-      units = DEFAULT_DECIMAL_UNITS,
-      precision = DEFAULT_PRECISION,
-      minPrecision = DEFAULT_MIN_PRECISION,
-    } = options || {};
+    const { units = DEFAULT_DECIMAL_UNITS, precision = DEFAULT_PRECISION } = options || {};
 
     const formattedUnits = this.formatUnits(units);
-    const formattedFixed = toFixed(formattedUnits, { precision, minPrecision });
+    const [integerPart, fractionalPart = ''] = formattedUnits.split('.');
 
-    // increase precision if formatted is zero, but has more numbers out of precision
-    if (!parseFloat(formattedFixed)) {
-      const [, originalDecimals = '0'] = formattedUnits.split('.');
-      const firstNonZero = originalDecimals.match(/[1-9]/);
+    const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const formattedFractional = fractionalPart.slice(0, precision);
 
-      if (firstNonZero && firstNonZero.index && firstNonZero.index + 1 > precision) {
-        const [valueUnits = '0'] = formattedFixed.split('.');
-        return `${valueUnits}.${originalDecimals.slice(0, firstNonZero.index + 1)}`;
-      }
+    if (precision === 0) {
+      return formattedInteger;
     }
 
-    return formattedFixed;
+    return `${formattedInteger}.${formattedFractional}`;
   }
 
   formatUnits(units: number = DEFAULT_DECIMAL_UNITS): string {
-    const valueUnits = this.toString().slice(0, units * -1);
-    const valueDecimals = this.toString().slice(units * -1);
-    const length = valueDecimals.length;
-    const defaultDecimals = Array.from({ length: units - length })
-      .fill('0')
-      .join('');
-    const integerPortion = valueUnits ? `${valueUnits}.` : '0.';
+    const valueString = this.toString();
+    const valueLength = valueString.length;
 
-    return `${integerPortion}${defaultDecimals}${valueDecimals}`;
+    if (valueLength <= units) {
+      const paddedZeros = '0'.repeat(units - valueLength + 1);
+      return `0.${paddedZeros}${valueString}`;
+    }
+
+    const integerPart = valueString.slice(0, valueLength - units);
+    const fractionalPart = valueString.slice(valueLength - units);
+
+    return `${integerPart}.${fractionalPart}`;
   }
   // END ANCHOR: HELPERS
 
