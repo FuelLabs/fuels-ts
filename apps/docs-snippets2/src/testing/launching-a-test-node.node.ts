@@ -55,7 +55,6 @@ console.assert(wallets.length === 4, 'Wallets length is not 4');
 // #endregion basic-example
 
 // #region advanced-example
-
 const assets = TestAssetId.random(2);
 const message = new TestMessage({ amount: 1000 });
 
