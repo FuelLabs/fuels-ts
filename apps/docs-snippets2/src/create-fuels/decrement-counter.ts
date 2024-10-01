@@ -19,8 +19,8 @@ const incrementedValue = 5;
 const decrementedValue = 2;
 
 // We can now call the contract functions and test the results. Lets assert the initial value of the counter.
-const { waitForResult: initWaitForResult } = await contract.functions.get_count().call();
-const { value: initValue } = await initWaitForResult();
+const { waitForResult: getCountWaitForResult } = await contract.functions.get_count().call();
+const { value: initialGetCountValue } = await getCountWaitForResult();
 console.assert(
   initValue.toNumber() === initialCount,
   'Initial value should be equal to the initial count.'
