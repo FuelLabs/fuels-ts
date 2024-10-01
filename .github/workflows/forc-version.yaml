@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - master
+      - next
 
 jobs:
   verify-forc-version:
