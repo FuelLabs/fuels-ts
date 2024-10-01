@@ -118,7 +118,6 @@ console.assert(name === 'custom-chain-config', 'Chain name is not custom-chain-c
 
 launchedWithCustomChainConfig.cleanup();
 // #region custom-node-options
-
 const [baseAssetId] = TestAssetId.random();
 
 const nodeWithCustomBaseAssetId = await launchTestNode({
