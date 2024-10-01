@@ -2,6 +2,7 @@ import type { WalletUnlocked } from '@fuel-ts/account';
 import { ContractFactory } from '@fuel-ts/contract';
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { Contract } from '@fuel-ts/program';
+import { concat } from '@fuel-ts/utils';
 import { existsSync, readFileSync } from 'fs';
 
 import { setForcTomlProxyAddress, type ForcToml } from '../../config/forcUtils';
@@ -28,11 +29,11 @@ export async function deployContract(
 
   const targetBytecode = readFileSync(binaryPath);
   const targetAbi = JSON.parse(readFileSync(abiPath, 'utf-8'));
-  const targetStorageSlots = deployConfig.storageSlots;
+  const targetStorageSlots = deployConfig.storageSlots ?? [];
 
   const proxyBytecode = Src14OwnedProxyFactory.bytecode;
   const proxyAbi = Src14OwnedProxy.abi;
-  const proxyStorageSlots = Src14OwnedProxy.storageSlots;
+  const proxyStorageSlots = Src14OwnedProxy.storageSlots ?? [];
 
   const isProxyEnabled = tomlContents?.proxy?.enabled;
   const proxyAddress = tomlContents?.proxy?.address;
@@ -84,7 +85,7 @@ export async function deployContract(
   // b. Deploy the SR-C14 Compliant / Proxy Contract
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { storageSlots, stateRoot, ...commonDeployConfig } = deployConfig;
-  const mergedStorageSlots = [...(targetStorageSlots || []), ...(proxyStorageSlots || [])];
+  const mergedStorageSlots = targetStorageSlots.concat(proxyStorageSlots);
 
   const proxyDeployConfig: DeployContractOptions = {
     ...commonDeployConfig,
