@@ -1,8 +1,7 @@
+import { Provider, Wallet, type StdString } from 'fuels';
 
-import { Provider, Wallet, type StdString } from "fuels";
-
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from "../env";
-import { EchoStdStringFactory } from "../typegend";
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
+import { EchoStdStringFactory } from '../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
