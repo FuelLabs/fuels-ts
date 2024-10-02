@@ -6,8 +6,10 @@ let bits256String: string = getRandomB256();
 // #endregion bits256-1
 
 // #region bits256-2
+const randomB256: string = getRandomB256();
+
 // convert to Uint8Array
-const uint8Arr = arrayify(bits256String);
+const uint8Arr = arrayify(randomB256);
 
 // convert back to hexlified string
 bits256String = hexlify(uint8Arr);
@@ -20,8 +22,8 @@ const bits256 = '0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e88
 // #region bits256-3
 const address = Address.fromB256(bits256String);
 
+expect(address.toB256()).toEqual(bits256String);
 // #endregion bits256-3
 // #endregion full
 
-expect(address.toB256()).toEqual(bits256String);
 expect(bits256).toBe('0xbebd3baab326f895289ecbd4210cf886ce41952316441ae4cac35f00f0e882a6');

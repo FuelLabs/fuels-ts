@@ -14,6 +14,10 @@ The `AssetId` type can be used with the SDK and passed to the contract function 
 
 <<< @/../../docs-snippets2/src/types/asset-id.ts#asset-id-3{ts:line-numbers}
 
+And to validate the returned value:
+
+<<< @/../../docs-snippets2/src/types/asset-id.ts#asset-id-4{ts:line-numbers}
+
 ## Full Example
 
 <<< @/../../docs-snippets2/src/types/asset-id.ts#full{ts:line-numbers}

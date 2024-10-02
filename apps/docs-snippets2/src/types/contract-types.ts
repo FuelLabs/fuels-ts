@@ -52,9 +52,7 @@ const addressIdentityInput = { Address: addressInput };
 const response3 = await contract.functions.identity(addressIdentityInput).get();
 
 const identityFromOutput1: IdentityOutput = response3.value;
-
 const addressStringFromOutput: AddressOutput = identityFromOutput1.Address as AddressOutput;
-
 addressFromOutput = Address.fromB256(addressStringFromOutput.bits);
 // #endregion identity-address-output
 
@@ -68,9 +66,7 @@ const contractIdentityInput = { ContractId: contractIdInput };
 const response4 = await contract.functions.identity(contractIdentityInput).get();
 
 const identityFromOutput2: IdentityOutput = response4.value;
-
 contractIdOutput = identityFromOutput2.ContractId as ContractIdOutput;
-
 contractIdFromOutput = contractIdOutput.bits;
 // #endregion identity-contract-output
 
