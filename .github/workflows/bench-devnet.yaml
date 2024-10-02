@@ -1,16 +1,13 @@
-name: Benchmarks
+name: "Bench Devnet"
 
 on:
-  pull_request:
   push:
     branches:
-      - master
+      - release/*
 
 jobs:
   benchmarks:
     runs-on: ubuntu-latest
-    # remove if:false after fine-tuning benchmarks
-    if: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,3 +23,5 @@ jobs:
         with:
           run: pnpm bench:node
           token: ${{ secrets.CODSPEED_TOKEN }}
+        env:
+          DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
