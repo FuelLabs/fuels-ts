@@ -15,3 +15,8 @@ impl Eq for ExternalStruct {
         self.value == other.value
     }
 }
+impl Eq for ExternalEnum {
+    fn eq(self, other: Self) -> bool {
+      self == other
+    }
+}

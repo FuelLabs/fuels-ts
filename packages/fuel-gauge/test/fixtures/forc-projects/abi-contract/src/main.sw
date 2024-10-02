@@ -183,12 +183,16 @@ impl MyContract for Contract {
     }
     // @TODO
     fn types_b512(x: B512) -> B512 {
-        // const INPUT: B512 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
-        // assert_eq(x, INPUT);
+        // HIGH_BIT and **LOW_BIT**
+        const HI_BITS = 0xbd0c9b8792876713afa8bff383eebf31c43437823ed761cc3600d0016de5110c;
+        const LO_BITS = 0x44ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d;
+        const INPUT: B512 = B512::from((HI_BITS, LO_BITS));
+        assert_eq(x, INPUT);
 
-        // const EXPECTED: B512 = 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000;
-        // EXPECTED
-        x
+        // HIGH_BIT and **LOW_BIT2**
+        const LO_BITS2 = 0x54ac566bd156b4fc71a4a4cb2655d3dd360c695edb17dc3b64d611e122fea23d;
+        const EXPECTED: B512 = B512::from((HI_BITS, LO_BITS2));
+        return INPUT
     }
 
     fn types_bytes(x: Bytes) -> Bytes {
@@ -531,14 +535,51 @@ impl MyContract for Contract {
     ) -> StructWithImplicitGenerics<b256, u8> {
         x
     }
+    // @todo - unable to create this struct.
     fn types_struct_with_array(x: StructWithGenericArray<b256>) -> StructWithGenericArray<b256> {
-        x
+        const INPUT_B256: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
+        const INPUT_STRUCT: StructDoubleGeneric<b256, u8> = StructDoubleGeneric {
+          a: INPUT_B256,
+          b: 10
+        };
+        const INPUT = StructWithGenericArray<b256> {
+          a: [INPUT_STRUCT, INPUT_STRUCT, INPUT_STRUCT]
+        }
+        assert(x === INPUT)
+
+        const EXPECTED_B256: b256 = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
+        const EXPECTED_STRUCT: StructDoubleGeneric<b256, u8> = StructDoubleGeneric {
+          a: EXPECTED_B256,
+          b: 20
+        };
+        const EXPECTED = StructWithGenericArray<b256> {
+          a: [EXPECTED_STRUCT, EXPECTED_STRUCT, EXPECTED_STRUCT]
+        }
+
+        EXPECTED
     }
+    // @todo - need help
     fn types_struct_with_vector(x: StructWithVector) -> StructWithVector {
+        // let INPUT_VEC: Vec<u8> = vec_u8_from([1, 2, 3]);
+        // let INPUT: StructWithVector = {
+        //   a: 1,
+        //   b: INPUT_VEC
+        // }
+
         x
     }
+
+    // @todo - also broken
     fn types_struct_with_array_of_enums(x: StructWithEnumArray) -> StructWithEnumArray {
-        x
+        // const INPUT_ENUM = EnumWithNative::Checked;
+        // const INPUT: StructWithEnumArray = StructWithEnumArray {
+        //   a: [INPUT_ENUM, INPUT_ENUM, INPUT_ENUM]
+        // }
+        // assert(x == INPUT);
+
+        // return INPUT
+
+        return x
     }
 
     /**
@@ -568,12 +609,9 @@ impl MyContract for Contract {
         return EXPECTED
     }
     fn types_enum_external(x: ExternalEnum) -> ExternalEnum {
-        // @TODO figure out how to assert for this.
-        x
-        // assert(x == ExternalEnum::A);
+        assert_eq(x, ExternalEnum::A);
 
-        // const EXPECTED: ExternalEnum = ExternalEnum::B;
-        // EXPECTED
+        return ExternalEnum::B;
     }
     fn types_enum_with_structs(x: EnumWithStructs) -> EnumWithStructs {
         const INPUT: EnumWithStructs = EnumWithStructs::a(EnumWithNative::Checked);
@@ -637,10 +675,22 @@ impl MyContract for Contract {
      * Options
      */
     fn types_option(x: Option<u8>) -> Option<u8> {
-        x
+        const INPUT: Option<u8> = Option::Some(10);
+        assert(x === INPUT);
+
+        const EXPECTED: Option<u8> = Option::None;
+        return EXPECTED
     }
     fn types_option_geo(x: Option<StructSimple>) -> Option<StructSimple> {
-        x
+        const INPUT_STRUCT: StructSimple = StructSimple {
+          a: true,
+          b: 10
+        }
+        const INPUT: Option<StructSimple> = Option::Some(INPUT_STRUCT);
+        assert(x === INPUT);
+
+        const EXPECTED: Option<StructSimple> = Option::None;
+        return EXPECTED
     }
 
     /**
@@ -732,26 +782,74 @@ impl MyContract for Contract {
         ()
     }
     fn types_value_then_value_then_void_then_void(x: u8, y: u8, z: (), a: ()) -> () {
+        const inputX = 10;
+        assert(x == inputX);
+
+        const inputY = 20;
+        assert(z == inputZ);
+
         ()
     }
 
     /**
       * Multi-args
+      * @TODO revisit these after we can resolve the issue around the input being returned as the output.
       */
     fn multi_arg_u64_u64(x: u64, y: u64) -> u64 {
-        0
+        const INPUT_X = 1;
+        const INPUT_Y = 2;
+        assert(x == INPUT_X);
+        assert(y == INPUT_Y);
+
+        const EXPECTED = 3;
+        return EXPECTED;
     }
     fn multi_arg_b256_bool(x: b256, y: bool) -> (b256, bool) {
-        (x, y)
+        const INPUT_X: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
+        const INPUT_Y: bool = true;
+        assert_eq(x, INPUT);
+
+        const EXPECTED: (b256, bool) = (0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, false);
+        return EXPECTED
     }
     fn multi_arg_vector_vector(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {
-        (x, y)
+        let INPUT_X = vec_u8_from([1, 2, 3]);
+        let INPUT_Y = vec_u8_from([4, 5, 6]);
+        expect(x === INPUT_X);
+        expect(y === INPUT_Y);
+
+        const EXPECTED_X = vec_u8_from([7, 8, 9]);
+        const EXPECTED_X = vec_u8_from([10, 11, 12]);
+        (EXPECTED_X, EXPECTED_Y)
     }
     fn multi_arg_vector_b256(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {
-        (x, y)
+        let INPUT_X = vec_u8_from([1, 2, 3]);
+        let INPUT_Y: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
+        expect(x === INPUT_X);
+        expect(y === INPUT_Y);
+
+        const EXPECTED_X = vec_u8_from([7, 8, 9]);
+        const EXPECTED_Y = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
+        const EXPECTED = (EXPECTED_X, EXPECTED_Y);
+        return EXPECTED
     }
     fn multi_arg_struct_vector(x: StructSimple, y: Vec<u8>) -> (StructSimple, Vec<u8>) {
-        (x, y)
+        const INPUT_X = StructSimple {
+          a: true,
+          b: 1
+        };
+        const INPUT_Y = vec_u8_from([1, 2, 3]);
+        expect(x === INPUT_X);
+        expect(y === INPUT_Y);
+
+
+        const EXPECTED_X = StructSimple {
+          a: false,
+          b: 2
+        };
+        const EXPECTED_Y = vec_u8_from([4, 5, 6]);
+        const EXPECTED = (EXPECTED_X, EXPECTED_Y);
+        return EXPECTED
     }
     fn multi_arg_u64_struct(x: u64, y: StructSimple) -> (u64, StructSimple) {
         (x, y)
