@@ -1,3 +1,4 @@
+// #region full
 import { Provider, Wallet, type StdString } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
@@ -15,3 +16,4 @@ const { value } = await contract.functions.echo_string(stdString).get();
 
 expect(value).toEqual(stdString);
 // #endregion std-string-2
+// #endregion full

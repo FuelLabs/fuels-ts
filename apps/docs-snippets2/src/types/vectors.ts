@@ -1,3 +1,4 @@
+// #region full
 import { arrayify, bn, getRandomB256, Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
@@ -51,3 +52,4 @@ const { value: bytecodeRoot } = await waitForResult();
 expect(basicU8Vector).toStrictEqual([1, 2, 3]);
 expect(JSON.stringify(value)).toEqual(JSON.stringify(employees[1]));
 expect(bytecodeRoot).toEqual('0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20');
+// #endregion full

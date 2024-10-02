@@ -1,3 +1,4 @@
+// #region full
 import { Address, Provider, Wallet, type B256AddressEvm, type EvmAddress } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
@@ -50,3 +51,4 @@ const { value: value2 } = await contract.functions.echo_address().get();
 
 expect(value2).toEqual(evmAddress);
 // #endregion evm-address-4
+// #endregion full

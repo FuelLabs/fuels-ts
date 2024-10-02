@@ -65,3 +65,7 @@ Thrown when the parameter passed is not an expected enum value.
 Thrown when the passed enum case is not an expected enum case value.
 
 <<< @/../../docs-snippets2/src/types/enums.ts#enums-10{ts:line-numbers}
+
+## Full Example
+
+<<< @/../../docs-snippets2/src/types/enums.ts#full{ts:line-numbers}

@@ -1,3 +1,4 @@
+// #region full
 import type { RawSlice } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
@@ -12,7 +13,8 @@ const { contract } = await deploy.waitForResult();
 // #region raw-slice-2
 const rawSlice: RawSlice = [8, 42, 77];
 
-const { value } = await contract.functions.echo_raw_slice(rawSlice).simulate();
+const { value } = await contract.functions.echo_raw_slice(rawSlice).get();
 
 expect(value).toStrictEqual(rawSlice);
 // #endregion raw-slice-2
+// #endregion full

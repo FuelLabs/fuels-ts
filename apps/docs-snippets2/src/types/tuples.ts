@@ -1,3 +1,4 @@
+// #region full
 import { Provider, Wallet, BN } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
@@ -18,3 +19,4 @@ const { value } = await contract.functions.echo_tuple(tuple).simulate();
 
 expect(tuple).toEqual([value[0], value[1], new BN(value[2]).toNumber()]);
 // #endregion tuples-3
+// #endregion full

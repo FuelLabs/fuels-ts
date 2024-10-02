@@ -21,3 +21,7 @@ To execute and validate the contract function using the SDK, follow these steps:
 In this example, we create a Tuple with three elements, call the `echo_tuple` contract function, and expect the returned tuple to match the original one. Note that we convert the third element of the returned tuple to a number using `new BN(value[2]).toNumber()`.
 
 Tuples in Sway provide a convenient way to store and manipulate collections of heterogeneous elements. Understanding how to represent and work with tuples in TypeScript and Sway contracts will enable you to create more versatile and expressive code.
+
+## Full Example
+
+<<< @/../../docs-snippets2/src/types/tuples.ts#full{ts:line-numbers}

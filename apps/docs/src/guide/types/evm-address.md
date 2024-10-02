@@ -23,3 +23,7 @@ The `EvmAddress` type can be used with the SDK and passed to the contract functi
 And to validate the returned value:
 
 <<< @/../../docs-snippets2/src/types/evm-address.ts#evm-address-4{ts:line-numbers}
+
+## Full Example
+
+<<< @/../../docs-snippets2/src/types/evm-address.ts#full{ts:line-numbers}

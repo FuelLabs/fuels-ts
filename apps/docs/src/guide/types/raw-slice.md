@@ -11,3 +11,7 @@ The `RawSlice` type can be integrated with your contract calls. Consider the fol
 A `RawSlice` can be created using a native JavaScript array of numbers or Big Numbers, and sent to a Sway contract:
 
 <<< @/../../docs-snippets2/src/types/raw-slice.ts#raw-slice-2{ts:line-numbers}
+
+## Full Example
+
+<<< @/../../docs-snippets2/src/types/raw-slice.ts#full{ts:line-numbers}
