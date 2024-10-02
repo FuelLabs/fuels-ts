@@ -24,6 +24,13 @@
       "options": {
         "useTabs": false
       }
+    },
+    {
+      "files": ["apps/docs-snippets2/src/**/*.ts"],
+      "excludeFiles": ["apps/docs-snippets2/src/**/*.test.ts"],
+      "options": {
+        "printWidth": 80
+      }
     }
   ]
 }
