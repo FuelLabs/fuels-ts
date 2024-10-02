@@ -1,2 +1,2 @@
 [workspace]
-members = ["call-test-contract", "counter-contract"]
+members = ["call-test-contract", "counter-contract", "large-contract"]
