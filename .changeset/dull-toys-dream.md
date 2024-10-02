@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-chore: remove unused operation names
+chore: deprecate unused operation names
