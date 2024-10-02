@@ -28,9 +28,11 @@ export async function deployContract(
 
   const targetBytecode = readFileSync(binaryPath);
   const targetAbi = JSON.parse(readFileSync(abiPath, 'utf-8'));
+  const targetStorageSlots = deployConfig.storageSlots ?? [];
 
+  const proxyBytecode = Src14OwnedProxyFactory.bytecode;
   const proxyAbi = Src14OwnedProxy.abi;
-  const proxyFactory = new Src14OwnedProxyFactory(wallet);
+  const proxyStorageSlots = Src14OwnedProxy.storageSlots ?? [];
 
   const isProxyEnabled = tomlContents?.proxy?.enabled;
   const proxyAddress = tomlContents?.proxy?.address;
@@ -82,15 +84,18 @@ export async function deployContract(
   // b. Deploy the SR-C14 Compliant / Proxy Contract
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { storageSlots, stateRoot, ...commonDeployConfig } = deployConfig;
+  const mergedStorageSlots = targetStorageSlots.concat(proxyStorageSlots);
 
   const proxyDeployConfig: DeployContractOptions = {
     ...commonDeployConfig,
+    storageSlots: mergedStorageSlots,
     configurableConstants: {
       INITIAL_TARGET: { bits: targetContract.id.toB256() },
       INITIAL_OWNER: { Initialized: { Address: { bits: wallet.address.toB256() } } },
     },
   };
 
+  const proxyFactory = new ContractFactory(proxyBytecode, proxyAbi, wallet);
   const { waitForResult: waitForProxy } = await proxyFactory.deploy(proxyDeployConfig);
   const { contract: proxyContract } = await waitForProxy();
 
