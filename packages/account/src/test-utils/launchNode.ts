@@ -6,7 +6,6 @@ import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/u
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
-import { getPortPromise } from 'portfinder';
 
 import { Signer } from '../signer';
 
@@ -148,14 +147,7 @@ export const launchNode = async ({
 
     const ipToUse = ip || '0.0.0.0';
 
-    const portToUse =
-      port ||
-      (
-        await getPortPromise({
-          port: 4000, // tries 4000 first, then 4001, then 4002, etc.
-          stopPort: 5000, // don't try ports above 5000
-        })
-      ).toString();
+    const portToUse = port || '0';
 
     let snapshotDirToUse: string;
 

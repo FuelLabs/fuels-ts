@@ -1,5 +1,13 @@
 # Change Log
 
+## 0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+
 ## 0.94.6
 
 ## 0.94.5

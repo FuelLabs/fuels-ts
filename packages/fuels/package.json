@@ -1,6 +1,6 @@
 {
   "name": "fuels",
-  "version": "0.94.6",
+  "version": "0.94.8",
   "description": "Fuel TS SDK",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {
@@ -14,24 +14,24 @@
   },
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "import": "./dist/index.mjs"
     },
     "./cli": {
+      "types": "./dist/cli.d.ts",
       "require": "./dist/cli.js",
-      "import": "./dist/cli.mjs",
-      "types": "./dist/cli.d.ts"
+      "import": "./dist/cli.mjs"
     },
     "./test-utils": {
+      "types": "./dist/test-utils.d.ts",
       "require": "./dist/test-utils.js",
-      "import": "./dist/test-utils.mjs",
-      "types": "./dist/test-utils.d.ts"
+      "import": "./dist/test-utils.mjs"
     },
     "./cli-utils": {
+      "types": "./dist/cli-utils.d.ts",
       "require": "./dist/cli-utils.js",
-      "import": "./dist/cli-utils.mjs",
-      "types": "./dist/cli-utils.d.ts"
+      "import": "./dist/cli-utils.mjs"
     }
   },
   "typesVersions": {
@@ -51,7 +51,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "run-s build:package build:browser build:minified",
+    "build": "run-s build:proxy build:package build:browser build:minified",
+    "build:proxy": "tsx scripts/build-proxy-contract.ts",
     "build:package": "tsup",
     "build:browser": "pnpm vite build",
     "build:minified": "pnpm uglifyjs --compress --mangle --output dist/browser.min.mjs -- dist/browser.mjs",
@@ -82,7 +83,7 @@
     "chalk": "4",
     "chokidar": "^3.6.0",
     "commander": "12.1.0",
-    "esbuild": "^0.23.1",
+    "esbuild": "^0.24.0",
     "glob": "^10.4.5",
     "handlebars": "^4.7.8",
     "joycon": "^3.1.1",
@@ -95,7 +96,7 @@
   "devDependencies": {
     "@types/lodash.camelcase": "^4.3.9",
     "@types/rimraf": "^3.0.2",
-    "vite": "^5.4.5"
+    "vite": "^5.4.8"
   },
   "keywords": [
     "ethereum",

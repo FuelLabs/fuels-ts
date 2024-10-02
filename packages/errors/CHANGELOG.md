@@ -1,5 +1,23 @@
 # @fuel-ts/errors
 
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+  - @fuel-ts/versions@0.94.7
+
 ## 0.94.6
 
 ### Patch Changes

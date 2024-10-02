@@ -21,6 +21,7 @@ module.exports = {
     },
   },
   rules: {
+    'no-continue': 'off',
     'no-restricted-syntax': [
       'off',
       {
