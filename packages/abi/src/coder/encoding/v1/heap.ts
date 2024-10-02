@@ -112,7 +112,7 @@ vector.fromAbi = ({ name, type: { components } }: GetCoderParams, getCoder: GetC
     throw new Error(`The provided Vec type is missing an item of 'components'.`);
   }
 
-  const bufferComponent = components.find((component) => component.name === '');
+  const bufferComponent = components.find((component) => component.name === 'buf');
   if (!bufferComponent) {
     throw new Error(`The Vec type provided is missing or has a malformed 'buf' component.`);
   }
