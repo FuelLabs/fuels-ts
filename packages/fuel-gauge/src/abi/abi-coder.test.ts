@@ -59,6 +59,28 @@ describe('AbiCoder', () => {
     });
 
     const oldAbi = new Interface(AbiContract.abi);
+    const newAbi = AbiCoder.fromAbi({ ...AbiContract.abi, specVersion: '1' });
+
+    // vi.spyOn(Interface.prototype, 'getFunction').mockImplementation((name) => {
+    //   const fn = newAbi.functions[name];
+    //   const oldFn = oldAbi.functions[name];
+
+    //   return {
+    //     ...oldFn,
+    //     name,
+    //     encodeArguments: (values) => {
+    //       const encoded = fn.arguments.encode(values);
+    //       return encoded;
+    //     },
+    //     decodeOutput: (data) => {
+    //       const input = arrayify(data);
+    //       const decoded = fn.output.decode(input) as DecodedValue;
+    //       return [decoded, 0];
+    //     },
+    //   };
+    // });
+
+    // const newAbi = adapter(AbiCoder.fromAbi({ ...AbiContract.abi, specVersion: '1' }));
 
     wallet = launched.wallets[0];
     contract = new Contract(launched.contracts[0].id, oldAbi, wallet) as AbiContract;
