@@ -5,10 +5,9 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "dev": "nodemon --config nodemon.config.json -x 'pnpm run docs && vitepress dev'",
-    "build": "pnpm run docs && vitepress build",
-    "preview": "pnpm run docs && vitepress preview",
-    "docs": "typedoc && tsx ./scripts/typedoc-postbuild.ts"
+    "dev": "nodemon --config nodemon.config.json -x 'vitepress dev'",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
   },
   "keywords": [],
   "author": "",
@@ -16,8 +15,7 @@
   "dependencies": {
     "@fuel-ts/errors": "workspace:*",
     "@fuel-ts/versions": "workspace:*",
-    "fuels": "workspace:*",
-    "typedoc-plugin-markdown": "^4.2.8"
+    "fuels": "workspace:*"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.1.2",
@@ -26,8 +24,6 @@
     "markdown-it": "^14.1.0",
     "nodemon": "^3.1.7",
     "replace": "^1.2.2",
-    "typedoc": "^0.26.3",
-    "typedoc-plugin-merge-modules": "^6.0.1",
     "vitepress-plugin-search": "1.0.4-alpha.22",
     "vitepress": "1.3.4",
     "vue": "^3.5.10"
