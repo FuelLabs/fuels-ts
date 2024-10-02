@@ -74,7 +74,7 @@ export const wrapSnippet = (filepath: string) => {
   const wrappedSnippet =
     // eslintDisableRule +
     wrapperFnContents
-      .replace('%IMPORTS%', imports)
+      .replace('// %IMPORTS%', imports)
       .replace('%NAME%', basename(filepath))
       .replace('// %SNIPPET%', indented)
       .replace('// %NODE_LAUNCHER%', nodeLauncher)
