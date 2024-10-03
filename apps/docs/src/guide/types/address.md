@@ -22,19 +22,19 @@ Thanks to the utility functions provided by the [`AbstractAddress`](../../api/In
 
 To create an [`Address`](../../api/Address/Address.md) from a `Bech32` address, use the following code snippet:
 
-<<< @/../../docs-snippets2/src/types/address.ts#address-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/address/address-1.ts#full{ts:line-numbers}
 
 ### From a Public Key
 
 To create an [`Address`](../../api/Address/Address.md) from a public key, use the following code snippet:
 
-<<< @/../../docs-snippets2/src/types/address.ts#address-4{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/address/address-2.ts#full{ts:line-numbers}
 
 ### From a 256-bit Address
 
 To create an [`Address`](../../api/Address/Address.md) from a 256-bit address, use the following code snippet:
 
-<<< @/../../docs-snippets2/src/types/address.ts#address-5{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/address/address-3.ts#full{ts:line-numbers}
 
 ## Utility Functions
 
@@ -42,16 +42,12 @@ The [`Address`](../../api/Address/Address.md) class also provides some practical
 
 1. `fromString`: Create a new [`Address`](../../api/Address/Address.md) from an ambiguous source that may be a `Bech32` or `B256` address:
 
-<<< @/../../docs-snippets2/src/types/address.ts#address-6{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/address/address-4.ts#full{ts:line-numbers}
 
 2. `fromDynamicInput`: Create a new [`Address`](../../api/Address/Address.md) when the address source is unknown:
 
-<<< @/../../docs-snippets2/src/types/address.ts#address-7{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/address/address-5.ts#full{ts:line-numbers}
 
 3. `equals:` As you may already notice, the `equals` function can compare addresses instances:
 
-<<< @/../../docs-snippets2/src/types/address.ts#address-8{ts:line-numbers}
-
-## Full Example
-
-<<< @/../../docs-snippets2/src/types/address.ts#full{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/address/address-6.ts#full{ts:line-numbers}
