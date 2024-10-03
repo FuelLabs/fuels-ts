@@ -818,20 +818,20 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
   });
 
   it('should handle multiple calls [with vectors + stack data first]', async () => {
-    using contractInstance = await setupContract();
+    using contract = await setupContract();
 
     const INPUT_A = [hexlify(randomBytes(32)), hexlify(randomBytes(32)), hexlify(randomBytes(32))];
     const INPUT_B = [hexlify(randomBytes(32))];
     const INPUT_C = hexlify(randomBytes(32));
     const INPUT_D = hexlify(randomBytes(32));
 
-    const { waitForResult } = await contractInstance
+    const { waitForResult } = await contract
       .multiCall([
-        contractInstance.functions.echo_u8(1),
-        contractInstance.functions.echo_u8(2),
-        contractInstance.functions.echo_enum_small(SmallEnumInput.Empty),
-        contractInstance.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
-        contractInstance.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
+        contract.functions.echo_u8(1),
+        contract.functions.echo_u8(2),
+        contract.functions.echo_enum_small(SmallEnumInput.Empty),
+        contract.functions.echo_b256_middle(INPUT_A, INPUT_B, INPUT_C, INPUT_D),
+        contract.functions.echo_b256_middle(INPUT_B, INPUT_A, INPUT_C, INPUT_D),
       ])
       .call();
 

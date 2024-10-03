@@ -1,0 +1,34 @@
+{{header}}
+
+import { ContractFactory } from 'fuels';
+import type { Account, Provider, DeployContractOptions, DeployContractResult } from 'fuels';
+import { {{name}} } from './{{name}}';
+import { bytecode } from './{{name}}-bytecode';
+import abi from './{{name}}-abi.json';
+import storageSlots from './{{name}}-storage-slots.json';
+
+export class {{name}}Factory extends ContractFactory {
+
+  static readonly bytecode = bytecode;
+
+  constructor(accountOrProvider: Account | Provider) {
+    super(bytecode, abi, accountOrProvider);
+  }
+
+  deploy(
+    deployOptions?: DeployContractOptions
+  ): Promise<DeployContractResult<{{name}}>> {
+    return super.deploy({
+      storageSlots,
+      ...deployOptions,
+    });
+  }
+
+  static async deploy (
+    wallet: Account,
+    options: DeployContractOptions = {}
+  ): Promise<DeployContractResult<{{name}}>> {
+    const factory = new {{name}}Factory(wallet);
+    return factory.deploy(options);
+  }
+}
