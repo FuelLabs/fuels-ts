@@ -89,7 +89,7 @@ export const wrapSnippet = (filepath: string) => {
     // eslintDisableRule +
     wrapperFnContents
       .replace('// %TEST_ENVIRONMENT%', testEnvironments)
-      .replace('%IMPORTS%', imports)
+      .replace('// %IMPORTS%', imports)
       .replace('%NAME%', basename(filepath))
       .replace('// %SNIPPET%', indented)
       .replace('// %NODE_LAUNCHER%', nodeLauncher)
@@ -112,12 +112,6 @@ export const wrapSnippet = (filepath: string) => {
 */
 const dir = 'src/**';
 const src = `${dir}/*.ts`;
-const ignore = [
-  `src/typegend/**`,
-  `src/env.ts`,
-  `src/transactions/new-api.ts`,
-  `${dir}/*.test.ts`,
-  `${dir}/*.wrapped.ts`,
-];
+const ignore = [`src/typegend/**`, `src/env.ts`, `src/transactions/new-api.ts`, `${dir}/*.test.ts`];
 
 globSync(src, { ignore }).forEach(wrapSnippet);

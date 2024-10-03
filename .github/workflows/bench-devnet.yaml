@@ -1,11 +1,9 @@
-name: Benchmarks
+name: "Bench Devnet"
 
 on:
-  pull_request:
   push:
     branches:
-      - master
-      - next
+      - release/*
 
 jobs:
   benchmarks:
@@ -25,3 +23,5 @@ jobs:
         with:
           run: pnpm bench:node
           token: ${{ secrets.CODSPEED_TOKEN }}
+        env:
+          DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
