@@ -22,10 +22,10 @@ describe('deploy', { timeout: 180000 }, () => {
   let paths = bootstrapProject(__filename);
 
   beforeEach(() => {
-    mockCheckForUpdates();
     resetConfigAndMocks(paths.fuelsConfigPath);
     resetDiskAndMocks(paths.root);
     paths = bootstrapProject(__filename);
+    mockCheckForUpdates();
   });
 
   afterEach(() => {
