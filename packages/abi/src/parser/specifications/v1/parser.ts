@@ -13,16 +13,18 @@ import type {
 
 export class AbiParserV1 {
   static parse(abi: AbiSpecificationV1): Abi {
-    const resolvableTypes = abi.metadataTypes.map(
-      (metadataType) => new ResolvableType(abi, metadataType.metadataTypeId, undefined)
-    );
+    const resolvableTypes = abi.metadataTypes
+      .map((metadataType) => new ResolvableType(abi, metadataType.metadataTypeId, undefined))
+      .filter(
+        (x) => x.type !== 'struct std::vec::RawVec' && x.type !== 'struct std::bytes::RawBytes'
+      );
 
     const types = abi.concreteTypes.map((t) =>
       makeResolvedType(abi, resolvableTypes, t.concreteTypeId).toAbiType()
     );
 
     const getType = (typeId: string | number) => {
-      const type = types.find((t) => t.typeId === typeId);
+      const type = types.find((t) => t.concreteTypeId === typeId);
       if (type === undefined) {
         throw new Error(`Type with typeId ${typeId} not found`);
       }
@@ -30,6 +32,8 @@ export class AbiParserV1 {
     };
 
     return {
+      metadataTypes: resolvableTypes.map((rt) => rt.toAbiType()),
+      types,
       specVersion: abi.specVersion,
       encodingVersion: abi.encodingVersion,
       programType: abi.programType,

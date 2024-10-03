@@ -1,10 +1,30 @@
+export interface Abi {
+  specVersion: string;
+  encodingVersion: string;
+  programType: string;
+  metadataTypes: AbiTypeMetadata[];
+  types: AbiType[];
+  functions: AbiFunction[];
+  loggedTypes: AbiLoggedType[];
+  messageTypes: AbiMessageType[];
+  configurables: AbiConfigurable[];
+}
+
 export interface AbiType {
-  // Concrete type ID
-  typeId: string;
-  // This will reference the metadata type
-  // Fallback to concrete type when no metadata type is referenced (i.e. for built in types)
   swayType: string;
+  concreteTypeId: string;
   components?: AbiTypeComponent[];
+  metadata?: {
+    metadataTypeId: number;
+    typeArguments?: AbiType[];
+  };
+}
+
+export interface AbiTypeMetadata {
+  metadataTypeId: number;
+  swayType: string;
+  components?: { name: string; type: AbiType | AbiTypeMetadata }[];
+  typeParameters?: AbiTypeMetadata[];
 }
 
 export interface AbiTypeComponent {
@@ -38,17 +58,6 @@ export interface AbiConfigurable {
   name: string;
   offset: number;
   type: AbiType;
-}
-
-export interface Abi {
-  specVersion: string;
-  encodingVersion: string;
-  programType: string;
-
-  functions: AbiFunction[];
-  loggedTypes: AbiLoggedType[];
-  messageTypes: AbiMessageType[];
-  configurables: AbiConfigurable[];
 }
 
 type AbiFunctionAttribute =

@@ -17,5 +17,11 @@ export function makeResolvedType(
 
   return resolvableType
     ? resolvableType.resolve(abi, concreteType)
-    : new ResolvedType(concreteType.type, concreteType.concreteTypeId, undefined, undefined);
+    : new ResolvedType(
+        concreteType.type,
+        concreteType.concreteTypeId,
+        undefined,
+        undefined,
+        undefined
+      );
 }
