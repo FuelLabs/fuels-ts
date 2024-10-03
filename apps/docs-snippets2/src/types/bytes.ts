@@ -1,4 +1,3 @@
-// #region full
 import type { Bytes } from 'fuels';
 import { Provider, Wallet } from 'fuels';
 
@@ -10,11 +9,9 @@ const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const deploy = await EchoBytesFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
 
-// #region bytes-2
+// #region snippet-1
 const bytes: Bytes = [40, 41, 42];
 
 const { value } = await contract.functions.bytes_comparison(bytes).get();
-
-expect(value).toBeTruthy();
-// #endregion bytes-2
-// #endregion full
+// #endregion snippet-1
+console.log('value', value);
