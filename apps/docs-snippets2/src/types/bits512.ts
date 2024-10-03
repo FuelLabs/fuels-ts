@@ -10,7 +10,6 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 let wallet = Wallet.generate({ provider });
 
 console.log('public key', wallet.publicKey);
-
 // 0x97e3a666e4cd34b6b3cf778ef5ec617de4439b68f7a629245442a1fece7713094a1cb0aa7ad0ac253ca1ea47d4618f9090b2a881e829e091fb2c426763e94cca
 // #endregion bits512-1
 
@@ -23,7 +22,7 @@ const { contract } = await deploy.waitForResult();
 const b512 = wallet.publicKey;
 
 const { value } = await contract.functions.echo_b512(b512).get();
-
-expect(value).toEqual(b512);
 // #endregion bits512-3
 // #endregion full
+
+expect(value).toEqual(b512);
