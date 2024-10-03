@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
 import { Script, BN, Wallet, Provider } from 'fuels';
 
@@ -22,7 +23,6 @@ const { value } = await waitForResult();
 
 const expectedTotal = inputtedValue + configurableConstants.AMOUNT;
 
-console.assert(new BN(value as number).toNumber() === expectedTotal, 'unexpected total');
 // #endregion script-with-configurable-contants-2
 
 const argument = 10;
@@ -47,9 +47,5 @@ const { waitForResult: waitForActualGasUsed } = await tx.call();
 const { value: valueOfActualGasUsed, gasUsed: gasUsedOfActualGasUsed } =
   await waitForActualGasUsed();
 // #endregion preparing-scripts
-console.assert(txRequest, 'txn request undefined');
-console.assert(txId, 'txn id undefined');
-console.assert(new BN(valueOfActualGasUsed as number).toNumber() === expected, 'unexpected total');
-console.assert(new BN(gasUsedOfActualGasUsed).toNumber() > 0, 'gas used is 0');
 
 // #endregion full

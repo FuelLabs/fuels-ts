@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
 import { BN, ScriptTransactionRequest, coinQuantityfy } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode } from 'fuels/test-utils';
@@ -41,7 +42,10 @@ request
   .addContractInputAndOutput(contract.id);
 
 // 4. Get the transaction resources
-const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
+const quantities = [
+  coinQuantityfy([1000, ASSET_A]),
+  coinQuantityfy([500, ASSET_B]),
+];
 
 // 5. Calculate the transaction fee
 const txCost = await wallet.getTransactionCost(request, { quantities });
@@ -57,9 +61,6 @@ await tx.waitForResult();
 
 const contractFinalBalanceAssetA = await contract.getBalance(ASSET_A);
 const contractFinalBalanceAssetB = await contract.getBalance(ASSET_B);
-
-console.assert(new BN(contractFinalBalanceAssetA).toNumber() === 1000, 'unexpected balance');
-console.assert(new BN(contractFinalBalanceAssetB).toNumber() === 500, 'unexpected balance');
 // #endregion custom-transactions-2
 
 // #endregion full

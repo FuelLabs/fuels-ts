@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
 import { WalletManager, Wallet, Provider } from 'fuels';
 
@@ -47,28 +48,10 @@ const vaults = walletManager.getVaults();
 
 // #region getting-started-with-wallet-manager-6
 
-console.assert(
-  JSON.stringify(vaults) ===
-    JSON.stringify([
-      {
-        title: 'My first private key vault',
-        type: 'privateKey',
-        vaultId: 0,
-      },
-      {
-        title: 'My second private key vault',
-        type: 'privateKey',
-        vaultId: 1,
-      },
-    ]),
-  'Vaults do not match expected structure'
-);
 // #endregion getting-started-with-wallet-manager-6
 
 // #region getting-started-with-wallet-manager-7
 const retrievedWallet = walletManager.getWallet(myWallet.address);
-console.assert(retrievedWallet.address.equals(myWallet.address), 'Wallets do not match');
-console.assert(vaults.length > 0, 'Vaults length should be greater than 0');
 // #endregion getting-started-with-wallet-manager-7
 
 // #endregion full

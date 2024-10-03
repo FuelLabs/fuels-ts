@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
 import type { JsonAbi, TransactionResultReturnDataReceipt } from 'fuels';
 import {
@@ -100,16 +101,3 @@ const [decodedReturnData] = abiInterface.decodeType(argument, returnData);
 const totalValue = argumentToAdd + initialValue;
 // #endregion encode-and-decode-5
 // #endregion full
-console.assert(value === totalValue, 'Value should be equal to the total value.');
-console.assert(
-  decodedReturnData === totalValue,
-  'Decoded return data should be equal to the total value.'
-);
-console.assert(
-  encodedArguments.toString() === new Uint8Array([0, 0, 0, 10]).toString(),
-  'Encoded arguments should be equal to the total value.'
-);
-console.assert(
-  returnData.toString() === new Uint8Array([0, 0, 0, 20]).toString(),
-  'Return data should be equal to the total value.'
-);

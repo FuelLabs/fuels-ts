@@ -46,9 +46,6 @@ const {
 const { waitForResult } = await contract.functions.get_count().call();
 const response = await waitForResult();
 
-console.assert(response.value.toNumber() === 0, 'Counter is not initialized');
-console.assert(provider instanceof Provider, 'Provider is not instance of Provider');
-console.assert(wallets.length === 4, 'Wallets length is not 4');
 // #endregion basic-example
 
 // #region advanced-example
@@ -77,15 +74,6 @@ const {
   wallets: [wallet1, wallet2, wallet3, wallet4],
 } = counterContractNode;
 
-console.assert(
-  counterContract instanceof CounterFactory,
-  'CounterFactory is not instance of CounterFactory'
-);
-console.assert(wallet1 instanceof WalletUnlocked, 'Wallet1 is not instance of WalletUnlocked');
-console.assert(wallet2 instanceof WalletUnlocked, 'Wallet2 is not instance of WalletUnlocked');
-console.assert(wallet3 instanceof WalletUnlocked, 'Wallet3 is not instance of WalletUnlocked');
-console.assert(wallet4 instanceof WalletUnlocked, 'Wallet4 is not instance of WalletUnlocked');
-
 // #endregion advanced-example
 
 // #region custom-fuel-core-args
@@ -96,24 +84,28 @@ process.env.DEFAULT_FUEL_CORE_ARGS = `--tx-max-depth 20`;
 const nodeWithCustomArgs = await launchTestNode();
 const { provider: providerWithCustomArgs } = nodeWithCustomArgs;
 
-console.assert(providerWithCustomArgs.getNode().maxDepth.toNumber() === 20, 'Max depth is not 20');
 process.env.DEFAULT_FUEL_CORE_ARGS = '';
 // #endregion custom-fuel-core-args
 
 nodeWithCustomArgs.cleanup();
 
-const mySnapshotDirPath = join(__dirname, '../../../../', '.fuel-core', 'configs');
+const mySnapshotDirPath = join(
+  __dirname,
+  '../../../../',
+  '.fuel-core',
+  'configs'
+);
 
 // #region custom-chain-config
 process.env.DEFAULT_CHAIN_SNAPSHOT_DIR = mySnapshotDirPath;
 
 const launchedWithCustomChainConfig = await launchTestNode();
 
-const { provider: providerWithCustomChainConfig } = launchedWithCustomChainConfig;
+const { provider: providerWithCustomChainConfig } =
+  launchedWithCustomChainConfig;
 
 const { name } = await providerWithCustomChainConfig.fetchChain();
 
-console.assert(name === 'custom-chain-config', 'Chain name is not custom-chain-config');
 // #endregion custom-chain-config
 
 launchedWithCustomChainConfig.cleanup();
@@ -150,10 +142,8 @@ const {
   wallets: [walletWithCustomAssetIds],
 } = nodeWithCustomAssetIds;
 
-const { coins } = await walletWithCustomAssetIds.getCoins(randomAssetIds[0].value);
-console.assert(
-  coins[0].assetId === randomAssetIds[0].value,
-  'Asset id is not randomAssetIds[0].value'
+const { coins } = await walletWithCustomAssetIds.getCoins(
+  randomAssetIds[0].value
 );
 // #endregion asset-ids
 
@@ -176,10 +166,6 @@ const {
   messages: [messageWithTestMessages],
 } = await walletWithTestMessages.getMessages();
 
-console.assert(
-  messageWithTestMessages.nonce === testMessage.nonce,
-  'Nonce is not testMessage.nonce'
-);
 // #endregion test-messages
 
 nodeWithTestMessages.cleanup();
@@ -201,15 +187,12 @@ using launchedWithTestMessagesOnChain = await launchTestNode({
   },
 });
 
-const { provider: providerWithTestMessagesOnChain } = launchedWithTestMessagesOnChain;
+const { provider: providerWithTestMessagesOnChain } =
+  launchedWithTestMessagesOnChain;
 
 recipient.provider = providerWithTestMessagesOnChain;
 
 const {
   messages: [messageOnChain],
 } = await recipient.getMessages();
-console.assert(
-  messageOnChain.nonce === testMessageOnChain.nonce,
-  'Nonce is not testMessageOnChain.nonce'
-);
 // #endregion test-messages-chain

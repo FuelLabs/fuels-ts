@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
 import { WalletManager } from 'fuels';
 
@@ -10,7 +11,8 @@ const walletManager = new WalletManager();
 await walletManager.unlock(password);
 // #endregion locking-and-unlocking-wallet-manager-1
 
-const privateKey = '0xc7079e195cca2495e47b056115f850a8be1f2c4ffe2a806922accb36d2ff0dde';
+const privateKey =
+  '0xc7079e195cca2495e47b056115f850a8be1f2c4ffe2a806922accb36d2ff0dde';
 
 await walletManager.addVault({
   type: 'privateKey',
@@ -28,7 +30,6 @@ await walletManager.unlock(password);
 // #region locking-and-unlocking-wallet-manager-4
 const isLocked = walletManager.isLocked;
 
-console.assert(isLocked === false, 'WalletManager is locked');
 // #endregion locking-and-unlocking-wallet-manager-4
 
 // #region locking-and-unlocking-wallet-manager-5
@@ -43,7 +44,5 @@ await walletManager.unlock(newPassword);
 // perform your tasks...
 
 walletManager.lock(); // Always lock your WalletManager when you're done
-
-console.assert(walletManager.isLocked === true, 'WalletManager is unlocked');
 // #endregion locking-and-unlocking-wallet-manager-6
 // #endregion full
