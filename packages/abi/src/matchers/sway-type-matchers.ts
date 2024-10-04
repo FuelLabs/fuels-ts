@@ -47,7 +47,7 @@ const str: Matcher = (type) => type === 'str';
 export const TUPLE_REGEX = /^\((?<items>.+)\)$/m;
 const tuple: Matcher = (type) => TUPLE_REGEX.test(type);
 
-export const ARRAY_REGEX = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
+export const ARRAY_REGEX = /\^[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 const array: Matcher = (type) => ARRAY_REGEX.test(type);
 
 export const STRUCT_REGEX = /^struct (.+::)?(?<name>.+)$/m;
