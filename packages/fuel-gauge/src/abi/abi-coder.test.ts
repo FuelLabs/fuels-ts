@@ -722,8 +722,7 @@ describe('AbiCoder', () => {
     });
   });
 
-  // @todo Investigate: returning the input as the output
-  describe.skip('types_struct_with_array', () => {
+  describe('types_struct_with_array', () => {
     it('should encode/decode just fine', async () => {
       // Inputs
       const inputB256: string =
