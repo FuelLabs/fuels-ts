@@ -12,7 +12,6 @@ import { debug, log } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
 import { deployContract } from './deployContract';
-import { deployScript } from './deployScript';
 import { getDeployConfig } from './getDeployConfig';
 import { saveContractIds } from './saveContractIds';
 
