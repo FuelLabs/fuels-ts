@@ -1,6 +1,6 @@
 library;
 
-pub fn vec_32_from(vals: [u32; 3]) -> Vec<u32> {
+pub fn vec_u32_from(vals: [u32; 3]) -> Vec<u32> {
     let mut vec = Vec::new();
     vec.push(vals[0]);
     vec.push(vals[1]);

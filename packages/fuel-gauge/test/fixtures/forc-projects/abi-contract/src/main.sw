@@ -305,11 +305,11 @@ impl MyContract for Contract {
         [EXPECTED_STRUCT, EXPECTED_STRUCT]
     }
     fn types_array_with_vector(x: [Vec<u32>; 1]) -> [Vec<u32>; 1] {
-        let INPUT_VEC = vec_32_from([1, 2, 3]);
+        let INPUT_VEC = vec_u32_from([1, 2, 3]);
         let INPUT = [INPUT_VEC];
         assert(x == INPUT);
 
-        let EXPECTED_VEC: Vec<u32> = vec_32_from([3, 2, 1]);
+        let EXPECTED_VEC: Vec<u32> = vec_u32_from([3, 2, 1]);
         let EXPECTED: [Vec<u32>; 1] = [EXPECTED_VEC];
         return EXPECTED
     }
@@ -640,12 +640,12 @@ impl MyContract for Contract {
     }
     fn types_vector_inside_vector(x: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
         let mut INPUT = Vec::new();
-        INPUT.push(vec_32_from([1, 2, 3]));
+        INPUT.push(vec_u32_from([1, 2, 3]));
         assert(x == INPUT);
 
         let mut EXPECTED = Vec::new();
-        EXPECTED.push(vec_32_from([3, 2, 1]));
-        EXPECTED.push(vec_32_from([6, 5, 4]));
+        EXPECTED.push(vec_u32_from([3, 2, 1]));
+        EXPECTED.push(vec_u32_from([6, 5, 4]));
         return EXPECTED
     }
     fn types_vector_with_struct(x: Vec<StructSimple>) -> Vec<StructSimple> {
