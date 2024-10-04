@@ -1263,7 +1263,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  describe('multi_arg_u32_vector_vector', async () => {
+  describe('multi_arg_u32_vector_vector', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 1;
       const inputY = [bn(10020), bn(1231231), bn(777657)];
