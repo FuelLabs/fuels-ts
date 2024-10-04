@@ -1263,6 +1263,21 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  describe.skip('multi_arg_u32_vector_vector');
+  describe('multi_arg_u32_vector_vector', async () => {
+    it('should encode/decode just fine', async () => {
+      const inputX = 1;
+      const inputY = [bn(10020), bn(1231231), bn(777657)];
+      const inputZ = [bn(99), bn(101)];
+
+      const expected = [2, [bn(7), bn(8), bn(9)], [bn(10), bn(11), bn(12)]];
+
+      const { waitForResult } = await contract.functions
+        .multi_arg_u32_vector_vector(inputX, inputY, inputZ)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+    });
+  });
   describe.skip('multi_arg_complex');
 });
