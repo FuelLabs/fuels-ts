@@ -82,7 +82,7 @@ function mapFunctions(abi: Abi, cTypes: Record<string, TyperReturn>) {
   });
 }
 
-export function renderTypes({ name, abi }: ProgramDetails): TsAbiGenResult {
+export function renderTypesTemplate({ name, abi }: ProgramDetails): TsAbiGenResult {
   const mTypes = abi.metadataTypes
     .filter(metadataTypeFilter)
     .map((t) => generateTsType({ abiType: t }));

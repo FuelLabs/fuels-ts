@@ -3,16 +3,16 @@ import type { ProgramDetails } from '../../utils/get-program-details';
 import type { Renderer, TsAbiGenResult } from '../types';
 
 import { renderHbsTemplate } from './renderers/render-hbs-template';
-import { renderProgram } from './renderers/render-program';
-import { renderTypes } from './renderers/render-types';
+import { renderProgramTemplates } from './renderers/render-program-templates';
+import { renderTypesTemplate } from './renderers/render-types-template';
 import commonTemplate from './templates/common.hbs';
 import indexTemplate from './templates/index.hbs';
 
 export const renderTs: Renderer = (details: ProgramDetails[]): AbiGenResult[] => {
   const results: TsAbiGenResult[] = details
     .map((d) => {
-      const program = renderProgram(d);
-      const types = renderTypes(d);
+      const program = renderProgramTemplates(d);
+      const types = renderTypesTemplate(d);
       return [program, types].flat();
     })
     .flat();

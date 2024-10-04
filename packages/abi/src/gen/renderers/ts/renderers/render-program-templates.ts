@@ -8,7 +8,7 @@ import scriptTemplate from '../templates/script.hbs';
 
 import { renderHbsTemplate } from './render-hbs-template';
 
-export function renderProgram(programDetails: ProgramDetails): TsAbiGenResult[] {
+export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGenResult[] {
   const { abi, binCompressed, name } = programDetails;
 
   const results: TsAbiGenResult[] = [
