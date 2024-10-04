@@ -12,6 +12,7 @@ import { debug, log } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
 import { deployContract } from './deployContract';
+import { deployScript } from './deployScript';
 import { getDeployConfig } from './getDeployConfig';
 import { saveContractIds } from './saveContractIds';
 
@@ -39,6 +40,14 @@ export async function deploy(config: FuelsConfig) {
       contractPath,
     });
 
+    // TODO: Implement deploy case for Scripts and Predicates
+    /**
+     * Example:
+     *   const scriptId = await deployScript(...)
+     *   const predicateId = await deployPredicate(...)
+     *
+     * Notes: final implementations for both may be identical.
+     */
     const contractId = await deployContract(
       wallet,
       binaryPath,
