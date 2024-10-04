@@ -15,8 +15,13 @@ impl Eq for ExternalStruct {
         self.value == other.value
     }
 }
+
 impl Eq for ExternalEnum {
     fn eq(self, other: Self) -> bool {
-      self == other
+        match (self, other) {
+            (ExternalEnum::A, ExternalEnum::A) => true,
+            (ExternalEnum::B, ExternalEnum::B) => true,
+            _ => false,
+        }
     }
 }
