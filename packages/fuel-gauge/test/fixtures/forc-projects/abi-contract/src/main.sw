@@ -24,7 +24,7 @@ fn divide(numerator: u64, denominator: u64) -> Result<u64, MyContractError> {
     }
 }
 
-abi MyContract {
+abi AbiContract {
     fn configurables() -> Configurables;
 
     fn types_u8(x: u8) -> u8;
@@ -136,7 +136,7 @@ configurable {
     },
 }
 
-impl MyContract for Contract {
+impl AbiContract for Contract {
     fn configurables() -> Configurables {
         Configurables {
             U8_VALUE: U8_VALUE,
