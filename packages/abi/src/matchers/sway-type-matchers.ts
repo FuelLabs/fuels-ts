@@ -22,7 +22,7 @@ export type SwayType =
   | 'array'
   | 'assetId'
   | 'evmAddress'
-  | 'rawUntypedPtr' // might not need it
+  | 'rawUntypedPtr'
   | 'rawUntypedSlice';
 
 type Matcher = (type: string) => boolean;
