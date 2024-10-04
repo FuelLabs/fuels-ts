@@ -5,9 +5,10 @@
 
 # Table of contents
 
-- [building](#building)
-- [running](#running)
-
+- [`docs-snippets`](#docs-snippets)
+- [Table of contents](#table-of-contents)
+	- [Building](#building)
+	- [Testing](#testing)
 ## Building
 
 This builds the snippets into testable scripts from the `src` folder and generates the Typegen `types` in the `typegend` folder. All test scripts end with a `.test.ts` suffix.
