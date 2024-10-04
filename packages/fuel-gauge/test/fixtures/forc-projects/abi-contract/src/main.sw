@@ -786,7 +786,7 @@ impl MyContract for Contract {
         assert(x == inputX);
 
         const inputY = 20;
-        assert(z == inputZ);
+        assert(y == inputY);
 
         ()
     }
