@@ -392,3 +392,20 @@ impl Eq for StructWithGenericArray<b256> {
     }
 }
 
+impl Eq for [b256; 3] {
+    fn eq(self, other: Self) -> bool {
+        self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
+    }
+}
+
+impl Eq for (b256, u8) {
+    fn eq(self, other: Self) -> bool {
+        self.0 == other.0 && self.1 == other.1
+    }
+}
+
+impl Eq for StructWithImplicitGenerics<b256, u8> {
+    fn eq(self, other: Self) -> bool {
+        self.a == other.a && self.b == other.b
+    }
+}
