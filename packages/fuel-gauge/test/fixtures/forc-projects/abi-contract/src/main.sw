@@ -533,7 +533,21 @@ impl AbiContract for Contract {
     fn types_struct_with_implicit_generics(
         x: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8> {
-        x
+        const INPUT_B256: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
+        const INPUT: StructWithImplicitGenerics<b256, u8> = StructWithImplicitGenerics {
+            a: [INPUT_B256, INPUT_B256, INPUT_B256],
+            b: (INPUT_B256, 10),
+        };
+
+        assert(x == INPUT);
+
+        const EXPECTED_B256: b256 = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
+        const EXPECTED: StructWithImplicitGenerics<b256, u8> = StructWithImplicitGenerics {
+            a: [EXPECTED_B256, EXPECTED_B256, EXPECTED_B256],
+            b: (EXPECTED_B256, 25),
+        };
+
+        EXPECTED
     }
     // @todo - unable to create this struct.
     fn types_struct_with_array(x: StructWithGenericArray<b256>) -> StructWithGenericArray<b256> {
