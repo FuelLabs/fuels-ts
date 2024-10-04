@@ -905,7 +905,7 @@ const abi = {
           "concreteTypeId": "3597e0782bd4dbaf5c8025b40ff3a325845ee34caa713a6d664bda034a31d02a"
         }
       ],
-      "name": "types_option_geo",
+      "name": "types_option_struct",
       "output": "3597e0782bd4dbaf5c8025b40ff3a325845ee34caa713a6d664bda034a31d02a",
       "attributes": null
     },
@@ -1176,7 +1176,7 @@ export class MyContractInterface extends Interface {
     types_generic_enum: FunctionFragment;
     types_generic_struct: FunctionFragment;
     types_option: FunctionFragment;
-    types_option_geo: FunctionFragment;
+    types_option_struct: FunctionFragment;
     types_raw_slice: FunctionFragment;
     types_result: FunctionFragment;
     types_std_string: FunctionFragment;
@@ -1225,7 +1225,7 @@ export class MyContract extends Contract {
     types_generic_enum: InvokeFunction<[x: GenericEnumInput<BigNumberish, BigNumberish>], GenericEnumOutput<number, number>>;
     types_generic_struct: InvokeFunction<[x: GenericStructWithEnumInput<BigNumberish, BigNumberish>], GenericStructWithEnumOutput<number, number>>;
     types_option: InvokeFunction<[x?: Option<BigNumberish>], Option<number>>;
-    types_option_geo: InvokeFunction<[x?: Option<MyStructInput>], Option<MyStructOutput>>;
+    types_option_struct: InvokeFunction<[x?: Option<MyStructInput>], Option<MyStructOutput>>;
     types_raw_slice: InvokeFunction<[x: RawSlice], RawSlice>;
     types_result: InvokeFunction<[x: Result<BigNumberish, BigNumberish>], Result<BN, string>>;
     types_std_string: InvokeFunction<[x: StdString], StdString>;

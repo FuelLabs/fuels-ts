@@ -81,7 +81,7 @@ abi MyContract {
     fn types_vector_geo(x: Vec<MyStruct>) -> Vec<MyStruct>;
     fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption>;
     fn types_option(x: Option<u8>) -> Option<u8>;
-    fn types_option_geo(x: Option<MyStruct>) -> Option<MyStruct>;
+    fn types_option_struct(x: Option<MyStruct>) -> Option<MyStruct>;
     fn types_evm_address(x: EvmAddress) -> EvmAddress;
     fn types_bytes(x: Bytes) -> Bytes;
     fn types_raw_slice(x: raw_slice) -> raw_slice;
@@ -182,7 +182,7 @@ impl MyContract for Contract {
     fn types_option(x: Option<u8>) -> Option<u8> {
         x
     }
-    fn types_option_geo(x: Option<MyStruct>) -> Option<MyStruct> {
+    fn types_option_struct(x: Option<MyStruct>) -> Option<MyStruct> {
         x
     }
     fn types_evm_address(x: EvmAddress) -> EvmAddress {

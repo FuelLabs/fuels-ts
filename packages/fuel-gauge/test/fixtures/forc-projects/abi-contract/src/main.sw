@@ -92,7 +92,7 @@ abi MyContract {
     fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption>;
 
     fn types_option(x: Option<u8>) -> Option<u8>;
-    fn types_option_geo(x: Option<StructSimple>) -> Option<StructSimple>;
+    fn types_option_struct(x: Option<StructSimple>) -> Option<StructSimple>;
 
     fn types_identity_address(x: Identity) -> Identity;
     fn types_identity_contract_id(x: Identity) -> Identity;
@@ -681,7 +681,7 @@ impl MyContract for Contract {
         const EXPECTED: Option<u8> = Option::None;
         return EXPECTED
     }
-    fn types_option_geo(x: Option<StructSimple>) -> Option<StructSimple> {
+    fn types_option_struct(x: Option<StructSimple>) -> Option<StructSimple> {
         const INPUT_STRUCT: StructSimple = StructSimple {
           a: true,
           b: 10,

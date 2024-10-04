@@ -886,7 +886,7 @@ describe('AbiCoder', () => {
     });
   });
   // @todo Investigate: returning the input as the output
-  describe.skip('types_option_geo', () => {
+  describe.skip('types_option_struct', () => {
     it('should encode/decode just fine', async () => {
       const input: Option<StructSimpleInput> = {
         a: true,
@@ -894,7 +894,7 @@ describe('AbiCoder', () => {
       };
       const expected: Option<StructSimpleOutput> = undefined;
 
-      const { waitForResult } = await contract.functions.types_option_geo(input).call();
+      const { waitForResult } = await contract.functions.types_option_struct(input).call();
 
       const { value } = await waitForResult();
       expect(value).toEqual(expected);
