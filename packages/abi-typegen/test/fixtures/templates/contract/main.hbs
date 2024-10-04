@@ -692,7 +692,7 @@ const abi = {
           "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
         }
       ],
-      "name": "type_address",
+      "name": "types_address",
       "output": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308",
       "attributes": null
     },
@@ -703,7 +703,7 @@ const abi = {
           "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
         }
       ],
-      "name": "type_contract_id",
+      "name": "types_contract_id",
       "output": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
       "attributes": null
     },
@@ -1157,8 +1157,8 @@ export class MyContractInterface extends Interface {
 
   declare functions: {
     alias_types_tuple_with_native_types: FunctionFragment;
-    type_address: FunctionFragment;
-    type_contract_id: FunctionFragment;
+    types_address: FunctionFragment;
+    types_contract_id: FunctionFragment;
     type_external_enum: FunctionFragment;
     type_external_struct: FunctionFragment;
     type_identity: FunctionFragment;
@@ -1206,8 +1206,8 @@ export class MyContract extends Contract {
   declare interface: MyContractInterface;
   declare functions: {
     alias_types_tuple_with_native_types: InvokeFunction<[x: [AssetIdInput, AssetIdInput, boolean]], [AssetIdOutput, AssetIdOutput, boolean]>;
-    type_address: InvokeFunction<[x: AddressInput], AddressOutput>;
-    type_contract_id: InvokeFunction<[x: ContractIdInput], ContractIdOutput>;
+    types_address: InvokeFunction<[x: AddressInput], AddressOutput>;
+    types_contract_id: InvokeFunction<[x: ContractIdInput], ContractIdOutput>;
     type_external_enum: InvokeFunction<[x: ExternalEnumInput], ExternalEnumOutput>;
     type_external_struct: InvokeFunction<[x: ExternalStructInput], ExternalStructOutput>;
     type_identity: InvokeFunction<[x: IdentityInput], IdentityOutput>;

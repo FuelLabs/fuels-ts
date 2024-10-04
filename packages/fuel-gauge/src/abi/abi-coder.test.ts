@@ -1,12 +1,5 @@
 import { Contract, FuelError, Interface } from 'fuels';
-import type {
-  AssetId,
-  BigNumberish,
-  DecodedValue,
-  EvmAddress,
-  RawSlice,
-  WalletUnlocked,
-} from 'fuels';
+import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { AbiContract, AbiContractFactory } from '../../test/typegen';
@@ -925,7 +918,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
-  describe('type_identity_address', () => {
+  describe('types_identity_address', () => {
     it('should encode/decode just fine', async () => {
       const input: IdentityInput = {
         Address: { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
@@ -934,13 +927,13 @@ describe('AbiCoder', () => {
         Address: { bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' },
       };
 
-      const { waitForResult } = await contract.functions.type_identity_address(input).call();
+      const { waitForResult } = await contract.functions.types_identity_address(input).call();
 
       const { value } = await waitForResult();
       expect(value).toStrictEqual(expected);
     });
   });
-  describe('type_identity_contract_id', () => {
+  describe('types_identity_contract_id', () => {
     it('should encode/decode just fine', async () => {
       const input: IdentityInput = {
         ContractId: { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' },
@@ -949,33 +942,33 @@ describe('AbiCoder', () => {
         ContractId: { bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb' },
       };
 
-      const { waitForResult } = await contract.functions.type_identity_contract_id(input).call();
+      const { waitForResult } = await contract.functions.types_identity_contract_id(input).call();
 
       const { value } = await waitForResult();
       expect(value).toStrictEqual(expected);
     });
   });
-  describe('type_address', () => {
+  describe('types_address', () => {
     it('should encode/decode just fine', async () => {
       const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
       const expected = {
         bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
       };
 
-      const { waitForResult } = await contract.functions.type_address(input).call();
+      const { waitForResult } = await contract.functions.types_address(input).call();
 
       const { value } = await waitForResult();
       expect(value).toStrictEqual(expected);
     });
   });
-  describe('type_contract_id', () => {
+  describe('types_contract_id', () => {
     it('should encode/decode just fine', async () => {
       const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
       const expected = {
         bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
       };
 
-      const { waitForResult } = await contract.functions.type_contract_id(input).call();
+      const { waitForResult } = await contract.functions.types_contract_id(input).call();
 
       const { value } = await waitForResult();
       expect(value).toStrictEqual(expected);

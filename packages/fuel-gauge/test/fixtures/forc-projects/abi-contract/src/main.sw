@@ -94,10 +94,10 @@ abi MyContract {
     fn types_option(x: Option<u8>) -> Option<u8>;
     fn types_option_geo(x: Option<StructSimple>) -> Option<StructSimple>;
 
-    fn type_identity_address(x: Identity) -> Identity;
-    fn type_identity_contract_id(x: Identity) -> Identity;
-    fn type_address(x: Address) -> Address;
-    fn type_contract_id(x: ContractId) -> ContractId;
+    fn types_identity_address(x: Identity) -> Identity;
+    fn types_identity_contract_id(x: Identity) -> Identity;
+    fn types_address(x: Address) -> Address;
+    fn types_contract_id(x: ContractId) -> ContractId;
     fn types_asset_id(x: AssetId) -> AssetId;
     fn types_evm_address(x: EvmAddress) -> EvmAddress;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
@@ -703,7 +703,7 @@ impl MyContract for Contract {
         const EXPECTED = AssetId::from(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
         return EXPECTED
     }
-    fn type_identity_address(x: Identity) -> Identity {
+    fn types_identity_address(x: Identity) -> Identity {
         const ADDRESS = Address::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         const INPUT = Identity::Address(ADDRESS);
         assert(x == INPUT);
@@ -712,7 +712,7 @@ impl MyContract for Contract {
         const EXPECTED = Identity::Address(EXPECTED_ADDRESS);
         return EXPECTED
     }
-    fn type_identity_contract_id(x: Identity) -> Identity {
+    fn types_identity_contract_id(x: Identity) -> Identity {
         const CONTRACT_ID = ContractId::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         const INPUT = Identity::ContractId(CONTRACT_ID);
         assert(x == INPUT);
@@ -721,14 +721,14 @@ impl MyContract for Contract {
         const EXPECTED = Identity::ContractId(EXPECTED_ADDRESS);
         return EXPECTED
     }
-    fn type_address(x: Address) -> Address {
+    fn types_address(x: Address) -> Address {
         const INPUT = Address::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         assert(x == INPUT);
 
         const EXPECTED = Address::from(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
         return EXPECTED
     }
-    fn type_contract_id(x: ContractId) -> ContractId {
+    fn types_contract_id(x: ContractId) -> ContractId {
         const INPUT = ContractId::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         assert(x == INPUT);
 
