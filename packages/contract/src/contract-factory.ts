@@ -24,7 +24,11 @@ import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined } from '@fuel-ts/utils';
 
-import { getLoaderInstructions, getContractChunks } from './loader';
+import {
+  getLoaderInstructions,
+  getPredicateScriptLoaderInstructions,
+  getContractChunks,
+} from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /** Amount of percentage override for chunk sizes in blob transactions */
@@ -373,22 +377,17 @@ export default class ContractFactory {
     return { waitForResult, contractId, waitForTransactionId };
   }
 
-  async deployAsBlobTxForScript(
-    deployOptions: DeployContractOptions = {
-      chunkSizeMultiplier: CHUNK_SIZE_MULTIPLIER,
-    }
-  ) {
+  async deployAsBlobTxForScript(deployOptions: DeployContractOptions = {}) {
     const account = this.getAccount();
-    const { chunkSizeMultiplier } = deployOptions;
-    // if (configurableConstants) {
-    //   this.setConfigurableConstants(configurableConstants);
-    // }
+    const { configurableConstants } = deployOptions;
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
+    }
 
     // Generate the chunks based on the maximum chunk size and create blob txs
     const chunkSize = this.getMaxChunkSize(deployOptions, 1);
     const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
       const transactionRequest = this.blobTransactionRequest({
-        // ...deployOptions,
         bytecode: c.bytecode,
       });
       return {
@@ -402,14 +401,13 @@ export default class ContractFactory {
     const blobIds = [chunks[0].blobId];
     const blobId = chunks[0].blobId;
     const bloTransactionRequest = chunks[0].transactionRequest;
-    const loaderBytecode = getLoaderInstructions(blobIds);
+    const loaderBytecode = getPredicateScriptLoaderInstructions(
+      arrayify(this.bytecode),
+      arrayify(blobId)
+    );
     const transactionRequest = new ScriptTransactionRequest({
       script: loaderBytecode,
     });
-    // const { contractId, transactionRequest: createRequest } = this.createTransactionRequest({
-    //   bytecode: loaderBytecode,
-    //   ...deployOptions,
-    // });
 
     // BlobIDs only need to be uploaded once and we can check if they exist on chain
     const uniqueBlobIds = [...new Set(blobIds)];
