@@ -883,7 +883,16 @@ impl AbiContract for Contract {
         return (EXPECTED_X, expected_y);
     }
     fn multi_arg_str_str(x: str[5], y: str[5]) -> (str[5], str[5]) {
-        (x, y)
+        let input_x: str = "Input";
+        let input_y: str = "False";
+
+        assert_eq(from_str_array(x), input_x);
+        assert_eq(from_str_array(y), input_y);
+
+        let EXPECTED_X: str[5] = __to_str_array("Fuuel");
+        let EXPECTED_Y: str[5] = __to_str_array("Niice");
+
+        (EXPECTED_X, EXPECTED_Y)
     }
     fn multi_arg_u32_vector_vector(x: u32, y: Vec<u64>, z: Vec<u64>) -> (u32, Vec<u64>, Vec<u64>) {
         (x, y, z)
