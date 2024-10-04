@@ -21,6 +21,7 @@ import type {
   StructWithNestedArrayInput,
   StructWithNestedTupleInput,
   StructSingleGenericInput,
+  StructWithImplicitGenericsInput,
 } from '../../test/typegen/contracts/AbiContract';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
@@ -697,7 +698,29 @@ describe('AbiCoder', () => {
       // expect(value).toEqual(expected);
     });
   });
-  describe.todo('types_struct_with_implicit_generics', () => {});
+  describe('types_struct_with_implicit_generics', () => {
+    it('should encode/decode just fine', async () => {
+      const INPUT_B256 = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
+      const INPUT: StructWithImplicitGenericsInput<string, number> = {
+        a: [INPUT_B256, INPUT_B256, INPUT_B256],
+        b: [INPUT_B256, 10],
+      };
+
+      const EXPECTED_B256 = '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
+
+      const EXPECTED: StructWithImplicitGenericsInput<string, number> = {
+        a: [EXPECTED_B256, EXPECTED_B256, EXPECTED_B256],
+        b: [EXPECTED_B256, 25],
+      };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_implicit_generics(INPUT)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(EXPECTED);
+    });
+  });
 
   // @todo Investigate: returning the input as the output
   describe.skip('types_struct_with_array', () => {
