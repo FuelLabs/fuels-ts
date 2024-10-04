@@ -1,4 +1,4 @@
-import { Contract, FuelError, Interface } from 'fuels';
+import { bn, Contract, FuelError, Interface } from 'fuels';
 import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from 'fuels';
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
@@ -1236,7 +1236,20 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  describe.skip('multi_arg_u64_struct');
+  describe('multi_arg_u64_struct', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX = bn(99);
+      const inputY: StructSimpleInput = { a: true, b: 51 };
+      const expected = [bn(3), { a: false, b: 4 }];
+
+      const { waitForResult } = await contract.functions
+        .multi_arg_u64_struct(inputX, inputY)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
+    });
+  });
   describe.skip('multi_arg_str_str');
   describe.skip('multi_arg_u32_vector_vector');
   describe.skip('multi_arg_complex');
