@@ -37,7 +37,7 @@ export class FuelError extends Error {
     code: ErrorCode,
     message: string,
     metadata: Record<string, unknown> = {},
-    rawError: unknown = {}
+    rawError: unknown = null
   ) {
     super(message);
     this.code = code;

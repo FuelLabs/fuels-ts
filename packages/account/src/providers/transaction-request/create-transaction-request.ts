@@ -4,6 +4,7 @@ import { bn, type BN } from '@fuel-ts/math';
 import type { TransactionCreate } from '@fuel-ts/transactions';
 import { TransactionType, OutputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
+import { clone } from 'ramda';
 
 import type { GqlGasCosts } from '../__generated__/operations';
 import { calculateMetadataGasForTxCreate } from '../utils/gas';
@@ -32,10 +33,7 @@ export interface CreateTransactionRequestLike extends BaseTransactionRequestLike
  */
 export class CreateTransactionRequest extends BaseTransactionRequest {
   static from(obj: CreateTransactionRequestLike) {
-    if (obj instanceof this) {
-      return obj;
-    }
-    return new this(obj);
+    return new this(clone(obj));
   }
 
   /** Type of the transaction */

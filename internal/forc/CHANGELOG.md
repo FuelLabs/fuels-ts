@@ -1,5 +1,19 @@
 # Change Log
 
+## 0.89.2
+
+### Patch Changes
+
+- 47b5cd3: chore: upgrade to forc `0.63.6`
+- 127ade0: chore: upgrade `forc@0.64.0`
+
+## 0.89.1
+
+### Patch Changes
+
+- 942b56b: chore: upgrading `forc` to `0.63.5`
+- cffa075: chore: upgrading `forc` to `0.63.4`
+
 ## 0.89.0
 
 ### Minor Changes

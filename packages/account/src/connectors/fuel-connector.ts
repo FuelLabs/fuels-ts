@@ -13,6 +13,7 @@ import type {
   Network,
   FuelEventArg,
   Version,
+  SelectNetworkArguments,
 } from './types';
 
 interface Connector {
@@ -59,7 +60,7 @@ interface Connector {
   addNetwork(networkUrl: string): Promise<boolean>;
   // #endregion fuel-connector-method-addNetwork
   // #region fuel-connector-method-selectNetwork
-  selectNetwork(network: Network): Promise<boolean>;
+  selectNetwork(network: SelectNetworkArguments): Promise<boolean>;
   // #endregion fuel-connector-method-selectNetwork
   // #region fuel-connector-method-networks
   networks(): Promise<Array<Network>>;
@@ -89,6 +90,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
   metadata: ConnectorMetadata = {} as ConnectorMetadata;
   connected: boolean = false;
   installed: boolean = false;
+  external: boolean = true;
   events = FuelConnectorEventTypes;
 
   /**
@@ -269,7 +271,7 @@ export abstract class FuelConnector extends EventEmitter implements Connector {
    * @param network - The network to be selected.
    * @returns Return true if the network was added successfully
    */
-  async selectNetwork(_network: Network): Promise<boolean> {
+  async selectNetwork(_network: SelectNetworkArguments): Promise<boolean> {
     throw new FuelError(FuelError.CODES.NOT_IMPLEMENTED, 'Method not implemented.');
   }
 

@@ -1,5 +1,63 @@
 # @fuel-ts/utils
 
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.8
+- @fuel-ts/interfaces@0.94.8
+- @fuel-ts/math@0.94.8
+- @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+- Updated dependencies [600b781]
+  - @fuel-ts/versions@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/math@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- Updated dependencies [aef7282]
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/math@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- Updated dependencies [942b56b]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/versions@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes

@@ -16,6 +16,9 @@ import {
   Wallet,
   AddressType,
   OperationName,
+  Address,
+  ChainName,
+  bn,
   OutputType,
 } from 'fuels';
 import { ASSET_A, ASSET_B, launchTestNode, TestMessage } from 'fuels/test-utils';
@@ -727,6 +730,80 @@ describe('TransactionSummary', () => {
           { address: contract.id, quantities: [{ amount, assetId: provider.getBaseAssetId() }] },
         ],
       });
+    });
+
+    it('should ensure contract call operations are correctly assembled [WITHDRAW TO BASE LAYER]', async () => {
+      using launched = await launchTestNode();
+
+      const {
+        provider,
+        wallets: [sender],
+      } = launched;
+
+      const recipient = Address.fromB256(
+        '0x00000000000000000000000047ba61eec8e5e65247d717ff236f504cf3b0a263'
+      );
+
+      const amountToWithdraw = 10;
+
+      const tx = await sender.withdrawToBaseLayer(recipient, amountToWithdraw);
+      const result = await tx.waitForResult();
+
+      const { operations } = result;
+
+      expect(operations[0].name).toEqual(OperationName.withdrawFromFuel);
+      expect(operations[0].from?.type).toEqual(AddressType.account);
+      expect(operations[0].from?.address).toEqual(sender.address.toB256());
+      expect(operations[0].to?.type).toEqual(AddressType.account);
+      expect(operations[0].to?.address).toEqual(recipient.toB256());
+      expect(operations[0].to?.chain).toEqual(ChainName.ethereum);
+      expect(operations[0].assetsSent).toHaveLength(1);
+      expect(operations[0].assetsSent?.[0].amount).toEqual(bn(amountToWithdraw));
+      expect(operations[0].assetsSent?.[0].assetId).toEqual(provider.getBaseAssetId());
+    });
+
+    it('Should return contract created operations', async () => {
+      using launched = await launchTestNode();
+
+      const {
+        wallets: [wallet],
+      } = launched;
+
+      const tx = await MultiTokenContractFactory.deploy(wallet);
+      const result = await tx.waitForResult();
+
+      expect(result.transactionResult.operations).toHaveLength(1);
+      expect(result.transactionResult.operations[0].name).toEqual(OperationName.contractCreated);
+      expect(result.transactionResult.operations[0].from?.type).toEqual(AddressType.account);
+      expect(result.transactionResult.operations[0].from?.address).toEqual(wallet.address.toB256());
+      expect(result.transactionResult.operations[0].to?.type).toEqual(AddressType.contract);
+      expect(result.transactionResult.isTypeCreate).toEqual(true);
+    });
+
+    it('should have no assets returned for contract call operations', async () => {
+      using launched = await launchTestNode({
+        contractsConfigs: [
+          {
+            factory: TokenContractFactory,
+          },
+        ],
+      });
+
+      const {
+        wallets: [wallet],
+        contracts: [contract],
+      } = launched;
+
+      const tx = await contract.functions.mint_coins(100).call();
+      const result = await tx.waitForResult();
+
+      expect(result.transactionResult.operations).toHaveLength(1);
+      expect(result.transactionResult.operations[0].name).toEqual(OperationName.contractCall);
+      expect(result.transactionResult.operations[0].from?.type).toEqual(AddressType.account);
+      expect(result.transactionResult.operations[0].from?.address).toEqual(wallet.address.toB256());
+      expect(result.transactionResult.operations[0].to?.address).toEqual(contract.id.toB256());
+      expect(result.transactionResult.operations[0].to?.type).toEqual(AddressType.contract);
+      expect(result.transactionResult.operations[0].assetsSent).toBeUndefined();
     });
   });
 });

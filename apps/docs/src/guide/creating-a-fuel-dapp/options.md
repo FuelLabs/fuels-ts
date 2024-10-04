@@ -25,7 +25,7 @@ bunx --bun create-fuels@{{fuels}} --bun [project-name] [options]
 
 ## `--template <template-name>`
 
-Specifies the template to use for your project. The available templates are: `nextjs`.
+Specifies the template to use for your project. The available templates are: `vite` and `nextjs`. The default template is `vite`.
 
 ## `--pnpm`
 

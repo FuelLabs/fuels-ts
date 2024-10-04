@@ -64,30 +64,25 @@ The project scaffolded by `npm create fuels` has roughly the following directory
 ```md
 my-fuel-project
 ├── src
-│ ├── app
-│ │ ├── page.tsx
-│ │ └── ...
 │ ├── components
 │ │ └── ...
 │ ├── hooks
-│ └── ...
-│ ├── styles
 │ │ └── ...
-│ └── lib.ts
-├── public
+│ ├── lib.tsx
+│ ├── App.tsx
 │ └── ...
 ├── sway-programs
 │ ├── contract
-│ │ └── src
-│ │ └── main.sw
-│ ├── Forc.lock
-│ └── Forc.toml
+│ │ └── ...
+│ └── ...
+├── public
+│ └── ...
 ├── fuels.config.ts
 ├── package.json
 └── ...
 ```
 
-It is a Next.js project with a few extra files and folders. Let's take a closer look at some of the important ones:
+It is a Vite project with a few extra files and folders. Let's take a closer look at some of the important ones:
 
 ### `./fuels.config.ts`
 
@@ -97,9 +92,13 @@ This is the configuration file for the [`fuels` CLI](../fuels-cli/index.md), the
 
 This is where our Sway contract lives. Out of the box, it is a simple counter contract that can only be incremented. We will add a decrement functionality to it in the next step.
 
-### `./src/app/page.tsx`
+### `./src/App.tsx`
 
-This file contains the source code for the frontend of our dApp. It is a Next.js page that renders the counter value and allows the user to increment the counter.
+This file contains the source code for the frontend of our dApp.
+
+### `./src/components/Contract.tsx`
+
+This file contains the source code for the 'Contract' tab in the UI, this is where the contract calling logic is implemented.
 
 ### Dev Environment Setup
 
@@ -141,17 +140,19 @@ bun run dev
 
 :::
 
-You should now be able to see the counter dApp running at `http://localhost:3000`. You can try changing the contents of the `./sway-programs/contract/src/main.sw` file and see the changes reflected in the UI without having to restart the server.
+You should now be able to see the dApp running at `http://localhost:5173`. Go ahead and connect a wallet to the dApp. You can choose the Burner Wallet from the list if you don't want to connect a wallet.
+
+![Available Wallet Connectors](../../public/creating-a-fuel-dapp-wallet-list.png)
+
+Now, you can try changing the contents of the `./sway-programs/contract/src/main.sw` file and see the changes reflected in the 'Contract' tab in the UI without having to restart the server.
 
 ![Fullstack Fuel Dev Workflow](../../public/creating-a-fuel-dapp-create-fuels-split-view.png)
 
 **Note:** You may wish to learn more about how you could create a Fuel dApp that uses predicates, check out our [Working with Predicates](./working-with-predicates.md) guide.
 
----
-
 ## Adding Decrement Functionality
 
-To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/app/page.tsx` file to add a button that calls this function.
+To add decrement functionality to our counter, we will have to do two things: 1. Add a `decrement_counter` function to our Sway contract, and 2. Modify the `./src/components/Contract.tsx` file to add a button that calls this function.
 
 ### 1. Modifying the Sway Contract
 
@@ -171,13 +172,13 @@ We will add the implementation of the `decrement_counter` function right below t
 
 ### 2. Modifying the Frontend
 
-We will now add a new button to the frontend that will call the `decrement_counter` function when clicked. To do this, we will modify the `./src/app/page.tsx` file.
+We will now add a new button to the frontend that will call the `decrement_counter` function when clicked. To do this, we will modify the `./src/App.tsx` file.
 
-First, we will add a function called `onDecrementPressed` similar to the `onIncrementPressed` function:
+First, we will add a function called `decrementCounter` similar to the `incrementCounter` function:
 
-<<< @/../../create-fuels-counter-guide/src/app/page.tsx#create-fuels-counter-guide-on-decrement-react-function{ts:line-numbers}
+<<< @/../../create-fuels-counter-guide/src/components/Contract.tsx#create-fuels-counter-guide-on-decrement-react-function{ts:line-numbers}
 
-Second, we will add a new button to the UI that will call the `onDecrementPressed` function when clicked:
+Second, we will add a new button to the UI that will call the `decrementCounter` function when clicked:
 
 <!-- TODO: our docs engine currently does not detect comments in JSX -->
 
@@ -187,7 +188,7 @@ Second, we will add a new button to the UI that will call the `onDecrementPresse
 </Button>
 ```
 
-Congratulations! You should now be able to see the counter dApp running at `http://localhost:3000` with our newly added decrement functionality.
+Congratulations! You should now be able to see the counter dApp running at `http://localhost:5173` with our newly added decrement functionality.
 
 You can find the complete source code of the dApp we built [here](https://github.com/FuelLabs/fuels-ts/tree/master/apps/create-fuels-counter-guide).
 
@@ -202,6 +203,10 @@ Testing the integration with your smart contract isn't essential, but it's good 
 We've provided some examples for each program type in the `./test` directory of your project. But let's also add a test for our new `decrement_counter` function in the `./test/contract.test.ts` file:
 
 <<< @/../../docs-snippets/src/guide/create-fuels/decrement_counter.test.ts#decrement-counter{ts:line-numbers}
+
+The template also comes with a UI testing setup using [Playwright](https://playwright.dev/). We can add a test for our new `decrement_counter` function in the `./test/ui/ui.test.ts` file:
+
+<<< @/../../create-fuels-counter-guide/test/ui/ui.test.ts#decrement-counter-ui-test{ts:line-numbers}
 
 ## Next Steps
 

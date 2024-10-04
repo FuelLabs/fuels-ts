@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, rmSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join, basename } from 'path';
 
 import { Commands } from '../../src';
@@ -24,6 +24,7 @@ export type Paths = {
   outputDir: string;
   contractsJsonPath: string;
   fooContractFactoryPath: string;
+  upgradableContractPath: string;
 };
 
 export function bootstrapProject(testFilepath: string) {
@@ -43,6 +44,8 @@ export function bootstrapProject(testFilepath: string) {
   const scriptsDir = join(workspaceDir, 'scripts');
   const predicateDir = join(workspaceDir, 'predicate');
   const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
+  const upgradableContractPath = join(contractsDir, 'upgradable');
+  const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
 
   const outputDir = join(root, 'output');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
@@ -65,6 +68,8 @@ export function bootstrapProject(testFilepath: string) {
     fooContractFactoryPath,
     forcPath,
     fuelCorePath,
+    upgradableContractPath,
+    upgradableChunkedContractPath,
   };
 }
 
@@ -91,6 +96,7 @@ export type InitParams = BaseParams & {
   fuelCorePath?: string;
   autoStartFuelCore?: boolean;
   build?: boolean;
+  privateKey?: string;
 };
 
 export type BuildParams = BaseParams & {
@@ -108,6 +114,7 @@ export async function runInit(params: InitParams) {
     forcPath,
     fuelCorePath,
     workspace,
+    privateKey,
   } = params;
 
   const flag = (flags: (string | undefined)[], value?: string | boolean): string[] =>
@@ -125,7 +132,19 @@ export async function runInit(params: InitParams) {
     flag(['--auto-start-fuel-core'], autoStartFuelCore),
   ].flat();
 
-  return runCommand(Commands.init, flags);
+  const command = await runCommand(Commands.init, flags);
+
+  if (privateKey) {
+    const configPath = join(root, 'fuels.config.ts');
+    const config = readFileSync(configPath, 'utf-8');
+
+    const search = /(^.*fuelCorePath:.*$)/m;
+    const replace = `$1\n  privateKey: '${privateKey}',`;
+
+    writeFileSync(configPath, config.replace(search, replace));
+  }
+
+  return command;
 }
 
 export async function runBuild(params: BuildParams) {

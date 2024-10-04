@@ -29,7 +29,16 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
     });
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return new FuelGraphqlSubscriber(response.body!.getReader());
+    const [errorReader, resultReader] = response.body!.tee().map((stream) => stream.getReader());
+
+    /**
+     * If the node threw an error, read it and throw it to the user
+     * Else just discard the response and return the subscriber below,
+     * which will have that same response via `resultReader`
+     */
+    await new FuelGraphqlSubscriber(errorReader).next();
+
+    return new FuelGraphqlSubscriber(resultReader);
   }
 
   private events: Array<{ data: unknown; errors?: { message: string }[] }> = [];
@@ -94,10 +103,8 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
   /**
    * Gets called when `break` is called in a `for-await-of` loop.
    */
-  async return(): Promise<IteratorResult<unknown, undefined>> {
-    await this.stream.cancel();
-    this.stream.releaseLock();
-    return { done: true, value: undefined };
+  return(): Promise<IteratorResult<unknown, undefined>> {
+    return Promise.resolve({ done: true, value: undefined });
   }
 
   [Symbol.asyncIterator](): AsyncIterator<unknown, unknown, undefined> {

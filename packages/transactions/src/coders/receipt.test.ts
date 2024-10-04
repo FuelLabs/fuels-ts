@@ -72,6 +72,7 @@ describe('ReceiptCoder', () => {
       digest: B256,
       pc: bn(0),
       is: bn(0),
+      data: '0x',
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -164,6 +165,7 @@ describe('ReceiptCoder', () => {
       digest: B256,
       pc: bn(0),
       is: bn(0),
+      data: '0x',
     };
 
     const encoded = hexlify(new ReceiptCoder().encode(receipt));
@@ -232,6 +234,7 @@ describe('ReceiptCoder', () => {
       recipient: B256_ALT2,
       amount: bn(4000),
       nonce: B256_ALT3,
+      len: 12,
       digest: B256_ALT4,
       data: Uint8Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]),
     };

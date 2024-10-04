@@ -2,24 +2,14 @@
  * @group node
  * @group browser
  */
-describe('assets', () => {
-  it('should have rawAssets without the icon resolved', async () => {
-    const { rawAssets } = await import('./assets');
+describe('assets', async () => {
+  const { rawAssets, assets } = (await import('./assets'));
 
-    expect(rawAssets).toEqual([
-      expect.objectContaining({
-        'icon': 'eth.svg',
-      })
-    ])
+  it.each(rawAssets)('$symbol should have icon not resolved to URL', ({ icon }) => {
+    expect(icon).not.toContain('/');
   });
 
-  it('should have assets with the icon resolved', async () => {
-    const { assets } = await import('./assets');
-
-    expect(assets).toEqual([
-      expect.objectContaining({
-        'icon': 'https://cdn.fuel.network/assets/eth.svg',
-      })
-    ])
+  it.each(assets)('$symbol should have icon resolved to URL', async ({ icon }) => {
+    expect(icon).toContain('https://cdn.fuel.network/assets');
   });
-})
+});

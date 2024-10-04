@@ -7,7 +7,7 @@ You can execute multiple contract calls in a single transaction, either to the s
 
 <!-- calls:example:end -->
 
-## Same Contract multi calls
+## Same Contract Multi Calls
 
 <!-- This section should explain how make multiple calls with the SDK -->
 <!-- multicall:example:start -->
@@ -18,7 +18,7 @@ Use the `multiCall` method to call multiple functions on the same contract in a 
 
 <<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-1{ts:line-numbers}
 
-## Different contracts multi calls
+## Different Contracts Multi Calls
 
 The `multiCall` method also allows you to execute multiple contract calls to distinct contracts within a single transaction:
 
@@ -28,6 +28,10 @@ You can also chain supported contract call methods, like `callParams`, for each 
 
 <<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-3{ts:line-numbers}
 
-When chaining contract call methods within `multiCall`, avoid executing the contract functions themselves, such as `.call`, `.get`, and `.simulate`.
+When using `multiCall`, the contract calls are queued and executed only after invoking one of the following methods: `.get`, `.simulate`, or `.call`.
 
-The `multiCall` method creates a scope for all contract calls, which will only be executed after invoking the `.call` method.
+## Using `multiCall` for Read-Only Contract Calls
+
+When you need to read data from multiple contracts, the `multiCall` method can perform multiple [read-only](./methods.md#get) calls in a single transaction. This minimizes the number of requests sent to the network and consolidates data retrieval, making your dApp interactions more efficient.
+
+<<< @/../../docs-snippets/src/guide/contracts/multicalls.test.ts#multicall-4{ts:line-numbers}

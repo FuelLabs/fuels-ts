@@ -19,5 +19,5 @@ import { globSync } from 'glob';
     ],
   });
 
-  execSync(`pnpm textlint ${mdFiles.join(' ')} --parallel --debug`, { stdio: 'inherit' });
+  execSync(`pnpm textlint ${mdFiles.join(' ')} --debug`, { stdio: 'inherit' });
 })();

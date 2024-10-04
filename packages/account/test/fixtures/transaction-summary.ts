@@ -177,6 +177,7 @@ export const MOCK_RECEIPT_MESSAGE_OUT: TransactionResultMessageOutReceipt = {
   amount: bn.parseUnits('0.001'),
   nonce: '0x66c4d70c08ff30cd2d9dae0b6fd05972997579328529bb0605dd604afedfdf93',
   digest: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+  len: 0,
   data: new Uint8Array(),
 };
 

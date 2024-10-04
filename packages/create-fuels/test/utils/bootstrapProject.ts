@@ -21,10 +21,7 @@ const testDir = join(__dirname, '..');
 const createFuelsDir = join(__dirname, '../..');
 const sourceTemplatesDir = join(__dirname, '../../../../templates');
 
-export const bootstrapProject = (
-  testFilepath: string,
-  template: string = 'nextjs'
-): ProjectPaths => {
+export const bootstrapProject = (testFilepath: string, template: string = 'vite'): ProjectPaths => {
   // Unique name
   const testFilename = basename(testFilepath.replace(/\./g, '-'));
 

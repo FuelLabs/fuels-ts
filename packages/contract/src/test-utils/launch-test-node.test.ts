@@ -107,7 +107,7 @@ describe('launchTestNode', () => {
 
     const {
       provider: { url },
-    } = spy.mock.results[0].value as { provider: { url: string } };
+    } = await spy.mock.results[0].value;
 
     // test will time out if the node isn't killed
     await waitUntilUnreachable(url);

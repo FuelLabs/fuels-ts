@@ -1,5 +1,133 @@
 # Change Log
 
+## 0.94.8
+
+### Patch Changes
+
+- f02fa88: fix: reduce flakiness by favoring port `0` over `portfinder` dependency
+  - @fuel-ts/abi-coder@0.94.8
+  - @fuel-ts/address@0.94.8
+  - @fuel-ts/crypto@0.94.8
+  - @fuel-ts/errors@0.94.8
+  - @fuel-ts/hasher@0.94.8
+  - @fuel-ts/interfaces@0.94.8
+  - @fuel-ts/math@0.94.8
+  - @fuel-ts/merkle@0.94.8
+  - @fuel-ts/transactions@0.94.8
+  - @fuel-ts/utils@0.94.8
+  - @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- f46334d: fix: removed sepolia assets and adjust decimal config
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+- 80df900: chore: fix exported types
+- 3048099: chore: upgrading `@fuels/vm-asm` to `0.57.1`
+- b869ee8: feat: add flag to indicate if connector is external
+- 3668a26: fix: add missing receipts properties
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [48db506]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+- Updated dependencies [600b781]
+- Updated dependencies [3668a26]
+  - @fuel-ts/versions@0.94.7
+  - @fuel-ts/abi-coder@0.94.7
+  - @fuel-ts/transactions@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/address@0.94.7
+  - @fuel-ts/crypto@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/hasher@0.94.7
+  - @fuel-ts/merkle@0.94.7
+  - @fuel-ts/utils@0.94.7
+  - @fuel-ts/math@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- 99d39e9: feat: introduce upload and upgrade transaction request
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- 5efe23d: chore: Include Ethereum asset in ETH Mainnet network
+- aef7282: feat: `provider.url` now returns auth url
+- c98461f: chore: deprecate network URLs, add asset ID and chain ID for mainnet
+- 6a920ee: chore: add new supported assets
+- c968ac0: chore: revert add `signTransaction` to `FuelConnectorMethods` enum
+- c21096c: chore: made `selectNetwork` arguments more flexible
+- 4bb8625: chore: update block explorer url
+- Updated dependencies [99d39e9]
+- Updated dependencies [a9f31ca]
+- Updated dependencies [9719c1b]
+- Updated dependencies [aef7282]
+  - @fuel-ts/transactions@0.94.6
+  - @fuel-ts/abi-coder@0.94.6
+  - @fuel-ts/address@0.94.6
+  - @fuel-ts/crypto@0.94.6
+  - @fuel-ts/hasher@0.94.6
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/merkle@0.94.6
+  - @fuel-ts/math@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- 309b8d5: feat: use `submitAndAwaitStatus` to submit transactions
+- 2ce9ce5: fix: error handling in `Provider` for when a node is offline
+- 37eab14: chore: deprecate all receipt coders
+- Updated dependencies [942b56b]
+- Updated dependencies [37eab14]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/transactions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/abi-coder@0.94.5
+  - @fuel-ts/address@0.94.5
+  - @fuel-ts/crypto@0.94.5
+  - @fuel-ts/math@0.94.5
+  - @fuel-ts/hasher@0.94.5
+  - @fuel-ts/merkle@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- 7fc8d24: feat: return deep clone on transaction request `from` method
+- 24d4d03: ci: revert gas price estimation test flakiness
+- 121eca3: feat: add block header to responses in block-related queries
+- be1c43f: chore: deprecate `BaseTransactionRequest.fundWithFakeUtxos`
+- 7d74c8c: fix: TX estimation when `InputMessage` contains data
+- 6bef838: feat: validate blob IDs against chain in chunk deploys
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+- a059ea1: feat: map 'not enough coins' error
+- 90a1d0f: feat: support basic auth
+- 1b4db70: fix: assemble of transaction revert error message
+- 4cbba82: feat: parse message response from `getMessageByNonce`
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/versions@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/crypto@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/abi-coder@0.94.4
+  - @fuel-ts/address@0.94.4
+  - @fuel-ts/math@0.94.4
+  - @fuel-ts/transactions@0.94.4
+  - @fuel-ts/hasher@0.94.4
+  - @fuel-ts/merkle@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes

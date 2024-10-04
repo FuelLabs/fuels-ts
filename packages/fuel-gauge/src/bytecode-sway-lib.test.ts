@@ -1,8 +1,7 @@
-import { Predicate, arrayify } from 'fuels';
+import { arrayify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
-import { defaultPredicateAbi } from '../test/fixtures/abi/predicate';
-import { defaultPredicateBytecode } from '../test/fixtures/bytecode/predicate';
+import { PredicateTrue } from '../test/typegen';
 import { BytecodeSwayLibFactory } from '../test/typegen/contracts';
 
 import { launchTestContract } from './utils';
@@ -58,16 +57,12 @@ describe('bytecode computations', () => {
       provider,
     } = launched;
 
-    const predicate = new Predicate({
-      bytecode: defaultPredicateBytecode,
-      abi: defaultPredicateAbi,
-      provider,
-    });
+    const predicate = new PredicateTrue({ provider });
 
     const address = predicate.address;
 
     const { waitForResult } = await contract.functions
-      .compute_predicate_address(Array.from(arrayify(defaultPredicateBytecode)))
+      .compute_predicate_address(Array.from(arrayify(PredicateTrue.bytecode)))
       .call();
 
     const { value } = await waitForResult();

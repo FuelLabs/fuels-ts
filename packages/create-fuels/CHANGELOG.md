@@ -1,5 +1,47 @@
 # create-fuels
 
+## 0.94.8
+
+### Patch Changes
+
+- f7bacd1: feat: `create fuels` template revamp
+
+## 0.94.7
+
+### Patch Changes
+
+- 47b5cd3: chore: upgrade to forc `0.63.6`
+- 7cb3457: chore: fix deprecation on Commander method
+- cab11ef: build(deps): bump the deps-minor group with 14 updates
+- 20d2ac2: chore: upgraded to fuel-core 0.36.0
+- 327b309: fix: calling `prebuild` only if deps are installed
+- 0c927f7: fix: `create fuels` not respecting toolchain file
+- 127ade0: chore: upgrade `forc@0.64.0`
+- e7c2c30: fix: generate types for `create fuels` users when extracted
+- b6a82bc: build(deps): bump @tanstack/react-router from 1.56.5 to 1.58.3
+- 600b781: build(deps): bump the deps-patch group
+
+## 0.94.6
+
+### Patch Changes
+
+- 3409c10: chore: downgrade ora from `8.1.0` to `5.4.1`
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- c98461f: chore: deprecate network URLs, add asset ID and chain ID for mainnet
+- 41ea8d0: chore: bump connectors package version
+- 11d4f8b: feat: add UI tests to `create fuels` template
+
+## 0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- 96140a2: fix: faucet link in `create-fuels` navbar
+- b00fd02: chore: upgrade `fuel-core@0.35.0`
+- a0bb25f: feat: make vite the default `create-fuels` template
+- cc1aa12: build(deps): bump the deps-patch group with 9 updates
+
 ## 0.94.3
 
 ### Patch Changes

@@ -47,8 +47,8 @@ describe('rewriteTemplateFiles', () => {
 
     expect(packageJson).not.toContain('"xprebuild": "fuels build"');
     expect(packageJson).toContain('"prebuild": "fuels build"');
-    expect(packageJson).not.toContain('"build": "pnpm run xprebuild && next build"');
-    expect(packageJson).toContain('"build": "pnpm run prebuild && next build"');
+    expect(packageJson).not.toContain('"build": "pnpm run xprebuild && tsc -b && vite build"');
+    expect(packageJson).toContain('"build": "pnpm run prebuild && tsc -b && vite build"');
     expect(packageJson).not.toContain(`"fuels": "workspace:\\*"`);
     expect(packageJson).toContain(`"fuels": "^0.0.0"`);
   });
@@ -65,7 +65,7 @@ describe('rewriteTemplateFiles', () => {
   });
 
   it('should rewrite the test files', () => {
-    const testDir = join(paths.templateRoot, 'test');
+    const testDir = join(paths.templateRoot, 'test', 'integration');
     const programs = [
       {
         program: 'contract',

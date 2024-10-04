@@ -72,6 +72,7 @@ describe('assembleReceiptByType', () => {
     expect(receipt.len).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.len));
     expect(receipt.is).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.is));
     expect(receipt.pc).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.pc));
+    expect(receipt.data).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.data);
     expect(receipt.ptr).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.ptr));
   });
 
@@ -133,6 +134,7 @@ describe('assembleReceiptByType', () => {
     expect(receipt.len).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.len));
     expect(receipt.val0).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.ra));
     expect(receipt.val1).toStrictEqual(new BN(MOCK_GQL_RECEIPT_FRAGMENT.rb));
+    expect(receipt.data).toStrictEqual(MOCK_GQL_RECEIPT_FRAGMENT.data);
   });
 
   it('should return a ReceiptTransfer receipt when GqlReceiptType.Transfer is provided', () => {
@@ -218,6 +220,7 @@ describe('assembleReceiptByType', () => {
     const amount = bn(MOCK_GQL_RECEIPT_FRAGMENT.amount);
     const data = arrayify(MOCK_GQL_RECEIPT_FRAGMENT.data || '');
     const digest = MOCK_GQL_RECEIPT_FRAGMENT.digest;
+    const len = Number(MOCK_GQL_RECEIPT_FRAGMENT.len);
 
     const messageId = ReceiptMessageOutCoder.getMessageId({
       sender,
@@ -234,6 +237,7 @@ describe('assembleReceiptByType', () => {
     expect(receipt.nonce).toStrictEqual(nonce);
     expect(receipt.recipient).toStrictEqual(recipient);
     expect(receipt.sender).toStrictEqual(sender);
+    expect(receipt.len).toStrictEqual(len);
     expect(receipt.data).toStrictEqual(data);
   });
 

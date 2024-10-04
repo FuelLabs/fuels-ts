@@ -1,5 +1,66 @@
 # @fuel-ts/abi-typegen
 
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.8
+- @fuel-ts/interfaces@0.94.8
+- @fuel-ts/utils@0.94.8
+- @fuel-ts/versions@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 48db506: feat: support message types
+- 80df900: chore: fix exported types
+- 600b781: build(deps): bump the deps-patch group
+- Updated dependencies [47b5cd3]
+- Updated dependencies [431990d]
+- Updated dependencies [20d2ac2]
+- Updated dependencies [80df900]
+- Updated dependencies [127ade0]
+  - @fuel-ts/versions@0.94.7
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/errors@0.94.7
+  - @fuel-ts/utils@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- ccfa699: fix: storage slots auto-load from typegen
+- Updated dependencies [aef7282]
+  - @fuel-ts/errors@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+  - @fuel-ts/versions@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- Updated dependencies [942b56b]
+- Updated dependencies [cffa075]
+  - @fuel-ts/versions@0.94.5
+  - @fuel-ts/errors@0.94.5
+  - @fuel-ts/utils@0.94.5
+  - @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [b00fd02]
+- Updated dependencies [a059ea1]
+- Updated dependencies [482bbf0]
+  - @fuel-ts/versions@0.94.4
+  - @fuel-ts/errors@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes

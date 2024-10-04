@@ -173,6 +173,64 @@ export function calculateMetadataGasForTxBlob({
   return txId.add(blobLen);
 }
 
+export function calculateMetadataGasForTxUpgrade({
+  gasCosts,
+  txBytesSize,
+  consensusSize,
+}: {
+  gasCosts: GasCosts;
+  txBytesSize: number;
+  consensusSize?: number;
+}) {
+  const txId = resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+
+  if (consensusSize) {
+    const consensusLen = resolveGasDependentCosts(consensusSize, gasCosts.s256);
+    txId.add(consensusLen);
+  }
+
+  return txId;
+}
+
+export function calculateMetadataGasForTxUpload({
+  gasCosts,
+  txBytesSize,
+  subsectionSize,
+  subsectionsSize,
+}: {
+  gasCosts: GasCosts;
+  txBytesSize: number;
+  subsectionSize: number;
+  subsectionsSize: number;
+}) {
+  const txId = resolveGasDependentCosts(txBytesSize, gasCosts.s256);
+
+  const subsectionLen = resolveGasDependentCosts(subsectionSize, gasCosts.s256);
+  txId.add(subsectionLen);
+
+  const subsectionsLen = resolveGasDependentCosts(subsectionsSize, gasCosts.stateRoot);
+  txId.add(subsectionsLen);
+
+  return txId;
+}
+
+export function calculateMinGasForTxUpload({
+  gasCosts,
+  baseMinGas,
+  subsectionSize,
+}: {
+  gasCosts: GasCosts;
+  baseMinGas: number;
+  subsectionSize: number;
+}) {
+  // Since the `Upload` transaction occupies much of the storage, we want to
+  // discourage people from using it too much. For that, we charge additional gas
+  // for the storage.
+  // https://github.com/FuelLabs/fuel-vm/blob/6e137db6387bd291b9505d17e15e0f2edda7957e/fuel-tx/src/transaction/types/upload.rs#L135-L150
+  const additionalStoragePerByte = bn(gasCosts.newStoragePerByte).mul(subsectionSize);
+  return bn(baseMinGas).add(additionalStoragePerByte);
+}
+
 export interface CalculateGasFeeParams {
   tip?: BN;
   gas: BN;

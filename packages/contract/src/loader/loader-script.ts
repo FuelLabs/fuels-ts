@@ -13,7 +13,7 @@ export const getLoaderInstructions = (blobIds: string[]): Uint8Array => {
   // Bytes for the Blob Ids
   const blobIdBytes = concat(blobIds.map((b) => arrayify(b)));
 
-  // Reference: https://github.com/FuelLabs/fuels-ts/issues/2741#issuecomment-2260364179
+  // Reference: https://github.com/FuelLabs/fuels-rs/blob/master/packages/fuels-programs/src/contract/loader.rs
   // There are 2 main steps:
   // 1. Load the blob contents into memory
   // 2. Jump to the beginning of the memory where the blobs were loaded
@@ -22,7 +22,7 @@ export const getLoaderInstructions = (blobIds: string[]): Uint8Array => {
   const instructionBytes = new InstructionSet(
     // 1. load the blob contents into memory
     // find the start of the hardcoded blob ids, which are located after the code ends
-    asm.move_(0x10, RegId.is().to_u8()),
+    asm.move_(0x10, RegId.pc().to_u8()),
     // 0x10 to hold the address of the current blob id
     asm.addi(0x10, 0x10, numberOfInstructions * Instruction.size()),
     // The contract is going to be loaded from the current value of SP onwards, save

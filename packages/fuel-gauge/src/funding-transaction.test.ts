@@ -268,7 +268,21 @@ describe('Funding Transactions', () => {
      */
     await expectToThrowFuelError(
       () => sender.fund(request, txCost),
-      new FuelError(FuelError.CODES.INVALID_REQUEST, 'not enough coins to fit the target')
+      new FuelError(
+        FuelError.CODES.NOT_ENOUGH_FUNDS,
+        `The account(s) sending the transaction don't have enough funds to cover the transaction.`,
+        {},
+        {
+          locations: [
+            {
+              column: 3,
+              line: 2,
+            },
+          ],
+          message: 'not enough coins to fit the target',
+          path: ['coinsToSpend'],
+        }
+      )
     );
 
     expect(getResourcesToSpend).toHaveBeenCalled();

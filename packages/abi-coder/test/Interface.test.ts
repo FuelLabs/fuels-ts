@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { FuelError } from '@fuel-ts/errors';
+import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
 import type { BN } from '@fuel-ts/math';
 import { concat } from '@fuel-ts/utils';
 
@@ -636,121 +638,154 @@ describe('Abi interface', () => {
           fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8] - negative',
           value: -1,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_8,
           title: '[u8] - over max',
           value: U8_MAX + 1,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u8, too many bytes.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_16,
           title: '[u16] - negative',
           value: -1,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_16,
           title: '[u16] - over max',
           value: U32_MAX + 1,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u16, too many bytes.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_32,
           title: '[u32] - negative',
           value: -1,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_32,
           title: '[u32] - over max',
           value: U32_MAX + 1,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u32, too many bytes.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64] - negative',
           value: -1,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.u_64,
           title: '[u64] - over max',
           value: U64_MAX.add(1),
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid u64.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256] - too short',
           value: B256_DECODED.slice(0, B256_DECODED.length - 1),
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256] - too long',
           value: `${B256_DECODED}0`,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b256] - not hex',
           value: `not a hex string`,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.b_512,
           title: '[b512] - too short',
           value: B512_ENCODED.slice(0, B512_ENCODED.length - 1),
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.b_512,
           title: '[b512] - too long',
           value: `${B512_DECODED}0`,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid struct B512.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.b_256,
           title: '[b512] - not hex',
           value: `not a hex string`,
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid b256.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.boolean,
           title: '[boolean] - not bool',
           value: 'not bool',
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Invalid boolean value.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.enum_simple,
           title: '[enum] - not in values',
           value: "Doesn't exist",
+          error: new FuelError(
+            FuelError.CODES.INVALID_DECODE_VALUE,
+            'Only one field must be provided.'
+          ),
         },
         {
           fn: exhaustiveExamplesInterface.functions.enum_with_builtin_type,
           title: '[enum] - multiple values selected',
           value: { a: true, b: 1 },
+          error: new FuelError(
+            FuelError.CODES.INVALID_DECODE_VALUE,
+            'Only one field must be provided.'
+          ),
         },
         {
           fn: exhaustiveExamplesInterface.functions.struct_simple,
           title: '[struct] - missing property',
           value: { a: true },
+          error: new FuelError(
+            FuelError.CODES.ENCODE_ERROR,
+            'Invalid struct SimpleStruct. Field "b" not present.'
+          ),
         },
         {
           fn: exhaustiveExamplesInterface.functions.struct_with_tuple,
           title: '[tuple] - extra element',
           value: { propB1: [true, U64_MAX, 'extra element'] },
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.struct_with_tuple,
           title: '[tuple] - missing element',
           value: { propB1: [true] },
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] - input not array',
           value: { 0: 'element', 1: 'e', 2: 'e', 3: 'e' },
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Expected array value.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] - not enough elements',
           value: [[1, 2, 3]],
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.'),
         },
         {
           fn: exhaustiveExamplesInterface.functions.array_simple,
           title: '[array] - too many elements',
           value: [[1, 2, 3, 4, 5]],
+          error: new FuelError(FuelError.CODES.ENCODE_ERROR, 'Types/values length mismatch.'),
         },
-      ])('$title', ({ fn, value }) => {
-        expect(() =>
-          Array.isArray(value) ? fn.encodeArguments(value) : fn.encodeArguments([value])
-        ).toThrow();
+      ])('$title', async ({ fn, value, error }) => {
+        await expectToThrowFuelError(
+          () => (Array.isArray(value) ? fn.encodeArguments(value) : fn.encodeArguments([value])),
+          error
+        );
       });
     });
   });

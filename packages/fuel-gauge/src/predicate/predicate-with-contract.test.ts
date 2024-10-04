@@ -1,5 +1,5 @@
-import { Contract, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import { Contract, ErrorCode, FuelError, Wallet } from 'fuels';
+import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { CallTestContractFactory, TokenContractFactory } from '../../test/typegen/contracts';
 import { PredicateMainArgsStruct, PredicateTrue } from '../../test/typegen/predicates';
@@ -59,8 +59,13 @@ describe('Predicate', () => {
 
       // calling the contract with the receiver account (no resources)
       contract.account = receiver;
-      await expect(contract.functions.mint_coins(200).call()).rejects.toThrow(
-        /not enough coins to fit the target/
+
+      await expectToThrowFuelError(
+        () => contract.functions.mint_coins(200).call(),
+        new FuelError(
+          ErrorCode.NOT_ENOUGH_FUNDS,
+          `The account(s) sending the transaction don't have enough funds to cover the transaction.`
+        )
       );
 
       // setup predicate

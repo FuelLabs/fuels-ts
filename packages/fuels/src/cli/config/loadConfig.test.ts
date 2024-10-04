@@ -70,7 +70,7 @@ describe('loadConfig', () => {
 
     const config = await loadConfig(paths.root);
 
-    expect(config.contracts.length).toEqual(2);
+    expect(config.contracts.length).toEqual(4);
     expect(config.scripts.length).toEqual(1);
     expect(config.predicates.length).toEqual(1);
   });
@@ -88,7 +88,7 @@ describe('loadConfig', () => {
 
     const config = await loadConfig(paths.root);
 
-    expect(config.contracts.length).toEqual(2);
+    expect(config.contracts.length).toEqual(4);
     expect(config.scripts.length).toEqual(1);
     expect(config.predicates.length).toEqual(1);
   });
@@ -104,7 +104,7 @@ describe('loadConfig', () => {
 
     const config = await loadConfig(paths.root);
 
-    expect(config.contracts.length).toEqual(2);
+    expect(config.contracts.length).toEqual(4);
     expect(config.scripts.length).toEqual(0);
     expect(config.predicates.length).toEqual(0);
   });

@@ -1,5 +1,50 @@
 # Change Log
 
+## 0.94.8
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.94.8
+- @fuel-ts/interfaces@0.94.8
+- @fuel-ts/utils@0.94.8
+
+## 0.94.7
+
+### Patch Changes
+
+- 80df900: chore: fix exported types
+- Updated dependencies [80df900]
+  - @fuel-ts/interfaces@0.94.7
+  - @fuel-ts/crypto@0.94.7
+  - @fuel-ts/utils@0.94.7
+
+## 0.94.6
+
+### Patch Changes
+
+- a9f31ca: build(deps): bump the deps group across 1 directory with 38 updates
+- Updated dependencies [a9f31ca]
+  - @fuel-ts/crypto@0.94.6
+  - @fuel-ts/utils@0.94.6
+  - @fuel-ts/interfaces@0.94.6
+
+## 0.94.5
+
+### Patch Changes
+
+- @fuel-ts/utils@0.94.5
+- @fuel-ts/crypto@0.94.5
+- @fuel-ts/interfaces@0.94.5
+
+## 0.94.4
+
+### Patch Changes
+
+- Updated dependencies [482bbf0]
+  - @fuel-ts/crypto@0.94.4
+  - @fuel-ts/utils@0.94.4
+  - @fuel-ts/interfaces@0.94.4
+
 ## 0.94.3
 
 ### Patch Changes

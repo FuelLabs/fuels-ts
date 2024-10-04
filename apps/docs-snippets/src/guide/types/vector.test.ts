@@ -78,7 +78,7 @@ describe('Vector Types', () => {
       // #import { arrayify };
       // #context import { BytecodeInputFactory } from '../path/to/typegen';
 
-      const bytecodeAsVecU8 = arrayify(BytecodeInputFactory.bytecode);
+      const bytecodeAsVecU8 = Array.from(arrayify(BytecodeInputFactory.bytecode));
 
       const { waitForResult } = await bytecodeContract.functions
         .compute_bytecode_root(bytecodeAsVecU8)

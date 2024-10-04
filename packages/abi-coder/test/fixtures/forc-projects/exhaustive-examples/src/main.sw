@@ -2,6 +2,7 @@ contract;
 use std::b512::B512;
 use std::bytes::Bytes;
 use std::string::String;
+use std::message::send_typed_message;
 
 enum EnumWithGeneric<A> {
     VariantOne: A,
@@ -181,6 +182,8 @@ abi MyContract {
         arg3: (str[5], bool),
         arg4: MyOtherStruct,
     );
+    #[payable]
+    fn send_typed_message_bool(recipient: b256, msg_data: bool, coins: u64);
 }
 
 impl MyContract for Contract {
@@ -338,5 +341,9 @@ impl MyContract for Contract {
     ) {}
     fn simple_vector(arg: Vec<u8>) -> Vec<u8> {
         arg
+    }
+    #[payable]
+    fn send_typed_message_bool(recipient: b256, msg_data: bool, coins: u64) {
+        send_typed_message(recipient, msg_data, coins);
     }
 }

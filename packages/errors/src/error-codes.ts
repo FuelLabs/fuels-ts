@@ -35,6 +35,7 @@ export enum ErrorCode {
   MISSING_PROVIDER = 'missing-provider',
   INVALID_PROVIDER = 'invalid-provider',
   CONNECTION_REFUSED = 'connection-refused',
+  INVALID_URL = 'invalid-url',
 
   // wallet
   INVALID_PUBLIC_KEY = 'invalid-public-key',
@@ -60,6 +61,8 @@ export enum ErrorCode {
 
   // crypto
   INVALID_CREDENTIALS = 'invalid-credentials',
+
+  /** @deprecated This error code is no longer used */
   HASHER_LOCKED = 'hasher-locked',
 
   // transaction

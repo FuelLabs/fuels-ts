@@ -4,6 +4,8 @@ import {
   getContractName,
   getContractCamelCase,
   getStorageSlotsPath,
+  readForcToml,
+  getClosestForcTomlDir,
 } from '../../config/forcUtils';
 import type { FuelsConfig, DeployedContract } from '../../types';
 import { debug, log } from '../../utils/logger';
@@ -24,11 +26,13 @@ export async function deploy(config: FuelsConfig) {
 
   for (let i = 0; i < contractsLen; i++) {
     const contractPath = config.contracts[i];
+    const forcTomlPath = getClosestForcTomlDir(contractPath);
     const binaryPath = getBinaryPath(contractPath, config);
     const abiPath = getABIPath(contractPath, config);
     const storageSlotsPath = getStorageSlotsPath(contractPath, config);
     const projectName = getContractName(contractPath);
     const contractName = getContractCamelCase(contractPath);
+    const tomlContents = readForcToml(forcTomlPath);
     const deployConfig = await getDeployConfig(config.deployConfig, {
       contracts: Array.from(contracts),
       contractName,
@@ -40,7 +44,9 @@ export async function deploy(config: FuelsConfig) {
       binaryPath,
       abiPath,
       storageSlotsPath,
-      deployConfig
+      deployConfig,
+      contractPath,
+      tomlContents
     );
 
     debug(`Contract deployed: ${projectName} - ${contractId}`);

@@ -1,14 +1,27 @@
-export const Button: React.FC<{
-  children: React.ReactNode;
-  className?: string;
-  onClick?: () => void;
-}> = ({ children, className, onClick }) => {
+import React from "react";
+import clsx from "clsx";
+
+export type Props = {
+  color?: "primary" | "secondary" | "inactive";
+} & React.ComponentProps<"button">;
+
+export default function Button(props: Props) {
+  const { color = "primary", children, disabled, className, ...rest } = props;
+
   return (
     <button
-      className={`bg-fuel-green text-white px-4 py-2 rounded-md ${className}`}
-      onClick={onClick}
+      type="button"
+      className={clsx(
+        "btn",
+        color === "primary" && "btn-primary",
+        color === "secondary" && "btn-secondary",
+        color === "inactive" && "btn-inactive",
+        className,
+      )}
+      disabled={disabled}
+      {...rest}
     >
       {children}
     </button>
   );
-};
+}

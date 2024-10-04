@@ -46,6 +46,11 @@ export type ReceiptCall = {
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptCallCoder extends Coder<ReceiptCall, ReceiptCall> {
   constructor() {
     super('ReceiptCall', 'struct ReceiptCall', 0);
@@ -120,6 +125,11 @@ export type ReceiptReturn = {
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptReturnCoder extends Coder<ReceiptReturn, ReceiptReturn> {
   constructor() {
     super('ReceiptReturn', 'struct ReceiptReturn', 0);
@@ -174,10 +184,17 @@ export type ReceiptReturnData = {
   digest: string;
   /** Value of register $pc (u64) */
   pc: BN;
+  /** Value of the memory range MEM[$rA, $rB]. */
+  data: string;
   /** Value of register $is (u64) */
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptReturnData> {
   constructor() {
     super('ReceiptReturnData', 'struct ReceiptReturnData', 0);
@@ -192,6 +209,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new BigNumberCoder('u64').encode(value.pc));
     parts.push(new BigNumberCoder('u64').encode(value.is));
+    parts.push(new ByteArrayCoder(value.len.toNumber()).encode(value.data));
 
     return concat(parts);
   }
@@ -212,6 +230,8 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
+    [decoded, o] = new ByteArrayCoder(len.toNumber()).decode(data, o);
+    const returnData = decoded;
 
     return [
       {
@@ -222,6 +242,7 @@ export class ReceiptReturnDataCoder extends Coder<ReceiptReturnData, ReceiptRetu
         digest,
         pc,
         is,
+        data: returnData,
       },
       o,
     ];
@@ -242,6 +263,11 @@ export type ReceiptPanic = {
   contractId: string;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptPanicCoder extends Coder<ReceiptPanic, ReceiptPanic> {
   constructor() {
     super('ReceiptPanic', 'struct ReceiptPanic', 0);
@@ -300,6 +326,11 @@ export type ReceiptRevert = {
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptRevertCoder extends Coder<ReceiptRevert, ReceiptRevert> {
   constructor() {
     super('ReceiptRevert', 'struct ReceiptRevert', 0);
@@ -360,6 +391,11 @@ export type ReceiptLog = {
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptLogCoder extends Coder<ReceiptLog, ReceiptLog> {
   constructor() {
     super('ReceiptLog', 'struct ReceiptLog', 0);
@@ -428,12 +464,19 @@ export type ReceiptLogData = {
   len: BN;
   /** Hash of MEM[$rC, $rD] (b256) */
   digest: string;
+  /** Value of the memory range MEM[$rC, $rD]. */
+  data: string;
   /** Value of register $pc (u64) */
   pc: BN;
   /** Value of register $is (u64) */
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
   constructor() {
     super('ReceiptLogData', 'struct ReceiptLogData', 0);
@@ -450,6 +493,7 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     parts.push(new B256Coder().encode(value.digest));
     parts.push(new BigNumberCoder('u64').encode(value.pc));
     parts.push(new BigNumberCoder('u64').encode(value.is));
+    parts.push(new ByteArrayCoder(value.len.toNumber()).encode(value.data));
 
     return concat(parts);
   }
@@ -474,6 +518,8 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
     const pc = decoded;
     [decoded, o] = new BigNumberCoder('u64').decode(data, o);
     const is = decoded;
+    [decoded, o] = new ByteArrayCoder(len.toNumber()).decode(data, o);
+    const logData = decoded;
 
     return [
       {
@@ -486,6 +532,7 @@ export class ReceiptLogDataCoder extends Coder<ReceiptLogData, ReceiptLogData> {
         digest,
         pc,
         is,
+        data: logData,
       },
       o,
     ];
@@ -508,6 +555,11 @@ export type ReceiptTransfer = {
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptTransferCoder extends Coder<ReceiptTransfer, ReceiptTransfer> {
   constructor() {
     super('ReceiptTransfer', 'struct ReceiptTransfer', 0);
@@ -574,6 +626,11 @@ export type ReceiptTransferOut = {
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptTransferOutCoder extends Coder<ReceiptTransferOut, ReceiptTransferOut> {
   constructor() {
     super('ReceiptTransferOut', 'struct ReceiptTransferOut', 0);
@@ -632,6 +689,11 @@ export type ReceiptScriptResult = {
   gasUsed: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptScriptResultCoder extends Coder<ReceiptScriptResult, ReceiptScriptResult> {
   constructor() {
     super('ReceiptScriptResult', 'struct ReceiptScriptResult', 0);
@@ -678,17 +740,28 @@ export type ReceiptMessageOut = {
   amount: BN;
   /** Hexadecimal string representation of the 256-bit (32-byte) message nonce */
   nonce: string;
+  /** Decimal string representation of a 16-bit unsigned integer; value of register $rC. */
+  len: number;
   /** Hexadecimal string representation of 256-bit (32-byte), hash of MEM[$rA + 32, $rB] */
   digest: string;
   /** Hexadecimal string representation of the value of the memory range MEM[$rA + 32, $rB] */
   data: Uint8Array;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMessageOut> {
   constructor() {
     super('ReceiptMessageOut', 'struct ReceiptMessageOut', 0);
   }
 
+  /**
+   * @deprecated `ReceiptMessageOutCoder.getMessageId` is deprecated and will be removed in future versions.
+   * Use the static method `InputMessageCoder.getMessageId` instead.
+   */
   static getMessageId(
     value: Pick<ReceiptMessageOut, 'sender' | 'recipient' | 'nonce' | 'amount' | 'data'>
   ): string {
@@ -743,6 +816,7 @@ export class ReceiptMessageOutCoder extends Coder<ReceiptMessageOut, ReceiptMess
       recipient,
       amount,
       nonce,
+      len,
       digest,
       data: messageData,
     };
@@ -779,11 +853,20 @@ export const createAssetId = (contractId: string, subId: string): AssetId => ({
   bits: getMintedAssetId(contractId, subId),
 });
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptMintCoder extends Coder<ReceiptMint, ReceiptMint> {
   constructor() {
     super('ReceiptMint', 'struct ReceiptMint', 0);
   }
 
+  /**
+   * @deprecated `ReceiptMintCoder.getAssetId` is deprecated and will be removed in future versions.
+   * Use the helper function `getMintedAssetId` instead.
+   */
   static getAssetId(contractId: string, subId: string): string {
     return getMintedAssetId(contractId, subId);
   }
@@ -847,11 +930,20 @@ export type ReceiptBurn = {
   is: BN;
 };
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptBurnCoder extends Coder<ReceiptBurn, ReceiptBurn> {
   constructor() {
     super('ReceiptBurn', 'struct ReceiptBurn', 0);
   }
 
+  /**
+   * @deprecated `ReceiptBurnCoder.getAssetId` is deprecated and will be removed in future versions.
+   * Use the helper function `getMintedAssetId` instead.
+   */
   static getAssetId(contractId: string, subId: string): string {
     return getMintedAssetId(contractId, subId);
   }
@@ -914,6 +1006,11 @@ export type Receipt =
   | ReceiptMint
   | ReceiptBurn;
 
+/**
+ * @deprecated Receipt Coders are deprecated and will be removed in future versions
+ * because decoding receipts is no longer necessary. No replacement is required as
+ * this functionality is obsolete.
+ */
 export class ReceiptCoder extends Coder<Receipt, Receipt> {
   constructor() {
     super('Receipt', 'struct Receipt', 0);

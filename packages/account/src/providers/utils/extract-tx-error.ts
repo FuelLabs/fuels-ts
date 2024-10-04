@@ -56,19 +56,23 @@ export const assembleRevertError = (
 
   if (revertReceipt) {
     const reasonHex = bn(revertReceipt.val).toHex();
+    const lastLog = logs[logs.length - 1];
+    const lastButOneLog = logs[logs.length - 2];
 
     switch (reasonHex) {
       case FAILED_REQUIRE_SIGNAL: {
         reason = 'require';
         errorMessage = `The transaction reverted because a "require" statement has thrown ${
-          logs.length ? stringify(logs[0]) : 'an error.'
+          logs.length ? stringify(lastLog) : 'an error.'
         }.`;
         break;
       }
 
       case FAILED_ASSERT_EQ_SIGNAL: {
         const sufix =
-          logs.length >= 2 ? ` comparing ${stringify(logs[1])} and ${stringify(logs[0])}.` : '.';
+          logs.length >= 2
+            ? ` comparing ${stringify(lastLog)} and ${stringify(lastButOneLog)}.`
+            : '.';
 
         reason = 'assert_eq';
         errorMessage = `The transaction reverted because of an "assert_eq" statement${sufix}`;
@@ -77,7 +81,9 @@ export const assembleRevertError = (
 
       case FAILED_ASSERT_NE_SIGNAL: {
         const sufix =
-          logs.length >= 2 ? ` comparing ${stringify(logs[1])} and ${stringify(logs[0])}.` : '.';
+          logs.length >= 2
+            ? ` comparing ${stringify(lastButOneLog)} and ${stringify(lastLog)}.`
+            : '.';
 
         reason = 'assert_ne';
         errorMessage = `The transaction reverted because of an "assert_ne" statement${sufix}`;

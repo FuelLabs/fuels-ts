@@ -1,10 +1,10 @@
-import type { SpyInstance } from 'vitest';
+import type { MockInstance } from 'vitest';
 
 import * as autoStartFuelCoreMod from '../../src/cli/commands/dev/autoStartFuelCore';
 
 export const mockStartFuelCore = (): {
-  killChildProcess: SpyInstance;
-  autoStartFuelCore: SpyInstance;
+  killChildProcess: MockInstance;
+  autoStartFuelCore: MockInstance;
   fuelCore: autoStartFuelCoreMod.FuelCoreNode;
 } => {
   const killChildProcess = vi.fn();

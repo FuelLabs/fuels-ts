@@ -1,4 +1,5 @@
 import type { JsonAbi } from '@fuel-ts/abi-coder';
+import type { RequireAtLeastOne } from 'type-fest';
 
 /**
  * @name Version
@@ -27,6 +28,13 @@ export type Network = {
    */
   chainId: number;
 };
+
+/**
+ * @name SelectNetworkArguments
+ *
+ * Select a network requires either the `chainId` or the `url`.
+ */
+export type SelectNetworkArguments = RequireAtLeastOne<Network, 'chainId' | 'url'>;
 
 /**
  * ABI that represents a binary code interface from Sway.

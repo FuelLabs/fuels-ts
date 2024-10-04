@@ -18,6 +18,9 @@ export const filterOriginalTemplateFiles = (files: string[]) => {
     if (['/gitignore', '/env'].includes(file)) {
       return false;
     }
+    if (file.includes('dist')) {
+      return false;
+    }
     return true;
   });
 

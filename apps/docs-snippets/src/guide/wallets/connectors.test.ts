@@ -121,8 +121,11 @@ class WalletConnector extends FuelConnector {
     // #region fuel-connector-events-abis
     const abis: Array<FuelABI> = [
       {
-        encoding: '1',
-        types: [],
+        encodingVersion: '1',
+        specVersion: '1',
+        programType: 'contract',
+        concreteTypes: [],
+        metadataTypes: [],
         loggedTypes: [],
         functions: [],
         messagesTypes: [],

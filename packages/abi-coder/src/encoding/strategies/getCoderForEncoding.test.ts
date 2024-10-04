@@ -1,3 +1,4 @@
+import type { EncodingVersion } from '../../utils/constants';
 import { ENCODING_V1 } from '../../utils/constants';
 
 import { getCoderForEncoding } from './getCoderForEncoding';
@@ -17,6 +18,8 @@ describe('getEncodingStrategy', () => {
   });
 
   it('throws for an unsupported encoding version', () => {
-    expect(() => getCoderForEncoding('2')).toThrowError('Encoding version 2 is unsupported.');
+    expect(() => getCoderForEncoding('2' as EncodingVersion)).toThrowError(
+      'Encoding version 2 is unsupported.'
+    );
   });
 });

@@ -6,7 +6,6 @@ import { defaultConsensusKey, hexlify, defaultSnapshotConfigs } from '@fuel-ts/u
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
-import { getPortPromise } from 'portfinder';
 
 import { Signer } from '../signer';
 
@@ -148,14 +147,7 @@ export const launchNode = async ({
 
     const ipToUse = ip || '0.0.0.0';
 
-    const portToUse =
-      port ||
-      (
-        await getPortPromise({
-          port: 4000, // tries 4000 first, then 4001, then 4002, etc.
-          stopPort: 5000, // don't try ports above 5000
-        })
-      ).toString();
+    const portToUse = port || '0';
 
     let snapshotDirToUse: string;
 
@@ -264,21 +256,15 @@ export const launchNode = async ({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const [realIp, realPort] = rowWithUrl.split(' ').at(-1)!.trim().split(':'); // e.g. "2024-02-13T12:31:44.445844Z  INFO new{name=fuel-core}: fuel_core::graphql_api::service: 216: Binding GraphQL provider to 127.0.0.1:35039"
 
-        // TODO: Remove delay after fuel-core issue is fixed
-        // https://github.com/FuelLabs/fuel-core/issues/2107
-        setTimeout(
-          () =>
-            // Resolve with the cleanup method.
-            resolve({
-              cleanup,
-              ip: realIp,
-              port: realPort,
-              url: `http://${realIp}:${realPort}/v1/graphql`,
-              snapshotDir: snapshotDirToUse as string,
-              pid: child.pid as number,
-            }),
-          500
-        );
+        // Resolve with the cleanup method.
+        resolve({
+          cleanup,
+          ip: realIp,
+          port: realPort,
+          url: `http://${realIp}:${realPort}/v1/graphql`,
+          snapshotDir: snapshotDirToUse as string,
+          pid: child.pid as number,
+        });
       }
       if (/error/i.test(text)) {
         // eslint-disable-next-line no-console

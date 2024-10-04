@@ -10,7 +10,7 @@ describe('truncateWalletAddress Tests', () => {
   it('should correctly truncate a wallet address', () => {
     const mockAddress: Address = {
       toString: () => '0x1234567890abcdef1234567890abcdef',
-    };
+    } as Address;
     const options = { prefixLength: 6, suffixLength: 4 };
     const result = truncateWalletAddress(mockAddress, options);
     expect(result).toBe('0x1234…cdef');
@@ -19,7 +19,7 @@ describe('truncateWalletAddress Tests', () => {
   it('should handle default options if none provided', () => {
     const mockAddress: Address = {
       toString: () => '0x1234567890abcdef1234567890abcdef',
-    };
+    } as Address;
     const result = truncateWalletAddress(mockAddress);
     expect(result).toBe('0x…cdef');
   });

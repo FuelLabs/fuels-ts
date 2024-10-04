@@ -9,6 +9,7 @@ use std::logging::log;
 use std::option::Option;
 use std::storage::*;
 use std::vec::Vec;
+use data_structure_library::GameState;
 
 pub struct U8Struct {
     i: u8,
@@ -126,6 +127,7 @@ abi CoverageContract {
         inputD: b256,
     ) -> Vec<b256>;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
+    fn echo_enum_namespaced(value: GameState) -> GameState;
 }
 
 pub fn vec_from(vals: [u32; 3]) -> Vec<u32> {
@@ -462,5 +464,9 @@ impl CoverageContract for Contract {
             Ok(value) => Ok(value),
             Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
         }
+    }
+
+    fn echo_enum_namespaced(value: GameState) -> GameState {
+        value
     }
 }

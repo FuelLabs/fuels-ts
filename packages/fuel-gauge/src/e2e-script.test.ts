@@ -1,14 +1,6 @@
 /* eslint-disable no-console */
-import {
-  DEVNET_NETWORK_URL,
-  TESTNET_NETWORK_URL,
-  Provider,
-  TransactionType,
-  WalletUnlocked,
-  CHAIN_IDS,
-  rawAssets,
-  assets,
-} from 'fuels';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
+import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
 
@@ -133,24 +125,65 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       return;
     }
 
-    const expected = [
+    const expectedRawBaseAsset = [
       {
         name: 'Ethereum',
         symbol: 'ETH',
-        icon: expect.stringContaining('eth.svg'),
-        networks: expect.arrayContaining([
+        icon: 'eth.svg',
+        networks: [
+          {
+            type: 'ethereum',
+            chainId: CHAIN_IDS.eth.sepolia,
+            decimals: 18,
+          },
+          {
+            type: 'ethereum',
+            chainId: CHAIN_IDS.eth.foundry,
+            decimals: 18,
+          },
+          {
+            type: 'ethereum',
+            chainId: CHAIN_IDS.eth.mainnet,
+            decimals: 18,
+          },
           {
             type: 'fuel',
+            chainId: CHAIN_IDS.fuel.devnet,
             decimals: 9,
-            chainId: provider.getChainId(),
-            assetId: provider.getBaseAssetId(),
+            assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
           },
-        ]),
+          {
+            type: 'fuel',
+            chainId: CHAIN_IDS.fuel.testnet,
+            decimals: 9,
+            assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+          },
+          {
+            type: 'fuel',
+            chainId: CHAIN_IDS.fuel.mainnet,
+            decimals: 9,
+            assetId: '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07',
+          },
+        ],
       },
     ];
 
+    const expectedBaseAsset = [
+      {
+        ...expectedRawBaseAsset[0],
+        icon: 'https://cdn.fuel.network/assets/eth.svg',
+      },
+    ];
+
+    const totalAssets = 27;
+
     expect(CHAIN_IDS.fuel[selectedNetwork]).toEqual(provider.getChainId());
-    expect(rawAssets).toEqual(expected);
-    expect(assets).toEqual(expected);
+
+    // Ensure contains base asset
+    expect(rawAssets).containSubset(expectedRawBaseAsset);
+    expect(assets).containSubset(expectedBaseAsset);
+
+    expect(rawAssets.length).toEqual(totalAssets);
+    expect(assets.length).toEqual(totalAssets);
   }, 15_000);
 });
