@@ -8,22 +8,25 @@ import { AbiProjectsEnum, getAbiForcProject } from './utils';
  * @group node
  */
 describe('AbiGen', () => {
-  test('contract', () => {
+  test('AbiGen generates all files correctly', () => {
     const fixtureResultMap = new Map([
-      ['common', 'common.ts'],
-      ['contract', 'AbiContract.ts'],
-      ['contract-types', 'AbiContractTypes.ts'],
-      ['contract-factory', 'AbiContractFactory.ts'],
-      ['contract-bytecode', 'AbiContract-bytecode.ts'],
-      ['contract-abi', 'AbiContract-abi.json'],
-      ['contract-storage-slots', 'AbiContract-storage-slots.json'],
-      ['predicate', 'AbiPredicate.ts'],
-      ['predicate-types', 'AbiPredicateTypes.ts'],
-      ['predicate-abi', 'AbiPredicate-abi.json'],
-      ['script', 'AbiScript.ts'],
-      ['script-types', 'AbiScriptTypes.ts'],
-      ['script-abi', 'AbiScript-abi.json'],
       ['index', 'index.ts'],
+      ['common', 'common.ts'],
+
+      ['contract', 'contracts/AbiContract.ts'],
+      ['contract-types', 'contracts/AbiContractTypes.ts'],
+      ['contract-factory', 'contracts/AbiContractFactory.ts'],
+      ['contract-bytecode', 'contracts/AbiContract-bytecode.ts'],
+      ['contract-abi', 'contracts/AbiContract-abi.json'],
+      ['contract-storage-slots', 'contracts/AbiContract-storage-slots.json'],
+
+      ['predicate', 'predicates/AbiPredicate.ts'],
+      ['predicate-types', 'predicates/AbiPredicateTypes.ts'],
+      ['predicate-abi', 'predicates/AbiPredicate-abi.json'],
+      ['script', 'scripts/AbiScript.ts'],
+
+      ['script-types', 'scripts/AbiScriptTypes.ts'],
+      ['script-abi', 'scripts/AbiScript-abi.json'],
     ]);
 
     const { buildDir: contractDir } = getAbiForcProject(AbiProjectsEnum.ABI_CONTRACT);
@@ -31,7 +34,7 @@ describe('AbiGen', () => {
     const { buildDir: scriptDir } = getAbiForcProject(AbiProjectsEnum.ABI_SCRIPT);
 
     const programDetails = getProgramDetails([contractDir, predicateDir, scriptDir]);
-    const { results } = new AbiGen({ programDetails });
+    const results = AbiGen.generate({ programDetails });
 
     fixtureResultMap.forEach((filename, fixture) => {
       const fixtureFile = join(
@@ -42,6 +45,9 @@ describe('AbiGen', () => {
 
       const result = results.find((r) => r.filename === filename);
       expect(result?.content).toEqual(fixtureContent);
+
+      // verify only one file generated
+      expect(results.filter((r) => r.filename === filename)).toHaveLength(1);
     });
   });
 });

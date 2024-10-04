@@ -7,9 +7,13 @@ import { generateTsType } from '../typers/generate-ts-type';
 import { flattenImports } from '../typers/helpers';
 import type { TyperReturn } from '../typers/types';
 
+import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { renderHbsTemplate } from './render-hbs-template';
 
 const metadataTypeFilter = createMatcher<boolean>({
+  enum: true,
+  struct: true,
+  assetId: true,
   string: false,
   void: false,
   bool: false,
@@ -23,15 +27,12 @@ const metadataTypeFilter = createMatcher<boolean>({
   stdString: false,
   option: false,
   result: false,
-  enum: true,
-  struct: true,
   str: false,
   b512: false,
   bytes: false,
   vector: false,
   tuple: false,
   array: false,
-  assetId: true,
   evmAddress: false,
   rawUntypedPtr: false,
   rawUntypedSlice: false,
@@ -120,9 +121,10 @@ export function renderTypesTemplate({ name, abi }: ProgramDetails): TsAbiGenResu
     },
   });
 
+  const withParentDir = getParentDirWrapper(abi.programType);
+
   return {
-    filename: `${name}Types`,
-    extension: 'ts',
+    filename: withParentDir(`${name}Types.ts`),
     content,
   };
 }

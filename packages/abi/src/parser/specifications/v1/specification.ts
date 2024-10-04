@@ -5,7 +5,7 @@
 export interface AbiSpecificationV1 {
   readonly specVersion: '1';
   readonly encodingVersion: string;
-  readonly programType: string;
+  readonly programType: 'contract' | 'script' | 'predicate' | 'library';
   readonly concreteTypes: readonly AbiConcreteTypeV1[];
   readonly metadataTypes: readonly AbiMetadataTypeV1[];
   readonly functions: readonly AbiFunctionV1[];

@@ -9,7 +9,7 @@
 */
 
 
-export { AbiContract } from './AbiContract';
-export { AbiContractFactory } from './AbiContractFactory';
-export { AbiPredicate } from './AbiPredicate';
-export { AbiScript } from './AbiScript';
+export * from './contracts/AbiContract';
+export * from './contracts/AbiContractFactory';
+export * from './predicates/AbiPredicate';
+export * from './scripts/AbiScript';

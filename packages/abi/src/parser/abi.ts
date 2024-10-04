@@ -1,7 +1,7 @@
 export interface Abi {
   specVersion: string;
   encodingVersion: string;
-  programType: string;
+  programType: 'contract' | 'script' | 'predicate' | 'library';
   metadataTypes: AbiTypeMetadata[];
   types: AbiType[];
   functions: AbiFunction[];

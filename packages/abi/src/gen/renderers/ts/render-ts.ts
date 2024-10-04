@@ -18,24 +18,25 @@ export const renderTs: Renderer = (details: ProgramDetails[]): AbiGenResult[] =>
     .flat();
 
   results.push({
-    filename: 'common',
-    extension: 'ts',
+    filename: 'common.ts',
     content: renderHbsTemplate({ template: commonTemplate }),
   });
 
   results.push({
-    filename: 'index',
-    extension: 'ts',
+    filename: 'index.ts',
     content: renderHbsTemplate({
       template: indexTemplate,
       data: {
-        members: results.filter((r) => r.exportInIndex).map((r) => r.filename),
+        members: results
+          .filter((r) => r.exportInIndexFile)
+          .map(
+            (r) =>
+              // remove .ts extension
+              r.filename.split('.')[0]
+          ),
       },
     }),
   });
 
-  return results.map((r) => ({
-    content: r.content,
-    filename: `${r.filename}.${r.extension}`,
-  }));
+  return results;
 };

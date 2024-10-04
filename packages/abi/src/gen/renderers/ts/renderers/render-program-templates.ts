@@ -1,3 +1,5 @@
+import { assertUnreachable } from '@fuel-ts/utils';
+
 import type { ProgramDetails } from '../../../utils/get-program-details';
 import type { TsAbiGenResult } from '../../types';
 import bytecodeTemplate from '../templates/bytecode.hbs';
@@ -6,6 +8,7 @@ import contractTemplate from '../templates/contract.hbs';
 import predicateTemplate from '../templates/predicate.hbs';
 import scriptTemplate from '../templates/script.hbs';
 
+import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { renderHbsTemplate } from './render-hbs-template';
 
 export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGenResult[] {
@@ -13,13 +16,11 @@ export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGen
 
   const results: TsAbiGenResult[] = [
     {
-      filename: `${name}-abi`,
-      extension: 'json',
+      filename: `${name}-abi.json`,
       content: programDetails.abiContents,
     },
     {
-      filename: `${name}-bytecode`,
-      extension: 'ts',
+      filename: `${name}-bytecode.ts`,
       content: renderHbsTemplate({ template: bytecodeTemplate, data: { binCompressed } }),
     },
   ];
@@ -28,55 +29,56 @@ export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGen
     case 'contract':
       results.push(
         {
-          filename: name,
-          extension: 'ts',
+          filename: `${name}.ts`,
           content: renderHbsTemplate({
             template: contractTemplate,
             data: { name },
           }),
-          exportInIndex: true,
+          exportInIndexFile: true,
         },
         {
-          filename: `${name}Factory`,
-          extension: 'ts',
+          filename: `${name}Factory.ts`,
           content: renderHbsTemplate({
             template: contractFactoryTemplate,
             data: { name },
           }),
-          exportInIndex: true,
+          exportInIndexFile: true,
         },
         {
-          filename: `${name}-storage-slots`,
-          extension: 'json',
+          filename: `${name}-storage-slots.json`,
           content: programDetails.storageSlots as string,
         }
       );
       break;
     case 'predicate':
       results.push({
-        filename: name,
-        extension: 'ts',
+        filename: `${name}.ts`,
         content: renderHbsTemplate({
           template: predicateTemplate,
           data: { name },
         }),
-        exportInIndex: true,
+        exportInIndexFile: true,
       });
       break;
     case 'script':
       results.push({
-        filename: name,
-        extension: 'ts',
+        filename: `${name}.ts`,
         content: renderHbsTemplate({
           template: scriptTemplate,
           data: { name },
         }),
-        exportInIndex: true,
+        exportInIndexFile: true,
       });
       break;
+    case 'library':
+      // we do nothing for library
+      break;
     default:
+      assertUnreachable(abi.programType);
       break;
   }
 
-  return results;
+  const withParentDir = getParentDirWrapper(abi.programType);
+
+  return results.map((r) => ({ ...r, filename: withParentDir(r.filename) }));
 }
