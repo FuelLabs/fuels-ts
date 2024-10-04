@@ -8,8 +8,6 @@
   Fuels version: 0.94.8
 */
 
-import type { FunctionFragment, InvokeFunction } from 'fuels';
-
 /**
  * Mimics Sway Enum.
  * Requires one and only one Key-Value pair and raises error if more are provided.
@@ -19,34 +17,15 @@ export type Enum<T> = {
 }[keyof T];
 
 /**
- * Mimics Sway Option type.
+ * Mimics Sway Option and Vectors.
+ * Vectors are treated like arrays in Typescript.
  */
 export type Option<T> = T | undefined;
+
+export type Vec<T> = T[];
 
 /**
  * Mimics Sway Result enum type.
  * Ok represents the success case, while Err represents the error case.
  */
-export type Result<T, E> = Enum<{ Ok: T; Err: E }>;
-
-/**
- * Mimics Sway array type. For example, [u64; 10] is converted to ArrayOfLength<BigNumberish, 10>.
- */
-export type ArrayOfLength<
-  T,
-  Length extends number,
-  Arr extends unknown[] = [],
-> = Arr['length'] extends Length ? Arr : ArrayOfLength<T, Length, [T, ...Arr]>;
-
-interface Types {
-  functions: Record<string, { inputs: unknown[]; output: unknown }>;
-  configurables: Partial<Record<string, unknown>>;
-}
-
-export type ProgramFunctionMapper<T extends Types['functions']> = {
-  [K in keyof T]: InvokeFunction<T[K]['inputs'], T[K]['output']>;
-};
-
-export type InterfaceFunctionMapper<T extends Types['functions']> = {
-  [K in keyof T]: FunctionFragment;
-};
+export type Result<T, E> = Enum<{Ok: T, Err: E}>;
