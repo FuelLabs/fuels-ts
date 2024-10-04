@@ -12,12 +12,19 @@ export const saveToCache = (cache: FuelsVersionCache) => {
 export const FUELS_VERSION_CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
 
 export const checkAndLoadCache = (): FuelsVersionCache | null => {
-  if (fs.existsSync(FUELS_VERSION_CACHE_FILE)) {
+  const doesVersionCacheExist = fs.existsSync(FUELS_VERSION_CACHE_FILE);
+
+  if (doesVersionCacheExist) {
     const cachedVersion = fs.readFileSync(FUELS_VERSION_CACHE_FILE, 'utf-8');
-    const { mtimeMs: cacheTimestamp } = fs.statSync(FUELS_VERSION_CACHE_FILE);
-    if (cachedVersion && Date.now() - cacheTimestamp < FUELS_VERSION_CACHE_TTL) {
-      return cachedVersion;
+    if (!cachedVersion) {
+      return null;
     }
+
+    const { mtimeMs: cacheTimestamp } = fs.statSync(FUELS_VERSION_CACHE_FILE);
+    const hasCacheExpired = Date.now() - cacheTimestamp < FUELS_VERSION_CACHE_TTL;
+
+    return hasCacheExpired ? null : cachedVersion;
   }
+
   return null;
 };
