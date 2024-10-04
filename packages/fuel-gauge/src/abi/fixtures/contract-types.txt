@@ -86,6 +86,10 @@ export interface AbiContractTypes {
             inputs: [x: string, y: boolean];
             output: [string, boolean];
         };
+        multi_arg_complex: {
+            inputs: [x: StructDoubleGenericInput<ArrayOfLength<string, 3>, BigNumberish>, y: ArrayOfLength<StructDoubleGenericInput<BigNumberish, boolean>, 4>, z: [string, boolean], a: StructSimpleInput];
+            output: void;
+        };
         multi_arg_str_str: {
             inputs: [x: string, y: string];
             output: [string, string];
