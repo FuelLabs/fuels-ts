@@ -785,10 +785,9 @@ describe('AbiCoder', () => {
     });
   });
   describe('types_enum_external', () => {
-    // @TODO revist this one, can't return B from this Sway function.
     it('should encode/decode just fine', async () => {
       const input = ExternalEnumInput.A;
-      const expected = ExternalEnumInput.A; // Should be B
+      const expected = ExternalEnumInput.B;
 
       const { waitForResult } = await contract.functions.types_enum_external(input).call();
 
