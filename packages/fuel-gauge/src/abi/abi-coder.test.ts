@@ -1250,7 +1250,19 @@ describe('AbiCoder', () => {
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
     });
   });
-  describe.skip('multi_arg_str_str');
+  describe('multi_arg_str_str', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX = 'Input';
+      const inputY = 'False';
+
+      const expected = ['Fuuel', 'Niice'];
+
+      const { waitForResult } = await contract.functions.multi_arg_str_str(inputX, inputY).call();
+
+      const { value } = await waitForResult();
+      expect(value).toStrictEqual(expected);
+    });
+  });
   describe.skip('multi_arg_u32_vector_vector');
   describe.skip('multi_arg_complex');
 });
