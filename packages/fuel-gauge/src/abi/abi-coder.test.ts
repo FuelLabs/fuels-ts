@@ -894,8 +894,7 @@ describe('AbiCoder', () => {
   /**
    * Options
    */
-  // @todo Investigate: returning the input as the output
-  describe.skip('types_option', () => {
+  describe('types_option', () => {
     it('should encode/decode just fine', async () => {
       const input: Option<BigNumberish> = 10; // Some
       const expected: Option<BigNumberish> = undefined; // None
@@ -906,8 +905,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('types_option_struct', () => {
+  describe('types_option_struct', () => {
     it('should encode/decode just fine', async () => {
       const input: Option<StructSimpleInput> = {
         a: true,
