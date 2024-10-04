@@ -540,21 +540,21 @@ impl MyContract for Contract {
         const INPUT_B256: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
         const INPUT_STRUCT: StructDoubleGeneric<b256, u8> = StructDoubleGeneric {
           a: INPUT_B256,
-          b: 10
+          b: 10,
         };
-        const INPUT = StructWithGenericArray<b256> {
-          a: [INPUT_STRUCT, INPUT_STRUCT, INPUT_STRUCT]
-        }
-        assert(x == INPUT)
+        const INPUT: StructWithGenericArray<b256>  = StructWithGenericArray {
+          a: [INPUT_STRUCT, INPUT_STRUCT, INPUT_STRUCT],
+        };
+        assert(x == INPUT);
 
         const EXPECTED_B256: b256 = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
         const EXPECTED_STRUCT: StructDoubleGeneric<b256, u8> = StructDoubleGeneric {
           a: EXPECTED_B256,
-          b: 20
+          b: 20,
         };
-        const EXPECTED = StructWithGenericArray<b256> {
-          a: [EXPECTED_STRUCT, EXPECTED_STRUCT, EXPECTED_STRUCT]
-        }
+        const EXPECTED: StructWithGenericArray<b256> = StructWithGenericArray {
+          a: [EXPECTED_STRUCT, EXPECTED_STRUCT, EXPECTED_STRUCT],
+        };
 
         EXPECTED
     }
@@ -684,8 +684,8 @@ impl MyContract for Contract {
     fn types_option_geo(x: Option<StructSimple>) -> Option<StructSimple> {
         const INPUT_STRUCT: StructSimple = StructSimple {
           a: true,
-          b: 10
-        }
+          b: 10,
+        };
         const INPUT: Option<StructSimple> = Option::Some(INPUT_STRUCT);
         assert(x == INPUT);
 
