@@ -1,4 +1,5 @@
 import { assertUnreachable } from '@fuel-ts/utils';
+import type { BinaryVersions } from '@fuel-ts/versions';
 
 import type { ProgramDetails } from '../../../utils/get-program-details';
 import type { TsAbiGenResult } from '../../types';
@@ -11,7 +12,10 @@ import scriptTemplate from '../templates/script.hbs';
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
 import { renderHbsTemplate } from './render-hbs-template';
 
-export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGenResult[] {
+export function renderProgramTemplates(
+  programDetails: ProgramDetails,
+  versions: BinaryVersions
+): TsAbiGenResult[] {
   const { abi, binCompressed, name } = programDetails;
 
   const results: TsAbiGenResult[] = [
@@ -21,7 +25,7 @@ export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGen
     },
     {
       filename: `${name}-bytecode.ts`,
-      content: renderHbsTemplate({ template: bytecodeTemplate, data: { binCompressed } }),
+      content: renderHbsTemplate({ template: bytecodeTemplate, versions, data: { binCompressed } }),
     },
   ];
 
@@ -32,6 +36,7 @@ export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGen
           filename: `${name}.ts`,
           content: renderHbsTemplate({
             template: contractTemplate,
+            versions,
             data: { name },
           }),
           exportInIndexFile: true,
@@ -40,6 +45,7 @@ export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGen
           filename: `${name}Factory.ts`,
           content: renderHbsTemplate({
             template: contractFactoryTemplate,
+            versions,
             data: { name },
           }),
           exportInIndexFile: true,
@@ -55,6 +61,7 @@ export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGen
         filename: `${name}.ts`,
         content: renderHbsTemplate({
           template: predicateTemplate,
+          versions,
           data: { name },
         }),
         exportInIndexFile: true,
@@ -65,6 +72,7 @@ export function renderProgramTemplates(programDetails: ProgramDetails): TsAbiGen
         filename: `${name}.ts`,
         content: renderHbsTemplate({
           template: scriptTemplate,
+          versions,
           data: { name },
         }),
         exportInIndexFile: true,

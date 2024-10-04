@@ -34,7 +34,10 @@ describe('AbiGen', () => {
     const { buildDir: scriptDir } = getAbiForcProject(AbiProjectsEnum.ABI_SCRIPT);
 
     const programDetails = getProgramDetails([contractDir, predicateDir, scriptDir]);
-    const results = AbiGen.generate({ programDetails });
+    const results = AbiGen.generate({
+      programDetails,
+      versions: { FUELS: '0.94.8', FORC: '0.64.0' },
+    });
 
     fixtureResultMap.forEach((filename, fixture) => {
       const fixtureFile = join(

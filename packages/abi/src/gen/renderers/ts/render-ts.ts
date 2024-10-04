@@ -8,23 +8,24 @@ import { renderTypesTemplate } from './renderers/render-types-template';
 import commonTemplate from './templates/common.hbs';
 import indexTemplate from './templates/index.hbs';
 
-export const renderTs: Renderer = (details: ProgramDetails[]): AbiGenResult[] => {
+export const renderTs: Renderer = (details: ProgramDetails[], versions): AbiGenResult[] => {
   const results: TsAbiGenResult[] = details
     .map((d) => {
-      const program = renderProgramTemplates(d);
-      const types = renderTypesTemplate(d);
+      const program = renderProgramTemplates(d, versions);
+      const types = renderTypesTemplate(d, versions);
       return [program, types].flat();
     })
     .flat();
 
   results.push({
     filename: 'common.ts',
-    content: renderHbsTemplate({ template: commonTemplate }),
+    content: renderHbsTemplate({ template: commonTemplate, versions }),
   });
 
   results.push({
     filename: 'index.ts',
     content: renderHbsTemplate({
+      versions,
       template: indexTemplate,
       data: {
         members: results

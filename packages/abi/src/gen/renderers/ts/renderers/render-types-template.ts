@@ -1,3 +1,5 @@
+import type { BinaryVersions } from '@fuel-ts/versions';
+
 import { createMatcher, swayTypeMatchers } from '../../../../matchers/sway-type-matchers';
 import type { Abi, AbiFunctionInput } from '../../../../parser';
 import type { ProgramDetails } from '../../../utils/get-program-details';
@@ -83,7 +85,10 @@ function mapFunctions(abi: Abi, cTypes: Record<string, TyperReturn>) {
   });
 }
 
-export function renderTypesTemplate({ name, abi }: ProgramDetails): TsAbiGenResult {
+export function renderTypesTemplate(
+  { name, abi }: ProgramDetails,
+  versions: BinaryVersions
+): TsAbiGenResult {
   const mTypes = abi.metadataTypes
     .filter(metadataTypeFilter)
     .map((t) => generateTsType({ abiType: t }));
@@ -110,6 +115,7 @@ export function renderTypesTemplate({ name, abi }: ProgramDetails): TsAbiGenResu
 
   const content = renderHbsTemplate({
     template: typesTemplate,
+    versions,
     data: {
       name,
       fuelsTypeImports,

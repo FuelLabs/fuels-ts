@@ -1,9 +1,11 @@
+import type { BinaryVersions } from '@fuel-ts/versions';
 
 import { getRenderer } from './renderers/getRenderer';
 import type { ProgramDetails } from './utils/get-program-details';
 
 export interface AbiGenInput {
   programDetails: ProgramDetails[];
+  versions: BinaryVersions;
   mode?: 'ts';
 }
 
@@ -13,8 +15,8 @@ export interface AbiGenResult {
 }
 
 export class AbiGen {
-  public static generate({ programDetails, mode }: AbiGenInput) {
+  public static generate({ programDetails, mode, versions }: AbiGenInput) {
     const render = getRenderer(mode);
-    return render(programDetails);
+    return render(programDetails, versions);
   }
 }
