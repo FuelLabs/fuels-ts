@@ -867,7 +867,20 @@ impl AbiContract for Contract {
         return EXPECTED
     }
     fn multi_arg_u64_struct(x: u64, y: StructSimple) -> (u64, StructSimple) {
-        (x, y)
+        const INPUT_X = 99u64;
+        let input_y = StructSimple {
+          a: true,
+          b: 51
+        };
+        assert(x == INPUT_X);
+        assert(y == input_y);
+
+        const EXPECTED_X = 3u64;
+        let expected_y = StructSimple {
+          a: false,
+          b: 4
+        };
+        return (EXPECTED_X, expected_y);
     }
     fn multi_arg_str_str(x: str[5], y: str[5]) -> (str[5], str[5]) {
         (x, y)
