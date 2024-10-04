@@ -615,13 +615,13 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
-  describe('type_struct_external', () => {
+  describe('types_struct_external', () => {
     it('should encode/decode just fine', async () => {
       const input = { value: 10 };
       // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = { value: expect.toEqualBn(20) };
 
-      const { waitForResult } = await contract.functions.type_struct_external(input).call();
+      const { waitForResult } = await contract.functions.types_struct_external(input).call();
 
       const { value } = await waitForResult();
       expect(value).toEqual(expected);

@@ -57,7 +57,7 @@ abi MyContract {
     fn types_struct_double_generic(
         x: StructGenericWithEnum<u8, u16>,
     ) -> StructGenericWithEnum<u8, u16>;
-    fn type_struct_external(x: ExternalStruct) -> ExternalStruct;
+    fn types_struct_external(x: ExternalStruct) -> ExternalStruct;
     fn types_struct_with_implicit_generics(
         x: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8>;
@@ -399,7 +399,7 @@ impl MyContract for Contract {
         };
         return EXPECTED
     }
-    fn type_struct_external(x: ExternalStruct) -> ExternalStruct {
+    fn types_struct_external(x: ExternalStruct) -> ExternalStruct {
         const INPUT: ExternalStruct = ExternalStruct { value: 10 };
         assert(x == INPUT);
 
