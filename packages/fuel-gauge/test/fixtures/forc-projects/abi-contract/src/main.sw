@@ -818,8 +818,8 @@ impl MyContract for Contract {
         assert(x == INPUT_X);
         assert(y == INPUT_Y);
 
-        const EXPECTED_X = vec_u8_from([7, 8, 9]);
-        const EXPECTED_Y = vec_u8_from([10, 11, 12]);
+        let EXPECTED_X = vec_u8_from([7, 8, 9]);
+        let EXPECTED_Y = vec_u8_from([10, 11, 12]);
         (EXPECTED_X, EXPECTED_Y)
     }
     fn multi_arg_vector_b256(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {
@@ -828,9 +828,9 @@ impl MyContract for Contract {
         assert(x == INPUT_X);
         assert(y == INPUT_Y);
 
-        const EXPECTED_X = vec_u8_from([7, 8, 9]);
+        let EXPECTED_X = vec_u8_from([7, 8, 9]);
         const EXPECTED_Y = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
-        const EXPECTED = (EXPECTED_X, EXPECTED_Y);
+        let EXPECTED = (EXPECTED_X, EXPECTED_Y);
         return EXPECTED
     }
     fn multi_arg_struct_vector(x: StructSimple, y: Vec<u8>) -> (StructSimple, Vec<u8>) {
@@ -838,7 +838,7 @@ impl MyContract for Contract {
           a: true,
           b: 1
         };
-        const INPUT_Y = vec_u8_from([1, 2, 3]);
+        let INPUT_Y = vec_u8_from([1, 2, 3]);
         assert(x == INPUT_X);
         assert(y == INPUT_Y);
 
@@ -847,8 +847,8 @@ impl MyContract for Contract {
           a: false,
           b: 2
         };
-        const EXPECTED_Y = vec_u8_from([4, 5, 6]);
-        const EXPECTED = (EXPECTED_X, EXPECTED_Y);
+        let EXPECTED_Y = vec_u8_from([4, 5, 6]);
+        let EXPECTED = (EXPECTED_X, EXPECTED_Y);
         return EXPECTED
     }
     fn multi_arg_u64_struct(x: u64, y: StructSimple) -> (u64, StructSimple) {
