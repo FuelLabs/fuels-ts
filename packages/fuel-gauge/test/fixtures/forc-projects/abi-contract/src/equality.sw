@@ -52,6 +52,18 @@ impl Eq for StructDoubleGeneric<StructSingleGeneric<u64>, str[1]> {
     }
 }
 
+impl Eq for StructDoubleGeneric<b256, u8> {
+    fn eq(self, other: Self) -> bool {
+        self.a == other.a && self.b == other.b
+    }
+}
+
+impl Eq for [StructDoubleGeneric<b256, u8>; 3] {
+    fn eq(self, other: Self) -> bool {
+        self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
+    }
+}
+
 impl Eq for [StructDoubleGeneric<StructSingleGeneric<u64>, str[1]>; 2] {
     fn eq(self, other: Self) -> bool {
         self[0] == other[0] && self[1] == other[1]
@@ -373,3 +385,10 @@ impl Eq for Vec<StructWithMultiOption> {
         true
     }
 }
+
+impl Eq for StructWithGenericArray<b256> {
+    fn eq(self, other: Self) -> bool {
+        self.a == other.a
+    }
+}
+
