@@ -23,8 +23,6 @@ export function renderHbsTemplate(params: {
   const renderTemplate = Handlebars.compile(template, options);
 
   const text = renderTemplate({
-    // TODO: consider passing the version of forc used to build the project,
-    // not the version supported by `fuels`.
     header: renderHeaderTemplate(versions),
     ...(data ?? {}),
   });
