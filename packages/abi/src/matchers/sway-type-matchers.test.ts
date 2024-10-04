@@ -26,6 +26,7 @@ const testMappings: Record<keyof typeof swayTypeMatchers, `${string}-matched`> =
   evmAddress: 'evmAddress-matched',
   rawUntypedPtr: 'rawUntypedPtr-matched',
   rawUntypedSlice: 'rawUntypedSlice-matched',
+  str: 'str-matched',
 };
 
 const matcher = createMatcher(testMappings);

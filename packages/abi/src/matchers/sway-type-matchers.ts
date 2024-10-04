@@ -9,6 +9,7 @@ export type SwayType =
   | 'b256'
   | 'generic'
   | 'string'
+  | 'str'
   | 'stdString'
   | 'option'
   | 'result'
@@ -22,7 +23,7 @@ export type SwayType =
   | 'assetId'
   | 'evmAddress'
   | 'rawUntypedPtr' // might not need it
-  | 'rawUntypedSlice'; // might not need it
+  | 'rawUntypedSlice';
 
 type Matcher = (type: string) => boolean;
 
@@ -41,13 +42,15 @@ const generic: Matcher = (type) => GENERIC_REGEX.test(type);
 export const STRING_REGEX = /^str\[(?<length>[0-9]+)\]/;
 const string: Matcher = (type) => STRING_REGEX.test(type);
 
+const str: Matcher = (type) => type === 'str';
+
 export const TUPLE_REGEX = /^\((?<items>.+)\)$/m;
 const tuple: Matcher = (type) => TUPLE_REGEX.test(type);
 
-export const ARRAY_REGEX = /^\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
+export const ARRAY_REGEX = /\[(?<item>[\w\s\\[\]]+);\s*(?<length>[0-9]+)\]/;
 const array: Matcher = (type) => ARRAY_REGEX.test(type);
 
-const STRUCT_REGEX = /^struct .+$/m;
+export const STRUCT_REGEX = /^struct (.+::)?(?<name>.+)$/m;
 const STRUCT_STD_REGEX =
   /^struct std::.*(AssetId|B512|Vec|RawVec|EvmAddress|Bytes|String|RawBytes)$/m;
 const struct: Matcher = (type) => STRUCT_REGEX.test(type) && !STRUCT_STD_REGEX.test(type);
@@ -60,7 +63,9 @@ const vector: Matcher = (type) => type === 'struct std::vec::Vec';
 
 const option: Matcher = (type) => type === 'enum std::option::Option';
 const result: Matcher = (type) => type === 'enum std::result::Result';
-const enumMatcher: Matcher = (type) => !option(type) && !result(type) && /^enum .*$/m.test(type);
+
+export const ENUM_REGEX = /^enum (.+::)?(?<name>.+)$/m;
+const enumMatcher: Matcher = (type) => !option(type) && !result(type) && ENUM_REGEX.test(type);
 
 const rawUntypedPtr: Matcher = (type) => type === 'raw untyped ptr';
 const rawUntypedSlice: Matcher = (type) => type === 'raw untyped slice';
@@ -75,6 +80,7 @@ export const swayTypeMatchers: Record<SwayType, Matcher> = {
   u64,
   u256,
   b256,
+  str,
 
   string,
   tuple,
@@ -105,7 +111,7 @@ export function createMatcher<T>(mappings: Record<SwayType, T>) {
     for (const [key, matcher] of swayTypeMatcherEntries) {
       if (matcher(swayType)) {
         const mapping = mappings[key as SwayType];
-        if (mapping) {
+        if (mapping !== undefined) {
           return mapping;
         }
         break;
