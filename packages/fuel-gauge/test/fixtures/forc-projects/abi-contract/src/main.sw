@@ -696,12 +696,12 @@ impl AbiContract for Contract {
         return EXPECTED
     }
     fn types_option_struct(x: Option<StructSimple>) -> Option<StructSimple> {
-        const INPUT_STRUCT: StructSimple = StructSimple {
+        let input_struct: StructSimple = StructSimple {
           a: true,
           b: 10,
         };
-        const INPUT: Option<StructSimple> = Option::Some(INPUT_STRUCT);
-        assert(x == INPUT);
+        let input: Option<StructSimple> = Option::Some(input_struct);
+        assert(x == input);
 
         const EXPECTED: Option<StructSimple> = Option::None;
         return EXPECTED
