@@ -15,7 +15,7 @@ export interface AbiGenResult {
 }
 
 export class AbiGen {
-  public static generate({ programDetails, mode, versions }: AbiGenInput) {
+  public static generate({ programDetails, mode, versions }: AbiGenInput): AbiGenResult[] {
     const render = getRenderer(mode);
     return render(programDetails, versions);
   }
