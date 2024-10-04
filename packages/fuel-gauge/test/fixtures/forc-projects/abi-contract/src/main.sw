@@ -895,7 +895,34 @@ impl AbiContract for Contract {
         (EXPECTED_X, EXPECTED_Y)
     }
     fn multi_arg_u32_vector_vector(x: u32, y: Vec<u64>, z: Vec<u64>) -> (u32, Vec<u64>, Vec<u64>) {
-        (x, y, z)
+        const INPUT_X = 1u32;
+
+        let mut input_y: Vec<u64> = Vec::new();
+        input_y.push(10020);
+        input_y.push(1231231);
+        input_y.push(777657);
+
+        let mut input_z: Vec<u64> = Vec::new();
+        input_z.push(99);
+        input_z.push(101);
+
+        assert(x == INPUT_X);
+        assert(y == input_y);
+        assert(z == input_z);
+
+        const EXPECTED_X = 2u32;
+
+        let mut expected_y: Vec<u64> = Vec::new();
+        expected_y.push(7);
+        expected_y.push(8);
+        expected_y.push(9);
+
+        let mut expected_z: Vec<u64> = Vec::new();
+        expected_z.push(10);
+        expected_z.push(11);
+        expected_z.push(12);
+
+        return (EXPECTED_X, expected_y, expected_z);
     }
     fn multi_arg_complex(
         x: StructDoubleGeneric<[b256; 3], u8>,
