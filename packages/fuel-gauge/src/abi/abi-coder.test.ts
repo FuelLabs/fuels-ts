@@ -1222,8 +1222,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('multi_arg_struct_vector', () => {
+  describe('multi_arg_struct_vector', () => {
     it('should encode/decode just fine', async () => {
       const inputX = { a: true, b: 1 };
       const inputY = [1, 2, 3];
