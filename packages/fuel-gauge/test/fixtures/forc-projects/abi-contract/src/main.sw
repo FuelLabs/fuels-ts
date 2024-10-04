@@ -822,6 +822,7 @@ impl AbiContract for Contract {
         const INPUT_X: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
         const INPUT_Y: bool = true;
         assert_eq(x, INPUT_X);
+        assert_eq(y, INPUT_Y);
 
         const EXPECTED: (b256, bool) = (0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, false);
         return EXPECTED

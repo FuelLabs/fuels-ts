@@ -1173,9 +1173,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
-  // @todo Investigate: returning the input as the output
-  describe.skip('multi_arg_b256_bool', () => {
-    // @todo investigate, this is returning the input as the output.
+  describe('multi_arg_b256_bool', () => {
     it('should encode/decode just fine', async () => {
       const inputX = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
       const inputY = true;
