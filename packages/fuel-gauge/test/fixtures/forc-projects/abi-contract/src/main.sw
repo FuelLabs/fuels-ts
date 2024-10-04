@@ -807,7 +807,7 @@ impl MyContract for Contract {
     fn multi_arg_b256_bool(x: b256, y: bool) -> (b256, bool) {
         const INPUT_X: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
         const INPUT_Y: bool = true;
-        assert_eq(x, INPUT);
+        assert_eq(x, INPUT_X);
 
         const EXPECTED: (b256, bool) = (0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, false);
         return EXPECTED
@@ -815,18 +815,18 @@ impl MyContract for Contract {
     fn multi_arg_vector_vector(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {
         let INPUT_X = vec_u8_from([1, 2, 3]);
         let INPUT_Y = vec_u8_from([4, 5, 6]);
-        expect(x == INPUT_X);
-        expect(y == INPUT_Y);
+        assert(x == INPUT_X);
+        assert(y == INPUT_Y);
 
         const EXPECTED_X = vec_u8_from([7, 8, 9]);
-        const EXPECTED_X = vec_u8_from([10, 11, 12]);
+        const EXPECTED_Y = vec_u8_from([10, 11, 12]);
         (EXPECTED_X, EXPECTED_Y)
     }
     fn multi_arg_vector_b256(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {
         let INPUT_X = vec_u8_from([1, 2, 3]);
         let INPUT_Y: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
-        expect(x == INPUT_X);
-        expect(y == INPUT_Y);
+        assert(x == INPUT_X);
+        assert(y == INPUT_Y);
 
         const EXPECTED_X = vec_u8_from([7, 8, 9]);
         const EXPECTED_Y = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
@@ -839,8 +839,8 @@ impl MyContract for Contract {
           b: 1
         };
         const INPUT_Y = vec_u8_from([1, 2, 3]);
-        expect(x == INPUT_X);
-        expect(y == INPUT_Y);
+        assert(x == INPUT_X);
+        assert(y == INPUT_Y);
 
 
         const EXPECTED_X = StructSimple {
