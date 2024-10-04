@@ -545,7 +545,7 @@ impl MyContract for Contract {
         const INPUT = StructWithGenericArray<b256> {
           a: [INPUT_STRUCT, INPUT_STRUCT, INPUT_STRUCT]
         }
-        assert(x === INPUT)
+        assert(x == INPUT)
 
         const EXPECTED_B256: b256 = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
         const EXPECTED_STRUCT: StructDoubleGeneric<b256, u8> = StructDoubleGeneric {
@@ -676,7 +676,7 @@ impl MyContract for Contract {
      */
     fn types_option(x: Option<u8>) -> Option<u8> {
         const INPUT: Option<u8> = Option::Some(10);
-        assert(x === INPUT);
+        assert(x == INPUT);
 
         const EXPECTED: Option<u8> = Option::None;
         return EXPECTED
@@ -687,7 +687,7 @@ impl MyContract for Contract {
           b: 10
         }
         const INPUT: Option<StructSimple> = Option::Some(INPUT_STRUCT);
-        assert(x === INPUT);
+        assert(x == INPUT);
 
         const EXPECTED: Option<StructSimple> = Option::None;
         return EXPECTED
@@ -815,8 +815,8 @@ impl MyContract for Contract {
     fn multi_arg_vector_vector(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {
         let INPUT_X = vec_u8_from([1, 2, 3]);
         let INPUT_Y = vec_u8_from([4, 5, 6]);
-        expect(x === INPUT_X);
-        expect(y === INPUT_Y);
+        expect(x == INPUT_X);
+        expect(y == INPUT_Y);
 
         const EXPECTED_X = vec_u8_from([7, 8, 9]);
         const EXPECTED_X = vec_u8_from([10, 11, 12]);
@@ -825,8 +825,8 @@ impl MyContract for Contract {
     fn multi_arg_vector_b256(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {
         let INPUT_X = vec_u8_from([1, 2, 3]);
         let INPUT_Y: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
-        expect(x === INPUT_X);
-        expect(y === INPUT_Y);
+        expect(x == INPUT_X);
+        expect(y == INPUT_Y);
 
         const EXPECTED_X = vec_u8_from([7, 8, 9]);
         const EXPECTED_Y = 0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
@@ -839,8 +839,8 @@ impl MyContract for Contract {
           b: 1
         };
         const INPUT_Y = vec_u8_from([1, 2, 3]);
-        expect(x === INPUT_X);
-        expect(y === INPUT_Y);
+        expect(x == INPUT_X);
+        expect(y == INPUT_Y);
 
 
         const EXPECTED_X = StructSimple {
