@@ -382,7 +382,8 @@ export default class ContractFactory {
       loaderBytecode: string;
     }>;
     blobId: string;
-    loaderBytecode: string;
+    loaderBytecode: Uint8Array;
+    loaderBytecodeHexlified: string;
   }> {
     const account = this.getAccount();
 
@@ -448,7 +449,12 @@ export default class ContractFactory {
       return { transactionResult: result, loaderBytecode: hexlify(loaderBytecode) };
     };
 
-    return { waitForResult, blobId, loaderBytecode: hexlify(loaderBytecode) };
+    return {
+      waitForResult,
+      blobId,
+      loaderBytecode,
+      loaderBytecodeHexlified: hexlify(loaderBytecode),
+    };
   }
 
   /**

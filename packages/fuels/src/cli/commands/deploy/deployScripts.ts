@@ -24,13 +24,14 @@ export async function deployScript(
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const factory = new ContractFactory(bytecode, abi, wallet);
 
-  const { waitForResult, blobId, loaderBytecode } =
+  const { waitForResult, blobId, loaderBytecode, loaderBytecodeHexlified } =
     await factory.deployAsBlobTxForScript(configurableConstants);
   await waitForResult();
 
   return {
     blobId,
     loaderBytecode,
+    loaderBytecodeHexlified,
   };
 }
 
@@ -52,7 +53,11 @@ export async function deployScripts(config: FuelsConfig) {
     const abiPath = getABIPath(scriptPath, config);
     const projectName = getContractName(scriptPath);
 
-    const { blobId, loaderBytecode } = await deployScript(wallet, binaryPath, abiPath);
+    const { blobId, loaderBytecode, loaderBytecodeHexlified } = await deployScript(
+      wallet,
+      binaryPath,
+      abiPath
+    );
 
     debug(`Script deployed: ${projectName} - ${blobId}`);
 
@@ -60,6 +65,7 @@ export async function deployScripts(config: FuelsConfig) {
       path: scriptPath,
       blobId,
       loaderBytecode,
+      loaderBytecodeHexlified,
     });
   }
 
