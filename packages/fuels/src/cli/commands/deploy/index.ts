@@ -24,7 +24,7 @@ export async function deploy(config: FuelsConfig) {
    * After saving the script files, we need to
    * re-generate types for them.
    *
-   * This time, the script will have to binaries:
+   * This time, the script will have two binaries:
    *  - the original one
    *  - the loader one (after deploy)
    *
