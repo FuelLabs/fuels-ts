@@ -412,11 +412,6 @@ export default class ContractFactory {
   }> {
     const account = this.getAccount();
 
-    // TODO: We think that we should not be setting configurable constants here, but rather when we try to call the script.
-    // if (configurableConstants) {
-    //   this.setConfigurableConstants(configurableConstants);
-    // }
-
     // Generate the associated create tx for the loader contract
     const blobId = hash(this.bytecode);
     const bloTransactionRequest = this.blobTransactionRequest({
@@ -458,12 +453,6 @@ export default class ContractFactory {
         const blobTx = await account.sendTransaction(fundedBlobRequest);
         result = await blobTx.waitForResult();
       } catch (err: unknown) {
-        // Core will throw for blobs that have already been uploaded, but the blobId
-        // is still valid so we can use this for the loader contract
-        // if ((<Error>err).message.indexOf(`BlobId is already taken ${blobId}`) > -1) {
-        //   uploadedBlobs.push(blobId);
-        // }
-
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
 
