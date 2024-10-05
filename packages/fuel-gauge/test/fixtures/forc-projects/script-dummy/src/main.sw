@@ -4,7 +4,7 @@ configurable {
     PIN: u64 = 1337,
 }
 
-fn main() -> u8 {
+fn main(input: u8) -> u8 {
     log(PIN);
-    99
+    input
 }
