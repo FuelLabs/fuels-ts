@@ -385,7 +385,7 @@ export default class ContractFactory {
   }> {
     const account = this.getAccount();
 
-    // TODO: Implement me
+    // TODO: We think that we should not be setting configurable constants here, but rather when we try to call the script.
     // if (configurableConstants) {
     //   this.setConfigurableConstants(configurableConstants);
     // }
