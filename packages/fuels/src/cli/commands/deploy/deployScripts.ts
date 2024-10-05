@@ -24,8 +24,9 @@ export async function deployScript(
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const factory = new ContractFactory(bytecode, abi, wallet);
 
-  const { waitForResult, blobId } = await factory.deployAsBlobTxForScript(configurableConstants);
-  const { loaderBytecode } = await waitForResult();
+  const { waitForResult, blobId, loaderBytecode } =
+    await factory.deployAsBlobTxForScript(configurableConstants);
+  await waitForResult();
 
   return {
     blobId,
