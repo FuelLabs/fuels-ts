@@ -25,6 +25,7 @@ export async function deployPredicate(
 
   const { waitForResult, predicateRoot, loaderBytecode, loaderBytecodeHexlified } =
     await factory.deployAsBlobTxForPredicate(configurableConstants);
+
   await waitForResult();
 
   return {
