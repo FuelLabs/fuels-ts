@@ -4,7 +4,6 @@ configurable {
     SECRET_NUMBER: u64 = 9000,
 }
 
-fn main() -> bool {
-    log(SECRET_NUMBER);
-    false
+fn main(arg: u64) -> bool {
+    SECRET_NUMBER == arg
 }
