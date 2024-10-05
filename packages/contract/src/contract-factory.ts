@@ -27,6 +27,7 @@ import {
   getLoaderInstructions,
   getPredicateScriptLoaderInstructions,
   getContractChunks,
+  getDataOffset,
 } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
@@ -43,6 +44,18 @@ export type DeployContractOptions = {
   configurableConstants?: { [name: string]: unknown };
   chunkSizeMultiplier?: number;
 } & CreateTransactionRequestLike;
+
+function getDataOffset(binary: Uint8Array): number {
+  // Extract 8 bytes starting from index 8 (similar to binary[8..16] in Rust)
+  const OFFSET_INDEX = 8;
+  const dataView = new DataView(binary.buffer, OFFSET_INDEX, 8);
+
+  // Read the value as a 64-bit big-endian unsigned integer
+  const dataOffset = dataView.getBigUint64(0, false); // false means big-endian
+
+  // Convert the BigInt to a regular number (safe as long as the offset is within Number.MAX_SAFE_INTEGER)
+  return Number(dataOffset);
+}
 
 export type DeployContractResult<TContract extends Contract = Contract> = {
   contractId: string;
@@ -411,11 +424,19 @@ export default class ContractFactory {
     loaderBytecodeHexlified: string;
   }> {
     const account = this.getAccount();
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
+    }
+
+    const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
+
+    const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
 
     // Generate the associated create tx for the loader contract
-    const blobId = hash(this.bytecode);
+    const blobId = hash(byteCodeWithoutDataSection);
+
     const bloTransactionRequest = this.blobTransactionRequest({
-      bytecode: this.bytecode,
+      bytecode: byteCodeWithoutDataSection,
     });
     const loaderBytecode = getPredicateScriptLoaderInstructions(
       arrayify(this.bytecode),

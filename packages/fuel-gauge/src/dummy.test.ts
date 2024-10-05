@@ -1,21 +1,15 @@
 /* eslint-disable no-console */
+import { readFileSync } from 'fs';
 import { bn, ContractFactory, hexlify, Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
+import { join } from 'path';
 
 import { ScriptDummy } from '../test/typegen';
 
 /**
  * @group node
- * @group browser
  */
 describe('first try', () => {
-  function getDataOffset(binary: Uint8Array): number {
-    const buffer = binary.buffer.slice(binary.byteOffset + 8, binary.byteOffset + 16);
-    const dataView = new DataView(buffer);
-    const dataOffset = dataView.getBigUint64(0, false); // big-endian
-    return Number(dataOffset);
-  }
-
   it('should deploy blob for a script transaction and submit it', async () => {
     using launch = await launchTestNode();
 
@@ -47,7 +41,7 @@ describe('first try', () => {
 
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const configurable = {
-      PIN: 1000,
+      SECRET_NUMBER: 1000,
     };
     const { waitForResult } = await factory.deployAsBlobTxForScript(configurable);
 
@@ -63,7 +57,7 @@ describe('first try', () => {
     expect(logs[0].toNumber()).toBe(1000);
   });
 
-  it.skip('Should call another script after deploying script with configurable using script program', async () => {
+  it('Should call another script after deploying script with configurable using script program', async () => {
     using launch = await launchTestNode();
 
     const {
@@ -75,7 +69,7 @@ describe('first try', () => {
     console.log('Script Dummy Bytecode', hexlify(ScriptDummy.bytecode));
     const newScript = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     newScript.setConfigurableConstants({
-      PIN: 1000,
+      SECRET_NUMBER: 1000,
     });
     console.log('New Script Bytecode', hexlify(newScript.bytes));
 
@@ -85,7 +79,7 @@ describe('first try', () => {
 
     const preScript = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const otherConfigurable = {
-      PIN: 4592,
+      SECRET_NUMBER: 4592,
     };
     preScript.setConfigurableConstants(otherConfigurable);
 
@@ -113,5 +107,41 @@ describe('first try', () => {
 
     expect(value).toBe(33);
     expect(logs).toBe([bn(4592)]);
+  });
+
+  it.only('Should work with structs', async () => {
+    using launch = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launch;
+    const bytecode = readFileSync(
+      join(
+        process.cwd(),
+        'packages/fuel-gauge/test/fixtures/forc-projects/script-dummy/out/release/script-dummy.bin'
+      )
+    );
+    const factory = new ContractFactory(bytecode, ScriptDummy.abi, wallet);
+    const configurable = {
+      SECRET_NUMBER: 10001,
+    };
+    const { waitForResult } = await factory.deployAsBlobTxForScript(configurable);
+    const { loaderBytecode } = await waitForResult();
+
+    expect(loaderBytecode).to.not.equal(hexlify(bytecode));
+
+    const script = new Script(bytecode, ScriptDummy.abi, wallet, loaderBytecode);
+
+    script.setConfigurableConstants(configurable);
+
+    const { waitForResult: waitForResult2 } = await script.functions
+      .main({
+        field_a: {
+          B: 99,
+        },
+        field_b: '0x1111111111111111111111111111111111111111111111111111111111111111',
+      })
+      .call();
+    const { value } = await waitForResult2();
+    expect(bn(value as unknown as string).eq(bn(10001))).toBe(true);
   });
 });
