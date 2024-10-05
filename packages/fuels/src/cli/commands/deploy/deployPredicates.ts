@@ -3,7 +3,12 @@ import { ContractFactory } from '@fuel-ts/contract';
 import { debug, log } from 'console';
 import { readFileSync } from 'fs';
 
-import { getABIPath, getBinaryPath, getContractName } from '../../config/forcUtils';
+import {
+  getABIPath,
+  getBinaryPath,
+  getContractName,
+  getPredicateName,
+} from '../../config/forcUtils';
 import type { DeployedPredicate, FuelsConfig } from '../../types';
 
 import { createWallet } from './createWallet';
@@ -51,7 +56,7 @@ export async function deployPredicates(config: FuelsConfig) {
     const predicatePath = config.predicates[i];
     const binaryPath = getBinaryPath(predicatePath, config);
     const abiPath = getABIPath(predicatePath, config);
-    const projectName = getContractName(predicatePath);
+    const projectName = getPredicateName(predicatePath);
 
     const { predicateRoot, loaderBytecode, loaderBytecodeHexlified } = await deployPredicate(
       wallet,

@@ -4,7 +4,7 @@ import { ContractFactory } from '@fuel-ts/contract';
 import { debug, log } from 'console';
 import { readFileSync } from 'fs';
 
-import { getBinaryPath, getABIPath, getContractName } from '../../config/forcUtils';
+import { getBinaryPath, getABIPath, getScriptName } from '../../config/forcUtils';
 import type { FuelsConfig, DeployedScript } from '../../types';
 
 import { createWallet } from './createWallet';
@@ -52,7 +52,7 @@ export async function deployScripts(config: FuelsConfig) {
     const scriptPath = config.scripts[i];
     const binaryPath = getBinaryPath(scriptPath, config);
     const abiPath = getABIPath(scriptPath, config);
-    const projectName = getContractName(scriptPath);
+    const projectName = getScriptName(scriptPath);
 
     const { blobId, loaderBytecode, loaderBytecodeHexlified } = await deployScript(
       wallet,
