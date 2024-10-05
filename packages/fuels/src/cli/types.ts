@@ -40,6 +40,12 @@ export type DeployedContract = {
   contractId: string;
 };
 
+export type DeployedScript = {
+  path: string;
+  blobId: string;
+  loaderBytecode: string;
+};
+
 export type ContractDeployOptions = {
   contracts: DeployedContract[];
   contractName: string;
