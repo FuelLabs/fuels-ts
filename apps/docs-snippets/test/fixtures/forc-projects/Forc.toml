@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "counter",
+  "counter-v2",
   "echo-enum",
   "liquidity-pool",
   "log-values",
@@ -34,4 +35,5 @@ members = [
   "input-output-types",
   "bytecode-input",
   "configurable-pin",
+  "proxy-contract",
 ]
