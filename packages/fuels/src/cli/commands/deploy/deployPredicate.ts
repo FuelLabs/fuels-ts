@@ -27,5 +27,5 @@ export async function deployPredicate(
     tomlContents,
   });
 
-  return Promise.resolve('predicate-id');
+  return Promise.resolve('predicate-loader-bytecode');
 }

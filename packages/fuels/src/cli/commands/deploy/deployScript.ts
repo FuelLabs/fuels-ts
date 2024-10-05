@@ -27,5 +27,5 @@ export async function deployScript(
     tomlContents,
   });
 
-  return Promise.resolve('script-id');
+  return Promise.resolve('script-loader-bytecode');
 }
