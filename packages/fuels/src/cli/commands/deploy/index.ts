@@ -1,4 +1,5 @@
 import type { FuelsConfig } from '../../types';
+import { generateTypes } from '../build/generateTypes';
 
 import { deployContracts } from './deployContracts';
 import { deployPredicates } from './deployPredicates';
@@ -13,6 +14,7 @@ export async function deploy(config: FuelsConfig) {
    */
   const contractIds = await deployContracts(config);
   await saveContractIds(contractIds, config.output);
+
   config.onDeploy?.(config, contractIds);
 
   /**
@@ -26,6 +28,12 @@ export async function deploy(config: FuelsConfig) {
    */
   const predicates = await deployPredicates(config);
   savePredicateFiles(predicates, config);
+
+  /**
+   * After deploying scripts/predicates, we need to
+   * re-generate factory classe with the loader coee
+   */
+  await generateTypes(config);
 
   return contractIds;
 }
