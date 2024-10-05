@@ -26,6 +26,7 @@ export async function deployScript(
 
   const { waitForResult, blobId, loaderBytecode, loaderBytecodeHexlified } =
     await factory.deployAsBlobTxForScript(configurableConstants);
+
   await waitForResult();
 
   return {
