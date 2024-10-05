@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { readFileSync } from 'fs';
-import { bn, ContractFactory, hexlify, Script } from 'fuels';
+import { bn, ContractFactory, hexlify, Predicate, Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 import { join } from 'path';
 
-import { ScriptDummy } from '../test/typegen';
+import { ScriptDummy, PredicateFalseConfigurable } from '../test/typegen';
 
 /**
  * @group node
@@ -66,12 +66,10 @@ describe('first try', () => {
 
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
 
-    console.log('Script Dummy Bytecode', hexlify(ScriptDummy.bytecode));
     const newScript = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     newScript.setConfigurableConstants({
       SECRET_NUMBER: 1000,
     });
-    console.log('New Script Bytecode', hexlify(newScript.bytes));
 
     const { waitForResult } = await factory.deployAsBlobTxForScript();
 
@@ -82,19 +80,6 @@ describe('first try', () => {
       SECRET_NUMBER: 4592,
     };
     preScript.setConfigurableConstants(otherConfigurable);
-
-    console.log('###########################################');
-    console.log('preScript: ', hexlify(preScript.bytes));
-    console.log('###########################################');
-    console.log('loaderBytecode: ', loaderBytecode);
-    console.log('###########################################');
-
-    // const configurablesOffset = getDataOffset(preScript.bytes);
-    // const configurablesOffsetInLoader = getDataOffset(arrayify(loaderBytecode));
-    // const setConfigurablesBytes = preScript.bytes.slice(configurablesOffset);
-    // const dataSectionLenBytes = new Uint8Array(8);
-    // const dataView = new DataView(dataSectionLenBytes.buffer);
-    // dataView.setBigUint64(0, BigInt(setConfigurablesBytes.length), false); // false for big-endian
 
     const { waitForResult: waitForResult2 } = await preScript.functions.main(33).call();
 
@@ -109,7 +94,7 @@ describe('first try', () => {
     expect(logs).toBe([bn(4592)]);
   });
 
-  it.only('Should work with structs', async () => {
+  it('Should work with structs', async () => {
     using launch = await launchTestNode();
     const {
       wallets: [wallet],
@@ -143,5 +128,30 @@ describe('first try', () => {
       .call();
     const { value } = await waitForResult2();
     expect(bn(value as unknown as string).eq(bn(10001))).toBe(true);
+  });
+
+  it('Should work with predicates', async () => {
+    using launch = await launchTestNode();
+    const {
+      wallets: [wallet],
+    } = launch;
+
+    const factory = new ContractFactory(
+      PredicateFalseConfigurable.bytecode,
+      PredicateFalseConfigurable.abi,
+      wallet
+    );
+
+    const configurable = {
+      SECRET_NUMBER: 10001,
+    };
+    const { waitForResult } = await factory.deployAsBlobTxForScript(configurable);
+    const { loaderBytecode } = await waitForResult();
+
+    expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
+    // Create a new Predicate instance with the loader bytecode
+    // Set the configurable constants
+    // Test to ensure that the configurable constants are set correctly
+    // const predicate = new Predicate(loaderBytecode, PredicateFalseConfigurable.abi, wallet);
   });
 });

@@ -3,7 +3,7 @@ import { Interface } from '@fuel-ts/abi-coder';
 import { Address } from '@fuel-ts/address';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import type { BytesLike } from '@fuel-ts/interfaces';
-import { arrayify, hexlify } from '@fuel-ts/utils';
+import { arrayify, hexlify, concat } from '@fuel-ts/utils';
 
 import type { FakeResources } from '../account';
 import { Account } from '../account';
@@ -35,7 +35,15 @@ export type PredicateParams<
   abi?: JsonAbi;
   data?: TData;
   configurableConstants?: TConfigurables;
+  loaderBytecode?: BytesLike;
 };
+
+function getDataOffset(binary: Uint8Array): number {
+  const buffer = binary.buffer.slice(binary.byteOffset + 8, binary.byteOffset + 16);
+  const dataView = new DataView(buffer);
+  const dataOffset = dataView.getBigUint64(0, false); // big-endian
+  return Number(dataOffset);
+}
 
 /**
  * `Predicate` provides methods to populate transaction data with predicate information and sending transactions with them.
@@ -47,6 +55,7 @@ export class Predicate<
   bytes: Uint8Array;
   predicateData: TData = [] as unknown as TData;
   interface?: Interface;
+  loaderBytecode: BytesLike = '';
 
   /**
    * Creates an instance of the Predicate class.
@@ -63,6 +72,7 @@ export class Predicate<
     provider,
     data,
     configurableConstants,
+    loaderBytecode = '',
   }: PredicateParams<TData, TConfigurables>) {
     const { predicateBytes, predicateInterface } = Predicate.processPredicateData(
       bytecode,
@@ -74,6 +84,7 @@ export class Predicate<
 
     this.bytes = predicateBytes;
     this.interface = predicateInterface;
+    this.loaderBytecode = loaderBytecode;
     if (data !== undefined && data.length > 0) {
       this.predicateData = data;
     }
@@ -230,7 +241,8 @@ export class Predicate<
   private static setConfigurableConstants(
     bytes: Uint8Array,
     configurableConstants: { [name: string]: unknown },
-    abiInterface?: Interface
+    abiInterface?: Interface,
+    loaderBytecode?: BytesLike
   ) {
     const mutatedBytes = bytes;
 
@@ -263,6 +275,22 @@ export class Predicate<
 
         mutatedBytes.set(encoded, offset);
       });
+
+      if (loaderBytecode) {
+        const offset = getDataOffset(bytes);
+
+        // update the dataSection here as necessary (with configurables)
+        const dataSection = mutatedBytes.slice(offset);
+
+        const dataSectionLen = dataSection.length;
+
+        // Convert dataSectionLen to big-endian bytes
+        const dataSectionLenBytes = new Uint8Array(8);
+        const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
+        dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
+
+        mutatedBytes.set(concat([loaderBytecode, dataSectionLenBytes, dataSection]));
+      }
     } catch (err) {
       throw new FuelError(
         ErrorCode.INVALID_CONFIGURABLE_CONSTANTS,

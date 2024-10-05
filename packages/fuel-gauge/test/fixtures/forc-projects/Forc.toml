@@ -42,6 +42,7 @@ members = [
   "predicate-validate-transfer",
   "predicate-vector-types",
   "predicate-with-configurable",
+  "predicate-false-configurable",
   "proxy-contract",
   "raw-slice-contract",
   "reentrant-bar",
