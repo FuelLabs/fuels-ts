@@ -6,7 +6,7 @@ const REG_START_OF_LOADED_CODE = 0x11;
 const REG_GENERAL_USE = 0x12;
 const WORD_SIZE = 8; // size in bytes
 
-function getDataOffset(binary: Uint8Array): number {
+export function getDataOffset(binary: Uint8Array): number {
   // Extract 8 bytes starting from index 8 (similar to binary[8..16] in Rust)
   const OFFSET_INDEX = 8;
   const dataView = new DataView(binary.buffer, OFFSET_INDEX, 8);

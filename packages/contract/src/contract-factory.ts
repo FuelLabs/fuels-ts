@@ -27,6 +27,7 @@ import {
   getLoaderInstructions,
   getPredicateScriptLoaderInstructions,
   getContractChunks,
+  getDataOffset,
 } from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
@@ -423,14 +424,19 @@ export default class ContractFactory {
     loaderBytecodeHexlified: string;
   }> {
     const account = this.getAccount();
-    const originalBytes = arrayify(this.bytecode);
-    const offset = getDataOffset(originalBytes);
-    const byteWithoutData = originalBytes.slice(0, offset);
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
+    }
+
+    const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
+
+    const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
 
     // Generate the associated create tx for the loader contract
-    const blobId = hash(byteWithoutData);
+    const blobId = hash(byteCodeWithoutDataSection);
+
     const bloTransactionRequest = this.blobTransactionRequest({
-      bytecode: byteWithoutData,
+      bytecode: byteCodeWithoutDataSection,
     });
     const loaderBytecode = getPredicateScriptLoaderInstructions(
       arrayify(this.bytecode),

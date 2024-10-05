@@ -111,12 +111,7 @@ describe('script-deploy', () => {
     const { loaderBytecode } = await waitForResult();
 
     // Instantiate script with loader bytecode
-    const deployedScript = new Script(
-      ScriptDummy.bytecode,
-      ScriptDummy.abi,
-      wallet,
-      loaderBytecode
-    );
+    const deployedScript = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
 
     deployedScript.setConfigurableConstants(inputs.deployedConfigurableConstants);
     const { waitForResult: deployedScriptWaitForResult } = await deployedScript.functions
