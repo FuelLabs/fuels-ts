@@ -1,7 +1,6 @@
 import type { WalletUnlocked } from '@fuel-ts/account';
 import type { DeployContractOptions } from '@fuel-ts/contract';
 import { ContractFactory } from '@fuel-ts/contract';
-import { hash } from '@fuel-ts/hasher';
 import { debug, log } from 'console';
 import { readFileSync } from 'fs';
 
@@ -21,15 +20,15 @@ export async function deployScript(
 ) {
   debug(`Deploying script for ABI: ${abiPath}`);
 
-  const bytecode = readFileSync(binaryPath, 'utf-8');
+  const bytecode = readFileSync(binaryPath);
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const factory = new ContractFactory(bytecode, abi, wallet);
 
-  const { waitForResult } = await factory.deployAsBlobTxForScript(configurableConstants);
+  const { waitForResult, blobId } = await factory.deployAsBlobTxForScript(configurableConstants);
   const { loaderBytecode } = await waitForResult();
 
   return {
-    blobId: hash(bytecode),
+    blobId,
     loaderBytecode,
   };
 }
