@@ -27,9 +27,8 @@ export function getPredicateScriptLoaderInstructions(
   // 4. the data_section (updated with configurables as needed)
   const offset = getDataOffset(originalBinary);
 
-  const dataSection = originalBinary.slice(offset);
-
   // update the dataSection here as necessary (with configurables)
+  const dataSection = originalBinary.slice(offset);
 
   const dataSectionLen = dataSection.length;
 
@@ -90,7 +89,7 @@ export function getPredicateScriptLoaderInstructions(
   // Convert dataSectionLen to big-endian bytes
   const dataSectionLenBytes = new Uint8Array(8);
   const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
-  dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false); // false for big-endian
+  dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
 
   return concat([instructionBytes, blobBytes, dataSectionLenBytes, dataSection]);
 }

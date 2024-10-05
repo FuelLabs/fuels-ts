@@ -13,7 +13,6 @@ import {
   BlobTransactionRequest,
   TransactionStatus,
   calculateGasFee,
-  ScriptTransactionRequest,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -22,7 +21,7 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify, isDefined } from '@fuel-ts/utils';
+import { arrayify, isDefined, hexlify } from '@fuel-ts/utils';
 
 import {
   getLoaderInstructions,
@@ -377,42 +376,26 @@ export default class ContractFactory {
     return { waitForResult, contractId, waitForTransactionId };
   }
 
-  async deployAsBlobTxForScript(deployOptions: DeployContractOptions = {}) {
+  async deployAsBlobTxForScript(configurableConstants: { [name: string]: unknown } = {}): Promise<{
+    waitForResult: () => Promise<{
+      transactionResult: TransactionResult<TransactionType.Blob>;
+      loaderBytecode: string;
+    }>;
+  }> {
     const account = this.getAccount();
-    const { configurableConstants } = deployOptions;
     if (configurableConstants) {
       this.setConfigurableConstants(configurableConstants);
     }
 
-    // Generate the chunks based on the maximum chunk size and create blob txs
-    const chunkSize = this.getMaxChunkSize(deployOptions, 1);
-    const chunks = getContractChunks(arrayify(this.bytecode), chunkSize).map((c) => {
-      const transactionRequest = this.blobTransactionRequest({
-        bytecode: c.bytecode,
-      });
-      return {
-        ...c,
-        transactionRequest,
-        blobId: transactionRequest.blobId,
-      };
-    });
-
     // Generate the associated create tx for the loader contract
-    const blobIds = [chunks[0].blobId];
-    const blobId = chunks[0].blobId;
-    const bloTransactionRequest = chunks[0].transactionRequest;
+    const blobId = hash(this.bytecode);
+    const bloTransactionRequest = this.blobTransactionRequest({
+      bytecode: this.bytecode,
+    });
     const loaderBytecode = getPredicateScriptLoaderInstructions(
       arrayify(this.bytecode),
       arrayify(blobId)
     );
-    const transactionRequest = new ScriptTransactionRequest({
-      script: loaderBytecode,
-    });
-
-    // BlobIDs only need to be uploaded once and we can check if they exist on chain
-    const uniqueBlobIds = [...new Set(blobIds)];
-    const uploadedBlobIds = await account.provider.getBlobs(uniqueBlobIds);
-    const blobIdsToUpload = uniqueBlobIds.filter((id) => !uploadedBlobIds.includes(id));
 
     // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
@@ -420,25 +403,15 @@ export default class ContractFactory {
     const gasPrice = await account.provider.estimateGasPrice(10);
     const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
 
-    if (blobIdsToUpload.includes(blobIds[0])) {
-      const minGas = bloTransactionRequest.calculateMinGas(chainInfo);
-      const minFee = calculateGasFee({
-        gasPrice,
-        gas: minGas,
-        priceFactor,
-        tip: bloTransactionRequest.tip,
-      }).add(1);
-
-      totalCost = totalCost.add(minFee);
-    }
-    const createMinGas = transactionRequest.calculateMinGas(chainInfo);
-    const createMinFee = calculateGasFee({
+    const minGas = bloTransactionRequest.calculateMinGas(chainInfo);
+    const minFee = calculateGasFee({
       gasPrice,
-      gas: createMinGas,
+      gas: minGas,
       priceFactor,
-      tip: transactionRequest.tip,
+      tip: bloTransactionRequest.tip,
     }).add(1);
-    totalCost = totalCost.add(createMinFee);
+
+    totalCost = totalCost.add(minFee);
 
     if (totalCost.gt(await account.getBalance())) {
       throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
@@ -446,13 +419,8 @@ export default class ContractFactory {
 
     // Transaction id is unset until we have funded the create tx, which is dependent on the blob txs
     const waitForResult = async () => {
-      // Upload the blob if it hasn't been uploaded yet. Duplicate blob IDs will fail gracefully.
-      const uploadedBlobs: string[] = [];
       // Deploy the chunks as blob txs
-      const fundedBlobRequest = await this.fundTransactionRequest(
-        bloTransactionRequest,
-        deployOptions
-      );
+      const fundedBlobRequest = await this.fundTransactionRequest(bloTransactionRequest);
 
       let result: TransactionResult<TransactionType.Blob>;
 
@@ -473,20 +441,7 @@ export default class ContractFactory {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
 
-      uploadedBlobs.push(blobId);
-
-      const txCost = await account.getTransactionCost(transactionRequest);
-
-      transactionRequest.maxFee = txCost.maxFee;
-      transactionRequest.gasLimit = txCost.gasUsed;
-
-      await account.fund(transactionRequest, txCost);
-
-      const transactionResponse = await account.sendTransaction(transactionRequest);
-      const transactionResult = await transactionResponse.waitForResult<TransactionType.Create>();
-      // const contract = new Contract(contractId, this.interface, account) as TContract;
-
-      return { transactionResult };
+      return { transactionResult: result, loaderBytecode: hexlify(loaderBytecode) };
     };
 
     return { waitForResult };
