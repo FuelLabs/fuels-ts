@@ -11,7 +11,7 @@ import type { FuelsConfig, DeployedContract } from '../../types';
 import { debug, log } from '../../utils/logger';
 
 import { createWallet } from './createWallet';
-import { deployContract } from './deployContract';
+import { deployContract } from './deployContracts';
 import { getDeployConfig } from './getDeployConfig';
 import { saveContractIds } from './saveContractIds';
 
