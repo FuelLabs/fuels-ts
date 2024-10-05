@@ -1,9 +1,13 @@
-import type { TransactionScript } from 'fuels';
+/* eslint-disable no-console */
 import { ContractFactory, hexlify, Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ScriptDummy } from '../test/typegen';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('first try', () => {
   it('should deploy blob for a script transaction and submit it', async () => {
     using launch = await launchTestNode();
@@ -15,19 +19,9 @@ describe('first try', () => {
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
 
-    const { transactionResult } = await waitForResult();
+    const { loaderBytecode } = await waitForResult();
 
-    const scriptBytes = hexlify(ScriptDummy.bytecode);
-    const actualBytes = hexlify(
-      (transactionResult.transaction as unknown as TransactionScript).script
-    );
-
-    console.log(
-      'transaciton result receipts for no set configurable : ',
-      transactionResult.receipts
-    );
-
-    expect(scriptBytes).not.equal(actualBytes);
+    expect(loaderBytecode).to.not.equal(hexlify(ScriptDummy.bytecode));
   });
 
   it('Should work with configurables', async () => {
@@ -41,20 +35,11 @@ describe('first try', () => {
     const configurable = {
       PIN: 1000,
     };
-    const { waitForResult } = await factory.deployAsBlobTxForScript({
-      configurableConstants: configurable,
-    });
+    const { waitForResult } = await factory.deployAsBlobTxForScript(configurable);
 
-    const { transactionResult } = await waitForResult();
+    const { loaderBytecode } = await waitForResult();
 
-    const scriptBytes = hexlify(ScriptDummy.bytecode);
-    const actualBytes = hexlify(
-      (transactionResult.transaction as unknown as TransactionScript).script
-    );
-
-    console.log('transaciton result receipts for set config: ', transactionResult.receipts);
-
-    expect(scriptBytes).not.equal(actualBytes);
+    expect(loaderBytecode).to.not.equal(hexlify(ScriptDummy.bytecode));
   });
 
   it('Should call another script after deploying script with configurable using script program', async () => {
@@ -65,16 +50,12 @@ describe('first try', () => {
     } = launch;
 
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-    const configurable = {
-      PIN: 1000,
-    };
-    const { waitForResult } = await factory.deployAsBlobTxForScript({
-      configurableConstants: configurable,
-    });
 
-    const { transactionResult } = await waitForResult();
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
 
-    const script = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
+    const { loaderBytecode } = await waitForResult();
+
+    const script = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet, loaderBytecode);
 
     const otherConfigurable = {
       PIN: 4592,
@@ -86,6 +67,9 @@ describe('first try', () => {
 
     const { transactionResult: transactionResult2 } = await waitForResult2();
 
-    console.log('transaciton result receipts for third test config: ', transactionResult2.logs);
+    // The logs should reflect the new configurable that was set
+    console.log('transaction result 2 logs: ', transactionResult2.logs);
+    console.log('script bytes: ', hexlify(transactionResult2.transaction.script));
+    console.log('loader bytecode: ', loaderBytecode);
   });
 });
