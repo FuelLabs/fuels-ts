@@ -397,6 +397,7 @@ export default class ContractFactory {
     const bloTransactionRequest = this.blobTransactionRequest({
       bytecode: this.bytecode,
     });
+
     const loaderBytecode = getPredicateScriptLoaderInstructions(
       arrayify(this.bytecode),
       arrayify(blobId)

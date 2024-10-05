@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
-import { bn, ContractFactory, hexlify, Script } from 'fuels';
+import { readFileSync, writeFileSync } from 'fs';
+import { arrayify, bn, ContractFactory, hexlify, Script } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
+import { join } from 'path';
 
 import { ScriptDummy } from '../test/typegen';
 
@@ -31,29 +33,46 @@ describe('first try', () => {
     expect(logs[0].toNumber()).toBe(1337);
   });
 
-  it('Should work with configurables', async () => {
+  it.only('Should work with configurables', async () => {
     using launch = await launchTestNode();
 
     const {
       wallets: [wallet],
     } = launch;
 
-    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
+    const bytecode = readFileSync(
+      join(
+        process.cwd(),
+        'packages/fuel-gauge/test/fixtures/forc-projects/script-dummy/out/release/script-dummy.bin'
+      )
+    );
+
+    const factory = new ContractFactory(bytecode, ScriptDummy.abi, wallet);
+
     const configurable = {
-      PIN: 1000,
+      SECRET_NUMBER: 10001,
     };
+
     const { waitForResult } = await factory.deployAsBlobTxForScript(configurable);
 
     const { loaderBytecode } = await waitForResult();
+    expect(loaderBytecode).to.not.equal(hexlify(bytecode));
 
-    expect(loaderBytecode).to.not.equal(hexlify(ScriptDummy.bytecode));
+    const script = new Script(bytecode, ScriptDummy.abi, wallet, loaderBytecode);
 
-    const script = new Script(loaderBytecode, ScriptDummy.abi, wallet);
+    script.setConfigurableConstants(configurable);
 
-    const { waitForResult: waitForResult2 } = await script.functions.main(54).call();
+    const { waitForResult: waitForResult2 } = await script.functions
+      .main({
+        field_a: {
+          B: 99,
+        },
+        field_b: '0x1111111111111111111111111111111111111111111111111111111111111111',
+      })
+      .call();
     const { value, logs } = await waitForResult2();
     expect(value).toBe(54);
-    expect(logs[0].toNumber()).toBe(1000);
+    expect(logs[0].toNumber()).toBe(10001);
   });
 
   it('Should call another script after deploying script with configurable using script program', async () => {

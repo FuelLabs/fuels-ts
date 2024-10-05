@@ -1,6 +1,7 @@
 import { InstructionSet } from '@fuel-ts/program';
 import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
+import { writeFileSync } from 'fs';
 
 const BLOB_ID_SIZE = 32;
 const REG_ADDRESS_OF_DATA_AFTER_CODE = 0x10;
@@ -90,6 +91,20 @@ export function getPredicateScriptLoaderInstructions(
   const dataSectionLenBytes = new Uint8Array(8);
   const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
   dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
+
+  writeFileSync(
+    'bytecodeSplit.json',
+    JSON.stringify(
+      {
+        instructionBytes: Array.from(instructionBytes),
+        blobBytes: Array.from(blobBytes),
+        dataSectionLenBytes: Array.from(dataSectionLenBytes),
+        dataSection: Array.from(dataSection),
+      },
+      undefined,
+      2
+    )
+  );
 
   return concat([instructionBytes, blobBytes, dataSectionLenBytes, dataSection]);
 }
