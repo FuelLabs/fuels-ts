@@ -47,6 +47,13 @@ export type DeployedScript = {
   loaderBytecodeHexlified: string;
 };
 
+export type DeployedPredicate = {
+  path: string;
+  predicateRoot: string;
+  loaderBytecode: Uint8Array;
+  loaderBytecodeHexlified: string;
+};
+
 export type ContractDeployOptions = {
   contracts: DeployedContract[];
   contractName: string;
