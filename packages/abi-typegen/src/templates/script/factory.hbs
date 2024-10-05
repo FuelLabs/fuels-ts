@@ -54,15 +54,20 @@ export type {{capitalizedName}}Configurables = Partial<{
 const abi = {{abiJsonString}};
 
 const originalBytecode = decompressBytecode('{{compressedOriginalBytecode}}');
-const loaderBytecode = decompressBytecode('{{compressedLoaderBytecode}}')
 
-export class {{capitalizedName}}Deployed extends Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
+export class {{capitalizedName}}Factory {
 
   static readonly abi = abi;
   static readonly originalBytecode = originalBytecode;
-  static readonly loaderBytecode = loaderBytecode;
 
-  constructor(wallet: Account) {
-    super(originalBytecode, abi, wallet, loaderBytecode);
+  constructor(private wallet: Account) {
+
+  }
+
+  public deploy(): Promise<Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output>> {
+    const factory = new ContractFactory({{capitalizedName}}.originalBytecode, {{capitalizedName}}.abi, this.wallet);
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode } = await waitForResult();
+    return new Script({{capitalizedName}}.originalBytecode, {{capitalizedName}}.abi, this.wallet, loaderBytecode);
   }
 }

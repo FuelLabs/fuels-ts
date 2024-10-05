@@ -25,6 +25,7 @@ export type Paths = {
   contractsJsonPath: string;
   fooContractFactoryPath: string;
   upgradableContractPath: string;
+  scriptTruePath: string;
 };
 
 export function bootstrapProject(testFilepath: string) {
@@ -39,13 +40,19 @@ export function bootstrapProject(testFilepath: string) {
 
   cpSync(sampleWorkspaceDir, workspaceDir, { recursive: true });
 
+  // Workspace Dirs
   const contractsDir = join(workspaceDir, 'contracts');
   const contractsFooDir = join(contractsDir, 'foo');
   const scriptsDir = join(workspaceDir, 'scripts');
   const predicateDir = join(workspaceDir, 'predicate');
+
+  // Contract workspaces
   const fooContractMainPath = join(contractsDir, 'foo', 'src', 'main.sw');
   const upgradableContractPath = join(contractsDir, 'upgradable');
   const upgradableChunkedContractPath = join(contractsDir, 'upgradable-chunked');
+
+  // Predicate workspaces
+  const scriptTruePath = join(scriptsDir, 'script');
 
   const outputDir = join(root, 'output');
   const contractsJsonPath = join(outputDir, 'contract-ids.json');
@@ -70,6 +77,7 @@ export function bootstrapProject(testFilepath: string) {
     fuelCorePath,
     upgradableContractPath,
     upgradableChunkedContractPath,
+    scriptTruePath,
   };
 }
 

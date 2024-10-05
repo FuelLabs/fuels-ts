@@ -152,3 +152,13 @@ export const getStorageSlotsPath = (contractPath: string, { buildMode }: FuelsCo
   const projectName = getContractName(contractPath);
   return join(contractPath, `/out/${buildMode}/${projectName}-storage_slots.json`);
 };
+
+export const getScriptDeployedBinHash = (scriptPath: string, { buildMode }: FuelsConfig) => {
+  const projectName = getScriptName(scriptPath);
+  return join(scriptPath, `out/${buildMode}/${projectName}-deployed-bin-hash`);
+};
+
+export const getScriptLoaderBytecode = (scriptPath: string, { buildMode }: FuelsConfig) => {
+  const projectName = getScriptName(scriptPath);
+  return join(scriptPath, `out/${buildMode}/${projectName}.deployed.bin`);
+};

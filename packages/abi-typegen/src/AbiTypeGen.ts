@@ -41,17 +41,19 @@ export class AbiTypeGen {
     // Creates a `Abi` for each abi file
     this.abis = this.abiFiles.map((abiFile) => {
       const binFilepath = abiFile.path.replace('-abi.json', '.bin');
-      const relatedBinFile = this.binFiles.find(({ path }) => path === binFilepath);
+      const deployedBinFilepath = abiFile.path.replace('-abi.json', 'deployed.bin');
+      const relatedOriginalBinFile = this.binFiles.find(({ path }) => path === binFilepath);
+      const relatedLoadedBinFile = this.binFiles.find(({ path }) => path === deployedBinFilepath);
 
       const storageSlotFilepath = abiFile.path.replace('-abi.json', '-storage_slots.json');
       const relatedStorageSlotsFile = this.storageSlotsFiles.find(
         ({ path }) => path === storageSlotFilepath
       );
 
-      if (!relatedBinFile) {
+      if (!relatedOriginalBinFile) {
         validateBinFile({
           abiFilepath: abiFile.path,
-          binExists: !!relatedBinFile,
+          binExists: !!relatedOriginalBinFile,
           binFilepath,
           programType,
         });
@@ -60,7 +62,8 @@ export class AbiTypeGen {
       const abi = new Abi({
         filepath: abiFile.path,
         rawContents: JSON.parse(abiFile.contents as string),
-        hexlifiedBinContents: relatedBinFile?.contents,
+        hexlifiedOriginalBinContents: relatedOriginalBinFile?.contents,
+        hexlifiedLoaderBinContents: relatedLoadedBinFile?.contents,
         storageSlotsContents: relatedStorageSlotsFile?.contents,
         outputDir,
         programType,

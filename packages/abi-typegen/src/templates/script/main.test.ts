@@ -15,6 +15,11 @@ import { ProgramTypeEnum } from '../../types/enums/ProgramTypeEnum';
 
 import { renderMainTemplate } from './main';
 
+const mockAll = () => {
+  vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-original-bytecode-here');
+  vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-loaded-bytecode-here');
+};
+
 /**
  * @group node
  */
@@ -24,7 +29,7 @@ describe('main.ts', () => {
   });
 
   test('should render main template', () => {
-    vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
+    mockAll();
 
     const { versions, restore } = mockVersions();
 
@@ -33,7 +38,8 @@ describe('main.ts', () => {
 
     const abi = new Abi({
       filepath: './my-script-abi.json',
-      hexlifiedBinContents: '0x000',
+      hexlifiedOriginalBinContents: '0x000',
+      hexlifiedLoaderBinContents: '0x001',
       outputDir: 'stdout',
       rawContents,
       programType: ProgramTypeEnum.SCRIPT,
@@ -52,7 +58,7 @@ describe('main.ts', () => {
   });
 
   test('should render main template with configurables', () => {
-    vi.spyOn(utilsMod, 'compressBytecode').mockReturnValueOnce('0x-bytecode-here');
+    mockAll();
 
     const { versions, restore } = mockVersions();
 
@@ -61,7 +67,8 @@ describe('main.ts', () => {
 
     const abi = new Abi({
       filepath: './my-script-abi.json',
-      hexlifiedBinContents: '0x000',
+      hexlifiedOriginalBinContents: '0x000',
+      hexlifiedLoaderBinContents: '0x001',
       outputDir: 'stdout',
       rawContents,
       programType: ProgramTypeEnum.SCRIPT,
@@ -92,7 +99,8 @@ describe('main.ts', () => {
 
     const abi = new Abi({
       filepath: './my-script-abi.json',
-      hexlifiedBinContents: '0x000',
+      hexlifiedOriginalBinContents: '0x000',
+      hexlifiedLoaderBinContents: '0x001',
       outputDir: 'stdout',
       rawContents,
       programType: ProgramTypeEnum.SCRIPT,

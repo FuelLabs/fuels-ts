@@ -10,18 +10,13 @@ import { formatStructs } from '../utils/formatStructs';
 
 import mainTemplate from './main.hbs';
 
-export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions }) {
+export function renderFactoryTemplate(params: { abi: Abi; versions: BinaryVersions }) {
   const { abi, versions } = params;
 
   const { types, configurables } = abi;
 
-  const {
-    rawContents,
-    capitalizedName,
-    hexlifiedOriginalBinContents,
-    hexlifiedLoaderBinContents,
-    commonTypesInUse,
-  } = params.abi;
+  const { rawContents, capitalizedName, hexlifiedOriginalBinContents, commonTypesInUse } =
+    params.abi;
 
   const abiJsonString = JSON.stringify(rawContents, null, 2);
 
@@ -35,7 +30,7 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
   const { structs } = formatStructs({ types });
   const { imports } = formatImports({
     types,
-    baseMembers: ['Script', 'Account', 'decompressBytecode'],
+    baseMembers: ['Script', 'Account', 'decompressBytecode', 'ContractFactory'],
   });
 
   const { prefixedInputs: inputs, output } = func.attributes;
@@ -50,8 +45,8 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
       enums,
       abiJsonString,
       compressedOriginalBytecode: compressBytecode(hexlifiedOriginalBinContents),
-      compressedLoaderBytecode: compressBytecode(hexlifiedLoaderBinContents),
       capitalizedName,
+      className: capitalizedName,
       imports,
       configurables,
       commonTypesInUse: commonTypesInUse.join(', '),
