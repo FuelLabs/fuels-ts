@@ -381,11 +381,16 @@ export default class ContractFactory {
       transactionResult: TransactionResult<TransactionType.Blob>;
       loaderBytecode: string;
     }>;
+    blobId: string;
+    loaderBytecode: Uint8Array;
+    loaderBytecodeHexlified: string;
   }> {
     const account = this.getAccount();
-    if (configurableConstants) {
-      this.setConfigurableConstants(configurableConstants);
-    }
+
+    // TODO: We think that we should not be setting configurable constants here, but rather when we try to call the script.
+    // if (configurableConstants) {
+    //   this.setConfigurableConstants(configurableConstants);
+    // }
 
     // Generate the associated create tx for the loader contract
     const blobId = hash(this.bytecode);
@@ -444,7 +449,12 @@ export default class ContractFactory {
       return { transactionResult: result, loaderBytecode: hexlify(loaderBytecode) };
     };
 
-    return { waitForResult };
+    return {
+      waitForResult,
+      blobId,
+      loaderBytecode,
+      loaderBytecodeHexlified: hexlify(loaderBytecode),
+    };
   }
 
   /**

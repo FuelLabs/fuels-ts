@@ -43,7 +43,8 @@ export type DeployedContract = {
 export type DeployedScript = {
   path: string;
   blobId: string;
-  loaderBytecode: string;
+  loaderBytecode: Uint8Array;
+  loaderBytecodeHexlified: string;
 };
 
 export type ContractDeployOptions = {

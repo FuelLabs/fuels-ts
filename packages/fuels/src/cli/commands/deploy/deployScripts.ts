@@ -1,15 +1,10 @@
 import type { WalletUnlocked } from '@fuel-ts/account';
+import type { DeployContractOptions } from '@fuel-ts/contract';
+import { ContractFactory } from '@fuel-ts/contract';
 import { debug, log } from 'console';
+import { readFileSync } from 'fs';
 
-import type { ForcToml } from '../../config/forcUtils';
-import {
-  getClosestForcTomlDir,
-  getBinaryPath,
-  getABIPath,
-  getStorageSlotsPath,
-  getContractName,
-  readForcToml,
-} from '../../config/forcUtils';
+import { getBinaryPath, getABIPath, getContractName } from '../../config/forcUtils';
 import type { FuelsConfig, DeployedScript } from '../../types';
 
 import { createWallet } from './createWallet';
@@ -21,24 +16,23 @@ export async function deployScript(
   wallet: WalletUnlocked,
   binaryPath: string,
   abiPath: string,
-  storageSlotsPath: string,
-  scriptPath: string,
-  tomlContents: ForcToml
+  configurableConstants?: DeployContractOptions['configurableConstants']
 ) {
   debug(`Deploying script for ABI: ${abiPath}`);
 
-  // Implement script deploy
-  await Promise.resolve({
-    wallet,
-    binaryPath,
-    abiPath,
-    storageSlotsPath,
-    scriptPath,
-    tomlContents,
-  });
+  const bytecode = readFileSync(binaryPath);
+  const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
+  const factory = new ContractFactory(bytecode, abi, wallet);
 
-  // TODO: implement me
-  return 'deployed-blob-id';
+  const { waitForResult, blobId, loaderBytecode, loaderBytecodeHexlified } =
+    await factory.deployAsBlobTxForScript(configurableConstants);
+  await waitForResult();
+
+  return {
+    blobId,
+    loaderBytecode,
+    loaderBytecodeHexlified,
+  };
 }
 
 /**
@@ -55,25 +49,15 @@ export async function deployScripts(config: FuelsConfig) {
 
   for (let i = 0; i < scriptsLen; i++) {
     const scriptPath = config.scripts[i];
-    const forcTomlPath = getClosestForcTomlDir(scriptPath);
     const binaryPath = getBinaryPath(scriptPath, config);
     const abiPath = getABIPath(scriptPath, config);
-    const storageSlotsPath = getStorageSlotsPath(scriptPath, config);
     const projectName = getContractName(scriptPath);
-    // const scriptName = getContractCamelCase(scriptPath);
-    const tomlContents = readForcToml(forcTomlPath);
 
-    const blobId = await deployScript(
+    const { blobId, loaderBytecode, loaderBytecodeHexlified } = await deployScript(
       wallet,
       binaryPath,
-      abiPath,
-      storageSlotsPath,
-      scriptPath,
-      tomlContents
+      abiPath
     );
-
-    // TODO: implement me
-    const loaderBytecode = `0x${blobId}`;
 
     debug(`Script deployed: ${projectName} - ${blobId}`);
 
@@ -81,6 +65,7 @@ export async function deployScripts(config: FuelsConfig) {
       path: scriptPath,
       blobId,
       loaderBytecode,
+      loaderBytecodeHexlified,
     });
   }
 

@@ -1,3 +1,6 @@
+import { writeFileSync } from 'fs';
+
+import { getScriptName } from '../../config/forcUtils';
 import type { DeployedScript, FuelsConfig } from '../../types';
 
 export async function saveScriptFiles(scripts: DeployedScript[], _config: FuelsConfig) {
@@ -9,6 +12,15 @@ export async function saveScriptFiles(scripts: DeployedScript[], _config: FuelsC
      *    - Hash file for scripts
      *    - Root file for predicates
      */
+    const scriptName = getScriptName(path);
+    const buildMode = _config.buildMode;
+
+    const scriptBlobIdPath = `${path}/out/${buildMode}/${scriptName}-deployed-bin-hash`;
+    writeFileSync(scriptBlobIdPath, blobId);
+
+    const loaderBytecodePath = `${path}/out/${buildMode}/${scriptName}-deployed.bin`;
+    writeFileSync(loaderBytecodePath, loaderBytecode);
+
     await Promise.resolve({ path, blobId, loaderBytecode });
   }
 }
