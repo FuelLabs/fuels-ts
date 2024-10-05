@@ -8,4 +8,3 @@ fn main() -> u8 {
     log(PIN);
     99
 }
-
