@@ -1,8 +1,10 @@
 import type { FuelsConfig } from '../../types';
 
 import { deployContracts } from './deployContracts';
+import { deployPredicates } from './deployPredicates';
 import { deployScripts } from './deployScripts';
 import { saveContractIds } from './saveContractIds';
+import { savePredicateFiles } from './savePredicateFiles';
 import { saveScriptFiles } from './saveScriptFiles';
 
 export async function deploy(config: FuelsConfig) {
@@ -18,6 +20,12 @@ export async function deploy(config: FuelsConfig) {
    */
   const scripts = await deployScripts(config);
   await saveScriptFiles(scripts, config);
+
+  /**
+   * Deploy predicates and save deployed files to disk
+   */
+  const predicates = await deployPredicates(config);
+  await savePredicateFiles(predicates, config);
 
   // TODO: Implement me
   /**

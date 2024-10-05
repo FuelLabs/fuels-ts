@@ -18,7 +18,7 @@ export async function saveScriptFiles(scripts: DeployedScript[], _config: FuelsC
     const scriptBlobIdPath = `${path}/out/${buildMode}/${scriptName}-deployed-bin-hash`;
     writeFileSync(scriptBlobIdPath, blobId);
 
-    const loaderBytecodePath = `${path}/out/${buildMode}/${scriptName}-deployed.bin`;
+    const loaderBytecodePath = `${path}/out/${buildMode}/${scriptName}.deployed.bin`;
     writeFileSync(loaderBytecodePath, loaderBytecode);
 
     await Promise.resolve({ path, blobId, loaderBytecode });
