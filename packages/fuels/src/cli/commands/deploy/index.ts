@@ -16,33 +16,16 @@ export async function deploy(config: FuelsConfig) {
   config.onDeploy?.(config, contractIds);
 
   /**
-   * Deploy scripts and save deployed files to disk
+   * Deploy scripts and save deployed files to disk.
    */
   const scripts = await deployScripts(config);
-  await saveScriptFiles(scripts, config);
+  saveScriptFiles(scripts, config);
 
   /**
-   * Deploy predicates and save deployed files to disk
+   * Deploy predicates and save deployed files to disk.
    */
   const predicates = await deployPredicates(config);
-  await savePredicateFiles(predicates, config);
-
-  // TODO: Implement me
-  /**
-   * After saving the script files, we need to
-   * re-generate types for them.
-   *
-   * This time, the script will have two binaries:
-   *  - the original one
-   *  - the loader one (after deploy)
-   *
-   * At this point, we can generate one class per binary.
-   *
-   * This would look like:
-   *
-   *  import { MyScript, MyScriptDeployed } from './generated-types';
-   *
-   */
+  savePredicateFiles(predicates, config);
 
   return contractIds;
 }
