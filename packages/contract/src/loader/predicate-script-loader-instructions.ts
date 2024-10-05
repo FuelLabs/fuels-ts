@@ -4,7 +4,6 @@ const BLOB_ID_SIZE = 32;
 const REG_ADDRESS_OF_DATA_AFTER_CODE = 0x10;
 const REG_START_OF_LOADED_CODE = 0x11;
 const REG_GENERAL_USE = 0x12;
-const REG_START_OF_DATA_SECTION = 0x13;
 const WORD_SIZE = 8; // size in bytes
 
 function getDataOffset(binary: Uint8Array): number {
@@ -59,12 +58,8 @@ export function getPredicateScriptLoaderInstructions(
     // after we have read the length of the data section, we move the pointer to the actual
     // data by skipping WORD_SIZE bytes.
     asm.addi(REG_ADDRESS_OF_DATA_AFTER_CODE, REG_ADDRESS_OF_DATA_AFTER_CODE, WORD_SIZE),
-    // extend the stack
-    asm.cfe(REG_GENERAL_USE),
-    // move to the start of the newly allocated stack
-    asm.sub(REG_START_OF_DATA_SECTION, REG_SP, REG_GENERAL_USE),
-    // load the data section onto the stack
-    asm.mcp(REG_START_OF_DATA_SECTION, REG_ADDRESS_OF_DATA_AFTER_CODE, REG_GENERAL_USE),
+    // load the data section of the executable
+    asm.ldc(REG_ADDRESS_OF_DATA_AFTER_CODE, 0, REG_GENERAL_USE, 2),
     // Jump into the memory where the contract is loaded.
     // What follows is called _jmp_mem by the sway compiler.
     // Subtract the address contained in IS because jmp will add it back.
