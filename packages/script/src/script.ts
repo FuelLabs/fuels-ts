@@ -7,7 +7,7 @@ import { AbstractScript } from '@fuel-ts/interfaces';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import type { BN } from '@fuel-ts/math';
 import type { ScriptRequest } from '@fuel-ts/program';
-import { arrayify, concat } from '@fuel-ts/utils';
+import { arrayify } from '@fuel-ts/utils';
 
 import { ScriptInvocationScope } from './script-invocation-scope';
 
@@ -25,24 +25,6 @@ type Result<T> = {
 type InvokeMain<TArgs extends Array<any> = Array<any>, TReturn = any> = (
   ...args: TArgs
 ) => ScriptInvocationScope<TArgs, TReturn>;
-
-function getDataOffset(binary: Uint8Array): number {
-  const buffer = binary.buffer.slice(binary.byteOffset + 8, binary.byteOffset + 16);
-  const dataView = new DataView(buffer);
-  const dataOffset = dataView.getBigUint64(0, false); // big-endian
-  return Number(dataOffset);
-}
-
-function extractConfigurableBytes(offset: number, bytes: Uint8Array) {
-  const dataSection = bytes.slice(offset);
-  const dataSectionLen = dataSection.length;
-
-  // Convert dataSectionLen to big-endian bytes
-  const dataSectionLenBytes = new Uint8Array(8);
-  const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
-  dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
-  return concat([dataSectionLenBytes, dataSection]);
-}
 
 /**
  * `Script` provides a typed interface for interacting with the script program type.
@@ -79,27 +61,20 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   functions: { main: InvokeMain<TInput, TOutput> };
 
   /**
-   * The loader bytecode ofe the script.
-   */
-  loaderBytecode?: Uint8Array;
-
-  /**
    * Create a new instance of the Script class.
    *
    * @param bytecode - The compiled bytecode of the script.
    * @param abi - The ABI interface for the script.
    * @param account - The account associated with the script.
    */
-  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account, loaderBytecode?: BytesLike) {
+  constructor(bytecode: BytesLike, abi: JsonAbi, account: Account) {
     super();
     this.bytes = arrayify(bytecode);
     this.interface = new Interface(abi);
 
     this.provider = account.provider;
     this.account = account;
-    if (loaderBytecode) {
-      this.loaderBytecode = arrayify(loaderBytecode);
-    }
+
     this.functions = {
       main: (...args: TInput) =>
         new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
@@ -136,29 +111,6 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
 
         this.bytes.set(encoded, offset);
       });
-
-      if (this.loaderBytecode) {
-        const offset = getDataOffset(this.bytes);
-        // update the dataSection here as necessary (with configurables)
-        const dataSection = this.bytes.slice(offset);
-        const dataSectionLen = dataSection.length;
-
-        // Convert dataSectionLen to big-endian bytes
-        const dataSectionLenBytes = new Uint8Array(8);
-        const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
-        dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
-
-        /**
-         * When setting configurables on the loader, we need to strip the old data
-         * from the loader and replace it with the new data.
-         */
-        const cleanLoader = this.loaderBytecode.slice(
-          0,
-          this.loaderBytecode.length - dataSectionLenBytes.length - dataSectionLen
-        );
-
-        this.loaderBytecode = concat([cleanLoader, dataSectionLenBytes, dataSection]);
-      }
     } catch (err) {
       throw new FuelError(
         FuelError.CODES.INVALID_CONFIGURABLE_CONSTANTS,
