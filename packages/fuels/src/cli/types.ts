@@ -49,6 +49,7 @@ export type DeployedScript = {
 
 export type DeployedPredicate = {
   path: string;
+  offset: number; // TODO: This should not be in this way it should be one offset per configurable
   predicateRoot: string;
   loaderBytecode: Uint8Array;
   loaderBytecodeHexlified: string;

@@ -1,3 +1,4 @@
+import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
 const BLOB_ID_SIZE = 32;
@@ -21,7 +22,10 @@ export function getDataOffset(binary: Uint8Array): number {
 export function getPredicateScriptLoaderInstructions(
   originalBinary: Uint8Array,
   blobId: Uint8Array
-): Uint8Array {
+): {
+  bytecode: Uint8Array;
+  offset: number;
+} {
   // The final code is going to have this structure:
   // 1. loader instructions
   // 2. blob id
@@ -100,6 +104,7 @@ export function getPredicateScriptLoaderInstructions(
   ];
 
   const offset = getDataOffset(originalBinary);
+  console.log('Bytecode end', offset);
 
   // if the binary length is smaller than the offset
   if (originalBinary.length < offset) {
@@ -134,8 +139,13 @@ export function getPredicateScriptLoaderInstructions(
     const dataView = new DataView(dataSectionLenBytes.buffer);
     dataView.setBigUint64(0, BigInt(dataSection.length), false); // false for big-endian
 
+    const bytecodeLoader = new Uint8Array([...instructionBytes, ...blobBytes, ...dataSectionLenBytes]);
+
     // Combine the instruction bytes, blob bytes, data section length, and the data section
-    return new Uint8Array([...instructionBytes, ...blobBytes, ...dataSectionLenBytes, ...dataSection]);
+    return {
+      bytecode: concat([bytecodeLoader, dataSection]),
+      offset: bytecodeLoader.length, // TODO: We problably need to calculate the offset for each configurable
+    };
   }
   // Handle case where there is no data section
   const numOfInstructions = getInstructionsNoDataSection(0).length;
@@ -154,5 +164,8 @@ export function getPredicateScriptLoaderInstructions(
   const blobBytes = new Uint8Array(blobId);
 
   // Combine the instruction bytes and blob bytes
-  return new Uint8Array([...instructionBytes, ...blobBytes]);
+  return {
+    bytecode: new Uint8Array([...instructionBytes, ...blobBytes]),
+    offset: 0,
+  };
 }

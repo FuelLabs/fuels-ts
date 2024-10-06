@@ -23,6 +23,7 @@ import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
 import { arrayify, isDefined, hexlify } from '@fuel-ts/utils';
+import { off } from 'process';
 
 import {
   getLoaderInstructions,
@@ -385,11 +386,13 @@ export default class ContractFactory {
       transactionResult: TransactionResult<TransactionType.Blob>;
       loaderBytecode: string;
     }>;
+    offset: number;
     predicateRoot: string;
     loaderBytecode: Uint8Array;
     loaderBytecodeHexlified: string;
   }> {
     const {
+      offset,
       waitForResult,
       blobId,
       loaderBytecode,
@@ -402,7 +405,7 @@ export default class ContractFactory {
       predicateRoot: getPredicateRoot(loaderBytecode),
       loaderBytecode,
       loaderBytecodeHexlified,
-      offset: 0, // TODO: Implement me
+      offset,
     });
   }
 
@@ -411,6 +414,7 @@ export default class ContractFactory {
       transactionResult: TransactionResult<TransactionType.Blob>;
       loaderBytecode: string;
     }>;
+    offset: number;
     blobId: string;
     loaderBytecode: Uint8Array;
     loaderBytecodeHexlified: string;
@@ -474,14 +478,15 @@ export default class ContractFactory {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
 
-      return { transactionResult: result, loaderBytecode: hexlify(loaderBytecode) };
+      return { transactionResult: result, loaderBytecode: hexlify(loaderBytecode.bytecode), offset: loaderBytecode.offset };
     };
 
     return {
       waitForResult,
       blobId,
-      loaderBytecode,
-      loaderBytecodeHexlified: hexlify(loaderBytecode),
+      loaderBytecode: loaderBytecode.bytecode,
+      loaderBytecodeHexlified: hexlify(loaderBytecode.bytecode),
+      offset: loaderBytecode.offset
     };
   }
 

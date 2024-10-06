@@ -26,9 +26,11 @@ export async function deploy(config: FuelsConfig) {
   /**
    * Deploy predicates and save deployed files to disk.
    */
-  console.log('config', config);
   const predicates = await deployPredicates(config);
   savePredicateFiles(predicates, config);
+
+  // eslint-disable-next-line no-param-reassign
+  config.predicates = config.predicates.map((predicate) => `${predicate}/loader`);
 
   /**
    * After deploying scripts/predicates, we need to

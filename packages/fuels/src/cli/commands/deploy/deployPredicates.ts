@@ -28,11 +28,12 @@ export async function deployPredicate(
   const factory = new ContractFactory(bytecode, abi, wallet);
 
   try {
-    const { predicateRoot, loaderBytecode, loaderBytecodeHexlified } =
+    const { predicateRoot, loaderBytecode, loaderBytecodeHexlified, offset } =
       await factory.deployAsBlobTxForPredicate(configurableConstants);
     // await waitForResult();
 
     return {
+      offset,
       predicateRoot,
       loaderBytecode,
       loaderBytecodeHexlified,
@@ -61,7 +62,7 @@ export async function deployPredicates(config: FuelsConfig) {
     const abiPath = getABIPath(predicatePath, config);
     const projectName = getPredicateName(predicatePath);
 
-    const { predicateRoot, loaderBytecode, loaderBytecodeHexlified } = await deployPredicate(
+    const { predicateRoot, loaderBytecode, loaderBytecodeHexlified, offset } = await deployPredicate(
       wallet,
       binaryPath,
       abiPath
@@ -74,6 +75,7 @@ export async function deployPredicates(config: FuelsConfig) {
       predicateRoot,
       loaderBytecode,
       loaderBytecodeHexlified,
+      offset,
     });
   }
 
