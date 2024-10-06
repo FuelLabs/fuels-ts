@@ -1,5 +1,5 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { WalletUnlocked } from '@fuel-ts/account';
-import type { DeployContractOptions } from '@fuel-ts/contract';
 import { ContractFactory } from '@fuel-ts/contract';
 import { arrayify } from '@fuel-ts/utils';
 import { debug, log } from 'console';
@@ -8,25 +8,20 @@ import { readFileSync } from 'fs';
 import { getBinaryPath, getABIPath, getScriptName } from '../../config/forcUtils';
 import type { FuelsConfig, DeployedScript } from '../../types';
 
+import { adjustOffsets } from './adjustOffsets';
 import { createWallet } from './createWallet';
 
 /**
  * Deploys one script.
  */
-export async function deployScript(
-  wallet: WalletUnlocked,
-  binaryPath: string,
-  abiPath: string,
-  configurableConstants?: DeployContractOptions['configurableConstants']
-) {
+export async function deployScript(wallet: WalletUnlocked, binaryPath: string, abiPath: string) {
   debug(`Deploying script for ABI: ${abiPath}`);
 
   const bytecode = readFileSync(binaryPath);
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const factory = new ContractFactory(bytecode, abi, wallet);
 
-  const { waitForResult, blobId } = await factory.deployAsBlobTxForScript(configurableConstants);
-
+  const { waitForResult, blobId } = await factory.deployAsBlobTxForScript();
   const { configurableOffsetDiff, loaderBytecode } = await waitForResult();
 
   return {
@@ -60,12 +55,17 @@ export async function deployScripts(config: FuelsConfig) {
       abiPath
     );
 
+    let abi = JSON.parse(readFileSync(abiPath, 'utf-8')) as JsonAbi;
+    if (configurableOffsetDiff) {
+      abi = adjustOffsets(abi, configurableOffsetDiff);
+    }
+
     debug(`Script deployed: ${projectName} - ${blobId}`);
 
     scripts.push({
       path: scriptPath,
       loaderBytecode: arrayify(loaderBytecode),
-      configurableOffsetDiff,
+      abi,
     });
   }
 

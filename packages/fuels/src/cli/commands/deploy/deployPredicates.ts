@@ -1,3 +1,4 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import { getPredicateRoot, type WalletUnlocked } from '@fuel-ts/account';
 import { ContractFactory } from '@fuel-ts/contract';
 import { arrayify } from '@fuel-ts/utils';
@@ -7,6 +8,7 @@ import { readFileSync } from 'fs';
 import { getABIPath, getBinaryPath, getPredicateName } from '../../config/forcUtils';
 import type { DeployedPredicate, FuelsConfig } from '../../types';
 
+import { adjustOffsets } from './adjustOffsets';
 import { createWallet } from './createWallet';
 
 /**
@@ -54,13 +56,18 @@ export async function deployPredicates(config: FuelsConfig) {
     );
     const predicateRoot = getPredicateRoot(loaderBytecode);
 
+    let abi = JSON.parse(readFileSync(abiPath, 'utf-8')) as JsonAbi;
+    if (configurableOffsetDiff) {
+      abi = adjustOffsets(abi, configurableOffsetDiff);
+    }
+
     debug(`Predicate deployed: ${projectName} - ${predicateRoot}`);
 
     predicates.push({
       path: predicatePath,
       predicateRoot,
       loaderBytecode: arrayify(loaderBytecode),
-      configurableOffsetDiff,
+      abi,
     });
   }
 
