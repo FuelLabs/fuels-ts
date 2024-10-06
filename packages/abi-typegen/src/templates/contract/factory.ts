@@ -13,7 +13,7 @@ export function renderFactoryTemplate(params: { abi: Abi; versions: BinaryVersio
     capitalizedName,
     rawContents,
     storageSlotsContents,
-    hexlifiedOriginalBinContents,
+    hexlifiedBinContents: hexlifiedBinString,
   } = abi;
 
   const abiJsonString = JSON.stringify(rawContents, null, 2);
@@ -27,7 +27,7 @@ export function renderFactoryTemplate(params: { abi: Abi; versions: BinaryVersio
       capitalizedName,
       abiJsonString,
       storageSlotsJsonString,
-      compressedBytecode: compressBytecode(hexlifiedOriginalBinContents),
+      compressedBytecode: compressBytecode(hexlifiedBinString),
     },
   });
 
