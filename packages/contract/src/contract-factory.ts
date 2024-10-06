@@ -390,7 +390,7 @@ export default class ContractFactory {
   }> {
     /** TODO: Implement me */
     // @ts-expect-error lol
-     return Promise.resolve({
+    return Promise.resolve({
       waitForResult: () =>
         Promise.resolve({
           transactionResult: {},
@@ -406,7 +406,6 @@ export default class ContractFactory {
 
   async deployAsBlobTxForScript(configurableConstants: { [name: string]: unknown } = {}): Promise<{
     waitForResult: () => Promise<{
-      transactionResult: TransactionResult<TransactionType.Blob>;
       loaderBytecode: string;
     }>;
     blobId: string;
@@ -430,6 +429,17 @@ export default class ContractFactory {
       arrayify(this.bytecode),
       arrayify(blobId)
     );
+
+    const blobExists = (await account.provider.getBlobs([blobId])).length > 0;
+    if (blobExists) {
+      return {
+        waitForResult: () => Promise.resolve({ loaderBytecode: hexlify(loaderBytecode) }),
+        blobId,
+        // TODO: Remove the loader from here
+        loaderBytecode,
+        loaderBytecodeHexlified: hexlify(loaderBytecode),
+      };
+    }
 
     // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
@@ -469,12 +479,13 @@ export default class ContractFactory {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
 
-      return { transactionResult: result, loaderBytecode: hexlify(loaderBytecode) };
+      return { loaderBytecode: hexlify(loaderBytecode) };
     };
 
     return {
       waitForResult,
       blobId,
+      // TODO: Remove the loader from here
       loaderBytecode,
       loaderBytecodeHexlified: hexlify(loaderBytecode),
     };
