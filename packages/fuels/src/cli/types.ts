@@ -1,3 +1,4 @@
+import type { JsonAbi } from '@fuel-ts/abi-coder';
 import type { DeployContractOptions } from '@fuel-ts/contract';
 
 export enum Commands {
@@ -43,7 +44,7 @@ export type DeployedContract = {
 export type DeployedScript = {
   path: string;
   loaderBytecode: Uint8Array;
-  configurableOffsetDiff: number;
+  abi: JsonAbi;
 };
 
 export type DeployedPredicate = DeployedScript & {
