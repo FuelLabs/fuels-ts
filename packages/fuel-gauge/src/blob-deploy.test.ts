@@ -18,7 +18,7 @@ describe('first try', () => {
     const { configurables: readOnlyConfigurables } = jsonAbi;
     const configurables: JsonAbi['configurables'] = [];
     readOnlyConfigurables.forEach((config) => {
-      // @ts-expect-error shut up
+      // @ts-expect-error shut up the read-only thing
       configurables.push({ ...config, offset: config.offset - offset });
     });
     return { ...jsonAbi, configurables } as JsonAbi;
@@ -71,13 +71,12 @@ describe('first try', () => {
 
     const factory = new ContractFactory(ScriptMainArgBool.bytecode, ScriptMainArgBool.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode } = await waitForResult();
+    const { loaderBytecode, offset } = await waitForResult();
 
     const script = new Script(
-      ScriptMainArgBool.bytecode,
-      ScriptMainArgBool.abi,
-      wallet,
-      loaderBytecode
+      loaderBytecode,
+      mapToLoaderAbi(ScriptMainArgBool.abi, offset),
+      wallet
     );
 
     const { waitForResult: waitForResult2 } = await script.functions.main(true).call();
@@ -100,8 +99,8 @@ describe('first try', () => {
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
 
-    const { loaderBytecode } = await waitForResult();
-    const script = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet, loaderBytecode);
+    const { loaderBytecode, offset } = await waitForResult();
+    const script = new Script(loaderBytecode, mapToLoaderAbi(ScriptDummy.abi, offset), wallet);
 
     const configurable = {
       SECRET_NUMBER: 10001,
@@ -122,12 +121,11 @@ describe('first try', () => {
     } = launch;
 
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
-
     const { waitForResult } = await factory.deployAsBlobTxForScript();
 
-    const { loaderBytecode } = await waitForResult();
+    const { loaderBytecode, offset } = await waitForResult();
 
-    const preScript = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet, loaderBytecode);
+    const preScript = new Script(loaderBytecode, mapToLoaderAbi(ScriptDummy.abi, offset), wallet);
     const configurable = {
       SECRET_NUMBER: 299,
     };
@@ -141,9 +139,6 @@ describe('first try', () => {
     expect(value).toBe(false);
   });
 
-  // We need to use the `loaderBytecode` even in cases where there is no configurable constants set
-  // But this tests demonstrates that we cannot decode the logs in such instances
-  // We are awaiting a response from @ahmed about this
   it('it should return false if no configurable constants are set', async () => {
     using launch = await launchTestNode();
 
@@ -153,10 +148,9 @@ describe('first try', () => {
 
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode, offset } = await waitForResult();
 
-    const { loaderBytecode } = await waitForResult();
-
-    const script = new Script(ScriptDummy.bytecode, ScriptDummy.abi, wallet, loaderBytecode);
+    const script = new Script(loaderBytecode, mapToLoaderAbi(ScriptDummy.abi, offset), wallet);
 
     const { waitForResult: waitForResult2 } = await script.functions.main().call();
     const { value, logs } = await waitForResult2();
@@ -179,8 +173,8 @@ describe('first try', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployAsBlobTxForPredicate();
-    const { loaderBytecode } = await waitForResult();
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode, offset } = await waitForResult();
 
     expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
 
@@ -190,10 +184,9 @@ describe('first try', () => {
 
     const predicate = new Predicate({
       data: [configurable.SECRET_NUMBER],
-      bytecode: PredicateFalseConfigurable.bytecode,
-      abi: PredicateFalseConfigurable.abi,
+      bytecode: loaderBytecode,
+      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, offset),
       provider,
-      loaderBytecode,
       configurableConstants: configurable,
     });
 
@@ -217,8 +210,8 @@ describe('first try', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployAsBlobTxForPredicate();
-    const { loaderBytecode } = await waitForResult();
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode, offset } = await waitForResult();
 
     expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
 
@@ -226,10 +219,9 @@ describe('first try', () => {
 
     const predicate = new Predicate({
       data: [bn(SECRET_NUMBER)],
-      bytecode: PredicateFalseConfigurable.bytecode,
-      abi: PredicateFalseConfigurable.abi,
+      bytecode: loaderBytecode,
+      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, offset),
       provider,
-      loaderBytecode,
     });
 
     const transfer2 = await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
