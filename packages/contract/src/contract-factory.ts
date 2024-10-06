@@ -380,13 +380,15 @@ export default class ContractFactory {
   async deployAsBlobTxForScript(configurableConstants: { [name: string]: unknown } = {}): Promise<{
     waitForResult: () => Promise<{
       loaderBytecode: string;
-      offset: number;
+      configurableOffsetDiff: number;
     }>;
     blobId: string;
-    loaderBytecode: Uint8Array;
-    loaderBytecodeHexlified: string;
   }> {
     const account = this.getAccount();
+
+    if (configurableConstants) {
+      this.setConfigurableConstants(configurableConstants);
+    }
 
     const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
     const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
@@ -403,16 +405,14 @@ export default class ContractFactory {
       arrayify(blobId)
     );
 
-    const offset = byteCodeWithoutDataSection.length - (blobOffset || 0);
+    const configurableOffsetDiff = byteCodeWithoutDataSection.length - (blobOffset || 0);
 
     const blobExists = (await account.provider.getBlobs([blobId])).length > 0;
     if (blobExists) {
       return {
-        waitForResult: () => Promise.resolve({ loaderBytecode: hexlify(loaderBytecode), offset }),
-        // TODO: Remove the loader from here
+        waitForResult: () =>
+          Promise.resolve({ loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff }),
         blobId,
-        loaderBytecode,
-        loaderBytecodeHexlified: hexlify(loaderBytecode),
       };
     }
 
@@ -454,15 +454,12 @@ export default class ContractFactory {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
 
-      return { loaderBytecode: hexlify(loaderBytecode), offset };
+      return { loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff };
     };
 
     return {
       waitForResult,
       blobId,
-      // TODO: Remove the loader from here
-      loaderBytecode,
-      loaderBytecodeHexlified: hexlify(loaderBytecode),
     };
   }
 
