@@ -14,6 +14,16 @@ import {
  * @group node
  */
 describe('first try', () => {
+  const mapToLoaderAbi = (jsonAbi: JsonAbi, offset: number) => {
+    const { configurables: readOnlyConfigurables } = jsonAbi;
+    const configurables: JsonAbi['configurables'] = [];
+    readOnlyConfigurables.forEach((config) => {
+      // @ts-expect-error shut up
+      configurables.push({ ...config, offset: config.offset - offset });
+    });
+    return { ...jsonAbi, configurables } as JsonAbi;
+  };
+
   it('should ensure deploy the same blob again will not throw error', async () => {
     using launch = await launchTestNode();
 
@@ -298,14 +308,7 @@ describe('first try', () => {
       SECRET_NUMBER: 8000,
     };
 
-    const { configurables: readOnlyConfigurables } = PredicateFalseConfigurable.abi;
-    const configurables: JsonAbi['configurables'] = [];
-
-    readOnlyConfigurables.forEach((config) => {
-      // @ts-expect-error shut up
-      configurables.push({ ...config, offset: config.offset - offset });
-    });
-    const newAbi = { ...PredicateFalseConfigurable.abi, configurables } as JsonAbi;
+    const newAbi = mapToLoaderAbi(PredicateFalseConfigurable.abi, offset);
 
     const predicate = new Predicate({
       data: [configurable.SECRET_NUMBER],
@@ -322,7 +325,7 @@ describe('first try', () => {
     expect(response.isStatusSuccess).toBe(true);
   });
 
-  it('can run with loader bytecode with manually modified configurables', async () => {
+  it('can run with loader bytecode with many manually modified configurables', async () => {
     using launch = await launchTestNode();
     const {
       wallets: [wallet],
@@ -340,7 +343,6 @@ describe('first try', () => {
     const { waitForResult } = await factory.deployAsBlobTxForScript();
     const { loaderBytecode, offset } = await waitForResult();
     expect(loaderBytecode).to.not.equal(hexlify(PredicateWithMoreConfigurables.bytecode));
-    // U16 == 305u16 && U32 == 101u32 && U64 == 1000000 && BOOL == false
     const configurable = {
       FEE: 99,
       ADDRESS: getRandomB256(),
@@ -350,14 +352,7 @@ describe('first try', () => {
       BOOL: false,
     };
 
-    const { configurables: readOnlyConfigurables } = PredicateWithMoreConfigurables.abi;
-    const configurables: JsonAbi['configurables'] = [];
-
-    readOnlyConfigurables.forEach((config) => {
-      // @ts-expect-error shut up
-      configurables.push({ ...config, offset: config.offset - offset });
-    });
-    const newAbi = { ...PredicateWithMoreConfigurables.abi, configurables } as JsonAbi;
+    const newAbi = mapToLoaderAbi(PredicateWithMoreConfigurables.abi, offset);
 
     const predicate = new Predicate({
       data: [configurable.FEE, configurable.ADDRESS],
