@@ -51,7 +51,6 @@ describe('Deploying Scripts', () => {
     };
     script.setConfigurableConstants(configurable);
 
-    // On calling it, we will see the gas used is far more optimal than just executing the script without the loader
     const { waitForResult } = await script.functions.main(10).call();
     const { value, gasUsed } = await waitForResult();
     // #endregion deploying-scripts
