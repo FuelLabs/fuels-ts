@@ -381,15 +381,14 @@ export default class ContractFactory {
     configurableConstants: { [name: string]: unknown } = {}
   ): Promise<{
     waitForResult: () => Promise<{
-      transactionResult: TransactionResult<TransactionType.Blob>;
       loaderBytecode: string;
+      offset: number;
     }>;
     predicateRoot: string;
     loaderBytecode: Uint8Array;
     loaderBytecodeHexlified: string;
   }> {
     /** TODO: Implement me */
-    // @ts-expect-error lol
     return Promise.resolve({
       waitForResult: () =>
         Promise.resolve({
@@ -407,6 +406,7 @@ export default class ContractFactory {
   async deployAsBlobTxForScript(configurableConstants: { [name: string]: unknown } = {}): Promise<{
     waitForResult: () => Promise<{
       loaderBytecode: string;
+      offset: number;
     }>;
     blobId: string;
     loaderBytecode: Uint8Array;
@@ -415,7 +415,6 @@ export default class ContractFactory {
     const account = this.getAccount();
 
     const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
-
     const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
 
     // Generate the associated create tx for the loader contract
@@ -425,17 +424,19 @@ export default class ContractFactory {
       bytecode: byteCodeWithoutDataSection,
     });
 
-    const loaderBytecode = getPredicateScriptLoaderInstructions(
+    const { loaderBytecode, blobOffset } = getPredicateScriptLoaderInstructions(
       arrayify(this.bytecode),
       arrayify(blobId)
     );
 
+    const offset = byteCodeWithoutDataSection.length - (blobOffset || 0);
+
     const blobExists = (await account.provider.getBlobs([blobId])).length > 0;
     if (blobExists) {
       return {
-        waitForResult: () => Promise.resolve({ loaderBytecode: hexlify(loaderBytecode) }),
-        blobId,
+        waitForResult: () => Promise.resolve({ loaderBytecode: hexlify(loaderBytecode), offset }),
         // TODO: Remove the loader from here
+        blobId,
         loaderBytecode,
         loaderBytecodeHexlified: hexlify(loaderBytecode),
       };
@@ -479,7 +480,7 @@ export default class ContractFactory {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
 
-      return { loaderBytecode: hexlify(loaderBytecode) };
+      return { loaderBytecode: hexlify(loaderBytecode), offset };
     };
 
     return {
