@@ -50,7 +50,7 @@ export async function deployPredicates(config: FuelsConfig) {
 
   log(`Deploying predicates to: ${wallet.provider.url}`);
 
-  const predicatesLen = config.scripts.length;
+  const predicatesLen = config.predicates.length;
 
   for (let i = 0; i < predicatesLen; i++) {
     const predicatePath = config.predicates[i];
