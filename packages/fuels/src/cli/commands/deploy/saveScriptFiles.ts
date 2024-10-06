@@ -8,10 +8,10 @@ export function saveScriptFiles(scripts: DeployedScript[], _config: FuelsConfig)
     const scriptName = getScriptName(path);
     const buildMode = _config.buildMode;
 
-    const scriptBlobIdPath = `${path}/out/${buildMode}/${scriptName}-deployed-bin-hash`;
+    const scriptBlobIdPath = `${path}/out/${buildMode}/${scriptName}-loader-bin-hash`;
     writeFileSync(scriptBlobIdPath, blobId);
 
-    const loaderBytecodePath = `${path}/out/${buildMode}/${scriptName}.deployed.bin`;
+    const loaderBytecodePath = `${path}/out/${buildMode}/${scriptName}-loader.bin`;
     writeFileSync(loaderBytecodePath, loaderBytecode);
   }
 }
