@@ -390,15 +390,17 @@ export default class ContractFactory {
   }> {
     /** TODO: Implement me */
     // @ts-expect-error lol
-    return Promise.resolve({
+     return Promise.resolve({
       waitForResult: () =>
         Promise.resolve({
           transactionResult: {},
           loaderBytecode: '',
+          offset: 0,
         }),
       predicateRoot: '',
       loaderBytecode: new Uint8Array(),
       loaderBytecodeHexlified: '',
+      offset: 0,
     });
   }
 
