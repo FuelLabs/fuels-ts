@@ -14,15 +14,17 @@ import {
  * @group node
  */
 describe('first try', () => {
-  const mapToLoaderAbi = (jsonAbi: JsonAbi, offset: number) => {
+  const mapToLoaderAbi = (jsonAbi: JsonAbi, configurableOffsetDiff: number) => {
     const { configurables: readOnlyConfigurables } = jsonAbi;
     const configurables: JsonAbi['configurables'] = [];
     readOnlyConfigurables.forEach((config) => {
       // @ts-expect-error shut up the read-only thing
-      configurables.push({ ...config, offset: config.offset - offset });
+      configurables.push({ ...config, offset: config.offset - configurableOffsetDiff });
     });
     return { ...jsonAbi, configurables } as JsonAbi;
   };
+
+  it.todo('add test that deploys the loader with already set configurables');
 
   it('should ensure deploy the same blob again will not throw error', async () => {
     using launch = await launchTestNode();
@@ -71,11 +73,11 @@ describe('first try', () => {
 
     const factory = new ContractFactory(ScriptMainArgBool.bytecode, ScriptMainArgBool.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, offset } = await waitForResult();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
 
     const script = new Script(
       loaderBytecode,
-      mapToLoaderAbi(ScriptMainArgBool.abi, offset),
+      mapToLoaderAbi(ScriptMainArgBool.abi, configurableOffsetDiff),
       wallet
     );
 
@@ -99,8 +101,12 @@ describe('first try', () => {
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
 
-    const { loaderBytecode, offset } = await waitForResult();
-    const script = new Script(loaderBytecode, mapToLoaderAbi(ScriptDummy.abi, offset), wallet);
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
+    const script = new Script(
+      loaderBytecode,
+      mapToLoaderAbi(ScriptDummy.abi, configurableOffsetDiff),
+      wallet
+    );
 
     const configurable = {
       SECRET_NUMBER: 10001,
@@ -123,9 +129,13 @@ describe('first try', () => {
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
 
-    const { loaderBytecode, offset } = await waitForResult();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
 
-    const preScript = new Script(loaderBytecode, mapToLoaderAbi(ScriptDummy.abi, offset), wallet);
+    const preScript = new Script(
+      loaderBytecode,
+      mapToLoaderAbi(ScriptDummy.abi, configurableOffsetDiff),
+      wallet
+    );
     const configurable = {
       SECRET_NUMBER: 299,
     };
@@ -148,9 +158,13 @@ describe('first try', () => {
 
     const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, offset } = await waitForResult();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
 
-    const script = new Script(loaderBytecode, mapToLoaderAbi(ScriptDummy.abi, offset), wallet);
+    const script = new Script(
+      loaderBytecode,
+      mapToLoaderAbi(ScriptDummy.abi, configurableOffsetDiff),
+      wallet
+    );
 
     const { waitForResult: waitForResult2 } = await script.functions.main().call();
     const { value, logs } = await waitForResult2();
@@ -174,7 +188,7 @@ describe('first try', () => {
     );
 
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, offset } = await waitForResult();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
 
     expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
 
@@ -185,7 +199,7 @@ describe('first try', () => {
     const predicate = new Predicate({
       data: [configurable.SECRET_NUMBER],
       bytecode: loaderBytecode,
-      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, offset),
+      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, configurableOffsetDiff),
       provider,
       configurableConstants: configurable,
     });
@@ -211,7 +225,7 @@ describe('first try', () => {
     );
 
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, offset } = await waitForResult();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
 
     expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
 
@@ -220,7 +234,7 @@ describe('first try', () => {
     const predicate = new Predicate({
       data: [bn(SECRET_NUMBER)],
       bytecode: loaderBytecode,
-      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, offset),
+      abi: mapToLoaderAbi(PredicateFalseConfigurable.abi, configurableOffsetDiff),
       provider,
     });
 
@@ -293,14 +307,14 @@ describe('first try', () => {
     );
 
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, offset } = await waitForResult();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
     expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
 
     const configurable = {
       SECRET_NUMBER: 8000,
     };
 
-    const newAbi = mapToLoaderAbi(PredicateFalseConfigurable.abi, offset);
+    const newAbi = mapToLoaderAbi(PredicateFalseConfigurable.abi, configurableOffsetDiff);
 
     const predicate = new Predicate({
       data: [configurable.SECRET_NUMBER],
@@ -333,7 +347,7 @@ describe('first try', () => {
     );
 
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode, offset } = await waitForResult();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
     expect(loaderBytecode).to.not.equal(hexlify(PredicateWithMoreConfigurables.bytecode));
     const configurable = {
       FEE: 99,
@@ -344,7 +358,7 @@ describe('first try', () => {
       BOOL: false,
     };
 
-    const newAbi = mapToLoaderAbi(PredicateWithMoreConfigurables.abi, offset);
+    const newAbi = mapToLoaderAbi(PredicateWithMoreConfigurables.abi, configurableOffsetDiff);
 
     const predicate = new Predicate({
       data: [configurable.FEE, configurable.ADDRESS],
