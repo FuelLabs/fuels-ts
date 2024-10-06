@@ -24,8 +24,6 @@ describe('first try', () => {
     return { ...jsonAbi, configurables } as JsonAbi;
   };
 
-  it.todo('add test that deploys the loader with already set configurables');
-
   it('should ensure deploy the same blob again will not throw error', async () => {
     using launch = await launchTestNode();
 
