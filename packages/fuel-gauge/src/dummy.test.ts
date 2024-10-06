@@ -12,6 +12,29 @@ import {
  * @group node
  */
 describe('first try', () => {
+  it('should ensure deploy the same blob again will not throw error', async () => {
+    using launch = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launch;
+
+    const spy = vi.spyOn(wallet.provider, 'sendTransaction');
+
+    const factory = new ContractFactory(ScriptDummy.bytecode, ScriptDummy.abi, wallet);
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode } = await waitForResult();
+
+    const { waitForResult: waitForResult2 } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode: loaderBytecode2 } = await waitForResult2();
+
+    // Should deploy not deploy the same blob again
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(loaderBytecode).equals(loaderBytecode2);
+
+    vi.restoreAllMocks();
+  });
+
   it('should deploy blob for a script transaction and submit it', async () => {
     using launch = await launchTestNode();
 
