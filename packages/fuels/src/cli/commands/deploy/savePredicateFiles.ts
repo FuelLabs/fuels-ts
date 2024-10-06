@@ -8,10 +8,10 @@ export function savePredicateFiles(predicates: DeployedPredicate[], _config: Fue
     const predicateName = getPredicateName(path);
     const buildMode = _config.buildMode;
 
-    const predicateRootPath = `${path}/out/${buildMode}/${predicateName}-deployed-bin-root`;
+    const predicateRootPath = `${path}/out/${buildMode}/${predicateName}-loader-bin-root`;
     writeFileSync(predicateRootPath, predicateRoot);
 
-    const loaderBytecodePath = `${path}/out/${buildMode}/${predicateName}.deployed.bin`;
+    const loaderBytecodePath = `${path}/out/${buildMode}/${predicateName}-loader.bin`;
     writeFileSync(loaderBytecodePath, loaderBytecode);
   }
 }
