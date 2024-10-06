@@ -4,8 +4,10 @@
   "description": "",
   "private": true,
   "scripts": {
-    "pretest": "run-s build:forc type:check",
-    "build:forc": "pnpm fuels build",
+    "pretest": "run-s kill-node fuels:node fuels:deploy kill-node type:check",
+    "kill-node": "lsof -t -i:4000 | xargs -r kill",
+    "fuels:deploy": "pnpm fuels deploy",
+    "fuels:node": "pnpm fuels node > /dev/null 2>&1 &",
     "type:check": "tsc --noEmit"
   },
   "devDependencies": {
