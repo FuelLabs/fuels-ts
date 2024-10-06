@@ -13,6 +13,7 @@ import {
   BlobTransactionRequest,
   TransactionStatus,
   calculateGasFee,
+  getPredicateRoot,
 } from '@fuel-ts/account';
 import { randomBytes } from '@fuel-ts/crypto';
 import { ErrorCode, FuelError } from '@fuel-ts/errors';
@@ -388,17 +389,20 @@ export default class ContractFactory {
     loaderBytecode: Uint8Array;
     loaderBytecodeHexlified: string;
   }> {
-    /** TODO: Implement me */
-    // @ts-expect-error lol
+    const {
+      waitForResult,
+      blobId,
+      loaderBytecode,
+      loaderBytecodeHexlified,
+    } = await this.deployAsBlobTxForScript(configurableConstants);
+
     return Promise.resolve({
-      waitForResult: () =>
-        Promise.resolve({
-          transactionResult: {},
-          loaderBytecode: '',
-        }),
-      predicateRoot: '',
-      loaderBytecode: new Uint8Array(),
-      loaderBytecodeHexlified: '',
+      blobId,
+      waitForResult,
+      predicateRoot: getPredicateRoot(loaderBytecode),
+      loaderBytecode,
+      loaderBytecodeHexlified,
+      offset: 0, // TODO: Implement me
     });
   }
 
@@ -428,6 +432,7 @@ export default class ContractFactory {
       arrayify(this.bytecode),
       arrayify(blobId)
     );
+    console.dir(loaderBytecode, { depth: null });
 
     // Check the account can afford to deploy all chunks and loader
     let totalCost = bn(0);
@@ -457,6 +462,8 @@ export default class ContractFactory {
       let result: TransactionResult<TransactionType.Blob>;
 
       try {
+        // TODO: MAKE SURE WE QUERY THE BLOB TO SEE IF EXISTS
+        // query { blobExits(0x000000000000) }
         const blobTx = await account.sendTransaction(fundedBlobRequest);
         result = await blobTx.waitForResult();
       } catch (err: unknown) {

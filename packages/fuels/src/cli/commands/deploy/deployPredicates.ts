@@ -6,7 +6,6 @@ import { readFileSync } from 'fs';
 import {
   getABIPath,
   getBinaryPath,
-  getContractName,
   getPredicateName,
 } from '../../config/forcUtils';
 import type { DeployedPredicate, FuelsConfig } from '../../types';
@@ -28,16 +27,20 @@ export async function deployPredicate(
   const abi = JSON.parse(readFileSync(abiPath, 'utf-8'));
   const factory = new ContractFactory(bytecode, abi, wallet);
 
-  const { waitForResult, predicateRoot, loaderBytecode, loaderBytecodeHexlified } =
-    await factory.deployAsBlobTxForPredicate(configurableConstants);
+  try {
+    const { predicateRoot, loaderBytecode, loaderBytecodeHexlified } =
+      await factory.deployAsBlobTxForPredicate(configurableConstants);
+    // await waitForResult();
 
-  await waitForResult();
-
-  return {
-    predicateRoot,
-    loaderBytecode,
-    loaderBytecodeHexlified,
-  };
+    return {
+      predicateRoot,
+      loaderBytecode,
+      loaderBytecodeHexlified,
+    };
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 }
 
 /**
@@ -50,7 +53,7 @@ export async function deployPredicates(config: FuelsConfig) {
 
   log(`Deploying predicates to: ${wallet.provider.url}`);
 
-  const predicatesLen = config.scripts.length;
+  const predicatesLen = config.predicates.length;
 
   for (let i = 0; i < predicatesLen; i++) {
     const predicatePath = config.predicates[i];

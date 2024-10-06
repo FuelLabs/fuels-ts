@@ -26,6 +26,7 @@ export async function deploy(config: FuelsConfig) {
   /**
    * Deploy predicates and save deployed files to disk.
    */
+  console.log('config', config);
   const predicates = await deployPredicates(config);
   savePredicateFiles(predicates, config);
 
