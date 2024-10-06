@@ -4,7 +4,7 @@ import { getPredicateName } from '../../config/forcUtils';
 import type { DeployedPredicate, FuelsConfig } from '../../types';
 
 export function savePredicateFiles(predicates: DeployedPredicate[], _config: FuelsConfig) {
-  for (const { path, predicateRoot, loaderBytecode } of predicates) {
+  for (const { path, predicateRoot, loaderBytecode, abi } of predicates) {
     const predicateName = getPredicateName(path);
     const buildMode = _config.buildMode;
 
@@ -13,5 +13,8 @@ export function savePredicateFiles(predicates: DeployedPredicate[], _config: Fue
 
     const loaderBytecodePath = `${path}/out/${buildMode}/${predicateName}-loader.bin`;
     writeFileSync(loaderBytecodePath, loaderBytecode);
+
+    const abiPath = `${path}/out/${buildMode}/${predicateName}-abi.json`;
+    writeFileSync(abiPath, JSON.stringify(abi, null, 2));
   }
 }
