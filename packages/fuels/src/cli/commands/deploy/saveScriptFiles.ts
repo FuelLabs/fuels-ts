@@ -11,7 +11,7 @@ export function saveScriptFiles(scripts: DeployedScript[], _config: FuelsConfig)
     const loaderBytecodePath = `${path}/out/${buildMode}/${scriptName}-loader.bin`;
     writeFileSync(loaderBytecodePath, loaderBytecode);
 
-    const abiPath = `${path}/out/${buildMode}/${scriptName}-abi.json`;
+    const abiPath = `${path}/out/${buildMode}/${scriptName}-loader-abi.json`;
     writeFileSync(abiPath, JSON.stringify(abi, null, 2));
   }
 }
