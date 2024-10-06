@@ -43,7 +43,7 @@ describe('Deploying Scripts', () => {
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
     // Then we will instantiate the script using both the scripts bytecode and it's loader bytecode
-    const script = new Script(TypegenScript.bytecode, TypegenScript.abi, wallet, loaderBytecode);
+    const script = new Script(loaderBytecode, TypegenScript.abi, wallet);
 
     // Now we are free to interact with the script as we would normally, such as overriding the configurables
     const configurable = {
