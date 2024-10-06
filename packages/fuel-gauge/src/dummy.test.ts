@@ -1,3 +1,4 @@
+import type { JsonAbi } from 'fuels';
 import { bn, ContractFactory, hexlify, Predicate, Script, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -271,5 +272,52 @@ describe('first try', () => {
     const { isStatusSuccess } = await transfer3.waitForResult();
 
     expect(isStatusSuccess).toBe(true);
+  });
+
+  it.only('can run with loader bytecode with manually modified configurables', async () => {
+    using launch = await launchTestNode();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launch;
+
+    const receiver = Wallet.generate({ provider });
+
+    const factory = new ContractFactory(
+      PredicateFalseConfigurable.bytecode,
+      PredicateFalseConfigurable.abi,
+      wallet
+    );
+
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode } = await waitForResult();
+    expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
+
+    const configurable = {
+      SECRET_NUMBER: 8000,
+    };
+    const abi: JsonAbi = {
+      ...PredicateFalseConfigurable.abi,
+      configurables: [
+        {
+          ...PredicateFalseConfigurable.abi.configurables[0],
+          offset: 88, // to calculate
+        },
+      ],
+    };
+
+    const predicate = new Predicate({
+      data: [configurable.SECRET_NUMBER],
+      bytecode: loaderBytecode,
+      abi,
+      provider,
+      configurableConstants: configurable,
+    });
+
+    await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
+
+    const tx = await predicate.transfer(receiver.address, 1000, provider.getBaseAssetId());
+    const response = await tx.waitForResult();
+    expect(response.isStatusSuccess).toBe(true);
   });
 });

@@ -1,3 +1,4 @@
+import { concat } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
 const BLOB_ID_SIZE = 32;
@@ -135,12 +136,13 @@ export function getPredicateScriptLoaderInstructions(
     dataView.setBigUint64(0, BigInt(dataSection.length), false); // false for big-endian
 
     // Combine the instruction bytes, blob bytes, data section length, and the data section
-    return new Uint8Array([
+    const loaderBytecode = new Uint8Array([
       ...instructionBytes,
       ...blobBytes,
       ...dataSectionLenBytes,
-      ...dataSection,
     ]);
+
+    return concat([loaderBytecode, dataSection]);
   }
   // Handle case where there is no data section
   const numOfInstructions = getInstructionsNoDataSection(0).length;
