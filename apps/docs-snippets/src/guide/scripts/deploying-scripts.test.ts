@@ -28,7 +28,7 @@ describe('Deploying Scripts', () => {
       readFileSync(
         join(
           __dirname,
-          '../../../test/fixtures/forc-projects/sum-script/out/release/sum-script.deployed.bin'
+          '../../../test/fixtures/forc-projects/sum-script/out/release/sum-script-loader.bin'
         )
       )
     );
