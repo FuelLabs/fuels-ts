@@ -98,23 +98,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
     this.provider = account.provider;
     this.account = account;
     if (loaderBytecode) {
-      /**
-       * The loader bytecode is deployed without the configurable data, meaning even the default
-       * configurables are absent. If the script has configurable constants, we need to set the default
-       * values in the loader.
-       */
       this.loaderBytecode = arrayify(loaderBytecode);
-      const offset = getDataOffset(this.bytes);
-
-      // Extract default configurable on the script
-      const configurableData = this.bytes.slice(offset);
-
-      // If the script has configurable data
-      if (configurableData.length > 0) {
-        // Set default configurable at the loader
-        const configurableBytes = extractConfigurableBytes(offset, this.bytes);
-        this.loaderBytecode = concat([this.loaderBytecode, configurableBytes]);
-      }
     }
     this.functions = {
       main: (...args: TInput) =>
