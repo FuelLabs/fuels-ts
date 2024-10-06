@@ -5,6 +5,9 @@ import { join } from 'path';
 
 import { SumScript as TypegenScript } from '../../../test/typegen';
 
+/**
+ * @group node
+ */
 describe('Deploying Scripts', () => {
   it('deploys a script via loader and calls', async () => {
     using launched = await launchTestNode();

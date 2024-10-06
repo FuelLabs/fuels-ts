@@ -14,7 +14,7 @@ export function savePredicateFiles(predicates: DeployedPredicate[], _config: Fue
     const loaderBytecodePath = `${path}/out/${buildMode}/${predicateName}-loader.bin`;
     writeFileSync(loaderBytecodePath, loaderBytecode);
 
-    const abiPath = `${path}/out/${buildMode}/${predicateName}-abi.json`;
+    const abiPath = `${path}/out/${buildMode}/${predicateName}-loader-abi.json`;
     writeFileSync(abiPath, JSON.stringify(abi, null, 2));
   }
 }
