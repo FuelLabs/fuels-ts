@@ -377,7 +377,7 @@ export default class ContractFactory {
     return { waitForResult, contractId, waitForTransactionId };
   }
 
-  async deployAsBlobTxForScript(configurableConstants: { [name: string]: unknown } = {}): Promise<{
+  async deployAsBlobTxForScript(): Promise<{
     waitForResult: () => Promise<{
       loaderBytecode: string;
       configurableOffsetDiff: number;
@@ -385,10 +385,6 @@ export default class ContractFactory {
     blobId: string;
   }> {
     const account = this.getAccount();
-
-    if (configurableConstants) {
-      this.setConfigurableConstants(configurableConstants);
-    }
 
     const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
     const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
