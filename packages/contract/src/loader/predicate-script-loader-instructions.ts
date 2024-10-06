@@ -22,7 +22,7 @@ export function getDataOffset(binary: Uint8Array): number {
 export function getPredicateScriptLoaderInstructions(
   originalBinary: Uint8Array,
   blobId: Uint8Array
-): Uint8Array {
+) {
   // The final code is going to have this structure:
   // 1. loader instructions
   // 2. blob id
@@ -142,7 +142,10 @@ export function getPredicateScriptLoaderInstructions(
       ...dataSectionLenBytes,
     ]);
 
-    return concat([loaderBytecode, dataSection]);
+    return {
+      loaderBytecode: concat([loaderBytecode, dataSection]),
+      blobOffset: loaderBytecode.length,
+    };
   }
   // Handle case where there is no data section
   const numOfInstructions = getInstructionsNoDataSection(0).length;
@@ -161,5 +164,7 @@ export function getPredicateScriptLoaderInstructions(
   const blobBytes = new Uint8Array(blobId);
 
   // Combine the instruction bytes and blob bytes
-  return new Uint8Array([...instructionBytes, ...blobBytes]);
+  const loaderBytecode = new Uint8Array([...instructionBytes, ...blobBytes]);
+
+  return { loaderBytecode };
 }

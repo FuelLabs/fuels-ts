@@ -377,45 +377,16 @@ export default class ContractFactory {
     return { waitForResult, contractId, waitForTransactionId };
   }
 
-  async deployAsBlobTxForPredicate(
-    configurableConstants: { [name: string]: unknown } = {}
-  ): Promise<{
-    waitForResult: () => Promise<{
-      transactionResult: TransactionResult<TransactionType.Blob>;
-      loaderBytecode: string;
-    }>;
-    predicateRoot: string;
-    loaderBytecode: Uint8Array;
-    loaderBytecodeHexlified: string;
-  }> {
-    /** TODO: Implement me */
-    // @ts-expect-error lol
-    return Promise.resolve({
-      waitForResult: () =>
-        Promise.resolve({
-          transactionResult: {},
-          loaderBytecode: '',
-          offset: 0,
-        }),
-      predicateRoot: '',
-      loaderBytecode: new Uint8Array(),
-      loaderBytecodeHexlified: '',
-      offset: 0,
-    });
-  }
-
-  async deployAsBlobTxForScript(configurableConstants: { [name: string]: unknown } = {}): Promise<{
+  async deployAsBlobTxForScript(): Promise<{
     waitForResult: () => Promise<{
       loaderBytecode: string;
+      configurableOffsetDiff: number;
     }>;
     blobId: string;
-    loaderBytecode: Uint8Array;
-    loaderBytecodeHexlified: string;
   }> {
     const account = this.getAccount();
 
     const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
-
     const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
 
     // Generate the associated create tx for the loader contract
@@ -425,19 +396,19 @@ export default class ContractFactory {
       bytecode: byteCodeWithoutDataSection,
     });
 
-    const loaderBytecode = getPredicateScriptLoaderInstructions(
+    const { loaderBytecode, blobOffset } = getPredicateScriptLoaderInstructions(
       arrayify(this.bytecode),
       arrayify(blobId)
     );
 
+    const configurableOffsetDiff = byteCodeWithoutDataSection.length - (blobOffset || 0);
+
     const blobExists = (await account.provider.getBlobs([blobId])).length > 0;
     if (blobExists) {
       return {
-        waitForResult: () => Promise.resolve({ loaderBytecode: hexlify(loaderBytecode) }),
+        waitForResult: () =>
+          Promise.resolve({ loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff }),
         blobId,
-        // TODO: Remove the loader from here
-        loaderBytecode,
-        loaderBytecodeHexlified: hexlify(loaderBytecode),
       };
     }
 
@@ -479,15 +450,12 @@ export default class ContractFactory {
         throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
       }
 
-      return { loaderBytecode: hexlify(loaderBytecode) };
+      return { loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff };
     };
 
     return {
       waitForResult,
       blobId,
-      // TODO: Remove the loader from here
-      loaderBytecode,
-      loaderBytecodeHexlified: hexlify(loaderBytecode),
     };
   }
 
