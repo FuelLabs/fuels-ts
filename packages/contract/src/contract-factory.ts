@@ -377,32 +377,6 @@ export default class ContractFactory {
     return { waitForResult, contractId, waitForTransactionId };
   }
 
-  async deployAsBlobTxForPredicate(
-    configurableConstants: { [name: string]: unknown } = {}
-  ): Promise<{
-    waitForResult: () => Promise<{
-      loaderBytecode: string;
-      offset: number;
-    }>;
-    predicateRoot: string;
-    loaderBytecode: Uint8Array;
-    loaderBytecodeHexlified: string;
-  }> {
-    /** TODO: Implement me */
-    return Promise.resolve({
-      waitForResult: () =>
-        Promise.resolve({
-          transactionResult: {},
-          loaderBytecode: '',
-          offset: 0,
-        }),
-      predicateRoot: '',
-      loaderBytecode: new Uint8Array(),
-      loaderBytecodeHexlified: '',
-      offset: 0,
-    });
-  }
-
   async deployAsBlobTxForScript(configurableConstants: { [name: string]: unknown } = {}): Promise<{
     waitForResult: () => Promise<{
       loaderBytecode: string;
