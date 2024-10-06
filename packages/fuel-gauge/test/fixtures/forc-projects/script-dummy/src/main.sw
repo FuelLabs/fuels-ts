@@ -4,5 +4,6 @@ configurable {
 }
 
 fn main() -> bool {
+    log(SECRET_NUMBER);
     SECRET_NUMBER == 10001
 }

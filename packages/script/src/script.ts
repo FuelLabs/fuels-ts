@@ -70,7 +70,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
   /**
    * The loader bytecode ofe the script.
    */
-  loaderBytecode?: BytesLike;
+  loaderBytecode?: Uint8Array;
 
   /**
    * Create a new instance of the Script class.
@@ -86,7 +86,9 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
 
     this.provider = account.provider;
     this.account = account;
-    this.loaderBytecode = loaderBytecode;
+    if (loaderBytecode) {
+      this.loaderBytecode = arrayify(loaderBytecode);
+    }
     this.functions = {
       main: (...args: TInput) =>
         new ScriptInvocationScope(this, this.interface.getFunction('main'), args),
@@ -137,7 +139,7 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
         const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
         dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
 
-        this.bytes = concat([this.loaderBytecode, dataSectionLenBytes, dataSection]);
+        this.loaderBytecode = concat([this.loaderBytecode, dataSectionLenBytes, dataSection]);
       }
     } catch (err) {
       throw new FuelError(

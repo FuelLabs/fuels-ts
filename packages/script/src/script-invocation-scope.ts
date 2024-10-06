@@ -19,7 +19,13 @@ export class ScriptInvocationScope<
   }
 
   private buildScriptRequest() {
-    const programBytes = (this.program as AbstractScript).bytes;
+    let programBytes: Uint8Array;
+    if ((this.program as AbstractScript).loaderBytecode) {
+      programBytes = (this.program as AbstractScript).loaderBytecode as Uint8Array;
+    } else {
+      programBytes = (this.program as AbstractScript).bytes;
+    }
+
     const chainInfoCache = (this.program.provider as Provider).getChain();
 
     // TODO: Remove this error since it is already handled on Provider class

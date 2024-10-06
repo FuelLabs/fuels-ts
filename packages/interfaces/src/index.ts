@@ -90,6 +90,7 @@ export abstract class AbstractContract extends AbstractProgram {
  */
 export abstract class AbstractScript extends AbstractProgram {
   abstract bytes: Uint8Array;
+  abstract loaderBytecode?: Uint8Array;
 }
 
 /** A simple type alias defined using the `type` keyword. */

@@ -412,9 +412,6 @@ export default class ContractFactory {
     loaderBytecodeHexlified: string;
   }> {
     const account = this.getAccount();
-    if (configurableConstants) {
-      this.setConfigurableConstants(configurableConstants);
-    }
 
     const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
 
@@ -426,6 +423,7 @@ export default class ContractFactory {
     const bloTransactionRequest = this.blobTransactionRequest({
       bytecode: byteCodeWithoutDataSection,
     });
+
     const loaderBytecode = getPredicateScriptLoaderInstructions(
       arrayify(this.bytecode),
       arrayify(blobId)
