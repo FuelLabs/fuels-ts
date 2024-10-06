@@ -4,7 +4,6 @@ import { Contract } from '@fuel-ts/program';
 import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
-import { getScriptName } from '../../src/cli/config/forcUtils';
 import { launchTestNode } from '../../src/test-utils';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import {
@@ -241,52 +240,5 @@ describe('deploy', { timeout: 180000 }, () => {
       getCountValue: 10,
       testFunctionValue: false,
     });
-  });
-
-  it.only('should run `deploy` command [using script]', async () => {
-    using launched = await launchTestNode({
-      nodeOptions: {
-        port: '4000',
-      },
-    });
-
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    await runInit({
-      root: paths.root,
-      workspace: paths.workspaceDir,
-      output: paths.outputDir,
-      forcPath: paths.forcPath,
-      fuelCorePath: paths.fuelCorePath,
-      privateKey: wallet.privateKey,
-    });
-
-    /**
-     * 1) First deploy
-     *  Validate if script's json was written.
-     */
-    await runBuild({ root: paths.root });
-    await runDeploy({ root: paths.root });
-
-    expect(existsSync(paths.scriptsDir)).toBeTruthy();
-
-    const scriptName = getScriptName(paths.scriptTruePath);
-    const scriptOutDir = join(paths.scriptTruePath, 'out', 'debug');
-
-    // Check blob id file exists
-    const blobIdFileName = `${scriptName}-deployed-bin-hash`;
-    const blobIdFilePath = join(scriptOutDir, blobIdFileName);
-    expect(existsSync(blobIdFilePath)).toBeTruthy();
-
-    // Check loader bytecode file exists
-    const loaderByteCodeFileName = `${scriptName}.deployed.bin`;
-    const loaderFilePath = join(scriptOutDir, loaderByteCodeFileName);
-    expect(existsSync(loaderFilePath)).toBeTruthy();
-
-    /**
-     * 2). Check that the types have been regenerated
-     */
   });
 });

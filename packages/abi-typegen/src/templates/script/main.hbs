@@ -53,16 +53,14 @@ export type {{capitalizedName}}Configurables = Partial<{
 
 const abi = {{abiJsonString}};
 
-const originalBytecode = decompressBytecode('{{compressedOriginalBytecode}}');
-const loaderBytecode = decompressBytecode('{{compressedLoaderBytecode}}')
+const bytecode = decompressBytecode('{{compressedBytecode}}');
 
-export class {{capitalizedName}}Deployed extends Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
+export class {{capitalizedName}} extends Script<{{capitalizedName}}Inputs, {{capitalizedName}}Output> {
 
   static readonly abi = abi;
-  static readonly originalBytecode = originalBytecode;
-  static readonly loaderBytecode = loaderBytecode;
+  static readonly bytecode = bytecode;
 
   constructor(wallet: Account) {
-    super(originalBytecode, abi, wallet, loaderBytecode);
+    super(bytecode, abi, wallet);
   }
 }

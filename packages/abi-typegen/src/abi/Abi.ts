@@ -27,8 +27,7 @@ export class Abi {
   public commonTypesInUse: string[] = [];
 
   public rawContents: JsonAbi;
-  public hexlifiedOriginalBinContents?: string;
-  public hexlifiedLoaderBinContents?: string;
+  public hexlifiedBinContents?: string;
   public storageSlotsContents?: string;
 
   public types: IType[];
@@ -39,8 +38,7 @@ export class Abi {
     filepath: string;
     programType: ProgramTypeEnum;
     rawContents: JsonAbi;
-    hexlifiedOriginalBinContents?: string;
-    hexlifiedLoaderBinContents?: string;
+    hexlifiedBinContents?: string;
     storageSlotsContents?: string;
     outputDir: string;
   }) {
@@ -48,8 +46,7 @@ export class Abi {
       filepath,
       outputDir,
       rawContents,
-      hexlifiedOriginalBinContents,
-      hexlifiedLoaderBinContents,
+      hexlifiedBinContents,
       programType,
       storageSlotsContents,
     } = params;
@@ -72,8 +69,7 @@ export class Abi {
 
     this.filepath = filepath;
     this.rawContents = rawContents;
-    this.hexlifiedOriginalBinContents = hexlifiedOriginalBinContents;
-    this.hexlifiedLoaderBinContents = hexlifiedLoaderBinContents;
+    this.hexlifiedBinContents = hexlifiedBinContents;
     this.storageSlotsContents = storageSlotsContents;
     this.outputDir = outputDir;
 

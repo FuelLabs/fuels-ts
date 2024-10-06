@@ -32,7 +32,7 @@ describe('templates/factory', () => {
       filepath: './my-contract-abi.json',
       outputDir: 'stdout',
       rawContents,
-      hexlifiedOriginalBinContents: '0x-bytecode-here',
+      hexlifiedBinContents: '0x-bytecode-here',
       programType: ProgramTypeEnum.CONTRACT,
     });
 
