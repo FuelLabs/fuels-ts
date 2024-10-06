@@ -1,5 +1,5 @@
 import type { JsonAbi } from 'fuels';
-import { bn, ContractFactory, hexlify, Predicate, Script, Wallet } from 'fuels';
+import { bn, ContractFactory, getRandomB256, hexlify, Predicate, Script, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -7,6 +7,7 @@ import {
   PredicateFalseConfigurable,
   ScriptMainArgBool,
   PredicateTrue,
+  PredicateWithMoreConfigurables,
 } from '../test/typegen';
 
 /**
@@ -248,7 +249,7 @@ describe('first try', () => {
       wallet
     );
 
-    const { waitForResult } = await factory.deployAsBlobTxForPredicate();
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
     const { loaderBytecode } = await waitForResult();
 
     expect(loaderBytecode).to.not.equal(hexlify(PredicateTrue.bytecode));
@@ -274,7 +275,7 @@ describe('first try', () => {
     expect(isStatusSuccess).toBe(true);
   });
 
-  it.only('can run with loader bytecode with manually modified configurables', async () => {
+  it('can run with loader bytecode with manually modified configurables', async () => {
     using launch = await launchTestNode();
     const {
       wallets: [wallet],
@@ -290,26 +291,78 @@ describe('first try', () => {
     );
 
     const { waitForResult } = await factory.deployAsBlobTxForScript();
-    const { loaderBytecode } = await waitForResult();
+    const { loaderBytecode, offset } = await waitForResult();
     expect(loaderBytecode).to.not.equal(hexlify(PredicateFalseConfigurable.bytecode));
 
     const configurable = {
       SECRET_NUMBER: 8000,
     };
-    const abi: JsonAbi = {
-      ...PredicateFalseConfigurable.abi,
-      configurables: [
-        {
-          ...PredicateFalseConfigurable.abi.configurables[0],
-          offset: 88, // to calculate
-        },
-      ],
-    };
+
+    const { configurables: readOnlyConfigurables } = PredicateFalseConfigurable.abi;
+    const configurables: JsonAbi['configurables'] = [];
+
+    readOnlyConfigurables.forEach((config) => {
+      // @ts-expect-error shut up
+      configurables.push({ ...config, offset: config.offset - offset });
+    });
+    const newAbi = { ...PredicateFalseConfigurable.abi, configurables } as JsonAbi;
 
     const predicate = new Predicate({
       data: [configurable.SECRET_NUMBER],
       bytecode: loaderBytecode,
-      abi,
+      abi: newAbi,
+      provider,
+      configurableConstants: configurable,
+    });
+
+    await wallet.transfer(predicate.address, 10_000, provider.getBaseAssetId());
+
+    const tx = await predicate.transfer(receiver.address, 1000, provider.getBaseAssetId());
+    const response = await tx.waitForResult();
+    expect(response.isStatusSuccess).toBe(true);
+  });
+
+  it('can run with loader bytecode with manually modified configurables', async () => {
+    using launch = await launchTestNode();
+    const {
+      wallets: [wallet],
+      provider,
+    } = launch;
+
+    const receiver = Wallet.generate({ provider });
+
+    const factory = new ContractFactory(
+      PredicateWithMoreConfigurables.bytecode,
+      PredicateWithMoreConfigurables.abi,
+      wallet
+    );
+
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode, offset } = await waitForResult();
+    expect(loaderBytecode).to.not.equal(hexlify(PredicateWithMoreConfigurables.bytecode));
+    // U16 == 305u16 && U32 == 101u32 && U64 == 1000000 && BOOL == false
+    const configurable = {
+      FEE: 99,
+      ADDRESS: getRandomB256(),
+      U16: 305,
+      U32: 101,
+      U64: 1000000,
+      BOOL: false,
+    };
+
+    const { configurables: readOnlyConfigurables } = PredicateWithMoreConfigurables.abi;
+    const configurables: JsonAbi['configurables'] = [];
+
+    readOnlyConfigurables.forEach((config) => {
+      // @ts-expect-error shut up
+      configurables.push({ ...config, offset: config.offset - offset });
+    });
+    const newAbi = { ...PredicateWithMoreConfigurables.abi, configurables } as JsonAbi;
+
+    const predicate = new Predicate({
+      data: [configurable.FEE, configurable.ADDRESS],
+      bytecode: loaderBytecode,
+      abi: newAbi,
       provider,
       configurableConstants: configurable,
     });
