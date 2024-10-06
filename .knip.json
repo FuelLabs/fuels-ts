@@ -28,6 +28,8 @@
     "eslint-plugin-react",
     "eslint-plugin-react-hooks",
     "dotenv",
+    "kill",
+    "lsof",
     "memfs",
     "open",
     "textlint",
