@@ -15,12 +15,8 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
 
   const { types, configurables } = abi;
 
-  const {
-    rawContents,
-    capitalizedName,
-    hexlifiedBinContents: hexlifiedBinString,
-    commonTypesInUse,
-  } = params.abi;
+  const { rawContents, capitalizedName, hexlifiedOriginalBinContents, commonTypesInUse } =
+    params.abi;
 
   const abiJsonString = JSON.stringify(rawContents, null, 2);
 
@@ -48,7 +44,7 @@ export function renderMainTemplate(params: { abi: Abi; versions: BinaryVersions 
       structs,
       enums,
       abiJsonString,
-      compressedBytecode: compressBytecode(hexlifiedBinString),
+      compressedBytecode: compressBytecode(hexlifiedOriginalBinContents),
       capitalizedName,
       imports,
       configurables,
