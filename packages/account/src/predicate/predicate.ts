@@ -75,7 +75,7 @@ export class Predicate<
     /**
      * TODO: Implement a getBytes method within the Predicate class. This method should return the loaderBytecode if it is set.
      * The getBytes method should be used in all places where we use this.bytes.
-     * Note: Do not set loaderBytecode to a default string here; it should remain optional.
+     * Note: Do not set loaderBytecode to a default string here; it should remain undefined when not provided.
      */
     loaderBytecode = '',
   }: PredicateParams<TData, TConfigurables>) {
@@ -284,7 +284,7 @@ export class Predicate<
       if (loaderBytecode) {
         /**
          * TODO: We mutate the predicate bytes here to be the loader bytes only if the configurables are being set.
-         * What we actually do here is to mutate the loader bytes to include the configurables.
+         * What we actually need to do here is to mutate the loader bytes to include the configurables.
          */
         const offset = getDataOffset(bytes);
 
