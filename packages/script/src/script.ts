@@ -33,6 +33,17 @@ function getDataOffset(binary: Uint8Array): number {
   return Number(dataOffset);
 }
 
+function extractConfigurableBytes(offset: number, bytes: Uint8Array) {
+  const dataSection = bytes.slice(offset);
+  const dataSectionLen = dataSection.length;
+
+  // Convert dataSectionLen to big-endian bytes
+  const dataSectionLenBytes = new Uint8Array(8);
+  const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
+  dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
+  return concat([dataSectionLenBytes, dataSection]);
+}
+
 /**
  * `Script` provides a typed interface for interacting with the script program type.
  */
@@ -87,7 +98,23 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
     this.provider = account.provider;
     this.account = account;
     if (loaderBytecode) {
+      /**
+       * The loader bytecode is deployed without the configurable data, meaning even the default
+       * configurables are absent. If the script has configurable constants, we need to set the default
+       * values in the loader.
+       */
       this.loaderBytecode = arrayify(loaderBytecode);
+      const offset = getDataOffset(this.bytes);
+
+      // Extract default configurable on the script
+      const configurableData = this.bytes.slice(offset);
+
+      // If the script has configurable data
+      if (configurableData.length > 0) {
+        // Set default configurable at the loader
+        const configurableBytes = extractConfigurableBytes(offset, this.bytes);
+        this.loaderBytecode = concat([this.loaderBytecode, configurableBytes]);
+      }
     }
     this.functions = {
       main: (...args: TInput) =>
@@ -128,10 +155,8 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
 
       if (this.loaderBytecode) {
         const offset = getDataOffset(this.bytes);
-
         // update the dataSection here as necessary (with configurables)
         const dataSection = this.bytes.slice(offset);
-
         const dataSectionLen = dataSection.length;
 
         // Convert dataSectionLen to big-endian bytes
@@ -139,7 +164,16 @@ export class Script<TInput extends Array<any>, TOutput> extends AbstractScript {
         const dataSectionLenDataView = new DataView(dataSectionLenBytes.buffer);
         dataSectionLenDataView.setBigUint64(0, BigInt(dataSectionLen), false);
 
-        this.loaderBytecode = concat([this.loaderBytecode, dataSectionLenBytes, dataSection]);
+        /**
+         * When setting configurables on the loader, we need to strip the old data
+         * from the loader and replace it with the new data.
+         */
+        const cleanLoader = this.loaderBytecode.slice(
+          0,
+          this.loaderBytecode.length - dataSectionLenBytes.length - dataSectionLen
+        );
+
+        this.loaderBytecode = concat([cleanLoader, dataSectionLenBytes, dataSection]);
       }
     } catch (err) {
       throw new FuelError(
