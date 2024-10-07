@@ -2,7 +2,7 @@
 
 In order to optimize the cost of your recurring predicate executions, we recommend first deploying your predicate. This can be done using the [Fuels CLI](../fuels-cli/index.md) and running the [deploy command](../fuels-cli/commands#fuels-deploy).
 
-By deploying the predicate, it's bytecode is stored on chain as a blob. The SDK will then produce bytecode that can load the blob on demand that can execute the predicate. This far reduces the repeat execution cost of the predicate.
+By deploying the predicate, its bytecode is stored on chain as a blob. The SDK will then produce bytecode that can load the blob on demand to execute the original predicate. This far reduces the repeat execution cost of the predicate.
 
 ## How to Deploy a Predicate
 
