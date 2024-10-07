@@ -1,12 +1,12 @@
 # Deploying Scripts
 
-In order to optimize the cost of your recurring script executions, we recommend first deploying your script. This can be done using the [Fuels CLI](../fuels-cli/index.md) and running the [deploy command](../fuels-cli/commands#fuels-deploy).
+In order to optimize the cost of your recurring script executions, we recommend first deploying your script. This can be done using the [Fuels CLI](../fuels-cli/index.md) and running the [deploy command](../fuels-cli/commands.md#fuels-deploy).
 
 By deploying the script, its bytecode is stored on chain as a blob. The SDK will then produce bytecode that can load the blob on demand to execute the original script. This far reduces the repeat execution cost of the script.
 
 ## How to Deploy a Script
 
-To deploy a script, we can use the [Fuels CLI](../fuels-cli/index.md) and execute the [deploy command](../fuels-cli/commands#fuels-deploy).
+To deploy a script, we can use the [Fuels CLI](../fuels-cli/index.md) and execute the [deploy command](../fuels-cli/commands.md#fuels-deploy).
 
 This will perform the following actions:
 
