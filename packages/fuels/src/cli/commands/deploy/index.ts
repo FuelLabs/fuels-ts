@@ -10,11 +10,6 @@ import { savePredicateFiles } from './savePredicateFiles';
 import { saveScriptFiles } from './saveScriptFiles';
 
 export async function deploy(config: FuelsConfig) {
-  let cleanup: (() => void) | undefined;
-  if (config.autoStartFuelCore) {
-    const res = await autoStartFuelCore(config);
-    cleanup = res?.killChildProcess;
-  }
   /**
    * Deploy contract and save their IDs to JSON file.
    */
@@ -35,11 +30,9 @@ export async function deploy(config: FuelsConfig) {
   const predicates = await deployPredicates(config);
   savePredicateFiles(predicates, config);
 
-  cleanup?.();
-
   /**
    * After deploying scripts/predicates, we need to
-   * re-generate factory classes with the loader code
+   * re-generate factory classe with the loader coee
    */
   await generateTypes(config);
 
