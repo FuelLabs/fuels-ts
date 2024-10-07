@@ -1,7 +1,7 @@
 ---
 "@fuel-ts/account": patch
 "@fuel-ts/contract": patch
-"@fuel-ts/fuels": patch
+"fuels": patch
 "@fuel-ts/program": patch
 "@fuel-ts/versions": patch
 "create-fuels": patch
