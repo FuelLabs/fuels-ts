@@ -4,7 +4,10 @@
   "description": "",
   "private": true,
   "scripts": {
-    "pretest": "./scripts/pretest.sh"
+    "pretest": "run-s fuels:build fuels:deploy type:check",
+    "fuels:deploy": "pnpm fuels deploy",
+    "fuels:build": "pnpm fuels build",
+    "type:check": "tsc --noEmit"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
