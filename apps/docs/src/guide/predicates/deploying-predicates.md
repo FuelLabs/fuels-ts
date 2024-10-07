@@ -10,10 +10,10 @@ To deploy a predicate, we can use the [Fuels CLI](../fuels-cli/index.md) and exe
 
 This will perform the following actions:
 
-1. Compile the script using your `forc` version
-1. Deploys the built script binary to the chain as a blob
-1. Generates a script that loads the blob that can be used to execute the script
-1. Generates types for both the script and the loader that you can use in your application
+1. Compile the predicate using your `forc` version
+1. Deploy the built predicate binary to the chain as a blob
+1. Generate a new, smaller predicate that loads the deployed predicate's blob
+1. Generate types for both the predicate and the loader that you can use in your application
 
 We can then utilize the above generated types like so:
 
