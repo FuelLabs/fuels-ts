@@ -1,9 +1,6 @@
 script;
 
-use std::{
-    string::String,
-};
-
+use std::{string::String,};
 
 struct Struct1 {
     tag: str[3],
@@ -113,11 +110,13 @@ fn main() -> bool {
     log(STR_4);
     assert(TUPLE == (67, true, __to_str_array("hu")));
     log(TUPLE);
-    assert(STRUCT_1 == Struct1 {
-        tag: __to_str_array("909"),
-        age: 15,
-        scores: [9, 2, 1],
-    });
+    assert(
+        STRUCT_1 == Struct1 {
+            tag: __to_str_array("909"),
+            age: 15,
+            scores: [9, 2, 1],
+        },
+    );
     log(STRUCT_1);
 
     true
