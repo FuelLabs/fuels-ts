@@ -8,6 +8,7 @@ import {
   ScriptMainArgBool,
   PredicateTrue,
   PredicateWithMoreConfigurables,
+  ScriptWithMoreConfigurable,
 } from '../test/typegen';
 
 /**
@@ -168,6 +169,76 @@ describe('first try', () => {
     const { value, logs } = await waitForResult2();
     expect(logs[0].toNumber()).equal(9000);
     expect(value).toBe(false);
+  });
+
+  it('it should set configurables in complicated script', async () => {
+    using launch = await launchTestNode();
+
+    const {
+      wallets: [wallet],
+    } = launch;
+
+    const factory = new ContractFactory(
+      ScriptWithMoreConfigurable.bytecode,
+      ScriptWithMoreConfigurable.abi,
+      wallet
+    );
+    const { waitForResult } = await factory.deployAsBlobTxForScript();
+    const { loaderBytecode, configurableOffsetDiff } = await waitForResult();
+
+    const configurable = {
+      U8: 16,
+      U16: 201,
+      U32: 1001,
+      U64: 99999999,
+      BOOL: false,
+      B256: '0x314fa58689bbe1da2430517de2d772b384a1c1d2e9cb87e73c6afcf246045b10',
+      ENUM: 'blue',
+      ARRAY: [
+        [101, 99],
+        [123, 456],
+      ],
+      STR_4: 'leuf',
+      TUPLE: [67, true, 'hu'],
+      STRUCT_1: {
+        tag: '909',
+        age: 15,
+        scores: [9, 2, 1],
+      },
+    };
+
+    const normalScript = new Script(
+      ScriptWithMoreConfigurable.bytecode,
+      ScriptWithMoreConfigurable.abi,
+      wallet
+    );
+
+    normalScript.setConfigurableConstants(configurable);
+
+    const script = new Script(
+      loaderBytecode,
+      mapToLoaderAbi(ScriptWithMoreConfigurable.abi, configurableOffsetDiff),
+      wallet
+    );
+
+    script.setConfigurableConstants(configurable);
+
+    const { waitForResult: waitForResult2 } = await script.functions.main().call();
+    const { value, logs } = await waitForResult2();
+
+    expect(value).toBeTruthy();
+
+    expect(logs[0]).equal(configurable.U8);
+    expect(logs[1]).equal(configurable.U16);
+    expect(logs[2]).equal(configurable.U32);
+    expect(logs[3].toNumber()).equal(configurable.U64);
+    expect(logs[4]).equal(configurable.BOOL);
+    expect(logs[5]).equal(configurable.B256);
+    expect(logs[6]).equal(configurable.ENUM);
+    expect(logs[7]).toStrictEqual(configurable.ARRAY);
+    expect(logs[8]).equal(configurable.STR_4);
+    expect(logs[9]).toStrictEqual(configurable.TUPLE);
+    expect(logs[10]).toStrictEqual(configurable.STRUCT_1);
   });
 
   it('Should work with predicates', async () => {
