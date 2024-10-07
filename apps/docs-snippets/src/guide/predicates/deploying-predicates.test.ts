@@ -33,7 +33,7 @@ describe('Deploying Predicates', () => {
     await waitForDeploy();
 
     // #region deploying-predicates
-    // #import { Provider, Wallet, bn};
+    // #import { Provider, Wallet};
     // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
     // #context import { TypegenPredicateLoader } from 'path/to/typegen/outputs';
 
