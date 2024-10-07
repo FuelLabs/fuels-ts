@@ -1,4 +1,4 @@
-[**@fuel-ts/contract v0.94.8**](../index.md) • **Docs**
+[**@fuel-ts/contract v0.94.9**](../index.md) • **Docs**
 
 ***
 
@@ -38,7 +38,7 @@ packages/account/dist/test-utils/setup-test-provider-and-wallets.d.ts:22
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:48](https://github.com/FuelLabs/fuels-ts/blob/f2f18fa0b7b675b5fd86d7a2e5587e757a054fae/packages/contract/src/test-utils/launch-test-node.ts#L48)
+[packages/contract/src/test-utils/launch-test-node.ts:48](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/contract/src/test-utils/launch-test-node.ts#L48)
 
 ***
 

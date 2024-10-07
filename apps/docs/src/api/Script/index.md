@@ -1,4 +1,4 @@
-**@fuel-ts/script v0.94.8** • [**Docs**](index.md)
+**@fuel-ts/script v0.94.9** • [**Docs**](index.md)
 
 ***
 
