@@ -1,4 +1,5 @@
 ---
+"@internal/forc": patch
 "@fuel-ts/versions": patch
 ---
 
