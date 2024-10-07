@@ -934,7 +934,58 @@ impl AbiContract for Contract {
         y: [StructDoubleGeneric<u64, bool>; 4],
         z: (str[5], bool),
         a: StructSimple,
+    ) -> (
+        StructDoubleGeneric<[b256; 3], u8>,
+        [StructDoubleGeneric<u64, bool>; 4],
+        (str[5], bool),
+        StructSimple,
     ) {
-        ()
+
+        let input_x: StructDoubleGeneric<[b256; 3], u8> = StructDoubleGeneric {
+            a: [
+                0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
+                0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
+                0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc,
+            ],
+            b: 10,
+        };
+
+        let input_y: [StructDoubleGeneric<u64, bool>; 4] = [
+            StructDoubleGeneric { a: 99u64, b: false },
+            StructDoubleGeneric { a: 199u64, b: false },
+            StructDoubleGeneric { a: 2000u64, b: false },
+            StructDoubleGeneric { a: 31u64, b: true },
+        ];
+
+        let input_z: (str[5], bool) = (__to_str_array("Input"), true);
+
+        let input_a: StructSimple = StructSimple { a: true, b: 10 };
+
+        assert(x == input_x);
+        assert(y == input_y);
+        assert(z == input_z);
+        assert(a == input_a);
+
+        let expected_x: StructDoubleGeneric<[b256; 3], u8> = StructDoubleGeneric {
+            a: [
+                0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd,
+                0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee,
+                0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff,
+            ],
+            b: 99,
+        };
+
+        let expected_y: [StructDoubleGeneric<u64, bool>; 4] = [
+            StructDoubleGeneric { a: 11u64, b: true },
+            StructDoubleGeneric { a: 99u64, b: true },
+            StructDoubleGeneric { a: 567u64, b: true },
+            StructDoubleGeneric { a: 971u64, b: false },
+        ];
+
+        let expected_z: (str[5], bool) = (__to_str_array("tupni"), false);
+
+        let expected_a: StructSimple = StructSimple { a: false, b: 57 };
+
+        return (expected_x, expected_y, expected_z, expected_a);
     }
 }
