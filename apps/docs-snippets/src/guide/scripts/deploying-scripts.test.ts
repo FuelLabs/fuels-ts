@@ -46,6 +46,7 @@ describe('Deploying Scripts', () => {
 
     const { waitForResult } = await script.functions.main(10).call();
     const { value, gasUsed } = await waitForResult();
+    // value: 10
     // #endregion deploying-scripts
 
     const scriptWithoutLoader = new TypegenScript(wallet);
