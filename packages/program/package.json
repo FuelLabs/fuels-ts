@@ -34,7 +34,7 @@
     "@fuel-ts/math": "workspace:*",
     "@fuel-ts/transactions": "workspace:*",
     "@fuel-ts/utils": "workspace:*",
-    "@fuels/vm-asm": "0.57.1"
+    "@fuels/vm-asm": "0.58.0"
   },
   "devDependencies": {
     "@types/ramda": "^0.30.2"
