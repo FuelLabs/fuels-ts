@@ -121,6 +121,11 @@ abi AbiContract {
         y: [StructDoubleGeneric<u64, bool>; 4],
         z: (str[5], bool),
         a: StructSimple,
+    ) -> (
+        StructDoubleGeneric<[b256; 3], u8>,
+        [StructDoubleGeneric<u64, bool>; 4],
+        (str[5], bool),
+        StructSimple,
     );
 }
 
