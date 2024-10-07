@@ -5,4 +5,4 @@
 "create-fuels": patch
 ---
 
-chore: upgrade `fuel-core@0.37.1` and update `create-fuels` toolchain
+chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
