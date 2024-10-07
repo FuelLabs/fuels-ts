@@ -171,7 +171,7 @@ describe('first try', () => {
     expect(value).toBe(false);
   });
 
-  it('it should set configurables in complicated script', async () => {
+  it('should set configurables in complicated script', async () => {
     using launch = await launchTestNode();
 
     const {
