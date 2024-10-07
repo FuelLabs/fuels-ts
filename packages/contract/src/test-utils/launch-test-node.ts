@@ -1,4 +1,6 @@
-import type { Account, WalletUnlocked } from '@fuel-ts/account';
+import { Provider, Wallet } from '@fuel-ts/account';
+import type { WalletUnlocked, Account } from '@fuel-ts/account';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@fuel-ts/account/configs';
 import { setupTestProviderAndWallets } from '@fuel-ts/account/test-utils';
 import type {
   LaunchCustomProviderAndGetWalletsOptions,
@@ -129,15 +131,25 @@ export async function launchTestNode<const TFactories extends DeployContractConf
 }: Partial<LaunchTestNodeOptions<TFactories>> = {}): Promise<LaunchTestNodeReturn<TFactories>> {
   const snapshotConfig = getChainSnapshot(nodeOptions);
   const args = getFuelCoreArgs(nodeOptions);
-  const { provider, wallets, cleanup } = await setupTestProviderAndWallets({
-    walletsConfig,
-    providerOptions,
-    nodeOptions: {
-      ...nodeOptions,
-      snapshotConfig,
-      args,
-    },
-  });
+  // const { provider, wallets, cleanup } = await setupTestProviderAndWallets({
+  //   walletsConfig,
+  //   providerOptions,
+  //   nodeOptions: {
+  //     ...nodeOptions,
+  //     snapshotConfig,
+  //     args,
+  //   },
+  // });
+
+  // @TODO change network + private key
+
+  const provider = await Provider.create(TESTNET_NETWORK_URL);
+  const wallet = Wallet.fromPrivateKey('', provider);
+
+  console.log('address', wallet.address.toB256());
+  console.log((await wallet.getBalances()).balances.map((b) => b.amount.toString()));
+  const wallets = [wallet, wallet, wallet, wallet, wallet, wallet, wallet, wallet];
+  const cleanup = () => {};
 
   const contracts: TContracts<TFactories> = [] as TContracts<TFactories>;
   const configs = contractsConfigs ?? [];

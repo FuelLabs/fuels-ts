@@ -1,10 +1,11 @@
 import { defaultSnapshotConfigs, type SnapshotConfigs } from '@fuel-ts/utils';
+import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
 import { mergeDeepRight } from 'ramda';
 import type { PartialDeep } from 'type-fest';
 
 import type { ProviderOptions } from '../providers';
 import { Provider } from '../providers';
-import type { WalletUnlocked } from '../wallet';
+import { Wallet, type WalletUnlocked } from '../wallet';
 
 import type { LaunchNodeOptions } from './launchNode';
 import { launchNode } from './launchNode';
@@ -66,47 +67,22 @@ export async function setupTestProviderAndWallets({
     }
   );
 
-  const launchNodeOptions: LaunchNodeOptions = {
-    loggingEnabled: false,
-    ...nodeOptions,
-    snapshotConfig: mergeDeepRight(
-      defaultSnapshotConfigs,
-      walletsConfig.apply(nodeOptions?.snapshotConfig)
-    ),
-    port: nodeOptions.port || '0',
-  };
+  // @TODO change network + private key
 
-  let cleanup: () => void;
-  let url: string;
-  if (launchNodeServerPort) {
-    const serverUrl = `http://localhost:${launchNodeServerPort}`;
-    url = await (
-      await fetch(serverUrl, { method: 'POST', body: JSON.stringify(launchNodeOptions) })
-    ).text();
+  const provider = await Provider.create(TESTNET_NETWORK_URL);
+  const wallet = Wallet.fromPrivateKey('', provider);
 
-    cleanup = () => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      fetch(`${serverUrl}/cleanup/${url}`);
-    };
-  } else {
-    const settings = await launchNode(launchNodeOptions);
-    url = settings.url;
-    cleanup = settings.cleanup;
-  }
+  // console.log('Address', wallet.address.toB256());
+  // console.log('Base asset id', provider.getBaseAssetId());
+  // console.log(
+  //   (await wallet.getBalances()).balances.map((b) => ({
+  //     amount: b.amount.toString(),
+  //     assetId: b.assetId,
+  //   }))
+  // );
 
-  let provider: Provider;
-
-  try {
-    provider = await Provider.create(url, providerOptions);
-  } catch (err) {
-    cleanup();
-    throw err;
-  }
-
-  const wallets = walletsConfig.wallets;
-  wallets.forEach((wallet) => {
-    wallet.connect(provider);
-  });
+  const wallets = [wallet, wallet, wallet, wallet, wallet];
+  const cleanup = () => {};
 
   return {
     provider,

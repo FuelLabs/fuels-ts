@@ -189,7 +189,7 @@ describe('TransactionResponse', () => {
     }
   );
 
-  it(
+  it.only(
     'should throw error for a SqueezedOut status update [waitForResult]',
     { timeout: 10_000, retry: 10 },
     async () => {

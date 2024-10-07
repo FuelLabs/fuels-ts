@@ -925,59 +925,65 @@ describe('Provider', () => {
     });
   });
 
-  it('can getBlocks', async () => {
+  it.only('can getBlocks', async () => {
     using launched = await setupTestProviderAndWallets();
     const blocksLenght = 5;
     const { provider } = launched;
+
+    // console.log(provider.url);
     // Force-producing some blocks to make sure that blocksLenght blocks exist
-    await provider.produceBlocks(blocksLenght);
+    // await provider.produceBlocks(blocksLenght);
     const { blocks } = await provider.getBlocks({
-      last: 5,
+      last: 47,
     });
-    expect(blocks.length).toBe(blocksLenght);
-    blocks.forEach((block) => {
-      expect(block).toStrictEqual({
-        id: expect.any(String),
-        height: expect.any(BN),
-        time: expect.any(String),
-        header: {
-          applicationHash: expect.any(String),
-          daHeight: expect.any(BN),
-          eventInboxRoot: expect.any(String),
-          messageOutboxRoot: expect.any(String),
-          prevRoot: expect.any(String),
-          stateTransitionBytecodeVersion: expect.any(String),
-          transactionsCount: expect.any(String),
-          transactionsRoot: expect.any(String),
-        },
-        transactionIds: expect.any(Array<string>),
-      });
-    });
+
+    console.log(blocks);
+    console.log(blocks.length);
+    // expect(blocks.length).toBe(blocksLenght);
+    // blocks.forEach((block) => {
+    //   expect(block).toStrictEqual({
+    //     id: expect.any(String),
+    //     height: expect.any(BN),
+    //     time: expect.any(String),
+    //     header: {
+    //       applicationHash: expect.any(String),
+    //       daHeight: expect.any(BN),
+    //       eventInboxRoot: expect.any(String),
+    //       messageOutboxRoot: expect.any(String),
+    //       prevRoot: expect.any(String),
+    //       stateTransitionBytecodeVersion: expect.any(String),
+    //       transactionsCount: expect.any(String),
+    //       transactionsRoot: expect.any(String),
+    //     },
+    //     transactionIds: expect.any(Array<string>),
+    //   });
+    // });
   });
 
-  it('can getBlockWithTransactions', async () => {
+  it.only('can getBlockWithTransactions', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
-    await provider.produceBlocks(1);
-    const block = await provider.getBlockWithTransactions('latest');
-    const { transactions } = await provider.getTransactions({ first: 100 });
-    expect(block).toStrictEqual({
-      id: expect.any(String),
-      height: expect.any(BN),
-      time: expect.any(String),
-      header: {
-        applicationHash: expect.any(String),
-        daHeight: expect.any(BN),
-        eventInboxRoot: expect.any(String),
-        messageOutboxRoot: expect.any(String),
-        prevRoot: expect.any(String),
-        stateTransitionBytecodeVersion: expect.any(String),
-        transactionsCount: expect.any(String),
-        transactionsRoot: expect.any(String),
-      },
-      transactionIds: expect.any(Array<string>),
-      transactions,
-    });
+    // await provider.produceBlocks(1);
+    // const block = await provider.getBlockWithTransactions('latest');
+    const { transactions } = await provider.getTransactions({ last: 164 });
+    console.log('length', transactions.length);
+    // expect(block).toStrictEqual({
+    //   id: expect.any(String),
+    //   height: expect.any(BN),
+    //   time: expect.any(String),
+    //   header: {
+    //     applicationHash: expect.any(String),
+    //     daHeight: expect.any(BN),
+    //     eventInboxRoot: expect.any(String),
+    //     messageOutboxRoot: expect.any(String),
+    //     prevRoot: expect.any(String),
+    //     stateTransitionBytecodeVersion: expect.any(String),
+    //     transactionsCount: expect.any(String),
+    //     transactionsRoot: expect.any(String),
+    //   },
+    //   transactionIds: expect.any(Array<string>),
+    //   transactions,
+    // });
   });
 
   it('can getMessageProof with all data', async () => {

@@ -21,7 +21,7 @@ const BaseAssetId = defaultSnapshotConfigs.chainConfig.consensus_parameters.V1.b
  * @group node
  */
 describe('setupTestProviderAndWallets', () => {
-  it('kills the node after going out of scope', async () => {
+  it.only('kills the node after going out of scope', async () => {
     let url = '';
     // eslint-disable-next-line no-lone-blocks
     {

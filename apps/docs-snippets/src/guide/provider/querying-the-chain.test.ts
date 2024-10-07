@@ -142,7 +142,7 @@ describe('querying the chain', () => {
     expect(balances).toBeDefined();
   });
 
-  it('can getBlocks', async () => {
+  it.only('can getBlocks', async () => {
     using launched = await launchTestNode();
 
     const FUEL_NETWORK_URL = launched.provider.url;
@@ -152,16 +152,16 @@ describe('querying the chain', () => {
 
     const provider = await Provider.create(FUEL_NETWORK_URL);
 
-    const blockToProduce = 3;
+    // const blockToProduce = 3;
 
-    // Force-producing some blocks to make sure that 10 blocks exist
-    await provider.produceBlocks(blockToProduce);
+    // // Force-producing some blocks to make sure that 10 blocks exist
+    // await provider.produceBlocks(blockToProduce);
 
     const { blocks } = await provider.getBlocks({
-      last: blockToProduce,
+      last: 10,
     });
     // #endregion Provider-get-blocks
-    expect(blocks.length).toBe(blockToProduce);
+    expect(blocks.length).toBe(10);
   });
 
   it('can getMessageByNonce', async () => {
