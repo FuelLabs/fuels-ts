@@ -1,4 +1,4 @@
-import { ContractFactory, Provider, Wallet, bn, hexlify } from 'fuels';
+import { ContractFactory, Provider, Wallet, hexlify } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import {
@@ -41,10 +41,11 @@ describe('Deploying Predicates', () => {
     const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
     const baseAssetId = provider.getBaseAssetId();
 
-    // First, we will need to instantiate the script via it's loader bytecode. This can be imported from the typegen outputs
-    // that were created on `fuels deploy`. Then we can use the predicate as we would normally, such as overriding the configurables.
+    // First, we will need to instantiate the script via it's loader bytecode.
+    // This can be imported from the typegen outputs that were created on `fuels deploy`.
+    // Then we can use the predicate as we would normally, such as overriding the configurables.
     const predicate = new TypegenPredicateLoader({
-      data: [bn(23)],
+      data: [23],
       provider,
       configurableConstants: {
         PIN: 23,
@@ -52,20 +53,12 @@ describe('Deploying Predicates', () => {
     });
 
     // Now, let's fund the predicate
-    const { waitForResult: waitForFund } = await wallet.transfer(
-      predicate.address,
-      100_000,
-      baseAssetId
-    );
-    await waitForFund();
+    const fundTx = await wallet.transfer(predicate.address, 100_000, baseAssetId);
+    await fundTx.waitForResult();
 
     // Then we'll execute the transfer and validate the predicate
-    const { waitForResult: waitForTransfer } = await predicate.transfer(
-      receiver.address,
-      1000,
-      baseAssetId
-    );
-    const { gasUsed } = await waitForTransfer();
+    const transferTx = await predicate.transfer(receiver.address, 1000, baseAssetId);
+    const { gasUsed } = await transferTx.waitForResult();
     // #endregion deploying-predicates
 
     const anotherPredicate = new TypegenPredicate({
@@ -76,19 +69,15 @@ describe('Deploying Predicates', () => {
       },
     });
 
-    const { waitForResult: waitForAnotherFund } = await wallet.transfer(
-      anotherPredicate.address,
-      100_000
-    );
-    await waitForAnotherFund();
+    const anotherFundTx = await wallet.transfer(anotherPredicate.address, 100_000);
+    await anotherFundTx.waitForResult();
 
-    const { waitForResult: waitForAnotherTransfer } = await anotherPredicate.transfer(
-      receiver.address,
-      1000
-    );
-    const { gasUsed: anotherGasUsed } = await waitForAnotherTransfer();
+    const anotherTransferTx = await anotherPredicate.transfer(receiver.address, 1000);
+    const { gasUsed: anotherGasUsed } = await anotherTransferTx.waitForResult();
 
-    expect(recieverInitialBalance.toNumber()).toBeLessThan(recieverInitialBalance.toNumber());
+    expect(recieverInitialBalance.toNumber()).toBeLessThan(
+      (await receiver.getBalance()).toNumber()
+    );
     expect(gasUsed.toNumber()).toBeLessThanOrEqual(anotherGasUsed.toNumber());
   });
 });
