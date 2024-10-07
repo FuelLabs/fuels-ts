@@ -1,6 +1,5 @@
 import type { FuelsConfig } from '../../types';
 import { generateTypes } from '../build/generateTypes';
-import { autoStartFuelCore } from '../dev/autoStartFuelCore';
 
 import { deployContracts } from './deployContracts';
 import { deployPredicates } from './deployPredicates';
