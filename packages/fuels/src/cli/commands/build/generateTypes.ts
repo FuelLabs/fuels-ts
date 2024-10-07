@@ -25,14 +25,12 @@ async function generateTypesForProgramType(
   const isPredicate = programType === ProgramTypeEnum.PREDICATE;
 
   if (isScript || isPredicate) {
-    filepaths = paths.flatMap((dirpath) => {
+    const loaderFiles = paths.flatMap((dirpath) => {
       const glob = `*-abi.json`;
-      const cwd = `${dirpath}/out/${config.buildMode}`;
-      return globSync(glob, { cwd }).map(
-        (filename) => `${dirpath}/out/${config.buildMode}/${filename}`
-      );
+      const cwd = `${dirpath}/out`;
+      return globSync(glob, { cwd }).map((filename) => `${dirpath}/out/${filename}`);
     });
-    filepaths = filepaths.slice(0);
+    filepaths = filepaths.concat(loaderFiles);
   }
 
   runTypegen({

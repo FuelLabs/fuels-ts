@@ -6,12 +6,11 @@ import type { DeployedScript, FuelsConfig } from '../../types';
 export function saveScriptFiles(scripts: DeployedScript[], _config: FuelsConfig) {
   for (const { path, loaderBytecode, abi } of scripts) {
     const scriptName = getScriptName(path);
-    const buildMode = _config.buildMode;
 
-    const loaderBytecodePath = `${path}/out/${buildMode}/${scriptName}-loader.bin`;
+    const loaderBytecodePath = `${path}/out/${scriptName}-loader.bin`;
     writeFileSync(loaderBytecodePath, loaderBytecode);
 
-    const abiPath = `${path}/out/${buildMode}/${scriptName}-loader-abi.json`;
+    const abiPath = `${path}/out/${scriptName}-loader-abi.json`;
     writeFileSync(abiPath, JSON.stringify(abi, null, 2));
   }
 }
