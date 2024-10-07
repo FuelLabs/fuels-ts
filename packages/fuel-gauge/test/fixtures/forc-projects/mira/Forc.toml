@@ -1,0 +1,11 @@
+[project]
+authors = ["Fuel Labs <contact@fuel.sh>"]
+license = "Apache-2.0"
+name = "mira"
+
+[dependencies]
+interfaces = { path = "../libraries/interfaces" }
+math = { path = "../libraries/math" }
+standards = { git = "https://github.com/FuelLabs/sway-standards", tag = "v0.6.1" }
+sway_libs = { git = "https://github.com/FuelLabs/sway-libs", tag = "v0.24.0" }
+utils = { path = "../libraries/utils" }

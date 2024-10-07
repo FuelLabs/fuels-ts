@@ -30,13 +30,18 @@ export function getDecodedLogs<T = unknown>(
     if (receipt.type === ReceiptType.LogData || receipt.type === ReceiptType.Log) {
       const interfaceToUse = new Interface(externalAbis[receipt.id] || mainAbi);
 
-      const data =
-        receipt.type === ReceiptType.Log
-          ? new BigNumberCoder('u64').encode(receipt.val0)
-          : receipt.data;
+      try {
+        const data =
+          receipt.type === ReceiptType.Log
+            ? new BigNumberCoder('u64').encode(receipt.val0)
+            : receipt.data;
 
-      const [decodedLog] = interfaceToUse.decodeLog(data, receipt.val1.toString());
-      logs.push(decodedLog);
+        const [decodedLog] = interfaceToUse.decodeLog(data, receipt.val1.toString());
+        logs.push(decodedLog);
+      } catch (error) {
+        console.warn('Log not decoded');
+        console.log(error);
+      }
     }
 
     return logs;
