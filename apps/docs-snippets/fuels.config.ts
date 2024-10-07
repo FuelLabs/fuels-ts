@@ -7,4 +7,5 @@ export default createConfig({
   forcPath: 'fuels-forc',
   fuelCorePath: 'fuels-core',
   autoStartFuelCore: true,
+  fuelCorePort: 0,
 });
