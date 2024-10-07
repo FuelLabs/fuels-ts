@@ -27,7 +27,7 @@ describe('Deploying Scripts', () => {
     await waitForDeploy();
 
     // #region deploying-scripts
-    // #import { Provider, Wallet, };
+    // #import { Provider, Wallet };
     // #context import { WALLET_PVT_KEY } from 'path/to/my/env/file';
     // #context import { TypegenScriptLoader } from 'path/to/typegen/outputs';
 
