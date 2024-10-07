@@ -8,6 +8,8 @@ import { ConfigurablePin as TypegenPredicate } from '../../../test/typegen';
 /**
  * @group browser
  * @group node
+ *
+ * TODO: enable the test and reintroduce the docs
  */
 describe.skip('Deploying Predicates', () => {
   it('deploys a predicate via loader and calls', async () => {

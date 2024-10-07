@@ -8,6 +8,8 @@ import { SumScript as TypegenScript } from '../../../test/typegen';
 /**
  * @group browser
  * @group node
+ *
+ * TODO: enable the test and reintroduce the docs
  */
 describe.skip('Deploying Scripts', () => {
   it('deploys a script via loader and calls', async () => {
