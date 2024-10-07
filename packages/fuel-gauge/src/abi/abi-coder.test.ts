@@ -1279,5 +1279,69 @@ describe('AbiCoder', () => {
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
     });
   });
-  describe.skip('multi_arg_complex');
+  describe('multi_arg_complex', () => {
+    it('should encode/decode just fine', async () => {
+      const inputX: StructDoubleGenericInput<[string, string, string], number> = {
+        a: [
+          '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+          '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+          '0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc',
+        ],
+        b: 10,
+      };
+
+      const inputY: [
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+      ] = [
+        { a: bn(99), b: false },
+        { a: bn(199), b: false },
+        { a: bn(2000), b: false },
+        { a: bn(31), b: true },
+      ];
+
+      const inputZ: [string, boolean] = ['Input', true];
+
+      const inputA = { a: true, b: 10 };
+
+      const expectedX: StructDoubleGenericInput<[string, string, string], number> = {
+        a: [
+          '0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd',
+          '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+          '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+        ],
+        b: 99,
+      };
+
+      const expectedY: [
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+        StructDoubleGenericInput<BigNumberish, boolean>,
+      ] = [
+        { a: bn(11), b: true },
+        { a: bn(99), b: true },
+        { a: bn(567), b: true },
+        { a: bn(971), b: false },
+      ];
+
+      const expectedZ: [string, boolean] = ['tupni', false];
+
+      const expectedA = {
+        a: false,
+        b: 57,
+      };
+
+      const { waitForResult } = await contract.functions
+        .multi_arg_complex(inputX, inputY, inputZ, inputA)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(JSON.stringify(value)).toEqual(
+        JSON.stringify([expectedX, expectedY, expectedZ, expectedA])
+      );
+    });
+  });
 });
