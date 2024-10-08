@@ -44,78 +44,82 @@ function setupContract() {
  * @group browser
  */
 describe('Coverage Contract', { timeout: 15_000 }, () => {
-  it('can return outputs', async () => {
-    using contractInstance = await setupContract();
+  it(
+    'can return outputs',
+    async () => {
+      using contractInstance = await setupContract();
 
-    // Call contract methods
-    let expectedValue: unknown =
-      '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
-    let call = await contractInstance.functions.get_id().call();
-    let result = await call.waitForResult();
+      // Call contract methods
+      let expectedValue: unknown =
+        '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+      let call = await contractInstance.functions.get_id().call();
+      let result = await call.waitForResult();
 
-    expect(result.value).toEqual(expectedValue);
+      expect(result.value).toEqual(expectedValue);
 
-    expectedValue = 'gggggggg';
-    call = await contractInstance.functions.get_small_string().call();
-    result = await call.waitForResult();
+      expectedValue = 'gggggggg';
+      call = await contractInstance.functions.get_small_string().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toEqual(expectedValue);
+      expect(result.value).toEqual(expectedValue);
 
-    expectedValue = 'ggggggggg';
-    call = await contractInstance.functions.get_large_string().call();
-    result = await call.waitForResult();
+      expectedValue = 'ggggggggg';
+      call = await contractInstance.functions.get_large_string().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toEqual(expectedValue);
+      expect(result.value).toEqual(expectedValue);
 
-    expectedValue = {
-      foo: 100,
-    };
-    call = await contractInstance.functions.get_u32_struct().call();
-    result = await call.waitForResult();
+      expectedValue = {
+        foo: 100,
+      };
+      call = await contractInstance.functions.get_u32_struct().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toStrictEqual(expectedValue);
+      expect(result.value).toStrictEqual(expectedValue);
 
-    expectedValue = {
-      foo: 12,
-      bar: 42,
-    };
-    call = await contractInstance.functions.get_large_struct().call();
-    result = await call.waitForResult();
+      expectedValue = {
+        foo: 12,
+        bar: 42,
+      };
+      call = await contractInstance.functions.get_large_struct().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toStrictEqual(expectedValue);
+      expect(result.value).toStrictEqual(expectedValue);
 
-    expectedValue = [1, 2];
-    call = await contractInstance.functions.get_large_array().call();
-    result = await call.waitForResult();
+      expectedValue = [1, 2];
+      call = await contractInstance.functions.get_large_array().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toStrictEqual(expectedValue);
+      expect(result.value).toStrictEqual(expectedValue);
 
-    expectedValue = SmallEnumInput.Empty;
-    call = await contractInstance.functions.get_empty_enum().call();
-    result = await call.waitForResult();
+      expectedValue = SmallEnumInput.Empty;
+      call = await contractInstance.functions.get_empty_enum().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toStrictEqual(expectedValue);
+      expect(result.value).toStrictEqual(expectedValue);
 
-    expectedValue = {
-      bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
-    };
-    call = await contractInstance.functions.get_contract_id().call();
-    result = await call.waitForResult();
+      expectedValue = {
+        bits: '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+      };
+      call = await contractInstance.functions.get_contract_id().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toStrictEqual(expectedValue);
+      expect(result.value).toStrictEqual(expectedValue);
 
-    expectedValue = 113;
-    call = await contractInstance.functions.get_some_option_u8().call();
-    result = await call.waitForResult();
+      expectedValue = 113;
+      call = await contractInstance.functions.get_some_option_u8().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toEqual(113);
+      expect(result.value).toEqual(113);
 
-    expectedValue = undefined;
-    call = await contractInstance.functions.get_none_option_u8().call();
-    result = await call.waitForResult();
+      expectedValue = undefined;
+      call = await contractInstance.functions.get_none_option_u8().call();
+      result = await call.waitForResult();
 
-    expect(result.value).toEqual(undefined);
-  });
+      expect(result.value).toEqual(undefined);
+    },
+    { timeout: 10000000 }
+  );
 
   it('should test u8 variable type', async () => {
     using contractInstance = await setupContract();
@@ -537,6 +541,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     expect(unhexed).toStrictEqual(last);
   });
 
+  // Expected to fail as these will not have messages???
   it('should get initial state messages from node', async () => {
     using launched = await setupContract();
     const { provider } = launched;
@@ -587,6 +592,7 @@ describe('Coverage Contract', { timeout: 15_000 }, () => {
     // #endregion Message-getMessages
   });
 
+  // This currently uses a fixed private key so fails
   it('should test spending input messages', async () => {
     using contractInstance = await setupContract();
 

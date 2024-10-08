@@ -71,7 +71,7 @@ describe('Resubmitting Failed Transactions', () => {
         }
       }
       // #endregion resubmitting-failed-transactions-3
-    }).rejects.toThrow('Transaction is not inserted. UTXO does not exist: 0x');
+    }).rejects.toThrowError(/Transaction input validation failed: UTXO \(id: .*\) does not exist/);
 
     await expect(
       (async () => {
