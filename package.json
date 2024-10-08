@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "nodemon --config nodemon.config.json -x 'pnpm build:packages'",
     "build": "turbo run build --cache-dir=.turbo",
-    "build:packages": "turbo run build --filter=!docs --filter=!template-*",
+    "build:packages": "turbo run build --filter=!docs --filter=!template-* --filter=!demo-*",
     "ci:test": "./scripts/tests-ci.sh",
     "pretest": "turbo run pretest",
     "depcheck": "knip --dependencies --tags=-knipignore",
