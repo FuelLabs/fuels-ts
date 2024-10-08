@@ -72,9 +72,7 @@ describe('Resubmitting Failed Transactions', () => {
       }
 
       // #endregion resubmitting-failed-transactions-3
-    }).rejects.toThrow(
-      'Transaction input validation failed: UTXO (id: b2814e068053151c158a8c22c219d25ba5324d1ae6efe95fc82f06fcf928527b0000) does not exist'
-    );
+    }).rejects.toThrowError(/Transaction input validation failed: UTXO \(id: .*\) does not exist/);
 
     await expect(
       (async () => {

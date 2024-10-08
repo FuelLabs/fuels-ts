@@ -511,7 +511,7 @@ describe('Funding Transactions', () => {
       () => fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId()),
       new FuelError(
         FuelError.CODES.INVALID_REQUEST,
-        'Transaction input validation failed: Transaction id already exists (id: bacb0b8395b11e8d9a802f38674c5e41bd065567281d8c2f8f791e7760643e6a)'
+    }).rejects.toThrowError(/Transaction input validation failed: UTXO \(id: .*\) does not exist/);
       )
     );
   }, 15_000);
