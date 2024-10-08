@@ -277,24 +277,4 @@ export const MOCK_CHAIN: GqlChainInfoFragment = {
       newStoragePerByte: '1',
     },
   },
-  latestBlock: {
-    id: '0xb9e55ced368c8d8f1aa487d33e97043e5891406792ea5d61f7807d0441d34722',
-    height: '234',
-    header: {
-      time: '4611686020152758037',
-      applicationHash: '0x9b4b3f3021fec42b2d946b2c6547841e379716122f78a6f22d65f51d6e1a2746',
-      daHeight: '0',
-      eventInboxRoot: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-      messageOutboxRoot: '0xe3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
-      prevRoot: '0x68a08304aa13a972e471d3b15e9a59d18a50301c3990840ed4282b2e7b6a9008',
-      stateTransitionBytecodeVersion: '0',
-      transactionsCount: '1',
-      transactionsRoot: '0x4d9e0e3cda1af0c5bbf3dff9af9025ee2e264cc88bdef9dd103fb3a96d0a21ba',
-    },
-    transactions: [
-      {
-        id: '0x304fb90a1a9897d839dcd9a5b93739ca6045638fc6520e2cf5735dd84b2de4a7',
-      },
-    ],
-  },
 };
