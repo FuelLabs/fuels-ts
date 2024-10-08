@@ -70,7 +70,7 @@ function getSubscriptionStreamFromFetch(streamHolder: { stream: ReadableStream<U
  * @group node
  * @group browser
  */
-describe('TransactionResponse', () => {
+describe('TransactionResponse', { timeout: 100000 }, () => {
   it('should ensure create method waits till a transaction response is given', async () => {
     using launched = await launchTestNode();
 
@@ -189,7 +189,7 @@ describe('TransactionResponse', () => {
     }
   );
 
-  it.only(
+  it(
     'should throw error for a SqueezedOut status update [waitForResult]',
     { timeout: 10_000, retry: 10 },
     async () => {

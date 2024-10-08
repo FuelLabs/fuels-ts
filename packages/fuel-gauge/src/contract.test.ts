@@ -815,7 +815,7 @@ describe(
       );
     });
 
-    it.only('should ensure assets can be transfered to wallets (SINGLE TRANSFER)', async () => {
+    it('should ensure assets can be transfered to wallets (SINGLE TRANSFER)', async () => {
       using contract = await setupTestContract();
       const { provider } = contract;
 
@@ -1064,7 +1064,7 @@ describe(
       expect(value.toNumber()).toBe(initialCounterValue);
     });
 
-    it.only('should ensure "maxFee" and "gasLimit" can be set for a contract call', async () => {
+    it('should ensure "maxFee" and "gasLimit" can be set for a contract call', async () => {
       using launched = await launchTestNode({
         contractsConfigs: [
           {

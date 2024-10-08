@@ -142,7 +142,7 @@ describe('querying the chain', () => {
     expect(balances).toBeDefined();
   });
 
-  it.only('can getBlocks', async () => {
+  it('can getBlocks', async () => {
     using launched = await launchTestNode();
 
     const FUEL_NETWORK_URL = launched.provider.url;

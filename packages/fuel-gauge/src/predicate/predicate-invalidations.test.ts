@@ -48,7 +48,7 @@ describe(
         );
       });
 
-      it.only('throws if the passed gas limit is too low', async () => {
+      it('throws if the passed gas limit is too low', async () => {
         using launched = await launchTestNode();
         const {
           provider,
@@ -60,9 +60,6 @@ describe(
           bytecode: PredicateMainArgsStruct.bytecode,
           provider,
         });
-
-        console.log('wallet address', wallet.address.toB256());
-        console.log('predicate address', predicate.address.toB256());
 
         await fundPredicate(wallet, predicate, 1000);
 
