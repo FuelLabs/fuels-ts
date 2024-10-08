@@ -203,7 +203,7 @@ describe('TransactionResponse', () => {
         },
         nodeOptions: {
           args: ['--poa-instant', 'false', '--poa-interval-period', '2s', '--tx-pool-ttl', '1s'],
-          loggingEnabled: true,
+          loggingEnabled: false,
         },
       });
 
