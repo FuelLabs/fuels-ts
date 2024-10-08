@@ -507,12 +507,10 @@ describe('Funding Transactions', () => {
     await sleep(100);
 
     // Submitting TX 2 before TX 1 finished to process.
-    await expectToThrowFuelError(
-      () => fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId()),
-      new FuelError(
-        FuelError.CODES.INVALID_REQUEST,
-        'Transaction is not inserted. Hash is already known'
-      )
+    await expect(() =>
+      fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId())
+    ).rejects.toThrowError(
+      /Transaction input validation failed: Transaction id already exists \(id: .*\)/
     );
   }, 15_000);
 });
