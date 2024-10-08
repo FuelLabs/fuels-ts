@@ -1457,7 +1457,7 @@ Supported fuel-core version: ${supportedVersion}.`
     } else if (idOrHeight === 'latest') {
       const {
         blocks: [block],
-      } = await this.getBlocks({ first: 1 });
+      } = await this.getBlocks({ last: 1 });
       return block;
     } else if (idOrHeight.length === 66) {
       variables = { blockId: idOrHeight };
