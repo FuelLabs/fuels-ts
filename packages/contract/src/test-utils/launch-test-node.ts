@@ -143,8 +143,10 @@ export async function launchTestNode<const TFactories extends DeployContractConf
 
   // @TODO change network + private key
 
-  const provider = await Provider.create(TESTNET_NETWORK_URL);
-  const wallet = Wallet.fromPrivateKey('', provider);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const provider = await Provider.create(process.env.TESTING_NETWORK_URL!);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const wallet = Wallet.fromPrivateKey(process.env.TESTING_NETWORK_PVT_KEY!, provider);
 
   console.log('address', wallet.address.toB256());
   console.log((await wallet.getBalances()).balances.map((b) => b.amount.toString()));
