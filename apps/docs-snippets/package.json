@@ -4,13 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "pretest": "run-s fuels:build type:check",
-    "xpretest": "run-s kill-node fuels:build fuels:node fuels:deploy kill-node type:check",
-    "kill-node": "lsof -t -i:4000 | xargs -r kill",
-    "fuels:deploy": "pnpm fuels deploy",
-    "fuels:node": "pnpm fuels node > /dev/null 2>&1 &",
-    "fuels:build": "pnpm fuels build",
-    "type:check": "tsc --noEmit"
+    "pretest": "./scripts/pretest.sh"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
