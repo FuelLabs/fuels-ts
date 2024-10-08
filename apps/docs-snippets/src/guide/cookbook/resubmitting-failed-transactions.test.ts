@@ -70,7 +70,6 @@ describe('Resubmitting Failed Transactions', () => {
           await wallet.sendTransaction(transactionRequest);
         }
       }
-
       // #endregion resubmitting-failed-transactions-3
     }).rejects.toThrowError(/Transaction input validation failed: UTXO \(id: .*\) does not exist/);
 
