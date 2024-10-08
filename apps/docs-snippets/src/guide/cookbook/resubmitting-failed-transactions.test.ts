@@ -73,7 +73,7 @@ describe('Resubmitting Failed Transactions', () => {
 
       // #endregion resubmitting-failed-transactions-3
     }).rejects.toThrow(
-      'TTransaction input validation failed: UTXO (id: 8f8ae65eeed9c7dc73b9d4f65b5b757cb901662a90c207a9b7a81bdc1a0b9e640000) does not exist'
+      'Transaction input validation failed: UTXO (id: 8f8ae65eeed9c7dc73b9d4f65b5b757cb901662a90c207a9b7a81bdc1a0b9e640000) does not exist'
     );
 
     await expect(
