@@ -723,6 +723,9 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns a promise that resolves to the node information.
    */
   async fetchNode(): Promise<NodeInfo> {
+    if (Provider.nodeInfoCache[this.urlWithoutAuth]) {
+      return Provider.nodeInfoCache[this.urlWithoutAuth];
+    }
     const { nodeInfo } = await this.operations.getNodeInfo();
 
     const processedNodeInfo: NodeInfo = {
@@ -744,6 +747,9 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns a promise that resolves to the chain information.
    */
   async fetchChain(): Promise<ChainInfo> {
+    if (Provider.chainInfoCache[this.urlWithoutAuth]) {
+      return Provider.chainInfoCache[this.urlWithoutAuth];
+    }
     const { chain } = await this.operations.getChain();
 
     const processedChain = processGqlChain(chain);
