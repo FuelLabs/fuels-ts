@@ -1455,7 +1455,10 @@ Supported fuel-core version: ${supportedVersion}.`
     if (typeof idOrHeight === 'number') {
       variables = { height: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
-      variables = { height: (await this.getBlockNumber()).toString(10) };
+      const {
+        blocks: [block],
+      } = await this.getBlocks({ first: 1 });
+      return block;
     } else if (idOrHeight.length === 66) {
       variables = { blockId: idOrHeight };
     } else {
