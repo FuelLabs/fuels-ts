@@ -10,6 +10,10 @@ import {
   ProxyContractFactory,
 } from '../../../test/typegen';
 
+/**
+ * @group node
+ * @group browser
+ */
 describe('Proxy Contracts', () => {
   it('deploys and upgrades a contracts using a proxy', async () => {
     using launched = await launchTestNode();
