@@ -79,6 +79,10 @@ const createBasicAuth = (launchNodeUrl: string) => {
  * @group node
  */
 describe('Provider', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should ensure supports basic auth', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
@@ -1072,6 +1076,23 @@ describe('Provider', () => {
     provider.getNode();
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(0);
+    expect(spyFetchChain).toHaveBeenCalledTimes(0);
+    expect(spyFetchNode).toHaveBeenCalledTimes(0);
+  });
+
+  it('should ensure creating new instances should not re-fetch chain and node info', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
+    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
+    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
+
+    const INSTANCES_NUM = 5;
+
+    Array.from({ length: INSTANCES_NUM }, () => Provider.create(provider.url));
+
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(INSTANCES_NUM);
     expect(spyFetchChain).toHaveBeenCalledTimes(0);
     expect(spyFetchNode).toHaveBeenCalledTimes(0);
   });
