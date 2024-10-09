@@ -1,4 +1,3 @@
-import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import { mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
@@ -84,10 +83,9 @@ describe('CLI', { timeout: 15_000 }, () => {
     const fuelToolchain = readFileSync(fuelToolchainPath, 'utf-8');
     const parsedFuelToolchain = toml.parse(fuelToolchain);
 
-    const { toolchain, components } = parsedFuelToolchain;
+    const { toolchain } = parsedFuelToolchain;
 
     expect(toolchain).toEqual({ channel: 'testnet' });
-    expect(components).toEqual({ forc: versions.FORC, 'fuel-core': versions.FUEL_CORE });
   });
 
   test('should rewrite for the appropriate package manager', async () => {

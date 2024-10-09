@@ -1,5 +1,12 @@
 # create-fuels
 
+## 0.94.9
+
+### Patch Changes
+
+- c2f0599: feat: deploying scripts and predicates
+- 8ea97cc: build(deps): bump the deps-minor group with 9 updates
+
 ## 0.94.8
 
 ### Patch Changes

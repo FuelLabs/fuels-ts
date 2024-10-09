@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.94.9
+
+### Patch Changes
+
+- c2f0599: feat: deploying scripts and predicates
+
 ## 0.94.8
 
 ## 0.94.7
