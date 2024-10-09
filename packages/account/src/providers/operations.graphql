@@ -630,6 +630,15 @@ query getChain {
   }
 }
 
+query getChainAndNodeInfo {
+  chain {
+    ...chainInfoFragment
+  }
+  nodeInfo {
+    ...nodeInfoFragment
+  }
+}
+
 query getTransaction($transactionId: TransactionId!) {
   transaction(id: $transactionId) {
     ...transactionFragment
