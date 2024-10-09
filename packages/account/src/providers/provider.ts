@@ -28,6 +28,7 @@ import type {
   GqlPageInfo,
   GqlRelayedTransactionFailed,
   Requester,
+  GqlBlockFragment,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -717,8 +718,12 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the latest block number.
    */
   async getBlockNumber(): Promise<BN> {
-    const block = await this.getBlock('latest');
-    return bn(block?.height);
+    const {
+      chain: {
+        latestBlock: { height },
+      },
+    } = await this.operations.getLatestBlockHeight();
+    return bn(height);
   }
 
   /**
@@ -1449,21 +1454,21 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the block or null.
    */
   async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
-    let variables;
-    if (typeof idOrHeight === 'number') {
-      variables = { height: bn(idOrHeight).toString(10) };
-    } else if (idOrHeight === 'latest') {
-      const {
-        blocks: [block],
-      } = await this.getBlocks({ last: 1 });
-      return block;
-    } else if (idOrHeight.length === 66) {
-      variables = { blockId: idOrHeight };
-    } else {
-      variables = { blockId: bn(idOrHeight).toString(10) };
-    }
+    let block: GqlBlockFragment | undefined | null;
 
-    const { block } = await this.operations.getBlock(variables);
+    if (idOrHeight === 'latest') {
+      const {
+        chain: { latestBlock },
+      } = await this.operations.getLatestBlock();
+      block = latestBlock;
+    } else {
+      const isblockId = typeof idOrHeight === 'string' && idOrHeight.length === 66;
+      const variables = isblockId
+        ? { blockId: idOrHeight }
+        : { height: bn(idOrHeight).toString(10) };
+      const response = await this.operations.getBlock(variables);
+      block = response.block;
+    }
 
     if (!block) {
       return null;

@@ -524,6 +524,22 @@ query estimatePredicates($encodedTransaction: HexString!) {
   }
 }
 
+query getLatestBlock {
+  chain {
+    latestBlock {
+      ...blockFragment
+    }
+  }
+}
+
+query getLatestBlockHeight {
+  chain {
+    latestBlock {
+      height
+    }
+  }
+}
+
 query getBlock($blockId: BlockId, $height: U32) {
   block(id: $blockId, height: $height) {
     ...blockFragment
