@@ -36,7 +36,7 @@ Finally, we can call our counter contract using the contract ID of the proxy.
 
 <<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-4{ts:line-numbers}
 
-Now let's make some changes to our initial counter contract by adding an additional storage slot to track the number of increments and a new get method that retrieves it's value:
+Now let's make some changes to our initial counter contract by adding an additional storage slot to track the number of increments and a new get method that retrieves its value:
 
 <<< @/../../docs-snippets/test/fixtures/forc-projects/counter-v2/src/main.sw#proxy-5{rs:line-numbers}
 
