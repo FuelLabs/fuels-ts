@@ -1051,36 +1051,31 @@ describe('Provider', () => {
     const { provider } = launched;
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
 
     provider.getChain();
     provider.getNode();
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+    expect(spyFetchChain).toHaveBeenCalledTimes(0);
+    expect(spyFetchNode).toHaveBeenCalledTimes(0);
   });
 
   it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
     Provider.clearChainAndNodeCaches();
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
     using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+
+    const { provider } = launched;
+
+    const spyOperation = vi.spyOn(provider.operations, 'getChainAndNodeInfo');
 
     await provider.fetchChainAndNodeInfo();
 
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
-    expect(spyFetchChain).toHaveBeenCalledTimes(2);
-    expect(spyFetchNode).toHaveBeenCalledTimes(2);
+    expect(spyOperation).toHaveBeenCalledTimes(1);
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
@@ -1186,50 +1181,6 @@ which is not supported by the version of the TS SDK that you are using.
 Things may not work as expected.
 Supported fuel-core version: ${mock.supportedVersion}.`
     );
-  });
-
-  it('should ensure fuel node version warning is shown before chain incompatibility error', async () => {
-    const { FUEL_CORE } = versions;
-    const [major, minor, patch] = FUEL_CORE.split('.');
-    const majorMismatch = major === '0' ? 1 : parseInt(patch, 10) - 1;
-
-    const mock = {
-      isMajorSupported: false,
-      isMinorSupported: true,
-      isPatchSupported: true,
-      supportedVersion: `${majorMismatch}.${minor}.${patch}`,
-    };
-
-    if (mock.supportedVersion === FUEL_CORE) {
-      throw new Error();
-    }
-
-    const spy = vi.spyOn(fuelTsVersionsMod, 'checkFuelCoreVersionCompatibility');
-    spy.mockImplementationOnce(() => mock);
-
-    const consoleWarnSpy = vi.spyOn(console, 'warn');
-
-    const graphQLDummyError = `Unknown field "height" on type "Block".
-      Unknown field "version" on type "ScriptParameters".
-      Unknown field "version" on type "ConsensusParameters".`;
-
-    const fuelError = new FuelError(ErrorCode.INVALID_REQUEST, graphQLDummyError);
-
-    const fetchChainSpy = vi
-      .spyOn(Provider.prototype, 'fetchChain')
-      .mockImplementationOnce(async () => Promise.reject(fuelError));
-
-    await expectToThrowFuelError(() => setupTestProviderAndWallets(), fuelError);
-
-    expect(consoleWarnSpy).toHaveBeenCalledOnce();
-    expect(consoleWarnSpy).toHaveBeenCalledWith(
-      `The Fuel Node that you are trying to connect to is using fuel-core version ${FUEL_CORE},
-which is not supported by the version of the TS SDK that you are using.
-Things may not work as expected.
-Supported fuel-core version: ${mock.supportedVersion}.`
-    );
-
-    expect(fetchChainSpy).toHaveBeenCalledOnce();
   });
 
   it('An invalid subscription request throws a FuelError and does not hold the test runner (closes all handles)', async () => {
