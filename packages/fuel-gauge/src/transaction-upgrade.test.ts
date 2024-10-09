@@ -7,6 +7,7 @@ import {
   UpgradeTransactionRequest,
   Wallet,
   UploadTransactionRequest,
+  sleep,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -40,7 +41,7 @@ const setupTestNode = async () => {
 
   const { provider, wallets, cleanup } = await launchTestNode({
     nodeOptions: {
-      args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       loggingEnabled: false,
       snapshotConfig,
     },
@@ -111,11 +112,14 @@ describe('Transaction upgrade consensus', () => {
     expect(isStatusSuccess).toBeTruthy();
     expect(isTypeUpgrade).toBeTruthy();
 
+    // Waiting for the next block to ensure upgraded value are reflected
+    await sleep(1000);
+    provider.clearChainAndNodeCaches();
+
     // Fetch the upgraded gas costs, they should be different from before
     const {
       chain: { consensusParameters: consensusAfterUpgrade },
     } = await provider.fetchChainAndNodeInfo();
-
     expect(consensusBeforeUpgrade.gasCosts).not.toEqual(consensusAfterUpgrade.gasCosts);
   });
 });
