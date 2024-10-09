@@ -2,4 +2,4 @@
 "@fuel-ts/account": minor
 ---
 
-chore!: slim down `GasCostsFragment`
+chore!: slim down `chainInfoFragment` and `GasCostsFragment`
