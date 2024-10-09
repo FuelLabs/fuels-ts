@@ -2,7 +2,6 @@ import { ErrorCode, FuelError } from '@fuel-ts/errors';
 import BnJs from 'bn.js';
 
 import { DEFAULT_DECIMAL_UNITS, DEFAULT_MIN_PRECISION, DEFAULT_PRECISION } from './configs';
-import { toFixed } from './decimal';
 import type { FormatConfig } from './types';
 
 type CompareResult = -1 | 0 | 1;
