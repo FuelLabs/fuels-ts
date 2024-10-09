@@ -410,9 +410,6 @@ fragment consensusParametersFragment on ConsensusParameters {
 
 fragment chainInfoFragment on ChainInfo {
   name
-  latestBlock {
-    ...blockFragment
-  }
   daHeight
   consensusParameters {
     ...consensusParametersFragment

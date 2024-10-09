@@ -167,12 +167,6 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   consensusParameters: ConsensusParameters;
-  latestBlock: {
-    id: string;
-    height: BN;
-    time: string;
-    transactions: Array<{ id: string }>;
-  };
 };
 
 /**
@@ -213,7 +207,7 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters, latestBlock } = chain;
+  const { name, daHeight, consensusParameters } = chain;
 
   const {
     contractParams,
@@ -266,14 +260,6 @@ const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
         maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
       },
       gasCosts,
-    },
-    latestBlock: {
-      id: latestBlock.id,
-      height: bn(latestBlock.height),
-      time: latestBlock.header.time,
-      transactions: latestBlock.transactions.map((i) => ({
-        id: i.id,
-      })),
     },
   };
 };
@@ -731,8 +717,8 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the latest block number.
    */
   async getBlockNumber(): Promise<BN> {
-    const { chain } = await this.operations.getChain();
-    return bn(chain.latestBlock.height, 10);
+    const block = await this.getBlock('latest');
+    return bn(block?.height);
   }
 
   /**
@@ -1467,7 +1453,10 @@ Supported fuel-core version: ${supportedVersion}.`
     if (typeof idOrHeight === 'number') {
       variables = { height: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
-      variables = { height: (await this.getBlockNumber()).toString(10) };
+      const {
+        blocks: [block],
+      } = await this.getBlocks({ last: 1 });
+      return block;
     } else if (idOrHeight.length === 66) {
       variables = { blockId: idOrHeight };
     } else {
