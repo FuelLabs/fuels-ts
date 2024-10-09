@@ -107,19 +107,49 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
   }
 
   format(options?: FormatConfig): string {
-    const { units = DEFAULT_DECIMAL_UNITS, precision = DEFAULT_PRECISION } = options || {};
+    const {
+      units = DEFAULT_DECIMAL_UNITS,
+      precision: initialPrecision = DEFAULT_PRECISION,
+      minPrecision: initialMinPrecision = DEFAULT_MIN_PRECISION,
+    } = options || {};
+
+    // If units is 0, return the whole number formatted with commas
+    if (units === 0) {
+      return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    // Adjust precision and minPrecision
+    // TODO: This really should throw an error because you can't have a precision less than the minPrecision but this would be a breaking change
+    const minPrecision =
+      initialMinPrecision > initialPrecision ? initialPrecision : initialMinPrecision;
+    const precision =
+      initialPrecision > initialMinPrecision ? initialPrecision : initialMinPrecision;
 
     const formattedUnits = this.formatUnits(units);
     const [integerPart, fractionalPart = ''] = formattedUnits.split('.');
 
     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    const formattedFractional = fractionalPart.slice(0, precision);
 
+    // If precision is 0, return only the integer part
     if (precision === 0) {
       return formattedInteger;
     }
 
-    return `${formattedInteger}.${formattedFractional}`;
+    // Remove trailing zeros and apply precision
+    let formattedFractional = fractionalPart.replace(/0+$/, '').slice(0, precision);
+
+    // Ensure we meet the minimum precision
+    if (formattedFractional.length < minPrecision) {
+      formattedFractional = formattedFractional.padEnd(minPrecision, '0');
+    }
+
+    // If after removing trailing zeros, the fractional part is empty and minPrecision is 0, return only the integer part
+    if (formattedFractional === '' && minPrecision === 0) {
+      return formattedInteger;
+    }
+
+    // Only add the decimal point and fractional part if there's a fractional part
+    return formattedFractional ? `${formattedInteger}.${formattedFractional}` : formattedInteger;
   }
 
   formatUnits(units: number = DEFAULT_DECIMAL_UNITS): string {
@@ -127,7 +157,7 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     const valueLength = valueString.length;
 
     if (valueLength <= units) {
-      const paddedZeros = '0'.repeat(units - valueLength + 1);
+      const paddedZeros = '0'.repeat(units - valueLength);
       return `0.${paddedZeros}${valueString}`;
     }
 

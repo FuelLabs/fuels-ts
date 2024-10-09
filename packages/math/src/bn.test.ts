@@ -7,10 +7,6 @@ import type { BigNumberish } from './types';
  * @group browser
  */
 describe('Math - BN', () => {
-  it('should format with default configs', () => {
-    expect(bn('1000000000').format({ units: 0, precision: 0 })).toEqual('1,000,000,000');
-  });
-
   it('can execute operations without losing our BN reference', () => {
     let test: BN;
 
@@ -332,7 +328,7 @@ describe('Math - BN', () => {
       bn('1000000000').format({
         minPrecision: 2,
       })
-    ).toEqual('1,000,000,000.00');
+    ).toEqual('1.00');
     expect(
       bn('1000000000').format({
         minPrecision: 2,
@@ -373,6 +369,7 @@ describe('Math - BN', () => {
     expect(
       bn('2').format({
         minPrecision: 2,
+        precision: 10,
         units: 10,
       })
     ).toEqual('0.0000000002');
@@ -498,5 +495,29 @@ describe('Math - BN', () => {
     expect(bn('100000020000').valueOf()).toEqual('100000020000');
     expect(bn('100100000020000').valueOf()).toEqual('100100000020000');
     expect(bn('-1').valueOf()).toEqual('-1');
+  });
+
+  it('should format properly with 0 units', () => {
+    expect(bn('1000000000').format({ units: 0 })).toEqual('1,000,000,000');
+  });
+
+  it('should format properly with 0 precision', () => {
+    expect(bn('1000000000').format({ units: 5, precision: 0 })).toEqual('10,000');
+  });
+
+  it('should format properly with 0 units and precision', () => {
+    expect(bn('1000000000').format({ units: 0, precision: 0 })).toEqual('1,000,000,000');
+  });
+
+  it('should format properly with 0 minPrecision', () => {
+    expect(bn('1000000000').format({ minPrecision: 0 })).toEqual('1');
+  });
+
+  it('should properly format with minPrecision 0 and precision 1', () => {
+    expect(bn('10010000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('100.1');
+  });
+
+  it('should properly format with minPrecision 0 and precision 1 with a leading zero', () => {
+    expect(bn('100000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('1');
   });
 });
