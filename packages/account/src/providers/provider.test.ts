@@ -143,11 +143,11 @@ describe('Provider', () => {
 
   it('should ensure that custom requestMiddleware is not overwritten by basic auth', async () => {
     using launched = await setupTestProviderAndWallets();
-    const {
-      provider: { url },
-    } = launched;
+    const { provider } = launched;
 
-    const { urlWithAuth } = createBasicAuth(url);
+    provider.clearChainAndNodeCaches();
+
+    const { urlWithAuth } = createBasicAuth(provider.url);
 
     const requestMiddleware = vi.fn().mockImplementation((options) => options);
 
@@ -1047,40 +1047,36 @@ describe('Provider', () => {
   });
 
   it('should cache chain and node info', async () => {
-    Provider.clearChainAndNodeCaches();
-
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(provider.getChain()).toBeDefined();
-    expect(provider.getNode()).toBeDefined();
+    const spy1 = vi.spyOn(Provider.prototype, 'fetchChain');
+    const spy2 = vi.spyOn(Provider.prototype, 'fetchNode');
+
+    provider.getChain();
+    provider.getNode();
+
+    expect(spy1).not.toHaveBeenCalled();
+    expect(spy2).not.toHaveBeenCalled();
   });
 
   it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
-    Provider.clearChainAndNodeCaches();
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
 
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
-
     provider.getChain();
     provider.getNode();
 
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(1);
-    expect(spyFetchNode).toHaveBeenCalledTimes(1);
+    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(0);
+    expect(spyFetchChain).toHaveBeenCalledTimes(0);
+    expect(spyFetchNode).toHaveBeenCalledTimes(0);
   });
 
-  it('should ensure fetchChainAndNodeInfo always fetch new data', async () => {
-    Provider.clearChainAndNodeCaches();
-
+  it('should ensure fetchChainAndNodeInfo uses cached data', async () => {
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
     const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
     const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
@@ -1095,8 +1091,9 @@ describe('Provider', () => {
     await provider.fetchChainAndNodeInfo();
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
-    expect(spyFetchChain).toHaveBeenCalledTimes(2);
-    expect(spyFetchNode).toHaveBeenCalledTimes(2);
+
+    expect(spyFetchChain).toHaveBeenCalledTimes(1);
+    expect(spyFetchNode).toHaveBeenCalledTimes(1);
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
@@ -1115,7 +1112,7 @@ describe('Provider', () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    Provider.clearChainAndNodeCaches();
+    provider.clearChainAndNodeCaches();
 
     await expectToThrowFuelError(
       () => provider.getChain(),
@@ -1740,6 +1737,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('requestMiddleware modifies the request before being sent to the node [sync]', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    provider.clearChainAndNodeCaches();
 
     const fetchSpy = vi.spyOn(global, 'fetch');
     await Provider.create(provider.url, {
@@ -1760,6 +1758,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('requestMiddleware modifies the request before being sent to the node [async]', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    provider.clearChainAndNodeCaches();
 
     const fetchSpy = vi.spyOn(global, 'fetch');
     await Provider.create(provider.url, {
@@ -1811,6 +1810,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
   test('custom fetch works with requestMiddleware', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
+    provider.clearChainAndNodeCaches();
 
     let requestHeaders: HeadersInit | undefined;
     await Provider.create(provider.url, {
