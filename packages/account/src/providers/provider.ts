@@ -21,7 +21,7 @@ import type {
   GqlDryRunFailureStatusFragment,
   GqlDryRunSuccessStatusFragment,
   GqlFeeParameters as FeeParameters,
-  GqlGasCosts as GasCosts,
+  GqlGasCostsFragment as GasCosts,
   GqlPredicateParameters as PredicateParameters,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
