@@ -1093,8 +1093,9 @@ describe('Provider', () => {
     Array.from({ length: INSTANCES_NUM }, () => Provider.create(provider.url));
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(INSTANCES_NUM);
-    expect(spyFetchChain).toHaveBeenCalledTimes(0);
-    expect(spyFetchNode).toHaveBeenCalledTimes(0);
+
+    expect(spyFetchChain).not.toHaveBeenCalled();
+    expect(spyFetchNode).not.toHaveBeenCalled();
   });
 
   it('should ensure fetchChainAndNodeInfo uses cached data', async () => {
