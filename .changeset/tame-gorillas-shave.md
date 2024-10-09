@@ -2,4 +2,4 @@
 "@fuel-ts/account": patch
 ---
 
-feat!: optimise balance queries
+chore!: optimise balance queries
