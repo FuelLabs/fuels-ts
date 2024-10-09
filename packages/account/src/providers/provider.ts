@@ -416,7 +416,7 @@ export default class Provider {
   cache?: ResourceCache;
 
   /** @hidden */
-  static clearChainAndNodeCaches() {
+  private static clearChainAndNodeCaches() {
     Provider.nodeInfoCache = {};
     Provider.chainInfoCache = {};
   }
