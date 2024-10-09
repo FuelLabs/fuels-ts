@@ -260,7 +260,6 @@ fragment messageFragment on Message {
   sender
   recipient
   data
-  nonce
   daHeight
 }
 
@@ -307,7 +306,6 @@ fragment messageProofFragment on MessageProof {
   }
   sender
   recipient
-  nonce
   amount
   data
 }
