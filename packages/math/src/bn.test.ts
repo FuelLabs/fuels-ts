@@ -402,7 +402,7 @@ describe('Math - BN', () => {
         minPrecision: 4,
         precision: 4,
       })
-    ).toEqual('100.00002');
+    ).toEqual('100.0000');
 
     expect(
       bn('100100000020000').format({
