@@ -28,7 +28,7 @@ Let's deploy and interact with it by proxy. First let's setup the environment an
 
 <<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-2{ts:line-numbers}
 
-Now let's deploy the [SRC14 compliant proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/master/src14/owned_proxy) and initialize it by setting it's target to the counter target ID.
+Now let's deploy the [SRC14 compliant proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/master/src14/owned_proxy) and initialize it by setting its target to the counter target ID.
 
 <<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-3{ts:line-numbers}
 
