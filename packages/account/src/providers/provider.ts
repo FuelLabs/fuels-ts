@@ -5,7 +5,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
+import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
@@ -167,6 +167,12 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   consensusParameters: ConsensusParameters;
+  latestBlock: {
+    id: string;
+    height: BN;
+    time: string;
+    transactions: Array<{ id: string }>;
+  };
 };
 
 /**
@@ -207,7 +213,7 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters } = chain;
+  const { name, daHeight, consensusParameters, latestBlock } = chain;
 
   const {
     contractParams,
@@ -260,6 +266,14 @@ const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
         maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
       },
       gasCosts,
+    },
+    latestBlock: {
+      id: latestBlock.id,
+      height: bn(latestBlock.height),
+      time: latestBlock.header.time,
+      transactions: latestBlock.transactions.map((i) => ({
+        id: i.id,
+      })),
     },
   };
 };
@@ -457,20 +471,16 @@ export default class Provider {
    * @hidden
    */
   protected constructor(url: string, options: ProviderOptions = {}) {
-    const { url: rawUrl, urlWithoutAuth, headers: authHeaders } = Provider.extractBasicAuth(url);
+    const { url: rawUrl, urlWithoutAuth, headers } = Provider.extractBasicAuth(url);
 
     this.url = rawUrl;
     this.urlWithoutAuth = urlWithoutAuth;
+    this.options = { ...this.options, ...options };
     this.url = url;
 
-    const { FUELS } = versions;
-    const headers = { ...authHeaders, ...options.headers, Source: `ts-sdk-${FUELS}` };
-
-    this.options = {
-      ...this.options,
-      ...options,
-      headers,
-    };
+    if (headers) {
+      this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
+    }
 
     this.operations = this.createOperations();
     const { resourceCacheTTL } = this.options;
@@ -717,8 +727,8 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the latest block number.
    */
   async getBlockNumber(): Promise<BN> {
-    const block = await this.getBlock('latest');
-    return bn(block?.height);
+    const { chain } = await this.operations.getChain();
+    return bn(chain.latestBlock.height, 10);
   }
 
   /**
@@ -727,9 +737,6 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns a promise that resolves to the node information.
    */
   async fetchNode(): Promise<NodeInfo> {
-    if (Provider.nodeInfoCache[this.urlWithoutAuth]) {
-      return Provider.nodeInfoCache[this.urlWithoutAuth];
-    }
     const { nodeInfo } = await this.operations.getNodeInfo();
 
     const processedNodeInfo: NodeInfo = {
@@ -751,9 +758,6 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns a promise that resolves to the chain information.
    */
   async fetchChain(): Promise<ChainInfo> {
-    if (Provider.chainInfoCache[this.urlWithoutAuth]) {
-      return Provider.chainInfoCache[this.urlWithoutAuth];
-    }
     const { chain } = await this.operations.getChain();
 
     const processedChain = processGqlChain(chain);
@@ -1459,10 +1463,7 @@ Supported fuel-core version: ${supportedVersion}.`
     if (typeof idOrHeight === 'number') {
       variables = { height: bn(idOrHeight).toString(10) };
     } else if (idOrHeight === 'latest') {
-      const {
-        blocks: [block],
-      } = await this.getBlocks({ last: 1 });
-      return block;
+      variables = { height: (await this.getBlockNumber()).toString(10) };
     } else if (idOrHeight.length === 66) {
       variables = { blockId: idOrHeight };
     } else {
