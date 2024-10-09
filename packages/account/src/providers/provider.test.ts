@@ -97,6 +97,22 @@ describe('Provider', () => {
     expect(request?.headers).toMatchObject(expectedHeaders);
   });
 
+  it('adds source header with version on request', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const {
+      provider: { url },
+    } = launched;
+    const provider = await Provider.create(url);
+
+    const fetchSpy = vi.spyOn(global, 'fetch');
+
+    await provider.operations.getChain();
+
+    const [requestUrl, request] = fetchSpy.mock.calls[0];
+    expect(requestUrl).toEqual(url);
+    expect(request?.headers).toMatchObject({ Source: `ts-sdk-${versions.FUELS}` });
+  });
+
   it('should ensure we can reuse provider URL to connect to a authenticated endpoint', async () => {
     using launched = await setupTestProviderAndWallets();
     const {
