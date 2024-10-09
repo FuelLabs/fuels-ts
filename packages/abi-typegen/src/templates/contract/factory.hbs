@@ -15,7 +15,7 @@ export class {{capitalizedName}}Factory extends ContractFactory {
     super(bytecode, {{capitalizedName}}.abi, accountOrProvider);
   }
 
-  deploy<TContract extends Contract = Contract>(
+  override deploy<TContract extends Contract = Contract>(
     deployOptions?: DeployContractOptions
   ): Promise<DeployContractResult<TContract>> {
     return super.deploy({

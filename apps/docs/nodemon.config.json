@@ -1,6 +1,17 @@
 {
   "verbose": true,
   "ext": "ts",
-  "watch": ["../../packages", "../docs-snippets"],
-  "ignore": ["**/*.d.ts", "**/*.map", "**/*.js", "**/out/release/**"]
+  "watch": [
+    "../../packages",
+    "../docs-snippets",
+    "../docs-snippets2/src",
+    "../docs-snippets2/sway"
+  ],
+  "ignore": [
+    "**/*.d.ts",
+    "**/*.map",
+    "**/*.js",
+    "**/out/release/**",
+    "../docs-snippets2/**/*.test.ts"
+  ]
 }
