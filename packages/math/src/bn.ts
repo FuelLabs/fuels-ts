@@ -135,7 +135,19 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     }
 
     // Remove trailing zeros and apply precision
-    let formattedFractional = fractionalPart.replace(/0+$/, '').slice(0, precision);
+    let formattedFractional = fractionalPart.replace(/0+$/, '');
+
+    // Always return the first non-zero number if it exceeds the precision
+    if (formattedFractional.length > precision) {
+      const firstNonZeroIndex = formattedFractional.search(/[1-9]/);
+      if (firstNonZeroIndex >= 0 && firstNonZeroIndex < precision) {
+        formattedFractional = formattedFractional.slice(0, precision);
+      } else {
+        formattedFractional = formattedFractional.slice(0, firstNonZeroIndex + 1);
+      }
+    } else {
+      formattedFractional = formattedFractional.slice(0, precision);
+    }
 
     // Ensure we meet the minimum precision
     if (formattedFractional.length < minPrecision) {

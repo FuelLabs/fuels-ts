@@ -369,7 +369,6 @@ describe('Math - BN', () => {
     expect(
       bn('2').format({
         minPrecision: 2,
-        precision: 10,
         units: 10,
       })
     ).toEqual('0.0000000002');
@@ -403,7 +402,7 @@ describe('Math - BN', () => {
         minPrecision: 4,
         precision: 4,
       })
-    ).toEqual('100.0000');
+    ).toEqual('100.00002');
 
     expect(
       bn('100100000020000').format({
@@ -519,5 +518,9 @@ describe('Math - BN', () => {
 
   it('should properly format with minPrecision 0 and precision 1 with a leading zero', () => {
     expect(bn('100000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('1');
+  });
+
+  it('should return significant figures even if it exceeds the precision', () => {
+    expect(bn('4000000').format({ precision: 1 })).toEqual('0.004');
   });
 });
