@@ -14,5 +14,5 @@
     "fuels": "workspace:*",
     "@internal/utils": "workspace:*"
   },
-  "version": "1.0.3"
+  "version": "1.0.4"
 }
