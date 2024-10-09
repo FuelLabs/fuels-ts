@@ -39,7 +39,7 @@ describe('Proxy Contracts', () => {
     // #endregion proxy-2
 
     // #region proxy-3
-    // It is important to pass the pass all storage slots to the proxy in order to initialize the storage slots.
+    // It is important to pass all storage slots to the proxy in order to initialize the storage slots.
     const storageSlots = Counter.storageSlots.concat(ProxyContract.storageSlots);
 
     // These configurables are specific to our recommended SRC14 compliant contract. They must be passed on deploy
