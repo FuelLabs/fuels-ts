@@ -734,7 +734,22 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
     }
     edges {
       node {
-        ...blockFragment
+        id
+        height
+        header {
+          time
+          applicationHash
+          daHeight
+          eventInboxRoot
+          messageOutboxRoot
+          prevRoot
+          stateTransitionBytecodeVersion
+          transactionsCount
+          transactionsRoot
+        }
+        transactions {
+          id
+        }
       }
     }
   }
