@@ -422,6 +422,11 @@ export default class Provider {
   }
 
   /** @hidden */
+  clearChainAndNodeCaches() {
+    Provider.clearChainAndNodeCaches();
+  }
+
+  /** @hidden */
   public url: string;
   /** @hidden */
   private urlWithoutAuth: string;
