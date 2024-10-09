@@ -686,7 +686,22 @@ query estimatePredicates($encodedTransaction: HexString!) {
 
 query getBlock($blockId: BlockId, $height: U32) {
   block(id: $blockId, height: $height) {
-    ...blockFragment
+    height
+    id
+    transactions {
+      id
+    }
+    header {
+      time
+      applicationHash
+      daHeight
+      eventInboxRoot
+      messageOutboxRoot
+      prevRoot
+      stateTransitionBytecodeVersion
+      transactionsCount
+      transactionsRoot
+    }
   }
 }
 
