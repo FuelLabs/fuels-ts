@@ -5,7 +5,7 @@ import { BN, bn } from '@fuel-ts/math';
 import type { Transaction } from '@fuel-ts/transactions';
 import { InputType, InputMessageCoder, TransactionCoder } from '@fuel-ts/transactions';
 import { arrayify, hexlify, DateTime, isDefined } from '@fuel-ts/utils';
-import { checkFuelCoreVersionCompatibility } from '@fuel-ts/versions';
+import { checkFuelCoreVersionCompatibility, versions } from '@fuel-ts/versions';
 import { equalBytes } from '@noble/curves/abstract/utils';
 import type { DocumentNode } from 'graphql';
 import { GraphQLClient } from 'graphql-request';
@@ -457,16 +457,20 @@ export default class Provider {
    * @hidden
    */
   protected constructor(url: string, options: ProviderOptions = {}) {
-    const { url: rawUrl, urlWithoutAuth, headers } = Provider.extractBasicAuth(url);
+    const { url: rawUrl, urlWithoutAuth, headers: authHeaders } = Provider.extractBasicAuth(url);
 
     this.url = rawUrl;
     this.urlWithoutAuth = urlWithoutAuth;
-    this.options = { ...this.options, ...options };
     this.url = url;
 
-    if (headers) {
-      this.options = { ...this.options, headers: { ...this.options.headers, ...headers } };
-    }
+    const { FUELS } = versions;
+    const headers = { ...authHeaders, ...options.headers, Source: `ts-sdk-${FUELS}` };
+
+    this.options = {
+      ...this.options,
+      ...options,
+      headers,
+    };
 
     this.operations = this.createOperations();
     const { resourceCacheTTL } = this.options;
