@@ -621,9 +621,22 @@ export default class Provider {
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
   async fetchChainAndNodeInfo() {
-    const nodeInfo = await this.fetchNode();
+    let chain: ChainInfo;
+    let nodeInfo: NodeInfo;
+
+    try {
+      nodeInfo = this.getNode();
+    } catch {
+      nodeInfo = await this.fetchNode();
+    }
+
     Provider.ensureClientVersionIsSupported(nodeInfo);
-    const chain = await this.fetchChain();
+
+    try {
+      chain = this.getChain();
+    } catch {
+      chain = await this.fetchChain();
+    }
 
     return {
       chain,
