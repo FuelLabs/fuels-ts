@@ -5,10 +5,10 @@
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "scripts": {
-    "pretest": "run-s build:forc build:process-predicates type:check",
+    "pretest": "run-s build:forc build:process-predicates type:lint",
     "build:forc": "pnpm fuels build",
     "build:process-predicates": "tsx ./scripts/process-predicates.ts",
-    "type:check": "tsc --noEmit"
+    "type:lint": "tsc --noEmit"
   },
   "license": "Apache-2.0",
   "dependencies": {
