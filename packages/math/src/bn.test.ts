@@ -495,4 +495,32 @@ describe('Math - BN', () => {
     expect(bn('100100000020000').valueOf()).toEqual('100100000020000');
     expect(bn('-1').valueOf()).toEqual('-1');
   });
+
+  it('should format properly with 0 units', () => {
+    expect(bn('1000000000').format({ units: 0 })).toEqual('1,000,000,000');
+  });
+
+  it('should format properly with 0 precision', () => {
+    expect(bn('1000000000').format({ units: 5, precision: 0 })).toEqual('10,000');
+  });
+
+  it('should format properly with 0 units and precision', () => {
+    expect(bn('1000000000').format({ units: 0, precision: 0 })).toEqual('1,000,000,000');
+  });
+
+  it('should format properly with 0 minPrecision', () => {
+    expect(bn('1000000000').format({ minPrecision: 0 })).toEqual('1');
+  });
+
+  it('should properly format with minPrecision 0 and precision 1', () => {
+    expect(bn('10010000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('100.1');
+  });
+
+  it('should properly format with minPrecision 0 and precision 1 with a trailing zero', () => {
+    expect(bn('100000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('1');
+  });
+
+  it('should return significant figures even if it exceeds the precision', () => {
+    expect(bn('4000000').format({ precision: 1 })).toEqual('0.004');
+  });
 });
