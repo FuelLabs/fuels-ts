@@ -1989,21 +1989,21 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       using launched = await setupTestProviderAndWallets();
       const { provider } = launched;
 
-      await provider.produceBlocks(50);
+      await provider.produceBlocks(70);
 
       await expectToThrowFuelError(
-        () => provider.getTransactions({ first: 40 }),
+        () => provider.getTransactions({ first: 80 }),
         new FuelError(
           ErrorCode.INVALID_INPUT_PARAMETERS,
-          'Pagination limit for this query cannot exceed 30 items'
+          'Pagination limit for this query cannot exceed 60 items'
         )
       );
 
       let { transactions, pageInfo } = await provider.getTransactions({
-        first: 30,
+        first: 60,
       });
 
-      expect(transactions.length).toBe(30);
+      expect(transactions.length).toBe(60);
       expect(pageInfo.hasNextPage).toBeTruthy();
       expect(pageInfo.hasPreviousPage).toBeFalsy();
       expect(pageInfo.startCursor).toBeDefined();
@@ -2013,7 +2013,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
         after: pageInfo.endCursor,
       }));
 
-      expect(transactions.length).toBe(20);
+      expect(transactions.length).toBe(10);
       expect(pageInfo.hasNextPage).toBeFalsy();
       expect(pageInfo.hasPreviousPage).toBeTruthy();
       expect(pageInfo.startCursor).toBeDefined();
@@ -2021,10 +2021,10 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
       ({ transactions, pageInfo } = await provider.getTransactions({
         before: pageInfo.startCursor,
-        last: 20,
+        last: 10,
       }));
 
-      expect(transactions.length).toBe(20);
+      expect(transactions.length).toBe(10);
       expect(pageInfo.hasNextPage).toBeTruthy();
       expect(pageInfo.hasPreviousPage).toBeTruthy();
       expect(pageInfo.startCursor).toBeDefined();
