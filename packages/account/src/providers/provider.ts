@@ -603,13 +603,26 @@ export default class Provider {
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
   async fetchChainAndNodeInfo() {
-    const nodeInfo = await this.fetchNode();
-    Provider.ensureClientVersionIsSupported(nodeInfo);
-    const chain = await this.fetchChain();
+    const { nodeInfo, chain } = await this.operations.getChainAndNodeInfo();
+
+    const processedNodeInfo: NodeInfo = {
+      maxDepth: bn(nodeInfo.maxDepth),
+      maxTx: bn(nodeInfo.maxTx),
+      nodeVersion: nodeInfo.nodeVersion,
+      utxoValidation: nodeInfo.utxoValidation,
+      vmBacktrace: nodeInfo.vmBacktrace,
+    };
+
+    Provider.ensureClientVersionIsSupported(processedNodeInfo);
+
+    const processedChain = processGqlChain(chain);
+
+    Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
+    Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
     return {
-      chain,
-      nodeInfo,
+      chain: processedChain,
+      nodeInfo: processedNodeInfo,
     };
   }
 
