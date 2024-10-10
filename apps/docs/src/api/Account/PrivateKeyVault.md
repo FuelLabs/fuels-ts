@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.9**](../index.md) • **Docs**
+[**@fuel-ts/account v0.95.0**](../index.md) • **Docs**
 
 ***
 
@@ -27,7 +27,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:23](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L23)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:23](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L23)
 
 ## Properties
 
@@ -41,7 +41,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:15](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L15)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:15](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L15)
 
 ## Methods
 
@@ -67,7 +67,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:49](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L49)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:49](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L49)
 
 ***
 
@@ -89,7 +89,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:57](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L57)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:57](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L57)
 
 ***
 
@@ -107,7 +107,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:45](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L45)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:45](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L45)
 
 ***
 
@@ -133,7 +133,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:37](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L37)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:37](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L37)
 
 ***
 
@@ -155,7 +155,7 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:73](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L73)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:73](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L73)
 
 ***
 
@@ -173,4 +173,4 @@ one account with the fallowing secret
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:31](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L31)
+[packages/account/src/wallet-manager/vaults/privatekey-vault.ts:31](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/account/src/wallet-manager/vaults/privatekey-vault.ts#L31)

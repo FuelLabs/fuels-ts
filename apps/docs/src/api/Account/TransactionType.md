@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.94.9**](../index.md) • **Docs**
+[**@fuel-ts/account v0.95.0**](../index.md) • **Docs**
 
 ***
 

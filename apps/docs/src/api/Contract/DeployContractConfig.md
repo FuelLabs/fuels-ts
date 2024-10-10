@@ -1,4 +1,4 @@
-[**@fuel-ts/contract v0.94.9**](../index.md) • **Docs**
+[**@fuel-ts/contract v0.95.0**](../index.md) • **Docs**
 
 ***
 
@@ -14,7 +14,7 @@ Contract factory class outputted by `pnpm fuels typegen`.
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:23](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/contract/src/test-utils/launch-test-node.ts#L23)
+[packages/contract/src/test-utils/launch-test-node.ts:23](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/contract/src/test-utils/launch-test-node.ts#L23)
 
 ***
 
@@ -26,7 +26,7 @@ Options for contract deployment taken from `ContractFactory`.
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:27](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/contract/src/test-utils/launch-test-node.ts#L27)
+[packages/contract/src/test-utils/launch-test-node.ts:27](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/contract/src/test-utils/launch-test-node.ts#L27)
 
 ***
 
@@ -38,4 +38,4 @@ Index of wallet to be used for deployment. Defaults to `0` (first wallet).
 
 #### Defined in
 
-[packages/contract/src/test-utils/launch-test-node.ts:31](https://github.com/FuelLabs/fuels-ts/blob/6074ab538bfb9e8b48e10c710d2d5944a3027bc5/packages/contract/src/test-utils/launch-test-node.ts#L31)
+[packages/contract/src/test-utils/launch-test-node.ts:31](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packages/contract/src/test-utils/launch-test-node.ts#L31)
