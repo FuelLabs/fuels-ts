@@ -4,6 +4,10 @@ import { launchTestNode } from 'fuels/test-utils';
 import { AdvancedLoggingFactory } from '../test/typegen/contracts/AdvancedLoggingFactory';
 import { ScriptDummy } from '../test/typegen/scripts';
 
+/**
+ * @group browser
+ * @group node
+ */
 describe('User account tests', () => {
   it('should return false for a blob ID', async () => {
     using launch = await launchTestNode();
