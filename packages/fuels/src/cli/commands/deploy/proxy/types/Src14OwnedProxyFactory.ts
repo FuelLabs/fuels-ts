@@ -23,7 +23,7 @@ export class Src14OwnedProxyFactory extends ContractFactory {
     super(bytecode, Src14OwnedProxy.abi, accountOrProvider);
   }
 
-  deploy<TContract extends Contract = Contract>(
+  override deploy<TContract extends Contract = Contract>(
     deployOptions?: DeployContractOptions
   ): Promise<DeployContractResult<TContract>> {
     return super.deploy({
