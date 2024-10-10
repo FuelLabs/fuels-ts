@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/account": patch
+"@fuel-ts/account": minor
 ---
 
-fix: remove unnecessary nonce from message gql queries
+fix!: remove unnecessary nonce from message gql queries
