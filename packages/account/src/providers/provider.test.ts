@@ -1087,17 +1087,18 @@ describe('Provider', () => {
     const { provider } = launched;
 
     const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
+    const spyGetChainAndNodeInfo = vi.spyOn(provider.operations, 'getChainAndNodeInfo');
 
     const INSTANCES_NUM = 5;
 
-    Array.from({ length: INSTANCES_NUM }, () => Provider.create(provider.url));
+    const promises = Array.from({ length: INSTANCES_NUM }, async () =>
+      Provider.create(provider.url)
+    );
+    await Promise.all(promises);
 
     expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(INSTANCES_NUM);
 
-    expect(spyFetchChain).not.toHaveBeenCalled();
-    expect(spyFetchNode).not.toHaveBeenCalled();
+    expect(spyGetChainAndNodeInfo).not.toHaveBeenCalled();
   });
 
   it('should ensure fetchChainAndNodeInfo uses cached data', async () => {
