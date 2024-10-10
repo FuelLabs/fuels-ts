@@ -553,7 +553,7 @@ query getBlockWithTransactions($blockId: BlockId, $blockHeight: U32) {
   block(id: $blockId, height: $blockHeight) {
     ...blockFragment
     transactions {
-      ...transactionFragment
+      ...transactionRawPayload
     }
   }
 }
@@ -569,6 +569,11 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
       }
     }
   }
+}
+
+fragment transactionRawPayload on Transaction {
+  id
+  rawPayload
 }
 
 query getCoin($coinId: UtxoId!) {
