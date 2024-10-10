@@ -95,12 +95,12 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Converts and returns the `bech32Address` property as a string
+   * returns the address `checksum` as a string
    *
    * @returns The `bech32Address` property as a string
    */
   toString(): string {
-    return this.bech32Address;
+    return this.toChecksum();
   }
 
   /**
@@ -137,12 +137,12 @@ export default class Address extends AbstractAddress {
   }
 
   /**
-   * Returns the value of the `bech32Address` property
+   * returns the address `checksum` as a string
    *
    * @returns The value of `bech32Address` property
    */
   valueOf(): string {
-    return this.bech32Address;
+    return this.toChecksum();
   }
 
   /**
