@@ -1,5 +1,19 @@
 # @fuel-ts/utils
 
+## 0.95.0
+
+### Patch Changes
+
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [b733e81]
+- Updated dependencies [f7afa04]
+- Updated dependencies [735bb1c]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+
 ## 0.94.9
 
 ### Patch Changes

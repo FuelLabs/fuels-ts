@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/account",
-  "version": "0.94.9",
+  "version": "0.95.0",
   "description": "",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "main": "dist/index.js",
