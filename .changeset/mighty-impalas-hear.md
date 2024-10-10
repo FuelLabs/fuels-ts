@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/account": minor
+"@fuel-ts/account": patch
 ---
 
-fix!: provider cache
+fix: provider cache
