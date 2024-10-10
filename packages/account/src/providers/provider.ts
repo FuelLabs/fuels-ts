@@ -1951,6 +1951,53 @@ Supported fuel-core version: ${supportedVersion}.`
   }
 
   /**
+   * Check if the given ID is an account.
+   *
+   * @param id - The ID to check.
+   * @returns A promise that resolves to the result of the check.
+   */
+  async isUserAccount(id: string): Promise<boolean> {
+    try {
+      const { contract, blob, transaction } = await this.operations.isUserAccount({
+        blobId: id,
+        contractId: id,
+        transactionId: id,
+      });
+
+      if (contract || blob || transaction) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      return true;
+    }
+  }
+
+  async getAddressType(id: string): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob'> {
+    try {
+      const { contract, blob, transaction } = await this.operations.isUserAccount({
+        blobId: id,
+        contractId: id,
+        transactionId: id,
+      });
+
+      if (contract) {
+        return 'Contract';
+      }
+      if (blob) {
+        return 'Blob';
+      }
+      if (transaction) {
+        return 'Transaction';
+      }
+
+      return 'Account';
+    } catch (error) {
+      return 'Account';
+    }
+  }
+
+  /**
    * Get the transaction response for the given transaction ID.
    *
    * @param transactionId - The transaction ID to get the response for.
