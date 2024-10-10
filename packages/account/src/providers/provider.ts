@@ -604,26 +604,32 @@ export default class Provider {
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
   async fetchChainAndNodeInfo() {
-    const { nodeInfo, chain } = await this.operations.getChainAndNodeInfo();
+    let nodeInfo: NodeInfo;
+    let chain: ChainInfo;
 
-    const processedNodeInfo: NodeInfo = {
-      maxDepth: bn(nodeInfo.maxDepth),
-      maxTx: bn(nodeInfo.maxTx),
-      nodeVersion: nodeInfo.nodeVersion,
-      utxoValidation: nodeInfo.utxoValidation,
-      vmBacktrace: nodeInfo.vmBacktrace,
-    };
+    try {
+      nodeInfo = this.getNode();
+      chain = this.getChain();
+    } catch (error) {
+      const data = await this.operations.getChainAndNodeInfo();
 
-    Provider.ensureClientVersionIsSupported(processedNodeInfo);
+      nodeInfo = {
+        maxDepth: bn(data.nodeInfo.maxDepth),
+        maxTx: bn(data.nodeInfo.maxTx),
+        nodeVersion: data.nodeInfo.nodeVersion,
+        utxoValidation: data.nodeInfo.utxoValidation,
+        vmBacktrace: data.nodeInfo.vmBacktrace,
+      };
 
-    const processedChain = processGqlChain(chain);
-
-    Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
-    Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
+      Provider.ensureClientVersionIsSupported(nodeInfo);
+      chain = processGqlChain(data.chain);
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+    }
 
     return {
-      chain: processedChain,
-      nodeInfo: processedNodeInfo,
+      chain,
+      nodeInfo,
     };
   }
 
