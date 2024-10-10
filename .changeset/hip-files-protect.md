@@ -3,4 +3,4 @@
 "@fuel-ts/address": patch
 ---
 
-Add checksum address
+feat: add checksum utils for address
