@@ -1,5 +1,5 @@
 ---
-"@fuel-ts/account": patch
+"@fuel-ts/account": minor
 ---
 
-fix: optimize coin gql queries
+fix!: optimize coin gql queries
