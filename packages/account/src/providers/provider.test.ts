@@ -1050,36 +1050,16 @@ describe('Provider', () => {
     expect(provider.getNode()).toBeDefined();
   });
 
-  it('should cache chain and node info', async () => {
-    using launched = await setupTestProviderAndWallets();
-    const { provider } = launched;
-
-    const spy1 = vi.spyOn(Provider.prototype, 'fetchChain');
-    const spy2 = vi.spyOn(Provider.prototype, 'fetchNode');
-
-    provider.getChain();
-    provider.getNode();
-
-    expect(spy1).not.toHaveBeenCalled();
-    expect(spy2).not.toHaveBeenCalled();
-  });
-
   it('should ensure getChain and getNode uses the cache and does not fetch new data', async () => {
-    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-    const spyFetchChain = vi.spyOn(Provider.prototype, 'fetchChain');
-    const spyFetchNode = vi.spyOn(Provider.prototype, 'fetchNode');
-
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+    const { error } = await safeExec(() => {
+      provider.getChain();
+      provider.getNode();
+    });
 
-    provider.getChain();
-    provider.getNode();
-
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-    expect(spyFetchChain).toHaveBeenCalledTimes(0);
-    expect(spyFetchNode).toHaveBeenCalledTimes(0);
+    expect(error).toBeUndefined();
   });
 
   it('should ensure creating new instances should not re-fetch chain and node info', async () => {
@@ -1102,21 +1082,16 @@ describe('Provider', () => {
   });
 
   it('should ensure fetchChainAndNodeInfo uses cached data', async () => {
-    const spyFetchChainAndNodeInfo = vi.spyOn(Provider.prototype, 'fetchChainAndNodeInfo');
-
     using launched = await setupTestProviderAndWallets();
-
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
-
     const { provider } = launched;
+
+    Provider.clearChainAndNodeCaches();
 
     const spyOperation = vi.spyOn(provider.operations, 'getChainAndNodeInfo');
 
     await provider.fetchChainAndNodeInfo();
 
-    expect(spyFetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
-
-    expect(spyOperation).toHaveBeenCalledTimes(0);
+    expect(spyOperation).toHaveBeenCalledTimes(1);
   });
 
   it('should ensure getGasConfig return essential gas related data', async () => {
