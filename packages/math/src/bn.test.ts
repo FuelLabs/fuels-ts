@@ -516,7 +516,7 @@ describe('Math - BN', () => {
     expect(bn('10010000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('100.1');
   });
 
-  it('should properly format with minPrecision 0 and precision 1 with a leading zero', () => {
+  it('should properly format with minPrecision 0 and precision 1 with a trailing zero', () => {
     expect(bn('100000').format({ units: 5, minPrecision: 0, precision: 1 })).toEqual('1');
   });
 
