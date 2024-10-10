@@ -377,4 +377,21 @@ describe('Address class', () => {
     );
     await expectToThrowFuelError(() => Address.fromEvmAddress(address), expectedError);
   });
+
+  test('validate checksum address', () => {
+    const address = Address.fromRandom();
+    const addressMock = '0x9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dC897';
+    expect(Address.isChecksumValid(address.toChecksum())).toBeTruthy();
+    expect(Address.fromB256(addressMock).toChecksum()).toBe(addressMock);
+    expect(Address.isChecksumValid(addressMock)).toBeTruthy();
+    expect(Address.isChecksumValid(addressMock.slice(2))).toBeTruthy();
+  });
+
+  test('validate checksum address for invalid types', () => {
+    const address = Address.fromRandom();
+    expect(Address.isChecksumValid(address.toB256())).toBeFalsy();
+    expect(Address.isChecksumValid('0x9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')).toBeFalsy();
+    expect(Address.isChecksumValid('9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')).toBeFalsy();
+    expect(Address.isChecksumValid('9cFB2Cad509d417eC40B70eBe1DD72')).toBeFalsy();
+  });
 });
