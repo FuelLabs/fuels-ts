@@ -264,11 +264,7 @@ fragment messageFragment on Message {
 }
 
 fragment getMessageFragment on Message {
-  amount
-  sender
-  recipient
-  data
-  daHeight
+  ...messageFragment
   nonce
 }
 
