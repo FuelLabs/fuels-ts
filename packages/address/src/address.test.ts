@@ -390,8 +390,12 @@ describe('Address class', () => {
   test('validate checksum address for invalid types', () => {
     const address = Address.fromRandom();
     expect(Address.isChecksumValid(address.toB256())).toBeFalsy();
-    expect(Address.isChecksumValid('0x9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')).toBeFalsy();
-    expect(Address.isChecksumValid('9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')).toBeFalsy();
+    expect(
+      Address.isChecksumValid('0x9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')
+    ).toBeFalsy();
+    expect(
+      Address.isChecksumValid('9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')
+    ).toBeFalsy();
     expect(Address.isChecksumValid('9cFB2Cad509d417eC40B70eBe1DD72')).toBeFalsy();
   });
 });
