@@ -976,7 +976,7 @@ describe('Provider', () => {
     const { provider } = launched;
     await provider.produceBlocks(1);
     const block = await provider.getBlockWithTransactions('latest');
-    const { transactions } = await provider.getTransactions({ first: 100 });
+    const { transactions } = await provider.getTransactions({ first: 30 });
     expect(block).toStrictEqual({
       id: expect.any(String),
       height: expect.any(BN),
@@ -1976,6 +1976,52 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       }));
 
       expect(blocks.length).toBe(last);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+    });
+
+    it('can get transactions', async () => {
+      using launched = await setupTestProviderAndWallets();
+      const { provider } = launched;
+
+      await provider.produceBlocks(50);
+
+      await expectToThrowFuelError(
+        () => provider.getTransactions({ first: 40 }),
+        new FuelError(
+          ErrorCode.INVALID_INPUT_PARAMETERS,
+          'Pagination limit for this query cannot exceed 30 items'
+        )
+      );
+
+      let { transactions, pageInfo } = await provider.getTransactions({
+        first: 30,
+      });
+
+      expect(transactions.length).toBe(30);
+      expect(pageInfo.hasNextPage).toBeTruthy();
+      expect(pageInfo.hasPreviousPage).toBeFalsy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ transactions, pageInfo } = await provider.getTransactions({
+        after: pageInfo.endCursor,
+      }));
+
+      expect(transactions.length).toBe(20);
+      expect(pageInfo.hasNextPage).toBeFalsy();
+      expect(pageInfo.hasPreviousPage).toBeTruthy();
+      expect(pageInfo.startCursor).toBeDefined();
+      expect(pageInfo.endCursor).toBeDefined();
+
+      ({ transactions, pageInfo } = await provider.getTransactions({
+        before: pageInfo.startCursor,
+        last: 20,
+      }));
+
+      expect(transactions.length).toBe(20);
       expect(pageInfo.hasNextPage).toBeTruthy();
       expect(pageInfo.hasPreviousPage).toBeTruthy();
       expect(pageInfo.startCursor).toBeDefined();
