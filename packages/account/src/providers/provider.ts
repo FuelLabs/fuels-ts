@@ -1360,7 +1360,7 @@ Supported fuel-core version: ${supportedVersion}.`
       id: node.utxoId,
       assetId: node.assetId,
       amount: bn(node.amount),
-      owner: Address.fromAddressOrString(owner),
+      owner: ownerAddress,
       blockCreated: bn(node.blockCreated),
       txCreatedIdx: bn(node.txCreatedIdx),
     }));
