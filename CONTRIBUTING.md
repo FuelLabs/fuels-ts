@@ -48,6 +48,7 @@ pnpm build
 After running `pnpm install` and `pnpm build`, the following files and directories are created:
 
 - Forc Repository:
+
   - Located at `internal/forc/sway-repo`.
   - Contains the source code for the version of `forc` you are using.
 
@@ -129,19 +130,20 @@ When you need to work with unreleased versions of `forc` or `fuel-core`, you can
 
 To use an unreleased version of `forc`:
 
-1. **Edit the `VERSION` File**
-Open the `internal/forc/VERSION` file and replace the version number (e.g., 0.59.0) with the desired git branch:
+1.  **Edit the `VERSION` File**
+    Open the `internal/forc/VERSION` file and replace the version number (e.g., 0.59.0) with the desired git branch:
 
-    ```text
-    git:some/branch-name
-    ```
-1. **Install and Build**
-To download and build `forc` from the specified branch after updating `VERSION` file, run:
+        ```text
+        git:some/branch-name
+        ```
 
-    ```sh
-    pnpm install
-    pnpm build
-    ```
+1.  **Install and Build**
+    To download and build `forc` from the specified branch after updating `VERSION` file, run:
+
+        ```sh
+        pnpm install
+        pnpm build
+        ```
 
 The following directory will be updated or created: `internal/forc/sway-repo`
 
@@ -149,21 +151,23 @@ The following directory will be updated or created: `internal/forc/sway-repo`
 
 Similarly, to use an unreleased version of `fuel-core`:
 
-1. **Edit the `VERSION` file:**
-Open the `internal/fuel-core/VERSION` file and replace the version number with the desired git branch:
+1.  **Edit the `VERSION` file:**
+    Open the `internal/fuel-core/VERSION` file and replace the version number with the desired git branch:
 
-    ```text
-    git:some/branch-name
-    ```
-1. **Install and Build**
-To download and build `fuel-core` from the specified branch after updating `VERSION` file, run:
+        ```text
+        git:some/branch-name
+        ```
 
-    ```sh
-    pnpm install
-    pnpm build
-    ```
+1.  **Install and Build**
+    To download and build `fuel-core` from the specified branch after updating `VERSION` file, run:
 
-The following directory will be updated or created: `internal/fuel-core/fuel-core-repo`
+        ```sh
+        pnpm install
+        pnpm build
+        ```
+
+> [!Note]
+> The `internal/forc/sway-repo` and `internal/fuel-core/fuel-core-repo` directory will contain a local clone of the Sway and Fuel Core repository respectively, at the specific version or git branch you have specified in the `internal/forc/VERSION` and `internal/fuel-core/VERSION` file.
 
 # Switching Back to Standard Binaries
 
@@ -175,15 +179,16 @@ To resolve the issue and ensure the SDK uses the correct binaries:
 
 1. **Delete the downloaded repositories**
 
-    ```sh
-    rm -rf internal/forc/sway-repo
-    rm -rf internal/fuel-core/fuel-core-repo
-    ```
+   ```sh
+   rm -rf internal/forc/sway-repo
+   rm -rf internal/fuel-core/fuel-core-repo
+   ```
+
 1. **Reinstall and build.**
-    ```sh
-    pnpm install
-    pnpm build
-    ```
+   ```sh
+   pnpm install
+   pnpm build
+   ```
 
 # Testing
 
