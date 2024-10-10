@@ -1,0 +1,19 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "packages",
+  "entryPoints": [
+    "../../packages/address",
+    "../../packages/interfaces",
+    "../../packages/predicate",
+    "../../packages/account",
+    "../../packages/program",
+    "../../packages/contract",
+    "../../packages/script",
+    "../../packages/utils"
+  ],
+  "out": "src/api",
+  "navigationLinks": {
+    "Docs": "https://docs.fuel.network/docs/intro/what-is-fuel/",
+    "GitHub": "https://github.com/FuelLabs/fuels-ts"
+  }
+}
