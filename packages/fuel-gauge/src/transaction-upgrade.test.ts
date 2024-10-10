@@ -8,6 +8,7 @@ import {
   Wallet,
   UploadTransactionRequest,
   sleep,
+  Provider,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -114,7 +115,7 @@ describe('Transaction upgrade consensus', () => {
 
     // Waiting for the next block to ensure upgraded value are reflected
     await sleep(1000);
-    provider.clearChainAndNodeCaches();
+    Provider.clearChainAndNodeCaches();
 
     // Fetch the upgraded gas costs, they should be different from before
     const {
