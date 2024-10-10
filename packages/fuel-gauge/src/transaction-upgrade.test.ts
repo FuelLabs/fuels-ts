@@ -47,7 +47,7 @@ const setupTestNode = async () => {
       snapshotConfig,
     },
   });
-  privileged.provider = provider;
+  privileged.provider = await Provider.create(provider.url);
 
   return { provider, privileged, wallets, cleanup, [Symbol.dispose]: cleanup };
 };
@@ -101,9 +101,11 @@ describe('Transaction upgrade consensus', () => {
     using launched = await setupTestNode();
     const { privileged, provider } = launched;
 
+    const mainProvider = await Provider.create(provider.url);
+
     const {
       chain: { consensusParameters: consensusBeforeUpgrade },
-    } = await provider.fetchChainAndNodeInfo();
+    } = await mainProvider.fetchChainAndNodeInfo();
 
     // Update the gas costs to free
     const { isStatusSuccess, isTypeUpgrade } = await upgradeConsensusParameters(
@@ -120,7 +122,7 @@ describe('Transaction upgrade consensus', () => {
     // Fetch the upgraded gas costs, they should be different from before
     const {
       chain: { consensusParameters: consensusAfterUpgrade },
-    } = await provider.fetchChainAndNodeInfo();
+    } = await mainProvider.fetchChainAndNodeInfo();
     expect(consensusBeforeUpgrade.gasCosts).not.toEqual(consensusAfterUpgrade.gasCosts);
   });
 });
