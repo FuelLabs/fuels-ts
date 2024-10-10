@@ -1,5 +1,16 @@
 # @fuel-ts/logger
 
+## 0.95.0
+
+### Patch Changes
+
+- Updated dependencies [b733e81]
+- Updated dependencies [bf14023]
+- Updated dependencies [f7afa04]
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/address@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+
 ## 0.94.9
 
 ### Patch Changes

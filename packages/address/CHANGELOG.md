@@ -1,5 +1,20 @@
 # Change Log
 
+## 0.95.0
+
+### Minor Changes
+
+- bf14023: chore!: made Address `toString` and `valueOf` returns checksum
+
+### Patch Changes
+
+- f7afa04: feat: add checksum utils for address
+- Updated dependencies [f7afa04]
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+  - @fuel-ts/crypto@0.95.0
+
 ## 0.94.9
 
 ### Patch Changes
