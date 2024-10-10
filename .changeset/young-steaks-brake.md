@@ -2,4 +2,4 @@
 "@fuel-ts/account": minor
 ---
 
-fix!: optimize coin gql queries
+chore!: optimize coin gql queries
