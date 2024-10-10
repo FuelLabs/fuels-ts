@@ -61,6 +61,7 @@ members = [
   "script-str-slice",
   "script-with-array",
   "script-with-configurable",
+  "script-with-more-configurable",
   "script-with-vector",
   "script-with-options",
   "script-with-vector-advanced",
