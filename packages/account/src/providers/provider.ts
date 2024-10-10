@@ -1957,44 +1957,36 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the result of the check.
    */
   async isUserAccount(id: string): Promise<boolean> {
-    try {
-      const { contract, blob, transaction } = await this.operations.isUserAccount({
-        blobId: id,
-        contractId: id,
-        transactionId: id,
-      });
+    const { contract, blob, transaction } = await this.operations.isUserAccount({
+      blobId: id,
+      contractId: id,
+      transactionId: id,
+    });
 
-      if (contract || blob || transaction) {
-        return false;
-      }
-      return true;
-    } catch (error) {
-      return true;
+    if (contract || blob || transaction) {
+      return false;
     }
+    return true;
   }
 
   async getAddressType(id: string): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob'> {
-    try {
-      const { contract, blob, transaction } = await this.operations.isUserAccount({
-        blobId: id,
-        contractId: id,
-        transactionId: id,
-      });
+    const { contract, blob, transaction } = await this.operations.isUserAccount({
+      blobId: id,
+      contractId: id,
+      transactionId: id,
+    });
 
-      if (contract) {
-        return 'Contract';
-      }
-      if (blob) {
-        return 'Blob';
-      }
-      if (transaction) {
-        return 'Transaction';
-      }
-
-      return 'Account';
-    } catch (error) {
-      return 'Account';
+    if (contract) {
+      return 'Contract';
     }
+    if (blob) {
+      return 'Blob';
+    }
+    if (transaction) {
+      return 'Transaction';
+    }
+
+    return 'Account';
   }
 
   /**
