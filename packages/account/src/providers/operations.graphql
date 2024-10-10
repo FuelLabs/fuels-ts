@@ -770,6 +770,22 @@ query getMessageByNonce($nonce: Nonce!) {
   }
 }
 
+query isUserAccount(
+  $blobId: BlobId!
+  $contractId: ContractId!
+  $transactionId: TransactionId!
+) {
+  blob(id: $blobId) {
+    id
+  }
+  contract(id: $contractId) {
+    id
+  }
+  transaction(id: $transactionId) {
+    id
+  }
+}
+
 subscription submitAndAwait($encodedTransaction: HexString!) {
   submitAndAwait(tx: $encodedTransaction) {
     ...transactionStatusSubscriptionFragment
