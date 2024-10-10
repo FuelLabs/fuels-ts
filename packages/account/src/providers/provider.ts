@@ -21,13 +21,14 @@ import type {
   GqlDryRunFailureStatusFragment,
   GqlDryRunSuccessStatusFragment,
   GqlFeeParameters as FeeParameters,
-  GqlGasCosts as GasCosts,
+  GqlGasCostsFragment as GasCosts,
   GqlPredicateParameters as PredicateParameters,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
   GqlPageInfo,
   GqlRelayedTransactionFailed,
   Requester,
+  GqlBlockFragment,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -167,12 +168,6 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   consensusParameters: ConsensusParameters;
-  latestBlock: {
-    id: string;
-    height: BN;
-    time: string;
-    transactions: Array<{ id: string }>;
-  };
 };
 
 /**
@@ -213,7 +208,7 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters, latestBlock } = chain;
+  const { name, daHeight, consensusParameters } = chain;
 
   const {
     contractParams,
@@ -266,14 +261,6 @@ const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
         maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
       },
       gasCosts,
-    },
-    latestBlock: {
-      id: latestBlock.id,
-      height: bn(latestBlock.height),
-      time: latestBlock.header.time,
-      transactions: latestBlock.transactions.map((i) => ({
-        id: i.id,
-      })),
     },
   };
 };
@@ -616,13 +603,26 @@ export default class Provider {
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
   async fetchChainAndNodeInfo() {
-    const nodeInfo = await this.fetchNode();
-    Provider.ensureClientVersionIsSupported(nodeInfo);
-    const chain = await this.fetchChain();
+    const { nodeInfo, chain } = await this.operations.getChainAndNodeInfo();
+
+    const processedNodeInfo: NodeInfo = {
+      maxDepth: bn(nodeInfo.maxDepth),
+      maxTx: bn(nodeInfo.maxTx),
+      nodeVersion: nodeInfo.nodeVersion,
+      utxoValidation: nodeInfo.utxoValidation,
+      vmBacktrace: nodeInfo.vmBacktrace,
+    };
+
+    Provider.ensureClientVersionIsSupported(processedNodeInfo);
+
+    const processedChain = processGqlChain(chain);
+
+    Provider.chainInfoCache[this.urlWithoutAuth] = processedChain;
+    Provider.nodeInfoCache[this.urlWithoutAuth] = processedNodeInfo;
 
     return {
-      chain,
-      nodeInfo,
+      chain: processedChain,
+      nodeInfo: processedNodeInfo,
     };
   }
 
@@ -731,8 +731,12 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the latest block number.
    */
   async getBlockNumber(): Promise<BN> {
-    const { chain } = await this.operations.getChain();
-    return bn(chain.latestBlock.height, 10);
+    const {
+      chain: {
+        latestBlock: { height },
+      },
+    } = await this.operations.getLatestBlockHeight();
+    return bn(height);
   }
 
   /**
@@ -1463,18 +1467,21 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the block or null.
    */
   async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
-    let variables;
-    if (typeof idOrHeight === 'number') {
-      variables = { height: bn(idOrHeight).toString(10) };
-    } else if (idOrHeight === 'latest') {
-      variables = { height: (await this.getBlockNumber()).toString(10) };
-    } else if (idOrHeight.length === 66) {
-      variables = { blockId: idOrHeight };
-    } else {
-      variables = { blockId: bn(idOrHeight).toString(10) };
-    }
+    let block: GqlBlockFragment | undefined | null;
 
-    const { block } = await this.operations.getBlock(variables);
+    if (idOrHeight === 'latest') {
+      const {
+        chain: { latestBlock },
+      } = await this.operations.getLatestBlock();
+      block = latestBlock;
+    } else {
+      const isblockId = typeof idOrHeight === 'string' && idOrHeight.length === 66;
+      const variables = isblockId
+        ? { blockId: idOrHeight }
+        : { height: bn(idOrHeight).toString(10) };
+      const response = await this.operations.getBlock(variables);
+      block = response.block;
+    }
 
     if (!block) {
       return null;
