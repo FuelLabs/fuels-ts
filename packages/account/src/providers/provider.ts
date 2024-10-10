@@ -66,7 +66,7 @@ import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
 const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
-export const TRANSACTIONS_PAGE_SIZE_LIMIT = 30;
+export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
 
