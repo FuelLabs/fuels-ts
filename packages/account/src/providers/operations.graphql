@@ -312,12 +312,6 @@ fragment messageProofFragment on MessageProof {
   data
 }
 
-fragment balanceFragment on Balance {
-  owner
-  amount
-  assetId
-}
-
 fragment TxParametersFragment on TxParameters {
   version
   maxInputs
@@ -782,7 +776,7 @@ query getContractBalance($contract: ContractId!, $asset: AssetId!) {
 
 query getBalance($owner: Address!, $assetId: AssetId!) {
   balance(owner: $owner, assetId: $assetId) {
-    ...balanceFragment
+    amount
   }
 }
 
@@ -817,7 +811,8 @@ query getBalances(
     }
     edges {
       node {
-        ...balanceFragment
+        assetId
+        amount
       }
     }
   }
