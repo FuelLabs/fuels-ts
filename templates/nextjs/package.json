@@ -9,7 +9,10 @@
     "build": "pnpm run xprebuild && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest",
+    "test": "run-p test:feat",
+    "test:all": "run-p test:feat test:unit test:ui",
+    "test:feat": "vitest",
+    "test:unit": "cd sway-programs && forc test",
     "test:ui": "./test/ui/test-ui.sh"
   },
   "dependencies": {
