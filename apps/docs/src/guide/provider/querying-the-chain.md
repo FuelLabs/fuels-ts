@@ -74,3 +74,9 @@ You can retrieve a message proof by either using it's block ID:
 Or by it's block height:
 
 <<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof-blockHeight{ts:line-numbers}
+
+## `getTransactions`
+
+You can use the `getTransactions` method to retrieve a list of transactions from the blockchain. This is limited to 30 transactions per page.
+
+<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-transactions{ts:line-numbers}

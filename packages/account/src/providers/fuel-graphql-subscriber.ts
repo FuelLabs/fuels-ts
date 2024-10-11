@@ -76,7 +76,6 @@ export class FuelGraphqlSubscriber implements AsyncIterator<unknown> {
         .replace(':keep-alive-text\n\n', '');
 
       if (decoded === '') {
-        // eslint-disable-next-line no-continue
         continue;
       }
 

@@ -1,5 +1,24 @@
 # @internal/benchmarks
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [d4e839f]
+- Updated dependencies [d968532]
+- Updated dependencies [735bb1c]
+  - fuels@0.95.0
+
+## 1.0.4
+
+### Patch Changes
+
+- 3015555: chore: run benchmarking utility in devnet environment
+- Updated dependencies [83b0ea9]
+- Updated dependencies [c2f0599]
+- Updated dependencies [8ea97cc]
+  - fuels@0.94.9
+
 ## 1.0.3
 
 ### Patch Changes

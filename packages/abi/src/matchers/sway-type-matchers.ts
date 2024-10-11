@@ -22,7 +22,7 @@ export type SwayType =
   | 'array'
   | 'assetId'
   | 'evmAddress'
-  | 'rawUntypedPtr' // might not need it
+  | 'rawUntypedPtr'
   | 'rawUntypedSlice';
 
 type Matcher = (type: string) => boolean;
@@ -110,9 +110,8 @@ export function createMatcher<T>(mappings: Record<SwayType, T>) {
 
     for (const [key, matcher] of swayTypeMatcherEntries) {
       if (matcher(swayType)) {
-        const mapping = mappings[key as SwayType];
-        if (mapping !== undefined) {
-          return mapping;
+        if (key in mappings) {
+          return mappings[key as SwayType];
         }
         break;
       }
