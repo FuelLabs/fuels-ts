@@ -1,8 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { WalletLocked, WalletUnlocked, Wallet } from 'fuels';
+import { DEVNET_NETWORK_URL } from '@internal/utils';
+import { Provider, WalletLocked, WalletUnlocked, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 import { bench } from 'vitest';
+
+import { isDevnet } from './config';
 
 const expectedPrivateKey = '0x5f70feeff1f229e4a95e1056e8b4d80d0b24b565674860cc213bdb07127ce1b1';
 const expectedPublicKey =
@@ -15,29 +18,40 @@ const expectedLockedAddress = 'fuel1tac0aml37g57f227zptw3dxcp59jfdt9vayxpnpp80ds
  * @group browser
  */
 describe('Wallet Benchmarks', () => {
-  bench('Instantiate a new Unlocked wallet', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
+  let cleanup: () => void;
+  let provider: Provider;
 
+  const setupTestEnvironment = async () => {
+    if (isDevnet) {
+      provider = await Provider.create(DEVNET_NETWORK_URL);
+    } else {
+      const launched = await launchTestNode();
+      cleanup = launched.cleanup;
+      provider = launched.provider;
+    }
+  };
+
+  beforeAll(setupTestEnvironment);
+
+  afterAll(() => {
+    if (!isDevnet && cleanup) {
+      cleanup();
+    }
+  });
+
+  bench('Instantiate a new Unlocked wallet', () => {
     const unlockedWallet = new WalletUnlocked(expectedPrivateKey, provider);
-
     expect(unlockedWallet.publicKey).toEqual(expectedPublicKey);
     expect(unlockedWallet.address.toAddress()).toEqual(expectedAddress);
   });
 
-  bench('Instantiate from a constructor', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
+  bench('Instantiate a new Locked wallet from a constructor', () => {
     const lockedWallet = new WalletLocked(expectedPrivateKey, provider);
-
     expect(lockedWallet.address.toAddress()).toEqual(expectedLockedAddress);
   });
 
-  bench('Instantiate from an address', async () => {
-    using launched = await launchTestNode();
-    const { provider } = launched;
+  bench('Instantiate from an address', () => {
     const lockedWallet = Wallet.fromAddress(expectedAddress, provider);
-
     expect(lockedWallet.address.toAddress()).toEqual(expectedAddress);
     expect(lockedWallet).toBeInstanceOf(WalletLocked);
   });
