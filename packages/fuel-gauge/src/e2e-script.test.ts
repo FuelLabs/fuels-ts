@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { DEVNET_NETWORK_URL, TESTNET_NETWORK_URL } from '@internal/utils';
-import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets } from 'fuels';
+import { WalletUnlocked, Provider, TransactionType, CHAIN_IDS, rawAssets, assets, bn } from 'fuels';
 
 import { ScriptMainArgBool } from '../test/typegen';
 
@@ -127,7 +127,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       }
 
       const balance = await provider.getBalance(wallet.address, provider.getBaseAssetId());
-      expect(balance).toBeGreaterThan(0);
+      expect(bn(balance).gt(0));
     });
 
     it('should get the chain and node info', { timeout: 15_000 }, async () => {
@@ -145,7 +145,7 @@ describe.each(selectedNetworks)('Live Script Test', (selectedNetwork) => {
       }
 
       const blockNumber = await provider.getBlockNumber();
-      expect(blockNumber).toBeGreaterThan(0);
+      expect(bn(blockNumber).gt(0));
     });
 
     it('should get the latest block', { timeout: 15_000 }, async () => {
