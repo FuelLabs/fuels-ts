@@ -12,6 +12,8 @@ export type Bech32Address = `fuel${string}`;
 // #endregion bech32-1
 export type B256Address = string;
 
+export type ChecksumAddress = string;
+
 export type B256AddressEvm = `0x000000000000000000000000${string}`;
 
 export type Bytes = Uint8Array | number[];

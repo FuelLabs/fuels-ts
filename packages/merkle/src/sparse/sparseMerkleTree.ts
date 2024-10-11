@@ -114,7 +114,6 @@ export class SparseMerkleTree {
 
     for (let i = 0; i < sideNodes.length; i += 1) {
       if (sideNodes[i] === '') {
-        // eslint-disable-next-line no-continue
         continue;
       }
 
@@ -127,7 +126,6 @@ export class SparseMerkleTree {
           // This is the leaf sibling that needs to be percolated up the tree.
           currentHash = sideNode;
           currentData = sideNode;
-          // eslint-disable-next-line no-continue
           continue;
         } else {
           // This is the node sibling that needs to be left in its place.
@@ -139,7 +137,6 @@ export class SparseMerkleTree {
       if (!nonPlaceholderReached && sideNode === ZERO) {
         // We found another placeholder sibling node, keep going up the
         // tree until we find the first sibling that is not a placeholder.
-        // eslint-disable-next-line no-continue
         continue;
       } else if (!nonPlaceholderReached) {
         // We found the first sibling node that is not a placeholder, it is
@@ -221,7 +218,6 @@ export class SparseMerkleTree {
         if (commonPrefixCount !== MAX_HEIGHT && commonPrefixCount > MAX_HEIGHT - 1 - i) {
           sideNode = ZERO;
         } else {
-          // eslint-disable-next-line no-continue
           continue;
         }
       } else {

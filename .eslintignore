@@ -13,7 +13,6 @@ apps/demo-react-cra
 apps/demo-react-vite
 apps/create-fuels-counter-guide
 apps/docs-snippets2/src/typegend
-apps/docs-snippets2/src/**/*.wrapped.ts
 
 packages/fuels/src/cli/commands/deploy/proxy
 packages/fuels/test/fixtures/project

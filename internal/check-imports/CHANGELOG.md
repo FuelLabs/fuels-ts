@@ -1,5 +1,69 @@
 # @internal/check-imports
 
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies [d4e839f]
+- Updated dependencies [95a9650]
+- Updated dependencies [b733e81]
+- Updated dependencies [74991ad]
+- Updated dependencies [fcbcc22]
+- Updated dependencies [bf14023]
+- Updated dependencies [f7afa04]
+- Updated dependencies [45f4a86]
+- Updated dependencies [55bfa6d]
+- Updated dependencies [d968532]
+- Updated dependencies [c84abb3]
+- Updated dependencies [735bb1c]
+- Updated dependencies [87da048]
+- Updated dependencies [9c70eba]
+- Updated dependencies [04578ed]
+- Updated dependencies [d1b4505]
+  - @fuel-ts/versions@0.95.0
+  - @fuel-ts/account@0.95.0
+  - fuels@0.95.0
+  - @fuel-ts/math@0.95.0
+  - @fuel-ts/address@0.95.0
+  - @fuel-ts/interfaces@0.95.0
+  - @fuel-ts/abi-typegen@0.95.0
+  - @fuel-ts/contract@0.95.0
+  - @fuel-ts/script@0.95.0
+  - @fuel-ts/errors@0.95.0
+  - @fuel-ts/utils@0.95.0
+  - @fuel-ts/program@0.95.0
+  - @fuel-ts/abi-coder@0.95.0
+  - @fuel-ts/crypto@0.95.0
+  - @fuel-ts/merkle@0.95.0
+  - @fuel-ts/transactions@0.95.0
+  - @fuel-ts/hasher@0.95.0
+
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies [5194a85]
+- Updated dependencies [83b0ea9]
+- Updated dependencies [c2f0599]
+- Updated dependencies [8ea97cc]
+  - @fuel-ts/account@0.94.9
+  - fuels@0.94.9
+  - @fuel-ts/contract@0.94.9
+  - @fuel-ts/program@0.94.9
+  - @fuel-ts/versions@0.94.9
+  - @fuel-ts/script@0.94.9
+  - @fuel-ts/abi-typegen@0.94.9
+  - @fuel-ts/errors@0.94.9
+  - @fuel-ts/utils@0.94.9
+  - @fuel-ts/abi-coder@0.94.9
+  - @fuel-ts/address@0.94.9
+  - @fuel-ts/crypto@0.94.9
+  - @fuel-ts/math@0.94.9
+  - @fuel-ts/transactions@0.94.9
+  - @fuel-ts/hasher@0.94.9
+  - @fuel-ts/merkle@0.94.9
+  - @fuel-ts/interfaces@0.94.9
+
 ## 0.0.10
 
 ### Patch Changes
