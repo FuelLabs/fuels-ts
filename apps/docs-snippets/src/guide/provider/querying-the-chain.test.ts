@@ -289,4 +289,28 @@ describe('querying the chain', () => {
     expect(messageProof?.amount.toNumber()).toEqual(100);
     expect(messageProof?.sender.toHexString()).toEqual(result.id);
   });
+
+  it('get transactions', async () => {
+    using launched = await launchTestNode();
+    const {
+      provider: testProvider,
+      wallets: [wallet, receiver],
+    } = launched;
+
+    const tx = await wallet.transfer(receiver.address, 100);
+    await tx.waitForResult();
+    const FUEL_NETWORK_URL = testProvider.url;
+
+    // #region get-transactions
+    // #import { Provider };
+
+    const provider = await Provider.create(FUEL_NETWORK_URL);
+
+    const { transactions } = await provider.getTransactions();
+    // #endregion get-transactions
+
+    expect(transactions).toBeDefined();
+    expect(transactions.length).toBe(2);
+    // Includes base asset minting tx
+  });
 });

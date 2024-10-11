@@ -7,6 +7,8 @@ import {
   UpgradeTransactionRequest,
   Wallet,
   UploadTransactionRequest,
+  sleep,
+  Provider,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -40,12 +42,12 @@ const setupTestNode = async () => {
 
   const { provider, wallets, cleanup } = await launchTestNode({
     nodeOptions: {
-      args: ['--poa-instant', 'false', '--poa-interval-period', '1ms'],
+      args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
       loggingEnabled: false,
       snapshotConfig,
     },
   });
-  privileged.provider = provider;
+  privileged.provider = await Provider.create(provider.url);
 
   return { provider, privileged, wallets, cleanup, [Symbol.dispose]: cleanup };
 };
@@ -99,9 +101,11 @@ describe('Transaction upgrade consensus', () => {
     using launched = await setupTestNode();
     const { privileged, provider } = launched;
 
+    const mainProvider = await Provider.create(provider.url);
+
     const {
       chain: { consensusParameters: consensusBeforeUpgrade },
-    } = await provider.fetchChainAndNodeInfo();
+    } = await mainProvider.fetchChainAndNodeInfo();
 
     // Update the gas costs to free
     const { isStatusSuccess, isTypeUpgrade } = await upgradeConsensusParameters(
@@ -111,11 +115,14 @@ describe('Transaction upgrade consensus', () => {
     expect(isStatusSuccess).toBeTruthy();
     expect(isTypeUpgrade).toBeTruthy();
 
+    // Waiting for the next block to ensure upgraded value are reflected
+    await sleep(1000);
+    Provider.clearChainAndNodeCaches();
+
     // Fetch the upgraded gas costs, they should be different from before
     const {
       chain: { consensusParameters: consensusAfterUpgrade },
-    } = await provider.fetchChainAndNodeInfo();
-
+    } = await mainProvider.fetchChainAndNodeInfo();
     expect(consensusBeforeUpgrade.gasCosts).not.toEqual(consensusAfterUpgrade.gasCosts);
   });
 });

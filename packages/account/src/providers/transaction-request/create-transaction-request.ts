@@ -6,7 +6,7 @@ import { TransactionType, OutputType } from '@fuel-ts/transactions';
 import { arrayify, hexlify } from '@fuel-ts/utils';
 import { clone } from 'ramda';
 
-import type { GqlGasCosts } from '../__generated__/operations';
+import type { GasCosts } from '../provider';
 import { calculateMetadataGasForTxCreate } from '../utils/gas';
 
 import { hashTransaction } from './hash-transaction';
@@ -118,7 +118,7 @@ export class CreateTransactionRequest extends BaseTransactionRequest {
     });
   }
 
-  metadataGas(gasCosts: GqlGasCosts): BN {
+  metadataGas(gasCosts: GasCosts): BN {
     return calculateMetadataGasForTxCreate({
       contractBytesSize: bn(arrayify(this.witnesses[this.bytecodeWitnessIndex] || '0x').length),
       gasCosts,
