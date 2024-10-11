@@ -1,5 +1,18 @@
 # Change Log
 
+## 0.95.0
+
+### Patch Changes
+
+- b733e81: fix: correct `bn` formatting bug with 0 units
+  - @fuel-ts/errors@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.9
+
 ## 0.94.8
 
 ### Patch Changes

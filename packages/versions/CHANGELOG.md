@@ -1,5 +1,19 @@
 # @fuel-ts/versions
 
+## 0.95.0
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+- 95a9650: chore: update to `forc@0.65.2`
+- 735bb1c: chore: update `fuel-core` to `0.38.0`
+
+## 0.94.9
+
+### Patch Changes
+
+- c2f0599: feat: deploying scripts and predicates
+
 ## 0.94.8
 
 ## 0.94.7
