@@ -3,4 +3,4 @@
 "fuels": patch
 ---
 
-fix: ensure that we fetch node info per estimation
+feat: ensure that we fetch node info per estimation
