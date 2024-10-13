@@ -3,4 +3,4 @@
 "fuels": patch
 ---
 
-Fix checksum to not consider 0x before sha256
+fix!: checksum method to remove `0x` before hashing
