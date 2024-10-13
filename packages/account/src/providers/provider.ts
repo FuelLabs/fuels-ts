@@ -485,6 +485,13 @@ export default class Provider {
     } else {
       this.cache = new ResourceCache(DEFAULT_RESOURCE_CACHE_TTL);
     }
+
+    // Call auto refresh cache on 1 minute intervals continuously
+    setInterval(() => {
+      this.autoRefreshCache().catch((error) => {
+        console.error('Error during auto refresh cache:', error);
+      });
+    }, 60000); // 60000 milliseconds = 1 minute
   }
 
   private static extractBasicAuth(url: string): {
@@ -598,41 +605,39 @@ export default class Provider {
     await this.fetchChainAndNodeInfo();
   }
 
-  async refreshCacheFunction(): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
-    const data = await this.operations.getChainAndNodeInfo();
-
-    const nodeInfo = {
-      maxDepth: bn(data.nodeInfo.maxDepth),
-      maxTx: bn(data.nodeInfo.maxTx),
-      nodeVersion: data.nodeInfo.nodeVersion,
-      utxoValidation: data.nodeInfo.utxoValidation,
-      vmBacktrace: data.nodeInfo.vmBacktrace,
-    };
-
-    Provider.ensureClientVersionIsSupported(nodeInfo);
-    const chain = processGqlChain(data.chain);
-    Provider.chainInfoCache[this.urlWithoutAuth] = chain;
-    Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
-
-    return { chain, nodeInfo };
-  }
-
   /**
    * Return the chain and node information.
    *
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo(
-    refreshCache = false
-  ): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
-    if (refreshCache) {
-      return this.refreshCacheFunction();
-    }
+  async fetchChainAndNodeInfo() {
+    let nodeInfo: NodeInfo;
+    let chain: ChainInfo;
+
     try {
-      return { chain: this.getChain(), nodeInfo: this.getNode() };
+      nodeInfo = this.getNode();
+      chain = this.getChain();
     } catch (error) {
-      return this.refreshCacheFunction();
+      const data = await this.operations.getChainAndNodeInfo();
+
+      nodeInfo = {
+        maxDepth: bn(data.nodeInfo.maxDepth),
+        maxTx: bn(data.nodeInfo.maxTx),
+        nodeVersion: data.nodeInfo.nodeVersion,
+        utxoValidation: data.nodeInfo.utxoValidation,
+        vmBacktrace: data.nodeInfo.vmBacktrace,
+      };
+
+      Provider.ensureClientVersionIsSupported(nodeInfo);
+      chain = processGqlChain(data.chain);
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
     }
+
+    return {
+      chain,
+      nodeInfo,
+    };
   }
 
   /**
@@ -1143,6 +1148,26 @@ Supported fuel-core version: ${supportedVersion}.`
     return results;
   }
 
+  private async autoRefreshCache() {
+    const chainInfo = this.getChain();
+
+    const {
+      consensusParameters: { version: cachedConsensusParametersVersion },
+    } = chainInfo;
+
+    const {
+      chain: {
+        latestBlock: {
+          header: { consensusParametersVersion: currentConsensusParametersVersion },
+        },
+      },
+    } = await this.operations.getConsensusParametersVersion();
+
+    if (cachedConsensusParametersVersion !== currentConsensusParametersVersion) {
+      await this.fetchChainAndNodeInfo();
+    }
+  }
+
   /**
    * Estimates the transaction gas and fee based on the provided transaction request.
    * @param transactionRequest - The transaction request object.
@@ -1151,8 +1176,6 @@ Supported fuel-core version: ${supportedVersion}.`
   async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
     const { transactionRequest } = params;
     let { gasPrice } = params;
-
-    await this.fetchChainAndNodeInfo(true);
 
     const chainInfo = this.getChain();
     const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
