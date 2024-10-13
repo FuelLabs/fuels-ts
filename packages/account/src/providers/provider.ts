@@ -419,7 +419,7 @@ export default class Provider {
   private static nodeInfoCache: NodeInfoCache = {};
 
   /** @hidden */
-  private autoRefreshIntervalId?: NodeJS.Timeout;
+  private consensusParametersTimestamp: number;
 
   options: ProviderOptions = {
     timeout: undefined,
@@ -489,14 +489,7 @@ export default class Provider {
       this.cache = new ResourceCache(DEFAULT_RESOURCE_CACHE_TTL);
     }
 
-    // Call auto refresh cache on 1 minute intervals continuously
-    if (!this.autoRefreshIntervalId) {
-      this.autoRefreshIntervalId = setInterval(() => {
-        this.autoRefreshCache().catch((error) => {
-          console.error('Error during auto refresh cache:', error);
-        });
-      }, 60000); // 60000 milliseconds = 1 minute
-    }
+    this.consensusParametersTimestamp = Date.now();
   }
 
   private static extractBasicAuth(url: string): {
@@ -756,14 +749,6 @@ Supported fuel-core version: ${supportedVersion}.`
       },
     } = await this.operations.getLatestBlockHeight();
     return bn(height);
-  }
-
-  /**
-   * Destroys the provider instance.
-   */
-  destroy() {
-    clearInterval(this.autoRefreshIntervalId);
-    this.autoRefreshIntervalId = undefined;
   }
 
   /**
@@ -1161,23 +1146,33 @@ Supported fuel-core version: ${supportedVersion}.`
     return results;
   }
 
-  private async autoRefreshCache() {
-    const chainInfo = this.getChain();
+  private hasMinutePassed(timestampA: number) {
+    const currentTime = Date.now();
+    const differenceInMs = currentTime - timestampA;
+    const oneMinuteInMs = 60 * 1000; // 60 seconds * 1000 milliseconds
 
-    const {
-      consensusParameters: { version: cachedConsensusParametersVersion },
-    } = chainInfo;
+    return differenceInMs > oneMinuteInMs;
+  }
 
-    const {
-      chain: {
-        latestBlock: {
-          header: { consensusParametersVersion: currentConsensusParametersVersion },
+  private async checkConsensusParametersValidity() {
+    if (this.hasMinutePassed(this.consensusParametersTimestamp)) {
+      const chainInfo = this.getChain();
+
+      const {
+        consensusParameters: { version: cachedConsensusParametersVersion },
+      } = chainInfo;
+
+      const {
+        chain: {
+          latestBlock: {
+            header: { consensusParametersVersion: currentConsensusParametersVersion },
+          },
         },
-      },
-    } = await this.operations.getConsensusParametersVersion();
+      } = await this.operations.getConsensusParametersVersion();
 
-    if (cachedConsensusParametersVersion !== currentConsensusParametersVersion) {
-      await this.fetchChainAndNodeInfo();
+      if (cachedConsensusParametersVersion !== currentConsensusParametersVersion) {
+        await this.fetchChainAndNodeInfo();
+      }
     }
   }
 
@@ -1189,6 +1184,8 @@ Supported fuel-core version: ${supportedVersion}.`
   async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
     const { transactionRequest } = params;
     let { gasPrice } = params;
+
+    await this.checkConsensusParametersValidity();
 
     const chainInfo = this.getChain();
     const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
