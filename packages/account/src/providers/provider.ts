@@ -69,6 +69,7 @@ export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
+export const GAS_USED_MODIFIER = 1.3;
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -1313,7 +1314,7 @@ Supported fuel-core version: ${supportedVersion}.`
       }
 
       gasUsed = getGasUsedFromReceipts(receipts);
-      txRequestClone.gasLimit = gasUsed;
+      txRequestClone.gasLimit = bn(gasUsed.muln(GAS_USED_MODIFIER));
 
       ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
         transactionRequest: txRequestClone,
