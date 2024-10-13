@@ -13,7 +13,7 @@ const ADDRESS_B256_EVM_PADDED: B256AddressEvm =
 const ADDRESS_EVM = '0x07a6e159a1103cefb7e2ae0636fb33d3cb2a9e4a';
 const ADDRESS_BECH32: Bech32Address =
   'fuel1a7r2l2tfdncdccu9utzq0fhptxs3q080kl32up3klvea8je2ne9qrqnt6n';
-const ADDRESS_CHECKSUM = '0xEf86aFa9696Cf0dc6385e2C407A6e159A1103cEfB7E2Ae0636FB33d3cb2A9E4A';
+const ADDRESS_CHECKSUM = '0xEf86Afa9696cF0Dc6385E2c407a6E159A1103CEfb7e2Ae0636fb33D3cb2A9e4a';
 const ADDRESS_WORDS = [
   29, 30, 3, 10, 31, 10, 11, 9, 13, 19, 24, 13, 24, 24, 28, 5, 28, 11, 2, 0, 15, 9, 23, 1, 11, 6,
   16, 17, 0, 15, 7, 15, 22, 31, 17, 10, 28, 1, 17, 22, 31, 12, 25, 29, 7, 18, 25, 10, 19, 25, 5, 0,
@@ -381,7 +381,7 @@ describe('Address class', () => {
 
   test('validate checksum address', () => {
     const address = Address.fromRandom();
-    const addressMock = '0x9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dC897';
+    const addressMock = '0x9cfB2CAd509D417ec40b70ebE1DD72a3624D46fdD1Ea5420dBD755CE7f4Dc897';
     expect(Address.isChecksumValid(address.toChecksum())).toBeTruthy();
     expect(Address.fromB256(addressMock).toChecksum()).toBe(addressMock);
     expect(Address.isChecksumValid(addressMock)).toBeTruthy();
@@ -392,7 +392,7 @@ describe('Address class', () => {
     const address = Address.fromRandom();
     expect(Address.isChecksumValid(address.toB256())).toBeFalsy();
     expect(
-      Address.isChecksumValid('0x9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')
+      Address.isChecksumValid('0x9cfB2CAd509D417ec40b70ebE1DD72a3624D46fdD1Ea5420dBD755CE7f4dc897')
     ).toBeFalsy();
     expect(
       Address.isChecksumValid('9cFB2Cad509d417eC40B70eBe1DD72a3624d46fDD1EA5420DbD755Ce7f4dc897')
