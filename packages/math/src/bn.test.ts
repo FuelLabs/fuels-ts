@@ -476,6 +476,9 @@ describe('Math - BN', () => {
     expect(bn.parseUnits('.').toHex()).toEqual(bn('0').toHex());
     expect(bn.parseUnits('.', 5).toHex()).toEqual(bn('0').toHex());
     expect(bn.parseUnits('1', 0).toHex()).toEqual(bn('1').toHex());
+    expect(bn.parseUnits('0.000000001', 0).toHex()).toEqual(bn('0').toHex());
+    expect(bn.parseUnits('100.00002', 0).toHex()).toEqual(bn('100').toHex());
+    expect(bn.parseUnits('100,100.00002', 0).toHex()).toEqual(bn('100100').toHex());
 
     expect(() => {
       bn.parseUnits('100,100.000002', 5);
