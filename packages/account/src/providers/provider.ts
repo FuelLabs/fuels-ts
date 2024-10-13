@@ -418,6 +418,9 @@ export default class Provider {
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
 
+  /** @hidden */
+  private autoRefreshIntervalId?: NodeJS.Timeout;
+
   options: ProviderOptions = {
     timeout: undefined,
     resourceCacheTTL: undefined,
@@ -487,11 +490,13 @@ export default class Provider {
     }
 
     // Call auto refresh cache on 1 minute intervals continuously
-    setInterval(() => {
-      this.autoRefreshCache().catch((error) => {
-        console.error('Error during auto refresh cache:', error);
-      });
-    }, 60000); // 60000 milliseconds = 1 minute
+    if (!this.autoRefreshIntervalId) {
+      this.autoRefreshIntervalId = setInterval(() => {
+        this.autoRefreshCache().catch((error) => {
+          console.error('Error during auto refresh cache:', error);
+        });
+      }, 60000); // 60000 milliseconds = 1 minute
+    }
   }
 
   private static extractBasicAuth(url: string): {
@@ -751,6 +756,13 @@ Supported fuel-core version: ${supportedVersion}.`
       },
     } = await this.operations.getLatestBlockHeight();
     return bn(height);
+  }
+
+  /**
+   * Destroys the provider instance.
+   */
+  destroy() {
+    clearInterval(this.autoRefreshIntervalId);
   }
 
   /**
