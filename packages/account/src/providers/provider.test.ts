@@ -870,7 +870,7 @@ describe('Provider', () => {
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs.'
+        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: ${quantities.length}, max inputs: ${maxInputs}`
       )
     );
   });
@@ -939,7 +939,7 @@ describe('Provider', () => {
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_OUTPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of outputs.'
+        `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${request.outputs.length}, max outputs: ${maxOutputs}`
       )
     );
   });
