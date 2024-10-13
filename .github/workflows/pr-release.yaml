@@ -8,7 +8,7 @@ jobs:
     name: "Release PR to npm"
     runs-on: ubuntu-latest
     # comment out if:false to enable release PR to npm
-    if: false
+    # if: true
     permissions: write-all
     steps:
       - name: Checkout
