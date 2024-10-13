@@ -9,7 +9,7 @@ describe('Address Types', () => {
   it('should successfully create new address from bech32 string', () => {
     // #region address-2
     const ADDRESS_BECH32 = 'fuel1elnmzsav56dqnp95sx4e2pckq36cvae9ser44m5zlvgtwxw49fmqd7e42e';
-    const ADDRESS_CHECKSUM = '0xcfE7B143aCa69A0984b481aB950716047586772586475aee82fB10B719D52A76';
+    const ADDRESS_CHECKSUM = '0xcfe7b143Aca69a0984b481ab950716047586772586475AEE82fb10B719d52A76';
 
     const address = new Address(ADDRESS_BECH32);
 
