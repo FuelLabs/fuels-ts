@@ -79,7 +79,7 @@ function getFinalStateConfigJSON({ stateConfig, chainConfig }: SnapshotConfigs) 
       owner: signer.address.toHexString(),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       amount: '18446744073709551615' as any,
-      asset_id: chainConfig.consensus_parameters.V1.base_asset_id,
+      asset_id: chainConfig.consensus_parameters.V2.base_asset_id,
       output_index: 0,
       tx_pointer_block_height: 0,
       tx_pointer_tx_idx: 0,

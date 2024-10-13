@@ -204,7 +204,7 @@ interface ConsensusParameters {
 interface ChainConfig {
   chain_name: string;
   consensus_parameters: {
-    V1: ConsensusParameters;
+    V2: ConsensusParameters;
   };
   consensus: Consensus;
 }

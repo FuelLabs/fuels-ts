@@ -830,7 +830,7 @@ describe('Provider', () => {
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
-              V1: {
+              V2: {
                 tx_params: {
                   V1: {
                     max_inputs: maxInputs,
@@ -883,7 +883,7 @@ describe('Provider', () => {
         snapshotConfig: {
           chainConfig: {
             consensus_parameters: {
-              V1: {
+              V2: {
                 tx_params: {
                   V1: {
                     max_outputs: maxOutputs,
