@@ -990,6 +990,8 @@ Supported fuel-core version: ${supportedVersion}.`
     let outputVariables = 0;
     let dryRunStatus: DryRunStatus | undefined;
 
+    this.validateTransaction(transactionRequest);
+
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
         dryRun: [{ receipts: rawReceipts, status }],
