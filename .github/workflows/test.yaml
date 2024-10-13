@@ -164,7 +164,7 @@ jobs:
         run: pnpm test:coverage-diff
 
       - name: Report Coverage
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v3
         if: ${{ steps.findPr.outputs.number }}
         with:
           filePath: coverage/report/coverage-diff.txt
