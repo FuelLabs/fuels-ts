@@ -598,39 +598,41 @@ export default class Provider {
     await this.fetchChainAndNodeInfo();
   }
 
+  async refreshCacheFunction(): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
+    const data = await this.operations.getChainAndNodeInfo();
+
+    const nodeInfo = {
+      maxDepth: bn(data.nodeInfo.maxDepth),
+      maxTx: bn(data.nodeInfo.maxTx),
+      nodeVersion: data.nodeInfo.nodeVersion,
+      utxoValidation: data.nodeInfo.utxoValidation,
+      vmBacktrace: data.nodeInfo.vmBacktrace,
+    };
+
+    Provider.ensureClientVersionIsSupported(nodeInfo);
+    const chain = processGqlChain(data.chain);
+    Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+    Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+
+    return { chain, nodeInfo };
+  }
+
   /**
    * Return the chain and node information.
    *
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo() {
-    let nodeInfo: NodeInfo;
-    let chain: ChainInfo;
-
-    try {
-      nodeInfo = this.getNode();
-      chain = this.getChain();
-    } catch (error) {
-      const data = await this.operations.getChainAndNodeInfo();
-
-      nodeInfo = {
-        maxDepth: bn(data.nodeInfo.maxDepth),
-        maxTx: bn(data.nodeInfo.maxTx),
-        nodeVersion: data.nodeInfo.nodeVersion,
-        utxoValidation: data.nodeInfo.utxoValidation,
-        vmBacktrace: data.nodeInfo.vmBacktrace,
-      };
-
-      Provider.ensureClientVersionIsSupported(nodeInfo);
-      chain = processGqlChain(data.chain);
-      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
-      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+  async fetchChainAndNodeInfo(
+    refreshCache = false
+  ): Promise<{ chain: ChainInfo; nodeInfo: NodeInfo }> {
+    if (refreshCache) {
+      return this.refreshCacheFunction();
     }
-
-    return {
-      chain,
-      nodeInfo,
-    };
+    try {
+      return { chain: this.getChain(), nodeInfo: this.getNode() };
+    } catch (error) {
+      return this.refreshCacheFunction();
+    }
   }
 
   /**
@@ -1149,6 +1151,8 @@ Supported fuel-core version: ${supportedVersion}.`
   async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
     const { transactionRequest } = params;
     let { gasPrice } = params;
+
+    await this.fetchChainAndNodeInfo(true);
 
     const chainInfo = this.getChain();
     const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
