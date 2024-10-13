@@ -289,8 +289,12 @@ export default class Address extends AbstractAddress {
 
   /** @hidden */
   private static toChecksum(address: string) {
+    if (!isB256(address)) {
+      throw new Error('Invalid B256 Address');
+    }
+
     const addressHex = hexlify(address).toLowerCase().slice(2);
-    const checksum = sha256(address);
+    const checksum = sha256(addressHex);
 
     let ret = '0x';
     for (let i = 0; i < 32; ++i) {
