@@ -1353,7 +1353,7 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(minFee.eq(0)).not.toBeTruthy();
   });
 
-  it('should ensure gas used is has a 30% modifier', async () => {
+  it('should ensure gas used has a modifier', async () => {
     using launched = await setupTestProviderAndWallets();
 
     const {
