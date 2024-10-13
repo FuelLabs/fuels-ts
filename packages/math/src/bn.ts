@@ -326,6 +326,11 @@ bn.parseUnits = (value: string, units: number = DEFAULT_DECIMAL_UNITS): BN => {
   const [valueUnits = '0', valueDecimals = '0'] = valueToParse.split('.');
   const length = valueDecimals.length;
 
+  if (units === 0) {
+    const valueWithoutDecimals = valueToParse.replace(',', '').split('.')[0];
+    return bn(valueWithoutDecimals);
+  }
+
   if (length > units) {
     throw new FuelError(
       ErrorCode.CONVERTING_FAILED,
