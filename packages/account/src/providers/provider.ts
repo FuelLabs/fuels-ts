@@ -1313,8 +1313,9 @@ Supported fuel-core version: ${supportedVersion}.`
         throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
       }
 
-      gasUsed = getGasUsedFromReceipts(receipts);
-      txRequestClone.gasLimit = bn(gasUsed.muln(GAS_USED_MODIFIER));
+      const pristineGasUsed = getGasUsedFromReceipts(receipts);
+      gasUsed = bn(pristineGasUsed.muln(GAS_USED_MODIFIER));
+      txRequestClone.gasLimit = gasUsed;
 
       ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
         transactionRequest: txRequestClone,
