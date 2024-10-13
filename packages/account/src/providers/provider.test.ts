@@ -1352,6 +1352,29 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(minFee.eq(0)).not.toBeTruthy();
   });
 
+  it('should validate max number of inputs when estimating TX', async () => {
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 100,
+        coinsPerAsset: 400,
+      },
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet.address, 40_000, provider.getBaseAssetId());
+
+    const { coins } = await wallet.getCoins(provider.getBaseAssetId());
+    request.addResources(coins);
+
+    await expectToThrowFuelError(() => wallet.getTransactionCost(request), {
+      code: ErrorCode.MAX_INPUTS_EXCEEDED,
+    });
+  });
+
   it('should accept string addresses in methods that require an address', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
