@@ -29,6 +29,7 @@ import type { ChainInfo, CursorPaginationArgs, NodeInfo } from './provider';
 import Provider, {
   BLOCKS_PAGE_SIZE_LIMIT,
   DEFAULT_RESOURCE_CACHE_TTL,
+  GAS_USED_MODIFIER,
   RESOURCES_PAGE_SIZE_LIMIT,
 } from './provider';
 import type { ExcludeResourcesOption } from './resource';
@@ -1350,6 +1351,27 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(gasPrice.eq(0)).toBeTruthy();
     expect(maxFee.eq(0)).not.toBeTruthy();
     expect(minFee.eq(0)).not.toBeTruthy();
+  });
+
+  it('should ensure gas used is has a 30% modifier', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const {
+      provider,
+      wallets: [wallet],
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet.address, 1000, provider.getBaseAssetId());
+
+    const spyGetGasUsedFromReceipts = vi.spyOn(gasMod, 'getGasUsedFromReceipts');
+    const cost = await wallet.getTransactionCost(request);
+
+    const pristineGasUsed = spyGetGasUsedFromReceipts.mock.results[0].value;
+
+    expect(cost.gasUsed.toNumber()).toBe(
+      bn(pristineGasUsed.toNumber() * GAS_USED_MODIFIER).toNumber()
+    );
   });
 
   it('should accept string addresses in methods that require an address', async () => {
