@@ -841,14 +841,14 @@ Supported fuel-core version: ${supportedVersion}.`
     if (bn(tx.inputs.length).gt(maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs.'
+        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: ${tx.inputs.length}, max inputs: ${maxInputs}`
       );
     }
 
     if (bn(tx.outputs.length).gt(maxOutputs)) {
       throw new FuelError(
         ErrorCode.MAX_OUTPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of outputs.'
+        `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${tx.outputs.length}, max outputs: ${maxOutputs}`
       );
     }
   }
