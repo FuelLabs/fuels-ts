@@ -69,7 +69,7 @@ export const RESOURCES_PAGE_SIZE_LIMIT = 512;
 export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
-export const GAS_USED_MODIFIER = 1.3;
+export const GAS_USED_MODIFIER = 1.2;
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
