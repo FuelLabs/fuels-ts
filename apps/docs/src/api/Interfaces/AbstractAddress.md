@@ -1,4 +1,4 @@
-[**@fuel-ts/interfaces v0.95.0**](../index.md) • **Docs**
+[**@fuel-ts/interfaces v0.96.0**](../index.md) • **Docs**
 
 ***
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[index.ts:58](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packag./src/index.ts#L58)
+[index.ts:58](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packag./src/index.ts#L58)
 
 ***
 
@@ -46,7 +46,7 @@
 
 #### Defined in
 
-[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packag./src/index.ts#L54)
+[index.ts:54](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packag./src/index.ts#L54)
 
 ***
 
@@ -60,7 +60,7 @@
 
 #### Defined in
 
-[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packag./src/index.ts#L55)
+[index.ts:55](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packag./src/index.ts#L55)
 
 ***
 
@@ -74,7 +74,7 @@
 
 #### Defined in
 
-[index.ts:57](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packag./src/index.ts#L57)
+[index.ts:57](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packag./src/index.ts#L57)
 
 ***
 
@@ -88,7 +88,7 @@
 
 #### Defined in
 
-[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packag./src/index.ts#L56)
+[index.ts:56](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packag./src/index.ts#L56)
 
 ***
 
@@ -102,7 +102,7 @@
 
 #### Defined in
 
-[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packag./src/index.ts#L52)
+[index.ts:52](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packag./src/index.ts#L52)
 
 ***
 
@@ -116,4 +116,4 @@
 
 #### Defined in
 
-[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/520f93c51eb523e7de0fb66083fca60997ac2db5/packag./src/index.ts#L53)
+[index.ts:53](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packag./src/index.ts#L53)
