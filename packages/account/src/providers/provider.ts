@@ -763,6 +763,7 @@ Supported fuel-core version: ${supportedVersion}.`
    */
   destroy() {
     clearInterval(this.autoRefreshIntervalId);
+    this.autoRefreshIntervalId = undefined;
   }
 
   /**
