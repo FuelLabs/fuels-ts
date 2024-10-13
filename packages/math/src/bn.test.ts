@@ -255,6 +255,20 @@ describe('Math - BN', () => {
     expect(() => bn(over).toBytes(4)).toThrow();
   });
 
+  it('should ensure max method works just like expected', () => {
+    // Using Number
+    const maxNumber = 100_000;
+    const exceedingNumber = maxNumber + 1;
+
+    let maxSafeNumber = bn(exceedingNumber).max(maxNumber);
+
+    expect(maxSafeNumber.toNumber()).toEqual(maxNumber);
+
+    // Using BN
+    maxSafeNumber = bn(maxNumber).add(1).max(bn(maxNumber));
+    expect(maxSafeNumber.toNumber()).toEqual(maxNumber);
+  });
+
   it('should toHex break when value provided is bigger than bytePadding config', () => {
     let maxBytes: Uint8Array;
     let maxHex: string;
