@@ -292,6 +292,7 @@ export default class Address extends AbstractAddress {
     if (!isB256(address)) {
       throw new Error('Invalid B256 Address');
     }
+
     const addressHex = hexlify(address).toLowerCase().slice(2);
     const checksum = sha256(addressHex);
 
