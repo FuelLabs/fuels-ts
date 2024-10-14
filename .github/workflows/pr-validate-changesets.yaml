@@ -33,7 +33,7 @@ jobs:
         if: env.CHANGESET_FILE == ''
         uses: pnpm/action-setup@v4
         with:
-          version: 9.4.0
+          version: 9.7.1
           run_install: true
 
       - name: Install jq
