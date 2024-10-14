@@ -1,5 +1,11 @@
 # @fuel-ts/versions
 
+## 0.96.1
+
+### Patch Changes
+
+- eb3b6c9: chore: upgrading `fuel-core` to `0.39.0`
+
 ## 0.96.0
 
 ## 0.95.0
