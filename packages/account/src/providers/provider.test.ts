@@ -824,7 +824,7 @@ describe('Provider', () => {
     });
   });
 
-  it('should throws if max of inputs was exceeded', async () => {
+  it('should validate max number of inputs at sendTransaction method', async () => {
     const maxInputs = 2;
     using launched = await setupTestProviderAndWallets({
       nodeOptions: {
@@ -852,29 +852,51 @@ describe('Provider', () => {
       provider,
     } = launched;
 
-    const request = new ScriptTransactionRequest();
+    const request = new ScriptTransactionRequest({
+      gasLimit: 1000,
+      maxFee: 1000,
+    });
 
-    const quantities = [coinQuantityfy([1000, ASSET_A]), coinQuantityfy([500, ASSET_B])];
+    const quantities = [
+      coinQuantityfy([1000, ASSET_A]),
+      coinQuantityfy([500, ASSET_B]),
+      coinQuantityfy([5000, provider.getBaseAssetId()]),
+    ];
+
     const resources = await sender.getResourcesToSpend(quantities);
-
     request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
-
-    const txCost = await sender.getTransactionCost(request);
-
-    request.gasLimit = txCost.gasUsed;
-    request.maxFee = txCost.maxFee;
-
     request.addResources(resources);
-
-    await sender.fund(request, txCost);
 
     await expectToThrowFuelError(
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs.'
+        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: ${quantities.length}, max inputs: ${maxInputs}`
       )
     );
+  });
+
+  it('should validate max number of inputs when estimating TX', async () => {
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 100,
+        coinsPerAsset: 400,
+      },
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet.address, 40_000, provider.getBaseAssetId());
+
+    const { coins } = await wallet.getCoins(provider.getBaseAssetId());
+    request.addResources(coins);
+
+    await expectToThrowFuelError(() => wallet.getTransactionCost(request), {
+      code: ErrorCode.MAX_INPUTS_EXCEEDED,
+    });
   });
 
   it('should throws if max of ouputs was exceeded', async () => {
@@ -918,7 +940,7 @@ describe('Provider', () => {
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_OUTPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of outputs.'
+        `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${request.outputs.length}, max outputs: ${maxOutputs}`
       )
     );
   });

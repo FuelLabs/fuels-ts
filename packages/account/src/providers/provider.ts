@@ -830,19 +830,26 @@ Supported fuel-core version: ${supportedVersion}.`
     this.cache.set(transactionId, inputsToCache);
   }
 
-  private validateTransaction(tx: TransactionRequest, consensusParameters: ConsensusParameters) {
-    const { maxOutputs, maxInputs } = consensusParameters.txParameters;
+  /**
+   * @hidden
+   */
+  validateTransaction(tx: TransactionRequest) {
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs, maxOutputs },
+      },
+    } = this.getChain();
     if (bn(tx.inputs.length).gt(maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs.'
+        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: ${tx.inputs.length}, max inputs: ${maxInputs}`
       );
     }
 
     if (bn(tx.outputs.length).gt(maxOutputs)) {
       throw new FuelError(
         ErrorCode.MAX_OUTPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of outputs.'
+        `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${tx.outputs.length}, max outputs: ${maxOutputs}`
       );
     }
   }
@@ -868,9 +875,7 @@ Supported fuel-core version: ${supportedVersion}.`
     }
     // #endregion Provider-sendTransaction
 
-    const { consensusParameters } = this.getChain();
-
-    this.validateTransaction(transactionRequest, consensusParameters);
+    this.validateTransaction(transactionRequest);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
@@ -985,6 +990,8 @@ Supported fuel-core version: ${supportedVersion}.`
     const missingContractIds: string[] = [];
     let outputVariables = 0;
     let dryRunStatus: DryRunStatus | undefined;
+
+    this.validateTransaction(transactionRequest);
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
