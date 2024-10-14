@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.96.0**](../index.md) • **Docs**
+[**@fuel-ts/account v0.96.1**](../index.md) • **Docs**
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:13](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L13)
+[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:13](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L13)
 
 ***
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:12](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L12)
+[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:12](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L12)
 
 ***
 
@@ -32,4 +32,4 @@
 
 #### Defined in
 
-[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L11)
+[packages/account/src/wallet-manager/vaults/mnemonic-vault.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/wallet-manager/vaults/mnemonic-vault.ts#L11)

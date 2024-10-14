@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.96.0**](../index.md) • **Docs**
+[**@fuel-ts/account v0.96.1**](../index.md) • **Docs**
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:36](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/providers/coin-quantity.ts#L36)
+[packages/account/src/providers/coin-quantity.ts:36](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/coin-quantity.ts#L36)
 
 ***
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:35](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/providers/coin-quantity.ts#L35)
+[packages/account/src/providers/coin-quantity.ts:35](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/coin-quantity.ts#L35)
 
 ***
 
@@ -32,4 +32,4 @@
 
 #### Defined in
 
-[packages/account/src/providers/coin-quantity.ts:37](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/providers/coin-quantity.ts#L37)
+[packages/account/src/providers/coin-quantity.ts:37](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/providers/coin-quantity.ts#L37)

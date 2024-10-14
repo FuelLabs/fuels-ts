@@ -1,4 +1,4 @@
-[**@fuel-ts/account v0.96.0**](../index.md) • **Docs**
+[**@fuel-ts/account v0.96.1**](../index.md) • **Docs**
 
 ***
 
@@ -12,7 +12,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:10](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L10)
+[packages/account/src/connectors/types/connector-types.ts:10](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L10)
 
 ***
 
@@ -22,7 +22,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L25)
+[packages/account/src/connectors/types/connector-types.ts:25](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L25)
 
 ***
 
@@ -32,7 +32,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L17)
+[packages/account/src/connectors/types/connector-types.ts:17](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L17)
 
 ***
 
@@ -42,7 +42,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L18)
+[packages/account/src/connectors/types/connector-types.ts:18](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L18)
 
 ***
 
@@ -52,7 +52,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:22](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L22)
+[packages/account/src/connectors/types/connector-types.ts:22](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L22)
 
 ***
 
@@ -62,7 +62,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:16](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L16)
+[packages/account/src/connectors/types/connector-types.ts:16](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L16)
 
 ***
 
@@ -72,7 +72,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:6](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L6)
+[packages/account/src/connectors/types/connector-types.ts:6](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L6)
 
 ***
 
@@ -82,7 +82,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L11)
+[packages/account/src/connectors/types/connector-types.ts:11](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L11)
 
 ***
 
@@ -92,7 +92,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L21)
+[packages/account/src/connectors/types/connector-types.ts:21](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L21)
 
 ***
 
@@ -102,7 +102,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L7)
+[packages/account/src/connectors/types/connector-types.ts:7](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L7)
 
 ***
 
@@ -112,7 +112,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L26)
+[packages/account/src/connectors/types/connector-types.ts:26](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L26)
 
 ***
 
@@ -122,7 +122,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L27)
+[packages/account/src/connectors/types/connector-types.ts:27](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L27)
 
 ***
 
@@ -132,7 +132,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:8](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L8)
+[packages/account/src/connectors/types/connector-types.ts:8](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L8)
 
 ***
 
@@ -142,7 +142,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L20)
+[packages/account/src/connectors/types/connector-types.ts:20](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L20)
 
 ***
 
@@ -152,7 +152,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:3](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L3)
+[packages/account/src/connectors/types/connector-types.ts:3](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L3)
 
 ***
 
@@ -162,7 +162,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L23)
+[packages/account/src/connectors/types/connector-types.ts:23](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L23)
 
 ***
 
@@ -172,7 +172,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:14](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L14)
+[packages/account/src/connectors/types/connector-types.ts:14](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L14)
 
 ***
 
@@ -182,7 +182,7 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L13)
+[packages/account/src/connectors/types/connector-types.ts:13](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L13)
 
 ***
 
@@ -192,4 +192,4 @@
 
 #### Defined in
 
-[packages/account/src/connectors/types/connector-types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/account/src/connectors/types/connector-types.ts#L4)
+[packages/account/src/connectors/types/connector-types.ts:4](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/account/src/connectors/types/connector-types.ts#L4)

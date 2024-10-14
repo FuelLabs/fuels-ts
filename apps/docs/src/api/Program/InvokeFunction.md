@@ -1,4 +1,4 @@
-[**@fuel-ts/program v0.96.0**](../index.md) • **Docs**
+[**@fuel-ts/program v0.96.1**](../index.md) • **Docs**
 
 ***
 
@@ -30,7 +30,7 @@ Represents a function that can be invoked.
 
 ## Defined in
 
-[types.ts:71](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/program/src/types.ts#L71)
+[types.ts:71](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/program/src/types.ts#L71)
 
 ## Properties
 
@@ -48,4 +48,4 @@ True if the function is read-only or pure, false otherwise.
 
 #### Defined in
 
-[types.ts:77](https://github.com/FuelLabs/fuels-ts/blob/793ac1bcd1e3f1560372e455e3b77c2d623e78b6/packages/program/src/types.ts#L77)
+[types.ts:77](https://github.com/FuelLabs/fuels-ts/blob/2d42dc2cd8ad9160914de24e3ddf50045f8b0f24/packages/program/src/types.ts#L77)
