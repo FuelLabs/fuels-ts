@@ -419,7 +419,7 @@ export default class Provider {
   private static nodeInfoCache: NodeInfoCache = {};
 
   /** @hidden */
-  private consensusParametersTimestamp: number;
+  public consensusParametersTimestamp: number;
 
   options: ProviderOptions = {
     timeout: undefined,
@@ -488,8 +488,6 @@ export default class Provider {
     } else {
       this.cache = new ResourceCache(DEFAULT_RESOURCE_CACHE_TTL);
     }
-
-    this.consensusParametersTimestamp = Date.now();
   }
 
   private static extractBasicAuth(url: string): {
@@ -605,17 +603,20 @@ export default class Provider {
 
   /**
    * Return the chain and node information.
-   *
+   * @param ignoreCache - If true, ignores the cache and re-fetch configs.
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo() {
+  async fetchChainAndNodeInfo(ignoreCache: boolean = false) {
     let nodeInfo: NodeInfo;
     let chain: ChainInfo;
 
     try {
+      if (ignoreCache) {
+        throw new Error(`Jumps to the catch block andre-fetch`);
+      }
       nodeInfo = this.getNode();
       chain = this.getChain();
-    } catch (error) {
+    } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
       nodeInfo = {
@@ -627,9 +628,13 @@ export default class Provider {
       };
 
       Provider.ensureClientVersionIsSupported(nodeInfo);
+
       chain = processGqlChain(data.chain);
+
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+
+      this.consensusParametersTimestamp = Date.now();
     }
 
     return {
@@ -1146,33 +1151,32 @@ Supported fuel-core version: ${supportedVersion}.`
     return results;
   }
 
-  private hasMinutePassed(timestampA: number) {
-    const currentTime = Date.now();
-    const differenceInMs = currentTime - timestampA;
-    const oneMinuteInMs = 60 * 1000; // 60 seconds * 1000 milliseconds
+  public async autoRefetchConfigs() {
+    const now = Date.now();
+    const diff = now - (this.consensusParametersTimestamp ?? 0);
 
-    return differenceInMs > oneMinuteInMs;
-  }
+    console.log({ now, diff, x: this.consensusParametersTimestamp });
+    if (diff < 60000) {
+      return;
+    }
 
-  private async checkConsensusParametersValidity() {
-    if (this.hasMinutePassed(this.consensusParametersTimestamp)) {
-      const chainInfo = this.getChain();
+    const chainInfo = this.getChain();
 
-      const {
-        consensusParameters: { version: cachedConsensusParametersVersion },
-      } = chainInfo;
+    const {
+      consensusParameters: { version: previous },
+    } = chainInfo;
 
-      const {
-        chain: {
-          latestBlock: {
-            header: { consensusParametersVersion: currentConsensusParametersVersion },
-          },
+    const {
+      chain: {
+        latestBlock: {
+          header: { consensusParametersVersion: current },
         },
-      } = await this.operations.getConsensusParametersVersion();
+      },
+    } = await this.operations.getConsensusParametersVersion();
 
-      if (cachedConsensusParametersVersion !== currentConsensusParametersVersion) {
-        await this.fetchChainAndNodeInfo();
-      }
+    if (previous !== current) {
+      // calling with true to skip cache
+      await this.fetchChainAndNodeInfo(true);
     }
   }
 
@@ -1185,7 +1189,7 @@ Supported fuel-core version: ${supportedVersion}.`
     const { transactionRequest } = params;
     let { gasPrice } = params;
 
-    await this.checkConsensusParametersValidity();
+    await this.autoRefetchConfigs();
 
     const chainInfo = this.getChain();
     const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
