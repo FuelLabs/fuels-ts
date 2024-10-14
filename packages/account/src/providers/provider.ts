@@ -1155,7 +1155,6 @@ Supported fuel-core version: ${supportedVersion}.`
     const now = Date.now();
     const diff = now - (this.consensusParametersTimestamp ?? 0);
 
-    console.log({ now, diff, x: this.consensusParametersTimestamp });
     if (diff < 60000) {
       return;
     }
