@@ -290,7 +290,10 @@ export default class Address extends AbstractAddress {
   /** @hidden */
   private static toChecksum(address: string) {
     if (!isB256(address)) {
-      throw new Error('Invalid B256 Address');
+      throw new FuelError(
+        FuelError.CODES.INVALID_B256_ADDRESS,
+        `Invalid B256 Address: ${address}.`
+      );
     }
 
     const addressHex = hexlify(address).toLowerCase().slice(2);
