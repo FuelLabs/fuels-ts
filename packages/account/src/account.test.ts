@@ -899,6 +899,31 @@ describe('Account', () => {
     vi.restoreAllMocks();
   });
 
+  it('should validate max number of inputs when funding the TX', async () => {
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 100,
+        coinsPerAsset: 400,
+      },
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    const request = new ScriptTransactionRequest();
+    request.addCoinOutput(wallet.address, 30_000, provider.getBaseAssetId());
+
+    const txCost = await wallet.getTransactionCost(request);
+
+    request.gasLimit = txCost.gasUsed;
+    request.maxFee = txCost.maxFee;
+
+    await expectToThrowFuelError(() => wallet.fund(request, txCost), {
+      code: ErrorCode.MAX_INPUTS_EXCEEDED,
+    });
+  });
+
   test('can properly use getBalances', async () => {
     const fundAmount = 10_000;
 
