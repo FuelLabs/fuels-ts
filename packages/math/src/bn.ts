@@ -307,6 +307,10 @@ export class BN extends BnJs implements BNInputOverrides, BNHiddenTypes, BNHelpe
     return this.gte(this.MAX_U64) ? new BN(this.MAX_U64) : this;
   }
 
+  max(num: BNInput): BN {
+    return this.gte(num) ? new BN(num) : this;
+  }
+
   normalizeZeroToOne(): BN {
     return this.isZero() ? new BN(1) : this;
   }
@@ -321,6 +325,11 @@ bn.parseUnits = (value: string, units: number = DEFAULT_DECIMAL_UNITS): BN => {
   const valueToParse = value === '.' ? '0.' : value;
   const [valueUnits = '0', valueDecimals = '0'] = valueToParse.split('.');
   const length = valueDecimals.length;
+
+  if (units === 0) {
+    const valueWithoutDecimals = valueToParse.replace(',', '').split('.')[0];
+    return bn(valueWithoutDecimals);
+  }
 
   if (length > units) {
     throw new FuelError(

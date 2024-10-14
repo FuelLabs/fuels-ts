@@ -1,5 +1,15 @@
 # Change Log
 
+## 0.96.1
+
+### Patch Changes
+
+- 4ae041e: chore: use `FuelError` instead of JS `Error`
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
 ## 0.96.0
 
 ### Minor Changes
