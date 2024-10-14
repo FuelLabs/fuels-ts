@@ -2190,4 +2190,31 @@ Supported fuel-core version: ${mock.supportedVersion}.`
       expect([baseAssetId, ASSET_A, ASSET_B].includes(balance.assetId)).toBeTruthy();
     });
   });
+
+  test('should not refetch consensus params in less than 1min', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const provider = await Provider.create(launched.provider.url);
+    const fetchChainAndNodeInfo = vi.spyOn(provider, 'fetchChainAndNodeInfo');
+
+    // calling twice
+    await provider.autoRefetchConfigs();
+    await provider.autoRefetchConfigs();
+
+    expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(1);
+  });
+
+  test('should refetch consensus params if >1 min has passed', async () => {
+    using launched = await setupTestProviderAndWallets();
+
+    const provider = await Provider.create(launched.provider.url);
+    const fetchChainAndNodeInfo = vi.spyOn(provider, 'fetchChainAndNodeInfo');
+
+    // calling twice
+    await provider.autoRefetchConfigs();
+    provider.consensusParametersTimestamp = 0;
+    await provider.autoRefetchConfigs();
+
+    expect(fetchChainAndNodeInfo).toHaveBeenCalledTimes(2);
+  });
 });

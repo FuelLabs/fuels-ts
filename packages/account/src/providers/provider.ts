@@ -419,6 +419,9 @@ export default class Provider {
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
 
+  /** @hidden */
+  public consensusParametersTimestamp?: number;
+
   options: ProviderOptions = {
     timeout: undefined,
     resourceCacheTTL: undefined,
@@ -601,17 +604,20 @@ export default class Provider {
 
   /**
    * Return the chain and node information.
-   *
+   * @param ignoreCache - If true, ignores the cache and re-fetch configs.
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo() {
+  async fetchChainAndNodeInfo(ignoreCache: boolean = false) {
     let nodeInfo: NodeInfo;
     let chain: ChainInfo;
 
     try {
+      if (ignoreCache) {
+        throw new Error(`Jumps to the catch block andre-fetch`);
+      }
       nodeInfo = this.getNode();
       chain = this.getChain();
-    } catch (error) {
+    } catch (_err) {
       const data = await this.operations.getChainAndNodeInfo();
 
       nodeInfo = {
@@ -623,9 +629,13 @@ export default class Provider {
       };
 
       Provider.ensureClientVersionIsSupported(nodeInfo);
+
       chain = processGqlChain(data.chain);
+
       Provider.chainInfoCache[this.urlWithoutAuth] = chain;
       Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+
+      this.consensusParametersTimestamp = Date.now();
     }
 
     return {
@@ -1149,6 +1159,34 @@ Supported fuel-core version: ${supportedVersion}.`
     return results;
   }
 
+  public async autoRefetchConfigs() {
+    const now = Date.now();
+    const diff = now - (this.consensusParametersTimestamp ?? 0);
+
+    if (diff < 60000) {
+      return;
+    }
+
+    const chainInfo = this.getChain();
+
+    const {
+      consensusParameters: { version: previous },
+    } = chainInfo;
+
+    const {
+      chain: {
+        latestBlock: {
+          header: { consensusParametersVersion: current },
+        },
+      },
+    } = await this.operations.getConsensusParametersVersion();
+
+    if (previous !== current) {
+      // calling with true to skip cache
+      await this.fetchChainAndNodeInfo(true);
+    }
+  }
+
   /**
    * Estimates the transaction gas and fee based on the provided transaction request.
    * @param transactionRequest - The transaction request object.
@@ -1157,6 +1195,8 @@ Supported fuel-core version: ${supportedVersion}.`
   async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
     const { transactionRequest } = params;
     let { gasPrice } = params;
+
+    await this.autoRefetchConfigs();
 
     const chainInfo = this.getChain();
     const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
