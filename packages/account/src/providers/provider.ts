@@ -419,7 +419,7 @@ export default class Provider {
   private static nodeInfoCache: NodeInfoCache = {};
 
   /** @hidden */
-  public consensusParametersTimestamp: number;
+  public consensusParametersTimestamp?: number;
 
   options: ProviderOptions = {
     timeout: undefined,
