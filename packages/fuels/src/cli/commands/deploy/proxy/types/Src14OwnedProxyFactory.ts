@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 
 /*
-  Fuels version: 0.94.9
+  Fuels version: 0.95.0
 */
 
 import { Contract, ContractFactory, decompressBytecode } from "../../../../..";
