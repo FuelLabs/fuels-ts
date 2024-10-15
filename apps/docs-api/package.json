@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@fuel-ts/versions": "workspace:*",
+    "fuels": "workspace:*",
     "typedoc": "^0.26.3"
   }
 }
