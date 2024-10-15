@@ -697,12 +697,60 @@ export class Account extends AbstractAccount {
   }
 
   /** @hidden * */
-  private async estimateAndFundTransaction(
-    transactionRequest: ScriptTransactionRequest,
+  private async peformTransferToContracts(
+    contractTransferParams: ContractTransferParams[],
     txParams: TxParamsType
   ) {
+    let request = new ScriptTransactionRequest({
+      ...txParams,
+    });
+
+    const quantities: CoinQuantity[] = [];
+
+    const parsedParams = contractTransferParams.map((transferParam) => {
+      const amount = bn(transferParam.amount);
+      const contractAddress = Address.fromAddressOrString(transferParam.contractId);
+
+      const assetId = transferParam.assetId
+        ? hexlify(transferParam.assetId)
+        : this.provider.getBaseAssetId();
+
+      if (amount.lte(0)) {
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSFER_AMOUNT,
+          'Transfer amount must be a positive number.'
+        );
+      }
+
+      request.addContractInputAndOutput(contractAddress);
+
+      quantities.push({ amount, assetId });
+
+      return {
+        amount,
+        contractId: contractAddress.toB256(),
+        assetId,
+      };
+    });
+
+    const { script, scriptData } = await assembleTransferToContractScript(parsedParams);
+
+    request.script = script;
+    request.scriptData = scriptData;
+
+    request = await this.estimateAndFundTransaction(request, txParams, { quantities });
+
+    return this.sendTransaction(request);
+  }
+
+  /** @hidden * */
+  private async estimateAndFundTransaction(
+    transactionRequest: ScriptTransactionRequest,
+    txParams: TxParamsType,
+    costParams?: TransactionCostParams
+  ) {
     let request = transactionRequest;
-    const txCost = await this.getTransactionCost(request);
+    const txCost = await this.getTransactionCost(request, costParams);
     request = this.validateGasLimitAndMaxFee({
       transactionRequest: request,
       gasUsed: txCost.gasUsed,
