@@ -899,7 +899,7 @@ describe('Account', () => {
     vi.restoreAllMocks();
   });
 
-  it('should validate max number of inputs when funding the TX', async () => {
+  it('throws when funding with more than 255 coins for an input', async () => {
     using launched = await setupTestProviderAndWallets({
       walletsConfig: {
         amountPerCoin: 100,
@@ -920,31 +920,9 @@ describe('Account', () => {
     request.maxFee = txCost.maxFee;
 
     await expectToThrowFuelError(() => wallet.fund(request, txCost), {
-      code: ErrorCode.MAX_INPUTS_EXCEEDED,
+      code: ErrorCode.INVALID_REQUEST,
+      message: 'max number of coins is reached while trying to fit the target',
     });
-  });
-
-  it('invalid request with getCoinsToSpend', async () => {
-    using launched = await setupTestProviderAndWallets({
-      walletsConfig: {
-        amountPerCoin: 100,
-        coinsPerAsset: 400,
-      },
-    });
-    const {
-      wallets: [wallet],
-      provider,
-    } = launched;
-
-    expect(provider.getChain().consensusParameters.txParameters.maxInputs.toNumber()).toBe(255);
-
-    await expectToThrowFuelError(
-      () => wallet.getResourcesToSpend([[30_000, provider.getBaseAssetId()]]),
-      {
-        code: ErrorCode.INVALID_REQUEST,
-        message: 'max number of coins is reached while trying to fit the target',
-      }
-    );
   });
 
   test('can properly use getBalances', async () => {
