@@ -680,6 +680,28 @@ describe('Contract', () => {
     expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
   });
 
+  it('should transfer asset to a deployed contract just fine (NON-NATIVE ASSET)', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs,
+    });
+    const {
+      provider,
+      wallets: [wallet],
+      contracts: [contract],
+    } = launched;
+
+    const initialBalance = new BN(await contract.getBalance(provider.getBaseAssetId())).toNumber();
+    const amountToContract = bn(10_000);
+    const assetId = TestAssetId.A.value;
+
+    const tx = await wallet.transferToContract(contract.id, amountToContract, assetId);
+
+    await tx.waitForResult();
+
+    const finalBalance = new BN(await contract.getBalance(assetId)).toNumber();
+    expect(finalBalance).toBe(initialBalance + amountToContract.toNumber());
+  });
+
   it('should transfer assets to deployed contracts just fine', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
