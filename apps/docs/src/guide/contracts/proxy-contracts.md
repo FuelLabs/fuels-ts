@@ -8,7 +8,7 @@ We recommend that you use [fuels deploy](https://docs.fuel.network/docs/fuels-ts
 
 As mentioned above, we recommend using [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy) to deploy and upgrade your contract as everything is handled under the hood. But the below guide will detail this process should you want to implement it yourself.
 
-We recommend using the [SRC14 compliant owned proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/master/src14/owned_proxy) as the underlying proxy and that is the one we will use in this guide, as is the one used by [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy).
+We recommend using the [SRC14 compliant owned proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/174f5ed9c79c23a6aaf5db906fe27ecdb29c22eb/src14/owned_proxy/contract/out/release) as the underlying proxy and that is the one we will use in this guide, as is the one used by [fuels deploy](https://docs.fuel.network/docs/fuels-ts/fuels-cli/commands/#fuels-deploy).
 
 The overall process is as follows:
 
@@ -28,7 +28,7 @@ Let's deploy and interact with it by proxy. First let's setup the environment an
 
 <<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-2{ts:line-numbers}
 
-Now let's deploy the [SRC14 compliant proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/master/src14/owned_proxy) and initialize it by setting its target to the counter target ID.
+Now let's deploy the [SRC14 compliant proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/174f5ed9c79c23a6aaf5db906fe27ecdb29c22eb/src14/owned_proxy/contract/out/release) and initialize it by setting its target to the counter target ID.
 
 <<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-3{ts:line-numbers}
 
