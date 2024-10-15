@@ -1,10 +1,10 @@
 # Contract Balance
 
-When working with contracts, it's crucial to be aware of the available contract balance of an asset while paying for costly operations. This guide will explain the `getBalance` method in the [Contract](../../api/Program/Contract.md) class, which allows you to check a contract's available balance.
+When working with contracts, it's crucial to be aware of the available contract balance of an asset while paying for costly operations. This guide will explain the `getBalance` method in the [Contract](https://fuels-ts-docs-api.vercel.app/Program/Contract.md) class, which allows you to check a contract's available balance.
 
 ## The `getBalance` Method
 
-The [`Contract`](../../api/Program/Contract.md) class includes a method called `getBalance` that retrieves the available balance of a specific asset for a contract. This method is particularly useful for determining the remaining balance after sending assets to a contract and executing contract calls.
+The [`Contract`](https://fuels-ts-docs-api.vercel.app/Program/Contract.md) class includes a method called `getBalance` that retrieves the available balance of a specific asset for a contract. This method is particularly useful for determining the remaining balance after sending assets to a contract and executing contract calls.
 
 <<< @/../../../packages/program/src/contract.ts#contract-balance-1{ts:line-numbers}
 
