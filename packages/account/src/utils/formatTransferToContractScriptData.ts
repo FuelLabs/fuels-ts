@@ -1,13 +1,12 @@
-import { BigNumberCoder } from '@fuel-ts/abi-coder';
-import type { B256Address, BytesLike } from '@fuel-ts/interfaces';
-import { BN, type BigNumberish } from '@fuel-ts/math';
+import type { BytesLike } from '@fuel-ts/interfaces';
+import { BN } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
 import * as asm from '@fuels/vm-asm';
 
-interface IAssembleTransferToContractScriptParams {
-  hexlifiedContractId: B256Address;
-  amountToTransfer: BigNumberish;
+interface AssembleTransferToContractParams {
+  contractId: string;
   assetId: BytesLike;
+  amount: BN;
 }
 
 export const formatTransferToContractScriptData = (
