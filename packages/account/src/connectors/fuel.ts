@@ -107,8 +107,9 @@ export class Fuel extends FuelConnector implements FuelSdk {
 
   private async initialize(): Promise<void> {
     try {
-      await this.setDefaultConnector();
+      const connectResponse = this.setDefaultConnector();
       this._targetUnsubscribe = this.setupConnectorListener();
+      await connectResponse;
     } catch (error) {
       throw new FuelError(ErrorCode.INVALID_PROVIDER, 'Error initializing Fuel Connector');
     }
