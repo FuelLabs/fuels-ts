@@ -16,7 +16,7 @@ const { contract } = await deploy.waitForResult();
 // #region transaction-parameters-6
 const txParams: TxParams = {
   // #region transaction-parameters-1
-  gasLimit: bn(69242),
+  gasLimit: bn(70935),
   // #endregion transaction-parameters-1
   // #region transaction-parameters-2
   maxFee: bn(69242),
