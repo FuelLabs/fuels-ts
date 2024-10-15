@@ -130,6 +130,11 @@ fragment transactionFragment on Transaction {
   }
 }
 
+fragment transactionRawPayloadFragment on Transaction {
+  id
+  rawPayload
+}
+
 fragment inputEstimatePredicatesFragment on Input {
   ... on InputCoin {
     predicateGasUsed
@@ -569,11 +574,6 @@ query getBlocks($after: String, $before: String, $first: Int, $last: Int) {
       }
     }
   }
-}
-
-fragment transactionRawPayloadFragment on Transaction {
-  id
-  rawPayload
 }
 
 query getCoin($coinId: UtxoId!) {
