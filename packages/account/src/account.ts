@@ -59,6 +59,12 @@ export type TransferParams = {
   assetId?: BytesLike;
 };
 
+export type ContractTransferParams = {
+  contractId: string | AbstractAddress;
+  amount: BigNumberish;
+  assetId?: BytesLike;
+};
+
 export type EstimatedTxParams = Pick<
   TransactionCost,
   'estimatedPredicates' | 'addedSignatures' | 'requiredQuantities' | 'updateMaxFee' | 'gasPrice'
