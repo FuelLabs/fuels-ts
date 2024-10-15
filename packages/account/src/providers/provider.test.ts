@@ -1885,7 +1885,6 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(transactions.edges.length).toBe(1);
 
     const expectedNode = {
-      id: expect.any(String),
       rawPayload: expect.any(String),
     };
 
