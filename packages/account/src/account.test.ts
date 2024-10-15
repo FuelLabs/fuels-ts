@@ -924,6 +924,29 @@ describe('Account', () => {
     });
   });
 
+  it('invalid request with getCoinsToSpend', async () => {
+    using launched = await setupTestProviderAndWallets({
+      walletsConfig: {
+        amountPerCoin: 100,
+        coinsPerAsset: 400,
+      },
+    });
+    const {
+      wallets: [wallet],
+      provider,
+    } = launched;
+
+    expect(provider.getChain().consensusParameters.txParameters.maxInputs.toNumber()).toBe(255);
+
+    await expectToThrowFuelError(
+      () => wallet.getResourcesToSpend([[30_000, provider.getBaseAssetId()]]),
+      {
+        code: ErrorCode.INVALID_REQUEST,
+        message: 'max number of coins is reached while trying to fit the target',
+      }
+    );
+  });
+
   test('can properly use getBalances', async () => {
     const fundAmount = 10_000;
 
