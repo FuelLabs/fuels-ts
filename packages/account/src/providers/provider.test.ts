@@ -1892,22 +1892,27 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(transactions.edges[0].node).toStrictEqual(expectedNode);
   });
 
-  it('ensures get transactions does not fetch unused data', async () => {
+  it('ensures getBlockWithTransactions does not fetch unused transaction data', async () => {
     using launched = await setupTestProviderAndWallets();
     const { provider } = launched;
 
     await provider.produceBlocks(1);
 
-    const { transactions } = await provider.operations.getTransactions({
-      first: 1,
+    const blockNumber = await provider.getBlockNumber();
+
+    const { block } = await provider.operations.getBlockWithTransactions({
+      blockHeight: blockNumber.toString(),
     });
+
+    expect(block).toBeDefined();
+    expect(block?.transactions.length).toBe(1);
 
     const expectedNode = {
       id: expect.any(String),
       rawPayload: expect.any(String),
     };
 
-    expect(transactions.edges[0].node).toStrictEqual(expectedNode);
+    expect(block?.transactions?.[0]).toStrictEqual(expectedNode);
   });
 
   describe('paginated methods', () => {
