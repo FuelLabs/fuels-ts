@@ -761,7 +761,7 @@ describe('Contract', () => {
 
     expect(transferReceipts.length).toBe(contractTransferParams.length);
 
-    contractTransferParams.forEach(({ amount, contractId, assetId }) => {
+    contractTransferParams.forEach(({ amount, contractId, assetId = baseAssetId }) => {
       const foundReceipt = transferReceipts.find(
         (r) => r.amount.eq(amount) && r.to === contractId && r.assetId === assetId
       );
