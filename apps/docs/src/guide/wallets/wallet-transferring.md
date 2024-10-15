@@ -36,8 +36,6 @@ To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
 
 <<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-6{ts:line-numbers}
 
-This section demonstrates additional examples of transferring assets between wallets and to contracts.
-
 ## Transferring Assets To Contracts
 
 When transferring assets to a deployed contract, we use the `transferToContract` method, which shares a similar parameter structure with the `transfer` method.
