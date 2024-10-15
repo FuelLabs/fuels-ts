@@ -2,6 +2,8 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPointStrategy": "packages",
   "entryPoints": [
+    "../../packages/abi-coder",
+    "../../packages/abi-typegen",
     "../../packages/address",
     "../../packages/interfaces",
     "../../packages/predicate",
@@ -9,7 +11,12 @@
     "../../packages/program",
     "../../packages/contract",
     "../../packages/script",
-    "../../packages/utils"
+    "../../packages/utils",
+    "../../packages/crypto",
+    "../../packages/errors",
+    "../../packages/hasher",
+    "../../packages/math",
+    "../../packages/transactions"
   ],
   "out": "src/api",
   "navigationLinks": {
