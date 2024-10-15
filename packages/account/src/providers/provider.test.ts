@@ -1884,11 +1884,11 @@ Supported fuel-core version: ${mock.supportedVersion}.`
 
     expect(transactions.edges.length).toBe(1);
 
-    const expectedNode = {
+    const expectedData = {
       rawPayload: expect.any(String),
     };
 
-    expect(transactions.edges[0].node).toStrictEqual(expectedNode);
+    expect(transactions.edges[0].node).toStrictEqual(expectedData);
   });
 
   it('ensures getBlockWithTransactions does not fetch unused transaction data', async () => {
@@ -1906,12 +1906,12 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     expect(block).toBeDefined();
     expect(block?.transactions.length).toBe(1);
 
-    const expectedNode = {
+    const expectedData = {
       id: expect.any(String),
       rawPayload: expect.any(String),
     };
 
-    expect(block?.transactions?.[0]).toStrictEqual(expectedNode);
+    expect(block?.transactions?.[0]).toStrictEqual(expectedData);
   });
 
   describe('paginated methods', () => {
