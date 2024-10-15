@@ -728,7 +728,6 @@ describe('Contract', () => {
       {
         contractId: storageId,
         amount: 999,
-        assetId: baseAssetId,
       },
       {
         contractId: storageId,
