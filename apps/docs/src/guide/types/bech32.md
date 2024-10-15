@@ -1,8 +1,8 @@
 # `Bech32`
 
-The SDK uses the `Bech32` type as the core property of the [`Address`](../../api/Address/Address.md) class, specifically through the `bech32Address` property.
+The SDK uses the `Bech32` type as the core property of the [`Address`](https://fuels-ts-docs-api.vercel.app/Address/Address.md) class, specifically through the `bech32Address` property.
 
-Originally designed for Bitcoin, the `Bech32` format offers numerous advantages such as enhanced error detection, simplified integrations, and improved compatibility with future upgrades. Given these benefits, the [`Address`](../../api/Address/Address.md) class is constructed around the `Bech32` type.
+Originally designed for Bitcoin, the `Bech32` format offers numerous advantages such as enhanced error detection, simplified integrations, and improved compatibility with future upgrades. Given these benefits, the [`Address`](https://fuels-ts-docs-api.vercel.app/Address/Address.md) class is constructed around the `Bech32` type.
 
 You can read more about the `Bech32` type [here](https://thebitcoinmanual.com/articles/btc-bech32-address/).
 

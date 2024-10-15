@@ -122,28 +122,6 @@ jobs:
         if: startsWith(env.LAST_COMMIT_MSG, 'ci(release):') && env.RELEASE_VERSION_HIGHER_THAN_LATEST == 'true'
         run: echo SHOULD_DEPLOY_DOCS=true >> $GITHUB_ENV
 
-      - name: Checkout API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        uses: actions/checkout@v4
-        with:
-          ref: docs
-          fetch-depth: 0
-
-      - name: Generate and Push API Docs
-        if: env.SHOULD_DEPLOY_DOCS == 'true'
-        run: |
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config user.name "github-actions[bot]"
-          git merge origin/$GITHUB_REF_NAME --no-edit
-          pnpm install
-          pnpm build
-          rm -f apps/docs/.gitignore
-          git add apps/docs/src/api/
-          git add apps/docs/.typedoc/api-links.json
-          git commit -m "docs: API docs - ${{ env.RELEASE_VERSION }}"
-          git push
-          git restore apps/docs/.gitignore
-
       - name: Update docs (nightly)
         if: github.ref_name == 'master' && env.SHOULD_DEPLOY_DOCS == 'true'
         uses: benc-uk/workflow-dispatch@v1
