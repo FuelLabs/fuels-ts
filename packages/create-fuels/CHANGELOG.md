@@ -1,5 +1,15 @@
 # create-fuels
 
+## 0.96.1
+
+## 0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+
 ## 0.94.9
 
 ### Patch Changes
