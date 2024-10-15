@@ -1,5 +1,32 @@
 # Change Log
 
+## 0.96.1
+
+### Patch Changes
+
+- bdfd009: fix: `parseUnits` bug with 0 units
+- 987aed3: feat: using gas modifier at `Provider.getTransactionCost`
+  - @fuel-ts/errors@0.96.1
+
+## 0.96.0
+
+### Patch Changes
+
+- @fuel-ts/errors@0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- b733e81: fix: correct `bn` formatting bug with 0 units
+  - @fuel-ts/errors@0.95.0
+
+## 0.94.9
+
+### Patch Changes
+
+- @fuel-ts/errors@0.94.9
+
 ## 0.94.8
 
 ### Patch Changes

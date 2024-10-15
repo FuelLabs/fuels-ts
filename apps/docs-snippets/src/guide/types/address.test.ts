@@ -9,10 +9,11 @@ describe('Address Types', () => {
   it('should successfully create new address from bech32 string', () => {
     // #region address-2
     const ADDRESS_BECH32 = 'fuel1elnmzsav56dqnp95sx4e2pckq36cvae9ser44m5zlvgtwxw49fmqd7e42e';
+    const ADDRESS_CHECKSUM = '0xcfe7b143Aca69a0984b481ab950716047586772586475AEE82fb10B719d52A76';
 
     const address = new Address(ADDRESS_BECH32);
 
-    expect(address.toString()).toEqual(ADDRESS_BECH32);
+    expect(address.toString()).toEqual(ADDRESS_CHECKSUM);
     expect(address.bech32Address).toEqual(ADDRESS_BECH32);
     // #endregion address-2
   });
