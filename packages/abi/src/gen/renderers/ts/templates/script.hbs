@@ -1,0 +1,15 @@
+{{header}}
+
+import { Script } from 'fuels';
+import abi from './{{name}}-abi.json';
+import { bytecode } from './{{name}}-bytecode.json';
+import type { {{name}}Types } from './{{name}}Types';
+
+export class {{name}} extends Script<
+  {{name}}Types['functions']['main']['inputs'],
+  {{name}}Types['functions']['main']['output']
+> {
+    constructor(wallet: Account) {
+        super(bytecode, abi, wallet);
+    }
+}
