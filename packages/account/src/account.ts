@@ -439,43 +439,9 @@ export class Account extends AbstractAccount {
     assetId?: BytesLike,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    if (bn(amount).lte(0)) {
-      throw new FuelError(
-        ErrorCode.INVALID_TRANSFER_AMOUNT,
-        'Transfer amount must be a positive number.'
-      );
-    }
+    return this.peformTransferToContracts([{ amount, assetId, contractId }], txParams);
+  }
 
-    const contractAddress = Address.fromAddressOrString(contractId);
-    const assetIdToTransfer = assetId ?? this.provider.getBaseAssetId();
-    const { script, scriptData } = await assembleTransferToContractScript({
-      hexlifiedContractId: contractAddress.toB256(),
-      amountToTransfer: bn(amount),
-      assetId: assetIdToTransfer,
-    });
-
-    let request = new ScriptTransactionRequest({
-      ...txParams,
-      script,
-      scriptData,
-    });
-
-    request.addContractInputAndOutput(contractAddress);
-
-    const txCost = await this.getTransactionCost(request, {
-      quantities: [{ amount: bn(amount), assetId: String(assetIdToTransfer) }],
-    });
-
-    request = this.validateGasLimitAndMaxFee({
-      transactionRequest: request,
-      gasUsed: txCost.gasUsed,
-      maxFee: txCost.maxFee,
-      txParams,
-    });
-
-    await this.fund(request, txCost);
-
-    return this.sendTransaction(request);
   }
 
   /**
