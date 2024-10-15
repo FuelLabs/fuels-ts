@@ -492,7 +492,7 @@ query getTransactions(
   transactions(after: $after, before: $before, first: $first, last: $last) {
     edges {
       node {
-        ...transactionFragment
+        ...transactionRawPayloadFragment
       }
     }
     pageInfo {
