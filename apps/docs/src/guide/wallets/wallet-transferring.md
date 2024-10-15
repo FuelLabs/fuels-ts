@@ -48,6 +48,12 @@ Here's an example demonstrating how to use `transferToContract`:
 
 <<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-4{ts:line-numbers}
 
+## Transferring Assets To Multiple Contracts
+
+Similar to the `Account.batchTransfer` method, you can transfer multiple assets to multiple contracts using the `Account.batchTransferToContracts` method. Here's how it works:
+
+<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-5{ts:line-numbers}
+
 Always remember to call the `waitForResult()` function on the transaction response. That ensures the transaction has been mined successfully before proceeding.
 
 ## Checking Balances
