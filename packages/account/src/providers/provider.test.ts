@@ -867,6 +867,9 @@ describe('Provider', () => {
     request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
     request.addResources(resources);
 
+    // We need to add more resources manually here as a single `getResourcesToSpend` call
+    // will always truncate to `maxInputs`. So we need to add more resources manually
+    // to test our validation logic.
     const moreResources = await sender.getResourcesToSpend(quantities);
     request.addResources(moreResources);
 
