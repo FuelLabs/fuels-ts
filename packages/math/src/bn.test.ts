@@ -255,6 +255,20 @@ describe('Math - BN', () => {
     expect(() => bn(over).toBytes(4)).toThrow();
   });
 
+  it('should ensure max method works just like expected', () => {
+    // Using Number
+    const maxNumber = 100_000;
+    const exceedingNumber = maxNumber + 1;
+
+    let maxSafeNumber = bn(exceedingNumber).max(maxNumber);
+
+    expect(maxSafeNumber.toNumber()).toEqual(maxNumber);
+
+    // Using BN
+    maxSafeNumber = bn(maxNumber).add(1).max(bn(maxNumber));
+    expect(maxSafeNumber.toNumber()).toEqual(maxNumber);
+  });
+
   it('should toHex break when value provided is bigger than bytePadding config', () => {
     let maxBytes: Uint8Array;
     let maxHex: string;
@@ -475,6 +489,10 @@ describe('Math - BN', () => {
     expect(bn.parseUnits('100,100,100.00002', 5).toHex()).toEqual(bn('10010010000002').toHex());
     expect(bn.parseUnits('.').toHex()).toEqual(bn('0').toHex());
     expect(bn.parseUnits('.', 5).toHex()).toEqual(bn('0').toHex());
+    expect(bn.parseUnits('1', 0).toHex()).toEqual(bn('1').toHex());
+    expect(bn.parseUnits('0.000000001', 0).toHex()).toEqual(bn('0').toHex());
+    expect(bn.parseUnits('100.00002', 0).toHex()).toEqual(bn('100').toHex());
+    expect(bn.parseUnits('100,100.00002', 0).toHex()).toEqual(bn('100100').toHex());
 
     expect(() => {
       bn.parseUnits('100,100.000002', 5);
