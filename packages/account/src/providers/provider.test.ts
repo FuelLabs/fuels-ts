@@ -1872,6 +1872,24 @@ Supported fuel-core version: ${mock.supportedVersion}.`
     });
   });
 
+  it('ensures get transactions does not fetch unused data', async () => {
+    using launched = await setupTestProviderAndWallets();
+    const { provider } = launched;
+
+    await provider.produceBlocks(1);
+
+    const { transactions } = await provider.operations.getTransactions({
+      first: 1,
+    });
+
+    const expectedNode = {
+      id: expect.any(String),
+      rawPayload: expect.any(String),
+    };
+
+    expect(transactions.edges[0].node).toStrictEqual(expectedNode);
+  });
+
   describe('paginated methods', () => {
     test('can properly use getCoins', async () => {
       const totalCoins = RESOURCES_PAGE_SIZE_LIMIT + 1;
