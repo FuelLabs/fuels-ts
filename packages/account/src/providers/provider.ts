@@ -21,13 +21,14 @@ import type {
   GqlDryRunFailureStatusFragment,
   GqlDryRunSuccessStatusFragment,
   GqlFeeParameters as FeeParameters,
-  GqlGasCosts as GasCosts,
+  GqlGasCostsFragment as GasCosts,
   GqlPredicateParameters as PredicateParameters,
   GqlScriptParameters as ScriptParameters,
   GqlTxParameters as TxParameters,
   GqlPageInfo,
   GqlRelayedTransactionFailed,
   Requester,
+  GqlBlockFragment,
 } from './__generated__/operations';
 import type { Coin } from './coin';
 import type { CoinQuantity, CoinQuantityLike } from './coin-quantity';
@@ -65,8 +66,10 @@ import { handleGqlErrorMessage } from './utils/handle-gql-error-message';
 const MAX_RETRIES = 10;
 
 export const RESOURCES_PAGE_SIZE_LIMIT = 512;
+export const TRANSACTIONS_PAGE_SIZE_LIMIT = 60;
 export const BLOCKS_PAGE_SIZE_LIMIT = 5;
 export const DEFAULT_RESOURCE_CACHE_TTL = 20_000; // 20 seconds
+export const GAS_USED_MODIFIER = 1.2;
 
 export type DryRunFailureStatusFragment = GqlDryRunFailureStatusFragment;
 export type DryRunSuccessStatusFragment = GqlDryRunSuccessStatusFragment;
@@ -167,12 +170,6 @@ export type ChainInfo = {
   name: string;
   baseChainHeight: BN;
   consensusParameters: ConsensusParameters;
-  latestBlock: {
-    id: string;
-    height: BN;
-    time: string;
-    transactions: Array<{ id: string }>;
-  };
 };
 
 /**
@@ -213,7 +210,7 @@ export type TransactionCost = {
 // #endregion cost-estimation-1
 
 const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
-  const { name, daHeight, consensusParameters, latestBlock } = chain;
+  const { name, daHeight, consensusParameters } = chain;
 
   const {
     contractParams,
@@ -266,14 +263,6 @@ const processGqlChain = (chain: GqlChainInfoFragment): ChainInfo => {
         maxScriptDataLength: bn(scriptParams.maxScriptDataLength),
       },
       gasCosts,
-    },
-    latestBlock: {
-      id: latestBlock.id,
-      height: bn(latestBlock.height),
-      time: latestBlock.header.time,
-      transactions: latestBlock.transactions.map((i) => ({
-        id: i.id,
-      })),
     },
   };
 };
@@ -429,6 +418,9 @@ export default class Provider {
   private static chainInfoCache: ChainInfoCache = {};
   /** @hidden */
   private static nodeInfoCache: NodeInfoCache = {};
+
+  /** @hidden */
+  public consensusParametersTimestamp?: number;
 
   options: ProviderOptions = {
     timeout: undefined,
@@ -612,13 +604,39 @@ export default class Provider {
 
   /**
    * Return the chain and node information.
-   *
+   * @param ignoreCache - If true, ignores the cache and re-fetch configs.
    * @returns A promise that resolves to the Chain and NodeInfo.
    */
-  async fetchChainAndNodeInfo() {
-    const nodeInfo = await this.fetchNode();
-    Provider.ensureClientVersionIsSupported(nodeInfo);
-    const chain = await this.fetchChain();
+  async fetchChainAndNodeInfo(ignoreCache: boolean = false) {
+    let nodeInfo: NodeInfo;
+    let chain: ChainInfo;
+
+    try {
+      if (ignoreCache) {
+        throw new Error(`Jumps to the catch block andre-fetch`);
+      }
+      nodeInfo = this.getNode();
+      chain = this.getChain();
+    } catch (_err) {
+      const data = await this.operations.getChainAndNodeInfo();
+
+      nodeInfo = {
+        maxDepth: bn(data.nodeInfo.maxDepth),
+        maxTx: bn(data.nodeInfo.maxTx),
+        nodeVersion: data.nodeInfo.nodeVersion,
+        utxoValidation: data.nodeInfo.utxoValidation,
+        vmBacktrace: data.nodeInfo.vmBacktrace,
+      };
+
+      Provider.ensureClientVersionIsSupported(nodeInfo);
+
+      chain = processGqlChain(data.chain);
+
+      Provider.chainInfoCache[this.urlWithoutAuth] = chain;
+      Provider.nodeInfoCache[this.urlWithoutAuth] = nodeInfo;
+
+      this.consensusParametersTimestamp = Date.now();
+    }
 
     return {
       chain,
@@ -731,8 +749,12 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the latest block number.
    */
   async getBlockNumber(): Promise<BN> {
-    const { chain } = await this.operations.getChain();
-    return bn(chain.latestBlock.height, 10);
+    const {
+      chain: {
+        latestBlock: { height },
+      },
+    } = await this.operations.getLatestBlockHeight();
+    return bn(height);
   }
 
   /**
@@ -818,19 +840,26 @@ Supported fuel-core version: ${supportedVersion}.`
     this.cache.set(transactionId, inputsToCache);
   }
 
-  private validateTransaction(tx: TransactionRequest, consensusParameters: ConsensusParameters) {
-    const { maxOutputs, maxInputs } = consensusParameters.txParameters;
+  /**
+   * @hidden
+   */
+  validateTransaction(tx: TransactionRequest) {
+    const {
+      consensusParameters: {
+        txParameters: { maxInputs, maxOutputs },
+      },
+    } = this.getChain();
     if (bn(tx.inputs.length).gt(maxInputs)) {
       throw new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of inputs.'
+        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: ${tx.inputs.length}, max inputs: ${maxInputs}`
       );
     }
 
     if (bn(tx.outputs.length).gt(maxOutputs)) {
       throw new FuelError(
         ErrorCode.MAX_OUTPUTS_EXCEEDED,
-        'The transaction exceeds the maximum allowed number of outputs.'
+        `The transaction exceeds the maximum allowed number of outputs. Tx outputs: ${tx.outputs.length}, max outputs: ${maxOutputs}`
       );
     }
   }
@@ -856,9 +885,7 @@ Supported fuel-core version: ${supportedVersion}.`
     }
     // #endregion Provider-sendTransaction
 
-    const { consensusParameters } = this.getChain();
-
-    this.validateTransaction(transactionRequest, consensusParameters);
+    this.validateTransaction(transactionRequest);
 
     const encodedTransaction = hexlify(transactionRequest.toTransactionBytes());
 
@@ -973,6 +1000,8 @@ Supported fuel-core version: ${supportedVersion}.`
     const missingContractIds: string[] = [];
     let outputVariables = 0;
     let dryRunStatus: DryRunStatus | undefined;
+
+    this.validateTransaction(transactionRequest);
 
     for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
       const {
@@ -1130,6 +1159,34 @@ Supported fuel-core version: ${supportedVersion}.`
     return results;
   }
 
+  public async autoRefetchConfigs() {
+    const now = Date.now();
+    const diff = now - (this.consensusParametersTimestamp ?? 0);
+
+    if (diff < 60000) {
+      return;
+    }
+
+    const chainInfo = this.getChain();
+
+    const {
+      consensusParameters: { version: previous },
+    } = chainInfo;
+
+    const {
+      chain: {
+        latestBlock: {
+          header: { consensusParametersVersion: current },
+        },
+      },
+    } = await this.operations.getConsensusParametersVersion();
+
+    if (previous !== current) {
+      // calling with true to skip cache
+      await this.fetchChainAndNodeInfo(true);
+    }
+  }
+
   /**
    * Estimates the transaction gas and fee based on the provided transaction request.
    * @param transactionRequest - The transaction request object.
@@ -1138,6 +1195,8 @@ Supported fuel-core version: ${supportedVersion}.`
   async estimateTxGasAndFee(params: { transactionRequest: TransactionRequest; gasPrice?: BN }) {
     const { transactionRequest } = params;
     let { gasPrice } = params;
+
+    await this.autoRefetchConfigs();
 
     const chainInfo = this.getChain();
     const { gasPriceFactor, maxGasPerTx } = this.getGasConfig();
@@ -1301,7 +1360,10 @@ Supported fuel-core version: ${supportedVersion}.`
         throw this.extractDryRunError(txRequestClone, receipts, dryRunStatus);
       }
 
-      gasUsed = getGasUsedFromReceipts(receipts);
+      const { maxGasPerTx } = this.getGasConfig();
+
+      const pristineGasUsed = getGasUsedFromReceipts(receipts);
+      gasUsed = bn(pristineGasUsed.muln(GAS_USED_MODIFIER)).max(maxGasPerTx.sub(minGas));
       txRequestClone.gasLimit = gasUsed;
 
       ({ maxFee, maxGas, minFee, minGas, gasPrice } = await this.estimateTxGasAndFee({
@@ -1463,18 +1525,21 @@ Supported fuel-core version: ${supportedVersion}.`
    * @returns A promise that resolves to the block or null.
    */
   async getBlock(idOrHeight: string | number | 'latest'): Promise<Block | null> {
-    let variables;
-    if (typeof idOrHeight === 'number') {
-      variables = { height: bn(idOrHeight).toString(10) };
-    } else if (idOrHeight === 'latest') {
-      variables = { height: (await this.getBlockNumber()).toString(10) };
-    } else if (idOrHeight.length === 66) {
-      variables = { blockId: idOrHeight };
-    } else {
-      variables = { blockId: bn(idOrHeight).toString(10) };
-    }
+    let block: GqlBlockFragment | undefined | null;
 
-    const { block } = await this.operations.getBlock(variables);
+    if (idOrHeight === 'latest') {
+      const {
+        chain: { latestBlock },
+      } = await this.operations.getLatestBlock();
+      block = latestBlock;
+    } else {
+      const isblockId = typeof idOrHeight === 'string' && idOrHeight.length === 66;
+      const variables = isblockId
+        ? { blockId: idOrHeight }
+        : { height: bn(idOrHeight).toString(10) };
+      const response = await this.operations.getBlock(variables);
+      block = response.block;
+    }
 
     if (!block) {
       return null;
@@ -1620,7 +1685,12 @@ Supported fuel-core version: ${supportedVersion}.`
   async getTransactions(paginationArgs?: CursorPaginationArgs): Promise<GetTransactionsResponse> {
     const {
       transactions: { edges, pageInfo },
-    } = await this.operations.getTransactions(paginationArgs);
+    } = await this.operations.getTransactions({
+      ...this.validatePaginationArgs({
+        inputArgs: paginationArgs,
+        paginationLimit: TRANSACTIONS_PAGE_SIZE_LIMIT,
+      }),
+    });
 
     const coder = new TransactionCoder();
     const transactions = edges
@@ -1929,6 +1999,45 @@ Supported fuel-core version: ${supportedVersion}.`
       startTimestamp: startTime ? DateTime.fromUnixMilliseconds(startTime).toTai64() : undefined,
     });
     return bn(latestBlockHeight);
+  }
+
+  /**
+   * Check if the given ID is an account.
+   *
+   * @param id - The ID to check.
+   * @returns A promise that resolves to the result of the check.
+   */
+  async isUserAccount(id: string): Promise<boolean> {
+    const { contract, blob, transaction } = await this.operations.isUserAccount({
+      blobId: id,
+      contractId: id,
+      transactionId: id,
+    });
+
+    if (contract || blob || transaction) {
+      return false;
+    }
+    return true;
+  }
+
+  async getAddressType(id: string): Promise<'Account' | 'Contract' | 'Transaction' | 'Blob'> {
+    const { contract, blob, transaction } = await this.operations.isUserAccount({
+      blobId: id,
+      contractId: id,
+      transactionId: id,
+    });
+
+    if (contract) {
+      return 'Contract';
+    }
+    if (blob) {
+      return 'Blob';
+    }
+    if (transaction) {
+      return 'Transaction';
+    }
+
+    return 'Account';
   }
 
   /**
