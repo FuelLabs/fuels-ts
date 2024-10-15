@@ -1,3 +1,5 @@
+import { ASSET_ID_LEN, BigNumberCoder, CONTRACT_ID_LEN, WORD_SIZE } from '@fuel-ts/abi-coder';
+import { Address } from '@fuel-ts/address';
 import type { BytesLike } from '@fuel-ts/interfaces';
 import { BN } from '@fuel-ts/math';
 import { arrayify } from '@fuel-ts/utils';
@@ -10,21 +12,19 @@ interface AssembleTransferToContractParams {
 }
 
 export const formatTransferToContractScriptData = (
-  params: IAssembleTransferToContractScriptParams
+  transferParams: Array<AssembleTransferToContractParams>
 ) => {
-  const { assetId, amountToTransfer, hexlifiedContractId } = params;
-
   const numberCoder = new BigNumberCoder('u64');
-
-  const encoded = numberCoder.encode(new BN(amountToTransfer).toNumber());
-
-  const scriptData = Uint8Array.from([
-    ...arrayify(hexlifiedContractId),
-    ...encoded,
-    ...arrayify(assetId),
-  ]);
-
-  return scriptData;
+  return transferParams.reduce((acc, transferParam) => {
+    const { assetId, amount, contractId } = transferParam;
+    const encoded = numberCoder.encode(new BN(amount).toNumber());
+    const scriptData = Uint8Array.from([
+      ...Address.fromAddressOrString(contractId).toBytes(),
+      ...encoded,
+      ...arrayify(assetId),
+    ]);
+    return new Uint8Array([...acc, ...scriptData]);
+  }, new Uint8Array());
 };
 
 export const assembleTransferToContractScript = async (
