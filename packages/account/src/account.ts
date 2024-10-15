@@ -442,6 +442,11 @@ export class Account extends AbstractAccount {
     return this.peformTransferToContracts([{ amount, assetId, contractId }], txParams);
   }
 
+  async batchTransferToContracts(
+    contractTransferParams: ContractTransferParams[],
+    txParams: TxParamsType = {}
+  ): Promise<TransactionResponse> {
+    return this.peformTransferToContracts(contractTransferParams, txParams);
   }
 
   /**
