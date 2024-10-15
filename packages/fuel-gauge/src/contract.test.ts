@@ -734,14 +734,14 @@ describe('Contract', () => {
 
     const { receipts } = await submit.waitForResult();
 
-    const transferOutReceipts = receipts.filter(
+    const transferReceipts = receipts.filter(
       ({ type }) => type === ReceiptType.Transfer
     ) as ReceiptTransfer[];
 
-    expect(transferOutReceipts.length).toBe(contractTransferParams.length);
+    expect(transferReceipts.length).toBe(contractTransferParams.length);
 
     contractTransferParams.forEach(({ amount, contractId, assetId }) => {
-      const foundReceipt = transferOutReceipts.find(
+      const foundReceipt = transferReceipts.find(
         (r) => r.amount.eq(amount) && r.to === contractId && r.assetId === assetId
       );
 
