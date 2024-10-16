@@ -14,7 +14,7 @@ pub struct B512 {
 
 In the SDK, you can visualize a `b512` value by examining a wallet's public key:
 
-<<< @/../../docs-snippets2/src/types/bits512/bits512-1.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/bits512/b512-in-the-sdk.ts#snippet-1{ts:line-numbers}
 
 ## Example: Echoing a `b512` Value in a Contract Function
 
@@ -24,6 +24,6 @@ Let's consider a contract function that accepts a `b512` parameter and returns t
 
 To call this function and validate the returned value, follow these steps:
 
-<<< @/../../docs-snippets2/src/types/bits512/bits512-2.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/bits512/echoing-a-b512.ts#snippet-1{ts:line-numbers}
 
 In this example, we generate a wallet, use its public key as the `b512` input, call the `echo_b512` contract function, and expect the returned value to match the original input.
