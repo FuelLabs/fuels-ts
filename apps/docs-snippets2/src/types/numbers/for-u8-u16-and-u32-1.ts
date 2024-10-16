@@ -9,7 +9,7 @@ const deploy = await EchoValuesFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
 
 // #region snippet-1
-const number = 1337;
+const number = 200;
 
 const { value } = await contract.functions.echo_u8(number).get();
 

@@ -8,6 +8,6 @@ const ethersBigNum = toBigInt(number);
 
 const fuelsBigNum = bn(ethersBigNum.toString());
 
-console.log(fuelsBigNum.toNumber());
+console.log('value', fuelsBigNum.toNumber());
 // 20
 // #endregion snippet-1
