@@ -16,8 +16,13 @@ import { error } from 'console';
      */
     execSync(`changeset version`);
 
-    // Invoke versions' prebuild script (will rewrite version files if needed)
-    execSync(`pnpm -C packages/versions prebuild`);
+    /**
+     * Invoke versions' build script (will rewrite version files if needed)
+     * and build the versions package,
+     * so that fuels-typegen picks up the new fuels version
+     * when generating the proxy contract below.
+     */
+    execSync(`pnpm -C packages/versions build`);
 
     // Invoke fuels' build:proxy script (will rewrite header versions in generated files)
     execSync(`pnpm -C packages/fuels build:proxy`);
