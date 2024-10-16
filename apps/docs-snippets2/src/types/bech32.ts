@@ -3,7 +3,7 @@ import { Address } from 'fuels';
 
 const address = Address.fromRandom();
 
-console.log('Bech32', address.bech32Address.toString());
+console.log('Bech32', address.bech32Address);
 
 // fuel1d5cfwekq78r0zq73g7eg0747etkaxxltrqx5tncm7lvg89awe3hswhqjhs
 // #endregion bech32-2

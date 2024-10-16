@@ -14,5 +14,5 @@ const bigNumber = bn('10000000000000000000');
 const { value } = await contract.functions.echo_u64(bigNumber).get();
 
 console.log('value', value.toString());
-// '1000000000000000000000000'
+// '10000000000000000000'
 // #endregion snippet-1

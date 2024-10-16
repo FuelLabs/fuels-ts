@@ -12,6 +12,8 @@ const { contract } = await deploy.waitForResult();
 // #region snippet-1
 const bytes: Bytes = [40, 41, 42];
 
-const { value } = await contract.functions.bytes_comparison(bytes).get();
-// #endregion snippet-1
+const { value } = await contract.functions.echo_bytes(bytes).get();
+
 console.log('value', value);
+// Uint8Array(3)[40, 41, 42]
+// #endregion snippet-1

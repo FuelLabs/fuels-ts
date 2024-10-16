@@ -26,10 +26,10 @@ const { contract } = await deploy.waitForResult();
 // #region arrays-3
 const u64Array: [BigNumberish, BigNumberish] = [10000000, 20000000];
 
-const { value } = await contract.functions
-  .echo_u64_array(u64Array)
-  .get();
-// [10000000, 20000000]
+const { value } = await contract.functions.echo_u64_array(u64Array).get();
+
+console.log('value', value);
+// [<BN: 0x989680>, <BN: 1312D00>]
 // #endregion arrays-3
 
 console.log('value 1', value[0]);

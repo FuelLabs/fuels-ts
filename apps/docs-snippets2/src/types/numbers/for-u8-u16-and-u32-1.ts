@@ -14,5 +14,5 @@ const number = 200;
 const { value } = await contract.functions.echo_u8(number).get();
 
 console.log('value', Number(value));
-// 1337
+// 200
 // #endregion snippet-1
