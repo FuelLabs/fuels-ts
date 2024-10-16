@@ -922,7 +922,7 @@ describe('Account', () => {
     await expectToThrowFuelError(() => wallet.fund(request, txCost), {
       code: ErrorCode.MAX_COINS_REACHED,
       message:
-        'The account retrieving coins has reached the maximum response size. Please use the `getCoins` method to paginate the response.',
+        'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',
     });
   });
 
