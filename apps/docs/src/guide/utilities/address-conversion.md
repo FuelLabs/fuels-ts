@@ -8,7 +8,8 @@ The Fuel Network uses the [`Bech32`](../types/bech32.md) address format for its 
 
 However, a hexlified [Bits256](../types/bits256.md) (hex) is another common address format; an example can be seen below:
 
-<<< @/../../docs-snippets2/src/types/bits256.ts#addresses-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/evm-address/creating-an-evm.ts#snippet-2{ts:line-numbers}
+apps/
 
 At times, these can even be wrapped in a [Struct](../types/structs.md). Such as an [Asset ID](../types/asset-id.md) or a [EVM Address](../types/evm-address.md):
 
