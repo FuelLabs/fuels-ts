@@ -52,6 +52,5 @@ impl EchoValues for Contract {
         u64_array
     }
     // #endregion arrays-2
-
 }
 // #endregion understanding-fuel-binary-file
