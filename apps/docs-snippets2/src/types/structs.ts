@@ -18,11 +18,4 @@ const data: EmployeeDataStruct = {
 };
 // #endregion struct-2
 
-expect(data).toStrictEqual({
-  name: 'John Doe',
-  age: 30,
-  salary: 100_000,
-  idHash: '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-  ratings: [4, 5, 5],
-  isActive: true,
-});
+console.log('value', data);

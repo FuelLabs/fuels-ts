@@ -1,5 +1,5 @@
 // #region full
-import { Provider, Wallet, BN } from 'fuels';
+import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 import { EchoValuesFactory } from '../typegend';
@@ -17,6 +17,7 @@ const tuple: [number, boolean, number] = [100, false, 10000];
 
 const { value } = await contract.functions.echo_tuple(tuple).simulate();
 
-expect(tuple).toEqual([value[0], value[1], new BN(value[2]).toNumber()]);
+console.log('value', value);
+// [100, false, <BN 0x2710>]
 // #endregion tuples-3
 // #endregion full

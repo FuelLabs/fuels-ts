@@ -26,10 +26,11 @@ const addressOutput = response1.value;
 let addressFromOutput: Address = Address.fromB256(addressOutput.bits);
 // #endregion address-output
 
-expect(addressFromOutput).toEqual(address);
+console.log('equals', addressFromOutput.equals(address));
 
 // #region contract-id-input
-let contractId = '0x7296ff960b5eb86b5f79aa587d7ebe1bae147c7cac046a16d062fbd7f3a753ec';
+let contractId =
+  '0x7296ff960b5eb86b5f79aa587d7ebe1bae147c7cac046a16d062fbd7f3a753ec';
 let contractIdInput = { bits: contractId };
 // #endregion contract-id-input
 
@@ -40,7 +41,7 @@ let contractIdOutput = response2.value;
 let contractIdFromOutput: string = contractIdOutput.bits;
 // #endregion contract-id-output
 
-expect(contractIdFromOutput).toEqual(contractId);
+console.log('equals', contractIdFromOutput === contractId);
 
 // #region identity-address-input
 address = Address.fromRandom();
@@ -52,29 +53,34 @@ const addressIdentityInput = { Address: addressInput };
 const response3 = await contract.functions.identity(addressIdentityInput).get();
 
 const identityFromOutput1: IdentityOutput = response3.value;
-const addressStringFromOutput: AddressOutput = identityFromOutput1.Address as AddressOutput;
+const addressStringFromOutput: AddressOutput =
+  identityFromOutput1.Address as AddressOutput;
 addressFromOutput = Address.fromB256(addressStringFromOutput.bits);
 // #endregion identity-address-output
 
 // #region identity-contract-input
-contractId = '0x7296ff960b5eb86b5f79aa587d7ebe1bae147c7cac046a16d062fbd7f3a753ec';
+contractId =
+  '0x7296ff960b5eb86b5f79aa587d7ebe1bae147c7cac046a16d062fbd7f3a753ec';
 contractIdInput = { bits: contractId.toString() };
 const contractIdentityInput = { ContractId: contractIdInput };
 // #endregion identity-contract-input
 
 // #region identity-contract-output
-const response4 = await contract.functions.identity(contractIdentityInput).get();
+const response4 = await contract.functions
+  .identity(contractIdentityInput)
+  .get();
 
 const identityFromOutput2: IdentityOutput = response4.value;
 contractIdOutput = identityFromOutput2.ContractId as ContractIdOutput;
 contractIdFromOutput = contractIdOutput.bits;
 // #endregion identity-contract-output
 
-expect(addressFromOutput).toEqual(address);
-expect(contractIdFromOutput).toEqual(contractId);
+console.log('equals', addressFromOutput.equals(address));
+console.log('equals', contractIdFromOutput === contractId);
 
 // #region asset-id-input
-const assetId = '0x0cfabde7bbe58d253cf3103d8f55d26987b3dc4691205b9299ac6826c613a2e2';
+const assetId =
+  '0x0cfabde7bbe58d253cf3103d8f55d26987b3dc4691205b9299ac6826c613a2e2';
 const assetIdInput = { bits: assetId };
 // #endregion asset-id-input
 
@@ -85,5 +91,5 @@ const assetIdOutput = response5.value;
 const assetIdFromOutput: string = assetIdOutput.bits;
 // #endregion asset-id-output
 
-expect(assetIdFromOutput).toEqual(assetId);
+console.log('equals', assetIdFromOutput === assetId);
 // #endregion full

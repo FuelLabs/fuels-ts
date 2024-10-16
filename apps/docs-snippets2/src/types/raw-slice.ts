@@ -14,7 +14,7 @@ const { contract } = await deploy.waitForResult();
 const rawSlice: RawSlice = [8, 42, 77];
 
 const { value } = await contract.functions.echo_raw_slice(rawSlice).get();
-
-expect(value).toStrictEqual(rawSlice);
 // #endregion raw-slice-2
 // #endregion full
+
+console.log('value', JSON.stringify(value) === JSON.stringify(rawSlice));

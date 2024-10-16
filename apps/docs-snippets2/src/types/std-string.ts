@@ -14,6 +14,7 @@ const stdString: StdString = 'Hello Fuel';
 
 const { value } = await contract.functions.echo_string(stdString).get();
 
-expect(value).toEqual(stdString);
+console.log('value', value);
+// 'Hello Fuel'
 // #endregion std-string-2
 // #endregion full

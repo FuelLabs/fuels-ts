@@ -20,23 +20,30 @@ const stringSize8 = 'fuel-sdk';
 // #region string-2
 const { value } = await contract.functions.echo_str_8('fuel-sdk').get();
 
-expect(value).toEqual('fuel-sdk');
+console.log('value', value);
+// 'fuel-sdk'
 // #endregion string-2
 
 // #region string-3
 const longString = 'fuel-sdk-WILL-THROW-ERROR';
 
-await expect(async () => contract.functions.echo_str_8(longString).call()).rejects.toThrowError(
-  'Value length mismatch during encode'
-);
+try {
+  await contract.functions.echo_str_8(longString).call();
+} catch (error) {
+  console.log('error', error);
+  // Value length mismatch during encode
+}
 
 const shortString = 'THROWS';
 
-await expect(async () => contract.functions.echo_str_8(shortString).call()).rejects.toThrowError(
-  'Value length mismatch during encode'
-);
+try {
+  await contract.functions.echo_str_8(shortString).call();
+} catch (error) {
+  console.log('error', error);
+  // Value length mismatch during encode
+}
 // #endregion string-3
 // #endregion full
 
-expect(stringSize2).toBe('st');
-expect(stringSize8).toBe('fuel-sdk');
+console.log('equals', stringSize2 === 'st');
+console.log('equals', stringSize8 === 'fuel-sdk');

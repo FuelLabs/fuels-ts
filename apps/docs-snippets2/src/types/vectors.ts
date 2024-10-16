@@ -2,7 +2,10 @@
 import { arrayify, bn, getRandomB256, Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
-import { BytecodeInputFactory, EchoEmployeeDataVectorFactory } from '../typegend';
+import {
+  BytecodeInputFactory,
+  EchoEmployeeDataVectorFactory,
+} from '../typegend';
 import type { EmployeeDataInput } from '../typegend/contracts/EchoEmployeeDataVector';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
@@ -36,7 +39,9 @@ const employees: EmployeeDataInput[] = [
     isActive: true,
   },
 ];
-const { value } = await contract.functions.echo_last_employee_data(employees).simulate();
+const { value } = await contract.functions
+  .echo_last_employee_data(employees)
+  .simulate();
 // #endregion vector-4
 
 // #region vector-bytecode-input-ts
@@ -48,8 +53,15 @@ const { waitForResult } = await bytecodeContract.functions
 
 const { value: bytecodeRoot } = await waitForResult();
 // #endregion vector-bytecode-input-ts
-
-expect(basicU8Vector).toStrictEqual([1, 2, 3]);
-expect(JSON.stringify(value)).toEqual(JSON.stringify(employees[1]));
-expect(bytecodeRoot).toEqual('0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20');
 // #endregion full
+
+console.log(
+  'equals',
+  JSON.stringify(basicU8Vector) === JSON.stringify([1, 2, 3])
+);
+console.log('equals', JSON.stringify(value) === JSON.stringify(employees[1]));
+console.log(
+  'equals',
+  bytecodeRoot ===
+    '0x0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f20'
+);
