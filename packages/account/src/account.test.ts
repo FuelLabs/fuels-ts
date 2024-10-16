@@ -920,8 +920,9 @@ describe('Account', () => {
     request.maxFee = txCost.maxFee;
 
     await expectToThrowFuelError(() => wallet.fund(request, txCost), {
-      code: ErrorCode.INVALID_REQUEST,
-      message: 'max number of coins is reached while trying to fit the target',
+      code: ErrorCode.MAX_COINS_REACHED,
+      message:
+        'The account retrieving coins has reached the maximum response size. Please use the `getCoins` method to paginate the response.',
     });
   });
 
