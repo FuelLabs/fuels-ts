@@ -18,7 +18,3 @@ When working with statically-sized strings, ensure that the input and output str
 If you pass a string that is either too long or too short for a contract method, the call will fail like this:
 
 <<< @/../../docs-snippets2/src/types/string.ts#string-3{ts:line-numbers}
-
-## Full Example
-
-<<< @/../../docs-snippets2/src/types/string.ts#full{ts:line-numbers}
