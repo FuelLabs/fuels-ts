@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Provider, Wallet } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
