@@ -439,14 +439,52 @@ export class Account extends AbstractAccount {
     assetId?: BytesLike,
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    return this.peformTransferToContracts([{ amount, assetId, contractId }], txParams);
+    return this.batchTransferToContracts([{ amount, assetId, contractId }], txParams);
   }
 
   async batchTransferToContracts(
     contractTransferParams: ContractTransferParams[],
     txParams: TxParamsType = {}
   ): Promise<TransactionResponse> {
-    return this.peformTransferToContracts(contractTransferParams, txParams);
+    let request = new ScriptTransactionRequest({
+      ...txParams,
+    });
+
+    const quantities: CoinQuantity[] = [];
+
+    const parsedParams = contractTransferParams.map((transferParam) => {
+      const amount = bn(transferParam.amount);
+      const contractAddress = Address.fromAddressOrString(transferParam.contractId);
+
+      const assetId = transferParam.assetId
+        ? hexlify(transferParam.assetId)
+        : this.provider.getBaseAssetId();
+
+      if (amount.lte(0)) {
+        throw new FuelError(
+          ErrorCode.INVALID_TRANSFER_AMOUNT,
+          'Transfer amount must be a positive number.'
+        );
+      }
+
+      request.addContractInputAndOutput(contractAddress);
+      quantities.push({ amount, assetId });
+
+      return {
+        amount,
+        contractId: contractAddress.toB256(),
+        assetId,
+      };
+    });
+
+    const { script, scriptData } = await assembleTransferToContractScript(parsedParams);
+
+    request.script = script;
+    request.scriptData = scriptData;
+
+    request = await this.estimateAndFundTransaction(request, txParams, { quantities });
+
+    return this.sendTransaction(request);
   }
 
   /**
@@ -665,53 +703,6 @@ export class Account extends AbstractAccount {
         'Transfer amount must be a positive number.'
       );
     }
-  }
-
-  /** @hidden * */
-  private async peformTransferToContracts(
-    contractTransferParams: ContractTransferParams[],
-    txParams: TxParamsType
-  ) {
-    let request = new ScriptTransactionRequest({
-      ...txParams,
-    });
-
-    const quantities: CoinQuantity[] = [];
-
-    const parsedParams = contractTransferParams.map((transferParam) => {
-      const amount = bn(transferParam.amount);
-      const contractAddress = Address.fromAddressOrString(transferParam.contractId);
-
-      const assetId = transferParam.assetId
-        ? hexlify(transferParam.assetId)
-        : this.provider.getBaseAssetId();
-
-      if (amount.lte(0)) {
-        throw new FuelError(
-          ErrorCode.INVALID_TRANSFER_AMOUNT,
-          'Transfer amount must be a positive number.'
-        );
-      }
-
-      request.addContractInputAndOutput(contractAddress);
-
-      quantities.push({ amount, assetId });
-
-      return {
-        amount,
-        contractId: contractAddress.toB256(),
-        assetId,
-      };
-    });
-
-    const { script, scriptData } = await assembleTransferToContractScript(parsedParams);
-
-    request.script = script;
-    request.scriptData = scriptData;
-
-    request = await this.estimateAndFundTransaction(request, txParams, { quantities });
-
-    return this.sendTransaction(request);
   }
 
   /** @hidden * */
