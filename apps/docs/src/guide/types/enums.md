@@ -18,7 +18,7 @@ Let's define a Sway contract function that takes a `StateError` Enum variant as 
 
 To execute the contract function and validate the response, we can use the following code:
 
-<<< @/../../docs-snippets2/src/types/enums/enums-1.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/enums/using-sway-enums.ts#snippet-1{ts:line-numbers}
 
 In this example, we simply pass the Enum variant as a value to execute the contract function call.
 
@@ -36,13 +36,13 @@ Now, let's create a Sway contract function that accepts any variant of the `Erro
 
 Since the `Error` Enum is an Enum of Enums, we need to pass the function parameter differently. The parameter will be a TypeScript object:
 
-<<< @/../../docs-snippets2/src/types/enums/enums-2.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/enums/using-enums-of-enums-1.ts#snippet-1{ts:line-numbers}
 
 In this case, since the variant `InsufficientPermissions` belongs to the `UserError` Enum, we create a TypeScript object using the Enum name as the object key and the variant as the object value.
 
 We would follow the same approach if we intended to use a variant from the `StateError` Enum:
 
-<<< @/../../docs-snippets2/src/types/enums/enums-3.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/enums/using-enums-of-enums-2.ts#snippet-1{ts:line-numbers}
 
 ## Errors
 
@@ -52,16 +52,16 @@ While working with enums, you may run into the following issues:
 
 Thrown when the type being passed to the enum does not match that expected by it.
 
-<<< @/../../docs-snippets2/src/types/enums/enums-4.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/enums/using-an-invalid-enum-type.ts#snippet-1{ts:line-numbers}
 
 ### Using an invalid enum value
 
 Thrown when the parameter passed is not an expected enum value.
 
-<<< @/../../docs-snippets2/src/types/enums/enums-5.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/enums/using-an-invalid-enum-value.ts#snippet-1{ts:line-numbers}
 
 ### Using an invalid enum case key
 
 Thrown when the passed enum case is not an expected enum case value.
 
-<<< @/../../docs-snippets2/src/types/enums/enums-6.ts#snippet-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/enums/using-an-invalid-enum-case.ts#snippet-1{ts:line-numbers}
