@@ -13,7 +13,7 @@ apps/
 
 At times, these can even be wrapped in a [Struct](../types/structs.md). Such as an [Asset ID](../types/asset-id.md) or a [EVM Address](../types/evm-address.md):
 
-<<< @/../../docs-snippets2/src/types/evm-address.ts#addresses-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/evm-address/using-an-evm-address-1.ts#snippet-2{ts:line-numbers}
 
 The TS-SDK makes converting between these addresses simple using the [Address](../types/address.md) helper, which provides various utilities for conversion.
 

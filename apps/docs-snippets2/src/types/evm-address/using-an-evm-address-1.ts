@@ -9,9 +9,11 @@ const deploy = await EchoEvmAddressFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
 
 // #region snippet-1
+// #region snippet-2
 const evmAddress: EvmAddress = {
   bits: '0x000000000000000000000000210cf886ce41952316441ae4cac35f00f0e882a6',
 };
+// #endregion snippet-2
 
 const { value } = await contract.functions
   .echo_address_comparison(evmAddress)
