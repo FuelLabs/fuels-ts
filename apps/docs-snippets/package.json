@@ -4,9 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "pretest": "run-s build:forc type:check",
-    "build:forc": "pnpm fuels build",
-    "type:check": "tsc --noEmit"
+    "pretest": "./scripts/pretest.sh"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",

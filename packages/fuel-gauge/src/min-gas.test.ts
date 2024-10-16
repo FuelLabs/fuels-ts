@@ -7,6 +7,7 @@ import {
   getGasUsedFromReceipts,
   BigNumberCoder,
   ContractFactory,
+  GAS_USED_MODIFIER,
 } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
@@ -103,7 +104,8 @@ describe('Minimum gas tests', () => {
     const { status, gasUsed: txGasUsed } = await result.wait();
 
     expect(status).toBe(TransactionStatus.success);
-    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
+    // Final gas is less then the estimated in a normal scenario
+    expect(txCost.gasUsed.toNumber()).toBe(txGasUsed.muln(GAS_USED_MODIFIER).toNumber());
   });
 
   it('sets gas requirements (predicate)', async () => {
@@ -152,7 +154,8 @@ describe('Minimum gas tests', () => {
     const gasUsedFromReceipts = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
-    expect(txCost.gasUsed.toString()).toBe(gasUsedFromReceipts.toString());
+    // Final gas is less then the estimated in a normal scenario
+    expect(txCost.gasUsed.toNumber()).toBe(gasUsedFromReceipts.muln(GAS_USED_MODIFIER).toNumber());
   });
 
   it('sets gas requirements (account and predicate with script)', async () => {
@@ -221,6 +224,7 @@ describe('Minimum gas tests', () => {
     const txGasUsed = getGasUsedFromReceipts(receipts);
 
     expect(status).toBe(TransactionStatus.success);
-    expect(txCost.gasUsed.toString()).toBe(txGasUsed.toString());
+    // Final gas is less then the estimated in a normal scenario
+    expect(txCost.gasUsed.toNumber()).toBe(txGasUsed.muln(GAS_USED_MODIFIER).toNumber());
   });
 });

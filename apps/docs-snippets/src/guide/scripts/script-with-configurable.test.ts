@@ -49,7 +49,7 @@ describe('Script With Configurable', () => {
     const tx = script.functions.main(argument);
 
     // Set the call parameters
-    tx.callParams({ gasLimit: 1500 });
+    tx.callParams({ gasLimit: 1700 });
 
     // Get the entire transaction request prior to
     const txRequest = await tx.getTransactionRequest();
