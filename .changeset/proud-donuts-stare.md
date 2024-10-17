@@ -2,4 +2,4 @@
 "create-fuels": patch
 ---
 
-chore: exlude `node_modules` in template tests
+chore: exclude `node_modules` in template tests
