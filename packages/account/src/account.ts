@@ -452,7 +452,7 @@ export class Account extends AbstractAccount {
 
     const quantities: CoinQuantity[] = [];
 
-    const parsedParams = contractTransferParams.map((transferParam) => {
+    const transferParams = contractTransferParams.map((transferParam) => {
       const amount = bn(transferParam.amount);
       const contractAddress = Address.fromAddressOrString(transferParam.contractId);
 
@@ -477,7 +477,7 @@ export class Account extends AbstractAccount {
       };
     });
 
-    const { script, scriptData } = await assembleTransferToContractScript(parsedParams);
+    const { script, scriptData } = await assembleTransferToContractScript(transferParams);
 
     request.script = script;
     request.scriptData = scriptData;
