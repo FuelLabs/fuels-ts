@@ -22,7 +22,7 @@ The overall process is as follows:
 
 For example, lets imagine we want to deploy the following counter contract:
 
-<<< @/../../docs-snippets/test/fixtures/forc-projects/counter/src/main.sw#proxy-1{rs:line-numbers}
+<<< @/../../docs-snippets2/sway/counter/src/main.sw#proxy-1{rs:line-numbers}
 
 Let's deploy and interact with it by proxy. First let's setup the environment and deploy the counter contract:
 
@@ -30,23 +30,23 @@ Let's deploy and interact with it by proxy. First let's setup the environment an
 
 Now let's deploy the [SRC14 compliant proxy contract](https://github.com/FuelLabs/sway-standard-implementations/tree/174f5ed9c79c23a6aaf5db906fe27ecdb29c22eb/src14/owned_proxy/contract/out/release) and initialize it by setting its target to the counter target ID.
 
-<<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/cookbook/proxy-contracts.ts#proxy-3{ts:line-numbers}
 
 Finally, we can call our counter contract using the contract ID of the proxy.
 
-<<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-4{ts:line-numbers}
+<<< @/../../docs-snippets2/src/cookbook/proxy-contracts.ts#proxy-4{ts:line-numbers}
 
 Now let's make some changes to our initial counter contract by adding an additional storage slot to track the number of increments and a new get method that retrieves its value:
 
-<<< @/../../docs-snippets/test/fixtures/forc-projects/counter-v2/src/main.sw#proxy-5{rs:line-numbers}
+<<< @/../../docs-snippets2/sway/counter-v2/src/main.sw#proxy-5{rs:line-numbers}
 
 We can deploy it and update the target of the proxy like so:
 
-<<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-6{ts:line-numbers}
+<<< @/../../docs-snippets2/src/cookbook/proxy-contracts.ts#proxy-6{ts:line-numbers}
 
 Then, we can instantiate our upgraded contract via the same proxy contract ID:
 
-<<< @/../../docs-snippets/src/guide/contracts/proxy-contracts.test.ts#proxy-7{ts:line-numbers}
+<<< @/../../docs-snippets2/src/cookbook/proxy-contracts.ts#proxy-7{ts:line-numbers}
 
 For more info, please check these docs:
 

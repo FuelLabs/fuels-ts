@@ -1,2 +1,2 @@
 [workspace]
-members = ["counter", "script-sum"]
+members = ["counter", "counter-v2", "proxy", "script-sum"]
