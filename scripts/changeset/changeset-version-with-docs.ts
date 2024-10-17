@@ -18,9 +18,8 @@ import { error } from 'console';
 
     /**
      * Invoke versions' build script (will rewrite version files if needed)
-     * and build the versions package,
-     * so that fuels-typegen picks up the new fuels version
-     * when generating the proxy contract below.
+     * and build the versions package, so that fuels-typegen picks up the
+     * new fuels version when generating the proxy contract below.
      */
     execSync(`pnpm -C packages/versions build`);
 
