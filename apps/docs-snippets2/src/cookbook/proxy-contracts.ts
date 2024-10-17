@@ -1,4 +1,4 @@
-// #region proxy-1
+// #region proxy-2
 import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
