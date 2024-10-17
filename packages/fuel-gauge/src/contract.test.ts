@@ -749,6 +749,16 @@ describe('Contract', () => {
         amount: 800,
         assetId: assetA,
       },
+      {
+        contractId: voidId,
+        amount: 166,
+        assetId: assetB,
+      },
+      {
+        contractId: storageId,
+        amount: 2278,
+        assetId: assetB,
+      },
     ];
 
     const submit = await wallet.batchTransferToContracts(contractTransferParams);
