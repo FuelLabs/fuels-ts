@@ -85,7 +85,7 @@ export enum ErrorCode {
   MAX_INPUTS_EXCEEDED = 'max-inputs-exceeded',
   FUNDS_TOO_LOW = 'funds-too-low',
   MAX_OUTPUTS_EXCEEDED = 'max-outputs-exceeded',
-
+  MAX_COINS_REACHED = 'max-coins-reached',
   // receipt
   INVALID_RECEIPT_TYPE = 'invalid-receipt-type',
 

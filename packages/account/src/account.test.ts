@@ -899,7 +899,7 @@ describe('Account', () => {
     vi.restoreAllMocks();
   });
 
-  it('should validate max number of inputs when funding the TX', async () => {
+  it('throws when funding with more than 255 coins for an input', async () => {
     using launched = await setupTestProviderAndWallets({
       walletsConfig: {
         amountPerCoin: 100,
@@ -920,7 +920,9 @@ describe('Account', () => {
     request.maxFee = txCost.maxFee;
 
     await expectToThrowFuelError(() => wallet.fund(request, txCost), {
-      code: ErrorCode.MAX_INPUTS_EXCEEDED,
+      code: ErrorCode.MAX_COINS_REACHED,
+      message:
+        'The account retrieving coins has exceeded the maximum number of coins per asset. Please consider combining your coins into a single UTXO.',
     });
   });
 

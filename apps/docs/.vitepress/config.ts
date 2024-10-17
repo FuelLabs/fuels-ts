@@ -422,6 +422,10 @@ export default defineConfig({
                 text: 'Resubmitting Failed Transactions',
                 link: '/guide/cookbook/resubmitting-failed-transactions',
               },
+              {
+                text: 'Combining UTXOs',
+                link: '/guide/cookbook/combining-utxos',
+              },
             ],
           },
           {
