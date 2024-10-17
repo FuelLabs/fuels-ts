@@ -1,7 +1,8 @@
-import { Address, BN, Wallet } from 'fuels';
-import { launchTestNode } from 'fuels/test-utils';
+import type { ContractTransferParams, ReceiptTransfer } from 'fuels';
+import { BN, ReceiptType, Wallet } from 'fuels';
+import { launchTestNode, TestAssetId } from 'fuels/test-utils';
 
-import { CounterFactory } from '../../../test/typegen';
+import { CounterFactory, TokenFactory } from '../../../test/typegen';
 
 /**
  * @group node
@@ -111,7 +112,7 @@ describe('Transferring Assets', () => {
     // #endregion transferring-assets-3
   });
 
-  it('should successfully prepare transfer transaction request', async () => {
+  it('should successfully transfer to contract', async () => {
     using launched = await launchTestNode({
       contractsConfigs: [
         {
@@ -124,25 +125,72 @@ describe('Transferring Assets', () => {
       wallets: [sender],
       contracts: [deployedContract],
     } = launched;
-    const contractId = Address.fromAddressOrString(deployedContract.id);
     // #region transferring-assets-4
     // #import { Wallet, BN };
 
-    // #context const senderWallet = Wallet.fromPrivateKey('...');
+    // #context const sender = Wallet.fromPrivateKey('...');
 
     const amountToTransfer = 400;
     const assetId = provider.getBaseAssetId();
-    // #context const contractId = Address.fromAddressOrString('0x123...');
+    const contractId = deployedContract.id;
 
     const contractBalance = await deployedContract.getBalance(assetId);
 
     const tx = await sender.transferToContract(contractId, amountToTransfer, assetId);
     await tx.waitForResult();
+
     expect(new BN(contractBalance).toNumber()).toBe(0);
-
-    await tx.waitForResult();
-
     expect(new BN(await deployedContract.getBalance(assetId)).toNumber()).toBe(amountToTransfer);
     // #endregion transferring-assets-4
+  });
+
+  it('should successfully batch transfer to contracts', async () => {
+    using launched = await launchTestNode({
+      contractsConfigs: [
+        {
+          factory: CounterFactory,
+        },
+        {
+          factory: TokenFactory,
+        },
+      ],
+    });
+    const {
+      provider,
+      wallets: [sender],
+      contracts: [contract1, contract2],
+    } = launched;
+
+    // #region transferring-assets-5
+    const baseAssetId = provider.getBaseAssetId();
+    const assetA = TestAssetId.A.value;
+
+    const contractTransferParams: ContractTransferParams[] = [
+      {
+        contractId: contract1.id,
+        amount: 999,
+        assetId: baseAssetId,
+      },
+      {
+        contractId: contract1.id,
+        amount: 550,
+        assetId: assetA,
+      },
+      {
+        contractId: contract2.id,
+        amount: 200,
+        assetId: assetA,
+      },
+    ];
+
+    const submit = await sender.batchTransferToContracts(contractTransferParams);
+    const txResult = await submit.waitForResult();
+    // #endregion transferring-assets-5
+
+    const transferReceipts = txResult.receipts.filter(
+      (receipt) => receipt.type === ReceiptType.Transfer
+    ) as ReceiptTransfer[];
+
+    expect(transferReceipts.length).toBe(contractTransferParams.length);
   });
 });
