@@ -55,5 +55,5 @@ const deploy = await CounterFactory.deploy(wallet);
 const { contract } = await deploy.waitForResult();
 
 // Add the contract input and output using the contract ID
-transactionRequest.addContractInputAndOutput(contract);
+transactionRequest.addContractInputAndOutput(contract.id);
 // #endregion transaction-request-4

@@ -15,7 +15,6 @@ const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
   gasLimit: bn(2000),
-  maturity: 2,
   tip: bn(10),
   witnessLimit: 900,
   maxFee: bn(2000),
