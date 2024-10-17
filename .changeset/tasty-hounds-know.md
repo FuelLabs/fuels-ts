@@ -3,4 +3,4 @@
 "@internal/forc": patch
 ---
 
-chore: upgrade `forc` to `0.66.2`
+chore: upgrading `forc` to `0.66.2`
