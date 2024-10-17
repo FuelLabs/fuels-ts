@@ -21,11 +21,17 @@ const { contract: counterContract } = await waitForCounterContract();
 // #endregion proxy-2
 
 // #region proxy-3
-// It is important to pass all storage slots to the proxy in order to initialize the storage slots.
+/**
+ * It is important to pass all storage slots to the proxy in order to
+ * initialize the storage slots.
+ */
 const storageSlots = Counter.storageSlots.concat(Proxy.storageSlots);
 
-// These configurables are specific to our recommended SRC14 compliant contract. They must be passed on deploy
-// and then `initialize_proxy` must be called to setup the proxy contract.
+/**
+ * These configurables are specific to our recommended SRC14 compliant
+ * contract. They must be passed on deploy and then `initialize_proxy`
+ * must be called to setup the proxy contract.
+ */
 const configurableConstants = {
   INITIAL_TARGET: { bits: counterContract.id.toB256() },
   INITIAL_OWNER: {
@@ -48,8 +54,10 @@ await waitForProxyInit();
 // #endregion proxy-3
 
 // #region proxy-4
-// Make sure to use only the contract ID of the proxy when instantiating the contract
-// as this will remain static even with future upgrades.
+/**
+ * Make sure to use only the contract ID of the proxy when instantiating
+ * the contract as this will remain static even with future upgrades.
+ */
 const initialContract = new Counter(proxyContract.id, wallet);
 
 const { waitForResult: waitForIncrement } = await initialContract.functions
@@ -73,7 +81,10 @@ await waitForUpdateTarget();
 // #endregion proxy-6
 
 // #region proxy-7
-// Again, we are instantiating the contract with the same proxy ID but using a new contract instance.
+/**
+ * Again, we are instantiating the contract with the same proxy ID
+ * but using a new contract instance.
+ */
 const upgradedContract = new CounterV2(proxyContract.id, wallet);
 const { waitForResult: waitForSecondIncrement } =
   await upgradedContract.functions.increment_count(1).call();
