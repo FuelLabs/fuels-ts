@@ -40,7 +40,7 @@ const combineTx = await wallet.transfer(
 );
 await combineTx.wait();
 
-// Now we can perform the same validations and see we have less UTXOs. 
+// Now we can perform the same validations and see we have less UTXOs.
 // We have 2 in this instance, as we have performed the transfer in the base asset:
 // a UTXO for our transfer, and another for what is left after paying the fees.
 const { coins: combinedCoins } = await wallet.getCoins(
