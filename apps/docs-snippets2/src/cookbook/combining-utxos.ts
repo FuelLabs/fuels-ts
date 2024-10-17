@@ -49,8 +49,8 @@ const { coins: combinedCoins } = await wallet.getCoins(
 console.log('Combined Coins Length', combinedCoins.length);
 // 2
 
-// And we can also confirm the final balance of the base asset for this account is 9_998. So
-// the cost of combining is also minimal.
+// And we can also confirm the final balance of the base asset for this account is 9_998,
+// so the cost of combining is also minimal.
 const combinedBalance = await wallet.getBalance(provider.getBaseAssetId());
 console.log('Combined Balance', combinedBalance.toNumber());
 // 9_998
