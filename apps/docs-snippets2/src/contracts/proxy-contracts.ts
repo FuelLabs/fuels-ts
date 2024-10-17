@@ -15,9 +15,8 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 const counterContractFactory = new CounterFactory(wallet);
-const { waitForResult: waitForCounterContract } =
-  await counterContractFactory.deploy();
-const { contract: counterContract } = await waitForCounterContract();
+const deploy = await counterContractFactory.deploy();
+const { contract: counterContract } = await deploy.waitForResult();
 // #endregion proxy-2
 
 // #region proxy-3
@@ -40,17 +39,17 @@ const configurableConstants = {
 };
 
 const proxyContractFactory = new ProxyFactory(wallet);
-const { waitForResult: waitForProxyContract } =
-  await proxyContractFactory.deploy({
-    storageSlots,
-    configurableConstants,
-  });
-const { contract: proxyContract } = await waitForProxyContract();
+const proxyDeploy = await proxyContractFactory.deploy({
+  storageSlots,
+  configurableConstants,
+});
 
-const { waitForResult: waitForProxyInit } = await proxyContract.functions
+const { contract: proxyContract } = await proxyDeploy.waitForResult();
+const { waitForResult } = await proxyContract.functions
   .initialize_proxy()
   .call();
-await waitForProxyInit();
+
+await waitForResult();
 // #endregion proxy-3
 
 // #region proxy-4
@@ -58,26 +57,25 @@ await waitForProxyInit();
  * Make sure to use only the contract ID of the proxy when instantiating
  * the contract as this will remain static even with future upgrades.
  */
-const initialContract = new Counter(proxyContract.id, wallet);
+const proxiedContract = new Counter(proxyContract.id, wallet);
 
-const { waitForResult: waitForIncrement } = await initialContract.functions
-  .increment_count(1)
-  .call();
-await waitForIncrement();
+const incrementCall = await proxiedContract.functions.increment_count(1).call();
+await incrementCall.waitForResult();
 
-const { value: count } = await initialContract.functions.get_count().get();
+const { value: count } = await proxiedContract.functions.get_count().get();
 // #endregion proxy-4
 
-// #region proxy-6
-const { waitForResult: waitForCounterContractV2 } =
-  await CounterV2Factory.deploy(wallet);
-const { contract: counterContractV2 } = await waitForCounterContractV2();
+console.log('count:', count.toNumber() === 1);
 
-const { waitForResult: waitForUpdateTarget } = await proxyContract.functions
-  .set_proxy_target({ bits: counterContractV2.id.toB256() })
+// #region proxy-6
+const deployV2 = await CounterV2Factory.deploy(wallet);
+const { contract: contractV2 } = await deployV2.waitForResult();
+
+const updateTargetCall = await proxyContract.functions
+  .set_proxy_target({ bits: contractV2.id.toB256() })
   .call();
 
-await waitForUpdateTarget();
+await updateTargetCall.waitForResult();
 // #endregion proxy-6
 
 // #region proxy-7
@@ -86,18 +84,19 @@ await waitForUpdateTarget();
  * but using a new contract instance.
  */
 const upgradedContract = new CounterV2(proxyContract.id, wallet);
-const { waitForResult: waitForSecondIncrement } =
-  await upgradedContract.functions.increment_count(1).call();
-await waitForSecondIncrement();
+
+const incrementCall2 = await upgradedContract.functions
+  .increment_count(1)
+  .call();
+
+await incrementCall2.waitForResult();
 
 const { value: increments } = await upgradedContract.functions
   .get_increments()
   .get();
-const { value: secondCount } = await upgradedContract.functions
-  .get_count()
-  .get();
+
+const { value: count2 } = await upgradedContract.functions.get_count().get();
 // #endregion proxy-7
 
-console.log('count', count.toNumber());
-console.log('secondCount', secondCount.toNumber());
-console.log('increments', increments.toNumber());
+console.log('secondCount', count2.toNumber() === 2);
+console.log('increments', increments);
