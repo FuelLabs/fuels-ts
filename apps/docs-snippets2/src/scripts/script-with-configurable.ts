@@ -34,7 +34,7 @@ const myMainScript = new Script(ScriptSum.bytecode, ScriptSum.abi, wallet);
 const tx = myMainScript.functions.main(argument);
 
 // Set the call parameters
-tx.callParams({ gasLimit: 1500 });
+tx.callParams({ gasLimit: 7500 });
 
 // Get the entire transaction request prior to
 const txRequest = await tx.getTransactionRequest();
