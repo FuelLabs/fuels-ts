@@ -10,6 +10,7 @@
 
 
 import { Script } from 'fuels';
+import type { Account } from 'fuels';
 import abi from './AbiScript-abi.json';
 import { bytecode } from './AbiScript-bytecode';
 import type { AbiScriptTypes } from './AbiScriptTypes';
