@@ -19,6 +19,7 @@ import storageSlots from './AbiContract-storage-slots.json';
 export class AbiContractFactory extends ContractFactory {
 
   static readonly bytecode = bytecode;
+  static readonly storageSlots: StorageSlot[] = storageSlots;
 
   constructor(accountOrProvider: Account | Provider) {
     super(bytecode, abi, accountOrProvider);
