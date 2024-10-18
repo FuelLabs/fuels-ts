@@ -27,6 +27,8 @@ export class AbiContract extends Contract {
     declare interface: AbiContractInterface;
     declare functions: ProgramFunctionMapper<AbiContractTypes['functions']>;
 
+    public static readonly abi: AbiSpecification = abi;
+
     constructor(
         id: string | AbstractAddress,
         accountOrProvider: Account | Provider,

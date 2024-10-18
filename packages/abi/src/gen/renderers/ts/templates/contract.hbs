@@ -18,6 +18,8 @@ export class {{name}} extends Contract {
     declare interface: {{name}}Interface;
     declare functions: ProgramFunctionMapper<{{name}}Types['functions']>;
 
+    public static readonly abi: AbiSpecification = abi;
+
     constructor(
         id: string | AbstractAddress,
         accountOrProvider: Account | Provider,
