@@ -194,7 +194,7 @@ abi MyContract {
     fn types_struct_double_generic(
         x: StructGenericWithEnum<u8, u16>,
     ) -> StructGenericWithEnum<u8, u16>;
-    fn type_struct_external(x: ExternalStruct) -> ExternalStruct;
+    fn types_struct_external(x: ExternalStruct) -> ExternalStruct;
     fn types_struct_with_implicit_generics(
         x: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8>;
@@ -232,9 +232,9 @@ abi MyContract {
     fn types_option(x: Option<u8>) -> Option<u8>;
     fn types_option_geo(x: Option<StructSimple>) -> Option<StructSimple>;
 
-    fn type_identity(x: Identity) -> Identity;
-    fn type_address(x: Address) -> Address;
-    fn type_contract_id(x: ContractId) -> ContractId;
+    fn types_identity(x: Identity) -> Identity;
+    fn types_address(x: Address) -> Address;
+    fn types_contract_id(x: ContractId) -> ContractId;
     fn types_asset_id(x: AssetId) -> AssetId;
     fn types_evm_address(x: EvmAddress) -> EvmAddress;
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]>;
@@ -414,13 +414,13 @@ impl MyContract for Contract {
             Err(MyContractError::DivisionByZero) => Err(__to_str_array("DivisError")),
         }
     }
-    fn type_address(x: Address) -> Address {
+    fn types_address(x: Address) -> Address {
         x
     }
-    fn type_contract_id(x: ContractId) -> ContractId {
+    fn types_contract_id(x: ContractId) -> ContractId {
         x
     }
-    fn type_identity(x: Identity) -> Identity {
+    fn types_identity(x: Identity) -> Identity {
         x
     }
     fn types_enum_external(x: ExternalEnum) -> ExternalEnum {
@@ -429,7 +429,7 @@ impl MyContract for Contract {
     fn types_enum_with_structs(x: EnumWithStructs) -> EnumWithStructs {
         x
     }
-    fn type_struct_external(x: ExternalStruct) -> ExternalStruct {
+    fn types_struct_external(x: ExternalStruct) -> ExternalStruct {
         x
     }
     fn types_struct_with_implicit_generics(

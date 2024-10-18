@@ -25,6 +25,9 @@
     "build": "tsup",
     "postbuild": "tsx ../../scripts/postbuild.ts"
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@fuel-ts/utils": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
+    "handlebars": "^4.7.8"
+  }
 }
