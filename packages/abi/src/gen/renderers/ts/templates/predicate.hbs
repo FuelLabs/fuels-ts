@@ -3,20 +3,20 @@
 import { Predicate } from 'fuels';
 import type { PredicateParams } from 'fuels';
 import abi from './{{name}}-abi.json';
-import { bytecode } from './{{name}}-bytecode.json';
+import { bytecode } from './{{name}}-bytecode';
 import type { {{name}}Types } from './{{name}}Types';
 
 export type AbiPredicateParameters = Omit<
   PredicateParams<
     {{name}}Types['functions']['main']['inputs'],
-    {{name}}Types['confugirables']
+    {{name}}Types['configurables']
   >,
   'abi' | 'bytecode'
 >;
 
 export class {{name}} extends Predicate<
   {{name}}Types['functions']['main']['inputs'],
-  {{name}}Types['confugirables']
+  {{name}}Types['configurables']
 > {
   constructor(params: AbiPredicateParameters) {
     super({ abi, bytecode, ...params });
