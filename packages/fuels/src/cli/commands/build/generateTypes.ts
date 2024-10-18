@@ -1,14 +1,13 @@
 import { ProgramTypeEnum } from '@fuel-ts/abi-typegen';
 import { runTypegen } from '@fuel-ts/abi-typegen/runTypegen';
 import { getBinaryVersions } from '@fuel-ts/versions/cli';
-import { writeFileSync, mkdirSync } from 'fs';
 import { globSync } from 'glob';
 import { join } from 'path';
 
 import { getABIPaths } from '../../config/forcUtils';
-import { renderIndexTemplate } from '../../templates';
 import type { FuelsConfig } from '../../types';
 import { debug, log, loggingConfig } from '../../utils/logger';
+import { runFuelsTypegen } from '../typegen';
 
 async function generateTypesForProgramType(
   config: FuelsConfig,
@@ -45,26 +44,14 @@ async function generateTypesForProgramType(
   return pluralizedDirName;
 }
 
-export async function generateTypes(config: FuelsConfig) {
+export function generateTypes(config: FuelsConfig) {
   log('Generating types..');
 
   const { contracts, scripts, predicates, output } = config;
 
-  mkdirSync(output, { recursive: true });
+  const paths = contracts
+    .concat(scripts, predicates)
+    .map((path) => `${path}/out/${config.buildMode}`);
 
-  const members = [
-    { type: ProgramTypeEnum.CONTRACT, programs: contracts },
-    { type: ProgramTypeEnum.SCRIPT, programs: scripts },
-    { type: ProgramTypeEnum.PREDICATE, programs: predicates },
-  ];
-
-  const pluralizedDirNames = await Promise.all(
-    members
-      .filter(({ programs }) => !!programs.length)
-      .map(({ programs, type }) => generateTypesForProgramType(config, programs, type))
-  );
-
-  const indexFile = await renderIndexTemplate(pluralizedDirNames);
-
-  writeFileSync(join(config.output, 'index.ts'), indexFile);
+  runFuelsTypegen({ inputs: paths, output, silent: false });
 }

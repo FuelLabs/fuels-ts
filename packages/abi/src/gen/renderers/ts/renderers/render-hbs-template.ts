@@ -22,10 +22,8 @@ export function renderHbsTemplate(params: {
   const renderHeaderTemplate = Handlebars.compile(headerTemplate, options);
   const renderTemplate = Handlebars.compile(template, options);
 
-  const text = renderTemplate({
+  return renderTemplate({
     header: renderHeaderTemplate(versions),
     ...(data ?? {}),
   });
-
-  return text;
 }

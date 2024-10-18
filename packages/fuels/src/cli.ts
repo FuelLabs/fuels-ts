@@ -8,6 +8,7 @@ import { deploy } from './cli/commands/deploy';
 import { dev } from './cli/commands/dev';
 import { init } from './cli/commands/init';
 import { node } from './cli/commands/node';
+import { typegen } from './cli/commands/typegen';
 import { withBinaryPaths } from './cli/commands/withBinaryPaths';
 import { withConfig } from './cli/commands/withConfig';
 import { withProgram } from './cli/commands/withProgram';
@@ -49,7 +50,8 @@ export const configureCli = () => {
   const desc = `Relative path/globals to `;
   const arg = `<path|global>`;
 
-  (command = program.command(Commands.init))
+  const initCommand = program
+    .command(Commands.init)
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
     .option('-w, --workspace <path>', 'Relative dir path to Forc workspace')
@@ -59,8 +61,9 @@ export const configureCli = () => {
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
     .option('--forc-path <path>', 'Path to the `forc` binary')
     .option('--fuel-core-path <path>', 'Path to the `fuel-core` binary')
-    .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command')
-    .action(withProgram(command, Commands.init, init));
+    .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command');
+
+  initCommand.action(withProgram(initCommand, Commands.init, init));
 
   (command = program.command(Commands.dev))
     .description('Start a Fuel node and run build + deploy on every file change')
@@ -90,10 +93,12 @@ export const configureCli = () => {
    * Routing external commands from sub-packages' CLIs
    */
 
-  // Typegen
-  configureTypegenCliOptions(
-    program.command('typegen').description(`Generate Typescript from Sway ABI JSON files`)
-  );
+  (command = program.command(Commands.typegen))
+    .description(`Generate Typescript from Sway ABI JSON files`)
+    .requiredOption('-i, --inputs <path|glob...>', 'Input paths/globals to your ABI JSON files')
+    .requiredOption('-o, --output <dir>', 'Directory path for generated files')
+    .option('-S, --silent', 'Omit output messages')
+    .action(withProgram(command, Commands.typegen, typegen));
 
   // Versions
   (command = program.command('versions'))
