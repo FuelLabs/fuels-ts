@@ -19,6 +19,8 @@ export class AbiScript extends Script<
   AbiScriptTypes['functions']['main']['inputs'],
   AbiScriptTypes['functions']['main']['output']
 > {
+    public static readonly bytecode = bytecode;
+
     constructor(wallet: Account) {
         super(bytecode, abi, wallet);
     }
