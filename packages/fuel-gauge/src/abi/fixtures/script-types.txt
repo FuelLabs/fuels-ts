@@ -10,7 +10,7 @@
 
 
 import type { BigNumberish } from 'fuels';
-import type { Enum, Option, Result } from './common';
+import type { Enum, Option, Result } from '../common';
 
 
 export type ConfigurablesInput = { U8_VALUE: BigNumberish, B256_VALUE: string };

@@ -12,7 +12,7 @@
 import { Contract, Interface } from "fuels";
 import type { AbiSpecification, AbstractAddress, Account, Provider } from 'fuels';
 import type { AbiContractTypes } from './AbiContractTypes';
-import type { InterfaceFunctionMapper, ProgramFunctionMapper } from './common';
+import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 import abi from './AbiContract-abi.json';
 
 export class AbiContractInterface extends Interface {
