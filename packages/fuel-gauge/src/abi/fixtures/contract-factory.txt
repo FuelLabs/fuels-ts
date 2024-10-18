@@ -10,7 +10,7 @@
 
 
 import { ContractFactory } from 'fuels';
-import type { Account, Provider, DeployContractOptions, DeployContractResult } from 'fuels';
+import type { Account, Provider, DeployContractOptions, DeployContractResult, StorageSlot } from 'fuels';
 import { AbiContract } from './AbiContract';
 import { bytecode } from './AbiContract-bytecode';
 import abi from './AbiContract-abi.json';
