@@ -11,7 +11,7 @@
 
 import { Script } from 'fuels';
 import abi from './AbiScript-abi.json';
-import { bytecode } from './AbiScript-bytecode.json';
+import { bytecode } from './AbiScript-bytecode';
 import type { AbiScriptTypes } from './AbiScriptTypes';
 
 export class AbiScript extends Script<
