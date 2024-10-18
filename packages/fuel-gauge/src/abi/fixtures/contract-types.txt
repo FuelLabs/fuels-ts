@@ -10,7 +10,7 @@
 
 
 import type { BigNumberish, Bytes, EvmAddress, RawSlice, StdString, StrSlice } from 'fuels';
-import type { ArrayOfLength, Enum, Option, Result } from './common';
+import type { ArrayOfLength, Enum, Option, Result } from '../common';
 
 export enum EnumWithNative { Checked = 'Checked', Pending = 'Pending' };
 export enum ExternalEnum { A = 'A', B = 'B' };
