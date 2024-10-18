@@ -1,7 +1,7 @@
 {{header}}
 
 import { ContractFactory } from 'fuels';
-import type { Account, Provider, DeployContractOptions, DeployContractResult } from 'fuels';
+import type { Account, Provider, DeployContractOptions, DeployContractResult, StorageSlot } from 'fuels';
 import { {{name}} } from './{{name}}';
 import { bytecode } from './{{name}}-bytecode';
 import abi from './{{name}}-abi.json';
@@ -10,6 +10,7 @@ import storageSlots from './{{name}}-storage-slots.json';
 export class {{name}}Factory extends ContractFactory {
 
   static readonly bytecode = bytecode;
+  static readonly storageSlots: StorageSlot[] = storageSlots;
 
   constructor(accountOrProvider: Account | Provider) {
     super(bytecode, abi, accountOrProvider);
