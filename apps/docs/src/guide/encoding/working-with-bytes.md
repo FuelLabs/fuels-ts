@@ -32,7 +32,7 @@ These are fixed-length byte arrays, with `b256` containing 256 bits and `b512` c
 
 ## Automatically Encoded Types
 
-These are the types that will contain nested types and no additional encoding is required other than the encoding of the nested types. This is relevant to `array`s, `tuple`s, and `struct`s and `enum`s. The only caveat here, is an `enum` will also contain a `u64` representing the `enum` case value. `option`s are encoded in the same way as `enum`s.
+These are the types that will contain nested types and no additional encoding is required other than the encoding of the nested types. This is relevant to `array`s, `tuple`s, `struct`s, and `enum`s. The only caveat here, is an `enum` will also contain a `u64` representing the `enum` case value. `option`s are encoded in the same way as `enum`s.
 
 <<< @/../../docs-snippets/src/guide/encoding/working-with-bytes.test.ts#working-with-bytes-5{ts:line-numbers}
 
