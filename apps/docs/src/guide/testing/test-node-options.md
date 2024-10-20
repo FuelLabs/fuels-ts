@@ -30,7 +30,7 @@ The `TestAssetId` utility integrates with [`walletsConfig`](./test-node-options.
 
 ### `walletsConfig.messages`
 
-The `TestMessage` helper class is used to create messages for testing purposes. When passed via `walletsConfig.messages`, the `recipient` field of the message is overriden to be the wallet's address.
+The `TestMessage` helper class is used to create messages for testing purposes. When passed via `walletsConfig.messages`, the `recipient` field of the message is overridden to be the wallet's address.
 
 <<< @/../../docs-snippets/src/guide/testing/launching-a-test-node.test.ts#test-messages{ts:line-numbers}
 
