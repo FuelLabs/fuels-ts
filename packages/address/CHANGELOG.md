@@ -1,5 +1,28 @@
 # Change Log
 
+## 0.96.1
+
+### Patch Changes
+
+- 4ae041e: chore: use `FuelError` instead of JS `Error`
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
+## 0.96.0
+
+### Minor Changes
+
+- 5bf6621: fix!: checksum method to remove `0x` before hashing
+
+### Patch Changes
+
+- @fuel-ts/crypto@0.96.0
+- @fuel-ts/errors@0.96.0
+- @fuel-ts/interfaces@0.96.0
+- @fuel-ts/utils@0.96.0
+
 ## 0.95.0
 
 ### Minor Changes

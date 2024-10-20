@@ -786,6 +786,16 @@ query isUserAccount(
   }
 }
 
+query getConsensusParametersVersion {
+  chain {
+    latestBlock {
+      header {
+        consensusParametersVersion
+      }
+    }
+  }
+}
+
 subscription submitAndAwait($encodedTransaction: HexString!) {
   submitAndAwait(tx: $encodedTransaction) {
     ...transactionStatusSubscriptionFragment
