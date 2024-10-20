@@ -21,9 +21,14 @@ import type { BytesLike } from '@fuel-ts/interfaces';
 import { bn } from '@fuel-ts/math';
 import { Contract } from '@fuel-ts/program';
 import type { StorageSlot } from '@fuel-ts/transactions';
-import { arrayify, isDefined } from '@fuel-ts/utils';
+import { arrayify, isDefined, hexlify } from '@fuel-ts/utils';
 
-import { getLoaderInstructions, getContractChunks } from './loader';
+import {
+  getLoaderInstructions,
+  getPredicateScriptLoaderInstructions,
+  getContractChunks,
+  getDataOffset,
+} from './loader';
 import { getContractId, getContractStorageRoot, hexlifyWithPrefix } from './util';
 
 /** Amount of percentage override for chunk sizes in blob transactions */
@@ -370,6 +375,88 @@ export default class ContractFactory {
     const waitForTransactionId = () => txIdPromise;
 
     return { waitForResult, contractId, waitForTransactionId };
+  }
+
+  async deployAsBlobTxForScript(): Promise<{
+    waitForResult: () => Promise<{
+      loaderBytecode: string;
+      configurableOffsetDiff: number;
+    }>;
+    blobId: string;
+  }> {
+    const account = this.getAccount();
+
+    const dataSectionOffset = getDataOffset(arrayify(this.bytecode));
+    const byteCodeWithoutDataSection = this.bytecode.slice(0, dataSectionOffset);
+
+    // Generate the associated create tx for the loader contract
+    const blobId = hash(byteCodeWithoutDataSection);
+
+    const bloTransactionRequest = this.blobTransactionRequest({
+      bytecode: byteCodeWithoutDataSection,
+    });
+
+    const { loaderBytecode, blobOffset } = getPredicateScriptLoaderInstructions(
+      arrayify(this.bytecode),
+      arrayify(blobId)
+    );
+
+    const configurableOffsetDiff = byteCodeWithoutDataSection.length - (blobOffset || 0);
+
+    const blobExists = (await account.provider.getBlobs([blobId])).length > 0;
+    if (blobExists) {
+      return {
+        waitForResult: () =>
+          Promise.resolve({ loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff }),
+        blobId,
+      };
+    }
+
+    // Check the account can afford to deploy all chunks and loader
+    let totalCost = bn(0);
+    const chainInfo = account.provider.getChain();
+    const gasPrice = await account.provider.estimateGasPrice(10);
+    const priceFactor = chainInfo.consensusParameters.feeParameters.gasPriceFactor;
+
+    const minGas = bloTransactionRequest.calculateMinGas(chainInfo);
+    const minFee = calculateGasFee({
+      gasPrice,
+      gas: minGas,
+      priceFactor,
+      tip: bloTransactionRequest.tip,
+    }).add(1);
+
+    totalCost = totalCost.add(minFee);
+
+    if (totalCost.gt(await account.getBalance())) {
+      throw new FuelError(ErrorCode.FUNDS_TOO_LOW, 'Insufficient balance to deploy contract.');
+    }
+
+    // Transaction id is unset until we have funded the create tx, which is dependent on the blob txs
+    const waitForResult = async () => {
+      // Deploy the chunks as blob txs
+      const fundedBlobRequest = await this.fundTransactionRequest(bloTransactionRequest);
+
+      let result: TransactionResult<TransactionType.Blob>;
+
+      try {
+        const blobTx = await account.sendTransaction(fundedBlobRequest);
+        result = await blobTx.waitForResult();
+      } catch (err: unknown) {
+        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+      }
+
+      if (!result.status || result.status !== TransactionStatus.success) {
+        throw new FuelError(ErrorCode.TRANSACTION_FAILED, 'Failed to deploy contract chunk');
+      }
+
+      return { loaderBytecode: hexlify(loaderBytecode), configurableOffsetDiff };
+    };
+
+    return {
+      waitForResult,
+      blobId,
+    };
   }
 
   /**
