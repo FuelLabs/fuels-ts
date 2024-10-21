@@ -1,5 +1,29 @@
 # Change Log
 
+## 0.96.1
+
+### Patch Changes
+
+- 85072f7: fix: setup listeners current connector
+- 6b7b6de: feat: ensure that we fetch node info per estimation
+- b78d032: chore: validate tx max number of inputs
+- 987aed3: feat: using gas modifier at `Provider.getTransactionCost`
+- Updated dependencies [eb3b6c9]
+- Updated dependencies [4ae041e]
+- Updated dependencies [bdfd009]
+- Updated dependencies [987aed3]
+  - @fuel-ts/versions@0.96.1
+  - @fuel-ts/address@0.96.1
+  - @fuel-ts/math@0.96.1
+  - @fuel-ts/errors@0.96.1
+  - @fuel-ts/utils@0.96.1
+  - @fuel-ts/transactions@0.96.1
+  - @fuel-ts/abi-coder@0.96.1
+  - @fuel-ts/crypto@0.96.1
+  - @fuel-ts/merkle@0.96.1
+  - @fuel-ts/hasher@0.96.1
+  - @fuel-ts/interfaces@0.96.1
+
 ## 0.96.0
 
 ### Patch Changes
