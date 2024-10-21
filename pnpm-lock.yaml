@@ -666,6 +666,8 @@ importers:
         specifier: workspace:*
         version: link:../tsup
 
+  packages/abi: {}
+
   packages/abi-coder:
     dependencies:
       '@fuel-ts/crypto':
@@ -945,6 +947,9 @@ importers:
 
   packages/fuel-gauge:
     dependencies:
+      '@fuel-ts/abi':
+        specifier: workspace:*
+        version: link:../abi
       fuels:
         specifier: workspace:*
         version: link:../fuels
