@@ -16,6 +16,7 @@ export function renderFuelsConfigTemplate(props: {
   forcPath?: string;
   fuelCorePath?: string;
   autoStartFuelCore?: boolean;
+  fuelCorePort?: string;
 }) {
   const renderTemplate = Handlebars.compile(fuelsConfigTemplate, {
     strict: true,
