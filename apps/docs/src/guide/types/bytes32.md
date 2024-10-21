@@ -6,13 +6,13 @@ In Sway and the FuelVM, `bytes32` is used to represent hashes. It holds a 256-bi
 
 To generate a random `bytes32` value, you can use the `randomBytes` function from the fuels module:
 
-<<< @/../../docs-snippets/src/guide/types/bytes32.test.ts#bytes32-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/bytes32/generating-random-bytes32.ts#snippet-1{ts:line-numbers}
 
 ## Converting Between Byte Arrays and Strings
 
 You can use the `hexlify` function to convert a byte array to a hex string, and the `arrayify` function to convert a hex string back to a byte array:
 
-<<< @/../../docs-snippets/src/guide/types/bytes32.test.ts#bytes32-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/types/bytes32/converting-between-byte.ts#snippet-1{ts:line-numbers}
 
 ## Working with b256 in Fuel
 
