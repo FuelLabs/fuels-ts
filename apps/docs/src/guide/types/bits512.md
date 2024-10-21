@@ -4,11 +4,7 @@ In Sway, the `b512` type is commonly used to handle public keys and signatures. 
 
 The `b512` type in Sway is a wrapper around two `b256` types, allowing for the representation of 64-byte values. It is defined as a struct:
 
-```rs
-pub struct B512 {
-  bytes: [b256; 2],
-}
-```
+<<< @/../../docs-snippets2/sway/bytecode-input/src/main.sw#b512-1{rs:line-numbers}
 
 ## `b512` in the SDK
 

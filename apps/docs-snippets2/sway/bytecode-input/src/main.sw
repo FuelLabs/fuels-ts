@@ -4,6 +4,13 @@ abi MyContract {
     fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256;
 }
 
+// #region b512-1
+pub struct B512 {
+    /// The two `b256`s that make up the `B512`.
+    bits: [b256; 2],
+}
+// #endregion b512-1
+
 impl MyContract for Contract {
     // #region vector-bytecode-input-sway
     fn compute_bytecode_root(bytecode_input: Vec<u8>) -> b256 {
