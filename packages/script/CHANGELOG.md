@@ -1,5 +1,21 @@
 # Change Log
 
+## 0.96.2
+
+### Patch Changes
+
+- Updated dependencies [9dba357]
+- Updated dependencies [eede61c]
+  - @fuel-ts/account@0.96.2
+  - @fuel-ts/errors@0.96.2
+  - @fuel-ts/utils@0.96.2
+  - @fuel-ts/program@0.96.2
+  - @fuel-ts/abi-coder@0.96.2
+  - @fuel-ts/address@0.96.2
+  - @fuel-ts/math@0.96.2
+  - @fuel-ts/transactions@0.96.2
+  - @fuel-ts/interfaces@0.96.2
+
 ## 0.96.1
 
 ### Patch Changes

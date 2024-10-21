@@ -1,5 +1,12 @@
 # create-fuels
 
+## 0.96.2
+
+### Patch Changes
+
+- bf47c3d: build(deps): bump typescript-eslint from 8.5.0 to 8.8.0
+- 3a56354: chore: exclude `node_modules` in template tests
+
 ## 0.96.1
 
 ## 0.96.0
