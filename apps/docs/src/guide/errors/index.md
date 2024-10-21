@@ -330,4 +330,4 @@ When the number of transaction outputs exceeds the maximum limit allowed by the 
 
 When performing a funding operation, or calling `getResourcesToSpend`, this error can be thrown if the number of coins fetched per asset exceeds the maximum limit allowed by the blockchain.
 
-This can be avoided by paginating the results of the `getCoins` method to fund your transaction, or by reducing the number of UTXOs for your account. This can be done by performing a transfer that amalgamates your UTXOs, as demonstrated in this cookbook.
+This can be avoided by paginating the results of the `getCoins` method to fund your transaction, or by reducing the number of UTXOs for your account. This can be done by performing a transfer that amalgamates your UTXOs, as demonstrated in [this cookbook](../cookbook/combining-utxos.md).
