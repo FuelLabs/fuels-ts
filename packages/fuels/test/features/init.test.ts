@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import { existsSync, readFileSync } from 'fs';
 
 import { Commands } from '../../src';
+import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import { mockLogger } from '../utils/mockLogger';
 import {
   bootstrapProject,
@@ -19,6 +20,7 @@ describe('init', () => {
 
   beforeEach(() => {
     mockLogger();
+    mockCheckForUpdates();
   });
 
   afterEach(() => {
