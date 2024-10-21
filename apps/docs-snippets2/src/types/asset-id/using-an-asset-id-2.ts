@@ -12,7 +12,7 @@ const { contract } = await deploy.waitForResult();
 const { value } = await contract.functions.echo_asset_id().get();
 
 console.log('value', value);
-// const assetId: AssetId = {
+// const value: AssetId = {
 //   bits: '0x9ae5b658754e096e4d681c548daf46354495a437cc61492599e33fc64dcdc30c',
 // };
 // #endregion snippet-1
