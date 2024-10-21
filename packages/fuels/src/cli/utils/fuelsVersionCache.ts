@@ -16,12 +16,13 @@ export const checkAndLoadCache = (): FuelsVersionCache | null => {
 
   if (doesVersionCacheExist) {
     const cachedVersion = fs.readFileSync(FUELS_VERSION_CACHE_FILE, 'utf-8').trim();
+
     if (!cachedVersion) {
       return null;
     }
 
     const { mtimeMs: cacheTimestamp } = fs.statSync(FUELS_VERSION_CACHE_FILE);
-    const hasCacheExpired = Date.now() - cacheTimestamp < FUELS_VERSION_CACHE_TTL;
+    const hasCacheExpired = Date.now() - cacheTimestamp > FUELS_VERSION_CACHE_TTL;
 
     return hasCacheExpired ? null : cachedVersion;
   }
