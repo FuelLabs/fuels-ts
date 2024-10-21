@@ -38,7 +38,7 @@ Once the predicate resolves with a return value `true` based on its predefined c
 
 ---
 
-In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](../../api/Account/ScriptTransactionRequest.md). Then, we can submit this transaction request by calling the `sendTransaction` method.
+In a similar approach, you can use the `createTransfer` method, which returns a [`ScriptTransactionRequest`](https://fuels-ts-docs-api.vercel.app/Account/ScriptTransactionRequest.md). Then, we can submit this transaction request by calling the `sendTransaction` method.
 
 <<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
 
