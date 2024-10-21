@@ -22,10 +22,10 @@ The maximum amount you're willing to pay for the transaction using the base asse
 
 The following snippet shows which transaction parameters correspond to which policies:
 
-<<< @/../../docs-snippets/src/guide/transactions/transaction-policies.test.ts#transaction-policies-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/transactions/transaction-policies/setting-policies.ts#transaction-policies-1{ts:line-numbers}
 
 ## Retrieving Transaction Policies from a Transaction
 
 Policies used for a transaction can be retrieved from a transaction using a `TransactionResponse`. The below snippet will show how to retrieve the policies from a transaction:
 
-<<< @/../../docs-snippets/src/guide/transactions/transaction-policies.test.ts#transaction-policies-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/transactions/transaction-policies/policies-from-response.ts#transaction-policies-2{ts:line-numbers}
