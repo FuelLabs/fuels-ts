@@ -1,5 +1,22 @@
 # create-fuels
 
+## 0.96.1
+
+## 0.96.0
+
+## 0.95.0
+
+### Patch Changes
+
+- d4e839f: chore: `fuel-core@0.37.1`, `forc@0.65.1`, and `create-fuels` toolchains
+
+## 0.94.9
+
+### Patch Changes
+
+- c2f0599: feat: deploying scripts and predicates
+- 8ea97cc: build(deps): bump the deps-minor group with 9 updates
+
 ## 0.94.8
 
 ### Patch Changes

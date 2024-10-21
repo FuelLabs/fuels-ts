@@ -302,6 +302,8 @@ export class Account extends AbstractAccount {
       );
     }
 
+    this.provider.validateTransaction(request);
+
     request.updatePredicateGasUsed(estimatedPredicates);
 
     const requestToReestimate = clone(request);
