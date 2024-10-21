@@ -119,6 +119,16 @@ export function getContractName(contractPath: string) {
   return project.name;
 }
 
+export function getScriptName(scriptPath: string) {
+  const { project } = readForcToml(scriptPath);
+  return project.name;
+}
+
+export function getPredicateName(predicatePath: string) {
+  const { project } = readForcToml(predicatePath);
+  return project.name;
+}
+
 export function getContractCamelCase(contractPath: string) {
   const projectName = getContractName(contractPath);
   return camelCase(projectName);

@@ -1,6 +1,6 @@
 {
   "name": "@fuel-ts/versions",
-  "version": "0.94.8",
+  "version": "0.96.1",
   "description": "Validates supported versions of the Fuel toolchain",
   "author": "Fuel Labs <contact@fuel.sh> (https://fuel.network/)",
   "bin": {

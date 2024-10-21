@@ -1,64 +1,39 @@
-import {
-  getBinaryPath,
-  getABIPath,
-  getContractName,
-  getContractCamelCase,
-  getStorageSlotsPath,
-  readForcToml,
-  getClosestForcTomlDir,
-} from '../../config/forcUtils';
-import type { FuelsConfig, DeployedContract } from '../../types';
-import { debug, log } from '../../utils/logger';
+import type { FuelsConfig } from '../../types';
+import { generateTypes } from '../build/generateTypes';
 
-import { createWallet } from './createWallet';
-import { deployContract } from './deployContract';
-import { getDeployConfig } from './getDeployConfig';
+import { deployContracts } from './deployContracts';
+import { deployPredicates } from './deployPredicates';
+import { deployScripts } from './deployScripts';
 import { saveContractIds } from './saveContractIds';
+import { savePredicateFiles } from './savePredicateFiles';
+import { saveScriptFiles } from './saveScriptFiles';
 
 export async function deploy(config: FuelsConfig) {
-  const contracts: DeployedContract[] = [];
+  /**
+   * Deploy contract and save their IDs to JSON file.
+   */
+  const contractIds = await deployContracts(config);
+  await saveContractIds(contractIds, config.output);
 
-  const wallet = await createWallet(config.providerUrl, config.privateKey);
+  config.onDeploy?.(config, contractIds);
 
-  log(`Deploying contracts to: ${wallet.provider.url}`);
+  /**
+   * Deploy scripts and save deployed files to disk.
+   */
+  const scripts = await deployScripts(config);
+  saveScriptFiles(scripts, config);
 
-  const contractsLen = config.contracts.length;
+  /**
+   * Deploy predicates and save deployed files to disk.
+   */
+  const predicates = await deployPredicates(config);
+  savePredicateFiles(predicates, config);
 
-  for (let i = 0; i < contractsLen; i++) {
-    const contractPath = config.contracts[i];
-    const forcTomlPath = getClosestForcTomlDir(contractPath);
-    const binaryPath = getBinaryPath(contractPath, config);
-    const abiPath = getABIPath(contractPath, config);
-    const storageSlotsPath = getStorageSlotsPath(contractPath, config);
-    const projectName = getContractName(contractPath);
-    const contractName = getContractCamelCase(contractPath);
-    const tomlContents = readForcToml(forcTomlPath);
-    const deployConfig = await getDeployConfig(config.deployConfig, {
-      contracts: Array.from(contracts),
-      contractName,
-      contractPath,
-    });
+  /**
+   * After deploying scripts/predicates, we need to
+   * re-generate factory classe with the loader coee
+   */
+  await generateTypes(config);
 
-    const contractId = await deployContract(
-      wallet,
-      binaryPath,
-      abiPath,
-      storageSlotsPath,
-      deployConfig,
-      contractPath,
-      tomlContents
-    );
-
-    debug(`Contract deployed: ${projectName} - ${contractId}`);
-
-    contracts.push({
-      name: contractName,
-      contractId,
-    });
-  }
-
-  await saveContractIds(contracts, config.output);
-  config.onDeploy?.(config, contracts);
-
-  return contracts;
+  return contractIds;
 }

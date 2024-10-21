@@ -1,5 +1,5 @@
 import { FuelError } from '@fuel-ts/errors';
-import { expectToThrowFuelError } from '@fuel-ts/errors/test-utils';
+import { expectToThrowFuelError, safeExec } from '@fuel-ts/errors/test-utils';
 import type { Account, CoinTransactionRequestInput } from 'fuels';
 import { DEFAULT_RESOURCE_CACHE_TTL, ScriptTransactionRequest, Wallet, bn, sleep } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
@@ -507,12 +507,20 @@ describe('Funding Transactions', () => {
     await sleep(100);
 
     // Submitting TX 2 before TX 1 finished to process.
-    await expectToThrowFuelError(
-      () => fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId()),
-      new FuelError(
-        FuelError.CODES.INVALID_REQUEST,
-        'Transaction is not inserted. Hash is already known'
-      )
+    await expect(() =>
+      fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId())
+    ).rejects.toThrowError(
+      /Transaction input validation failed: Transaction id already exists \(id: .*\)/
+    );
+
+    const { error: e } = await safeExec(async () => {
+      await fundedWallet.transfer(receiver.address, transferAmount, provider.getBaseAssetId());
+    });
+
+    const error = <FuelError>e;
+    expect(error.code).toEqual(FuelError.CODES.INVALID_REQUEST);
+    expect(error.message).toMatch(
+      /Transaction input validation failed: Transaction id already exists \(id: .*\)/
     );
   }, 15_000);
 });
