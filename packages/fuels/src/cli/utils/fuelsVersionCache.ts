@@ -15,7 +15,7 @@ export const checkAndLoadCache = (): FuelsVersionCache | null => {
   const doesVersionCacheExist = fs.existsSync(FUELS_VERSION_CACHE_FILE);
 
   if (doesVersionCacheExist) {
-    const cachedVersion = fs.readFileSync(FUELS_VERSION_CACHE_FILE, 'utf-8');
+    const cachedVersion = fs.readFileSync(FUELS_VERSION_CACHE_FILE, 'utf-8').trim();
     if (!cachedVersion) {
       return null;
     }
