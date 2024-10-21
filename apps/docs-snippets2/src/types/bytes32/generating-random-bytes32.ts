@@ -1,6 +1,5 @@
 // #region snippet-1
-import { randomBytes } from 'crypto';
-import type { Bytes } from 'fuels';
+import { randomBytes, type Bytes } from 'fuels';
 
 const bytes32: Bytes = randomBytes(32);
 
