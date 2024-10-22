@@ -1,5 +1,4 @@
 import { FuelError } from '@fuel-ts/errors';
-import { versions } from '@fuel-ts/versions';
 import toml from '@iarna/toml';
 import chalk from 'chalk';
 import { execSync } from 'child_process';
@@ -125,7 +124,7 @@ export const runScaffoldCli = async ({
   const fuelsVersion = getPackageVersion(args);
   const newPackageJsonContents = packageJsonContents
     .replace(`pnpm run prebuild`, packageManager.run('prebuild'))
-    .replace(`"fuels": "${versions.FUELS}"`, `"fuels": "${fuelsVersion}"`);
+    .replace(/"fuels": ".*"/, `"fuels": "${fuelsVersion}"`);
 
   writeFileSync(packageJsonPath, newPackageJsonContents);
 
