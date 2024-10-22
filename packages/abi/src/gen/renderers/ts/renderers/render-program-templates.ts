@@ -20,10 +20,13 @@ export function renderProgramTemplates(
 
   const results: TsAbiGenResult[] = [
     {
+      programType: abi.programType,
       filename: `${name}-abi.json`,
       content: programDetails.abiContents,
     },
     {
+      programType: abi.programType,
+
       filename: `${name}-bytecode.ts`,
       content: renderHbsTemplate({ template: bytecodeTemplate, versions, data: { binCompressed } }),
     },
@@ -33,6 +36,7 @@ export function renderProgramTemplates(
     case 'contract':
       results.push(
         {
+          programType: abi.programType,
           filename: `${name}.ts`,
           content: renderHbsTemplate({
             template: contractTemplate,
@@ -42,6 +46,7 @@ export function renderProgramTemplates(
           exportInIndexFile: true,
         },
         {
+          programType: abi.programType,
           filename: `${name}Factory.ts`,
           content: renderHbsTemplate({
             template: contractFactoryTemplate,
@@ -51,6 +56,7 @@ export function renderProgramTemplates(
           exportInIndexFile: true,
         },
         {
+          programType: abi.programType,
           filename: `${name}-storage-slots.json`,
           content: programDetails.storageSlots as string,
         }
@@ -58,6 +64,7 @@ export function renderProgramTemplates(
       break;
     case 'predicate':
       results.push({
+        programType: abi.programType,
         filename: `${name}.ts`,
         content: renderHbsTemplate({
           template: predicateTemplate,
@@ -69,6 +76,7 @@ export function renderProgramTemplates(
       break;
     case 'script':
       results.push({
+        programType: abi.programType,
         filename: `${name}.ts`,
         content: renderHbsTemplate({
           template: scriptTemplate,
@@ -86,7 +94,7 @@ export function renderProgramTemplates(
       break;
   }
 
-  const withParentDir = getParentDirWrapper(abi.programType);
+  const { withParentDir } = getParentDirWrapper(abi.programType);
 
   return results.map((r) => ({ ...r, filename: withParentDir(r.filename) }));
 }

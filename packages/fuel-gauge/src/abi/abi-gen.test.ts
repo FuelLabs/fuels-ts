@@ -13,6 +13,7 @@ describe('AbiGen', () => {
       ['index', 'index.ts'],
       ['common', 'common.ts'],
 
+      ['contract-index', 'contracts/index.ts'],
       ['contract', 'contracts/AbiContract.ts'],
       ['contract-types', 'contracts/AbiContractTypes.ts'],
       ['contract-factory', 'contracts/AbiContractFactory.ts'],
@@ -20,11 +21,13 @@ describe('AbiGen', () => {
       ['contract-abi', 'contracts/AbiContract-abi.json'],
       ['contract-storage-slots', 'contracts/AbiContract-storage-slots.json'],
 
+      ['predicate-index', 'predicates/index.ts'],
       ['predicate', 'predicates/AbiPredicate.ts'],
       ['predicate-types', 'predicates/AbiPredicateTypes.ts'],
       ['predicate-abi', 'predicates/AbiPredicate-abi.json'],
-      ['script', 'scripts/AbiScript.ts'],
 
+      ['script-index', 'scripts/index.ts'],
+      ['script', 'scripts/AbiScript.ts'],
       ['script-types', 'scripts/AbiScriptTypes.ts'],
       ['script-abi', 'scripts/AbiScript-abi.json'],
     ]);

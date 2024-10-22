@@ -127,7 +127,7 @@ export function renderTypesTemplate(
     },
   });
 
-  const withParentDir = getParentDirWrapper(abi.programType);
+  const { withParentDir } = getParentDirWrapper(abi.programType);
 
   return {
     filename: withParentDir(`${name}Types.ts`),

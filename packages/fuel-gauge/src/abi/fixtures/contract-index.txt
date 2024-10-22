@@ -9,6 +9,5 @@
 */
 
 
-export * from './contracts';
-export * from './predicates';
-export * from './scripts';
+export * from './AbiContract';
+export * from './AbiContractFactory';
