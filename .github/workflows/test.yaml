@@ -164,11 +164,11 @@ jobs:
         run: pnpm test:coverage-diff
 
       - name: Report Coverage
-        uses: thollander/actions-comment-pull-request@v2
+        uses: thollander/actions-comment-pull-request@v3
         if: ${{ steps.findPr.outputs.number }}
         with:
-          filePath: coverage/report/coverage-diff.txt
-          pr_number: ${{ (steps.findPr.outputs.number) }}
-          comment_tag: diff
+          file-path: coverage/report/coverage-diff.txt
+          pr-number: ${{ (steps.findPr.outputs.number) }}
+          comment-tag: diff
           mode: recreate
-          create_if_not_exists: true
+          create-if-not-exists: true
