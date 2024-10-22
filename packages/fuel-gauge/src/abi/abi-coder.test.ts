@@ -477,7 +477,6 @@ describe('AbiCoder', () => {
       const expected = [EXPECTED_STRUCT, EXPECTED_STRUCT];
 
       const { waitForResult } = await contract.functions
-        // @ts-expect-error - @TODO remove once typegen remastered
         .types_array_with_generic_struct(input)
         .call();
 
@@ -491,7 +490,6 @@ describe('AbiCoder', () => {
       const input = [[1, 2, 3]];
       const expected = [[3, 2, 1]];
 
-      // @ts-expect-error - @TODO remove once typegen remastered
       const { waitForResult } = await contract.functions.types_array_with_vector(input).call();
 
       const { value } = await waitForResult();
@@ -520,7 +518,6 @@ describe('AbiCoder', () => {
       // @todo resolve this issue.
       const expected = [3, { a: { a: expect.toEqualBn(30) } }, 'CBA'];
 
-      // @ts-expect-error - @TODO remove once typegen remastered
       const { waitForResult } = await contract.functions.types_tuple_complex(input).call();
 
       const { value } = await waitForResult();
@@ -539,7 +536,6 @@ describe('AbiCoder', () => {
       const expected = [B, A, false];
 
       const { waitForResult } = await contract.functions
-        // @ts-expect-error - @TODO remove once typegen remastered
         .types_tuple_with_native_types(input)
         .call();
 
@@ -559,7 +555,6 @@ describe('AbiCoder', () => {
       const expected = [B, A, false];
 
       const { waitForResult } = await contract.functions
-        // @ts-expect-error - @TODO remove once typegen remastered
         .types_alias_tuple_with_native_types(input)
         .call();
 
@@ -1164,7 +1159,7 @@ describe('AbiCoder', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 1;
       const inputY = 2;
-      // @ts-expect-error: Custom matcher 'toEqualBn's
+      // @ts-expect-error: Custom matcher 'toEqualBn'
       const expected = expect.toEqualBn(3);
 
       const { waitForResult } = await contract.functions.multi_arg_u64_u64(inputX, inputY).call();
