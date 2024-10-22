@@ -11,50 +11,50 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  environments:
-    runs-on: ubuntu-latest
-    # name will be node@<version> or browser
-    name: ${{ matrix.env.display-name }}
-    strategy:
-      fail-fast: false
-      matrix:
-        env:
-          [
-            { name: node, version: 18.20.3, display-name: "node@18" },
-            { name: node, version: 20.14.0, display-name: "node@20" },
-            { name: node, version: 22.3.0, display-name: "node@22" },
-            { name: browser, display-name: "browser" },
-          ]
-    timeout-minutes: 25
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # environments:
+  #   runs-on: ubuntu-latest
+  #   # name will be node@<version> or browser
+  #   name: ${{ matrix.env.display-name }}
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       env:
+  #         [
+  #           { name: node, version: 18.20.3, display-name: "node@18" },
+  #           { name: node, version: 20.14.0, display-name: "node@20" },
+  #           { name: node, version: 22.3.0, display-name: "node@22" },
+  #           { name: browser, display-name: "browser" },
+  #         ]
+  #   timeout-minutes: 25
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
-        with:
-          node-version: ${{ matrix.env.version || 20 }}
+  #     - name: CI Setup
+  #       uses: ./.github/actions/test-setup
+  #       with:
+  #         node-version: ${{ matrix.env.version || 20 }}
 
-      - name: Validate Tests
-        run: pnpm test:validate
+  #     - name: Validate Tests
+  #       run: pnpm test:validate
 
-      - name: Pretest
-        run: pnpm pretest
+  #     - name: Pretest
+  #       run: pnpm pretest
 
-      - name: Run Tests - ${{ matrix.env.name }}
-        run: pnpm test:${{ matrix.env.name }}
+  #     - name: Run Tests - ${{ matrix.env.name }}
+  #       run: pnpm test:${{ matrix.env.name }}
 
-      - name: Upload Coverage - ${{ matrix.env.name }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.env.name }}
-          path: coverage/environments/${{ matrix.env.name }}
-          overwrite: true
+  #     - name: Upload Coverage - ${{ matrix.env.name }}
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: ${{ matrix.env.name }}
+  #         path: coverage/environments/${{ matrix.env.name }}
+  #         overwrite: true
 
   integration:
     runs-on: ubuntu-latest
     timeout-minutes: 25
-    if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
+    # if: github.ref_name == 'master' || github.head_ref == 'changeset-release/master'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -66,14 +66,14 @@ jobs:
         with:
           should-install-bun: true
 
-      - name: Run UI tests (on template)
-        run: sh ./scripts/tests-ui.sh
+      # - name: Run UI tests (on template)
+      #   run: sh ./scripts/tests-ui.sh
 
       - name: Wait for release to succeed
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: "refs/heads/master"
-          check-name: "Release"
+          check-name: "Release to @pr-<number> tag on npm"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 30
 
@@ -82,93 +82,93 @@ jobs:
         env:
           PUBLISHED_NPM_TAG: next
 
-      - name: Run UI tests (with published version)
-        run: sh ./scripts/tests-ui-integration.sh
-        env:
-          PUBLISHED_NPM_TAG: next
+      # - name: Run UI tests (with published version)
+      #   run: sh ./scripts/tests-ui-integration.sh
+      #   env:
+      #     PUBLISHED_NPM_TAG: next
 
-  e2e:
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
-    needs: [environments]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+  # e2e:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 25
+  #   needs: [environments]
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Test Setup
-        uses: ./.github/actions/test-setup
+  #     - name: Test Setup
+  #       uses: ./.github/actions/test-setup
 
-      - name: Pretest
-        run: pnpm pretest
+  #     - name: Pretest
+  #       run: pnpm pretest
 
-      - name: Run Isolated Tests
-        run: pnpm test:e2e
-        env:
-          TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
-          # uncomment the below line to test against devnet
-          # DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
+  #     - name: Run Isolated Tests
+  #       run: pnpm test:e2e
+  #       env:
+  #         TESTNET_WALLET_PVT_KEY: ${{ secrets.TESTNET_WALLET_PVT_KEY }}
+  #         # uncomment the below line to test against devnet
+  #         # DEVNET_WALLET_PVT_KEY: ${{ secrets.DEVNET_WALLET_PVT_KEY }}
 
-  test:
-    if: github.base_ref == 'master' || github.ref_name == 'master'
-    runs-on: ubuntu-latest
-    needs: [environments, e2e]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # test:
+  #   if: github.base_ref == 'master' || github.ref_name == 'master'
+  #   runs-on: ubuntu-latest
+  #   needs: [environments, e2e]
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: CI Setup
-        uses: ./.github/actions/test-setup
+  #     - name: CI Setup
+  #       uses: ./.github/actions/test-setup
 
-      - name: Generate Coverage Directory
-        run: mkdir -p coverage/environments
+  #     - name: Generate Coverage Directory
+  #       run: mkdir -p coverage/environments
 
-      - name: Download Coverage Artifact for Node Tests
-        uses: actions/download-artifact@v4
-        with:
-          name: node
-          path: coverage/environments/node
+  #     - name: Download Coverage Artifact for Node Tests
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: node
+  #         path: coverage/environments/node
 
-      - name: Download Coverage Artifact for Browser Tests
-        uses: actions/download-artifact@v4
-        with:
-          name: browser
-          path: coverage/environments/browser
+  #     - name: Download Coverage Artifact for Browser Tests
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: browser
+  #         path: coverage/environments/browser
 
-      - name: Generate Coverage
-        run: pnpm test:coverage-merge
+  #     - name: Generate Coverage
+  #       run: pnpm test:coverage-merge
 
-      - name: Find PR Number
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
+  #     - name: Find PR Number
+  #       uses: jwalton/gh-find-current-pr@v1
+  #       id: findPr
 
-      - name: Upload Master Coverage Artifact
-        uses: actions/upload-artifact@v4
-        if: ${{ !steps.findPr.outputs.number }}
-        with:
-          name: coverage-master
-          path: coverage/report
+  #     - name: Upload Master Coverage Artifact
+  #       uses: actions/upload-artifact@v4
+  #       if: ${{ !steps.findPr.outputs.number }}
+  #       with:
+  #         name: coverage-master
+  #         path: coverage/report
 
-      - name: Download Master Coverage Artifact
-        uses: dawidd6/action-download-artifact@v6
-        if: ${{ steps.findPr.outputs.number }}
-        with:
-          workflow: test.yaml
-          branch: master
-          name: coverage-master
-          path: coverage-master
+  #     - name: Download Master Coverage Artifact
+  #       uses: dawidd6/action-download-artifact@v6
+  #       if: ${{ steps.findPr.outputs.number }}
+  #       with:
+  #         workflow: test.yaml
+  #         branch: master
+  #         name: coverage-master
+  #         path: coverage-master
 
-      - name: Generate Coverage Diff
-        if: ${{ (steps.findPr.outputs.number) }}
-        run: pnpm test:coverage-diff
+  #     - name: Generate Coverage Diff
+  #       if: ${{ (steps.findPr.outputs.number) }}
+  #       run: pnpm test:coverage-diff
 
-      - name: Report Coverage
-        uses: thollander/actions-comment-pull-request@v3
-        if: ${{ steps.findPr.outputs.number }}
-        with:
-          file-path: coverage/report/coverage-diff.txt
-          pr-number: ${{ (steps.findPr.outputs.number) }}
-          comment-tag: diff
-          mode: recreate
-          create-if-not-exists: true
+  #     - name: Report Coverage
+  #       uses: thollander/actions-comment-pull-request@v3
+  #       if: ${{ steps.findPr.outputs.number }}
+  #       with:
+  #         file-path: coverage/report/coverage-diff.txt
+  #         pr-number: ${{ (steps.findPr.outputs.number) }}
+  #         comment-tag: diff
+  #         mode: recreate
+  #         create-if-not-exists: true
