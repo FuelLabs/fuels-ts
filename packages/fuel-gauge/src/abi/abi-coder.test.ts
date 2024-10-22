@@ -381,6 +381,7 @@ describe('AbiCoder', () => {
       );
     });
   });
+
   describe('types_str_slice', () => {
     it('should encode/decode just fine', async () => {
       const input = 'Input';
@@ -392,6 +393,7 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
   });
+
   describe('types_std_string', () => {
     it('should encode/decode just fine', async () => {
       const input = 'Input';
@@ -403,6 +405,7 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
   });
+
   describe('types_raw_slice', () => {
     it('should encode/decode just fine', async () => {
       const input: RawSlice = [1, 2, 3];
@@ -516,6 +519,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_tuple_complex', () => {
     it('should encode/decode just fine', async () => {
       const input = [1, { a: { a: 10 } }, 'ABC'] as [
@@ -533,6 +537,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_tuple_with_native_types', () => {
     it('should encode/decode just fine', async () => {
       const A: AssetId = {
@@ -552,6 +557,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_alias_tuple_with_native_types', () => {
     it('should encode/decode just fine', async () => {
       const A: AssetId = {
@@ -586,6 +592,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_generic', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: 10 };
@@ -597,6 +604,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_with_tuple', () => {
     it('should encode/decode just fine', async () => {
       const input: StructSingleGenericInput<[boolean, BigNumberish]> = { a: [true, 10] };
@@ -609,6 +617,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_double_generic', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: 10, b: { a: 10 } };
@@ -620,6 +629,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_external', () => {
     it('should encode/decode just fine', async () => {
       const input = { value: 10 };
@@ -632,6 +642,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_with_nested_array', () => {
     it('should encode/decode just fine', async () => {
       const INPUT_STRUCT = { a: { a: 10 }, b: 'A' };
@@ -649,6 +660,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(EXPECTED);
     });
   });
+
   describe('types_struct_with_nested_tuple', () => {
     it('should encode/decode just fine', async () => {
       const input: StructWithNestedTupleInput = { a: [10, { a: { a: 20 } }, 'ABC'] };
@@ -664,6 +676,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_with_nested_struct', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: { a: { a: 10 }, b: 20 } };
@@ -677,6 +690,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe.todo('types_struct_with_multiple_struct_params', () => {
     it('should encode/decode just fine', async () => {
       const STRUCT_A = { propA1: 10 };
@@ -702,6 +716,7 @@ describe('AbiCoder', () => {
       // expect(value).toEqual(expected);
     });
   });
+
   describe('types_struct_with_implicit_generics', () => {
     it('should encode/decode just fine', async () => {
       const INPUT_B256 = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -756,6 +771,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe.todo('types_struct_with_vector');
   describe.todo('types_struct_with_array_of_enums');
   describe.todo('types_struct_with_complex_nested_struct');
@@ -775,6 +791,7 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
   });
+
   describe('types_enum_with_builtin_type', () => {
     it('should encode/decode just fine', async () => {
       const input: EnumWithBuiltinTypeInput = { a: true };
@@ -788,6 +805,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_enum_with_vector', () => {
     it('should encode/decode just fine', async () => {
       const input: EnumWithVectorInput = { a: 10 };
@@ -799,6 +817,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_generic_enum', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: 10 };
@@ -810,6 +829,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_enum_external', () => {
     it('should encode/decode just fine', async () => {
       const input = ExternalEnumInput.A;
@@ -821,6 +841,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_enum_with_structs', () => {
     it('should encode/decode just fine', async () => {
       const input = { a: EnumWithNativeInput.Checked };
@@ -847,6 +868,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_boolean', () => {
     it('should encode/decode just fine', async () => {
       const input = [true, false, true, false];
@@ -858,6 +880,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_inside_vector', () => {
     it('should encode/decode just fine', async () => {
       const input = [[1, 2, 3]];
@@ -872,6 +895,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_with_struct', () => {
     it('should encode/decode just fine', async () => {
       const input = [{ a: true, b: 10 }];
@@ -883,6 +907,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_vector_option', () => {
     it('should encode/decode just fine', async () => {
       const input: Vec<StructWithMultiOptionInput> = [{ a: [1, 2, 3, 4, 5] }];
@@ -909,6 +934,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_option_struct', () => {
     it('should encode/decode just fine', async () => {
       const input: Option<StructSimpleInput> = {
@@ -941,6 +967,7 @@ describe('AbiCoder', () => {
       expect(value).toEqual(expected);
     });
   });
+
   describe('types_identity_address', () => {
     it('should encode/decode just fine', async () => {
       const input: IdentityInput = {
@@ -956,6 +983,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_identity_contract_id', () => {
     it('should encode/decode just fine', async () => {
       const input: IdentityInput = {
@@ -971,6 +999,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_address', () => {
     it('should encode/decode just fine', async () => {
       const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
@@ -984,6 +1013,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_contract_id', () => {
     it('should encode/decode just fine', async () => {
       const input = { bits: '0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' };
@@ -997,6 +1027,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_evm_address', () => {
     it('should encode/decode just fine', async () => {
       const input: EvmAddress = {
@@ -1012,6 +1043,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_result', () => {
     it('should accept result just fine [Ok - 10]', async () => {
       const input: Result<BigNumberish, BigNumberish> = {
@@ -1081,6 +1113,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('types_void_then_value', () => {
     it('should encode/decode just fine', async () => {
       const inputX = undefined;
@@ -1095,6 +1128,7 @@ describe('AbiCoder', () => {
       expect(value).toBe(expected);
     });
   });
+
   describe('types_value_then_void', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 10;
@@ -1116,6 +1150,7 @@ describe('AbiCoder', () => {
       expect(value).toBeUndefined();
     });
   });
+
   describe('types_value_then_void_then_value', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 10;
@@ -1130,6 +1165,7 @@ describe('AbiCoder', () => {
       expect(value).toBeUndefined();
     });
   });
+
   describe('types_value_then_value_then_void_then_void', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 10;
@@ -1177,6 +1213,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('multi_arg_b256_bool', () => {
     it('should encode/decode just fine', async () => {
       const inputX = '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
@@ -1192,6 +1229,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('multi_arg_vector_vector', () => {
     it('should encode/decode just fine', async () => {
       const inputX = [1, 2, 3];
@@ -1209,6 +1247,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('multi_arg_vector_b256', () => {
     it('should encode/decode just fine', async () => {
       const inputX = [1, 2, 3];
@@ -1226,6 +1265,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('multi_arg_struct_vector', () => {
     it('should encode/decode just fine', async () => {
       const inputX = { a: true, b: 1 };
@@ -1240,6 +1280,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('multi_arg_u64_struct', () => {
     it('should encode/decode just fine', async () => {
       const inputX = bn(99);
@@ -1254,6 +1295,7 @@ describe('AbiCoder', () => {
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
     });
   });
+
   describe('multi_arg_str_str', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 'Input';
@@ -1267,6 +1309,7 @@ describe('AbiCoder', () => {
       expect(value).toStrictEqual(expected);
     });
   });
+
   describe('multi_arg_u32_vector_vector', () => {
     it('should encode/decode just fine', async () => {
       const inputX = 1;
@@ -1283,6 +1326,7 @@ describe('AbiCoder', () => {
       expect(JSON.stringify(value)).toEqual(JSON.stringify(expected));
     });
   });
+
   describe('multi_arg_complex', () => {
     it('should encode/decode just fine', async () => {
       const inputX: StructDoubleGenericInput<[string, string, string], number> = {
