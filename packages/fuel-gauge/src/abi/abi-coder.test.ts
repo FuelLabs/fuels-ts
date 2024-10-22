@@ -22,6 +22,8 @@ import type {
   StructWithNestedTupleInput,
   StructSingleGenericInput,
   StructWithImplicitGenericsInput,
+  StructSingleGenericOutput,
+  AssetIdInput,
 } from '../../test/typegen/contracts/AbiContract';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
@@ -465,7 +467,10 @@ describe('AbiCoder', () => {
         },
         b: 'A',
       };
-      const input = [INPUT_STRUCT, INPUT_STRUCT];
+      const input = [INPUT_STRUCT, INPUT_STRUCT] as [
+        StructDoubleGenericInput<StructSingleGenericInput<BigNumberish>, string>,
+        StructDoubleGenericInput<StructSingleGenericInput<BigNumberish>, string>,
+      ];
 
       const EXPECTED_STRUCT = {
         a: {
@@ -487,7 +492,7 @@ describe('AbiCoder', () => {
 
   describe('types_array_with_vector', () => {
     it('should encode/decode just fine', async () => {
-      const input = [[1, 2, 3]];
+      const input = [[1, 2, 3]] as [Vec<BigNumberish>];
       const expected = [[3, 2, 1]];
 
       const { waitForResult } = await contract.functions.types_array_with_vector(input).call();
@@ -513,7 +518,11 @@ describe('AbiCoder', () => {
   });
   describe('types_tuple_complex', () => {
     it('should encode/decode just fine', async () => {
-      const input = [1, { a: { a: 10 } }, 'ABC'];
+      const input = [1, { a: { a: 10 } }, 'ABC'] as [
+        BigNumberish,
+        StructSingleGenericInput<StructSingleGenericInput<BigNumberish>>,
+        string,
+      ];
       // @ts-expect-error: Custom matcher 'toEqualBn'
       // @todo resolve this issue.
       const expected = [3, { a: { a: expect.toEqualBn(30) } }, 'CBA'];
@@ -532,7 +541,7 @@ describe('AbiCoder', () => {
       const B: AssetId = {
         bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
       };
-      const input = [A, B, true];
+      const input = [A, B, true] as [AssetIdInput, AssetIdInput, boolean];
       const expected = [B, A, false];
 
       const { waitForResult } = await contract.functions
@@ -551,7 +560,7 @@ describe('AbiCoder', () => {
       const B: AssetId = {
         bits: '0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
       };
-      const input = [A, B, true];
+      const input = [A, B, true] as [AssetIdInput, AssetIdInput, boolean];
       const expected = [B, A, false];
 
       const { waitForResult } = await contract.functions
