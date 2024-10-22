@@ -33,7 +33,7 @@ describe('fuelsVersionCache', () => {
     saveToCache(version);
 
     // Assert that writeFileSync was called
-    expect(writeFileMock).toHaveBeenCalled();
+    expect(writeFileMock).toHaveBeenCalledWith(FUELS_VERSION_CACHE_FILE, version, 'utf-8');
   });
 
   test('checkAndLoadCache - when cache exists', () => {
@@ -50,8 +50,17 @@ describe('fuelsVersionCache', () => {
     expect(result).toEqual(version);
   });
 
-  test('checkAndLoadCache - when cache does not exist', () => {
+  test('checkAndLoadCache - when cache file does not exist', () => {
     mockFileExists(false);
+
+    const result = checkAndLoadCache();
+
+    expect(result).toBeNull();
+  });
+
+  test('checkAndLoadCache - when cache file is empty', () => {
+    mockFileExists(true);
+    mockReadFile('');
 
     const result = checkAndLoadCache();
 
