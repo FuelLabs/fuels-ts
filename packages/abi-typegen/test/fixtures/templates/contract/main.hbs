@@ -689,28 +689,6 @@ const abi = {
       "inputs": [
         {
           "name": "x",
-          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
-        }
-      ],
-      "name": "types_address",
-      "output": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308",
-      "attributes": null
-    },
-    {
-      "inputs": [
-        {
-          "name": "x",
-          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
-        }
-      ],
-      "name": "types_contract_id",
-      "output": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
-      "attributes": null
-    },
-    {
-      "inputs": [
-        {
-          "name": "x",
           "concreteTypeId": "d255d7621a80835aee6d3d0643eaec25fbb2c3215ed140fcf98ceffa69d895bc"
         }
       ],
@@ -738,6 +716,17 @@ const abi = {
       ],
       "name": "type_identity",
       "output": "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335",
+      "attributes": null
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
+        }
+      ],
+      "name": "types_address",
+      "output": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308",
       "attributes": null
     },
     {
@@ -804,6 +793,17 @@ const abi = {
       ],
       "name": "types_bytes",
       "output": "cdd87b7d12fe505416570c294c884bca819364863efe3bf539245fa18515fbbb",
+      "attributes": null
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
+        }
+      ],
+      "name": "types_contract_id",
+      "output": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
       "attributes": null
     },
     {
@@ -1157,17 +1157,17 @@ export class MyContractInterface extends Interface {
 
   declare functions: {
     alias_types_tuple_with_native_types: FunctionFragment;
-    types_address: FunctionFragment;
-    types_contract_id: FunctionFragment;
     type_external_enum: FunctionFragment;
     type_external_struct: FunctionFragment;
     type_identity: FunctionFragment;
+    types_address: FunctionFragment;
     types_array: FunctionFragment;
     types_asset_id: FunctionFragment;
     types_b256: FunctionFragment;
     types_b512: FunctionFragment;
     types_bool: FunctionFragment;
     types_bytes: FunctionFragment;
+    types_contract_id: FunctionFragment;
     types_empty: FunctionFragment;
     types_empty_then_value: FunctionFragment;
     types_enum: FunctionFragment;
@@ -1206,17 +1206,17 @@ export class MyContract extends Contract {
   declare interface: MyContractInterface;
   declare functions: {
     alias_types_tuple_with_native_types: InvokeFunction<[x: [AssetIdInput, AssetIdInput, boolean]], [AssetIdOutput, AssetIdOutput, boolean]>;
-    types_address: InvokeFunction<[x: AddressInput], AddressOutput>;
-    types_contract_id: InvokeFunction<[x: ContractIdInput], ContractIdOutput>;
     type_external_enum: InvokeFunction<[x: ExternalEnumInput], ExternalEnumOutput>;
     type_external_struct: InvokeFunction<[x: ExternalStructInput], ExternalStructOutput>;
     type_identity: InvokeFunction<[x: IdentityInput], IdentityOutput>;
+    types_address: InvokeFunction<[x: AddressInput], AddressOutput>;
     types_array: InvokeFunction<[x: [BigNumberish, BigNumberish, BigNumberish]], [number, number, number]>;
     types_asset_id: InvokeFunction<[x: AssetIdInput], AssetIdOutput>;
     types_b256: InvokeFunction<[x: string], string>;
     types_b512: InvokeFunction<[x: string], string>;
     types_bool: InvokeFunction<[x: boolean], boolean>;
     types_bytes: InvokeFunction<[x: Bytes], Bytes>;
+    types_contract_id: InvokeFunction<[x: ContractIdInput], ContractIdOutput>;
     types_empty: InvokeFunction<[x?: undefined], void>;
     types_empty_then_value: InvokeFunction<[x: undefined, y: BigNumberish], void>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
