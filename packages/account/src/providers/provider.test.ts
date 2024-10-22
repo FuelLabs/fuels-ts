@@ -867,11 +867,17 @@ describe('Provider', () => {
     request.addCoinOutput(receiver.address, 500, provider.getBaseAssetId());
     request.addResources(resources);
 
+    // We need to add more resources manually here as a single `getResourcesToSpend` call
+    // will always truncate to `maxInputs`. So we need to add more resources manually
+    // to test our validation logic.
+    const moreResources = await sender.getResourcesToSpend(quantities);
+    request.addResources(moreResources);
+
     await expectToThrowFuelError(
       () => sender.sendTransaction(request),
       new FuelError(
         ErrorCode.MAX_INPUTS_EXCEEDED,
-        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: ${quantities.length}, max inputs: ${maxInputs}`
+        `The transaction exceeds the maximum allowed number of inputs. Tx inputs: 4, max inputs: ${maxInputs}`
       )
     );
   });
