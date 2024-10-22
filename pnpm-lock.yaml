@@ -890,6 +890,12 @@ importers:
 
   packages/create-fuels:
     dependencies:
+      '@fuel-ts/errors':
+        specifier: workspace:*
+        version: link:../errors
+      '@fuel-ts/versions':
+        specifier: workspace:*
+        version: link:../versions
       '@iarna/toml':
         specifier: ^2.2.5
         version: 2.2.5
@@ -906,12 +912,6 @@ importers:
         specifier: ^2.4.2
         version: 2.4.2
     devDependencies:
-      '@fuel-ts/errors':
-        specifier: workspace:*
-        version: link:../errors
-      '@fuel-ts/versions':
-        specifier: workspace:*
-        version: link:../versions
       '@types/prompts':
         specifier: ^2.4.8
         version: 2.4.9
@@ -4127,10 +4127,6 @@ packages:
 
   '@metamask/safe-event-emitter@2.0.0':
     resolution: {integrity: sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==}
-
-  '@metamask/safe-event-emitter@3.1.1':
-    resolution: {integrity: sha512-ihb3B0T/wJm1eUuArYP4lCTSEoZsClHhuWyfo/kMX3m/odpqNcPfsz5O2A3NT7dXCAgWPGDQGPqygCpgeniKMw==}
-    engines: {node: '>=12.0.0'}
 
   '@metamask/safe-event-emitter@3.1.2':
     resolution: {integrity: sha512-5yb2gMI1BDm0JybZezeoX/3XhPDOtTbcFvpTXM9kxsoZjPZFh4XciqRbpD6N86HYZqWDhEaKUDuOyR0sQHEjMA==}
@@ -20795,7 +20791,7 @@ snapshots:
       '@metamask/json-rpc-middleware-stream': 7.0.2
       '@metamask/object-multiplex': 2.0.0
       '@metamask/rpc-errors': 6.4.0
-      '@metamask/safe-event-emitter': 3.1.1
+      '@metamask/safe-event-emitter': 3.1.2
       '@metamask/utils': 8.5.0
       detect-browser: 5.3.0
       extension-port-stream: 3.0.0
@@ -20814,8 +20810,6 @@ snapshots:
       - supports-color
 
   '@metamask/safe-event-emitter@2.0.0': {}
-
-  '@metamask/safe-event-emitter@3.1.1': {}
 
   '@metamask/safe-event-emitter@3.1.2': {}
 
@@ -25964,7 +25958,7 @@ snapshots:
 
   bufferutil@4.0.8:
     dependencies:
-      node-gyp-build: 4.8.1
+      node-gyp-build: 4.8.2
 
   builtin-modules@3.3.0: {}
 
@@ -36121,7 +36115,7 @@ snapshots:
 
   utf-8-validate@5.0.10:
     dependencies:
-      node-gyp-build: 4.8.1
+      node-gyp-build: 4.8.2
 
   utf-8-validate@6.0.4:
     dependencies:
