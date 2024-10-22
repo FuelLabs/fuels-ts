@@ -151,22 +151,27 @@ impl AbiContract for Contract {
             GENERIC_STRUCT_VALUE: GENERIC_STRUCT_VALUE,
         }
     }
+
     fn types_u8(x: u8) -> u8 {
         assert_eq(x, 8);
         255
     }
+
     fn types_u16(x: u16) -> u16 {
         assert_eq(x, 16);
         65535
     }
+
     fn types_u32(x: u32) -> u32 {
         assert_eq(x, 32);
         4294967295
     }
+
     fn types_u64(x: u64) -> u64 {
         assert_eq(x, 64);
         4294967295000
     }
+
     fn types_u256(x: u256) -> u256 {
         assert_eq(x, 256);
         0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFu256
@@ -179,6 +184,7 @@ impl AbiContract for Contract {
         const EXPECTED: bool = true;
         return EXPECTED
     }
+
     fn types_b256(x: b256) -> b256 {
         const INPUT: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
         assert_eq(x, INPUT);
@@ -227,6 +233,7 @@ impl AbiContract for Contract {
         const EXPECTED: str[5] = __to_str_array("Hello");
         return EXPECTED;
     }
+
     fn types_str_slice(x: str) -> str {
         let INPUT = "Input";
         assert(x == INPUT);
@@ -234,6 +241,7 @@ impl AbiContract for Contract {
         let EXPECTED = "Output";
         return EXPECTED;
     }
+
     fn types_std_string(x: String) -> String {
         let INPUT = "Input";
         assert_eq(x, String::from_ascii_str(INPUT));
@@ -241,6 +249,7 @@ impl AbiContract for Contract {
         let EXPECTED = "Output";
         return String::from_ascii_str(EXPECTED);
     }
+
     fn types_raw_slice(x: raw_slice) -> raw_slice {
         let vec: Vec<u8> = Vec::from(x);
         require(vec.len() == 3, "raw slice len is not 3");
@@ -283,6 +292,7 @@ impl AbiContract for Contract {
         const EXPECTED: [u8; 4] = [4, 3, 2, 1];
         return EXPECTED
     }
+
     fn types_array_struct(x: [StructSimple; 3]) -> [StructSimple; 3] {
         const INPUT_STRUCT_1: StructSimple = StructSimple { a: true, b: 10 };
         const INPUT = [INPUT_STRUCT_1, INPUT_STRUCT_1, INPUT_STRUCT_1];
@@ -291,6 +301,7 @@ impl AbiContract for Contract {
         const EXPECTED_STRUCT: StructSimple = StructSimple { a: false, b: 30 };
         [EXPECTED_STRUCT, EXPECTED_STRUCT, EXPECTED_STRUCT]
     }
+
     fn types_array_with_generic_struct(
         x: [StructDoubleGeneric<StructSingleGeneric<u64>, str[1]>; 2],
     ) -> [StructDoubleGeneric<StructSingleGeneric<u64>, str[1]>; 2] {
@@ -309,6 +320,7 @@ impl AbiContract for Contract {
             };
         [EXPECTED_STRUCT, EXPECTED_STRUCT]
     }
+
     fn types_array_with_vector(x: [Vec<u32>; 1]) -> [Vec<u32>; 1] {
         let INPUT_VEC = vec_u32_from([1, 2, 3]);
         let INPUT = [INPUT_VEC];
@@ -329,6 +341,7 @@ impl AbiContract for Contract {
         const EXPECTED: (u8, u8, u8) = (3, 2, 1);
         return EXPECTED
     }
+
     fn types_tuple_complex(
         x: (u8, StructSingleGeneric<StructSingleGeneric<u64>>, str[3]),
     ) -> (u8, StructSingleGeneric<StructSingleGeneric<u64>>, str[3]) {
@@ -340,6 +353,7 @@ impl AbiContract for Contract {
             (3, StructSingleGeneric { a: StructSingleGeneric { a: 30 } }, __to_str_array("CBA"));
         return EXPECTED
     }
+
     fn types_tuple_with_native_types(x: (AssetId, AssetId, bool)) -> (AssetId, AssetId, bool) {
         const A = AssetId::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         const B = AssetId::from(0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB);
@@ -351,6 +365,7 @@ impl AbiContract for Contract {
         const EXPECTED: (AssetId, AssetId, bool) = (B, A, F);
         return EXPECTED
     }
+
     fn types_alias_tuple_with_native_types(x: TupleWithNativeAssets) -> TupleWithNativeAssets {
         const A = AssetId::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         const B = AssetId::from(0xBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB);
@@ -373,6 +388,7 @@ impl AbiContract for Contract {
         const EXPECTED: StructSimple = StructSimple { a: false, b: 30 };
         return EXPECTED
     }
+
     fn types_struct_generic(x: StructSingleGeneric<u8>) -> StructSingleGeneric<u8> {
         const INPUT: StructSingleGeneric<u8> = StructSingleGeneric { a: 10 };
         assert(x == INPUT);
@@ -380,6 +396,7 @@ impl AbiContract for Contract {
         const EXPECTED: StructSingleGeneric<u8> = StructSingleGeneric { a: 20 };
         return EXPECTED
     }
+
     fn types_struct_with_tuple(
         x: StructSingleGeneric<(bool, u64)>,
     ) -> StructSingleGeneric<(bool, u64)> {
@@ -389,6 +406,7 @@ impl AbiContract for Contract {
         const EXPECTED: StructSingleGeneric<(bool, u64)> = StructSingleGeneric { a: (false, 20) };
         return EXPECTED
     }
+
     fn types_struct_double_generic(
         x: StructGenericWithEnum<u8, u16>,
     ) -> StructGenericWithEnum<u8, u16> {
@@ -404,6 +422,7 @@ impl AbiContract for Contract {
         };
         return EXPECTED
     }
+
     fn types_struct_external(x: ExternalStruct) -> ExternalStruct {
         const INPUT: ExternalStruct = ExternalStruct { value: 10 };
         assert(x == INPUT);
@@ -411,6 +430,7 @@ impl AbiContract for Contract {
         const EXPECTED: ExternalStruct = ExternalStruct { value: 20 };
         return EXPECTED
     }
+
     fn types_struct_with_nested_array(x: StructWithNestedArray) -> StructWithNestedArray {
         const INPUT_STRUCT: StructDoubleGeneric<StructSingleGeneric<u64>, str[1]> =
             StructDoubleGeneric {
@@ -428,6 +448,7 @@ impl AbiContract for Contract {
         const EXPECTED = StructWithNestedArray { a: [EXPECTED_STRUCT, EXPECTED_STRUCT] };
         return EXPECTED
     }
+
     fn types_struct_with_nested_tuple(x: StructWithNestedTuple) -> StructWithNestedTuple {
         const INPUT: StructWithNestedTuple = StructWithNestedTuple {
             a: (10, StructSingleGeneric { a: StructSingleGeneric { a: 20 } }, __to_str_array("ABC")),
@@ -439,6 +460,7 @@ impl AbiContract for Contract {
         };
         return EXPECTED
     }
+
     fn types_struct_with_nested_struct(x: StructWithNestedStruct) -> StructWithNestedStruct {
         const INPUT: StructWithNestedStruct = StructWithNestedStruct {
             a: StructDoubleGeneric {
@@ -456,6 +478,7 @@ impl AbiContract for Contract {
         };
         return EXPECTED
     }
+
     fn types_struct_with_multiple_struct_params(x: StructA, y: StructB, z: StructC) -> bool {
         const STRUCT_A: StructA = StructA { propA1: 10 };
         assert(x == STRUCT_A);
@@ -529,12 +552,15 @@ impl AbiContract for Contract {
         // assert(y == INPUT_Y);
 
     }
+
     fn types_struct_with_complex_nested_struct(x: StructD<u32, u32, StructF<Vec<StructG>>>) -> bool {
         false
     }
+
     fn types_struct_with_single_option(x: StructWithSingleOption) -> StructWithSingleOption {
         x
     }
+
     fn types_struct_with_implicit_generics(
         x: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8> {
@@ -609,17 +635,20 @@ impl AbiContract for Contract {
 
         EnumWithNative::Pending
     }
+
     fn types_enum_with_builtin_type(x: EnumWithBuiltinType) -> EnumWithBuiltinType {
         assert(x == EnumWithBuiltinType::a(true));
 
         EnumWithBuiltinType::b(20)
     }
+
     fn types_enum_with_vector(x: EnumWithVector) -> EnumWithVector {
         assert(x == EnumWithVector::a(10));
 
         let EXPECTED_VEC = vec_u8_from([1, 2, 3]);
         return EnumWithVector::b(EXPECTED_VEC)
     }
+
     fn types_generic_enum(x: EnumDoubleGeneric<u8, u16>) -> EnumDoubleGeneric<u8, u16> {
         const INPUT: EnumDoubleGeneric<u8, u16> = EnumDoubleGeneric::a(10);
         assert(x == INPUT);
@@ -627,11 +656,13 @@ impl AbiContract for Contract {
         const EXPECTED: EnumDoubleGeneric<u8, u16> = EnumDoubleGeneric::b(20);
         return EXPECTED
     }
+
     fn types_enum_external(x: ExternalEnum) -> ExternalEnum {
         assert_eq(x, ExternalEnum::A);
 
         return ExternalEnum::B;
     }
+
     fn types_enum_with_structs(x: EnumWithStructs) -> EnumWithStructs {
         const INPUT: EnumWithStructs = EnumWithStructs::a(EnumWithNative::Checked);
         assert(x == INPUT);
@@ -650,6 +681,7 @@ impl AbiContract for Contract {
         let EXPECTED = vec_u8_from([3, 2, 1]);
         return EXPECTED
     }
+
     fn types_vector_boolean(x: Vec<bool>) -> Vec<bool> {
         let INPUT = vec_bool_from([true, false, true, false]);
         assert(x == INPUT);
@@ -657,6 +689,7 @@ impl AbiContract for Contract {
         let EXPECTED = vec_bool_from([false, true, false, true]);
         return EXPECTED
     }
+
     fn types_vector_inside_vector(x: Vec<Vec<u32>>) -> Vec<Vec<u32>> {
         let mut INPUT = Vec::new();
         INPUT.push(vec_u32_from([1, 2, 3]));
@@ -667,6 +700,7 @@ impl AbiContract for Contract {
         EXPECTED.push(vec_u32_from([6, 5, 4]));
         return EXPECTED
     }
+
     fn types_vector_with_struct(x: Vec<StructSimple>) -> Vec<StructSimple> {
         let mut INPUT = Vec::new();
         INPUT.push(StructSimple { a: true, b: 10 });
@@ -676,6 +710,7 @@ impl AbiContract for Contract {
         EXPECTED.push(StructSimple { a: false, b: 30 });
         return EXPECTED
     }
+
     fn types_vector_option(x: Vec<StructWithMultiOption>) -> Vec<StructWithMultiOption> {
         let mut INPUT = Vec::new();
         INPUT.push(StructWithMultiOption {
@@ -700,6 +735,7 @@ impl AbiContract for Contract {
         const EXPECTED: Option<u8> = Option::None;
         return EXPECTED
     }
+
     fn types_option_struct(x: Option<StructSimple>) -> Option<StructSimple> {
         let input_struct: StructSimple = StructSimple {
           a: true,
@@ -722,6 +758,7 @@ impl AbiContract for Contract {
         const EXPECTED = AssetId::from(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
         return EXPECTED
     }
+
     fn types_identity_address(x: Identity) -> Identity {
         const ADDRESS = Address::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         const INPUT = Identity::Address(ADDRESS);
@@ -731,6 +768,7 @@ impl AbiContract for Contract {
         const EXPECTED = Identity::Address(EXPECTED_ADDRESS);
         return EXPECTED
     }
+
     fn types_identity_contract_id(x: Identity) -> Identity {
         const CONTRACT_ID = ContractId::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         const INPUT = Identity::ContractId(CONTRACT_ID);
@@ -740,6 +778,7 @@ impl AbiContract for Contract {
         const EXPECTED = Identity::ContractId(EXPECTED_ADDRESS);
         return EXPECTED
     }
+
     fn types_address(x: Address) -> Address {
         const INPUT = Address::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         assert(x == INPUT);
@@ -747,6 +786,7 @@ impl AbiContract for Contract {
         const EXPECTED = Address::from(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
         return EXPECTED
     }
+
     fn types_contract_id(x: ContractId) -> ContractId {
         const INPUT = ContractId::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         assert(x == INPUT);
@@ -754,6 +794,7 @@ impl AbiContract for Contract {
         const EXPECTED = ContractId::from(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
         return EXPECTED
     }
+
     fn types_evm_address(x: EvmAddress) -> EvmAddress {
         let INPUT = EvmAddress::from(0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA);
         assert(x == INPUT);
@@ -761,6 +802,7 @@ impl AbiContract for Contract {
         let EXPECTED = EvmAddress::from(0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb);
         return EXPECTED
     }
+
     fn types_result(x: Result<u64, u32>) -> Result<u64, str[10]> {
         if (x.is_err()) {
             return Err(__to_str_array("InputError"));
@@ -779,18 +821,21 @@ impl AbiContract for Contract {
     fn types_void(x: ()) -> () {
         x
     }
+
     fn types_void_then_value(x: (), y: u8) -> () {
         const inputY = 10;
         assert(y == inputY);
 
         ()
     }
+
     fn types_value_then_void(x: u8, y: ()) -> () {
         const inputX = 10;
         assert(x == inputX);
 
         ()
     }
+
     fn types_value_then_void_then_value(x: u8, y: (), z: u8) -> () {
         const inputX = 10;
         assert(x == inputX);
@@ -800,6 +845,7 @@ impl AbiContract for Contract {
 
         ()
     }
+
     fn types_value_then_value_then_void_then_void(x: u8, y: u8, z: (), a: ()) -> () {
         const inputX = 10;
         assert(x == inputX);
@@ -823,6 +869,7 @@ impl AbiContract for Contract {
         const EXPECTED = 3;
         return EXPECTED;
     }
+
     fn multi_arg_b256_bool(x: b256, y: bool) -> (b256, bool) {
         const INPUT_X: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
         const INPUT_Y: bool = true;
@@ -832,6 +879,7 @@ impl AbiContract for Contract {
         const EXPECTED: (b256, bool) = (0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb, false);
         return EXPECTED
     }
+
     fn multi_arg_vector_vector(x: Vec<u8>, y: Vec<u8>) -> (Vec<u8>, Vec<u8>) {
         let INPUT_X = vec_u8_from([1, 2, 3]);
         let INPUT_Y = vec_u8_from([4, 5, 6]);
@@ -842,6 +890,7 @@ impl AbiContract for Contract {
         let EXPECTED_Y = vec_u8_from([10, 11, 12]);
         (EXPECTED_X, EXPECTED_Y)
     }
+
     fn multi_arg_vector_b256(x: Vec<u8>, y: b256) -> (Vec<u8>, b256) {
         let INPUT_X = vec_u8_from([1, 2, 3]);
         let INPUT_Y: b256 = 0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa;
@@ -853,6 +902,7 @@ impl AbiContract for Contract {
         let EXPECTED = (EXPECTED_X, EXPECTED_Y);
         return EXPECTED
     }
+
     fn multi_arg_struct_vector(x: StructSimple, y: Vec<u8>) -> (StructSimple, Vec<u8>) {
         const INPUT_X = StructSimple {
           a: true,
@@ -871,6 +921,7 @@ impl AbiContract for Contract {
         let EXPECTED = (EXPECTED_X, EXPECTED_Y);
         return EXPECTED
     }
+
     fn multi_arg_u64_struct(x: u64, y: StructSimple) -> (u64, StructSimple) {
         const INPUT_X = 99u64;
         let input_y = StructSimple {
@@ -887,6 +938,7 @@ impl AbiContract for Contract {
         };
         return (EXPECTED_X, expected_y);
     }
+
     fn multi_arg_str_str(x: str[5], y: str[5]) -> (str[5], str[5]) {
         let input_x: str = "Input";
         let input_y: str = "False";
@@ -899,6 +951,7 @@ impl AbiContract for Contract {
 
         (EXPECTED_X, EXPECTED_Y)
     }
+
     fn multi_arg_u32_vector_vector(x: u32, y: Vec<u64>, z: Vec<u64>) -> (u32, Vec<u64>, Vec<u64>) {
         const INPUT_X = 1u32;
 
@@ -929,6 +982,7 @@ impl AbiContract for Contract {
 
         return (EXPECTED_X, expected_y, expected_z);
     }
+
     fn multi_arg_complex(
         x: StructDoubleGeneric<[b256; 3], u8>,
         y: [StructDoubleGeneric<u64, bool>; 4],
