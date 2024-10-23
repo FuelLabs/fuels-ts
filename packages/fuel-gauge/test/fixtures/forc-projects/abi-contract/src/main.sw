@@ -625,16 +625,19 @@ impl AbiContract for Contract {
         EXPECTED
     }
 
-    // @todo - also broken
     fn types_struct_with_array_of_enums(x: StructWithEnumArray) -> StructWithEnumArray {
-        // const INPUT_ENUM = EnumWithNative::Checked;
-        // const INPUT: StructWithEnumArray = StructWithEnumArray {
-        //   a: [INPUT_ENUM, INPUT_ENUM, INPUT_ENUM]
-        // };
-        // assert(x == INPUT);
+        const INPUT_ENUM = EnumWithNative::Checked;
+        const INPUT: StructWithEnumArray = StructWithEnumArray {
+            a: [INPUT_ENUM, INPUT_ENUM, INPUT_ENUM],
+        };
+        assert(x == INPUT);
 
-        // return INPUT
-        return x
+        const EXPECTED_ENUM = EnumWithNative::Pending;
+        const EXPECTED: StructWithEnumArray = StructWithEnumArray {
+            a: [EXPECTED_ENUM, EXPECTED_ENUM, EXPECTED_ENUM],
+        };
+
+        EXPECTED
     }
 
     /**

@@ -5,10 +5,7 @@ use core::ops::Eq;
 
 impl Eq for [u8; 4] {
     fn eq(self, other: Self) -> bool {
-        self[0] == other[0] &&
-          self[1] == other[1] &&
-          self[2] == other[2] &&
-          self[3] == other[3]
+        self[0] == other[0] && self[1] == other[1] && self[2] == other[2] && self[3] == other[3]
     }
 }
 
@@ -421,11 +418,7 @@ impl Eq for Vec<StructSimple> {
 
 impl Eq for [Option<u8>; 5] {
     fn eq(self, other: Self) -> bool {
-        self[0] == other[0] &&
-          self[1] == other[1] &&
-          self[2] == other[2] &&
-          self[3] == other[3] &&
-          self[4] == other[4]
+        self[0] == other[0] && self[1] == other[1] && self[2] == other[2] && self[3] == other[3] && self[4] == other[4]
     }
 }
 
@@ -434,7 +427,6 @@ impl Eq for StructWithMultiOption {
         self.a == other.a
     }
 }
-
 
 impl Eq for Vec<StructWithMultiOption> {
     fn eq(self, other: Self) -> bool {
@@ -467,5 +459,17 @@ impl Eq for StructWithImplicitGenerics<b256, u8> {
 impl Eq for StructWithVector {
     fn eq(self, other: Self) -> bool {
         self.a == other.a && self.b == other.b
+    }
+}
+
+impl Eq for [EnumWithNative; 3] {
+    fn eq(self, other: Self) -> bool {
+        self[0] == other[0] && self[1] == other[1] && self[2] == other[2]
+    }
+}
+
+impl Eq for StructWithEnumArray {
+    fn eq(self, other: Self) -> bool {
+        self.a == other.a
     }
 }

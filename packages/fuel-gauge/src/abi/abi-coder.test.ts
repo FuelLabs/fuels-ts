@@ -3,7 +3,11 @@ import type { AssetId, BigNumberish, EvmAddress, RawSlice, WalletUnlocked } from
 import { expectToThrowFuelError, launchTestNode } from 'fuels/test-utils';
 
 import { AbiContract, AbiContractFactory } from '../../test/typegen';
-import { EnumWithNativeInput, ExternalEnumInput } from '../../test/typegen/contracts/AbiContract';
+import {
+  EnumWithNativeInput,
+  EnumWithNativeOutput,
+  ExternalEnumInput,
+} from '../../test/typegen/contracts/AbiContract';
 import type {
   EnumWithBuiltinTypeInput,
   EnumWithBuiltinTypeOutput,
@@ -24,6 +28,8 @@ import type {
   StructWithImplicitGenericsInput,
   StructSingleGenericOutput,
   AssetIdInput,
+  StructWithEnumArrayInput,
+  StructWithEnumArrayOutput,
 } from '../../test/typegen/contracts/AbiContract';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
@@ -781,7 +787,28 @@ describe('AbiCoder', () => {
     });
   });
 
-  describe.todo('types_struct_with_array_of_enums');
+  describe('types_struct_with_array_of_enums', () => {
+    it('should encode/decode just fine', async () => {
+      const input: StructWithEnumArrayInput = {
+        a: [EnumWithNativeInput.Checked, EnumWithNativeInput.Checked, EnumWithNativeInput.Checked],
+      };
+      const expected: StructWithEnumArrayOutput = {
+        a: [
+          EnumWithNativeOutput.Pending,
+          EnumWithNativeOutput.Pending,
+          EnumWithNativeOutput.Pending,
+        ],
+      };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_array_of_enums(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
   describe.todo('types_struct_with_complex_nested_struct');
   describe.todo('types_struct_with_single_option');
 
