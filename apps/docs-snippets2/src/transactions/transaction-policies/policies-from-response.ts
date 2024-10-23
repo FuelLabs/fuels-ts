@@ -9,8 +9,8 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
 /**
- * Instantiate the transaction request with transaction parameters that would
- * set the respective policies.
+ * Instantiate the transaction request with transaction parameters
+ * that will set the respective policies.
  */
 const transactionRequest = new ScriptTransactionRequest({
   script: ScriptSum.bytecode,
@@ -28,12 +28,13 @@ transactionRequest.setData(ScriptSum.abi, scriptArguments);
 const resources = await wallet.getResourcesToSpend([
   { amount: 1000, assetId: provider.getBaseAssetId() },
 ]);
+
 transactionRequest.addResources(resources);
 
 // Submit the transaction and retrieve the transaction response
 const tx = await wallet.sendTransaction(transactionRequest);
 const response = await tx.waitForResult();
 const policies: Policy[] | undefined = response.transaction.policies;
-// #endregion transaction-policies-2
 
 console.log('policies', policies);
+// #endregion transaction-policies-2
