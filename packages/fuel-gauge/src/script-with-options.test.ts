@@ -3,7 +3,7 @@ import { bn } from 'fuels';
 import { launchTestNode } from 'fuels/test-utils';
 
 import { ScriptWithOptions } from '../test/typegen';
-import type { Option } from '../test/typegen/contracts/common';
+import type { Option } from '../test/typegen/common';
 
 /**
  * @group node

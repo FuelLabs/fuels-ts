@@ -7,7 +7,7 @@ import {
   ScriptWithVectorAdvanced,
   ScriptWithVectorMixed,
 } from '../test/typegen';
-import { StateErrorInput, UserErrorInput } from '../test/typegen/scripts/ScriptWithVectorAdvanced';
+import { StateError, UserError } from '../test/typegen/scripts/ScriptWithVectorAdvancedTypes';
 
 /**
  * @group node
@@ -144,15 +144,15 @@ describe('Script With Vectors', () => {
     ];
 
     const errors = [
-      { StateError: StateErrorInput.Void },
-      { StateError: StateErrorInput.Pending },
-      { StateError: StateErrorInput.Completed },
-      { UserError: UserErrorInput.InsufficientPermissions },
-      { UserError: UserErrorInput.Unauthorized },
-      { UserError: UserErrorInput.Unauthorized },
-      { UserError: UserErrorInput.Unauthorized },
-      { UserError: UserErrorInput.Unauthorized },
-      { UserError: UserErrorInput.Unauthorized },
+      { StateError: StateError.Void },
+      { StateError: StateError.Pending },
+      { StateError: StateError.Completed },
+      { UserError: UserError.InsufficientPermissions },
+      { UserError: UserError.Unauthorized },
+      { UserError: UserError.Unauthorized },
+      { UserError: UserError.Unauthorized },
+      { UserError: UserError.Unauthorized },
+      { UserError: UserError.Unauthorized },
     ];
 
     const vectorOfStructs = [

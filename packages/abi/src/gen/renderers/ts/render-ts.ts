@@ -1,5 +1,4 @@
-import type { AbiGenResult } from '../../abi-gen';
-import type { ProgramDetails } from '../../utils/get-program-details';
+import type { AbiGenResult, ProgramDetails } from '../../abi-gen';
 import type { Renderer } from '../types';
 
 import { renderHbsTemplate } from './renderers/render-hbs-template';

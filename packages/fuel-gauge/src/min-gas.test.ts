@@ -42,7 +42,7 @@ describe('Minimum gas tests', () => {
     );
 
     const { transactionRequest: request } = contractFactory.createTransactionRequest({
-      storageSlots: CoverageContract.storageSlots,
+      storageSlots: CoverageContractFactory.storageSlots,
     });
 
     const resources = await provider.getResourcesToSpend(wallet.address, [

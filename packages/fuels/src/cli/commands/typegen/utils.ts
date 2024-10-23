@@ -1,16 +1,6 @@
+import { type ProgramDetails, type AbiSpecification, AbiParser } from '@fuel-ts/abi';
 import { compressBytecode, hexlify } from '@fuel-ts/utils';
 import { globSync, readFileSync } from 'fs';
-
-import { AbiParser, type Abi } from '../../parser';
-import type { AbiSpecification } from '../../parser/abi-parser';
-
-export interface ProgramDetails {
-  name: string;
-  binCompressed: string;
-  abi: Abi;
-  abiContents: string;
-  storageSlots?: string;
-}
 
 /**
  * Converts `some.string-value` into `SomeStringValue`.

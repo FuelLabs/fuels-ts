@@ -1,5 +1,6 @@
-import { AbiGen, getProgramDetails } from '@fuel-ts/abi';
 import { readFileSync } from 'fs';
+import { AbiGen } from 'fuels';
+import { getProgramDetails } from 'fuels/cli-utils';
 import { join } from 'path';
 
 import { AbiProjectsEnum, getAbiForcProject } from './utils';

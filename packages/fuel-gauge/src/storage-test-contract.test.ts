@@ -15,7 +15,7 @@ describe('StorageTestContract', () => {
       wallets: [wallet],
     } = launched;
 
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
 
     // #region contract-deployment-storage-slots
     // #context import storageSlots from '../your-sway-project/out/debug/your-sway-project-storage_slots.json';
@@ -101,7 +101,7 @@ describe('StorageTestContract', () => {
   });
 
   it('should automatically load storage slots', async () => {
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
     const expectedStorageSlots = storageSlots.map(({ key, value }) => ({
       key: `0x${key}`,
       value: `0x${value}`,
@@ -128,7 +128,7 @@ describe('StorageTestContract', () => {
   });
 
   it('should allow for overriding storage slots', async () => {
-    const { storageSlots } = StorageTestContract;
+    const { storageSlots } = StorageTestContractFactory;
     const expectedStorageSlots = storageSlots.map(({ key }) => ({
       key: `0x${key}`,
       value: ZeroBytes32,
