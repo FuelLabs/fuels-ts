@@ -27,7 +27,10 @@ export class AbiPredicate extends Predicate<
   AbiPredicateTypes['functions']['main']['inputs'],
   AbiPredicateTypes['configurables']
 > {
-  constructor(params: AbiPredicateParameters) {
-    super({ abi, bytecode, ...params });
-  }
+    public static readonly abi = abi;
+    public static readonly bytecode = bytecode;
+
+    constructor(params: AbiPredicateParameters) {
+      super({ abi, bytecode, ...params });
+    }
 }

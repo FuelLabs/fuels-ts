@@ -20,7 +20,7 @@ export class {{name}}Factory extends ContractFactory {
     deployOptions?: DeployContractOptions
   ): Promise<DeployContractResult<{{name}}>> {
     return super.deploy({
-      storageSlots,
+      storageSlots: {{name}}Factory.storageSlots,
       ...deployOptions,
     });
   }

@@ -29,7 +29,7 @@ export class AbiContractFactory extends ContractFactory {
     deployOptions?: DeployContractOptions
   ): Promise<DeployContractResult<AbiContract>> {
     return super.deploy({
-      storageSlots,
+      storageSlots: AbiContractFactory.storageSlots,
       ...deployOptions,
     });
   }

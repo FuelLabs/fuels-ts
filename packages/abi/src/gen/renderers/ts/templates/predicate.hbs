@@ -18,7 +18,10 @@ export class {{name}} extends Predicate<
   {{name}}Types['functions']['main']['inputs'],
   {{name}}Types['configurables']
 > {
-  constructor(params: AbiPredicateParameters) {
-    super({ abi, bytecode, ...params });
-  }
+    public static readonly abi = abi;
+    public static readonly bytecode = bytecode;
+
+    constructor(params: AbiPredicateParameters) {
+      super({ abi, bytecode, ...params });
+    }
 }
