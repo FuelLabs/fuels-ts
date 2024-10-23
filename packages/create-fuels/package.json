@@ -21,6 +21,8 @@
     "prepublishOnly": "tsx ./scripts/prepublish.ts"
   },
   "dependencies": {
+    "@fuel-ts/errors": "workspace:*",
+    "@fuel-ts/versions": "workspace:*",
     "@iarna/toml": "^2.2.5",
     "chalk": "4",
     "commander": "12.1.0",
@@ -28,8 +30,6 @@
     "prompts": "^2.4.2"
   },
   "devDependencies": {
-    "@fuel-ts/errors": "workspace:*",
-    "@fuel-ts/versions": "workspace:*",
     "@types/prompts": "^2.4.8",
     "glob": "^10.4.5"
   }
