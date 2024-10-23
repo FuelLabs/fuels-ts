@@ -543,6 +543,9 @@ importers:
 
   apps/docs-api:
     devDependencies:
+      fuels:
+        specifier: workspace:*
+        version: link:../../packages/fuels
       typedoc:
         specifier: ^0.26.3
         version: 0.26.6(typescript@5.6.3)

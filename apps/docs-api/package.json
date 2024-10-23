@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "fuels": "workspace:*",
     "typedoc": "^0.26.3"
   }
 }
