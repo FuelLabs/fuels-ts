@@ -463,3 +463,9 @@ impl Eq for StructWithImplicitGenerics<b256, u8> {
         self.a == other.a && self.b == other.b
     }
 }
+
+impl Eq for StructWithVector {
+    fn eq(self, other: Self) -> bool {
+        self.a == other.a && self.b == other.b
+    }
+}

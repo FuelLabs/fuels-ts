@@ -772,7 +772,18 @@ describe('AbiCoder', () => {
     });
   });
 
-  describe.todo('types_struct_with_vector');
+  describe('types_struct_with_vector', () => {
+    it('should encode/decode just fine', async () => {
+      const input = { a: 1, b: [1, 2, 3] };
+      const expected = { a: 3, b: [3, 2, 1] };
+
+      const { waitForResult } = await contract.functions.types_struct_with_vector(input).call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
+
   describe.todo('types_struct_with_array_of_enums');
   describe.todo('types_struct_with_complex_nested_struct');
   describe.todo('types_struct_with_single_option');

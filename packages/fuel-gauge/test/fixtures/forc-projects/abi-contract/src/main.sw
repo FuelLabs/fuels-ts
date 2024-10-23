@@ -603,15 +603,22 @@ impl AbiContract for Contract {
 
         EXPECTED
     }
-    // @todo - need help
-    fn types_struct_with_vector(x: StructWithVector) -> StructWithVector {
-        // let INPUT_VEC: Vec<u8> = vec_u8_from([1, 2, 3]);
-        // let INPUT: StructWithVector = {
-        //   a: 1,
-        //   b: INPUT_VEC
-        // }
 
-        x
+    fn types_struct_with_vector(x: StructWithVector) -> StructWithVector {
+        let INPUT_VEC: Vec<u8> = vec_u8_from([1, 2, 3]);
+        let INPUT: StructWithVector = StructWithVector {
+            a: 1,
+            b: INPUT_VEC,
+        };
+        assert(x == INPUT);
+
+        let EXPECTED_VEC: Vec<u8> = vec_u8_from([3, 2, 1]);
+        let EXPECTED: StructWithVector = StructWithVector {
+            a: 3,
+            b: EXPECTED_VEC,
+        };
+
+        EXPECTED
     }
 
     // @todo - also broken
