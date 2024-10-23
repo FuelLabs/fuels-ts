@@ -10,6 +10,7 @@ export class {{name}} extends Script<
   {{name}}Types['functions']['main']['inputs'],
   {{name}}Types['functions']['main']['output']
 > {
+    public static readonly abi = abi;
     public static readonly bytecode = bytecode;
 
     constructor(wallet: Account) {
