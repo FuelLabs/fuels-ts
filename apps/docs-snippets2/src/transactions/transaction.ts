@@ -14,4 +14,4 @@ await tx.waitForResult();
 const newBalance = await receiver.getBalance(provider.getBaseAssetId());
 // 100
 // #endregion transactions-1
-console.log('balance', newBalance.toNumber() > 0);
+console.log('balance', newBalance.toNumber());

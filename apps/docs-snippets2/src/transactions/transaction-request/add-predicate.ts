@@ -22,8 +22,8 @@ const transactionRequest = new ScriptTransactionRequest({
 const predicateArguments = [ZeroBytes32];
 
 /**
- * Instantiate the predicate and pass valid input data to validate the
- * predicate and unlock the funds
+ * Instantiate the predicate and pass valid input data to validate
+ * the predicate and unlock the funds
  */
 const predicate = new Predicate({
   bytecode: SimplePredicate.bytecode,
@@ -32,7 +32,7 @@ const predicate = new Predicate({
   provider,
 });
 
-// fund the predicate
+// Fund the predicate
 const tx = await wallet.transfer(predicate.address, bn(100_000));
 await tx.waitForResult();
 
