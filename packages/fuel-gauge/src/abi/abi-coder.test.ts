@@ -448,7 +448,7 @@ describe('AbiCoder', () => {
         { a: true, b: 10 },
         { a: true, b: 10 },
         { a: true, b: 10 },
-      ] as [{ a: boolean; b: number }, { a: boolean; b: number }, { a: boolean; b: number }]; // @TODO removed once typegen remastered
+      ] as [{ a: boolean; b: number }, { a: boolean; b: number }, { a: boolean; b: number }];
       const expected = [
         { a: false, b: 30 },
         { a: false, b: 30 },
@@ -528,7 +528,6 @@ describe('AbiCoder', () => {
         string,
       ];
       // @ts-expect-error: Custom matcher 'toEqualBn'
-      // @todo resolve this issue.
       const expected = [3, { a: { a: expect.toEqualBn(30) } }, 'CBA'];
 
       const { waitForResult } = await contract.functions.types_tuple_complex(input).call();
@@ -648,7 +647,6 @@ describe('AbiCoder', () => {
       const INPUT_STRUCT = { a: { a: 10 }, b: 'A' };
       const input: StructWithNestedArrayInput = { a: [INPUT_STRUCT, INPUT_STRUCT] };
       // @ts-expect-error: Custom matcher 'toEqualBn'
-      // @todo resolve this issue.
       const EXPECTED_STRUCT = { a: { a: expect.toEqualBn(20) }, b: 'B' };
       const EXPECTED = { a: [EXPECTED_STRUCT, EXPECTED_STRUCT] };
 
@@ -665,7 +663,6 @@ describe('AbiCoder', () => {
     it('should encode/decode just fine', async () => {
       const input: StructWithNestedTupleInput = { a: [10, { a: { a: 20 } }, 'ABC'] };
       // @ts-expect-error: Custom matcher 'toEqualBn'
-      // @todo resolve this issue.
       const expected = { a: [30, { a: { a: expect.toEqualBn(40) } }, 'CBA'] };
 
       const { waitForResult } = await contract.functions
@@ -807,7 +804,6 @@ describe('AbiCoder', () => {
     it('should encode/decode just fine', async () => {
       const input: EnumWithBuiltinTypeInput = { a: true };
       // @ts-expect-error: Custom matcher 'toEqualBn'
-      // @todo resolve this issue.
       const expected: EnumWithBuiltinTypeOutput = { b: expect.toEqualBn(20) };
 
       const { waitForResult } = await contract.functions.types_enum_with_builtin_type(input).call();
@@ -1062,7 +1058,6 @@ describe('AbiCoder', () => {
       };
       const expected: Result<BigNumberish, BigNumberish> = {
         // @ts-expect-error: Custom matcher 'toEqualBn'
-        // @todo resolve this issue.
         Ok: expect.toEqualBn(2),
       };
 
@@ -1207,9 +1202,6 @@ describe('AbiCoder', () => {
 
   /**
    * Multi-arg
-   *
-   * @todo resolve the below issue.
-   * Most of these are suffering from the similar issue around returning the input as the output.
    */
   describe('multi_arg_u64_u64', () => {
     it('should encode/decode just fine', async () => {
