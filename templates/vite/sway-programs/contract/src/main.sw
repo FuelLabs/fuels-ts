@@ -30,3 +30,18 @@ impl Counter for Contract {
         storage.counter.read()
     }
 }
+
+#[test]
+fn test_get_count() {
+    let contract_instance = abi(Counter, CONTRACT_ID);
+    let count = contract_instance.get_count();
+    assert(count == 0);
+}
+
+#[test]
+fn test_increment_counter() {
+    let contract_instance = abi(Counter, CONTRACT_ID);
+    let count_before = contract_instance.get_count();
+    let count_after = contract_instance.increment_counter(1);
+    assert(count_after == count_before + 1);
+}

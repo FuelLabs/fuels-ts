@@ -6,3 +6,12 @@ predicate;
 fn main(password: u64) -> bool {
     return password == 1337;
 }
+
+#[test]
+fn test_main() {
+    let result1 = main(1337);
+    assert(result1 == true);
+
+    let result2 = main(1338);
+    assert(result2 == false);
+}
