@@ -689,28 +689,6 @@ const abi = {
       "inputs": [
         {
           "name": "x",
-          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
-        }
-      ],
-      "name": "type_address",
-      "output": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308",
-      "attributes": null
-    },
-    {
-      "inputs": [
-        {
-          "name": "x",
-          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
-        }
-      ],
-      "name": "type_contract_id",
-      "output": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
-      "attributes": null
-    },
-    {
-      "inputs": [
-        {
-          "name": "x",
           "concreteTypeId": "d255d7621a80835aee6d3d0643eaec25fbb2c3215ed140fcf98ceffa69d895bc"
         }
       ],
@@ -738,6 +716,17 @@ const abi = {
       ],
       "name": "type_identity",
       "output": "ab7cd04e05be58e3fc15d424c2c4a57f824a2a2d97d67252440a3925ebdc1335",
+      "attributes": null
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "concreteTypeId": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308"
+        }
+      ],
+      "name": "types_address",
+      "output": "f597b637c3b0f588fb8d7086c6f4735caa3122b85f0423b82e489f9bb58e2308",
       "attributes": null
     },
     {
@@ -804,6 +793,17 @@ const abi = {
       ],
       "name": "types_bytes",
       "output": "cdd87b7d12fe505416570c294c884bca819364863efe3bf539245fa18515fbbb",
+      "attributes": null
+    },
+    {
+      "inputs": [
+        {
+          "name": "x",
+          "concreteTypeId": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54"
+        }
+      ],
+      "name": "types_contract_id",
+      "output": "29c10735d33b5159f0c71ee1dbd17b36a3e69e41f00fab0d42e1bd9f428d8a54",
       "attributes": null
     },
     {
@@ -905,7 +905,7 @@ const abi = {
           "concreteTypeId": "3597e0782bd4dbaf5c8025b40ff3a325845ee34caa713a6d664bda034a31d02a"
         }
       ],
-      "name": "types_option_geo",
+      "name": "types_option_struct",
       "output": "3597e0782bd4dbaf5c8025b40ff3a325845ee34caa713a6d664bda034a31d02a",
       "attributes": null
     },
@@ -1157,17 +1157,17 @@ export class MyContractInterface extends Interface {
 
   declare functions: {
     alias_types_tuple_with_native_types: FunctionFragment;
-    type_address: FunctionFragment;
-    type_contract_id: FunctionFragment;
     type_external_enum: FunctionFragment;
     type_external_struct: FunctionFragment;
     type_identity: FunctionFragment;
+    types_address: FunctionFragment;
     types_array: FunctionFragment;
     types_asset_id: FunctionFragment;
     types_b256: FunctionFragment;
     types_b512: FunctionFragment;
     types_bool: FunctionFragment;
     types_bytes: FunctionFragment;
+    types_contract_id: FunctionFragment;
     types_empty: FunctionFragment;
     types_empty_then_value: FunctionFragment;
     types_enum: FunctionFragment;
@@ -1176,7 +1176,7 @@ export class MyContractInterface extends Interface {
     types_generic_enum: FunctionFragment;
     types_generic_struct: FunctionFragment;
     types_option: FunctionFragment;
-    types_option_geo: FunctionFragment;
+    types_option_struct: FunctionFragment;
     types_raw_slice: FunctionFragment;
     types_result: FunctionFragment;
     types_std_string: FunctionFragment;
@@ -1206,17 +1206,17 @@ export class MyContract extends Contract {
   declare interface: MyContractInterface;
   declare functions: {
     alias_types_tuple_with_native_types: InvokeFunction<[x: [AssetIdInput, AssetIdInput, boolean]], [AssetIdOutput, AssetIdOutput, boolean]>;
-    type_address: InvokeFunction<[x: AddressInput], AddressOutput>;
-    type_contract_id: InvokeFunction<[x: ContractIdInput], ContractIdOutput>;
     type_external_enum: InvokeFunction<[x: ExternalEnumInput], ExternalEnumOutput>;
     type_external_struct: InvokeFunction<[x: ExternalStructInput], ExternalStructOutput>;
     type_identity: InvokeFunction<[x: IdentityInput], IdentityOutput>;
+    types_address: InvokeFunction<[x: AddressInput], AddressOutput>;
     types_array: InvokeFunction<[x: [BigNumberish, BigNumberish, BigNumberish]], [number, number, number]>;
     types_asset_id: InvokeFunction<[x: AssetIdInput], AssetIdOutput>;
     types_b256: InvokeFunction<[x: string], string>;
     types_b512: InvokeFunction<[x: string], string>;
     types_bool: InvokeFunction<[x: boolean], boolean>;
     types_bytes: InvokeFunction<[x: Bytes], Bytes>;
+    types_contract_id: InvokeFunction<[x: ContractIdInput], ContractIdOutput>;
     types_empty: InvokeFunction<[x?: undefined], void>;
     types_empty_then_value: InvokeFunction<[x: undefined, y: BigNumberish], void>;
     types_enum: InvokeFunction<[x: MyEnumInput], MyEnumOutput>;
@@ -1225,7 +1225,7 @@ export class MyContract extends Contract {
     types_generic_enum: InvokeFunction<[x: GenericEnumInput<BigNumberish, BigNumberish>], GenericEnumOutput<number, number>>;
     types_generic_struct: InvokeFunction<[x: GenericStructWithEnumInput<BigNumberish, BigNumberish>], GenericStructWithEnumOutput<number, number>>;
     types_option: InvokeFunction<[x?: Option<BigNumberish>], Option<number>>;
-    types_option_geo: InvokeFunction<[x?: Option<MyStructInput>], Option<MyStructOutput>>;
+    types_option_struct: InvokeFunction<[x?: Option<MyStructInput>], Option<MyStructOutput>>;
     types_raw_slice: InvokeFunction<[x: RawSlice], RawSlice>;
     types_result: InvokeFunction<[x: Result<BigNumberish, BigNumberish>], Result<BN, string>>;
     types_std_string: InvokeFunction<[x: StdString], StdString>;
