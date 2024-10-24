@@ -3,6 +3,7 @@ members = [
   "counter",
   "script-sum",
   "echo-values",
+  "script-transfer-to-contract",
   "echo-asset-id",
   "echo-bytes",
   "echo-enum",
