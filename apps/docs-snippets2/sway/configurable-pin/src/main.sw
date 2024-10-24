@@ -1,4 +1,4 @@
-// #region predicate-with-configurable-pin-1
+// #region full
 predicate;
 
 configurable {
@@ -9,4 +9,4 @@ fn main(pin: u64) -> bool {
     return PIN == pin;
 }
 
-// #endregion predicate-with-configurable-pin-1
+// #endregion full
