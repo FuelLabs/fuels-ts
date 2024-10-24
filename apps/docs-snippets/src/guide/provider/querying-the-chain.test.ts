@@ -26,26 +26,6 @@ describe('querying the chain', () => {
     expect(message?.nonce).toEqual(nonce);
   });
 
-  it('can getMessage', async () => {
-    // #region Message-getMessages
-    // #import { TestMessage, launchTestNode };
-
-    // Creates a test message with an amount of 100
-    const testMessage = new TestMessage({ amount: 100 });
-
-    // Launches a test node with the test message configured
-    using launched = await launchTestNode({ walletsConfig: { messages: [testMessage] } });
-    const {
-      wallets: [wallet],
-    } = launched;
-
-    // Retrieves messages from the wallet
-    const { messages } = await wallet.getMessages();
-    // #endregion Message-getMessages
-
-    expect(messages[0].nonce).toEqual(testMessage.nonce);
-  });
-
   it('can getMessageProof with blockId', async () => {
     // #region Message-getMessageProof-blockId
     // #import { launchTestNode, TransactionResultMessageOutReceipt };

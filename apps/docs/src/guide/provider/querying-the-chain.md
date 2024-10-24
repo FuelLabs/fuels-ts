@@ -61,7 +61,7 @@ You can use the `getMessageByNonce` method to retrieve a message by its nonce.
 
 You can use the `getMessages` method to retrieve a list of messages from the blockchain.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessages{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-messages.ts#getMessages{ts:line-numbers}
 
 ## `getMessageProof`
 
