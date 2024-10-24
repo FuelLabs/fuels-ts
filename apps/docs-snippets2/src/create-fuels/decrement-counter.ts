@@ -24,11 +24,16 @@ const { waitForResult: getCountWaitForResult } = await contract.functions
   .get_count()
   .call();
 const { value: initialGetCountValue } = await getCountWaitForResult();
+
+console.log('Initial value', initialGetCountValue);
+
 // Next we'll increment the counter, so that we can decrement it.
 const { waitForResult: incWaitForResult } = await contract.functions
   .increment_count(5)
   .call();
 const { value: incValue } = await incWaitForResult();
+
+console.log('Incremented value', incValue);
 
 // Next, we'll decrement the counter by 3 and assert the new value.
 const { waitForResult: decWaitForResult } = await contract.functions
@@ -36,9 +41,13 @@ const { waitForResult: decWaitForResult } = await contract.functions
   .call();
 const { value: decValue } = await decWaitForResult();
 
+console.log('Decremented value', decValue);
+
 // Finally, we'll test the get count function again to ensure parity.
 const { waitForResult: finalWaitForResult } = await contract.functions
   .get_count()
   .call();
 const { value: finalValue } = await finalWaitForResult();
+
+console.log('Final value', finalValue);
 // #endregion full
