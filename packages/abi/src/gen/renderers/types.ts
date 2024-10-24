@@ -5,6 +5,5 @@ import type { AbiGenResult, ProgramDetails } from '../abi-gen';
 export type Renderer = (details: ProgramDetails[], versions: BinaryVersions) => AbiGenResult[];
 
 export type TsAbiGenResult = AbiGenResult & {
-  programType?: ProgramDetails['abi']['programType'];
   exportInIndexFile?: boolean;
 };
