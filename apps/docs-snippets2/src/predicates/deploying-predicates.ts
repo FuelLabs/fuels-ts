@@ -1,4 +1,4 @@
-// #region deploying-predicates
+// #region full
 import { Provider, Wallet, ContractFactory } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
@@ -42,7 +42,7 @@ const transferTx = await predicate.transfer(
   baseAssetId
 );
 const { isStatusSuccess } = await transferTx.waitForResult();
-// #endregion deploying-predicates
+// #endregion full
 
 console.log('Predicate defined', predicate);
 console.log('Should fund predicate successfully', isStatusSuccess);
