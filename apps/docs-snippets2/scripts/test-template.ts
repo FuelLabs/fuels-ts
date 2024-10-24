@@ -1,7 +1,9 @@
 /* eslint-disable no-global-assign */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 // %IMPORTS%
 
+// @ts-ignore global assignment
 const consoleBkp = { ...console };
 
 afterAll(() => {

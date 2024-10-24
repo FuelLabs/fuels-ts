@@ -15,6 +15,8 @@ abi EchoValues {
     fn echo_b512(input: B512) -> B512;
 
     fn echo_u64(value: u64) -> u64;
+
+    fn echo_u64_array(u64_array: [u64; 2]) -> [u64; 2];
 }
 
 impl EchoValues for Contract {
@@ -44,5 +46,14 @@ impl EchoValues for Contract {
     fn echo_u64(value: u64) -> u64 {
         value
     }
+<<<<<<< HEAD
+=======
+
+    // #region arrays-2
+    fn echo_u64_array(u64_array: [u64; 2]) -> [u64; 2] {
+        u64_array
+    }
+    // #endregion arrays-2
+>>>>>>> master
 }
 // #endregion understanding-fuel-binary-file

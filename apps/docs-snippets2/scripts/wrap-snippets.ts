@@ -41,7 +41,7 @@ export const wrapSnippet = (filepath: string) => {
   /*
     Removes .env file import
   */
-  const envImportReg = /\nimport.+\{.+([\s\S]+).+\}.+from.+'\.\.\/env';/gm;
+  const envImportReg = /\nimport\s*\{([^}]+)\}\s*from\s*['"](\.\.\/)+env['"];/gm;
   if (envImportReg.test(imports)) {
     const allImports = imports.match(envImportReg)?.[0];
     const envImport = `import ${allImports?.split('import ').pop()}`;
