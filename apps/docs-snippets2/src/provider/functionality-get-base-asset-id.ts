@@ -9,7 +9,7 @@ const baseAssetId = provider.getBaseAssetId();
 // 0x...
 
 // Instantiate our recipients address
-const recipientAddress = Address.fromB256(WALLET_ADDRESS);
+const recipientAddress = Address.fromAddressOrString(WALLET_ADDRESS);
 
 // Create a transaction request
 const transactionRequest = new ScriptTransactionRequest();
@@ -17,4 +17,4 @@ const transactionRequest = new ScriptTransactionRequest();
 transactionRequest.addCoinOutput(recipientAddress, 100, baseAssetId);
 // #endregion getBaseAssetId
 
-console.log(baseAssetId);
+console.log('baseAssetId', baseAssetId);

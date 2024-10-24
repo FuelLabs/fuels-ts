@@ -5,8 +5,8 @@ import { Provider, sleep, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY, WALLET_PVT_KEY_2 } from '../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
-const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY);
-const recipient = Wallet.fromPrivateKey(WALLET_PVT_KEY_2);
+const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
+const recipient = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 
 // Performs a withdrawal transaction from sender to recipient, thus generating a message
 const withdrawTx = await sender.withdrawToBaseLayer(
@@ -41,7 +41,14 @@ const messageProofFromBlockHeight = await provider.getMessageProof(
 );
 // #endregion getMessageProof-blockHeight
 
-console.log(messageProofFromBlockId?.amount.toNumber() === 100);
-console.log(messageProofFromBlockId?.sender.toHexString() === result.id);
-console.log(messageProofFromBlockHeight?.amount.toNumber() === 100);
-console.log(messageProofFromBlockHeight?.sender.toHexString() === result.id);
+console.log('messageProofFromBlockId', messageProofFromBlockId);
+console.log(
+  'messageProofFromBlockId.amount equals 100',
+  messageProofFromBlockId?.amount.toNumber() === 100
+);
+
+console.log('messageProofFromBlockHeight', messageProofFromBlockHeight);
+console.log(
+  'messageProofFromBlockHeight.amount equals 100',
+  messageProofFromBlockHeight?.amount.toNumber() === 100
+);

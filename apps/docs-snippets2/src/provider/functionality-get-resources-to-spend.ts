@@ -5,7 +5,7 @@ import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
-const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY);
+const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 const assetIdA =
   '0x0101010101010101010101010101010101010101010101010101010101010101';
 
@@ -42,5 +42,5 @@ const spendableResourcesFromWallet = await wallet.getResourcesToSpend(
 );
 // #endregion getResourcesToSpend-2
 
-console.log(spendableResources);
-console.log(spendableResourcesFromWallet);
+console.log('spendableResources', spendableResources);
+console.log('spendableResourcesFromWallet', spendableResourcesFromWallet);

@@ -17,6 +17,6 @@ const { balances } = await wallet.getBalances();
 // []
 // #endregion provider-instantiation
 
-console.log(provider);
-console.log(consensusParameters);
-console.log(balances);
+console.log('provider', provider);
+console.log('consensusParameters', consensusParameters);
+console.log('balances', balances);

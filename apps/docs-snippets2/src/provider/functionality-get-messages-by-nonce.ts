@@ -1,6 +1,7 @@
 // #region getMessageByNonce
 import { Provider } from 'fuels';
-import { LOCAL_NETWORK_URL } from 'src/env';
+
+import { LOCAL_NETWORK_URL } from '../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 
@@ -9,4 +10,4 @@ const nonce =
 const message = await provider.getMessageByNonce(nonce);
 // #endregion getMessageByNonce
 
-console.log(message);
+console.log('message', message);

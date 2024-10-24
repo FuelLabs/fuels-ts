@@ -10,6 +10,6 @@ const chain = await provider.operations.getChain();
 const nodeInfo = await provider.operations.getNodeInfo();
 // #endregion operations
 
-console.log(provider);
-console.log(chain);
-console.log(nodeInfo);
+console.log('provider', provider);
+console.log('chain', chain);
+console.log('nodeInfo', nodeInfo);

@@ -15,4 +15,7 @@ const { blocks } = await provider.getBlocks({
 });
 // #endregion getBlocks
 
-console.log(blockToProduce === blocks.length);
+console.log(
+  'blockToProduce equals blocks.length',
+  blockToProduce === blocks.length
+);

@@ -9,4 +9,4 @@ const { transactions } = await provider.getTransactions();
 // #endregion getTransactions
 // #endregion getBlocks
 
-console.log(transactions);
+console.log('transactions', transactions);

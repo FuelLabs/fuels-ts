@@ -11,7 +11,7 @@ const paginationArgsExample: CursorPaginationArgs = {
   last: 10,
 };
 // #endregion pagination-args
-console.log(paginationArgsExample);
+console.log('paginationArgsExample', paginationArgsExample);
 
 // #region pagination-page-info
 const pageInfoExample: PageInfo = {
@@ -21,7 +21,7 @@ const pageInfoExample: PageInfo = {
   hasPreviousPage: true,
 };
 // #endregion pagination-page-info
-console.log(pageInfoExample);
+console.log('pageInfoExample', pageInfoExample);
 
 // #region pagination-next-page
 const provider = await Provider.create(LOCAL_NETWORK_URL);
@@ -66,8 +66,8 @@ if (pageInfo.hasPreviousPage) {
 }
 // #endregion pagination-previous-page
 
-console.log(coins);
-console.log(pageInfo);
+console.log('coins', coins);
+console.log('pageInfo', pageInfo);
 
 // #region pagination-forward-pagination
 const paginationArgsForward: CursorPaginationArgs = {
@@ -75,7 +75,7 @@ const paginationArgsForward: CursorPaginationArgs = {
   first: 10,
 };
 // #endregion pagination-forward-pagination
-console.log(paginationArgsForward);
+console.log('paginationArgsForward', paginationArgsForward);
 
 // #region pagination-backward-pagination
 const paginationArgsBackwards: CursorPaginationArgs = {
@@ -83,7 +83,7 @@ const paginationArgsBackwards: CursorPaginationArgs = {
   last: 10,
 };
 // #endregion pagination-backward-pagination
-console.log(paginationArgsBackwards);
+console.log('paginationArgsBackwards', paginationArgsBackwards);
 
 // #region pagination-default-args
 // It will return the first 100 coins for a given wallet
