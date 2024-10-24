@@ -12,6 +12,7 @@
 ## Building
 
 This builds the snippets into testable scripts from the `src` folder and generates the Typegen `types` in the `typegend` folder. All test scripts end with a `.test.ts` suffix.
+
 ```sh
 pnpm build
 ```
