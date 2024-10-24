@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "bytecode-input",
+  "configurable-pin",
   "counter",
   "echo-asset-id",
   "echo-bytes",
