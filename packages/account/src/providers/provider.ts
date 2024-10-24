@@ -106,14 +106,16 @@ export type Block = {
   };
 };
 
+export type PageInfo = GqlPageInfo;
+
 export type GetCoinsResponse = {
   coins: Coin[];
-  pageInfo: GqlPageInfo;
+  pageInfo: PageInfo;
 };
 
 export type GetMessagesResponse = {
   messages: Message[];
-  pageInfo: GqlPageInfo;
+  pageInfo: PageInfo;
 };
 
 export type GetBalancesResponse = {
@@ -122,12 +124,12 @@ export type GetBalancesResponse = {
 
 export type GetTransactionsResponse = {
   transactions: Transaction[];
-  pageInfo: GqlPageInfo;
+  pageInfo: PageInfo;
 };
 
 export type GetBlocksResponse = {
   blocks: Block[];
-  pageInfo: GqlPageInfo;
+  pageInfo: PageInfo;
 };
 
 /**
