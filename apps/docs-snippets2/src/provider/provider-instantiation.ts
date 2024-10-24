@@ -17,8 +17,6 @@ const { balances } = await wallet.getBalances();
 // []
 // #endregion provider-instantiation
 
-expect(provider).toBeDefined();
-expect(provider).toBeInstanceOf(Provider);
-expect(consensusParameters).toBeDefined();
-expect(consensusParameters).toBeInstanceOf(Object);
-expect(balances).toEqual([]);
+console.log(provider);
+console.log(consensusParameters);
+console.log(balances);

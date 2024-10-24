@@ -56,7 +56,7 @@ You can also use the `paginationArgs` to navigate to the previous page of result
 
   Use `before` with `last` to retrieve items preceding a cursor.
 
-<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-backwards-pagination{ts}
+<<< @/../../docs-snippets2/src/provider/pagination.ts#pagination-backward-pagination{ts}
 
 ## Default Behavior
 

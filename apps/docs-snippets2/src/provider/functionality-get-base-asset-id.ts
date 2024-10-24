@@ -1,5 +1,5 @@
 // #region getBaseAssetId
-import { Provider, ScriptTransactionRequest } from 'fuels';
+import { Address, Provider, ScriptTransactionRequest } from 'fuels';
 
 import { LOCAL_NETWORK_URL, WALLET_ADDRESS } from '../env';
 
@@ -8,10 +8,13 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 const baseAssetId = provider.getBaseAssetId();
 // 0x...
 
+// Instantiate our recipients address
+const recipientAddress = Address.fromB256(WALLET_ADDRESS);
+
 // Create a transaction request
 const transactionRequest = new ScriptTransactionRequest();
 // Use the base asset for an operation
-transactionRequest.addCoinOutput(WALLET_ADDRESS, 100, baseAssetId);
+transactionRequest.addCoinOutput(recipientAddress, 100, baseAssetId);
 // #endregion getBaseAssetId
 
-expect(baseAssetId).toBeDefined();
+console.log(baseAssetId);

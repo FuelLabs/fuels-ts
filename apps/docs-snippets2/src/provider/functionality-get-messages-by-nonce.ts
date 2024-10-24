@@ -1,4 +1,4 @@
-// #endregion getMessageByNonce
+// #region getMessageByNonce
 import { Provider } from 'fuels';
 import { LOCAL_NETWORK_URL } from 'src/env';
 
