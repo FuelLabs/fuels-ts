@@ -79,4 +79,4 @@ Or by it's block height:
 
 You can use the `getTransactions` method to retrieve a list of transactions from the blockchain. This is limited to 30 transactions per page.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-transactions{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-transactions.ts#getTransactions{ts:line-numbers}
