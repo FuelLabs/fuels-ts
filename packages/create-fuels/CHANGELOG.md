@@ -1,5 +1,18 @@
 # create-fuels
 
+## 0.96.2
+
+### Patch Changes
+
+- b306b7b: fix: moved `create-fuels` deps for `fuels-ts`
+- 28e9ed8: build(deps): bump the deps-minor group with 20 updates
+- bf47c3d: build(deps): bump typescript-eslint from 8.5.0 to 8.8.0
+- 3a56354: chore: exclude `node_modules` in template tests
+- Updated dependencies [9dba357]
+- Updated dependencies [7c162de]
+  - @fuel-ts/versions@0.96.2
+  - @fuel-ts/errors@0.96.2
+
 ## 0.96.1
 
 ## 0.96.0
