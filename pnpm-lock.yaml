@@ -561,9 +561,6 @@ importers:
       '@fuel-ts/utils':
         specifier: workspace:*
         version: link:../../packages/utils
-      ethers:
-        specifier: ^6.13.4
-        version: 6.13.4(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
@@ -573,6 +570,9 @@ importers:
 
   apps/docs-snippets2:
     dependencies:
+      ethers:
+        specifier: ^6.13.2
+        version: 6.13.4(bufferutil@4.0.8)(utf-8-validate@6.0.4)
       fuels:
         specifier: workspace:*
         version: link:../../packages/fuels
