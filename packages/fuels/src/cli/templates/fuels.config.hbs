@@ -36,6 +36,9 @@ export default createConfig({
   {{#if (isDefined autoStartFuelCore)}}
   autoStartFuelCore: {{autoStartFuelCore}},
   {{/if}}
+  {{#if (isDefined fuelCorePort)}}
+  fuelCorePort: {{fuelCorePort}},
+  {{/if}}
 });
 
 /**
