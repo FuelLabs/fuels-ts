@@ -55,7 +55,7 @@ The `getBlocks` method returns blocks from the blockchain matching the given `pa
 
 You can use the `getMessageByNonce` method to retrieve a message by its nonce.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-message-by-nonce-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-messages-by-nonce.ts#getMessageByNonce{ts:line-numbers}
 
 ## `getMessages`
 

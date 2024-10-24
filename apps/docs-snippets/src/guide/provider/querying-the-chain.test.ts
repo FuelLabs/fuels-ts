@@ -7,25 +7,6 @@ import { TestMessage, launchTestNode } from 'fuels/test-utils';
  * @group browser
  */
 describe('querying the chain', () => {
-  it('can getMessageByNonce', async () => {
-    using launched = await launchTestNode();
-    const { provider: testProvider } = launched;
-
-    const FUEL_NETWORK_URL = testProvider.url;
-
-    // #region get-message-by-nonce-1
-    // #import { Provider };
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    const nonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
-    const message = await provider.getMessageByNonce(nonce);
-    // #endregion get-message-by-nonce-1
-
-    expect(message).toBeDefined();
-    expect(message?.nonce).toEqual(nonce);
-  });
-
   it('can getMessageProof with blockId', async () => {
     // #region Message-getMessageProof-blockId
     // #import { launchTestNode, TransactionResultMessageOutReceipt };
