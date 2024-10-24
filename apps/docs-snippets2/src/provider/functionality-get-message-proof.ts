@@ -1,12 +1,18 @@
 // #region getMessageProof-blockId
 import type { TransactionResultMessageOutReceipt } from 'fuels';
-import { Provider, sleep, Wallet } from 'fuels';
+import { sleep } from 'fuels';
+import { launchTestNode } from 'fuels/test-utils';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY, WALLET_PVT_KEY_2 } from '../env';
+using launched = await launchTestNode({
+  nodeOptions: {
+    args: ['--poa-instant', 'false', '--poa-interval-period', '1s'],
+  },
+});
 
-const provider = await Provider.create(LOCAL_NETWORK_URL);
-const sender = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
-const recipient = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
+const {
+  provider,
+  wallets: [sender, recipient],
+} = launched;
 
 // Performs a withdrawal transaction from sender to recipient, thus generating a message
 const withdrawTx = await sender.withdrawToBaseLayer(
