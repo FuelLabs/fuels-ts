@@ -39,11 +39,11 @@ This method is also available in the `Account` class and can be used without pro
 
 Returns the sum of all UTXOs coins and unspent message coins amounts for all assets. Unlike `getCoins`, it only returns the total amounts, not the individual coins:
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-balances-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-balances.ts#getBalances-1{ts:line-numbers}
 
 This method is also available in the `Account` class and can be used without providing the `address` parameter:
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-balances-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-balances.ts#getBalances-2{ts:line-numbers}
 
 ## `getBlocks`
 

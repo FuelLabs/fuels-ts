@@ -1,45 +1,12 @@
 import type { TransactionResultMessageOutReceipt } from 'fuels';
 import { Provider } from 'fuels';
-import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
+import { TestMessage, launchTestNode } from 'fuels/test-utils';
 
 /**
  * @group node
  * @group browser
  */
 describe('querying the chain', () => {
-  it('get balances', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100,
-        assets: [TestAssetId.A],
-      },
-    });
-    const {
-      provider: testProvider,
-      wallets: [wallet],
-    } = launched;
-
-    const FUEL_NETWORK_URL = testProvider.url;
-
-    // #region get-balances-1
-    // #import { Provider };
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    const { balances } = await provider.getBalances(wallet.address);
-    // [
-    //   { amount: bn(42), assetId: baseAssetId } // total amount of baseAssetId
-    //   { amount: bn(100), assetId: assetIdA } // total amount of assetIdA
-    // ]
-    // #endregion get-balances-1
-
-    // #region get-balances-2
-    await wallet.getBalances();
-    // #endregion get-balances-2
-
-    expect(balances).toBeDefined();
-  });
-
   it('can getBlocks', async () => {
     using launched = await launchTestNode();
 
