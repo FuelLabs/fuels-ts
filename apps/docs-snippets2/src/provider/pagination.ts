@@ -1,7 +1,7 @@
 import { Provider } from 'fuels';
 import type { CursorPaginationArgs, PageInfo } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_ADDRESS, WALLET_PVT_KEY } from '../env';
+import { LOCAL_NETWORK_URL, WALLET_ADDRESS } from '../env';
 
 // #region pagination-args
 const paginationArgsExample: CursorPaginationArgs = {
