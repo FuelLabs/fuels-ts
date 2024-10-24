@@ -1,5 +1,13 @@
 # @fuel-ts/logger
 
+## 0.96.2
+
+### Patch Changes
+
+- @fuel-ts/address@0.96.2
+- @fuel-ts/math@0.96.2
+- @fuel-ts/interfaces@0.96.2
+
 ## 0.96.1
 
 ### Patch Changes
