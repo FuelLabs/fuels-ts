@@ -43,7 +43,7 @@ await walletManager.addVault({
 // #region getting-started-with-wallet-manager-5
 const vaults = walletManager.getVaults();
 
-// #context console.log(vaults);
+console.log(vaults);
 // #endregion getting-started-with-wallet-manager-5
 
 // #region getting-started-with-wallet-manager-6
