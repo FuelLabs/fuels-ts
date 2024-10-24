@@ -18,7 +18,7 @@ pnpm build
 
 ## Testing
 
-This will build the snippets and run the generated tests. To specific a particular environment for a test, the snippet should be named as `{name}.{environment}.test.ts`. e.g. `deploy-contract.node.test.ts`
+This will build the snippets and run the generated tests. To test a specific environment (`node` or `browser`), the snippet should be named as `{name}.{environment}.test.ts`. e.g. `deploy-contract.node.test.ts`
 
 If no environment is specified, it will run in the browser and node environments by default.
 
