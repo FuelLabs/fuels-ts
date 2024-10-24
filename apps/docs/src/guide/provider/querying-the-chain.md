@@ -69,11 +69,11 @@ A message proof is a cryptographic proof that a message was included in a block.
 
 You can retrieve a message proof by either using it's block ID:
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof-blockId{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-message-proof.ts#getMessageProof-blockId{ts:line-numbers}
 
 Or by it's block height:
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Message-getMessageProof-blockHeight{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-message-proof.ts#getMessageProof-blockHeight{ts:line-numbers}
 
 ## `getTransactions`
 
