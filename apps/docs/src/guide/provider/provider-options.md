@@ -18,19 +18,19 @@ You can provide the following settings:
   - `fixed`: Uses a constant delay between attempts.
 - `baseDelay` _(default 150ms)_ - Base time in milliseconds for the backoff strategy.
 
-<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-retryOptions{ts:line-numbers}
+<<< @/../../docs-snippets2/src/guide/provider/provider-options.ts#retryOptions{ts:line-numbers}
 
 ### `requestMiddleware`
 
 Allows you to modify the request object to add additional headers, modify the request's body, and much more.
 
-<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-requestMiddleware{ts:line-numbers}
+<<< @/../../docs-snippets2/src/guide/provider/provider-options.ts#requestMiddleware{ts:line-numbers}
 
 ### `timeout`
 
 Specify the timeout in milliseconds after which every request will be aborted.
 
-<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-timeout{ts:line-numbers}
+<<< @/../../docs-snippets2/src/guide/provider/provider-options.ts#timeout{ts:line-numbers}
 
 ### `fetch`
 
@@ -38,7 +38,7 @@ Provide a custom `fetch` function that'll replace the default fetch call.
 
 _Note: If defined, `requestMiddleware`, `timeout` and `retryOptions` are applied to this custom `fetch` function as well._
 
-<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-fetch{ts:line-numbers}
+<<< @/../../docs-snippets2/src/guide/provider/provider-options.ts#fetch{ts:line-numbers}
 
 ### `resourceCacheTTL`
 
@@ -60,7 +60,7 @@ This error indicates that the resources used by the second transaction no longer
 
 To prevent this issue, the SDK sets a default cache for resources to 20 seconds. This default caching mechanism ensures that resources used in a submitted transaction are not reused in subsequent transactions within the specified time. You can control the duration of this cache using the `resourceCacheTTL` flag. If you would like to disable caching, you can pass a value of `-1` to the `resourceCacheTTL` parameter.
 
-<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#options-cache-utxo{ts:line-numbers}
+<<< @/../../docs-snippets2/src/guide/provider/provider-options.ts#cache-utxo{ts:line-numbers}
 
 **Note:**
 
