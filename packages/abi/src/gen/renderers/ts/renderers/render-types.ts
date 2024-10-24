@@ -2,7 +2,7 @@ import type { BinaryVersions } from '@fuel-ts/versions';
 
 import { createMatcher, swayTypeMatchers } from '../../../../matchers/sway-type-matchers';
 import type { Abi, AbiFunctionInput } from '../../../../parser';
-import type { ProgramDetails } from '../../../utils/get-program-details';
+import type { ProgramDetails } from '../../../abi-gen';
 import type { TsAbiGenResult } from '../../types';
 import typesTemplate from '../templates/types.hbs';
 import { generateTsType } from '../typers/generate-ts-type';
@@ -10,7 +10,7 @@ import { flattenImports } from '../typers/helpers';
 import type { TyperReturn } from '../typers/types';
 
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
-import { renderHbsTemplate } from './render-hbs-template';
+import { templateRenderer } from './template-renderer';
 
 const metadataTypeFilter = createMatcher<boolean>({
   enum: true,
@@ -85,7 +85,7 @@ function mapFunctions(abi: Abi, cTypes: Record<string, TyperReturn>) {
   });
 }
 
-export function renderTypesTemplate(
+export function renderTypes(
   { name, abi }: ProgramDetails,
   versions: BinaryVersions
 ): TsAbiGenResult {
@@ -113,7 +113,7 @@ export function renderTypesTemplate(
   const enums = mTypes.filter((t) => t.tsType === 'enum').sort(sortAlphabetically);
   const types = mTypes.filter((t) => t.tsType === 'type').sort(sortAlphabetically);
 
-  const content = renderHbsTemplate({
+  const content = templateRenderer({
     template: typesTemplate,
     versions,
     data: {

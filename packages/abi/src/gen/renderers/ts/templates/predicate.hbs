@@ -6,7 +6,7 @@ import abi from './{{name}}-abi.json';
 import { bytecode } from './{{name}}-bytecode';
 import type { {{name}}Types } from './{{name}}Types';
 
-export type AbiPredicateParameters = Omit<
+export type {{name}}Parameters = Omit<
   PredicateParams<
     {{name}}Types['functions']['main']['inputs'],
     {{name}}Types['configurables']
@@ -21,7 +21,7 @@ export class {{name}} extends Predicate<
     public static readonly abi = abi;
     public static readonly bytecode = bytecode;
 
-    constructor(params: AbiPredicateParameters) {
+    constructor(params: {{name}}Parameters) {
       super({ abi, bytecode, ...params });
     }
 }

@@ -1,7 +1,7 @@
 {{header}}
 
 import { Contract, Interface } from "fuels";
-import type { AbiSpecification, AbstractAddress, Account, Provider } from 'fuels';
+import type { AbstractAddress, Account, Provider } from 'fuels';
 import type { {{name}}Types } from './{{name}}Types';
 import type { InterfaceFunctionMapper, ProgramFunctionMapper } from '../common';
 import abi from './{{name}}-abi.json';
@@ -10,7 +10,7 @@ export class {{name}}Interface extends Interface {
   declare functions: InterfaceFunctionMapper<{{name}}Types['functions']>;
 
   constructor() {
-    super(abi as AbiSpecification);
+    super(abi);
   }
 }
 
@@ -18,12 +18,12 @@ export class {{name}} extends Contract {
     declare interface: {{name}}Interface;
     declare functions: ProgramFunctionMapper<{{name}}Types['functions']>;
 
-    public static readonly abi: AbiSpecification = abi;
+    public static readonly abi = abi;
 
     constructor(
         id: string | AbstractAddress,
         accountOrProvider: Account | Provider,
     ) {
-        super(id, abi as AbiSpecification, accountOrProvider);
+        super(id, abi, accountOrProvider);
     }
 }

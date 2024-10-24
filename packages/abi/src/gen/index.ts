@@ -1,2 +1,2 @@
 export { AbiGen } from './abi-gen';
-export { getProgramDetails } from './utils/get-program-details';
+export type { ProgramDetails } from './abi-gen';

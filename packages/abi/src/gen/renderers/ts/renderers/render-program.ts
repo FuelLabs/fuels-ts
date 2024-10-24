@@ -1,7 +1,7 @@
 import { assertUnreachable } from '@fuel-ts/utils';
 import type { BinaryVersions } from '@fuel-ts/versions';
 
-import type { ProgramDetails } from '../../../utils/get-program-details';
+import type { ProgramDetails } from '../../../abi-gen';
 import type { TsAbiGenResult } from '../../types';
 import bytecodeTemplate from '../templates/bytecode.hbs';
 import contractFactoryTemplate from '../templates/contract-factory.hbs';
@@ -10,25 +10,20 @@ import predicateTemplate from '../templates/predicate.hbs';
 import scriptTemplate from '../templates/script.hbs';
 
 import { getParentDirWrapper } from './get-parent-dir-wrapper';
-import { renderHbsTemplate } from './render-hbs-template';
+import { templateRenderer } from './template-renderer';
 
-export function renderProgramTemplates(
-  programDetails: ProgramDetails,
+export function renderProgram(
+  { abi, binCompressed, name, abiContents, storageSlots }: ProgramDetails,
   versions: BinaryVersions
 ): TsAbiGenResult[] {
-  const { abi, binCompressed, name } = programDetails;
-
   const results: TsAbiGenResult[] = [
     {
-      programType: abi.programType,
       filename: `${name}-abi.json`,
-      content: programDetails.abiContents,
+      content: abiContents,
     },
     {
-      programType: abi.programType,
-
       filename: `${name}-bytecode.ts`,
-      content: renderHbsTemplate({ template: bytecodeTemplate, versions, data: { binCompressed } }),
+      content: templateRenderer({ template: bytecodeTemplate, versions, data: { binCompressed } }),
     },
   ];
 
@@ -36,9 +31,8 @@ export function renderProgramTemplates(
     case 'contract':
       results.push(
         {
-          programType: abi.programType,
           filename: `${name}.ts`,
-          content: renderHbsTemplate({
+          content: templateRenderer({
             template: contractTemplate,
             versions,
             data: { name },
@@ -46,9 +40,8 @@ export function renderProgramTemplates(
           exportInIndexFile: true,
         },
         {
-          programType: abi.programType,
           filename: `${name}Factory.ts`,
-          content: renderHbsTemplate({
+          content: templateRenderer({
             template: contractFactoryTemplate,
             versions,
             data: { name },
@@ -56,17 +49,15 @@ export function renderProgramTemplates(
           exportInIndexFile: true,
         },
         {
-          programType: abi.programType,
           filename: `${name}-storage-slots.json`,
-          content: programDetails.storageSlots as string,
+          content: storageSlots as string,
         }
       );
       break;
     case 'predicate':
       results.push({
-        programType: abi.programType,
         filename: `${name}.ts`,
-        content: renderHbsTemplate({
+        content: templateRenderer({
           template: predicateTemplate,
           versions,
           data: { name },
@@ -76,9 +67,8 @@ export function renderProgramTemplates(
       break;
     case 'script':
       results.push({
-        programType: abi.programType,
         filename: `${name}.ts`,
-        content: renderHbsTemplate({
+        content: templateRenderer({
           template: scriptTemplate,
           versions,
           data: { name },

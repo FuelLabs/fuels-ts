@@ -1,7 +1,8 @@
 import type { BinaryVersions } from '@fuel-ts/versions';
 
+import type { Abi } from '../parser';
+
 import { getRenderer } from './renderers/getRenderer';
-import type { ProgramDetails } from './utils/get-program-details';
 
 export interface AbiGenInput {
   programDetails: ProgramDetails[];
@@ -12,6 +13,14 @@ export interface AbiGenInput {
 export interface AbiGenResult {
   filename: string;
   content: string;
+}
+
+export interface ProgramDetails {
+  name: string;
+  binCompressed: string;
+  abi: Abi;
+  abiContents: string;
+  storageSlots?: string;
 }
 
 export class AbiGen {

@@ -9,7 +9,7 @@
 */
 
 
-import { ContractFactory } from 'fuels';
+import { Contract, ContractFactory } from 'fuels';
 import type { Account, Provider, DeployContractOptions, DeployContractResult, StorageSlot } from 'fuels';
 import { AbiContract } from './AbiContract';
 import { bytecode } from './AbiContract-bytecode';
@@ -25,9 +25,9 @@ export class AbiContractFactory extends ContractFactory {
     super(bytecode, abi, accountOrProvider);
   }
 
-  deploy(
+  override deploy<TContract extends Contract = AbiContract>(
     deployOptions?: DeployContractOptions
-  ): Promise<DeployContractResult<AbiContract>> {
+  ): Promise<DeployContractResult<TContract>> {
     return super.deploy({
       storageSlots: AbiContractFactory.storageSlots,
       ...deployOptions,
