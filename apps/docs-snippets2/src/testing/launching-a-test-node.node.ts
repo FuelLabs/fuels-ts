@@ -18,9 +18,9 @@ using launched = await launchTestNode();
 const launchedTestNode = await launchTestNode();
 
 /*
-      Do your things, run your tests, and then call
-      `launchedTestNode.cleanup()` to dispose of everything.
-    */
+  Do your things, run your tests, and then call
+  `launchedTestNode.cleanup()` to dispose of everything.
+*/
 
 launchedTestNode.cleanup();
 // #endregion manual-cleanup
