@@ -49,7 +49,7 @@ This method is also available in the `Account` class and can be used without pro
 
 The `getBlocks` method returns blocks from the blockchain matching the given `paginationArgs` parameter, supporting [pagination](./pagination.md). The below code snippet shows how to get the last 10 blocks.
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#Provider-get-blocks{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-blocks.ts#getBlocks{ts:line-numbers}
 
 ## `getMessageByNonce`
 

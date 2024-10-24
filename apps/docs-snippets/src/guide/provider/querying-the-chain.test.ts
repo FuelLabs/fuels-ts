@@ -7,28 +7,6 @@ import { TestMessage, launchTestNode } from 'fuels/test-utils';
  * @group browser
  */
 describe('querying the chain', () => {
-  it('can getBlocks', async () => {
-    using launched = await launchTestNode();
-
-    const FUEL_NETWORK_URL = launched.provider.url;
-
-    // #region Provider-get-blocks
-    // #import { Provider };
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    const blockToProduce = 3;
-
-    // Force-producing some blocks to make sure that 10 blocks exist
-    await provider.produceBlocks(blockToProduce);
-
-    const { blocks } = await provider.getBlocks({
-      last: blockToProduce,
-    });
-    // #endregion Provider-get-blocks
-    expect(blocks.length).toBe(blockToProduce);
-  });
-
   it('can getMessageByNonce', async () => {
     using launched = await launchTestNode();
     const { provider: testProvider } = launched;
