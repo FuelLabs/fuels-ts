@@ -1,4 +1,3 @@
-import { configureCliOptions as configureTypegenCliOptions } from '@fuel-ts/abi-typegen/cli';
 import { versions } from '@fuel-ts/versions';
 import { runVersions } from '@fuel-ts/versions/cli';
 import { Command, Option } from 'commander';
@@ -50,8 +49,7 @@ export const configureCli = () => {
   const desc = `Relative path/globals to `;
   const arg = `<path|global>`;
 
-  const initCommand = program
-    .command(Commands.init)
+  (command = program.command(Commands.init))
     .description('Create a sample `fuel.config.ts` file')
     .addOption(pathOption)
     .option('-w, --workspace <path>', 'Relative dir path to Forc workspace')
@@ -61,9 +59,8 @@ export const configureCli = () => {
     .requiredOption('-o, --output <path>', 'Relative dir path for Typescript generation output')
     .option('--forc-path <path>', 'Path to the `forc` binary')
     .option('--fuel-core-path <path>', 'Path to the `fuel-core` binary')
-    .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command');
-
-  initCommand.action(withProgram(initCommand, Commands.init, init));
+    .option('--auto-start-fuel-core', 'Auto-starts a `fuel-core` node during `dev` command')
+    .action(withProgram(command, Commands.init, init));
 
   (command = program.command(Commands.dev))
     .description('Start a Fuel node and run build + deploy on every file change')

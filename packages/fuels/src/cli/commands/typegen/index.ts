@@ -4,6 +4,9 @@ import type { Command } from 'commander';
 import { mkdirSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
+import type { FuelsConfig } from '../../types';
+import { debug } from '../../utils/logger';
+
 import { getProgramDetails } from './utils';
 
 interface RunTypegen {
@@ -11,7 +14,8 @@ interface RunTypegen {
   output: string;
   silent: boolean;
 }
-export function runFuelsTypegen(options: RunTypegen) {
+
+function runFuelsTypegen(options: RunTypegen) {
   const { inputs, output, silent } = options;
 
   const programDetails = getProgramDetails(inputs);
@@ -44,4 +48,19 @@ export function typegen(program: Command) {
   const { inputs, output, silent } = options;
 
   runFuelsTypegen({ inputs, output, silent });
+}
+
+export function generateTypes(config: FuelsConfig) {
+  debug('Generating types...');
+
+  const { contracts, scripts, predicates, output } = config;
+
+  const loaderPaths = scripts.concat(predicates).map((path) => `${path}/out`);
+
+  const paths = contracts
+    .concat(scripts, predicates)
+    .map((path) => `${path}/out/${config.buildMode}`)
+    .concat(loaderPaths);
+
+  runFuelsTypegen({ inputs: paths, output, silent: false });
 }

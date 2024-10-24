@@ -1,7 +1,7 @@
 import { type ProgramDetails, type AbiSpecification, AbiParser } from '@fuel-ts/abi';
 import { compressBytecode, hexlify } from '@fuel-ts/utils';
-import { globSync, readFileSync } from 'fs';
-
+import { readFileSync } from 'fs';
+import { globSync } from 'glob';
 /**
  * Converts `some.string-value` into `SomeStringValue`.
  *

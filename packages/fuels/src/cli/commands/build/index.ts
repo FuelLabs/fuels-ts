@@ -4,15 +4,15 @@ import type { FuelsConfig } from '../../types';
 import { log } from '../../utils/logger';
 import { deploy } from '../deploy';
 import { autoStartFuelCore } from '../dev/autoStartFuelCore';
+import { generateTypes } from '../typegen';
 
 import { buildSwayPrograms } from './buildSwayPrograms';
-import { generateTypes } from './generateTypes';
 
 export async function build(config: FuelsConfig, program?: Command) {
   log('Building..');
 
   await buildSwayPrograms(config);
-  await generateTypes(config);
+  generateTypes(config);
   config.onBuild?.(config);
 
   const options = program?.opts();
