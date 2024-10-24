@@ -1,9 +1,5 @@
-import type {
-  TransactionResultMessageOutReceipt,
-  CoinQuantityLike,
-  ExcludeResourcesOption,
-} from 'fuels';
-import { ScriptTransactionRequest, Provider } from 'fuels';
+import type { TransactionResultMessageOutReceipt } from 'fuels';
+import { Provider } from 'fuels';
 import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
 
 /**
@@ -11,57 +7,6 @@ import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
  * @group browser
  */
 describe('querying the chain', () => {
-  it('get spendable resources', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100,
-        assets: [TestAssetId.A],
-      },
-    });
-    const {
-      provider: testProvider,
-      wallets: [wallet],
-    } = launched;
-
-    const FUEL_NETWORK_URL = testProvider.url;
-
-    // #region get-spendable-resources-1
-    // #import { Provider, ScriptTransactionRequest, CoinQuantityLike, ExcludeResourcesOption };
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-
-    const baseAssetId = provider.getBaseAssetId();
-
-    const quantities: CoinQuantityLike[] = [
-      { amount: 32, assetId: baseAssetId, max: 42 },
-      { amount: 50, assetId: assetIdA },
-    ];
-
-    const utxoId = '0x00000000000000000000000000000000000000000000000000000000000000010001';
-    const messageNonce = '0x381de90750098776c71544527fd253412908dec3d07ce9a7367bd1ba975908a0';
-    const excludedIds: ExcludeResourcesOption = {
-      utxos: [utxoId],
-      messages: [messageNonce],
-    };
-
-    const spendableResources = await provider.getResourcesToSpend(
-      wallet.address,
-      quantities,
-      excludedIds
-    );
-
-    const tx = new ScriptTransactionRequest();
-    tx.addResources(spendableResources);
-    // #endregion get-spendable-resources-1
-
-    // #region get-spendable-resources-2
-    await wallet.getResourcesToSpend(spendableResources, excludedIds);
-    // #endregion get-spendable-resources-2
-
-    expect(spendableResources).toBeDefined();
-  });
-
   it('get balances', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
