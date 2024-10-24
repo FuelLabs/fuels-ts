@@ -19,12 +19,13 @@ export class ResolvedType {
       swayType: this.type,
       concreteTypeId: this.typeId as string,
       components: this.components?.map((c) => ({ name: c.name, type: c.type.toAbiType() })),
-      metadata: this.metadataTypeId
-        ? {
-            metadataTypeId: this.metadataTypeId,
-            typeArguments: this.typeParamsArgsMap?.map((tpa) => tpa[1].toAbiType()),
-          }
-        : undefined,
+      metadata:
+        this.metadataTypeId !== undefined
+          ? {
+              metadataTypeId: this.metadataTypeId,
+              typeArguments: this.typeParamsArgsMap?.map((tpa) => tpa[1].toAbiType()),
+            }
+          : undefined,
     };
   }
 }

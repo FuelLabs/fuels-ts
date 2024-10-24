@@ -12,8 +12,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "fuels": "workspace:*",
-    "@fuel-ts/abi": "workspace:*"
+    "fuels": "workspace:*"
   },
   "devDependencies": {
     "@fuel-ts/account": "workspace:*",
