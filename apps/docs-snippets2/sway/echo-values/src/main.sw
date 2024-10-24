@@ -46,14 +46,11 @@ impl EchoValues for Contract {
     fn echo_u64(value: u64) -> u64 {
         value
     }
-<<<<<<< HEAD
-=======
 
     // #region arrays-2
     fn echo_u64_array(u64_array: [u64; 2]) -> [u64; 2] {
         u64_array
     }
     // #endregion arrays-2
->>>>>>> master
 }
 // #endregion understanding-fuel-binary-file
