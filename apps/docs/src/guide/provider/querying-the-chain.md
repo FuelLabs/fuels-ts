@@ -13,7 +13,7 @@ Let's look at a few examples below.
 
 The base asset is the underlying asset used to perform any transaction on a chain. This should be fetched from a provider to then be used in transactions.
 
-<<< @/../../docs-snippets/src/guide/provider/provider.test.ts#provider-getBaseAssetId{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality-get-base-asset-id.ts#getBaseAssetId{ts:line-numbers}
 
 ## `getCoins`
 
