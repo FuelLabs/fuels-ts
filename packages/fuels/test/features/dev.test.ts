@@ -3,6 +3,7 @@ import * as chokidar from 'chokidar';
 import * as buildMod from '../../src/cli/commands/build/index';
 import * as deployMod from '../../src/cli/commands/deploy/index';
 import { mockStartFuelCore } from '../utils/mockAutoStartFuelCore';
+import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import { mockLogger } from '../utils/mockLogger';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import { runInit, runDev, bootstrapProject, resetConfigAndMocks } from '../utils/runCommands';
@@ -20,6 +21,10 @@ vi.mock('chokidar', async () => {
  */
 describe('dev', () => {
   const paths = bootstrapProject(__filename);
+
+  beforeEach(() => {
+    mockCheckForUpdates();
+  });
 
   afterEach(() => {
     resetConfigAndMocks(paths.fuelsConfigPath);
