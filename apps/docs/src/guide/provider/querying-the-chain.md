@@ -19,11 +19,11 @@ The base asset is the underlying asset used to perform any transaction on a chai
 
 Returns UTXOs coins from an account address, optionally filtered by asset ID. This method supports [pagination](./pagination.md).
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-coins-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/guide/provider/functionality-get-coins.ts#getCoins-1{ts:line-numbers}
 
 This method is also implemented on the `Account` class and can be used without providing the `address`:
 
-<<< @/../../docs-snippets/src/guide/provider/querying-the-chain.test.ts#get-coins-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/guide/provider/functionality-get-coins.ts#getCoins-2{ts:line-numbers}
 
 ## `getResourcesToSpend`
 

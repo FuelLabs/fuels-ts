@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type {
   TransactionResultMessageOutReceipt,
   CoinQuantityLike,
@@ -12,52 +11,6 @@ import { TestAssetId, TestMessage, launchTestNode } from 'fuels/test-utils';
  * @group browser
  */
 describe('querying the chain', () => {
-  it('query coins', async () => {
-    using launched = await launchTestNode({
-      walletsConfig: {
-        amountPerCoin: 100,
-        assets: [TestAssetId.A],
-      },
-    });
-    const {
-      provider: testProvider,
-      wallets: [wallet],
-    } = launched;
-
-    const FUEL_NETWORK_URL = testProvider.url;
-
-    // #region get-coins-1
-    // #import { Provider };
-
-    const provider = await Provider.create(FUEL_NETWORK_URL);
-
-    const assetIdA = '0x0101010101010101010101010101010101010101010101010101010101010101';
-    const baseAssetId = provider.getBaseAssetId();
-
-    // fetches up to 100 coins from baseAssetId
-    const { coins, pageInfo } = await provider.getCoins(wallet.address, baseAssetId);
-    // [
-    //   { amount: bn(100), assetId: baseAssetId },
-    //   ...
-    // ]
-
-    // fetches up to 100 coins from all assets
-    await provider.getCoins(wallet.address);
-    // [
-    //   { amount: bn(100), assetId: baseAssetId }
-    //   { amount: bn(100), assetId: assetIdA }
-    //   ...
-    // ]
-    // #endregion get-coins-1
-
-    // #region get-coins-2
-    await wallet.getCoins(baseAssetId);
-    // #endregion get-coins-2
-
-    expect(coins).toBeDefined();
-    expect(pageInfo).toBeDefined();
-  });
-
   it('get spendable resources', async () => {
     using launched = await launchTestNode({
       walletsConfig: {
