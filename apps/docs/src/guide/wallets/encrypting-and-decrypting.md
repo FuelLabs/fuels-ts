@@ -4,23 +4,23 @@ JSON wallets are a standardized way of storing wallets securely. They follow a s
 
 ## Encrypting a Wallet
 
-We will be calling `encrypt` from the [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/Account/WalletUnlocked.md) instance which will take a password as the argument. It will encrypt the private key using a cipher and returns the JSON keystore wallet. You can then securely store this JSON wallet.
+We will be calling `encrypt` from the [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletUnlocked.html) instance which will take a password as the argument. It will encrypt the private key using a cipher and returns the JSON keystore wallet. You can then securely store this JSON wallet.
 
 Here is an example of how you can accomplish this:
 
 <<< @/../../docs-snippets/src/guide/wallets/encrypting-and-decrypting-json-wallets.test.ts#encrypting-and-decrypting-json-wallets-1{ts:line-numbers}
 
-Please note that `encrypt` must be called within an instance of [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/Account/WalletUnlocked.md). This instance can only be achieved through passing a private key or mnemonic phrase to a locked wallet.
+Please note that `encrypt` must be called within an instance of [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletUnlocked.html). This instance can only be achieved through passing a private key or mnemonic phrase to a locked wallet.
 
 ## Decrypting a Wallet
 
-To decrypt the JSON wallet and retrieve your private key, you can call `fromEncryptedJson` on a [Wallet](https://fuels-ts-docs-api.vercel.app/Account/Wallet.md) instance. It takes the encrypted JSON wallet and the password as its arguments, and returns the decrypted wallet.
+To decrypt the JSON wallet and retrieve your private key, you can call `fromEncryptedJson` on a [Wallet](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Wallet.html) instance. It takes the encrypted JSON wallet and the password as its arguments, and returns the decrypted wallet.
 
 Here is an example:
 
 <<< @/../../docs-snippets/src/guide/wallets/encrypting-and-decrypting-json-wallets.test.ts#encrypting-and-decrypting-json-wallets-2{ts:line-numbers}
 
-In this example, `decryptedWallet` is an instance of [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/Account/WalletUnlocked.md) class, now available for use.
+In this example, `decryptedWallet` is an instance of [`WalletUnlocked`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.WalletUnlocked.html) class, now available for use.
 
 ## Important
 

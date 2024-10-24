@@ -25,7 +25,7 @@ This guide demonstrates how to convert between address formats and Sway Standard
 
 ## From `Bech32` to `b256`
 
-By instantiating an [`Address`](https://fuels-ts-docs-api.vercel.app/Address/Address.md), we can validate a `Bech32` address and easily convert it to a `b256`:
+By instantiating an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html), we can validate a `Bech32` address and easily convert it to a `b256`:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-5{ts:line-numbers}
 
@@ -35,7 +35,7 @@ Or, if you'd prefer to use utility functions directly for validation and convers
 
 ## From `b256` to `Bech32`
 
-In a similar fashion, we have both class functions on the [`Address`](https://fuels-ts-docs-api.vercel.app/Address/Address.md) and utilities available for `b256` validation and conversion:
+In a similar fashion, we have both class functions on the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) and utilities available for `b256` validation and conversion:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-7{ts:line-numbers}
 
@@ -45,18 +45,18 @@ And by using the `isB256` and `toBech32` utilities:
 
 ## Converting a Contract ID
 
-The Contract `id` property has the [`AbstractAddress`](../types/address.md#abstractaddress-class) type. Therefore, it can be converted using the [`Address`](https://fuels-ts-docs-api.vercel.app/Address/Address.md) class functions such as `toAddress` and `toB256`:
+The Contract `id` property has the [`AbstractAddress`](../types/address.md#abstractaddress-class) type. Therefore, it can be converted using the [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class functions such as `toAddress` and `toB256`:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-2{ts:line-numbers}
 
 ## Converting a Wallet Address
 
-Similarly, the Wallet `address` property is also of type [`AbstractAddress`](../types/address.md#abstractaddress-class) and can therefore use the same [`Address`](https://fuels-ts-docs-api.vercel.app/Address/Address.md) class functions for conversion:
+Similarly, the Wallet `address` property is also of type [`AbstractAddress`](../types/address.md#abstractaddress-class) and can therefore use the same [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) class functions for conversion:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-3{ts:line-numbers}
 
 ## Converting an Asset ID
 
-[Asset IDs](../types/asset-id.md) are a wrapped [b256](../types/bits256.md) value. The following example shows how to create an [`Address`](https://fuels-ts-docs-api.vercel.app/Address/Address.md) from a `b256` type:
+[Asset IDs](../types/asset-id.md) are a wrapped [b256](../types/bits256.md) value. The following example shows how to create an [`Address`](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_address.Address.html) from a `b256` type:
 
 <<< @/../../docs-snippets/src/guide/types/conversion.test.ts#conversion-4{ts:line-numbers}

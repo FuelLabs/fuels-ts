@@ -9,6 +9,6 @@ Included assets such as:
 - USD Coin (USDC)
 - Wrapped ETH (WETH)
 
-The helper functions `getAssetFuel` and `getAssetEth` can be used to get an asset's details relative to each network. These return a combination of the asset, and network information (the return types are [`AssetFuel`](https://fuels-ts-docs-api.vercel.app/Account/index.md#assetfuel) and [`AssetEth`](https://fuels-ts-docs-api.vercel.app/Account/index.md#asseteth) respectively).
+The helper functions `getAssetFuel` and `getAssetEth` can be used to get an asset's details relative to each network. These return a combination of the asset, and network information (the return types are [`AssetFuel`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.AssetFuel.html) and [`AssetEth`](https://fuels-ts-docs-api.vercel.app/types/_fuel_ts_account.AssetEth.html) respectively).
 
 <<< @/../../docs-snippets/src/guide/utilities/using-assets.test.ts#using-assets-1{ts:line-numbers}

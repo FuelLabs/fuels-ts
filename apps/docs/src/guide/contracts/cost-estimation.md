@@ -1,6 +1,6 @@
 # Estimating Contract Call Cost
 
-The `getTransactionCost` function provided by the [Account](https://fuels-ts-docs-api.vercel.app/Account/Account.md) allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
+The `getTransactionCost` function provided by the [Account](https://fuels-ts-docs-api.vercel.app/classes/_fuel_ts_account.Account.html) allows you to estimate the cost of a specific contract call. The return type, `TransactionCost`, is an object containing relevant information for the estimation:
 
 <<< @/../../../packages/account/src/providers/provider.ts#cost-estimation-1{ts:line-numbers}
 
