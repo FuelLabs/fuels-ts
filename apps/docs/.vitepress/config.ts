@@ -32,7 +32,7 @@ export default defineConfig({
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/FuelLabs/fuels-ts' },
-      { icon: 'twitter', link: 'https://twitter.com/fuel_network' },
+      { icon: 'twitter', link: 'https://x.com/fuel_network' },
       { icon: 'discord', link: 'https://discord.com/invite/xfpK4Pe' },
     ],
     editLink: {
