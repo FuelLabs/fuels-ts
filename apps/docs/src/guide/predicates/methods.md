@@ -46,7 +46,7 @@ The `createTransfer` method creates a transaction request with all the necessary
 
 However, please remember that you can still modify the transfer request details and use its properties before submitting it to the node.
 
-<<< @/../../docs-snippets/src/guide/predicates/send-and-spend-funds-from-predicates.test.ts#send-and-spend-funds-from-predicates-8{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/create-transfer.ts#createTransfer{ts:line-numbers}
 
 ### `transfer`
 
