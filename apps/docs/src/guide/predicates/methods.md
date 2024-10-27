@@ -52,4 +52,4 @@ However, please remember that you can still modify the transfer request details 
 
 You can send funds to another address using the `transfer` method.
 
-<<< @/../../docs-snippets/src/guide/cookbook/transferring-assets.test.ts#transferring-assets-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/transfer.ts#transfer{ts:line-numbers}
