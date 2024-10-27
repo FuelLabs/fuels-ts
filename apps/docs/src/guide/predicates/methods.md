@@ -30,7 +30,7 @@ You may want to use this method when using a predicate in an existing transactio
 
 This is used to send a transaction to the node.
 
-<<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/send-transaction.ts#sendTransaction{ts:line-numbers}
 
 ### `simulateTransaction`
 

@@ -36,45 +36,6 @@ describe('Interacting with Predicates', () => {
     return predicate;
   }
 
-  it('should successfully transfer funds to the predicate', async () => {
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [fundedWallet],
-    } = launched;
-
-    const predicate = await createAndFundPredicate(
-      provider,
-      fundedWallet,
-      [inputAddress],
-      SimplePredicate.abi,
-      SimplePredicate.bytecode
-    );
-
-    const receiver = Wallet.generate({ provider });
-
-    const transactionRequest = new ScriptTransactionRequest({ gasLimit: 2000, maxFee: bn(0) });
-    transactionRequest.addCoinOutput(receiver.address, 100, provider.getBaseAssetId());
-
-    const txCost = await predicate.getTransactionCost(transactionRequest);
-
-    transactionRequest.gasLimit = txCost.gasUsed;
-    transactionRequest.maxFee = txCost.maxFee;
-
-    await predicate.fund(transactionRequest, txCost);
-
-    // #region interacting-with-predicates-2
-
-    const result = await predicate.sendTransaction(transactionRequest);
-
-    await result.waitForResult();
-    // #endregion interacting-with-predicates-2
-
-    const { isStatusSuccess } = await result.waitForResult();
-
-    expect(isStatusSuccess).toBeTruthy();
-  });
-
   it('should successfully simulate a transaction with predicate', async () => {
     using launched = await launchTestNode();
     const {
