@@ -36,7 +36,7 @@ This is used to send a transaction to the node.
 
 You can use the `simulateTransaction` method to dry-run a predicate call without consuming resources. A typical use case of a dry-run call is to validate that sufficient funds are available to cover the transaction fees.
 
-<<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/simulate-transaction.ts#simulateTransaction{ts:line-numbers}
 
 ## Transfers
 
