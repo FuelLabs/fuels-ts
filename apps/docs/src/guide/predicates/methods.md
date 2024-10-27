@@ -1,10 +1,10 @@
 # Interacting With Predicates
 
 The `Predicate` class extends the [`Account`](https://docs.fuel.network/docs/fuels-ts/account/) class, inheriting all its methods. Therefore, there are multiple ways to interact with predicates, but broadly speaking, we can think about three:
- - `Checking Balances`
- - `Transactions`
- - `Transfers`
 
+- `Checking Balances`
+- `Transactions`
+- `Transfers`
 
 ## Checking Balances
 
@@ -22,7 +22,7 @@ This method is called under the hood when using [`transfer`](./methods.md#transf
 
 You may want to use this method when using a predicate in an existing transaction request.
 
-<<< @/../../docs-snippets/src/guide/predicates/interacting-with-predicates.test.ts#interacting-with-predicates-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/predicates/methods/get-resources-to-spend.ts#getResourcesToSpend{ts:line-numbers}
 
 ## Transactions
 

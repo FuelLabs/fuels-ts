@@ -36,41 +36,6 @@ describe('Interacting with Predicates', () => {
     return predicate;
   }
 
-  it('should get predicate resources and add them to the predicate data', async () => {
-    using launched = await launchTestNode();
-    const {
-      provider,
-      wallets: [fundedWallet],
-    } = launched;
-
-    const predicate = await createAndFundPredicate(
-      provider,
-      fundedWallet,
-      [inputAddress],
-      SimplePredicate.abi,
-      SimplePredicate.bytecode
-    );
-
-    // #region interacting-with-predicates-1
-
-    // Instantiate the transaction request
-    const transactionRequest = new ScriptTransactionRequest({
-      gasLimit: 2000,
-      maxFee: bn(0),
-    });
-
-    const predicateCoins = await predicate.getResourcesToSpend([
-      { amount: 2000, assetId: provider.getBaseAssetId() },
-    ]);
-
-    // Add the predicate input and resources
-    transactionRequest.addResources(predicateCoins);
-    // #endregion interacting-with-predicates-1
-
-    expect(transactionRequest.inputs.length).toBeGreaterThanOrEqual(1);
-    expect(transactionRequest.outputs.length).toEqual(1);
-  });
-
   it('should successfully transfer funds to the predicate', async () => {
     using launched = await launchTestNode();
     const {
