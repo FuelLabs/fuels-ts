@@ -48,7 +48,7 @@ pub struct StructWithMultiOption {
 }
 
 pub struct StructWithSingleOption {
-    pub b: Option<StructWithMultiOption>,
+    pub a: Option<StructWithMultiOption>,
 }
 
 pub struct StructWithVector {

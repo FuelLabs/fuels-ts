@@ -26,10 +26,11 @@ import type {
   StructWithNestedTupleInput,
   StructSingleGenericInput,
   StructWithImplicitGenericsInput,
-  StructSingleGenericOutput,
   AssetIdInput,
   StructWithEnumArrayInput,
   StructWithEnumArrayOutput,
+  StructWithSingleOptionOutput,
+  StructWithSingleOptionInput,
 } from '../../test/typegen/contracts/AbiContract';
 import type { Option, Result, Vec } from '../../test/typegen/contracts/common';
 
@@ -810,7 +811,26 @@ describe('AbiCoder', () => {
   });
 
   describe.todo('types_struct_with_complex_nested_struct');
-  describe.todo('types_struct_with_single_option');
+
+  describe('types_struct_with_single_option', () => {
+    it('should encode/decode just fine', async () => {
+      const input: StructWithSingleOptionInput = {
+        a: {
+          a: [1, undefined, 2, undefined, 3],
+        },
+      };
+      const expected: StructWithSingleOptionOutput = {
+        a: undefined,
+      };
+
+      const { waitForResult } = await contract.functions
+        .types_struct_with_single_option(input)
+        .call();
+
+      const { value } = await waitForResult();
+      expect(value).toEqual(expected);
+    });
+  });
 
   /**
    * Enums

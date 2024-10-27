@@ -557,14 +557,6 @@ impl AbiContract for Contract {
         // assert(y == INPUT_Y);
     }
 
-    fn types_struct_with_complex_nested_struct(x: StructD<u32, u32, StructF<Vec<StructG>>>) -> bool {
-        false
-    }
-
-    fn types_struct_with_single_option(x: StructWithSingleOption) -> StructWithSingleOption {
-        x
-    }
-
     fn types_struct_with_implicit_generics(
         x: StructWithImplicitGenerics<b256, u8>,
     ) -> StructWithImplicitGenerics<b256, u8> {
@@ -637,6 +629,26 @@ impl AbiContract for Contract {
             a: [EXPECTED_ENUM, EXPECTED_ENUM, EXPECTED_ENUM],
         };
 
+        EXPECTED
+    }
+
+    fn types_struct_with_complex_nested_struct(x: StructD<u32, u32, StructF<Vec<StructG>>>) -> bool {
+        false
+    }
+
+    fn types_struct_with_single_option(x: StructWithSingleOption) -> StructWithSingleOption {
+        const OPTION_ARRAY: [Option<u8>; 5] = [Option::Some(1), Option::None, Option::Some(2), Option::None, Option::Some(3)];
+        const OPTION_STRUCT: Option<StructWithMultiOption> = Option::Some(StructWithMultiOption {
+          a: OPTION_ARRAY
+        });
+        const INPUT: StructWithSingleOption = StructWithSingleOption {
+          a: OPTION_STRUCT
+        };
+        assert(x == INPUT);
+
+        const EXPECTED: StructWithSingleOption = StructWithSingleOption {
+          a: Option::None
+        };
         EXPECTED
     }
 
