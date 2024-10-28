@@ -4,6 +4,7 @@ members = [
   "counter",
   "echo-asset-id",
   "echo-bytes",
+  "echo-configurables",
   "echo-employee-data-vector",
   "echo-enum",
   "echo-evm-address",

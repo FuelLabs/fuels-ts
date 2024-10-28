@@ -24,22 +24,11 @@ configurable {
 }
 
 abi EchoConfigurables {
-    fn echo_configurables(updated_grades: bool) -> (u8, str[4], [u8; 4], MyStruct);
+    fn echo_configurables() -> (u8, str[4], [u8; 4], MyStruct);
 }
 
 impl EchoConfigurables for Contract {
-    fn echo_configurables(updated_grades: bool) -> (u8, str[4], [u8; 4], MyStruct) {
-        if (updated_grades) {
-            assert_eq(grades[0], 10);
-            assert_eq(grades[1], 9);
-            assert_eq(grades[2], 8);
-            assert_eq(grades[3], 9);
-        } else {
-            assert_eq(grades[0], 3);
-            assert_eq(grades[1], 4);
-            assert_eq(grades[2], 3);
-            assert_eq(grades[3], 2);
-        }
+    fn echo_configurables() -> (u8, str[4], [u8; 4], MyStruct) {
         (age, tag, grades, my_struct)
     }
 }
