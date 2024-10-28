@@ -1,14 +1,23 @@
 // #region getResourcesToSpend
-import { bn, Provider, ScriptTransactionRequest } from 'fuels';
+import { bn, Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL } from '../../env';
-import { SimplePredicate } from '../../typegend';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
+import { ReturnTruePredicate } from '../../typegend';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
+const funder = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-const predicate = new SimplePredicate({
+const predicate = new ReturnTruePredicate({
   provider,
 });
+
+// Fund the predicate
+const fundPredicate = await funder.transfer(
+  predicate.address,
+  100_000_000,
+  provider.getBaseAssetId()
+);
+await fundPredicate.waitForResult();
 
 // Instantiate the transaction request.
 const transactionRequest = new ScriptTransactionRequest({
@@ -32,5 +41,5 @@ console.log(
 
 console.log(
   'Transaction should have a single output',
-  transactionRequest.outputs.length === 0
+  transactionRequest.outputs.length === 1
 );
