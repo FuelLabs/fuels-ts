@@ -1,4 +1,4 @@
-// #region contract-balance-2
+// #region full
 contract;
 
 use std::asset::transfer;
@@ -20,4 +20,4 @@ impl TransferToAddress for Contract {
         );
     }
 }
-// #endregion contract-balance-2
+// #endregion full

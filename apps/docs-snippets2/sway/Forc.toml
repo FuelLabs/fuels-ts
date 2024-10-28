@@ -16,5 +16,6 @@ members = [
   "script-sum",
   "simple-predicate",
   "sum-option-u8",
-  "return-context"
+  "return-context",
+  "transfer-to-address"
 ]
