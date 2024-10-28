@@ -20,8 +20,8 @@ beforeAll(async () => {
   const killCommand = 'lsof -ti:4000 | xargs kill -9';
 
   try {
-    await new Promise((resolve, reject) => {
-      exec(killCommand, (error: Error | null) => {
+    await new Promise((resolve) => {
+      exec(killCommand, () => {
         // Ignore errors since port may not be in use
         resolve(null);
       });
