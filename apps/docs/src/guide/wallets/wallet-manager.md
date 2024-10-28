@@ -84,13 +84,13 @@ This guide will walk you through the process of managing the lock state of your 
 
 As mentioned earlier, a `WalletManager` instance begins in a locked state. Before usage, you need to unlock it by providing a password via the unlock method.
 
-<<< @/../../docs-snippets/src/guide/wallet-manager/locking-and-unlocking-wallet-manager.test.ts#locking-and-unlocking-wallet-manager-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-1{ts:line-numbers}
 
 ### Locking the `WalletManager`
 
 When you lock the `WalletManager` using the `lock` method, all its vaults and associated accounts (wallets) are cleared. This clearance is possible due to the encryption and saving of all data by the storage system. `WalletManager` frequently uses the storage system to preserve its state. Consequently, sensitive operations including exporting vaults, private keys, accessing wallets, and saving/loading the `WalletManager` state are not possible when it is locked.
 
-<<< @/../../docs-snippets/src/guide/wallet-manager/locking-and-unlocking-wallet-manager.test.ts#locking-and-unlocking-wallet-manager-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallet-manager/locking-and-unlocking-wallet-manager.ts#locking-and-unlocking-wallet-manager-2{ts:line-numbers}
 
 Remember, it's crucial to lock your `WalletManager` when it's not in use to ensure the safety of your funds.
 

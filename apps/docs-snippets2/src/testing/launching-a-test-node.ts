@@ -4,6 +4,10 @@ import { WalletUnlocked, Provider } from 'fuels';
 import { launchTestNode, TestAssetId, TestMessage } from 'fuels/test-utils';
 import { join } from 'path';
 
+/**
+ * @group node
+ */
+
 // #region automatic-cleanup
 using launched = await launchTestNode();
 

@@ -17,10 +17,14 @@ export const wrapSnippet = (filepath: string) => {
    */
   let testEnvironments = '';
 
-  // Check if the filepath includes '.node' or '.browser'
-  if (filepath.includes('.node')) {
+  // Check if the file contains 'node' or 'browser' groups at the top of the file
+  const fileContents = readFileSync(filepath, 'utf8');
+  const hasNodeComment = fileContents.includes('@group node');
+  const hasBrowserComment = fileContents.includes('@group browser');
+
+  if (hasNodeComment && !hasBrowserComment) {
     testEnvironments = '/**\n * @group node\n */';
-  } else if (filepath.includes('.browser')) {
+  } else if (hasBrowserComment && !hasNodeComment) {
     testEnvironments = '/**\n * @group browser\n */';
   } else {
     testEnvironments = '/**\n * @group node\n * @group browser\n */';
