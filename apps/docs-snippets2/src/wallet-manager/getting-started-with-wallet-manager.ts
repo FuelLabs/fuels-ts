@@ -42,12 +42,21 @@ await walletManager.addVault({
 
 // #region getting-started-with-wallet-manager-5
 const vaults = walletManager.getVaults();
-
-console.log(vaults);
 // #endregion getting-started-with-wallet-manager-5
 
 // #region getting-started-with-wallet-manager-6
-
+// [
+//     {
+//         title: 'My first private key vault',
+//         type: 'privateKey',
+//         vaultId: 0
+//     },
+//     {
+//         title: 'My second private key vault',
+//         type: 'privateKey',
+//         vaultId: 1
+//     }
+// ]
 // #endregion getting-started-with-wallet-manager-6
 
 // #region getting-started-with-wallet-manager-7

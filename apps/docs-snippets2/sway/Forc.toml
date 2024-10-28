@@ -2,7 +2,6 @@
 members = [
   "bytecode-input",
   "counter",
-  "script-sum",
   "echo-values",
   "script-transfer-to-contract",
   "echo-asset-id",
@@ -12,7 +11,6 @@ members = [
   "echo-evm-address",
   "echo-raw-slice",
   "echo-std-string",
-  "echo-values",
   "employee-data",
   "input-output-types",
   "script-sum",
