@@ -36,4 +36,7 @@ const decryptedWallet = await Wallet.fromEncryptedJson(
 // Use the decrypted wallet
 const myBalance = await decryptedWallet.getBalance();
 // #endregion full
+/**
+ * @group node
+ */
 console.log('myBalance', myBalance);
