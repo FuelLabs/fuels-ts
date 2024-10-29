@@ -323,7 +323,7 @@ The TS SDK exports the `Fuel` class, which serves as the connectors manager. Thi
 
 It can be instantiated as follows:
 
-<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-instantiation-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-instantiation-one.ts#fuel-instantiation-1{ts:line-numbers}
 
 > [!NOTE] Note
 > We recommend initializing the Fuel class with the `init` method to avoid any potential race conditions that may arise from the async nature of instantiating a connector.
@@ -342,23 +342,23 @@ The `connectors` option provides a list of connectors with which the `Fuel` conn
 
 Below, we initialize the manager using the `defaultConnectors` method which provides an array of all the default connectors available in the `fuel-connectors` package. Supplying the `devMode` flag as `true` will enable the development wallet for the connectors (to install visit our [wallet documentation](https://docs.fuel.network/docs/wallet/install/)).
 
-<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-options-connectors{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-instantiation-options.ts#fuel-options-connectors{ts:line-numbers}
 
 #### `storage`
 
 The `storage` is used internally to store the current connector state. It can be overridden by passing an instance that extends the `StorageAbstract` class.
 
-<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-options-storage-memory{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-options-storage-memory.ts#fuel-options-storage-memory{ts:line-numbers}
 
 The default behavior will use `LocalStorage` if the `window` is available:
 
-<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-options-storage-local{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-options-storage-local.ts#fuel-options-storage-local{ts:line-numbers}
 
 #### `targetObject`
 
 The `targetObject` provides a target with which the `Fuel` manager can interact. Used for registering events and can be overridden as follows:
 
-<<< @/../../docs-snippets2/src/wallets/connectors.ts#fuel-options-target-object{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/fuel-options-target-object.ts#fuel-options-target-object{ts:line-numbers}
 
 ### Methods
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // #region full
 // #region encrypting-and-decrypting-json-wallets-1
 import fs from 'fs';

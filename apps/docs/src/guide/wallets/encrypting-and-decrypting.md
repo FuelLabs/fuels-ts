@@ -18,7 +18,7 @@ To decrypt the JSON wallet and retrieve your private key, you can call `fromEncr
 
 Here is an example:
 
-<<< @/../../docs-snippets2/src/wallets/encrypting-and-decrypting-wallets.ts#encrypting-and-decrypting-json-wallets-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/encrypting-and-decrypting-json-wallets-two.ts#encrypting-and-decrypting-json-wallets-2{ts:line-numbers}
 
 In this example, `decryptedWallet` is an instance of [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) class, now available for use.
 

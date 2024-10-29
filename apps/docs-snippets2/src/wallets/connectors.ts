@@ -1,6 +1,7 @@
 // #region full
 
 /* eslint-disable max-classes-per-file */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fuel, LocalStorage, MemoryStorage, FuelConnector } from 'fuels';
 import type { TargetObject, Network, Asset, FuelABI } from 'fuels';
 
@@ -34,7 +35,7 @@ metadata = {
   // #endregion fuel-connector-metadata-image-theme
 };
 
-export class WalletConnector extends FuelConnector {
+class WalletConnector extends FuelConnector {
   // #region fuel-connector-name
   name: string = 'My Wallet Connector';
   // #endregion fuel-connector-name
@@ -179,4 +180,5 @@ const targetObject: TargetObject = emptyWindow || document;
 const sdkWithTargetObject = await new Fuel({
   targetObject,
 }).init();
+
 // #endregion full

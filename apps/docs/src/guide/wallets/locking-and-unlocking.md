@@ -30,17 +30,17 @@ provides greater access via its private key.
 
 You can choose not to pass through a provider argument on `Wallet` construction:
 
-<<< @/../../docs-snippets2/src/wallets/access.ts#wallet-optional-provider{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/wallet-optional-provider.ts#wallet-optional-provider{ts:line-numbers}
 
 ## Transitioning States
 
 A [`WalletLocked`](../../api/Account/WalletLocked.md) instance can be unlocked by providing the private key:
 
-<<< @/../../docs-snippets2/src/wallets/access.ts#wallet-locked-to-unlocked{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/locked-to-unlocked.ts#wallet-locked-to-unlocked{ts:line-numbers}
 
 A [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) instance can be locked using the `lock` method:
 
-<<< @/../../docs-snippets2/src/wallets/access.ts#wallet-unlocked-to-locked{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/unlocked-to-locked.ts#wallet-unlocked-to-locked{ts:line-numbers}
 
 Most wallet constructors that create or generate a new wallet are provided on
 the [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) type. Consider locking the wallet with the `lock` method after the new private

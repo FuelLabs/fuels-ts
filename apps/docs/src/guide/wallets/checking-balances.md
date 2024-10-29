@@ -6,7 +6,7 @@ To check the balance of a specific asset, you can use [`getBalance`](../../api/A
 
 To retrieve the balances of all assets in your wallet, use the [`getBalances`](../../api/Account/Account.md#getbalances) method, it returns an array of [`CoinQuantity`](../../api/Account/index.md#coinquantity). This is useful for getting a comprehensive view of your holdings.
 
-<<< @/../../docs-snippets2/src/wallets/checking-balances.ts#checking-balances-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/checking-balances-two.ts#checking-balances-2{ts:line-numbers}
 
 ## Full Example
 

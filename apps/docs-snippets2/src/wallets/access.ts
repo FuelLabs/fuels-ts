@@ -11,9 +11,9 @@ const myWallet: WalletUnlocked = Wallet.generate({ provider });
 
 // or use an Address to create a wallet
 const someWallet: WalletLocked = Wallet.fromAddress(myWallet.address, provider);
+// #endregion wallets
 console.log('my wallet address', myWallet.address);
 console.log('some wallet address', someWallet.address);
-// #endregion wallets
 
 const wallet: WalletUnlocked = Wallet.generate({ provider });
 const PRIVATE_KEY = wallet.privateKey;
@@ -45,7 +45,7 @@ unlockedWalletWithoutProvider = Wallet.fromPrivateKey(
 unlockedWalletWithoutProvider.lock();
 
 // All provider dependent methods will throw
-await expect(() => unlockedWallet.getCoins()).rejects.toThrow(
+await expect(() => unlockedWalletWithoutProvider.getCoins()).rejects.toThrow(
   /Provider not set/
 );
 // #endregion full
