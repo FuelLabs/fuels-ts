@@ -15,10 +15,8 @@ const balance: BN = await myWallet.getBalance(provider.getBaseAssetId());
 console.log('balance', balance);
 // #endregion checking-balances-1
 
-// #region checking-balances-2
 const myOtherWallet = Wallet.fromPrivateKey(WALLET_PVT_KEY_2, provider);
 
 const { balances } = await myOtherWallet.getBalances();
-console.log('balances:', balances);
-// #endregion checking-balances-2
 // #endregion full
+console.log('balances:', balances);

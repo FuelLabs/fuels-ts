@@ -15,7 +15,6 @@ console.log('my wallet address', myWallet.address);
 console.log('some wallet address', someWallet.address);
 // #endregion wallets
 
-// #region wallet-locked-to-unlocked
 const wallet: WalletUnlocked = Wallet.generate({ provider });
 const PRIVATE_KEY = wallet.privateKey;
 
@@ -29,15 +28,12 @@ const lockedWallet: WalletLocked = Wallet.fromAddress(
 const someUnlockedWallet: WalletUnlocked = lockedWallet.unlock(PRIVATE_KEY);
 
 console.log('unlocked wallet address', someUnlockedWallet.address);
-// #endregion wallet-locked-to-unlocked
 
 // #region wallet-unlocked-to-locked
 const unlockedWallet: WalletUnlocked = Wallet.generate({ provider });
 const newlyLockedWallet = unlockedWallet.lock();
 console.log('newly locked wallet address', newlyLockedWallet.address);
 // #endregion wallet-unlocked-to-locked
-
-// #region wallet-optional-provider
 
 // You can create a wallet, without a provider
 let unlockedWalletWithoutProvider: WalletUnlocked = Wallet.generate();
@@ -52,5 +48,4 @@ unlockedWalletWithoutProvider.lock();
 await expect(() => unlockedWallet.getCoins()).rejects.toThrow(
   /Provider not set/
 );
-// #endregion wallet-optional-provider
 // #endregion full

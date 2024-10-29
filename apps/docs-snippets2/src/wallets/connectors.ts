@@ -34,7 +34,7 @@ metadata = {
   // #endregion fuel-connector-metadata-image-theme
 };
 
-class WalletConnector extends FuelConnector {
+export class WalletConnector extends FuelConnector {
   // #region fuel-connector-name
   name: string = 'My Wallet Connector';
   // #endregion fuel-connector-name
@@ -78,7 +78,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-currentAccount
 
     // #region fuel-connector-events-networks
-    // #import { Network };
 
     const network: Network = {
       chainId: 1,
@@ -89,7 +88,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-networks
 
     // #region fuel-connector-events-currentNetwork
-    // #import { Network };
 
     const currentNetwork: Network = {
       chainId: 1,
@@ -100,7 +98,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-currentNetwork
 
     // #region fuel-connector-events-assets
-    // #import { Asset };
 
     const assets: Array<Asset> = [
       {
@@ -140,8 +137,6 @@ class WalletConnector extends FuelConnector {
   }
 }
 
-// #region fuel-instantiation-1
-
 const sdk = new Fuel();
 
 /*
@@ -149,31 +144,20 @@ const sdk = new Fuel();
 	derived from the async nature of instantiating a connector.
 */
 await sdk.init();
-console.log('sdk', sdk);
-// #endregion fuel-instantiation-1
 
 const defaultConnectors = (_opts: {
   devMode: boolean;
 }): Array<FuelConnector> => [new WalletConnector()];
-
-// #region fuel-options-connectors
-// #import { Fuel };
-// #context import { defaultConnectors } from '@fuels/connectors';
 
 const sdkDevMode = await new Fuel({
   connectors: defaultConnectors({
     devMode: true,
   }),
 }).init();
-console.log('sdk', sdkDevMode);
-// #endregion fuel-options-connectors
 
-// #region fuel-options-storage-memory
 const sdkWithMemoryStorage = await new Fuel({
   storage: new MemoryStorage(),
 }).init();
-console.log('sdkWithMemoryStorage', sdkWithMemoryStorage);
-// #endregion fuel-options-storage-memory
 
 const window = {
   localStorage: {
@@ -184,22 +168,15 @@ const window = {
   } as unknown as Storage,
 };
 
-// #region fuel-options-storage-local
 const sdkWithLocalStorage = await new Fuel({
   storage: new LocalStorage(window.localStorage),
 }).init();
-console.log('sdkWithLocalStorage', sdkWithLocalStorage);
-// #endregion fuel-options-storage-local
 
 const emptyWindow = {} as unknown as TargetObject;
 
-// #region fuel-options-target-object
 const targetObject: TargetObject = emptyWindow || document;
 
 const sdkWithTargetObject = await new Fuel({
   targetObject,
 }).init();
-console.log('sdkWithTargetObject', sdkWithTargetObject);
-// #endregion fuel-options-target-object
-
 // #endregion full
