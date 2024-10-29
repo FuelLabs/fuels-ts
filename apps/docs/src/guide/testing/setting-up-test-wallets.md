@@ -12,10 +12,4 @@ You can set up multiple test wallets using the `launchTestNode` utility via the 
 
 To understand the different configurations, check out the [walletsConfig](./test-node-options.md#walletsconfig) in the test node options guide.
 
-<<< @/../../docs-snippets/src/guide/wallets/instantiating-wallets.test.ts#multiple-wallets{ts:line-numbers}
-
-## Full Example
-
-For a full example of how to set up multiple test wallets, see the snippet below:
-
-<<< @/../../docs-snippets2/src/wallets/access.ts#full{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/instantiating/launch-test-node-wallets.ts#multiple-wallets{ts:line-numbers}
