@@ -11,7 +11,7 @@ const assetIdA =
   '0x0101010101010101010101010101010101010101010101010101010101010101';
 const baseAssetId = provider.getBaseAssetId();
 
-// Fetches up to 100 coins from baseAssetId
+// Fetches up to 100 coins that have an asset ID that is equal to the base asset ID
 const { coins: coinsOnlyBaseAsset } = await provider.getCoins(
   wallet.address,
   baseAssetId
@@ -21,7 +21,7 @@ const { coins: coinsOnlyBaseAsset } = await provider.getCoins(
 //   ...
 // ]
 
-// Fetches up to 100 coins from all assets
+// Fetches up to 100 coins - irrespective of the asset ID
 const { coins: coinsAnyAsset } = await provider.getCoins(wallet.address);
 // [
 //   { amount: bn(100), assetId: baseAssetId }
@@ -30,14 +30,5 @@ const { coins: coinsAnyAsset } = await provider.getCoins(wallet.address);
 // ]
 // #endregion getCoins-1
 
-// #region getCoins-2
-const { coins: coinsFromWallet } = await wallet.getCoins(baseAssetId);
-// [
-//   { amount: bn(100), assetId: baseAssetId },
-//   ...
-// ]
-// #endregion getCoins-2
-
 console.log('coinsOnlyBaseAsset', coinsOnlyBaseAsset);
 console.log('coinsAnyAsset', coinsAnyAsset);
-console.log('coinsFromWallet', coinsFromWallet);
