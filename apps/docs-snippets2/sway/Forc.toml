@@ -2,6 +2,7 @@
 members = [
   "bytecode-input",
   "counter",
+  "log-values",
   "my-contract",
   "echo-values",
   "script-transfer-to-contract",
