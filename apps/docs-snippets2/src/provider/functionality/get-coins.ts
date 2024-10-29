@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+// #region getCoins-1
 import { Provider, Wallet } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../env';
+import { LOCAL_NETWORK_URL, WALLET_PVT_KEY } from '../../env';
 
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 const wallet = Wallet.fromPrivateKey(WALLET_PVT_KEY, provider);
 
-// #region getCoins-1
 const assetIdA =
   '0x0101010101010101010101010101010101010101010101010101010101010101';
 const baseAssetId = provider.getBaseAssetId();

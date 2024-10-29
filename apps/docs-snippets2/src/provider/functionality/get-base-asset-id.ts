@@ -1,7 +1,7 @@
 // #region getBaseAssetId
 import { Address, Provider, ScriptTransactionRequest } from 'fuels';
 
-import { LOCAL_NETWORK_URL, WALLET_ADDRESS } from '../env';
+import { LOCAL_NETWORK_URL, WALLET_ADDRESS } from '../../env';
 
 // Fetch the base asset ID using the provider
 const provider = await Provider.create(LOCAL_NETWORK_URL);
