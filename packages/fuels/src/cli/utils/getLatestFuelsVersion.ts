@@ -8,6 +8,7 @@ export const getLatestFuelsVersion = async (): Promise<string | undefined> => {
 
   const data: { version: string } | null = await Promise.race([
     new Promise((_, reject) => {
+      // eslint-disable-next-line prefer-promise-reject-errors
       setTimeout(() => reject(null), 3000);
     }),
     fetch('https://registry.npmjs.org/fuels/latest').then((response) => response.json()),
