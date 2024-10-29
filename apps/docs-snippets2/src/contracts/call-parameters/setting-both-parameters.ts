@@ -13,7 +13,7 @@ const { contract } = await deploy.waitForResult();
 const contractCallGasLimit = 4_000;
 const transactionGasLimit = 100_000;
 
-const { waitForResult } = await contract.functions
+const call = await contract.functions
   .return_context_amount()
   .callParams({
     forward: [10, provider.getBaseAssetId()],
@@ -23,9 +23,9 @@ const { waitForResult } = await contract.functions
     gasLimit: transactionGasLimit,
   })
   .call();
-
 // #endregion setting-both-parameters
+
 const {
   transactionResult: { isStatusSuccess },
-} = await waitForResult();
+} = await call.waitForResult();
 console.log('tx successful', isStatusSuccess);

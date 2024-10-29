@@ -12,7 +12,7 @@ Below is an example of a contract in which we declare four configurable constant
 
 <<< @/../../docs-snippets2/sway/echo-configurables/src/main.sw#configurable-constants-1{rust:line-numbers}
 
-In this contract, we have a function `echo_configurables` that returns the values of the configurable constants, which we'll use for demonstrating the setting of configurables via the SDK.
+In this contract, the function `echo_configurables` returns the values of the configurable constants, which we'll use for demonstrating the setting of configurables via the SDK.
 
 ## Setting New Values For Configurable Constants
 

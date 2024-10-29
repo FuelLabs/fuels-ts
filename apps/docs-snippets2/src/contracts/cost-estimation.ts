@@ -30,7 +30,7 @@ const scope = contract.multiCall([
   }),
 ]);
 
-const transactionCost = await scope.getTransactionCost();
+const txCost = await scope.getTransactionCost();
 
-console.log('costs', transactionCost);
+console.log('costs', txCost);
 // #endregion cost-estimation-2
