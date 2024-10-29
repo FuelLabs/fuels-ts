@@ -1,4 +1,4 @@
-import { getRandomB256, Provider, Wallet } from 'fuels';
+import { Provider, Wallet } from 'fuels';
 import { safeExec } from 'fuels/test-utils';
 
 import { LOCAL_NETWORK_URL } from '../../env';
