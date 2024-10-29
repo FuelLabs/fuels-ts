@@ -16,7 +16,10 @@ members = [
   "input-output-types",
   "script-sum",
   "simple-predicate",
+  "simple-token",
+  "simple-token-abi",
   "sum-option-u8",
+  "token-depositor",
   "return-context",
   "transfer-to-address"
 ]
