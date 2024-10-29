@@ -3,6 +3,9 @@ import { Provider, Wallet } from 'fuels';
 
 import { LOCAL_NETWORK_URL } from '../env';
 
+/**
+ * @group node
+ */
 const provider = await Provider.create(LOCAL_NETWORK_URL);
 
 const newJsonWallet = await Wallet.generate({
