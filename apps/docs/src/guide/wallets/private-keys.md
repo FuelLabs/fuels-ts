@@ -2,7 +2,7 @@
 
 A new wallet with a randomly generated private key can be created by supplying `Wallet.generate`.
 
-<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/access.ts#wallets{ts:line-numbers}
 
 Alternatively, you can create a wallet from a Private Key:
 

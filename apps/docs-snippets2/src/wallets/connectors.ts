@@ -1,3 +1,5 @@
+// #region full
+
 /* eslint-disable max-classes-per-file */
 import { Fuel, LocalStorage, MemoryStorage, FuelConnector } from 'fuels';
 import type { TargetObject, Network, Asset, FuelABI } from 'fuels';
@@ -138,93 +140,66 @@ class WalletConnector extends FuelConnector {
   }
 }
 
-/**
- * @group node
- */
-describe('connectors', () => {
-  describe('instantiation', () => {
-    test('should be able to instantiate a Fuel SDK', async () => {
-      // #region fuel-instantiation-1
-      // #import { Fuel };
+// #region fuel-instantiation-1
 
-      const sdk = new Fuel();
+const sdk = new Fuel();
 
-      /*
-        Awaits for initialization to mitigate potential race conditions
-        derived from the async nature of instantiating a connector.
-      */
-      await sdk.init();
-      // #endregion fuel-instantiation-1
+/*
+	Awaits for initialization to mitigate potential race conditions
+	derived from the async nature of instantiating a connector.
+*/
+await sdk.init();
+console.log('sdk', sdk);
+// #endregion fuel-instantiation-1
 
-      expect(sdk).toBeDefined();
-    });
+const defaultConnectors = (_opts: {
+  devMode: boolean;
+}): Array<FuelConnector> => [new WalletConnector()];
 
-    test('should be able to instantiate with connectors', async () => {
-      const defaultConnectors = (_opts: { devMode: boolean }): Array<FuelConnector> => [
-        new WalletConnector(),
-      ];
+// #region fuel-options-connectors
+// #import { Fuel };
+// #context import { defaultConnectors } from '@fuels/connectors';
 
-      // #region fuel-options-connectors
-      // #import { Fuel };
-      // #context import { defaultConnectors } from '@fuels/connectors';
+const sdkDevMode = await new Fuel({
+  connectors: defaultConnectors({
+    devMode: true,
+  }),
+}).init();
+console.log('sdk', sdkDevMode);
+// #endregion fuel-options-connectors
 
-      const sdk = await new Fuel({
-        connectors: defaultConnectors({
-          devMode: true,
-        }),
-      }).init();
-      // #endregion fuel-options-connectors
+// #region fuel-options-storage-memory
+const sdkWithMemoryStorage = await new Fuel({
+  storage: new MemoryStorage(),
+}).init();
+console.log('sdkWithMemoryStorage', sdkWithMemoryStorage);
+// #endregion fuel-options-storage-memory
 
-      expect(sdk).toBeDefined();
-    });
+const window = {
+  localStorage: {
+    setItem: vi.fn(),
+    getItem: vi.fn(),
+    removeItem: vi.fn(),
+    clear: vi.fn(),
+  } as unknown as Storage,
+};
 
-    test('should be able to instantiate with memory storage', async () => {
-      // #region fuel-options-storage-memory
-      // #import { Fuel, MemoryStorage };
+// #region fuel-options-storage-local
+const sdkWithLocalStorage = await new Fuel({
+  storage: new LocalStorage(window.localStorage),
+}).init();
+console.log('sdkWithLocalStorage', sdkWithLocalStorage);
+// #endregion fuel-options-storage-local
 
-      const sdk = await new Fuel({
-        storage: new MemoryStorage(),
-      }).init();
-      // #endregion fuel-options-storage-memory
+const emptyWindow = {} as unknown as TargetObject;
 
-      expect(sdk).toBeDefined();
-    });
+// #region fuel-options-target-object
+const targetObject: TargetObject = emptyWindow || document;
 
-    test('should be able to instantiate with local storage', async () => {
-      const window = {
-        localStorage: {
-          setItem: vi.fn(),
-          getItem: vi.fn(),
-          removeItem: vi.fn(),
-          clear: vi.fn(),
-        } as unknown as Storage,
-      };
+const sdkWithTargetObject = await new Fuel({
+  targetObject,
+}).init();
+console.log('sdkWithTargetObject', sdkWithTargetObject);
+// #endregion fuel-options-target-object
 
-      // #region fuel-options-storage-local
-      // #import { Fuel, LocalStorage };
-
-      const sdk = await new Fuel({
-        storage: new LocalStorage(window.localStorage),
-      }).init();
-      // #endregion fuel-options-storage-local
-
-      expect(sdk).toBeDefined();
-    });
-
-    test('should be able to instantiate with targetObject', async () => {
-      const window = {} as unknown as TargetObject;
-
-      // #region fuel-options-target-object
-      // #import { Fuel, TargetObject };
-
-      const targetObject: TargetObject = window || document;
-
-      const sdk = await new Fuel({
-        targetObject,
-      }).init();
-      // #endregion fuel-options-target-object
-
-      expect(sdk).toBeDefined();
-    });
-  });
-});
+// #endregion full

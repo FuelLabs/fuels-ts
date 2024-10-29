@@ -24,23 +24,23 @@ provides greater access via its private key.
 
 ## Basic Example
 
-<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallets{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/access.ts#wallets{ts:line-numbers}
 
 ## Optional Provider
 
 You can choose not to pass through a provider argument on `Wallet` construction:
 
-<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallet-optional-provider{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/access.ts#wallet-optional-provider{ts:line-numbers}
 
 ## Transitioning States
 
 A [`WalletLocked`](../../api/Account/WalletLocked.md) instance can be unlocked by providing the private key:
 
-<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallet-locked-to-unlocked{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/access.ts#wallet-locked-to-unlocked{ts:line-numbers}
 
 A [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) instance can be locked using the `lock` method:
 
-<<< @/../../docs-snippets/src/guide/wallets/access.test.ts#wallet-unlocked-to-locked{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/access.ts#wallet-unlocked-to-locked{ts:line-numbers}
 
 Most wallet constructors that create or generate a new wallet are provided on
 the [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) type. Consider locking the wallet with the `lock` method after the new private
@@ -54,3 +54,9 @@ about the kind of access that we require. API developers should aim to minimise
 their usage of [`WalletUnlocked`](../../api/Account/WalletUnlocked.md) in order to ensure private keys are stored in
 memory no longer than necessary to reduce the surface area for attacks and
 vulnerabilities in downstream libraries and applications.
+
+## Full Example
+
+For a full example of how to lock and unlock a wallet, see the snippet below:
+
+<<< @/../../docs-snippets2/src/wallets/access.ts#full{ts:line-numbers}
