@@ -29,11 +29,11 @@ This method is also implemented on the `Account` class and can be used without p
 
 Returns spendable resources (coins or messages) for a transaction request. It accepts an optional third parameter, `excludedIds`, to exclude specific UTXO IDs or coin message nonces:
 
-<<< @/../../docs-snippets2/src/provider/functionality/get-resources-to-spend.ts#getResourcesToSpend-1{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality/get-resources-to-spend-from-provider.ts#getResourcesToSpend-1{ts:line-numbers}
 
 This method is also available in the `Account` class and can be used without providing the `address`:
 
-<<< @/../../docs-snippets2/src/provider/functionality/get-resources-to-spend.ts#getResourcesToSpend-2{ts:line-numbers}
+<<< @/../../docs-snippets2/src/provider/functionality/get-resources-to-spend-from-account.ts#getResourcesToSpend-2{ts:line-numbers}
 
 ## `getBalances`
 

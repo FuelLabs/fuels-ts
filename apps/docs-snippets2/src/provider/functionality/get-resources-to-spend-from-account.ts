@@ -1,4 +1,4 @@
-// #region getResourcesToSpend-1
+// #region getResourcesToSpend-2
 import type { CoinQuantityLike, ExcludeResourcesOption } from 'fuels';
 import { Provider, ScriptTransactionRequest, Wallet } from 'fuels';
 
@@ -25,22 +25,13 @@ const excludedIds: ExcludeResourcesOption = {
   messages: [messageNonce],
 };
 
-const spendableResources = await provider.getResourcesToSpend(
-  wallet.address,
+const spendableResources = await wallet.getResourcesToSpend(
   quantities,
   excludedIds
 );
 
 const tx = new ScriptTransactionRequest();
 tx.addResources(spendableResources);
-// #endregion getResourcesToSpend-1
-
-// #region getResourcesToSpend-2
-const spendableResourcesFromWallet = await wallet.getResourcesToSpend(
-  spendableResources,
-  excludedIds
-);
 // #endregion getResourcesToSpend-2
 
 console.log('spendableResources', spendableResources);
-console.log('spendableResourcesFromWallet', spendableResourcesFromWallet);
