@@ -17,4 +17,4 @@ This will perform the following actions:
 
 We can then utilize the above generated types like so:
 
-<<< @/../../docs-snippets/src/guide/scripts/deploying-scripts.test.ts#deploying-scripts{ts:line-numbers}
+<<< @/../../docs-snippets2/src/scripts/deploying-scripts.ts#deploying-scripts{ts:line-numbers}
