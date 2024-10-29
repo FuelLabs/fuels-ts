@@ -7,6 +7,5 @@ const provider = await Provider.create(LOCAL_NETWORK_URL);
 
 const { transactions } = await provider.getTransactions();
 // #endregion getTransactions
-// #endregion getBlocks
 
 console.log('transactions', transactions);
