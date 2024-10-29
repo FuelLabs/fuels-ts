@@ -2,6 +2,7 @@
 members = [
   "bytecode-input",
   "counter",
+  "my-contract",
   "echo-asset-id",
   "echo-bytes",
   "echo-configurables",
