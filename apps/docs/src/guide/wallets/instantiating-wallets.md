@@ -18,7 +18,7 @@ From a private key:
 
 From a mnemonic phrase:
 
-<<< @/../../docs-snippets2/src/wallets/instantiating/from-private-key.ts#instantiating-wallets-3{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/instantiating/from-mnemonic-phrase.ts#instantiating-wallets-3{ts:line-numbers}
 
 From a seed:
 
