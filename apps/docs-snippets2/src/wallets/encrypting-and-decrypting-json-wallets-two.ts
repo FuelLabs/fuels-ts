@@ -13,7 +13,7 @@ const newJsonWallet = await Wallet.generate({
 }).encrypt('my-password');
 
 // Load the encrypted wallet from a file
-// #context const jsonWallet = fs.readFileSync('secure-path/my-wallet.json', 'utf-8');
+// const jsonWallet = fs.readFileSync('secure-path/my-wallet.json', 'utf-8');
 
 // Decrypt the wallet
 const newPassword = 'my-password';
