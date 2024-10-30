@@ -88,7 +88,6 @@ class WalletConnector extends FuelConnector {
     // #endregion fuel-connector-events-networks
 
     // #region fuel-connector-events-currentNetwork
-
     const currentNetwork: Network = {
       chainId: 1,
       url: 'https://example.com/rpc',
