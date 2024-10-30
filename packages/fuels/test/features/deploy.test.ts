@@ -6,6 +6,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
 import { launchTestNode } from '../../src/test-utils';
+import { mockCheckForUpdates } from '../utils/mockCheckForUpdates';
 import { resetDiskAndMocks } from '../utils/resetDiskAndMocks';
 import {
   bootstrapProject,
@@ -41,6 +42,7 @@ describe('deploy', { timeout: 180000 }, () => {
     resetConfigAndMocks(paths.fuelsConfigPath);
     resetDiskAndMocks(paths.root);
     paths = bootstrapProject(__filename);
+    mockCheckForUpdates();
   });
 
   afterEach(() => {

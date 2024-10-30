@@ -5,10 +5,10 @@ import { arrayify } from '@fuel-ts/utils';
 
 import type {
   GqlGetTransactionsByOwnerQueryVariables,
-  GqlPageInfo,
   GqlReceiptFragment,
 } from '../__generated__/operations';
 import type Provider from '../provider';
+import type { PageInfo } from '../provider';
 import type { TransactionRequest } from '../transaction-request';
 import type { TransactionResult } from '../transaction-response';
 
@@ -133,7 +133,7 @@ export interface GetTransactionsSummariesParams {
 
 export interface GetTransactionsSummariesReturns {
   transactions: TransactionResult[];
-  pageInfo: GqlPageInfo;
+  pageInfo: PageInfo;
 }
 
 /** @hidden */

@@ -1,23 +1,13 @@
 import { versions, gt, eq } from '@fuel-ts/versions';
 
+import { getLatestFuelsVersion } from './getLatestFuelsVersion';
 import { warn, log } from './logger';
-
-export const getLatestFuelsVersion = async () => {
-  const response = await fetch('https://registry.npmjs.org/fuels/latest');
-  const data = await response.json();
-  return data.version as string;
-};
 
 export const checkForAndDisplayUpdates = async () => {
   try {
     const { FUELS: userFuelsVersion } = versions;
 
-    const latestFuelsVersion = await Promise.race<string | undefined>([
-      new Promise((resolve) => {
-        setTimeout(resolve, 3000);
-      }),
-      getLatestFuelsVersion(),
-    ]);
+    const latestFuelsVersion = await getLatestFuelsVersion();
 
     if (!latestFuelsVersion) {
       log(`\n Unable to fetch latest fuels version. Skipping...\n`);
