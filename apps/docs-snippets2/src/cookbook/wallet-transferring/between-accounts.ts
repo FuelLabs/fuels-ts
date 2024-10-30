@@ -16,10 +16,10 @@ const response = await sender.transfer(
   baseAssetId
 );
 
-await response.wait();
+await response.waitForResult();
 
 // Retrieve balances
 const balance = await destination.getBalance(baseAssetId);
 // #endregion transferring-assets-1
 
-console.log('new balance', balance.toNumber() === amountToTransfer);
+console.log('new balance', balance.toNumber() >= amountToTransfer);
