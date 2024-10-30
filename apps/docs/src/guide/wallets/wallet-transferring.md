@@ -34,7 +34,7 @@ This method also creates a `ScriptTransactionRequest` and populates it with the 
 
 To transfer assets to multiple wallets, use the `Account.batchTransfer` method:
 
-<<< @/../../docs-snippets/src/guide/wallets/wallet-transferring.test.ts#wallet-transferring-6{ts:line-numbers}
+<<< @/../../docs-snippets2/src/wallets/transfers/batch-transfer.ts#wallet-transferring-6{ts:line-numbers}
 
 ## Transferring Assets To Contracts
 
